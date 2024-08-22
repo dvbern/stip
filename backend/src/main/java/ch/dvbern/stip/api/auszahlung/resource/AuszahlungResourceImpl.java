@@ -2,9 +2,7 @@ package ch.dvbern.stip.api.auszahlung.resource;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungSapService;
 import ch.dvbern.stip.generated.api.AuszahlungResource;
-import ch.dvbern.stip.generated.dto.ChangeAuszahlungKreditorDto;
-import ch.dvbern.stip.generated.dto.CreateAuszahlungDto;
-import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDto;
+import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
@@ -20,20 +18,20 @@ public class AuszahlungResourceImpl implements AuszahlungResource {
     private final AuszahlungSapService auszahlungSapService;
     @RolesAllowed({ROLE_SACHBEARBEITER})
     @Override
-    public Response changeKreditor(ChangeAuszahlungKreditorDto changeAuszahlungKreditorDto) {
-        return auszahlungSapService.changeBusinessPartner(changeAuszahlungKreditorDto);
+    public Response changeKreditor(AuszahlungDto auszahlungDto) {
+        return auszahlungSapService.changeBusinessPartner(auszahlungDto);
     }
 
     @RolesAllowed({ROLE_SACHBEARBEITER})
     @Override
-    public Response createAuszahlung(CreateAuszahlungDto createAuszahlungDto) {
-        return auszahlungSapService.createAuszahlung(createAuszahlungDto);
+    public Response createAuszahlung(AuszahlungDto auszahlungDto) {
+        return auszahlungSapService.createAuszahlung(auszahlungDto);
     }
 
     @RolesAllowed({ROLE_SACHBEARBEITER})
     @Override
-    public Response createKreditor(CreateAuszahlungKreditorDto createAuszahlungKreditorDto) {
-        return auszahlungSapService.createBusinessPartner(createAuszahlungKreditorDto);
+    public Response createKreditor(AuszahlungDto auszahlungDto) {
+        return auszahlungSapService.createBusinessPartner(auszahlungDto);
     }
 
     @RolesAllowed({ROLE_SACHBEARBEITER})

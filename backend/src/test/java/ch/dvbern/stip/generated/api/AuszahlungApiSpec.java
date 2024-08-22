@@ -13,9 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.ChangeAuszahlungKreditorDtoSpec;
-import ch.dvbern.stip.generated.dto.CreateAuszahlungDtoSpec;
-import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDtoSpec;
+import ch.dvbern.stip.generated.dto.AuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
@@ -137,11 +135,11 @@ public class AuszahlungApiSpec {
         }
 
          /**
-         * @param changeAuszahlungKreditorDtoSpec (ChangeAuszahlungKreditorDtoSpec)  (required)
+         * @param auszahlungDtoSpec (AuszahlungDtoSpec)  (required)
          * @return operation
          */
-        public ChangeKreditorOper body(ChangeAuszahlungKreditorDtoSpec changeAuszahlungKreditorDtoSpec) {
-            reqSpec.setBody(changeAuszahlungKreditorDtoSpec);
+        public ChangeKreditorOper body(AuszahlungDtoSpec auszahlungDtoSpec) {
+            reqSpec.setBody(auszahlungDtoSpec);
             return this;
         }
 
@@ -209,11 +207,11 @@ public class AuszahlungApiSpec {
         }
 
          /**
-         * @param createAuszahlungDtoSpec (CreateAuszahlungDtoSpec)  (required)
+         * @param auszahlungDtoSpec (AuszahlungDtoSpec)  (required)
          * @return operation
          */
-        public CreateAuszahlungOper body(CreateAuszahlungDtoSpec createAuszahlungDtoSpec) {
-            reqSpec.setBody(createAuszahlungDtoSpec);
+        public CreateAuszahlungOper body(AuszahlungDtoSpec auszahlungDtoSpec) {
+            reqSpec.setBody(auszahlungDtoSpec);
             return this;
         }
 
@@ -281,11 +279,11 @@ public class AuszahlungApiSpec {
         }
 
          /**
-         * @param createAuszahlungKreditorDtoSpec (CreateAuszahlungKreditorDtoSpec)  (required)
+         * @param auszahlungDtoSpec (AuszahlungDtoSpec)  (required)
          * @return operation
          */
-        public CreateKreditorOper body(CreateAuszahlungKreditorDtoSpec createAuszahlungKreditorDtoSpec) {
-            reqSpec.setBody(createAuszahlungKreditorDtoSpec);
+        public CreateKreditorOper body(AuszahlungDtoSpec auszahlungDtoSpec) {
+            reqSpec.setBody(auszahlungDtoSpec);
             return this;
         }
 

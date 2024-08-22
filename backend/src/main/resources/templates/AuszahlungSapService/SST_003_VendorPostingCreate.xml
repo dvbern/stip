@@ -19,14 +19,14 @@
           <REF_DOC_NO>0001544323</REF_DOC_NO>
           <!--Optional:-->
           <PAYMENT_REASON/>
-          <DOC_DATE>{data.docDate}</DOC_DATE>
-          <PSTNG_DATE>{data.pstingDate}</PSTNG_DATE>
+          <DOC_DATE>{data.additionalData.docDate}</DOC_DATE>
+          <PSTNG_DATE>{ata.additionalData.pstingDate}</PSTNG_DATE>
           <CURRENCY>CHF</CURRENCY>
           <!--Optional:-->
           <IKS_RELEVANT>false</IKS_RELEVANT>
         </HEADER>
         <VENDOR>
-          <VENDOR_NO>{data.vendorNo}</VENDOR_NO>
+          <VENDOR_NO>{data.businessPartnerId}</VENDOR_NO>
           <AMT_DOCCUR>7162.0</AMT_DOCCUR>
           <ZTERM>ZB04</ZTERM>
           <!--Optional:-->

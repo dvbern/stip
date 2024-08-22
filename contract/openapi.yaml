@@ -1200,7 +1200,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateAuszahlungKreditor'
+              $ref: '#/components/schemas/Auszahlung'
         required: true
       responses:
         '200':
@@ -1228,7 +1228,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ChangeAuszahlungKreditor'
+              $ref: '#/components/schemas/Auszahlung'
         required: true
       responses:
         '200':
@@ -1256,7 +1256,7 @@ paths:
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/CreateAuszahlung'
+                $ref: '#/components/schemas/Auszahlung'
         required: true
       responses:
         '200':
@@ -3342,52 +3342,6 @@ components:
           format: date
         comment:
           type: string
-    CreateAuszahlungKreditor:
-      type: object
-      required:
-        - deliveryId
-        - extId
-        - auszahlung
-      properties:
-        deliveryId:
-          type: integer
-        extId:
-          type: integer
-        auszahlung:
-          $ref: '#/components/schemas/Auszahlung'
-    ChangeAuszahlungKreditor:
-      type: object
-      required:
-        - businessPartnerId
-        - deliveryId
-        - extId
-        - auszahlung
-      properties:
-        businessPartnerId:
-          type: integer
-        deliveryId:
-          type: integer
-        extId:
-          type: integer
-        auszahlung:
-          $ref: '#/components/schemas/Auszahlung'
-    CreateAuszahlung:
-      type: object
-      required:
-        - deliveryId
-        - vendorNo
-        - auszahlung
-      properties:
-        deliveryId:
-          type: integer
-        vendorNo:
-          type: integer
-        positionsText:
-          type: string
-        zahlungszweck:
-          type: string
-        auszahlung:
-          $ref: '#/components/schemas/Auszahlung'
     GetAuszahlungImportStatusRequest:
       type: object
       required:

@@ -14,9 +14,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.WebApplicationException;
-import org.aesh.command.man.TerminalPage;
 import org.apache.http.HttpStatus;
-import org.checkerframework.checker.units.qual.A;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
@@ -99,7 +97,7 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        assertThrows(ForbiddenException.class, () -> auszahlungResource.createKreditor(initCreateAuszahlungKreditorDto()));
+        assertThrows(ForbiddenException.class, () -> auszahlungResource.createKreditor(initAuszahlungDto()));
     }
 
     @Test
@@ -110,7 +108,7 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.createKreditor(initCreateAuszahlungKreditorDto());
+        final var response = auszahlungResource.createKreditor(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -122,7 +120,7 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.createKreditor(initCreateAuszahlungKreditorDto());
+        final var response = auszahlungResource.createKreditor(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -134,32 +132,24 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.createKreditor(initCreateAuszahlungKreditorDto());
+        final var response = auszahlungResource.createKreditor(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test
     @TestAsSachbearbeiter
     void createBusinessPartnerInvalidDtoTest() throws IOException {
+        //todo: rewrite test
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
         );
-        final CreateAuszahlungKreditorDto requestDto1 = initCreateAuszahlungKreditorDto();
+        final AuszahlungDto requestDto1 = initAuszahlungDto();
         assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createKreditor(null));
-        requestDto1.setExtId(null);
         assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createKreditor(requestDto1));
 
-        final CreateAuszahlungKreditorDto requestDto2 = initCreateAuszahlungKreditorDto();
-        requestDto2.setAuszahlung(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createKreditor(requestDto2));
-
-        final CreateAuszahlungKreditorDto requestDto3 = initCreateAuszahlungKreditorDto();
-        requestDto3.setDeliveryId(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createKreditor(requestDto3));
-
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.createKreditor(initCreateAuszahlungKreditorDto());
+        final var response = auszahlungResource.createKreditor(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -167,35 +157,22 @@ class AuszahlungResourceImplTest {
     @TestAsGesuchsteller
     void changeBusinessPartnerAsGSTest(){
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn("");
-        assertThrows(ForbiddenException.class, () -> auszahlungResource.changeKreditor((initChangeAuszahlungKreditorDto())));
+        assertThrows(ForbiddenException.class, () -> auszahlungResource.changeKreditor((initAuszahlungDto())));
     }
 
     @Test
     @TestAsSachbearbeiter
     void changeBusinessPartnerInvalidDtoTest() throws IOException {
-        String xml = IOUtils.toString(//todo: add proper file
+        String xml = IOUtils.toString(//todo: add proper file & rewrite test
             this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
         );
-        final ChangeAuszahlungKreditorDto requestDto1 = initChangeAuszahlungKreditorDto();
+        final AuszahlungDto requestDto1 = initAuszahlungDto();
+        requestDto1.setAdresse(null);
         assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(null));
-        requestDto1.setExtId(null);
         assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(requestDto1));
-
-        final ChangeAuszahlungKreditorDto requestDto2 = initChangeAuszahlungKreditorDto();
-        requestDto2.setAuszahlung(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(requestDto2));
-
-        final ChangeAuszahlungKreditorDto requestDto3 = initChangeAuszahlungKreditorDto();
-        requestDto3.setDeliveryId(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(requestDto3));
-
-        final ChangeAuszahlungKreditorDto requestDto4 = initChangeAuszahlungKreditorDto();
-        requestDto4.setBusinessPartnerId(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(requestDto4));
-
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.changeKreditor(initChangeAuszahlungKreditorDto());
+        final var response = auszahlungResource.changeKreditor(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -207,7 +184,7 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.changeKreditor(initChangeAuszahlungKreditorDto());
+        final var response = auszahlungResource.changeKreditor(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
 
     }
@@ -216,31 +193,23 @@ class AuszahlungResourceImplTest {
     @TestAsGesuchsteller
     void createAuszahlungAsGSTest(){
         when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn("");
-        assertThrows(ForbiddenException.class, () -> auszahlungResource.createAuszahlung((initCreateAuszahlungDto())));
+        assertThrows(ForbiddenException.class, () -> auszahlungResource.createAuszahlung((initAuszahlungDto())));
     }
 
     @Test
     @TestAsSachbearbeiter
     void createAuszahlungInvalidDtoTest() throws IOException {
-        String xml = IOUtils.toString(//todo: add proper file
+        String xml = IOUtils.toString(//todo: add proper file & rewrite test
             this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
         );
-        final CreateAuszahlungDto requestDto1 = initCreateAuszahlungDto();
+        final AuszahlungDto requestDto1 = initAuszahlungDto();
+        requestDto1.setAdresse(null);
         assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createAuszahlung(null));
-        requestDto1.setDeliveryId(null);
         assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createAuszahlung(requestDto1));
 
-        final CreateAuszahlungDto requestDto2 = initCreateAuszahlungDto();
-        requestDto2.setAuszahlung(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createAuszahlung(requestDto2));
-
-        final CreateAuszahlungDto requestDto3 = initCreateAuszahlungDto();
-        requestDto3.setVendorNo(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createAuszahlung(requestDto3));
-
         when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(xml);
-        final var response = auszahlungResource.createAuszahlung(initCreateAuszahlungDto());
+        final var response = auszahlungResource.createAuszahlung(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -252,9 +221,8 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(xml);
-        final var response = auszahlungResource.createAuszahlung(initCreateAuszahlungDto());
+        final var response = auszahlungResource.createAuszahlung(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
-
     }
 
     @Inject
@@ -307,66 +275,6 @@ class AuszahlungResourceImplTest {
         auszahlungDto.setAdresse(adresseDto);
         return auszahlungDto;
     }
-    private CreateAuszahlungKreditorDto initCreateAuszahlungKreditorDto() {
-        AuszahlungDto auszahlungDto = new AuszahlungDto();
-        auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
-        auszahlungDto.setIban("CH5589144649329557546");
-        auszahlungDto.setNachname("Muster");
-        auszahlungDto.setVorname("Hans");
-        AdresseDto adresseDto = new AdresseDto();
-        adresseDto.setHausnummer("1a");
-        adresseDto.setStrasse("Musterstrasse");
-        adresseDto.setOrt("Bern");
-        adresseDto.setPlz("3011");
-        adresseDto.setLand(Land.CH);
-        auszahlungDto.setAdresse(adresseDto);
-        CreateAuszahlungKreditorDto kreditorDto = new CreateAuszahlungKreditorDto();
-        kreditorDto.setAuszahlung(auszahlungDto);
-        kreditorDto.setExtId(EXAMPLE_EXT_ID);
-        kreditorDto.setDeliveryId(EXAMPLE_DELIVERY_ID);
-        return kreditorDto;
-    }
 
-    private ChangeAuszahlungKreditorDto initChangeAuszahlungKreditorDto() {
-        AuszahlungDto auszahlungDto = new AuszahlungDto();
-        auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
-        auszahlungDto.setIban("CH5589144649329557546");
-        auszahlungDto.setNachname("Muster");
-        auszahlungDto.setVorname("Hans");
-        AdresseDto adresseDto = new AdresseDto();
-        adresseDto.setHausnummer("1a");
-        adresseDto.setStrasse("Musterstrasse");
-        adresseDto.setOrt("Bern");
-        adresseDto.setPlz("3011");
-        adresseDto.setLand(Land.CH);
-        auszahlungDto.setAdresse(adresseDto);
-        ChangeAuszahlungKreditorDto kreditorDto = new ChangeAuszahlungKreditorDto();
-        kreditorDto.setBusinessPartnerId(0);
-        kreditorDto.setAuszahlung(auszahlungDto);
-        kreditorDto.setExtId(EXAMPLE_EXT_ID);
-        kreditorDto.setDeliveryId(EXAMPLE_DELIVERY_ID);
-        return kreditorDto;
-    }
 
-    private CreateAuszahlungDto initCreateAuszahlungDto() {
-        CreateAuszahlungDto createAuszahlungDto = new CreateAuszahlungDto();
-        AuszahlungDto auszahlungDto = new AuszahlungDto();
-        auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
-        auszahlungDto.setIban("CH5589144649329557546");
-        auszahlungDto.setNachname("Muster");
-        auszahlungDto.setVorname("Hans");
-        AdresseDto adresseDto = new AdresseDto();
-        adresseDto.setHausnummer("1a");
-        adresseDto.setStrasse("Musterstrasse");
-        adresseDto.setOrt("Bern");
-        adresseDto.setPlz("3011");
-        adresseDto.setLand(Land.CH);
-        auszahlungDto.setAdresse(adresseDto);
-        createAuszahlungDto.setAuszahlung(auszahlungDto);
-        createAuszahlungDto.setDeliveryId(EXAMPLE_DELIVERY_ID);
-        createAuszahlungDto.setPositionsText("blabala");
-        createAuszahlungDto.setZahlungszweck("blabla");
-        createAuszahlungDto.setVendorNo(1234);
-        return createAuszahlungDto;
-    }
 }

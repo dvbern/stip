@@ -1,20 +1,9 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.ChangeAuszahlungKreditorDto;
-import ch.dvbern.stip.generated.dto.CreateAuszahlungDto;
-import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDto;
-import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusResponseDto;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.generated.dto.AuszahlungDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
-
-
-
-import java.io.InputStream;
-import java.util.Map;
-import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
@@ -27,19 +16,19 @@ public interface AuszahlungResource {
     @Path("/kreditor/change")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response changeKreditor(@Valid @NotNull ChangeAuszahlungKreditorDto changeAuszahlungKreditorDto);
+    Response changeKreditor(@Valid @NotNull AuszahlungDto auszahlungDto);
 
     @POST
     @Path("/create")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createAuszahlung(@Valid @NotNull CreateAuszahlungDto createAuszahlungDto);
+    Response createAuszahlung(@Valid @NotNull AuszahlungDto auszahlungDto);
 
     @POST
     @Path("/kreditor/create")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createKreditor(@Valid @NotNull CreateAuszahlungKreditorDto createAuszahlungKreditorDto);
+    Response createKreditor(@Valid @NotNull AuszahlungDto auszahlungDto);
 
     @GET
     @Path("/status/{deliveryId}")

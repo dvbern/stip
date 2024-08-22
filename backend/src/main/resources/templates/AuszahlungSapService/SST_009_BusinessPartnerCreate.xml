@@ -82,7 +82,7 @@
         <ADDRESS>
           <ADR_KIND>XXDEFAULT</ADR_KIND>
           <!--Optional:-->
-          <C_O_NAME>{coAdresse ?: ''}</C_O_NAME>
+          <C_O_NAME></C_O_NAME>
           <CITY>{data.auszahlung.adresse.ort}</CITY>
           <!--Optional:-->
           <DISTRICT/>

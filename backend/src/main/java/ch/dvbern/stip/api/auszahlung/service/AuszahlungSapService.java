@@ -1,7 +1,10 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.api.auszahlung.service.sap.SAPUtils;
+import ch.dvbern.stip.generated.dto.AuszahlungDto;
+import ch.dvbern.stip.generated.dto.AuszahlungImportStatusLogDto;
+import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusResponseDto;
 import io.quarkus.qute.Location;
 import io.quarkus.qute.Template;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,7 +21,9 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @ApplicationScoped
@@ -38,10 +43,6 @@ public class AuszahlungSapService {
     @Location("AuszahlungSapService/SST_074_BusinessPartnerSearch.xml")
     public Template SST_074_BusinessPartnerSearch;
 
-    private final GetAuszahlungImportStatusRequestMapper getAuszahlungImportStatusRequestMapper;
-    private final CreateAuszahlungKreditorMapper createAuszahlungKreditorMapper;
-    private final ChangeAuszahlungKreditorMapper changeAuszahlungKreditorMapper;
-    private final CreateAuszahlungMapper createAuszahlungMapper;
     private final AuszahlungMapper auszahlungMapper;
 
     @ConfigProperty(name = "stip_sap_sysid")
@@ -62,15 +63,27 @@ public class AuszahlungSapService {
     @RestClient
     SearchBusinessPartnerClient searchBusinessPartnerClient;
 
-    private String buildPayload(Template template, Object data){
-        return template.data("data", data).render();
+    private String buildPayload(Template template, String deliveryId, String businessPartnerId, String extId, Auszahlung auszahlung, Map<String,Object> additionalData){
+        Map<String,Object> dataMap = new HashMap<>();
+        dataMap.put("sysId", sysid);
+        dataMap.put("deliveryId", deliveryId);
+        dataMap.put("auszahlung",auszahlung);
+        dataMap.put("businessPartnerId", businessPartnerId);
+        dataMap.put("extId", extId);
+        dataMap.put("additionalData", additionalData);
+        return template.data("data", dataMap).render();
     }
 
     private GetAuszahlungImportStatusResponseDto getAndParseGetSAPImportStatusResponse(Integer deliveryId) throws JAXBException {
         GetAuszahlungImportStatusRequest data = new GetAuszahlungImportStatusRequest();
         data.setDeliveryId(deliveryId);
         data.setSysId(sysid);
-        String response = importStatusReadClient.getImportStatus(buildPayload(SST_073_ImportStatusRead,data));
+        String response = importStatusReadClient.getImportStatus(buildPayload(
+            SST_073_ImportStatusRead,
+            String.valueOf(deliveryId),
+            null,
+            null,
+            null,null));
         JAXBContext context = JAXBContext.newInstance(GetAuszahlungImportStatusResponse.class);
         String shortendResponse = response.substring(response.indexOf("<POSITION>"), response.indexOf("</POSITION>")+ "</POSITION>".length());
         StringReader reader = new StringReader(shortendResponse);
@@ -93,10 +106,17 @@ public class AuszahlungSapService {
         }
     }
 
-    public Response createBusinessPartner(@Valid CreateAuszahlungKreditorDto dto){
+    public Response createBusinessPartner(@Valid AuszahlungDto dto){
         try{
-            CreateAuszahlungKreditor data = createAuszahlungKreditorMapper.toAuszahlungKreditor(dto);
-            String response = businessPartnerCreateClient.createBusinessPartner(buildPayload(SST_009_BusinessPartnerCreate,data));
+            Auszahlung data = auszahlungMapper.toEntity(dto);
+            String response = businessPartnerCreateClient.createBusinessPartner(
+                buildPayload(
+                    SST_009_BusinessPartnerCreate,
+                    SAPUtils.generateDeliveryId(),
+                    null,
+                    SAPUtils.generateExtId(),
+                    data,null
+                ));
             return Response.status(HttpStatus.SC_OK).entity(response).build();
         }
         catch(WebApplicationException ex){
@@ -104,10 +124,14 @@ public class AuszahlungSapService {
         }
     }
 
-    public Response changeBusinessPartner(@Valid ChangeAuszahlungKreditorDto dto){
+    public Response changeBusinessPartner(@Valid AuszahlungDto dto){
         try{
-            ChangeAuszahlungKreditor data = changeAuszahlungKreditorMapper.toChangeAuszahlungKreditor(dto);
-            String response = businessPartnerChangeClient.changeBusinessPartner(buildPayload(SST_077_BusinessPartnerChange,data));
+            Auszahlung data = auszahlungMapper.toEntity(dto);
+            String response = businessPartnerChangeClient.changeBusinessPartner(buildPayload(SST_077_BusinessPartnerChange,
+                SAPUtils.generateDeliveryId(),
+                null,
+                SAPUtils.generateExtId(),
+                data,null));
             return Response.status(HttpStatus.SC_OK).entity(response).build();
         }
         catch(WebApplicationException ex){
@@ -115,10 +139,14 @@ public class AuszahlungSapService {
         }
     }
 
-    public Response createAuszahlung(@Valid CreateAuszahlungDto dto){
+    public Response createAuszahlung(@Valid AuszahlungDto dto){
         try{
-            CreateAuszahlung data = createAuszahlungMapper.toCreateAuszahlung(dto);
-            String response = vendorPostingCreateClient.createVendorPosting(buildPayload(SST_003_VendorPostingCreate,data));
+            Auszahlung data = auszahlungMapper.toEntity(dto);
+            String response = vendorPostingCreateClient.createVendorPosting(buildPayload(SST_003_VendorPostingCreate,
+                SAPUtils.generateDeliveryId(),
+                null,
+                SAPUtils.generateExtId(),
+                data,null));
             return Response.status(HttpStatus.SC_OK).entity(response).build();
         }
         catch (WebApplicationException ex){
@@ -129,7 +157,11 @@ public class AuszahlungSapService {
     public Response searchBusinessPartner(@Valid AuszahlungDto auszahlungDto){
         try{
             Auszahlung data = auszahlungMapper.toEntity(auszahlungDto);
-            String response = searchBusinessPartnerClient.searchBusinessPartner(buildPayload(SST_074_BusinessPartnerSearch,data));
+            String response = searchBusinessPartnerClient.searchBusinessPartner(buildPayload(SST_074_BusinessPartnerSearch,
+                SAPUtils.generateDeliveryId(),
+                null,
+                SAPUtils.generateExtId(),
+                data,null));
             return Response.status(HttpStatus.SC_OK).entity(response).build();
 
         }
