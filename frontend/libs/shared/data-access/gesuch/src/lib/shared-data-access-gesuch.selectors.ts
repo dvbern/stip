@@ -144,6 +144,9 @@ const transformValidationMessagesToFormKeys = (
 ) => {
   const formKeys: SharedModelGesuchFormularProps[] = [
     ...(Object.keys(currentForm ?? {}) as SharedModelGesuchFormularProps[]),
+    'steuerdaten',
+    'steuerdatenMutter',
+    'steuerdatenVater',
     'dokuments',
   ];
 

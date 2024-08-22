@@ -304,24 +304,23 @@ class GesuchFillFormularTest {
     @Order(18)
     void noSuperfluousDocuments() {
         final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
-            DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET,
-            DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER,
-            DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER,
-            DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_VATER,
-            DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
-            DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER,
-            DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_MUTTER,
-            DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
-            DokumentTypDtoSpec.AUSZAHLUNG_ABTRETUNGSERKLAERUNG,
-            DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN,
-            DokumentTypDtoSpec.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
-            DokumentTypDtoSpec.EK_BELEG_BEZAHLTE_RENTEN,
-            DokumentTypDtoSpec.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
-            DokumentTypDtoSpec.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
-            DokumentTypDtoSpec.EK_BELEG_OV_ABONNEMENT,
-            DokumentTypDtoSpec.EK_MIETVERTRAG,
+            DokumentTypDtoSpec.EK_LOHNABRECHNUNG,
             DokumentTypDtoSpec.EK_BELEG_BETREUUNGSKOSTEN_KINDER,
-            DokumentTypDtoSpec.EK_LOHNABRECHNUNG
+            DokumentTypDtoSpec.EK_MIETVERTRAG,
+            DokumentTypDtoSpec.EK_BELEG_OV_ABONNEMENT,
+            DokumentTypDtoSpec.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
+            DokumentTypDtoSpec.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
+            DokumentTypDtoSpec.EK_BELEG_BEZAHLTE_RENTEN,
+            DokumentTypDtoSpec.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
+            DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN,
+            DokumentTypDtoSpec.AUSZAHLUNG_ABTRETUNGSERKLAERUNG,
+            DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
+            DokumentTypDtoSpec.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE,
+            DokumentTypDtoSpec.STEUERDATEN_SOZIALHILFEBUDGET_MUTTER,
+            DokumentTypDtoSpec.STEUERDATEN_SOZIALHILFEBUDGET_VATER,
+            DokumentTypDtoSpec.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER,
+            DokumentTypDtoSpec.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER,
+            DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET
         };
 
         var gesuchDokumente = gesuchTrancheApiSpec.getGesuchDokumente()

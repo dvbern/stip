@@ -10,9 +10,9 @@ import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
 
 public class PartnerUpdateDtoSpecModel {
     public static PartnerUpdateDtoSpec partnerUpdateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec::new, (model, faker) -> {
-            model.setVorname(faker.name().firstName());
-            model.setNachname(faker.name().lastName());
+        return TestUtil.createUpdateDtoSpec(ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec::new, (model) -> {
+            model.setVorname("Test");
+            model.setNachname("Partner");
             model.setGeburtsdatum(TestUtil.getRandomLocalDateBetween(
                 LocalDate.of(1990, 1, 1),
                 LocalDate.of(2002, 1, 1))
@@ -29,7 +29,7 @@ public class PartnerUpdateDtoSpecModel {
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecPartner() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> model.setPartner(partnerUpdateDtoSpec())
+            (model) -> model.setPartner(partnerUpdateDtoSpec())
         );
     }
 }

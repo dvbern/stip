@@ -8,11 +8,11 @@ import ch.dvbern.stip.generated.dto.KontoinhaberDtoSpec;
 
 public final class AuszahlungUpdateDtoSpecModel {
     public static AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(AuszahlungUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(AuszahlungUpdateDtoSpec::new, (model) -> {
             model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             model.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
-            model.setVorname(faker.name().firstName());
-            model.setNachname(faker.name().lastName());
+            model.setVorname("John");
+            model.setNachname("Doe");
             model.setKontoinhaber(KontoinhaberDtoSpec.SOZIALDIENST_INSTITUTION);
         });
     }
@@ -20,7 +20,7 @@ public final class AuszahlungUpdateDtoSpecModel {
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAuszahlung() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec())
+            (model) -> model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec())
         );
     }
 }

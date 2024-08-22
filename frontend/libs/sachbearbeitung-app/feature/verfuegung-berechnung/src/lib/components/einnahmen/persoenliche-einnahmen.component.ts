@@ -12,14 +12,12 @@ import { PersoenlicheBerechnung } from '../../../models';
   imports: [CommonModule, TranslateModule, SharedUiFormatChfPipe],
   template: `
     <!-- Nettoerwerbseinkommen -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen'
-              | translate
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen'
+            | translate
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen.info'
@@ -33,14 +31,12 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- EO -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen'
-              | translate
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen'
+            | translate
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen.info'
@@ -54,98 +50,84 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Unterhaltsbeiträge -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().unterhaltsbeitraege }}
       </div>
     </div>
 
     <!-- Kinder- und Ausbildungszulagen -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.kinderUndAusbildungszulagen'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.kinderUndAusbildungszulagen'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().kinderUndAusbildungszulagen }}
       </div>
     </div>
 
     <!-- Ergänzungsleistungen -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.ergaenzungsleistungen'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.ergaenzungsleistungen'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().ergaenzungsleistungen }}
       </div>
     </div>
 
     <!-- Beiträge an Gemeindeinstitutionen -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitution'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitution'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().beitraegeGemeindeInstitution }}
       </div>
     </div>
 
     <!-- Steuerbares Vermögen -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.steuerbaresVermoegen'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.steuerbaresVermoegen'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().steuerbaresVermoegen }}
       </div>
     </div>
 
     <!-- Elterliche Leistung -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().elterlicheLeistung }}
       </div>
     </div>
 
     <!-- Einkommen Partner -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().einkommenPartner }}
       </div>
     </div>
 
     <!-- Total -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div class="h4 mt-3">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total'

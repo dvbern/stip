@@ -823,8 +823,6 @@ class GesuchServiceTest {
             reportDto.getValidationErrors().size(),
             Matchers.is(0)
         );
-
-        EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec().setSteuerjahr(null);
     }
 
     // TODO KSTIP-1236: Enable this test
@@ -870,6 +868,9 @@ class GesuchServiceTest {
         steuerdatenUpdateDto.setFahrkosten(0);
         steuerdatenUpdateDto.setEigenmietwert(0);
         steuerdatenUpdateDto.setErgaenzungsleistungen(0);
+        steuerdatenUpdateDto.setErgaenzungsleistungenPartner(0);
+        steuerdatenUpdateDto.setSozialhilfebeitraege(0);
+        steuerdatenUpdateDto.setSozialhilfebeitraegePartner(0);
         steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
         steuerdatenUpdateDto.setKinderalimente(0);
         steuerdatenUpdateDto.setSteuernBund(0);
@@ -878,6 +879,7 @@ class GesuchServiceTest {
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setVerpflegung(0);
         steuerdatenUpdateDto.setVermoegen(0);
+        steuerdatenUpdateDto.setWohnkosten(0);
         return steuerdatenUpdateDto;
     }
 

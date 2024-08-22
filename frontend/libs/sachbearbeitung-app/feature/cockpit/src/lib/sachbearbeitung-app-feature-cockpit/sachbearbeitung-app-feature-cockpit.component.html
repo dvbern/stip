@@ -2,18 +2,18 @@
   <div class="container pt-4 mt-2">
     <div class="row g-4" [formGroup]="quickFilterForm">
       @for (quickFilter of quickFilters; track quickFilter) {
-        <div class="col-12 col-md-6 col-lg-4 d-flex">
+        <div class="col-12 col-md-4 col-lg-2 d-flex">
           <button
             type="button"
             (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-            class="btn flex-grow-1 shadow-lg p-4 d-flex text-start align-items-center"
+            class="btn flex-grow-1 shadow-lg p-2 px-3 d-flex text-start align-items-center"
             [class.btn-danger]="radio.checked"
           >
             <dv-shared-ui-icon-chip class="me-3 chip">
-              <i class="icon material-symbols-rounded">{{ quickFilter.icon }}</i>
+              <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
             </dv-shared-ui-icon-chip>
             <div class="flex-grow-1">
-              <h2 class="fw-bold fs-4">
+              <h2 class="fw-bold fs-7 mb-0">
                 {{ 'sachbearbeitung-app.cockpit.quick-filter.' + quickFilter.typ | translate }}
               </h2>
               <input
@@ -316,7 +316,7 @@
                         "
                         [valueSig]="[
                           filterForm.controls.letzteAktivitaetStart.value,
-                          filterForm.controls.letzteAktivitaetEnd.value
+                          filterForm.controls.letzteAktivitaetEnd.value,
                         ]"
                       ></dv-shared-ui-clear-button>
                     </div>

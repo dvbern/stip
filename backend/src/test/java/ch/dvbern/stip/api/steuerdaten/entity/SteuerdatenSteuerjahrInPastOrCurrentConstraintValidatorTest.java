@@ -1,17 +1,14 @@
 package ch.dvbern.stip.api.steuerdaten.entity;
 
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
-import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
-import ch.dvbern.stip.api.gesuch.entity.EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import org.junit.jupiter.api.Test;
-
-import java.time.Year;
 import java.util.LinkedHashSet;
 
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidatorTest {
 
@@ -24,6 +21,7 @@ class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidatorTest {
         gesuchFormular.setSteuerdaten(new LinkedHashSet<>());
         Steuerdaten steuerdaten = new Steuerdaten();
         steuerdaten.setSteuerjahr(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() + 1);
+        steuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
         gesuchFormular.getSteuerdaten().add(steuerdaten);
 
 

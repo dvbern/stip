@@ -12,14 +12,12 @@ import { PersoenlicheBerechnung } from '../../../models';
   imports: [CommonModule, TranslateModule, SharedUiFormatChfPipe],
   template: `
     <!-- Section Eltern Wohnend -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.title'
-              | translate
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.title'
+            | translate
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.infoElternWohnend'
@@ -31,14 +29,12 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Ungedeckter Anteil Lebenshaltungskosten  -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.anteilLebenshaltungskosten'
-              | translate
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.anteilLebenshaltungskosten'
+            | translate
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.anteilLebenshaltungskosten.info'
@@ -52,27 +48,23 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Mehrkosten für auswärtige Verpflegung -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.mehrkostenVerpflegung'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.mehrkostenVerpflegung'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().mehrkostenVerpflegung }}
       </div>
     </div>
 
     <!-- Section eigener Wohnsitz -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.title'
-              | translate
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.title'
+            | translate
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.infoEigenerWohnsitz'
@@ -84,14 +76,12 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Grundbedarf für 0 Personenhaushalt -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarfPersonen'
-              | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarfPersonen'
+            | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarfPersonen.info'
@@ -105,14 +95,12 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Wohnkosten für 0 Personenhaushalt -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen'
-              | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen'
+            | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen.info'
@@ -126,53 +114,45 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Medizinische Grundversorgung für 0 Personenhaushalt -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.medizinischeGrundversorgungPersonen'
-            | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.medizinischeGrundversorgungPersonen'
+          | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().medizinischeGrundversorgungPersonen }}
       </div>
     </div>
 
     <!-- Kantons- und Gemeindesteuern -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuern'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuern'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().kantonsGemeindesteuern }}
       </div>
     </div>
 
     <!-- Bundessteuern -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.bundessteuern'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.bundessteuern'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().bundessteuern }}
       </div>
     </div>
 
     <!-- Fahrkosten Ehepartnerin/Ehepartner -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner'
-              | translate
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner'
+            | translate
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner.info'
@@ -186,14 +166,12 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Verpflegung Ehepartnerin/Ehepartner -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner'
-              | translate
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner'
+            | translate
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner.info'
@@ -207,46 +185,40 @@ import { PersoenlicheBerechnung } from '../../../models';
     </div>
 
     <!-- Betreuungskosten für Kinder -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.betreuungskostenKinder'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.betreuungskostenKinder'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().betreuungskostenKinder }}
       </div>
     </div>
 
     <!-- Ausbildungskosten der/des Auszubildenden -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().ausbildungskosten }}
       </div>
     </div>
 
     <!-- Fahrkosten der/des Auszubildenden -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().fahrkosten }}
       </div>
     </div>
 
     <!-- Total -->
-    <div class="d-flex">
+    <div class="d-flex gap-2">
       <div class="h4 mt-3">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.total'
