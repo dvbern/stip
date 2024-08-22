@@ -174,7 +174,7 @@
               >
                 @if (kommentareRd | rdIsPending) {
                   <dv-shared-ui-loading class="pb-2" type="icon"></dv-shared-ui-loading>
-                } @else if (kommentareRd.data === undefined || !kommentareRd.data.length) {
+                } @else if (dokumentsStore.kommentareViewSig().length === 0) {
                   <div class="text-muted text-center py-2">
                     {{ 'shared.dokumente.table.noComment' | translate }}
                   </div>

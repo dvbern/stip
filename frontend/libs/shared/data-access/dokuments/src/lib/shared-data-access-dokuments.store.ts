@@ -52,6 +52,12 @@ export class DokumentsStore extends signalStore(
     requiredDocumentTypes: fromCachedDataSig(this.requiredDocumentTypes) ?? [],
   }));
 
+  kommentareViewSig = computed(() => {
+    return (
+      this.gesuchDokumentKommentare.data()?.filter((k) => k.kommentar) ?? []
+    );
+  });
+
   hasAbgelehnteDokumentsSig = computed(() => {
     return (
       this.dokuments
