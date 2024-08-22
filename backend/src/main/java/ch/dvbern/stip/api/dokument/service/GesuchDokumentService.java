@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.dokument.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -70,6 +71,7 @@ public class GesuchDokumentService {
             );
         Dokument dokument = new Dokument();
         dokument.getGesuchDokumente().add(gesuchDokument);
+        gesuchDokument.getDokumente().add(dokument);
         dokument.setFilename(fileUpload.fileName());
         dokument.setObjectId(objectId);
         dokument.setFilesize(String.valueOf(fileUpload.size()));
@@ -164,7 +166,7 @@ public class GesuchDokumentService {
             .indefinitely();
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public String deleteDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
@@ -179,7 +181,7 @@ public class GesuchDokumentService {
         return dokumentObjectId;
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void removeDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
@@ -199,8 +201,10 @@ public class GesuchDokumentService {
         final var dokuments = gesuchDokument.getDokumente();
 
         List<String> dokumentObjectIds = new ArrayList<>();
-        for (final var dokument : dokuments) {
-            gesuchDokument.getDokumente().remove(dokument);
+        // Using Iterator to be able to remove while looping
+        for (Iterator<Dokument> iterator = dokuments.iterator(); iterator.hasNext(); ) {
+            final var dokument = iterator.next();
+            iterator.remove();
             if (dokument.getGesuchDokumente().isEmpty()) {
                 dokumentRepository.delete(dokument);
                 dokumentObjectIds.add(dokument.getObjectId());

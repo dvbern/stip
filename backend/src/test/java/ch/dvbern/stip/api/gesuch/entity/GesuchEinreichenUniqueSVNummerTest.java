@@ -98,7 +98,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .body()
             .as(GesuchDtoSpec.class)
             .getGesuchTrancheToWorkWith().getId();
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull;
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()

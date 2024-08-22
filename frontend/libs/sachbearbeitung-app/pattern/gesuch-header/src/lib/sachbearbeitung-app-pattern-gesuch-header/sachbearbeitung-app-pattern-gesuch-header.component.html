@@ -2,7 +2,7 @@
   [closeMenu]="navClickedSig()"
   [backLink]="{
     path: '/',
-    text: 'sachbearbeitung-app.header.back' | translate
+    text: 'sachbearbeitung-app.header.back' | translate,
   }"
 >
   <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
@@ -31,7 +31,7 @@
             <span>
               {{
                 'sachbearbeitung-app.header.tranche.item'
-                  | translate: { date: tranche.gueltigAb | date: 'MM.YYYY', index: $index + 2 }
+                  | translate: { date: tranche.gueltigAb | date: 'MM.YYYY', index: $index + 1 }
               }}
               -
               {{ tranche.gueltigBis | date: 'MM.YYYY' }}

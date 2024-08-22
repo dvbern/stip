@@ -15,6 +15,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import org.junit.jupiter.api.Test;
@@ -287,6 +288,7 @@ class GesuchTrancheServiceTruncateTest {
     private GesuchTranche getDummyTranche(final DateRange gueltigkeit) {
         return ((GesuchTranche) new GesuchTranche()
             .setGueltigkeit(gueltigkeit)
+            .setStatus(GesuchTrancheStatus.UEBERPRUEFEN)
             .setGesuchFormular(getDummyFormular())
             .setId(UUID.randomUUID()));
     }

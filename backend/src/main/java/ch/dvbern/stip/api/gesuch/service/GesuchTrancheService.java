@@ -83,6 +83,7 @@ public class GesuchTrancheService {
         return requiredDokumentService.getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
     }
 
+    @Transactional
     public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
@@ -93,16 +94,26 @@ public class GesuchTrancheService {
     public void removeSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
         List<String> dokumentObjectIds = new ArrayList<>();
 
-        requiredDokumentService.getSuperfluousDokumentsForGesuch(formular).forEach(
-            gesuchDokument -> gesuchDokument.getDokumente().forEach(
-                dokument -> {
-                    final var dokumentObjectId = gesuchDokumentService.deleteDokument(dokument.getId());
-                    if (dokument.getGesuchDokumente().isEmpty()) {
-                        dokumentObjectIds.add(dokumentObjectId);
+        final var superfluousGesuchDokuments = requiredDokumentService.getSuperfluousDokumentsForGesuch(formular);
+
+        superfluousGesuchDokuments.forEach(
+            gesuchDokument -> {
+                // Make a copy to avoid ConcurrentModificationException
+                final var dokumente = new ArrayList<>(gesuchDokument.getDokumente());
+                dokumente.forEach(
+                    dokument -> {
+                        final var dokumentObjectId = gesuchDokumentService.deleteDokument(dokument.getId());
+                        if (dokument.getGesuchDokumente().isEmpty()) {
+                            dokumentObjectIds.add(dokumentObjectId);
+                        }
                     }
-                }
-            )
+                );
+            }
         );
+
+        for (final var gesuchDokument : superfluousGesuchDokuments) {
+            formular.getTranche().getGesuchDokuments().remove(gesuchDokument);
+        }
 
         if (!dokumentObjectIds.isEmpty()) {
             gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);

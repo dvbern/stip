@@ -12,7 +12,7 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 public class ElternUpdateDtoSpecModel {
     public static List<ElternUpdateDtoSpec> elternUpdateDtoSpecs(final int amount) {
         return TestUtil.createUpdateDtoSpecs(ElternUpdateDtoSpec::new, (model, faker) -> {
-            model.setAdresse(AdresseSpecModel.adresseDtoSpec);
+            model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             model.setVorname(faker.name().firstName());
             model.setNachname(faker.name().lastName());
             model.setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATTER);
@@ -33,6 +33,10 @@ public class ElternUpdateDtoSpecModel {
         return elternUpdateDtoSpecs(1);
     }
 
-    public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecElterns =
-        TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model, faker) -> model.setElterns(elternUpdateDtoSpecs()));
+    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecElterns() {
+        return TestUtil.createUpdateDtoSpec(
+            GesuchFormularUpdateDtoSpec::new,
+            (model, faker) -> model.setElterns(elternUpdateDtoSpecs())
+        );
+    }
 }

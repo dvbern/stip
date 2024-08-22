@@ -781,7 +781,7 @@ class GesuchServiceTest {
     @Test
     @TestAsGesuchsteller
     void validateEinreichenValid() {
-        EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec.setSteuerjahr(0);
+        EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec().setSteuerjahr(0);
         final var gesuchUpdateDto = GesuchGenerator.createFullGesuch();
         final var famsit = new FamiliensituationUpdateDto();
         famsit.setElternVerheiratetZusammen(false);
@@ -808,7 +808,6 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
-        tranche.getGesuchFormular().setPartner(null);
 
         Set<Steuerdaten> list = new LinkedHashSet<>();
         list.add(TestUtil.prepareSteuerdaten());
@@ -825,7 +824,7 @@ class GesuchServiceTest {
             Matchers.is(0)
         );
 
-        EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec.setSteuerjahr(null);
+        EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec().setSteuerjahr(null);
     }
 
     // TODO KSTIP-1236: Enable this test
@@ -874,7 +873,7 @@ class GesuchServiceTest {
         steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
         steuerdatenUpdateDto.setKinderalimente(0);
         steuerdatenUpdateDto.setSteuernBund(0);
-        steuerdatenUpdateDto.setSteuernStaat(0);
+        steuerdatenUpdateDto.setSteuernKantonGemeinde(0);
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setVerpflegung(0);

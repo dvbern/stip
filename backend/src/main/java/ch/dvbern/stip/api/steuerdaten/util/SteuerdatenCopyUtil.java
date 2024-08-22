@@ -20,7 +20,7 @@ public class SteuerdatenCopyUtil {
         copy.setKinderalimente(other.getKinderalimente());
         copy.setErgaenzungsleistungen(other.getErgaenzungsleistungen());
         copy.setVermoegen(other.getVermoegen());
-        copy.setSteuernStaat(other.getSteuernStaat());
+        copy.setSteuernKantonGemeinde(other.getSteuernKantonGemeinde());
         copy.setSteuernBund(other.getSteuernBund());
         copy.setFahrkosten(other.getFahrkosten());
         copy.setFahrkostenPartner(other.getFahrkostenPartner());
