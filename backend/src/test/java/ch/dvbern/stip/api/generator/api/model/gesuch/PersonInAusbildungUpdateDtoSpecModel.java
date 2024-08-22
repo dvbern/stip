@@ -17,7 +17,7 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 
 public final class PersonInAusbildungUpdateDtoSpecModel {
     public static PersonInAusbildungUpdateDtoSpec personInAusbildungUpdateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(PersonInAusbildungUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(PersonInAusbildungUpdateDtoSpec::new, (model) -> {
             model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             model.setIdentischerZivilrechtlicherWohnsitz(false);
             model.setNationalitaet(LandDtoSpec.CH);
@@ -25,18 +25,18 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             model.setNiederlassungsstatus(null);
             model.setEmail("valid@mailbucket.dvbern.ch");
             model.setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG);
-            model.setVorname(faker.name().firstName());
-            model.setNachname(faker.name().lastName());
+            model.setVorname("Reed");
+            model.setNachname("Richards");
             model.setGeburtsdatum(LocalDate.now().with(firstDayOfYear()).minusYears(17));
             model.setWohnsitzAnteilMutter(TestUtil.getRandomBigDecimal(0, 100, 0));
             model.setWohnsitzAnteilVater(BigDecimal.valueOf(100).subtract(model.getWohnsitzAnteilMutter()));
             model.setAnrede(TestUtil.getRandomElementFromArray(AnredeDtoSpec.values()));
-            model.setTelefonnummer(faker.phoneNumber().cellPhone());
+            model.setTelefonnummer("+41 79 111 11 11");
             model.setEinreisedatum(TestUtil.getRandomLocalDateBetween(
                 LocalDate.of(1980, 1, 1),
                 LocalDate.of(2000, 1, 1))
             );
-            model.setHeimatort(faker.address().cityName());
+            model.setHeimatort("Bern");
             model.setZivilstand(ZivilstandDtoSpec.LEDIG);
             model.setSozialhilfebeitraege(true);
             model.setVormundschaft(false);
@@ -49,7 +49,7 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecPersonInAusbildung() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> model.setPersonInAusbildung(personInAusbildungUpdateDtoSpec())
+            (model) -> model.setPersonInAusbildung(personInAusbildungUpdateDtoSpec())
         );
     }
 }

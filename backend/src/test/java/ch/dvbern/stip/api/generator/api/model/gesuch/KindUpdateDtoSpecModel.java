@@ -12,9 +12,9 @@ import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 
 public class KindUpdateDtoSpecModel {
     public static List<KindUpdateDtoSpec> kindUpdateDtoSpecs() {
-        return TestUtil.createUpdateDtoSpecs(KindUpdateDtoSpec::new, (model, faker) -> {
-            model.setVorname(faker.name().firstName());
-            model.setNachname(faker.name().lastName());
+        return TestUtil.createUpdateDtoSpecs(KindUpdateDtoSpec::new, (model) -> {
+            model.setVorname("Test");
+            model.setNachname("Kind");
             model.setGeburtsdatum(TestUtil.getRandomLocalDateBetween(
                 LocalDate.of(1990, 1, 1),
                 LocalDate.of(2002, 1, 1)));
@@ -28,7 +28,7 @@ public class KindUpdateDtoSpecModel {
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecKinder() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> model.setKinds(kindUpdateDtoSpecs())
+            (model) -> model.setKinds(kindUpdateDtoSpecs())
         );
     }
 }

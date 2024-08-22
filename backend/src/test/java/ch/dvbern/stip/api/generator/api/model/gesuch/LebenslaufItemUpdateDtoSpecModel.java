@@ -14,11 +14,11 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 public final class LebenslaufItemUpdateDtoSpecModel {
     public static List<LebenslaufItemUpdateDtoSpec> lebenslaufItemUpdateDtoSpecs() {
-        return TestUtil.createUpdateDtoSpecs(LebenslaufItemUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpecs(LebenslaufItemUpdateDtoSpec::new, (model) -> {
             model.setWohnsitz(TestUtil.getRandomElementFromArray(WohnsitzKantonDtoSpec.values()));
-            model.setAusbildungAbgeschlossen(faker.bool().bool());
-            model.setFachrichtung(faker.educator().course());
-            model.setTaetigkeitsBeschreibung(faker.job().field());
+            model.setAusbildungAbgeschlossen(true);
+            model.setFachrichtung("Testrichtung");
+            model.setTaetigkeitsBeschreibung("Ein Test");
             model.setVon(LocalDate.now().withMonth(8).withDayOfMonth(1).minusYears(1).format(DATE_TIME_FORMATTER));
             model.setBis(LocalDate.now().with(lastDayOfYear()).format(DATE_TIME_FORMATTER));
             model.setBildungsart(LebenslaufAusbildungsArtDtoSpec.MASTER);
@@ -28,7 +28,7 @@ public final class LebenslaufItemUpdateDtoSpecModel {
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecLebenslauf() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> model.setLebenslaufItems(lebenslaufItemUpdateDtoSpecs())
+            (model) -> model.setLebenslaufItems(lebenslaufItemUpdateDtoSpecs())
         );
     }
 }

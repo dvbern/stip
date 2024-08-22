@@ -39,9 +39,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecFamiliensituation() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 FamiliensituationUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecFamiliensituation()
             );
@@ -49,9 +49,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecPartner() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 PartnerUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPartner()
             );
@@ -59,9 +59,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAusbildung() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 AusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAusbildung()
             );
@@ -69,9 +69,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAuszahlung() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 AuszahlungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAuszahlung()
             );
@@ -79,9 +79,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecGeschwister() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 GeschwisterUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecGeschwisters()
             );
@@ -89,9 +89,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecLebenslauf() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 LebenslaufItemUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecLebenslauf()
             );
@@ -99,9 +99,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecElterns() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 ElternUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecElterns()
             );
@@ -109,9 +109,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSteuerdatenTabs() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 SteuerdatenUpdateTabsDtoSpecModel.gesuchFormularUpdateDtoSpecSteuerdaten()
             );
@@ -119,9 +119,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecEinnahmenKosten() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 EinnahmenKostenUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecEinnahmenKosten()
             );
@@ -129,9 +129,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecKinder() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 KindUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecKinder()
             );
@@ -139,7 +139,7 @@ public class GesuchTestSpecGenerator {
     }
 
     private static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecFull() {
-        return TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model) -> {
             model.setPersonInAusbildung(PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec());
             model.getPersonInAusbildung().setZivilstand(ZivilstandDtoSpec.VERHEIRATET);
             model.setAusbildung(AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec());
@@ -159,9 +159,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecFull() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(gesuchFormularUpdateDtoSpecFull());
         });
     }
