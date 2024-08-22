@@ -1,7 +1,3 @@
-<link
-  rel="stylesheet"
-  href="../../../../../../shared/feature/gesuch-dokumente/src/lib/shared-feature-gesuch-dokumente/shared-feature-gesuch-dokumente.component.scss"
-/>
 <div class="col-12 container card p-3 mt-5 shadow row overflow-auto">
   @if (store.loading()) {
     <dv-shared-ui-loading class="loading-spinner"></dv-shared-ui-loading>
@@ -343,7 +339,7 @@
           mat-row
           [ngClass]="{
             'edit-row': staette.id === editedAusbildungsstaette?.id,
-            'expanded-row': staette.id === expandedRowId
+            'expanded-row': staette.id === expandedRowId,
           }"
           *matRowDef="let staette; columns: displayedColumns"
           (click)="expandRow(staette)"

@@ -14,9 +14,9 @@
   min-width: 8rem;
 }
 
-.grid-2-cols {
+.kommentar-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 33px 1fr 1fr 3fr;
   gap: 1rem;
 }
 

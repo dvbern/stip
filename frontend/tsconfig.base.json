@@ -121,6 +121,7 @@
       "@dv/shared/pattern/route-reuse-strategy-configurable": ["libs/shared/pattern/route-reuse-strategy-configurable/src/index.ts"],
       "@dv/shared/pattern/unsaved-guard": ["libs/shared/pattern/unsaved-guard/src/index.ts"],
       "@dv/shared/ui/aenderung-melden-dialog": ["libs/shared/ui/aenderung-melden-dialog/src/index.ts"],
+      "@dv/shared/ui/animations": ["libs/shared/ui/animations/src/index.ts"],
       "@dv/shared/ui/badge": ["libs/shared/ui/badge/src/index.ts"],
       "@dv/shared/ui/clear-button": ["libs/shared/ui/clear-button/src/index.ts"],
       "@dv/shared/ui/comming-soon": ["libs/shared/ui/comming-soon/src/index.ts"],

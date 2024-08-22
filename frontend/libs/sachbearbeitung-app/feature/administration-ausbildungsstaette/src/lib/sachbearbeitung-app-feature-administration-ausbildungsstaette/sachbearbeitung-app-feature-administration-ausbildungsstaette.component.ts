@@ -1,10 +1,3 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
@@ -35,6 +28,7 @@ import { merge } from 'rxjs';
 import { AdminAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
 import { AusbildungsstaetteTableData } from '@dv/sachbearbeitung-app/model/administration';
 import { Ausbildungsgang, Bildungsstufe } from '@dv/shared/model/gesuch';
+import { detailExpand } from '@dv/shared/ui/animations';
 import {
   ConfirmDialogData,
   SharedUiConfirmDialogComponent,
@@ -69,16 +63,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     './sachbearbeitung-app-feature-administration-ausbildungsstaette.component.html',
   styleUrl:
     './sachbearbeitung-app-feature-administration-ausbildungsstaette.component.scss',
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed,void', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
-      ),
-    ]),
-  ],
+  animations: [detailExpand],
   providers: [
     AdminAusbildungsstaetteStore,
     { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },

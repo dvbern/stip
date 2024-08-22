@@ -1,10 +1,3 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -43,6 +36,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createDocumentOptions,
 } from '@dv/shared/pattern/document-upload';
+import { detailExpand } from '@dv/shared/ui/animations';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
@@ -79,16 +73,7 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
   styleUrl: './shared-feature-gesuch-dokumente.component.scss',
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed,void', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
-      ),
-    ]),
-  ],
+  animations: [detailExpand],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchDokumenteComponent {
@@ -98,7 +83,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   private destroyRef = inject(DestroyRef);
   public dokumentsStore = inject(DokumentsStore);
 
-  detailColumns = ['barbeiterUndZeit', 'kommentar'];
+  detailColumns = ['kommentar'];
 
   displayedColumns = [
     'expander',
@@ -251,7 +236,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   expandRow(dokument: SharedModelTableDokument) {
-    if (dokument.gesuchDokument?.status === Dokumentstatus.AUSSTEHEND) {
+    if (dokument.gesuchDokument?.status !== Dokumentstatus.ABGELEHNT) {
       return;
     }
 

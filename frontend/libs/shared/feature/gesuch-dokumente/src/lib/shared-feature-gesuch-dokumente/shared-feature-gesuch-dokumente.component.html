@@ -16,15 +16,15 @@
               'shared.dokumente.table.description' | translate
             }}
           </caption>
-          <ng-container>
-            <td mat-cell class="action-cell" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-              @if (expandedRowId === dokument.dokumentTyp) {
-                <i class="material-symbols-rounded fs-4">expand_less</i>
-              } @else {
-                <i class="material-symbols-rounded fs-4">expand_more</i>
-              }
-            </td>
-          </ng-container>
+
+          <td mat-cell class="action-cell" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+            @if (expandedRowId === dokument.dokumentTyp) {
+              <i class="material-symbols-rounded fs-4">expand_less</i>
+            } @else {
+              <i class="material-symbols-rounded fs-4">expand_more</i>
+            }
+          </td>
+
           <!-- required document -->
           <ng-container matColumnDef="documentName">
             <th mat-header-cell *matHeaderCellDef class="required-document">
@@ -51,17 +51,15 @@
           <ng-container matColumnDef="expander">
             <th class="expander-cell" mat-header-cell *matHeaderCellDef></th>
             <td class="expander-cell" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-              <button
-                class="btn btn-link"
-                [disabled]="dokument.gesuchDokument?.status === DokumentStatus.AUSSTEHEND"
-                type="button"
-              >
-                @if (expandedRowId === dokument.dokumentTyp) {
-                  <i class="material-symbols-rounded expand-indicator fs-4">expand_less</i>
-                } @else {
-                  <i class="material-symbols-rounded expand-indicator fs-4">expand_more</i>
-                }
-              </button>
+              @if (dokument.gesuchDokument?.status === DokumentStatus.ABGELEHNT) {
+                <button class="btn btn-link" type="button">
+                  @if (expandedRowId === dokument.dokumentTyp) {
+                    <i class="material-symbols-rounded expand-indicator fs-4">expand_less</i>
+                  } @else {
+                    <i class="material-symbols-rounded expand-indicator fs-4">expand_more</i>
+                  }
+                </button>
+              }
             </td>
           </ng-container>
 
@@ -155,6 +153,7 @@
             <td mat-cell class="action-cell" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
               <div class="action-cell-content">
                 <dv-shared-pattern-document-upload
+                  (click)="$event.stopPropagation()"
                   [optionsSig]="dokument.documentOptions"
                 ></dv-shared-pattern-document-upload>
               </div>
@@ -163,12 +162,12 @@
 
           @let kommentareRd = dokumentsStore.gesuchDokumentKommentare();
 
-          <!-- detailColumns / Bearbeiter und Zeit  -->
-          <ng-container matColumnDef="barbeiterUndZeit">
+          <!-- detailColumns / Kommentare  -->
+          <ng-container matColumnDef="kommentar">
             <td
               class="expander-cell"
               mat-cell
-              [attr.colspan]="2"
+              [attr.colspan]="displayedColumns.length"
               *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"
             >
               <div
@@ -178,37 +177,17 @@
                 @if (kommentareRd | rdIsPending) {
                   <dv-shared-ui-loading class="pb-2" type="icon"></dv-shared-ui-loading>
                 } @else {
-                  <div class="grid-2-cols py-2">
+                  <div class="kommentar-grid py-2">
                     @for (kommentar of kommentareRd.data; track $index) {
-                      <div class="d-flex gap-4">
-                        <i class="material-symbols-rounded text-gray">person</i>
-                        <span>{{ kommentar.user_erstellt }}</span>
-                      </div>
+                      <i class="material-symbols-rounded text-gray">person</i>
+                      <span>{{ kommentar.user_erstellt }}</span>
                       <div class="text-muted">
                         {{ kommentar.timestampErstellt | date: 'dd.MMMM.YYYY' }}
                       </div>
+                      <div class="">
+                        {{ kommentar.kommentar }}
+                      </div>
                     }
-                  </div>
-                }
-              </div>
-            </td>
-          </ng-container>
-
-          <!-- detailColumns / Kommentar -->
-          <ng-container matColumnDef="kommentar">
-            <td
-              class="expander-cell"
-              mat-cell
-              [attr.colspan]="3"
-              *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"
-            >
-              <div
-                class="detail-cell"
-                [@detailExpand]="dokument.dokumentTyp === expandedRowId ? 'expanded' : 'collapsed'"
-              >
-                @for (kommentar of kommentareRd.data; track $index) {
-                  <div class="py-2">
-                    {{ kommentar?.kommentar ?? ' ' }}
                   </div>
                 }
               </div>
@@ -222,9 +201,7 @@
             mat-row
             *matRowDef="let dokument; columns: displayedColumns"
             (click)="expandRow(dokument)"
-            [ngClass]="{
-              'expanded-row': dokument.dokumentTyp === expandedRowId,
-            }"
+            [class.expanded-row]="dokument.dokumentTyp === expandedRowId"
           ></tr>
           <tr mat-row class="detail-row" *matRowDef="let dokument; columns: detailColumns"></tr>
         </table>
