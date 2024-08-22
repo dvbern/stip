@@ -1,13 +1,21 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.AuszahlungImportStatusLogDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("GetAuszahlungImportStatusResponse")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -25,7 +33,7 @@ public class GetAuszahlungImportStatusResponseDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("status")
   public String getStatus() {
     return status;
@@ -43,7 +51,7 @@ public class GetAuszahlungImportStatusResponseDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("logs")
   public List<AuszahlungImportStatusLogDto> getLogs() {
     return logs;
@@ -93,7 +101,7 @@ public class GetAuszahlungImportStatusResponseDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetAuszahlungImportStatusResponseDto {\n");
-
+    
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    logs: ").append(toIndentedString(logs)).append("\n");
     sb.append("}");

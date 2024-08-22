@@ -7,6 +7,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("GetAuszahlungImportStatusRequest")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -23,7 +28,7 @@ public class GetAuszahlungImportStatusRequestDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("deliveryId")
   @NotNull
   public Integer getDeliveryId() {
@@ -57,7 +62,7 @@ public class GetAuszahlungImportStatusRequestDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GetAuszahlungImportStatusRequestDto {\n");
-
+    
     sb.append("    deliveryId: ").append(toIndentedString(deliveryId)).append("\n");
     sb.append("}");
     return sb.toString();

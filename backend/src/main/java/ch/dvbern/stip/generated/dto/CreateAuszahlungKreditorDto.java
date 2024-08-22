@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -7,6 +8,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("CreateAuszahlungKreditor")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -25,7 +31,7 @@ public class CreateAuszahlungKreditorDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("deliveryId")
   @NotNull
   public Integer getDeliveryId() {
@@ -44,7 +50,7 @@ public class CreateAuszahlungKreditorDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("extId")
   @NotNull
   public Integer getExtId() {
@@ -63,7 +69,7 @@ public class CreateAuszahlungKreditorDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("auszahlung")
   @NotNull
   public AuszahlungDto getAuszahlung() {
@@ -99,7 +105,7 @@ public class CreateAuszahlungKreditorDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CreateAuszahlungKreditorDto {\n");
-
+    
     sb.append("    deliveryId: ").append(toIndentedString(deliveryId)).append("\n");
     sb.append("    extId: ").append(toIndentedString(extId)).append("\n");
     sb.append("    auszahlung: ").append(toIndentedString(auszahlung)).append("\n");

@@ -2,10 +2,16 @@ package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("AuszahlungImportStatusLog")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -23,7 +29,7 @@ public class AuszahlungImportStatusLogDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("datetime")
   public String getDatetime() {
     return datetime;
@@ -41,7 +47,7 @@ public class AuszahlungImportStatusLogDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("message")
   public String getMessage() {
     return message;
@@ -75,7 +81,7 @@ public class AuszahlungImportStatusLogDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AuszahlungImportStatusLogDto {\n");
-
+    
     sb.append("    datetime: ").append(toIndentedString(datetime)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");

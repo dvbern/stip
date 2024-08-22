@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -7,6 +8,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("CreateAuszahlung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -27,7 +33,7 @@ public class CreateAuszahlungDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("deliveryId")
   @NotNull
   public Integer getDeliveryId() {
@@ -46,7 +52,7 @@ public class CreateAuszahlungDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vendorNo")
   @NotNull
   public Integer getVendorNo() {
@@ -65,7 +71,7 @@ public class CreateAuszahlungDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("auszahlung")
   @NotNull
   public AuszahlungDto getAuszahlung() {
@@ -84,7 +90,7 @@ public class CreateAuszahlungDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("positionsText")
   public String getPositionsText() {
     return positionsText;
@@ -102,7 +108,7 @@ public class CreateAuszahlungDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("zahlungszweck")
   public String getZahlungszweck() {
     return zahlungszweck;
@@ -139,7 +145,7 @@ public class CreateAuszahlungDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CreateAuszahlungDto {\n");
-
+    
     sb.append("    deliveryId: ").append(toIndentedString(deliveryId)).append("\n");
     sb.append("    vendorNo: ").append(toIndentedString(vendorNo)).append("\n");
     sb.append("    auszahlung: ").append(toIndentedString(auszahlung)).append("\n");

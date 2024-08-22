@@ -3,10 +3,19 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.ChangeAuszahlungKreditorDto;
 import ch.dvbern.stip.generated.dto.CreateAuszahlungDto;
 import ch.dvbern.stip.generated.dto.CreateAuszahlungKreditorDto;
+import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusResponseDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
+
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
-import jakarta.validation.constraints.NotNull;
+
+
+
+import java.io.InputStream;
+import java.util.Map;
+import java.util.List;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
