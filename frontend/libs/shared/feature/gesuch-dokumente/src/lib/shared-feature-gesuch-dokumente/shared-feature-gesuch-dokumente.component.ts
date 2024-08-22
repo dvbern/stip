@@ -186,7 +186,9 @@ export class SharedFeatureGesuchDokumenteComponent {
 
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: document.gesuchDokument.id,
-      gesuchId,
+      afterSuccess: () => {
+        this.dokumentsStore.getDokumenteAndRequired$(gesuchId);
+      },
     });
   }
 
@@ -210,8 +212,10 @@ export class SharedFeatureGesuchDokumenteComponent {
         if (result) {
           this.dokumentsStore.gesuchDokumentAblehnen$({
             gesuchDokumentId: result.id,
-            gesuchId,
             kommentar: result.kommentar,
+            afterSuccess: () => {
+              this.dokumentsStore.getDokumenteAndRequired$(gesuchId);
+            },
           });
         }
       });

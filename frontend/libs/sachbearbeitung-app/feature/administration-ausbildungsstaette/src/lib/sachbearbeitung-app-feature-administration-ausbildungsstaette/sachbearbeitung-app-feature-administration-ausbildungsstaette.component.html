@@ -348,7 +348,7 @@
           mat-row
           [ngClass]="{
             'edit-row': staette.id === editedAusbildungsstaette?.id,
-            'expanded-row': staette.id === expandedRowId
+            'expanded-row': staette.id === expandedRowId,
           }"
           *matRowDef="let staette; columns: displayedColumns"
           (click)="expandRow(staette)"

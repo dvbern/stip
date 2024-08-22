@@ -74,6 +74,7 @@ public class GesuchApiSpec {
                 getBerechnungForGesuch(),
                 getCurrentGesuch(),
                 getGesuch(),
+                getGesuchDokument(),
                 getGesuchDokumente(),
                 getGesucheForFall(),
                 getGesucheGs(),
@@ -119,6 +120,10 @@ public class GesuchApiSpec {
 
     public GetGesuchOper getGesuch() {
         return new GetGesuchOper(createReqSpec());
+    }
+
+    public GetGesuchDokumentOper getGesuchDokument() {
+        return new GetGesuchDokumentOper(createReqSpec());
     }
 
     public GetGesuchDokumenteOper getGesuchDokumente() {
@@ -783,6 +788,91 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchsIdPath  (required)
+     * @see #dokumentTypPath  (required)
+     * return GesuchDokumentDtoSpec
+     */
+    public static class GetGesuchDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{gesuchsId}/dokumente/{dokumentTyp}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{gesuchsId}/dokumente/{dokumentTyp}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{gesuchsId}/dokumente/{dokumentTyp}
+         * @param handler handler
+         * @return GesuchDokumentDtoSpec
+         */
+        public GesuchDokumentDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDokumentDtoSpec> type = new TypeRef<GesuchDokumentDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCHS_ID_PATH = "gesuchsId";
+
+        /**
+         * @param gesuchsId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentOper gesuchsIdPath(Object gesuchsId) {
+            reqSpec.addPathParam(GESUCHS_ID_PATH, gesuchsId);
+            return this;
+        }
+
+        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
+
+        /**
+         * @param dokumentTyp (DokumentTypDtoSpec)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentOper dokumentTypPath(Object dokumentTyp) {
+            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
