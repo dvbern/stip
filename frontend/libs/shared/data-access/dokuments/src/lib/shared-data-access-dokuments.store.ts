@@ -96,13 +96,13 @@ export class DokumentsStore extends signalStore(
     }),
   );
 
-  gesuchDokumentAblehnenAndReloadList$ = rxMethod<{
-    gesuchId: string;
+  gesuchDokumentAblehnen$ = rxMethod<{
     gesuchDokumentId: string;
     kommentar: string;
+    afterSuccess?: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchId, gesuchDokumentId, kommentar }) =>
+      switchMap(({ gesuchDokumentId, kommentar, afterSuccess }) =>
         this.dokumentService
           .gesuchDokumentAblehnen$({
             gesuchDokumentId,
@@ -111,68 +111,41 @@ export class DokumentsStore extends signalStore(
             },
           })
           .pipe(
-            this.reloadGesuchDokumente(
-              gesuchId,
-              'shared.dokumente.reject.success',
-            ),
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.reject.success',
+                });
+                afterSuccess?.();
+              },
+              error: () => undefined,
+            }),
           ),
       ),
     ),
   );
 
-  gesuchDokumentAkzeptierenAndReloadList$ = rxMethod<{
-    gesuchId: string;
+  gesuchDokumentAkzeptieren$ = rxMethod<{
     gesuchDokumentId: string;
+    afterSuccess?: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchDokumentId, gesuchId }) =>
+      switchMap(({ gesuchDokumentId, afterSuccess }) =>
         this.dokumentService
           .gesuchDokumentAkzeptieren$({
             gesuchDokumentId,
           })
           .pipe(
-            this.reloadGesuchDokumente(
-              gesuchId,
-              'shared.dokumente.accept.success',
-            ),
-          ),
-      ),
-    ),
-  );
-
-  gesuchDokumentAblehnenAndReloadCurrent$ = rxMethod<{
-    gesuchId: string;
-    gesuchDokumentId: string;
-    kommentar: string;
-    gesuchDokumentTyp: DokumentTyp;
-  }>(
-    pipe(
-      switchMap(
-        ({ gesuchId, gesuchDokumentId, kommentar, gesuchDokumentTyp }) =>
-          this.dokumentService
-            .gesuchDokumentAblehnen$({
-              gesuchDokumentId,
-              gesuchDokumentAblehnenRequest: {
-                kommentar,
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.accept.success',
+                });
+                afterSuccess?.();
               },
-            })
-            .pipe(this.loadGesuchDokument$(gesuchId, gesuchDokumentTyp)),
-      ),
-    ),
-  );
-
-  gesuchDokumentAkzeptierenAndReloadCurrent$ = rxMethod<{
-    gesuchId: string;
-    gesuchDokumentId: string;
-    gesuchDokumentTyp: DokumentTyp;
-  }>(
-    pipe(
-      switchMap(({ gesuchDokumentId, gesuchId, gesuchDokumentTyp }) =>
-        this.dokumentService
-          .gesuchDokumentAkzeptieren$({
-            gesuchDokumentId,
-          })
-          .pipe(this.loadGesuchDokument$(gesuchId, gesuchDokumentTyp)),
+              error: () => undefined,
+            }),
+          ),
       ),
     ),
   );
@@ -277,34 +250,4 @@ export class DokumentsStore extends signalStore(
       ),
     ),
   );
-
-  private reloadGesuchDokumente = (gesuchId: string, messageKey: string) =>
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          dokuments: cachedPending(state.dokuments),
-        }));
-      }),
-      switchMap(() =>
-        this.gesuchService.getGesuchDokumente$({
-          gesuchId,
-        }),
-      ),
-      tapResponse({
-        next: (dokuments) => {
-          patchState(this, { dokuments: success(dokuments) });
-          this.globalNotificationStore.createSuccessNotification({
-            messageKey,
-          });
-        },
-        error: () => {
-          patchState(this, (state) => ({
-            dokuments: success(state.dokuments.data ?? []),
-          }));
-        },
-      }),
-      catchError(() => {
-        return EMPTY;
-      }),
-    );
 }

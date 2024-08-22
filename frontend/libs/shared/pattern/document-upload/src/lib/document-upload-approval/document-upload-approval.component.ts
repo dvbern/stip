@@ -57,10 +57,11 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
     const dokumentId = this.dokumentsStore.dokumentViewSig()?.id;
     if (!dokumentId) return;
 
-    this.dokumentsStore.gesuchDokumentAkzeptierenAndReloadCurrent$({
+    this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: dokumentId,
-      gesuchId: this.uploadViewSig().gesuchId,
-      gesuchDokumentTyp: this.uploadViewSig().type,
+      afterSuccess: () => {
+        this.reloadDokumente();
+      },
     });
   }
 
@@ -78,13 +79,26 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         if (result) {
-          this.dokumentsStore.gesuchDokumentAblehnenAndReloadCurrent$({
+          this.dokumentsStore.gesuchDokumentAblehnen$({
             gesuchDokumentId: result.id,
-            gesuchId: this.uploadViewSig().gesuchId,
             kommentar: result.kommentar,
-            gesuchDokumentTyp: this.uploadViewSig().type,
+            afterSuccess: () => {
+              this.reloadDokumente();
+            },
           });
         }
       });
+  }
+
+  private reloadDokumente() {
+    if (this.uploadViewSig().initialDocuments) {
+      this.dokumentsStore.getDokumenteAndRequired$(
+        this.uploadViewSig().gesuchId,
+      );
+    }
+    this.dokumentsStore.getGesuchDokument$({
+      gesuchsId: this.uploadViewSig().gesuchId,
+      dokumentTyp: this.uploadViewSig().type,
+    });
   }
 }

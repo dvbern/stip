@@ -11,7 +11,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, mergeMap } from 'rxjs';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { DocumentOptions } from '@dv/shared/model/dokument';
+import { DocumentOptions, UploadView } from '@dv/shared/model/dokument';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUiIfGesuchstellerDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUtilDocumentMergerService } from '@dv/shared/util/document-merger';
@@ -45,10 +45,11 @@ export class SharedPatternDocumentUploadDialogComponent {
   documentMerger = inject(SharedUtilDocumentMergerService);
   config = inject(SharedModelCompileTimeConfig);
 
-  uploadViewSig = computed(() => ({
+  uploadViewSig = computed<UploadView>(() => ({
     gesuchId: this.data.options.gesuchId,
     type: this.data.options.dokumentTyp,
     readonly: this.data.options.readonly,
+    initialDocuments: this.data.options.initialDocuments,
     isSachbearbeitungApp: this.config.isSachbearbeitungApp,
   }));
 

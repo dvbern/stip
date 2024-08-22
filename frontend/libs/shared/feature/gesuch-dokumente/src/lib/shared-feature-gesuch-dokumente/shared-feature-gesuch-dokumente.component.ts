@@ -184,9 +184,11 @@ export class SharedFeatureGesuchDokumenteComponent {
 
     if (!document?.gesuchDokument?.id || !gesuchId) return;
 
-    this.dokumentsStore.gesuchDokumentAkzeptierenAndReloadList$({
+    this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: document.gesuchDokument.id,
-      gesuchId,
+      afterSuccess: () => {
+        this.dokumentsStore.getDokumenteAndRequired$(gesuchId);
+      },
     });
   }
 
@@ -208,10 +210,12 @@ export class SharedFeatureGesuchDokumenteComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         if (result) {
-          this.dokumentsStore.gesuchDokumentAblehnenAndReloadList$({
+          this.dokumentsStore.gesuchDokumentAblehnen$({
             gesuchDokumentId: result.id,
-            gesuchId,
             kommentar: result.kommentar,
+            afterSuccess: () => {
+              this.dokumentsStore.getDokumenteAndRequired$(gesuchId);
+            },
           });
         }
       });
