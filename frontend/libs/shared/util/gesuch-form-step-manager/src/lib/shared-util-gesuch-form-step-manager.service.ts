@@ -47,12 +47,13 @@ export class SharedUtilGesuchFormStepManagerService {
     steps: SharedModelGesuchFormStep[],
     gesuchFormular: SharedModelGesuchFormular | null,
     invalidProps?: StepValidation,
+    readonly = false,
   ): GesuchFormStepView[] {
     return steps.map((step, index) => ({
       ...step,
       nextStep: steps[index + 1],
       status: isStepValid(step, gesuchFormular, invalidProps),
-      disabled: isStepDisabled(step, gesuchFormular),
+      disabled: isStepDisabled(step, gesuchFormular, readonly),
     }));
   }
 

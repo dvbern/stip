@@ -73,10 +73,12 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
     const { cachedGesuchFormular, invalidFormularProps } =
       this.validationViewSig();
     const steps = this.stepsViewSig().steps;
+    const readonly = this.viewSig().readonly;
     const validatedSteps = this.stepManager.getValidatedSteps(
       steps,
       cachedGesuchFormular,
       invalidFormularProps.validations,
+      readonly,
     );
     return validatedSteps;
   });
