@@ -43,11 +43,17 @@ export const initializeTest = () => {
       }
 
       // extract gesuch new gesuch id
-      const requestPromise = page.waitForResponse('**/api/v1/gesuch/*');
+      const requestPromise = page.waitForResponse((response) => {
+        return (
+          response.url().includes('/api/v1/gesuch/fall/') &&
+          response.status() === 200 &&
+          response.request().method() === 'GET'
+        );
+      });
       await cockpit.getGesuchNew().click();
       const response = await requestPromise;
       const body = await response.json();
-      gesuchId = body.id;
+      gesuchId = body[0].id;
 
       await use(cockpit);
     },

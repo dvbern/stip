@@ -97,7 +97,7 @@ class BenutzerResourceTest {
     @Order(5)
     @TestAsAdmin
     void createSachbearbeiterZuordnungStammdaten() {
-        final var updateDto = SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenDtoSpec;
+        final var updateDto = SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenDtoSpec();
         api.createOrUpdateSachbearbeiterStammdaten()
             .benutzerIdPath(sachbearbeiterUUID)
             .body(updateDto)

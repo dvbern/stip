@@ -2,7 +2,7 @@
   [closeMenu]="navClickedSig()"
   [backLink]="{
     path: '/',
-    text: 'sachbearbeitung-app.header.back' | translate
+    text: 'sachbearbeitung-app.header.back' | translate,
   }"
 >
   <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
@@ -11,7 +11,6 @@
       type="button"
       class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-tranche-auswahl"
-      routerLinkActive="active"
       [class.active]="isGesuchRouteSig()"
       [matMenuTriggerFor]="gesuchMenu"
     >
@@ -20,26 +19,29 @@
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
     <mat-menu #gesuchMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'">
-      @if (currentGesuchSig(); as currentGesuch) {
-        <a
-          [routerLink]="['/', 'gesuch', currentGesuch.id]"
-          class="btn btn-light btn-nav active fw-normal px-3 d-flex align-items-center shadow-none"
-          data-testid="gesuch-step-nav-overview"
-          mat-menu-item
-        >
-          <span>
-            {{
-              'sachbearbeitung-app.header.tranche.item'
-                | translate: { date: currentGesuch.gesuchsperiode.gesuchsperiodeStart | date: 'MM.YYYY', index: 1 }
-            }}
-            -
-            {{ currentGesuch.gesuchsperiode.gesuchsperiodeStopp | date: 'MM.YYYY' }}
-          </span>
-        </a>
-      }
+      <div class="d-flex flex-column gap-2">
+        @for (tranche of tranchenSig(); track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'tranche', tranche.id]"
+            class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+            data-testid="gesuch-step-nav-overview"
+            mat-menu-item
+            [class.active]="currentGesuchSig()?.gesuchTrancheToWorkWith?.id === tranche.id"
+          >
+            <span>
+              {{
+                'sachbearbeitung-app.header.tranche.item'
+                  | translate: { date: tranche.gueltigAb | date: 'MM.YYYY', index: $index + 1 }
+              }}
+              -
+              {{ tranche.gueltigBis | date: 'MM.YYYY' }}
+            </span>
+          </a>
+        }
+      </div>
     </mat-menu>
 
-    <!-- Verfuegung -->
+    <!-- Verfuegung-->
     <a
       [routerLink]="['/', 'verfuegung', currentGesuchSig()?.id]"
       routerLinkActive="active"
@@ -81,14 +83,15 @@
         <span>{{ 'sachbearbeitung-app.header.gesuch-bearbeiten' | translate }}</span>
       </button>
     } @else {
-      <a
-        routerLink="/"
+      <button
+        type="button"
         class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
         data-testid="gesuch-header-nav-tranche-erstellen"
+        (click)="createTranche()"
       >
         <i class="material-symbols-rounded text-white me-2">add_circle</i>
         <span>{{ 'sachbearbeitung-app.header.tranche.erstellen' | translate }}</span>
-      </a>
+      </button>
     }
   </div>
   <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>

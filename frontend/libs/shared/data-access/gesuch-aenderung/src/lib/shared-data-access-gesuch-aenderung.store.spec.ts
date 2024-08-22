@@ -23,5 +23,10 @@ describe('GesuchAenderungStore', () => {
       data: undefined,
       error: undefined,
     });
+    expect(store.cachedTranchenSlim()).toEqual({
+      type: 'initial',
+      data: undefined,
+      error: undefined,
+    });
   });
 });

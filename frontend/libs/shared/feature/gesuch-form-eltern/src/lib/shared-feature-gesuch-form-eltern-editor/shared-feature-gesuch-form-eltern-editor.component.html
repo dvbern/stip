@@ -165,33 +165,6 @@
   </div>
 
   <div class="row g-4 my-2">
-    <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-      <mat-form-field dvSharedUiFormField class="flex-grow-1">
-        <mat-label>{{ 'shared.form.shared.wohnkosten.label' | translate }}</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="wohnkosten"
-          data-testid="form-eltern-wohnkosten"
-          [maskito]="maskitoNumber"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      @if (wohnkostenDocumentSig(); as options) {
-        <div class="d-flex gap-2 align-items-center">
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        </div>
-      }
-    </div>
-  </div>
-
-  <div class="row g-4 my-2">
     <mat-radio-group
       formControlName="ausweisbFluechtling"
       data-testid="form-eltern-ausweisFluechtling"
@@ -211,62 +184,6 @@
           <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
         </div>
         @if (lohnabrechnungVermoegenDocumentSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1 mt-2"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
-      </div>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-radio-group>
-  </div>
-
-  <div class="row g-4 my-2">
-    <mat-radio-group
-      formControlName="ergaenzungsleistungAusbezahlt"
-      data-testid="form-eltern-ergaenzungsleistungAusbezahlt"
-      dvSharedUiFormField
-      class="col-12"
-    >
-      <label>{{ 'shared.form.eltern.ergaenzungsleistungAusbezahlt.label' | translate }}</label>
-      <div class="d-flex flex-wrap gap-2 col-12 col-md-6 col-xl-4 pe-md-3 justify-content-between">
-        <div class="d-flex flex-column">
-          <mat-radio-button data-testid="yes" [value]="true">{{
-            'shared.form.radio.yes' | translate
-          }}</mat-radio-button>
-          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
-        </div>
-        @if (ergaenzungsleistungenDocumentSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1 mt-2"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
-      </div>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-radio-group>
-  </div>
-
-  <div class="row g-4 my-2">
-    <mat-radio-group
-      formControlName="sozialhilfebeitraegeAusbezahlt"
-      data-testid="form-eltern-sozialhilfebeitraegeAusbezahlt"
-      dvSharedUiFormField
-      class="col-12"
-    >
-      <label>{{ 'shared.form.eltern.sozialhilfebeitraegeAusbezahlt.label' | translate }}</label>
-      <div class="d-flex flex-wrap gap-2 col-12 col-md-6 col-xl-4 pe-md-3 justify-content-between">
-        <div class="d-flex flex-column">
-          <mat-radio-button data-testid="yes" [value]="true">{{
-            'shared.form.radio.yes' | translate
-          }}</mat-radio-button>
-          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
-        </div>
-        @if (sozialhilfeDocumentSig(); as options) {
           <dv-shared-pattern-document-upload
             class="flex-shrink-1 mt-2"
             [optionsSig]="options"

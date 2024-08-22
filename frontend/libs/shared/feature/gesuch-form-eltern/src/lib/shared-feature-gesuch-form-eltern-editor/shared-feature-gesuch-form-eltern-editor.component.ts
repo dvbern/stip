@@ -55,10 +55,7 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import {
-  fromFormatedNumber,
-  maskitoNumber,
-} from '@dv/shared/util/maskito-util';
+import { maskitoNumber } from '@dv/shared/util/maskito-util';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
@@ -150,7 +147,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       <string | undefined>undefined,
       [Validators.required],
     ],
-    wohnkosten: [<string | undefined>undefined, [Validators.required]],
     telefonnummer: [
       '',
       [Validators.required, sharedUtilValidatorTelefonNummer()],
@@ -173,26 +169,10 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         ),
       ],
     ],
-    sozialhilfebeitraegeAusbezahlt: [
-      <boolean | null>null,
-      [Validators.required],
-    ],
     ausweisbFluechtling: [<boolean | null>null, [Validators.required]],
-    ergaenzungsleistungAusbezahlt: [
-      <boolean | null>null,
-      [Validators.required],
-    ],
   });
 
   svnIsRequiredSig = signal(false);
-
-  ergaenzungsleistungAusbezahltSig = toSignal(
-    this.form.controls.ergaenzungsleistungAusbezahlt.valueChanges,
-  );
-
-  sozialhilfeSig = toSignal(
-    this.form.controls.sozialhilfebeitraegeAusbezahlt.valueChanges,
-  );
 
   ausweisbFluechtlingSig = toSignal(
     this.form.controls.ausweisbFluechtling.valueChanges,
@@ -201,8 +181,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   landChangedSig = toSignal(
     this.form.controls.adresse.controls.land.valueChanges,
   );
-
-  wohnkostenChangedSig = toSignal(this.form.controls.wohnkosten.valueChanges);
 
   lohnabrechnungVermoegenDocumentSig = this.createUploadOptionsSig(() => {
     const elternTyp = this.elternteil.elternTyp;
@@ -231,47 +209,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     }
 
     return null;
-  });
-
-  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
-    const elternTyp = this.elternteil.elternTyp;
-    const ergaenzungsleistung = this.ergaenzungsleistungAusbezahltSig();
-
-    if (elternTyp === ElternTyp.MUTTER) {
-      return ergaenzungsleistung
-        ? DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
-        : null;
-    }
-
-    return ergaenzungsleistung
-      ? DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
-      : null;
-  });
-
-  sozialhilfeDocumentSig = this.createUploadOptionsSig(() => {
-    const elternTyp = this.elternteil.elternTyp;
-    const sozialhilfe = this.sozialhilfeSig();
-
-    if (elternTyp === ElternTyp.MUTTER) {
-      return sozialhilfe ? DokumentTyp.ELTERN_SOZIALHILFEBUDGET_MUTTER : null;
-    }
-
-    return sozialhilfe ? DokumentTyp.ELTERN_SOZIALHILFEBUDGET_VATER : null;
-  });
-
-  wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
-    const elternTyp = this.elternteil.elternTyp;
-    const wohnkosten = fromFormatedNumber(this.wohnkostenChangedSig()) ?? 0;
-
-    if (elternTyp === ElternTyp.MUTTER) {
-      return wohnkosten > 0
-        ? DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
-        : null;
-    }
-
-    return wohnkosten > 0
-      ? DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
-      : null;
   });
 
   constructor() {
@@ -330,7 +267,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     if (changes['elternteil']?.currentValue) {
       this.form.patchValue({
         ...this.elternteil,
-        wohnkosten: this.elternteil.wohnkosten?.toString(),
         geburtsdatum: parseBackendLocalDateAndPrint(
           this.elternteil.geburtsdatum,
           this.languageSig(),
@@ -359,10 +295,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
     const formValues = convertTempFormToRealValues(this.form, [
-      'sozialhilfebeitraegeAusbezahlt',
       'ausweisbFluechtling',
-      'ergaenzungsleistungAusbezahlt',
-      'wohnkosten',
     ]);
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       formValues.geburtsdatum,
@@ -381,7 +314,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         id: this.elternteil.id,
         elternTyp: this.elternteil.elternTyp,
         geburtsdatum,
-        wohnkosten: fromFormatedNumber(formValues.wohnkosten),
       });
       this.form.markAsPristine();
     }

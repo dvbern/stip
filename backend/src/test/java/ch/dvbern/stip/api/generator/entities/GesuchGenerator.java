@@ -21,19 +21,19 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.util.TestConstants;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
@@ -43,7 +43,7 @@ public final class GesuchGenerator {
     }
 
     public static GesuchUpdateDto createFullGesuch() {
-        GesuchUpdateDtoSpec gesuchFormular = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull;
+        GesuchUpdateDtoSpec gesuchFormular = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
         return new GesuchUpdateDtoMapperImpl().toEntity(gesuchFormular);
     }
 
@@ -69,7 +69,7 @@ public final class GesuchGenerator {
     }
 
     private static List<LebenslaufItemUpdateDtoSpec> createLebenslaufItems() {
-        return LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs;
+        return LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs();
     }
 
     /* return a new instance of Gesuch with a valid GesuchPeriode */
@@ -101,7 +101,7 @@ public final class GesuchGenerator {
     }
 
     private static FamiliensituationUpdateDtoSpec createFamiliensituation() {
-        final var familienSituationUpdateDto = FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec;
+        final var familienSituationUpdateDto = FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec();
         familienSituationUpdateDto.setElternVerheiratetZusammen(true);
         return familienSituationUpdateDto;
     }
@@ -121,23 +121,23 @@ public final class GesuchGenerator {
     }
 
     private static PartnerUpdateDtoSpec createPartner() {
-        PartnerUpdateDtoSpec partnerDtoSpec = PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec;
+        PartnerUpdateDtoSpec partnerDtoSpec = PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec();
         return partnerDtoSpec;
     }
 
     private static PersonInAusbildungUpdateDtoSpec createPersonInAusbildung() {
-        return PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec;
+        return PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec();
     }
 
     private static EinnahmenKostenUpdateDtoSpec createEinnahmeKosten() {
         EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto =
-            EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec;
+            EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec();
         einnahmenKostenUpdateDto.setVerdienstRealisiert(false);
         return einnahmenKostenUpdateDto;
     }
 
     private static AuszahlungUpdateDtoSpec createAuszahlung() {
-        AuszahlungUpdateDtoSpec auszahlungUpdateDto = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec;
+        AuszahlungUpdateDtoSpec auszahlungUpdateDto = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
         auszahlungUpdateDto.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         return auszahlungUpdateDto;
     }

@@ -25,16 +25,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * AenderungsantragCreateDtoSpec
+ * BaseTrancheRequestDtoSpec
  */
 @JsonPropertyOrder({
-  AenderungsantragCreateDtoSpec.JSON_PROPERTY_START,
-  AenderungsantragCreateDtoSpec.JSON_PROPERTY_END,
-  AenderungsantragCreateDtoSpec.JSON_PROPERTY_COMMENT
+  BaseTrancheRequestDtoSpec.JSON_PROPERTY_START,
+  BaseTrancheRequestDtoSpec.JSON_PROPERTY_END,
+  BaseTrancheRequestDtoSpec.JSON_PROPERTY_COMMENT
 })
-@JsonTypeName("AenderungsantragCreate")
+@JsonTypeName("BaseTrancheRequest")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class AenderungsantragCreateDtoSpec {
+public class BaseTrancheRequestDtoSpec {
   public static final String JSON_PROPERTY_START = "start";
   private LocalDate start;
 
@@ -44,10 +44,10 @@ public class AenderungsantragCreateDtoSpec {
   public static final String JSON_PROPERTY_COMMENT = "comment";
   private String comment;
 
-  public AenderungsantragCreateDtoSpec() {
+  public BaseTrancheRequestDtoSpec() {
   }
 
-  public AenderungsantragCreateDtoSpec start(LocalDate start) {
+  public BaseTrancheRequestDtoSpec start(LocalDate start) {
     
     this.start = start;
     return this;
@@ -57,9 +57,9 @@ public class AenderungsantragCreateDtoSpec {
    * Get start
    * @return start
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_START)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public LocalDate getStart() {
     return start;
@@ -67,13 +67,13 @@ public class AenderungsantragCreateDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_START)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setStart(LocalDate start) {
     this.start = start;
   }
 
 
-  public AenderungsantragCreateDtoSpec end(LocalDate end) {
+  public BaseTrancheRequestDtoSpec end(LocalDate end) {
     
     this.end = end;
     return this;
@@ -99,7 +99,7 @@ public class AenderungsantragCreateDtoSpec {
   }
 
 
-  public AenderungsantragCreateDtoSpec comment(String comment) {
+  public BaseTrancheRequestDtoSpec comment(String comment) {
     
     this.comment = comment;
     return this;
@@ -132,10 +132,10 @@ public class AenderungsantragCreateDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AenderungsantragCreateDtoSpec aenderungsantragCreate = (AenderungsantragCreateDtoSpec) o;
-    return Objects.equals(this.start, aenderungsantragCreate.start) &&
-        Objects.equals(this.end, aenderungsantragCreate.end) &&
-        Objects.equals(this.comment, aenderungsantragCreate.comment);
+    BaseTrancheRequestDtoSpec baseTrancheRequest = (BaseTrancheRequestDtoSpec) o;
+    return Objects.equals(this.start, baseTrancheRequest.start) &&
+        Objects.equals(this.end, baseTrancheRequest.end) &&
+        Objects.equals(this.comment, baseTrancheRequest.comment);
   }
 
   @Override
@@ -146,7 +146,7 @@ public class AenderungsantragCreateDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AenderungsantragCreateDtoSpec {\n");
+    sb.append("class BaseTrancheRequestDtoSpec {\n");
     sb.append("    start: ").append(toIndentedString(start)).append("\n");
     sb.append("    end: ").append(toIndentedString(end)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");

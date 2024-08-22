@@ -14,44 +14,89 @@ import ch.dvbern.stip.api.familiensituation.util.FamiliensituationCopyUtil;
 import ch.dvbern.stip.api.geschwister.util.GeschwisterCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.util.KindCopyUtil;
 import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
 import ch.dvbern.stip.api.partner.util.PartnerCopyUtil;
 import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
-import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
+import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
+import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 // TODO KSTIP-1236: Once proper test data generation is in place, test copying
 public class GesuchTrancheCopyUtil {
+    /**
+     * Copies an existing {@link GesuchTranche} and sets all values, so it's a complete Aenderungstranche
+     */
     public GesuchTranche createAenderungstranche(
-        final GesuchTranche gesuchTranche,
-        final AenderungsantragCreateDto createDto
+        final GesuchTranche original,
+        final CreateAenderungsantragRequestDto createDto
     ) {
-        final var gesuch = gesuchTranche.getGesuch();
-        final var newTranche = new GesuchTranche();
-        newTranche.setGesuch(gesuch);
+        return copyTranche(
+            original,
+            new DateRange(createDto.getStart(), createDto.getEnd()),
+            createDto.getComment()
+        ).setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+    }
 
-        newTranche.setGueltigkeit(clampStartStop(gesuch.getGesuchsperiode(), createDto));
-        newTranche.setComment(createDto.getComment());
-        newTranche.setGesuchFormular(copy(gesuchTranche.getGesuchFormular()));
+    /**
+     * Copies an existing {@link GesuchTranche} and sets the new {@link GesuchTranche#status}
+     * to {@link GesuchTrancheStatus#UEBERPRUEFEN}
+     */
+    public GesuchTranche createNewTranche(
+        final GesuchTranche gesuchTranche,
+        final DateRange gueltigkeit,
+        final String comment
+    ) {
+        final var newTranche = copyTranche(
+            gesuchTranche,
+            gueltigkeit,
+            comment
+        );
+
+        newTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         return newTranche;
     }
 
-    DateRange clampStartStop(final Gesuchsperiode gesuchsperiode, final AenderungsantragCreateDto createDto) {
+    /**
+     * Copies a tranche
+     */
+    public GesuchTranche copyTranche(
+        final GesuchTranche original,
+        final DateRange createDateRange,
+        final String comment
+    ) {
+        final var gesuch = original.getGesuch();
+        final var newTranche = new GesuchTranche();
+        newTranche.setGueltigkeit(clampStartStop(gesuch.getGesuchsperiode(), createDateRange));
+        newTranche.setComment(comment);
+        newTranche.setGesuchFormular(copy(original.getGesuchFormular()));
+        newTranche.getGesuchFormular().setTranche(newTranche);
+        newTranche.setGesuch(original.getGesuch());
+        return newTranche;
+    }
+
+    DateRange clampStartStop(final Gesuchsperiode gesuchsperiode, final DateRange createDateRange) {
         final var gesuchsperiodeStart = gesuchsperiode.getGesuchsperiodeStart();
         final var gesuchsperiodeStopp = gesuchsperiode.getGesuchsperiodeStopp();
-        final var startDate = DateUtil.clamp(
-            createDto.getStart(),
-            gesuchsperiodeStart,
-            gesuchsperiodeStopp
+        final var startDate = DateUtil.roundToStartOrEnd(
+            DateUtil.clamp(
+                createDateRange.getGueltigAb(),
+                gesuchsperiodeStart,
+                gesuchsperiodeStopp
+            ),
+            true
         );
-        final var endDate = DateUtil.clamp(
-            createDto.getEnd() != null ? createDto.getEnd() : gesuchsperiodeStopp,
-            gesuchsperiodeStart,
-            gesuchsperiodeStopp
+        final var endDate = DateUtil.roundToStartOrEnd(
+            DateUtil.clamp(
+                createDateRange.getGueltigBis() != null ? createDateRange.getGueltigBis() : gesuchsperiodeStopp,
+                gesuchsperiodeStart,
+                gesuchsperiodeStopp
+            ),
+            false
         );
 
         if (startDate.isAfter(endDate)) {

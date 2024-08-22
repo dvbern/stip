@@ -46,9 +46,12 @@ const baseSteps = [
   EINNAHMEN_KOSTEN,
   DOKUMENTE,
 ];
+
 const { selectRouteParam } = getRouterSelectors();
 
 export const selectRouteId = selectRouteParam('id');
+
+export const selectRouteTrancheId = selectRouteParam('trancheId');
 
 export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedDataAccessConfigsView,
@@ -141,6 +144,9 @@ const transformValidationMessagesToFormKeys = (
 ) => {
   const formKeys: SharedModelGesuchFormularProps[] = [
     ...(Object.keys(currentForm ?? {}) as SharedModelGesuchFormularProps[]),
+    'steuerdaten',
+    'steuerdatenMutter',
+    'steuerdatenVater',
     'dokuments',
   ];
 

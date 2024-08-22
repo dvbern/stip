@@ -14,13 +14,17 @@ public class SteuerdatenCopyUtil {
         copy.setSteuerdatenTyp(other.getSteuerdatenTyp());
         copy.setTotalEinkuenfte(other.getTotalEinkuenfte());
         copy.setEigenmietwert(other.getEigenmietwert());
+        copy.setWohnkosten(other.getWohnkosten());
         copy.setIsArbeitsverhaeltnisSelbstaendig(other.getIsArbeitsverhaeltnisSelbstaendig());
         copy.setSaeule3a(other.getSaeule3a());
         copy.setSaeule2(other.getSaeule2());
         copy.setKinderalimente(other.getKinderalimente());
         copy.setErgaenzungsleistungen(other.getErgaenzungsleistungen());
+        copy.setErgaenzungsleistungenPartner(other.getErgaenzungsleistungenPartner());
+        copy.setSozialhilfebeitraege(other.getSozialhilfebeitraege());
+        copy.setSozialhilfebeitraegePartner(other.getSozialhilfebeitraegePartner());
         copy.setVermoegen(other.getVermoegen());
-        copy.setSteuernStaat(other.getSteuernStaat());
+        copy.setSteuernKantonGemeinde(other.getSteuernKantonGemeinde());
         copy.setSteuernBund(other.getSteuernBund());
         copy.setFahrkosten(other.getFahrkosten());
         copy.setFahrkostenPartner(other.getFahrkostenPartner());

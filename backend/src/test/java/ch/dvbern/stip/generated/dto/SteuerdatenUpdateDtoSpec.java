@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_ID,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
-  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERN_STAAT,
+  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_STEUERN_BUND,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
@@ -46,7 +46,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_SAEULE2,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_KINDERALIMENTE,
   SteuerdatenUpdateDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
-  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_VERMOEGEN
+  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN_PARTNER,
+  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_VERMOEGEN,
+  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
+  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE,
+  SteuerdatenUpdateDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE_PARTNER
 })
 @JsonTypeName("SteuerdatenUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -57,8 +61,8 @@ public class SteuerdatenUpdateDtoSpec {
   public static final String JSON_PROPERTY_STEUERDATEN_TYP = "steuerdatenTyp";
   private SteuerdatenTypDtoSpec steuerdatenTyp;
 
-  public static final String JSON_PROPERTY_STEUERN_STAAT = "steuernStaat";
-  private Integer steuernStaat;
+  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
+  private Integer steuernKantonGemeinde;
 
   public static final String JSON_PROPERTY_STEUERN_BUND = "steuernBund";
   private Integer steuernBund;
@@ -102,8 +106,20 @@ public class SteuerdatenUpdateDtoSpec {
   public static final String JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN = "ergaenzungsleistungen";
   private Integer ergaenzungsleistungen;
 
+  public static final String JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN_PARTNER = "ergaenzungsleistungenPartner";
+  private Integer ergaenzungsleistungenPartner;
+
   public static final String JSON_PROPERTY_VERMOEGEN = "vermoegen";
   private Integer vermoegen;
+
+  public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
+  private Integer wohnkosten;
+
+  public static final String JSON_PROPERTY_SOZIALHILFEBEITRAEGE = "sozialhilfebeitraege";
+  private Integer sozialhilfebeitraege;
+
+  public static final String JSON_PROPERTY_SOZIALHILFEBEITRAEGE_PARTNER = "sozialhilfebeitraegePartner";
+  private Integer sozialhilfebeitraegePartner;
 
   public SteuerdatenUpdateDtoSpec() {
   }
@@ -160,29 +176,29 @@ public class SteuerdatenUpdateDtoSpec {
   }
 
 
-  public SteuerdatenUpdateDtoSpec steuernStaat(Integer steuernStaat) {
+  public SteuerdatenUpdateDtoSpec steuernKantonGemeinde(Integer steuernKantonGemeinde) {
     
-    this.steuernStaat = steuernStaat;
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
     return this;
   }
 
    /**
-   * Get steuernStaat
-   * @return steuernStaat
+   * Get steuernKantonGemeinde
+   * @return steuernKantonGemeinde
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERN_STAAT)
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getSteuernStaat() {
-    return steuernStaat;
+  public Integer getSteuernKantonGemeinde() {
+    return steuernKantonGemeinde;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN_STAAT)
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuernStaat(Integer steuernStaat) {
-    this.steuernStaat = steuernStaat;
+  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
+    this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
 
 
@@ -404,9 +420,9 @@ public class SteuerdatenUpdateDtoSpec {
    * Get eigenmietwert
    * @return eigenmietwert
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_EIGENMIETWERT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getEigenmietwert() {
     return eigenmietwert;
@@ -414,7 +430,7 @@ public class SteuerdatenUpdateDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EIGENMIETWERT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setEigenmietwert(Integer eigenmietwert) {
     this.eigenmietwert = eigenmietwert;
   }
@@ -531,12 +547,12 @@ public class SteuerdatenUpdateDtoSpec {
   }
 
    /**
-   * Get ergaenzungsleistungen
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Ergaenzungsleistungen Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Ergaenzungsleistungen steuerdatenTyp&#39; 
    * @return ergaenzungsleistungen
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getErgaenzungsleistungen() {
     return ergaenzungsleistungen;
@@ -544,9 +560,35 @@ public class SteuerdatenUpdateDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
+  }
+
+
+  public SteuerdatenUpdateDtoSpec ergaenzungsleistungenPartner(Integer ergaenzungsleistungenPartner) {
+    
+    this.ergaenzungsleistungenPartner = ergaenzungsleistungenPartner;
+    return this;
+  }
+
+   /**
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Ergaenzungsleistungen Mutter&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Ergaenzungsleistungen null&#39; 
+   * @return ergaenzungsleistungenPartner
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getErgaenzungsleistungenPartner() {
+    return ergaenzungsleistungenPartner;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setErgaenzungsleistungenPartner(Integer ergaenzungsleistungenPartner) {
+    this.ergaenzungsleistungenPartner = ergaenzungsleistungenPartner;
   }
 
 
@@ -575,6 +617,84 @@ public class SteuerdatenUpdateDtoSpec {
     this.vermoegen = vermoegen;
   }
 
+
+  public SteuerdatenUpdateDtoSpec wohnkosten(Integer wohnkosten) {
+    
+    this.wohnkosten = wohnkosten;
+    return this;
+  }
+
+   /**
+   * Get wohnkosten
+   * @return wohnkosten
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getWohnkosten() {
+    return wohnkosten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
+  }
+
+
+  public SteuerdatenUpdateDtoSpec sozialhilfebeitraege(Integer sozialhilfebeitraege) {
+    
+    this.sozialhilfebeitraege = sozialhilfebeitraege;
+    return this;
+  }
+
+   /**
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Sozialhilfebeitraege Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Sozialhilfebeitraege steuerdatenTyp&#39; 
+   * @return sozialhilfebeitraege
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOZIALHILFEBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getSozialhilfebeitraege() {
+    return sozialhilfebeitraege;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SOZIALHILFEBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSozialhilfebeitraege(Integer sozialhilfebeitraege) {
+    this.sozialhilfebeitraege = sozialhilfebeitraege;
+  }
+
+
+  public SteuerdatenUpdateDtoSpec sozialhilfebeitraegePartner(Integer sozialhilfebeitraegePartner) {
+    
+    this.sozialhilfebeitraegePartner = sozialhilfebeitraegePartner;
+    return this;
+  }
+
+   /**
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Sozialhilfebeitraege Mutter&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: null&#39; 
+   * @return sozialhilfebeitraegePartner
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOZIALHILFEBEITRAEGE_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getSozialhilfebeitraegePartner() {
+    return sozialhilfebeitraegePartner;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SOZIALHILFEBEITRAEGE_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSozialhilfebeitraegePartner(Integer sozialhilfebeitraegePartner) {
+    this.sozialhilfebeitraegePartner = sozialhilfebeitraegePartner;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -586,7 +706,7 @@ public class SteuerdatenUpdateDtoSpec {
     SteuerdatenUpdateDtoSpec steuerdatenUpdate = (SteuerdatenUpdateDtoSpec) o;
     return Objects.equals(this.id, steuerdatenUpdate.id) &&
         Objects.equals(this.steuerdatenTyp, steuerdatenUpdate.steuerdatenTyp) &&
-        Objects.equals(this.steuernStaat, steuerdatenUpdate.steuernStaat) &&
+        Objects.equals(this.steuernKantonGemeinde, steuerdatenUpdate.steuernKantonGemeinde) &&
         Objects.equals(this.steuernBund, steuerdatenUpdate.steuernBund) &&
         Objects.equals(this.fahrkosten, steuerdatenUpdate.fahrkosten) &&
         Objects.equals(this.fahrkostenPartner, steuerdatenUpdate.fahrkostenPartner) &&
@@ -601,12 +721,16 @@ public class SteuerdatenUpdateDtoSpec {
         Objects.equals(this.saeule2, steuerdatenUpdate.saeule2) &&
         Objects.equals(this.kinderalimente, steuerdatenUpdate.kinderalimente) &&
         Objects.equals(this.ergaenzungsleistungen, steuerdatenUpdate.ergaenzungsleistungen) &&
-        Objects.equals(this.vermoegen, steuerdatenUpdate.vermoegen);
+        Objects.equals(this.ergaenzungsleistungenPartner, steuerdatenUpdate.ergaenzungsleistungenPartner) &&
+        Objects.equals(this.vermoegen, steuerdatenUpdate.vermoegen) &&
+        Objects.equals(this.wohnkosten, steuerdatenUpdate.wohnkosten) &&
+        Objects.equals(this.sozialhilfebeitraege, steuerdatenUpdate.sozialhilfebeitraege) &&
+        Objects.equals(this.sozialhilfebeitraegePartner, steuerdatenUpdate.sozialhilfebeitraegePartner);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, steuerdatenTyp, steuernStaat, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsCode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, ergaenzungsleistungen, vermoegen);
+    return Objects.hash(id, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsCode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, ergaenzungsleistungen, ergaenzungsleistungenPartner, vermoegen, wohnkosten, sozialhilfebeitraege, sozialhilfebeitraegePartner);
   }
 
   @Override
@@ -615,7 +739,7 @@ public class SteuerdatenUpdateDtoSpec {
     sb.append("class SteuerdatenUpdateDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
-    sb.append("    steuernStaat: ").append(toIndentedString(steuernStaat)).append("\n");
+    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
@@ -630,7 +754,11 @@ public class SteuerdatenUpdateDtoSpec {
     sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
     sb.append("    kinderalimente: ").append(toIndentedString(kinderalimente)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
+    sb.append("    ergaenzungsleistungenPartner: ").append(toIndentedString(ergaenzungsleistungenPartner)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
+    sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
+    sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
+    sb.append("    sozialhilfebeitraegePartner: ").append(toIndentedString(sozialhilfebeitraegePartner)).append("\n");
     sb.append("}");
     return sb.toString();
   }
