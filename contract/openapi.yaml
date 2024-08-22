@@ -952,7 +952,7 @@ paths:
           in: path
           required: true
       responses:
-        '204':
+        '200':
           description: |
             Dokument deleted
         '401':
@@ -965,7 +965,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteDokument
       summary: deletes a Dokument
-      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
     parameters:
       - name: gesuchTrancheId
         schema:
