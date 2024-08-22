@@ -6,8 +6,8 @@ import { RenderResult, render, within } from '@testing-library/angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { GesuchFormular, PersonInAusbildung } from '@dv/shared/model/gesuch';
-import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
+import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person.component';
 import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';

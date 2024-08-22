@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { Ausbildungsstaette } from '@dv/shared/model/gesuch';
-import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
+import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import {
   checkMatCheckbox,
   clickFirstMatSelectOption,

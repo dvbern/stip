@@ -55,7 +55,6 @@ import {
   CompileTimeConfig,
   SharedModelCompileTimeConfig,
 } from '@dv/shared/model/config';
-import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { provideSharedPatternAppInitialization } from '@dv/shared/pattern/app-initialization';
 import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
 import { withDvGlobalHttpErrorInterceptorFn } from '@dv/shared/pattern/http-error-interceptor';
@@ -63,6 +62,7 @@ import { provideSharedPatternI18nTitleStrategy } from '@dv/shared/pattern/i18n-t
 import { SharedPatternInterceptorDeploymentConfig } from '@dv/shared/pattern/interceptor-deployment-config';
 import { provideSharedPatternNgbDatepickerAdapter } from '@dv/shared/pattern/ngb-datepicker-adapter';
 import { provideSharedPatternRouteReuseStrategyConfigurable } from '@dv/shared/pattern/route-reuse-strategy-configurable';
+import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 export class ExplicitMissingTranslationHandler
   implements MissingTranslationHandler
