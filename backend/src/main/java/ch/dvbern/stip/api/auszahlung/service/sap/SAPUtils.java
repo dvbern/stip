@@ -19,6 +19,7 @@ public class SAPUtils {
         return String.valueOf(generateRandomNumber(0,Integer.MAX_VALUE));
     }
 
+
     public SapMessageType parseSapMessageType(String sapXmlResponse){
         if(sapXmlResponse.contains("<TYPE>S</TYPE>")){
             return SapMessageType.S;

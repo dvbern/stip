@@ -7,7 +7,6 @@ import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.stammdaten.type.Land;
-import ch.dvbern.stip.generated.api.AuszahlungResource;
 import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -30,8 +29,6 @@ import static org.mockito.Mockito.when;
 class AuszahlungResourceImplTest {
     private static final Integer EXAMPLE_DELIVERY_ID = 2761;
     private static final Integer EXAMPLE_EXT_ID = 889994;
-    @Inject
-    AuszahlungResource auszahlungResource;
 
     @RestClient
     @InjectMock
@@ -55,13 +52,51 @@ class AuszahlungResourceImplTest {
 
     @TestAsSachbearbeiter
     @Test
+    void triggerAuszahlungNonExistingBusinessPartner_Privatperson() {
+        AuszahlungDto auszahlungDto = initAuszahlungDto();
+        final var searchResult = auszahlungSapService.searchBusinessPartner(auszahlungDto);
+        fail("Not implemented yet");
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void triggerAuszahlungExistingBusinessPartner_Privatperson() throws IOException {
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/BusinessPartnerSearchExampleResponse.xml"),
+            "UTF-8"
+        );
+        when(searchBusinessPartnerClient.searchBusinessPartner(any())).thenReturn(xml);
+        AuszahlungDto auszahlungDto = initAuszahlungDto();
+
+        final var searchResult = auszahlungSapService.searchBusinessPartner(auszahlungDto);
+        fail("Not implemented yet");
+
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void triggerAuszahlungNonExistingBusinessPartner_Organisation() {
+        AuszahlungDto auszahlungDto = initAuszahlungDto();
+        fail("Not implemented yet");
+
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void triggerAuszahlungExistingBusinessPartner_Organisation() {
+        AuszahlungDto auszahlungDto = initAuszahlungDto();
+        fail("Not implemented yet");
+    }
+
+    @TestAsSachbearbeiter
+    @Test
     void getImportStatusTest() throws IOException {
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/getImportStatusExampleResponse.xml"),
             "UTF-8"
         );
         when(importStatusReadClient.getImportStatus(any())).thenReturn(xml);
-        final var response = auszahlungResource.getImportStatus(EXAMPLE_DELIVERY_ID);
+        final var response = auszahlungSapService.getImportStatus(EXAMPLE_DELIVERY_ID);
         assertEquals(HttpStatus.SC_OK,response.getStatus());
         final var responseDto = (GetAuszahlungImportStatusResponseDto) response.getEntity();
         assertFalse(responseDto.getLogs().isEmpty());
@@ -72,22 +107,13 @@ class AuszahlungResourceImplTest {
     @Test
     void getImportStatusInvalidDeliveryIdTest(){
         when(importStatusReadClient.getImportStatus(any())).thenThrow(WebApplicationException.class);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.getImportStatus(-1));
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.getImportStatus(0));
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.getImportStatus(null));
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(-1));
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(0));
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(null));
 
     }
 
-    @TestAsGesuchsteller
-    @Test
-    void getImportStatusTestAsGS() throws IOException {
-        String xml = IOUtils.toString(
-            this.getClass().getResourceAsStream("/auszahlung/getImportStatusExampleResponse.xml"),
-            "UTF-8"
-        );
-        when(importStatusReadClient.getImportStatus(any())).thenReturn(xml);
-        assertThrows(ForbiddenException.class, () ->  auszahlungResource.getImportStatus(EXAMPLE_DELIVERY_ID));
-    }
+
 
     @Test
     @TestAsGesuchsteller
@@ -97,7 +123,7 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        assertThrows(ForbiddenException.class, () -> auszahlungResource.createKreditor(initAuszahlungDto()));
+        assertThrows(ForbiddenException.class, () -> auszahlungSapService.changeBusinessPartner(initAuszahlungDto()));
     }
 
     @Test
@@ -108,7 +134,7 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.createKreditor(initAuszahlungDto());
+        final var response = auszahlungSapService.createBusinessPartner(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -120,7 +146,7 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.createKreditor(initAuszahlungDto());
+        final var response = auszahlungSapService.createBusinessPartner(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -132,7 +158,7 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.createKreditor(initAuszahlungDto());
+        final var response = auszahlungSapService.createBusinessPartner(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -145,11 +171,11 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         final AuszahlungDto requestDto1 = initAuszahlungDto();
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createKreditor(null));
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createKreditor(requestDto1));
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.createBusinessPartner(null));
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.createBusinessPartner(requestDto1));
 
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.createKreditor(initAuszahlungDto());
+        final var response = auszahlungSapService.createBusinessPartner(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -157,7 +183,7 @@ class AuszahlungResourceImplTest {
     @TestAsGesuchsteller
     void changeBusinessPartnerAsGSTest(){
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn("");
-        assertThrows(ForbiddenException.class, () -> auszahlungResource.changeKreditor((initAuszahlungDto())));
+        assertThrows(ForbiddenException.class, () -> auszahlungSapService.createBusinessPartner((initAuszahlungDto())));
     }
 
     @Test
@@ -169,10 +195,10 @@ class AuszahlungResourceImplTest {
         );
         final AuszahlungDto requestDto1 = initAuszahlungDto();
         requestDto1.setAdresse(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(null));
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.changeKreditor(requestDto1));
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.createBusinessPartner(null));
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.createBusinessPartner(requestDto1));
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.changeKreditor(initAuszahlungDto());
+        final var response = auszahlungSapService.createBusinessPartner(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -184,7 +210,7 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungResource.changeKreditor(initAuszahlungDto());
+        final var response = auszahlungSapService.createBusinessPartner(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
 
     }
@@ -193,7 +219,7 @@ class AuszahlungResourceImplTest {
     @TestAsGesuchsteller
     void createAuszahlungAsGSTest(){
         when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn("");
-        assertThrows(ForbiddenException.class, () -> auszahlungResource.createAuszahlung((initAuszahlungDto())));
+        assertThrows(ForbiddenException.class, () -> auszahlungSapService.createAuszahlung((initAuszahlungDto())));
     }
 
     @Test
@@ -205,11 +231,11 @@ class AuszahlungResourceImplTest {
         );
         final AuszahlungDto requestDto1 = initAuszahlungDto();
         requestDto1.setAdresse(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createAuszahlung(null));
-        assertThrows(ConstraintViolationException.class, () -> auszahlungResource.createAuszahlung(requestDto1));
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.createAuszahlung(null));
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.createAuszahlung(requestDto1));
 
         when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(xml);
-        final var response = auszahlungResource.createAuszahlung(initAuszahlungDto());
+        final var response = auszahlungSapService.createAuszahlung(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -221,7 +247,7 @@ class AuszahlungResourceImplTest {
             "UTF-8"
         );
         when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(xml);
-        final var response = auszahlungResource.createAuszahlung(initAuszahlungDto());
+        final var response = auszahlungSapService.createAuszahlung(initAuszahlungDto());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 

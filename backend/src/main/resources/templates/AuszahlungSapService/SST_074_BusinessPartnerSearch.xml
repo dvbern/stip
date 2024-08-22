@@ -34,30 +34,30 @@
       <!--Optional:-->
       <FILTER_PARMS_BASE xmlns="">
         <!--Optional:-->
-        <NAME>{data.nachname}</NAME>
+        <NAME>{data.auszahlung.nachname}</NAME>
         <!--Optional:-->
-        <VORNAME>{data.vorname}</VORNAME>
+        <VORNAME>{data.auszahlung.vorname}</VORNAME>
       </FILTER_PARMS_BASE>
       <!--Optional:-->
       <FILTER_PARMS_ADDR xmlns="">
         <!--Optional:-->
         <ADR_KIND/>
         <!--Optional:-->
-        <C_O_NAME>{data.adresse.coAdresse}</C_O_NAME>
+        <C_O_NAME>{data.auszahlung.adresse.coAdresse}</C_O_NAME>
         <!--Optional:-->
-        <CITY>{data.adresse.ort}</CITY>
+        <CITY>{data.auszahlung.adresse.ort}</CITY>
         <!--Optional:-->
         <DISTRICT/>
         <!--Optional:-->
-        <POSTL_COD1>{data.adresse.plz}</POSTL_COD1>
+        <POSTL_COD1>{data.auszahlung.adresse.plz}</POSTL_COD1>
         <!--Optional:-->
         <PO_BOX/>
         <!--Optional:-->
-        <STREET>{data.adresse.strasse}</STREET>
+        <STREET>{data.auszahlung.adresse.strasse}</STREET>
         <!--Optional:-->
-        <HOUSE_NO>{data.adresse.hausnummer}</HOUSE_NO>
+        <HOUSE_NO>{data.auszahlung.adresse.hausnummer}</HOUSE_NO>
         <!--Optional:-->
-        <COUNTRY>{data.adresse.land}</COUNTRY>
+        <COUNTRY>{data.auszahlung.adresse.land}</COUNTRY>
       </FILTER_PARMS_ADDR>
       <!--Optional:-->
       <FILTER_PARMS_COMM xmlns="">
