@@ -99,6 +99,7 @@
   "shared.dialog.gesuch-aenderung.comment.label": "Commentaire (facultatif)",
   "shared.dialog.gesuch-aenderung.comment.placeholder": "Écrire une justification",
   "shared.dialog.gesuch-aenderung.success": "Le changement a été créé avec succès",
+  "shared.dialog.gesuch.tranche.success": "La tranche a été créée avec succès",
   "shared.dokumente.title": "Documents",
   "shared.dokumente.reject.title": "Rejeter un document",
   "shared.dokumente.reject.message": "Pour rejeter un document, vous devez fournir une raison.",
