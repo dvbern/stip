@@ -1655,15 +1655,16 @@ components:
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
         - FAMILIENSITUATION_TRENNUNGSKONVENTION
         - ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
-        - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
-        - ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
-        - ELTERN_SOZIALHILFEBUDGET_VATER
-        - ELTERN_STEUERUNTERLAGEN_VATER
         - ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER
-        - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
-        - ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
-        - ELTERN_SOZIALHILFEBUDGET_MUTTER
+        - ELTERN_STEUERUNTERLAGEN_VATER
         - ELTERN_STEUERUNTERLAGEN_MUTTER
+        - STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER
+        - STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
+        - STEUERDATEN_SOZIALHILFEBUDGET_VATER
+        - STEUERDATEN_SOZIALHILFEBUDGET_MUTTER
+        - STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+        - STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
+        - STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
         - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
         - KINDER_ALIMENTENVERORDUNG
@@ -2252,13 +2253,10 @@ components:
       required:
         - adresse
         - ausweisbFluechtling
-        - ergaenzungsleistungAusbezahlt
         - geburtsdatum
         - identischerZivilrechtlicherWohnsitz
         - nachname
-        - sozialhilfebeitraegeAusbezahlt
         - telefonnummer
-        - wohnkosten
         - vorname
         - elternTyp
       type: object
@@ -2277,19 +2275,13 @@ components:
           type: string
         telefonnummer:
           type: string
-        wohnkosten:
-          type: integer
         sozialversicherungsnummer:
           type: string
         geburtsdatum:
           format: date
           description: dd.MM.YYYY
           type: string
-        sozialhilfebeitraegeAusbezahlt:
-          type: boolean
         ausweisbFluechtling:
-          type: boolean
-        ergaenzungsleistungAusbezahlt:
           type: boolean
         id:
           $ref: '#/components/schemas/UUID'
@@ -3090,12 +3082,11 @@ components:
         - fahrkosten
         - verpflegung
         - totalEinkuenfte
-        - eigenmietwert
         - isArbeitsverhaeltnisSelbstaendig
         - kinderalimente
-        - ergaenzungsleistungen
         - vermoegen
         - steuerdatenTyp
+        - wohnkosten
       type: object
       properties:
         id:
@@ -3131,8 +3122,28 @@ components:
         kinderalimente:
           type: integer
         ergaenzungsleistungen:
+          description: |
+            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater'
+            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp'
+          type: integer
+        ergaenzungsleistungenPartner:
+          description: |
+            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Mutter'
+            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen null'
           type: integer
         vermoegen:
+          type: integer
+        wohnkosten:
+          type: integer
+        sozialhilfebeitraege:
+          description: |
+            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater'
+            'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp'
+          type: integer
+        sozialhilfebeitraegePartner:
+          description: |
+           'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Mutter'
+           'Falls steuerdatenTyp != Famile: null'
           type: integer
     Steuerdaten:
       title: Root Type for Steuerdaten

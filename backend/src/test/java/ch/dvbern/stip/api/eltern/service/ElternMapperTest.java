@@ -55,11 +55,9 @@ class ElternMapperTest {
         eltern.setAusweisbFluechtling(false);
         eltern.setAdresse(new AdresseDto());
         eltern.setElternTyp(ElternTyp.VATER);
-        eltern.setErgaenzungsleistungAusbezahlt(false);
         eltern.setIdentischerZivilrechtlicherWohnsitz(false);
         eltern.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
         eltern.setIdentischerZivilrechtlicherWohnsitzPLZ("1234");
-        eltern.setSozialhilfebeitraegeAusbezahlt(false);
         eltern.setSozialversicherungsnummer(AHV_NUMMER_VALID);
         return eltern;
     }

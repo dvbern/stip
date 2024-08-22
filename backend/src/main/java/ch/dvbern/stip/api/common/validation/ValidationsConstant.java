@@ -137,6 +137,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.gesuchFormular.documents.invalidStatus.message}";
     public static final String VALIDATION_TRANCHEN_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchTranche.invalidStatus.message}";
+    public static final String VALIDATION_STEUERDATEN_FIELDS_REQUIRED_IF_TYPE =
+        "{jakarta.validation.constraints.steuerdaten.fieldRequiredIfType.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

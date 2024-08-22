@@ -1,5 +1,4 @@
 package ch.dvbern.stip.api.generator.api;
-
 import java.util.UUID;
 
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
@@ -30,9 +29,9 @@ public class GesuchTestSpecGenerator {
     }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecPersonInAusbildung() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.fromString(faker.internet().uuid()));
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(
                 PersonInAusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPersonInAusbildung()
             );

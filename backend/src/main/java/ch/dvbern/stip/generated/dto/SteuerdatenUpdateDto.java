@@ -26,18 +26,22 @@ public class SteuerdatenUpdateDto  implements Serializable {
   private @Valid Integer fahrkosten;
   private @Valid Integer verpflegung;
   private @Valid Integer totalEinkuenfte;
-  private @Valid Integer eigenmietwert;
   private @Valid Boolean isArbeitsverhaeltnisSelbstaendig;
   private @Valid Integer kinderalimente;
-  private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer vermoegen;
+  private @Valid Integer wohnkosten;
   private @Valid UUID id;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
   private @Valid Integer steuerjahr;
   private @Valid Integer veranlagungsCode;
+  private @Valid Integer eigenmietwert;
   private @Valid Integer saeule3a;
   private @Valid Integer saeule2;
+  private @Valid Integer ergaenzungsleistungen;
+  private @Valid Integer ergaenzungsleistungenPartner;
+  private @Valid Integer sozialhilfebeitraege;
+  private @Valid Integer sozialhilfebeitraegePartner;
 
   /**
    **/
@@ -155,25 +159,6 @@ public class SteuerdatenUpdateDto  implements Serializable {
 
   /**
    **/
-  public SteuerdatenUpdateDto eigenmietwert(Integer eigenmietwert) {
-    this.eigenmietwert = eigenmietwert;
-    return this;
-  }
-
-  
-  @JsonProperty("eigenmietwert")
-  @NotNull
-  public Integer getEigenmietwert() {
-    return eigenmietwert;
-  }
-
-  @JsonProperty("eigenmietwert")
-  public void setEigenmietwert(Integer eigenmietwert) {
-    this.eigenmietwert = eigenmietwert;
-  }
-
-  /**
-   **/
   public SteuerdatenUpdateDto isArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
     this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
     return this;
@@ -212,25 +197,6 @@ public class SteuerdatenUpdateDto  implements Serializable {
 
   /**
    **/
-  public SteuerdatenUpdateDto ergaenzungsleistungen(Integer ergaenzungsleistungen) {
-    this.ergaenzungsleistungen = ergaenzungsleistungen;
-    return this;
-  }
-
-  
-  @JsonProperty("ergaenzungsleistungen")
-  @NotNull
-  public Integer getErgaenzungsleistungen() {
-    return ergaenzungsleistungen;
-  }
-
-  @JsonProperty("ergaenzungsleistungen")
-  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
-    this.ergaenzungsleistungen = ergaenzungsleistungen;
-  }
-
-  /**
-   **/
   public SteuerdatenUpdateDto vermoegen(Integer vermoegen) {
     this.vermoegen = vermoegen;
     return this;
@@ -246,6 +212,25 @@ public class SteuerdatenUpdateDto  implements Serializable {
   @JsonProperty("vermoegen")
   public void setVermoegen(Integer vermoegen) {
     this.vermoegen = vermoegen;
+  }
+
+  /**
+   **/
+  public SteuerdatenUpdateDto wohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
+    return this;
+  }
+
+  
+  @JsonProperty("wohnkosten")
+  @NotNull
+  public Integer getWohnkosten() {
+    return wohnkosten;
+  }
+
+  @JsonProperty("wohnkosten")
+  public void setWohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
   }
 
   /**
@@ -340,6 +325,24 @@ public class SteuerdatenUpdateDto  implements Serializable {
 
   /**
    **/
+  public SteuerdatenUpdateDto eigenmietwert(Integer eigenmietwert) {
+    this.eigenmietwert = eigenmietwert;
+    return this;
+  }
+
+  
+  @JsonProperty("eigenmietwert")
+  public Integer getEigenmietwert() {
+    return eigenmietwert;
+  }
+
+  @JsonProperty("eigenmietwert")
+  public void setEigenmietwert(Integer eigenmietwert) {
+    this.eigenmietwert = eigenmietwert;
+  }
+
+  /**
+   **/
   public SteuerdatenUpdateDto saeule3a(Integer saeule3a) {
     this.saeule3a = saeule3a;
     return this;
@@ -374,6 +377,82 @@ public class SteuerdatenUpdateDto  implements Serializable {
     this.saeule2 = saeule2;
   }
 
+  /**
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Ergaenzungsleistungen Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Ergaenzungsleistungen steuerdatenTyp&#39; 
+   **/
+  public SteuerdatenUpdateDto ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+    this.ergaenzungsleistungen = ergaenzungsleistungen;
+    return this;
+  }
+
+  
+  @JsonProperty("ergaenzungsleistungen")
+  public Integer getErgaenzungsleistungen() {
+    return ergaenzungsleistungen;
+  }
+
+  @JsonProperty("ergaenzungsleistungen")
+  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
+    this.ergaenzungsleistungen = ergaenzungsleistungen;
+  }
+
+  /**
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Ergaenzungsleistungen Mutter&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Ergaenzungsleistungen null&#39; 
+   **/
+  public SteuerdatenUpdateDto ergaenzungsleistungenPartner(Integer ergaenzungsleistungenPartner) {
+    this.ergaenzungsleistungenPartner = ergaenzungsleistungenPartner;
+    return this;
+  }
+
+  
+  @JsonProperty("ergaenzungsleistungenPartner")
+  public Integer getErgaenzungsleistungenPartner() {
+    return ergaenzungsleistungenPartner;
+  }
+
+  @JsonProperty("ergaenzungsleistungenPartner")
+  public void setErgaenzungsleistungenPartner(Integer ergaenzungsleistungenPartner) {
+    this.ergaenzungsleistungenPartner = ergaenzungsleistungenPartner;
+  }
+
+  /**
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Sozialhilfebeitraege Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Sozialhilfebeitraege steuerdatenTyp&#39; 
+   **/
+  public SteuerdatenUpdateDto sozialhilfebeitraege(Integer sozialhilfebeitraege) {
+    this.sozialhilfebeitraege = sozialhilfebeitraege;
+    return this;
+  }
+
+  
+  @JsonProperty("sozialhilfebeitraege")
+  public Integer getSozialhilfebeitraege() {
+    return sozialhilfebeitraege;
+  }
+
+  @JsonProperty("sozialhilfebeitraege")
+  public void setSozialhilfebeitraege(Integer sozialhilfebeitraege) {
+    this.sozialhilfebeitraege = sozialhilfebeitraege;
+  }
+
+  /**
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Sozialhilfebeitraege Mutter&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: null&#39; 
+   **/
+  public SteuerdatenUpdateDto sozialhilfebeitraegePartner(Integer sozialhilfebeitraegePartner) {
+    this.sozialhilfebeitraegePartner = sozialhilfebeitraegePartner;
+    return this;
+  }
+
+  
+  @JsonProperty("sozialhilfebeitraegePartner")
+  public Integer getSozialhilfebeitraegePartner() {
+    return sozialhilfebeitraegePartner;
+  }
+
+  @JsonProperty("sozialhilfebeitraegePartner")
+  public void setSozialhilfebeitraegePartner(Integer sozialhilfebeitraegePartner) {
+    this.sozialhilfebeitraegePartner = sozialhilfebeitraegePartner;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -390,23 +469,27 @@ public class SteuerdatenUpdateDto  implements Serializable {
         Objects.equals(this.fahrkosten, steuerdatenUpdate.fahrkosten) &&
         Objects.equals(this.verpflegung, steuerdatenUpdate.verpflegung) &&
         Objects.equals(this.totalEinkuenfte, steuerdatenUpdate.totalEinkuenfte) &&
-        Objects.equals(this.eigenmietwert, steuerdatenUpdate.eigenmietwert) &&
         Objects.equals(this.isArbeitsverhaeltnisSelbstaendig, steuerdatenUpdate.isArbeitsverhaeltnisSelbstaendig) &&
         Objects.equals(this.kinderalimente, steuerdatenUpdate.kinderalimente) &&
-        Objects.equals(this.ergaenzungsleistungen, steuerdatenUpdate.ergaenzungsleistungen) &&
         Objects.equals(this.vermoegen, steuerdatenUpdate.vermoegen) &&
+        Objects.equals(this.wohnkosten, steuerdatenUpdate.wohnkosten) &&
         Objects.equals(this.id, steuerdatenUpdate.id) &&
         Objects.equals(this.fahrkostenPartner, steuerdatenUpdate.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, steuerdatenUpdate.verpflegungPartner) &&
         Objects.equals(this.steuerjahr, steuerdatenUpdate.steuerjahr) &&
         Objects.equals(this.veranlagungsCode, steuerdatenUpdate.veranlagungsCode) &&
+        Objects.equals(this.eigenmietwert, steuerdatenUpdate.eigenmietwert) &&
         Objects.equals(this.saeule3a, steuerdatenUpdate.saeule3a) &&
-        Objects.equals(this.saeule2, steuerdatenUpdate.saeule2);
+        Objects.equals(this.saeule2, steuerdatenUpdate.saeule2) &&
+        Objects.equals(this.ergaenzungsleistungen, steuerdatenUpdate.ergaenzungsleistungen) &&
+        Objects.equals(this.ergaenzungsleistungenPartner, steuerdatenUpdate.ergaenzungsleistungenPartner) &&
+        Objects.equals(this.sozialhilfebeitraege, steuerdatenUpdate.sozialhilfebeitraege) &&
+        Objects.equals(this.sozialhilfebeitraegePartner, steuerdatenUpdate.sozialhilfebeitraegePartner);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, kinderalimente, ergaenzungsleistungen, vermoegen, id, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungsCode, saeule3a, saeule2);
+    return Objects.hash(steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, isArbeitsverhaeltnisSelbstaendig, kinderalimente, vermoegen, wohnkosten, id, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungsCode, eigenmietwert, saeule3a, saeule2, ergaenzungsleistungen, ergaenzungsleistungenPartner, sozialhilfebeitraege, sozialhilfebeitraegePartner);
   }
 
   @Override
@@ -420,18 +503,22 @@ public class SteuerdatenUpdateDto  implements Serializable {
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");
     sb.append("    totalEinkuenfte: ").append(toIndentedString(totalEinkuenfte)).append("\n");
-    sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
     sb.append("    isArbeitsverhaeltnisSelbstaendig: ").append(toIndentedString(isArbeitsverhaeltnisSelbstaendig)).append("\n");
     sb.append("    kinderalimente: ").append(toIndentedString(kinderalimente)).append("\n");
-    sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
+    sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
+    sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
+    sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
+    sb.append("    ergaenzungsleistungenPartner: ").append(toIndentedString(ergaenzungsleistungenPartner)).append("\n");
+    sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
+    sb.append("    sozialhilfebeitraegePartner: ").append(toIndentedString(sozialhilfebeitraegePartner)).append("\n");
     sb.append("}");
     return sb.toString();
   }

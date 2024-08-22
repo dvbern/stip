@@ -44,8 +44,6 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.RandomService;
 import io.restassured.response.ValidatableResponse;
@@ -177,24 +175,12 @@ public class TestUtil {
         steuerdaten.setSteuernKantonGemeinde(0);
         steuerdaten.setVermoegen(0);
         steuerdaten.setErgaenzungsleistungen(0);
+        steuerdaten.setErgaenzungsleistungenPartner(0);
+        steuerdaten.setSozialhilfebeitraege(0);
+        steuerdaten.setSozialhilfebeitraegePartner(0);
         steuerdaten.setSteuerjahr(0);
+        steuerdaten.setWohnkosten(0);
         return steuerdaten;
-    }
-
-    public static SteuerdatenUpdateDtoSpec createSteuerdatenUpdateDtoSpec() {
-        SteuerdatenUpdateDtoSpec steuerdatenUpdateDto = new SteuerdatenUpdateDtoSpec();
-        steuerdatenUpdateDto.setSteuerdatenTyp(SteuerdatenTypDtoSpec.FAMILIE);
-        steuerdatenUpdateDto.setEigenmietwert(0);
-        steuerdatenUpdateDto.setFahrkosten(0);
-        steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
-        steuerdatenUpdateDto.setKinderalimente(0);
-        steuerdatenUpdateDto.setSteuernKantonGemeinde(0);
-        steuerdatenUpdateDto.setTotalEinkuenfte(0);
-        steuerdatenUpdateDto.setVermoegen(0);
-        steuerdatenUpdateDto.setVerpflegung(0);
-        steuerdatenUpdateDto.setErgaenzungsleistungen(0);
-        steuerdatenUpdateDto.setSteuernBund(0);
-        return steuerdatenUpdateDto;
     }
 
     public static GesuchCreateDtoSpec initGesuchCreateDto() {
@@ -406,11 +392,9 @@ public class TestUtil {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
-                    .setWohnkosten(0)
                     .setGeburtsdatum(LocalDate.now().minusYears(30)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
-                    .setWohnkosten(0)
                     .setGeburtsdatum(LocalDate.now().minusYears(30))
 
             )
@@ -420,6 +404,9 @@ public class TestUtil {
             Set.of(
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.VATER)
+                    .setWohnkosten(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0)
                     .setVerpflegung(0)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(0)
@@ -435,6 +422,9 @@ public class TestUtil {
                     .setIsArbeitsverhaeltnisSelbstaendig(false),
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+                    .setWohnkosten(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0)
                     .setVerpflegung(0)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(0)
