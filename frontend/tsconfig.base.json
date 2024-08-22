@@ -104,7 +104,6 @@
       "@dv/shared/model/state-colors": ["libs/shared/model/state-colors/src/index.ts"],
       "@dv/shared/model/ui-constants": ["libs/shared/model/ui-constants/src/index.ts"],
       "@dv/shared/model/version": ["libs/shared/model/version/src/index.ts"],
-      "@dv/shared/pattern/angular-material-config": ["libs/shared/pattern/angular-material-config/src/index.ts"],
       "@dv/shared/pattern/app-header": ["libs/shared/pattern/app-header/src/index.ts"],
       "@dv/shared/pattern/app-initialization": ["libs/shared/pattern/app-initialization/src/index.ts"],
       "@dv/shared/pattern/app-settings": ["libs/shared/pattern/app-settings/src/index.ts"],

@@ -26,14 +26,16 @@ import {
   removeDuplicates,
   sortZuweisung,
 } from '@dv/sachbearbeitung-app/util-fn/sachbearbeiter-helper';
-import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
-import { SharedUtilFormService } from '@dv/shared/util/form';
+import {
+  SharedUtilFormService,
+  provideMaterialDefaultOptions,
+} from '@dv/shared/util/form';
 import { createFilterableColumns } from '@dv/shared/util-fn/table-helper';
 
 const CHAR = '[a-z]{1,3} ?';

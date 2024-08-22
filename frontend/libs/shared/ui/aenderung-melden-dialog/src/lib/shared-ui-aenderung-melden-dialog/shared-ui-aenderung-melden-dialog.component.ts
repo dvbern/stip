@@ -21,7 +21,10 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
-import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import {
+  convertTempFormToRealValues,
+  provideMaterialDefaultOptions,
+} from '@dv/shared/util/form';
 import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 
 type GesuchAenderungData = {
@@ -44,7 +47,12 @@ type GesuchAenderungData = {
   ],
   templateUrl: './shared-ui-aenderung-melden-dialog.component.html',
   styleUrl: './shared-ui-aenderung-melden-dialog.component.scss',
-  providers: [provideDvDateAdapter()],
+  providers: [
+    provideDvDateAdapter(),
+    provideMaterialDefaultOptions({
+      subscriptSizing: 'dynamic',
+    }),
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiAenderungMeldenDialogComponent {
