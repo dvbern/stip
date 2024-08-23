@@ -14,27 +14,19 @@
       </mat-card-title>
     </mat-card-header>
 
-    <div class="border-bottom border-1 mt-4 mb-4"></div>
+    <div class="border-bottom border-1 mt-4"></div>
 
-    @if (zusammenfassung.totalBetragStipendium > 0) {
-      <mat-card-content>
-        <div class="mb-4 fs-4">
-          {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.message.angenommen' | translate }}
-        </div>
+    <mat-card-content class="p-5">
+      @if (zusammenfassung.totalBetragStipendium > 0) {
         <div class="accept p-4 rounded-4 fs-3 fw-bold">
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen' | translate }}
         </div>
-      </mat-card-content>
-    } @else {
-      <mat-card-content>
-        <div class="mb-4 fs-4">
-          {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.message.abgelehnt' | translate }}
-        </div>
+      } @else {
         <div class="reject p-4 rounded-4 fs-3 fw-bold">
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt' | translate }}
         </div>
-      </mat-card-content>
-    }
+      }
+    </mat-card-content>
   </mat-card>
 
   <!-- zusammenfassung -->
@@ -53,13 +45,13 @@
     <mat-card-content class="d-flex flex-column gap-4">
       @for (berechnung of zusammenfassung.berechnungsresultate; track $index) {
         <div>
-          <div class="d-flex justify-content-between h4 mb-0">
-            <span class="fw-normal fs-5">
+          <div class="d-flex justify-content-between fs-5 mb-3">
+            <span class="">
               {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.item.total' | translate: { index: $index + 1 } }}
             </span>
-            <div>{{ berechnung.berechnung | formatNoChf }}</div>
+            <div class="">{{ berechnung.berechnung | formatNoChf }}</div>
           </div>
-          <a class="text-decoration-none text-info fs-5" [routerLink]="['../berechnung', $index + 1]">
+          <a class="text-decoration-none text-info" [routerLink]="['../berechnung', $index + 1]">
             <div class="d-flex align-items-center gap-2">
               <span class="text-decoration-underline" translate [translateParams]="{ index: $index + 1 }"
                 >sachbearbeitung-app.verfuegung.zusammenfassung.item.link</span
