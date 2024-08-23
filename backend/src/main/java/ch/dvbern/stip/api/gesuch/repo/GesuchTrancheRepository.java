@@ -22,6 +22,7 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
         return new JPAQueryFactory(em)
             .selectFrom(gesuchTranche)
             .where(gesuchTranche.gesuch.id.eq(gesuchId))
+            .orderBy(gesuchTranche.gueltigkeit.gueltigAb.asc())
             .stream();
     }
 }

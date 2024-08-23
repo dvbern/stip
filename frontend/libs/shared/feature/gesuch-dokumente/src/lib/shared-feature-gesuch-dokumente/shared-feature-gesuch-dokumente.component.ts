@@ -187,6 +187,9 @@ export class SharedFeatureGesuchDokumenteComponent {
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: document.gesuchDokument.id,
       trancheId,
+      afterSuccess: () => {
+        this.dokumentsStore.getDokumenteAndRequired$(trancheId);
+      },
     });
   }
 
@@ -212,6 +215,9 @@ export class SharedFeatureGesuchDokumenteComponent {
             gesuchDokumentId: result.id,
             trancheId,
             kommentar: result.kommentar,
+            afterSuccess: () => {
+              this.dokumentsStore.getDokumenteAndRequired$(trancheId);
+            },
           });
         }
       });

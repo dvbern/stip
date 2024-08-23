@@ -1404,6 +1404,35 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchDokumente
+  '/gesuchtranche/{gesuchTrancheId}/dokumente/{dokumentTyp}':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+      - name: dokumentTyp
+        schema:
+          $ref: '#/components/schemas/DokumentTyp'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: GesuchDokument returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchDokument'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchDokument
   '/gesuchtranche/{gesuchTrancheId}/requiredDokumente':
     parameters:
       - name: gesuchTrancheId

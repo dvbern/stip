@@ -38,7 +38,6 @@ import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
-import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -94,7 +93,6 @@ public class GesuchService {
     private final GesuchDokumentService gesuchDokumentService;
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
-    private final RequiredDokumentService requiredDokumentService;
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
     private final GesuchMapperUtil gesuchMapperUtil;

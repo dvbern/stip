@@ -43,5 +43,6 @@ export interface UploadView {
   trancheId: string;
   type: DokumentTyp;
   readonly: boolean;
+  initialDocuments?: Dokument[];
   isSachbearbeitungApp: boolean;
 }

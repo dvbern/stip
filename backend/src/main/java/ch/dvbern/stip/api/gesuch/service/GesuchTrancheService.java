@@ -46,7 +46,6 @@ public class GesuchTrancheService {
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
 
-
     @Transactional
     public GesuchDto createAenderungsantrag(
         final UUID gesuchId,
@@ -119,6 +118,15 @@ public class GesuchTrancheService {
             gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);
         }
     }
+
+    @Transactional
+    public GesuchDokumentDto getGesuchDokument(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+        return gesuchDokumentMapper.toDto(
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp)
+                .orElseThrow(NotFoundException::new)
+        );
+    }
+
 
     @Transactional
     public List<GesuchDokumentDto> getGesuchDokumenteForGesuchTranche(final UUID gesuchTrancheId) {
