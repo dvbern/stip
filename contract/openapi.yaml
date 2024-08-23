@@ -3235,6 +3235,8 @@ components:
       description: Resultat der Berechnung (eine Tranche)
       required:
         - berechnung
+        - gueltigAb
+        - gueltigBis
         - persoenlichesBudgetresultat
         - familienBudgetresultate
       type: object
@@ -3242,6 +3244,10 @@ components:
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
           type: integer
+        gueltigAb:
+          $ref: '#/components/schemas/LocalDate'
+        gueltigBis:
+          $ref: '#/components/schemas/LocalDate'
         persoenlichesBudgetresultat:
           description: 'Berechnungsdaten des persönlichen Budgets'
           $ref: '#/components/schemas/PersoenlichesBudgetresultat'

@@ -526,7 +526,6 @@ public class GesuchService {
 
     public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
-        final var resultat = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);
-        return List.of(resultat);
+        return berechnungService.getBerechnungsresultateFromGesuch(gesuch, 1, 0);
     }
 }

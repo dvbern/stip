@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'sachbearbeitung-app-data-access-berechnung',
+  displayName: 'shared-feature-verfuegung-zusammenfassung',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/data-access/berechnung',
+    '../../../../coverage/libs/shared/feature/verfuegung-zusammenfassung',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

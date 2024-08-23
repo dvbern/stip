@@ -3,6 +3,8 @@ package ch.dvbern.stip.berechnung.service;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,6 +16,7 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
@@ -33,7 +36,6 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kie.api.io.Resource;
@@ -162,8 +164,47 @@ public class BerechnungService {
         );
     }
 
-    public BerechnungsresultatDto getBerechnungsResultatFromGesuch(final Gesuch gesuch, final int majorVersion, final int minorVersion) {
-        final var gesuchTranche = gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new);
+    private int calcMonthsBetween(final LocalDate from, final LocalDate to) {
+        return (int) ChronoUnit.MONTHS.between(
+            from,
+            to.plusDays(1)
+        );
+    }
+
+    public List<BerechnungsresultatDto> getBerechnungsresultateFromGesuch(
+        final Gesuch gesuch,
+        final int majorVersion,
+        final int minorVersion
+    ) {
+        final var gesuchStatusToFilterFor = List.of(GesuchTrancheStatus.AKZETPIERT, GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN);
+        final var gesuchTranchen = gesuch.getGesuchTranchen().stream().filter(gesuchTranche -> gesuchStatusToFilterFor.contains(gesuchTranche.getStatus())).toList();
+
+        List<BerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
+        for (final var gesuchTranche : gesuchTranchen) {
+            final var berechnungsresultat = getBerechnungsresultatFromGesuchTranche(
+                gesuchTranche,
+                majorVersion,
+                minorVersion
+            );
+
+            final var monthsValid = calcMonthsBetween(
+                gesuchTranche.getGueltigkeit().getGueltigAb(),
+                gesuchTranche.getGueltigkeit().getGueltigBis()
+            );
+            berechnungsresultat.setBerechnung(
+                (berechnungsresultat.getBerechnung() * monthsValid / 12)
+            );
+            berechnungsresultate.add(berechnungsresultat);
+        }
+        return berechnungsresultate;
+    }
+
+    public BerechnungsresultatDto getBerechnungsresultatFromGesuchTranche(
+        final GesuchTranche gesuchTranche,
+        final int majorVersion,
+        final int minorVersion
+    ) {
+        final var gesuch = gesuchTranche.getGesuch();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         // Use DMN model simply to get the number of budgets required. Bit overkill to do it for both parents but may serve as sanity check.
         final var personenImHaushaltRequestForVater = personenImHaushaltService.getPersonenImHaushaltRequest(
@@ -285,6 +326,8 @@ public class BerechnungService {
 
         return new BerechnungsresultatDto(
             berechnung,
+            gesuchTranche.getGueltigkeit().getGueltigAb(),
+            gesuchTranche.getGueltigkeit().getGueltigBis(),
             persoenlichesBudgetresultatFromRequest(
                 stipendienBerechnungsRequestForVater,
                 stipendienCalculatedForVater,

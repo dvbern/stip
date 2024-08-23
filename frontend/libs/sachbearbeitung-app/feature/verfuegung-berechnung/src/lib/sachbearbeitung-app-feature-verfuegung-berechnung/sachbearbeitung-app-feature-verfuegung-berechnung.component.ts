@@ -5,6 +5,7 @@ import {
   computed,
   effect,
   inject,
+  input,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -12,7 +13,7 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addDays, differenceInMonths } from 'date-fns';
 
-import { BerechnungStore } from '@dv/sachbearbeitung-app/data-access/berechnung';
+import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -49,6 +50,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
 })
 export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   private store = inject(Store);
+  indexSig = input.required<number>({ alias: 'index' });
   expansionState = {
     persoenlich: {
       einnahmen: false,
@@ -66,18 +68,13 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   viewSig = computed(() => {
     const { gesuch, gesuchFormular } = this.gesuchViewSig();
-    const tranche = gesuch?.gesuchTrancheToWorkWith;
 
-    if (!gesuch || !tranche || !gesuchFormular) {
+    if (!gesuch || !gesuchFormular) {
       return null;
     }
     return {
       gesuchId: gesuch.id,
       person: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
-      ...tranche,
-      monate: Math.abs(
-        differenceInMonths(addDays(tranche.gueltigBis, 1), tranche.gueltigAb),
-      ),
     };
   });
   berechnungStore = inject(BerechnungStore);
@@ -85,9 +82,8 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   berechnungenSig = computed<{ loading: boolean; list: GesamtBerechnung[] }>(
     () => {
       const { gesuch, gesuchFormular } = this.gesuchViewSig();
-      const tranche = gesuch?.gesuchTrancheToWorkWith;
       const berechnungenRd = this.berechnungStore.berechnungen();
-      if (!berechnungenRd.data || !tranche || !gesuchFormular) {
+      if (!berechnungenRd.data || !gesuch || !gesuchFormular) {
         return { loading: berechnungenRd.type === 'pending', list: [] };
       }
       const berechnungen = berechnungenRd.data;
@@ -96,10 +92,15 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         list: berechnungen.map(
           ({
             berechnung,
+            gueltigAb,
+            gueltigBis,
             persoenlichesBudgetresultat: p,
             familienBudgetresultate,
           }) => ({
             total: berechnung,
+            gueltigAb: gueltigAb,
+            gueltigBis: gueltigBis,
+            monate: differenceInMonths(addDays(gueltigBis, 1), gueltigAb),
             persoenlich: {
               typ: 'persoenlich' as const,
               name: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
@@ -191,7 +192,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         if (!gesuchId) {
           return;
         }
-        this.berechnungStore.calculateBerechnung$({ gesuchId });
+        this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
       },
       { allowSignalWrites: true },
     );
