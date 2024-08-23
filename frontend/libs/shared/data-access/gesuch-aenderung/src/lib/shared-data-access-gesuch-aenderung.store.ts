@@ -128,7 +128,7 @@ export class GesuchAenderungStore extends signalStore(
               {
                 onSuccess: () => {
                   this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'shared.dialog.gesuch-aenderung.success',
+                    messageKey: 'shared.dialog.gesuch.tranche.success',
                   });
                   this.getAllTranchenForGesuch$({ gesuchId });
                 },

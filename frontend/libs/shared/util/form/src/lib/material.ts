@@ -8,6 +8,9 @@ import {
   MatFormFieldDefaultOptions,
 } from '@angular/material/form-field';
 
+/**
+ * Material default options with a custom form field appearance and default dialog configuration.
+ */
 export function provideMaterialDefaultOptions(
   options?: MatFormFieldDefaultOptions,
 ): Provider[] {
