@@ -4,7 +4,7 @@ import { SharedFeatureDownloadComponent } from './shared-feature-download/shared
 
 export const sharedFeatureDownloadRoutes: Route[] = [
   {
-    path: ':gesuchId/:type/:dokumentId',
+    path: ':gesuchTrancheId/:type/:dokumentId',
     pathMatch: 'prefix',
     providers: [],
     children: [{ path: '', component: SharedFeatureDownloadComponent }],
