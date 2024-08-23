@@ -304,7 +304,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   );
 
   constructor() {
-    this.gotReenabled$.subscribe((x) => console.log('gotReenabled$???', x));
     this.formUtils.registerFormForUnsavedCheck(this);
     const isUniqueSozialversicherungsnummer = (control: AbstractControl) => {
       const {
