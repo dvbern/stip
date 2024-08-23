@@ -42,9 +42,9 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
-    const { gesuchId, type } = this.uploadViewSig();
+    const { trancheId, type } = this.uploadViewSig();
     this.dokumentsStore.getGesuchDokument$({
-      gesuchsId: gesuchId,
+      trancheId,
       dokumentTyp: type,
     });
   }
@@ -93,11 +93,11 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   private reloadDokumente() {
     if (this.uploadViewSig().initialDocuments) {
       this.dokumentsStore.getDokumenteAndRequired$(
-        this.uploadViewSig().gesuchId,
+        this.uploadViewSig().trancheId,
       );
     }
     this.dokumentsStore.getGesuchDokument$({
-      gesuchsId: this.uploadViewSig().gesuchId,
+      trancheId: this.uploadViewSig().trancheId,
       dokumentTyp: this.uploadViewSig().type,
     });
   }

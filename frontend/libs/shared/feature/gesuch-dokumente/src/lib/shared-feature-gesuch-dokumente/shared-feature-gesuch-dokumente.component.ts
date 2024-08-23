@@ -186,7 +186,6 @@ export class SharedFeatureGesuchDokumenteComponent {
 
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: document.gesuchDokument.id,
-      trancheId,
       afterSuccess: () => {
         this.dokumentsStore.getDokumenteAndRequired$(trancheId);
       },
@@ -213,7 +212,6 @@ export class SharedFeatureGesuchDokumenteComponent {
         if (result) {
           this.dokumentsStore.gesuchDokumentAblehnen$({
             gesuchDokumentId: result.id,
-            trancheId,
             kommentar: result.kommentar,
             afterSuccess: () => {
               this.dokumentsStore.getDokumenteAndRequired$(trancheId);
