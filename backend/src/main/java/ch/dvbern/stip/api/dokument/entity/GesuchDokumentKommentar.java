@@ -14,6 +14,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -35,14 +36,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Setter
 public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_gesuch_id"))
-    private Gesuch gesuch;
-
-    @NotNull
     @Column(name = "dokument_typ", nullable = false)
     @Enumerated(EnumType.STRING)
     private DokumentTyp dokumentTyp;
+
+    @NotNull
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_gesuch_id"))
+    private Gesuch gesuch;
 
     @NotNull
     @Column(name = "dokumentstatus")
@@ -51,6 +52,6 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
 
     @Nullable
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(name = "kommentar")
+    @Column(name = "kommentar", nullable = true)
     private String kommentar;
 }

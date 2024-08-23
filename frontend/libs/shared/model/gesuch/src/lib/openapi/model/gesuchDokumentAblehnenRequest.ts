@@ -9,11 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GesuchDokumentKommentar } from './gesuchDokumentKommentar';
 
 /**
  * Meta information um ein GesuchDokument abzulehnen
  */
 export interface GesuchDokumentAblehnenRequest { 
-    kommentar?: string;
+    kommentar?: GesuchDokumentKommentar;
 }
 

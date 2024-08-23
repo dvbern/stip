@@ -11,27 +11,32 @@ import {
   DokumentTyp,
   Dokumentstatus,
   GesuchDokument,
+  GesuchDokumentKommentar,
   GesuchService,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
+  RemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
   isSuccess,
+  pending,
   success,
 } from '@dv/shared/util/remote-data';
 
 type DokumentsState = {
   dokuments: CachedRemoteData<GesuchDokument[]>;
   requiredDocumentTypes: CachedRemoteData<DokumentTyp[]>;
+  gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
   dokument: CachedRemoteData<GesuchDokument>;
 };
 
 const initialState: DokumentsState = {
   dokuments: initial(),
   requiredDocumentTypes: initial(),
+  gesuchDokumentKommentare: initial(),
   dokument: initial(),
 };
 
@@ -49,6 +54,12 @@ export class DokumentsStore extends signalStore(
     dokuments: fromCachedDataSig(this.dokuments) ?? [],
     requiredDocumentTypes: fromCachedDataSig(this.requiredDocumentTypes) ?? [],
   }));
+
+  kommentareViewSig = computed(() => {
+    return (
+      this.gesuchDokumentKommentare.data()?.filter((k) => k.kommentar) ?? []
+    );
+  });
 
   dokumentViewSig = computed(() =>
     isSuccess(this.dokument()) ? this.dokument().data : undefined,
@@ -71,23 +82,6 @@ export class DokumentsStore extends signalStore(
     );
   });
 
-  getGesuchDokument$ = rxMethod<{
-    gesuchsId: string;
-    dokumentTyp: DokumentTyp;
-  }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          dokument: cachedPending(state.dokument),
-        }));
-      }),
-      switchMap(({ gesuchsId, dokumentTyp }) =>
-        this.gesuchService.getGesuchDokument$({ gesuchsId, dokumentTyp }),
-      ),
-      handleApiResponse((dokument) => patchState(this, { dokument })),
-    ),
-  );
-
   resetGesuchDokumentStateToInitial = rxMethod(
     tap(() => {
       patchState(this, {
@@ -96,31 +90,63 @@ export class DokumentsStore extends signalStore(
     }),
   );
 
+  getGesuchDokumentKommentare$ = rxMethod<{
+    dokumentTyp: DokumentTyp;
+    gesuchId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          gesuchDokumentKommentare: pending(),
+        }));
+      }),
+      switchMap((req) =>
+        this.dokumentService.getGesuchDokumentKommentare$(req),
+      ),
+      handleApiResponse((gesuchDokumentKommentare) =>
+        patchState(this, { gesuchDokumentKommentare }),
+      ),
+    ),
+  );
+
   gesuchDokumentAblehnen$ = rxMethod<{
+    gesuchId: string;
     gesuchDokumentId: string;
+    dokumentTyp: DokumentTyp;
     kommentar: string;
     afterSuccess?: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchDokumentId, kommentar, afterSuccess }) =>
-        this.dokumentService
-          .gesuchDokumentAblehnen$({
-            gesuchDokumentId,
-            gesuchDokumentAblehnenRequest: {
-              kommentar,
-            },
-          })
-          .pipe(
-            tapResponse({
-              next: () => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'shared.dokumente.reject.success',
-                });
-                afterSuccess?.();
+      switchMap(
+        ({
+          gesuchId,
+          gesuchDokumentId,
+          dokumentTyp,
+          kommentar,
+          afterSuccess,
+        }) =>
+          this.dokumentService
+            .gesuchDokumentAblehnen$({
+              gesuchDokumentId,
+              gesuchDokumentAblehnenRequest: {
+                kommentar: {
+                  kommentar,
+                  dokumentTyp,
+                  gesuchId,
+                },
               },
-              error: () => undefined,
-            }),
-          ),
+            })
+            .pipe(
+              tapResponse({
+                next: () => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey: 'shared.dokumente.reject.success',
+                  });
+                  afterSuccess?.();
+                },
+                error: () => undefined,
+              }),
+            ),
       ),
     ),
   );
@@ -150,22 +176,22 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  private loadGesuchDokument$ = (
-    gesuchsId: string,
-    dokumentTyp: DokumentTyp,
-  ) => {
-    return pipe(
+  getGesuchDokument$ = rxMethod<{
+    gesuchsId: string;
+    dokumentTyp: DokumentTyp;
+  }>(
+    pipe(
       tap(() => {
         patchState(this, (state) => ({
           dokument: cachedPending(state.dokument),
         }));
       }),
-      switchMap(() =>
+      switchMap(({ gesuchsId, dokumentTyp }) =>
         this.gesuchService.getGesuchDokument$({ gesuchsId, dokumentTyp }),
       ),
       handleApiResponse((dokument) => patchState(this, { dokument })),
-    );
-  };
+    ),
+  );
 
   //TODO: akzeptieren und ablehnen umbenennen fuer liste und duplizieren und umschreiben fuer einzeln
 

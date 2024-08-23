@@ -1,4 +1,4 @@
-.document-table {
+.mat-mdc-table.document-table {
   width: 100%;
 
   .mat-mdc-header-cell {
@@ -12,9 +12,33 @@
   }
 
   .mat-mdc-row {
+    min-height: 48px;
+
     &.warning {
       background-color: var(--dv-yellow-bg-subtle);
     }
+
+    &.expanded-row {
+      > .mat-mdc-cell {
+        border-bottom: none;
+      }
+    }
+
+    .mat-column-documentName {
+      padding: 10px;
+    }
+
+    &:hover:not(.expanded-row, .detail-row) {
+      background-color: var(--dv-gray-200);
+    }
+
+    &.detail-row {
+      height: 0;
+    }
+  }
+
+  .btn-link {
+    padding: 0;
   }
 
   .expander-cell {
@@ -33,8 +57,15 @@
   }
 }
 
+.expand-indicator {
+  border-radius: 50%;
+  color: white;
+  border: 1px solid var(--dv-blue-bg);
+  background-color: var(--dv-blue-bg);
+}
+
 .action-cell {
-  width: 150px;
+  width: 135px;
 }
 
 .action-cell-content {
@@ -73,7 +104,7 @@
   }
 
   .mat-mdc-row {
-    height: 48px;
+    min-height: 48px;
 
     &.edit-row {
       .mat-mdc-cell:has(.mat-mdc-form-field) {
@@ -172,6 +203,7 @@
     width: 100%;
   }
 }
+
 .mat-mdc-table.dv-crud-table.large-spacing {
   .mat-mdc-header-cell {
     --dv-table-header-spacing: 30px;

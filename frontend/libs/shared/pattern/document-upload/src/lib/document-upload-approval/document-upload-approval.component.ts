@@ -80,6 +80,8 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result) {
           this.dokumentsStore.gesuchDokumentAblehnen$({
+            gesuchId: this.uploadViewSig().gesuchId,
+            dokumentTyp: this.uploadViewSig().type,
             gesuchDokumentId: result.id,
             kommentar: result.kommentar,
             afterSuccess: () => {
