@@ -109,9 +109,9 @@ public class CreateGesuchTrancheRequestDtoSpec {
    * Get comment
    * @return comment
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_COMMENT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getComment() {
     return comment;
@@ -119,7 +119,7 @@ public class CreateGesuchTrancheRequestDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_COMMENT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setComment(String comment) {
     this.comment = comment;
   }

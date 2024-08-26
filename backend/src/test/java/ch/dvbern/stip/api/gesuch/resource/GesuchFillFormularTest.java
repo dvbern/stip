@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
@@ -71,10 +72,12 @@ import static org.hamcrest.Matchers.notNullValue;
     // TODO KSTIP-1303: Test Aenderungsantrag once proper generation is done
 class GesuchFillFormularTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    public final GesuchTrancheApiSpec gesuchTrancheApiSpec = GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private UUID fallId;
     private UUID gesuchId;
+    private UUID gesuchTrancheId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
 
@@ -100,6 +103,12 @@ class GesuchFillFormularTest {
             .statusCode(Response.Status.CREATED.getStatusCode());
 
         gesuchId = TestUtil.extractIdFromResponse(response);
+        gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek).then().extract()
+            .body()
+            .as(GesuchDtoSpec.class)
+            .getGesuchTrancheToWorkWith().getId();
     }
 
     @Test
@@ -270,7 +279,7 @@ class GesuchFillFormularTest {
     void addDokumente() {
         for (final var dokTyp : DokumentTypDtoSpec.values()) {
             final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, gesuchId, dokTyp, file);
+            TestUtil.uploadFile(dokumentApiSpec, gesuchTrancheId, dokTyp, file);
         }
 
         validatePage(false);
@@ -282,8 +291,8 @@ class GesuchFillFormularTest {
     void removeSuperfluousDocuments() {
         // getGesuchDokumente also removes superfluous documents from the Gesuch
         // This is needed so the follow check if only necessary documents are saved works
-        gesuchApiSpec.getGesuchDokumente()
-            .gesuchIdPath(gesuchId)
+        gesuchTrancheApiSpec.getGesuchDokumente()
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -314,8 +323,8 @@ class GesuchFillFormularTest {
             DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET
         };
 
-        var gesuchDokumente = gesuchApiSpec.getGesuchDokumente()
-            .gesuchIdPath(gesuchId)
+        var gesuchDokumente = gesuchTrancheApiSpec.getGesuchDokumente()
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()

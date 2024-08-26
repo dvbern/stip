@@ -60,9 +60,9 @@ public class DocumentsRequiredConstraintValidator
             return logAndReturn.apply("GesuchTranche->Gesuch");
         }
 
-        final var gesuchDokumente = gesuch.getGesuchDokuments();
+        final var gesuchDokumente = tranche.getGesuchDokuments();
         if (gesuchDokumente == null) {
-            return logAndReturn.apply("GesuchTranche->Gesuch->GesuchDokumente");
+            return logAndReturn.apply("GesuchTranche->GesuchDokumente");
         }
 
         return gesuchDokumente.stream().map(GesuchDokument::getDokumentTyp).collect(Collectors.toSet());

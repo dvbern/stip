@@ -78,8 +78,9 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
  * Factory function to create a computed signal that returns an upload options object for a given view
  *
  * The view should have the following properties:
- * - **gesuchId**:   string | undefined
- * - **allowTypes**: string | undefined
+ * - **gesuchTrancheId**: string | undefined
+ * - **allowTypes**:      string | undefined
+ * - **readonly**:        boolean
  *
  * @example
  * ```typescript
@@ -104,7 +105,7 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
  */
 export function createUploadOptionsFactory<
   T extends Signal<{
-    gesuchId: string | undefined;
+    trancheId: string | undefined;
     allowTypes: string | undefined;
     readonly: boolean;
   }>,
@@ -131,17 +132,17 @@ export function createUploadOptionsFactory<
     options?: { singleUpload?: boolean; initialDocuments?: Dokument[] },
   ) => {
     return computed<DocumentOptions | null>(() => {
-      const gesuchId = view().gesuchId;
+      const trancheId = view().trancheId;
       const allowTypes = view().allowTypes;
       const readonly = view().readonly;
       const dokumentTyp = lazyDokumentTyp(view);
-      return dokumentTyp && gesuchId && allowTypes
+      return dokumentTyp && trancheId && allowTypes
         ? {
             allowTypes,
             titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
             dokumentTyp,
             singleUpload: options?.singleUpload ?? false,
-            gesuchId,
+            trancheId,
             initialDocuments: options?.initialDocuments,
             readonly,
           }
@@ -151,7 +152,7 @@ export function createUploadOptionsFactory<
 }
 
 export function createDocumentOptions(options: {
-  gesuchId: string;
+  trancheId: string;
   allowTypes: string;
   dokumentTyp: DokumentTyp;
   initialDocuments?: Dokument[];
@@ -159,7 +160,7 @@ export function createDocumentOptions(options: {
   readonly: boolean;
 }): DocumentOptions {
   const {
-    gesuchId,
+    trancheId,
     allowTypes,
     dokumentTyp,
     initialDocuments,
@@ -171,7 +172,7 @@ export function createDocumentOptions(options: {
     titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
     dokumentTyp,
     singleUpload: singleUpload ?? false,
-    gesuchId,
+    trancheId,
     initialDocuments,
     readonly,
   };

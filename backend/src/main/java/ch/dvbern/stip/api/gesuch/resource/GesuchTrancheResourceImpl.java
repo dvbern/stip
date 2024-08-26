@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
@@ -51,5 +52,26 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
             createGesuchTrancheRequestDto
         );
         return Response.ok(gesuchDto).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGesuchDokumente(UUID gesuchTrancheId) {
+        var gesuchDokumente = gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
+        return Response.ok(gesuchDokumente).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGesuchDokument(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
+        final var gesuchDokument = gesuchTrancheService.getGesuchDokument(gesuchTrancheId, dokumentTyp);
+        return Response.ok(gesuchDokument).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getRequiredGesuchDokumentTyp(UUID gesuchTrancheId) {
+        final var requiredTypes = gesuchTrancheService.getRequiredDokumentTypes(gesuchTrancheId);
+        return Response.ok(requiredTypes).build();
     }
 }

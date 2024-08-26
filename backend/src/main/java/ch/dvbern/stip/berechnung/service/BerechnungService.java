@@ -175,7 +175,7 @@ public class BerechnungService {
         final int majorVersion,
         final int minorVersion
     ) {
-        final var gesuchStatusToFilterFor = List.of(GesuchTrancheStatus.AKZETPIERT, GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN);
+        final var gesuchStatusToFilterFor = List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN);
         final var gesuchTranchen = gesuch.getGesuchTranchen().stream().filter(gesuchTranche -> gesuchStatusToFilterFor.contains(gesuchTranche.getStatus())).toList();
 
         List<BerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());

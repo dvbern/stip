@@ -23,9 +23,9 @@ import static org.hamcrest.core.Is.is;
 
 class RequiredDokumentServiceTest {
     @Test
-    void getRequiredDokumentsForGesuchTest() {
+    void getRequiredDokumentsForGesuchFormularTest() {
         final var service = new RequiredDokumentService(new MockInstance(List.of(new MockDocumentProducer())));
-        final var requiredDocuments = service.getRequiredDokumentsForGesuch(initFormular(List.of()));
+        final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
         assertThat(requiredDocuments.size(), is(1));
         assertThat(requiredDocuments.get(0), is(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
@@ -34,7 +34,7 @@ class RequiredDokumentServiceTest {
     @Test
     void getEmptyListTest() {
         final var service = new RequiredDokumentService(new MockInstance(List.of(new MockEmptyDocumentProducer())));
-        final var requiredDocuments = service.getRequiredDokumentsForGesuch(initFormular(List.of()));
+        final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
         assertThat(requiredDocuments.size(), is(0));
     }
@@ -43,18 +43,18 @@ class RequiredDokumentServiceTest {
     void noExistingTest() {
         final var service = new RequiredDokumentService(new MockInstance(List.of(new MockDocumentProducer())));
         final var requiredDocuments = service
-            .getRequiredDokumentsForGesuch(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));
+            .getRequiredDokumentsForGesuchFormular(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));
 
         assertThat(requiredDocuments.size(), is(0));
     }
 
     private GesuchFormular initFormular(final List<DokumentTyp> existingTypes) {
         return new GesuchFormular().setTranche(new GesuchTranche().setGesuch(
-                new Gesuch().setGesuchDokuments(
-                    existingTypes.stream()
-                        .map(x -> new GesuchDokument().setDokumentTyp(x))
-                        .toList()
-                )
+                new Gesuch()
+            ).setGesuchDokuments(
+                existingTypes.stream()
+                    .map(x -> new GesuchDokument().setDokumentTyp(x))
+                    .toList()
             )
         );
     }
@@ -116,7 +116,7 @@ class RequiredDokumentServiceTest {
         public void destroy(RequiredDocumentProducer instance) {
 
         }
-
+    
         @Override
         public Handle<RequiredDocumentProducer> getHandle() {
             return null;

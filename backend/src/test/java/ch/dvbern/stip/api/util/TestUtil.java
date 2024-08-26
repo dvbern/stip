@@ -92,7 +92,7 @@ public class TestUtil {
 
         for (final var dokTyp : DokumentTypDtoSpec.values()) {
             final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, gesuch.getId(), dokTyp, file);
+            TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokTyp, file);
         }
     }
 
@@ -231,11 +231,11 @@ public class TestUtil {
 
     public static void uploadFile(
         DokumentApiSpec dokumentApiSpec,
-        UUID gesuchId,
+        UUID gesuchTrancheId,
         DokumentTypDtoSpec dokTyp,
         File file) {
         dokumentApiSpec.createDokument()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(dokTyp)
             .reqSpec(req -> {
                 req.addMultiPart("fileUpload", file, "image/png");

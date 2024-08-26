@@ -1,14 +1,18 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.GueltigkeitStatusDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
+import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -78,7 +82,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -97,7 +101,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gueltigkeitStatus")
   @NotNull
   public GueltigkeitStatusDto getGueltigkeitStatus() {
@@ -116,7 +120,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("bezeichnungDe")
   @NotNull
   public String getBezeichnungDe() {
@@ -135,7 +139,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("bezeichnungFr")
   @NotNull
   public String getBezeichnungFr() {
@@ -154,7 +158,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("fiskaljahr")
   @NotNull
   public Integer getFiskaljahr() {
@@ -173,7 +177,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchsjahrId")
   @NotNull
   public UUID getGesuchsjahrId() {
@@ -193,7 +197,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchsperiodeStart")
   @NotNull
   public LocalDate getGesuchsperiodeStart() {
@@ -213,7 +217,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchsperiodeStopp")
   @NotNull
   public LocalDate getGesuchsperiodeStopp() {
@@ -233,7 +237,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("aufschaltterminStart")
   @NotNull
   public LocalDate getAufschaltterminStart() {
@@ -253,7 +257,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("aufschaltterminStopp")
   @NotNull
   public LocalDate getAufschaltterminStopp() {
@@ -273,7 +277,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("einreichefristNormal")
   @NotNull
   public LocalDate getEinreichefristNormal() {
@@ -293,7 +297,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("einreichefristReduziert")
   @NotNull
   public LocalDate getEinreichefristReduziert() {
@@ -312,7 +316,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbKosten_SekII")
   @NotNull
   public Integer getAusbKostenSekII() {
@@ -331,7 +335,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbKosten_Tertiaer")
   @NotNull
   public Integer getAusbKostenTertiaer() {
@@ -350,7 +354,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("freibetrag_vermoegen")
   @NotNull
   public Integer getFreibetragVermoegen() {
@@ -369,7 +373,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("freibetrag_erwerbseinkommen")
   @NotNull
   public Integer getFreibetragErwerbseinkommen() {
@@ -388,7 +392,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("einkommensfreibetrag")
   @NotNull
   public Integer getEinkommensfreibetrag() {
@@ -407,7 +411,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("elternbeteiligungssatz")
   @NotNull
   public Integer getElternbeteiligungssatz() {
@@ -426,7 +430,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vermogenSatzAngerechnet")
   @NotNull
   public Integer getVermogenSatzAngerechnet() {
@@ -445,7 +449,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("integrationszulage")
   @NotNull
   public Integer getIntegrationszulage() {
@@ -464,7 +468,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("limite_EkFreibetrag_Integrationszulage")
   @NotNull
   public Integer getLimiteEkFreibetragIntegrationszulage() {
@@ -483,7 +487,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("stipLimite_Minimalstipendium")
   @NotNull
   public Integer getStipLimiteMinimalstipendium() {
@@ -502,7 +506,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("person_1")
   @NotNull
   public Integer getPerson1() {
@@ -521,7 +525,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("personen_2")
   @NotNull
   public Integer getPersonen2() {
@@ -540,7 +544,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("personen_3")
   @NotNull
   public Integer getPersonen3() {
@@ -559,7 +563,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("personen_4")
   @NotNull
   public Integer getPersonen4() {
@@ -578,7 +582,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("personen_5")
   @NotNull
   public Integer getPersonen5() {
@@ -597,7 +601,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("personen_6")
   @NotNull
   public Integer getPersonen6() {
@@ -616,7 +620,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("personen_7")
   @NotNull
   public Integer getPersonen7() {
@@ -635,7 +639,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("proWeiterePerson")
   @NotNull
   public Integer getProWeiterePerson() {
@@ -654,7 +658,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("kinder_00_18")
   @NotNull
   public Integer getKinder0018() {
@@ -673,7 +677,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("jugendliche_erwachsene_19_25")
   @NotNull
   public Integer getJugendlicheErwachsene1925() {
@@ -692,7 +696,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("erwachsene_26_99")
   @NotNull
   public Integer getErwachsene2699() {
@@ -711,7 +715,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten_fam_1pers")
   @NotNull
   public Integer getWohnkostenFam1pers() {
@@ -730,7 +734,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten_fam_2pers")
   @NotNull
   public Integer getWohnkostenFam2pers() {
@@ -749,7 +753,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten_fam_3pers")
   @NotNull
   public Integer getWohnkostenFam3pers() {
@@ -768,7 +772,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten_fam_4pers")
   @NotNull
   public Integer getWohnkostenFam4pers() {
@@ -787,7 +791,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten_fam_5pluspers")
   @NotNull
   public Integer getWohnkostenFam5pluspers() {
@@ -806,7 +810,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten_persoenlich_1pers")
   @NotNull
   public Integer getWohnkostenPersoenlich1pers() {
@@ -825,7 +829,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten_persoenlich_2pers")
   @NotNull
   public Integer getWohnkostenPersoenlich2pers() {
@@ -844,7 +848,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten_persoenlich_3pers")
   @NotNull
   public Integer getWohnkostenPersoenlich3pers() {
@@ -863,7 +867,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten_persoenlich_4pers")
   @NotNull
   public Integer getWohnkostenPersoenlich4pers() {
@@ -882,7 +886,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten_persoenlich_5pluspers")
   @NotNull
   public Integer getWohnkostenPersoenlich5pluspers() {
@@ -901,7 +905,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("preisProMahlzeit")
   @NotNull
   public Integer getPreisProMahlzeit() {
@@ -920,7 +924,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("maxSaeule3a")
   @NotNull
   public Integer getMaxSaeule3a() {
@@ -939,7 +943,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("anzahlWochenLehre")
   @NotNull
   public Integer getAnzahlWochenLehre() {
@@ -958,7 +962,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("anzahlWochenSchule")
   @NotNull
   public Integer getAnzahlWochenSchule() {
@@ -977,7 +981,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vermoegensanteilInProzent")
   @NotNull
   public Integer getVermoegensanteilInProzent() {
@@ -996,7 +1000,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("reduzierungDesGrundbedarfs")
   @NotNull
   public Integer getReduzierungDesGrundbedarfs() {
@@ -1015,7 +1019,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("zweiterAuszahlungsterminMonat")
   @NotNull
   public Integer getZweiterAuszahlungsterminMonat() {
@@ -1034,7 +1038,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("zweiterAuszahlungsterminTag")
   @NotNull
   public Integer getZweiterAuszahlungsterminTag() {
@@ -1053,7 +1057,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("einreichfrist")
   public LocalDate getEinreichfrist() {
     return einreichfrist;
@@ -1137,7 +1141,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchsperiodeWithDatenDto {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");

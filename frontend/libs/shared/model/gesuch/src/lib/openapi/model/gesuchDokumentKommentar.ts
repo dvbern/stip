@@ -16,7 +16,7 @@ import { DokumentTyp } from './dokumentTyp';
  * Kommentar zu einem (abgelehnten) GesuchDokument
  */
 export interface GesuchDokumentKommentar { 
-    gesuchId: string;
+    gesuchTrancheId: string;
     dokumentTyp: DokumentTyp;
     dokumentStatus?: Dokumentstatus;
     kommentar?: string;

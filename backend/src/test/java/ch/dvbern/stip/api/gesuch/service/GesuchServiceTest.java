@@ -111,7 +111,7 @@ class GesuchServiceTest {
     void setup() {
         final var requiredDokumentServiceMock = Mockito.mock(RequiredDokumentService.class);
         Mockito.when(requiredDokumentServiceMock.getSuperfluousDokumentsForGesuch(any())).thenReturn(List.of());
-        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuch(any())).thenReturn(List.of());
+        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         QuarkusMock.installMockForType(requiredDokumentServiceMock, RequiredDokumentService.class);
     }
 
@@ -799,9 +799,9 @@ class GesuchServiceTest {
             .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
 
         tranche.getGesuchFormular().setTranche(tranche);
-        tranche.getGesuch().setGesuchDokuments(
+        tranche.setGesuchDokuments(
             Arrays.stream(DokumentTyp.values())
-                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
+                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche))
                 .toList()
         );
 

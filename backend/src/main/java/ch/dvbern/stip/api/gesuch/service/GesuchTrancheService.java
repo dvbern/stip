@@ -7,7 +7,13 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
@@ -16,6 +22,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,6 +41,10 @@ public class GesuchTrancheService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final GesuchTrancheMapper gesuchTrancheMapper;
+    private final GesuchDokumentMapper gesuchDokumentMapper;
+    private final RequiredDokumentService requiredDokumentService;
+    private final GesuchDokumentService gesuchDokumentService;
+    private final GesuchDokumentRepository gesuchDokumentRepository;
 
     @Transactional
     public GesuchDto createAenderungsantrag(
@@ -64,6 +75,62 @@ public class GesuchTrancheService {
 
     public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(final UUID gesuchId) {
         return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
+    }
+
+    public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        return requiredDokumentService.getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
+    }
+
+    @Transactional
+    public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+
+        removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
+        return getGesuchDokumenteForGesuchTranche(gesuchTrancheId);
+    }
+
+    public void removeSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
+        List<String> dokumentObjectIds = new ArrayList<>();
+
+        final var superfluousGesuchDokuments = requiredDokumentService.getSuperfluousDokumentsForGesuch(formular);
+
+        superfluousGesuchDokuments.forEach(
+            gesuchDokument -> {
+                // Make a copy to avoid ConcurrentModificationException
+                final var dokumente = new ArrayList<>(gesuchDokument.getDokumente());
+                dokumente.forEach(
+                    dokument -> {
+                        final var dokumentObjectId = gesuchDokumentService.deleteDokument(dokument.getId());
+                        if (dokument.getGesuchDokumente().isEmpty()) {
+                            dokumentObjectIds.add(dokumentObjectId);
+                        }
+                    }
+                );
+            }
+        );
+
+        for (final var gesuchDokument : superfluousGesuchDokuments) {
+            formular.getTranche().getGesuchDokuments().remove(gesuchDokument);
+        }
+
+        if (!dokumentObjectIds.isEmpty()) {
+            gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);
+        }
+    }
+
+    @Transactional
+    public GesuchDokumentDto getGesuchDokument(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+        return gesuchDokumentMapper.toDto(
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp)
+                .orElseThrow(NotFoundException::new)
+        );
+    }
+
+
+    @Transactional
+    public List<GesuchDokumentDto> getGesuchDokumenteForGesuchTranche(final UUID gesuchTrancheId) {
+        return gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId).map(gesuchDokumentMapper::toDto).toList();
     }
 
     @Transactional
