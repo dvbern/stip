@@ -13,6 +13,6 @@
 export interface CreateAenderungsantragRequest { 
     start: string;
     end?: string;
-    comment?: string;
+    comment: string;
 }
 
