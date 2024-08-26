@@ -15,16 +15,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { AenderungsantragCreate } from '@dv/shared/model/gesuch';
+import { CreateAenderungsantragRequest } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
-import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import {
+  convertTempFormToRealValues,
+  provideMaterialDefaultOptions,
+} from '@dv/shared/util/form';
 import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 
-type GesuchAenderungResult = Omit<AenderungsantragCreate, 'gesuchId'>;
 type GesuchAenderungData = {
   minDate: Date;
   maxDate: Date;
@@ -45,7 +47,12 @@ type GesuchAenderungData = {
   ],
   templateUrl: './shared-ui-aenderung-melden-dialog.component.html',
   styleUrl: './shared-ui-aenderung-melden-dialog.component.scss',
-  providers: [provideDvDateAdapter()],
+  providers: [
+    provideDvDateAdapter(),
+    provideMaterialDefaultOptions({
+      subscriptSizing: 'dynamic',
+    }),
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiAenderungMeldenDialogComponent {
@@ -53,20 +60,20 @@ export class SharedUiAenderungMeldenDialogComponent {
   dialogData = inject<GesuchAenderungData>(MAT_DIALOG_DATA);
   private dialogRef: MatDialogRef<
     SharedUiAenderungMeldenDialogComponent,
-    GesuchAenderungResult | null
+    CreateAenderungsantragRequest | null
   > = inject(MatDialogRef);
 
   form = this.formBuilder.group({
-    gueltigAb: [<Date | undefined>undefined, Validators.required],
-    gueltigBis: [<Date | undefined>undefined],
-    kommentar: [<string | undefined>undefined, Validators.required],
+    gueltigAb: [<Date | null>null, Validators.required],
+    gueltigBis: [<Date | null>null],
+    kommentar: [<string | null>null],
   });
 
   static open(dialog: MatDialog, data: GesuchAenderungData) {
     return dialog.open<
       SharedUiAenderungMeldenDialogComponent,
       GesuchAenderungData,
-      GesuchAenderungResult
+      CreateAenderungsantragRequest
     >(SharedUiAenderungMeldenDialogComponent, { data });
   }
 
@@ -77,14 +84,13 @@ export class SharedUiAenderungMeldenDialogComponent {
     }
     const aenderungsAntrag = convertTempFormToRealValues(this.form, [
       'gueltigAb',
-      'kommentar',
     ]);
     return this.dialogRef.close({
       start: toBackendLocalDate(aenderungsAntrag.gueltigAb),
       end: aenderungsAntrag.gueltigBis
         ? toBackendLocalDate(aenderungsAntrag.gueltigBis)
         : undefined,
-      comment: aenderungsAntrag.kommentar,
+      comment: aenderungsAntrag.kommentar ?? undefined,
     });
   }
 

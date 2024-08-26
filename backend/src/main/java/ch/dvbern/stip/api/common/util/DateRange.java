@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.common.util;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -41,12 +40,16 @@ public class DateRange implements Serializable, Comparable<DateRange> {
     private LocalDate gueltigBis;
 
     public DateRange(LocalDate gueltigAb, LocalDate gueltigBis) {
-        this.gueltigAb = Objects.requireNonNull(gueltigAb);
-        this.gueltigBis = Objects.requireNonNull(gueltigBis);
+        this.gueltigAb = gueltigAb;
+        this.gueltigBis = gueltigBis;
     }
 
     public DateRange() {
         this(LocalDate.now(), LocalDate.now());
+    }
+
+    public int getMonths() {
+        return DateUtil.getMonthsBetween(getGueltigAb(), getGueltigBis());
     }
 
     @Override
@@ -87,5 +90,13 @@ public class DateRange implements Serializable, Comparable<DateRange> {
 
     public boolean contains(LocalDate d) {
         return !d.isAfter(gueltigBis) && !d.isBefore(gueltigAb);
+    }
+
+    public boolean contains(final LocalDate date, final boolean inclusive) {
+        if (!inclusive) {
+            return contains(date);
+        }
+
+        return DateUtil.beforeOrEqual(getGueltigAb(), date) && DateUtil.afterOrEqual(getGueltigBis(), date);
     }
 }

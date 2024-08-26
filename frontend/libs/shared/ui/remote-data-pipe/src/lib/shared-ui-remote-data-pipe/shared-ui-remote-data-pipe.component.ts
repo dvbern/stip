@@ -17,6 +17,12 @@ export class SharedUiRdIsPendingPipe implements PipeTransform {
   }
 }
 
+/**
+ * Only returns `true` if the `data` field is `undefined` and `remote data` is pending.
+ * Else if the `data` field is not `undefined` and `remote data` is pending, it returns `false`.
+ *
+ * Useful to not show a spinner if the data is already there but the request is still pending.
+ */
 @Pipe({
   standalone: true,
   name: 'rdIsPendingWithoutCache',

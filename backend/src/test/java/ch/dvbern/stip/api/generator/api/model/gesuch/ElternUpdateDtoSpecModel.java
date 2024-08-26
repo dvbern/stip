@@ -11,21 +11,18 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 
 public class ElternUpdateDtoSpecModel {
     public static List<ElternUpdateDtoSpec> elternUpdateDtoSpecs(final int amount) {
-        return TestUtil.createUpdateDtoSpecs(ElternUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpecs(ElternUpdateDtoSpec::new, (model) -> {
             model.setAdresse(AdresseSpecModel.adresseDtoSpec());
-            model.setVorname(faker.name().firstName());
-            model.setNachname(faker.name().lastName());
+            model.setVorname("Test");
+            model.setNachname("Elternteil");
             model.setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATTER);
             model.setElternTyp(ElternTypDtoSpec.VATER);
             model.setGeburtsdatum(TestUtil.getRandomLocalDateBetween(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1, 1)));
             model.setIdentischerZivilrechtlicherWohnsitz(false);
             model.setIdentischerZivilrechtlicherWohnsitzOrt("Bern");
             model.setIdentischerZivilrechtlicherWohnsitzPLZ("3011");
-            model.setTelefonnummer(faker.phoneNumber().cellPhone());
-            model.setSozialhilfebeitraegeAusbezahlt(true);
+            model.setTelefonnummer("+41 79 111 11 11");
             model.setAusweisbFluechtling(false);
-            model.setErgaenzungsleistungAusbezahlt(true);
-            model.setWohnkosten(100);
         }, amount);
     }
 
@@ -36,7 +33,7 @@ public class ElternUpdateDtoSpecModel {
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecElterns() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> model.setElterns(elternUpdateDtoSpecs())
+            (model) -> model.setElterns(elternUpdateDtoSpecs())
         );
     }
 }

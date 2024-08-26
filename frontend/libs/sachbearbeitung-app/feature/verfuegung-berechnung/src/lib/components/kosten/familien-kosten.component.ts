@@ -12,49 +12,41 @@ import { FamilienBerechnung } from '../../../models';
   imports: [CommonModule, TranslateModule, SharedUiFormatChfPipe],
   template: `
     <!-- Anzahl anrechenbare Personen -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.anzahlPersonen'
-            | translate: kostenSig()
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.anzahlPersonen'
+          | translate: kostenSig()
+      }}
     </div>
 
     <!-- Grundbedarf  -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().grundbedarf }}
       </div>
     </div>
 
     <!-- Wohnkosten -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().wohnkosten }}
       </div>
     </div>
 
     <!-- Medizinische Grundversorgung -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().medizinischeGrundversorgung }}
       </div>
@@ -63,12 +55,10 @@ import { FamilienBerechnung } from '../../../models';
     <!-- lntegrationszulage pro in Ausbildung stehendes Kind -->
     <div class="d-flex gap-5">
       <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage'
-              | translate
-          }}
-        </div>
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage'
+            | translate
+        }}
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage.info'
@@ -82,85 +72,73 @@ import { FamilienBerechnung } from '../../../models';
     </div>
 
     <!-- Kantons- und Gemeindesteuern -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().kantonsGemeindesteuern }}
       </div>
     </div>
 
     <!-- Bundessteuern -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().bundessteuern }}
       </div>
     </div>
 
     <!-- Fahrkosten -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().fahrkosten }}
       </div>
     </div>
 
     <!-- Fahrkosten Partner:in -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().fahrkostenPartner }}
       </div>
     </div>
 
     <!-- Verpflegung auswärts -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().verpflegung }}
       </div>
     </div>
 
     <!-- Verpflegung auswärts Partner:in -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'
-            | translate
-        }}
-      </div>
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'
+          | translate
+      }}
       <div class="text-muted text-end flex-grow-1">
         {{ kostenSig().verpflegungPartner }}
       </div>
     </div>
 
     <!-- Total -->
-    <div class="d-flex mt-3">
+    <div class="d-flex mt-3 gap-2">
       <div class="h4 m-0">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.total'

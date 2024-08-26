@@ -17,6 +17,7 @@ import {
   createBerechnungOption,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
+import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
@@ -38,6 +39,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
   styleUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.scss',
   templateUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [BerechnungStore],
 })
 export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   @Input() option?: VerfuegungOption;
@@ -47,10 +49,23 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   verfuegungOptions = VERFUEGUNG_OPTIONS;
 
+  berechnungStore = inject(BerechnungStore);
+
   berechnungenSig = computed(() => {
     const gesuchId = this.gesuchViewSig().gesuchId;
     // berechnungenOptions will be fetched dynamically in the future
-    const berechnungenOptions = [createBerechnungOption(0)];
+    const berechnungenOptions = [];
+
+    const berechnungenRd = this.berechnungStore.berechnungen();
+    if (berechnungenRd.data) {
+      for (
+        let berechnungIndex = 0;
+        berechnungIndex < berechnungenRd.data.length;
+        berechnungIndex++
+      ) {
+        berechnungenOptions.push(createBerechnungOption(berechnungIndex));
+      }
+    }
 
     return berechnungenOptions.map((option) => ({
       ...option,

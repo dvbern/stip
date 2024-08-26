@@ -19,9 +19,17 @@ export const gesuchAppFeatureGesuchFormPersonRoutes: Route[] = [
       provideState(sharedDataAccessStammdatensFeature),
       provideEffects(sharedDataAccessStammdatenEffects),
     ],
+    data: {
+      shouldReuseRoute: false,
+    },
     children: [
       routeWithUnsavedChangesGuard({
         path: ':id',
+        title: 'shared.person.title',
+        component: SharedFeatureGesuchFormPersonComponent,
+      }),
+      routeWithUnsavedChangesGuard({
+        path: ':id/tranche/:trancheId',
         title: 'shared.person.title',
         component: SharedFeatureGesuchFormPersonComponent,
       }),

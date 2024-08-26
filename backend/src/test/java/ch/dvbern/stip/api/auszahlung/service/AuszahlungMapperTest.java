@@ -3,8 +3,8 @@ package ch.dvbern.stip.api.auszahlung.service;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.repo.AdresseRepository;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import org.junit.jupiter.api.Test;

@@ -17,6 +17,7 @@ import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -66,7 +67,8 @@ public class DokumentApiSpec {
                 gesuchDokumentAkzeptieren(),
                 getDokument(),
                 getDokumentDownloadToken(),
-                getDokumenteForTyp()
+                getDokumenteForTyp(),
+                getGesuchDokumentKommentare()
         );
     }
 
@@ -96,6 +98,10 @@ public class DokumentApiSpec {
 
     public GetDokumenteForTypOper getDokumenteForTyp() {
         return new GetDokumenteForTypOper(createReqSpec());
+    }
+
+    public GetGesuchDokumentKommentareOper getGesuchDokumentKommentare() {
+        return new GetGesuchDokumentKommentareOper(createReqSpec());
     }
 
     /**
@@ -667,6 +673,91 @@ public class DokumentApiSpec {
          * @return operation
          */
         public GetDokumenteForTypOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returniert GesuchDokumentKommentare zu einem GesuchDokument.
+     * 
+     *
+     * @see #dokumentTypPath  (required)
+     * @see #gesuchIdPath  (required)
+     * return List&lt;GesuchDokumentKommentarDtoSpec&gt;
+     */
+    public static class GetGesuchDokumentKommentareOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchDokumentKommentareOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare
+         * @param handler handler
+         * @return List&lt;GesuchDokumentKommentarDtoSpec&gt;
+         */
+        public List<GesuchDokumentKommentarDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchDokumentKommentarDtoSpec>> type = new TypeRef<List<GesuchDokumentKommentarDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
+
+        /**
+         * @param dokumentTyp (DokumentTypDtoSpec)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareOper dokumentTypPath(Object dokumentTyp) {
+            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentKommentareOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

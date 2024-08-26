@@ -232,34 +232,25 @@
                               (click)="$event.stopPropagation()"
                             >
                               @for (bildungskategorie of store.sortedBildungskategorien(); track $index) {
-                                @if (translate.currentLang === 'de') {
-                                  <mat-option
-                                    [value]="bildungskategorie.id"
-                                    [attr.data-testid]="bildungskategorie.bezeichnungDe"
-                                  >
-                                    <span>{{ bildungskategorie.bfs }}</span> -
-                                    <span>{{ bildungskategorie.bezeichnungDe }}</span>
-                                  </mat-option>
-                                } @else if (translate.currentLang === 'fr') {
-                                  <mat-option
-                                    [value]="bildungskategorie.id"
-                                    [attr.data-testid]="bildungskategorie.bezeichnungFr"
-                                  >
-                                    <span>{{ bildungskategorie.bfs }}</span> -
-                                    <span>{{ bildungskategorie.bezeichnungFr }}</span>
-                                  </mat-option>
-                                }
+                                <mat-option
+                                  [value]="bildungskategorie.id"
+                                  [attr.data-testid]="
+                                    bildungskategorie | translatedProp: 'bezeichnung' : translate.currentLang
+                                  "
+                                >
+                                  <span>{{ bildungskategorie.bfs }}</span> -
+                                  <span>{{
+                                    bildungskategorie | translatedProp: 'bezeichnung' : translate.currentLang
+                                  }}</span>
+                                </mat-option>
                               }
                             </mat-select>
                           </mat-form-field>
                         } @else {
-                          @if (translate.currentLang === 'de') {
-                            <span>{{ ausbildungsgang.bildungskategorie.bfs }}</span> -
-                            <span>{{ ausbildungsgang.bildungskategorie.bezeichnungDe }}</span>
-                          } @else if (translate.currentLang === 'fr') {
-                            <span>{{ ausbildungsgang.bildungskategorie.bfs }}</span> -
-                            <span>{{ ausbildungsgang.bildungskategorie.bezeichnungFr }}</span>
-                          }
+                          <span>{{ ausbildungsgang.bildungskategorie.bfs }}</span> -
+                          <span>{{
+                            ausbildungsgang.bildungskategorie | translatedProp: 'bezeichnung' : translate.currentLang
+                          }}</span>
                         }
                       </td>
                     </ng-container>
@@ -348,7 +339,7 @@
           mat-row
           [ngClass]="{
             'edit-row': staette.id === editedAusbildungsstaette?.id,
-            'expanded-row': staette.id === expandedRowId
+            'expanded-row': staette.id === expandedRowId,
           }"
           *matRowDef="let staette; columns: displayedColumns"
           (click)="expandRow(staette)"
