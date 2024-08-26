@@ -14,6 +14,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -22,7 +23,8 @@ public class GesuchStatusService {
     private final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
     private final GesuchValidatorService validationService;
 
-    public void triggerStateMachineEvent(Gesuch gesuch, GesuchStatusChangeEvent event) {
+    @Transactional
+    public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
         GesuchStateMachineUtil.addExit(
             config,
             transition -> validationService.validateGesuchForStatus(gesuch, transition.getDestination())
