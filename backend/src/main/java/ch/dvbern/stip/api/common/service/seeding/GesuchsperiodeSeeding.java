@@ -136,6 +136,10 @@ GesuchsperiodeSeeding extends Seeder{
             .setPreisProMahlzeit(7)
             .setMaxSaeule3a(7000)
             .setAnzahlWochenLehre(47)
-            .setAnzahlWochenSchule(38);
+            .setAnzahlWochenSchule(38)
+            .setVermoegensanteilInProzent(15)
+            .setReduzierungDesGrundbedarfs(2754)
+            .setZweiterAuszahlungsterminMonat(6)
+            .setZweiterAuszahlungsterminTag(1);
     }
 }
