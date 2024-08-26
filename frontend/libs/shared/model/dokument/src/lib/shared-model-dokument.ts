@@ -43,5 +43,6 @@ export interface UploadView {
   gesuchId: string;
   type: DokumentTyp;
   readonly: boolean;
+  initialDocuments?: Dokument[];
   isSachbearbeitungApp: boolean;
 }

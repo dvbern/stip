@@ -1,10 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'sachbearbeitung-app-data-access-berechnung',
+  displayName: 'shared-ui-animations',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/data-access/berechnung',
+  coverageDirectory: '../../../../coverage/libs/shared/ui/animations',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

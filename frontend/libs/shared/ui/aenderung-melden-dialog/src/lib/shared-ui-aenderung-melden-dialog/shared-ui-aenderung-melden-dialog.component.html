@@ -26,6 +26,12 @@
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
+          {{ 'shared.form.error.minDate' | translate: { date: dialogData.minDate | date: 'dd.MM.yyyy' } }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
+          {{ 'shared.form.error.maxDate' | translate: { date: dialogData.maxDate | date: 'dd.MM.yyyy' } }}
+        </mat-error>
       </mat-form-field>
     </div>
     <div class="col-6">
@@ -42,7 +48,10 @@
         <mat-datepicker-toggle matSuffix [for]="bisPicker"></mat-datepicker-toggle>
         <mat-datepicker #bisPicker></mat-datepicker>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
-          {{ 'shared.form.error.maxDateBeforeMin' | translate }}
+          {{ 'shared.form.error.minDate' | translate: { date: form.controls.gueltigAb.value | date: 'dd.MM.yyyy' } }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
+          {{ 'shared.form.error.maxDate' | translate: { date: dialogData.maxDate | date: 'dd.MM.yyyy' } }}
         </mat-error>
       </mat-form-field>
     </div>

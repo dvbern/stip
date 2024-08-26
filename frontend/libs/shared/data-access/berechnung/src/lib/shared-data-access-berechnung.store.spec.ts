@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { BerechnungStore } from './sachbearbeitung-app-data-access-berechnung.store';
+import { BerechnungStore } from './shared-data-access-berechnung.store';
 
 describe('BerechnungStore', () => {
   let store: BerechnungStore;

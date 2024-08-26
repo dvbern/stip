@@ -192,6 +192,9 @@
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}",
+  "sachbearbeitung-app.verfuegung.berechnung.months": "Monate",
+  "sachbearbeitung-app.verfuegung.berechnung.from": "von",
+  "sachbearbeitung-app.verfuegung.berechnung.to": "bis",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Details der Berechnung",
 
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Persönliches Budget",
@@ -265,6 +268,15 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung": "Verpflegung",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner": "Verpflegung auswärts Partner:in",
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Totaler Betrag des Budgets",
+
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title": "Resultat",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen": "Resultat: Stipendium gewährt",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt": "Resultat: Stipendium abgelehnt",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Zusammenfassung",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Details der Berechnung",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Stipendium Betrag",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung  {{ index }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}",
 
   "sachbearbeitung-app.gesuch-form.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.gesuch-form.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",

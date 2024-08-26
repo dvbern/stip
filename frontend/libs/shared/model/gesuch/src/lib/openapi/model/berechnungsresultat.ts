@@ -20,6 +20,8 @@ export interface Berechnungsresultat {
      * Berechneter Stpendiumsanspruch für diese Tranche
      */
     berechnung: number;
+    gueltigAb: string;
+    gueltigBis: string;
     persoenlichesBudgetresultat: PersoenlichesBudgetresultat;
     /**
      * Berechnungsdaten der Familienbudgets

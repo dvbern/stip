@@ -72,6 +72,7 @@ public final class GesuchGenerator {
         return LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs();
     }
 
+    /* return a new instance of Gesuch with a valid GesuchPeriode */
     public static Gesuch initGesuch() {
         final DateRange gueltigkeitsRange;
         if (GUELTIGKEIT_PERIODE_23_24 != null) {

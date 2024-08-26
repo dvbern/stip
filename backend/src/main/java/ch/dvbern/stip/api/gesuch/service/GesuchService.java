@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -92,6 +93,7 @@ public class GesuchService {
     private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentService gesuchDokumentService;
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
@@ -318,6 +320,7 @@ public class GesuchService {
         preventUpdateVonGesuchIfReadOnly(gesuch);
         gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
+        gesuchDokumentKommentarRepository.deleteAllForGesuch(gesuchId);
         gesuchRepository.delete(gesuch);
     }
 
@@ -445,6 +448,12 @@ public class GesuchService {
         return gesuchDokumentRepository.findAllForGesuch(gesuchId).map(gesuchDokumentMapper::toDto).toList();
     }
 
+    @Transactional
+    public GesuchDokumentDto getGesuchDokumentForGesuch(final UUID gesuchId, final DokumentTyp dokumentTyp) {
+        return gesuchDokumentMapper.toDto(gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp)
+            .orElseThrow(NotFoundException::new));
+    }
+
     public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var formular = gesuch.getAllTranchenValidOnDate(LocalDate.now())
@@ -517,7 +526,6 @@ public class GesuchService {
 
     public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
-        final var resultat = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);
-        return List.of(resultat);
+        return berechnungService.getBerechnungsresultateFromGesuch(gesuch, 1, 0);
     }
 }

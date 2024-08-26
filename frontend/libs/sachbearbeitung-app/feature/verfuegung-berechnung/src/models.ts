@@ -76,5 +76,8 @@ export type BerechnungsValue = keyof Pick<Berechnung, 'einnahmen' | 'kosten'>;
 export type GesamtBerechnung = {
   persoenlich: PersoenlicheBerechnung;
   familien: FamilienBerechnung[];
+  gueltigAb: string;
+  gueltigBis: string;
+  monate: number;
   total: number;
 };

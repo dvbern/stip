@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'shared-pattern-angular-material-config',
+  displayName: 'shared-feature-verfuegung-zusammenfassung',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/shared/pattern/angular-material-config',
+    '../../../../coverage/libs/shared/feature/verfuegung-zusammenfassung',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

@@ -72,6 +72,11 @@ public interface GesuchResource {
     Response getGesuch(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
+    @Path("/{gesuchsId}/dokumente/{dokumentTyp}")
+    @Produces({ "application/json", "text/plain" })
+    Response getGesuchDokument(@PathParam("gesuchsId") UUID gesuchsId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp);
+
+    @GET
     @Path("/{gesuchId}/dokumente")
     @Produces({ "application/json", "text/plain" })
     Response getGesuchDokumente(@PathParam("gesuchId") UUID gesuchId);

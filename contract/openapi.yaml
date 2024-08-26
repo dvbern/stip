@@ -191,6 +191,40 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: dokumentTyp
+          schema:
+            $ref: '#/components/schemas/DokumentTyp'
+          in: path
+          required: true
+        - name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GesuchDokumentKommentar'
+          description: Returns an Array of GesuchDokumentKommentar for a given GesuchDokuemntId
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchDokumentKommentare
+      summary: Returniert GesuchDokumentKommentare zu einem GesuchDokument.
   '/gesuchDokument/{gesuchDokumentId}/akzeptieren':
     parameters:
       - name: gesuchDokumentId
@@ -1036,6 +1070,35 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchDokumente
+  '/gesuch/{gesuchsId}/dokumente/{dokumentTyp}':
+    parameters:
+      - name: gesuchsId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+      - name: dokumentTyp
+        schema:
+          $ref: '#/components/schemas/DokumentTyp'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: GesuchDokument returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchDokument'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchDokument
   '/gesuch/{gesuchId}/requiredDokumente':
     parameters:
       - name: gesuchId
@@ -3143,7 +3206,26 @@ components:
       type: object
       properties:
         kommentar:
+          $ref: '#/components/schemas/GesuchDokumentKommentar'
+    GesuchDokumentKommentar:
+      description: 'Kommentar zu einem (abgelehnten) GesuchDokument'
+      type: object
+      required:
+        - gesuchId
+        - dokumentTyp
+      properties:
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        dokumentTyp:
+          $ref: '#/components/schemas/DokumentTyp'
+        dokumentStatus:
+          $ref: '#/components/schemas/Dokumentstatus'
+        kommentar:
           type: string
+        user_erstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
     Dokumentstatus:
       enum:
         - AUSSTEHEND
@@ -3153,6 +3235,8 @@ components:
       description: Resultat der Berechnung (eine Tranche)
       required:
         - berechnung
+        - gueltigAb
+        - gueltigBis
         - persoenlichesBudgetresultat
         - familienBudgetresultate
       type: object
@@ -3160,6 +3244,10 @@ components:
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
           type: integer
+        gueltigAb:
+          $ref: '#/components/schemas/LocalDate'
+        gueltigBis:
+          $ref: '#/components/schemas/LocalDate'
         persoenlichesBudgetresultat:
           description: 'Berechnungsdaten des persönlichen Budgets'
           $ref: '#/components/schemas/PersoenlichesBudgetresultat'

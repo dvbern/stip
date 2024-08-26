@@ -20,7 +20,9 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import io.smallrye.mutiny.Uni;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -41,6 +43,9 @@ import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchDokumentService {
@@ -52,6 +57,11 @@ public class GesuchDokumentService {
     private final S3AsyncClient s3;
     private final ConfigService configService;
     private final DokumentstatusService dokumentstatusService;
+
+    @Transactional
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(UUID gesuchDokumentId, DokumentTyp dokumentTyp) {
+        return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchDokumentId,dokumentTyp);
+    }
 
     @Transactional
     public DokumentDto uploadDokument(
@@ -116,7 +126,7 @@ public class GesuchDokumentService {
             );
         }
     }
-
+    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);

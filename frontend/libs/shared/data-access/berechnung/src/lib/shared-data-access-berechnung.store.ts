@@ -2,18 +2,18 @@ import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import { exhaustMap, pipe, tap } from 'rxjs';
 
 import { Berechnungsresultat, GesuchService } from '@dv/shared/model/gesuch';
 import {
-  RemoteData,
+  CachedRemoteData,
+  cachedPending,
   handleApiResponse,
   initial,
-  pending,
 } from '@dv/shared/util/remote-data';
 
 type BerechnungState = {
-  berechnungen: RemoteData<Berechnungsresultat[]>;
+  berechnungen: CachedRemoteData<Berechnungsresultat[]>;
 };
 
 const initialState: BerechnungState = {
@@ -28,18 +28,31 @@ export class BerechnungStore extends signalStore(
 ) {
   private gesuchService = inject(GesuchService);
 
-  berechnungViewSig = computed(() => {
-    return this.berechnungen.data();
+  berechnungZusammenfassungViewSig = computed(() => {
+    const value = { totalBetragStipendium: 0, berechnungsresultate: [] };
+    const data = this.berechnungen.data();
+
+    return data
+      ? data.reduce<{
+          totalBetragStipendium: number;
+          berechnungsresultate: Berechnungsresultat[];
+        }>((acc, curr) => {
+          return {
+            totalBetragStipendium: acc.totalBetragStipendium + curr.berechnung,
+            berechnungsresultate: [...acc.berechnungsresultate, curr],
+          };
+        }, value)
+      : value;
   });
 
-  calculateBerechnung$ = rxMethod<{ gesuchId: string }>(
+  getBerechnungForGesuch$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
-        patchState(this, () => ({
-          berechnungen: pending(),
+        patchState(this, (state) => ({
+          berechnungen: cachedPending(state.berechnungen),
         }));
       }),
-      switchMap(({ gesuchId }) =>
+      exhaustMap(({ gesuchId }) =>
         this.gesuchService
           .getBerechnungForGesuch$({ gesuchId })
           .pipe(
