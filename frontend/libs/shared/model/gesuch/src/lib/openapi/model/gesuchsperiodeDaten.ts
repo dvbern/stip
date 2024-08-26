@@ -75,5 +75,9 @@ export interface GesuchsperiodeDaten {
     maxSaeule3a: number;
     anzahlWochenLehre: number;
     anzahlWochenSchule: number;
+    vermoegensanteilInProzent: number;
+    reduzierungDesGrundbedarfs: number;
+    zweiterAuszahlungsterminMonat: number;
+    zweiterAuszahlungsterminTag: number;
 }
 
