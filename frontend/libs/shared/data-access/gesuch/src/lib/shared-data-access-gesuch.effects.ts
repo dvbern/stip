@@ -57,6 +57,7 @@ import {
   selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchStepsView,
+  selectSharedDataAccessGesuchsView,
 } from './shared-data-access-gesuch.selectors';
 
 export const LOAD_ALL_DEBOUNCE_TIME = 300;
@@ -402,14 +403,25 @@ export const redirectToGesuchFormNextStep = createEffect(
         SharedEventGesuchFormEinnahmenkosten.nextTriggered,
         SharedEventGesuchDokumente.nextTriggered,
       ),
-      withLatestFrom(store.select(selectSharedDataAccessGesuchStepsView)),
-      tap(([{ id, origin }, { stepsFlow: stepFlowSig }]) => {
-        router.navigate([
-          'gesuch',
-          ...stepManager.getNextStepOf(stepFlowSig, origin).route.split('/'),
-          id,
-        ]);
-      }),
+      withLatestFrom(
+        store.select(selectSharedDataAccessGesuchStepsView),
+        store.select(selectSharedDataAccessGesuchsView),
+      ),
+      tap(
+        ([
+          { id, origin },
+          { stepsFlow: stepFlowSig },
+          { gesuchFormular, readonly },
+        ]) => {
+          router.navigate([
+            'gesuch',
+            ...stepManager
+              .getNextStepOf(stepFlowSig, origin, gesuchFormular, readonly)
+              .route.split('/'),
+            id,
+          ]);
+        },
+      ),
     );
   },
   { functional: true, dispatch: false },

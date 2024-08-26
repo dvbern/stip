@@ -63,6 +63,8 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
     this.stepManager.getValidatedSteps(
       this.stepsViewSig().steps,
       this.cacheSig().gesuchFormular,
+      undefined,
+      this.viewSig().readonly,
     ),
   );
   currentStepProgressSig = computed(() => {
