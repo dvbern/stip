@@ -104,6 +104,9 @@ export class GesuchsperiodeDetailComponent {
   idSig = input.required<string | undefined>({ alias: 'id' });
   unsavedChangesSig: Signal<boolean>;
 
+  maxZweiterAuszahlungsterminMonat = 11;
+  minZweiterAuszahlungsterminTag = 1;
+  maxZweiterAuszahlungsterminTag = 28;
   form = this.formBuilder.group({
     bezeichnungDe: [<string | null>null, [Validators.required]],
     bezeichnungFr: [<string | null>null, [Validators.required]],
