@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +34,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_AB,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE
 })
@@ -41,6 +44,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_BERECHNUNG = "berechnung";
   private Integer berechnung;
+
+  public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
+  private LocalDate gueltigAb;
+
+  public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
+  private LocalDate gueltigBis;
 
   public static final String JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT = "persoenlichesBudgetresultat";
   private PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat;
@@ -74,6 +83,58 @@ public class BerechnungsresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBerechnung(Integer berechnung) {
     this.berechnung = berechnung;
+  }
+
+
+  public BerechnungsresultatDtoSpec gueltigAb(LocalDate gueltigAb) {
+    
+    this.gueltigAb = gueltigAb;
+    return this;
+  }
+
+   /**
+   * Get gueltigAb
+   * @return gueltigAb
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getGueltigAb() {
+    return gueltigAb;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGueltigAb(LocalDate gueltigAb) {
+    this.gueltigAb = gueltigAb;
+  }
+
+
+  public BerechnungsresultatDtoSpec gueltigBis(LocalDate gueltigBis) {
+    
+    this.gueltigBis = gueltigBis;
+    return this;
+  }
+
+   /**
+   * Get gueltigBis
+   * @return gueltigBis
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getGueltigBis() {
+    return gueltigBis;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGueltigBis(LocalDate gueltigBis) {
+    this.gueltigBis = gueltigBis;
   }
 
 
@@ -146,13 +207,15 @@ public class BerechnungsresultatDtoSpec {
     }
     BerechnungsresultatDtoSpec berechnungsresultat = (BerechnungsresultatDtoSpec) o;
     return Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
+        Objects.equals(this.gueltigAb, berechnungsresultat.gueltigAb) &&
+        Objects.equals(this.gueltigBis, berechnungsresultat.gueltigBis) &&
         Objects.equals(this.persoenlichesBudgetresultat, berechnungsresultat.persoenlichesBudgetresultat) &&
         Objects.equals(this.familienBudgetresultate, berechnungsresultat.familienBudgetresultate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(berechnung, gueltigAb, gueltigBis, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
@@ -160,6 +223,8 @@ public class BerechnungsresultatDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class BerechnungsresultatDtoSpec {\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
+    sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
+    sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    persoenlichesBudgetresultat: ").append(toIndentedString(persoenlichesBudgetresultat)).append("\n");
     sb.append("    familienBudgetresultate: ").append(toIndentedString(familienBudgetresultate)).append("\n");
     sb.append("}");

@@ -118,6 +118,7 @@
   "shared.dokumente.table.delete": "Supprimer",
   "shared.dokumente.table.upload": "Télécharger",
   "shared.dokumente.table.status": "Status",
+  "shared.dokumente.table.noComment": "Aucun commentaire n'a été ajouté",
   "shared.dokumente.dokumentStatus.AKZEPTIERT": "Valide",
   "shared.dokumente.dokumentStatus.ABGELEHNT": "Rejeté",
   "shared.dokumente.dokumentStatus.NO_DOCUMENT": "Aucun document",

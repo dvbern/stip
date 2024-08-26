@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 
-import { BerechnungStore } from '@dv/sachbearbeitung-app/data-access/berechnung';
+import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 
 import { SachbearbeitungAppFeatureVerfuegungBerechnungComponent } from './sachbearbeitung-app-feature-verfuegung-berechnung/sachbearbeitung-app-feature-verfuegung-berechnung.component';
 

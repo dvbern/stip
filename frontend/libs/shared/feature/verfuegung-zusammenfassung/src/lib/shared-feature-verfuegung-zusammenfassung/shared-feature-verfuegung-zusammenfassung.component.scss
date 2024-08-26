@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.accept {
+  background-color: var(--dv-green-bg-subtle);
+  color: var(--dv-green-bg);
+}
+
+.reject {
+  background-color: var(--dv-red-bg-subtle);
+  color: var(--dv-red-bg);
+}

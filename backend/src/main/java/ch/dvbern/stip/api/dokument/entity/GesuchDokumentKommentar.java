@@ -5,6 +5,7 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +28,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Table(
     name = "gesuch_dokument_kommentar",
     indexes = {
-        @Index(name = "IX_gesuch_dokument_kommentar_gesuch_tranche_id", columnList = "gesuch_tranche_id"),
+        @Index(name = "IX_gesuch_dokument_kommentar_gesuch_id", columnList = "gesuch_tranche_id"),
         @Index(name = "IX_gesuch_dokument_kommentar_mandant", columnList = "mandant")
     }
 )
@@ -35,7 +36,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LE
 @Setter
 public class GesuchDokumentKommentar extends AbstractMandantEntity {
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "gesuch_tranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_kommentar_gesuch_tranche_id"))
     private GesuchTranche gesuchTranche;
 
@@ -51,6 +52,6 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
 
     @Nullable
     @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(name = "kommentar")
+    @Column(name = "kommentar", nullable = true)
     private String kommentar;
 }

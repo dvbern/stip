@@ -123,7 +123,8 @@ export const isPending = (
 };
 
 /**
- * Checks if the given remote data object is in the pending state without preserved cached `data`.
+ * Checks if the given remote data object is in the pending state and without preserved cached `data`.
+ * Only returns `true` if the `data` field is `undefined` and `remote data` is pending.
  *
  * This can for example be used to still being able to show old data but with an disabled save button.
  *

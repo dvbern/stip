@@ -36,7 +36,7 @@ import { Berechnung } from '../../../models';
                   berechnung.typ +
                   '.title' | translate
               }}</span>
-              <span class="h3 mb-4 fs-4">
+              <h3 class="mb-4 fs-4">
                 @switch (berechnung.typ) {
                   @case ('persoenlich') {
                     {{ berechnung.name }}
@@ -45,7 +45,7 @@ import { Berechnung } from '../../../models';
                     {{ berechnung.nameKey | translate: berechnung }}
                   }
                 }
-              </span>
+              </h3>
             </div>
           </mat-card-title>
         </mat-card-header>

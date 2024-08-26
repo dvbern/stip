@@ -11,28 +11,33 @@ import {
   DokumentTyp,
   Dokumentstatus,
   GesuchDokument,
+  GesuchDokumentKommentar,
   GesuchService,
   GesuchTrancheService,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
+  RemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
   isSuccess,
+  pending,
   success,
 } from '@dv/shared/util/remote-data';
 
 type DokumentsState = {
   dokuments: CachedRemoteData<GesuchDokument[]>;
   requiredDocumentTypes: CachedRemoteData<DokumentTyp[]>;
+  gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
   dokument: CachedRemoteData<GesuchDokument>;
 };
 
 const initialState: DokumentsState = {
   dokuments: initial(),
   requiredDocumentTypes: initial(),
+  gesuchDokumentKommentare: initial(),
   dokument: initial(),
 };
 
@@ -51,6 +56,12 @@ export class DokumentsStore extends signalStore(
     dokuments: fromCachedDataSig(this.dokuments) ?? [],
     requiredDocumentTypes: fromCachedDataSig(this.requiredDocumentTypes) ?? [],
   }));
+
+  kommentareViewSig = computed(() => {
+    return (
+      this.gesuchDokumentKommentare.data()?.filter((k) => k.kommentar) ?? []
+    );
+  });
 
   dokumentViewSig = computed(() =>
     isSuccess(this.dokument()) ? this.dokument().data : undefined,
@@ -101,31 +112,63 @@ export class DokumentsStore extends signalStore(
     }),
   );
 
+  getGesuchDokumentKommentare$ = rxMethod<{
+    dokumentTyp: DokumentTyp;
+    gesuchTrancheId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          gesuchDokumentKommentare: pending(),
+        }));
+      }),
+      switchMap((req) =>
+        this.dokumentService.getGesuchDokumentKommentare$(req),
+      ),
+      handleApiResponse((gesuchDokumentKommentare) =>
+        patchState(this, { gesuchDokumentKommentare }),
+      ),
+    ),
+  );
+
   gesuchDokumentAblehnen$ = rxMethod<{
+    gesuchTrancheId: string;
     gesuchDokumentId: string;
+    dokumentTyp: DokumentTyp;
     kommentar: string;
     afterSuccess?: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchDokumentId, kommentar, afterSuccess }) =>
-        this.dokumentService
-          .gesuchDokumentAblehnen$({
-            gesuchDokumentId,
-            gesuchDokumentAblehnenRequest: {
-              kommentar,
-            },
-          })
-          .pipe(
-            tapResponse({
-              next: () => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'shared.dokumente.reject.success',
-                });
-                afterSuccess?.();
+      switchMap(
+        ({
+          gesuchTrancheId,
+          gesuchDokumentId,
+          dokumentTyp,
+          kommentar,
+          afterSuccess,
+        }) =>
+          this.dokumentService
+            .gesuchDokumentAblehnen$({
+              gesuchDokumentId,
+              gesuchDokumentAblehnenRequest: {
+                kommentar: {
+                  kommentar,
+                  dokumentTyp,
+                  gesuchTrancheId,
+                },
               },
-              error: () => undefined,
-            }),
-          ),
+            })
+            .pipe(
+              tapResponse({
+                next: () => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey: 'shared.dokumente.reject.success',
+                  });
+                  afterSuccess?.();
+                },
+                error: () => undefined,
+              }),
+            ),
       ),
     ),
   );
