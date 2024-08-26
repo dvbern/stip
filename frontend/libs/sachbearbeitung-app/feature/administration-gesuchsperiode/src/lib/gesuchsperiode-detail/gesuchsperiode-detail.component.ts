@@ -115,6 +115,8 @@ export class GesuchsperiodeDetailComponent {
     aufschaltterminStopp: [<string | null>null, [Validators.required]],
     einreichefristNormal: [<string | null>null, [Validators.required]],
     einreichefristReduziert: [<string | null>null, [Validators.required]],
+    zweiterAuszahlungsterminMonat: [<number | null>null, [Validators.required]],
+    zweiterAuszahlungsterminTag: [<number | null>null, [Validators.required]],
     ausbKosten_SekII: [<string | null>null, [Validators.required]],
     ausbKosten_Tertiaer: [<string | null>null, [Validators.required]],
     freibetrag_vermoegen: [<string | null>null, [Validators.required]],
@@ -128,6 +130,7 @@ export class GesuchsperiodeDetailComponent {
       [Validators.required],
     ],
     stipLimite_Minimalstipendium: [<string | null>null, [Validators.required]],
+    reduzierungDesGrundbedarfs: [<string | null>null, [Validators.required]],
     person_1: [<string | null>null, [Validators.required]],
     personen_2: [<string | null>null, [Validators.required]],
     personen_3: [<string | null>null, [Validators.required]],
@@ -156,6 +159,7 @@ export class GesuchsperiodeDetailComponent {
     maxSaeule3a: [<string | null>null, [Validators.required]],
     anzahlWochenLehre: [<string | null>null, [Validators.required]],
     anzahlWochenSchule: [<string | null>null, [Validators.required]],
+    vermoegensanteilInProzent: [<string | null>null, [Validators.required]],
   });
 
   gesuchsjahrChangedSig = toSignal(
@@ -202,6 +206,7 @@ export class GesuchsperiodeDetailComponent {
     'integrationszulage',
     'limite_EkFreibetrag_Integrationszulage',
     'stipLimite_Minimalstipendium',
+    'reduzierungDesGrundbedarfs',
     'person_1',
     'personen_2',
     'personen_3',
@@ -227,6 +232,7 @@ export class GesuchsperiodeDetailComponent {
     'maxSaeule3a',
     'anzahlWochenLehre',
     'anzahlWochenSchule',
+    'vermoegensanteilInProzent',
   ]);
 
   constructor() {
@@ -271,6 +277,8 @@ export class GesuchsperiodeDetailComponent {
               'aufschaltterminStopp',
               'einreichefristNormal',
               'einreichefristReduziert',
+              'zweiterAuszahlungsterminMonat',
+              'zweiterAuszahlungsterminTag',
             ],
           );
           this.form.patchValue({

@@ -205,6 +205,44 @@
         </mat-form-field>
       </div>
 
+      <!-- Zweiter Auszahlungstermin Monat-->
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+        <mat-label>{{
+          'sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminMonat.label' | translate
+        }}</mat-label>
+        <input
+          formControlName="zweiterAuszahlungsterminMonat"
+          data-testid="form-gesuchsperiode-zweiterAuszahlungsterminMonat"
+          matInput
+          type="number"
+          min="0"
+          max="11"
+        />
+        <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminMonat.info </mat-hint>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Tag der Auszahlung für zweiten Auszahlungstermin-->
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+        <mat-label>{{
+          'sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminTag.label' | translate
+        }}</mat-label>
+        <input
+          formControlName="zweiterAuszahlungsterminTag"
+          data-testid="form-gesuchsperiode-zweiterAuszahlungsterminTag"
+          matInput
+          type="number"
+          min="1"
+          max="28"
+        />
+        <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminTag.info </mat-hint>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
       <!-- Stammdaten -->
       <h1 class="h2 pt-5 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.stammdaten.title' | translate }}
@@ -417,6 +455,24 @@
         </mat-form-field>
       </div>
 
+      <!-- Vermoegensanteil In Prozent-->
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+        <mat-label>{{
+          'sachbearbeitung-app.admin.gesuchsperiode.vermoegensanteilInProzent.label' | translate
+        }}</mat-label>
+        <input
+          formControlName="vermoegensanteilInProzent"
+          data-testid="form-gesuchsperiode-vermoegensanteilInProzent"
+          matInput
+          [maskito]="maskitoNumber"
+          type="text"
+        />
+        <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.vermoegensanteilInProzent.info </mat-hint>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
       <!-- Ausbildungskosten (pers. Budget) -->
       <h2 class="h3 pt-5 mb-4">
         {{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title' | translate }}
@@ -460,6 +516,24 @@
       </h2>
 
       <div class="row g-4">
+        <!-- Redzuierung des Grundbedarfs -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{
+            'sachbearbeitung-app.admin.gesuchsperiode.reduzierungDesGrundbedarfs.label' | translate
+          }}</mat-label>
+          <input
+            formControlName="reduzierungDesGrundbedarfs"
+            data-testid="form-gesuchsperiode-reduzierungDesGrundbedarfs"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.reduzierungDesGrundbedarfs.info </mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+
         <!-- 1 Person -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.person_1.label' | translate }}</mat-label>
