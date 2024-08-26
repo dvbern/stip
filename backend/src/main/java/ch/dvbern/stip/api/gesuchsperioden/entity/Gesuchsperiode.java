@@ -33,6 +33,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -191,4 +193,23 @@ public class Gesuchsperiode extends AbstractMandantEntity {
 
     @Column(nullable = false, name = "anzahl_wochen_schule")
     private Integer anzahlWochenSchule;
+
+    @Min(0)
+    @Max(100)
+    @Column(nullable = false, name = "vermoegensanteil_in_prozent")
+    private Integer vermoegensanteilInProzent;
+
+    @Column(nullable = false, name = "reduzierung_des_grundbedarfs")
+    private Integer reduzierungDesGrundbedarfs;
+
+    @Min(0)
+    @Max(11)
+    @Column(name = "zweiter_auszahlungstermin_monat", nullable = false)
+    private Integer zweiterAuszahlungsterminMonat;
+
+    @Min(1)
+    @Max(28)
+    @Column(name = "zweiter_auszahlungstermin_tag", nullable = false)
+    private Integer zweiterAuszahlungsterminTag;
+
 }

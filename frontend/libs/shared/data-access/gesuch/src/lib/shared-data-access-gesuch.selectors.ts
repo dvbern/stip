@@ -137,6 +137,19 @@ export const selectSharedDataAccessGesuchCache = createSelector(
   sharedDataAccessGesuchsFeature.selectCache,
   (cache) => cache,
 );
+export const selectSharedDataAccessGesuchCacheView = createSelector(
+  selectSharedDataAccessGesuchCache,
+  selectSharedDataAccessConfigsView,
+  (cache, config) => {
+    return {
+      cache,
+      readonly: isGesuchFormularReadonly(
+        cache.gesuch,
+        config.compileTimeConfig?.appType,
+      ),
+    };
+  },
+);
 
 const transformValidationMessagesToFormKeys = (
   messages?: ValidationMessage[],

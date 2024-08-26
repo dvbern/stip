@@ -66,6 +66,10 @@ public class GesuchsperiodeCreateDto  implements Serializable {
   private @Valid Integer maxSaeule3a;
   private @Valid Integer anzahlWochenLehre;
   private @Valid Integer anzahlWochenSchule;
+  private @Valid Integer vermoegensanteilInProzent;
+  private @Valid Integer reduzierungDesGrundbedarfs;
+  private @Valid Integer zweiterAuszahlungsterminMonat;
+  private @Valid Integer zweiterAuszahlungsterminTag;
   private @Valid LocalDate einreichfrist;
 
   /**
@@ -931,6 +935,82 @@ public class GesuchsperiodeCreateDto  implements Serializable {
 
   /**
    **/
+  public GesuchsperiodeCreateDto vermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+    this.vermoegensanteilInProzent = vermoegensanteilInProzent;
+    return this;
+  }
+
+  
+  @JsonProperty("vermoegensanteilInProzent")
+  @NotNull
+  public Integer getVermoegensanteilInProzent() {
+    return vermoegensanteilInProzent;
+  }
+
+  @JsonProperty("vermoegensanteilInProzent")
+  public void setVermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+    this.vermoegensanteilInProzent = vermoegensanteilInProzent;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeCreateDto reduzierungDesGrundbedarfs(Integer reduzierungDesGrundbedarfs) {
+    this.reduzierungDesGrundbedarfs = reduzierungDesGrundbedarfs;
+    return this;
+  }
+
+  
+  @JsonProperty("reduzierungDesGrundbedarfs")
+  @NotNull
+  public Integer getReduzierungDesGrundbedarfs() {
+    return reduzierungDesGrundbedarfs;
+  }
+
+  @JsonProperty("reduzierungDesGrundbedarfs")
+  public void setReduzierungDesGrundbedarfs(Integer reduzierungDesGrundbedarfs) {
+    this.reduzierungDesGrundbedarfs = reduzierungDesGrundbedarfs;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeCreateDto zweiterAuszahlungsterminMonat(Integer zweiterAuszahlungsterminMonat) {
+    this.zweiterAuszahlungsterminMonat = zweiterAuszahlungsterminMonat;
+    return this;
+  }
+
+  
+  @JsonProperty("zweiterAuszahlungsterminMonat")
+  @NotNull
+  public Integer getZweiterAuszahlungsterminMonat() {
+    return zweiterAuszahlungsterminMonat;
+  }
+
+  @JsonProperty("zweiterAuszahlungsterminMonat")
+  public void setZweiterAuszahlungsterminMonat(Integer zweiterAuszahlungsterminMonat) {
+    this.zweiterAuszahlungsterminMonat = zweiterAuszahlungsterminMonat;
+  }
+
+  /**
+   **/
+  public GesuchsperiodeCreateDto zweiterAuszahlungsterminTag(Integer zweiterAuszahlungsterminTag) {
+    this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
+    return this;
+  }
+
+  
+  @JsonProperty("zweiterAuszahlungsterminTag")
+  @NotNull
+  public Integer getZweiterAuszahlungsterminTag() {
+    return zweiterAuszahlungsterminTag;
+  }
+
+  @JsonProperty("zweiterAuszahlungsterminTag")
+  public void setZweiterAuszahlungsterminTag(Integer zweiterAuszahlungsterminTag) {
+    this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
+  }
+
+  /**
+   **/
   public GesuchsperiodeCreateDto einreichfrist(LocalDate einreichfrist) {
     this.einreichfrist = einreichfrist;
     return this;
@@ -1002,12 +1082,16 @@ public class GesuchsperiodeCreateDto  implements Serializable {
         Objects.equals(this.maxSaeule3a, gesuchsperiodeCreate.maxSaeule3a) &&
         Objects.equals(this.anzahlWochenLehre, gesuchsperiodeCreate.anzahlWochenLehre) &&
         Objects.equals(this.anzahlWochenSchule, gesuchsperiodeCreate.anzahlWochenSchule) &&
+        Objects.equals(this.vermoegensanteilInProzent, gesuchsperiodeCreate.vermoegensanteilInProzent) &&
+        Objects.equals(this.reduzierungDesGrundbedarfs, gesuchsperiodeCreate.reduzierungDesGrundbedarfs) &&
+        Objects.equals(this.zweiterAuszahlungsterminMonat, gesuchsperiodeCreate.zweiterAuszahlungsterminMonat) &&
+        Objects.equals(this.zweiterAuszahlungsterminTag, gesuchsperiodeCreate.zweiterAuszahlungsterminTag) &&
         Objects.equals(this.einreichfrist, gesuchsperiodeCreate.einreichfrist);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, einreichfrist);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, einreichfrist);
   }
 
   @Override
@@ -1060,6 +1144,10 @@ public class GesuchsperiodeCreateDto  implements Serializable {
     sb.append("    maxSaeule3a: ").append(toIndentedString(maxSaeule3a)).append("\n");
     sb.append("    anzahlWochenLehre: ").append(toIndentedString(anzahlWochenLehre)).append("\n");
     sb.append("    anzahlWochenSchule: ").append(toIndentedString(anzahlWochenSchule)).append("\n");
+    sb.append("    vermoegensanteilInProzent: ").append(toIndentedString(vermoegensanteilInProzent)).append("\n");
+    sb.append("    reduzierungDesGrundbedarfs: ").append(toIndentedString(reduzierungDesGrundbedarfs)).append("\n");
+    sb.append("    zweiterAuszahlungsterminMonat: ").append(toIndentedString(zweiterAuszahlungsterminMonat)).append("\n");
+    sb.append("    zweiterAuszahlungsterminTag: ").append(toIndentedString(zweiterAuszahlungsterminTag)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
     sb.append("}");
     return sb.toString();

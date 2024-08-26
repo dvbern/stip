@@ -74,7 +74,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_PREIS_PRO_MAHLZEIT,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_MAX_SAEULE3A,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE,
-  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE
+  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE,
+  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT,
+  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS,
+  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT,
+  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG
 })
 @JsonTypeName("GesuchsperiodeUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -216,6 +220,18 @@ public class GesuchsperiodeUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE = "anzahlWochenSchule";
   private Integer anzahlWochenSchule;
+
+  public static final String JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT = "vermoegensanteilInProzent";
+  private Integer vermoegensanteilInProzent;
+
+  public static final String JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS = "reduzierungDesGrundbedarfs";
+  private Integer reduzierungDesGrundbedarfs;
+
+  public static final String JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT = "zweiterAuszahlungsterminMonat";
+  private Integer zweiterAuszahlungsterminMonat;
+
+  public static final String JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG = "zweiterAuszahlungsterminTag";
+  private Integer zweiterAuszahlungsterminTag;
 
   public GesuchsperiodeUpdateDtoSpec() {
   }
@@ -1415,6 +1431,110 @@ public class GesuchsperiodeUpdateDtoSpec {
     this.anzahlWochenSchule = anzahlWochenSchule;
   }
 
+
+  public GesuchsperiodeUpdateDtoSpec vermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+    
+    this.vermoegensanteilInProzent = vermoegensanteilInProzent;
+    return this;
+  }
+
+   /**
+   * Get vermoegensanteilInProzent
+   * @return vermoegensanteilInProzent
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getVermoegensanteilInProzent() {
+    return vermoegensanteilInProzent;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+    this.vermoegensanteilInProzent = vermoegensanteilInProzent;
+  }
+
+
+  public GesuchsperiodeUpdateDtoSpec reduzierungDesGrundbedarfs(Integer reduzierungDesGrundbedarfs) {
+    
+    this.reduzierungDesGrundbedarfs = reduzierungDesGrundbedarfs;
+    return this;
+  }
+
+   /**
+   * Get reduzierungDesGrundbedarfs
+   * @return reduzierungDesGrundbedarfs
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getReduzierungDesGrundbedarfs() {
+    return reduzierungDesGrundbedarfs;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setReduzierungDesGrundbedarfs(Integer reduzierungDesGrundbedarfs) {
+    this.reduzierungDesGrundbedarfs = reduzierungDesGrundbedarfs;
+  }
+
+
+  public GesuchsperiodeUpdateDtoSpec zweiterAuszahlungsterminMonat(Integer zweiterAuszahlungsterminMonat) {
+    
+    this.zweiterAuszahlungsterminMonat = zweiterAuszahlungsterminMonat;
+    return this;
+  }
+
+   /**
+   * Get zweiterAuszahlungsterminMonat
+   * @return zweiterAuszahlungsterminMonat
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getZweiterAuszahlungsterminMonat() {
+    return zweiterAuszahlungsterminMonat;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setZweiterAuszahlungsterminMonat(Integer zweiterAuszahlungsterminMonat) {
+    this.zweiterAuszahlungsterminMonat = zweiterAuszahlungsterminMonat;
+  }
+
+
+  public GesuchsperiodeUpdateDtoSpec zweiterAuszahlungsterminTag(Integer zweiterAuszahlungsterminTag) {
+    
+    this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
+    return this;
+  }
+
+   /**
+   * Get zweiterAuszahlungsterminTag
+   * @return zweiterAuszahlungsterminTag
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getZweiterAuszahlungsterminTag() {
+    return zweiterAuszahlungsterminTag;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setZweiterAuszahlungsterminTag(Integer zweiterAuszahlungsterminTag) {
+    this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -1469,12 +1589,16 @@ public class GesuchsperiodeUpdateDtoSpec {
         Objects.equals(this.preisProMahlzeit, gesuchsperiodeUpdate.preisProMahlzeit) &&
         Objects.equals(this.maxSaeule3a, gesuchsperiodeUpdate.maxSaeule3a) &&
         Objects.equals(this.anzahlWochenLehre, gesuchsperiodeUpdate.anzahlWochenLehre) &&
-        Objects.equals(this.anzahlWochenSchule, gesuchsperiodeUpdate.anzahlWochenSchule);
+        Objects.equals(this.anzahlWochenSchule, gesuchsperiodeUpdate.anzahlWochenSchule) &&
+        Objects.equals(this.vermoegensanteilInProzent, gesuchsperiodeUpdate.vermoegensanteilInProzent) &&
+        Objects.equals(this.reduzierungDesGrundbedarfs, gesuchsperiodeUpdate.reduzierungDesGrundbedarfs) &&
+        Objects.equals(this.zweiterAuszahlungsterminMonat, gesuchsperiodeUpdate.zweiterAuszahlungsterminMonat) &&
+        Objects.equals(this.zweiterAuszahlungsterminTag, gesuchsperiodeUpdate.zweiterAuszahlungsterminTag);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag);
   }
 
   @Override
@@ -1527,6 +1651,10 @@ public class GesuchsperiodeUpdateDtoSpec {
     sb.append("    maxSaeule3a: ").append(toIndentedString(maxSaeule3a)).append("\n");
     sb.append("    anzahlWochenLehre: ").append(toIndentedString(anzahlWochenLehre)).append("\n");
     sb.append("    anzahlWochenSchule: ").append(toIndentedString(anzahlWochenSchule)).append("\n");
+    sb.append("    vermoegensanteilInProzent: ").append(toIndentedString(vermoegensanteilInProzent)).append("\n");
+    sb.append("    reduzierungDesGrundbedarfs: ").append(toIndentedString(reduzierungDesGrundbedarfs)).append("\n");
+    sb.append("    zweiterAuszahlungsterminMonat: ").append(toIndentedString(zweiterAuszahlungsterminMonat)).append("\n");
+    sb.append("    zweiterAuszahlungsterminTag: ").append(toIndentedString(zweiterAuszahlungsterminTag)).append("\n");
     sb.append("}");
     return sb.toString();
   }

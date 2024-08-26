@@ -1,7 +1,6 @@
 package ch.dvbern.stip.berechnung.service;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -290,15 +289,15 @@ public class BerechnungService {
             // If all kids have their own living arrangement the calcualtion is moot and would lead to a /0 error. So we just the previously assigned value
             if (noKinderOhneEigenenHaushalt > 0) {
                 // Calculate the relative percentage (i.e. how much of all kids live with each parent)
-                kinderProzenteVater = kinderProzenteVater.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt)).round(new MathContext(2, RoundingMode.HALF_UP));
-                kinderProzenteMutter = kinderProzenteMutter.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt)).round(new MathContext(2, RoundingMode.HALF_UP));
+                kinderProzenteVater = kinderProzenteVater.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP);
+                kinderProzenteMutter = kinderProzenteMutter.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP);
 
                 // Calculate the total stipendien amount based on the respective amounts and their relative kid percentages.
                 berechnung =
                     kinderProzenteVater.multiply(BigDecimal.valueOf(stipendienCalculatedForVater.getStipendien())
-                        .divide(BigDecimal.valueOf(100))).round(new MathContext(2, RoundingMode.HALF_UP)).intValue()
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).intValue()
                         + kinderProzenteMutter.multiply(BigDecimal.valueOf(stipendienCalculatedForMutter.getStipendien())
-                        .divide(BigDecimal.valueOf(100))).round(new MathContext(2, RoundingMode.HALF_UP)).intValue();
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).intValue();
             }
         } else {
             // If there is only one budget.

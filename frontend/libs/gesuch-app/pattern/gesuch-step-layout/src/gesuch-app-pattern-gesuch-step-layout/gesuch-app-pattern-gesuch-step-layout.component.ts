@@ -16,6 +16,7 @@ import { filter } from 'rxjs';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import {
   SharedDataAccessGesuchEvents,
+  selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchValidationView,
   selectSharedDataAccessGesuchsView,
@@ -65,6 +66,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   validationViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchValidationView,
@@ -73,10 +75,12 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
     const { cachedGesuchFormular, invalidFormularProps } =
       this.validationViewSig();
     const steps = this.stepsViewSig().steps;
+    const readonly = this.cacheViewSig().readonly;
     const validatedSteps = this.stepManager.getValidatedSteps(
       steps,
       cachedGesuchFormular,
       invalidFormularProps.validations,
+      readonly,
     );
     return validatedSteps;
   });

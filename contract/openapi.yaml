@@ -813,11 +813,11 @@ paths:
         required: true
   '/gesuch/{gesuchId}':
     parameters:
-    - name: gesuchId
-      schema:
-        $ref: '#/components/schemas/UUID'
-      in: path
-      required: true
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     patch:
       requestBody:
         content:
@@ -861,11 +861,11 @@ paths:
       summary: delete a Gesuch
   '/gesuch/{gesuchId}/current':
     parameters:
-    - name: gesuchId
-      schema:
-        $ref: '#/components/schemas/UUID'
-      in: path
-      required: true
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     get:
       tags:
         - Gesuch
@@ -888,16 +888,16 @@ paths:
       summary: Returns the Gesuch with the given Id
   '/gesuch/{gesuchId}/{gesuchTrancheId}':
     parameters:
-    - name: gesuchId
-      schema:
-        $ref: '#/components/schemas/UUID'
-      in: path
-      required: true
-    - name: gesuchTrancheId
-      schema:
-        $ref: '#/components/schemas/UUID'
-      in: path
-      required: true
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     get:
       tags:
         - Gesuch
@@ -2880,6 +2880,10 @@ components:
         - maxSaeule3a
         - anzahlWochenLehre
         - anzahlWochenSchule
+        - vermoegensanteilInProzent
+        - reduzierungDesGrundbedarfs
+        - zweiterAuszahlungsterminMonat
+        - zweiterAuszahlungsterminTag
       properties:
         bezeichnungDe:
           type: string
@@ -2984,6 +2988,14 @@ components:
         anzahlWochenLehre:
           type: integer
         anzahlWochenSchule:
+          type: integer
+        vermoegensanteilInProzent:
+          type: integer
+        reduzierungDesGrundbedarfs:
+          type: integer
+        zweiterAuszahlungsterminMonat:
+          type: integer
+        zweiterAuszahlungsterminTag:
           type: integer
     AusbildungsstaetteUpdate:
       required:
@@ -3175,8 +3187,8 @@ components:
           type: integer
         sozialhilfebeitraegePartner:
           description: |
-           'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Mutter'
-           'Falls steuerdatenTyp != Famile: null'
+            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Mutter'
+            'Falls steuerdatenTyp != Famile: null'
           type: integer
     Steuerdaten:
       title: Root Type for Steuerdaten
@@ -3251,7 +3263,7 @@ components:
           description: 'Berechnungsdaten des persönlichen Budgets'
           $ref: '#/components/schemas/PersoenlichesBudgetresultat'
         familienBudgetresultate:
-          description: "Berechnungsdaten der Familienbudgets"
+          description: 'Berechnungsdaten der Familienbudgets'
           type: array
           items:
             $ref: '#/components/schemas/FamilienBudgetresultat'
@@ -3432,12 +3444,14 @@ components:
         - type: object
           required:
             - start
+            - comment
     CreateGesuchTrancheRequest:
       allOf:
         - $ref: '#/components/schemas/BaseTrancheRequest'
         - type: object
           required:
             - start
+            - comment
   responses:
     Unauthorized:
       content:

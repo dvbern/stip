@@ -166,6 +166,7 @@ export const findStepIndex = (
 export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
   formular: SharedModelGesuchFormular | null,
+  readonly = false,
 ) => {
   if (step === PARTNER) {
     const zivilstand = formular?.personInAusbildung?.zivilstand;
@@ -177,6 +178,14 @@ export const isStepDisabled = (
         Zivilstand.EINGETRAGENE_PARTNERSCHAFT,
       ].includes(zivilstand)
     );
+  }
+  if (step === GESCHWISTER) {
+    const geschwister = formular?.geschwisters;
+    return readonly && (!geschwister || geschwister.length === 0);
+  }
+  if (step === KINDER) {
+    const kinder = formular?.kinds;
+    return readonly && (!kinder || kinder.length === 0);
   }
   if (step === ELTERN) {
     const werZahltAlimente = formular?.familiensituation?.werZahltAlimente;

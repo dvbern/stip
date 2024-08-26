@@ -66,7 +66,7 @@ export class SharedUiAenderungMeldenDialogComponent {
   form = this.formBuilder.group({
     gueltigAb: [<Date | null>null, Validators.required],
     gueltigBis: [<Date | null>null],
-    kommentar: [<string | null>null],
+    kommentar: [<string | null>null, Validators.required],
   });
 
   static open(dialog: MatDialog, data: GesuchAenderungData) {
@@ -84,13 +84,14 @@ export class SharedUiAenderungMeldenDialogComponent {
     }
     const aenderungsAntrag = convertTempFormToRealValues(this.form, [
       'gueltigAb',
+      'kommentar',
     ]);
     return this.dialogRef.close({
       start: toBackendLocalDate(aenderungsAntrag.gueltigAb),
       end: aenderungsAntrag.gueltigBis
         ? toBackendLocalDate(aenderungsAntrag.gueltigBis)
         : undefined,
-      comment: aenderungsAntrag.kommentar ?? undefined,
+      comment: aenderungsAntrag.kommentar,
     });
   }
 

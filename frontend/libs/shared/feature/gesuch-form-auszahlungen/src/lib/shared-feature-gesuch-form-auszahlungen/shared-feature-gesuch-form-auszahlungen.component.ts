@@ -270,7 +270,9 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
       case Kontoinhaber.ANDERE:
       case Kontoinhaber.SOZIALDIENST_INSTITUTION:
       default:
-        this.enableNameAndAdresse();
+        if (!this.viewSig().readonly) {
+          this.enableNameAndAdresse();
+        }
         break;
     }
   }
