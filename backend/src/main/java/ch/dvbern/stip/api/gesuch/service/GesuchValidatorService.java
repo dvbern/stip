@@ -9,11 +9,11 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 
-@ApplicationScoped
+@RequestScoped
 @RequiredArgsConstructor
 public class GesuchValidatorService {
     private static final Map<Gesuchstatus, Class<?>> statusToValidationGroup = new EnumMap<>(Gesuchstatus.class);
@@ -25,7 +25,7 @@ public class GesuchValidatorService {
 
     private final Validator validator;
 
-    public void validateGesuchForStatus(Gesuch toValidate, Gesuchstatus status) {
+    public void validateGesuchForStatus(final Gesuch toValidate, final Gesuchstatus status) {
         final var concatenatedViolations = new HashSet<>(validator.validate(toValidate));
 
         final var validationGroup = statusToValidationGroup.getOrDefault(status, null);
