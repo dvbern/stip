@@ -1,4 +1,5 @@
 import 'jest-preset-angular/setup-jest';
+import 'reflect-metadata';
 import { jest } from '@jest/globals';
 
 const original: any = jest.requireActual('@nx/devkit');

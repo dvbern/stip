@@ -1,3 +1,5 @@
+import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
+
 /* eslint-disable */
 export default {
   displayName: 'shared-ui-form-country',
@@ -5,7 +7,8 @@ export default {
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../../../coverage/libs/shared/ui/form-country',
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': [
+    '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
+    '^.+\\.(html)$': [
       'jest-preset-angular',
       {
         tsconfig: '<rootDir>/tsconfig.spec.json',

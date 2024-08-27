@@ -29,6 +29,20 @@
         "options": {
           "cwd": "${workspaceFolder}/backend"
         }
+      },
+      {
+        "label": "Clear Frontend Caches",
+        "command": "rm -rf .nx .swc .angular",
+        "type": "shell",
+        "args": [],
+        "problemMatcher": ["$tsc"],
+        "presentation": {
+          "reveal": "always"
+        },
+        "group": "none",
+        "options": {
+          "cwd": "${workspaceFolder}/frontend"
+        }
       }
     ]
   },
