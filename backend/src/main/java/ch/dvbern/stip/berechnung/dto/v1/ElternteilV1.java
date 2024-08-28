@@ -63,7 +63,9 @@ public class ElternteilV1 {
         builder.essenskostenPerson1(steuerdaten.getVerpflegung());
         builder.essenskostenPerson2(steuerdaten.getVerpflegungPartner());
 
-        builder.grundbedarf(BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt));
+        builder.grundbedarf(
+            BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt, false)
+        );
 
         builder.fahrkostenPerson1(steuerdaten.getFahrkosten());
         builder.fahrkostenPerson2(steuerdaten.getFahrkostenPartner());

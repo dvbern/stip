@@ -1,5 +1,8 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.List;
 
 import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
@@ -47,12 +50,18 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             )
             .eigenerHaushalt(antragssteller.isEigenerHaushalt())
             .einkommen(einkommen)
+            .alimente(antragssteller.getAlimente())
             .leistungenEO(antragssteller.getLeistungenEO())
             .rente(antragssteller.getRente())
             .kinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagen())
             .ergaenzungsleistungen(antragssteller.getErgaenzungsleistungen())
             .gemeindeInstitutionen(antragssteller.getGemeindeInstitutionen())
-            .vermoegen(antragssteller.getVermoegen())
+            .steuerbaresVermoegen(antragssteller.getVermoegen())
+            .anrechenbaresVermoegen(
+                BigDecimal.valueOf(antragssteller.getVermoegen() * 0.15).round( // TODO: KSTIP-1362, Stammdaten aus request lesen)
+                    new MathContext(2, RoundingMode.HALF_UP)
+                ).intValue()
+            )
             .anteilFamilienbudget(
                 getAnteilFamilienBudget(familienBudgetresultatList, antragssteller)
             )

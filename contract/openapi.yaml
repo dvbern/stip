@@ -3274,12 +3274,14 @@ components:
         - eigenerHaushalt
         - anteilLebenshaltungskosten
         - einkommen
+        - alimente
         - leistungenEO
         - rente
         - kinderAusbildungszulagen
         - ergaenzungsleistungen
         - gemeindeInstitutionen
-        - vermoegen
+        - steuerbaresVermoegen
+        - anrechenbaresVermoegen
         - anteilFamilienbudget
         - einkommenPartner
         - einnahmenPersoenlichesBudget
@@ -3305,6 +3307,8 @@ components:
           type: integer
         einkommen:
           type: integer
+        alimente:
+          type: integer
         leistungenEO:
           type: integer
         rente:
@@ -3315,7 +3319,9 @@ components:
           type: integer
         gemeindeInstitutionen:
           type: integer
-        vermoegen:
+        steuerbaresVermoegen:
+          type: integer
+        anrechenbaresVermoegen:
           type: integer
         anteilFamilienbudget:
           type: integer
@@ -3357,8 +3363,9 @@ components:
         - totalEinkuenfte
         - ergaenzungsleistungen
         - steuerbaresVermoegen
-        - vermoegen
-        - einzahlungSaeule23a
+        - anrechenbaresVermoegen
+        - saeule2
+        - saeule3a
         - eigenmietwert
         - alimente
         - einkommensfreibetrag
@@ -3391,9 +3398,11 @@ components:
           type: integer
         steuerbaresVermoegen:
           type: integer
-        vermoegen:
+        anrechenbaresVermoegen:
           type: integer
-        einzahlungSaeule23a:
+        saeule2:
+          type: integer
+        saeule3a:
           type: integer
         eigenmietwert:
           type: integer

@@ -116,6 +116,7 @@ public class BerechnungService {
         final DmnRequest berechnungRequest,
         final BerechnungResult berechnungResult,
         final SteuerdatenTyp steuerdatenTyp,
+        final BigDecimal kinderProzente,
         final int budgetToUse,
         final int majorVersion,
         final int minorVersion
@@ -159,7 +160,8 @@ public class BerechnungService {
             budgetToUse,
             einnahmenFamilienbudget,
             ausgabenFamilienbudget,
-            familienbudgetBerechnet
+            familienbudgetBerechnet,
+            kinderProzente
         );
     }
 
@@ -241,6 +243,7 @@ public class BerechnungService {
         // If only one budget is required then there is no need to calculate the proportional stipendium based on the kids in the houshold. So we just take the one of the father
         var berechnung = stipendienCalculatedForVater.getStipendien();
         BerechnungRequestV1 stipendienBerechnungsRequestForMutter = null;
+        List<BigDecimal> kinderProzenteList = List.of(BigDecimal.valueOf(personenImHaushaltForVater.getKinderImHaushalt1()), BigDecimal.ZERO);
         if (noBudgetsRequired > 1) {
             stipendienBerechnungsRequestForMutter = (BerechnungRequestV1) getBerechnungRequest(
                 majorVersion,
@@ -288,15 +291,16 @@ public class BerechnungService {
             }
             // If all kids have their own living arrangement the calcualtion is moot and would lead to a /0 error. So we just the previously assigned value
             if (noKinderOhneEigenenHaushalt > 0) {
+                kinderProzenteList = List.of(kinderProzenteVater, kinderProzenteMutter);
                 // Calculate the relative percentage (i.e. how much of all kids live with each parent)
-                kinderProzenteVater = kinderProzenteVater.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP);
-                kinderProzenteMutter = kinderProzenteMutter.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP);
+                final BigDecimal kinderProzenteVaterNormalized = kinderProzenteVater.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP);
+                final BigDecimal kinderProzenteMutterNormalized = kinderProzenteMutter.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP);
 
                 // Calculate the total stipendien amount based on the respective amounts and their relative kid percentages.
                 berechnung =
-                    kinderProzenteVater.multiply(BigDecimal.valueOf(stipendienCalculatedForVater.getStipendien())
+                    kinderProzenteVaterNormalized.multiply(BigDecimal.valueOf(stipendienCalculatedForVater.getStipendien())
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).intValue()
-                        + kinderProzenteMutter.multiply(BigDecimal.valueOf(stipendienCalculatedForMutter.getStipendien())
+                    + kinderProzenteMutterNormalized.multiply(BigDecimal.valueOf(stipendienCalculatedForMutter.getStipendien())
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).intValue();
             }
         } else {
@@ -311,12 +315,14 @@ public class BerechnungService {
         List<FamilienBudgetresultatDto> familienBudgetresultatList = new ArrayList<>();
         while (steuerdatenListIterator.hasNext()) {
             final Steuerdaten steuerdaten = steuerdatenListIterator.next();
+            final int budgetIndex = steuerdatenListIterator.nextIndex();
             familienBudgetresultatList.add(
                 familienBudgetresultatFromRequest(
                     stipendienBerechnungsRequestForVater,
                     stipendienCalculatedForVater,
                     steuerdaten.getSteuerdatenTyp(),
-                    steuerdatenListIterator.nextIndex(),
+                    kinderProzenteList.get(budgetIndex),
+                    budgetIndex,
                     majorVersion,
                     minorVersion
                 )
