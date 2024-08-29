@@ -108,7 +108,8 @@ class V1StructureTest {
                         "lehre": false,
                         "eigenerHaushalt": true,
                         "abgeschlosseneErstausbildung": false,
-                        "anzahlPersonenImHaushalt": 2
+                        "anzahlPersonenImHaushalt": 2,
+                        "verheiratetKonkubinat": false
                     }
                 }
             }
