@@ -12,8 +12,11 @@ import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
@@ -21,6 +24,7 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheWithChangesDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -38,6 +42,8 @@ public class GesuchTrancheService {
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchTrancheTruncateService gesuchTrancheTruncateService;
+    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    private final GesuchTrancheStatusService gesuchTrancheStatusService;
 
     @Transactional
     public GesuchDto createAenderungsantrag(
@@ -60,7 +66,10 @@ public class GesuchTrancheService {
             gesuch,
             gesuch.getGesuchTranchen()
                 .stream()
-                .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+                .filter(tranche ->
+                    tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS &&
+                    tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                )
                 .findFirst()
                 .orElseThrow(NotFoundException::new)
         );
@@ -120,10 +129,11 @@ public class GesuchTrancheService {
         );
     }
 
-
     @Transactional
     public List<GesuchDokumentDto> getGesuchDokumenteForGesuchTranche(final UUID gesuchTrancheId) {
-        return gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId).map(gesuchDokumentMapper::toDto).toList();
+        return gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
+            .map(gesuchDokumentMapper::toDto)
+            .toList();
     }
 
     @Transactional
@@ -147,5 +157,22 @@ public class GesuchTrancheService {
         gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
 
         return gesuchMapperUtil.mapWithTranche(gesuch, newTranche);
+    }
+
+    public GesuchTrancheWithChangesDto getGsTrancheChanges(final UUID aenderungId) {
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+        return gesuchTrancheMapper.toWithChangesDto(initialRevision);
+    }
+
+    public GesuchTrancheWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+        final var latestWhereStatusChanged = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+        return gesuchTrancheMapper.toWithChangesDto(List.of(initialRevision, latestWhereStatusChanged));
+    }
+
+    @Transactional
+    public void aenderungEinreichen(final UUID aenderungId) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
 }

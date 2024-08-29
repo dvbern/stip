@@ -68,6 +68,7 @@ public class GesuchTranche extends AbstractEntity {
     @NotNull
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Audited(withModifiedFlag = true, modifiedColumnName = "status_mod")
     private GesuchTrancheStatus status = GesuchTrancheStatus.IN_BEARBEITUNG_GS;
 
     @Nullable

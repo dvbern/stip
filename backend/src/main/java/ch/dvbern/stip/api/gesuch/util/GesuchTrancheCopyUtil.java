@@ -42,7 +42,7 @@ public class GesuchTrancheCopyUtil {
             createDto.getComment()
         );
 
-        copy.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+        copy.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         copy.setTyp(GesuchTrancheTyp.AENDERUNG);
 
         return copy;

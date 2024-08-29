@@ -78,18 +78,21 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGsTrancheChanges(UUID aenderungId) {
-        return null;
+        final var changes = gesuchTrancheService.getGsTrancheChanges(aenderungId);
+        return Response.ok(changes).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getSbTrancheChanges(UUID aenderungId) {
-        return null;
+        final var changes = gesuchTrancheService.getSbTrancheChanges(aenderungId);
+        return Response.ok(changes).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response aenderungEinreichen(UUID aenderungId) {
-        return null;
+        gesuchTrancheService.aenderungEinreichen(aenderungId);
+        return Response.ok().build();
     }
 }

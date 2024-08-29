@@ -45,6 +45,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
@@ -273,7 +274,8 @@ public class GesuchService {
         var tranche = new GesuchTranche()
             .setGueltigkeit(new DateRange(periode.getGesuchsperiodeStart(), periode.getGesuchsperiodeStopp()))
             .setGesuch(gesuch)
-            .setGesuchFormular(new GesuchFormular());
+            .setGesuchFormular(new GesuchFormular())
+            .setTyp(GesuchTrancheTyp.TRANCHE);
 
         gesuch.getGesuchTranchen().add(tranche);
     }
