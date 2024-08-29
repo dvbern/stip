@@ -1646,7 +1646,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getsbTrancheChanges
+      operationId: getSbTrancheChanges
   '/gesuchtranche/{aenderungId}/aenderung/einreichen':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
@@ -1662,6 +1662,7 @@ paths:
           description: Die Tranche gibt es nicht
         '500':
           $ref: '#/components/responses/ServerError'
+      operationId: aenderungEinreichen
   /bildungskategorie:
     get:
       tags:
