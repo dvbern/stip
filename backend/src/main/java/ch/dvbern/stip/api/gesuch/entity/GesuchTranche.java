@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -75,4 +76,9 @@ public class GesuchTranche extends AbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuchTranche")
     private @Valid List<GesuchDokument> gesuchDokuments = new ArrayList<>();
+
+    @NotNull
+    @Column(name = "typ", nullable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    private GesuchTrancheTyp typ;
 }

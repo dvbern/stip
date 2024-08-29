@@ -15,6 +15,7 @@ import ch.dvbern.stip.api.geschwister.util.GeschwisterCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.util.KindCopyUtil;
 import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
@@ -22,7 +23,6 @@ import ch.dvbern.stip.api.partner.util.PartnerCopyUtil;
 import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
-import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -35,11 +35,17 @@ public class GesuchTrancheCopyUtil {
         final GesuchTranche original,
         final CreateAenderungsantragRequestDto createDto
     ) {
-        return copyTranche(
+        // TODO KSTIP-????: Don't truncate dates
+        final var copy = copyTranche(
             original,
             new DateRange(createDto.getStart(), createDto.getEnd()),
             createDto.getComment()
-        ).setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+        );
+
+        copy.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+        copy.setTyp(GesuchTrancheTyp.AENDERUNG);
+
+        return copy;
     }
 
     /**
@@ -58,6 +64,8 @@ public class GesuchTrancheCopyUtil {
         );
 
         newTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+        newTranche.setTyp(GesuchTrancheTyp.AENDERUNG);
+
         return newTranche;
     }
 
