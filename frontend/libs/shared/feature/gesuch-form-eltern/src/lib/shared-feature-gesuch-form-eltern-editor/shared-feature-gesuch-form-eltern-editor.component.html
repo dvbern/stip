@@ -174,12 +174,6 @@
           }}</mat-radio-button>
           <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
         </div>
-        @if (lohnabrechnungVermoegenDocumentSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1 mt-2"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
       </div>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}

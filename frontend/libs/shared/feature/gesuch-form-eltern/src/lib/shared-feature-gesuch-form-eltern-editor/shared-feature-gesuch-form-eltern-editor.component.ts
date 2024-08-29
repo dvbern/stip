@@ -31,17 +31,12 @@ import { Observable, Subject } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
-  DokumentTyp,
   ElternTyp,
   ElternUpdate,
   Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
-import {
-  SharedPatternDocumentUploadComponent,
-  createUploadOptionsFactory,
-} from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -90,7 +85,6 @@ const MEDIUM_AGE_ADULT = 40;
     SharedUiFormMessageErrorDirective,
     SharedUiFormAddressComponent,
     SharedUiStepFormButtonsComponent,
-    SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',
@@ -119,7 +113,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   gotReenabled$ = new Subject<object>();
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
-  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
 
@@ -170,25 +163,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   });
 
   svnIsRequiredSig = signal(false);
-
-  ausweisbFluechtlingSig = toSignal(
-    this.form.controls.ausweisbFluechtling.valueChanges,
-  );
-
-  landChangedSig = toSignal(
-    this.form.controls.adresse.controls.land.valueChanges,
-  );
-
-  lohnabrechnungVermoegenDocumentSig = this.createUploadOptionsSig(() => {
-    const elternTyp = this.elternteil.elternTyp;
-    const fluechtling = this.ausweisbFluechtlingSig();
-
-    if (fluechtling) {
-      return DokumentTyp[`ELTERN_LOHNABRECHNUNG_VERMOEGEN_${elternTyp}`];
-    }
-
-    return null;
-  });
 
   constructor() {
     this.formIsUnsaved = observeUnsavedChanges(
