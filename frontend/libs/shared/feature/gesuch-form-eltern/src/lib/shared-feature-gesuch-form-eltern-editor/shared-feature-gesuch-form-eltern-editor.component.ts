@@ -30,7 +30,6 @@ import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
-import { PlzOrtStore } from '@dv/shared/data-access/plz-ort';
 import {
   DokumentTyp,
   ElternTyp,
@@ -103,7 +102,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private store = inject(Store);
-  private plzStore = inject(PlzOrtStore);
 
   @Input({ required: true }) elternteil!: Omit<
     Partial<ElternUpdate>,
@@ -191,10 +189,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
 
     return null;
   });
-
-  plzChangedSig = toSignal(
-    this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
-  );
 
   constructor() {
     this.formIsUnsaved = observeUnsavedChanges(
