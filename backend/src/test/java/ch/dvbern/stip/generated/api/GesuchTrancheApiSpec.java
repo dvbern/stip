@@ -19,9 +19,7 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheWithChangesDtoSpec;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,9 +69,7 @@ public class GesuchTrancheApiSpec {
                 getAllTranchenForGesuch(),
                 getGesuchDokument(),
                 getGesuchDokumente(),
-                getGsTrancheChanges(),
-                getRequiredGesuchDokumentTyp(),
-                getSbTrancheChanges()
+                getRequiredGesuchDokumentTyp()
         );
     }
 
@@ -105,16 +101,8 @@ public class GesuchTrancheApiSpec {
         return new GetGesuchDokumenteOper(createReqSpec());
     }
 
-    public GetGsTrancheChangesOper getGsTrancheChanges() {
-        return new GetGsTrancheChangesOper(createReqSpec());
-    }
-
     public GetRequiredGesuchDokumentTypOper getRequiredGesuchDokumentTyp() {
         return new GetRequiredGesuchDokumentTypOper(createReqSpec());
-    }
-
-    public GetSbTrancheChangesOper getSbTrancheChanges() {
-        return new GetSbTrancheChangesOper(createReqSpec());
     }
 
     /**
@@ -665,79 +653,6 @@ public class GesuchTrancheApiSpec {
      * 
      * 
      *
-     * @see #aenderungIdPath Die ID der Aenderung (required)
-     * return GesuchTrancheWithChangesDtoSpec
-     */
-    public static class GetGsTrancheChangesOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchtranche/{aenderungId}/aenderung/gs/changes";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetGsTrancheChangesOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuchtranche/{aenderungId}/aenderung/gs/changes
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuchtranche/{aenderungId}/aenderung/gs/changes
-         * @param handler handler
-         * @return GesuchTrancheWithChangesDtoSpec
-         */
-        public GesuchTrancheWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchTrancheWithChangesDtoSpec> type = new TypeRef<GesuchTrancheWithChangesDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String AENDERUNG_ID_PATH = "aenderungId";
-
-        /**
-         * @param aenderungId (UUID) Die ID der Aenderung (required)
-         * @return operation
-         */
-        public GetGsTrancheChangesOper aenderungIdPath(Object aenderungId) {
-            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetGsTrancheChangesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetGsTrancheChangesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
      * @see #gesuchTrancheIdPath  (required)
      * return List&lt;DokumentTypDtoSpec&gt;
      */
@@ -803,79 +718,6 @@ public class GesuchTrancheApiSpec {
          * @return operation
          */
         public GetRequiredGesuchDokumentTypOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
-     * @see #aenderungIdPath Die ID der Aenderung (required)
-     * return GesuchTrancheWithChangesDtoSpec
-     */
-    public static class GetSbTrancheChangesOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchtranche/{aenderungId}/aenderung/sb/changes";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetSbTrancheChangesOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuchtranche/{aenderungId}/aenderung/sb/changes
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuchtranche/{aenderungId}/aenderung/sb/changes
-         * @param handler handler
-         * @return GesuchTrancheWithChangesDtoSpec
-         */
-        public GesuchTrancheWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchTrancheWithChangesDtoSpec> type = new TypeRef<GesuchTrancheWithChangesDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String AENDERUNG_ID_PATH = "aenderungId";
-
-        /**
-         * @param aenderungId (UUID) Die ID der Aenderung (required)
-         * @return operation
-         */
-        public GetSbTrancheChangesOper aenderungIdPath(Object aenderungId) {
-            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetSbTrancheChangesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetSbTrancheChangesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

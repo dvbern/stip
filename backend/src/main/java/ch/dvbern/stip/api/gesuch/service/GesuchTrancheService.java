@@ -12,7 +12,6 @@ import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatusChangeEvent;
@@ -24,7 +23,6 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheWithChangesDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -42,7 +40,6 @@ public class GesuchTrancheService {
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchTrancheTruncateService gesuchTrancheTruncateService;
-    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
 
     @Transactional
@@ -157,17 +154,6 @@ public class GesuchTrancheService {
         gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
 
         return gesuchMapperUtil.mapWithTranche(gesuch, newTranche);
-    }
-
-    public GesuchTrancheWithChangesDto getGsTrancheChanges(final UUID aenderungId) {
-        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
-        return gesuchTrancheMapper.toWithChangesDto(initialRevision);
-    }
-
-    public GesuchTrancheWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
-        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
-        final var latestWhereStatusChanged = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
-        return gesuchTrancheMapper.toWithChangesDto(List.of(initialRevision, latestWhereStatusChanged));
     }
 
     @Transactional

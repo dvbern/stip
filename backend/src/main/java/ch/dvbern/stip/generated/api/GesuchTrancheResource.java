@@ -5,9 +5,7 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheWithChangesDto;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -64,17 +62,7 @@ public interface GesuchTrancheResource {
     Response getGesuchDokumente(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/{aenderungId}/aenderung/gs/changes")
-    @Produces({ "application/json", "text/plain" })
-    Response getGsTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
-
-    @GET
     @Path("/{gesuchTrancheId}/requiredDokumente")
     @Produces({ "application/json", "text/plain" })
     Response getRequiredGesuchDokumentTyp(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @GET
-    @Path("/{aenderungId}/aenderung/sb/changes")
-    @Produces({ "application/json", "text/plain" })
-    Response getSbTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
 }

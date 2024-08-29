@@ -43,6 +43,8 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
@@ -66,6 +68,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -100,6 +103,8 @@ public class GesuchService {
     private final BerechnungService berechnungService;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final GesuchTrancheService gesuchTrancheService;
+    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    private final GesuchTrancheRepository gesuchTrancheRepository;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithCurrentTranche(UUID id) {
@@ -389,8 +394,8 @@ public class GesuchService {
         // (i.e. no lebenslaufitem is present)
         if (
             validationGroups.contains(PersonInAusbildungPageValidation.class) &&
-            validationGroups.contains(AusbildungPageValidation.class) &&
-            !validationGroups.contains(LebenslaufItemPageValidation.class)
+                validationGroups.contains(AusbildungPageValidation.class) &&
+                !validationGroups.contains(LebenslaufItemPageValidation.class)
         ) {
             validationGroups.add(LebenslaufItemPageValidation.class);
         }
@@ -424,13 +429,12 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
         return gesuch.getGesuchTranchen().stream().filter(
-            gesuchTranche -> gesuchTranche.getStatus() != GesuchTrancheStatus.ABGELEHNT
-        ).flatMap(
-            gesuchTranche -> gesuchDokumentRepository.findAllForGesuchTranche(gesuchTranche.getId())
-        ).map(gesuchDokumentMapper::toDto)
-        .toList();
+                gesuchTranche -> gesuchTranche.getStatus() != GesuchTrancheStatus.ABGELEHNT
+            ).flatMap(
+                gesuchTranche -> gesuchDokumentRepository.findAllForGesuchTranche(gesuchTranche.getId())
+            ).map(gesuchDokumentMapper::toDto)
+            .toList();
     }
-
 
     private void validateGesuchEinreichen(Gesuch gesuch) {
         validateAdditionalEinreichenCriteria(gesuch);
@@ -496,5 +500,22 @@ public class GesuchService {
     public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
         return berechnungService.getBerechnungsresultateFromGesuch(gesuch, 1, 0);
+    }
+
+    public GesuchWithChangesDto getGsTrancheChanges(final UUID aenderungId) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+        return gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision);
+    }
+
+    public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+        final var latestWhereStatusChanged = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+        return gesuchMapperUtil.toWithChangesDto(
+            aenderung.getGesuch(),
+            aenderung,
+            List.of(initialRevision, latestWhereStatusChanged)
+        );
     }
 }
