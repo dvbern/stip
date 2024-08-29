@@ -2,6 +2,7 @@ package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe;
@@ -10,6 +11,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
@@ -49,6 +51,7 @@ public class AntragsstellerV1 {
       boolean eigenerHaushalt;
       boolean abgeschlosseneErstausbildung;
       int anzahlPersonenImHaushalt;
+      boolean verheiratetKonkubinat;
 
       public static AntragsstellerV1 buildFromDependants(
           final GesuchFormular gesuchFormular
@@ -150,6 +153,10 @@ public class AntragsstellerV1 {
               builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
               builder.verpflegungPartner(Objects.requireNonNullElse(partner.getVerpflegungskosten(), 0));
           }
+          builder.verheiratetKonkubinat(
+              List.of(Zivilstand.EINGETRAGENE_PARTNERSCHAFT, Zivilstand.VERHEIRATET, Zivilstand.KONKUBINAT).contains(personInAusbildung.getZivilstand())
+          );
+
           return builder.build();
       }
 

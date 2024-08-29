@@ -321,7 +321,7 @@ public class BerechnungService {
                     stipendienBerechnungsRequestForVater,
                     stipendienCalculatedForVater,
                     steuerdaten.getSteuerdatenTyp(),
-                    kinderProzenteList.get(budgetIndex),
+                    kinderProzenteList.get(budgetIndex - 1),
                     budgetIndex,
                     majorVersion,
                     minorVersion
