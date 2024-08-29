@@ -135,7 +135,7 @@ wait-for-review:
   needs:
     - argocd:review-app:start
   script: |
-    curl --insecure \
+    curl --insecure --output /dev/null \
     --max-time $REVIEW_MAX_TIME \
     --retry $REVIEW_RETRY \
     --retry-delay $REVIEW_RETRY_DELAY \
