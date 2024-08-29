@@ -33,33 +33,22 @@ import { FamilienBerechnung } from '../../../models';
       </div>
     </div>
 
-    <!-- Steuerbares Vermögen -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.steuerbaresVermoegen'
-          | translate
-      }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().steuerbaresVermoegen }}
-      </div>
-    </div>
-
-    <!-- 15 % Vermögensaufrechnung -->
+    <!-- Anrechenbares Vermögen -->
     <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
         {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.vermoegensaufrechnung'
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen'
             | translate
         }}
         <div class="text-muted">
           {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.vermoegensaufrechnung.info'
-              | translate
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen.info'
+              | translate: einnahmenSig()
           }}
         </div>
       </div>
       <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().vermoegensaufrechnung }}
+        {{ einnahmenSig().anrechenbaresVermoegen }}
       </div>
     </div>
 
@@ -72,14 +61,25 @@ import { FamilienBerechnung } from '../../../models';
       <div class="text-muted text-end flex-grow-1"></div>
     </div>
 
-    <!-- Beiträge von Selbständigerwerbenden in die 2.Säule /Säule 3a -->
+    <!-- Beiträge von Selbständigerwerbenden in die 2.Säule -->
     <div class="d-flex gap-2">
       {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule'
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
           | translate
       }}
       <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().beitraegeSaule }}
+        {{ einnahmenSig().sauele2 }}
+      </div>
+    </div>
+
+    <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
+          | translate
+      }}
+      <div class="text-muted text-end flex-grow-1">
+        {{ einnahmenSig().sauele3 }}
       </div>
     </div>
 

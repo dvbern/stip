@@ -18,12 +18,14 @@ export interface PersoenlichesBudgetresultat {
     eigenerHaushalt: boolean;
     anteilLebenshaltungskosten: number;
     einkommen: number;
+    alimente: number;
     leistungenEO: number;
     rente: number;
     kinderAusbildungszulagen: number;
     ergaenzungsleistungen: number;
     gemeindeInstitutionen: number;
-    vermoegen: number;
+    steuerbaresVermoegen: number;
+    anrechenbaresVermoegen: number;
     anteilFamilienbudget: number;
     einkommenPartner: number;
     einnahmenPersoenlichesBudget: number;
