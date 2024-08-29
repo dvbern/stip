@@ -127,6 +127,7 @@ run-e2e:
   allow_failure: true
 
 wait-for-review:
+  tags: [ "zone:tz", "os:linux", "type:docker" ]
   image:
     name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/curl'
     entrypoint: ['']
