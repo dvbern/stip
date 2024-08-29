@@ -1148,6 +1148,50 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenValidieren
       summary: Das Gesuch Einreichen Validation Report generieren
+  '/gesuch/{aenderungId}/aenderung/gs/changes':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns 
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGsTrancheChanges
+  '/gesuch/{aenderungId}/aenderung/sb/changes':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns 
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getSbTrancheChanges
   /tenant/current:
     get:
       tags:
@@ -1603,50 +1647,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createGesuchTrancheCopy
-  '/gesuchtranche/{aenderungId}/aenderung/gs/changes':
-    parameters:
-      - $ref: '#/components/parameters/aenderungId'
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GesuchWithChanges'
-          description: Returns 
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGsTrancheChanges
-  '/gesuchtranche/{aenderungId}/aenderung/sb/changes':
-    parameters:
-      - $ref: '#/components/parameters/aenderungId'
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GesuchWithChanges'
-          description: Returns 
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getSbTrancheChanges
   '/gesuchtranche/{aenderungId}/aenderung/einreichen':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
