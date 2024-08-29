@@ -1614,7 +1614,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GesuchTrancheWithChanges'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Returns 
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1636,7 +1636,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GesuchTrancheWithChanges'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Returns 
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -2219,6 +2219,13 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
+    GesuchWithChanges:
+      description: '1 or 2 Aenderungstranche in relation to another Tranche'
+      properties:
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTranche'
     GesuchCreate:
       required:
         - fallId
@@ -3116,13 +3123,6 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gesuchFormular:
           $ref: '#/components/schemas/GesuchFormular'
-    GesuchTrancheWithChanges:
-      description: '1 or 2 Aenderungstranche in relation to another Tranche'
-      properties:
-        changes:
-          type: array
-          items:
-            $ref: '#/components/schemas/GesuchTranche'
     GesuchTrancheUpdate:
       required:
         - gesuchFormular
