@@ -2220,6 +2220,8 @@ components:
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
     GesuchWithChanges:
+      allOf:
+        - $ref: '#/components/schemas/Gesuch'
       description: '1 or 2 Aenderungstranche in relation to another Tranche'
       properties:
         changes:
