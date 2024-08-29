@@ -161,7 +161,7 @@ public class ElternteilV1 {
 
         builder.integrationszulage(
             Integer.min(
-                gesuchsperiode.getIntegrationszulage() * anzahlKinderInAusbildung,
+                gesuchsperiode.getIntegrationszulage() * (anzahlGeschwisterInAusbildung + 1),
                 gesuchsperiode.getLimiteEkFreibetragIntegrationszulage() - gesuchsperiode.getEinkommensfreibetrag()
             )
         );
