@@ -74,4 +74,22 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         final var requiredTypes = gesuchTrancheService.getRequiredDokumentTypes(gesuchTrancheId);
         return Response.ok(requiredTypes).build();
     }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGsTrancheChanges(UUID aenderungId) {
+        return null;
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getSbTrancheChanges(UUID aenderungId) {
+        return null;
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response aenderungEinreichen(UUID aenderungId) {
+        return null;
+    }
 }
