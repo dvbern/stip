@@ -275,11 +275,9 @@
   "shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG": "Contrat de location ou relevé de compte hypothécaire de l'année précédente",
   "shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_VATER": "Copie de l’attestation relative aux prestations complémentaires perçues l’année précédente avec la feuille de calcul pour votre père",
   "shared.form.eltern.file.SOZIALHILFEBUDGET_VATER": "Copie du budget de l’aide sociale de l’année civile précédente",
-  "shared.form.eltern.file.STEUERUNTERLAGEN_VATER": "Copie complète de la dernière taxation fiscale précédant l’année de formation pour vos parents et justificatif des impôts cantonaux, communaux et impôts directs payés",
   "shared.form.eltern.file.LOHNABRECHNUNG_VERMOEGEN_MUTTER": "Copie des décomptes de salaire ou de tous les certificats de salaire de l’année civile précédente et de l’attestation de fortune de l’année civile précédente (extraits des comptes bancaires et/ou postaux présentant le solde au 31 décembre) pour vos parents",
   "shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_MUTTER": "Copie de l’attestation relative aux prestations complémentaires perçues l’année précédente avec la feuille de calcul pour votre mère",
   "shared.form.eltern.file.SOZIALHILFEBUDGET_MUTTER": "Copie du budget de l’aide sociale de l’année civile précédente",
-  "shared.form.eltern.file.STEUERUNTERLAGEN_MUTTER": "Copie complète de la dernière taxation fiscale précédant l’année de formation pour vos parents et justificatif des impôts cantonaux, communaux et impôts directs payés",
 
   "shared.elternteil-steuer.title.FAMILIE": "Données fiscales pour la famille",
   "shared.elternteil-steuer.title.MUTTER": "Données fiscales pour la mère",

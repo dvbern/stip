@@ -37,15 +37,6 @@
           {{ 'shared.form.error.notUniqueAhv' | translate }}
         </mat-error>
       </mat-form-field>
-
-      @if (steuerunterlagenDocumentSig(); as options) {
-        <div class="d-flex gap-2 align-items-center">
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        </div>
-      }
     </div>
   </div>
 

@@ -38,7 +38,6 @@ import {
   Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   SharedModelGesuchFormular,
-  WohnsitzKanton,
 } from '@dv/shared/model/gesuch';
 import {
   SharedPatternDocumentUploadComponent,
@@ -196,20 +195,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   plzChangedSig = toSignal(
     this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
   );
-
-  steuerunterlagenDocumentSig = this.createUploadOptionsSig(() => {
-    const plz = this.plzChangedSig();
-    const land = this.landChangedSig();
-    const elternTyp = this.elternteil.elternTyp;
-
-    const kanton = this.plzStore.getKantonByPlz(plz);
-
-    if (land !== 'CH' || kanton !== WohnsitzKanton.BE) {
-      return DokumentTyp[`ELTERN_STEUERUNTERLAGEN_${elternTyp}`];
-    }
-
-    return null;
-  });
 
   constructor() {
     this.formIsUnsaved = observeUnsavedChanges(
