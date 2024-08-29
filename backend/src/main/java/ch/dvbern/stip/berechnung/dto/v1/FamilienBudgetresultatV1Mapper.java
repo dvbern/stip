@@ -1,7 +1,6 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -38,9 +37,8 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
         if (elternteil.isSelbststaendigErwerbend()) {
             anrechenbaresVermoegen = Integer.max(anrechenbaresVermoegen - 30000, 0); // TODO: KSTIP-1362, Stammdaten aus request lesen
         }
-        anrechenbaresVermoegen = BigDecimal.valueOf(anrechenbaresVermoegen * 0.15).round( // TODO: KSTIP-1362, Stammdaten aus request lesen
-            new MathContext(2, RoundingMode.HALF_UP)
-        ).intValue();
+        anrechenbaresVermoegen = BigDecimal.valueOf(anrechenbaresVermoegen * 0.15) // TODO: KSTIP-1362, Stammdaten aus request lesen
+            .setScale(0, RoundingMode.HALF_UP).intValue();
 
         return new FamilienBudgetresultatDto()
             .familienBudgetTyp(steuerdatenTyp)
