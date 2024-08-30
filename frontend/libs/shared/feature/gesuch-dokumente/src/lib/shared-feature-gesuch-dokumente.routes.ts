@@ -1,5 +1,7 @@
 import { Route } from '@angular/router';
 
+import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
+
 import { SharedFeatureGesuchDokumenteComponent } from './shared-feature-gesuch-dokumente/shared-feature-gesuch-dokumente.component';
 
 export const sharedFeatureGesuchDokumenteRoutes: Route[] = [
@@ -8,11 +10,10 @@ export const sharedFeatureGesuchDokumenteRoutes: Route[] = [
     pathMatch: 'prefix',
     providers: [],
     children: [
-      {
-        path: ':id',
+      ...idAndTrancheIdRoutes({
         title: 'shared.dokumente.title',
         component: SharedFeatureGesuchDokumenteComponent,
-      },
+      }),
     ],
   },
 ];

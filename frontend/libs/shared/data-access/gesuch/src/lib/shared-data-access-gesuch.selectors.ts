@@ -1,9 +1,11 @@
 import { getRouterSelectors } from '@ngrx/router-store';
 import { createSelector } from '@ngrx/store';
+import { diff } from 'json-diff-ts';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
+  SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
   ValidationMessage,
@@ -92,6 +94,7 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
       specificTrancheId: state.specificTrancheId,
       cachedGesuchId: state.cache.gesuchId,
       cachedGesuchFormular: currentForm,
+      tranchenChanges: prepareTranchenChanges(state.cache.gesuch),
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,
         validations: {
@@ -243,4 +246,32 @@ function getStepsByAppType(
     default:
       return [];
   }
+}
+
+function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
+  if (!gesuch) {
+    return {
+      original: null,
+    };
+  }
+  const allChanges = gesuch.changes?.map((tranche) => {
+    const changes = diff(
+      tranche.gesuchFormular,
+      gesuch.gesuchTrancheToWorkWith.gesuchFormular,
+    );
+    return {
+      hasChanges: changes.length > 0,
+      tranche,
+      affectedSteps: changes.map((c) => c.key),
+      changes,
+    };
+  });
+  if (!allChanges || allChanges.length <= 0) {
+    return {
+      original: null,
+    };
+  }
+  return {
+    original: allChanges[allChanges.length - 1],
+  };
 }

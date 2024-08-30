@@ -1,10 +1,10 @@
-import { Gesuch } from './openapi/model/gesuch';
 import { GesuchFormular } from './openapi/model/gesuchFormular';
 import { GesuchFormularUpdate } from './openapi/model/gesuchFormularUpdate';
+import { GesuchWithChanges } from './openapi/model/gesuchWithChanges';
 import { GetGesucheSBQueryType } from './openapi/model/getGesucheSBQueryType';
 import { SteuerdatenTyp } from './openapi/model/steuerdatenTyp';
 
-export interface SharedModelGesuch extends Gesuch {
+export interface SharedModelGesuch extends GesuchWithChanges {
   view?: {
     // view specific props
   };

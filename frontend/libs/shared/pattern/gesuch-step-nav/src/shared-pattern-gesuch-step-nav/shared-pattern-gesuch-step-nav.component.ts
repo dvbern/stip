@@ -11,7 +11,11 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { GesuchFormStepView, StepState } from '@dv/shared/model/gesuch-form';
+import {
+  GesuchFormStepView,
+  StepState,
+  gesuchFormStepsFieldMap,
+} from '@dv/shared/model/gesuch-form';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav.selectors';
@@ -40,9 +44,13 @@ export class SharedPatternGesuchStepNavComponent {
   };
   stepsSig = input<GesuchFormStepView[]>();
   stepsViewSig = computed(() => {
-    const { cachedGesuchId, specificTrancheId } = this.viewSig();
+    const { cachedGesuchId, specificTrancheId, tranchenChanges } =
+      this.viewSig();
     return this.stepsSig()?.map((step) => ({
       ...step,
+      hasChanges: tranchenChanges.original?.affectedSteps.includes(
+        gesuchFormStepsFieldMap[step.route] ?? -1,
+      ),
       routes: [
         '/',
         'gesuch',
