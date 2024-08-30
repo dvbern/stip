@@ -1,5 +1,6 @@
 import { Signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { Route } from '@angular/router';
 import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
 import { isDefined } from '@dv/shared/util-fn/type-guards';
@@ -54,4 +55,20 @@ export function getLatestGesuchIdFromGesuchOnUpdate$(
     ),
     map(([, gesuchId]) => gesuchId),
   );
+}
+
+/**
+ * Create 2 route configs, one with the id and one with the id and tranche id
+ */
+export function idAndTrancheIdRoutes<T extends Route>(route: T) {
+  return [
+    {
+      ...route,
+      path: ':id',
+    },
+    {
+      ...route,
+      path: ':id/tranche/:trancheId',
+    },
+  ];
 }

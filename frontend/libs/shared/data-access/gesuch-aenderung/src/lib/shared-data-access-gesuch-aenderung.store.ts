@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -8,20 +9,22 @@ import { GlobalNotificationStore } from '@dv/shared/data-access/global-notificat
 import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,
-  Gesuch,
+  GesuchTranche,
   GesuchTrancheService,
   GesuchTrancheSlim,
 } from '@dv/shared/model/gesuch';
+import { PERSON } from '@dv/shared/model/gesuch-form';
 import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
   cachedPending,
   handleApiResponse,
   initial,
+  isPending,
 } from '@dv/shared/util/remote-data';
 
 type GesuchAenderungState = {
-  cachedGesuchAenderung: CachedRemoteData<Gesuch>;
+  cachedGesuchAenderung: CachedRemoteData<GesuchTranche>;
   cachedTranchenSlim: CachedRemoteData<GesuchTrancheSlim[]>;
 };
 
@@ -38,6 +41,16 @@ export class GesuchAenderungStore extends signalStore(
 ) {
   private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+  private router = inject(Router);
+
+  aenderungenViewSig = computed(() => {
+    const tranchen = this.cachedTranchenSlim();
+    return {
+      loading: isPending(tranchen),
+      list:
+        tranchen.data?.filter((tranche) => tranche.typ === 'AENDERUNG') ?? [],
+    };
+  });
 
   resetCachedGesuchAenderung() {
     patchState(this, { cachedGesuchAenderung: initial() });
@@ -90,10 +103,17 @@ export class GesuchAenderungStore extends signalStore(
                 }));
               },
               {
-                onSuccess: () => {
+                onSuccess: (data) => {
                   this.globalNotificationStore.createSuccessNotification({
                     messageKey: 'shared.dialog.gesuch-aenderung.success',
                   });
+                  this.router.navigate([
+                    'gesuch',
+                    PERSON.route,
+                    gesuchId,
+                    'tranche',
+                    data.id,
+                  ]);
                 },
               },
             ),

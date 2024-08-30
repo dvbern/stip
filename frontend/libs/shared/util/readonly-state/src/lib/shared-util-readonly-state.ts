@@ -1,5 +1,10 @@
 import { AppType } from '@dv/shared/model/config';
-import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import {
+  GesuchTranche,
+  GesuchTrancheStatus,
+  Gesuchstatus,
+  SharedModelGesuch,
+} from '@dv/shared/model/gesuch';
 
 /** Readonly */
 const R__ = 'readonly';
@@ -38,12 +43,34 @@ export const readWriteStatusByAppType = {
   VERSENDET /**                        */: { [gs]: R__, [sb]: R__ },
 } as const satisfies Record<Gesuchstatus, Record<AppType, Persmissions>>;
 
-export const isGesuchFormularReadonly = (
+/**
+ * Same as `readWriteStatusByAppType` but for the tranches
+ *
+ * @see {@link readWriteStatusByAppType}
+ */
+export const trancheReadWritestatusByAppType = {
+  IN_BEARBEITUNG_GS: /** */ { [gs]: __W, [sb]: R__ },
+  UEBERPRUEFEN: /**      */ { [gs]: R__, [sb]: __W },
+  AKZETPIERT: /**        */ { [gs]: R__, [sb]: R__ },
+  ABGELEHNT: /**         */ { [gs]: R__, [sb]: R__ },
+} as const satisfies Record<GesuchTrancheStatus, Record<AppType, Persmissions>>;
+
+export const isGesuchReadonly = (
   gesuch: SharedModelGesuch | null,
   appType?: AppType,
 ) => {
   if (!gesuch || !appType) return false;
 
   const state = readWriteStatusByAppType[gesuch.gesuchStatus][appType];
+  return state === R__;
+};
+
+export const isTrancheReadonly = (
+  tranche: GesuchTranche | null,
+  appType?: AppType,
+) => {
+  if (!tranche || !appType) return false;
+
+  const state = trancheReadWritestatusByAppType[tranche.status][appType];
   return state === R__;
 };

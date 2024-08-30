@@ -1,6 +1,6 @@
 import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
-import { isGesuchFormularReadonly } from './shared-util-readonly-state';
+import { isGesuchReadonly } from './shared-util-readonly-state';
 
 const gesuch: SharedModelGesuch = {
   fall: {
@@ -46,7 +46,7 @@ describe('when App Gesuchsteller', () => {
   it('should be readonly if in bearbeitung Sachbearbeiter', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_SB;
 
-    expect(isGesuchFormularReadonly(gesuch, 'gesuch-app')).toBeTruthy();
+    expect(isGesuchReadonly(gesuch, 'gesuch-app')).toBeTruthy();
   });
 });
 
@@ -54,8 +54,6 @@ describe('when App Sachbearbeitung', () => {
   it('should be readonly if in bearbeitung Gesuchsteller', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
-    expect(
-      isGesuchFormularReadonly(gesuch, 'sachbearbeitung-app'),
-    ).toBeTruthy();
+    expect(isGesuchReadonly(gesuch, 'sachbearbeitung-app')).toBeTruthy();
   });
 });

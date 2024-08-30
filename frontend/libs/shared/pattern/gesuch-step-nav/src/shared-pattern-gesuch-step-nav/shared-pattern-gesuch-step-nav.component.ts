@@ -39,14 +39,16 @@ export class SharedPatternGesuchStepNavComponent {
     WARNING: 'error',
   };
   stepsSig = input<GesuchFormStepView[]>();
-  stepsViewSig = computed(() =>
-    this.stepsSig()?.map((step) => ({
+  stepsViewSig = computed(() => {
+    const { cachedGesuchId, specificTrancheId } = this.viewSig();
+    return this.stepsSig()?.map((step) => ({
       ...step,
       routes: [
         '/',
         'gesuch',
         ...step.route.split('/'),
-        this.viewSig().cachedGesuchId,
+        cachedGesuchId,
+        ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
       ],
       isActive: this.route.isActive(`gesuch/${step.route}`, {
         paths: 'subset',
@@ -54,8 +56,8 @@ export class SharedPatternGesuchStepNavComponent {
         fragment: 'ignored',
         matrixParams: 'ignored',
       }),
-    })),
-  );
+    }));
+  });
   viewSig = this.store.selectSignal(sharedPatternGesuchStepNavView);
 
   route = inject(Router);
