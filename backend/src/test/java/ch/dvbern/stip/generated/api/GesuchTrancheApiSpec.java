@@ -18,6 +18,7 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import java.util.UUID;
 
@@ -183,7 +184,7 @@ public class GesuchTrancheApiSpec {
      *
      * @see #gesuchIdPath  (required)
      * @see #body  (required)
-     * return GesuchDtoSpec
+     * return GesuchTrancheDtoSpec
      */
     public static class CreateAenderungsantragOper implements Oper {
 
@@ -214,10 +215,10 @@ public class GesuchTrancheApiSpec {
         /**
          * POST /gesuchtranche/{gesuchId}/aenderungsantrag
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchTrancheDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchTrancheDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchTrancheDtoSpec> type = new TypeRef<GesuchTrancheDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -267,7 +268,7 @@ public class GesuchTrancheApiSpec {
      *
      * @see #gesuchIdPath  (required)
      * @see #body  (optional)
-     * return GesuchDtoSpec
+     * return GesuchTrancheDtoSpec
      */
     public static class CreateGesuchTrancheCopyOper implements Oper {
 
@@ -298,10 +299,10 @@ public class GesuchTrancheApiSpec {
         /**
          * POST /gesuchtranche/{gesuchId}/tranche
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchTrancheDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchTrancheDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchTrancheDtoSpec> type = new TypeRef<GesuchTrancheDtoSpec>(){};
             return execute(handler).as(type);
         }
 

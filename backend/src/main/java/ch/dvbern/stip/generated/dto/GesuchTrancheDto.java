@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class GesuchTrancheDto  implements Serializable {
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
   private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status;
+  private @Valid GesuchTrancheTypDto typ;
   private @Valid GesuchFormularDto gesuchFormular;
 
   /**
@@ -106,6 +108,25 @@ public class GesuchTrancheDto  implements Serializable {
 
   /**
    **/
+  public GesuchTrancheDto typ(GesuchTrancheTypDto typ) {
+    this.typ = typ;
+    return this;
+  }
+
+  
+  @JsonProperty("typ")
+  @NotNull
+  public GesuchTrancheTypDto getTyp() {
+    return typ;
+  }
+
+  @JsonProperty("typ")
+  public void setTyp(GesuchTrancheTypDto typ) {
+    this.typ = typ;
+  }
+
+  /**
+   **/
   public GesuchTrancheDto gesuchFormular(GesuchFormularDto gesuchFormular) {
     this.gesuchFormular = gesuchFormular;
     return this;
@@ -136,12 +157,13 @@ public class GesuchTrancheDto  implements Serializable {
         Objects.equals(this.gueltigAb, gesuchTranche.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchTranche.gueltigBis) &&
         Objects.equals(this.status, gesuchTranche.status) &&
+        Objects.equals(this.typ, gesuchTranche.typ) &&
         Objects.equals(this.gesuchFormular, gesuchTranche.gesuchFormular);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, status, gesuchFormular);
+    return Objects.hash(id, gueltigAb, gueltigBis, status, typ, gesuchFormular);
   }
 
   @Override
@@ -153,6 +175,7 @@ public class GesuchTrancheDto  implements Serializable {
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    gesuchFormular: ").append(toIndentedString(gesuchFormular)).append("\n");
     sb.append("}");
     return sb.toString();

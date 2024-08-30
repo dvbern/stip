@@ -53,6 +53,7 @@ export * from './gesuchFormularUpdate';
 export * from './gesuchTranche';
 export * from './gesuchTrancheSlim';
 export * from './gesuchTrancheStatus';
+export * from './gesuchTrancheTyp';
 export * from './gesuchTrancheUpdate';
 export * from './gesuchUpdate';
 export * from './gesuchWithChanges';

@@ -9,16 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchTrancheTyp } from './gesuchTrancheTyp';
-import { GesuchTrancheStatus } from './gesuchTrancheStatus';
 
-export interface GesuchTrancheSlim { 
-    id?: string;
-    gueltigAb?: string;
-    gueltigBis?: string;
-    status?: GesuchTrancheStatus;
-    typ?: GesuchTrancheTyp;
-}
+export type GesuchTrancheTyp = 'AENDERUNG' | 'TRANCHE';
 
-
+export const GesuchTrancheTyp = {
+    AENDERUNG: 'AENDERUNG' as GesuchTrancheTyp,
+    TRANCHE: 'TRANCHE' as GesuchTrancheTyp
+};
 

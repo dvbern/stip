@@ -38,6 +38,7 @@ const gesuch: SharedModelGesuch = {
     gueltigAb: '',
     gueltigBis: '',
     status: 'UEBERPRUEFEN',
+    typ: 'TRANCHE',
   },
 };
 

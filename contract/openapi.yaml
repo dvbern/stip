@@ -1586,7 +1586,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchTranche'
           description: Aenderungsantrag wurde erstellt
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1637,7 +1637,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchTranche'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -3116,6 +3116,7 @@ components:
         - gueltigAb
         - gueltigBis
         - status
+        - typ
       type: object
       properties:
         id:
@@ -3128,6 +3129,8 @@ components:
           $ref: '#/components/schemas/GesuchFormular'
         status:
           $ref: '#/components/schemas/GesuchTrancheStatus'
+        typ:
+          $ref: '#/components/schemas/GesuchTrancheTyp'
     GesuchTrancheUpdate:
       required:
         - gesuchFormular
@@ -3149,6 +3152,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         status:
           $ref: '#/components/schemas/GesuchTrancheStatus'
+        typ:
+          $ref: '#/components/schemas/GesuchTrancheTyp'
     SachbearbeiterZuordnungStammdaten:
       type: object
       properties:
@@ -3309,6 +3314,10 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+    GesuchTrancheTyp:
+      enum:
+        - AENDERUNG
+        - TRANCHE
     Dokumentstatus:
       enum:
         - AUSSTEHEND

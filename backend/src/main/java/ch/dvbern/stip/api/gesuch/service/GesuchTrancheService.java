@@ -18,11 +18,7 @@ import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
-import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
-import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -43,7 +39,7 @@ public class GesuchTrancheService {
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
 
     @Transactional
-    public GesuchDto createAenderungsantrag(
+    public GesuchTrancheDto createAenderungsantrag(
         final UUID gesuchId,
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
@@ -54,7 +50,7 @@ public class GesuchTrancheService {
 
         // Manually persist so that when mapping happens the IDs on the new objects are set
         gesuchRepository.persistAndFlush(gesuch);
-        return gesuchMapperUtil.mapWithTranche(gesuch, newTranche);
+        return gesuchTrancheMapper.toDto(newTranche);
     }
 
     public GesuchDto getAenderungsantrag(final UUID gesuchId) {
@@ -134,7 +130,7 @@ public class GesuchTrancheService {
     }
 
     @Transactional
-    public GesuchDto createTrancheCopy(
+    public GesuchTrancheDto createTrancheCopy(
         final UUID gesuchId,
         final CreateGesuchTrancheRequestDto createDto
     ) {
@@ -153,7 +149,7 @@ public class GesuchTrancheService {
         // Truncating also removes all tranchen no longer needed (i.e. those with gueltigkeit <= 0 months)
         gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
 
-        return gesuchMapperUtil.mapWithTranche(gesuch, newTranche);
+        return gesuchTrancheMapper.toDto(newTranche);
     }
 
     @Transactional

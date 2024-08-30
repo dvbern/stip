@@ -23,6 +23,7 @@ import { CreateGesuchTrancheRequest } from '../model/createGesuchTrancheRequest'
 import { DokumentTyp } from '../model/dokumentTyp';
 import { Gesuch } from '../model/gesuch';
 import { GesuchDokument } from '../model/gesuchDokument';
+import { GesuchTranche } from '../model/gesuchTranche';
 import { GesuchTrancheSlim } from '../model/gesuchTrancheSlim';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -205,9 +206,9 @@ export class GesuchTrancheService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public createAenderungsantrag$(requestParameters: GesuchTrancheServiceCreateAenderungsantragRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Gesuch>;
-     public createAenderungsantrag$(requestParameters: GesuchTrancheServiceCreateAenderungsantragRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
-     public createAenderungsantrag$(requestParameters: GesuchTrancheServiceCreateAenderungsantragRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
+     public createAenderungsantrag$(requestParameters: GesuchTrancheServiceCreateAenderungsantragRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchTranche>;
+     public createAenderungsantrag$(requestParameters: GesuchTrancheServiceCreateAenderungsantragRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchTranche>>;
+     public createAenderungsantrag$(requestParameters: GesuchTrancheServiceCreateAenderungsantragRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchTranche>>;
      public createAenderungsantrag$(requestParameters: GesuchTrancheServiceCreateAenderungsantragRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchId = requestParameters.gesuchId;
         if (gesuchId === null || gesuchId === undefined) {
@@ -273,7 +274,7 @@ export class GesuchTrancheService {
         }
 
         const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/aenderungsantrag`;
-        return this.httpClient.request<Gesuch>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchTranche>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createAenderungsantragRequest,
@@ -291,9 +292,9 @@ export class GesuchTrancheService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public createGesuchTrancheCopy$(requestParameters: GesuchTrancheServiceCreateGesuchTrancheCopyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Gesuch>;
-     public createGesuchTrancheCopy$(requestParameters: GesuchTrancheServiceCreateGesuchTrancheCopyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
-     public createGesuchTrancheCopy$(requestParameters: GesuchTrancheServiceCreateGesuchTrancheCopyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
+     public createGesuchTrancheCopy$(requestParameters: GesuchTrancheServiceCreateGesuchTrancheCopyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchTranche>;
+     public createGesuchTrancheCopy$(requestParameters: GesuchTrancheServiceCreateGesuchTrancheCopyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchTranche>>;
+     public createGesuchTrancheCopy$(requestParameters: GesuchTrancheServiceCreateGesuchTrancheCopyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchTranche>>;
      public createGesuchTrancheCopy$(requestParameters: GesuchTrancheServiceCreateGesuchTrancheCopyRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchId = requestParameters.gesuchId;
         if (gesuchId === null || gesuchId === undefined) {
@@ -356,7 +357,7 @@ export class GesuchTrancheService {
         }
 
         const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/tranche`;
-        return this.httpClient.request<Gesuch>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchTranche>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createGesuchTrancheRequest,

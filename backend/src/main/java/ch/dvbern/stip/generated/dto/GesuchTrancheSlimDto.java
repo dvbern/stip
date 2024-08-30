@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.GesuchTrancheTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
   private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status;
+  private @Valid GesuchTrancheTypDto typ;
 
   /**
    **/
@@ -98,6 +100,24 @@ public class GesuchTrancheSlimDto  implements Serializable {
     this.status = status;
   }
 
+  /**
+   **/
+  public GesuchTrancheSlimDto typ(GesuchTrancheTypDto typ) {
+    this.typ = typ;
+    return this;
+  }
+
+  
+  @JsonProperty("typ")
+  public GesuchTrancheTypDto getTyp() {
+    return typ;
+  }
+
+  @JsonProperty("typ")
+  public void setTyp(GesuchTrancheTypDto typ) {
+    this.typ = typ;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -111,12 +131,13 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return Objects.equals(this.id, gesuchTrancheSlim.id) &&
         Objects.equals(this.gueltigAb, gesuchTrancheSlim.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchTrancheSlim.gueltigBis) &&
-        Objects.equals(this.status, gesuchTrancheSlim.status);
+        Objects.equals(this.status, gesuchTrancheSlim.status) &&
+        Objects.equals(this.typ, gesuchTrancheSlim.typ);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, status);
+    return Objects.hash(id, gueltigAb, gueltigBis, status, typ);
   }
 
   @Override
@@ -128,6 +149,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("}");
     return sb.toString();
   }
