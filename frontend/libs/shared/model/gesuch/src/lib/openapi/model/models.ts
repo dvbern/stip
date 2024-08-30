@@ -55,6 +55,7 @@ export * from './gesuchTrancheSlim';
 export * from './gesuchTrancheStatus';
 export * from './gesuchTrancheUpdate';
 export * from './gesuchUpdate';
+export * from './gesuchWithChanges';
 export * from './gesuchsjahr';
 export * from './gesuchsjahrCreate';
 export * from './gesuchsjahrUpdate';
