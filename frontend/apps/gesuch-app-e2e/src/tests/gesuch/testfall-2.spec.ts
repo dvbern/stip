@@ -274,11 +274,15 @@ test.describe('Neues gesuch erstellen', () => {
 
     await einnahmenKostenPO.fillEinnahmenKostenForm(einnahmenKosten);
 
+    const requiredDokumenteResponse = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/requiredDokumente',
+    );
     await einnahmenKostenPO.elems.buttonSaveContinue.click();
 
     // Step 11: Dokumente ===========================================================
 
     await expectStepTitleToContainText('Dokumente', page);
+    await requiredDokumenteResponse;
 
     const uploads = await page
       .locator('[data-testid^="button-document-upload"]')
