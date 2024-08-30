@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.GesuchFormularDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheStatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -33,7 +34,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchTrancheDtoSpec.JSON_PROPERTY_ID,
   GesuchTrancheDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   GesuchTrancheDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
-  GesuchTrancheDtoSpec.JSON_PROPERTY_GESUCH_FORMULAR
+  GesuchTrancheDtoSpec.JSON_PROPERTY_GESUCH_FORMULAR,
+  GesuchTrancheDtoSpec.JSON_PROPERTY_STATUS
 })
 @JsonTypeName("GesuchTranche")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -49,6 +51,9 @@ public class GesuchTrancheDtoSpec {
 
   public static final String JSON_PROPERTY_GESUCH_FORMULAR = "gesuchFormular";
   private GesuchFormularDtoSpec gesuchFormular;
+
+  public static final String JSON_PROPERTY_STATUS = "status";
+  private GesuchTrancheStatusDtoSpec status;
 
   public GesuchTrancheDtoSpec() {
   }
@@ -156,6 +161,32 @@ public class GesuchTrancheDtoSpec {
     this.gesuchFormular = gesuchFormular;
   }
 
+
+  public GesuchTrancheDtoSpec status(GesuchTrancheStatusDtoSpec status) {
+    
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GesuchTrancheStatusDtoSpec getStatus() {
+    return status;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStatus(GesuchTrancheStatusDtoSpec status) {
+    this.status = status;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -168,12 +199,13 @@ public class GesuchTrancheDtoSpec {
     return Objects.equals(this.id, gesuchTranche.id) &&
         Objects.equals(this.gueltigAb, gesuchTranche.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchTranche.gueltigBis) &&
-        Objects.equals(this.gesuchFormular, gesuchTranche.gesuchFormular);
+        Objects.equals(this.gesuchFormular, gesuchTranche.gesuchFormular) &&
+        Objects.equals(this.status, gesuchTranche.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, gesuchFormular);
+    return Objects.hash(id, gueltigAb, gueltigBis, gesuchFormular, status);
   }
 
   @Override
@@ -184,6 +216,7 @@ public class GesuchTrancheDtoSpec {
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    gesuchFormular: ").append(toIndentedString(gesuchFormular)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
   }

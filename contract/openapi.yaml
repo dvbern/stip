@@ -3115,6 +3115,7 @@ components:
         - id
         - gueltigAb
         - gueltigBis
+        - status
       type: object
       properties:
         id:
@@ -3125,6 +3126,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gesuchFormular:
           $ref: '#/components/schemas/GesuchFormular'
+        status:
+          $ref: '#/components/schemas/GesuchTrancheStatus'
     GesuchTrancheUpdate:
       required:
         - gesuchFormular
