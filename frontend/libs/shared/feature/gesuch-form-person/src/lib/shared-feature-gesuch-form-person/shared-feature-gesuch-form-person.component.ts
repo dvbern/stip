@@ -58,6 +58,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
@@ -121,6 +122,7 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     SharedUiLoadingComponent,
     SharedUiFormReadonlyDirective,
     SharedUiInfoDialogDirective,
+    SharedUiZuvorHintDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
