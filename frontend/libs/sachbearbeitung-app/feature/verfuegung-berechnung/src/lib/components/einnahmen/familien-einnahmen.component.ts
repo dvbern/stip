@@ -67,6 +67,12 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
           | translate
       }}
+      <div class="text-muted">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
+            | translate
+        }}
+      </div>
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().sauele2 }}
       </div>
@@ -78,6 +84,12 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
           | translate
       }}
+      <div class="text-muted">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
+            | translate: { maxSaeule3a: 7000 }
+        }}
+      </div>
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().sauele3 }}
       </div>

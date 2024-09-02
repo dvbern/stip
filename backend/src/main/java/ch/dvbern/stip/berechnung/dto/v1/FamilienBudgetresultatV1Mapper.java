@@ -50,7 +50,12 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
             .steuerbaresVermoegen(elternteil.getSteuerbaresVermoegen())
             .anrechenbaresVermoegen(anrechenbaresVermoegen)
             .saeule2(elternteil.getEinzahlungSaeule2())
-            .saeule3a(elternteil.getEinzahlungSaeule3a())
+            .saeule3a(
+                Integer.max(
+                    elternteil.getEinzahlungSaeule3a() - berechnungsRequest.getStammdaten().getMaxSaeule3a(),
+                    0
+                )
+            )
             .eigenmietwert(elternteil.getEigenmietwert())
             .alimente(elternteil.getAlimente())
             .einkommensfreibetrag(berechnungsRequest.getStammdaten().getEinkommensfreibetrag())
