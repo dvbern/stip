@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.auszahlung.sap.importstatus;
 
+import ch.dvbern.stip.api.auszahlung.sap.util.SapEndpointName;
+import ch.dvbern.stip.api.auszahlung.sap.util.SoapUtils;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -28,31 +30,6 @@ class ImportStatusReadRequestTest {
     private static final String EXPECTED = """
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS"><soapenv:Header/><soapenv:Body><urn:ImportStatusRead_Request><SENDER><SYSID>2080</SYSID></SENDER><FILTER_PARMS><DELIVERY_ID>2761</DELIVERY_ID></FILTER_PARMS></urn:ImportStatusRead_Request></soapenv:Body></soapenv:Envelope>
         """;
-
-    private String getRequestAsXmlString(Object request, JAXBContext contextObj) throws JAXBException, SOAPException, IOException {
-
-        MessageFactory messageFactory = MessageFactory.newInstance();
-        SOAPMessage soapMessage = messageFactory.createMessage();
-        SOAPPart soapPart = soapMessage.getSOAPPart();
-        SOAPEnvelope soapEnvelope = soapPart.getEnvelope();
-        soapEnvelope.setPrefix("soapenv");
-        soapEnvelope.addNamespaceDeclaration("urn", "urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS");
-        soapEnvelope.getHeader().setPrefix("soapenv");
-        SOAPBody soapBody = soapEnvelope.getBody();
-        soapBody.setPrefix("soapenv");
-
-        Marshaller marshallerObj = contextObj.createMarshaller();
-        marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshallerObj.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-        marshallerObj.marshal(request, soapBody);
-        soapMessage.saveChanges();
-
-        OutputStream outputStream = new ByteArrayOutputStream();
-        soapMessage.writeTo(outputStream);
-        String xml = outputStream.toString();
-        return xml;
-    }
-
     @Test
     void CreateImportStatusReadRequestTest() throws JAXBException, SOAPException, IOException {
         XMLUnit.setIgnoreWhitespace(true);
@@ -64,7 +41,7 @@ class ImportStatusReadRequestTest {
         senderParms.setSYSID(BigInteger.valueOf(2080));
         request.setFILTERPARMS(filterparms);
         request.setSENDER(senderParms);
-        final var actual = getRequestAsXmlString(request, contextObj);
+        final var actual = SoapUtils.buildXmlRequest(request, contextObj, SapEndpointName.IMPORT_STATUS);
         assertNotNull(actual);
         assertThat(actual, CompareMatcher.isSimilarTo(EXPECTED));
 
