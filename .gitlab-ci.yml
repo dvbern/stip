@@ -127,15 +127,20 @@ run-e2e:
   allow_failure: true
 
 wait-for-review:
-  extends: .install-argocd
+  tags: [ "zone:tz", "os:linux", "type:docker" ]
+  image:
+    name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/curl'
+    entrypoint: ['']
   stage: review-e2e
-  variables:
-    ARGOCD_SERVER: '$REVIEW_ARGOCD_SERVER'
-    ARGOCD_AUTH_TOKEN: '$REVIEW_ARGOCD_TOKEN'
   needs:
     - argocd:review-app:start
-  script:
-    - argocd app wait stip-${CI_COMMIT_REF_SLUG}-${CI_MERGE_REQUEST_IID} --insecure
+  script: |
+    curl --insecure --output /dev/null \
+    --max-time $REVIEW_MAX_TIME \
+    --retry $REVIEW_RETRY \
+    --retry-delay $REVIEW_RETRY_DELAY \
+    --retry-max-time $REVIEW_RETRY_MAX_TIME \
+    https://${CI_COMMIT_REF_SLUG}-stip.apps.mercury.ocp.dvbern.ch/q/health
   environment:
     name: review/$CI_COMMIT_REF_SLUG
   rules:
