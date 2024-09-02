@@ -11,6 +11,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
@@ -155,6 +156,18 @@ public class GesuchTrancheService {
         gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
 
         return gesuchTrancheMapper.toDto(newTranche);
+    }
+
+    @Transactional
+    public void aenderungEinbinden(
+        final GesuchTranche aenderung
+    ) {
+        final var gesuch = aenderung.getGesuch();
+        final var newTranche = GesuchTrancheCopyUtil.createNewTranche(aenderung);
+        gesuch.getGesuchTranchen().add(newTranche);
+        gesuchRepository.persistAndFlush(gesuch);
+
+        gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
     }
 
     @Transactional

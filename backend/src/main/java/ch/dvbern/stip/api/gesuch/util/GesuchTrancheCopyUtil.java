@@ -48,6 +48,10 @@ public class GesuchTrancheCopyUtil {
         return copy;
     }
 
+    public GesuchTranche createNewTranche(final GesuchTranche gesuchTranche) {
+        return createNewTranche(gesuchTranche, gesuchTranche.getGueltigkeit(), gesuchTranche.getComment());
+    }
+
     /**
      * Copies an existing {@link GesuchTranche} and sets the new {@link GesuchTranche#status}
      * to {@link GesuchTrancheStatus#UEBERPRUEFEN}
