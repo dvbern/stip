@@ -63,15 +63,17 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Beiträge von Selbständigerwerbenden in die 2.Säule -->
     <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
-          | translate
-      }}
-      <div class="text-muted">
+      <div classs="d-flex flex-column">
         {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
             | translate
         }}
+        <div class="text-muted">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
+              | translate
+          }}
+        </div>
       </div>
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().sauele2 }}
@@ -80,15 +82,17 @@ import { FamilienBerechnung } from '../../../models';
 
     <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
     <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
-          | translate
-      }}
-      <div class="text-muted">
+      <div classs="d-flex flex-column">
         {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
-            | translate: { maxSaeule3a: 7000 }
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
+            | translate
         }}
+        <div class="text-muted">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
+              | translate: { maxSaeule3a: 7000 }
+          }}
+        </div>
       </div>
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().sauele3 }}
