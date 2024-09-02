@@ -104,7 +104,6 @@ public class AntragsstellerV1 {
                       Boolean.TRUE.equals(einnahmenKosten.getWgWohnend())
                   )
               );
-              // TODO: adapt for ig wohhaft in WG einnahmenKosten.getWgWohnend();
           } else {
               builder.grundbedarf(0);
           }
