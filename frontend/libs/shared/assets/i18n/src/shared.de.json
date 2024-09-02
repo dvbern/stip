@@ -63,7 +63,6 @@
   "shared.form.select.salutation.frau": "Frau",
   "shared.form.radio.yes": "Ja",
   "shared.form.radio.no": "Nein",
-  "shared.form.zuvor.hint": "Zuvor: {{value}}",
   "shared.form-field.toggle-info-messages": "Info-Meldungen anzeigen",
   "shared.form-field.close-info-message": "Info schliessen",
   "shared.form.error.required": "Dieses Feld ist erforderlich",

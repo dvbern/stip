@@ -36,11 +36,13 @@
             <mat-error *dvSharedUiFormMessageError="'alreadyUsedAhv'">
               {{ 'shared.form.error.alreadyUsedAhv' | translate }}
             </mat-error>
+            <!-- TODO: feed with real data in 1181 -->
             <mat-hint
-              *dvZuvorHint="'TestString'"
+              *dvZuvorHint="'Alter Wert'"
               data-testid="form-person-sozialversicherungsnummer-zuvor-hint"
               class="zuvor-hint"
-            ></mat-hint>
+            >
+            </mat-hint>
           </mat-form-field>
           <button
             type="button"
