@@ -42,8 +42,18 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             verpflegung = antragssteller.getVerpflegung() * wochenProJahr * stammdaten.getPreisProMahlzeit();
         }
 
+        final int anzahlPersonenImHaushalt = antragssteller.getAnzahlPersonenImHaushalt();
+        int fahrkosten = antragssteller.getFahrkosten();
+        int ausbildungskosten = antragssteller.getAusbildungskosten();
+
+        if (antragssteller.isVerheiratetKonkubinat()) {
+            fahrkosten *= anzahlPersonenImHaushalt;
+            ausbildungskosten *= anzahlPersonenImHaushalt;
+
+        }
+
         return new PersoenlichesBudgetresultatDto()
-            .anzahlPersonenImHaushalt(antragssteller.getAnzahlPersonenImHaushalt())
+            .anzahlPersonenImHaushalt(anzahlPersonenImHaushalt)
             .anteilLebenshaltungskosten(
                 getAnteilLebenshaltungskosten(familienBudgetresultatList, antragssteller)
             )
@@ -69,12 +79,12 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             .wohnkosten(antragssteller.getWohnkosten())
             .medizinischeGrundversorgung(antragssteller.getMedizinischeGrundversorgung())
             .steuernKantonGemeinde(antragssteller.getSteuern())
-            .fahrkosten(antragssteller.getFahrkosten())
+            .fahrkosten(fahrkosten)
             .fahrkostenPartner(antragssteller.getFahrkostenPartner())
             .verpflegung(verpflegung)
             .verpflegungPartner(antragssteller.getVerpflegungPartner())
             .fremdbetreuung(antragssteller.getFremdbetreuung())
-            .ausbildungskosten(antragssteller.getAusbildungskosten())
+            .ausbildungskosten(ausbildungskosten)
             .ausgabenPersoenlichesBudget(ausgabenPersoenlichesBudget)
             .persoenlichesbudgetBerechnet(persoenlichesbudgetBerechnet);
     }
