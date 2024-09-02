@@ -1,37 +1,27 @@
 package ch.dvbern.stip.api.auszahlung.sap.importstatus;
 
-import com.savoirtech.json.JsonComparatorBuilder;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
-//import org.glassfish.expressly.util.MessageFactory;
-import jakarta.xml.soap.*;
+import jakarta.xml.soap.MessageFactory;
+import jakarta.xml.soap.SOAPEnvelope;
+import jakarta.xml.soap.SOAPBody;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
+import jakarta.xml.soap.SOAPPart;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.NodeList;
 import org.xmlunit.matchers.CompareMatcher;
 import wiremock.org.custommonkey.xmlunit.XMLUnit;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-//import jakarta.xml.soap.MessageFactory;
-/*
-import jakarta.xml.soap.SOAPBody;
-import jakarta.xml.soap.MessageFactory;
-import jakarta.xml.soap.SOAPEnvelope;
-import jakarta.xml.soap.SOAPException;
-import jakarta.xml.soap.SOAPMessage;
-import jakarta.xml.soap.SOAPPart;
-
- */
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class ImportStatusReadRequestTest {
