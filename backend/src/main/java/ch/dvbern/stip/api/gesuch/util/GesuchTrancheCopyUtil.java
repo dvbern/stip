@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
@@ -86,6 +87,11 @@ public class GesuchTrancheCopyUtil {
         newTranche.setGueltigkeit(clampStartStop(gesuch.getGesuchsperiode(), createDateRange));
         newTranche.setComment(comment);
         newTranche.setGesuchFormular(copy(original.getGesuchFormular()));
+        newTranche.setGesuchDokuments(GesuchDokumentCopyUtil.copyGesuchDokumenteWithDokumentReferences(
+                newTranche,
+                original.getGesuchDokuments()
+            )
+        );
         newTranche.getGesuchFormular().setTranche(newTranche);
         newTranche.setGesuch(original.getGesuch());
         return newTranche;
