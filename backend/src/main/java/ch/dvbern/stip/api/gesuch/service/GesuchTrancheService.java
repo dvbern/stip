@@ -18,7 +18,12 @@ import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
+import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -37,21 +42,6 @@ public class GesuchTrancheService {
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchTrancheTruncateService gesuchTrancheTruncateService;
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
-
-    @Transactional
-    public GesuchTrancheDto createAenderungsantrag(
-        final UUID gesuchId,
-        final CreateAenderungsantragRequestDto aenderungsantragCreateDto
-    ) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var trancheToCopy = gesuch.getCurrentGesuchTranche();
-        final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
-        gesuch.getGesuchTranchen().add(newTranche);
-
-        // Manually persist so that when mapping happens the IDs on the new objects are set
-        gesuchRepository.persistAndFlush(gesuch);
-        return gesuchTrancheMapper.toDto(newTranche);
-    }
 
     public GesuchDto getAenderungsantrag(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
@@ -127,6 +117,21 @@ public class GesuchTrancheService {
         return gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
             .map(gesuchDokumentMapper::toDto)
             .toList();
+    }
+
+    @Transactional
+    public GesuchTrancheDto createAenderungsantrag(
+        final UUID gesuchId,
+        final CreateAenderungsantragRequestDto aenderungsantragCreateDto
+    ) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var trancheToCopy = gesuch.getCurrentGesuchTranche();
+        final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
+        gesuch.getGesuchTranchen().add(newTranche);
+
+        // Manually persist so that when mapping happens the IDs on the new objects are set
+        gesuchRepository.persistAndFlush(gesuch);
+        return gesuchTrancheMapper.toDto(newTranche);
     }
 
     @Transactional

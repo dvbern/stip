@@ -64,7 +64,7 @@ public class GesuchTrancheCopyUtil {
         );
 
         newTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
-        newTranche.setTyp(GesuchTrancheTyp.AENDERUNG);
+        newTranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
         return newTranche;
     }

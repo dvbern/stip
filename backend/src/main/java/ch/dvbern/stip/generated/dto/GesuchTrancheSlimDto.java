@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GesuchTrancheTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -26,7 +25,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
   private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status;
-  private @Valid GesuchTrancheTypDto typ;
+  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
 
   /**
    **/
@@ -102,19 +101,19 @@ public class GesuchTrancheSlimDto  implements Serializable {
 
   /**
    **/
-  public GesuchTrancheSlimDto typ(GesuchTrancheTypDto typ) {
+  public GesuchTrancheSlimDto typ(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
     this.typ = typ;
     return this;
   }
 
   
   @JsonProperty("typ")
-  public GesuchTrancheTypDto getTyp() {
+  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp getTyp() {
     return typ;
   }
 
   @JsonProperty("typ")
-  public void setTyp(GesuchTrancheTypDto typ) {
+  public void setTyp(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
     this.typ = typ;
   }
 
