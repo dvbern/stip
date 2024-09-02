@@ -46,7 +46,6 @@ import {
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
-import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
@@ -79,7 +78,6 @@ const MEDIUM_AGE_ADULT = 30;
     ReactiveFormsModule,
     TranslateModule,
     SharedUiFormFieldDirective,
-    SharedUiFormCountryComponent,
     SharedUiFormAddressComponent,
     MatFormFieldModule,
     MatInputModule,
