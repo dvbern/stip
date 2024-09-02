@@ -101,7 +101,8 @@ public class AntragsstellerV1 {
                   BerechnungRequestV1.getGrundbedarf(
                       gesuchsperiode,
                       anzahlPersonenImHaushalt,
-                      Boolean.TRUE.equals(einnahmenKosten.getWgWohnend()))
+                      Boolean.TRUE.equals(einnahmenKosten.getWgWohnend())
+                  )
               );
               // TODO: adapt for ig wohhaft in WG einnahmenKosten.getWgWohnend();
           } else {
