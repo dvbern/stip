@@ -13,22 +13,27 @@ import { gesuchAppDataAccessAbschlussFeature } from './gesuch-app-data-access-ab
 export const selectGesuchAppDataAccessAbschlussView = createSelector(
   gesuchAppDataAccessAbschlussFeature.selectAbschlussState,
   sharedDataAccessGesuchsFeature.selectGesuch,
+  sharedDataAccessGesuchsFeature.selectSpecificTrancheId,
   sharedDataAccessGesuchsFeature.selectLastUpdate,
   sharedDataAccessGesuchsFeature.selectValidations,
-  (state, gesuch, lastUpdate, validations) => {
+  (state, gesuch, specificTrancheId, lastUpdate, validations) => {
     const checkValidationErrors = getValidationErrors(state.checkResult?.error);
     const allErrors = validations?.errors ?? [];
     const allValidations = allErrors.concat(checkValidationErrors ?? []);
     return {
       ...state,
       gesuch,
+      specificTrancheId,
       lastUpdate,
       validations: allValidations,
       specialValidationErrors: allValidations
         .filter(isSpecialValidationError)
         .map((error) => SPECIAL_VALIDATION_ERRORS[error.messageTemplate]),
       canCheck: allErrors.length === 0,
-      abschlussPhase: toAbschlussPhase(gesuch, !!state.checkResult?.success),
+      abschlussPhase: toAbschlussPhase(gesuch, {
+        isComplete: !!state.checkResult?.success,
+        checkTranche: !!specificTrancheId,
+      }),
     };
   },
 );
