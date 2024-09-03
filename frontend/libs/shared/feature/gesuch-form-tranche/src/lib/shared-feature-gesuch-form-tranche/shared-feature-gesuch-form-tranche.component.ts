@@ -27,7 +27,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { SharedUtilHeaderService } from '@dv/shared/util/header';
+import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
@@ -47,6 +47,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiHeaderSuffixDirective,
     TranslateModule,
   ],
   templateUrl: './shared-feature-gesuch-form-tranche.component.html',
@@ -56,7 +57,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private store = inject(Store);
   private translate = inject(TranslateService);
   private formBuilder = inject(NonNullableFormBuilder);
-  private headerService = inject(SharedUtilHeaderService);
   private defaultCommentSig = toSignal(
     this.translate.stream('shared.form.tranche.bemerkung.initialgesuch'),
   );
@@ -85,8 +85,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
           bis: formatBackendLocalDate(tranche.gueltigBis, this.languageSig()),
           bemerkung: tranche.comment ?? defaultComment,
         });
-
-        this.headerService.updateSuffix(this.titleSuffixSig());
       },
       { allowSignalWrites: true },
     );
