@@ -1,3 +1,10 @@
+<a
+  class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
+  [routerLink]="trancheRouteSig()"
+  data-testid="step-nav-tranche"
+  (click)="navClicked.emit({})"
+  >tranche__</a
+>
 @for (step of stepsViewSig(); track $index) {
   <a
     class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"

@@ -236,6 +236,11 @@
   "shared.form.education.form.error.monthYearAfterStart": "Das Enddatum muss nach dem Startdatum sein",
   "shared.form.education.form.error.lebenslaufConflict": "Der Zeitraum überschneidet die Lebenslauf Einträge",
 
+  "shared.form.shared.von.label": "Von",
+  "shared.form.shared.bis.label": "Bis (Optional)",
+  "shared.form.shared.bemerkung.label": "Bemerkung",
+  "shared.form.shared.bemerkung.initialgesuch.label": "Initialgesuch",
+
   "shared.familiensituation.title": "Familiensituation",
   "shared.form.familiensituation.mutter": "Mutter",
   "shared.form.familiensituation.vater": "Vater",

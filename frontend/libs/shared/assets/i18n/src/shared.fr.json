@@ -236,6 +236,11 @@
   "shared.form.education.form.error.monthYearAfterStart": "La date de fin doit être postérieure à la date de début",
   "shared.form.education.form.error.lebenslaufConflict": "La période chevauche d'autres formations indiquées",
 
+  "shared.form.shared.von.label": "De",
+  "shared.form.shared.bis.label": "Jusqu'à (en option)",
+  "shared.form.shared.bemerkung.label": "Bemerkung",
+  "shared.form.shared.bemerkung.initialgesuch.label": "Demande initiale",
+
   "shared.familiensituation.title": "Situation familiale",
   "shared.form.familiensituation.mutter": "Mère",
   "shared.form.familiensituation.vater": "Père",
