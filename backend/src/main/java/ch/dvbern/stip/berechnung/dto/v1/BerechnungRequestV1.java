@@ -137,7 +137,11 @@ public class BerechnungRequestV1 implements DmnRequest {
         );
     }
 
-    public static int getGrundbedarf(final Gesuchsperiode gesuchsperiode, final int anzahlPersonenImHaushalt, final boolean wohntInWG) {
+    public static int getGrundbedarf(
+        final Gesuchsperiode gesuchsperiode,
+        final int anzahlPersonenImHaushalt,
+        final boolean wohntInWG
+    ) {
         int grundbedarf = switch (anzahlPersonenImHaushalt) {
             case 1 -> gesuchsperiode.getPerson1();
             case 2 -> gesuchsperiode.getPersonen2();
