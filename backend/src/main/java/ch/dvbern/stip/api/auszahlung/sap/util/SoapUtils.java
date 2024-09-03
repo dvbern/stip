@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.auszahlung.sap.util;
 
+import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadRequest;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -20,7 +21,8 @@ import java.io.OutputStream;
 @UtilityClass
 public class SoapUtils {
     private static final String ENVELOPE_PREFIX ="soapenv";
-    public String buildXmlRequest(Object request, JAXBContext contextObj, SapEndpointName sapEndpoint) throws JAXBException, SOAPException, IOException {
+    public<T> String buildXmlRequest(Object request,Class<T> requestType, SapEndpointName sapEndpoint) throws JAXBException, SOAPException, IOException {
+        JAXBContext contextObj = JAXBContext.newInstance(ImportStatusReadRequest.class);
         String endpointNamespace = new StringBuilder("urn:be.ch:").append(sapEndpoint.getName()).toString();
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage soapMessage = messageFactory.createMessage();
