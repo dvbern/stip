@@ -1,20 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.FallDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
-import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -27,7 +21,7 @@ public class GesuchDto  implements Serializable {
   private @Valid FallDto fall;
   private @Valid GesuchsperiodeDto gesuchsperiode;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
-  private @Valid Integer gesuchNummer;
+  private @Valid String gesuchNummer;
   private @Valid UUID id;
   private @Valid LocalDate aenderungsdatum;
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
@@ -40,7 +34,7 @@ public class GesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fall")
   @NotNull
   public FallDto getFall() {
@@ -59,7 +53,7 @@ public class GesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchsperiode")
   @NotNull
   public GesuchsperiodeDto getGesuchsperiode() {
@@ -78,7 +72,7 @@ public class GesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchStatus")
   @NotNull
   public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getGesuchStatus() {
@@ -92,20 +86,20 @@ public class GesuchDto  implements Serializable {
 
   /**
    **/
-  public GesuchDto gesuchNummer(Integer gesuchNummer) {
+  public GesuchDto gesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
     return this;
   }
 
-  
+
   @JsonProperty("gesuchNummer")
   @NotNull
-  public Integer getGesuchNummer() {
+  public String getGesuchNummer() {
     return gesuchNummer;
   }
 
   @JsonProperty("gesuchNummer")
-  public void setGesuchNummer(Integer gesuchNummer) {
+  public void setGesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
 
@@ -116,7 +110,7 @@ public class GesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -135,7 +129,7 @@ public class GesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("aenderungsdatum")
   @NotNull
   public LocalDate getAenderungsdatum() {
@@ -154,7 +148,7 @@ public class GesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchTrancheToWorkWith")
   @NotNull
   public GesuchTrancheDto getGesuchTrancheToWorkWith() {
@@ -174,7 +168,7 @@ public class GesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bearbeiter")
   public String getBearbeiter() {
     return bearbeiter;
@@ -214,7 +208,7 @@ public class GesuchDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDto {\n");
-    
+
     sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
