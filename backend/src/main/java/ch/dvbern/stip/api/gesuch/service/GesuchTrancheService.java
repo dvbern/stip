@@ -25,6 +25,7 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -42,6 +43,7 @@ public class GesuchTrancheService {
     private final GesuchMapperUtil gesuchMapperUtil;
     private final GesuchTrancheMapper gesuchTrancheMapper;
     private final GesuchDokumentMapper gesuchDokumentMapper;
+    private final GesuchFormularService gesuchFormularService;
     private final RequiredDokumentService requiredDokumentService;
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
@@ -52,7 +54,7 @@ public class GesuchTrancheService {
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var trancheToCopy = gesuch.getCurrentGesuchTranche();
+        final var trancheToCopy = gesuch.getTrancheValidOnDate(aenderungsantragCreateDto.getStart()).orElseThrow(NotFoundException::new);
         final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
         gesuch.getGesuchTranchen().add(newTranche);
 
@@ -131,6 +133,15 @@ public class GesuchTrancheService {
     @Transactional
     public List<GesuchDokumentDto> getGesuchDokumenteForGesuchTranche(final UUID gesuchTrancheId) {
         return gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId).map(gesuchDokumentMapper::toDto).toList();
+    }
+
+    @Transactional
+    public ValidationReportDto validatePages(final UUID gesuchTrancheId) {
+        final var gesuchFormular = gesuchTrancheRepository.requireById(gesuchTrancheId).getGesuchFormular();
+        if (gesuchFormular == null) {
+            throw new NotFoundException();
+        }
+        return gesuchFormularService.validatePages(gesuchFormular);
     }
 
     @Transactional
