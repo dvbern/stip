@@ -155,9 +155,9 @@ public class GesuchTrancheDtoSpec {
    * Get comment
    * @return comment
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_COMMENT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getComment() {
     return comment;
@@ -165,7 +165,7 @@ public class GesuchTrancheDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_COMMENT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setComment(String comment) {
     this.comment = comment;
   }

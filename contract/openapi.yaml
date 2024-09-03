@@ -3115,7 +3115,6 @@ components:
         - id
         - gueltigAb
         - gueltigBis
-        - comment
         - status
         - typ
       type: object
