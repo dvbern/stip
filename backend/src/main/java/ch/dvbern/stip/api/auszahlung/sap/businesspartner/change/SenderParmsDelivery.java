@@ -1,5 +1,5 @@
 
-package ch.dvbern.stip.api.auszahlung.sap.businesspartner;
+package ch.dvbern.stip.api.auszahlung.sap.businesspartner.change;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

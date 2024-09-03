@@ -1,5 +1,5 @@
 
-package ch.dvbern.stip.api.auszahlung.sap.businesspartner;
+package ch.dvbern.stip.api.auszahlung.sap.businesspartner.change;
 
 import javax.xml.namespace.QName;
 import jakarta.xml.bind.JAXBElement;
@@ -10,7 +10,7 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the ch.dvbern.stip.api.auszahlung.sap.businesspartner package. 
+ * generated in the ch.dvbern.stip.api.auszahlung.sap.businesspartner.change package. 
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -28,7 +28,7 @@ public class ObjectFactory {
     private final static QName _BusinessPartnerChangeResponse_QNAME = new QName("urn:be.ch:KTBE_MDG:BUSINESS_PARTNER", "BusinessPartnerChange_Response");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ch.dvbern.stip.api.auszahlung.sap.businesspartner
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ch.dvbern.stip.api.auszahlung.sap.businesspartner.change
      * 
      */
     public ObjectFactory() {

@@ -1,5 +1,5 @@
 
-package ch.dvbern.stip.api.auszahlung.sap.businesspartner;
+package ch.dvbern.stip.api.auszahlung.sap.businesspartner.create;
 
 import java.math.BigDecimal;
 import jakarta.xml.bind.annotation.XmlAccessType;

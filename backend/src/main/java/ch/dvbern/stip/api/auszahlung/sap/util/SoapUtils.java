@@ -1,10 +1,6 @@
 package ch.dvbern.stip.api.auszahlung.sap.util;
 
-import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadRequest;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.*;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.SOAPMessage;
@@ -21,8 +17,8 @@ import java.io.OutputStream;
 @UtilityClass
 public class SoapUtils {
     private static final String ENVELOPE_PREFIX ="soapenv";
-    public<T> String buildXmlRequest(Object request,Class<T> requestType, SapEndpointName sapEndpoint) throws JAXBException, SOAPException, IOException {
-        JAXBContext contextObj = JAXBContext.newInstance(ImportStatusReadRequest.class);
+    public<T> String buildXmlRequest(Object request, Class<T> requestType, SapEndpointName sapEndpoint) throws JAXBException, SOAPException, IOException {
+        JAXBContext contextObj = JAXBContext.newInstance(requestType);
         String endpointNamespace = new StringBuilder("urn:be.ch:").append(sapEndpoint.getName()).toString();
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage soapMessage = messageFactory.createMessage();
@@ -48,7 +44,17 @@ public class SoapUtils {
     public<T> T parseSoapResponse(String xmlResponse, Class<T> responseType) throws SOAPException, IOException, JAXBException {
         SOAPMessage message = MessageFactory.newInstance().createMessage(null,
             new ByteArrayInputStream(xmlResponse.getBytes()));
-        Unmarshaller unmarshaller = JAXBContext.newInstance(responseType).createUnmarshaller();
-        return (T) unmarshaller.unmarshal(message.getSOAPBody().extractContentAsDocument());
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(responseType);
+
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        final var result = unmarshaller.unmarshal(message.getSOAPBody().extractContentAsDocument());
+        if(responseType.isInstance(result)){
+            return (T) result;
+        }else if(result instanceof JAXBElement<?> element){
+            return (T) element.getValue();
+        }
+        throw new RuntimeException();
     }
+
 }

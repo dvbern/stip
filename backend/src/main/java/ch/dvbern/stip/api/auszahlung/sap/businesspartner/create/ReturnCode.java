@@ -1,6 +1,7 @@
 
-package ch.dvbern.stip.api.auszahlung.sap.businesspartner;
+package ch.dvbern.stip.api.auszahlung.sap.businesspartner.create;
 
+import java.math.BigInteger;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -8,40 +9,40 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java-Klasse für BusinessPartner_ID_KEYS complex type.
+ * <p>Java-Klasse für ReturnCode complex type.
  * 
  * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
  * 
  * <pre>
- * &lt;complexType name="BusinessPartner_ID_KEYS"&gt;
+ * &lt;complexType name="ReturnCode"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="EXT_ID"&gt;
+ *         &lt;element name="TYPE"&gt;
+ *           &lt;simpleType&gt;
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
+ *               &lt;maxLength value="1"/&gt;
+ *             &lt;/restriction&gt;
+ *           &lt;/simpleType&gt;
+ *         &lt;/element&gt;
+ *         &lt;element name="MSG_NR"&gt;
+ *           &lt;simpleType&gt;
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}integer"&gt;
+ *               &lt;totalDigits value="3"/&gt;
+ *             &lt;/restriction&gt;
+ *           &lt;/simpleType&gt;
+ *         &lt;/element&gt;
+ *         &lt;element name="MESSAGE"&gt;
+ *           &lt;simpleType&gt;
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
+ *               &lt;maxLength value="220"/&gt;
+ *             &lt;/restriction&gt;
+ *           &lt;/simpleType&gt;
+ *         &lt;/element&gt;
+ *         &lt;element name="ID" minOccurs="0"&gt;
  *           &lt;simpleType&gt;
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
  *               &lt;maxLength value="20"/&gt;
- *             &lt;/restriction&gt;
- *           &lt;/simpleType&gt;
- *         &lt;/element&gt;
- *         &lt;element name="AHV_NR"&gt;
- *           &lt;simpleType&gt;
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
- *               &lt;maxLength value="13"/&gt;
- *             &lt;/restriction&gt;
- *           &lt;/simpleType&gt;
- *         &lt;/element&gt;
- *         &lt;element name="UID_NR"&gt;
- *           &lt;simpleType&gt;
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
- *               &lt;maxLength value="12"/&gt;
- *             &lt;/restriction&gt;
- *           &lt;/simpleType&gt;
- *         &lt;/element&gt;
- *         &lt;element name="ZPV_NR"&gt;
- *           &lt;simpleType&gt;
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
- *               &lt;maxLength value="10"/&gt;
  *             &lt;/restriction&gt;
  *           &lt;/simpleType&gt;
  *         &lt;/element&gt;
@@ -54,117 +55,117 @@ import jakarta.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "BusinessPartner_ID_KEYS", namespace = "urn:be.ch:KTBE_MDG:BUSINESS_PARTNER", propOrder = {
-    "extid",
-    "ahvnr",
-    "uidnr",
-    "zpvnr"
+@XmlType(name = "ReturnCode", namespace = "urn:be.ch:KTBE_MDG:BUSINESS_PARTNER", propOrder = {
+    "type",
+    "msgnr",
+    "message",
+    "id"
 })
-public class BusinessPartnerIDKEYS {
+public class ReturnCode {
 
-    @XmlElement(name = "EXT_ID", required = true)
-    protected String extid;
-    @XmlElement(name = "AHV_NR", required = true)
-    protected String ahvnr;
-    @XmlElement(name = "UID_NR", required = true)
-    protected String uidnr;
-    @XmlElement(name = "ZPV_NR", required = true)
-    protected String zpvnr;
+    @XmlElement(name = "TYPE", required = true)
+    protected String type;
+    @XmlElement(name = "MSG_NR", required = true)
+    protected BigInteger msgnr;
+    @XmlElement(name = "MESSAGE", required = true)
+    protected String message;
+    @XmlElement(name = "ID")
+    protected String id;
 
     /**
-     * Ruft den Wert der extid-Eigenschaft ab.
+     * Ruft den Wert der type-Eigenschaft ab.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getEXTID() {
-        return extid;
+    public String getTYPE() {
+        return type;
     }
 
     /**
-     * Legt den Wert der extid-Eigenschaft fest.
+     * Legt den Wert der type-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setEXTID(String value) {
-        this.extid = value;
+    public void setTYPE(String value) {
+        this.type = value;
     }
 
     /**
-     * Ruft den Wert der ahvnr-Eigenschaft ab.
+     * Ruft den Wert der msgnr-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BigInteger }
+     *     
+     */
+    public BigInteger getMSGNR() {
+        return msgnr;
+    }
+
+    /**
+     * Legt den Wert der msgnr-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BigInteger }
+     *     
+     */
+    public void setMSGNR(BigInteger value) {
+        this.msgnr = value;
+    }
+
+    /**
+     * Ruft den Wert der message-Eigenschaft ab.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getAHVNR() {
-        return ahvnr;
+    public String getMESSAGE() {
+        return message;
     }
 
     /**
-     * Legt den Wert der ahvnr-Eigenschaft fest.
+     * Legt den Wert der message-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setAHVNR(String value) {
-        this.ahvnr = value;
+    public void setMESSAGE(String value) {
+        this.message = value;
     }
 
     /**
-     * Ruft den Wert der uidnr-Eigenschaft ab.
+     * Ruft den Wert der id-Eigenschaft ab.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getUIDNR() {
-        return uidnr;
+    public String getID() {
+        return id;
     }
 
     /**
-     * Legt den Wert der uidnr-Eigenschaft fest.
+     * Legt den Wert der id-Eigenschaft fest.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setUIDNR(String value) {
-        this.uidnr = value;
-    }
-
-    /**
-     * Ruft den Wert der zpvnr-Eigenschaft ab.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getZPVNR() {
-        return zpvnr;
-    }
-
-    /**
-     * Legt den Wert der zpvnr-Eigenschaft fest.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setZPVNR(String value) {
-        this.zpvnr = value;
+    public void setID(String value) {
+        this.id = value;
     }
 
 }

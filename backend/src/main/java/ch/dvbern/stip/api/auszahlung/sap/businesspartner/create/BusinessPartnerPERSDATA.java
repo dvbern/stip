@@ -1,5 +1,5 @@
 
-package ch.dvbern.stip.api.auszahlung.sap.businesspartner;
+package ch.dvbern.stip.api.auszahlung.sap.businesspartner.create;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import jakarta.xml.bind.JAXBElement;

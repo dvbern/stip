@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ImportStatusReadResponseTest {
     @Test
-    void parseImportStatusResponseTest() throws IOException, JAXBException, SOAPException, ClassNotFoundException {
+    void parseImportStatusResponseTest() throws IOException, JAXBException, SOAPException {
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/getImportStatusExampleResponse.xml"),
             "UTF-8"

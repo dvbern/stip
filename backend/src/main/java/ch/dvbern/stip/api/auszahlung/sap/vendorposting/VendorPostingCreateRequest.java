@@ -6,18 +6,15 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlSchemaType;
-import jakarta.xml.bind.annotation.XmlType;
+
+import jakarta.xml.bind.annotation.*;
 
 
 /**
  * <p>Java-Klasse für VendorPostingCreate_Request complex type.
- * 
+ *
  * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
- * 
+ *
  * <pre>
  * &lt;complexType name="VendorPostingCreate_Request"&gt;
  *   &lt;complexContent&gt;
@@ -327,9 +324,10 @@ import jakarta.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
+ *
+ *
  */
+@XmlRootElement(name = "VendorPostingCreate_Request", namespace = "urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "VendorPostingCreate_Request", namespace = "urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING", propOrder = {
     "sender",
@@ -344,11 +342,11 @@ public class VendorPostingCreateRequest {
 
     /**
      * Ruft den Wert der sender-Eigenschaft ab.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link SenderParmsDelivery }
-     *     
+     *
      */
     public SenderParmsDelivery getSENDER() {
         return sender;
@@ -356,11 +354,11 @@ public class VendorPostingCreateRequest {
 
     /**
      * Legt den Wert der sender-Eigenschaft fest.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link SenderParmsDelivery }
-     *     
+     *
      */
     public void setSENDER(SenderParmsDelivery value) {
         this.sender = value;
@@ -368,25 +366,25 @@ public class VendorPostingCreateRequest {
 
     /**
      * Gets the value of the vendorposting property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the Jakarta XML Binding object.
      * This is why there is not a <CODE>set</CODE> method for the vendorposting property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getVENDORPOSTING().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link VendorPostingCreateRequest.VENDORPOSTING }
-     * 
-     * 
+     *
+     *
      */
     public List<VendorPostingCreateRequest.VENDORPOSTING> getVENDORPOSTING() {
         if (vendorposting == null) {
@@ -398,9 +396,9 @@ public class VendorPostingCreateRequest {
 
     /**
      * <p>Java-Klasse für anonymous complex type.
-     * 
+     *
      * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -699,8 +697,8 @@ public class VendorPostingCreateRequest {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
@@ -731,11 +729,11 @@ public class VendorPostingCreateRequest {
 
         /**
          * Ruft den Wert der header-Eigenschaft ab.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link VendorPostingCreateRequest.VENDORPOSTING.HEADER }
-         *     
+         *
          */
         public VendorPostingCreateRequest.VENDORPOSTING.HEADER getHEADER() {
             return header;
@@ -743,11 +741,11 @@ public class VendorPostingCreateRequest {
 
         /**
          * Legt den Wert der header-Eigenschaft fest.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link VendorPostingCreateRequest.VENDORPOSTING.HEADER }
-         *     
+         *
          */
         public void setHEADER(VendorPostingCreateRequest.VENDORPOSTING.HEADER value) {
             this.header = value;
@@ -755,11 +753,11 @@ public class VendorPostingCreateRequest {
 
         /**
          * Ruft den Wert der vendor-Eigenschaft ab.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link VendorPostingCreateRequest.VENDORPOSTING.VENDOR }
-         *     
+         *
          */
         public VendorPostingCreateRequest.VENDORPOSTING.VENDOR getVENDOR() {
             return vendor;
@@ -767,11 +765,11 @@ public class VendorPostingCreateRequest {
 
         /**
          * Legt den Wert der vendor-Eigenschaft fest.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link VendorPostingCreateRequest.VENDORPOSTING.VENDOR }
-         *     
+         *
          */
         public void setVENDOR(VendorPostingCreateRequest.VENDORPOSTING.VENDOR value) {
             this.vendor = value;
@@ -779,11 +777,11 @@ public class VendorPostingCreateRequest {
 
         /**
          * Ruft den Wert der paymentdetail-Eigenschaft ab.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL }
-         *     
+         *
          */
         public VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL getPAYMENTDETAIL() {
             return paymentdetail;
@@ -791,11 +789,11 @@ public class VendorPostingCreateRequest {
 
         /**
          * Legt den Wert der paymentdetail-Eigenschaft fest.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL }
-         *     
+         *
          */
         public void setPAYMENTDETAIL(VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL value) {
             this.paymentdetail = value;
@@ -803,25 +801,25 @@ public class VendorPostingCreateRequest {
 
         /**
          * Gets the value of the glaccount property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the Jakarta XML Binding object.
          * This is why there is not a <CODE>set</CODE> method for the glaccount property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getGLACCOUNT().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link VendorPostingCreateRequest.VENDORPOSTING.GLACCOUNT }
-         * 
-         * 
+         *
+         *
          */
         public List<VendorPostingCreateRequest.VENDORPOSTING.GLACCOUNT> getGLACCOUNT() {
             if (glaccount == null) {
@@ -832,25 +830,25 @@ public class VendorPostingCreateRequest {
 
         /**
          * Gets the value of the position property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the Jakarta XML Binding object.
          * This is why there is not a <CODE>set</CODE> method for the position property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getPOSITION().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link VendorPostingCreateRequest.VENDORPOSTING.POSITION }
-         * 
-         * 
+         *
+         *
          */
         public List<VendorPostingCreateRequest.VENDORPOSTING.POSITION> getPOSITION() {
             if (position == null) {
@@ -861,25 +859,25 @@ public class VendorPostingCreateRequest {
 
         /**
          * Gets the value of the attachment property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the Jakarta XML Binding object.
          * This is why there is not a <CODE>set</CODE> method for the attachment property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getATTACHMENT().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link VendorPostingCreateRequest.VENDORPOSTING.ATTACHMENT }
-         * 
-         * 
+         *
+         *
          */
         public List<VendorPostingCreateRequest.VENDORPOSTING.ATTACHMENT> getATTACHMENT() {
             if (attachment == null) {
@@ -890,25 +888,25 @@ public class VendorPostingCreateRequest {
 
         /**
          * Gets the value of the additionaldata property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the Jakarta XML Binding object.
          * This is why there is not a <CODE>set</CODE> method for the additionaldata property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getADDITIONALDATA().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link AdditionalData }
-         * 
-         * 
+         *
+         *
          */
         public List<AdditionalData> getADDITIONALDATA() {
             if (additionaldata == null) {
@@ -920,9 +918,9 @@ public class VendorPostingCreateRequest {
 
         /**
          * <p>Java-Klasse für anonymous complex type.
-         * 
+         *
          * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -941,8 +939,8 @@ public class VendorPostingCreateRequest {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -958,11 +956,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der filename-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getFILENAME() {
                 return filename;
@@ -970,11 +968,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der filename-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setFILENAME(String value) {
                 this.filename = value;
@@ -982,7 +980,7 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der filecontent-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     byte[]
@@ -993,7 +991,7 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der filecontent-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     byte[]
@@ -1007,9 +1005,9 @@ public class VendorPostingCreateRequest {
 
         /**
          * <p>Java-Klasse für anonymous complex type.
-         * 
+         *
          * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -1086,8 +1084,8 @@ public class VendorPostingCreateRequest {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -1127,11 +1125,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der itemnoacc-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link BigDecimal }
-             *     
+             *
              */
             public BigDecimal getITEMNOACC() {
                 return itemnoacc;
@@ -1139,11 +1137,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der itemnoacc-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link BigDecimal }
-             *     
+             *
              */
             public void setITEMNOACC(BigDecimal value) {
                 this.itemnoacc = value;
@@ -1151,11 +1149,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der glaccount-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getGLACCOUNT() {
                 return glaccount;
@@ -1163,11 +1161,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der glaccount-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setGLACCOUNT(String value) {
                 this.glaccount = value;
@@ -1175,11 +1173,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der orderid-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getORDERID() {
                 return orderid;
@@ -1187,11 +1185,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der orderid-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setORDERID(String value) {
                 this.orderid = value;
@@ -1199,11 +1197,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der taxcode-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTAXCODE() {
                 return taxcode;
@@ -1211,11 +1209,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der taxcode-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTAXCODE(String value) {
                 this.taxcode = value;
@@ -1223,11 +1221,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der wbselem-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWBSELEM() {
                 return wbselem;
@@ -1235,11 +1233,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der wbselem-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWBSELEM(String value) {
                 this.wbselem = value;
@@ -1247,11 +1245,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der costcenter-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCOSTCENTER() {
                 return costcenter;
@@ -1259,11 +1257,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der costcenter-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCOSTCENTER(String value) {
                 this.costcenter = value;
@@ -1271,11 +1269,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der itemtext-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getITEMTEXT() {
                 return itemtext;
@@ -1283,11 +1281,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der itemtext-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setITEMTEXT(String value) {
                 this.itemtext = value;
@@ -1295,11 +1293,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der kblnr-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getKBLNR() {
                 return kblnr;
@@ -1307,11 +1305,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der kblnr-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setKBLNR(String value) {
                 this.kblnr = value;
@@ -1319,11 +1317,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der kblpos-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link BigInteger }
-             *     
+             *
              */
             public BigInteger getKBLPOS() {
                 return kblpos;
@@ -1331,11 +1329,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der kblpos-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link BigInteger }
-             *     
+             *
              */
             public void setKBLPOS(BigInteger value) {
                 this.kblpos = value;
@@ -1343,11 +1341,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der refseterlk-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Boolean }
-             *     
+             *
              */
             public Boolean isREFSETERLK() {
                 return refseterlk;
@@ -1355,11 +1353,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der refseterlk-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Boolean }
-             *     
+             *
              */
             public void setREFSETERLK(Boolean value) {
                 this.refseterlk = value;
@@ -1370,9 +1368,9 @@ public class VendorPostingCreateRequest {
 
         /**
          * <p>Java-Klasse für anonymous complex type.
-         * 
+         *
          * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -1428,8 +1426,8 @@ public class VendorPostingCreateRequest {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -1468,11 +1466,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der doctype-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDOCTYPE() {
                 return doctype;
@@ -1480,11 +1478,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der doctype-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDOCTYPE(String value) {
                 this.doctype = value;
@@ -1492,11 +1490,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der compcode-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCOMPCODE() {
                 return compcode;
@@ -1504,11 +1502,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der compcode-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCOMPCODE(String value) {
                 this.compcode = value;
@@ -1516,11 +1514,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der headertxt-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getHEADERTXT() {
                 return headertxt;
@@ -1528,11 +1526,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der headertxt-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setHEADERTXT(String value) {
                 this.headertxt = value;
@@ -1540,11 +1538,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der refdocno-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getREFDOCNO() {
                 return refdocno;
@@ -1552,11 +1550,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der refdocno-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setREFDOCNO(String value) {
                 this.refdocno = value;
@@ -1564,11 +1562,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der paymentreason-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPAYMENTREASON() {
                 return paymentreason;
@@ -1576,11 +1574,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der paymentreason-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPAYMENTREASON(String value) {
                 this.paymentreason = value;
@@ -1588,11 +1586,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der docdate-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getDOCDATE() {
                 return docdate;
@@ -1600,11 +1598,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der docdate-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setDOCDATE(XMLGregorianCalendar value) {
                 this.docdate = value;
@@ -1612,11 +1610,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der pstngdate-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getPSTNGDATE() {
                 return pstngdate;
@@ -1624,11 +1622,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der pstngdate-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setPSTNGDATE(XMLGregorianCalendar value) {
                 this.pstngdate = value;
@@ -1636,11 +1634,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der currency-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCURRENCY() {
                 return currency;
@@ -1648,11 +1646,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der currency-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCURRENCY(String value) {
                 this.currency = value;
@@ -1660,11 +1658,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der iksrelevant-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Boolean }
-             *     
+             *
              */
             public Boolean isIKSRELEVANT() {
                 return iksrelevant;
@@ -1672,11 +1670,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der iksrelevant-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Boolean }
-             *     
+             *
              */
             public void setIKSRELEVANT(Boolean value) {
                 this.iksrelevant = value;
@@ -1687,9 +1685,9 @@ public class VendorPostingCreateRequest {
 
         /**
          * <p>Java-Klasse für anonymous complex type.
-         * 
+         *
          * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -1762,8 +1760,8 @@ public class VendorPostingCreateRequest {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -1782,11 +1780,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der bankid-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getBANKID() {
                 return bankid;
@@ -1794,11 +1792,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der bankid-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setBANKID(String value) {
                 this.bankid = value;
@@ -1806,11 +1804,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der iban-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.IBAN }
-             *     
+             *
              */
             public VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.IBAN getIBAN() {
                 return iban;
@@ -1818,11 +1816,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der iban-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.IBAN }
-             *     
+             *
              */
             public void setIBAN(VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.IBAN value) {
                 this.iban = value;
@@ -1830,11 +1828,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der qriban-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.QRIBAN }
-             *     
+             *
              */
             public VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.QRIBAN getQRIBAN() {
                 return qriban;
@@ -1842,11 +1840,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der qriban-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.QRIBAN }
-             *     
+             *
              */
             public void setQRIBAN(VendorPostingCreateRequest.VENDORPOSTING.PAYMENTDETAIL.QRIBAN value) {
                 this.qriban = value;
@@ -1855,9 +1853,9 @@ public class VendorPostingCreateRequest {
 
             /**
              * <p>Java-Klasse für anonymous complex type.
-             * 
+             *
              * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
-             * 
+             *
              * <pre>
              * &lt;complexType&gt;
              *   &lt;complexContent&gt;
@@ -1882,8 +1880,8 @@ public class VendorPostingCreateRequest {
              *   &lt;/complexContent&gt;
              * &lt;/complexType&gt;
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
@@ -1899,11 +1897,11 @@ public class VendorPostingCreateRequest {
 
                 /**
                  * Ruft den Wert der iban-Eigenschaft ab.
-                 * 
+                 *
                  * @return
                  *     possible object is
                  *     {@link String }
-                 *     
+                 *
                  */
                 public String getIBAN() {
                     return iban;
@@ -1911,11 +1909,11 @@ public class VendorPostingCreateRequest {
 
                 /**
                  * Legt den Wert der iban-Eigenschaft fest.
-                 * 
+                 *
                  * @param value
                  *     allowed object is
                  *     {@link String }
-                 *     
+                 *
                  */
                 public void setIBAN(String value) {
                     this.iban = value;
@@ -1923,11 +1921,11 @@ public class VendorPostingCreateRequest {
 
                 /**
                  * Ruft den Wert der accountholder-Eigenschaft ab.
-                 * 
+                 *
                  * @return
                  *     possible object is
                  *     {@link String }
-                 *     
+                 *
                  */
                 public String getACCOUNTHOLDER() {
                     return accountholder;
@@ -1935,11 +1933,11 @@ public class VendorPostingCreateRequest {
 
                 /**
                  * Legt den Wert der accountholder-Eigenschaft fest.
-                 * 
+                 *
                  * @param value
                  *     allowed object is
                  *     {@link String }
-                 *     
+                 *
                  */
                 public void setACCOUNTHOLDER(String value) {
                     this.accountholder = value;
@@ -1950,9 +1948,9 @@ public class VendorPostingCreateRequest {
 
             /**
              * <p>Java-Klasse für anonymous complex type.
-             * 
+             *
              * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
-             * 
+             *
              * <pre>
              * &lt;complexType&gt;
              *   &lt;complexContent&gt;
@@ -1984,8 +1982,8 @@ public class VendorPostingCreateRequest {
              *   &lt;/complexContent&gt;
              * &lt;/complexType&gt;
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
@@ -2004,11 +2002,11 @@ public class VendorPostingCreateRequest {
 
                 /**
                  * Ruft den Wert der qriban-Eigenschaft ab.
-                 * 
+                 *
                  * @return
                  *     possible object is
                  *     {@link String }
-                 *     
+                 *
                  */
                 public String getQRIBAN() {
                     return qriban;
@@ -2016,11 +2014,11 @@ public class VendorPostingCreateRequest {
 
                 /**
                  * Legt den Wert der qriban-Eigenschaft fest.
-                 * 
+                 *
                  * @param value
                  *     allowed object is
                  *     {@link String }
-                 *     
+                 *
                  */
                 public void setQRIBAN(String value) {
                     this.qriban = value;
@@ -2028,11 +2026,11 @@ public class VendorPostingCreateRequest {
 
                 /**
                  * Ruft den Wert der qribanaddlinfo-Eigenschaft ab.
-                 * 
+                 *
                  * @return
                  *     possible object is
                  *     {@link String }
-                 *     
+                 *
                  */
                 public String getQRIBANADDLINFO() {
                     return qribanaddlinfo;
@@ -2040,11 +2038,11 @@ public class VendorPostingCreateRequest {
 
                 /**
                  * Legt den Wert der qribanaddlinfo-Eigenschaft fest.
-                 * 
+                 *
                  * @param value
                  *     allowed object is
                  *     {@link String }
-                 *     
+                 *
                  */
                 public void setQRIBANADDLINFO(String value) {
                     this.qribanaddlinfo = value;
@@ -2052,11 +2050,11 @@ public class VendorPostingCreateRequest {
 
                 /**
                  * Ruft den Wert der porefno-Eigenschaft ab.
-                 * 
+                 *
                  * @return
                  *     possible object is
                  *     {@link String }
-                 *     
+                 *
                  */
                 public String getPOREFNO() {
                     return porefno;
@@ -2064,11 +2062,11 @@ public class VendorPostingCreateRequest {
 
                 /**
                  * Legt den Wert der porefno-Eigenschaft fest.
-                 * 
+                 *
                  * @param value
                  *     allowed object is
                  *     {@link String }
-                 *     
+                 *
                  */
                 public void setPOREFNO(String value) {
                     this.porefno = value;
@@ -2081,9 +2079,9 @@ public class VendorPostingCreateRequest {
 
         /**
          * <p>Java-Klasse für anonymous complex type.
-         * 
+         *
          * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -2110,8 +2108,8 @@ public class VendorPostingCreateRequest {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -2127,11 +2125,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der itemnoacc-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link BigDecimal }
-             *     
+             *
              */
             public BigDecimal getITEMNOACC() {
                 return itemnoacc;
@@ -2139,11 +2137,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der itemnoacc-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link BigDecimal }
-             *     
+             *
              */
             public void setITEMNOACC(BigDecimal value) {
                 this.itemnoacc = value;
@@ -2151,11 +2149,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der amtdoccur-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link BigDecimal }
-             *     
+             *
              */
             public BigDecimal getAMTDOCCUR() {
                 return amtdoccur;
@@ -2163,11 +2161,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der amtdoccur-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link BigDecimal }
-             *     
+             *
              */
             public void setAMTDOCCUR(BigDecimal value) {
                 this.amtdoccur = value;
@@ -2178,9 +2176,9 @@ public class VendorPostingCreateRequest {
 
         /**
          * <p>Java-Klasse für anonymous complex type.
-         * 
+         *
          * <p>Das folgende Schemafragment gibt den erwarteten Content an, der in dieser Klasse enthalten ist.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -2221,8 +2219,8 @@ public class VendorPostingCreateRequest {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -2244,11 +2242,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der vendorno-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getVENDORNO() {
                 return vendorno;
@@ -2256,11 +2254,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der vendorno-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setVENDORNO(String value) {
                 this.vendorno = value;
@@ -2268,11 +2266,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der amtdoccur-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link BigDecimal }
-             *     
+             *
              */
             public BigDecimal getAMTDOCCUR() {
                 return amtdoccur;
@@ -2280,11 +2278,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der amtdoccur-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link BigDecimal }
-             *     
+             *
              */
             public void setAMTDOCCUR(BigDecimal value) {
                 this.amtdoccur = value;
@@ -2292,11 +2290,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der zterm-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getZTERM() {
                 return zterm;
@@ -2304,11 +2302,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der zterm-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setZTERM(String value) {
                 this.zterm = value;
@@ -2316,11 +2314,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Ruft den Wert der itemtext-Eigenschaft ab.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getITEMTEXT() {
                 return itemtext;
@@ -2328,11 +2326,11 @@ public class VendorPostingCreateRequest {
 
             /**
              * Legt den Wert der itemtext-Eigenschaft fest.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setITEMTEXT(String value) {
                 this.itemtext = value;
