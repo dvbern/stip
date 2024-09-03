@@ -20,4 +20,25 @@ class BusinessPartnerCreateResponseTest {
         final var response = SoapUtils.parseSoapResponse(xml, BusinessPartnerCreateResponse.class);
         assertNotNull(response);
     }
+
+    @Test
+    void parseBusinessPartnerCreateAlreadyExistingDeliveryIdResponseTest() throws IOException, JAXBException, SOAPException {
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
+            "UTF-8"
+        );
+        final var response = SoapUtils.parseSoapResponse(xml, BusinessPartnerCreateResponse.class);
+        assertNotNull(response);
+    }
+
+    @Test
+    void parseBusinessPartnerCreateAlreadyExistingBusinessPartnerResponseTest() throws IOException, JAXBException, SOAPException {
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/createBusinessParnterAlreadyExistingPartnerResponse.xml"),
+            "UTF-8"
+        );
+        final var response = SoapUtils.parseSoapResponse(xml, BusinessPartnerCreateResponse.class);
+        assertNotNull(response);
+    }
+
 }

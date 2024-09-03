@@ -18,7 +18,6 @@ class VendorPostingCreateRequestTest {
     @Test
     void CreateVendorPostingCreateRequestTest() throws JAXBException, SOAPException, IOException {
         XMLUnit.setIgnoreWhitespace(true);
-
         VendorPostingCreateRequest request = new VendorPostingCreateRequest();
         SenderParmsDelivery senderParms = new SenderParmsDelivery();
         senderParms.setSYSID(BigInteger.valueOf(2080));
@@ -29,7 +28,5 @@ class VendorPostingCreateRequestTest {
             SoapUtils.buildXmlRequest(request, VendorPostingCreateRequest.class, SapEndpointName.VENDORPOSTING);});
         final var actual = SoapUtils.buildXmlRequest(request, VendorPostingCreateRequest.class, SapEndpointName.VENDORPOSTING);
         assertNotNull(actual);
-        //assertThat(actual, CompareMatcher.isSimilarTo(EXPECTED));
-
     }
 }

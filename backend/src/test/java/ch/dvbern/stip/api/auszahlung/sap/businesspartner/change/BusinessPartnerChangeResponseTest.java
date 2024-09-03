@@ -12,9 +12,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BusinessPartnerChangeResponseTest {
     @Test
-    void parseBusinessPartnerChangeResponseTest() throws IOException, JAXBException, SOAPException{
+    void parseBusinessPartnerChangeResponseSuccessTest() throws IOException, JAXBException, SOAPException{
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerSuccessResponse.xml"),
+            "UTF-8"
+        );
+        final var response = SoapUtils.parseSoapResponse(xml, BusinessPartnerChangeResponse.class);
+        assertNotNull(response);
+    }
+
+    @Test
+    void parseBusinessPartnerChangeResponseAlreadyExistingDeliveryIdTest() throws IOException, JAXBException, SOAPException{
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
         );
         final var response = SoapUtils.parseSoapResponse(xml, BusinessPartnerChangeResponse.class);

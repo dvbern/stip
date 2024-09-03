@@ -21,5 +21,15 @@ class ImportStatusReadResponseTest {
         assertNotNull(response);
     }
 
+    @Test
+    void parseImportStatusNotFoundResponseTest() throws IOException, JAXBException, SOAPException {
+        String xml = IOUtils.toString(
+                this.getClass().getResourceAsStream("/auszahlung/getImportStatusDeliveryIdNotFoundExampleResponse.xml"),
+                "UTF-8"
+        );
+        final var response = SoapUtils.parseSoapResponse(xml,ImportStatusReadResponse.class);
+        assertNotNull(response);
+    }
+
 
 }

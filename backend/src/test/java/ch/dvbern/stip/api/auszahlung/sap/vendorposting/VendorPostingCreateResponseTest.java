@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class VendorPostingCreateResponseTest {
     @Test
-    void parseVendorPostingCreateResponseTest() throws IOException, JAXBException, SOAPException {
+    void parseVendorPostingCreateResponseSuccessTest() throws IOException, JAXBException, SOAPException {
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/vendorPostingCreateSuccess.xml"),
             "UTF-8"
@@ -22,4 +22,23 @@ class VendorPostingCreateResponseTest {
         assertNotNull(response);
     }
 
+    @Test
+    void parseVendorPostingCreateResponseAlreadyExistingTest() throws IOException, JAXBException, SOAPException {
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/vendorPostingAlreadyExistingDeliveryResponse.xml"),
+            "UTF-8"
+        );
+        final var response = SoapUtils.parseSoapResponse(xml, VendorPostingCreateResponse.class);
+        assertNotNull(response);
+    }
+    @Test
+    void parseVendorPostingCreateResponseInvalidDataTest() throws IOException, JAXBException, SOAPException {
+        fail("Not implemented yet");
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/vendorPostingInvalidDataResponse.xml"),
+            "UTF-8"
+        );
+        final var response = SoapUtils.parseSoapResponse(xml, VendorPostingCreateResponse.class);
+        assertNotNull(response);
+    }
 }
