@@ -4,20 +4,11 @@ import ch.dvbern.stip.api.auszahlung.sap.util.SapEndpointName;
 import ch.dvbern.stip.api.auszahlung.sap.util.SoapUtils;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.soap.MessageFactory;
-import jakarta.xml.soap.SOAPEnvelope;
-import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPException;
-import jakarta.xml.soap.SOAPMessage;
-import jakarta.xml.soap.SOAPPart;
 import org.junit.jupiter.api.Test;
 import org.xmlunit.matchers.CompareMatcher;
 import wiremock.org.custommonkey.xmlunit.XMLUnit;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 

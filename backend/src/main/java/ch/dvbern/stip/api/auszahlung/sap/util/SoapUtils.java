@@ -3,9 +3,16 @@ package ch.dvbern.stip.api.auszahlung.sap.util;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
-import jakarta.xml.soap.*;
+import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.soap.SOAPEnvelope;
+import jakarta.xml.soap.MessageFactory;
+import jakarta.xml.soap.SOAPMessage;
+import jakarta.xml.soap.SOAPPart;
+import jakarta.xml.soap.SOAPBody;
+import jakarta.xml.soap.SOAPException;
 import lombok.experimental.UtilityClass;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,5 +41,12 @@ public class SoapUtils {
         OutputStream outputStream = new ByteArrayOutputStream();
         soapMessage.writeTo(outputStream);
         return outputStream.toString();
+    }
+
+    public<T> T parseSoapResponse(String xmlResponse, Class<T> responseType) throws SOAPException, IOException, JAXBException {
+        SOAPMessage message = MessageFactory.newInstance().createMessage(null,
+            new ByteArrayInputStream(xmlResponse.getBytes()));
+        Unmarshaller unmarshaller = JAXBContext.newInstance(responseType).createUnmarshaller();
+        return (T) unmarshaller.unmarshal(message.getSOAPBody().extractContentAsDocument());
     }
 }

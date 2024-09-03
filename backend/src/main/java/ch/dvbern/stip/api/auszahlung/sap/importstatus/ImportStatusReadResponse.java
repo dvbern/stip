@@ -6,11 +6,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlSchemaType;
-import jakarta.xml.bind.annotation.XmlType;
+
+import jakarta.xml.bind.annotation.*;
 
 
 /**
@@ -180,6 +177,7 @@ import jakarta.xml.bind.annotation.XmlType;
  *
  *
  */
+@XmlRootElement(name = "ImportStatusRead_Response", namespace = "urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ImportStatusRead_Response", namespace = "urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS", propOrder = {
     "delivery",
