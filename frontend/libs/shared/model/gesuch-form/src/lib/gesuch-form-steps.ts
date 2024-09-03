@@ -16,8 +16,8 @@ import {
 export const TRANCHE: SharedModelGesuchFormStep = {
   route: 'tranche',
   translationKey: 'shared.tranche.title',
-  titleTranslationKey: 'shared.tranche.title',
-  iconSymbolName: 'information',
+  titleTranslationKey: 'shared.nothing',
+  iconSymbolName: 'info',
 } satisfies SharedModelGesuchFormStep;
 
 export const PERSON = {

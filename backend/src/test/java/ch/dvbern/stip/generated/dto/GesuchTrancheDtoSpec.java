@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchTrancheDtoSpec.JSON_PROPERTY_ID,
   GesuchTrancheDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   GesuchTrancheDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
+  GesuchTrancheDtoSpec.JSON_PROPERTY_COMMENT,
   GesuchTrancheDtoSpec.JSON_PROPERTY_GESUCH_FORMULAR
 })
 @JsonTypeName("GesuchTranche")
@@ -46,6 +47,9 @@ public class GesuchTrancheDtoSpec {
 
   public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
   private LocalDate gueltigBis;
+
+  public static final String JSON_PROPERTY_COMMENT = "comment";
+  private String comment;
 
   public static final String JSON_PROPERTY_GESUCH_FORMULAR = "gesuchFormular";
   private GesuchFormularDtoSpec gesuchFormular;
@@ -131,6 +135,32 @@ public class GesuchTrancheDtoSpec {
   }
 
 
+  public GesuchTrancheDtoSpec comment(String comment) {
+    
+    this.comment = comment;
+    return this;
+  }
+
+   /**
+   * Get comment
+   * @return comment
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getComment() {
+    return comment;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
+
+
   public GesuchTrancheDtoSpec gesuchFormular(GesuchFormularDtoSpec gesuchFormular) {
     
     this.gesuchFormular = gesuchFormular;
@@ -168,12 +198,13 @@ public class GesuchTrancheDtoSpec {
     return Objects.equals(this.id, gesuchTranche.id) &&
         Objects.equals(this.gueltigAb, gesuchTranche.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchTranche.gueltigBis) &&
+        Objects.equals(this.comment, gesuchTranche.comment) &&
         Objects.equals(this.gesuchFormular, gesuchTranche.gesuchFormular);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, gesuchFormular);
+    return Objects.hash(id, gueltigAb, gueltigBis, comment, gesuchFormular);
   }
 
   @Override
@@ -183,6 +214,7 @@ public class GesuchTrancheDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    gesuchFormular: ").append(toIndentedString(gesuchFormular)).append("\n");
     sb.append("}");
     return sb.toString();

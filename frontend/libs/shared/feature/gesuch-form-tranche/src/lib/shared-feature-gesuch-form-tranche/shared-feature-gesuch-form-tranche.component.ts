@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  TemplateRef,
+  effect,
+  inject,
+  viewChild,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormsModule,
   NonNullableFormBuilder,
@@ -11,14 +19,16 @@ import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { onDateInputBlurBasic } from '@dv/shared/util/validator-date';
+import { SharedUtilHeaderService } from '@dv/shared/util/header';
+import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 
@@ -43,9 +53,15 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchFormTrancheComponent {
-  store = inject(Store);
+  private store = inject(Store);
+  private translate = inject(TranslateService);
   private formBuilder = inject(NonNullableFormBuilder);
+  private headerService = inject(SharedUtilHeaderService);
+  private defaultCommentSig = toSignal(
+    this.translate.stream('shared.form.tranche.bemerkung.initialgesuch'),
+  );
 
+  titleSuffixSig = viewChild('titleSuffix', { read: TemplateRef });
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
 
@@ -54,12 +70,27 @@ export class SharedFeatureGesuchFormTrancheComponent {
     bis: ['', [Validators.required]],
     bemerkung: ['', [Validators.required]],
   });
-  onDateBlur() {
-    return onDateInputBlurBasic(
-      this.form.controls.von && this.form.controls.bis,
-      new Date(),
-      this.languageSig(),
-      'date',
+
+  constructor() {
+    effect(
+      () => {
+        const tranche = this.viewSig().gesuchstranche;
+        const defaultComment = this.defaultCommentSig();
+        if (!tranche) {
+          return;
+        }
+
+        this.form.patchValue({
+          von: formatBackendLocalDate(tranche.gueltigAb, this.languageSig()),
+          bis: formatBackendLocalDate(tranche.gueltigBis, this.languageSig()),
+          bemerkung: tranche.comment ?? defaultComment,
+        });
+
+        this.headerService.updateSuffix(this.titleSuffixSig());
+      },
+      { allowSignalWrites: true },
     );
+
+    this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
   }
 }

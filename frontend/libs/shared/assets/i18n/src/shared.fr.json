@@ -8,6 +8,7 @@
   "shared.accept": "Accept",
   "shared.label.von": "du",
   "shared.label.bis": "au",
+  "shared.nothing": "",
   "shared.ui.yes": "Oui",
   "shared.ui.no": "Non",
   "shared.ui.clear": "Effacer la saisie",
@@ -176,6 +177,14 @@
   "shared.form.shared.wohnsitzanteil.mutter": "Chez la mère",
   "shared.form.shared.wohnsitzanteil.vater": "Chez le père",
 
+  "shared.tranche.title": "Aperçu",
+  "shared.form.title.suffix.TRANCHE": "Tranche {{ position }}",
+  "shared.form.title.suffix.AENDERUNG": "Changement {{ position }}",
+  "shared.form.tranche.von.label": "De",
+  "shared.form.tranche.bis.label": "Jusqu'à (en option)",
+  "shared.form.tranche.bemerkung.label": "Bemerkung",
+  "shared.form.tranche.bemerkung.initialgesuch": "Demande initiale",
+
   "shared.person.title": "Person in Education",
   "shared.form.person.section.additional-information": "Additional information",
   "shared.form.person.salutation.label": "Title",
@@ -235,11 +244,6 @@
   "shared.form.education.form.error.monthYearAfter": "La date de fin doit être postérieure à la date de début",
   "shared.form.education.form.error.monthYearAfterStart": "La date de fin doit être postérieure à la date de début",
   "shared.form.education.form.error.lebenslaufConflict": "La période chevauche d'autres formations indiquées",
-
-  "shared.form.shared.von.label": "De",
-  "shared.form.shared.bis.label": "Jusqu'à (en option)",
-  "shared.form.shared.bemerkung.label": "Bemerkung",
-  "shared.form.shared.bemerkung.initialgesuch.label": "Demande initiale",
 
   "shared.familiensituation.title": "Situation familiale",
   "shared.form.familiensituation.mutter": "Mère",

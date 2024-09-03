@@ -25,6 +25,7 @@ public class GesuchTrancheDto  implements Serializable {
   private @Valid UUID id;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
+  private @Valid String comment;
   private @Valid GesuchFormularDto gesuchFormular;
 
   /**
@@ -86,6 +87,25 @@ public class GesuchTrancheDto  implements Serializable {
 
   /**
    **/
+  public GesuchTrancheDto comment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+  
+  @JsonProperty("comment")
+  @NotNull
+  public String getComment() {
+    return comment;
+  }
+
+  @JsonProperty("comment")
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
+
+  /**
+   **/
   public GesuchTrancheDto gesuchFormular(GesuchFormularDto gesuchFormular) {
     this.gesuchFormular = gesuchFormular;
     return this;
@@ -115,12 +135,13 @@ public class GesuchTrancheDto  implements Serializable {
     return Objects.equals(this.id, gesuchTranche.id) &&
         Objects.equals(this.gueltigAb, gesuchTranche.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchTranche.gueltigBis) &&
+        Objects.equals(this.comment, gesuchTranche.comment) &&
         Objects.equals(this.gesuchFormular, gesuchTranche.gesuchFormular);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, gesuchFormular);
+    return Objects.hash(id, gueltigAb, gueltigBis, comment, gesuchFormular);
   }
 
   @Override
@@ -131,6 +152,7 @@ public class GesuchTrancheDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    gesuchFormular: ").append(toIndentedString(gesuchFormular)).append("\n");
     sb.append("}");
     return sb.toString();
