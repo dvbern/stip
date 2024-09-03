@@ -29,6 +29,16 @@ import { PersoenlicheBerechnung } from '../../../models';
         {{ einnahmenSig().nettoerwerbseinkommen }}
       </div>
     </div>
+    <!-- Unterhaltsbeiträge -->
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.alimente'
+          | translate
+      }}
+      <div class="text-muted text-end flex-grow-1">
+        {{ einnahmenSig().alimente }}
+      </div>
+    </div>
 
     <!-- EO -->
     <div class="d-flex gap-2">
@@ -93,14 +103,22 @@ import { PersoenlicheBerechnung } from '../../../models';
       </div>
     </div>
 
-    <!-- Steuerbares Vermögen -->
+    <!-- Anrechenbares Vermögen -->
     <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.steuerbaresVermoegen'
-          | translate
-      }}
+      <div classs="d-flex flex-column">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen'
+            | translate
+        }}
+        <div class="text-muted">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen.info'
+              | translate: einnahmenSig()
+          }}
+        </div>
+      </div>
       <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().steuerbaresVermoegen }}
+        {{ einnahmenSig().anrechenbaresVermoegen }}
       </div>
     </div>
 

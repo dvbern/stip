@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/"
-                 xmlns="https://kiegroup.org/dmn/_EF3E38E9-624A-45B0-BC0A-372B0B83A8B9"
-                 xmlns:kie="http://www.drools.org/kie/dmn/1.2"
-                 xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/"
-                 xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/"
-                 xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
-                 xmlns:included1="stip.kibon.ch"
-                 xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/"
-                 id="_29C4516C-614A-48F3-B851-A25E8853C853" name="PersoenlichesBudget"
-                 typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="https://kiegroup.org/dmn/_EF3E38E9-624A-45B0-BC0A-372B0B83A8B9">
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="https://kiegroup.org/dmn/_EF3E38E9-624A-45B0-BC0A-372B0B83A8B9" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:included1="stip.kibon.ch" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" id="_29C4516C-614A-48F3-B851-A25E8853C853" name="PersoenlichesBudget" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="https://kiegroup.org/dmn/_EF3E38E9-624A-45B0-BC0A-372B0B83A8B9">
   <dmn:description>Berechnet das Prösnliche Budget auf basis von 1..2 Familienbudgets</dmn:description>
   <dmn:extensionElements/>
   <dmn:import id="_1774F3A7-11FA-48BC-A1FA-2E55E6E481FC" name="FamBudget" namespace="stip.kibon.ch" locationURI="Familienbudget.dmn" importType="http://www.omg.org/spec/DMN/20180521/MODEL/"/>
@@ -94,6 +85,9 @@
     <dmn:itemComponent id="_4BFA3AAF-812C-4E70-A5C4-4A5A04BC3872" name="abgeschlosseneErstausbildung" isCollection="false">
       <dmn:typeRef>boolean</dmn:typeRef>
     </dmn:itemComponent>
+    <dmn:itemComponent id="_AntragsstelleV1_verheiratetKonkubinat" name="verheiratetKonkubinat" isCollection="false">
+      <dmn:typeRef>boolean</dmn:typeRef>
+    </dmn:itemComponent>
   </dmn:itemDefinition>
   <dmn:itemDefinition id="_69BA7C6B-9069-407C-A646-38BB77CF6CD7" name="InputPersoenlichesbudgetV1" isCollection="false">
     <dmn:itemComponent id="_4C91CFC5-61D3-40DE-9AE0-0BD6AFCA7DB7" name="antragssteller" isCollection="false">
@@ -148,7 +142,7 @@
               <dmn:text>true</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_06D185A9-40AA-42B8-B24B-A39829DC12DB">
-              <dmn:text>InputPersoenlichesbudget.antragssteller.einkommen - Stammdaten.einkommensfreibetrag</dmn:text>
+              <dmn:text>max((InputPersoenlichesbudget.antragssteller.einkommen - Stammdaten.einkommensfreibetrag), 0)</dmn:text>
             </dmn:outputEntry>
             <dmn:annotationEntry>
               <dmn:text/>
@@ -570,9 +564,37 @@
       </dmn:contextEntry>
       <dmn:contextEntry>
         <dmn:variable id="_53EA1BE6-738E-4960-86FE-4F40E7DCA15E" name="Ausbildungskosten" typeRef="number"/>
-        <dmn:literalExpression id="_F4421A24-82D5-4256-96B1-9634070EF583">
-          <dmn:text>InputPersoenlichesbudget.antragssteller.ausbildungskosten</dmn:text>
-        </dmn:literalExpression>
+        <dmn:decisionTable id="_F4421A24-82D5-4256-96B1-9634070EF583" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+          <dmn:input id="_5D2F6ED5-7AE2-48E4-8C02-6B37B83CC9ED">
+            <dmn:inputExpression id="_8392E796-FC2C-40A5-8EF4-4BEC69A27727" typeRef="boolean">
+              <dmn:text>InputPersoenlichesbudget.antragssteller.verheiratetKonkubinat</dmn:text>
+            </dmn:inputExpression>
+          </dmn:input>
+          <dmn:output id="_7BF9E136-8D05-4550-98B9-12844CC7B850"/>
+          <dmn:annotation name="annotation-1"/>
+          <dmn:rule id="_33B94626-548B-4C4E-9BA3-7203025DC79B">
+            <dmn:inputEntry id="_9E6F708A-5F8E-47FC-B53E-42E8110635AA">
+              <dmn:text>true</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_D57DB552-DA8F-4BB1-AA11-A2A00439AFAE">
+              <dmn:text>InputPersoenlichesbudget.antragssteller.ausbildungskosten * InputPersoenlichesbudget.antragssteller.anzahlPersonenImHaushalt</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+          <dmn:rule id="_4E039B03-DD9B-4486-B814-4616AD6D2790">
+            <dmn:inputEntry id="_C7CA36DE-0141-45B5-9740-B4D3082E2C95">
+              <dmn:text>false</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_0A627A14-8330-4705-833C-833DAA2D4236">
+              <dmn:text>InputPersoenlichesbudget.antragssteller.ausbildungskosten</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+        </dmn:decisionTable>
       </dmn:contextEntry>
       <dmn:contextEntry>
         <dmn:variable id="_8D465C9F-0613-4201-9D8D-252C7DE31845" name="Steuern" typeRef="number"/>
@@ -587,10 +609,38 @@
         </dmn:literalExpression>
       </dmn:contextEntry>
       <dmn:contextEntry>
-        <dmn:variable id="_F2129945-E3B4-4B39-AAA5-C2AC8307C505" name="Fahrkosten" typeRef="number"/>
-        <dmn:literalExpression id="_3383B6E5-DFFC-4869-BEDB-4E0526B5EFC7">
-          <dmn:text>InputPersoenlichesbudget.antragssteller.fahrkosten</dmn:text>
-        </dmn:literalExpression>
+        <dmn:variable id="_7AAC0D70-872A-4EC9-BEFD-EF1114311634" name="Fahrkosten" typeRef="number"/>
+        <dmn:decisionTable id="_0A0C76ED-E6B7-4443-ABC9-DB4E4EE33C71" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+          <dmn:input id="_C37657B2-A8C7-433B-AE07-FDAF4B3F8B10">
+            <dmn:inputExpression id="_A5AC0E96-2EF8-47EC-8523-8A674D796A77" typeRef="boolean">
+              <dmn:text>InputPersoenlichesbudget.antragssteller.verheiratetKonkubinat</dmn:text>
+            </dmn:inputExpression>
+          </dmn:input>
+          <dmn:output id="_368414F7-691B-4738-8D67-7A3F3238BAC7"/>
+          <dmn:annotation name="annotation-1"/>
+          <dmn:rule id="_E88E771A-F02D-44DD-9CAC-FF9C0A03CEEB">
+            <dmn:inputEntry id="_610F74B8-5DB8-49ED-B2B2-D6EE1EF73FB4">
+              <dmn:text>true</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_C4E8AC5A-6B22-4607-BC2A-29CE99EF2246">
+              <dmn:text>InputPersoenlichesbudget.antragssteller.fahrkosten * InputPersoenlichesbudget.antragssteller.anzahlPersonenImHaushalt</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+          <dmn:rule id="_C0E0693A-0AC6-4BF2-B705-B91335D9F24B">
+            <dmn:inputEntry id="_9477C671-927F-48B1-A050-A276F9B28D9A">
+              <dmn:text>false</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_9366B2ED-C41F-41BB-83C4-436F0A5297AB">
+              <dmn:text>InputPersoenlichesbudget.antragssteller.fahrkosten</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
+        </dmn:decisionTable>
       </dmn:contextEntry>
       <dmn:contextEntry>
         <dmn:variable id="_124D45D9-5063-408E-8529-277244EFD5DA" name="Fahrkosten_Partner" typeRef="number"/>
@@ -900,12 +950,43 @@
     <dmn:informationRequirement id="_5BF0BB12-FF04-4035-82CD-D6A2F1AB8C5D">
       <dmn:requiredDecision href="#_7590C8A6-6B9B-4675-8168-133FFFF15914"/>
     </dmn:informationRequirement>
+    <dmn:informationRequirement id="_3EE7BB2B-F2AD-4E4F-B466-0559CB5D64DE">
+      <dmn:requiredInput href="#_4F0E96BE-6B10-4FD4-93C0-DC3D0B514C41"/>
+    </dmn:informationRequirement>
     <dmn:knowledgeRequirement id="_E74C389C-F108-4505-B28B-7718AE1A8EC5">
       <dmn:requiredKnowledge href="#_9105DA37-1603-4F9E-AA31-9E007A7058EC"/>
     </dmn:knowledgeRequirement>
-    <dmn:literalExpression id="_06D72430-9A0E-4388-9913-10B54E2BA789">
-      <dmn:text>EinnahmenPersoenlichesBudget - AusgabenPersoenlichesBudget</dmn:text>
-    </dmn:literalExpression>
+    <dmn:decisionTable id="_FBB12748-492E-49B0-B458-1732D261263A" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+      <dmn:input id="_0C8AD661-C6D0-4C62-B0F4-43E795CB8DD6">
+        <dmn:inputExpression id="_3B4CC586-C003-4B9F-AF97-8E34B90A9731" typeRef="boolean">
+          <dmn:text>InputPersoenlichesbudget.antragssteller.verheiratetKonkubinat</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:output id="_2EAD9444-4B32-4E67-93F9-838492EF547C"/>
+      <dmn:annotation name="annotation-1"/>
+      <dmn:rule id="_A7922650-4A69-4C50-9F6B-5D9E99144581">
+        <dmn:inputEntry id="_49D11DD5-825A-4A7C-B845-E80375AFDB06">
+          <dmn:text>true</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_04BFF2C0-7AF7-4873-9276-F1875447982B">
+          <dmn:text>(EinnahmenPersoenlichesBudget - AusgabenPersoenlichesBudget)/InputPersoenlichesbudget.antragssteller.anzahlPersonenImHaushalt</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_AD7522A0-58AD-4B80-A683-B20ED92734FD">
+        <dmn:inputEntry id="_34DE0D40-DBFC-4FFF-AC8C-FA74823CB1BE">
+          <dmn:text>false</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_3D41055F-A689-4D00-A1F0-EE3DA67AED11">
+          <dmn:text>EinnahmenPersoenlichesBudget - AusgabenPersoenlichesBudget</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+    </dmn:decisionTable>
   </dmn:decision>
   <dmndi:DMNDI>
     <dmndi:DMNDiagram id="_AAEE144E-C690-4852-9C89-2ACE8943E8D6" name="DRG">
@@ -968,70 +1049,76 @@
           <kie:ComponentWidths dmnElementRef="_F1D17AB9-F16D-4019-899C-D4FBEB5C8239">
             <kie:width>50</kie:width>
             <kie:width>487</kie:width>
-            <kie:width>2698</kie:width>
+            <kie:width>3422</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_6FB3E248-7FEF-4B57-9C2B-48A3000CEEF4">
             <kie:width>50</kie:width>
-            <kie:width>1427</kie:width>
-            <kie:width>1101</kie:width>
-            <kie:width>100</kie:width>
+            <kie:width>1831</kie:width>
+            <kie:width>1413</kie:width>
+            <kie:width>108</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_5C0E9371-59FD-498F-A47A-E69450FC1670">
             <kie:width>50</kie:width>
-            <kie:width>1427</kie:width>
-            <kie:width>1101</kie:width>
-            <kie:width>100</kie:width>
+            <kie:width>1831</kie:width>
+            <kie:width>1413</kie:width>
+            <kie:width>108</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_E5B83CC3-5505-4D49-959D-374BE181E2DF">
             <kie:width>50</kie:width>
-            <kie:width>1427</kie:width>
-            <kie:width>1101</kie:width>
-            <kie:width>100</kie:width>
+            <kie:width>1831</kie:width>
+            <kie:width>1413</kie:width>
+            <kie:width>108</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_F4421A24-82D5-4256-96B1-9634070EF583">
-            <kie:width>2698</kie:width>
+            <kie:width>50</kie:width>
+            <kie:width>128</kie:width>
+            <kie:width>128</kie:width>
+            <kie:width>3096</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_133E5586-4653-46BB-96DB-13BFA1FF0409">
-            <kie:width>2698</kie:width>
+            <kie:width>3422</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_CC22856B-5441-48F7-ACB5-B36E9F8EDD09">
-            <kie:width>2698</kie:width>
+            <kie:width>3422</kie:width>
           </kie:ComponentWidths>
-          <kie:ComponentWidths dmnElementRef="_3383B6E5-DFFC-4869-BEDB-4E0526B5EFC7">
-            <kie:width>2698</kie:width>
+          <kie:ComponentWidths dmnElementRef="_0A0C76ED-E6B7-4443-ABC9-DB4E4EE33C71">
+            <kie:width>50</kie:width>
+            <kie:width>815</kie:width>
+            <kie:width>101</kie:width>
+            <kie:width>2436</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_306C57B1-F84B-4EFC-A952-8CECB471C0E7">
-            <kie:width>2698</kie:width>
+            <kie:width>3422</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_CF93DD6E-D339-46DE-AFBB-9212CA2B0F8B">
             <kie:width>50</kie:width>
-            <kie:width>443</kie:width>
-            <kie:width>398</kie:width>
-            <kie:width>1236</kie:width>
-            <kie:width>551</kie:width>
+            <kie:width>568</kie:width>
+            <kie:width>511</kie:width>
+            <kie:width>1586</kie:width>
+            <kie:width>687</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_4815FF19-F782-490C-A466-69D4676EFCDC">
-            <kie:width>2698</kie:width>
+            <kie:width>3422</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_FB16687F-9A0A-40EB-9C73-26025392B4A7">
-            <kie:width>2698</kie:width>
+            <kie:width>3422</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_501A419A-D9FE-4F8C-9022-80B32B6105D2">
             <kie:width>50</kie:width>
-            <kie:width>792</kie:width>
-            <kie:width>705</kie:width>
-            <kie:width>792</kie:width>
-            <kie:width>339</kie:width>
+            <kie:width>1016</kie:width>
+            <kie:width>905</kie:width>
+            <kie:width>1016</kie:width>
+            <kie:width>415</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_D3E6E9B0-8D85-4CE3-9ACD-98705675A326">
             <kie:width>50</kie:width>
-            <kie:width>792</kie:width>
-            <kie:width>705</kie:width>
-            <kie:width>792</kie:width>
-            <kie:width>339</kie:width>
+            <kie:width>1016</kie:width>
+            <kie:width>905</kie:width>
+            <kie:width>1016</kie:width>
+            <kie:width>415</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_E8B1E0CA-D060-4CF0-ACB4-3354516BD0DB">
-            <kie:width>2698</kie:width>
+            <kie:width>3422</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_39FB4C55-B6C3-4755-A197-8A1078AF2DF1">
             <kie:width>50</kie:width>
@@ -1057,8 +1144,11 @@
           <kie:ComponentWidths dmnElementRef="_67F3DCF8-9000-46F8-90A6-1430B9F2C72D">
             <kie:width>371</kie:width>
           </kie:ComponentWidths>
-          <kie:ComponentWidths dmnElementRef="_06D72430-9A0E-4388-9913-10B54E2BA789">
-            <kie:width>707</kie:width>
+          <kie:ComponentWidths dmnElementRef="_FBB12748-492E-49B0-B458-1732D261263A">
+            <kie:width>50</kie:width>
+            <kie:width>690</kie:width>
+            <kie:width>656</kie:width>
+            <kie:width>318</kie:width>
           </kie:ComponentWidths>
         </kie:ComponentsWidthsExtension>
       </di:extension>
@@ -1094,7 +1184,7 @@
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="2706" y="560.6842105263158" width="208" height="100"/>
+        <dc:Bounds x="2707" y="560.6842105263158" width="208" height="100"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNShape id="dmnshape-drg-_7590C8A6-6B9B-4675-8168-133FFFF15914" dmnElementRef="_7590C8A6-6B9B-4675-8168-133FFFF15914" isCollapsed="false">
@@ -1182,11 +1272,11 @@
         <di:waypoint x="2204" y="640"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_8D9ACB41-1751-4C05-AA9B-4798A430463C-AUTO-TARGET" dmnElementRef="_8D9ACB41-1751-4C05-AA9B-4798A430463C">
-        <di:waypoint x="2810" y="610.6842105263158"/>
+        <di:waypoint x="2811" y="610.6842105263158"/>
         <di:waypoint x="2204" y="680"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_7ABDE3D7-9C89-4D5E-944B-A3A7136E1537-AUTO-TARGET" dmnElementRef="_7ABDE3D7-9C89-4D5E-944B-A3A7136E1537">
-        <di:waypoint x="2810" y="610.6842105263158"/>
+        <di:waypoint x="2811" y="610.6842105263158"/>
         <di:waypoint x="2486" y="741"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_395F2281-773D-413A-8840-4C9721AC1DC0-AUTO-TARGET" dmnElementRef="_395F2281-773D-413A-8840-4C9721AC1DC0">
@@ -1235,6 +1325,10 @@
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_E74C389C-F108-4505-B28B-7718AE1A8EC5-AUTO-SOURCE-AUTO-TARGET" dmnElementRef="_E74C389C-F108-4505-B28B-7718AE1A8EC5">
         <di:waypoint x="2276.5" y="413"/>
+        <di:waypoint x="2325" y="497"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_3EE7BB2B-F2AD-4E4F-B466-0559CB5D64DE-AUTO-TARGET" dmnElementRef="_3EE7BB2B-F2AD-4E4F-B466-0559CB5D64DE">
+        <di:waypoint x="2811" y="610.6842105263158"/>
         <di:waypoint x="2325" y="497"/>
       </dmndi:DMNEdge>
     </dmndi:DMNDiagram>

@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
@@ -299,6 +300,7 @@ public class TestUtil {
         final var baseGesuch = getBaseGesuchForBerechnung(trancheUuid);
         final var gesuchFormular = baseGesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuchFormular.getPersonInAusbildung()
+            .setZivilstand(Zivilstand.LEDIG)
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1));
 
