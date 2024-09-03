@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GesuchTrancheTyp } from './gesuchTrancheTyp';
 import { GesuchTrancheStatus } from './gesuchTrancheStatus';
 
 export interface GesuchTrancheSlim { 
@@ -16,6 +17,7 @@ export interface GesuchTrancheSlim {
     gueltigAb?: string;
     gueltigBis?: string;
     status?: GesuchTrancheStatus;
+    typ?: GesuchTrancheTyp;
 }
 
 

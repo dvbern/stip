@@ -26,6 +26,8 @@ public class GesuchTrancheDto  implements Serializable {
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
   private @Valid String comment;
+  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status;
+  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
   private @Valid GesuchFormularDto gesuchFormular;
 
   /**
@@ -106,6 +108,44 @@ public class GesuchTrancheDto  implements Serializable {
 
   /**
    **/
+  public GesuchTrancheDto status(ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status) {
+    this.status = status;
+    return this;
+  }
+
+  
+  @JsonProperty("status")
+  @NotNull
+  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus getStatus() {
+    return status;
+  }
+
+  @JsonProperty("status")
+  public void setStatus(ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status) {
+    this.status = status;
+  }
+
+  /**
+   **/
+  public GesuchTrancheDto typ(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+    this.typ = typ;
+    return this;
+  }
+
+  
+  @JsonProperty("typ")
+  @NotNull
+  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp getTyp() {
+    return typ;
+  }
+
+  @JsonProperty("typ")
+  public void setTyp(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+    this.typ = typ;
+  }
+
+  /**
+   **/
   public GesuchTrancheDto gesuchFormular(GesuchFormularDto gesuchFormular) {
     this.gesuchFormular = gesuchFormular;
     return this;
@@ -136,12 +176,14 @@ public class GesuchTrancheDto  implements Serializable {
         Objects.equals(this.gueltigAb, gesuchTranche.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchTranche.gueltigBis) &&
         Objects.equals(this.comment, gesuchTranche.comment) &&
+        Objects.equals(this.status, gesuchTranche.status) &&
+        Objects.equals(this.typ, gesuchTranche.typ) &&
         Objects.equals(this.gesuchFormular, gesuchTranche.gesuchFormular);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, comment, gesuchFormular);
+    return Objects.hash(id, gueltigAb, gueltigBis, comment, status, typ, gesuchFormular);
   }
 
   @Override
@@ -153,6 +195,8 @@ public class GesuchTrancheDto  implements Serializable {
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    gesuchFormular: ").append(toIndentedString(gesuchFormular)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -130,4 +130,17 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
     }
 
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGsTrancheChanges(UUID aenderungId) {
+        final var changes = gesuchService.getGsTrancheChanges(aenderungId);
+        return Response.ok(changes).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getSbTrancheChanges(UUID aenderungId) {
+        final var changes = gesuchService.getSbTrancheChanges(aenderungId);
+        return Response.ok(changes).build();
+    }
 }

@@ -5,7 +5,6 @@
   "gesuch-app.cockpit.welcome.titel": "Guten Morgen, {{name}}",
   "gesuch-app.cockpit.gesuch.new": "Antrag erstellen",
   "gesuch-app.cockpit.gesuch.edit": "Bearbeiten",
-  "gesuch-app.cockpit.gesuch.aenderung": "Änderung Melden",
   "gesuch-app.cockpit.periode.einreichfrist.titel": "Einreichefrist",
   "gesuch-app.cockpit.periode.einreichfrist.spaetestens": "bis spätestens",
   "gesuch-app.cockpit.periode.status.titel": "Status des Antrags",
@@ -14,6 +13,8 @@
   "gesuch-app.cockpit.gesuch.semester.herbst": "Herbst",
   "gesuch-app.cockpit.gesuch.semester.fruehling": "Frühjahr",
   "gesuch-app.cockpit.gesuch.img.alt": "Person am Schreibtisch",
+  "gesuch-app.cockpit.aenderung.create": "Änderung melden",
+  "gesuch-app.cockpit.aenderung.edit": "Änderung bearbeiten",
 
   "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft"
 }

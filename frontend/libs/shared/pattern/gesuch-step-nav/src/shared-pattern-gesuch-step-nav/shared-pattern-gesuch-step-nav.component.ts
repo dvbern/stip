@@ -11,7 +11,11 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { GesuchFormStepView, StepState } from '@dv/shared/model/gesuch-form';
+import {
+  GesuchFormStepView,
+  StepState,
+  gesuchFormStepsFieldMap,
+} from '@dv/shared/model/gesuch-form';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav.selectors';
@@ -39,14 +43,20 @@ export class SharedPatternGesuchStepNavComponent {
     WARNING: 'error',
   };
   stepsSig = input<GesuchFormStepView[]>();
-  stepsViewSig = computed(() =>
-    this.stepsSig()?.map((step) => ({
+  stepsViewSig = computed(() => {
+    const { cachedGesuchId, specificTrancheId, tranchenChanges } =
+      this.viewSig();
+    return this.stepsSig()?.map((step) => ({
       ...step,
+      hasChanges: tranchenChanges.original?.affectedSteps.includes(
+        gesuchFormStepsFieldMap[step.route] ?? -1,
+      ),
       routes: [
         '/',
         'gesuch',
         ...step.route.split('/'),
-        this.viewSig().cachedGesuchId,
+        cachedGesuchId,
+        ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
       ],
       isActive: this.route.isActive(`gesuch/${step.route}`, {
         paths: 'subset',
@@ -54,8 +64,8 @@ export class SharedPatternGesuchStepNavComponent {
         fragment: 'ignored',
         matrixParams: 'ignored',
       }),
-    })),
-  );
+    }));
+  });
   viewSig = this.store.selectSignal(sharedPatternGesuchStepNavView);
 
   route = inject(Router);

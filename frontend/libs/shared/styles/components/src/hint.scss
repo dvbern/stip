@@ -1,0 +1,30 @@
+.mat-mdc-form-field-hint-wrapper {
+  .mat-mdc-form-field-hint-spacer {
+    display: none;
+  }
+
+  .mat-mdc-form-field-hint {
+    + .mat-mdc-form-field-hint-spacer {
+      + .mat-mdc-form-field-hint {
+        display: none;
+      }
+    }
+  }
+
+  .zuvor-hint {
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background-color: var(--dv-blue);
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+  }
+}
+
+.mat-mdc-form-field.mat-mdc-form-field-label-always-float
+  .mat-mdc-form-field-hint.zuvor-hint {
+  font-size: 0.875rem;
+}

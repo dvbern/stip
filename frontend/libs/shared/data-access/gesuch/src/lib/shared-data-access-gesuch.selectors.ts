@@ -1,9 +1,11 @@
 import { getRouterSelectors } from '@ngrx/router-store';
 import { createSelector } from '@ngrx/store';
+import { diff } from 'json-diff-ts';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
+  SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
   ValidationMessage,
@@ -29,7 +31,10 @@ import {
   TRANCHE,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
-import { isGesuchFormularReadonly } from '@dv/shared/util/readonly-state';
+import {
+  isGesuchReadonly,
+  isTrancheReadonly,
+} from '@dv/shared/util/readonly-state';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -61,18 +66,22 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   sharedDataAccessGesuchsFeature.selectLoading,
   sharedDataAccessGesuchsFeature.selectGesuch,
   sharedDataAccessGesuchsFeature.selectGesuchFormular,
-  (config, lastUpdate, loading, gesuch, gesuchFormular) => {
+  sharedDataAccessGesuchsFeature.selectSpecificTrancheId,
+  (config, lastUpdate, loading, gesuch, gesuchFormular, specificTrancheId) => {
     return {
       config,
       lastUpdate,
       loading,
       gesuch,
       gesuchFormular,
-      readonly: isGesuchFormularReadonly(
-        gesuch,
-        config.compileTimeConfig?.appType,
-      ),
+      readonly: specificTrancheId
+        ? isTrancheReadonly(
+            gesuch?.gesuchTrancheToWorkWith ?? null,
+            config.compileTimeConfig?.appType,
+          )
+        : isGesuchReadonly(gesuch, config.compileTimeConfig?.appType),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
+      specificTrancheId,
       gesuchId: gesuch?.id,
       allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
     };
@@ -84,8 +93,10 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
   (state) => {
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
     return {
+      specificTrancheId: state.specificTrancheId,
       cachedGesuchId: state.cache.gesuchId,
       cachedGesuchFormular: currentForm,
+      tranchenChanges: prepareTranchenChanges(state.cache.gesuch),
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,
         validations: {
@@ -137,18 +148,21 @@ export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
 
 export const selectSharedDataAccessGesuchCache = createSelector(
   sharedDataAccessGesuchsFeature.selectCache,
-  (cache) => cache,
+  sharedDataAccessGesuchsFeature.selectSpecificTrancheId,
+  (cache, specificTrancheId) => ({ ...cache, specificTrancheId }),
 );
 export const selectSharedDataAccessGesuchCacheView = createSelector(
   selectSharedDataAccessGesuchCache,
   selectSharedDataAccessConfigsView,
-  (cache, config) => {
+  ({ specificTrancheId, ...cache }, config) => {
     return {
       cache,
-      readonly: isGesuchFormularReadonly(
-        cache.gesuch,
-        config.compileTimeConfig?.appType,
-      ),
+      readonly: specificTrancheId
+        ? isTrancheReadonly(
+            cache.gesuch?.gesuchTrancheToWorkWith ?? null,
+            config.compileTimeConfig?.appType,
+          )
+        : isGesuchReadonly(cache.gesuch, config.compileTimeConfig?.appType),
     };
   },
 );
@@ -234,4 +248,32 @@ function getStepsByAppType(
     default:
       return [];
   }
+}
+
+function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
+  if (!gesuch) {
+    return {
+      original: null,
+    };
+  }
+  const allChanges = gesuch.changes?.map((tranche) => {
+    const changes = diff(
+      tranche.gesuchFormular,
+      gesuch.gesuchTrancheToWorkWith.gesuchFormular,
+    );
+    return {
+      hasChanges: changes.length > 0,
+      tranche,
+      affectedSteps: changes.map((c) => c.key),
+      changes,
+    };
+  });
+  if (!allChanges || allChanges.length <= 0) {
+    return {
+      original: null,
+    };
+  }
+  return {
+    original: allChanges[allChanges.length - 1],
+  };
 }

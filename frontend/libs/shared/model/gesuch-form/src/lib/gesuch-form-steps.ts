@@ -165,6 +165,26 @@ export const gesuchFormSteps = {
 };
 export type GesuchFormSteps = keyof typeof gesuchFormSteps;
 
+export const gesuchFormStepsFieldMap: Record<
+  string,
+  SharedModelGesuchFormularProps
+> = {
+  [PERSON.route]: 'personInAusbildung',
+  [AUSBILDUNG.route]: 'ausbildung',
+  [LEBENSLAUF.route]: 'lebenslaufItems',
+  [FAMILIENSITUATION.route]: 'familiensituation',
+  [ELTERN.route]: 'elterns',
+  [ELTERN_STEUER_MUTTER.route]: 'steuerdatenMutter',
+  [ELTERN_STEUER_VATER.route]: 'steuerdatenVater',
+  [ELTERN_STEUER_FAMILIE.route]: 'steuerdaten',
+  [GESCHWISTER.route]: 'geschwisters',
+  [PARTNER.route]: 'partner',
+  [KINDER.route]: 'kinds',
+  [AUSZAHLUNG.route]: 'auszahlung',
+  [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
+  [DOKUMENTE.route]: 'dokuments',
+};
+
 export const findStepIndex = (
   step: SharedModelGesuchFormStep,
   steps: SharedModelGesuchFormStep[],

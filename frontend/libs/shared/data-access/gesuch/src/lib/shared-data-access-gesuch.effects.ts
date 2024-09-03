@@ -175,15 +175,18 @@ export const loadGesuch = createEffect(
 
         if (trancheId) {
           return gesuchService
-            .getGesuch$(
-              { gesuchId: id, gesuchTrancheId: trancheId },
+            .getGsTrancheChanges$(
+              { aenderungId: trancheId },
               undefined,
               undefined,
               navigateIfNotFound,
             )
             .pipe(
               map((gesuch) =>
-                SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
+                SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
+                  gesuch,
+                  trancheId,
+                }),
               ),
               catchError((error) => [
                 SharedDataAccessGesuchEvents.gesuchLoadedFailure({
@@ -411,7 +414,7 @@ export const redirectToGesuchFormNextStep = createEffect(
         ([
           { id, origin },
           { stepsFlow: stepFlowSig },
-          { gesuchFormular, readonly },
+          { gesuchFormular, readonly, specificTrancheId },
         ]) => {
           router.navigate([
             'gesuch',
@@ -419,6 +422,7 @@ export const redirectToGesuchFormNextStep = createEffect(
               .getNextStepOf(stepFlowSig, origin, gesuchFormular, readonly)
               .route.split('/'),
             id,
+            ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
           ]);
         },
       ),

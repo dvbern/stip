@@ -67,7 +67,11 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
     this.store.dispatch(SharedEventGesuchFormAbschluss.init());
   }
 
-  abschliessen(gesuchId: string) {
+  abschliessen() {
+    const { specificTrancheId, gesuch } = this.viewSig();
+    if (!gesuch) {
+      return;
+    }
     const dialogRef = SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.form.abschluss.dialog.title',
       message: 'shared.form.abschluss.dialog.text',
@@ -80,11 +84,19 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.store.dispatch(
-            GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen({
-              gesuchId,
-            }),
-          );
+          if (specificTrancheId) {
+            this.store.dispatch(
+              GesuchAppDataAccessAbschlussApiEvents.trancheAbschliessen({
+                trancheId: specificTrancheId,
+              }),
+            );
+          } else {
+            this.store.dispatch(
+              GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen({
+                gesuchId: gesuch.id,
+              }),
+            );
+          }
         }
       });
   }
