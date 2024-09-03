@@ -6,6 +6,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -60,4 +61,9 @@ public interface GesuchTrancheResource {
     @Path("/{gesuchTrancheId}/requiredDokumente")
     @Produces({ "application/json", "text/plain" })
     Response getRequiredGesuchDokumentTyp(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/validatePages/{gesuchTrancheId}")
+    @Produces({ "application/json" })
+    Response validateGesuchTranchePages(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 }

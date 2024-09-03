@@ -57,12 +57,12 @@ public class ValidationApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                validateGesuchPages()
+                validateGesuchTranchePages()
         );
     }
 
-    public ValidateGesuchPagesOper validateGesuchPages() {
-        return new ValidateGesuchPagesOper(createReqSpec());
+    public ValidateGesuchTranchePagesOper validateGesuchTranchePages() {
+        return new ValidateGesuchTranchePagesOper(createReqSpec());
     }
 
     /**
@@ -79,25 +79,25 @@ public class ValidationApiSpec {
      * 
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return ValidationReportDtoSpec
      */
-    public static class ValidateGesuchPagesOper implements Oper {
+    public static class ValidateGesuchTranchePagesOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/validatePages/{gesuchId}";
+        public static final String REQ_URI = "/gesuchtranche/validatePages/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public ValidateGesuchPagesOper(RequestSpecBuilder reqSpec) {
+        public ValidateGesuchTranchePagesOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/validatePages/{gesuchId}
+         * GET /gesuchtranche/validatePages/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -108,7 +108,7 @@ public class ValidationApiSpec {
         }
 
         /**
-         * GET /gesuch/validatePages/{gesuchId}
+         * GET /gesuchtranche/validatePages/{gesuchTrancheId}
          * @param handler handler
          * @return ValidationReportDtoSpec
          */
@@ -117,14 +117,14 @@ public class ValidationApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public ValidateGesuchPagesOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public ValidateGesuchTranchePagesOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -133,7 +133,7 @@ public class ValidationApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public ValidateGesuchPagesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public ValidateGesuchTranchePagesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -143,7 +143,7 @@ public class ValidationApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public ValidateGesuchPagesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public ValidateGesuchTranchePagesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
