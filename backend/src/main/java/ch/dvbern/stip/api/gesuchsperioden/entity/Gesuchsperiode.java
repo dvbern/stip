@@ -61,7 +61,7 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     private String fiskaljahr;
 
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuchsperiode_gesuchsjahr_id"), nullable = false)
     private @Valid Gesuchsjahr gesuchsjahr;
 

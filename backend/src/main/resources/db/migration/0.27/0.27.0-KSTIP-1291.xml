@@ -16,11 +16,5 @@
                     minValue="1"
                     incrementBy="1"
                     dataType="int"/>
-    
-    <createSequence sequenceName="gesuch_nummer_seq"
-                    startValue="1"
-                    minValue="1"
-                    incrementBy="1"
-                    dataType="int"/>
   </changeSet>
 </databaseChangeLog>

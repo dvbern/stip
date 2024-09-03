@@ -34,7 +34,6 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
-import ch.dvbern.stip.api.common.service.SqidsService;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
@@ -46,7 +45,6 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuch.repo.GesuchNummerSeqRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
@@ -103,8 +101,7 @@ public class GesuchService {
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
     private final GesuchMapperUtil gesuchMapperUtil;
-    private final SqidsService sqidsService;
-    private final GesuchNummerSeqRepository gesuchNummerSeqRepository;
+    private final GesuchNummerService gesuchNummerService;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithCurrentTranche(UUID id) {
@@ -267,7 +264,7 @@ public class GesuchService {
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         createInitialGesuchTranche(gesuch);
-        gesuch.setGesuchNummer(createGesuchNummer());
+        gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
         gesuchRepository.persistAndFlush(gesuch);
         return gesuchMapperUtil.mapWithCurrentTranche(gesuch);
     }
@@ -283,14 +280,6 @@ public class GesuchService {
             .setGesuchFormular(new GesuchFormular());
 
         gesuch.getGesuchTranchen().add(tranche);
-    }
-
-    private String createGesuchNummer() {
-        var nextValue = gesuchNummerSeqRepository.getNextValue();
-        var encoded = sqidsService.encodeLenghtFive(nextValue);
-        var year = LocalDate.now().getYear();
-
-        return String.format("%s.BE.G.%s", year, encoded);
     }
 
     @Transactional
@@ -400,8 +389,8 @@ public class GesuchService {
         // (i.e. no lebenslaufitem is present)
         if (
             validationGroups.contains(PersonInAusbildungPageValidation.class) &&
-            validationGroups.contains(AusbildungPageValidation.class) &&
-            !validationGroups.contains(LebenslaufItemPageValidation.class)
+                validationGroups.contains(AusbildungPageValidation.class) &&
+                !validationGroups.contains(LebenslaufItemPageValidation.class)
         ) {
             validationGroups.add(LebenslaufItemPageValidation.class);
         }
