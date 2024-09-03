@@ -1,3 +1,5 @@
+import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
+
 /* eslint-disable */
 export default {
   displayName: 'shared-util-fn-gesuch-util',
@@ -6,7 +8,8 @@ export default {
   coverageDirectory:
     '../../../../coverage/libs/shared/util-fn/shared-util-fn-gesuch-util',
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': [
+    '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
+    '^.+\\.(html)$': [
       'jest-preset-angular',
       {
         tsconfig: '<rootDir>/tsconfig.spec.json',
