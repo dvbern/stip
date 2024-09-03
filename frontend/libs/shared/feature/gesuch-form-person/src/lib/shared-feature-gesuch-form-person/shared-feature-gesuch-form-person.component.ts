@@ -60,7 +60,6 @@ import {
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
-import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -113,7 +112,6 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     NgbAlert,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    SharedUiFormCountryComponent,
     SharedUiWohnsitzSplitterComponent,
     SharedUiFormAddressComponent,
     SharedPatternDocumentUploadComponent,

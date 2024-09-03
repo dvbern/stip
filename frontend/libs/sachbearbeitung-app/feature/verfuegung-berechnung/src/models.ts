@@ -10,11 +10,13 @@ export type PersoenlicheBerechnung = {
     eigenerHaushalt: boolean;
     nettoerwerbseinkommen: string;
     eoLeistungen: string;
+    alimente: string;
     unterhaltsbeitraege: string;
     kinderUndAusbildungszulagen: string;
     ergaenzungsleistungen: string;
     beitraegeGemeindeInstitution: string;
     steuerbaresVermoegen: string;
+    anrechenbaresVermoegen: string;
     elterlicheLeistung: string;
     einkommenPartner: string;
   };
@@ -48,9 +50,9 @@ export type FamilienBerechnung = {
     totalEinkuenfte: string;
     ergaenzungsleistungen: string;
     steuerbaresVermoegen: string;
-    vermoegensaufrechnung: string;
-    abzuege: string;
-    beitraegeSaule: string;
+    anrechenbaresVermoegen: string;
+    sauele2: string;
+    sauele3: string;
     mietwert: string;
     alimenteOderRenten: string;
     einkommensfreibeitrag: string;

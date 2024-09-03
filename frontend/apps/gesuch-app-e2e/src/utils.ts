@@ -24,7 +24,9 @@ export const initializeTest = () => {
       const cockpit = new CockpitPO(page);
 
       // delete if existing gesuch
-      const fallPromise = page.waitForResponse('**/api/v1/benutzer/prepare/me');
+      const fallPromise = page.waitForResponse(
+        '**/api/v1/gesuch/benutzer/me/gs',
+      );
       await cockpit.goToDashBoard();
       const fallresponse = await fallPromise;
 
