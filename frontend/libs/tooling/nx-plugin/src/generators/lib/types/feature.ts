@@ -4,6 +4,7 @@ import { libraryGenerator } from '@nx/angular/generators';
 
 import { NormalizedSchema, LibTypeGenerator } from '../generator.interface';
 import { extendEslintJson } from './helpers/eslint';
+import { extendJestConfigSwc, extendTestSetupSwc } from './helpers/swc';
 
 export function featureTypeFactory(
   options: NormalizedSchema,
@@ -31,6 +32,9 @@ export function featureTypeFactory(
 
 function postprocess(tree: Tree, options: NormalizedSchema) {
   extendEslintJson(tree, 'angular', options);
+  extendTestSetupSwc(tree, options);
+  extendJestConfigSwc(tree, options);
+
   tree.delete(
     path.join(options.projectRoot, options.nameDasherized, 'README.md'),
   );
