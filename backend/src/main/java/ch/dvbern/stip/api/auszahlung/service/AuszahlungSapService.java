@@ -89,7 +89,6 @@ public class AuszahlungSapService {
 
         String xmlRequest = SoapUtils.buildXmlRequest(request,ImportStatusReadRequest.class, SapEndpointName.IMPORT_STATUS);
         String xmlResponse = importStatusReadClient.getImportStatus(xmlRequest);
-
         return SoapUtils.parseSoapResponse(xmlResponse, ImportStatusReadResponse.class);
     }
 
@@ -105,14 +104,17 @@ public class AuszahlungSapService {
 
     public Response createBusinessPartner(@Valid AuszahlungDto dto){
         try{
-            Auszahlung data = auszahlungMapper.toEntity(dto);
+            Auszahlung auszahlung = auszahlungMapper.toEntity(dto);
+
+
+
             String response = businessPartnerCreateClient.createBusinessPartner(
                 buildPayload(
                     SST_009_BusinessPartnerCreate,
                     SAPUtils.generateDeliveryId(),
                     null,
                     SAPUtils.generateExtId(),
-                    data,null
+                    auszahlung,null
                 ));
             return Response.status(HttpStatus.SC_OK).entity(response).build();
         }
