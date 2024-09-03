@@ -12,6 +12,7 @@ import {
   LebenslaufItem,
   Partner,
   PersonInAusbildung,
+  Steuerdaten,
 } from '@dv/shared/model/gesuch';
 import { expectStepTitleToContainText } from '@dv/shared/util-fn/e2e-util';
 
@@ -25,6 +26,7 @@ import { KinderPO } from '../../po/kinder.po';
 import { LebenslaufPO } from '../../po/lebenslauf.po';
 import { PartnerPO } from '../../po/partner.po';
 import { PersonPO } from '../../po/person.po';
+import { SteuerdatenPO } from '../../po/steuerdaten.po';
 import { initializeTest } from '../../utils';
 
 const adresse: Adresse = {
@@ -136,11 +138,8 @@ const vater: Eltern = {
   telefonnummer: '0041791111111',
   geburtsdatum: '25.12.1969',
   ausweisbFluechtling: false,
-  ergaenzungsleistungAusbezahlt: false,
-  sozialhilfebeitraegeAusbezahlt: false,
-  id: '',
-  wohnkosten: 100,
   elternTyp: 'VATER',
+  id: '',
 };
 
 const mutter: Eltern = {
@@ -152,11 +151,30 @@ const mutter: Eltern = {
   telefonnummer: '0041791111111',
   geburtsdatum: '25.12.1968',
   ausweisbFluechtling: false,
-  ergaenzungsleistungAusbezahlt: false,
-  sozialhilfebeitraegeAusbezahlt: false,
-  id: '',
-  wohnkosten: 100,
   elternTyp: 'VATER',
+  id: '',
+};
+
+const steuerdaten: Steuerdaten = {
+  steuerdatenTyp: 'FAMILIE',
+  totalEinkuenfte: 120000,
+  eigenmietwert: 4893,
+  isArbeitsverhaeltnisSelbstaendig: false,
+  kinderalimente: 1000,
+  vermoegen: 50010,
+  ergaenzungsleistungen: 300,
+  ergaenzungsleistungenPartner: 100,
+  sozialhilfebeitraege: 200,
+  sozialhilfebeitraegePartner: 100,
+  wohnkosten: 3021,
+  steuernBund: 24000,
+  steuernKantonGemeinde: 12000,
+  fahrkosten: 400,
+  verpflegung: 820,
+  verpflegungPartner: 300,
+  steuerjahr: 2023,
+  veranlagungsCode: 80,
+  fahrkostenPartner: 200,
 };
 
 const bruder: Geschwister = {
@@ -237,9 +255,13 @@ test.describe('Neues gesuch erstellen', () => {
     await elternPO.elems.buttonContinue.click();
 
     // Step 5.2: Steuerdaten Eltern =================================================
-    await expectStepTitleToContainText('Steuerdaten für', page);
-    // Skipping for now as no .po for steuerdaten exists yet
-    await page.getByTestId('step-nav-geschwister').click();
+    await expectStepTitleToContainText('Steuerdaten', page);
+    const steuerdatenPO = new SteuerdatenPO(page);
+    await expect(steuerdatenPO.elems.loading).toBeHidden();
+
+    await steuerdatenPO.fillSteuerdaten(steuerdaten);
+
+    await steuerdatenPO.elems.buttonSaveContinue.click();
 
     // Step 6: Geschwister  ========================================================
     await expectStepTitleToContainText('Geschwister', page);

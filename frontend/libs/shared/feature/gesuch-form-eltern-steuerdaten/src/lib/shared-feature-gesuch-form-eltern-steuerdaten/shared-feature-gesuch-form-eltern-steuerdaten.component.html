@@ -1,10 +1,11 @@
 @if (viewSig().loading) {
-  <dv-shared-ui-loading data-testid="form-eltern-loading"></dv-shared-ui-loading>
+  <dv-shared-ui-loading data-testid="form-eltern-steuerdaten-loading"></dv-shared-ui-loading>
 } @else {
   <form
     [formGroup]="form"
     novalidate
     class="mt-4"
+    data-testid="form-eltern-steuerdaten-form"
     (ngSubmit)="handleSave()"
     [dvSharedUiFormReadonly]="viewSig().readonly"
     (gotReenabledSig)="gotReenabled$.next({})"
@@ -218,7 +219,7 @@
             <mat-label>{{ 'shared.form.eltern-steuerdaten.sozialhilfebeitraege.MUTTER.label' | translate }}</mat-label>
             <input
               formControlName="sozialhilfebeitraegePartner"
-              data-testid="form-eltern-steuerdaten.sozialhilfePartner"
+              data-testid="form-eltern-steuerdaten.sozialhilfebeitraegePartner"
               matInput
               [maskito]="maskitoNumber"
               type="text"
