@@ -8,7 +8,8 @@ export function extendTestSetupSwc(tree: Tree, options: NormalizedSchema) {
   const testSetupContent = tree.read(testSetupPath, 'utf-8');
 
   if (!testSetupContent) {
-    throw new Error(`Could not read test setup file at ${testSetupPath}`);
+    console.warn(`WARNING: Could not read test setup file at ${testSetupPath}`);
+    return;
   }
   if (testSetupContent.includes('reflect-metadata')) {
     return;
@@ -28,7 +29,10 @@ export function extendJestConfigSwc(tree: Tree, options: NormalizedSchema) {
   const jestConfigContent = tree.read(jestConfigPath, 'utf-8');
 
   if (!jestConfigContent) {
-    throw new Error(`Could not read jest config file at ${jestConfigPath}`);
+    console.warn(
+      `WARNING: Could not read jest config file at ${jestConfigPath}`,
+    );
+    return;
   }
 
   if (jestConfigContent.includes('swcAngularJestTransformer()')) {
@@ -59,7 +63,7 @@ export function extendJestConfigSwc(tree: Tree, options: NormalizedSchema) {
       }
       return `transform: {
         '^.+\\.[tj]s$': swcAngularJestTransformer(),
-      },`;
+      }`;
     },
   );
 

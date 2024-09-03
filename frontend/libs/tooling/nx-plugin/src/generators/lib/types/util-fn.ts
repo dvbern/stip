@@ -23,4 +23,7 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
   tree.delete(
     path.join(options.projectRoot, options.nameDasherized, 'package.json'),
   );
+  tree.delete(
+    path.join(options.projectRoot, options.nameDasherized, 'README.md'),
+  );
 }
