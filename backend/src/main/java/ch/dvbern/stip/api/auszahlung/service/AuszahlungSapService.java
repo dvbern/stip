@@ -1,10 +1,13 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadRequest;
+import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadResponse;
+import ch.dvbern.stip.api.auszahlung.sap.importstatus.SenderParms;
+import ch.dvbern.stip.api.auszahlung.sap.util.SapEndpointName;
+import ch.dvbern.stip.api.auszahlung.sap.util.SoapUtils;
 import ch.dvbern.stip.api.auszahlung.service.sap.SAPUtils;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
-import ch.dvbern.stip.generated.dto.AuszahlungImportStatusLogDto;
-import ch.dvbern.stip.generated.dto.GetAuszahlungImportStatusResponseDto;
 import io.quarkus.qute.Location;
 import io.quarkus.qute.Template;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -13,16 +16,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
+import jakarta.xml.soap.SOAPException;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import java.io.StringReader;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -74,26 +78,19 @@ public class AuszahlungSapService {
         return template.data("data", dataMap).render();
     }
 
-    private GetAuszahlungImportStatusResponseDto getAndParseGetSAPImportStatusResponse(Integer deliveryId) throws JAXBException {
-        GetAuszahlungImportStatusRequest data = new GetAuszahlungImportStatusRequest();
-        data.setDeliveryId(deliveryId);
-        data.setSysId(sysid);
-        String response = importStatusReadClient.getImportStatus(buildPayload(
-            SST_073_ImportStatusRead,
-            String.valueOf(deliveryId),
-            null,
-            null,
-            null,null));
-        JAXBContext context = JAXBContext.newInstance(GetAuszahlungImportStatusResponse.class);
-        String shortendResponse = response.substring(response.indexOf("<POSITION>"), response.indexOf("</POSITION>")+ "</POSITION>".length());
-        StringReader reader = new StringReader(shortendResponse);
-        final var parsed = (GetAuszahlungImportStatusResponse) context.createUnmarshaller()
-            .unmarshal(reader);
-        GetAuszahlungImportStatusResponseDto result = new GetAuszahlungImportStatusResponseDto();
-        result.setStatus(parsed.getSTATUS());
-        List<AuszahlungImportStatusLogDto> logs = parsed.getLOGS().stream().map(x -> new AuszahlungImportStatusLogDto(x.getDATETIME(), x.getMESSAGE())).toList();
-        result.setLogs(logs);
-        return result;
+    private ImportStatusReadResponse  getAndParseGetSAPImportStatusResponse(Integer deliveryId) throws JAXBException, SOAPException, IOException {
+        ImportStatusReadRequest request = new ImportStatusReadRequest();
+        SenderParms senderParms = new SenderParms();
+        senderParms.setSYSID(BigInteger.valueOf(sysid));
+        request.setSENDER(senderParms);
+        ImportStatusReadRequest.FILTERPARMS filterparms = new ImportStatusReadRequest.FILTERPARMS();
+        filterparms.setDELIVERYID(BigDecimal.valueOf(deliveryId));
+        request.setFILTERPARMS(filterparms);
+
+        String xmlRequest = SoapUtils.buildXmlRequest(request,ImportStatusReadRequest.class, SapEndpointName.IMPORT_STATUS);
+        String xmlResponse = importStatusReadClient.getImportStatus(xmlRequest);
+
+        return SoapUtils.parseSoapResponse(xmlResponse, ImportStatusReadResponse.class);
     }
 
     public Response getImportStatus(@Valid @Positive @NotNull Integer deliveryId){
@@ -101,7 +98,7 @@ public class AuszahlungSapService {
             return Response.status(HttpStatus.SC_OK).entity(getAndParseGetSAPImportStatusResponse(deliveryId)).build();
 
         }
-        catch(WebApplicationException | JAXBException ex){
+        catch(WebApplicationException | JAXBException | SOAPException | IOException ex){
             return Response.status(HttpStatus.SC_BAD_REQUEST).build();
         }
     }

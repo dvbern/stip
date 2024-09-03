@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
+import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.auszahlung.service.*;
 import ch.dvbern.stip.api.auszahlung.service.sap.SAPUtils;
 import ch.dvbern.stip.api.auszahlung.service.sap.SapMessageType;
@@ -98,8 +99,8 @@ class AuszahlungResourceImplTest {
         when(importStatusReadClient.getImportStatus(any())).thenReturn(xml);
         final var response = auszahlungSapService.getImportStatus(EXAMPLE_DELIVERY_ID);
         assertEquals(HttpStatus.SC_OK,response.getStatus());
-        final var responseDto = (GetAuszahlungImportStatusResponseDto) response.getEntity();
-        assertFalse(responseDto.getLogs().isEmpty());
+        final var responseDto = (ImportStatusReadResponse) response.getEntity();
+        assertEquals("S",responseDto.getRETURNCODE().get(0).getTYPE());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -110,7 +111,21 @@ class AuszahlungResourceImplTest {
         assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(-1));
         assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(0));
         assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(null));
+    }
 
+    @TestAsSachbearbeiter
+    @Test
+    void getImportStatusDeliveryIdNotFoundTest() throws IOException {
+        String xml = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/getImportStatusDeliveryIdNotFoundExampleResponse.xml"),
+            "UTF-8"
+        );
+        when(importStatusReadClient.getImportStatus(any())).thenReturn(xml);
+        final var response = auszahlungSapService.getImportStatus(EXAMPLE_DELIVERY_ID);
+        assertEquals(HttpStatus.SC_OK,response.getStatus());
+        final var responseDto = (ImportStatusReadResponse) response.getEntity();
+        assertEquals("E",responseDto.getRETURNCODE().get(0).getTYPE());
+        assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
 

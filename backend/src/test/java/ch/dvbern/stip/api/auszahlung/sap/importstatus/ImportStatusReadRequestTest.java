@@ -24,7 +24,6 @@ class ImportStatusReadRequestTest {
     @Test
     void CreateImportStatusReadRequestTest() throws JAXBException, SOAPException, IOException {
         XMLUnit.setIgnoreWhitespace(true);
-        JAXBContext contextObj = JAXBContext.newInstance(ImportStatusReadRequest.class);
         ImportStatusReadRequest request = new ImportStatusReadRequest();
         ImportStatusReadRequest.FILTERPARMS filterparms = new ImportStatusReadRequest.FILTERPARMS();
         filterparms.setDELIVERYID(BigDecimal.valueOf(2761));
@@ -32,7 +31,7 @@ class ImportStatusReadRequestTest {
         senderParms.setSYSID(BigInteger.valueOf(2080));
         request.setFILTERPARMS(filterparms);
         request.setSENDER(senderParms);
-        final var actual = SoapUtils.buildXmlRequest(request, contextObj, SapEndpointName.IMPORT_STATUS);
+        final var actual = SoapUtils.buildXmlRequest(request, ImportStatusReadRequest.class, SapEndpointName.IMPORT_STATUS);
         assertNotNull(actual);
         assertThat(actual, CompareMatcher.isSimilarTo(EXPECTED));
 
