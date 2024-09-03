@@ -40,6 +40,7 @@
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
     <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
     <kie.version>8.41.0.Final</kie.version>
+    <sqids.version>0.1.0</sqids.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -312,6 +313,11 @@
       <groupId>org.kie</groupId>
       <artifactId>kie-dmn-core</artifactId>
       <version>${kie.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sqids</groupId>
+      <artifactId>sqids</artifactId>
+      <version>${sqids.version}</version>
     </dependency>
   </dependencies>
   <build>
