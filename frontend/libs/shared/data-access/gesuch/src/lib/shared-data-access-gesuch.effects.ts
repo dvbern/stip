@@ -586,6 +586,6 @@ const toAusbildung = (ausbildung: ViewOrUpdateData<'ausbildung'>) => {
   return {
     ...ausbildung,
     ausbildungsgang: undefined,
-    ausbildungsgangId: ausbildung.ausbildungsgang.id,
+    ausbildungsgangId: ausbildung.ausbildungsgang?.id,
   };
 };
