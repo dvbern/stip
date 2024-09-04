@@ -32,7 +32,7 @@ import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-s
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
-import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
+import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -94,11 +94,11 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   });
 
   constructor() {
-    getLatestGesuchIdFromGesuchOnUpdate$(this.viewSig)
+    getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
-      .subscribe((gesuchId) => {
+      .subscribe((gesuchTrancheId) => {
         this.store.dispatch(
-          SharedDataAccessGesuchEvents.gesuchValidateSteps({ id: gesuchId }),
+          SharedDataAccessGesuchEvents.gesuchValidateSteps({ gesuchTrancheId }),
         );
       });
   }

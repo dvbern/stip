@@ -38,6 +38,7 @@ import {
   AusbildungUpdate,
   GesuchFormularUpdate,
   GesuchService,
+  GesuchTrancheService,
   GesuchUpdate,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
@@ -342,14 +343,22 @@ export const removeGesuch = createEffect(
 );
 
 export const gesuchValidateSteps = createEffect(
-  (events$ = inject(Actions), gesuchService = inject(GesuchService)) => {
+  (
+    events$ = inject(Actions),
+    gesuchTranchenService = inject(GesuchTrancheService),
+  ) => {
     return events$.pipe(
       ofType(SharedDataAccessGesuchEvents.gesuchValidateSteps),
-      switchMap(({ id: gesuchId }) =>
-        gesuchService
-          .validateGesuchPages$({ gesuchId }, undefined, undefined, {
-            context: shouldIgnoreNotFoundErrorsIf(true),
-          })
+      switchMap(({ gesuchTrancheId }) =>
+        gesuchTranchenService
+          .validateGesuchTranchePages$(
+            { gesuchTrancheId },
+            undefined,
+            undefined,
+            {
+              context: shouldIgnoreNotFoundErrorsIf(true),
+            },
+          )
           .pipe(
             switchMap((validation) => [
               SharedDataAccessGesuchEvents.gesuchValidationSuccess({
