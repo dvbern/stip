@@ -202,6 +202,9 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(nullable = false, name = "reduzierung_des_grundbedarfs")
     private Integer reduzierungDesGrundbedarfs;
 
+    @Column(nullable = false, name = "limite_alter_antragssteller_halbierung_elternbeitrag")
+    private Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
+
     @Min(0)
     @Max(11)
     @Column(name = "zweiter_auszahlungstermin_monat", nullable = false)

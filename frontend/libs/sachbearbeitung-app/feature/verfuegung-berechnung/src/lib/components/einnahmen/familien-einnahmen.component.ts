@@ -90,7 +90,7 @@ import { FamilienBerechnung } from '../../../models';
         <div class="text-muted">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
-              | translate: { maxSaeule3a: 7000 }
+              | translate: einnahmenSig()
           }}
         </div>
       </div>

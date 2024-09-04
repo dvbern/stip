@@ -58,7 +58,6 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
             )
             .eigenmietwert(elternteil.getEigenmietwert())
             .alimente(elternteil.getAlimente())
-            .einkommensfreibetrag(berechnungsRequest.getStammdaten().getEinkommensfreibetrag())
             .einnahmenFamilienbudget(einnahmenFamilienbudget)
             .grundbedarf(elternteil.getGrundbedarf())
             .effektiveWohnkosten(elternteil.getEffektiveWohnkosten())

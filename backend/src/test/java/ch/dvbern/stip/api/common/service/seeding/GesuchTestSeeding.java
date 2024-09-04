@@ -114,6 +114,7 @@ public class GesuchTestSeeding extends Seeder {
             .setAnzahlWochenLehre(1)
             .setAnzahlWochenSchule(1)
             .setVermoegensanteilInProzent(15)
+            .setLimiteAlterAntragsstellerHalbierungElternbeitrag(25)
             .setReduzierungDesGrundbedarfs(2754)
             .setZweiterAuszahlungsterminMonat(6)
             .setZweiterAuszahlungsterminTag(1);

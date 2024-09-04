@@ -21,12 +21,14 @@ import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
+import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.FamilienBudgetresultatMapper;
 import ch.dvbern.stip.berechnung.dto.PersoenlichesBudgetResultatMapper;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
 import ch.dvbern.stip.berechnung.util.DmnRequestContextUtil;
+import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
@@ -54,6 +56,7 @@ public class BerechnungService {
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
     private final Instance<PersoenlichesBudgetResultatMapper> persoenlichesBudgetResultatMappers;
     private final Instance<FamilienBudgetresultatMapper> familienBudgetresultatMappers;
+    private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final DMNService dmnService;
     private final TenantService tenantService;
 
@@ -85,7 +88,9 @@ public class BerechnungService {
         }).findFirst();
 
         if (mapper.isEmpty()) {
-            throw new IllegalArgumentException("Cannot find a PersoenlichesBudgetResultatMapper for version " + majorVersion + '.' + minorVersion);
+            throw new IllegalArgumentException(
+                "Cannot find a PersoenlichesBudgetResultatMapper for version " + majorVersion + '.' + minorVersion
+            );
         }
         final var decisionResults = berechnungResult.getDecisionEventList().stream().filter(
             afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("PersoenlichesbudgetBerechnet")
@@ -129,7 +134,9 @@ public class BerechnungService {
         }).findFirst();
 
         if (mapper.isEmpty()) {
-            throw new IllegalArgumentException("Cannot find a FamilienBudgetresultatMapper for version " + majorVersion + '.' + minorVersion);
+            throw new IllegalArgumentException(
+                "Cannot find a FamilienBudgetresultatMapper for version " + majorVersion + '.' + minorVersion
+            );
         }
         final var decisionResults = berechnungResult.getDecisionEventList().stream().filter(
             afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("Familienbudget_" + budgetToUse)
@@ -163,6 +170,27 @@ public class BerechnungService {
             familienbudgetBerechnet,
             kinderProzente
         );
+    }
+
+    private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(
+        final DmnRequest berechnungRequest,
+        final int majorVersion,
+        final int minorVersion
+    ) {
+        final var mapper = berechnungsStammdatenMappers.stream().filter(berechnungsStammdatenMapper -> {
+            final var versionAnnotation = berechnungsStammdatenMapper.getClass().getAnnotation(DmnModelVersion.class);
+            return (versionAnnotation != null) &&
+                (versionAnnotation.major() == majorVersion) &&
+                (versionAnnotation.minor() == minorVersion);
+        }).findFirst();
+
+        if (mapper.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Cannot find a BerechnungsStammdatenMapper for version " + majorVersion + '.' + minorVersion
+            );
+        }
+
+        return mapper.get().mapFromRequest(berechnungRequest);
     }
 
     private int calcMonthsBetween(final LocalDate from, final LocalDate to) {
@@ -333,6 +361,11 @@ public class BerechnungService {
             berechnung,
             gesuchTranche.getGueltigkeit().getGueltigAb(),
             gesuchTranche.getGueltigkeit().getGueltigBis(),
+            berechnungsStammdatenFromRequest(
+                stipendienBerechnungsRequestForVater,
+                majorVersion,
+                minorVersion
+            ),
             persoenlichesBudgetresultatFromRequest(
                 stipendienBerechnungsRequestForVater,
                 stipendienCalculatedForVater,

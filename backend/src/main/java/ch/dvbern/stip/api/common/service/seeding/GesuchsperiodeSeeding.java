@@ -138,6 +138,7 @@ GesuchsperiodeSeeding extends Seeder{
             .setAnzahlWochenLehre(47)
             .setAnzahlWochenSchule(38)
             .setVermoegensanteilInProzent(15)
+            .setLimiteAlterAntragsstellerHalbierungElternbeitrag(25)
             .setReduzierungDesGrundbedarfs(2754)
             .setZweiterAuszahlungsterminMonat(6)
             .setZweiterAuszahlungsterminTag(1);

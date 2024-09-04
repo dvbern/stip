@@ -163,6 +163,10 @@ export class GesuchsperiodeDetailComponent {
     anzahlWochenLehre: [<string | null>null, [Validators.required]],
     anzahlWochenSchule: [<string | null>null, [Validators.required]],
     vermoegensanteilInProzent: [<string | null>null, [Validators.required]],
+    limiteAlterAntragsstellerHalbierungElternbeitrag: [
+      <string | null>null,
+      [Validators.required],
+    ],
   });
 
   gesuchsjahrChangedSig = toSignal(
@@ -236,6 +240,7 @@ export class GesuchsperiodeDetailComponent {
     'anzahlWochenLehre',
     'anzahlWochenSchule',
     'vermoegensanteilInProzent',
+    'limiteAlterAntragsstellerHalbierungElternbeitrag',
   ]);
 
   constructor() {
