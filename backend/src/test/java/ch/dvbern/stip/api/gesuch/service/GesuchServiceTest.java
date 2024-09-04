@@ -18,7 +18,6 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -72,8 +71,6 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.LEDIG;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -1109,30 +1106,6 @@ class GesuchServiceTest {
             steuerdatenTab.getSteuerjahr(),
             Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
         );
-    }
-
-    @Test
-    void pageValidation() {
-        final var gesuch = new Gesuch();
-        final var gesuchTranche = new GesuchTranche();
-        final var gesuchFormular = new GesuchFormular();
-        gesuchTranche.setGesuch(gesuch);
-        gesuchFormular.setTranche(gesuchTranche);
-        var reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        assertThat(reportDto.getValidationErrors(), Matchers.is(empty()));
-
-        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
-        reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        var violationCount = reportDto.getValidationErrors().size();
-        assertThat(reportDto.getValidationErrors(), Matchers.is(not(empty())));
-
-        gesuchFormular.setFamiliensituation(
-            new Familiensituation()
-                .setElternteilUnbekanntVerstorben(true)
-                .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
-        );
-        reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        assertThat(reportDto.getValidationErrors().size(), Matchers.is(greaterThan(violationCount)));
     }
 
     @TestAsSachbearbeiter

@@ -918,25 +918,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuch
       summary: Returns the Gesuch with the given Id
-  '/gesuch/validatePages/{gesuchId}':
-    get:
-      tags:
-        - Gesuch
-        - Validation
-      parameters:
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationReport'
-          description: Die Validierung wurde erflogreich durchgeführt
-      operationId: validateGesuchPages
   '/dokument/download':
     parameters:
       - name: token
@@ -1412,6 +1393,25 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createOrUpdateSachbearbeiterStammdaten
+  '/gesuchtranche/validatePages/{gesuchTrancheId}':
+    get:
+      tags:
+        - GesuchTranche
+        - Validation
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationReport'
+          description: Die Validierung wurde erflogreich durchgeführt
+      operationId: validateGesuchTranchePages
   '/gesuchtranche/{gesuchTrancheId}/dokumente':
     parameters:
       - name: gesuchTrancheId

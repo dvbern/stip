@@ -55,3 +55,24 @@ export function getLatestGesuchIdFromGesuchOnUpdate$(
     map(([, gesuchId]) => gesuchId),
   );
 }
+
+export function getLatestTrancheIdFromGesuchOnUpdate$(
+  viewSig: Signal<{
+    gesuch?: { id: string } | null;
+    trancheId?: string | null;
+    lastUpdate: string | null;
+  }>,
+) {
+  return combineLatest([
+    // Get the last update time distinctly
+    toObservable(viewSig).pipe(map(({ lastUpdate }) => lastUpdate)),
+    // Get the latest gesuch id
+    getLatestTrancheIdFromGesuch$(viewSig).pipe(),
+  ]).pipe(
+    distinctUntilChanged(
+      ([lastUpdate1, trancheId1], [lastUpdate2, trancheId2]) =>
+        lastUpdate1 === lastUpdate2 && trancheId1 === trancheId2,
+    ),
+    map(([, trancheId]) => trancheId),
+  );
+}

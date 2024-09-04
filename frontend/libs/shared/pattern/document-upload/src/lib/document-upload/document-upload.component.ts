@@ -75,7 +75,7 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
 
         this.globalStore.dispatch(
           SharedDataAccessGesuchEvents.gesuchValidateSteps({
-            id: this.optionsSig().trancheId,
+            gesuchTrancheId: this.optionsSig().trancheId,
           }),
         );
 
