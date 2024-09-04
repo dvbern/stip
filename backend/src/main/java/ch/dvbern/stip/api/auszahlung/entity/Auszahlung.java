@@ -4,6 +4,7 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.IbanConstraint;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +21,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import java.math.BigInteger;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
@@ -60,4 +63,8 @@ public class Auszahlung extends AbstractMandantEntity {
     @Column(name = "iban", nullable = false)
     @IbanConstraint
     private String iban;
+
+    @Nullable
+    @Column(name = "sap_business_partner_id", nullable = true)
+    private BigInteger sapBusinessPartnerId;
 }
