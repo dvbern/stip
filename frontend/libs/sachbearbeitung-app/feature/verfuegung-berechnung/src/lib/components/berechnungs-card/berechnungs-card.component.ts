@@ -78,9 +78,11 @@ import { Berechnung } from '../../../models';
                     berechnung.typ +
                     '.total' | translate
                 }}
-                <span class="text-nowrap">{{
-                  berechnung.total | formatChfNegative
-                }}</span>
+                <span
+                  class="text-nowrap"
+                  [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'"
+                  >{{ berechnung.total | formatChfNegative }}</span
+                >
               </div>
             </div>
           </div>

@@ -5,7 +5,7 @@ import { SmallImageFile, selectMatRadio } from '@dv/shared/util-fn/e2e-util';
 import { PersonPO } from '../../po/person.po';
 import { initializeTest } from '../../utils';
 
-const { test } = initializeTest();
+const { test } = initializeTest('GESUCHSTELLER');
 
 test.describe('Dokument upload', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

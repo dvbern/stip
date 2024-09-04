@@ -1,8 +1,10 @@
-import { test as base, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 
-import { CockpitPO } from './po/cockpit.po';
+import { createTest } from '@dv/shared/util-fn/e2e-util';
 
-const test = base.extend<{ cockpit: CockpitPO }>({
+import { CockpitPO } from '../po/cockpit.po';
+
+const test = createTest('SACHBEARBEITER').extend<{ cockpit: CockpitPO }>({
   cockpit: async ({ page }, use) => {
     const cockpit = new CockpitPO(page);
 

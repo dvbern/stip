@@ -5,23 +5,13 @@ import {
   Locator,
   Page,
   PlaywrightWorkerArgs,
-  Project,
-  defineConfig,
-  devices,
   expect,
-  test,
 } from '@playwright/test';
-import { addSeconds } from 'date-fns';
+// Don't know why it fails, because the package is referenced in the package.json
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import seedRandom from 'seedrandom';
 
-import {
-  AuthenticatedTest,
-  BEARER_COOKIE,
-  KeycloakResponse,
-  REFRESH_COOKIE,
-  SetupTest,
-  authenticatedTestOptions,
-  setupTestOptions,
-} from './playwright.config.base';
+import { BEARER_COOKIE } from './playwright.config.base';
 
 export const getStepTitle = async (page: Page) => {
   return page.getByTestId('step-title');
@@ -59,49 +49,7 @@ export const deleteGesuch = async (
   apiContext: APIRequestContext,
   gesuchId: string,
 ) => {
-  await apiContext.delete(`/api/v1/gesuch/${gesuchId}`);
-};
-
-const usedStorageStatePaths = new Set<string>();
-/**
- * Create a test configuration with setup and test project
- */
-export const createTestConfigWithSetup = (config: {
-  dir: string;
-  name: string;
-  storageStatePath: string;
-  fixtures: AuthenticatedTest;
-}): [
-  ReturnType<typeof defineConfig<SetupTest<AuthenticatedTest>>>,
-  Project,
-] => {
-  if (usedStorageStatePaths.has(config.storageStatePath)) {
-    throw new Error(
-      `Storage state path must be unique, ${config.storageStatePath} is already has already been used`,
-    );
-  }
-  usedStorageStatePaths.add(config.storageStatePath);
-  const { dir, name, storageStatePath, fixtures } = config;
-  return [
-    {
-      name: `${name}-setup`,
-      testMatch: /.*\.setup\.ts/,
-      use: {
-        ...fixtures,
-        storageStatePath,
-      },
-    },
-    {
-      name,
-      testDir: `src/tests/${dir}`,
-      use: {
-        ...devices['Desktop Chrome'],
-        ...fixtures,
-        storageState: storageStatePath,
-      },
-      dependencies: [`${name}-setup`],
-    },
-  ];
+  return await apiContext.delete(`/api/v1/gesuch/${gesuchId}`);
 };
 
 /**
@@ -146,60 +94,53 @@ export const createTestContexts = async (options: {
 export type TestContexts = Awaited<ReturnType<typeof createTestContexts>>;
 
 /**
- * Authenticate a user with Keycloak using given fixture options
+ * Generates a random SVN number in the format 756.4849.0227.44
  */
-export const authenticateUser = () => {
-  test.extend<SetupTest<AuthenticatedTest>>(
-    setupTestOptions(authenticatedTestOptions),
-  )('authenticate', async ({ page, authentication, storageStatePath }) => {
-    const username = process.env[`E2E_${authentication}_USERNAME`];
-    const password = process.env[`E2E_${authentication}_PASSWORD`];
-    if (!username || !password) {
-      throw new Error(
-        `E2E_${authentication}_USERNAME and E2E_${authentication}_PASSWORD environment variables are required`,
-      );
-    }
+export const generateSVN = (seed: string) => {
+  const countryCode = [7, 5, 6];
 
-    await page.goto('');
-    await page.getByLabel('Username or email').fill(username);
-    await page.getByLabel('Password', { exact: true }).fill(password);
+  const rng = seedRandom(seed);
+  const randomNumbers = Array.from({ length: 9 }, () => Math.floor(rng() * 10));
+  const ssnWithoutCheckDigit = countryCode.concat(randomNumbers);
+  const checkDigit = getCheckDigit(ssnWithoutCheckDigit);
+  const unformattedSSN = ssnWithoutCheckDigit.concat(checkDigit);
+  const ssn = ssnFormatter(unformattedSSN);
+  return ssn;
+};
 
-    const responsePromise = page.waitForResponse(
-      '**/realms/bern/protocol/openid-connect/token',
-    );
+/**
+ * https://github.com/teaddict/swiss-ssn-avs-ahv/blob/master/src/swiss-ssn.js
+ */
 
-    await page.getByRole('button', { name: 'Sign In' }).click();
+const getCheckDigit = (ssn: number[]) => {
+  function isEven(x: number) {
+    return x % 2 == 0;
+  }
 
-    const response = await responsePromise;
-    const url = new URL(response.url());
-    const body: KeycloakResponse = await response.json();
+  let total = 0;
 
-    const unixTime = addSeconds(Date.now(), body.expires_in).getTime() / 1000;
+  for (let i = 0; i < 12; i += 1) {
+    if (isEven(i)) total += ssn[i];
+    else total += ssn[i] * 3;
+  }
 
-    await page.context().addCookies([
-      {
-        name: BEARER_COOKIE,
-        value: body.access_token,
-        domain: url.host,
-        path: '/realms/bern/',
-        expires: unixTime,
-        httpOnly: false,
-        secure: true,
-        sameSite: 'Lax',
-      },
-      {
-        name: REFRESH_COOKIE,
-        value: body.refresh_token,
-        domain: url.host,
-        path: '/realms/bern/',
-        expires: -1,
-        httpOnly: false,
-        secure: true,
-        sameSite: 'Lax',
-      },
-    ]);
+  let expectedCheckDigit = 0;
+  if (total % 10 != 0) {
+    const roundTen = Math.floor(total / 10) * 10 + 10;
+    expectedCheckDigit = roundTen - total;
+  }
 
-    // End of authentication steps.
-    await page.context().storageState({ path: storageStatePath });
-  });
+  return expectedCheckDigit;
+};
+
+const ssnFormatter = (ssn: number[]) => {
+  const ssnString = ssn.map(String);
+  const formattedSSN =
+    '756.' +
+    ssnString.slice(3, 7).join('') +
+    '.' +
+    ssnString.slice(7, 11).join('') +
+    '.' +
+    ssnString.slice(11, 13).join('');
+  return formattedSSN;
 };

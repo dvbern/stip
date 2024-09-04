@@ -1,9 +1,7 @@
-import { test as base } from '@playwright/test';
-
 import {
-  AuthenticatedTest,
+  E2eUser,
   TestContexts,
-  authenticatedTestOptions,
+  createTest,
   createTestContexts,
   deleteGesuch,
 } from '@dv/shared/util-fn/e2e-util';
@@ -15,11 +13,10 @@ import { CockpitPO } from './po/cockpit.po';
  *
  * It also registers a beforeAll to initialize the API Contexts and afterAll hook to delete the created gesuch
  */
-export const initializeTest = () => {
+export const initializeTest = (authType: E2eUser) => {
   let contexts: TestContexts;
   let gesuchId: string;
-  const test = base.extend<{ cockpit: CockpitPO } & AuthenticatedTest>({
-    ...authenticatedTestOptions,
+  const test = createTest(authType).extend<{ cockpit: CockpitPO }>({
     cockpit: async ({ page }, use) => {
       const cockpit = new CockpitPO(page);
 
@@ -33,10 +30,8 @@ export const initializeTest = () => {
       const fallbody = await fallresponse.json();
       gesuchId = fallbody.length > 0 ? fallbody[0].id : undefined;
       if (gesuchId) {
-        const response = await contexts.api.delete(
-          `/api/v1/gesuch/${gesuchId}`,
-        );
-        if (response.status() !== 200) {
+        const response = await deleteGesuch(contexts.api, gesuchId);
+        if (response.status() >= 400) {
           throw new Error(
             `Failed to delete gesuch ${gesuchId}, see backend logs for more information.`,
           );

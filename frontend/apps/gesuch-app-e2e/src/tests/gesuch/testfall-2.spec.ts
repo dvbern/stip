@@ -1,5 +1,5 @@
-import { expect } from '@playwright/test';
-import { addMonths, format } from 'date-fns';
+import { Response, expect } from '@playwright/test';
+import { addYears, format } from 'date-fns';
 
 import {
   Adresse,
@@ -8,13 +8,16 @@ import {
   Eltern,
   Familiensituation,
   Geschwister,
-  Kind,
   LebenslaufItem,
-  Partner,
   PersonInAusbildung,
   Steuerdaten,
 } from '@dv/shared/model/gesuch';
-import { expectStepTitleToContainText } from '@dv/shared/util-fn/e2e-util';
+import {
+  SmallImageFile,
+  expectStepTitleToContainText,
+  generateSVN,
+  getE2eUrls,
+} from '@dv/shared/util-fn/e2e-util';
 
 import { AusbildungPO, AusbildungValues } from '../../po/ausbildung.po';
 import { AuszahlungPO } from '../../po/auszahlung.po';
@@ -24,194 +27,167 @@ import { FamilyPO } from '../../po/familiy.po';
 import { GeschwisterPO } from '../../po/geschwister.po';
 import { KinderPO } from '../../po/kinder.po';
 import { LebenslaufPO } from '../../po/lebenslauf.po';
-import { PartnerPO } from '../../po/partner.po';
 import { PersonPO } from '../../po/person.po';
 import { SteuerdatenPO } from '../../po/steuerdaten.po';
 import { initializeTest } from '../../utils';
 
-const adresse: Adresse = {
-  land: 'CH',
-  coAdresse: '',
-  strasse: 'Aarbergergasse',
-  hausnummer: '5a',
-  plz: '3065',
-  ort: 'Bolligen',
-};
+const thisYear = format(new Date(), 'yyyy');
+const specificMonth = (month: number) =>
+  `${month}.${format(new Date(), 'yyyy')}`;
+const specificMonthPlusYears = (month: number, years: number) =>
+  `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
+const specificYearsAgo = (years: number) =>
+  format(addYears(new Date(), -years), 'yyyy');
 
-const person: PersonInAusbildung = {
-  sozialversicherungsnummer: '756.7357.7357.00',
+const adressen = {
+  person: {
+    land: 'CH',
+    coAdresse: '',
+    strasse: 'Kramgasse',
+    hausnummer: '1',
+    plz: '3011',
+    ort: 'Bern',
+  },
+  mutter: {
+    land: 'CH',
+    coAdresse: '',
+    strasse: 'Aarbergergasse',
+    hausnummer: '1',
+    plz: '3065',
+    ort: 'Bolligen',
+  },
+} as const satisfies Record<string, Adresse>;
+
+const person = (seed: string): PersonInAusbildung => ({
+  sozialversicherungsnummer: generateSVN(seed + '_person'),
   anrede: 'HERR',
   nachname: 'Muster',
-  vorname: 'Max',
-  adresse,
+  vorname: 'Fritz',
+  adresse: adressen.person,
   identischerZivilrechtlicherWohnsitz: true,
   email: 'max.muster@dvbern.ch',
-  telefonnummer: '0041791111111',
-  geburtsdatum: '25.12.1990',
+  telefonnummer: '0316338555',
+  geburtsdatum: `01.01.${specificYearsAgo(20)}`,
   nationalitaet: 'CH',
   heimatort: 'Bern',
-  zivilstand: 'VERHEIRATET',
-  wohnsitz: 'EIGENER_HAUSHALT',
+  zivilstand: 'LEDIG',
+  wohnsitz: 'FAMILIE',
   sozialhilfebeitraege: false,
   korrespondenzSprache: 'DEUTSCH',
-};
-
-const thisMonth = format(new Date(), 'MM.yyyy');
-const nextMonth = format(addMonths(new Date(), 1), 'MM.yyyy');
-const inTwoYears = format(addMonths(new Date(), 24), 'MM.yyyy');
+});
 
 const ausbildung: AusbildungValues = {
   ausbildungsort: 'Bern',
   ausbildungsstaette: 'Universität Bern',
-  ausbildungsgang: 'Bachelor',
-  fachrichtung: 'Informatik',
-  ausbildungBegin: nextMonth,
-  ausbildungEnd: inTwoYears,
+  ausbildungsgang: 'Master',
+  fachrichtung: 'Kunstgeschichte',
+  ausbildungBegin: specificMonth(9),
+  ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
-};
-
-const ausbildung1: LebenslaufItem = {
-  bildungsart: 'VORLEHRE',
-  von: '08.2006',
-  bis: '12.2019',
-  wohnsitz: 'BE',
-  ausbildungAbgeschlossen: true,
-  id: '',
-};
-
-const ausbildung2: LebenslaufItem = {
-  bildungsart: 'FACHMATURITAET',
-  von: '08.2020',
-  bis: thisMonth,
-  wohnsitz: 'BE',
-  ausbildungAbgeschlossen: false,
-  id: '',
 };
 
 const taetigkeit: LebenslaufItem = {
   taetigkeitsart: 'ERWERBSTAETIGKEIT',
   taetigkeitsBeschreibung: 'Serviceangestellter',
-  von: '07.2019',
-  bis: '07.2020',
+  von: `01.${specificYearsAgo(4)}`,
+  bis: `08.${thisYear}`,
   wohnsitz: 'BE',
+  id: '',
+};
+
+const familienlsituation: Familiensituation = {
+  elternVerheiratetZusammen: false,
+  gerichtlicheAlimentenregelung: false,
+  elternteilUnbekanntVerstorben: true,
+  mutterUnbekanntVerstorben: 'WEDER_NOCH',
+  mutterWiederverheiratet: false,
+  vaterUnbekanntVerstorben: 'VERSTORBEN',
+};
+
+const mutter = (seed: string): Eltern => ({
+  sozialversicherungsnummer: generateSVN(seed + '_mutter'),
+  nachname: 'Tester',
+  vorname: 'Mutter1',
+  adresse: adressen.mutter,
+  identischerZivilrechtlicherWohnsitz: true,
+  telefonnummer: '0316338355',
+  geburtsdatum: `01.01.${specificYearsAgo(44)}`,
+  ausweisbFluechtling: false,
+  elternTyp: 'MUTTER',
+  id: '',
+});
+
+const steuerdaten: Steuerdaten = {
+  steuerdatenTyp: 'MUTTER',
+  totalEinkuenfte: 8620,
+  eigenmietwert: 0,
+  isArbeitsverhaeltnisSelbstaendig: false,
+  kinderalimente: 0,
+  vermoegen: 0,
+  ergaenzungsleistungen: 0,
+  ergaenzungsleistungenPartner: 0,
+  sozialhilfebeitraege: 0,
+  sozialhilfebeitraegePartner: 0,
+  wohnkosten: 16260,
+  steuernKantonGemeinde: 0,
+  steuernBund: 0,
+  fahrkosten: 0,
+  fahrkostenPartner: 0,
+  verpflegung: 0,
+  verpflegungPartner: 0,
+  steuerjahr: +specificYearsAgo(2),
+  veranlagungsCode: 91,
+};
+
+const bruder: Geschwister = {
+  nachname: 'Tester',
+  vorname: 'Geschwister1',
+  geburtsdatum: `01.01.${specificYearsAgo(19)}`,
+  wohnsitz: 'MUTTER_VATER',
+  ausbildungssituation: 'IN_AUSBILDUNG',
+  wohnsitzAnteilMutter: 100,
   id: '',
 };
 
 const auszahlung: Auszahlung = {
   vorname: '',
-  adresse,
+  adresse: adressen.person,
   iban: 'CH9300762011623852957',
   nachname: '',
   kontoinhaber: 'GESUCHSTELLER',
 };
 
 const einnahmenKosten: EinnahmenKosten = {
-  nettoerwerbseinkommen: 15000,
-  fahrkosten: 100,
-  verdienstRealisiert: false,
-  wohnkosten: 1000,
-  ausbildungskostenSekundarstufeZwei: 1000,
-  ausbildungskostenTertiaerstufe: 1300,
-  zulagen: 250,
-  wgWohnend: false,
+  nettoerwerbseinkommen: 10000,
+  zulagen: 0,
+  renten: 1200,
+  eoLeistungen: 0,
+  ergaenzungsleistungen: 0,
+  beitraege: 3000,
+  ausbildungskostenTertiaerstufe: 1980,
+  fahrkosten: 798,
   auswaertigeMittagessenProWoche: 5,
-  betreuungskostenKinder: 100,
-  veranlagungsCode: 20,
-  steuerjahr: 2020,
-  vermoegen: 0,
+  vermoegen: 6,
+  steuerjahr: +specificYearsAgo(1),
+  veranlagungsCode: 0,
+  steuernKantonGemeinde: 0,
+  verdienstRealisiert: false,
+  willDarlehen: true,
 };
 
-const partner: Partner = {
-  adresse,
-  vorname: 'Susanne',
-  geburtsdatum: '16.12.1990',
-  sozialversicherungsnummer: '756.2222.2222.55',
-  nachname: 'Schmitt',
-};
-
-const vater: Eltern = {
-  sozialversicherungsnummer: '756.2222.2222.24',
-  nachname: 'Muster',
-  vorname: 'Maximilian',
-  adresse,
-  identischerZivilrechtlicherWohnsitz: true,
-  telefonnummer: '0041791111111',
-  geburtsdatum: '25.12.1969',
-  ausweisbFluechtling: false,
-  elternTyp: 'VATER',
-  id: '',
-};
-
-const mutter: Eltern = {
-  sozialversicherungsnummer: '756.3333.3333.35',
-  nachname: 'Muster',
-  vorname: 'Maxine',
-  adresse,
-  identischerZivilrechtlicherWohnsitz: true,
-  telefonnummer: '0041791111111',
-  geburtsdatum: '25.12.1968',
-  ausweisbFluechtling: false,
-  elternTyp: 'VATER',
-  id: '',
-};
-
-const steuerdaten: Steuerdaten = {
-  steuerdatenTyp: 'FAMILIE',
-  totalEinkuenfte: 120000,
-  eigenmietwert: 4893,
-  isArbeitsverhaeltnisSelbstaendig: false,
-  kinderalimente: 1000,
-  vermoegen: 50010,
-  ergaenzungsleistungen: 300,
-  ergaenzungsleistungenPartner: 100,
-  sozialhilfebeitraege: 200,
-  sozialhilfebeitraegePartner: 100,
-  wohnkosten: 3021,
-  steuernBund: 24000,
-  steuernKantonGemeinde: 12000,
-  fahrkosten: 400,
-  verpflegung: 820,
-  verpflegungPartner: 300,
-  steuerjahr: 2023,
-  veranlagungsCode: 80,
-  fahrkostenPartner: 200,
-};
-
-const bruder: Geschwister = {
-  nachname: 'Muster',
-  vorname: 'Simon',
-  geburtsdatum: '25.12.2005',
-  wohnsitz: 'FAMILIE',
-  ausbildungssituation: 'VORSCHULPFLICHTIG',
-  id: '',
-};
-
-const kind: Kind = {
-  nachname: 'Muster',
-  vorname: 'Sara',
-  geburtsdatum: '25.12.2018',
-  wohnsitz: 'FAMILIE',
-  ausbildungssituation: 'VORSCHULPFLICHTIG',
-  erhalteneAlimentebeitraege: 0,
-  id: '',
-};
-
-const familienlsituation: Familiensituation = {
-  elternVerheiratetZusammen: true,
-};
-
-const { test } = initializeTest();
+const { test, getGesuchId } = initializeTest('GESUCHSTELLER');
 
 test.describe('Neues gesuch erstellen', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  test('Gesuch minimal', async ({ page, cockpit }) => {
+  test('Gesuch Testfall-2', async ({ page, cockpit: _ }, testInfo) => {
+    const seed = `${testInfo.title}-${testInfo.workerIndex}`;
     test.slow();
     // Step 1: Person ============================================================
     await expectStepTitleToContainText('Person in Ausbildung', page);
     const personPO = new PersonPO(page);
     await expect(personPO.elems.loading).toBeHidden();
 
-    await personPO.fillPersonForm(person);
+    await personPO.fillPersonForm(person(seed));
 
     await personPO.elems.buttonSaveContinue.click();
 
@@ -229,8 +205,6 @@ test.describe('Neues gesuch erstellen', () => {
     const lebenslaufPO = new LebenslaufPO(page);
     await expect(lebenslaufPO.elems.loading).toBeHidden();
 
-    await lebenslaufPO.addAusbildung(ausbildung1);
-    await lebenslaufPO.addAusbildung(ausbildung2);
     await lebenslaufPO.addTaetigkeit(taetigkeit);
 
     await lebenslaufPO.elems.buttonContinue.click();
@@ -240,7 +214,7 @@ test.describe('Neues gesuch erstellen', () => {
     const familiyPO = new FamilyPO(page);
     await expect(familiyPO.elems.loading).toBeHidden();
 
-    await familiyPO.fillMinimalForm(familienlsituation);
+    await familiyPO.fillUnbekanntOderVerstorben(familienlsituation);
 
     await familiyPO.elems.buttonSaveContinue.click();
 
@@ -249,8 +223,7 @@ test.describe('Neues gesuch erstellen', () => {
     const elternPO = new ElternPO(page);
     await expect(elternPO.elems.loading).toBeHidden();
 
-    await elternPO.addVater(vater);
-    await elternPO.addMutter(mutter);
+    await elternPO.addMutter(mutter(seed));
 
     await elternPO.elems.buttonContinue.click();
 
@@ -272,22 +245,9 @@ test.describe('Neues gesuch erstellen', () => {
 
     await geschwisterPO.elems.buttonContinue.click();
 
-    // Step 7: Partner =============================================================
-    await expectStepTitleToContainText('Ehe- / Konkubinatspartner', page);
-    const partnerPO = new PartnerPO(page);
-    await expect(partnerPO.elems.loading).toBeHidden();
-
-    await partnerPO.fillPartnerForm(partner);
-
-    await partnerPO.elems.buttonSaveContinue.click();
-
     // Step 8: Kinder =============================================================
     await expectStepTitleToContainText('Kinder', page);
     const kinderPO = new KinderPO(page);
-    await expect(kinderPO.elems.loading).toBeHidden();
-
-    await kinderPO.addKind(kind);
-
     await kinderPO.elems.buttonContinue.click();
 
     // Step 9: Auszahlung ===========================================================
@@ -314,15 +274,58 @@ test.describe('Neues gesuch erstellen', () => {
 
     await einnahmenKostenPO.fillEinnahmenKostenForm(einnahmenKosten);
 
+    const requiredDokumenteResponse = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/requiredDokumente',
+    );
     await einnahmenKostenPO.elems.buttonSaveContinue.click();
 
     // Step 11: Dokumente ===========================================================
 
     await expectStepTitleToContainText('Dokumente', page);
+    await requiredDokumenteResponse;
+
+    const uploads = await page
+      .locator('[data-testid^="button-document-upload"]')
+      .all();
+    const uploadCalls: Promise<Response>[] = [];
+    for (const upload of uploads) {
+      uploadCalls.push(
+        page.waitForResponse(
+          (response) =>
+            response.url().includes('/api/v1/dokument') &&
+            response.request().method() === 'POST',
+        ),
+      );
+      await upload.click();
+      await page.getByTestId('file-input').setInputFiles(SmallImageFile);
+      await page.keyboard.press('Escape');
+      await expect(page.getByTestId('file-input')).toHaveCount(0);
+    }
+    await Promise.all(uploadCalls);
 
     await page.getByTestId('button-continue').click();
 
     // Step 12: Freigabe ===========================================================
     await expectStepTitleToContainText('Freigabe', page);
+
+    await page.getByTestId('button-abschluss').click();
+    await page.getByTestId('dialog-confirm').click();
+
+    // Go to Berechnung (SB-App)
+    const urls = getE2eUrls();
+    await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}`);
+
+    await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
+      /accept/,
+    );
+
+    await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
+
+    await expect(
+      page.getByTestId('berechnung-persoenlich-total'),
+    ).toContainText("- 14'192");
+    await expect(page.getByTestId('berechnung-familien-total')).toContainText(
+      "- 54'856",
+    );
   });
 });
