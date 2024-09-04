@@ -3,6 +3,8 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
@@ -25,6 +27,7 @@ import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
+import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
@@ -94,6 +97,58 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     public abstract GesuchFormular partialUpdate(
         GesuchFormularUpdateDto gesuchFormularUpdateDto,
         @MappingTarget GesuchFormular gesuchFormular);
+
+    @BeforeMapping
+    protected void setAuszahlungAdresseBeforeUpdate(
+        final GesuchFormularUpdateDto newFormular,
+        final @MappingTarget GesuchFormular targetFormular
+    ) {
+        if (newFormular.getAuszahlung() == null) {
+            return;
+        }
+
+        switch (newFormular.getAuszahlung().getKontoinhaber()) {
+        case GESUCHSTELLER -> setPiaAdresse(newFormular);
+        case VATER, MUTTER -> setForEltern(newFormular);
+        }
+    }
+
+    void setPiaAdresse(final GesuchFormularUpdateDto newFormular) {
+        if (newFormular.getPersonInAusbildung() == null ||
+            newFormular.getPersonInAusbildung().getAdresse().getId() == null) {
+            return;
+        }
+
+        newFormular.getAuszahlung().setAdresse(newFormular.getPersonInAusbildung().getAdresse());
+    }
+
+    void setForEltern(final GesuchFormularUpdateDto newFormular) {
+        final Function<ElternTyp, ElternUpdateDto> getElternteilOfTyp = elternTyp -> {
+            if (newFormular.getElterns() == null || newFormular.getElterns().isEmpty()) {
+                return null;
+            }
+
+            return newFormular.getElterns()
+                .stream()
+                .filter(elternTeil -> elternTeil.getElternTyp() == elternTyp)
+                .findFirst()
+                .orElse(null);
+        };
+
+        final Consumer<ElternUpdateDto> setAdresseOfElternteil = elternteil -> {
+            AdresseDto adresse = null;
+            if (elternteil != null) {
+                adresse = elternteil.getAdresse();
+            }
+
+            newFormular.getAuszahlung().setAdresse(adresse);
+        };
+
+        switch (newFormular.getAuszahlung().getKontoinhaber()) {
+        case VATER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.VATER));
+        case MUTTER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.MUTTER));
+        }
+    }
 
     @Override
     @BeforeMapping
