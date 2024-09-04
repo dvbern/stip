@@ -1,11 +1,17 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.sap.businesspartner.change.BusinessPartnerChangeRequest;
+import ch.dvbern.stip.api.auszahlung.sap.businesspartner.change.BusinessPartnerChangeRequestMapper;
+import ch.dvbern.stip.api.auszahlung.sap.businesspartner.create.BusinessPartnerCreateRequest;
+import ch.dvbern.stip.api.auszahlung.sap.businesspartner.create.BusinessPartnerCreateRequestMapper;
 import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadRequest;
 import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.auszahlung.sap.importstatus.SenderParms;
 import ch.dvbern.stip.api.auszahlung.sap.util.SapEndpointName;
 import ch.dvbern.stip.api.auszahlung.sap.util.SoapUtils;
+import ch.dvbern.stip.api.auszahlung.sap.vendorposting.VendorPostingCreateRequest;
+import ch.dvbern.stip.api.auszahlung.sap.vendorposting.VendorPostingCreateRequestMapper;
 import ch.dvbern.stip.api.auszahlung.service.sap.SAPUtils;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import io.quarkus.qute.Location;
@@ -32,12 +38,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @ApplicationScoped
 public class AuszahlungSapService {
-    @Location("AuszahlungSapService/SST_073_ImportStatusRead.xml")
-    public Template SST_073_ImportStatusRead;
-
-    @Location("AuszahlungSapService/SST_009_BusinessPartnerCreate.xml")
-    public Template SST_009_BusinessPartnerCreate;
-
     @Location("AuszahlungSapService/SST_077_BusinessPartnerChange.xml")
     public Template SST_077_BusinessPartnerChange;
 
@@ -102,54 +102,67 @@ public class AuszahlungSapService {
         }
     }
 
-    public Response createBusinessPartner(@Valid AuszahlungDto dto){
+    public Response createBusinessPartner(@Valid AuszahlungDto dto, BigDecimal deliveryId){
         try{
             Auszahlung auszahlung = auszahlungMapper.toEntity(dto);
-
+            BusinessPartnerCreateRequestMapper businessPartnerCreateRequestMapper = new BusinessPartnerCreateRequestMapper();
+            BusinessPartnerCreateRequest request = businessPartnerCreateRequestMapper.toBusinessPartnerCreateRequest(auszahlung, BigInteger.valueOf(sysid), deliveryId);
+            String xmlRequest = SoapUtils.buildXmlRequest(request,BusinessPartnerCreateRequest.class, SapEndpointName.BUSINESPARTNER);
 
 
             String response = businessPartnerCreateClient.createBusinessPartner(
-                buildPayload(
-                    SST_009_BusinessPartnerCreate,
-                    SAPUtils.generateDeliveryId(),
-                    null,
-                    SAPUtils.generateExtId(),
-                    auszahlung,null
-                ));
+                xmlRequest);
             return Response.status(HttpStatus.SC_OK).entity(response).build();
         }
         catch(WebApplicationException ex){
             return Response.status(HttpStatus.SC_BAD_REQUEST).build();
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        } catch (SOAPException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public Response changeBusinessPartner(@Valid AuszahlungDto dto){
+    public Response changeBusinessPartner(@Valid AuszahlungDto dto, BigDecimal deliveryId){
         try{
-            Auszahlung data = auszahlungMapper.toEntity(dto);
-            String response = businessPartnerChangeClient.changeBusinessPartner(buildPayload(SST_077_BusinessPartnerChange,
-                SAPUtils.generateDeliveryId(),
-                null,
-                SAPUtils.generateExtId(),
-                data,null));
+            Auszahlung auszahlung = auszahlungMapper.toEntity(dto);
+
+            BusinessPartnerChangeRequestMapper mapper = new BusinessPartnerChangeRequestMapper();
+            BusinessPartnerChangeRequest request = mapper.toBusinessPartnerChangeRequest(auszahlung, BigInteger.valueOf(sysid), deliveryId);
+
+            String response = businessPartnerChangeClient.changeBusinessPartner(SoapUtils.buildXmlRequest(request,BusinessPartnerChangeRequest.class,SapEndpointName.BUSINESPARTNER));
             return Response.status(HttpStatus.SC_OK).entity(response).build();
         }
         catch(WebApplicationException ex){
             return Response.status(HttpStatus.SC_BAD_REQUEST).build();
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        } catch (SOAPException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public Response createAuszahlung(@Valid AuszahlungDto dto){
+    public Response createAuszahlung(@Valid AuszahlungDto dto, BigDecimal deliveryId){
         try{
-            Auszahlung data = auszahlungMapper.toEntity(dto);
-            String response = vendorPostingCreateClient.createVendorPosting(buildPayload(SST_003_VendorPostingCreate,
-                SAPUtils.generateDeliveryId(),
-                null,
-                SAPUtils.generateExtId(),
-                data,null));
+            Auszahlung auszahlung = auszahlungMapper.toEntity(dto);
+            VendorPostingCreateRequestMapper mapper = new VendorPostingCreateRequestMapper();
+            VendorPostingCreateRequest request = mapper.toVendorPostingCreateRequest(auszahlung, BigInteger.valueOf(sysid), deliveryId);
+
+            String response = vendorPostingCreateClient.createVendorPosting(SoapUtils.buildXmlRequest(request,VendorPostingCreateRequest.class, SapEndpointName.VENDORPOSTING));
             return Response.status(HttpStatus.SC_OK).entity(response).build();
         }
         catch (WebApplicationException ex){
             return Response.status(HttpStatus.SC_BAD_REQUEST).build();
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        } catch (SOAPException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
