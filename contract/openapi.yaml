@@ -1495,11 +1495,11 @@ paths:
       operationId: getRequiredGesuchDokumentTyp
   '/gesuchtranche/{gesuchId}':
     parameters:
-    - name: gesuchId
-      schema:
-        $ref: '#/components/schemas/UUID'
-      in: path
-      required: true
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     get:
       tags:
         - GesuchTranche
@@ -1687,10 +1687,6 @@ components:
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
         - FAMILIENSITUATION_TRENNUNGSKONVENTION
-        - ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
-        - ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER
-        - ELTERN_STEUERUNTERLAGEN_VATER
-        - ELTERN_STEUERUNTERLAGEN_MUTTER
         - STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER
         - STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
         - STEUERDATEN_SOZIALHILFEBUDGET_VATER
