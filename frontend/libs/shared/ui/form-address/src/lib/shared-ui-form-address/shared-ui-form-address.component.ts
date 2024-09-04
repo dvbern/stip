@@ -25,13 +25,15 @@ import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { Land, Plz } from '@dv/shared/model/gesuch';
+import { Adresse, Land, Plz } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
 import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
+import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
@@ -62,12 +64,15 @@ type AddresseFormGroup = FormGroup<{
     SharedUiFormCountryComponent,
     SharedUiFormMessageErrorDirective,
     SharedUiPlzOrtAutocompleteDirective,
+    SharedUiZuvorHintDirective,
+    SharedUiTranslateChangePipe,
   ],
   templateUrl: './shared-ui-form-address.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
   @Input({ required: true }) group!: AddresseFormGroup;
+  @Input() changes: Partial<Adresse> | undefined = undefined;
   @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) language!: string;
 

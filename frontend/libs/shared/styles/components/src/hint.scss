@@ -1,16 +1,14 @@
 .mat-mdc-form-field-hint-wrapper {
-  .mat-mdc-form-field-hint-spacer {
+  .zuvor-hint ~ .mat-mdc-form-field-hint-spacer {
     display: none;
   }
 
-  .mat-mdc-form-field-hint {
-    + .mat-mdc-form-field-hint-spacer {
-      + .mat-mdc-form-field-hint {
-        display: none;
-      }
-    }
+  .zuvor-hint ~ .mat-mdc-form-field-hint {
+    display: none;
   }
-
+}
+.mat-mdc-form-field-hint-wrapper,
+.form-hints {
   .zuvor-hint {
     &::before {
       content: '';
@@ -25,6 +23,7 @@
 }
 
 .mat-mdc-form-field.mat-mdc-form-field-label-always-float
-  .mat-mdc-form-field-hint.zuvor-hint {
+  .mat-mdc-form-field-hint.zuvor-hint,
+.form-hints .zuvor-hint {
   font-size: 0.875rem;
 }

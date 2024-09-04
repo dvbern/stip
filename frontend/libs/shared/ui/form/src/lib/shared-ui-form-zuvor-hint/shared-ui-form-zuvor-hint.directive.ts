@@ -1,11 +1,9 @@
-import {
-  Directive,
-  Input,
-  Renderer2,
-  TemplateRef,
-  ViewContainerRef,
-  inject,
-} from '@angular/core';
+import { Directive, Input, ViewContainerRef, inject } from '@angular/core';
+
+import { FormularChangeTypes } from '@dv/shared/model/gesuch-form';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
+
+import { SharedUiZuvorHintComponent } from './shared-ui-form-zuvor-hint.template';
 
 /**
  * @description
@@ -14,7 +12,7 @@ import {
  * - Must be used in combination within a mat-form-field.
  * - If there is another hint, the hint will be replaced if there is a previous value.
  * Ohter hints must be placed after this hint element.
- * - The following hit must also have the attribute `align="end"` so material does not throw an error.
+ * - The following hint must also have the attribute `align="end"` so material does not throw an error.
  *
  * @example
  * <mat-hint
@@ -31,15 +29,14 @@ import {
 })
 export class SharedUiZuvorHintDirective {
   private viewContainerRef = inject(ViewContainerRef);
-  private renderer = inject(Renderer2);
-  private templateRef = inject(TemplateRef);
 
-  @Input() set dvZuvorHint(value: string | undefined) {
-    if (value) {
-      const ref = this.viewContainerRef.createEmbeddedView(this.templateRef);
-      if (ref.rootNodes.length > 0) {
-        this.renderer.setProperty(ref.rootNodes[0], 'innerText', value);
-      }
+  @Input() set dvZuvorHint(value: FormularChangeTypes) {
+    if (isDefined(value)) {
+      this.viewContainerRef.clear();
+      const compRef = this.viewContainerRef.createComponent(
+        SharedUiZuvorHintComponent,
+      );
+      compRef.setInput(<keyof SharedUiZuvorHintComponent>'zuvorSig', value);
     } else {
       this.viewContainerRef.clear();
     }

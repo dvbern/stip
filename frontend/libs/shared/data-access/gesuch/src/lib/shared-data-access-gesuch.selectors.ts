@@ -72,6 +72,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       loading,
       gesuch,
       gesuchFormular,
+      tranchenChanges: prepareTranchenChanges(gesuch),
       readonly: specificTrancheId
         ? isTrancheReadonly(
             gesuch?.gesuchTrancheToWorkWith ?? null,
@@ -263,7 +264,6 @@ function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
       hasChanges: changes.length > 0,
       tranche,
       affectedSteps: changes.map((c) => c.key),
-      changes,
     };
   });
   if (!allChanges || allChanges.length <= 0) {
