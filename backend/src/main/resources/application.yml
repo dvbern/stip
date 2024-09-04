@@ -12,6 +12,9 @@ kstip:
     issuer: 'https://stip.kibon.ch'
     expires-in-minutes: 1
     secret: '${STIP_PRE_SIGNED_REQUEST_SECRET}'
+  sap:
+    system-id: '${STIP_SAP_SYSID}'
+    auth-header-value: '${STIP_SAP_AUTH_HEADER_VALUE}'
   seeding:
     seed-on:
       - 'dev'
@@ -24,8 +27,6 @@ kstip:
     kc-path: '${STIP_WELCOME_MAIL_PATH}'
     kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
     kc-scope: '${STIP_WELCOME_MAIL_SCOPE}'
-  stip_sap_auth_header_value: '${STIP_SAP_AUTH_HEADER_VALUE}'
-  stip_sap_sysid: '${STIP_SAP_SYSID}'
 quarkus:
   execution-model-annotations:
     # TODO: use FAIL as soon as @Blocking is detected on subclasses
@@ -93,8 +94,6 @@ quarkus:
       url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerChange&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
     AuszahlungSapVendorPostingCreateEndpoint:
       url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_VendorPostingCreate&interfaceNamespace=urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING'
-    SearchBusinessPartnerEndpoint:
-      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerSearch&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
 #   store-type: jdbc-tx
 '%dev':
   quarkus:
