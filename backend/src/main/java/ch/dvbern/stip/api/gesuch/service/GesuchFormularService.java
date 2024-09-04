@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchFormularService {
-//    private final GesuchFormularRepository gesuchFormularRepository;
     private final GesuchService gesuchService;
     private final Validator validator;
 

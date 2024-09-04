@@ -14,7 +14,6 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,11 +26,10 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 
-@Slf4j
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class GesuchFormularServiceTest {
+class GesuchFormularServiceTest {
     @Inject
     GesuchFormularService gesuchFormularService;
 
