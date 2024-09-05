@@ -164,7 +164,7 @@ export class GesuchsperiodeDetailComponent {
     anzahlWochenSchule: [<string | null>null, [Validators.required]],
     vermoegensanteilInProzent: [<string | null>null, [Validators.required]],
     limiteAlterAntragsstellerHalbierungElternbeitrag: [
-      <string | null>null,
+      <number | null>null,
       [Validators.required],
     ],
   });
@@ -240,7 +240,6 @@ export class GesuchsperiodeDetailComponent {
     'anzahlWochenLehre',
     'anzahlWochenSchule',
     'vermoegensanteilInProzent',
-    'limiteAlterAntragsstellerHalbierungElternbeitrag',
   ]);
 
   constructor() {
