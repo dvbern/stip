@@ -178,8 +178,8 @@
   "shared.form.shared.wohnsitzanteil.vater": "Chez le père",
 
   "shared.tranche.title": "Aperçu",
-  "shared.form.title.suffix.TRANCHE": "Tranche {{ position }}",
-  "shared.form.title.suffix.AENDERUNG": "Changement {{ position }}",
+  "shared.form.title.suffix.TRANCHE": "Tranche {{ position }} du",
+  "shared.form.title.suffix.AENDERUNG": "Changement {{ position }} du",
   "shared.form.tranche.von.label": "De",
   "shared.form.tranche.bis.label": "Jusqu'à (en option)",
   "shared.form.tranche.bemerkung.label": "Bemerkung",

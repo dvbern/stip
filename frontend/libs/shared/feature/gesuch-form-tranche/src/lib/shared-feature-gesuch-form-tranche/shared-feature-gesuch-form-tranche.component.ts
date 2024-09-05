@@ -3,11 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   TemplateRef,
+  computed,
   effect,
   inject,
   viewChild,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import {
   FormsModule,
   NonNullableFormBuilder,
@@ -20,15 +21,19 @@ import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
+import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 
@@ -60,6 +65,17 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private defaultCommentSig = toSignal(
     this.translate.stream('shared.form.tranche.bemerkung.initialgesuch'),
   );
+  gesuchAenderungStore = inject(GesuchAenderungStore);
+
+  currentTrancheIndexSig = computed(() => {
+    const tranchen = this.gesuchAenderungStore.cachedTranchenSlim().data;
+
+    const index = tranchen?.findIndex(
+      (tranche) => tranche.id === this.viewSig().gesuchstranche?.id,
+    );
+
+    return (index ?? 0) + 1;
+  });
 
   titleSuffixSig = viewChild('titleSuffix', { read: TemplateRef });
   languageSig = this.store.selectSignal(selectLanguage);
@@ -72,6 +88,12 @@ export class SharedFeatureGesuchFormTrancheComponent {
   });
 
   constructor() {
+    getLatestGesuchIdFromGesuchOnUpdate$(this.viewSig)
+      .pipe(filter(isDefined), takeUntilDestroyed())
+      .subscribe((gesuchId) => {
+        this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+      });
+
     effect(
       () => {
         const tranche = this.viewSig().gesuchstranche;
