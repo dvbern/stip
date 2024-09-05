@@ -31,7 +31,7 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
-import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
+import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
 import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -68,11 +68,23 @@ export class SharedFeatureGesuchFormTrancheComponent {
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
   currentTrancheIndexSig = computed(() => {
-    const tranchen = this.gesuchAenderungStore.cachedTranchenSlim().data;
+    const currentTranche = this.viewSig().gesuchstranche;
+    const tranchen = this.gesuchAenderungStore.tranchenViewSig();
+    const aenderungen = this.gesuchAenderungStore.aenderungenViewSig();
 
-    const index = tranchen?.findIndex(
-      (tranche) => tranche.id === this.viewSig().gesuchstranche?.id,
-    );
+    let index = 0;
+
+    if (currentTranche?.typ === 'AENDERUNG') {
+      index = aenderungen.list.findIndex(
+        (aenderung) => aenderung.id === currentTranche.id,
+      );
+    }
+
+    if (currentTranche?.typ === 'TRANCHE') {
+      index = tranchen.list.findIndex(
+        (tranche) => tranche.id === currentTranche.id,
+      );
+    }
 
     return (index ?? 0) + 1;
   });
@@ -88,7 +100,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
   });
 
   constructor() {
-    getLatestGesuchIdFromGesuchOnUpdate$(this.viewSig)
+    getLatestGesuchIdFromGesuch$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchId) => {
         this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
