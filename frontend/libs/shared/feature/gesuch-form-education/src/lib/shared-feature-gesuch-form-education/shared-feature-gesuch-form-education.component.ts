@@ -273,18 +273,17 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
       () => {
         const { ausbildung, ausbildungsstaettes } = this.viewSig();
         if (ausbildung && ausbildungsstaettes) {
-          console.log('ausbildung', ausbildung);
           this.form.patchValue({
             ...ausbildung,
             ausbildungsgang: undefined,
           });
-          const ausbildungsgang = ausbildung.ausbildungsgang;
-          if (ausbildungsgang) {
+          const currentAusbildungsgang = ausbildung.ausbildungsgang;
+          if (currentAusbildungsgang) {
             const ausbildungsstaette = ausbildungsstaettes.find(
               (ausbildungsstaette) =>
                 ausbildungsstaette.ausbildungsgaenge?.find(
                   (ausbildungsgang) =>
-                    ausbildungsgang.id === ausbildungsgang.id,
+                    ausbildungsgang.id === currentAusbildungsgang.id,
                 ),
             );
             const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
