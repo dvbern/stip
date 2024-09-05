@@ -7,6 +7,7 @@ import {
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { lowercased } from '@dv/shared/util-fn/string-helper';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 export interface ElternSituation {
   expectVater: boolean;
@@ -83,7 +84,7 @@ export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
   if (!original || !changed) {
     return null;
   }
-  const dif = diff(changed, original);
+  const dif = diff(changed, original, { keysToSkip: ['id'] });
   const difference = dif.reduce(
     (acc, c) => {
       if (c.type === 'UPDATE') {
@@ -113,18 +114,37 @@ export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
   return difference;
 }
 
-export function getChangesForList<T extends ArrayForms>(
-  original: T,
-  changed: T,
+export function getChangesForList<const T extends ArrayForms[number], const R>(
+  original: T[] | undefined,
+  changed: T[] | undefined,
+  getIdentifier: (value: T) => R,
 ) {
-  const changes = diff(changed, original)[0];
+  if (!original || !changed) {
+    return null;
+  }
+  const changes = diff(changed, original, { keysToSkip: ['id'] })[0];
+  if (!changes) {
+    return null;
+  }
   let newIndexes: number[] = [];
   if (changes.type === 'UPDATE') {
     newIndexes =
       changes.changes?.filter((c) => c.type === 'ADD').map((c) => +c.key) ?? [];
   }
+  const collectedChanges = original
+    .map((c) => ({
+      identifier: getIdentifier(c),
+      values: getChangesForForm(
+        c,
+        changed.find((cc) => getIdentifier(cc) === getIdentifier(c)),
+      ),
+    }))
+    .filter((c) => isDefined(c.values));
+  if (collectedChanges.length === 0) {
+    return null;
+  }
   return {
-    changes: original.map((c, i) => getChangesForForm(c, changed[i])),
+    changes: collectedChanges.filter((c) => isDefined(c.values)),
     newIndexes,
   };
 }

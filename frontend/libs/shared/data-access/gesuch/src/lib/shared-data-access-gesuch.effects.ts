@@ -432,11 +432,21 @@ export const redirectToGesuchFormNextStep = createEffect(
 );
 
 export const refreshGesuchFormStep = createEffect(
-  (actions$ = inject(Actions), router = inject(Router)) => {
+  (
+    store = inject(Store),
+    actions$ = inject(Actions),
+    router = inject(Router),
+  ) => {
     return actions$.pipe(
       ofType(SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess),
-      tap(({ id, origin }) => {
-        router.navigate(['gesuch', origin.route, id]);
+      withLatestFrom(store.select(selectSharedDataAccessGesuchsView)),
+      tap(([{ id, origin }, { specificTrancheId }]) => {
+        router.navigate([
+          'gesuch',
+          origin.route,
+          id,
+          ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
+        ]);
       }),
     );
   },

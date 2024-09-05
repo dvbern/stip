@@ -123,6 +123,7 @@
       "@dv/shared/ui/aenderung-melden-dialog": ["libs/shared/ui/aenderung-melden-dialog/src/index.ts"],
       "@dv/shared/ui/animations": ["libs/shared/ui/animations/src/index.ts"],
       "@dv/shared/ui/badge": ["libs/shared/ui/badge/src/index.ts"],
+      "@dv/shared/ui/change-indicator": ["libs/shared/ui/change-indicator/src/index.ts"],
       "@dv/shared/ui/clear-button": ["libs/shared/ui/clear-button/src/index.ts"],
       "@dv/shared/ui/comming-soon": ["libs/shared/ui/comming-soon/src/index.ts"],
       "@dv/shared/ui/confirm-dialog": ["libs/shared/ui/confirm-dialog/src/index.ts"],

@@ -16,6 +16,7 @@ import {
   StepState,
   gesuchFormStepsFieldMap,
 } from '@dv/shared/model/gesuch-form';
+import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav.selectors';
@@ -27,6 +28,7 @@ import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav
     RouterLink,
     TranslateModule,
     SharedUiIconChipComponent,
+    SharedUiChangeIndicatorComponent,
     RouterLinkActive,
   ],
   templateUrl: './shared-pattern-gesuch-step-nav.component.html',

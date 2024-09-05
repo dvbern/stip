@@ -259,6 +259,9 @@ function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
     const changes = diff(
       tranche.gesuchFormular,
       gesuch.gesuchTrancheToWorkWith.gesuchFormular,
+      {
+        keysToSkip: ['id'],
+      },
     );
     return {
       hasChanges: changes.length > 0,

@@ -203,7 +203,7 @@
           placeholder="MM.YYYY"
           (blur)="onDateBlur(form.controls.ausbildungBegin)"
         />
-        <mat-hint *dvZuvorHint="view.formChanges?.ausbildungBegin | date: 'MM.YYYY'"></mat-hint>
+        <mat-hint *dvZuvorHint="view.formChanges?.ausbildungBegin"></mat-hint>
 
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
@@ -233,7 +233,7 @@
           placeholder="MM.YYYY"
           (blur)="onDateBlur(form.controls.ausbildungEnd)"
         />
-        <mat-hint *dvZuvorHint="view.formChanges?.ausbildungEnd | date: 'MM.YYYY'"></mat-hint>
+        <mat-hint *dvZuvorHint="view.formChanges?.ausbildungEnd"></mat-hint>
 
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
@@ -271,7 +271,7 @@
           }
         </mat-select>
         <mat-hint
-          *dvZuvorHint="view.formChanges?.ausbildungEnd | translateChange: 'shared.form.education.pensum.$VALUE'"
+          *dvZuvorHint="view.formChanges?.pensum | translateChange: 'shared.form.education.pensum.$VALUE'"
         ></mat-hint>
 
         <mat-error *dvSharedUiFormMessageError="'required'">

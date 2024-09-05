@@ -1,12 +1,15 @@
-@if (viewSig().loading) {
+@let view = viewSig();
+@if (view.loading) {
   <dv-shared-ui-loading data-testid="form-eltern-loading"></dv-shared-ui-loading>
 } @else {
+  @let typ = stepSig().type;
+  @let changes = view.listChanges[typ];
   <form
     [formGroup]="form"
     novalidate
     class="mt-4"
     (ngSubmit)="handleSave()"
-    [dvSharedUiFormReadonly]="viewSig().readonly"
+    [dvSharedUiFormReadonly]="view.readonly"
     (gotReenabledSig)="gotReenabled$.next({})"
   >
     <h3 class="pt-5">
@@ -22,6 +25,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
+        <mat-hint *dvZuvorHint="changes?.values?.totalEinkuenfte"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -35,6 +39,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
+        <mat-hint *dvZuvorHint="changes?.values?.eigenmietwert"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -51,10 +56,10 @@
         <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
           <div class="d-flex flex-column">
             <mat-radio-button data-testid="selbstaendig" [value]="true">{{
-              'shared.form.eltern-steuerdaten.arbeitsverhaeltnis.selbstaendig' | translate
+              'shared.form.eltern-steuerdaten.arbeitsverhaeltnis.true' | translate
             }}</mat-radio-button>
             <mat-radio-button data-testid="unselbstaendig" [value]="false">{{
-              'shared.form.eltern-steuerdaten.arbeitsverhaeltnis.unselbstaendig' | translate
+              'shared.form.eltern-steuerdaten.arbeitsverhaeltnis.false' | translate
             }}</mat-radio-button>
           </div>
         </div>
@@ -62,6 +67,12 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-radio-group>
+      <dv-shared-ui-form-zuvor-hint
+        [changes]="
+          changes?.values?.isArbeitsverhaeltnisSelbstaendig
+            | translateChange: 'shared.form.eltern-steuerdaten.arbeitsverhaeltnis.$VALUE'
+        "
+      ></dv-shared-ui-form-zuvor-hint>
     </div>
     @if (
       !hiddenFieldSet.valuesSig().has(form.controls.saeule3a) || !hiddenFieldSet.valuesSig().has(form.controls.saeule2)
@@ -77,6 +88,7 @@
               [maskito]="maskitoNumber"
               type="text"
             />
+            <mat-hint *dvZuvorHint="changes?.values?.saeule3a"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -92,6 +104,7 @@
               [maskito]="maskitoNumber"
               type="text"
             />
+            <mat-hint *dvZuvorHint="changes?.values?.saeule2"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -109,6 +122,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
+        <mat-hint *dvZuvorHint="changes?.values?.kinderalimente"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -122,6 +136,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
+        <mat-hint *dvZuvorHint="changes?.values?.vermoegen"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -140,6 +155,7 @@
             [maskito]="maskitoNumber"
             type="text"
           />
+          <mat-hint *dvZuvorHint="changes?.values?.ergaenzungsleistungen"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -168,6 +184,7 @@
             [maskito]="maskitoNumber"
             type="text"
           />
+          <mat-hint *dvZuvorHint="changes?.values?.sozialhilfebeitraege"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -183,7 +200,7 @@
         }
       </div>
     </ng-template>
-    @if (stepSig().type === 'FAMILIE') {
+    @if (typ === 'FAMILIE') {
       <div class="row g-4 my-2">
         <ng-container *ngTemplateOutlet="ergaenzungsleistungen; context: { $implicit: 'VATER' }"></ng-container>
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
@@ -196,6 +213,7 @@
               [maskito]="maskitoNumber"
               type="text"
             />
+            <mat-hint *dvZuvorHint="changes?.values?.ergaenzungsleistungenPartner"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -223,6 +241,7 @@
               [maskito]="maskitoNumber"
               type="text"
             />
+            <mat-hint *dvZuvorHint="changes?.values?.sozialhilfebeitraegePartner"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -240,8 +259,8 @@
       </div>
     } @else {
       <div class="row g-4 my-2">
-        <ng-container *ngTemplateOutlet="ergaenzungsleistungen; context: { $implicit: stepSig().type }"></ng-container>
-        <ng-container *ngTemplateOutlet="sozialhilfebeitraege; context: { $implicit: stepSig().type }"></ng-container>
+        <ng-container *ngTemplateOutlet="ergaenzungsleistungen; context: { $implicit: typ }"></ng-container>
+        <ng-container *ngTemplateOutlet="sozialhilfebeitraege; context: { $implicit: typ }"></ng-container>
       </div>
     }
     <div class="row g-4 my-2">
@@ -255,6 +274,7 @@
             data-testid="form-eltern-steuerdaten-wohnkosten"
             [maskito]="maskitoNumber"
           />
+          <mat-hint *dvZuvorHint="changes?.values?.wohnkosten"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -284,6 +304,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
+        <mat-hint *dvZuvorHint="changes?.values?.steuernKantonGemeinde"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -297,6 +318,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
+        <mat-hint *dvZuvorHint="changes?.values?.steuernBund"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -312,6 +334,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
+        <mat-hint *dvZuvorHint="changes?.values?.fahrkosten"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -325,6 +348,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
+        <mat-hint *dvZuvorHint="changes?.values?.fahrkostenPartner"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -340,6 +364,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
+        <mat-hint *dvZuvorHint="changes?.values?.verpflegung"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -353,6 +378,7 @@
           [maskito]="maskitoNumber"
           type="text"
         />
+        <mat-hint *dvZuvorHint="changes?.values?.verpflegungPartner"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -374,6 +400,7 @@
               [max]="steuerjahrValidation.steuerjahrPeriodeSig()"
               type="number"
             />
+            <mat-hint *dvZuvorHint="changes?.values?.steuerjahr"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -389,12 +416,13 @@
             <mat-label>{{ 'shared.form.eltern-steuerdaten.veranlagungscode.label' | translate }}</mat-label>
             <input
               formControlName="veranlagungsCode"
-              data-testid="form-eltern-steuerdaten.veranlagungscode"
+              data-testid="form-eltern-steuerdaten.veranlagungsCode"
               matInput
               type="number"
               min="0"
               max="99"
             />
+            <mat-hint *dvZuvorHint="changes?.values?.veranlagungsCode"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -406,7 +434,7 @@
       </div>
     }
     <dv-shared-ui-step-form-buttons>
-      @if (!viewSig().readonly) {
+      @if (!view.readonly) {
         <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | translate }}
         </button>

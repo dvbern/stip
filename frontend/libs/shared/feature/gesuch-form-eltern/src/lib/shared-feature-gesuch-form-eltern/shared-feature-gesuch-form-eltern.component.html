@@ -8,6 +8,7 @@
   @if (viewSig().gesuchFormular; as gesuchFormular) {
     <dv-shared-feature-gesuch-form-eltern-editor
       [elternteil]="editedElternteil"
+      [changes]="viewSig().listChanges[editedElternteil.elternTyp]?.values"
       [gesuchFormular]="gesuchFormular"
       [laender]="laenderSig()"
       (saveTriggered)="handleEditorSave($event)"
@@ -22,26 +23,34 @@
 @if (!editedElternteil && !viewSig().loading) {
   <div class="row g-4 mt-4">
     @if (viewSig().expectVater) {
-      <dv-shared-feature-gesuch-form-eltern-card
-        class="col-12 col-md-6 col-xl-4"
-        [elternteil]="viewSig().vater"
-        [elternTyp]="ElternTyp.VATER"
-        [translationkey]="'vater'"
-        [readonly]="viewSig().readonly"
-        (addTriggered)="handleAddElternteil($event)"
-        (editTriggered)="handleEdit($event)"
-      />
+      <div class="col-12 col-md-6 col-xl-4 position-relative">
+        <dv-shared-feature-gesuch-form-eltern-card
+          [elternteil]="viewSig().vater"
+          [elternTyp]="'VATER'"
+          [translationkey]="'vater'"
+          [readonly]="viewSig().readonly"
+          (addTriggered)="handleAddElternteil($event)"
+          (editTriggered)="handleEdit($event)"
+        />
+        @if (viewSig().listChanges['VATER']) {
+          <dv-shared-ui-change-indicator class="change-indicator"></dv-shared-ui-change-indicator>
+        }
+      </div>
     }
     @if (viewSig().expectMutter) {
-      <dv-shared-feature-gesuch-form-eltern-card
-        class="col-12 col-md-6 col-xl-4"
-        [elternteil]="viewSig().mutter"
-        [elternTyp]="ElternTyp.MUTTER"
-        [translationkey]="'mutter'"
-        [readonly]="viewSig().readonly"
-        (addTriggered)="handleAddElternteil($event)"
-        (editTriggered)="handleEdit($event)"
-      />
+      <div class="col-12 col-md-6 col-xl-4 position-relative">
+        <dv-shared-feature-gesuch-form-eltern-card
+          [elternteil]="viewSig().mutter"
+          [elternTyp]="'MUTTER'"
+          [translationkey]="'mutter'"
+          [readonly]="viewSig().readonly"
+          (addTriggered)="handleAddElternteil($event)"
+          (editTriggered)="handleEdit($event)"
+        />
+        @if (viewSig().listChanges['MUTTER']) {
+          <dv-shared-ui-change-indicator class="change-indicator"></dv-shared-ui-change-indicator>
+        }
+      </div>
     }
     @if (!viewSig().expectVater && !viewSig().expectMutter) {
       <div>

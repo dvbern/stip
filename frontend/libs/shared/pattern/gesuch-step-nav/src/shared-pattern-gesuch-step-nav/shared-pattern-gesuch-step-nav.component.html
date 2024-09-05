@@ -10,7 +10,7 @@
     (click)="navClicked.emit({})"
   >
     @if (step.hasChanges) {
-      <div class="change-indicator"></div>
+      <dv-shared-ui-change-indicator class="change-indicator"></dv-shared-ui-change-indicator>
     }
     <div class="position-relative d-flex align-middle me-3">
       <i class="material-symbols-rounded">{{ step.iconSymbolName }}</i>
