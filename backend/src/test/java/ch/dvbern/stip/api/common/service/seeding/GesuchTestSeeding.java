@@ -121,19 +121,19 @@ public class GesuchTestSeeding extends Seeder {
 
     private static LocalDate getGesuchsperiodeStart() {
         var jahr = LocalDate.now().getYear();
-        if (LocalDate.now().isBefore(LocalDate.of(jahr, 8, 1))) {
+        if (LocalDate.now().isBefore(LocalDate.of(jahr, 7, 1))) {
             jahr -= 1;
         }
 
-        return LocalDate.of(jahr, 8, 1);
+        return LocalDate.of(jahr, 7, 1);
     }
 
     private static LocalDate getGesuchsperiodeStopp() {
         var jahr = LocalDate.now().getYear();
-        if (LocalDate.now().isAfter(LocalDate.of(jahr, 7, 31))) {
+        if (LocalDate.now().isAfter(LocalDate.of(jahr, 6, 31))) {
             jahr += 1;
         }
 
-        return LocalDate.of(jahr, 7, 31);
+        return LocalDate.of(jahr, 6, 31);
     }
 }

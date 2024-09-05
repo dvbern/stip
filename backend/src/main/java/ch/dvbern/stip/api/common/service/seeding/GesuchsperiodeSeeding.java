@@ -48,15 +48,15 @@ GesuchsperiodeSeeding extends Seeder{
                 "Herbst",
                 "Automne",
                 newJahr,
-                LocalDate.of(currentYear, 8, 1),
-                LocalDate.of(currentYear + 1, 7, 31)
+                LocalDate.of(currentYear, 7, 1),
+                LocalDate.of(currentYear + 1, 6, 31)
             ),
             getPeriodeForSeeding(
                 "Frühling",
                 "Printemps",
                 newJahr,
-                LocalDate.of(currentYear, 2, 1),
-                LocalDate.of(currentYear + 1, 1, 31)
+                LocalDate.of(currentYear, 1, 1),
+                LocalDate.of(currentYear + 1, 12, 31)
             )
         );
 
