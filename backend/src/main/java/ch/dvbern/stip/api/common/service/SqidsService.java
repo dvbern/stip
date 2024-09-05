@@ -9,17 +9,27 @@ import org.sqids.Sqids;
 public class SqidsService {
     private final Sqids sqidsLengthFive;
     private final Sqids sqidsLengthSix;
+    private final String UPPERCASE_ALPHANUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     public SqidsService() {
-        this.sqidsLengthFive = Sqids.builder().alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789").minLength(5).build();
-        this.sqidsLengthSix = Sqids.builder().alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789").minLength(6).build();
+        this.sqidsLengthFive = Sqids.builder().alphabet(UPPERCASE_ALPHANUMERIC).minLength(5).build();
+        this.sqidsLengthSix = Sqids.builder().alphabet(UPPERCASE_ALPHANUMERIC).minLength(6).build();
     }
 
     public String encodeLenghtFive(int numberToEncode) {
-        return sqidsLengthFive.encode(List.of((long) numberToEncode));
+        var encoded =  sqidsLengthFive.encode(List.of((long) numberToEncode));
+        if (encoded.length() > 5) {
+            // TODO: Handle cases where the encoded string length exceeds 5 characters
+        }
+        return encoded;
     }
 
     public String encodeLenghtSix(int numberToEncode) {
-        return sqidsLengthSix.encode(List.of((long) numberToEncode));
+        var encoded = sqidsLengthSix.encode(List.of((long) numberToEncode));
+        if (encoded.length() > 6) {
+
+            // TODO: Handle cases where the encoded string length exceeds 6 characters
+        }
+        return encoded;
     }
 }

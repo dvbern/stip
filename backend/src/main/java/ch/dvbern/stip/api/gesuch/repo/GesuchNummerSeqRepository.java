@@ -21,7 +21,7 @@ public class GesuchNummerSeqRepository {
     }
 
     @Transactional(TxType.REQUIRES_NEW)
-    public int getNextValueFromCurrentSeq(String seqName) {
+    public int getNextValueFromSequence(String seqName) {
         String selectSql = String.format("SELECT nextval('%s')", seqName);
         Query selectQuery = entityManager.createNativeQuery(selectSql);
         Object result = selectQuery.getSingleResult();

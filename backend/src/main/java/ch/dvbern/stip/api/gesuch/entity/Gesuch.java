@@ -69,6 +69,7 @@ public class Gesuch extends AbstractMandantEntity {
     @Audited(withModifiedFlag = true, modifiedColumnName = "gesuch_status_mod")
     private Gesuchstatus gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
+    @NotNull
     @Column(name = "gesuch_nummer", nullable = false, updatable = false)
     private String gesuchNummer;
 

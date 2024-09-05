@@ -33,6 +33,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -49,6 +50,7 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 public class Fall extends AbstractMandantEntity {
+    @NotNull
     @Column(name = "fall_nummer", nullable = false, updatable = false)
     private String fallNummer;
 

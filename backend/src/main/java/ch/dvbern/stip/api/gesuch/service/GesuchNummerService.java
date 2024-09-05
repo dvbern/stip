@@ -18,7 +18,7 @@ public class GesuchNummerService {
     private final SqidsService sqidsService;
     private final GesuchsperiodenService gesuchsperiodenService;
     private final GesuchsjahrService gesuchsjahrService;
-    private final String MANDANT = "BE";
+    private final String MANDANT = "BE"; // TODO: KSTIP-1411
 
     @Transactional
     public String createGesuchNummer(final UUID gesuchsperiodeId) {
@@ -29,7 +29,7 @@ public class GesuchNummerService {
 
         var seqName = String.format("gesuch_nummer_%s_%s_seq", MANDANT, technischesJahr);
         gesuchNummerSeqRepository.createSequenceIfNotExists(seqName);
-        var nextValue = gesuchNummerSeqRepository.getNextValueFromCurrentSeq(seqName);
+        var nextValue = gesuchNummerSeqRepository.getNextValueFromSequence(seqName);
 
         var encoded = sqidsService.encodeLenghtFive(nextValue);
 
