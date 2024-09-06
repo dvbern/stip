@@ -4,6 +4,13 @@ import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [
   {
+    path: 'gesuch-app-feature-aenderungsentry',
+    loadChildren: () =>
+      import('@dv/gesuch-app/feature/aenderungsentry').then(
+        (m) => m.gesuchAppFeatureAenderungsentryRoutes,
+      ),
+  },
+  {
     path: 'gesuch-app-feature-gesuch-form-abschluss',
     loadChildren: () =>
       import('@dv/gesuch-app/feature/gesuch-form-abschluss').then(
