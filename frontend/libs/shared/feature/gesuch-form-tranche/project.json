@@ -2,7 +2,7 @@
   "name": "shared-feature-gesuch-form-tranche",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/feature/gesuch-form-tranche/src",
-  "prefix": "lib",
+  "prefix": "dv",
   "projectType": "library",
   "tags": ["type:feature", "scope:shared"],
   "targets": {

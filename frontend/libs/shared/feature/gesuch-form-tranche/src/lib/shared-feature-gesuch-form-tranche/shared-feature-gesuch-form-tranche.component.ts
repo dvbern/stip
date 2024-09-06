@@ -2,11 +2,9 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  TemplateRef,
   computed,
   effect,
   inject,
-  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -38,7 +36,7 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 
 @Component({
-  selector: 'lib-shared-feature-gesuch-form-tranche',
+  selector: 'dv-shared-feature-gesuch-form-tranche',
   standalone: true,
   imports: [
     CommonModule,
@@ -89,7 +87,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
     return (index ?? 0) + 1;
   });
 
-  titleSuffixSig = viewChild('titleSuffix', { read: TemplateRef });
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
 
