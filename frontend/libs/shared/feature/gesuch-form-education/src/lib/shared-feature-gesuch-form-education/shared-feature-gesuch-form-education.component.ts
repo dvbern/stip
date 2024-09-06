@@ -169,11 +169,11 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
   });
   previousAusbildungsstaetteSig = computed(() => {
     const { formChanges, ausbildungsstaettes } = this.viewSig();
-    const ausbildungsgang = formChanges?.ausbildungsgang;
-    if (ausbildungsgang && ausbildungsstaettes) {
+    const changedAusbildungsgang = formChanges?.ausbildungsgang;
+    if (changedAusbildungsgang && ausbildungsstaettes) {
       return ausbildungsstaettes.find((ausbildungsstaette) =>
         ausbildungsstaette.ausbildungsgaenge?.find(
-          (ausbildungsgang) => ausbildungsgang.id === ausbildungsgang.id,
+          (ausbildungsgang) => changedAusbildungsgang.id === ausbildungsgang.id,
         ),
       );
     }
@@ -287,7 +287,8 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
                 ),
             );
             const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-              (ausbildungsgang) => ausbildungsgang.id === ausbildungsgang.id,
+              (ausbildungsgang) =>
+                ausbildungsgang.id === currentAusbildungsgang.id,
             );
             this.form.patchValue({
               ausbildungsstaette:
