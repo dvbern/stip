@@ -67,24 +67,22 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
   currentTrancheIndexSig = computed(() => {
     const currentTranche = this.viewSig().gesuchstranche;
+
+    if (!currentTranche) {
+      return 0;
+    }
+
     const tranchen = this.gesuchAenderungStore.tranchenViewSig();
     const aenderungen = this.gesuchAenderungStore.aenderungenViewSig();
+    const list = {
+      TRANCHE: tranchen.list,
+      AENDERUNG: aenderungen.list,
+    };
+    const index = list[currentTranche.typ].findIndex(
+      (aenderung) => aenderung.id === currentTranche.id,
+    );
 
-    let index = 0;
-
-    if (currentTranche?.typ === 'AENDERUNG') {
-      index = aenderungen.list.findIndex(
-        (aenderung) => aenderung.id === currentTranche.id,
-      );
-    }
-
-    if (currentTranche?.typ === 'TRANCHE') {
-      index = tranchen.list.findIndex(
-        (tranche) => tranche.id === currentTranche.id,
-      );
-    }
-
-    return (index ?? 0) + 1;
+    return index ?? 0;
   });
 
   languageSig = this.store.selectSignal(selectLanguage);

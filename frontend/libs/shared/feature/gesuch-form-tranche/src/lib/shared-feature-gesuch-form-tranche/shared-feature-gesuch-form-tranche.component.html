@@ -2,7 +2,7 @@
   <h2 class="fw-bold">
     @let tranche = viewSig().gesuchstranche;
     @if (tranche) {
-      {{ 'shared.form.title.suffix.' + tranche.typ | translate: { position: currentTrancheIndexSig() } }}
+      {{ 'shared.form.title.suffix.' + tranche.typ | translate: { position: currentTrancheIndexSig() + 1 } }}
       {{ tranche.gueltigAb | date: 'MM.YYYY' }} -
       {{ tranche.gueltigBis | date: 'MM.YYYY' }}
     }
