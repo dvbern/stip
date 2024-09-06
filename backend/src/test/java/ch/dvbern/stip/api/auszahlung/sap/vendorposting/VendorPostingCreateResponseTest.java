@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.auszahlung.sap.vendorposting;
 
-import ch.dvbern.stip.api.auszahlung.sap.businesspartner.change.BusinessPartnerChangeResponse;
 import ch.dvbern.stip.api.auszahlung.sap.util.SoapUtils;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.soap.SOAPException;

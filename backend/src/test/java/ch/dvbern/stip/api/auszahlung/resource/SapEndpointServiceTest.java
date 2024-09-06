@@ -1,9 +1,7 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.sap.businesspartner.create.BusinessPartnerCreateRequest;
 import ch.dvbern.stip.api.auszahlung.sap.businesspartner.create.BusinessPartnerCreateResponse;
-import ch.dvbern.stip.api.auszahlung.sap.businesspartner.create.SenderParmsDelivery;
 import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.auszahlung.service.*;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
@@ -15,7 +13,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Request;
 import org.apache.http.HttpStatus;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
@@ -23,7 +20,6 @@ import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -142,7 +138,7 @@ class SapEndpointServiceTest {
     }
 
     @Test
-    void changeBusinessPartnerInvalidDtoTest() throws IOException {
+    void changeBusinessPartnerAlreadyExistingDeliveryIdTest() throws IOException {
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"

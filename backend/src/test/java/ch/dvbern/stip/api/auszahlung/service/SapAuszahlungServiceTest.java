@@ -92,7 +92,6 @@ class SapAuszahlungServiceTest {
         when(businessPartnerCreateClient.createBusinessPartner(any()))
             .thenReturn(firstCreateResponse)
             .thenReturn(secondCreateResponse);
-        ;
         assertNotNull(sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung()));
     }
 

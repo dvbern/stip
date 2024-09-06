@@ -8,10 +8,11 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 
 import java.math.BigDecimal;
-
+@Slf4j
 @RequestScoped
 public class SapAuszahlungService {
     @Inject SapEndpointService sapEndpointService;
@@ -26,8 +27,11 @@ public class SapAuszahlungService {
         BigDecimal deliveryId = SAPUtils.generateDeliveryId();
         if(auszahlung.getSapBusinessPartnerId() != null) {
             //update/sync busniesspartner
-            if(sapEndpointService.changeBusinessPartner(auszahlung,auszahlung.getSapBusinessPartnerId(),deliveryId).getStatus() != HttpStatus.SC_OK){
+            final var response = sapEndpointService.changeBusinessPartner(auszahlung,auszahlung.getSapBusinessPartnerId(),deliveryId);
+            if(response.getStatus() != HttpStatus.SC_OK){
                 throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            }else{
+                SAPUtils.logAsWarningIfNoAction(response);
             }
         }else{
             //generate ext-id
@@ -44,6 +48,7 @@ public class SapAuszahlungService {
                 .getBUSINESSPARTNER() == null) {
                 throw new WebApplicationException(Response.Status.BAD_REQUEST);
             }else{
+                SAPUtils.logAsWarningIfNoAction(createResponse2);
                 Integer businessPartnerId = Integer.valueOf(((BusinessPartnerCreateResponse) createResponse2.getEntity())
                     .getBUSINESSPARTNER().getHEADER().getBPARTNER());
                 auszahlung.setSapBusinessPartnerId(businessPartnerId);
@@ -60,10 +65,15 @@ public class SapAuszahlungService {
         //createOrUpdateBusinessPartner
         Integer businessPartnerId = getOrCreateBusinessPartner(auszahlung);
         //createVendorPosting
-        if(sapEndpointService.createVendorPosting(auszahlung,businessPartnerId,deliveryId).getStatus() != HttpStatus.SC_OK){
+        final var response = sapEndpointService.createVendorPosting(auszahlung,businessPartnerId,deliveryId);
+        if(response.getStatus() != HttpStatus.SC_OK){
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        };
+        }else{
+            SAPUtils.logAsWarningIfNoAction(response);
+        }
         return sapEndpointService.getImportStatus(deliveryId);
     }
+
+
 
 }
