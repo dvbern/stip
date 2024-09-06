@@ -33,7 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AuszahlungUpdateDtoSpec.JSON_PROPERTY_ADRESSE,
   AuszahlungUpdateDtoSpec.JSON_PROPERTY_IBAN,
   AuszahlungUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
-  AuszahlungUpdateDtoSpec.JSON_PROPERTY_KONTOINHABER
+  AuszahlungUpdateDtoSpec.JSON_PROPERTY_KONTOINHABER,
+  AuszahlungUpdateDtoSpec.JSON_PROPERTY_BUSINESS_PARTNER_ID
 })
 @JsonTypeName("AuszahlungUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -52,6 +53,9 @@ public class AuszahlungUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_KONTOINHABER = "kontoinhaber";
   private KontoinhaberDtoSpec kontoinhaber;
+
+  public static final String JSON_PROPERTY_BUSINESS_PARTNER_ID = "businessPartnerId";
+  private Integer businessPartnerId;
 
   public AuszahlungUpdateDtoSpec() {
   }
@@ -185,6 +189,32 @@ public class AuszahlungUpdateDtoSpec {
     this.kontoinhaber = kontoinhaber;
   }
 
+
+  public AuszahlungUpdateDtoSpec businessPartnerId(Integer businessPartnerId) {
+    
+    this.businessPartnerId = businessPartnerId;
+    return this;
+  }
+
+   /**
+   * Get businessPartnerId
+   * @return businessPartnerId
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BUSINESS_PARTNER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getBusinessPartnerId() {
+    return businessPartnerId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BUSINESS_PARTNER_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBusinessPartnerId(Integer businessPartnerId) {
+    this.businessPartnerId = businessPartnerId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -198,12 +228,13 @@ public class AuszahlungUpdateDtoSpec {
         Objects.equals(this.adresse, auszahlungUpdate.adresse) &&
         Objects.equals(this.iban, auszahlungUpdate.iban) &&
         Objects.equals(this.nachname, auszahlungUpdate.nachname) &&
-        Objects.equals(this.kontoinhaber, auszahlungUpdate.kontoinhaber);
+        Objects.equals(this.kontoinhaber, auszahlungUpdate.kontoinhaber) &&
+        Objects.equals(this.businessPartnerId, auszahlungUpdate.businessPartnerId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, iban, nachname, kontoinhaber);
+    return Objects.hash(vorname, adresse, iban, nachname, kontoinhaber, businessPartnerId);
   }
 
   @Override
@@ -215,6 +246,7 @@ public class AuszahlungUpdateDtoSpec {
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    kontoinhaber: ").append(toIndentedString(kontoinhaber)).append("\n");
+    sb.append("    businessPartnerId: ").append(toIndentedString(businessPartnerId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

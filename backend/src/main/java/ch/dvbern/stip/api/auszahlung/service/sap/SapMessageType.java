@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.auszahlung.service.sap;
 
 public enum SapMessageType {
-    S("success"), E("no action");
+    S("success"), E("no action | failure");
 
     public String getDescription() {
         return description;

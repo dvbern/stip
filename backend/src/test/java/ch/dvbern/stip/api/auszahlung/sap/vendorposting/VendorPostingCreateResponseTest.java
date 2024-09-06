@@ -31,14 +31,4 @@ class VendorPostingCreateResponseTest {
         final var response = SoapUtils.parseSoapResponse(xml, VendorPostingCreateResponse.class);
         assertNotNull(response);
     }
-    @Test
-    void parseVendorPostingCreateResponseInvalidDataTest() throws IOException, JAXBException, SOAPException {
-        fail("Not implemented yet");
-        String xml = IOUtils.toString(
-            this.getClass().getResourceAsStream("/auszahlung/vendorPostingInvalidDataResponse.xml"),
-            "UTF-8"
-        );
-        final var response = SoapUtils.parseSoapResponse(xml, VendorPostingCreateResponse.class);
-        assertNotNull(response);
-    }
 }

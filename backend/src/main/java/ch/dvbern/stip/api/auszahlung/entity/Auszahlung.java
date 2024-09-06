@@ -21,9 +21,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import java.math.BigInteger;
-
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
 @Audited
@@ -66,5 +63,5 @@ public class Auszahlung extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "sap_business_partner_id", nullable = true)
-    private BigInteger sapBusinessPartnerId;
+    private Integer sapBusinessPartnerId;
 }

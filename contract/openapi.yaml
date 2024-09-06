@@ -1980,6 +1980,8 @@ components:
           type: string
         kontoinhaber:
           $ref: '#/components/schemas/Kontoinhaber'
+        businessPartnerId:
+          type: integer
     Gesuch:
       required:
         - fall
