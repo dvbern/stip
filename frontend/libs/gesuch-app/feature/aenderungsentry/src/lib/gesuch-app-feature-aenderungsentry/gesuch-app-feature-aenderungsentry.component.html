@@ -1,0 +1,39 @@
+<div class="container mt-5 mb-5">
+  <!-- Änderung Titel -->
+  <h1 class="text-white mb-4">
+    {{ 'gesuch-app.aenderungsentry.titel' | translate }}
+  </h1>
+  @for (periode of cockpitViewSig().gesuchsperiodes; track trackByPerioden($index, periode)) {
+    <!-- existing Gesuch (änderung) -->
+    @if (periode.gesuch) {
+      <div class="d-flex flex-column align-items-start">
+        <span class="mt-4 fw-normal small">{{ 'gesuch-app.cockpit.periode.status.titel' | translate }}</span>
+      </div>
+    }
+    <!-- änderung Gesuch button -->
+    @if (periode.gesuch) {
+      <div class="row">
+        <!--        @if (gesuchAenderungStore.() | rdIsPending) {-->
+        <div class="col-12 mt-2">
+          <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
+        </div>
+        <!--        } @else {-->
+        <div class="col-md">
+          <a
+            class="btn btn-primary mt-3 w-100"
+            data-testid="cockpit-gesuch-edit"
+            [routerLink]="['/gesuch', periode.gesuch.id]"
+          >
+            {{ 'gesuch-app.cockpit.gesuch.aenderungsentry.edit' | translate }}
+          </a>
+        </div>
+        <div class="col-md">
+          <button type="button" class="btn btn-outline-primary mt-3 w-100" data-testid="cockpit-gesuch-aenderungen">
+            {{ 'gesuch-app.cockpit.gesuch.aenderung' | translate }}
+          </button>
+        </div>
+        <!--        }-->
+      </div>
+    }
+  }
+</div>

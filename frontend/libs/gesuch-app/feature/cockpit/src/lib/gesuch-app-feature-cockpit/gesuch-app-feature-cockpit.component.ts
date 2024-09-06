@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { GesuchAppEventCockpit } from '@dv/gesuch-app/event/cockpit';
+import { GesuchAppFeatureAenderungsentryComponent } from '@dv/gesuch-app/feature/aenderungsentry';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { FallStore } from '@dv/shared/data-access/fall';
@@ -45,6 +46,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
     SharedUiRdIsPendingPipe,
+    GesuchAppFeatureAenderungsentryComponent,
   ],
   providers: [FallStore],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
