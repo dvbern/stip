@@ -185,7 +185,7 @@
   "shared.form.title.suffix.TRANCHE": "Tranche {{ position }} vom",
   "shared.form.title.suffix.AENDERUNG": "Änderung {{ position }} vom",
   "shared.form.tranche.von.label": "Von",
-  "shared.form.tranche.bis.label": "Bis (Optional)",
+  "shared.form.tranche.bis.label": "Bis",
   "shared.form.tranche.bemerkung.label": "Bemerkung",
   "shared.form.tranche.bemerkung.initialgesuch": "Initialgesuch",
 

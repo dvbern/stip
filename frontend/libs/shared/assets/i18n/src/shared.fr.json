@@ -185,7 +185,7 @@
   "shared.form.title.suffix.TRANCHE": "Tranche {{ position }} du",
   "shared.form.title.suffix.AENDERUNG": "Changement {{ position }} du",
   "shared.form.tranche.von.label": "De",
-  "shared.form.tranche.bis.label": "Jusqu'à (en option)",
+  "shared.form.tranche.bis.label": "Jusqu'à",
   "shared.form.tranche.bemerkung.label": "Bemerkung",
   "shared.form.tranche.bemerkung.initialgesuch": "Demande initiale",
 
