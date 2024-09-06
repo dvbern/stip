@@ -100,11 +100,11 @@ export class TwoColumnTimelineComponent implements OnChanges {
     const ausbildungsstaette = ausbildungsstaettes.find((staette) =>
       staette.ausbildungsgaenge?.some(
         (ausbildungsgang) =>
-          plannedAusbildung?.ausbildungsgang.id === ausbildungsgang.id,
+          plannedAusbildung?.ausbildungsgang?.id === ausbildungsgang.id,
       ),
     );
     const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
-      (each) => each.id === plannedAusbildung?.ausbildungsgang.id,
+      (each) => each.id === plannedAusbildung?.ausbildungsgang?.id,
     );
 
     timelineRawItems.push({
@@ -169,7 +169,7 @@ export class TwoColumnTimelineComponent implements OnChanges {
     return {
       title:
         lebenslaufItem.bildungsart === 'ANDERER_BILDUNGSABSCHLUSS'
-          ? lebenslaufItem.titelDesAbschlusses ?? ''
+          ? (lebenslaufItem.titelDesAbschlusses ?? '')
           : `shared.form.lebenslauf.item.subtype.bildungsart.${lebenslaufItem.bildungsart}`,
     };
   }

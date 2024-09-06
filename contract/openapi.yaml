@@ -2772,8 +2772,6 @@ components:
         isAusbildungAusland:
           type: boolean
     Ausbildung:
-      required:
-        - ausbildungsgang
       type: object
       properties:
         ausbildungsgang:

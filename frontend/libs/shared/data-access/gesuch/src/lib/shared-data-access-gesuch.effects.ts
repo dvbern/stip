@@ -176,6 +176,7 @@ export const loadGesuch = createEffect(
         if (trancheId) {
           return gesuchService
             .getGsTrancheChanges$(
+              // TODO: Split with appType
               { aenderungId: trancheId },
               undefined,
               undefined,
@@ -432,11 +433,21 @@ export const redirectToGesuchFormNextStep = createEffect(
 );
 
 export const refreshGesuchFormStep = createEffect(
-  (actions$ = inject(Actions), router = inject(Router)) => {
+  (
+    store = inject(Store),
+    actions$ = inject(Actions),
+    router = inject(Router),
+  ) => {
     return actions$.pipe(
       ofType(SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess),
-      tap(({ id, origin }) => {
-        router.navigate(['gesuch', origin.route, id]);
+      withLatestFrom(store.select(selectSharedDataAccessGesuchsView)),
+      tap(([{ id, origin }, { specificTrancheId }]) => {
+        router.navigate([
+          'gesuch',
+          origin.route,
+          id,
+          ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
+        ]);
       }),
     );
   },
@@ -586,6 +597,6 @@ const toAusbildung = (ausbildung: ViewOrUpdateData<'ausbildung'>) => {
   return {
     ...ausbildung,
     ausbildungsgang: undefined,
-    ausbildungsgangId: ausbildung.ausbildungsgang.id,
+    ausbildungsgangId: ausbildung.ausbildungsgang?.id,
   };
 };

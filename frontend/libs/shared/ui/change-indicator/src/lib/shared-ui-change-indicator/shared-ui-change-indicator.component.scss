@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  background-color: var(--dv-blue-bg);
+  border: 2px solid var(--dv-blue-bg-subtle);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  top: calc(50% - 10px);
+  left: 0;
+  display: block;
+  position: absolute;
+
+  &.left {
+    left: -10px;
+  }
+}

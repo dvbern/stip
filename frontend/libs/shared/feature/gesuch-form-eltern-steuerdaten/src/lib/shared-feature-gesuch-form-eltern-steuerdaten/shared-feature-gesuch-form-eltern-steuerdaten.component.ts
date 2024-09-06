@@ -22,7 +22,6 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -39,9 +38,12 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -52,6 +54,8 @@ import {
 } from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
+
+import { selectSharedFeatureGesuchFormSteuerdatenView } from './shared-feature-gesuch-form-eltern-steuerdaten.selector';
 
 @Component({
   selector: 'lib-shared-feature-gesuch-form-eltern-steuerdaten',
@@ -69,6 +73,9 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
+    SharedUiZuvorHintDirective,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-steuerdaten.component.html',
@@ -82,7 +89,9 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
   formUtils = inject(SharedUtilFormService);
   elementRef = inject(ElementRef);
-  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  viewSig = this.store.selectSignal(
+    selectSharedFeatureGesuchFormSteuerdatenView,
+  );
   gotReenabled$ = new Subject<object>();
   maskitoNumber = maskitoNumber;
   form = this.formBuilder.group({
