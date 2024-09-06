@@ -72,7 +72,7 @@ type AddresseFormGroup = FormGroup<{
 })
 export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
   @Input({ required: true }) group!: AddresseFormGroup;
-  @Input() changes: Partial<Adresse> | undefined = undefined;
+  @Input({ required: true }) changes: Partial<Adresse> | undefined;
   @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) language!: string;
 

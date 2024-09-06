@@ -7,23 +7,6 @@
     display: none;
   }
 }
-.mat-mdc-form-field-hint-wrapper,
-.form-hints {
-  .zuvor-hint {
-    // TODO: check if template host styling is possible
-    margin-left: 0.25rem;
-
-    &::before {
-      content: '';
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      background-color: var(--dv-blue);
-      border-radius: 50%;
-      margin-right: 5px;
-    }
-  }
-}
 
 .mat-mdc-form-field.mat-mdc-form-field-label-always-float
   .mat-mdc-form-field-hint.zuvor-hint,

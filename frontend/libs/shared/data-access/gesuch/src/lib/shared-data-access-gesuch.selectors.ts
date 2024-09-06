@@ -8,7 +8,6 @@ import {
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
-  Steuerdaten,
   SteuerdatenTyp,
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
@@ -36,6 +35,7 @@ import {
   isGesuchReadonly,
   isTrancheReadonly,
 } from '@dv/shared/util/readonly-state';
+import { capitalized } from '@dv/shared/util-fn/string-helper';
 import { isDefined, type } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -270,18 +270,28 @@ function getStepsByAppType(
   }
 }
 
-function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
+/**
+ * Calculates the changes between the gesuchTrancheToWorkWith and previous tranches
+ *
+ * Returns:
+ * - hasChanges: true if there are changes
+ * - tranche: the tranche containing the previous gesuchFormular
+ * - affectedSteps: the steps that have changed
+ */
+export function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
   if (!gesuch) {
-    return {
-      original: null,
-    };
+    return null;
   }
   const allChanges = gesuch.changes?.map((tranche) => {
     const changes = diff(
-      tranche.gesuchFormular,
       gesuch.gesuchTrancheToWorkWith.gesuchFormular,
+      tranche.gesuchFormular,
       {
         keysToSkip: ['id'],
+        embeddedObjKeys: {
+          /** Used to have a more accurate diff for steuerdaten in {@link hasSteuerdatenChanges} */
+          ['steuerdaten']: 'steuerdatenTyp',
+        },
       },
     );
     return {
@@ -289,27 +299,30 @@ function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
       tranche,
       affectedSteps: [
         ...changes
-          .filter((c) => (c.changes?.length ?? 0) > 0)
+          .filter(
+            (c) =>
+              // Ignore steuerdaten changes, they are handled separately
+              c.key !== type<SharedModelGesuchFormularProps>('steuerdaten') &&
+              ((c.changes?.length ?? 0) > 0 ||
+                // Also mark the step as affected if a new entry has been added or removed
+                c.type !== 'UPDATE'),
+          )
           .map((c) => c.key),
-        ...hasSteuerdatenFamilyChange(changes),
+        ...hasSteuerdatenChanges(changes),
       ],
     };
   });
   if (!allChanges || allChanges.length <= 0) {
-    return {
-      original: null,
-    };
+    return null;
   }
-  return {
-    original: allChanges[allChanges.length - 1],
-  };
+  return allChanges[allChanges.length - 1];
 }
 
 /**
  * Used to mark steuerdatenVater/Mutter Tabs as affected if steuerdatenTyp has changed to FAMILIE
  * or back to individual
  */
-const hasSteuerdatenFamilyChange = (
+export const hasSteuerdatenChanges = (
   changes: IChange[],
 ): SharedModelGesuchFormularProps[] => {
   const steuerdatenChange = changes.find(
@@ -317,27 +330,25 @@ const hasSteuerdatenFamilyChange = (
       c.key === type<SharedModelGesuchFormularProps>('steuerdaten') &&
       c.type === 'UPDATE',
   );
+  const affectedSteps = new Set<SharedModelGesuchFormularProps>();
 
   // Check if steuerdaten have changed
-  for (const change of steuerdatenChange?.changes ?? []) {
-    const steuerdatenTypChange = change.changes?.find(
-      (c) => c.key === type<keyof Steuerdaten>('steuerdatenTyp'),
-    );
-    // Check if steuerdatenTyp has changed
-    if (steuerdatenTypChange && steuerdatenTypChange.type === 'UPDATE') {
-      // If steuerdatenTyp has changed from FAMILIE to steuerdatenMutter/Vater, mark them as affected
+  (['MUTTER', 'VATER', 'FAMILIE'] satisfies SteuerdatenTyp[]).forEach(
+    (steuerdatenTyp) => {
+      const steuerdatenTypChange = steuerdatenChange?.changes?.find(
+        (c) => c.key === steuerdatenTyp,
+      );
       if (
-        [steuerdatenTypChange.oldValue, steuerdatenTypChange.value].includes(
-          type<SteuerdatenTyp>('FAMILIE'),
-        )
+        steuerdatenTypChange &&
+        ((steuerdatenTypChange.changes ?? []).length > 0 ||
+          steuerdatenTypChange.type !== 'UPDATE')
       ) {
-        return ['steuerdatenMutter', 'steuerdatenVater'];
+        affectedSteps.add(
+          `steuerdaten${steuerdatenTyp === 'FAMILIE' ? '' : capitalized(steuerdatenTyp)}`,
+        );
       }
-      // else if steuerdatenTyp has changed from steuerdatenMutter/Vater to FAMILIE, mark it as affected
-      else {
-        return ['steuerdaten'];
-      }
-    }
-  }
-  return [];
+    },
+  );
+
+  return Array.from(affectedSteps);
 };

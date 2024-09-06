@@ -19,6 +19,7 @@ import {
   withLatestFrom,
 } from 'rxjs';
 
+import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
@@ -34,6 +35,7 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
+import { AppType } from '@dv/shared/model/config';
 import {
   AusbildungUpdate,
   GesuchFormularUpdate,
@@ -152,7 +154,8 @@ export const loadGesuch = createEffect(
           .select(selectRouteId)
           .pipe(combineLatestWith(store.select(selectRouteTrancheId))),
       ),
-      switchMap(([, [id, trancheId]]) => {
+      withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
+      switchMap(([[, [id, trancheId]], { compileTimeConfig }]) => {
         if (!id) {
           throw new Error(
             'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id',
@@ -173,28 +176,34 @@ export const loadGesuch = createEffect(
           ),
         };
 
-        if (trancheId) {
-          return gesuchService
-            .getGsTrancheChanges$(
-              // TODO: Split with appType
+        if (trancheId && compileTimeConfig) {
+          const services$ = {
+            'gesuch-app': gesuchService.getGsTrancheChanges$(
               { aenderungId: trancheId },
               undefined,
               undefined,
               navigateIfNotFound,
-            )
-            .pipe(
-              map((gesuch) =>
-                SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
-                  gesuch,
-                  trancheId,
-                }),
-              ),
-              catchError((error) => [
-                SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                  error: sharedUtilFnErrorTransformer(error),
-                }),
-              ]),
-            );
+            ),
+            'sachbearbeitung-app': gesuchService.getSbTrancheChanges$(
+              { aenderungId: trancheId },
+              undefined,
+              undefined,
+              navigateIfNotFound,
+            ),
+          } satisfies Record<AppType, unknown>;
+          return services$[compileTimeConfig.appType].pipe(
+            map((gesuch) =>
+              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
+                gesuch,
+                trancheId,
+              }),
+            ),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
         }
 
         return gesuchService

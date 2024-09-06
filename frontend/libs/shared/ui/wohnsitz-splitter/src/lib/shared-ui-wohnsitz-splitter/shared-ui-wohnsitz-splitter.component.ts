@@ -2,12 +2,21 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUiPercentageSplitterComponent } from '@dv/shared/ui/percentage-splitter';
+import { SharedUiZuvorHintDirective } from '@dv/shared/ui/form';
+import {
+  SharedUiPercentageSplitterComponent,
+  SharedUiPercentageSplitterDirective,
+} from '@dv/shared/ui/percentage-splitter';
 
 @Component({
   selector: 'dv-shared-ui-wohnsitz-splitter',
   standalone: true,
-  imports: [SharedUiPercentageSplitterComponent, TranslateModule],
+  imports: [
+    SharedUiPercentageSplitterComponent,
+    SharedUiPercentageSplitterDirective,
+    SharedUiZuvorHintDirective,
+    TranslateModule,
+  ],
   templateUrl: './shared-ui-wohnsitz-splitter.component.html',
   styleUrls: ['./shared-ui-wohnsitz-splitter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,4 +27,9 @@ export class SharedUiWohnsitzSplitterComponent {
     wohnsitzAnteilMutter: FormControl<string | undefined>;
     wohnsitzAnteilVater: FormControl<string | undefined>;
   };
+
+  @Input({ required: true }) changes!: Partial<{
+    wohnsitzAnteilVater: number;
+    wohnsitzAnteilMutter: number;
+  }>;
 }

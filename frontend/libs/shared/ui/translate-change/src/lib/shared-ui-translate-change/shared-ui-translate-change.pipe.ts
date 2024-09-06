@@ -5,6 +5,7 @@ import { FormularChangeTypes } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 const PLACEHOLDER = '$VALUE';
+type Placeholder = typeof PLACEHOLDER;
 
 @Pipe({
   standalone: true,
@@ -17,7 +18,11 @@ export class SharedUiTranslateChangePipe
 {
   override transform(
     value: FormularChangeTypes,
-    translationKey: `${string}${typeof PLACEHOLDER}${string}`,
+    translationKey:
+      | `shared.form.zuvor.checkbox.${Placeholder}`
+      | `shared.form.zuvor.radio.${Placeholder}`
+      // eslint-disable-next-line @typescript-eslint/ban-types -- Used to intellisense suggestions
+      | (`${string}${typeof PLACEHOLDER}${string}` & {}),
   ) {
     if (value === '') {
       return '';

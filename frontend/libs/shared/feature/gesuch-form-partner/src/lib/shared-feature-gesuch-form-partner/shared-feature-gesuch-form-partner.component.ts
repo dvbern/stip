@@ -44,11 +44,15 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import {
@@ -91,6 +95,10 @@ const MEDIUM_AGE_ADULT = 30;
     MatCheckboxModule,
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
+    SharedUiInfoDialogDirective,
+    SharedUiZuvorHintDirective,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
     SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-partner.component.html',

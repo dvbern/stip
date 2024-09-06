@@ -1,12 +1,13 @@
+@let view = viewSig();
 <!-- loading -->
-@if (viewSig().loading) {
+@if (view.loading) {
   <dv-shared-ui-loading data-testid="form-einnahmen-kosten-loading"></dv-shared-ui-loading>
 } @else {
   <!-- form -->
   @if (formStateSig().hasData) {
     <form
       [formGroup]="form"
-      [dvSharedUiFormReadonly]="viewSig().readonly"
+      [dvSharedUiFormReadonly]="view.readonly"
       (gotReenabledSig)="gotReenabled$.next({})"
       data-testid="form-einnahmen-kosten-form"
       novalidate
@@ -29,6 +30,7 @@
               type="text"
               [maskito]="maskitoNumber"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.nettoerwerbseinkommen"></mat-hint>
             <mat-hint translate>shared.form.einnahmenkosten.nettoerwerbseinkommen.info</mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
@@ -56,6 +58,7 @@
                 type="text"
                 [maskito]="maskitoNumber"
               />
+              <mat-hint *dvZuvorHint="view.formChanges?.alimente"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
@@ -87,6 +90,7 @@
               type="text"
               [maskito]="maskitoNumber"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.zulagen"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -113,6 +117,7 @@
                 type="text"
                 [maskito]="maskitoNumber"
               />
+              <mat-hint *dvZuvorHint="view.formChanges?.renten"></mat-hint>
               <mat-hint translate>shared.form.einnahmenkosten.renten.info</mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
@@ -140,6 +145,7 @@
               type="text"
               [maskito]="maskitoNumber"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.eoLeistungen"></mat-hint>
             <mat-hint translate>shared.form.einnahmenkosten.eoLeistungen.info</mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
@@ -166,6 +172,7 @@
               type="text"
               [maskito]="maskitoNumber"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.ergaenzungsleistungen"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -192,6 +199,7 @@
               type="text"
               [maskito]="maskitoNumber"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.beitraege"></mat-hint>
             <mat-hint translate>shared.form.einnahmenkosten.beitraege.info</mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
@@ -224,6 +232,7 @@
               type="text"
               [maskito]="maskitoNumber"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.ausbildungskostenSekundarstufeZwei"></mat-hint>
             @if (istSekundarstufeGroesserAlsLimitSig()) {
               <mat-hint class="mat-caution">
                 {{
@@ -257,6 +266,7 @@
               type="text"
               [maskito]="maskitoNumber"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.ausbildungskostenTertiaerstufe"></mat-hint>
             @if (istTeritaerstufeGroesserAlsLimitSig()) {
               <mat-hint class="mat-caution">
                 {{
@@ -292,6 +302,7 @@
                 type="text"
                 [maskito]="maskitoNumber"
               />
+              <mat-hint *dvZuvorHint="view.formChanges?.betreuungskostenKinder"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
@@ -319,6 +330,7 @@
               type="text"
               [maskito]="maskitoNumber"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.fahrkosten"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -346,6 +358,7 @@
                 type="text"
                 [maskito]="maskitoNumber"
               />
+              <mat-hint *dvZuvorHint="view.formChanges?.wohnkosten"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
@@ -373,6 +386,7 @@
               min="0"
               max="5"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.auswaertigeMittagessenProWoche"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -398,6 +412,9 @@
             <mat-radio-button data-testid="no" [value]="false">{{
               'shared.form.radio.no' | translate
             }}</mat-radio-button>
+            <dv-shared-ui-form-zuvor-hint
+              [changes]="view.formChanges?.wgWohnend | translateChange: 'shared.form.zuvor.radio.$VALUE'"
+            ></dv-shared-ui-form-zuvor-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -422,6 +439,7 @@
                 type="text"
                 [maskito]="maskitoNumber"
               />
+              <mat-hint *dvZuvorHint="view.formChanges?.vermoegen"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
@@ -450,6 +468,7 @@
               [max]="steuerjahrValidation.steuerjahrPeriodeSig()"
               type="number"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.steuerjahr"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -475,6 +494,7 @@
               min="0"
               max="99"
             />
+            <mat-hint *dvZuvorHint="view.formChanges?.veranlagungsCode"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -497,6 +517,7 @@
             disabled
             [value]="steuernKantonGemeindeSig()"
           />
+          <mat-hint *dvZuvorHint="view.formChanges?.steuernKantonGemeinde"></mat-hint>
         </mat-form-field>
       </div>
 
@@ -521,6 +542,9 @@
                 <mat-radio-button data-testid="no" [value]="false">{{
                   'shared.form.radio.no' | translate
                 }}</mat-radio-button>
+                <dv-shared-ui-form-zuvor-hint
+                  [changes]="view.formChanges?.verdienstRealisiert | translateChange: 'shared.form.zuvor.radio.$VALUE'"
+                ></dv-shared-ui-form-zuvor-hint>
               </div>
               @if (verdienstRealisiertDocumentSig(); as options) {
                 <dv-shared-pattern-document-upload
@@ -552,6 +576,9 @@
               <mat-radio-button data-testid="no" [value]="false">{{
                 'shared.form.radio.no' | translate
               }}</mat-radio-button>
+              <dv-shared-ui-form-zuvor-hint
+                [changes]="view.formChanges?.willDarlehen | translateChange: 'shared.form.zuvor.radio.$VALUE'"
+              ></dv-shared-ui-form-zuvor-hint>
 
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
@@ -563,7 +590,7 @@
 
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>
-        @if (!viewSig().readonly) {
+        @if (!view.readonly) {
           <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
             {{ 'shared.form.save-and-continue' | translate }}
           </button>

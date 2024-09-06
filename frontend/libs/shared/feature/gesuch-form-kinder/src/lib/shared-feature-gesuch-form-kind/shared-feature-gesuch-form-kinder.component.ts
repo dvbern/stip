@@ -9,15 +9,17 @@ import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
 import { KindUpdate } from '@dv/shared/model/gesuch';
 import { KINDER } from '@dv/shared/model/gesuch-form';
+import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
+import { SharedUiFormZuvorHintListPipe } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
 
+import { selectSharedFeatureGesuchFormKinderView } from './shared-feature-gesuch-form-kinder.selector';
 import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-gesuch-form-kind-editor/shared-feature-gesuch-form-kind-editor.component';
 
 @Component({
@@ -28,6 +30,8 @@ import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-
     NgbAlert,
     SharedFeatureGesuchFormKinderEditorComponent,
     SharedUiStepFormButtonsComponent,
+    SharedUiChangeIndicatorComponent,
+    SharedUiFormZuvorHintListPipe,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-kinder.component.html',
@@ -36,7 +40,7 @@ import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-
 export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   private store = inject(Store);
 
-  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormKinderView);
 
   hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);

@@ -1,3 +1,4 @@
+@let changes = changesSig();
 <form
   [formGroup]="form"
   [dvSharedUiFormReadonly]="viewSig().readonly"
@@ -11,6 +12,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
       <input matInput formControlName="nachname" data-testid="form-kind-nachname" type="text" />
+      <mat-hint *dvZuvorHint="changes?.nachname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -18,6 +20,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
       <input matInput formControlName="vorname" data-testid="form-kind-vorname" type="text" />
+      <mat-hint *dvZuvorHint="changes?.vorname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -36,6 +39,7 @@
         data-testid="form-kind-geburtsdatum"
         (blur)="onGeburtsdatumBlur()"
       />
+      <mat-hint *dvZuvorHint="changes?.geburtsdatum | date: 'dd.MM.YYYY'"></mat-hint>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -64,6 +68,7 @@
           </mat-option>
         }
       </mat-select>
+      <mat-hint *dvZuvorHint="changes?.wohnsitz | translateChange: 'shared.form.shared.wohnsitz.$VALUE'"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -76,6 +81,10 @@
       <div class="col-12 col-md-6 col-xl-4">
         <dv-shared-ui-wohnsitz-splitter
           [updateValidity]="updateValidity$ | async"
+          [changes]="{
+            wohnsitzAnteilVater: changes?.wohnsitzAnteilVater,
+            wohnsitzAnteilMutter: changes?.wohnsitzAnteilMutter,
+          }"
           [controls]="form.controls"
         ></dv-shared-ui-wohnsitz-splitter>
       </div>
@@ -101,6 +110,11 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-radio-group>
+      <mat-hint
+        *dvZuvorHint="
+          changes?.ausbildungssituation | translateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
+        "
+      ></mat-hint>
     </div>
   </div>
 
@@ -112,6 +126,9 @@
       >
         {{ 'shared.form.kinder.alimentenregelungExistiert.label' | translate }}
       </mat-checkbox>
+      <dv-shared-ui-form-zuvor-hint
+        [changes]="alimentenregelungExistiertChangeSig() | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+      ></dv-shared-ui-form-zuvor-hint>
     </div>
   </div>
   <div class="row g-4 my-2">
@@ -126,6 +143,7 @@
             data-testid="form-kind-erhalteneAlimentebeitraege"
             type="text"
           />
+          <mat-hint *dvZuvorHint="changes?.erhalteneAlimentebeitraege"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>

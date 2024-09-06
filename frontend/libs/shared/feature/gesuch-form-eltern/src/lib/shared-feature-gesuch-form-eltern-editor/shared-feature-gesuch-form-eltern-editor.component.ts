@@ -119,7 +119,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     Required<Pick<ElternUpdate, 'elternTyp'>>;
   @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) gesuchFormular!: SharedModelGesuchFormular;
-  @Input() changes: Partial<ElternUpdate> | undefined | null;
+  @Input({ required: true }) changes: Partial<ElternUpdate> | undefined | null;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();

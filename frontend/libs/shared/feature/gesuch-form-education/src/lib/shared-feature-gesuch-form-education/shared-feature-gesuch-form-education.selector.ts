@@ -24,8 +24,7 @@ export const selectSharedFeatureGesuchFormEducationView = createSelector(
       gesuchFormular: gesuchsView.gesuchFormular,
       formChanges: getChangesForForm(
         gesuchsView.gesuchFormular?.ausbildung,
-        gesuchsView.tranchenChanges.original?.tranche.gesuchFormular
-          ?.ausbildung,
+        gesuchsView.tranchenChanges?.tranche.gesuchFormular?.ausbildung,
       ),
       minAusbildungBeginDate: lastLebenslaufDate
         ? addMonths(lastLebenslaufDate, 1)
