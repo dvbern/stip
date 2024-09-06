@@ -87,7 +87,7 @@ export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
   const dif = diff(changed, original, { keysToSkip: ['id'] });
   const difference = dif.reduce(
     (acc, c) => {
-      if (c.type === 'UPDATE') {
+      if (handledChangeTypes.includes(c.type)) {
         if (c.changes) {
           acc[c.key as K] = c.changes
             .filter((s) => handledChangeTypes.includes(s.type))
@@ -114,7 +114,10 @@ export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
   return difference;
 }
 
-export function getChangesForList<const T extends ArrayForms[number], const R>(
+export function getChangesForList<
+  const T extends ArrayForms[number],
+  const R extends string | undefined,
+>(
   original: T[] | undefined,
   changed: T[] | undefined,
   getIdentifier: (value: T) => R,
@@ -132,11 +135,15 @@ export function getChangesForList<const T extends ArrayForms[number], const R>(
       changes.changes?.filter((c) => c.type === 'ADD').map((c) => +c.key) ?? [];
   }
   const collectedChanges = original
-    .map((c) => ({
+    .map((c, i) => ({
       identifier: getIdentifier(c),
       values: getChangesForForm(
         c,
-        changed.find((cc) => getIdentifier(cc) === getIdentifier(c)),
+        // TODO: Check if diff library has a better way to compare arrays
+        // Compare using the identifier
+        changed.find((cc) => getIdentifier(cc) === getIdentifier(c)) ??
+          // Otherwise fallback to index comparison
+          changed[i],
       ),
     }))
     .filter((c) => isDefined(c.values));
@@ -145,6 +152,13 @@ export function getChangesForList<const T extends ArrayForms[number], const R>(
   }
   return {
     changes: collectedChanges.filter((c) => isDefined(c.values)),
+    changesByIdentifier: collectedChanges.reduce(
+      (acc, c) => ({
+        ...acc,
+        ...(c.identifier ? { [c.identifier]: c.values } : {}),
+      }),
+      {} as Record<Exclude<R, undefined>, T>,
+    ),
     newIndexes,
   };
 }

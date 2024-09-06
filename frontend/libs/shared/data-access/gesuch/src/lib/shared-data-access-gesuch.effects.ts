@@ -176,6 +176,7 @@ export const loadGesuch = createEffect(
         if (trancheId) {
           return gesuchService
             .getGsTrancheChanges$(
+              // TODO: Split with appType
               { aenderungId: trancheId },
               undefined,
               undefined,

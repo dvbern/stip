@@ -37,6 +37,11 @@ async function setup(gesuchFormular: GesuchFormularUpdate) {
               },
             },
             gesuchFormular,
+            cache: {
+              gesuch: null,
+              gesuchId: null,
+              gesuchFormular: null,
+            },
           },
           language: { language: 'de' },
           configs: {},

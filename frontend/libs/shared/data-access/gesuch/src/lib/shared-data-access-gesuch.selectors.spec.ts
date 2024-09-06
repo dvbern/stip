@@ -44,6 +44,11 @@ describe('selectSharedDataAccessGesuchsView', () => {
         isGesuchApp: true,
         isSachbearbeitungApp: false,
       },
+      {
+        tranchenChanges: {
+          original: null,
+        },
+      },
       state.lastUpdate,
       state.loading,
       state.gesuch,
@@ -79,8 +84,10 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const firstState = reducer(undefined, firstAction);
     const secondAction = SharedEventGesuchFormPerson.init();
     const secondState = reducer(firstState, secondAction);
-    const result =
-      selectSharedDataAccessGesuchValidationView.projector(secondState);
+    const result = selectSharedDataAccessGesuchValidationView.projector(
+      { tranchenChanges: { original: null } },
+      secondState,
+    );
     expect(result.cachedGesuchFormular).toEqual(
       firstUpdate.gesuchTrancheToWorkWith.gesuchFormular,
     );
@@ -128,7 +135,12 @@ describe('selectSharedDataAccessGesuchsView', () => {
       loading: false,
       error: undefined,
     };
-    const result = selectSharedDataAccessGesuchValidationView.projector(state);
+    const result = selectSharedDataAccessGesuchValidationView.projector(
+      {
+        tranchenChanges: { original: null },
+      },
+      state,
+    );
     expect(result.invalidFormularProps.validations).toEqual({
       errors: ['partner', 'kinds'],
       warnings: undefined,

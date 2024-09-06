@@ -9,4 +9,8 @@
   left: 0;
   display: block;
   position: absolute;
+
+  &.left {
+    left: -10px;
+  }
 }

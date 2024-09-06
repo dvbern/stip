@@ -6,22 +6,18 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 import { SharedUiZuvorHintComponent } from './shared-ui-form-zuvor-hint.template';
 
 /**
- * @description
- * Directive to show a the previous values of Formfields.
- * - Must be placed on a mat-hint component.
- * - Must be used in combination within a mat-form-field.
- * - If there is another hint, the hint will be replaced if there is a previous value.
- * Ohter hints must be placed after this hint element.
- * - The following hint must also have the attribute `align="end"` so material does not throw an error.
+ * A directive to show a hint if a value has changed.
+ *
+ * It should be placed on a `mat-hint` element and the mat-hint should be the **FIRST** child of type `mat-hint` in a `mat-form-field`.
  *
  * @example
+ * <mat-hint *dvZuvorHint="previousValue"></mat-hint>
+ * <mat-hint translate>shared.form.einnahmenkosten.nettoerwerbseinkommen.info</mat-hint>
+ *
+ * @example <caption>Translated or values which need parsing</caption>
  * <mat-hint
- *  *dvZuvorHint="previousValue"
- *  data-testid="form-person-sozialversicherungsnummer-zuvor-hint"
- *  class="zuvor-hint"
- * >
- * </mat-hint>
- * <mat-hint align="end" translate>shared.form.einnahmenkosten.nettoerwerbseinkommen.info</mat-hint>
+ *   *dvZuvorHint="view.formChanges?.anrede | lowercase | translateChange: 'shared.form.select.salutation.$VALUE'"
+ * ></mat-hint>
  */
 @Directive({
   selector: '[dvZuvorHint]',

@@ -19,6 +19,9 @@ export class SharedUiTranslateChangePipe
     value: FormularChangeTypes,
     translationKey: `${string}${typeof PLACEHOLDER}${string}`,
   ) {
+    if (value === '') {
+      return '';
+    }
     if (isDefined(value)) {
       return super.transform(
         translationKey.replace(`${PLACEHOLDER}`, value.toString()),

@@ -10,6 +10,9 @@
 .mat-mdc-form-field-hint-wrapper,
 .form-hints {
   .zuvor-hint {
+    // TODO: check if template host styling is possible
+    margin-left: 0.25rem;
+
     &::before {
       content: '';
       display: inline-block;

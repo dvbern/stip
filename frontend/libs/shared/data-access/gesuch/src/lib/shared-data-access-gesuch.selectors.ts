@@ -1,6 +1,6 @@
 import { getRouterSelectors } from '@ngrx/router-store';
 import { createSelector } from '@ngrx/store';
-import { diff } from 'json-diff-ts';
+import { IChange, diff } from 'json-diff-ts';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { CompileTimeConfig } from '@dv/shared/model/config';
@@ -8,6 +8,8 @@ import {
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
+  Steuerdaten,
+  SteuerdatenTyp,
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
 import {
@@ -34,7 +36,7 @@ import {
   isGesuchReadonly,
   isTrancheReadonly,
 } from '@dv/shared/util/readonly-state';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined, type } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
@@ -58,21 +60,39 @@ export const selectRouteId = selectRouteParam('id');
 
 export const selectRouteTrancheId = selectRouteParam('trancheId');
 
+export const selectSharedDataAccessCachedGesuchChanges = createSelector(
+  sharedDataAccessGesuchsFeature.selectCache,
+  ({ gesuch }) => {
+    return {
+      tranchenChanges: prepareTranchenChanges(gesuch),
+    };
+  },
+);
+
 export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedDataAccessConfigsView,
+  selectSharedDataAccessCachedGesuchChanges,
   sharedDataAccessGesuchsFeature.selectLastUpdate,
   sharedDataAccessGesuchsFeature.selectLoading,
   sharedDataAccessGesuchsFeature.selectGesuch,
   sharedDataAccessGesuchsFeature.selectGesuchFormular,
   sharedDataAccessGesuchsFeature.selectSpecificTrancheId,
-  (config, lastUpdate, loading, gesuch, gesuchFormular, specificTrancheId) => {
+  (
+    config,
+    { tranchenChanges },
+    lastUpdate,
+    loading,
+    gesuch,
+    gesuchFormular,
+    specificTrancheId,
+  ) => {
     return {
       config,
       lastUpdate,
       loading,
       gesuch,
       gesuchFormular,
-      tranchenChanges: prepareTranchenChanges(gesuch),
+      tranchenChanges,
       readonly: specificTrancheId
         ? isTrancheReadonly(
             gesuch?.gesuchTrancheToWorkWith ?? null,
@@ -88,14 +108,15 @@ export const selectSharedDataAccessGesuchsView = createSelector(
 );
 
 export const selectSharedDataAccessGesuchValidationView = createSelector(
+  selectSharedDataAccessCachedGesuchChanges,
   sharedDataAccessGesuchsFeature.selectGesuchsState,
-  (state) => {
+  ({ tranchenChanges }, state) => {
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
     return {
       specificTrancheId: state.specificTrancheId,
       cachedGesuchId: state.cache.gesuchId,
       cachedGesuchFormular: currentForm,
-      tranchenChanges: prepareTranchenChanges(state.cache.gesuch),
+      tranchenChanges,
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,
         validations: {
@@ -266,7 +287,12 @@ function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
     return {
       hasChanges: changes.length > 0,
       tranche,
-      affectedSteps: changes.map((c) => c.key),
+      affectedSteps: [
+        ...changes
+          .filter((c) => (c.changes?.length ?? 0) > 0)
+          .map((c) => c.key),
+        ...hasSteuerdatenFamilyChange(changes),
+      ],
     };
   });
   if (!allChanges || allChanges.length <= 0) {
@@ -278,3 +304,40 @@ function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
     original: allChanges[allChanges.length - 1],
   };
 }
+
+/**
+ * Used to mark steuerdatenVater/Mutter Tabs as affected if steuerdatenTyp has changed to FAMILIE
+ * or back to individual
+ */
+const hasSteuerdatenFamilyChange = (
+  changes: IChange[],
+): SharedModelGesuchFormularProps[] => {
+  const steuerdatenChange = changes.find(
+    (c) =>
+      c.key === type<SharedModelGesuchFormularProps>('steuerdaten') &&
+      c.type === 'UPDATE',
+  );
+
+  // Check if steuerdaten have changed
+  for (const change of steuerdatenChange?.changes ?? []) {
+    const steuerdatenTypChange = change.changes?.find(
+      (c) => c.key === type<keyof Steuerdaten>('steuerdatenTyp'),
+    );
+    // Check if steuerdatenTyp has changed
+    if (steuerdatenTypChange && steuerdatenTypChange.type === 'UPDATE') {
+      // If steuerdatenTyp has changed from FAMILIE to steuerdatenMutter/Vater, mark them as affected
+      if (
+        [steuerdatenTypChange.oldValue, steuerdatenTypChange.value].includes(
+          type<SteuerdatenTyp>('FAMILIE'),
+        )
+      ) {
+        return ['steuerdatenMutter', 'steuerdatenVater'];
+      }
+      // else if steuerdatenTyp has changed from steuerdatenMutter/Vater to FAMILIE, mark it as affected
+      else {
+        return ['steuerdaten'];
+      }
+    }
+  }
+  return [];
+};

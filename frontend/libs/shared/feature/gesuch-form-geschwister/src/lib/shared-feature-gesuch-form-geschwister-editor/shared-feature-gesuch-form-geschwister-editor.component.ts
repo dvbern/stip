@@ -40,12 +40,16 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
@@ -81,12 +85,16 @@ const MEDIUM_AGE = 20;
     MatSelectModule,
     MatRadioModule,
     SharedUiFormMessageErrorDirective,
+    SharedUiZuvorHintDirective,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
     NgbInputDatepicker,
     MaskitoDirective,
     SharedUiWohnsitzSplitterComponent,
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiChangeIndicatorComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
@@ -100,6 +108,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
   private formUtils = inject(SharedUtilFormService);
 
   @Input({ required: true }) geschwister!: Partial<GeschwisterUpdate>;
+  @Input() changes: Partial<GeschwisterUpdate> | undefined | null;
 
   @Output() saveTriggered = new EventEmitter<GeschwisterUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
