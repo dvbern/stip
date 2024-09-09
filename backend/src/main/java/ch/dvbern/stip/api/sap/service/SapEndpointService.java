@@ -47,8 +47,6 @@ import java.time.LocalDate;
 @ApplicationScoped
 public class SapEndpointService {
 
-    private final AuszahlungMapper auszahlungMapper;
-
     @Inject
     ConfigService configService;
 
@@ -66,7 +64,6 @@ public class SapEndpointService {
 
     @RestClient
     BusinessPartnerReadClient businessPartnerReadClient;
-
 
     private ImportStatusReadResponse  getAndParseGetSAPImportStatusResponse(BigDecimal deliveryId) throws JAXBException, SOAPException, IOException {
         var request = new ImportStatusReadRequest();
@@ -124,15 +121,15 @@ public class SapEndpointService {
             request.getBUSINESSPARTNER().setIDKEYS(new BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS());
             request.getBUSINESSPARTNER().getIDKEYS().setEXTID(String.valueOf(extId));
             request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerCreateRequest.BUSINESSPARTNER.HEADER());
-            request.getBUSINESSPARTNER().getHEADER().setPARTNCAT("1"); //todo: set correct category
+            request.getBUSINESSPARTNER().getHEADER().setPARTNCAT("1"); //todo KSTIP-1229: set correct category
             request.getBUSINESSPARTNER().getPERSDATA().setCORRESPONDLANGUAGEISO("DE"); //todo: set correct language iso
-            request.getBUSINESSPARTNER().getORGDATA().setLANGUISO("DE");//todo: set correct language iso
-            request.getBUSINESSPARTNER().getORGDATA().setNAME1("");//todo: set correct name 1
-            request.getBUSINESSPARTNER().getORGDATA().setNAME2("");//todo: set correct name 2
-            request.getBUSINESSPARTNER().getORGDATA().setNAME3("");//todo: set correct name 3
-            request.getBUSINESSPARTNER().getORGDATA().setNAME4("");//todo: set correct name 4
+            request.getBUSINESSPARTNER().getORGDATA().setLANGUISO("DE");//todo KSTIP-1229: set correct language iso
+            request.getBUSINESSPARTNER().getORGDATA().setNAME1("");//todo KSTIP-1229: set correct name 1
+            request.getBUSINESSPARTNER().getORGDATA().setNAME2("");//todo KSTIP-1229: set correct name 2
+            request.getBUSINESSPARTNER().getORGDATA().setNAME3("");//todo KSTIP-1229: set correct name 3
+            request.getBUSINESSPARTNER().getORGDATA().setNAME4("");//todo KSTIP-1229: set correct name 4
             request.getBUSINESSPARTNER().getADDRESS().get(0).setADRKIND("XXDEFAULT");
-            request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo: set iso country (max 3 instead of "Schweiz"
+            request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo KSTIP-1229: set iso country (max 3 instead of "Schweiz"
 
             final var xmlRequest = SoapUtils.buildXmlRequest(request,BusinessPartnerCreateRequest.class, SapEndpointName.BUSINESPARTNER);
             final var response = businessPartnerCreateClient.createBusinessPartner(
@@ -162,15 +159,15 @@ public class SapEndpointService {
             request.getBUSINESSPARTNER().setIDKEYS(new BusinessPartnerChangeRequest.BUSINESSPARTNER.IDKEYS());
 
             //request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER());
-            //request.getBUSINESSPARTNER().getHEADER().setBPARTNER("1"); //todo: set correct category
-            request.getBUSINESSPARTNER().getPERSDATA().setCORRESPONDLANGUAGEISO("DE"); //todo: set correct language iso
-            request.getBUSINESSPARTNER().getORGDATA().setLANGUISO("DE");//todo: set correct language iso
-            request.getBUSINESSPARTNER().getORGDATA().setNAME1("");//todo: set correct name 1
-            request.getBUSINESSPARTNER().getORGDATA().setNAME2("");//todo: set correct name 2
-            request.getBUSINESSPARTNER().getORGDATA().setNAME3("");//todo: set correct name 3
-            request.getBUSINESSPARTNER().getORGDATA().setNAME4("");//todo: set correct name 4
+            //request.getBUSINESSPARTNER().getHEADER().setBPARTNER("1"); //todo KSTIP-1229: set correct category
+            request.getBUSINESSPARTNER().getPERSDATA().setCORRESPONDLANGUAGEISO("DE"); //todo KSTIP-1229: set correct language iso
+            request.getBUSINESSPARTNER().getORGDATA().setLANGUISO("DE");//todo KSTIP-1229: set correct language iso
+            request.getBUSINESSPARTNER().getORGDATA().setNAME1("");//todo KSTIP-1229: set correct name 1
+            request.getBUSINESSPARTNER().getORGDATA().setNAME2("");//todo KSTIP-1229: set correct name 2
+            request.getBUSINESSPARTNER().getORGDATA().setNAME3("");//todo KSTIP-1229: set correct name 3
+            request.getBUSINESSPARTNER().getORGDATA().setNAME4("");//todo KSTIP-1229: set correct name 4
             request.getBUSINESSPARTNER().getADDRESS().get(0).setADRKIND("XXDEFAULT");
-            request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo: set iso country (max 3 instead of "Schweiz"
+            request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo KSTIP-1229: set iso country (max 3 instead of "Schweiz"
 
             final var response = businessPartnerChangeClient.changeBusinessPartner(SoapUtils.buildXmlRequest(request,BusinessPartnerChangeRequest.class,SapEndpointName.BUSINESPARTNER));
             final var result = SoapUtils.parseSoapResponse(response, BusinessPartnerChangeResponse.class);

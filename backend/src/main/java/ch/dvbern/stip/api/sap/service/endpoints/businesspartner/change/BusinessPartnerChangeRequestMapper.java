@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class BusinessPartnerChangeRequestMapper {
-    BusinessParnterChangeMapper businessPartnerMapper = new BusinessParnterChangeMapper();
+    BusinessPartnerChangeMapper businessPartnerMapper = new BusinessPartnerChangeMapper();
 
     public BusinessPartnerChangeRequest toBusinessPartnerChangeRequest(Auszahlung auszahlung, BigInteger sysid, BigDecimal deliveryId){
         BusinessPartnerChangeRequest businessPartnerChangeRequest = new BusinessPartnerChangeRequest();

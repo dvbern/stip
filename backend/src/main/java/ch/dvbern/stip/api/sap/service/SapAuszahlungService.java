@@ -24,7 +24,7 @@ public class SapAuszahlungService {
         BigDecimal deliveryId = SAPUtils.generateDeliveryId();
         if(auszahlung.getSapBusinessPartnerId() != null) {
             //update/sync busniesspartner
-            final var response = sapEndpointService.changeBusinessPartner(auszahlung,auszahlung.getSapBusinessPartnerId(),deliveryId);
+            final var response = sapEndpointService.changeBusinessPartner(auszahlung,auszahlung.getSapBusinessPartnerId(), deliveryId);
             if(response.getStatus() != HttpStatus.SC_OK){
                 throw new WebApplicationException(Response.Status.BAD_REQUEST);
             }else{
@@ -34,7 +34,7 @@ public class SapAuszahlungService {
             //generate ext-id
             final var extId = SAPUtils.generateExtId();
             //create new businessparter
-            final var createResponse1 = sapEndpointService.createBusinessPartner(auszahlung,extId,deliveryId);
+            final var createResponse1 = sapEndpointService.createBusinessPartner(auszahlung, extId, deliveryId);
             SAPUtils.logAsWarningIfNoAction(createResponse1);
             final var readResponse = sapEndpointService.readBusniessPartner(extId);
             if(SAPUtils.noSapActionHasBeenPerformed(readResponse)){
@@ -53,7 +53,7 @@ public class SapAuszahlungService {
         Integer businessPartnerId = getOrCreateBusinessPartner(auszahlung);
         if(businessPartnerId != null) {
             //createVendorPosting
-            final var response = sapEndpointService.createVendorPosting(auszahlung,businessPartnerId,deliveryId);
+            final var response = sapEndpointService.createVendorPosting(auszahlung, businessPartnerId, deliveryId);
             if(response.getStatus() != HttpStatus.SC_OK){
                 throw new WebApplicationException(Response.Status.BAD_REQUEST);
             }else{

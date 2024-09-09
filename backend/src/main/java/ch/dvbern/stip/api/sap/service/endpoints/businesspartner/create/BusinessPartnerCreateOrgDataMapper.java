@@ -6,7 +6,7 @@ public class BusinessPartnerCreateOrgDataMapper {
 
     BusinessPartnerCreateRequest.BUSINESSPARTNER.ORGDATA toBusinessPartnerORGDATA(Auszahlung auszahlung){
         BusinessPartnerCreateRequest.BUSINESSPARTNER.ORGDATA orgdata = new BusinessPartnerCreateRequest.BUSINESSPARTNER.ORGDATA();
-        orgdata.setNAME1(new StringBuilder(auszahlung.getVorname() + " ").append(auszahlung.getNachname()).toString());
+        orgdata.setNAME1(String.format("%s %s", auszahlung.getVorname(), auszahlung.getNachname()));
         return orgdata;
     }
 }

@@ -6,7 +6,7 @@ public class BusinessPartnerChangeOrgDataMapper {
 
     BusinessPartnerChangeRequest.BUSINESSPARTNER.ORGDATA toBusinessPartnerORGDATA(Auszahlung auszahlung){
         BusinessPartnerChangeRequest.BUSINESSPARTNER.ORGDATA orgdata = new BusinessPartnerChangeRequest.BUSINESSPARTNER.ORGDATA();
-        orgdata.setNAME1(new StringBuilder(auszahlung.getVorname() + " ").append(auszahlung.getNachname()).toString());
+        orgdata.setNAME1(String.format("%s %s", auszahlung.getVorname(), auszahlung.getNachname()));
         return orgdata;
     }
 }

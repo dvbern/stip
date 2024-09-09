@@ -2,7 +2,7 @@ package ch.dvbern.stip.api.sap.service.endpoints.businesspartner.change;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 
-public class BusinessParnterChangeMapper {
+public class BusinessPartnerChangeMapper {
     BusinessPartnerChangeAdresseMapper adresseMapper = new BusinessPartnerChangeAdresseMapper();
     BusinessPartnerChangePersDataMapper persDataMapper = new BusinessPartnerChangePersDataMapper();
     BusinessPartnerChangeOrgDataMapper orgDataMapper = new BusinessPartnerChangeOrgDataMapper();
