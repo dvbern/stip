@@ -38,22 +38,13 @@ import { Berechnung, BerechnungsValue } from '../../../models';
               {{ view.titleKey | translate }}
               @if (!panel.expanded) {
                 <span class="row fw-normal mt-1 fs-6 text-muted">
-                  @if (view.shouldChangeSize) {
-                    <div class="col-12">
-                      {{ view.infoKey | translate }}
-                    </div>
-                  } @else {
-                    <span class="col-7 fw-normal">{{
-                      view.infoKey | translate
-                    }}</span>
-                    <span class="col-5 text-end text-muted text-nowrap">
-                      {{ view.total | formatChf }}
-                    </span>
-                  }
+                  <div class="col-12">
+                    {{ view.infoKey | translate }}
+                  </div>
                 </span>
               }
             </div>
-            @if (!panel.expanded && view.shouldChangeSize) {
+            @if (!panel.expanded) {
               <span class="text-end flex-grow-1 align-self-start text-nowrap">
                 {{ view.total | formatChf }}
               </span>
