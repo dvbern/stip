@@ -14,12 +14,13 @@ import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-g
 import { GeschwisterUpdate } from '@dv/shared/model/gesuch';
 import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
+import { SharedUiFormZuvorHintListPipe } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
 
+import { selectSharedFeatureGesuchFormGeschwisterView } from './shared-feature-gesuch-form-geschwister.selector';
 import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-feature-gesuch-form-geschwister-editor/shared-feature-gesuch-form-geschwister-editor.component';
-import { selectSharedFeatureGesuchFormGeschwisterView } from '../shared-feature-gesuch-form-geschwister.selector';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-geschwister',
@@ -30,6 +31,7 @@ import { selectSharedFeatureGesuchFormGeschwisterView } from '../shared-feature-
     SharedFeatureGesuchFormGeschwisterEditorComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiChangeIndicatorComponent,
+    SharedUiFormZuvorHintListPipe,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister.component.html',

@@ -25,6 +25,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -38,6 +39,7 @@ public class GesuchTrancheService {
     private final GesuchMapperUtil gesuchMapperUtil;
     private final GesuchTrancheMapper gesuchTrancheMapper;
     private final GesuchDokumentMapper gesuchDokumentMapper;
+    private final GesuchFormularService gesuchFormularService;
     private final RequiredDokumentService requiredDokumentService;
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
@@ -118,6 +120,15 @@ public class GesuchTrancheService {
         return gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
             .map(gesuchDokumentMapper::toDto)
             .toList();
+    }
+
+    @Transactional
+    public ValidationReportDto validatePages(final UUID gesuchTrancheId) {
+        final var gesuchFormular = gesuchTrancheRepository.requireById(gesuchTrancheId).getGesuchFormular();
+        if (gesuchFormular == null) {
+            throw new NotFoundException();
+        }
+        return gesuchFormularService.validatePages(gesuchFormular);
     }
 
     @Transactional

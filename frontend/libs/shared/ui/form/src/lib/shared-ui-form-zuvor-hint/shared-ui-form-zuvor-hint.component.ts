@@ -39,5 +39,6 @@ import { SharedUiZuvorHintDirective } from './shared-ui-form-zuvor-hint.directiv
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFormZuvorHintComponent {
-  @Input() changes: FormularChangeTypes | undefined = undefined;
+  @Input({ required: true }) changes: FormularChangeTypes | undefined =
+    undefined;
 }

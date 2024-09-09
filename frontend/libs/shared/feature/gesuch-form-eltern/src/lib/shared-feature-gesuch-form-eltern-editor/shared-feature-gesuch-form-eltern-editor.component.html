@@ -38,15 +38,6 @@
           {{ 'shared.form.error.notUniqueAhv' | translate }}
         </mat-error>
       </mat-form-field>
-
-      @if (steuerunterlagenDocumentSig(); as options) {
-        <div class="d-flex gap-2 align-items-center">
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        </div>
-      }
     </div>
   </div>
 
@@ -194,12 +185,6 @@
           }}</mat-radio-button>
           <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
         </div>
-        @if (lohnabrechnungVermoegenDocumentSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1 mt-2"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
       </div>
       <dv-shared-ui-form-zuvor-hint
         [changes]="changes?.ausweisbFluechtling | translateChange: 'shared.form.zuvor.radio.$VALUE'"

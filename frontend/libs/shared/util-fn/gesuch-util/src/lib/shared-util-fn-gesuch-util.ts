@@ -1,4 +1,4 @@
-import { Operation, diff } from 'json-diff-ts';
+import { IChange, diff } from 'json-diff-ts';
 
 import {
   ElternTyp,
@@ -61,46 +61,70 @@ export function findElternteil(
   return elterns?.find((eltern) => eltern.elternTyp === elternTyp);
 }
 
+/**
+ * Flatten the given type to a non-array type.
+ */
 type Unpack<T> = T extends Array<infer U> ? U : T;
+/**
+ * Extract the changeable properties of a GesuchFormular.
+ */
 type ChangeableProperties = Exclude<
   keyof SharedModelGesuchFormular,
   'steuerdatenTabs'
 >;
+/**
+ * Defines the values of a GesuchFormular which are not arrays.
+ */
 type NonArrayForm = Exclude<
   Unpack<SharedModelGesuchFormular[ChangeableProperties]>,
   unknown[] | undefined
 >;
+/**
+ * Defines the values of a GesuchFormular which are arrays.
+ */
 type ArrayForms = Extract<
   SharedModelGesuchFormular[ChangeableProperties],
   unknown[]
 >;
 
-const handledChangeTypes: Operation[] = [Operation.ADD, Operation.UPDATE];
+/**
+ * Keys to skip when calculating the changes between two versions of a form.
+ */
+const keysToSkip = ['id'];
 
+/**
+ * Calculate the changes between two versions of a GesuchFormular property.
+ */
 export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
-  original?: T,
   changed?: T,
+  original?: T,
 ) {
   if (!original || !changed) {
     return null;
   }
-  const dif = diff(changed, original, { keysToSkip: ['id'] });
-  const difference = dif.reduce(
+  const rawDiff = diff(original, changed, { keysToSkip });
+  const addChange = <T>(record: T, change: IChange) => {
+    // Skip if the record is not an object or the key is already present
+    if (!record || typeof record !== 'object' || change.key in record) {
+      return record;
+    }
+    record[change.key as keyof T] =
+      // Changes to undefined are marked with 2 entries, one REMOVE and one ADD
+      // ADD/REMOVE operations don't have an oldValue
+      change.type !== 'UPDATE' ? change.value : change.oldValue;
+    return record;
+  };
+
+  const difference = rawDiff.reduce(
     (acc, c) => {
-      if (handledChangeTypes.includes(c.type)) {
-        if (c.changes) {
-          acc[c.key as K] = c.changes
-            .filter((s) => handledChangeTypes.includes(s.type))
-            .reduce(
-              (sub, s) => ({
-                ...sub,
-                [s.key]: s.oldValue ?? '',
-              }),
-              {} as T[K],
-            );
-        } else {
-          acc[c.key as K] = c.oldValue ?? '';
-        }
+      // TODO (KSTIP-1436): Handle nested objects (recursively)
+      if (c.changes) {
+        acc[c.key as K] = c.changes.reduce(
+          (sub, s) => addChange(sub, s),
+          {} as T[K],
+        );
+      } else {
+        addChange(acc, c);
       }
       return acc;
     },
@@ -108,57 +132,83 @@ export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
       [key in K]?: T[key];
     },
   );
+
   if (Object.keys(difference).length === 0) {
     return null;
   }
   return difference;
 }
 
+/**
+ * Calculate the changes between two lists of GesuchFormular properties using a custom identifier.
+ */
 export function getChangesForList<
   const T extends ArrayForms[number],
-  const R extends string | undefined,
+  const R extends string,
 >(
-  original: T[] | undefined,
   changed: T[] | undefined,
-  getIdentifier: (value: T) => R,
+  original: T[] | undefined,
+  getIdentifier: (value: T) => R | undefined,
 ) {
   if (!original || !changed) {
     return null;
   }
-  const changes = diff(changed, original, { keysToSkip: ['id'] })[0];
+  const _changes = diff(original, changed, {
+    keysToSkip,
+    embeddedObjKeys: {
+      // Compare using generic 'id' property if available
+      // the getIdentifier is not used for the comparison
+      ['.']: 'id',
+    },
+  }); // We only care about the first change because the dataset is just a list
+  const changes = _changes[0];
+
   if (!changes) {
     return null;
   }
-  let newIndexes: number[] = [];
+
+  // Identify new entries
+  let newEntries: Partial<Record<R, boolean>> = {};
   if (changes.type === 'UPDATE') {
-    newIndexes =
-      changes.changes?.filter((c) => c.type === 'ADD').map((c) => +c.key) ?? [];
+    newEntries =
+      changes.changes
+        ?.filter((c) => c.type === 'ADD')
+        .reduce<typeof newEntries>((entries, c) => {
+          const identifier = getIdentifier(c.value);
+          if (!identifier) {
+            return entries;
+          }
+          return { ...entries, [identifier]: true };
+        }, {}) ?? {};
   }
+
+  // Collect all changes and associate them with the identifier
   const collectedChanges = original
     .map((c, i) => ({
       identifier: getIdentifier(c),
       values: getChangesForForm(
-        c,
-        // TODO: Check if diff library has a better way to compare arrays
         // Compare using the identifier
         changed.find((cc) => getIdentifier(cc) === getIdentifier(c)) ??
           // Otherwise fallback to index comparison
           changed[i],
+        c,
       ),
     }))
     .filter((c) => isDefined(c.values));
-  if (collectedChanges.length === 0) {
+
+  if (collectedChanges.length === 0 && Object.keys(newEntries).length === 0) {
     return null;
   }
+
   return {
-    changes: collectedChanges.filter((c) => isDefined(c.values)),
+    // Group changes by identifier
     changesByIdentifier: collectedChanges.reduce(
       (acc, c) => ({
         ...acc,
         ...(c.identifier ? { [c.identifier]: c.values } : {}),
       }),
-      {} as Record<Exclude<R, undefined>, T>,
+      {} as Record<R, T>,
     ),
-    newIndexes,
+    newEntries,
   };
 }

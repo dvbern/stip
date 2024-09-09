@@ -81,6 +81,10 @@
         <dv-shared-ui-wohnsitz-splitter
           [updateValidity]="updateValidity$ | async"
           [controls]="form.controls"
+          [changes]="{
+            wohnsitzAnteilVater: changes?.wohnsitzAnteilVater,
+            wohnsitzAnteilMutter: changes?.wohnsitzAnteilMutter,
+          }"
         ></dv-shared-ui-wohnsitz-splitter>
       </div>
     </div>

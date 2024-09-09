@@ -40,7 +40,6 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
-import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -94,7 +93,6 @@ const MEDIUM_AGE = 20;
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
-    SharedUiChangeIndicatorComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
@@ -108,7 +106,10 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
   private formUtils = inject(SharedUtilFormService);
 
   @Input({ required: true }) geschwister!: Partial<GeschwisterUpdate>;
-  @Input() changes: Partial<GeschwisterUpdate> | undefined | null;
+  @Input({ required: true }) changes:
+    | Partial<GeschwisterUpdate>
+    | undefined
+    | null;
 
   @Output() saveTriggered = new EventEmitter<GeschwisterUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();

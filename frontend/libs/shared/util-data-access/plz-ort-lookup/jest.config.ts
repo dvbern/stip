@@ -1,3 +1,5 @@
+import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
+
 /* eslint-disable */
 export default {
   displayName: 'shared-util-data-access-plz-ort-lookup',
@@ -6,7 +8,8 @@ export default {
   coverageDirectory:
     '../../../../coverage/libs/shared/util-data-access/plz-ort-lookup',
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': [
+    '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
+    '^.+\\.(html)$': [
       'jest-preset-angular',
       {
         tsconfig: '<rootDir>/tsconfig.spec.json',

@@ -50,7 +50,7 @@ export class SharedPatternGesuchStepNavComponent {
       this.viewSig();
     return this.stepsSig()?.map((step) => ({
       ...step,
-      hasChanges: tranchenChanges.original?.affectedSteps.includes(
+      hasChanges: tranchenChanges?.affectedSteps.includes(
         gesuchFormStepsFieldMap[step.route] ?? -1,
       ),
       routes: [

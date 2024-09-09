@@ -14,9 +14,24 @@ import type { SharedUiZuvorHintDirective } from './shared-ui-form-zuvor-hint.dir
  * Used by {@link SharedUiZuvorHintDirective} to show changed values.
  */
 @Component({
-  selector: 'dv-shared-ui-zuvor-hint',
+  selector: 'dv-shared-ui-form-zuvor-hint',
   standalone: true,
   template: '{{zuvorSig()}}',
+  styles: `
+    :host {
+      margin-left: 0.25rem;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-color: var(--dv-blue);
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+    }
+  `,
   hostDirectives: [MatHint],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

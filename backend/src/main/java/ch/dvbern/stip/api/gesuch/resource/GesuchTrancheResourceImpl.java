@@ -22,8 +22,8 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Response createAenderungsantrag(UUID gesuchId, CreateAenderungsantragRequestDto aenderungsantragCreateDto) {
-        final var trancheDto = gesuchTrancheService.createAenderungsantrag(gesuchId, aenderungsantragCreateDto);
+    public Response createAenderungsantrag(UUID gesuchId, CreateAenderungsantragRequestDto createAenderungsantragRequestDto) {
+        final var trancheDto = gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
         return Response.ok(trancheDto).build();
     }
 
@@ -74,6 +74,15 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         final var requiredTypes = gesuchTrancheService.getRequiredDokumentTypes(gesuchTrancheId);
         return Response.ok(requiredTypes).build();
     }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response validateGesuchTranchePages(UUID gesuchTrancheId) {
+        return Response.ok(
+            gesuchTrancheService.validatePages(gesuchTrancheId)
+        ).build();
+    }
+
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response aenderungEinreichen(UUID aenderungId) {

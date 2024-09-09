@@ -18,11 +18,11 @@
 
     <mat-card-content class="p-5">
       @if (zusammenfassung.totalBetragStipendium > 0) {
-        <div class="accept p-4 rounded-4 fs-3 fw-bold">
+        <div class="accept p-4 rounded-4 fs-3 fw-bold" data-testid="zusammenfassung-resultat">
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen' | translate }}
         </div>
       } @else {
-        <div class="reject p-4 rounded-4 fs-3 fw-bold">
+        <div class="reject p-4 rounded-4 fs-3 fw-bold" data-testid="zusammenfassung-resultat">
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt' | translate }}
         </div>
       }

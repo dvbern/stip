@@ -47,9 +47,7 @@
                 <tr>
                   @if (asGeschwister(geschwisterRaw); as geschwister) {
                     <td class="position-relative">
-                      @if (
-                        view.listChanges?.changes?.[$index]?.values || view.listChanges?.newIndexes?.includes($index)
-                      ) {
+                      @if (view.listChanges | dvZuvorListContains: geschwisterRaw) {
                         <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
                       }
                       <i class="material-symbols-rounded align-middle" aria-hidden>done</i>

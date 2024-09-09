@@ -29,7 +29,7 @@
              */
             "enforceBuildableLibDependency": false,
             "banTransitiveDependencies": true,
-            "allow": [],
+            "allow": ["@jscutlery/**", "reflect-metadata"],
             "depConstraints": [
               {
                 "sourceTag": "scope:sachbearbeitung-app",

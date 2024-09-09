@@ -1,6 +1,14 @@
-import { Directive, Input, ViewContainerRef, inject } from '@angular/core';
+import {
+  ComponentRef,
+  Directive,
+  ViewContainerRef,
+  effect,
+  inject,
+  input,
+} from '@angular/core';
 
 import { FormularChangeTypes } from '@dv/shared/model/gesuch-form';
+import { toFormatedNumber } from '@dv/shared/util/maskito-util';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { SharedUiZuvorHintComponent } from './shared-ui-form-zuvor-hint.template';
@@ -18,6 +26,9 @@ import { SharedUiZuvorHintComponent } from './shared-ui-form-zuvor-hint.template
  * <mat-hint
  *   *dvZuvorHint="view.formChanges?.anrede | lowercase | translateChange: 'shared.form.select.salutation.$VALUE'"
  * ></mat-hint>
+ *
+ * @example <caption>With a suffix</caption>
+ * <mat-hint *dvZuvorHint="view.formChanges?.wohnsitzAnteilMutter; suffix: '%'" translate>
  */
 @Directive({
   selector: '[dvZuvorHint]',
@@ -26,15 +37,37 @@ import { SharedUiZuvorHintComponent } from './shared-ui-form-zuvor-hint.template
 export class SharedUiZuvorHintDirective {
   private viewContainerRef = inject(ViewContainerRef);
 
-  @Input() set dvZuvorHint(value: FormularChangeTypes) {
-    if (isDefined(value)) {
-      this.viewContainerRef.clear();
-      const compRef = this.viewContainerRef.createComponent(
-        SharedUiZuvorHintComponent,
-      );
-      compRef.setInput(<keyof SharedUiZuvorHintComponent>'zuvorSig', value);
-    } else {
-      this.viewContainerRef.clear();
-    }
+  dvZuvorHintSuffixSig = input<string>('', { alias: 'dvZuvorHintSuffix' });
+  dvZuvorHintSig = input<FormularChangeTypes>(undefined, {
+    alias: 'dvZuvorHint',
+  });
+
+  constructor() {
+    let componentRef: ComponentRef<SharedUiZuvorHintComponent> | undefined =
+      undefined;
+    effect(() => {
+      let value = this.dvZuvorHintSig();
+      const suffix = this.dvZuvorHintSuffixSig();
+
+      if (isDefined(value)) {
+        if (!componentRef) {
+          this.viewContainerRef.clear();
+          componentRef = this.viewContainerRef.createComponent(
+            SharedUiZuvorHintComponent,
+          );
+        }
+        if (typeof value === 'number') {
+          value = toFormatedNumber(value);
+        }
+        componentRef.setInput(
+          <keyof SharedUiZuvorHintComponent>'zuvorSig',
+          value + suffix,
+        );
+      } else {
+        componentRef?.destroy();
+        componentRef = undefined;
+        this.viewContainerRef.clear();
+      }
+    });
   }
 }

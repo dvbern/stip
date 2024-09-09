@@ -15,8 +15,7 @@ export const selectSharedFeatureGesuchFormPersonView = createSelector(
     trancheId: gesuchsView.trancheId,
     formChanges: getChangesForForm(
       gesuchsView.gesuchFormular?.personInAusbildung,
-      gesuchsView.tranchenChanges.original?.tranche.gesuchFormular
-        ?.personInAusbildung,
+      gesuchsView.tranchenChanges?.tranche.gesuchFormular?.personInAusbildung,
     ),
     allowTypes: gesuchsView.allowTypes,
     gesuch: gesuchsView.gesuch,

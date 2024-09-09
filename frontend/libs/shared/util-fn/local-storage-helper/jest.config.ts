@@ -1,9 +1,11 @@
+import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
+
 /* eslint-disable */
 export default {
   displayName: 'shared-util-fn-local-storage-helper',
   preset: '../../../../jest.preset.js',
   transform: {
-    '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
+    '^.+\\.[tj]s$': swcAngularJestTransformer(),
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory:
