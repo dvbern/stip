@@ -1,14 +1,16 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.generator.entities.service.AuszahlungGenerator;
 import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.create.BusinessPartnerCreateResponse;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerChangeClient;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerCreateClient;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.ImportStatusReadClient;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.VendorPostingCreateClient;
 import ch.dvbern.stip.api.sap.service.endpoints.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.auszahlung.service.*;
-import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.sap.service.*;
-import ch.dvbern.stip.api.stammdaten.type.Land;
-import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -50,6 +52,7 @@ class SapEndpointServiceTest {
 
     @Inject
     SapEndpointService auszahlungSapService;
+    @Inject AuszahlungMapper auszahlungMapper;
 
     private static final BigDecimal DELIVERY_ID = EXAMPLE_DELIVERY_ID;
 
@@ -99,7 +102,7 @@ class SapEndpointServiceTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungSapService.createBusinessPartner(initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
+        final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -110,7 +113,7 @@ class SapEndpointServiceTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungSapService.createBusinessPartner(initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
+        final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
         final var businessPartnerId = ((BusinessPartnerCreateResponse) response.getEntity()).getBUSINESSPARTNER().getHEADER().getBPARTNER();
         assertNotNull(businessPartnerId);
         assertEquals(HttpStatus.SC_OK, response.getStatus());
@@ -123,7 +126,7 @@ class SapEndpointServiceTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungSapService.createBusinessPartner(initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
+        final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -134,7 +137,7 @@ class SapEndpointServiceTest {
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungSapService.createBusinessPartner(initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
+        final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -144,11 +147,11 @@ class SapEndpointServiceTest {
             this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
         );
-        final Auszahlung requestDto1 = initAuszahlung();
+        final Auszahlung requestDto1 = AuszahlungGenerator.initAuszahlung();
         requestDto1.setAdresse(null);
         assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.changeBusinessPartner(requestDto1,EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID));
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(xml);
-        final var response = auszahlungSapService.changeBusinessPartner(initAuszahlung(),EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
+        final var response = auszahlungSapService.changeBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -159,7 +162,7 @@ class SapEndpointServiceTest {
             "UTF-8"
         );
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(xml);
-        Auszahlung requestDto1 = initAuszahlung();
+        Auszahlung requestDto1 = AuszahlungGenerator.initAuszahlung();
         final var response = auszahlungSapService.changeBusinessPartner(requestDto1,EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
         assertEquals(HttpStatus.SC_OK, response.getStatus());
 
@@ -171,12 +174,12 @@ class SapEndpointServiceTest {
             this.getClass().getResourceAsStream("/auszahlung/vendorPostingAlreadyExistingDeliveryResponse.xml"),
             "UTF-8"
         );
-        final Auszahlung requestDto1 = initAuszahlung();
+        final Auszahlung requestDto1 = AuszahlungGenerator.initAuszahlung();
         requestDto1.setAdresse(null);
         assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.createVendorPosting(requestDto1,EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID));
 
         when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(xml);
-        final var response = auszahlungSapService.createVendorPosting(initAuszahlung(),EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
+        final var response = auszahlungSapService.createVendorPosting(AuszahlungGenerator.initAuszahlung(),EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
@@ -187,27 +190,10 @@ class SapEndpointServiceTest {
             "UTF-8"
         );
         when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(xml);
-        final var response = auszahlungSapService.createVendorPosting(initAuszahlung(),EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
+        final var response = auszahlungSapService.createVendorPosting(AuszahlungGenerator.initAuszahlung(),EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Inject AuszahlungMapper auszahlungMapper;
-    private Auszahlung initAuszahlung(){
-        AuszahlungDto auszahlungDto = new AuszahlungDto();
-        auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
-        auszahlungDto.setVorname("Brigitta1111111");
-        auszahlungDto.setNachname("Flückke11111111");
-        auszahlungDto.setIban("CH2089144635452242312");
-        AdresseDto adresseDto = new AdresseDto();
-        adresseDto.setStrasse("Bundesstadtstrasse");
-        adresseDto.setOrt("Hauptstadtort");
-        adresseDto.setPlz("9299");
-        adresseDto.setLand(Land.CH);
-        adresseDto.setHausnummer("9298");
-        auszahlungDto.setAdresse(adresseDto);
-        auszahlungDto.setBusinessPartnerId(1427);
-        return auszahlungMapper.toEntity(auszahlungDto);
-    }
 
 
 }

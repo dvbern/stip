@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.sap.service;
+package ch.dvbern.stip.api.sap.service.endpoints.clients;
 
 import ch.dvbern.stip.api.sap.util.RequestHeaderProviderUtil;
 import jakarta.enterprise.context.ApplicationScoped;

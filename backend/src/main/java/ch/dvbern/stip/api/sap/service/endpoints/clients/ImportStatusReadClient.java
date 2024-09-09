@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.sap.service;
+package ch.dvbern.stip.api.sap.service.endpoints.clients;
 
 import ch.dvbern.stip.api.sap.util.RequestHeaderProviderUtil;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -12,9 +12,9 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 @ApplicationScoped
 @Produces(MediaType.TEXT_XML)
 @Consumes(MediaType.TEXT_XML)
-@RegisterRestClient(configKey = "AuszahlungSapBusinessPartnerReadEndpoint")
+@RegisterRestClient(configKey = "AuszahlungSapImportStatusEndpoint")
 @ClientHeaderParam(name = "Authorization", value = "{getAuthHeader}")
-public interface BusinessPartnerReadClient extends RequestHeaderProviderUtil {
+public interface ImportStatusReadClient extends RequestHeaderProviderUtil {
     @POST
-    String readBusinessPartner(String xml);
+    String getImportStatus(String xml);
 }

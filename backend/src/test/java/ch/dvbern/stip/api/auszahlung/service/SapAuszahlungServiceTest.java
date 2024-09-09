@@ -1,12 +1,9 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.*;
 import ch.dvbern.stip.api.sap.service.endpoints.importstatus.ImportStatusReadResponse;
-import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.sap.service.*;
-import ch.dvbern.stip.api.stammdaten.type.Land;
-import ch.dvbern.stip.generated.dto.AdresseDto;
-import ch.dvbern.stip.generated.dto.AuszahlungDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -20,6 +17,7 @@ import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import static ch.dvbern.stip.api.generator.entities.service.AuszahlungGenerator.initAuszahlung;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -93,17 +91,20 @@ class SapAuszahlungServiceTest {
             this.getClass().getResourceAsStream("/auszahlung/createBusinessParnterAlreadyExistingPartnerResponse.xml"),
             "UTF-8"
         );
-
+        Auszahlung auszahlung = initAuszahlung();
+        auszahlung.setSapBusinessPartnerId(null);
         when(businessPartnerCreateClient.createBusinessPartner(any()))
             .thenReturn(firstCreateResponse)
             .thenReturn(secondCreateResponse);
-        assertNull(sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung()));
+        assertNull(sapAuszahlungService.getOrCreateBusinessPartner(auszahlung));
     }
 
     @Test
     void createBusinessPartnerTest_invalidRequest() {
+        Auszahlung auszahlung = initAuszahlung();
+        auszahlung.setSapBusinessPartnerId(null);
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenThrow(WebApplicationException.class);
-        assertNull(sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung()));
+        assertNull(sapAuszahlungService.getOrCreateBusinessPartner(auszahlung));
     }
 
     @Test
@@ -194,21 +195,5 @@ class SapAuszahlungServiceTest {
         assertThrows(WebApplicationException.class, () -> {sapAuszahlungService.createVendorPosting(auszahlung);});
     }
 
-    @Inject AuszahlungMapper auszahlungMapper;
-    private Auszahlung initAuszahlung(){
-        AuszahlungDto auszahlungDto = new AuszahlungDto();
-        auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
-        auszahlungDto.setVorname("Brigitta1111111");
-        auszahlungDto.setNachname("Flückke11111111");
-        auszahlungDto.setIban("CH2089144635452242312");
-        AdresseDto adresseDto = new AdresseDto();
-        adresseDto.setStrasse("Bundesstadtstrasse");
-        adresseDto.setOrt("Hauptstadtort");
-        adresseDto.setPlz("9299");
-        adresseDto.setLand(Land.CH);
-        adresseDto.setHausnummer("9298");
-        auszahlungDto.setAdresse(adresseDto);
-        auszahlungDto.setBusinessPartnerId(1427);
-        return auszahlungMapper.toEntity(auszahlungDto);
-    }
+
 }

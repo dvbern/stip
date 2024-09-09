@@ -11,6 +11,7 @@ import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.create.BusinessP
 import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.read.BusinessPartnerReadRequest;
 import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.read.BusinessPartnerReadResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.read.BusniessPartnerReadRequestMapper;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.*;
 import ch.dvbern.stip.api.sap.service.endpoints.importstatus.ImportStatusReadRequest;
 import ch.dvbern.stip.api.sap.service.endpoints.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.importstatus.SenderParms;
