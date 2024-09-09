@@ -142,7 +142,7 @@
               <dmn:text>true</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_06D185A9-40AA-42B8-B24B-A39829DC12DB">
-              <dmn:text>max((InputPersoenlichesbudget.antragssteller.einkommen - Stammdaten.einkommensfreibetrag), 0)</dmn:text>
+              <dmn:text>max((InputPersoenlichesbudget.antragssteller.einkommen - Stammdaten.freibetragErwerbseinkommen), 0)</dmn:text>
             </dmn:outputEntry>
             <dmn:annotationEntry>
               <dmn:text/>
@@ -170,7 +170,7 @@
       <dmn:contextEntry>
         <dmn:variable id="_94428FA3-8AA0-4D52-A665-E0EF1E048116" name="Vermögen" typeRef="number"/>
         <dmn:literalExpression id="_1B7E8C1E-3022-4B7A-97EA-24C362B0CBE6">
-          <dmn:text>InputPersoenlichesbudget.antragssteller.vermoegen * 0.15</dmn:text>
+          <dmn:text>InputPersoenlichesbudget.antragssteller.vermoegen * Stammdaten.vermoegensanteilInProzent / 100</dmn:text>
         </dmn:literalExpression>
       </dmn:contextEntry>
       <dmn:contextEntry>
@@ -234,7 +234,7 @@
               <dmn:text>&gt; 0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_49CE832B-581A-464B-A04D-0E0478D5156E">
-              <dmn:text>&gt;= 25</dmn:text>
+              <dmn:text>&gt;= Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_B8CB4B44-0E2A-46AA-A545-34400D2202BD">
               <dmn:text>true</dmn:text>
@@ -253,7 +253,7 @@
               <dmn:text>&gt;0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_B7AE0476-D6D5-4C9C-BC32-ABE8E9BE6EDA">
-              <dmn:text>&gt;=25</dmn:text>
+              <dmn:text>&gt;=Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_E324DAFA-701F-4DC0-B820-9582128EB725">
               <dmn:text>false</dmn:text>
@@ -272,7 +272,7 @@
               <dmn:text>&gt; 0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_1364A275-75DA-4CD8-B496-A6BF86657B42">
-              <dmn:text>&lt; 25</dmn:text>
+              <dmn:text>&lt; Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_D5BACFD7-471C-4A93-A40D-AB83DE85D3A0">
               <dmn:text>-</dmn:text>
@@ -330,7 +330,7 @@
               <dmn:text>&gt; 0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_1983C428-8190-4088-8A3E-1580750FD3A7">
-              <dmn:text>&gt;= 25</dmn:text>
+              <dmn:text>&gt;= Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_84AF5E0F-E185-4DB9-9A1B-F44E74E5DE39">
               <dmn:text>true</dmn:text>
@@ -349,7 +349,7 @@
               <dmn:text>&gt;0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_E16768F8-CF2B-4AEC-8395-31CB89872361">
-              <dmn:text>&gt;=25</dmn:text>
+              <dmn:text>&gt;=Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_9D91C6D5-4D1E-449D-858A-228DD98D9110">
               <dmn:text>false</dmn:text>
@@ -368,7 +368,7 @@
               <dmn:text>&gt; 0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_81914D82-7867-464B-830D-C5D99EDF6703">
-              <dmn:text>&lt; 25</dmn:text>
+              <dmn:text>&lt; Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_5B884FD3-F298-495B-B026-6AEBA5506ADD">
               <dmn:text>-</dmn:text>
@@ -1323,12 +1323,12 @@
         <di:waypoint x="2204" y="640"/>
         <di:waypoint x="2325" y="497"/>
       </dmndi:DMNEdge>
-      <dmndi:DMNEdge id="dmnedge-drg-_E74C389C-F108-4505-B28B-7718AE1A8EC5-AUTO-SOURCE-AUTO-TARGET" dmnElementRef="_E74C389C-F108-4505-B28B-7718AE1A8EC5">
-        <di:waypoint x="2276.5" y="413"/>
-        <di:waypoint x="2325" y="497"/>
-      </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_3EE7BB2B-F2AD-4E4F-B466-0559CB5D64DE-AUTO-TARGET" dmnElementRef="_3EE7BB2B-F2AD-4E4F-B466-0559CB5D64DE">
         <di:waypoint x="2811" y="610.6842105263158"/>
+        <di:waypoint x="2325" y="497"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_E74C389C-F108-4505-B28B-7718AE1A8EC5-AUTO-SOURCE-AUTO-TARGET" dmnElementRef="_E74C389C-F108-4505-B28B-7718AE1A8EC5">
+        <di:waypoint x="2276.5" y="413"/>
         <di:waypoint x="2325" y="497"/>
       </dmndi:DMNEdge>
     </dmndi:DMNDiagram>

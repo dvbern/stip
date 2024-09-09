@@ -19,6 +19,9 @@ export type PersoenlicheBerechnung = {
     anrechenbaresVermoegen: string;
     elterlicheLeistung: string;
     einkommenPartner: string;
+    freibetragErwerbseinkommen: string;
+    vermoegensanteilInProzent: string;
+    limiteAlterAntragsstellerHalbierungElternbeitrag: string;
   };
   kosten: {
     total: number;
@@ -56,6 +59,9 @@ export type FamilienBerechnung = {
     mietwert: string;
     alimenteOderRenten: string;
     einkommensfreibeitrag: string;
+    maxSaeule3a: string;
+    freibetragVermoegen: string;
+    vermoegensanteilInProzent: string;
   };
   kosten: {
     total: number;

@@ -40,7 +40,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_SAEULE3A,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_EIGENMIETWERT,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_ALIMENTE,
-  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_EINKOMMENSFREIBETRAG,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_EINNAHMEN_FAMILIENBUDGET,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_GRUNDBEDARF,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_EFFEKTIVE_WOHNKOSTEN,
@@ -93,9 +92,6 @@ public class FamilienBudgetresultatDtoSpec {
 
   public static final String JSON_PROPERTY_ALIMENTE = "alimente";
   private Integer alimente;
-
-  public static final String JSON_PROPERTY_EINKOMMENSFREIBETRAG = "einkommensfreibetrag";
-  private Integer einkommensfreibetrag;
 
   public static final String JSON_PROPERTY_EINNAHMEN_FAMILIENBUDGET = "einnahmenFamilienbudget";
   private Integer einnahmenFamilienbudget;
@@ -448,32 +444,6 @@ public class FamilienBudgetresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAlimente(Integer alimente) {
     this.alimente = alimente;
-  }
-
-
-  public FamilienBudgetresultatDtoSpec einkommensfreibetrag(Integer einkommensfreibetrag) {
-    
-    this.einkommensfreibetrag = einkommensfreibetrag;
-    return this;
-  }
-
-   /**
-   * Get einkommensfreibetrag
-   * @return einkommensfreibetrag
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getEinkommensfreibetrag() {
-    return einkommensfreibetrag;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
-    this.einkommensfreibetrag = einkommensfreibetrag;
   }
 
 
@@ -835,7 +805,6 @@ public class FamilienBudgetresultatDtoSpec {
         Objects.equals(this.saeule3a, familienBudgetresultat.saeule3a) &&
         Objects.equals(this.eigenmietwert, familienBudgetresultat.eigenmietwert) &&
         Objects.equals(this.alimente, familienBudgetresultat.alimente) &&
-        Objects.equals(this.einkommensfreibetrag, familienBudgetresultat.einkommensfreibetrag) &&
         Objects.equals(this.einnahmenFamilienbudget, familienBudgetresultat.einnahmenFamilienbudget) &&
         Objects.equals(this.grundbedarf, familienBudgetresultat.grundbedarf) &&
         Objects.equals(this.effektiveWohnkosten, familienBudgetresultat.effektiveWohnkosten) &&
@@ -853,7 +822,7 @@ public class FamilienBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, anrechenbaresVermoegen, saeule2, saeule3a, eigenmietwert, alimente, einkommensfreibetrag, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
+    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, anrechenbaresVermoegen, saeule2, saeule3a, eigenmietwert, alimente, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
   }
 
   @Override
@@ -872,7 +841,6 @@ public class FamilienBudgetresultatDtoSpec {
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
     sb.append("    alimente: ").append(toIndentedString(alimente)).append("\n");
-    sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
     sb.append("    einnahmenFamilienbudget: ").append(toIndentedString(einnahmenFamilienbudget)).append("\n");
     sb.append("    grundbedarf: ").append(toIndentedString(grundbedarf)).append("\n");
     sb.append("    effektiveWohnkosten: ").append(toIndentedString(effektiveWohnkosten)).append("\n");

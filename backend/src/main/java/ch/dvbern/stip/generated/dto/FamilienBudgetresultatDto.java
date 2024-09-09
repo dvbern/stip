@@ -33,7 +33,6 @@ public class FamilienBudgetresultatDto  implements Serializable {
   private @Valid Integer saeule3a;
   private @Valid Integer eigenmietwert;
   private @Valid Integer alimente;
-  private @Valid Integer einkommensfreibetrag;
   private @Valid Integer einnahmenFamilienbudget;
   private @Valid Integer grundbedarf;
   private @Valid Integer effektiveWohnkosten;
@@ -274,25 +273,6 @@ public class FamilienBudgetresultatDto  implements Serializable {
   @JsonProperty("alimente")
   public void setAlimente(Integer alimente) {
     this.alimente = alimente;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto einkommensfreibetrag(Integer einkommensfreibetrag) {
-    this.einkommensfreibetrag = einkommensfreibetrag;
-    return this;
-  }
-
-  
-  @JsonProperty("einkommensfreibetrag")
-  @NotNull
-  public Integer getEinkommensfreibetrag() {
-    return einkommensfreibetrag;
-  }
-
-  @JsonProperty("einkommensfreibetrag")
-  public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
-    this.einkommensfreibetrag = einkommensfreibetrag;
   }
 
   /**
@@ -564,7 +544,6 @@ public class FamilienBudgetresultatDto  implements Serializable {
         Objects.equals(this.saeule3a, familienBudgetresultat.saeule3a) &&
         Objects.equals(this.eigenmietwert, familienBudgetresultat.eigenmietwert) &&
         Objects.equals(this.alimente, familienBudgetresultat.alimente) &&
-        Objects.equals(this.einkommensfreibetrag, familienBudgetresultat.einkommensfreibetrag) &&
         Objects.equals(this.einnahmenFamilienbudget, familienBudgetresultat.einnahmenFamilienbudget) &&
         Objects.equals(this.grundbedarf, familienBudgetresultat.grundbedarf) &&
         Objects.equals(this.effektiveWohnkosten, familienBudgetresultat.effektiveWohnkosten) &&
@@ -582,7 +561,7 @@ public class FamilienBudgetresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, anrechenbaresVermoegen, saeule2, saeule3a, eigenmietwert, alimente, einkommensfreibetrag, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
+    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, anrechenbaresVermoegen, saeule2, saeule3a, eigenmietwert, alimente, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
   }
 
   @Override
@@ -602,7 +581,6 @@ public class FamilienBudgetresultatDto  implements Serializable {
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
     sb.append("    alimente: ").append(toIndentedString(alimente)).append("\n");
-    sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
     sb.append("    einnahmenFamilienbudget: ").append(toIndentedString(einnahmenFamilienbudget)).append("\n");
     sb.append("    grundbedarf: ").append(toIndentedString(grundbedarf)).append("\n");
     sb.append("    effektiveWohnkosten: ").append(toIndentedString(effektiveWohnkosten)).append("\n");

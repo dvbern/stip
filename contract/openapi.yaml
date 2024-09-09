@@ -2945,6 +2945,7 @@ components:
         - anzahlWochenSchule
         - vermoegensanteilInProzent
         - reduzierungDesGrundbedarfs
+        - limiteAlterAntragsstellerHalbierungElternbeitrag
         - zweiterAuszahlungsterminMonat
         - zweiterAuszahlungsterminTag
       properties:
@@ -3055,6 +3056,8 @@ components:
         vermoegensanteilInProzent:
           type: integer
         reduzierungDesGrundbedarfs:
+          type: integer
+        limiteAlterAntragsstellerHalbierungElternbeitrag:
           type: integer
         zweiterAuszahlungsterminMonat:
           type: integer
@@ -3325,6 +3328,7 @@ components:
         - berechnung
         - gueltigAb
         - gueltigBis
+        - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
       type: object
@@ -3336,6 +3340,9 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gueltigBis:
           $ref: '#/components/schemas/LocalDate'
+        berechnungsStammdaten:
+          description: 'Stammdaten für die Stipendienberechnung'
+          $ref: '#/components/schemas/BerechnungsStammdaten'
         persoenlichesBudgetresultat:
           description: 'Berechnungsdaten des persönlichen Budgets'
           $ref: '#/components/schemas/PersoenlichesBudgetresultat'
@@ -3344,6 +3351,41 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FamilienBudgetresultat'
+    BerechnungsStammdaten:
+      description: Stammdaten used for the calculation of the stipendium
+      required:
+        - maxSaeule3a
+        - einkommensfreibetrag
+        - freibetragErwerbseinkommen
+        - freibetragVermoegen
+        - vermoegensanteilInProzent
+        - anzahlWochenLehre
+        - anzahlWochenSchule
+        - preisProMahlzeit
+        - stipLimiteMinimalstipendium
+        - limiteAlterAntragsstellerHalbierungElternbeitrag
+      type: object
+      properties:
+        maxSaeule3a:
+          type: integer
+        einkommensfreibetrag:
+          type: integer
+        freibetragErwerbseinkommen:
+          type: integer
+        freibetragVermoegen:
+          type: integer
+        vermoegensanteilInProzent:
+          type: integer
+        anzahlWochenLehre:
+          type: integer
+        anzahlWochenSchule:
+          type: integer
+        preisProMahlzeit:
+          type: integer
+        stipLimiteMinimalstipendium:
+          type: integer
+        limiteAlterAntragsstellerHalbierungElternbeitrag:
+          type: integer
     PersoenlichesBudgetresultat:
       description: Persoenliche Budget daten fuer und von der Berechnung
       required:
@@ -3445,7 +3487,6 @@ components:
         - saeule3a
         - eigenmietwert
         - alimente
-        - einkommensfreibetrag
         - einnahmenFamilienbudget
         - grundbedarf
         - effektiveWohnkosten
@@ -3484,8 +3525,6 @@ components:
         eigenmietwert:
           type: integer
         alimente:
-          type: integer
-        einkommensfreibetrag:
           type: integer
         einnahmenFamilienbudget:
           type: integer

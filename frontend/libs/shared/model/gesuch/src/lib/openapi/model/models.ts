@@ -20,6 +20,7 @@ export * from './benutzerAllOf';
 export * from './benutzerUpdate';
 export * from './benutzereinstellungen';
 export * from './benutzereinstellungenUpdate';
+export * from './berechnungsStammdaten';
 export * from './berechnungsresultat';
 export * from './bildungskategorie';
 export * from './bildungsstufe';
