@@ -1,8 +1,8 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.sap.businesspartner.create.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.auszahlung.service.sap.SAPUtils;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -39,19 +39,12 @@ public class SapAuszahlungService {
             //create new businessparter
             //note: endpoint has to be called 2x in order to extract busniesspartner-id
             // 1. call
-           sapEndpointService.createBusinessPartner(auszahlung,extId,deliveryId);
+            final var createResponse1 = sapEndpointService.createBusinessPartner(auszahlung,extId,deliveryId);
+            SAPUtils.logAsWarningIfNoAction(createResponse1);
             //2. call
-            final var createResponse2 = sapEndpointService.createBusinessPartner(auszahlung,extId,deliveryId);
-            //extract busniessParnterId
-            if(createResponse2.getEntity() == null ||
-                ((BusinessPartnerCreateResponse) createResponse2.getEntity())
-                .getBUSINESSPARTNER() == null) {
-                throw new WebApplicationException(Response.Status.BAD_REQUEST);
-            }else{
-                SAPUtils.logAsWarningIfNoAction(createResponse2);
-                Integer businessPartnerId = Integer.valueOf(((BusinessPartnerCreateResponse) createResponse2.getEntity())
-                    .getBUSINESSPARTNER().getHEADER().getBPARTNER());
-                auszahlung.setSapBusinessPartnerId(businessPartnerId);
+            final var readResponse = sapEndpointService.readBusniessPartner(extId);
+            if(SAPUtils.noSapActionHasBeenPerformed(readResponse)){
+                Log.warn("business partner is not yet active in SAP");
             }
 
         }
@@ -64,14 +57,19 @@ public class SapAuszahlungService {
         BigDecimal deliveryId = SAPUtils.generateDeliveryId();
         //createOrUpdateBusinessPartner
         Integer businessPartnerId = getOrCreateBusinessPartner(auszahlung);
-        //createVendorPosting
-        final var response = sapEndpointService.createVendorPosting(auszahlung,businessPartnerId,deliveryId);
-        if(response.getStatus() != HttpStatus.SC_OK){
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        if(businessPartnerId != null) {
+            //createVendorPosting
+            final var response = sapEndpointService.createVendorPosting(auszahlung,businessPartnerId,deliveryId);
+            if(response.getStatus() != HttpStatus.SC_OK){
+                throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            }else{
+                SAPUtils.logAsWarningIfNoAction(response);
+            }
+            return sapEndpointService.getImportStatus(deliveryId);
         }else{
-            SAPUtils.logAsWarningIfNoAction(response);
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity("No vendor posting could be created due to problems").build();
         }
-        return sapEndpointService.getImportStatus(deliveryId);
+
     }
 
 

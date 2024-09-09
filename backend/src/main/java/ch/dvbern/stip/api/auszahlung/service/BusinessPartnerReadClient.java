@@ -12,9 +12,9 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 @ApplicationScoped
 @Produces(MediaType.TEXT_XML)
 @Consumes(MediaType.TEXT_XML)
-@RegisterRestClient(configKey = "AuszahlungSapVendorPostingCreateEndpoint")
+@RegisterRestClient(configKey = "AuszahlungSapBusinessPartnerReadEndpoint")
 @ClientHeaderParam(name = "Authorization", value = "{getAuthHeader}")
-public interface VendorPostingCreateClient extends RequestHeaderProviderUtil{
+public interface BusinessPartnerReadClient extends RequestHeaderProviderUtil {
     @POST
-    String createVendorPosting(String xml);
+    String readBusinessPartner(String xml);
 }
