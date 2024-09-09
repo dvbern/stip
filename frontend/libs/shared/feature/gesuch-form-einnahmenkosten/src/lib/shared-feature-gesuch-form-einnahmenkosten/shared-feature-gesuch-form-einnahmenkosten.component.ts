@@ -398,7 +398,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         this.gotReenabledSig();
         const {
           hasData,
-          hatElternteilVerloren,
           hatKinder,
           willSekundarstufeZwei,
           willTertiaerstufe,
@@ -415,10 +414,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           return;
         }
 
-        this.setDisabledStateAndHide(
-          this.form.controls.renten,
-          !hatElternteilVerloren,
-        );
         this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenSekundarstufeZwei,

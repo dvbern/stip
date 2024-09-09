@@ -201,18 +201,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         );
 
         resetFieldIf(
-            () -> GesuchFormularDiffUtil.hasElternteilVerstorbenOrUnbekanntChanged(newFormular, targetFormular),
-            "Clear Renten because Elternteil VERSTORBEN or UNBEKANNT",
-            () -> {
-                if (newFormular.getEinnahmenKosten() == null) {
-                    return;
-                }
-
-                newFormular.getEinnahmenKosten().setRenten(null);
-            }
-        );
-
-        resetFieldIf(
             () -> GesuchFormularDiffUtil.hasWohnsitzChanged(newFormular, targetFormular),
             "Clear Wohnkosten because wohnsitz changed",
             () -> {

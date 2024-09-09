@@ -104,35 +104,33 @@
           }
         </div>
       </div>
-      @if (!hiddenFieldsSetSig().has(form.controls.renten)) {
-        <div class="row g-4">
-          <!-- RENTEN -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.einnahmenkosten.renten.label' | translate }}</mat-label>
-              <input
-                formControlName="renten"
-                data-testid="form-einnahmen-kosten-renten"
-                matInput
-                type="text"
-                [maskito]="maskitoNumber"
-              />
-              <mat-hint *dvZuvorHint="view.formChanges?.renten"></mat-hint>
-              <mat-hint translate>shared.form.einnahmenkosten.renten.info</mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-form-field>
+      <div class="row g-4">
+        <!-- RENTEN -->
+        <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <mat-label>{{ 'shared.form.einnahmenkosten.renten.label' | translate }}</mat-label>
+            <input
+              formControlName="renten"
+              data-testid="form-einnahmen-kosten-renten"
+              matInput
+              type="text"
+              [maskito]="maskitoNumber"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges?.renten"></mat-hint>
+            <mat-hint translate>shared.form.einnahmenkosten.renten.info</mat-hint>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
 
-            @if (rentenDocumentSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
-            }
-          </div>
+          @if (rentenDocumentSig(); as options) {
+            <dv-shared-pattern-document-upload
+              class="flex-shrink-1"
+              [optionsSig]="options"
+            ></dv-shared-pattern-document-upload>
+          }
         </div>
-      }
+      </div>
       <div class="row g-4">
         <!-- EO_LEISTUNGEN -->
         <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
