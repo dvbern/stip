@@ -1,31 +1,21 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.auszahlung.service.*;
-import ch.dvbern.stip.api.auszahlung.service.sap.SAPUtils;
+import ch.dvbern.stip.api.sap.service.SapAuszahlungService;
+import ch.dvbern.stip.api.sap.service.SapEndpointService;
+import ch.dvbern.stip.api.sap.util.SAPUtils;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
-import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import org.apache.http.HttpStatus;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.platform.commons.function.Try.success;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @QuarkusTest
 class SapServiceIntegrationTest {

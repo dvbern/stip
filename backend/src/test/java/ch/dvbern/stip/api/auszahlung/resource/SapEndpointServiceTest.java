@@ -1,11 +1,12 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.sap.businesspartner.create.BusinessPartnerCreateResponse;
-import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadResponse;
+import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.create.BusinessPartnerCreateResponse;
+import ch.dvbern.stip.api.sap.service.endpoints.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.auszahlung.service.*;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.sap.service.*;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.InjectMock;

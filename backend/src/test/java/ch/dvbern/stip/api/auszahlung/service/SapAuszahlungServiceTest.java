@@ -1,8 +1,9 @@
 package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.sap.importstatus.ImportStatusReadResponse;
+import ch.dvbern.stip.api.sap.service.endpoints.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
+import ch.dvbern.stip.api.sap.service.*;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.AuszahlungDto;
@@ -18,7 +19,6 @@ import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -83,10 +83,7 @@ class SapAuszahlungServiceTest {
     @Test
     void createBusinessPartnerTest() throws IOException {
         /**
-         * Important: in order to create a new (non-existing in SAP) businesspartner,
-         * the "Create"-Endpoint has to be called twice!
-         * first call: create businesspartner
-         * second call: extract busniesspartner-id from response in order to proceed
+         * Important: it can take up to 48 hours until a newly created user will be set active in SAP!
          */
         String firstCreateResponse = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerSuccessResponse.xml"),
