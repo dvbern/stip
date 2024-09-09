@@ -13,6 +13,13 @@ import {
   StepValidation,
 } from './shared-model-gesuch-form';
 
+export const TRANCHE: SharedModelGesuchFormStep = {
+  route: 'tranche',
+  translationKey: 'shared.tranche.title',
+  titleTranslationKey: 'shared.nothing',
+  iconSymbolName: 'info',
+} satisfies SharedModelGesuchFormStep;
+
 export const PERSON = {
   route: 'person',
   translationKey: 'shared.person.title',

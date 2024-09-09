@@ -27,6 +27,7 @@ public class GesuchTrancheDto  implements Serializable {
   private @Valid LocalDate gueltigBis;
   private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status;
   private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
+  private @Valid String comment;
   private @Valid GesuchFormularDto gesuchFormular;
 
   /**
@@ -126,6 +127,24 @@ public class GesuchTrancheDto  implements Serializable {
 
   /**
    **/
+  public GesuchTrancheDto comment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+  
+  @JsonProperty("comment")
+  public String getComment() {
+    return comment;
+  }
+
+  @JsonProperty("comment")
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
+
+  /**
+   **/
   public GesuchTrancheDto gesuchFormular(GesuchFormularDto gesuchFormular) {
     this.gesuchFormular = gesuchFormular;
     return this;
@@ -157,12 +176,13 @@ public class GesuchTrancheDto  implements Serializable {
         Objects.equals(this.gueltigBis, gesuchTranche.gueltigBis) &&
         Objects.equals(this.status, gesuchTranche.status) &&
         Objects.equals(this.typ, gesuchTranche.typ) &&
+        Objects.equals(this.comment, gesuchTranche.comment) &&
         Objects.equals(this.gesuchFormular, gesuchTranche.gesuchFormular);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, status, typ, gesuchFormular);
+    return Objects.hash(id, gueltigAb, gueltigBis, status, typ, comment, gesuchFormular);
   }
 
   @Override
@@ -175,6 +195,7 @@ public class GesuchTrancheDto  implements Serializable {
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    gesuchFormular: ").append(toIndentedString(gesuchFormular)).append("\n");
     sb.append("}");
     return sb.toString();

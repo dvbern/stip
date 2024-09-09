@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchTrancheDtoSpec.JSON_PROPERTY_ID,
   GesuchTrancheDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   GesuchTrancheDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
+  GesuchTrancheDtoSpec.JSON_PROPERTY_COMMENT,
   GesuchTrancheDtoSpec.JSON_PROPERTY_GESUCH_FORMULAR,
   GesuchTrancheDtoSpec.JSON_PROPERTY_STATUS,
   GesuchTrancheDtoSpec.JSON_PROPERTY_TYP
@@ -50,6 +51,9 @@ public class GesuchTrancheDtoSpec {
 
   public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
   private LocalDate gueltigBis;
+
+  public static final String JSON_PROPERTY_COMMENT = "comment";
+  private String comment;
 
   public static final String JSON_PROPERTY_GESUCH_FORMULAR = "gesuchFormular";
   private GesuchFormularDtoSpec gesuchFormular;
@@ -138,6 +142,32 @@ public class GesuchTrancheDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGueltigBis(LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
+  }
+
+
+  public GesuchTrancheDtoSpec comment(String comment) {
+    
+    this.comment = comment;
+    return this;
+  }
+
+   /**
+   * Get comment
+   * @return comment
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getComment() {
+    return comment;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
 
@@ -230,6 +260,7 @@ public class GesuchTrancheDtoSpec {
     return Objects.equals(this.id, gesuchTranche.id) &&
         Objects.equals(this.gueltigAb, gesuchTranche.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchTranche.gueltigBis) &&
+        Objects.equals(this.comment, gesuchTranche.comment) &&
         Objects.equals(this.gesuchFormular, gesuchTranche.gesuchFormular) &&
         Objects.equals(this.status, gesuchTranche.status) &&
         Objects.equals(this.typ, gesuchTranche.typ);
@@ -237,7 +268,7 @@ public class GesuchTrancheDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, gesuchFormular, status, typ);
+    return Objects.hash(id, gueltigAb, gueltigBis, comment, gesuchFormular, status, typ);
   }
 
   @Override
@@ -247,6 +278,7 @@ public class GesuchTrancheDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    gesuchFormular: ").append(toIndentedString(gesuchFormular)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");

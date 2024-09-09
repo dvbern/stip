@@ -8,6 +8,7 @@
   "shared.accept": "Accept",
   "shared.label.von": "du",
   "shared.label.bis": "au",
+  "shared.nothing": "",
   "shared.ui.yes": "Oui",
   "shared.ui.no": "Non",
   "shared.ui.clear": "Effacer la saisie",
@@ -179,6 +180,14 @@
   "shared.form.shared.wohnsitzanteil.label": "Habite chez qui et combien?",
   "shared.form.shared.wohnsitzanteil.mutter": "Chez la mère",
   "shared.form.shared.wohnsitzanteil.vater": "Chez le père",
+
+  "shared.tranche.title": "Aperçu",
+  "shared.form.title.suffix.TRANCHE": "Tranche {{ position }} du",
+  "shared.form.title.suffix.AENDERUNG": "Changement {{ position }} du",
+  "shared.form.tranche.von.label": "De",
+  "shared.form.tranche.bis.label": "Jusqu'à",
+  "shared.form.tranche.bemerkung.label": "Bemerkung",
+  "shared.form.tranche.bemerkung.initialgesuch": "Demande initiale",
 
   "shared.person.title": "Person in Education",
   "shared.form.person.section.additional-information": "Additional information",

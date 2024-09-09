@@ -8,6 +8,7 @@
   "shared.accept": "Übernehmen",
   "shared.label.von": "von",
   "shared.label.bis": "bis",
+  "shared.nothing": "",
   "shared.ui.yes": "Ja",
   "shared.ui.no": "Nein",
   "shared.ui.clear": "Eingabe zurücksetzen",
@@ -179,6 +180,14 @@
   "shared.form.shared.wohnsitzanteil.label": "Wohnt bei wem wieviel?",
   "shared.form.shared.wohnsitzanteil.mutter": "Bei Mutter",
   "shared.form.shared.wohnsitzanteil.vater": "Bei Vater",
+
+  "shared.tranche.title": "Übersicht",
+  "shared.form.title.suffix.TRANCHE": "Tranche {{ position }} vom",
+  "shared.form.title.suffix.AENDERUNG": "Änderung {{ position }} vom",
+  "shared.form.tranche.von.label": "Von",
+  "shared.form.tranche.bis.label": "Bis",
+  "shared.form.tranche.bemerkung.label": "Bemerkung",
+  "shared.form.tranche.bemerkung.initialgesuch": "Initialgesuch",
 
   "shared.person.title": "Person in Ausbildung",
   "shared.form.person.section.additional-information": "Weitere Angaben",

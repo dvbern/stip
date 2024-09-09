@@ -29,6 +29,7 @@ import {
   RETURN_TO_HOME,
   SPECIAL_VALIDATION_ERRORS,
   SharedModelGesuchFormStep,
+  TRANCHE,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
 import {
@@ -41,6 +42,7 @@ import { isDefined, type } from '@dv/shared/util-fn/type-guards';
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
 const baseSteps = [
+  TRANCHE,
   PERSON,
   AUSBILDUNG,
   LEBENSLAUF,

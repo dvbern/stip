@@ -3119,6 +3119,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gueltigBis:
           $ref: '#/components/schemas/LocalDate'
+        comment:
+          type: string
         gesuchFormular:
           $ref: '#/components/schemas/GesuchFormular'
         status:

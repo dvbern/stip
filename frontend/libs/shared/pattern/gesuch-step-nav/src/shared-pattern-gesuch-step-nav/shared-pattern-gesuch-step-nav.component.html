@@ -1,4 +1,4 @@
-@for (step of stepsViewSig(); track $index) {
+@for (step of stepsViewSig(); track $index; let first = $first) {
   <a
     class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal position-relative overflow-visible"
     [class.btn-light]="!step.isActive"
@@ -29,4 +29,8 @@
       {{ step.translationKey | translate }}
     </span>
   </a>
+
+  @if (first) {
+    <hr class="mt-4 mb-4 pb-2" />
+  }
 }
