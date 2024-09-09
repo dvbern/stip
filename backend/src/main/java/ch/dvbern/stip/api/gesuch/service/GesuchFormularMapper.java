@@ -110,7 +110,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         switch (newFormular.getAuszahlung().getKontoinhaber()) {
         case GESUCHSTELLER -> setPiaAdresse(newFormular);
         case VATER, MUTTER -> setForEltern(newFormular);
-        case SOZIALDIENST_INSTITUTION, ANDERE -> {}
+        case SOZIALDIENST_INSTITUTION, ANDERE -> {/* Nur gesuchsteller und eltern haben verlinkte adressen */}
         }
     }
 
@@ -148,7 +148,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         switch (newFormular.getAuszahlung().getKontoinhaber()) {
         case VATER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.VATER));
         case MUTTER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.MUTTER));
-        case GESUCHSTELLER, ANDERE, SOZIALDIENST_INSTITUTION -> {}
+        case GESUCHSTELLER, ANDERE, SOZIALDIENST_INSTITUTION -> {/* Wir setzen hier nur adressen für eltern */}
         }
     }
 
