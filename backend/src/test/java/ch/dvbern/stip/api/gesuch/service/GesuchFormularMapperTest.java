@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
+import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.common.service.EntityReferenceMapperImpl;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -37,6 +39,8 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapperImpl;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.generated.dto.AdresseDto;
+import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -47,6 +51,8 @@ import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static io.smallrye.common.constraint.Assert.assertFalse;
 import static io.smallrye.common.constraint.Assert.assertTrue;
@@ -530,6 +536,103 @@ class GesuchFormularMapperTest {
         // Assert
         assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule2(), is(nullValue()));
         assertThat(formular.getSteuerdaten().stream().findFirst().get().getSaeule3a(), is(nullValue()));
+    }
+
+    @Test
+    void dontSetAuszahlungAdresseOnUpdate() {
+        // Arrange
+        final var piaAdresse = new AdresseDto();
+        piaAdresse.setId(UUID.randomUUID());
+
+        final var pia = new PersonInAusbildungUpdateDto();
+        pia.setAdresse(piaAdresse);
+
+        final var auszahlungAdresse = new AdresseDto();
+        auszahlungAdresse.setId(UUID.randomUUID());
+
+        final var auszahlung = new AuszahlungUpdateDto();
+        auszahlung.setKontoinhaber(Kontoinhaber.ANDERE);
+        auszahlung.setAdresse(auszahlungAdresse);
+
+        final var updateFormular = new GesuchFormularUpdateDto();
+        updateFormular.setPersonInAusbildung(pia);
+        updateFormular.setAuszahlung(auszahlung);
+
+        final var mapper = createMapper();
+
+        // Act
+        mapper.setAuszahlungAdresseBeforeUpdate(updateFormular, null);
+
+        // Assert
+        assertThat(auszahlung.getAdresse().getId(), is(auszahlungAdresse.getId()));
+    }
+
+    @Test
+    void setAuszahlungPiaAdresseOnUpdateTest() {
+        // Arrange
+        final var piaAdresse = new AdresseDto();
+        piaAdresse.setId(UUID.randomUUID());
+
+        final var pia = new PersonInAusbildungUpdateDto();
+        pia.setAdresse(piaAdresse);
+
+        final var auszahlungAdresse = new AdresseDto();
+        auszahlungAdresse.setId(UUID.randomUUID());
+
+        final var auszahlung = new AuszahlungUpdateDto();
+        auszahlung.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);
+        auszahlung.setAdresse(auszahlungAdresse);
+
+        final var updateFormular = new GesuchFormularUpdateDto();
+        updateFormular.setPersonInAusbildung(pia);
+        updateFormular.setAuszahlung(auszahlung);
+
+        final var mapper = createMapper();
+
+        // Act
+        mapper.setAuszahlungAdresseBeforeUpdate(updateFormular, null);
+
+        // Assert
+        assertThat(auszahlung.getAdresse().getId(), is(piaAdresse.getId()));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "MUTTER",
+        "VATER"
+    })
+    void setAuszahlungElternteilAdresseOnUpdateTest(final ElternTyp toTestFor) {
+        // Arrange
+        final var elternAdresse = new AdresseDto();
+        elternAdresse.setId(UUID.randomUUID());
+
+        final var elternTeil = new ElternUpdateDto();
+        elternTeil.setElternTyp(toTestFor);
+        elternTeil.setAdresse(elternAdresse);
+
+        final var auszahlungAdresse = new AdresseDto();
+        auszahlungAdresse.setId(UUID.randomUUID());
+
+        final var auszahlung = new AuszahlungUpdateDto();
+        auszahlung.setAdresse(auszahlungAdresse);
+
+        if (toTestFor == ElternTyp.VATER) {
+            auszahlung.setKontoinhaber(Kontoinhaber.VATER);
+        } else if (toTestFor == ElternTyp.MUTTER) {
+            auszahlung.setKontoinhaber(Kontoinhaber.MUTTER);
+        }
+
+        final var updateFormular = new GesuchFormularUpdateDto();
+        updateFormular.setElterns(List.of(elternTeil));
+        updateFormular.setAuszahlung(auszahlung);
+
+        final var mapper = createMapper();
+
+        // Act
+        mapper.setAuszahlungAdresseBeforeUpdate(updateFormular, null);
+
+        // Assert
+        assertThat(auszahlung.getAdresse().getId(), is(elternAdresse.getId()));
     }
 
     GesuchFormularMapper createMapper() {

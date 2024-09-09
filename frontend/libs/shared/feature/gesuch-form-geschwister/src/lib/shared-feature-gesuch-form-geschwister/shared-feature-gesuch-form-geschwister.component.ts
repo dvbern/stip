@@ -9,15 +9,17 @@ import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
 import { GeschwisterUpdate } from '@dv/shared/model/gesuch';
 import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
+import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
+import { SharedUiFormZuvorHintListPipe } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
 
+import { selectSharedFeatureGesuchFormGeschwisterView } from './shared-feature-gesuch-form-geschwister.selector';
 import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-feature-gesuch-form-geschwister-editor/shared-feature-gesuch-form-geschwister-editor.component';
 
 @Component({
@@ -28,6 +30,8 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
     NgbAlert,
     SharedFeatureGesuchFormGeschwisterEditorComponent,
     SharedUiStepFormButtonsComponent,
+    SharedUiChangeIndicatorComponent,
+    SharedUiFormZuvorHintListPipe,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister.component.html',
@@ -36,7 +40,9 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
 export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   private store = inject(Store);
 
-  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  viewSig = this.store.selectSignal(
+    selectSharedFeatureGesuchFormGeschwisterView,
+  );
 
   hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);

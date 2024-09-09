@@ -4,6 +4,8 @@
   [controlB]="controls.wohnsitzAnteilVater"
 >
   <label>{{ 'shared.form.shared.wohnsitzanteil.label' | translate }}</label>
-  <span class="label-a">{{ 'shared.form.shared.wohnsitzanteil.mutter' | translate }}</span>
-  <span class="label-b">{{ 'shared.form.shared.wohnsitzanteil.vater' | translate }}</span>
+  <span dvLabelA>{{ 'shared.form.shared.wohnsitzanteil.mutter' | translate }}</span>
+  <span dvLabelB>{{ 'shared.form.shared.wohnsitzanteil.vater' | translate }}</span>
+  <span dvHintA *dvZuvorHint="changes?.wohnsitzAnteilMutter; suffix: '%'"></span>
+  <span dvHintB *dvZuvorHint="changes?.wohnsitzAnteilVater; suffix: '%'"></span>
 </dv-shared-ui-percentage-splitter>

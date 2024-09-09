@@ -20,7 +20,7 @@
     </button>
     <mat-menu #gesuchMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'">
       <div class="d-flex flex-column gap-2">
-        @for (tranche of tranchenSig(); track $index) {
+        @for (tranche of gesuchAenderungStore.tranchenViewSig().list; track $index) {
           <a
             [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'tranche', tranche.id]"
             class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"

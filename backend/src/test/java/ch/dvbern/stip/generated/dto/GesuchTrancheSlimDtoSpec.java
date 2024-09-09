@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.GesuchTrancheStatusDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -33,7 +34,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_ID,
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
-  GesuchTrancheSlimDtoSpec.JSON_PROPERTY_STATUS
+  GesuchTrancheSlimDtoSpec.JSON_PROPERTY_STATUS,
+  GesuchTrancheSlimDtoSpec.JSON_PROPERTY_TYP
 })
 @JsonTypeName("GesuchTrancheSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -49,6 +51,9 @@ public class GesuchTrancheSlimDtoSpec {
 
   public static final String JSON_PROPERTY_STATUS = "status";
   private GesuchTrancheStatusDtoSpec status;
+
+  public static final String JSON_PROPERTY_TYP = "typ";
+  private GesuchTrancheTypDtoSpec typ;
 
   public GesuchTrancheSlimDtoSpec() {
   }
@@ -156,6 +161,32 @@ public class GesuchTrancheSlimDtoSpec {
     this.status = status;
   }
 
+
+  public GesuchTrancheSlimDtoSpec typ(GesuchTrancheTypDtoSpec typ) {
+    
+    this.typ = typ;
+    return this;
+  }
+
+   /**
+   * Get typ
+   * @return typ
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public GesuchTrancheTypDtoSpec getTyp() {
+    return typ;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTyp(GesuchTrancheTypDtoSpec typ) {
+    this.typ = typ;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -168,12 +199,13 @@ public class GesuchTrancheSlimDtoSpec {
     return Objects.equals(this.id, gesuchTrancheSlim.id) &&
         Objects.equals(this.gueltigAb, gesuchTrancheSlim.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchTrancheSlim.gueltigBis) &&
-        Objects.equals(this.status, gesuchTrancheSlim.status);
+        Objects.equals(this.status, gesuchTrancheSlim.status) &&
+        Objects.equals(this.typ, gesuchTrancheSlim.typ);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, status);
+    return Objects.hash(id, gueltigAb, gueltigBis, status, typ);
   }
 
   @Override
@@ -184,6 +216,7 @@ public class GesuchTrancheSlimDtoSpec {
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("}");
     return sb.toString();
   }

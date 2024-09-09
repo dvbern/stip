@@ -4,6 +4,7 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -24,6 +25,11 @@ import jakarta.validation.Valid;
 @Path("/gesuchtranche")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface GesuchTrancheResource {
+
+    @PATCH
+    @Path("/{aenderungId}/aenderung/einreichen")
+    @Produces({ "text/plain" })
+    Response aenderungEinreichen(@PathParam("aenderungId") UUID aenderungId);
 
     @POST
     @Path("/{gesuchId}/aenderungsantrag")

@@ -44,8 +44,11 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
@@ -81,6 +84,9 @@ const MEDIUM_AGE = 20;
     MatSelectModule,
     MatRadioModule,
     SharedUiFormMessageErrorDirective,
+    SharedUiZuvorHintDirective,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
     NgbInputDatepicker,
     MaskitoDirective,
     SharedUiWohnsitzSplitterComponent,
@@ -100,6 +106,10 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
   private formUtils = inject(SharedUtilFormService);
 
   @Input({ required: true }) geschwister!: Partial<GeschwisterUpdate>;
+  @Input({ required: true }) changes:
+    | Partial<GeschwisterUpdate>
+    | undefined
+    | null;
 
   @Output() saveTriggered = new EventEmitter<GeschwisterUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();

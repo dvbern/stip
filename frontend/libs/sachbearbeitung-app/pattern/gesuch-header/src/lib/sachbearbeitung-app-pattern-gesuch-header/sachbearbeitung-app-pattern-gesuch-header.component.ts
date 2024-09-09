@@ -45,7 +45,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   store = inject(Store);
   router = inject(Router);
   private dialog = inject(MatDialog);
-  private gesuchAenderungStore = inject(GesuchAenderungStore);
+  gesuchAenderungStore = inject(GesuchAenderungStore);
 
   isGesuchRouteSig = computed(() => {
     const gesuch = this.currentGesuchSig();
@@ -58,12 +58,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       matrixParams: 'ignored',
       queryParams: 'ignored',
     });
-  });
-
-  tranchenSig = computed(() => {
-    const tranchen = this.gesuchAenderungStore.cachedTranchenSlim();
-
-    return tranchen.data ?? [];
   });
 
   constructor() {

@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
@@ -47,6 +48,7 @@ class GesuchFormularServiceTest {
         final var gesuchTranche = new GesuchTranche();
         final var gesuchFormular = new GesuchFormular();
         gesuchTranche.setGesuch(gesuch);
+        gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
         gesuchFormular.setTranche(gesuchTranche);
         var reportDto = gesuchFormularService.validatePages(gesuchFormular);
         assertThat(reportDto.getValidationErrors(), Matchers.is(empty()));

@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, switchMap } from 'rxjs';
 
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
-import { GesuchService } from '@dv/shared/model/gesuch';
+import { GesuchService, GesuchTrancheService } from '@dv/shared/model/gesuch';
 import { shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
@@ -58,8 +58,30 @@ export const gesuchEinreichen = createEffect(
   { functional: true },
 );
 
+export const trancheEinreichen = createEffect(
+  (events$ = inject(Actions), trancheService = inject(GesuchTrancheService)) =>
+    events$.pipe(
+      ofType(GesuchAppDataAccessAbschlussApiEvents.trancheAbschliessen),
+      switchMap(({ trancheId }) =>
+        trancheService.aenderungEinreichen$({ aenderungId: trancheId }).pipe(
+          switchMap(() => [
+            GesuchAppDataAccessAbschlussApiEvents.abschlussSuccess(),
+            SharedEventGesuchFormAbschluss.init(),
+          ]),
+          catchError((error) => [
+            GesuchAppDataAccessAbschlussApiEvents.abschlussFailure({
+              error: sharedUtilFnErrorTransformer(error),
+            }),
+          ]),
+        ),
+      ),
+    ),
+  { functional: true },
+);
+
 // add effects here
 export const gesuchAppDataAccessAbschlussEffects = {
   gesuchCheck,
   gesuchEinreichen,
+  trancheEinreichen,
 };

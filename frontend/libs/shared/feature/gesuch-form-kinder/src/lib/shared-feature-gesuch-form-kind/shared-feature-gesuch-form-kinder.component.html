@@ -1,9 +1,11 @@
+@let view = viewSig();
 <!-- loading -->
-@if (viewSig().loading) {
+@if (view.loading) {
   <dv-shared-ui-loading data-testid="form-kinder-loading"></dv-shared-ui-loading>
 } @else if (editedKind) {
   <dv-shared-feature-gesuch-form-kinder-editor
     [kind]="editedKind"
+    [changesSig]="view.listChanges?.changesByIdentifier?.[editedKind.id ?? -1]"
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
     (formIsUnsaved)="hasUnsavedChanges = $event"
@@ -32,15 +34,18 @@
               @for (kindRaw of kinder; track trackByIndex($index)) {
                 <tr>
                   @if (kindRaw; as kinder) {
-                    <th scope="row">
-                      <i class="material-symbols-rounded">done</i>
-                    </th>
+                    <td class="position-relative">
+                      @if (view.listChanges | dvZuvorListContains: kindRaw) {
+                        <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
+                      }
+                      <i class="material-symbols-rounded align-middle" aria-hidden>done</i>
+                    </td>
                     <td>{{ kinder.vorname }} {{ kinder.nachname }}</td>
                     <td>
                       {{ parseBackendLocalDateAndPrint(kinder.geburtsdatum, languageSig()) }}
                     </td>
                     <td>
-                      @if (!viewSig().readonly) {
+                      @if (!view.readonly) {
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
@@ -52,7 +57,7 @@
                       }
                     </td>
                     <td>
-                      @if (!viewSig().readonly) {
+                      @if (!view.readonly) {
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
@@ -84,7 +89,7 @@
 
   <!-- ADD -->
   <div class="d-flex flex-column flex-md-row">
-    @if (!viewSig().readonly) {
+    @if (!view.readonly) {
       <button type="button" class="btn btn-outline-primary" (click)="handleAddKinder()" data-testid="button-add-kind">
         {{ 'shared.form.kinder.add' | translate }}
       </button>
@@ -97,7 +102,7 @@
       type="button"
       class="btn btn-primary"
       (click)="handleContinue()"
-      [disabled]="!viewSig().gesuchId"
+      [disabled]="!view.gesuchId"
       data-testid="button-continue"
     >
       {{ 'shared.form.gonext' | translate }}

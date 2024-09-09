@@ -45,9 +45,9 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
 
     public void dropGesuchDokumentIfNoDokumente(final UUID gesuchDokumentId) {
         final var gesuchDokument = requireById(gesuchDokumentId);
-        final var hasDokuments = gesuchDokument.getDokumente().isEmpty();
+        final var hasNoDokuments = gesuchDokument.getDokumente().isEmpty();
 
-        if (!hasDokuments) {
+        if (hasNoDokuments) {
             gesuchDokument.getGesuchTranche().getGesuchDokuments().remove(gesuchDokument);
             deleteById(gesuchDokumentId);
         }
