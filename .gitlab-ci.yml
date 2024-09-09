@@ -147,16 +147,16 @@ wait-for-review:
   rules:
     - if: $CI_MERGE_REQUEST_IID
 
-run-review-e2e:
-  extends: run-e2e
-  stage: review-e2e
-  needs:
-    - wait-for-review
-  variables:
-    E2E_BASEURL_GS: 'https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER'
-    E2E_BASEURL_SB: 'https://$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER'
-  rules:
-    - if: $PIPELINE_TYPE == "mr"
+# run-review-e2e:
+#   extends: run-e2e
+#   stage: review-e2e
+#   needs:
+#     - wait-for-review
+#   variables:
+#     E2E_BASEURL_GS: 'https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER'
+#     E2E_BASEURL_SB: 'https://$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER'
+#   rules:
+#     - if: $PIPELINE_TYPE == "mr"
 
 # stop-e2e:
 #   when: always
