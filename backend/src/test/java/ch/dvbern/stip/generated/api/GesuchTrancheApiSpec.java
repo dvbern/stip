@@ -18,6 +18,7 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -63,6 +64,7 @@ public class GesuchTrancheApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                aenderungEinreichen(),
                 createAenderungsantrag(),
                 createGesuchTrancheCopy(),
                 getAenderungsantrag(),
@@ -72,6 +74,10 @@ public class GesuchTrancheApiSpec {
                 getRequiredGesuchDokumentTyp(),
                 validateGesuchTranchePages()
         );
+    }
+
+    public AenderungEinreichenOper aenderungEinreichen() {
+        return new AenderungEinreichenOper(createReqSpec());
     }
 
     public CreateAenderungsantragOper createAenderungsantrag() {
@@ -120,9 +126,71 @@ public class GesuchTrancheApiSpec {
      * 
      * 
      *
+     * @see #aenderungIdPath Die ID der Aenderung (required)
+     */
+    public static class AenderungEinreichenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchtranche/{aenderungId}/aenderung/einreichen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public AenderungEinreichenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchtranche/{aenderungId}/aenderung/einreichen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String AENDERUNG_ID_PATH = "aenderungId";
+
+        /**
+         * @param aenderungId (UUID) Die ID der Aenderung (required)
+         * @return operation
+         */
+        public AenderungEinreichenOper aenderungIdPath(Object aenderungId) {
+            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public AenderungEinreichenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public AenderungEinreichenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
      * @see #gesuchIdPath  (required)
      * @see #body  (required)
-     * return GesuchDtoSpec
+     * return GesuchTrancheDtoSpec
      */
     public static class CreateAenderungsantragOper implements Oper {
 
@@ -153,10 +221,10 @@ public class GesuchTrancheApiSpec {
         /**
          * POST /gesuchtranche/{gesuchId}/aenderungsantrag
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchTrancheDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchTrancheDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchTrancheDtoSpec> type = new TypeRef<GesuchTrancheDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -206,7 +274,7 @@ public class GesuchTrancheApiSpec {
      *
      * @see #gesuchIdPath  (required)
      * @see #body  (optional)
-     * return GesuchDtoSpec
+     * return GesuchTrancheDtoSpec
      */
     public static class CreateGesuchTrancheCopyOper implements Oper {
 
@@ -237,10 +305,10 @@ public class GesuchTrancheApiSpec {
         /**
          * POST /gesuchtranche/{gesuchId}/tranche
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchTrancheDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchTrancheDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchTrancheDtoSpec> type = new TypeRef<GesuchTrancheDtoSpec>(){};
             return execute(handler).as(type);
         }
 

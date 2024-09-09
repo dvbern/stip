@@ -7,6 +7,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { SharedModelBenutzerApi, UsableRole } from '@dv/shared/model/benutzer';
+import { type } from '@dv/shared/util-fn/type-guards';
 
 import {
   BenutzerverwaltungStore,
@@ -15,8 +16,6 @@ import {
   roleToStateColor,
   toKnownUserErrorType,
 } from './sachbearbeitung-app-data-access-benutzerverwaltung.store';
-
-const ensureType = <T>(value: T) => value;
 
 describe('BenutzerverwaltungStore', () => {
   let store: BenutzerverwaltungStore;
@@ -79,7 +78,7 @@ describe('BenutzerverwaltungStore - helper functions', () => {
   });
 
   it.each([
-    ensureType<[UsableRole, string][]>([
+    type<[UsableRole, string][]>([
       ['Sachbearbeiter', 'info'],
       ['Admin', 'success'],
       ['Jurist', 'warning'],

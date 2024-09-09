@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -24,5 +25,20 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
             .where(gesuchTranche.gesuch.id.eq(gesuchId))
             .orderBy(gesuchTranche.gueltigkeit.gueltigAb.asc())
             .stream();
+    }
+
+    public GesuchTranche requireAenderungById(final UUID aenderungId) {
+        final var gesuchTranche = QGesuchTranche.gesuchTranche;
+
+        final var found = new JPAQueryFactory(em)
+            .selectFrom(gesuchTranche)
+            .where(gesuchTranche.id.eq(aenderungId))
+            .fetchFirst();
+
+        if (found != null) {
+            return found;
+        }
+
+        throw new NotFoundException();
     }
 }

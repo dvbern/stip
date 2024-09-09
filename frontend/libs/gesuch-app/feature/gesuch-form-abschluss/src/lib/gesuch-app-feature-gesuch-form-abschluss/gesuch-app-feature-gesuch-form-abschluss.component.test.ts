@@ -13,6 +13,8 @@ const abschlussPhase: Record<AbschlussPhase, string> = {
   NOT_READY: 'NOT_READY',
   READY_TO_SEND: 'READY_TO_SEND',
   SUBMITTED: 'SUBMITTED',
+  ABGELEHNT: 'ABGELEHNT',
+  AKZETPIERT: 'AKZETPIERT',
 };
 
 async function setup(abschlussPhase: AbschlussPhase) {
