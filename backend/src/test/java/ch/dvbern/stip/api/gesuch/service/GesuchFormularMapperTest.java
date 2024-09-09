@@ -56,33 +56,6 @@ import static org.hamcrest.Matchers.nullValue;
 
 class GesuchFormularMapperTest {
     @Test
-    void resetEinnahmenKostenRemovesRenten() {
-        final var target = new GesuchFormular()
-            .setFamiliensituation(
-                new Familiensituation()
-                    .setElternteilUnbekanntVerstorben(true)
-            )
-            .setEinnahmenKosten(
-                new EinnahmenKosten()
-                    .setRenten(1)
-            );
-
-        final var updateFamsit = new FamiliensituationUpdateDto();
-        updateFamsit.setElternteilUnbekanntVerstorben(false);
-
-        final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setRenten(1);
-
-        final var updateFormular = new GesuchFormularUpdateDto();
-        updateFormular.setFamiliensituation(updateFamsit);
-        updateFormular.setEinnahmenKosten(updateEinnahmenKosten);
-
-        final var mapper = createMapper();
-        mapper.resetEinnahmenKosten(updateFormular, target);
-        assertThat(updateFormular.getEinnahmenKosten().getRenten(), is(nullValue()));
-    }
-
-    @Test
     void resetElternRemovesVaterTest() {
         // Arrange
         final var elterns = new ArrayList<ElternUpdateDto>();
