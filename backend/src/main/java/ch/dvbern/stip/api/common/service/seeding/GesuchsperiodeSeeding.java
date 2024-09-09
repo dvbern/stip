@@ -58,7 +58,7 @@ GesuchsperiodeSeeding extends Seeder{
                 "Printemps",
                 newJahr,
                 LocalDate.of(currentYear, 1, 1),
-                LocalDate.of(currentYear + 1, 12, 31)
+                LocalDate.of(currentYear, 12, 31)
             )
         );
 
