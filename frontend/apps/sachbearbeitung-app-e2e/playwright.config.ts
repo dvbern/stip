@@ -1,30 +1,32 @@
+import { join } from 'node:path';
+
 import { nxE2EPreset } from '@nx/playwright/preset';
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
 
-import { SB_STORAGE_STATE, baseConfig } from '@dv/shared/util-fn/e2e-util';
+import { baseConfig, getE2eUrls } from '@dv/shared/util-fn/e2e-util';
 
-dotenv.config({ path: '../../.env' });
+const env = dotenv.config({ path: join(__dirname, '../../.env') });
+if (env.error) {
+  throw env.error;
+}
 
-const baseURL = process.env['E2E_BASEURL_SB'];
+const urls = getE2eUrls();
 
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
   ...baseConfig,
   use: {
     ...baseConfig.use,
-    baseURL,
+    baseURL: urls.sb,
   },
   projects: [
-    // Setup project for authentication.
-    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
-      name: 'chromium',
+      name: 'sachbearbeitung-app-e2e',
+      testDir: `src/tests`,
       use: {
         ...devices['Desktop Chrome'],
-        storageState: SB_STORAGE_STATE,
       },
-      dependencies: ['setup'],
     },
   ],
 });

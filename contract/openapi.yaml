@@ -918,25 +918,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuch
       summary: Returns the Gesuch with the given Id
-  '/gesuch/validatePages/{gesuchId}':
-    get:
-      tags:
-        - Gesuch
-        - Validation
-      parameters:
-        - name: gesuchId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationReport'
-          description: Die Validierung wurde erflogreich durchgeführt
-      operationId: validateGesuchPages
   '/dokument/download':
     parameters:
       - name: token
@@ -1148,6 +1129,50 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenValidieren
       summary: Das Gesuch Einreichen Validation Report generieren
+  '/gesuch/{aenderungId}/aenderung/gs/changes':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns 
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGsTrancheChanges
+  '/gesuch/{aenderungId}/aenderung/sb/changes':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns 
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getSbTrancheChanges
   /tenant/current:
     get:
       tags:
@@ -1412,6 +1437,25 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createOrUpdateSachbearbeiterStammdaten
+  '/gesuchtranche/validatePages/{gesuchTrancheId}':
+    get:
+      tags:
+        - GesuchTranche
+        - Validation
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationReport'
+          description: Die Validierung wurde erflogreich durchgeführt
+      operationId: validateGesuchTranchePages
   '/gesuchtranche/{gesuchTrancheId}/dokumente':
     parameters:
       - name: gesuchTrancheId
@@ -1495,11 +1539,11 @@ paths:
       operationId: getRequiredGesuchDokumentTyp
   '/gesuchtranche/{gesuchId}':
     parameters:
-    - name: gesuchId
-      schema:
-        $ref: '#/components/schemas/UUID'
-      in: path
-      required: true
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     get:
       tags:
         - GesuchTranche
@@ -1542,7 +1586,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchTranche'
           description: Aenderungsantrag wurde erstellt
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1593,7 +1637,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchTranche'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1603,6 +1647,22 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createGesuchTrancheCopy
+  '/gesuchtranche/{aenderungId}/aenderung/einreichen':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: Eingereicht
+        '400':
+          description: Falsche Tranche eingereicht
+        '404':
+          description: Die Tranche gibt es nicht
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungEinreichen
   /bildungskategorie:
     get:
       tags:
@@ -1687,10 +1747,6 @@ components:
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
         - FAMILIENSITUATION_TRENNUNGSKONVENTION
-        - ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
-        - ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER
-        - ELTERN_STEUERUNTERLAGEN_VATER
-        - ELTERN_STEUERUNTERLAGEN_MUTTER
         - STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER
         - STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
         - STEUERDATEN_SOZIALHILFEBUDGET_VATER
@@ -2159,6 +2215,15 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
+    GesuchWithChanges:
+      allOf:
+        - $ref: '#/components/schemas/Gesuch'
+      description: '1 or 2 Aenderungstranche in relation to another Tranche'
+      properties:
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTranche'
     GesuchCreate:
       required:
         - fallId
@@ -2703,8 +2768,6 @@ components:
         isAusbildungAusland:
           type: boolean
     Ausbildung:
-      required:
-        - ausbildungsgang
       type: object
       properties:
         ausbildungsgang:
@@ -3046,6 +3109,8 @@ components:
         - id
         - gueltigAb
         - gueltigBis
+        - status
+        - typ
       type: object
       properties:
         id:
@@ -3054,8 +3119,14 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gueltigBis:
           $ref: '#/components/schemas/LocalDate'
+        comment:
+          type: string
         gesuchFormular:
           $ref: '#/components/schemas/GesuchFormular'
+        status:
+          $ref: '#/components/schemas/GesuchTrancheStatus'
+        typ:
+          $ref: '#/components/schemas/GesuchTrancheTyp'
     GesuchTrancheUpdate:
       required:
         - gesuchFormular
@@ -3077,6 +3148,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         status:
           $ref: '#/components/schemas/GesuchTrancheStatus'
+        typ:
+          $ref: '#/components/schemas/GesuchTrancheTyp'
     SachbearbeiterZuordnungStammdaten:
       type: object
       properties:
@@ -3237,6 +3310,10 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+    GesuchTrancheTyp:
+      enum:
+        - AENDERUNG
+        - TRANCHE
     Dokumentstatus:
       enum:
         - AUSSTEHEND
@@ -3274,12 +3351,14 @@ components:
         - eigenerHaushalt
         - anteilLebenshaltungskosten
         - einkommen
+        - alimente
         - leistungenEO
         - rente
         - kinderAusbildungszulagen
         - ergaenzungsleistungen
         - gemeindeInstitutionen
-        - vermoegen
+        - steuerbaresVermoegen
+        - anrechenbaresVermoegen
         - anteilFamilienbudget
         - einkommenPartner
         - einnahmenPersoenlichesBudget
@@ -3305,6 +3384,8 @@ components:
           type: integer
         einkommen:
           type: integer
+        alimente:
+          type: integer
         leistungenEO:
           type: integer
         rente:
@@ -3315,7 +3396,9 @@ components:
           type: integer
         gemeindeInstitutionen:
           type: integer
-        vermoegen:
+        steuerbaresVermoegen:
+          type: integer
+        anrechenbaresVermoegen:
           type: integer
         anteilFamilienbudget:
           type: integer
@@ -3357,8 +3440,9 @@ components:
         - totalEinkuenfte
         - ergaenzungsleistungen
         - steuerbaresVermoegen
-        - vermoegen
-        - einzahlungSaeule23a
+        - anrechenbaresVermoegen
+        - saeule2
+        - saeule3a
         - eigenmietwert
         - alimente
         - einkommensfreibetrag
@@ -3391,9 +3475,11 @@ components:
           type: integer
         steuerbaresVermoegen:
           type: integer
-        vermoegen:
+        anrechenbaresVermoegen:
           type: integer
-        einzahlungSaeule23a:
+        saeule2:
+          type: integer
+        saeule3a:
           type: integer
         eigenmietwert:
           type: integer
@@ -3484,6 +3570,14 @@ components:
       type: openIdConnect
       openIdConnectUrl: https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern
       description: Bern (DEV)
+  parameters:
+    aenderungId:
+      name: aenderungId
+      in: path
+      required: true
+      description: Die ID der Aenderung
+      schema:
+        $ref: '#/components/schemas/UUID'
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []

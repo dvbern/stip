@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { isDefined } from '@dv/shared/util-fn/type-guards';
+
 type IsTranslated<K> = K extends `${string}De` | `${string}Fr` ? K : never;
 type NameOfTranslated<K> = K extends `${infer Name}De` | `${infer Name}Fr`
   ? Name
@@ -14,16 +16,22 @@ type OnlyKeysWithDeOrFr<T> = {
 })
 export class TranslatedPropertyPipe implements PipeTransform {
   transform<T extends { [key in K]: unknown }, K extends OnlyKeysWithDeOrFr<T>>(
-    value: T,
+    value: Partial<T> | undefined,
     property: NameOfTranslated<K>,
     language: string,
-  ): T[K] {
+  ): T[K] | null {
+    if (!isDefined(value)) {
+      return null;
+    }
     const lang = prepareLanguage(language);
     const translatedProperty = `${property}${lang}` as K;
     if (!(translatedProperty in value)) {
       throw new Error(
         `Property '${translatedProperty}' does not exist on given value`,
       );
+    }
+    if (!isDefined(value[translatedProperty])) {
+      return null;
     }
     return value[translatedProperty];
   }

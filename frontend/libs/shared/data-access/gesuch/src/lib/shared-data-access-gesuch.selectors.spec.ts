@@ -1,7 +1,11 @@
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import {
   Gesuch,
+  GesuchTranche,
+  SharedModelGesuch,
   SharedModelGesuchFormular,
+  SharedModelGesuchFormularProps,
+  Steuerdaten,
   SteuerdatenTyp,
 } from '@dv/shared/model/gesuch';
 import { ELTERN, ELTERN_STEUER_FAMILIE } from '@dv/shared/model/gesuch-form';
@@ -11,6 +15,7 @@ import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events
 import { State, reducer } from './shared-data-access-gesuch.feature';
 import {
   isGesuchFormularProp,
+  prepareTranchenChanges,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchValidationView,
   selectSharedDataAccessGesuchsView,
@@ -23,6 +28,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       gesuchs: [],
       validations: { errors: [], hasDocuments: null },
       gesuchFormular: null,
+      specificTrancheId: null,
       cache: {
         gesuch: null,
         gesuchId: null,
@@ -43,10 +49,14 @@ describe('selectSharedDataAccessGesuchsView', () => {
         isGesuchApp: true,
         isSachbearbeitungApp: false,
       },
+      {
+        tranchenChanges: null,
+      },
       state.lastUpdate,
       state.loading,
       state.gesuch,
       state.gesuchFormular,
+      state.specificTrancheId,
     );
     expect(result.loading).toBeFalsy();
   });
@@ -77,8 +87,10 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const firstState = reducer(undefined, firstAction);
     const secondAction = SharedEventGesuchFormPerson.init();
     const secondState = reducer(firstState, secondAction);
-    const result =
-      selectSharedDataAccessGesuchValidationView.projector(secondState);
+    const result = selectSharedDataAccessGesuchValidationView.projector(
+      { tranchenChanges: null },
+      secondState,
+    );
     expect(result.cachedGesuchFormular).toEqual(
       firstUpdate.gesuchTrancheToWorkWith.gesuchFormular,
     );
@@ -115,6 +127,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
         partner: {} as any,
         kinds: [],
       },
+      specificTrancheId: null,
       steuerdatenTabs: initial(),
       cache: {
         gesuch: null,
@@ -125,7 +138,12 @@ describe('selectSharedDataAccessGesuchsView', () => {
       loading: false,
       error: undefined,
     };
-    const result = selectSharedDataAccessGesuchValidationView.projector(state);
+    const result = selectSharedDataAccessGesuchValidationView.projector(
+      {
+        tranchenChanges: null,
+      },
+      state,
+    );
     expect(result.invalidFormularProps.validations).toEqual({
       errors: ['partner', 'kinds'],
       warnings: undefined,
@@ -142,6 +160,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
         hasDocuments: null,
       },
       gesuchFormular: null,
+      specificTrancheId: null,
       steuerdatenTabs: success([SteuerdatenTyp.FAMILIE]),
       cache: {
         gesuch: null,
@@ -171,4 +190,141 @@ describe('selectSharedDataAccessGesuchsView', () => {
     );
     expect(elternIndex + 1).toEqual(steuerdatenTabIndex);
   });
+});
+
+type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>;
+    }
+  : T;
+describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => {
+  it('should identify the changed form steps', () => {
+    const [original, changed] = [
+      {
+        gesuchFormular: {
+          elterns: [
+            { id: '1', elternTyp: 'VATER', nachname: 'Muster' },
+            { id: '2', elternTyp: 'MUTTER', nachname: 'Muster' },
+          ],
+          kinds: [{ id: '1', nachname: 'Muster' }],
+        },
+      },
+      {
+        gesuchFormular: {
+          elterns: [
+            { id: '1', elternTyp: 'VATER', nachname: 'Alvarez' },
+            { id: '2', elternTyp: 'MUTTER', nachname: 'Sanchez' },
+          ],
+          kinds: [],
+        },
+      },
+    ] satisfies DeepPartial<GesuchTranche>[] as GesuchTranche[];
+
+    const changes = prepareTranchenChanges({
+      gesuchTrancheToWorkWith: original,
+      changes: [changed],
+    } satisfies DeepPartial<SharedModelGesuch> as SharedModelGesuch);
+
+    expect(changes).toMatchObject({
+      affectedSteps: ['elterns', 'kinds'],
+      hasChanges: true,
+    });
+  });
+
+  it.each([
+    [
+      'Simple Family Change',
+      [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
+      [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 2000 }],
+      ['steuerdaten'],
+    ],
+    [
+      'Simple Mother Change',
+      [{ id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 500 }],
+      [{ id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 1000 }],
+      ['steuerdatenMutter'],
+    ],
+    [
+      'Simple Father Change',
+      [{ id: '1', steuerdatenTyp: 'VATER', eigenmietwert: 300 }],
+      [{ id: '1', steuerdatenTyp: 'VATER', eigenmietwert: 600 }],
+      ['steuerdatenVater'],
+    ],
+    [
+      'From Family to Mother and Father',
+      [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
+      [
+        { id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 500 },
+        { id: '2', steuerdatenTyp: 'VATER', eigenmietwert: 300 },
+      ],
+      ['steuerdatenVater', 'steuerdatenMutter'],
+    ],
+    [
+      'From Family to Mother',
+      [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
+      [{ id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 500 }],
+      ['steuerdatenMutter'],
+    ],
+    [
+      'From Family to Father',
+      [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
+      [{ id: '1', steuerdatenTyp: 'VATER', eigenmietwert: 300 }],
+      ['steuerdatenVater'],
+    ],
+    [
+      'From Mother and Father to Family',
+      [
+        { id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 500 },
+        { id: '2', steuerdatenTyp: 'VATER', eigenmietwert: 300 },
+      ],
+      [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
+      ['steuerdaten'],
+    ],
+    [
+      'From Mother to Family',
+      [{ id: '1', steuerdatenTyp: 'MUTTER', eigenmietwert: 500 }],
+      [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
+      ['steuerdaten'],
+    ],
+    [
+      'From Father to Family',
+      [{ id: '1', steuerdatenTyp: 'VATER', eigenmietwert: 300 }],
+      [{ id: '1', steuerdatenTyp: 'FAMILIE', eigenmietwert: 1000 }],
+      ['steuerdaten'],
+    ],
+  ] satisfies [
+    string,
+    DeepPartial<Steuerdaten[]>,
+    DeepPartial<Steuerdaten[]>,
+    SharedModelGesuchFormularProps[],
+  ][])(
+    'should identify correctly the steuerdaten changes: %s',
+    (_, steuerdatenA, steuerdatenB, affectedSteps) => {
+      const [original, changed] = [
+        {
+          gesuchFormular: {
+            steuerdaten: steuerdatenA,
+          },
+        },
+        {
+          gesuchFormular: {
+            steuerdaten: steuerdatenB,
+          },
+        },
+      ] satisfies DeepPartial<GesuchTranche>[] as GesuchTranche[];
+
+      const changes = prepareTranchenChanges({
+        gesuchTrancheToWorkWith: original,
+        changes: [changed],
+      } satisfies DeepPartial<SharedModelGesuch> as SharedModelGesuch);
+
+      expect(changes).toEqual(
+        expect.objectContaining({
+          hasChanges: true,
+          affectedSteps: expect.arrayContaining(affectedSteps),
+          tranche: expect.any(Object),
+        }),
+      );
+    },
+  );
 });

@@ -32,8 +32,9 @@ import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-s
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
-import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
+import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
+import { SharedUtilHeaderService } from '@dv/shared/util/header';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
@@ -54,6 +55,7 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
   templateUrl: './gesuch-app-pattern-gesuch-step-layout.component.html',
   styleUrls: ['./gesuch-app-pattern-gesuch-step-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SharedUtilHeaderService],
 })
 export class GesuchAppPatternGesuchStepLayoutComponent {
   @Input()
@@ -63,6 +65,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
 
   private store = inject(Store);
 
+  headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -94,11 +97,11 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   });
 
   constructor() {
-    getLatestGesuchIdFromGesuchOnUpdate$(this.viewSig)
+    getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
-      .subscribe((gesuchId) => {
+      .subscribe((gesuchTrancheId) => {
         this.store.dispatch(
-          SharedDataAccessGesuchEvents.gesuchValidateSteps({ id: gesuchId }),
+          SharedDataAccessGesuchEvents.gesuchValidateSteps({ gesuchTrancheId }),
         );
       });
   }

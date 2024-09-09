@@ -55,6 +55,7 @@ import {
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   SharedUiPercentageSplitterComponent,
+  SharedUiPercentageSplitterDirective,
   numberToPercentString,
   percentStringToNumber,
 } from '@dv/shared/ui/percentage-splitter';
@@ -94,6 +95,7 @@ const animationTime = 500;
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiPercentageSplitterComponent,
+    SharedUiPercentageSplitterDirective,
     SharedUiStepFormButtonsComponent,
     SharedUiStepperNavigationComponent,
     SharedUiLoadingComponent,

@@ -269,19 +269,12 @@ class GesuchTrancheServiceTruncateTest {
         );
     }
 
-    private GesuchTrancheService getDummyTrancheService() {
+    private GesuchTrancheTruncateService getDummyTrancheService() {
         final var mockTrancheRepo = Mockito.mock(GesuchTrancheRepository.class);
         Mockito.doNothing().when(mockTrancheRepo).delete(Mockito.any());
 
-        return new GesuchTrancheService(
-            null,
-            mockTrancheRepo,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+        return new GesuchTrancheTruncateService(
+            mockTrancheRepo
         );
     }
 

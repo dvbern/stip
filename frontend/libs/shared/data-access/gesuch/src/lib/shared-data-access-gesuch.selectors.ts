@@ -1,11 +1,14 @@
 import { getRouterSelectors } from '@ngrx/router-store';
 import { createSelector } from '@ngrx/store';
+import { IChange, diff } from 'json-diff-ts';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
+  SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
+  SteuerdatenTyp,
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
 import {
@@ -26,14 +29,20 @@ import {
   RETURN_TO_HOME,
   SPECIAL_VALIDATION_ERRORS,
   SharedModelGesuchFormStep,
+  TRANCHE,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
-import { isGesuchFormularReadonly } from '@dv/shared/util/readonly-state';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
+import {
+  isGesuchReadonly,
+  isTrancheReadonly,
+} from '@dv/shared/util/readonly-state';
+import { capitalized } from '@dv/shared/util-fn/string-helper';
+import { isDefined, type } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
 const baseSteps = [
+  TRANCHE,
   PERSON,
   AUSBILDUNG,
   LEBENSLAUF,
@@ -53,24 +62,47 @@ export const selectRouteId = selectRouteParam('id');
 
 export const selectRouteTrancheId = selectRouteParam('trancheId');
 
+export const selectSharedDataAccessCachedGesuchChanges = createSelector(
+  sharedDataAccessGesuchsFeature.selectCache,
+  ({ gesuch }) => {
+    return {
+      tranchenChanges: prepareTranchenChanges(gesuch),
+    };
+  },
+);
+
 export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedDataAccessConfigsView,
+  selectSharedDataAccessCachedGesuchChanges,
   sharedDataAccessGesuchsFeature.selectLastUpdate,
   sharedDataAccessGesuchsFeature.selectLoading,
   sharedDataAccessGesuchsFeature.selectGesuch,
   sharedDataAccessGesuchsFeature.selectGesuchFormular,
-  (config, lastUpdate, loading, gesuch, gesuchFormular) => {
+  sharedDataAccessGesuchsFeature.selectSpecificTrancheId,
+  (
+    config,
+    { tranchenChanges },
+    lastUpdate,
+    loading,
+    gesuch,
+    gesuchFormular,
+    specificTrancheId,
+  ) => {
     return {
       config,
       lastUpdate,
       loading,
       gesuch,
       gesuchFormular,
-      readonly: isGesuchFormularReadonly(
-        gesuch,
-        config.compileTimeConfig?.appType,
-      ),
+      tranchenChanges,
+      readonly: specificTrancheId
+        ? isTrancheReadonly(
+            gesuch?.gesuchTrancheToWorkWith ?? null,
+            config.compileTimeConfig?.appType,
+          )
+        : isGesuchReadonly(gesuch, config.compileTimeConfig?.appType),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
+      specificTrancheId,
       gesuchId: gesuch?.id,
       allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
     };
@@ -78,12 +110,15 @@ export const selectSharedDataAccessGesuchsView = createSelector(
 );
 
 export const selectSharedDataAccessGesuchValidationView = createSelector(
+  selectSharedDataAccessCachedGesuchChanges,
   sharedDataAccessGesuchsFeature.selectGesuchsState,
-  (state) => {
+  ({ tranchenChanges }, state) => {
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
     return {
+      specificTrancheId: state.specificTrancheId,
       cachedGesuchId: state.cache.gesuchId,
       cachedGesuchFormular: currentForm,
+      tranchenChanges,
       invalidFormularProps: {
         lastUpdate: state.lastUpdate,
         validations: {
@@ -135,18 +170,21 @@ export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
 
 export const selectSharedDataAccessGesuchCache = createSelector(
   sharedDataAccessGesuchsFeature.selectCache,
-  (cache) => cache,
+  sharedDataAccessGesuchsFeature.selectSpecificTrancheId,
+  (cache, specificTrancheId) => ({ ...cache, specificTrancheId }),
 );
 export const selectSharedDataAccessGesuchCacheView = createSelector(
   selectSharedDataAccessGesuchCache,
   selectSharedDataAccessConfigsView,
-  (cache, config) => {
+  ({ specificTrancheId, ...cache }, config) => {
     return {
       cache,
-      readonly: isGesuchFormularReadonly(
-        cache.gesuch,
-        config.compileTimeConfig?.appType,
-      ),
+      readonly: specificTrancheId
+        ? isTrancheReadonly(
+            cache.gesuch?.gesuchTrancheToWorkWith ?? null,
+            config.compileTimeConfig?.appType,
+          )
+        : isGesuchReadonly(cache.gesuch, config.compileTimeConfig?.appType),
     };
   },
 );
@@ -233,3 +271,86 @@ function getStepsByAppType(
       return [];
   }
 }
+
+/**
+ * Calculates the changes between the gesuchTrancheToWorkWith and previous tranches
+ *
+ * Returns:
+ * - hasChanges: true if there are changes
+ * - tranche: the tranche containing the previous gesuchFormular
+ * - affectedSteps: the steps that have changed
+ */
+export function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
+  if (!gesuch) {
+    return null;
+  }
+  const allChanges = gesuch.changes?.map((tranche) => {
+    const changes = diff(
+      gesuch.gesuchTrancheToWorkWith.gesuchFormular,
+      tranche.gesuchFormular,
+      {
+        keysToSkip: ['id'],
+        embeddedObjKeys: {
+          /** Used to have a more accurate diff for steuerdaten in {@link hasSteuerdatenChanges} */
+          ['steuerdaten']: 'steuerdatenTyp',
+        },
+      },
+    );
+    return {
+      hasChanges: changes.length > 0,
+      tranche,
+      affectedSteps: [
+        ...changes
+          .filter(
+            (c) =>
+              // Ignore steuerdaten changes, they are handled separately
+              c.key !== type<SharedModelGesuchFormularProps>('steuerdaten') &&
+              ((c.changes?.length ?? 0) > 0 ||
+                // Also mark the step as affected if a new entry has been added or removed
+                c.type !== 'UPDATE'),
+          )
+          .map((c) => c.key),
+        ...hasSteuerdatenChanges(changes),
+      ],
+    };
+  });
+  if (!allChanges || allChanges.length <= 0) {
+    return null;
+  }
+  return allChanges[allChanges.length - 1];
+}
+
+/**
+ * Used to mark steuerdatenVater/Mutter Tabs as affected if steuerdatenTyp has changed to FAMILIE
+ * or back to individual
+ */
+export const hasSteuerdatenChanges = (
+  changes: IChange[],
+): SharedModelGesuchFormularProps[] => {
+  const steuerdatenChange = changes.find(
+    (c) =>
+      c.key === type<SharedModelGesuchFormularProps>('steuerdaten') &&
+      c.type === 'UPDATE',
+  );
+  const affectedSteps = new Set<SharedModelGesuchFormularProps>();
+
+  // Check if steuerdaten have changed
+  (['MUTTER', 'VATER', 'FAMILIE'] satisfies SteuerdatenTyp[]).forEach(
+    (steuerdatenTyp) => {
+      const steuerdatenTypChange = steuerdatenChange?.changes?.find(
+        (c) => c.key === steuerdatenTyp,
+      );
+      if (
+        steuerdatenTypChange &&
+        ((steuerdatenTypChange.changes ?? []).length > 0 ||
+          steuerdatenTypChange.type !== 'UPDATE')
+      ) {
+        affectedSteps.add(
+          `steuerdaten${steuerdatenTyp === 'FAMILIE' ? '' : capitalized(steuerdatenTyp)}`,
+        );
+      }
+    },
+  );
+
+  return Array.from(affectedSteps);
+};

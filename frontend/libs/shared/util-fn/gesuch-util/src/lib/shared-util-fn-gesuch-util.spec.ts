@@ -1,10 +1,16 @@
 import {
+  Eltern,
   ElternAbwesenheitsGrund,
   ElternTyp,
   Familiensituation,
+  PersonInAusbildung,
 } from '@dv/shared/model/gesuch';
 
-import { calculateExpectElternteil } from './shared-util-fn-gesuch-util';
+import {
+  calculateExpectElternteil,
+  getChangesForForm,
+  getChangesForList,
+} from './shared-util-fn-gesuch-util';
 
 describe('calculateExpectElternteil', () => {
   it.each([
@@ -48,4 +54,106 @@ describe('calculateExpectElternteil', () => {
       );
     },
   );
+});
+
+describe('calculate differences', () => {
+  it('should calculate the diff for PersonInAusbildung', () => {
+    const [original, updated] = [
+      {
+        wohnsitz: 'EIGENER_HAUSHALT',
+        adresse: {
+          strasse: 'Musterstrasse',
+          plz: '1234',
+          ort: 'Musterort',
+          land: 'CH',
+        },
+      },
+      {
+        wohnsitz: 'MUTTER_VATER',
+        wohnsitzAnteilMutter: 50,
+        wohnsitzAnteilVater: 50,
+        adresse: {
+          strasse: 'Musterstrasse',
+          plz: '1234',
+          ort: 'Musterort',
+          land: 'CH',
+        },
+      },
+    ] satisfies Partial<PersonInAusbildung>[] as PersonInAusbildung[];
+
+    const changes = getChangesForForm(original, updated);
+    expect(changes).toEqual({
+      wohnsitz: 'MUTTER_VATER',
+      wohnsitzAnteilMutter: 50,
+      wohnsitzAnteilVater: 50,
+    });
+  });
+
+  it('should calculate the diff of Eltern (MUTTER/-VATER)', () => {
+    const [original, updated] = [
+      [
+        {
+          id: '123',
+          elternTyp: ElternTyp.MUTTER,
+          nachname: 'Sanchez',
+          vorname: 'Laura',
+          geburtsdatum: '2000-01-01',
+          identischerZivilrechtlicherWohnsitz: true,
+        },
+        {
+          id: '321',
+          elternTyp: ElternTyp.VATER,
+          nachname: 'Sanchez',
+          vorname: 'Alejandro',
+          geburtsdatum: '2000-01-02',
+          identischerZivilrechtlicherWohnsitz: true,
+        },
+      ],
+      [
+        {
+          id: '123',
+          elternTyp: ElternTyp.MUTTER,
+          nachname: 'Alvarez',
+          vorname: 'Elvira',
+          geburtsdatum: '2000-01-03',
+          identischerZivilrechtlicherWohnsitz: false,
+          identischerZivilrechtlicherWohnsitzPLZ: '1234',
+          identischerZivilrechtlicherWohnsitzOrt: 'Musterort',
+        },
+      ],
+    ] satisfies Partial<Eltern>[][] as Eltern[][];
+
+    const changes = getChangesForList(updated, original, (e) => e.elternTyp);
+    expect(changes).toEqual({
+      changesByIdentifier: {
+        MUTTER: {
+          geburtsdatum: '2000-01-01',
+          identischerZivilrechtlicherWohnsitz: true,
+          identischerZivilrechtlicherWohnsitzOrt: 'Musterort',
+          identischerZivilrechtlicherWohnsitzPLZ: '1234',
+          nachname: 'Sanchez',
+          vorname: 'Laura',
+        },
+      },
+      newEntries: {},
+    });
+  });
+
+  it('should calculate the diff of Eltern (MUTTER/+VATER)', () => {
+    const [original, changed] = [
+      [{ id: '123', elternTyp: ElternTyp.MUTTER, nachname: 'Sanchez' }],
+      [
+        { id: '123', elternTyp: ElternTyp.MUTTER, nachname: 'Alvarez' },
+        { id: '321', elternTyp: ElternTyp.VATER, nachname: 'Alvarez' },
+      ],
+    ] satisfies Partial<Eltern>[][] as Eltern[][];
+
+    const changes = getChangesForList(changed, original, (e) => e.elternTyp);
+    expect(changes).toEqual({
+      changesByIdentifier: {
+        MUTTER: { nachname: 'Sanchez' },
+      },
+      newEntries: { VATER: true },
+    });
+  });
 });

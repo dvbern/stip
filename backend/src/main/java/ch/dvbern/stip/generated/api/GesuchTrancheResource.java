@@ -4,8 +4,10 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -23,6 +25,11 @@ import jakarta.validation.Valid;
 @Path("/gesuchtranche")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface GesuchTrancheResource {
+
+    @PATCH
+    @Path("/{aenderungId}/aenderung/einreichen")
+    @Produces({ "text/plain" })
+    Response aenderungEinreichen(@PathParam("aenderungId") UUID aenderungId);
 
     @POST
     @Path("/{gesuchId}/aenderungsantrag")
@@ -60,4 +67,9 @@ public interface GesuchTrancheResource {
     @Path("/{gesuchTrancheId}/requiredDokumente")
     @Produces({ "application/json", "text/plain" })
     Response getRequiredGesuchDokumentTyp(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/validatePages/{gesuchTrancheId}")
+    @Produces({ "application/json" })
+    Response validateGesuchTranchePages(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 }

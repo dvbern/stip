@@ -8,7 +8,7 @@ import {
   inject,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -54,7 +54,6 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
 export class GesuchAppFeatureCockpitComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
-  private router = inject(Router);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   fallStore = inject(FallStore);
@@ -67,6 +66,16 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
   });
 
   constructor() {
+    effect(
+      () => {
+        // TODO (KSTIP-1189): use correct Aenderungs-Widget and loading mechanism
+        const gesuchId = this.cockpitViewSig().gesuchsperiodes?.[0]?.gesuch?.id;
+        if (gesuchId) {
+          this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+        }
+      },
+      { allowSignalWrites: true },
+    );
     effect(
       () => {
         const aenderung = this.gesuchAenderungStore.cachedGesuchAenderung();

@@ -7,10 +7,8 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
-import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -63,7 +61,9 @@ public class ElternteilV1 {
         builder.essenskostenPerson1(steuerdaten.getVerpflegung());
         builder.essenskostenPerson2(steuerdaten.getVerpflegungPartner());
 
-        builder.grundbedarf(BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt));
+        builder.grundbedarf(
+            BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt, false)
+        );
 
         builder.fahrkostenPerson1(steuerdaten.getFahrkosten());
         builder.fahrkostenPerson2(steuerdaten.getFahrkostenPartner());
@@ -72,7 +72,6 @@ public class ElternteilV1 {
         builder.steuernStaat(steuerdaten.getSteuernKantonGemeinde());
 
         int medizinischeGrundversorgung = 0;
-        int anzahlKinderInAusbildung = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
             for (final var elternteil : eltern) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
@@ -85,13 +84,6 @@ public class ElternteilV1 {
                     (int) ChronoUnit.YEARS.between(kindDerElternInHaushalten.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
                 );
-                if (kindDerElternInHaushalten instanceof Geschwister geschwister) {
-                    if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
-                        anzahlKinderInAusbildung += 1;
-                    }
-                } else {
-                    anzahlKinderInAusbildung += 1;
-                }
             }
         } else {
             switch (steuerdaten.getSteuerdatenTyp()) {
@@ -104,13 +96,6 @@ public class ElternteilV1 {
                             (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
                             gesuchsperiode
                         );
-                        if (kind instanceof Geschwister geschwister) {
-                            if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
-                                anzahlKinderInAusbildung += 1;
-                            }
-                        } else {
-                            anzahlKinderInAusbildung += 1;
-                        }
                     }
                 }
                 case MUTTER -> {
@@ -122,13 +107,6 @@ public class ElternteilV1 {
                             (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
                             gesuchsperiode
                         );
-                        if (kind instanceof Geschwister geschwister) {
-                            if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
-                                anzahlKinderInAusbildung += 1;
-                            }
-                        } else {
-                            anzahlKinderInAusbildung += 1;
-                        }
                     }
                 }
             }
@@ -146,20 +124,13 @@ public class ElternteilV1 {
                         (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
                         gesuchsperiode
                     );
-                    if (kind instanceof Geschwister geschwister) {
-                        if (geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE) {
-                            anzahlKinderInAusbildung += 1;
-                        }
-                    } else {
-                        anzahlKinderInAusbildung += 1;
-                    }
                 }
             }
         }
 
         builder.integrationszulage(
             Integer.min(
-                gesuchsperiode.getIntegrationszulage() * anzahlKinderInAusbildung,
+                gesuchsperiode.getIntegrationszulage() * (anzahlGeschwisterInAusbildung + 1),
                 gesuchsperiode.getLimiteEkFreibetragIntegrationszulage() - gesuchsperiode.getEinkommensfreibetrag()
             )
         );

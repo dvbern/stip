@@ -41,7 +41,15 @@ async function setup(type: SharedModelLebenslauf['type']) {
       provideMockStore({
         initialState: {
           language: { language: 'de' },
-          gesuchs: { gesuchFormular: {} },
+          gesuchs: {
+            gesuch: null,
+            gesuchFormular: {},
+            cache: {
+              gesuch: null,
+              gesuchId: null,
+              gesuchFormular: null,
+            },
+          },
           ausbildungsstaettes: { ausbildungsstaettes: [] },
           configs: {},
         },

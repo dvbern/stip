@@ -43,10 +43,13 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -83,6 +86,9 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
+    SharedUiZuvorHintDirective,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
     SharedUiIfSachbearbeiterDirective,
@@ -222,10 +228,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const ausbildungsgang = ausbildungsstaettes
       .find((a) =>
         a.ausbildungsgaenge?.some(
-          (g) => g.id === ausbildung.ausbildungsgang.id,
+          (g) => g.id === ausbildung.ausbildungsgang?.id,
         ),
       )
-      ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgang.id);
+      ?.ausbildungsgaenge?.find((a) => a.id === ausbildung.ausbildungsgang?.id);
     const willSekundarstufeZwei =
       ausbildungsgang?.bildungskategorie.bildungsstufe === 'SEKUNDAR_2';
     const willTertiaerstufe =

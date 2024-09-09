@@ -11,6 +11,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
       <input matInput formControlName="nachname" data-testid="form-geschwister-nachname" type="text" />
+      <mat-hint *dvZuvorHint="changes?.nachname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -18,6 +19,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
       <input matInput formControlName="vorname" data-testid="form-geschwister-vorname" type="text" />
+      <mat-hint *dvZuvorHint="changes?.vorname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -36,6 +38,7 @@
         data-testid="form-geschwister-geburtsdatum"
         (blur)="onGeburtsdatumBlur()"
       />
+      <mat-hint *dvZuvorHint="changes?.geburtsdatum | date: 'dd.MM.YYYY'"></mat-hint>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -64,6 +67,7 @@
           </mat-option>
         }
       </mat-select>
+      <mat-hint *dvZuvorHint="changes?.wohnsitz | translateChange: 'shared.form.shared.wohnsitz.$VALUE'"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -77,6 +81,10 @@
         <dv-shared-ui-wohnsitz-splitter
           [updateValidity]="updateValidity$ | async"
           [controls]="form.controls"
+          [changes]="{
+            wohnsitzAnteilVater: changes?.wohnsitzAnteilVater,
+            wohnsitzAnteilMutter: changes?.wohnsitzAnteilMutter,
+          }"
         ></dv-shared-ui-wohnsitz-splitter>
       </div>
     </div>
@@ -98,6 +106,12 @@
               'shared.form.geschwister.ausbildungssituation.select.' + a | translate
             }}</mat-radio-button>
           }
+          <dv-shared-ui-form-zuvor-hint
+            [changes]="
+              changes?.ausbildungssituation
+                | translateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
+            "
+          ></dv-shared-ui-form-zuvor-hint>
         </div>
 
         @if (ausbildungssituationDocumentSig(); as options) {
