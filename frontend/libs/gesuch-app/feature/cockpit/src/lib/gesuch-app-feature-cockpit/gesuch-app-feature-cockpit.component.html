@@ -105,20 +105,39 @@
                           </a>
                         </div>
                         <div class="col-md">
-                          <button
-                            type="button"
-                            class="btn btn-outline-primary mt-3 w-100"
-                            data-testid="cockpit-gesuch-aenderung"
-                            (click)="
-                              aenderungMelden(
-                                periode.gesuch.id,
-                                periode.gesuchsperiodeStart,
-                                periode.gesuchsperiodeStopp
-                              )
-                            "
-                          >
-                            {{ 'gesuch-app.cockpit.gesuch.aenderung' | translate }}
-                          </button>
+                          @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
+                          @if (aenderungen.list.length > 0) {
+                            @if (aenderungen.loading) {
+                              <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
+                            } @else {
+                              <div class="d-flex flex-column gap-2">
+                                @for (aenderung of aenderungen.list; track aenderung) {
+                                  <a
+                                    class="btn btn-outline-primary mt-3 w-100"
+                                    data-testid="cockpit-gesuch-aenderung-edit"
+                                    [routerLink]="['/gesuch', periode.gesuch.id, 'tranche', aenderung.id]"
+                                  >
+                                    {{ 'gesuch-app.cockpit.aenderung.edit' | translate }}
+                                  </a>
+                                }
+                              </div>
+                            }
+                          } @else {
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary mt-3 w-100"
+                              data-testid="cockpit-gesuch-aenderung-create"
+                              (click)="
+                                aenderungMelden(
+                                  periode.gesuch.id,
+                                  periode.gesuchsperiodeStart,
+                                  periode.gesuchsperiodeStopp
+                                )
+                              "
+                            >
+                              {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
+                            </button>
+                          }
                         </div>
                       }
                     </div>

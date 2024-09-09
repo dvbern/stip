@@ -80,6 +80,7 @@ export interface GesuchsperiodeWithDaten {
     anzahlWochenSchule: number;
     vermoegensanteilInProzent: number;
     reduzierungDesGrundbedarfs: number;
+    limiteAlterAntragsstellerHalbierungElternbeitrag: number;
     zweiterAuszahlungsterminMonat: number;
     zweiterAuszahlungsterminTag: number;
 }

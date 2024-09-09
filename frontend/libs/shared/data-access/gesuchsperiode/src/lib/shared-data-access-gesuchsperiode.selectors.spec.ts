@@ -23,12 +23,12 @@ describe('prepareGesuchsperiode', () => {
     erfassbar: boolean;
   }) => ({
     ...options,
-    gesuchsperiodeStart: '2024-08-01',
-    gesuchsperiodeStopp: '2025-07-31',
-    aufschaltterminStart: '2024-08-01',
-    aufschaltterminStopp: '2025-07-31',
+    gesuchsperiodeStart: '2024-07-01',
+    gesuchsperiodeStopp: '2025-06-30',
+    aufschaltterminStart: '2024-07-01',
+    aufschaltterminStopp: '2025-06-30',
     einreichefristNormal: '2024-12-31',
-    einreichefristReduziert: '2025-03-31',
+    einreichefristReduziert: '2025-02-28',
     semester: 'HERBST',
     yearsLabel: '24/25',
   });
@@ -39,14 +39,14 @@ describe('prepareGesuchsperiode', () => {
     erfassbar: boolean;
   }) => ({
     ...options,
-    gesuchsperiodeStart: '2024-02-01',
-    gesuchsperiodeStopp: '2025-01-31',
-    aufschaltterminStart: '2024-02-01',
-    aufschaltterminStopp: '2025-01-31',
-    einreichefristNormal: '2024-06-30',
-    einreichefristReduziert: '2024-09-30',
+    gesuchsperiodeStart: '2024-01-01',
+    gesuchsperiodeStopp: '2024-12-31',
+    aufschaltterminStart: '2024-01-01',
+    aufschaltterminStopp: '2024-12-31',
+    einreichefristNormal: '2024-05-31',
+    einreichefristReduziert: '2024-08-30',
     semester: 'FRUEHLING',
-    yearsLabel: '24/25',
+    yearsLabel: '24/24',
   });
 
   beforeAll(() => {

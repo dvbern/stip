@@ -40,6 +40,7 @@
           <h2 class="fw-bold" data-testid="step-title">
             {{ step.titleTranslationKey | translate }}
           </h2>
+          <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
         </div>
 
         <div>

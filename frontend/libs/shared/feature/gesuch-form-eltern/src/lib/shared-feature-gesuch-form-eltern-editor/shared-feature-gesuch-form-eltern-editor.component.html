@@ -27,6 +27,7 @@
           placeholder="756.xxxx.xxxx.xx"
           [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
         />
+        <mat-hint *dvZuvorHint="changes?.sozialversicherungsnummer"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
@@ -44,6 +45,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
       <input formControlName="nachname" data-testid="form-eltern-nachname" matInput type="text" />
+      <mat-hint *dvZuvorHint="changes?.nachname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -51,6 +53,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
       <input formControlName="vorname" data-testid="form-eltern-vorname" matInput type="text" />
+      <mat-hint *dvZuvorHint="changes?.vorname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -61,6 +64,7 @@
     <dv-shared-ui-form-address
       class="col-12 col-xl-8"
       [group]="form.controls.adresse"
+      [changes]="changes?.adresse"
       [laender]="laender"
       [language]="languageSig()"
     />
@@ -74,6 +78,9 @@
         data-testid="form-eltern-identischerZivilrechtlicherWohnsitz"
         >{{ 'shared.form.shared.identical-civil-residence.label' | translate }}</mat-checkbox
       >
+      <dv-shared-ui-form-zuvor-hint
+        [changes]="changes?.identischerZivilrechtlicherWohnsitz | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+      ></dv-shared-ui-form-zuvor-hint>
     </div>
   </div>
   <!-- alternative civil residence -->
@@ -91,6 +98,7 @@
               formControlName="identischerZivilrechtlicherWohnsitzPLZ"
               data-testid="form-eltern-identischerZivilrechtlicherWohnsitzPLZ"
             />
+            <mat-hint *dvZuvorHint="changes?.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -105,6 +113,7 @@
               formControlName="identischerZivilrechtlicherWohnsitzOrt"
               data-testid="form-eltern-identischerZivilrechtlicherWohnsitzOrt"
             />
+            <mat-hint *dvZuvorHint="changes?.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -129,6 +138,7 @@
         data-testid="form-eltern-geburtsdatum"
         (blur)="onGeburtsdatumBlur()"
       />
+      <mat-hint *dvZuvorHint="changes?.geburtsdatum | date: 'dd.MM.YYYY'"></mat-hint>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -146,6 +156,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.phone.label' | translate }}</mat-label>
       <input matInput type="text" formControlName="telefonnummer" data-testid="form-eltern-telefonnummer" />
+      <mat-hint *dvZuvorHint="changes?.telefonnummer"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -175,6 +186,9 @@
           <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
         </div>
       </div>
+      <dv-shared-ui-form-zuvor-hint
+        [changes]="changes?.ausweisbFluechtling | translateChange: 'shared.form.zuvor.radio.$VALUE'"
+      ></dv-shared-ui-form-zuvor-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>

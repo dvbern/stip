@@ -41,9 +41,12 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -85,6 +88,9 @@ const MEDIUM_AGE_ADULT = 40;
     SharedUiFormMessageErrorDirective,
     SharedUiFormAddressComponent,
     SharedUiStepFormButtonsComponent,
+    SharedUiZuvorHintDirective,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
     SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',
@@ -104,6 +110,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     Required<Pick<ElternUpdate, 'elternTyp'>>;
   @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) gesuchFormular!: SharedModelGesuchFormular;
+  @Input({ required: true }) changes: Partial<ElternUpdate> | undefined | null;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();

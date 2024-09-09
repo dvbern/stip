@@ -1,13 +1,16 @@
+@let view = viewSig();
+@let changes = view.listChanges;
 <!-- LOADING -->
-@if (viewSig().loading) {
+@if (view.loading) {
   <dv-shared-ui-loading data-testid="form-eltern-loading"></dv-shared-ui-loading>
 }
 
 <!-- EDITOR -->
 @if (editedElternteil) {
-  @if (viewSig().gesuchFormular; as gesuchFormular) {
+  @if (view.gesuchFormular; as gesuchFormular) {
     <dv-shared-feature-gesuch-form-eltern-editor
       [elternteil]="editedElternteil"
+      [changes]="changes?.changesByIdentifier?.[editedElternteil.elternTyp]"
       [gesuchFormular]="gesuchFormular"
       [laender]="laenderSig()"
       (saveTriggered)="handleEditorSave($event)"
@@ -19,31 +22,39 @@
 }
 
 <!-- OVERVIEW -->
-@if (!editedElternteil && !viewSig().loading) {
+@if (!editedElternteil && !view.loading) {
   <div class="row g-4 mt-4">
-    @if (viewSig().expectVater) {
-      <dv-shared-feature-gesuch-form-eltern-card
-        class="col-12 col-md-6 col-xl-4"
-        [elternteil]="viewSig().vater"
-        [elternTyp]="ElternTyp.VATER"
-        [translationkey]="'vater'"
-        [readonly]="viewSig().readonly"
-        (addTriggered)="handleAddElternteil($event)"
-        (editTriggered)="handleEdit($event)"
-      />
+    @if (view.expectVater) {
+      <div class="col-12 col-md-6 col-xl-4 position-relative">
+        <dv-shared-feature-gesuch-form-eltern-card
+          [elternteil]="view.vater"
+          [elternTyp]="'VATER'"
+          [translationkey]="'vater'"
+          [readonly]="view.readonly"
+          (addTriggered)="handleAddElternteil($event)"
+          (editTriggered)="handleEdit($event)"
+        />
+        @if (changes?.changesByIdentifier?.['VATER'] || changes?.newEntries?.['VATER']) {
+          <dv-shared-ui-change-indicator></dv-shared-ui-change-indicator>
+        }
+      </div>
     }
-    @if (viewSig().expectMutter) {
-      <dv-shared-feature-gesuch-form-eltern-card
-        class="col-12 col-md-6 col-xl-4"
-        [elternteil]="viewSig().mutter"
-        [elternTyp]="ElternTyp.MUTTER"
-        [translationkey]="'mutter'"
-        [readonly]="viewSig().readonly"
-        (addTriggered)="handleAddElternteil($event)"
-        (editTriggered)="handleEdit($event)"
-      />
+    @if (view.expectMutter) {
+      <div class="col-12 col-md-6 col-xl-4 position-relative">
+        <dv-shared-feature-gesuch-form-eltern-card
+          [elternteil]="view.mutter"
+          [elternTyp]="'MUTTER'"
+          [translationkey]="'mutter'"
+          [readonly]="view.readonly"
+          (addTriggered)="handleAddElternteil($event)"
+          (editTriggered)="handleEdit($event)"
+        />
+        @if (changes?.changesByIdentifier?.['MUTTER'] || changes?.newEntries?.['MUTTER']) {
+          <dv-shared-ui-change-indicator></dv-shared-ui-change-indicator>
+        }
+      </div>
     }
-    @if (!viewSig().expectVater && !viewSig().expectMutter) {
+    @if (!view.expectVater && !view.expectMutter) {
       <div>
         {{ 'shared.form.eltern.none' | translate }}
       </div>
@@ -55,7 +66,7 @@
       type="button"
       class="btn btn-primary"
       (click)="handleContinue()"
-      [disabled]="!viewSig().gesuchId"
+      [disabled]="!view.gesuchId"
       data-testid="button-continue"
     >
       {{ 'shared.form.gonext' | translate }}

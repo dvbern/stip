@@ -14,9 +14,21 @@ import {
   LEBENSLAUF,
   PARTNER,
   PERSON,
+  TRANCHE,
 } from '@dv/shared/model/gesuch-form';
 
 export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
+  {
+    path: TRANCHE.route,
+    resolve: {
+      step: () => TRANCHE,
+    },
+    title: TRANCHE.translationKey,
+    loadChildren: () =>
+      import('@dv/shared/feature/gesuch-form-tranche').then(
+        (m) => m.sharedFeatureGesuchFormTrancheRoutes,
+      ),
+  },
   {
     path: KINDER.route,
     resolve: {

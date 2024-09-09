@@ -3,6 +3,8 @@ import {
   GesuchFormularUpdate,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { type } from '@dv/shared/util-fn/type-guards';
 
 import {
   AUSBILDUNG,
@@ -20,9 +22,6 @@ import {
 } from './gesuch-form-steps';
 import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
 
-// Used for type safety and intelisense
-const typeGuard = <T>(value: T): T => value;
-
 const partnerCases = [
   ['disable', 'LEDIG', true],
   ['disable', 'VERWITWET', true],
@@ -39,7 +38,7 @@ const alimentAufteilungCases = [
   ['disable', Elternschaftsteilung.GEMEINSAM, true],
 ] as const;
 
-const validationCases = typeGuard<
+const validationCases = type<
   [SharedModelGesuchFormStep, keyof GesuchFormularUpdate][]
 >([
   [AUSBILDUNG, 'ausbildung'],

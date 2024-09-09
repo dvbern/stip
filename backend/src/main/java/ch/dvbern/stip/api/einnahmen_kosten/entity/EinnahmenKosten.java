@@ -51,8 +51,8 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "zulagen")
     private Integer zulagen;
 
-    @Nullable
-    @Column(name = "renten")
+    @NotNull
+    @Column(name = "renten", nullable = false)
     private Integer renten;
 
     @Nullable

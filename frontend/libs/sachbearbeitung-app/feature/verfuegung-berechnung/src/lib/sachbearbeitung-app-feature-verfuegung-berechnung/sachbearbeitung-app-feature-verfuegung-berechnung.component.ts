@@ -93,6 +93,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
             berechnung,
             gueltigAb,
             gueltigBis,
+            berechnungsStammdaten: sd,
             persoenlichesBudgetresultat: p,
             familienBudgetresultate,
           }) => ({
@@ -121,6 +122,10 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
                 anrechenbaresVermoegen: p.anrechenbaresVermoegen,
                 elterlicheLeistung: p.anteilFamilienbudget,
                 einkommenPartner: p.einkommenPartner,
+                freibetragErwerbseinkommen: sd.freibetragErwerbseinkommen,
+                vermoegensanteilInProzent: sd.vermoegensanteilInProzent,
+                limiteAlterAntragsstellerHalbierungElternbeitrag:
+                  sd.limiteAlterAntragsstellerHalbierungElternbeitrag,
               },
               kosten: {
                 anzahlPersonenImHaushalt: p.anzahlPersonenImHaushalt ?? 0,
@@ -159,7 +164,10 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
                   sauele3: f.saeule3a,
                   mietwert: f.eigenmietwert,
                   alimenteOderRenten: f.alimente,
-                  einkommensfreibeitrag: f.einkommensfreibetrag,
+                  einkommensfreibeitrag: sd.einkommensfreibetrag,
+                  maxSaeule3a: sd.maxSaeule3a,
+                  freibetragVermoegen: sd.freibetragVermoegen,
+                  vermoegensanteilInProzent: sd.vermoegensanteilInProzent,
                 },
                 kosten: {
                   total: f.ausgabenFamilienbudget,

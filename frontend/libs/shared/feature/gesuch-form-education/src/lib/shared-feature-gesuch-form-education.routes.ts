@@ -7,6 +7,7 @@ import {
   gesuchAppDataAccessAusbildungsstaettesFeature,
 } from '@dv/shared/data-access/ausbildungsstaette';
 import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
+import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
 import { SharedFeatureGesuchFormEducationComponent } from './shared-feature-gesuch-form-education/shared-feature-gesuch-form-education.component';
 
@@ -21,11 +22,12 @@ export const gesuchAppFeatureGesuchFormEducationRoutes: Route[] = [
       provideEffects(gesuchAppDataAccessAusbildungsstaetteEffects),
     ],
     children: [
-      routeWithUnsavedChangesGuard({
-        path: ':id',
-        title: 'shared.education.title',
-        component: SharedFeatureGesuchFormEducationComponent,
-      }),
+      ...idAndTrancheIdRoutes(
+        routeWithUnsavedChangesGuard({
+          title: 'shared.education.title',
+          component: SharedFeatureGesuchFormEducationComponent,
+        }),
+      ),
       // add more routes here (siblings)
       // it is also possible to add nested routes as children
       // of this feature root component (or even lazy loaded sub features)

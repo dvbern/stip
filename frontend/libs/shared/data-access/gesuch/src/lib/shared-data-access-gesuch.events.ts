@@ -23,7 +23,10 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
       create: GesuchCreate;
     }>(),
     removeTriggered: props<{ id: string }>(),
-    gesuchLoadedSuccess: props<{ gesuch: SharedModelGesuch }>(),
+    gesuchLoadedSuccess: props<{
+      gesuch: SharedModelGesuch;
+      trancheId?: string;
+    }>(),
     gesuchLoadedFailure: props<{ error: SharedModelError }>(),
     gesuchCreatedSuccess: props<{ id: string }>(),
     gesuchCreatedFailure: props<{ error: SharedModelError }>(),

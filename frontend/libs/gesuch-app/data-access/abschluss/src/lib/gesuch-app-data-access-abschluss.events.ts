@@ -8,6 +8,9 @@ export const GesuchAppDataAccessAbschlussApiEvents = createActionGroup({
     gesuchAbschliessen: props<{
       gesuchId: string;
     }>(),
+    trancheAbschliessen: props<{
+      trancheId: string;
+    }>(),
     check: props<{ gesuchId: string }>(),
     gesuchCheckSuccess: props<{ error: SharedModelError }>(),
     gesuchCheckFailure: props<{ error: SharedModelError }>(),

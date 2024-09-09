@@ -81,7 +81,7 @@ class BerechnungServiceTest {
         "5, 39751", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
         "6, 27179",
         "7, 6669",
-        "8, 266",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
+        "8, 0",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
         "9, 23527"
     })
     void testBerechnungFaelle(final int fall, final int expectedStipendien) {
@@ -327,6 +327,6 @@ class BerechnungServiceTest {
         );
 
         //Assert
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(266)));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(0)));
     }
 }

@@ -17,6 +17,7 @@ import {
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
 import { ELTERN, isStepDisabled } from '@dv/shared/model/gesuch-form';
+import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { capitalized } from '@dv/shared/util-fn/string-helper';
@@ -33,6 +34,7 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
     SharedFeatureGesuchFormElternEditorComponent,
     ElternteilCardComponent,
     SharedUiStepFormButtonsComponent,
+    SharedUiChangeIndicatorComponent,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern.component.html',
@@ -185,8 +187,6 @@ export class SharedFeatureGesuchFormElternComponent {
       },
     };
   }
-
-  protected readonly ElternTyp = ElternTyp;
 }
 
 export const setupElternTeil = (

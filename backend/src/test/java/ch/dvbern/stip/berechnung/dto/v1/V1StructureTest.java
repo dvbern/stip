@@ -28,9 +28,14 @@ class V1StructureTest {
                 "Stammdaten_V1": {
                     "maxSaeule3a": 7000,
                     "einkommensfreibetrag": 6000,
+                    "freibetragErwerbseinkommen": 6000,
+                    "freibetragVermoegen": 30000,
+                    "vermoegensanteilInProzent": 15,
                     "anzahlWochenLehre": 42,
                     "anzahlWochenSchule": 37,
-                    "preisProMahlzeit": 7
+                    "preisProMahlzeit": 7,
+                    "stipLimiteMinimalstipendium": 500,
+                    "limiteAlterAntragsstellerHalbierungElternbeitrag": 25
                 },
                 "InputFamilienbudget_1_V1": {
                     "elternteil": {
