@@ -2,14 +2,22 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
+import {
+  SharedUiFormatChfNegativePipe,
+  SharedUiFormatChfPipe,
+} from '@dv/shared/ui/format-chf-pipe';
 
 import { FamilienBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-familien-einnahmen',
   standalone: true,
-  imports: [CommonModule, TranslateModule, SharedUiFormatChfPipe],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    SharedUiFormatChfPipe,
+    SharedUiFormatChfNegativePipe,
+  ],
   template: `
     <!-- Total Einkünfte -->
     <div class="d-flex gap-2">
@@ -30,72 +38,6 @@ import { FamilienBerechnung } from '../../../models';
       }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().ergaenzungsleistungen }}
-      </div>
-    </div>
-
-    <!-- Anrechenbares Vermögen -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen'
-            | translate
-        }}
-        <div class="text-muted">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen.info'
-              | translate: einnahmenSig()
-          }}
-        </div>
-      </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().anrechenbaresVermoegen }}
-      </div>
-    </div>
-
-    <!-- Abzüge -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
-          | translate
-      }}
-      <div class="text-muted text-end flex-grow-1"></div>
-    </div>
-
-    <!-- Beiträge von Selbständigerwerbenden in die 2.Säule -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
-            | translate
-        }}
-        <div class="text-muted">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
-              | translate
-          }}
-        </div>
-      </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().sauele2 }}
-      </div>
-    </div>
-
-    <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
-            | translate
-        }}
-        <div class="text-muted">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
-              | translate: { maxSaeule3a: 7000 }
-          }}
-        </div>
-      </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().sauele3 }}
       </div>
     </div>
 
@@ -121,6 +63,44 @@ import { FamilienBerechnung } from '../../../models';
       </div>
     </div>
 
+    <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
+    <div class="d-flex gap-2">
+      <div classs="d-flex flex-column">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
+            | translate
+        }}
+        <div class="text-muted">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
+              | translate: { maxSaeule3a: 7000 }
+          }}
+        </div>
+      </div>
+      <div class="text-muted text-end flex-grow-1">
+        {{ einnahmenSig().sauele3 }}
+      </div>
+    </div>
+
+    <!-- Beiträge von Selbständigerwerbenden in die 2.Säule -->
+    <div class="d-flex gap-2">
+      <div classs="d-flex flex-column">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
+            | translate
+        }}
+        <div class="text-muted">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
+              | translate
+          }}
+        </div>
+      </div>
+      <div class="text-muted text-end flex-grow-1">
+        {{ einnahmenSig().sauele2 }}
+      </div>
+    </div>
+
     <!-- Einkommensfreibetrag -->
     <div class="d-flex gap-2">
       {{
@@ -129,6 +109,25 @@ import { FamilienBerechnung } from '../../../models';
       }}
       <div class="text-muted text-end flex-grow-1">
         {{ einnahmenSig().einkommensfreibeitrag }}
+      </div>
+    </div>
+
+    <!-- Anrechenbares Vermögen -->
+    <div class="d-flex gap-2">
+      <div classs="d-flex flex-column">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen'
+            | translate
+        }}
+        <div class="text-muted">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen.info'
+              | translate: einnahmenSig()
+          }}
+        </div>
+      </div>
+      <div class="text-muted text-end flex-grow-1">
+        {{ einnahmenSig().anrechenbaresVermoegen }}
       </div>
     </div>
 

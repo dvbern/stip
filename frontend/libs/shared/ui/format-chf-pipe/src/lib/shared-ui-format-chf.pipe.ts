@@ -28,26 +28,16 @@ export class SharedUiFormatChfPipe implements PipeTransform {
   standalone: true,
 })
 export class SharedUiFormatChfNegativePipe implements PipeTransform {
-  transform(value: Value): string {
+  transform(value: Value, alwaysNegative = false): string {
     if (value === undefined) {
       return '';
+    }
+    if (alwaysNegative) {
+      return `- ${toFormatedNumber(+value)}`;
     }
     if (+value >= 0) {
       return `${toFormatedNumber(+value)}`;
     }
     return `- ${toFormatedNumber(+value)}`;
-  }
-}
-
-@Pipe({
-  name: 'formatNoChf',
-  standalone: true,
-})
-export class SharedUiFormatNoChfPipe implements PipeTransform {
-  transform(value: Value): string {
-    if (value === undefined) {
-      return '';
-    }
-    return toFormatedNumber(+value);
   }
 }
