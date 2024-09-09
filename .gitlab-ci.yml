@@ -1,4 +1,5 @@
-stages: [test, build, e2e, mirror, deploy, review-e2e]
+stages: [test, build, mirror, deploy, review-e2e]
+# stages: [test, build, e2e, mirror, deploy, review-e2e]
 
 variables:
   ARGOCD_APP: stip
@@ -93,38 +94,38 @@ include:
       echo "Using ArgoCD Server at $ARGOCD_SERVER"
       curl -ksSL -o /usr/local/bin/argocd https://$ARGOCD_SERVER/download/argocd-linux-amd64
 
-start-e2e:
-  stage: e2e
-  resource_group: 'argocd:dev'
-  extends: .install-argocd
-  script:
-    - argocd app sync stip-e2e --insecure
-    - argocd app set stip-e2e --helm-set image.tag=$VERSION --insecure
-    - argocd app set stip-e2e --helm-set api.replicaCount=1 --insecure
-    - argocd app set stip-e2e --helm-set gesuchApp.replicaCount=1 --insecure
-    - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=1 --insecure
-    - argocd app set stip-e2e --helm-set postgres-cluster.enabled=true --insecure
-    - argocd app sync stip-e2e --insecure
-    - argocd app wait stip-e2e --insecure
-  environment:
-    name: e2e
-    url: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
-    action: start
-  rules:
-    - if: $PIPELINE_TYPE == "default"
-      when: on_success
-  allow_failure: true
+# start-e2e:
+#   stage: e2e
+#   resource_group: 'argocd:dev'
+#   extends: .install-argocd
+#   script:
+#     - argocd app sync stip-e2e --insecure
+#     - argocd app set stip-e2e --helm-set image.tag=$VERSION --insecure
+#     - argocd app set stip-e2e --helm-set api.replicaCount=1 --insecure
+#     - argocd app set stip-e2e --helm-set gesuchApp.replicaCount=1 --insecure
+#     - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=1 --insecure
+#     - argocd app set stip-e2e --helm-set postgres-cluster.enabled=true --insecure
+#     - argocd app sync stip-e2e --insecure
+#     - argocd app wait stip-e2e --insecure
+#   environment:
+#     name: e2e
+#     url: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
+#     action: start
+#   rules:
+#     - if: $PIPELINE_TYPE == "default"
+#       when: on_success
+#   allow_failure: true
 
-run-e2e:
-  stage: e2e
-  extends: .nx-e2e-test
-  resource_group: 'e2e'
-  variables:
-    E2E_BASEURL_GS: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
-    E2E_BASEURL_SB: 'https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'
-  needs:
-    - start-e2e
-  allow_failure: true
+# run-e2e:
+#   stage: e2e
+#   extends: .nx-e2e-test
+#   resource_group: 'e2e'
+#   variables:
+#     E2E_BASEURL_GS: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
+#     E2E_BASEURL_SB: 'https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'
+#   needs:
+#     - start-e2e
+#   allow_failure: true
 
 wait-for-review:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
@@ -157,25 +158,25 @@ run-review-e2e:
   rules:
     - if: $PIPELINE_TYPE == "mr"
 
-stop-e2e:
-  when: always
-  stage: e2e
-  needs:
-    - run-e2e
-  resource_group: 'argocd:dev'
-  extends: .install-argocd
-  script:
-    - argocd app set stip-e2e --helm-set api.replicaCount=0 --insecure
-    - argocd app set stip-e2e --helm-set gesuchApp.replicaCount=0 --insecure
-    - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=0 --insecure
-    - argocd app set stip-e2e --helm-set postgres-cluster.enabled=false --insecure
-    - argocd app sync stip-e2e --prune --insecure
-    - argocd app wait stip-e2e --insecure
-  environment:
-    name: e2e
-    url: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
-    action: stop
-  rules:
-    - if: $PIPELINE_TYPE == "default"
-      when: always
-  allow_failure: true
+# stop-e2e:
+#   when: always
+#   stage: e2e
+#   needs:
+#     - run-e2e
+#   resource_group: 'argocd:dev'
+#   extends: .install-argocd
+#   script:
+#     - argocd app set stip-e2e --helm-set api.replicaCount=0 --insecure
+#     - argocd app set stip-e2e --helm-set gesuchApp.replicaCount=0 --insecure
+#     - argocd app set stip-e2e --helm-set sachbearbeitungApp.replicaCount=0 --insecure
+#     - argocd app set stip-e2e --helm-set postgres-cluster.enabled=false --insecure
+#     - argocd app sync stip-e2e --prune --insecure
+#     - argocd app wait stip-e2e --insecure
+#   environment:
+#     name: e2e
+#     url: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
+#     action: stop
+#   rules:
+#     - if: $PIPELINE_TYPE == "default"
+#       when: always
+#   allow_failure: true
