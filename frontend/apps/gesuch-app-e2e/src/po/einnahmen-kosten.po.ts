@@ -5,6 +5,7 @@ import {
   expectFormToBeValid,
   selectMatRadio,
 } from '@dv/shared/util-fn/e2e-util';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 export class EinnahmenKostenPO {
   public elems: {
@@ -93,36 +94,65 @@ export class EinnahmenKostenPO {
       `${einnahmenKosten.nettoerwerbseinkommen ?? 0}`,
     );
 
-    await this.elems.zulagen.fill(`${einnahmenKosten.zulagen ?? 0}`);
+    if (isDefined(einnahmenKosten.zulagen)) {
+      await this.elems.zulagen.fill(`${einnahmenKosten.zulagen}`);
+    }
+    if (isDefined(einnahmenKosten.renten)) {
+      await this.elems.renten.fill(`${einnahmenKosten.renten}`);
+    }
+    if (isDefined(einnahmenKosten.eoLeistungen)) {
+      await this.elems.eoLeistungen.fill(`${einnahmenKosten.eoLeistungen}`);
+    }
+    if (isDefined(einnahmenKosten.ergaenzungsleistungen)) {
+      await this.elems.ergaenzungsleistungen.fill(
+        `${einnahmenKosten.ergaenzungsleistungen}`,
+      );
+    }
+    if (isDefined(einnahmenKosten.beitraege)) {
+      await this.elems.beitraege.fill(`${einnahmenKosten.beitraege}`);
+    }
 
     await this.elems.ausbildungskostenTertiaerstufe.fill(
-      `${einnahmenKosten.ausbildungskostenTertiaerstufe ?? 0}`,
+      `${einnahmenKosten.ausbildungskostenTertiaerstufe}`,
     );
 
-    await this.elems.betreuungskostenKinder.fill(
-      `${einnahmenKosten.betreuungskostenKinder ?? 0}`,
-    );
+    if (isDefined(einnahmenKosten.betreuungskostenKinder)) {
+      await this.elems.betreuungskostenKinder.fill(
+        `${einnahmenKosten.betreuungskostenKinder}`,
+      );
+    }
 
-    await this.elems.fahrkosten.fill(`${einnahmenKosten.fahrkosten ?? 0}`);
+    await this.elems.fahrkosten.fill(`${einnahmenKosten.fahrkosten}`);
 
-    await this.elems.wohnkosten.fill(`${einnahmenKosten.wohnkosten ?? 0}`);
+    if (isDefined(einnahmenKosten.wohnkosten)) {
+      await this.elems.wohnkosten.fill(`${einnahmenKosten.wohnkosten}`);
+    }
 
-    await this.elems.vermoegen.fill(`${einnahmenKosten.vermoegen ?? 0}`);
+    if (isDefined(einnahmenKosten.auswaertigeMittagessenProWoche)) {
+      await this.elems.auswaertigeMittagessenProWoche.fill(
+        `${einnahmenKosten.auswaertigeMittagessenProWoche}`,
+      );
+    }
 
-    await selectMatRadio(
-      this.elems.wgWohnend,
-      einnahmenKosten.wgWohnend ?? false,
-    );
+    if (isDefined(einnahmenKosten.vermoegen)) {
+      await this.elems.vermoegen.fill(`${einnahmenKosten.vermoegen}`);
+    }
+
+    if (isDefined(einnahmenKosten.wgWohnend)) {
+      await selectMatRadio(this.elems.wgWohnend, einnahmenKosten.wgWohnend);
+    }
 
     await selectMatRadio(
       this.elems.verdienstRealisiert,
       einnahmenKosten.verdienstRealisiert,
     );
 
-    await selectMatRadio(
-      this.elems.willDarlehen,
-      einnahmenKosten.willDarlehen ?? false,
-    );
+    if (isDefined(einnahmenKosten.willDarlehen)) {
+      await selectMatRadio(
+        this.elems.willDarlehen,
+        einnahmenKosten.willDarlehen,
+      );
+    }
 
     await expectFormToBeValid(this.elems.form);
   }

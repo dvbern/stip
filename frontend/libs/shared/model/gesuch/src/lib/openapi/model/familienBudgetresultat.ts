@@ -22,8 +22,9 @@ export interface FamilienBudgetresultat {
     totalEinkuenfte: number;
     ergaenzungsleistungen: number;
     steuerbaresVermoegen: number;
-    vermoegen: number;
-    einzahlungSaeule23a: number;
+    anrechenbaresVermoegen: number;
+    saeule2: number;
+    saeule3a: number;
     eigenmietwert: number;
     alimente: number;
     einkommensfreibetrag: number;

@@ -43,7 +43,7 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     gesuchUpdatedSubformFailure: props<{ error: SharedModelError }>(),
     gesuchRemovedSuccess: emptyProps(),
     gesuchRemovedFailure: props<{ error: SharedModelError }>(),
-    gesuchValidateSteps: props<{ id: string }>(),
+    gesuchValidateSteps: props<{ gesuchTrancheId: string }>(),
     gesuchValidationSuccess: props<{ error: SharedModelError }>(),
     gesuchValidationFailure: props<{ error: SharedModelError }>(),
     gesuchsLoadedSuccess: props<{ gesuchs: SharedModelGesuch[] }>(),

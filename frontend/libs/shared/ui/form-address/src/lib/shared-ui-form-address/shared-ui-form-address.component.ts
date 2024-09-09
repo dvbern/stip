@@ -31,7 +31,6 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
-import { SharedUiFormCountryComponent } from '@dv/shared/ui/form-country';
 import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
@@ -61,7 +60,6 @@ type AddresseFormGroup = FormGroup<{
     MatInputModule,
     MatSelectModule,
     SharedUiFormFieldDirective,
-    SharedUiFormCountryComponent,
     SharedUiFormMessageErrorDirective,
     SharedUiPlzOrtAutocompleteDirective,
     SharedUiZuvorHintDirective,

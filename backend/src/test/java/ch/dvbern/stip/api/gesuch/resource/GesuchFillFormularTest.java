@@ -431,9 +431,9 @@ class GesuchFillFormularTest {
     }
 
     private void validatePage(final boolean allowWarnings) {
-        final var report = gesuchApiSpec
-            .validateGesuchPages()
-            .gesuchIdPath(gesuchId)
+        final var report = gesuchTrancheApiSpec
+            .validateGesuchTranchePages()
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

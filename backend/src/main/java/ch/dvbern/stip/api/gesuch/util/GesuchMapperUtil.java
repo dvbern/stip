@@ -21,6 +21,10 @@ public class GesuchMapperUtil {
         return mapWithTranche(gesuch, gesuch.getCurrentGesuchTranche());
     }
 
+    public GesuchDto mapWithNewestTranche(final Gesuch gesuch) {
+        return mapWithTranche(gesuch, gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new));
+    }
+
     public GesuchDto mapWithTranche(final Gesuch gesuch, final GesuchTranche tranche) {
         final var gesuchDto = gesuchMapper.toDto(gesuch);
         gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
