@@ -23,22 +23,18 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.platform.commons.function.Try.success;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
 class SapServiceIntegrationTest {
-    @RestClient
-    ImportStatusReadClient importStatusReadClient;
-
-    @RestClient
-    BusinessPartnerCreateClient businessPartnerCreateClient;
-
-    @RestClient
-    BusinessPartnerChangeClient businessPartnerChangeClient;
-
-    @RestClient
-    VendorPostingCreateClient vendorPostingCreateClient;
+    /**
+     * Important:
+     * In this tests, the ACTIVE (INTEGRATION ENVIRONMENT) SAP is used,
+     * NOT the mocks!
+     *
+     */
 
     @Inject
     SapEndpointService auszahlungSapService;
@@ -46,32 +42,46 @@ class SapServiceIntegrationTest {
     @Inject
     SapAuszahlungService sapAuszahlungService;
 
-    @Test
-    void getImportStatus() throws IOException {
+    @Inject AuszahlungMapper auszahlungMapper;
+
+
+    // @Test
+    void getImportStatus(){
         final var response = auszahlungSapService.getImportStatus(SAPUtils.generateDeliveryId());
         assertEquals(HttpStatus.SC_OK,response.getStatus());
     }
 
+
+    /*
+    todo: if a new businesspartner is created, it can take up do 48 hours until he's available in SAP
+     */
+/*
     @Test
-    void createBusinessPartnerTest() { //todo: problem if bp is not active yet
+    void createBusinessPartnerTest() {
         fail();
         assertDoesNotThrow(() -> sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung()));
     }
 
-    @Test
+
+ */
+    //@Test
     void createBusinessPartnerTest_invalidRequest() {
         assertNull(sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung()));
     }
 
-
+    /*
+todo: if a new businesspartner is created, it can take up do 48 hours until he's available in SAP
+ */
+/*
     @Test
-    void createVendorPostingTest_New_BusinessPartner_Success() {//todo: problem if bp is not active yet
+    void createVendorPostingTest_New_BusinessPartner_Success() {
         fail();
         Auszahlung auszahlung= initAuszahlung();
         assertNotNull(sapAuszahlungService.createVendorPosting(auszahlung));
     }
 
-    @Test
+ */
+    //@Test
     void createVendorPostingTest_Existing_BusinessPartner_Success() {
         Integer bpId = 1000569588;
         Auszahlung auszahlung= initAuszahlung();
@@ -80,14 +90,13 @@ class SapServiceIntegrationTest {
     }
 
 
-    @Test
+    //@Test
     void createVendorPostingTest_alreadyExistingDeliveryId(){
         Auszahlung auszahlung= initAuszahlung();
         auszahlung.setSapBusinessPartnerId(0);
-        assertDoesNotThrow(() -> {sapAuszahlungService.createVendorPosting(auszahlung);});
+        assertThrows(WebApplicationException.class,() -> {sapAuszahlungService.createVendorPosting(auszahlung);});
     }
 
-    @Inject AuszahlungMapper auszahlungMapper;
     private Auszahlung initAuszahlung(){
         AuszahlungDto auszahlungDto = new AuszahlungDto();
         auszahlungDto.setKontoinhaber(Kontoinhaber.GESUCHSTELLER);

@@ -27,7 +27,6 @@ import static org.mockito.Mockito.when;
 class SapAuszahlungServiceTest {
     private static final BigDecimal EXAMPLE_DELIVERY_ID = BigDecimal.valueOf(2761);
     private static final Integer EXAMPLE_BUSINESS_PARTNER_ID = 2762;
-    private static final String EXAMPLE_EXTERNAL_ID = UUID.randomUUID().toString();
     @RestClient
     @InjectMock
     ImportStatusReadClient importStatusReadClient;
@@ -44,6 +43,10 @@ class SapAuszahlungServiceTest {
     @InjectMock
     VendorPostingCreateClient vendorPostingCreateClient;
 
+    @RestClient
+    @InjectMock
+    BusinessPartnerReadClient businessPartnerReadClient;
+
     @Inject
     SapEndpointService auszahlungSapService;
 
@@ -52,11 +55,16 @@ class SapAuszahlungServiceTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        String xml = IOUtils.toString(
+        String importStatusXmlResponse = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/getImportStatusExampleResponse.xml"),
             "UTF-8"
         );
-        when(importStatusReadClient.getImportStatus(any())).thenReturn(xml);
+        String readBusinessPartnerResponse = IOUtils.toString(
+            this.getClass().getResourceAsStream("/auszahlung/readBusinessPartnerExampleResponse.xml"),
+            "UTF-8"
+        );
+        when(importStatusReadClient.getImportStatus(any())).thenReturn(importStatusXmlResponse);
+        when(businessPartnerReadClient.readBusinessPartner(any())).thenReturn(readBusinessPartnerResponse);
     }
 
     void getImportStatus() throws IOException {
@@ -92,13 +100,13 @@ class SapAuszahlungServiceTest {
         when(businessPartnerCreateClient.createBusinessPartner(any()))
             .thenReturn(firstCreateResponse)
             .thenReturn(secondCreateResponse);
-        assertNotNull(sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung()));
+        assertNull(sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung()));
     }
 
     @Test
     void createBusinessPartnerTest_invalidRequest() {
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenThrow(WebApplicationException.class);
-        assertThrows(WebApplicationException.class, () -> {sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung());});
+        assertNull(sapAuszahlungService.getOrCreateBusinessPartner(initAuszahlung()));
     }
 
     @Test

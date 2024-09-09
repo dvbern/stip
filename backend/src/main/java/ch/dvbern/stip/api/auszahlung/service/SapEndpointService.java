@@ -19,7 +19,6 @@ import ch.dvbern.stip.api.auszahlung.sap.vendorposting.VendorPostingCreateReques
 import ch.dvbern.stip.api.auszahlung.sap.vendorposting.VendorPostingCreateRequestMapper;
 import ch.dvbern.stip.api.auszahlung.sap.vendorposting.VendorPostingCreateResponse;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import io.quarkus.jaxb.runtime.JaxbContextProducer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -40,12 +39,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 
 @RequiredArgsConstructor
 @ApplicationScoped
@@ -70,9 +64,6 @@ public class SapEndpointService {
 
     @RestClient
     BusinessPartnerReadClient businessPartnerReadClient;
-
-    @Inject
-    JaxbContextProducer jaxbContext;
 
 
     private ImportStatusReadResponse  getAndParseGetSAPImportStatusResponse(BigDecimal deliveryId) throws JAXBException, SOAPException, IOException {
@@ -116,6 +107,9 @@ public class SapEndpointService {
         }
     }
 
+    /*
+    Note: specific values are still hardcoded or commented - these have to be discussed in the near future
+ */
     public Response createBusinessPartner(@Valid Auszahlung auszahlung,String extId, BigDecimal deliveryId){
         try{
             final var businessPartnerCreateRequestMapper = new BusinessPartnerCreateRequestMapper();
@@ -148,6 +142,9 @@ public class SapEndpointService {
         }
     }
 
+    /*
+    Note: specific values are still hardcoded or commented - these have to be discussed in the near future
+     */
     public Response changeBusinessPartner(@Valid Auszahlung auszahlung, Integer businessPartnerId, BigDecimal deliveryId){
         try{
             final var  mapper = new BusinessPartnerChangeRequestMapper();
@@ -170,8 +167,6 @@ public class SapEndpointService {
             request.getBUSINESSPARTNER().getADDRESS().get(0).setADRKIND("XXDEFAULT");
             request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo: set iso country (max 3 instead of "Schweiz"
 
-
-
             final var response = businessPartnerChangeClient.changeBusinessPartner(SoapUtils.buildXmlRequest(request,BusinessPartnerChangeRequest.class,SapEndpointName.BUSINESPARTNER));
             final var result = SoapUtils.parseSoapResponse(response, BusinessPartnerChangeResponse.class);
             return Response.status(HttpStatus.SC_OK).entity(result).build();
@@ -183,6 +178,9 @@ public class SapEndpointService {
         }
     }
 
+    /*
+    Note: specific values are still hardcoded or commented - these have to be discussed in the near future
+ */
     public Response createVendorPosting(@Valid Auszahlung auszahlung, Integer businessPartnerId,BigDecimal deliveryId){
         try{
             final var  mapper = new VendorPostingCreateRequestMapper();
@@ -208,26 +206,13 @@ public class SapEndpointService {
                 vendorposting.getHEADER().setHEADERTXT("4890");
                 vendorposting.getHEADER().setREFDOCNO("0001544323");
 
-                GregorianCalendar c = new GregorianCalendar();
-                SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
-                String currentDateString = sd.format(new Date());
-                Date currentDate = null;
-                try {
-                    currentDate = sd.parse(currentDateString);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-
-                c.setTime(currentDate);
-                LocalDate localDate = LocalDate.now();
-                c.set(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
                 XMLGregorianCalendar date;
                 try {
+                    LocalDate localDate = LocalDate.now();
                     date = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(localDate.getYear(),localDate.getMonthValue(), localDate.getDayOfMonth(), DatatypeConstants. FIELD_UNDEFINED);
                 } catch (DatatypeConfigurationException e) {
                     throw new RuntimeException(e);
                 }
-
                 vendorposting.getHEADER().setDOCDATE(date);
                 vendorposting.getHEADER().setPSTNGDATE(date);
                 vendorposting.getHEADER().setCURRENCY("CHF");
