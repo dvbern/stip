@@ -281,6 +281,7 @@ class GesuchTrancheServiceTruncateTest {
             null,
             null,
             null,
+            null,
             null
         );
     }

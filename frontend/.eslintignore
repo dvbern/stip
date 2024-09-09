@@ -1,3 +1,8 @@
 node_modules
 libs/shared/model/gesuch/src/lib/openapi
 libs/tooling/
+dist
+coverage
+.nx
+.swc
+.angular

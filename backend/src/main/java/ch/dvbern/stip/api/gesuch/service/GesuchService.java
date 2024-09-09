@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -48,10 +47,6 @@ import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
-import ch.dvbern.stip.api.gesuch.validation.AusbildungPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
-import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -71,7 +66,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -262,7 +256,9 @@ public class GesuchService {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         createInitialGesuchTranche(gesuch);
         gesuchRepository.persistAndFlush(gesuch);
-        return gesuchMapperUtil.mapWithCurrentTranche(gesuch);
+        return gesuchMapperUtil.mapWithTranche(
+            gesuch, gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
+        );
     }
 
     private void createInitialGesuchTranche(Gesuch gesuch) {
@@ -296,20 +292,20 @@ public class GesuchService {
     }
 
     private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
-        return gesuche.map(gesuchMapperUtil::mapWithCurrentTranche).toList();
+        return gesuche.map(gesuchMapperUtil::mapWithNewestTranche).toList();
     }
 
     @Transactional
     public List<GesuchDto> findGesucheGs() {
         final var benutzer = benutzerService.getCurrentBenutzer();
         return gesuchRepository.findForGs(benutzer.getId())
-            .map(gesuchMapperUtil::mapWithCurrentTranche)
+            .map(gesuchMapperUtil::mapWithNewestTranche)
             .toList();
     }
 
     @Transactional
     public List<GesuchDto> findAllForFall(UUID fallId) {
-        return gesuchRepository.findAllForFall(fallId).map(gesuchMapperUtil::mapWithCurrentTranche).toList();
+        return gesuchRepository.findAllForFall(fallId).map(gesuchMapperUtil::mapWithNewestTranche).toList();
     }
 
     @Transactional
@@ -337,7 +333,7 @@ public class GesuchService {
     public GesuchDto gesuchStatusToInBearbeitung(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
-        return gesuchMapperUtil.mapWithCurrentTranche(gesuch);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
@@ -358,63 +354,6 @@ public class GesuchService {
         }
 
         return new ValidationReportDto();
-    }
-
-    public ValidationReportDto validatePages(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        return validatePages(gesuch);
-    }
-
-    public ValidationReportDto validatePages(final Gesuch gesuch) {
-        final var formular = gesuch.getAllTranchenValidOnDate(LocalDate.now())
-            .orElseThrow(NotFoundException::new)
-            .getGesuchFormular();
-
-        if (formular == null) {
-            throw new NotFoundException();
-        }
-
-        return validatePages(formular, gesuch.getId());
-    }
-
-    public ValidationReportDto validatePages(final @NotNull GesuchFormular gesuchFormular, UUID gesuchId) {
-        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
-        validationGroups.add(DocumentsRequiredValidationGroup.class);
-        // Since lebenslaufItems are nullable in GesuchFormular the validator has to be added manually if it is not
-        // already present
-        // Only do this if we are also validating PersonInAusbildungPage and AusbildungPage and not already
-        // validating LebenslaufItemPage
-        // (i.e. no lebenslaufitem is present)
-        if (
-            validationGroups.contains(PersonInAusbildungPageValidation.class) &&
-            validationGroups.contains(AusbildungPageValidation.class) &&
-            !validationGroups.contains(LebenslaufItemPageValidation.class)
-        ) {
-            validationGroups.add(LebenslaufItemPageValidation.class);
-        }
-
-        final var violations = new HashSet<>(
-            validator.validate(
-                gesuchFormular,
-                validationGroups.toArray(new Class<?>[0])
-            )
-        );
-        violations.addAll(validator.validate(gesuchFormular));
-
-        final var validationReportDto = ValidationsExceptionMapper.toDto(violations);
-        final var documents = gesuchFormular.getTranche().getGesuchDokuments();
-        validationReportDto.hasDocuments(documents != null && !documents.isEmpty());
-
-        try {
-            validateNoOtherGesuchEingereichtWithSameSvNumber(gesuchFormular, gesuchId);
-        } catch (CustomValidationsException exception) {
-            CustomValidationsExceptionMapper
-                .toDto(exception)
-                .getValidationErrors()
-                .forEach(validationReportDto::addValidationErrorsItem);
-        }
-
-        return validationReportDto;
     }
 
     @Transactional
@@ -451,13 +390,18 @@ public class GesuchService {
     }
 
     private void validateNoOtherGesuchEingereichtWithSameSvNumber(Gesuch gesuch) {
+        // If a Gesuch with more than one tranche is supposed to be validated throw as this is not an expected state.
+        if (gesuch.getGesuchTranchen().size() != 1) {
+            throw new IllegalStateException();
+        }
+
         validateNoOtherGesuchEingereichtWithSameSvNumber(
-            gesuch.getCurrentGesuchTranche().getGesuchFormular(),
+            gesuch.getGesuchTranchen().get(0).getGesuchFormular(),
             gesuch.getId()
         );
     }
 
-    private void validateNoOtherGesuchEingereichtWithSameSvNumber(
+    public void validateNoOtherGesuchEingereichtWithSameSvNumber(
         final GesuchFormular gesuchFormular,
         final UUID gesuchId
     ) {

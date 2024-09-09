@@ -1,0 +1,35 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet id="1725430516874-1" author="Juri Furer">
+    <delete tableName="gesuch_dokument">
+      <where>dokument_typ=:value</where>
+      <whereParams>
+        <param value="ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER" />
+      </whereParams>
+    </delete>
+  </changeSet>
+  <changeSet id="1725430518314-1" author="Juri Furer">
+    <delete tableName="gesuch_dokument">
+      <where>dokument_typ=:value</where>
+      <whereParams>
+        <param value="ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER" />
+      </whereParams>
+    </delete>
+  </changeSet>
+  <changeSet id="1725430519812-1" author="Juri Furer">
+    <delete tableName="gesuch_dokument">
+      <where>dokument_typ=:value</where>
+      <whereParams>
+        <param value="ELTERN_STEUERUNTERLAGEN_VATER" />
+      </whereParams>
+    </delete>
+  </changeSet>
+  <changeSet id="1725430521456-1" author="Juri Furer">
+    <delete tableName="gesuch_dokument">
+      <where>dokument_typ=:value</where>
+      <whereParams>
+        <param value="ELTERN_STEUERUNTERLAGEN_MUTTER" />
+      </whereParams>
+    </delete>
+  </changeSet>
+</databaseChangeLog>
