@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import {
   SharedUiFormatChfNegativePipe,
   SharedUiFormatChfPipe,
+  SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
 import { FamilienBerechnung } from '../../../models';
@@ -17,6 +18,7 @@ import { FamilienBerechnung } from '../../../models';
     TranslateModule,
     SharedUiFormatChfPipe,
     SharedUiFormatChfNegativePipe,
+    SharedUiFormatChfPositivePipe,
   ],
   template: `
     <!-- Total Einkünfte -->
@@ -25,8 +27,8 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
           | translate
       }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().totalEinkuenfte }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().totalEinkuenfte | formatChfPositive }}
       </div>
     </div>
 
@@ -36,8 +38,8 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
           | translate
       }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().ergaenzungsleistungen }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
       </div>
     </div>
 
@@ -47,8 +49,8 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
           | translate
       }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().mietwert }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().mietwert | formatChfNegative: true }}
       </div>
     </div>
 
@@ -58,8 +60,8 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.alimenteOderRenten'
           | translate
       }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().alimenteOderRenten }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().alimenteOderRenten | formatChfNegative: true }}
       </div>
     </div>
 
@@ -70,15 +72,15 @@ import { FamilienBerechnung } from '../../../models';
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
             | translate
         }}
-        <div class="text-muted">
+        <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
               | translate: { maxSaeule3a: 7000 }
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().sauele3 }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().sauele3 | formatChfNegative: true }}
       </div>
     </div>
 
@@ -89,26 +91,34 @@ import { FamilienBerechnung } from '../../../models';
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
             | translate
         }}
-        <div class="text-muted">
+        <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
               | translate
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().sauele2 }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().sauele2 | formatChfNegative: true }}
       </div>
     </div>
 
     <!-- Einkommensfreibetrag -->
     <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
-          | translate
-      }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().einkommensfreibeitrag }}
+      <div classs="d-flex flex-column">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
+            | translate
+        }}
+        <div class="text-muted fs-7">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag.info'
+              | translate
+          }}
+        </div>
+      </div>
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().einkommensfreibeitrag | formatChfNegative: true }}
       </div>
     </div>
 
@@ -119,15 +129,15 @@ import { FamilienBerechnung } from '../../../models';
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen'
             | translate
         }}
-        <div class="text-muted">
+        <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen.info'
               | translate: einnahmenSig()
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().anrechenbaresVermoegen }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().anrechenbaresVermoegen | formatChfPositive }}
       </div>
     </div>
 
@@ -139,8 +149,8 @@ import { FamilienBerechnung } from '../../../models';
             | translate
         }}
       </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().total | formatChf: false }}
+      <div class="text-end h4 flex-grow-1 text-nowrap">
+        {{ einnahmenSig().total | formatChf }}
       </div>
     </div>
   `,

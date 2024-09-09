@@ -47,7 +47,7 @@ import { Berechnung, BerechnungsValue } from '../../../models';
                       view.infoKey | translate
                     }}</span>
                     <span class="col-5 text-end text-muted text-nowrap">
-                      {{ view.total | formatChf: false }}
+                      {{ view.total | formatChf }}
                     </span>
                   }
                 </span>
@@ -55,7 +55,7 @@ import { Berechnung, BerechnungsValue } from '../../../models';
             </div>
             @if (!panel.expanded && view.shouldChangeSize) {
               <span class="text-end flex-grow-1 align-self-start text-nowrap">
-                {{ view.total | formatChf: false }}
+                {{ view.total | formatChf }}
               </span>
             }
           </mat-panel-title>
