@@ -14,6 +14,8 @@ import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
+
 @Singleton
 @RequiredArgsConstructor
 @Slf4j
@@ -49,7 +51,7 @@ GesuchsperiodeSeeding extends Seeder{
                 "Automne",
                 newJahr,
                 LocalDate.of(currentYear, 7, 1),
-                LocalDate.of(currentYear + 1, 6, 31)
+                LocalDate.of(currentYear + 1, 6, 30)
             ),
             getPeriodeForSeeding(
                 "Frühling",
@@ -98,8 +100,8 @@ GesuchsperiodeSeeding extends Seeder{
             .setGesuchsperiodeStopp(to)
             .setAufschaltterminStart(from)
             .setAufschaltterminStopp(to)
-            .setEinreichefristNormal(to.minusMonths(7))
-            .setEinreichefristReduziert(to.minusMonths(4))
+            .setEinreichefristNormal(to.minusMonths(7).with(lastDayOfMonth()))
+            .setEinreichefristReduziert(to.minusMonths(4).with(lastDayOfMonth()))
             .setAusbKostenSekII(2000)
             .setAusbKostenTertiaer(3000)
             .setFreibetragVermoegen(0)
