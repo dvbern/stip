@@ -89,20 +89,31 @@ public class SapEndpointService {
         }
     }
 
-    public Response readBusniessPartner(String extId){
-        try{
-            final var businessPartnerReadMapper = new BusniessPartnerReadRequestMapper();
-            var request = businessPartnerReadMapper.toBusinessPartnerReadRequest(extId,BigInteger.valueOf(configService.getSystemid()));
-            request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
+    public Response readBusniessPartner(String extId) {
+        final var businessPartnerReadMapper = new BusniessPartnerReadRequestMapper();
+        var request = businessPartnerReadMapper.toBusinessPartnerReadRequest(extId, BigInteger.valueOf(configService.getSystemid()));
+        request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
 
-            final var xmlRequest = SoapUtils.buildXmlRequest(request, BusinessPartnerReadRequest.class, SapEndpointName.BUSINESPARTNER);
-            final var response = businessPartnerReadClient.readBusinessPartner(
-                xmlRequest);
-            final var result = SoapUtils.parseSoapResponse(response, BusinessPartnerReadResponse.class);
-            return Response.status(HttpStatus.SC_OK).entity(result).build();
+        String xmlRequest = null;
+        try {
+            xmlRequest = SoapUtils.buildXmlRequest(request, BusinessPartnerReadRequest.class, SapEndpointName.BUSINESPARTNER);
+
+        } catch (JAXBException | SOAPException | IOException ex) {
+            throw new RuntimeException(ex.getMessage());
         }
-        catch(WebApplicationException | JAXBException | SOAPException | IOException ex){
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(ex).build();
+        String xmlResponse = null;
+
+        try {
+            xmlResponse = businessPartnerReadClient.readBusinessPartner(
+                xmlRequest);
+        } catch (WebApplicationException webApplicationException) {
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
+        }
+        try {
+            final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerReadResponse.class);
+            return Response.status(HttpStatus.SC_OK).entity(result).build();
+        } catch (SOAPException | IOException | JAXBException ex) {
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
@@ -112,71 +123,91 @@ public class SapEndpointService {
     /**
      * Important: it can take up to 48 hours until a newly created user will be set active in SAP!
      */
-    public Response createBusinessPartner(@Valid Auszahlung auszahlung,String extId, BigDecimal deliveryId){
-        try{
-            final var businessPartnerCreateRequestMapper = new BusinessPartnerCreateRequestMapper();
-            var request = businessPartnerCreateRequestMapper.toBusinessPartnerCreateRequest(auszahlung, BigInteger.valueOf(configService.getSystemid()), deliveryId);
-            request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
-            request.getSENDER().setDELIVERYID(deliveryId);
-            request.getBUSINESSPARTNER().setIDKEYS(new BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS());
-            request.getBUSINESSPARTNER().getIDKEYS().setEXTID(String.valueOf(extId));
-            request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerCreateRequest.BUSINESSPARTNER.HEADER());
-            request.getBUSINESSPARTNER().getHEADER().setPARTNCAT("1"); //todo KSTIP-1229: set correct category
-            request.getBUSINESSPARTNER().getPERSDATA().setCORRESPONDLANGUAGEISO("DE"); //todo: set correct language iso
-            request.getBUSINESSPARTNER().getORGDATA().setLANGUISO("DE");//todo KSTIP-1229: set correct language iso
-            request.getBUSINESSPARTNER().getORGDATA().setNAME1("");//todo KSTIP-1229: set correct name 1
-            request.getBUSINESSPARTNER().getORGDATA().setNAME2("");//todo KSTIP-1229: set correct name 2
-            request.getBUSINESSPARTNER().getORGDATA().setNAME3("");//todo KSTIP-1229: set correct name 3
-            request.getBUSINESSPARTNER().getORGDATA().setNAME4("");//todo KSTIP-1229: set correct name 4
-            request.getBUSINESSPARTNER().getADDRESS().get(0).setADRKIND("XXDEFAULT");
-            request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo KSTIP-1229: set iso country (max 3 instead of "Schweiz"
+    public Response createBusinessPartner(@Valid Auszahlung auszahlung, String extId, BigDecimal deliveryId) {
+        final var businessPartnerCreateRequestMapper = new BusinessPartnerCreateRequestMapper();
+        var request = businessPartnerCreateRequestMapper.toBusinessPartnerCreateRequest(auszahlung, BigInteger.valueOf(configService.getSystemid()), deliveryId);
+        request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
+        request.getSENDER().setDELIVERYID(deliveryId);
+        request.getBUSINESSPARTNER().setIDKEYS(new BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS());
+        request.getBUSINESSPARTNER().getIDKEYS().setEXTID(String.valueOf(extId));
+        request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerCreateRequest.BUSINESSPARTNER.HEADER());
+        request.getBUSINESSPARTNER().getHEADER().setPARTNCAT("1"); //todo KSTIP-1229: set correct category
+        request.getBUSINESSPARTNER().getPERSDATA().setCORRESPONDLANGUAGEISO("DE"); //todo: set correct language iso
+        request.getBUSINESSPARTNER().getORGDATA().setLANGUISO("DE");//todo KSTIP-1229: set correct language iso
+        request.getBUSINESSPARTNER().getORGDATA().setNAME1("");//todo KSTIP-1229: set correct name 1
+        request.getBUSINESSPARTNER().getORGDATA().setNAME2("");//todo KSTIP-1229: set correct name 2
+        request.getBUSINESSPARTNER().getORGDATA().setNAME3("");//todo KSTIP-1229: set correct name 3
+        request.getBUSINESSPARTNER().getORGDATA().setNAME4("");//todo KSTIP-1229: set correct name 4
+        request.getBUSINESSPARTNER().getADDRESS().get(0).setADRKIND("XXDEFAULT");
+        request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo KSTIP-1229: set iso country (max 3 instead of "Schweiz"
 
-            final var xmlRequest = SoapUtils.buildXmlRequest(request,BusinessPartnerCreateRequest.class, SapEndpointName.BUSINESPARTNER);
-            final var response = businessPartnerCreateClient.createBusinessPartner(
+        String xmlRequest = null;
+        try {
+            xmlRequest = SoapUtils.buildXmlRequest(request, BusinessPartnerCreateRequest.class, SapEndpointName.BUSINESPARTNER);
+
+        } catch (JAXBException | SOAPException | IOException ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+
+        String xmlResponse = null;
+        try {
+            xmlResponse = businessPartnerCreateClient.createBusinessPartner(
                 xmlRequest);
-            final var result = SoapUtils.parseSoapResponse(response, BusinessPartnerCreateResponse.class);
+        } catch (WebApplicationException webApplicationException) {
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
+        }
+
+        try {
+            final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerCreateResponse.class);
             return Response.status(HttpStatus.SC_OK).entity(result).build();
+        } catch (SOAPException | IOException | JAXBException ex) {
+            throw new RuntimeException(ex.getMessage());
         }
-        catch(WebApplicationException ex){
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(ex).build();
-        } catch (JAXBException|SOAPException|IOException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     /*
     Note: specific values are still hardcoded or commented - these have to be discussed in the near future
      */
-    public Response changeBusinessPartner(@Valid Auszahlung auszahlung, Integer businessPartnerId, BigDecimal deliveryId){
-        try{
-            final var  mapper = new BusinessPartnerChangeRequestMapper();
-            var request = mapper.toBusinessPartnerChangeRequest(auszahlung, BigInteger.valueOf(configService.getSystemid()), deliveryId);
-            request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER());
-            request.getSENDER().setDELIVERYID(deliveryId);
-            request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
-            request.getBUSINESSPARTNER().getHEADER().setBPARTNER(businessPartnerId);
+    public Response changeBusinessPartner(@Valid Auszahlung auszahlung, Integer businessPartnerId, BigDecimal deliveryId) {
+        final var mapper = new BusinessPartnerChangeRequestMapper();
+        var request = mapper.toBusinessPartnerChangeRequest(auszahlung, BigInteger.valueOf(configService.getSystemid()), deliveryId);
+        request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER());
+        request.getSENDER().setDELIVERYID(deliveryId);
+        request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
+        request.getBUSINESSPARTNER().getHEADER().setBPARTNER(businessPartnerId);
 
-            request.getBUSINESSPARTNER().setIDKEYS(new BusinessPartnerChangeRequest.BUSINESSPARTNER.IDKEYS());
+        request.getBUSINESSPARTNER().setIDKEYS(new BusinessPartnerChangeRequest.BUSINESSPARTNER.IDKEYS());
 
-            //request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER());
-            //request.getBUSINESSPARTNER().getHEADER().setBPARTNER("1"); //todo KSTIP-1229: set correct category
-            request.getBUSINESSPARTNER().getPERSDATA().setCORRESPONDLANGUAGEISO("DE"); //todo KSTIP-1229: set correct language iso
-            request.getBUSINESSPARTNER().getORGDATA().setLANGUISO("DE");//todo KSTIP-1229: set correct language iso
-            request.getBUSINESSPARTNER().getORGDATA().setNAME1("");//todo KSTIP-1229: set correct name 1
-            request.getBUSINESSPARTNER().getORGDATA().setNAME2("");//todo KSTIP-1229: set correct name 2
-            request.getBUSINESSPARTNER().getORGDATA().setNAME3("");//todo KSTIP-1229: set correct name 3
-            request.getBUSINESSPARTNER().getORGDATA().setNAME4("");//todo KSTIP-1229: set correct name 4
-            request.getBUSINESSPARTNER().getADDRESS().get(0).setADRKIND("XXDEFAULT");
-            request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo KSTIP-1229: set iso country (max 3 instead of "Schweiz"
+        //request.getBUSINESSPARTNER().setHEADER(new BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER());
+        //request.getBUSINESSPARTNER().getHEADER().setBPARTNER("1"); //todo KSTIP-1229: set correct category
+        request.getBUSINESSPARTNER().getPERSDATA().setCORRESPONDLANGUAGEISO("DE"); //todo KSTIP-1229: set correct language iso
+        request.getBUSINESSPARTNER().getORGDATA().setLANGUISO("DE");//todo KSTIP-1229: set correct language iso
+        request.getBUSINESSPARTNER().getORGDATA().setNAME1("");//todo KSTIP-1229: set correct name 1
+        request.getBUSINESSPARTNER().getORGDATA().setNAME2("");//todo KSTIP-1229: set correct name 2
+        request.getBUSINESSPARTNER().getORGDATA().setNAME3("");//todo KSTIP-1229: set correct name 3
+        request.getBUSINESSPARTNER().getORGDATA().setNAME4("");//todo KSTIP-1229: set correct name 4
+        request.getBUSINESSPARTNER().getADDRESS().get(0).setADRKIND("XXDEFAULT");
+        request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo KSTIP-1229: set iso country (max 3 instead of "Schweiz"
 
-            final var response = businessPartnerChangeClient.changeBusinessPartner(SoapUtils.buildXmlRequest(request,BusinessPartnerChangeRequest.class,SapEndpointName.BUSINESPARTNER));
-            final var result = SoapUtils.parseSoapResponse(response, BusinessPartnerChangeResponse.class);
-            return Response.status(HttpStatus.SC_OK).entity(result).build();
+        String xmlRequest = null;
+        try {
+            xmlRequest = SoapUtils.buildXmlRequest(request, BusinessPartnerChangeRequest.class, SapEndpointName.BUSINESPARTNER);
+        } catch (JAXBException | SOAPException | IOException ex) {
+            throw new RuntimeException(ex.getMessage());
         }
-        catch(WebApplicationException ex){
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(ex).build();
-        } catch (JAXBException|SOAPException|IOException e) {
-            throw new RuntimeException(e);
+        String xmlResponse = null;
+        try {
+            xmlResponse = businessPartnerChangeClient.changeBusinessPartner(xmlRequest);
+        } catch (WebApplicationException webApplicationException) {
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
+        }
+
+        try {
+            final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerChangeResponse.class);
+            return Response.status(HttpStatus.SC_OK).entity(result).build();
+        } catch (SOAPException | IOException | JAXBException ex) {
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
@@ -184,7 +215,6 @@ public class SapEndpointService {
     Note: specific values are still hardcoded or commented - these have to be discussed in the near future
  */
     public Response createVendorPosting(@Valid Auszahlung auszahlung, Integer businessPartnerId,BigDecimal deliveryId){
-        try{
             final var  mapper = new VendorPostingCreateRequestMapper();
             var request = mapper.toVendorPostingCreateRequest(auszahlung, BigInteger.valueOf(configService.getSystemid()), deliveryId);
             request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
@@ -220,15 +250,28 @@ public class SapEndpointService {
                 vendorposting.getHEADER().setCURRENCY("CHF");
             });
 
-            final var response = vendorPostingCreateClient.createVendorPosting(SoapUtils.buildXmlRequest(request,VendorPostingCreateRequest.class, SapEndpointName.VENDORPOSTING));
-            final var result = SoapUtils.parseSoapResponse(response, VendorPostingCreateResponse.class);
-            return Response.status(HttpStatus.SC_OK).entity(result).build();
-        }
-        catch (WebApplicationException ex){
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(ex).build();
-        } catch (JAXBException| SOAPException|IOException e ) {
-            throw new RuntimeException(e);
-        }
+            String xmlRequest = null;
+            try{
+                xmlRequest = SoapUtils.buildXmlRequest(request,VendorPostingCreateRequest.class, SapEndpointName.VENDORPOSTING);
+            }catch (JAXBException | SOAPException | IOException ex) {
+                throw new RuntimeException(ex.getMessage());
+            }
+            String xmlResponse = null;
+
+            try{
+                xmlResponse = vendorPostingCreateClient.createVendorPosting(xmlRequest);
+            }
+            catch(WebApplicationException webApplicationException){
+                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
+            }
+
+            try{
+                final var result = SoapUtils.parseSoapResponse(xmlResponse, VendorPostingCreateResponse.class);
+                return Response.status(HttpStatus.SC_OK).entity(result).build();
+            }
+            catch (SOAPException | IOException | JAXBException ex){
+                throw new RuntimeException(ex.getMessage());
+            }
     }
 
 }
