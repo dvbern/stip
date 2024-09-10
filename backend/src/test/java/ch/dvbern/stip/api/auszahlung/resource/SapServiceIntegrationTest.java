@@ -44,7 +44,7 @@ class SapServiceIntegrationTest {
 
 
     /*
-    todo: if a new businesspartner is created, it can take up do 48 hours until he's available in SAP
+    todo KSTIP-1229: if a new businesspartner is created, it can take up do 48 hours until he's available in SAP
      */
 /*
     @Test
@@ -61,7 +61,7 @@ class SapServiceIntegrationTest {
     }
 
     /*
-todo: if a new businesspartner is created, it can take up do 48 hours until he's available in SAP
+todo KSTIP-1229: if a new businesspartner is created, it can take up do 48 hours until he's available in SAP
  */
 /*
     @Test
