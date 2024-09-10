@@ -66,14 +66,18 @@ class SapAuszahlungServiceTest {
     }
 
     void getImportStatus() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/getImportStatusExampleResponse.xml"),
             "UTF-8"
         );
         when(importStatusReadClient.getImportStatus(any())).thenReturn(xml);
+        //act
         final var response = auszahlungSapService.getImportStatus(EXAMPLE_DELIVERY_ID);
-        assertEquals(HttpStatus.SC_OK,response.getStatus());
         final var responseDto = (ImportStatusReadResponse) response.getEntity();
+
+        //assert
+        assertEquals(HttpStatus.SC_OK,response.getStatus());
         assertEquals("S",responseDto.getRETURNCODE().get(0).getTYPE());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
@@ -83,6 +87,7 @@ class SapAuszahlungServiceTest {
         /**
          * Important: it can take up to 48 hours until a newly created user will be set active in SAP!
          */
+        //arrange
         String firstCreateResponse = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerSuccessResponse.xml"),
             "UTF-8"
@@ -96,19 +101,25 @@ class SapAuszahlungServiceTest {
         when(businessPartnerCreateClient.createBusinessPartner(any()))
             .thenReturn(firstCreateResponse)
             .thenReturn(secondCreateResponse);
+
+        //act & assert
         assertNull(sapAuszahlungService.getOrCreateBusinessPartner(auszahlung));
     }
 
     @Test
     void createBusinessPartnerTest_invalidRequest() {
+        //arrange
         Auszahlung auszahlung = initAuszahlung();
         auszahlung.setSapBusinessPartnerId(null);
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenThrow(WebApplicationException.class);
+
+        //act & assert
         assertNull(sapAuszahlungService.getOrCreateBusinessPartner(auszahlung));
     }
 
     @Test
     void updateBusinessPartnerTest_Success() throws IOException {
+        //arrange
         String createResponse = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
@@ -116,19 +127,25 @@ class SapAuszahlungServiceTest {
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(createResponse);
         Auszahlung auszahlung= initAuszahlung();
         auszahlung.setSapBusinessPartnerId(EXAMPLE_BUSINESS_PARTNER_ID);
+
+        //act & assert
         assertNotNull(sapAuszahlungService.getOrCreateBusinessPartner(auszahlung));
     }
 
     @Test
     void updateBusinessPartnerTest_invalidRequest(){
+        //arrange
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenThrow(WebApplicationException.class);
         Auszahlung auszahlung= initAuszahlung();
         auszahlung.setSapBusinessPartnerId(EXAMPLE_BUSINESS_PARTNER_ID);
+
+        //act & assert
         assertThrows(WebApplicationException.class, () -> {sapAuszahlungService.getOrCreateBusinessPartner(auszahlung);});
     }
 
     @Test
     void createVendorPostingTest_Success() throws IOException {
+        //arrange
         String existingBusinessPartnerResonse = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
@@ -141,12 +158,14 @@ class SapAuszahlungServiceTest {
         Auszahlung auszahlung= initAuszahlung();
         auszahlung.setSapBusinessPartnerId(EXAMPLE_BUSINESS_PARTNER_ID);
 
+        //act & assert
         getImportStatus();
         assertNotNull(sapAuszahlungService.createVendorPosting(auszahlung));
     }
 
     @Test
     void createVendorPostingTest_alreadyExistingPayment() throws IOException {
+        //arrange
         String existingBusinessPartnerResonse = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
@@ -159,12 +178,14 @@ class SapAuszahlungServiceTest {
         Auszahlung auszahlung= initAuszahlung();
         auszahlung.setSapBusinessPartnerId(EXAMPLE_BUSINESS_PARTNER_ID);
 
+        //act & assert
         getImportStatus();
         assertNotNull(sapAuszahlungService.createVendorPosting(auszahlung));
     }
 
     @Test
     void createVendorPostingTest_alreadyExistingDeliveryId() throws IOException {
+        //arrange
         String existingBusinessPartnerResonse = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
@@ -176,13 +197,15 @@ class SapAuszahlungServiceTest {
         );        when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(vendorPostingCreateResponse);
         Auszahlung auszahlung= initAuszahlung();
         auszahlung.setSapBusinessPartnerId(EXAMPLE_BUSINESS_PARTNER_ID);
-        //assertThrows(WebApplicationException.class, () -> {sapAuszahlungService.createVendorPosting(auszahlung);});
-        //todo: how to handle no action events?
+
+        //act & assert
+        //todo KSTIP-1229: how to handle no action events?
         assertDoesNotThrow(() -> {sapAuszahlungService.createVendorPosting(auszahlung);});
     }
 
     @Test
     void createVendorPostingTest_invalidRequest() throws IOException {
+        //arrange
         String existingBusinessPartnerResonse = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
@@ -192,6 +215,7 @@ class SapAuszahlungServiceTest {
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(existingBusinessPartnerResonse);
         when(vendorPostingCreateClient.createVendorPosting(any())).thenThrow(WebApplicationException.class);
 
+        //act & assert
         assertThrows(WebApplicationException.class, () -> {sapAuszahlungService.createVendorPosting(auszahlung);});
     }
 
