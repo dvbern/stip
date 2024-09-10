@@ -1,9 +1,10 @@
-import { Gesuch } from './openapi/model/gesuch';
 import { GesuchFormular } from './openapi/model/gesuchFormular';
 import { GesuchFormularUpdate } from './openapi/model/gesuchFormularUpdate';
+import { GesuchWithChanges } from './openapi/model/gesuchWithChanges';
 import { GetGesucheSBQueryType } from './openapi/model/getGesucheSBQueryType';
+import { SteuerdatenTyp } from './openapi/model/steuerdatenTyp';
 
-export interface SharedModelGesuch extends Gesuch {
+export interface SharedModelGesuch extends GesuchWithChanges {
   view?: {
     // view specific props
   };
@@ -12,8 +13,11 @@ export interface SharedModelGesuch extends Gesuch {
 export type SharedModelGesuchFormular = GesuchFormular;
 export type SharedModelGesuchFormularUpdate = GesuchFormularUpdate;
 
+export type SteuerdatenSteps =
+  `steuerdaten${Capitalize<Lowercase<Exclude<SteuerdatenTyp, 'FAMILIE'>>> | ''}`;
 export type SharedModelGesuchFormularProps =
-  | keyof SharedModelGesuchFormular
+  | Exclude<keyof SharedModelGesuchFormular, 'steuerdatenTabs'>
+  | SteuerdatenSteps
   | 'dokuments';
 
 // TODO extract to env or generate with OpenAPI?

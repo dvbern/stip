@@ -9,6 +9,7 @@ import {
 import {
   ElternSituation,
   calculateElternSituationGesuch,
+  getChangesForForm,
 } from '@dv/shared/util-fn/gesuch-util';
 
 export const selectSharedFeatureGesuchFormAuszahlungenView = createSelector(
@@ -19,7 +20,12 @@ export const selectSharedFeatureGesuchFormAuszahlungenView = createSelector(
       loading: gesuchsView.loading || stammdatenView.loading,
       gesuch: gesuchsView.gesuch,
       allowTypes: gesuchsView.allowTypes,
-      gesuchId: gesuchsView.gesuch?.id,
+      gesuchId: gesuchsView.gesuchId,
+      trancheId: gesuchsView.trancheId,
+      formChanges: getChangesForForm(
+        gesuchsView.gesuchFormular?.auszahlung,
+        gesuchsView.tranchenChanges?.tranche.gesuchFormular?.auszahlung,
+      ),
       gesuchFormular: gesuchsView.gesuchFormular,
       laender: stammdatenView.laender,
       kontoinhaberValues: calculateKontoinhaberValuesGesuch(

@@ -5,7 +5,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { selectGesuchAppDataAccessAbschlussView } from '@dv/gesuch-app/data-access/abschluss';
 import { AbschlussPhase } from '@dv/gesuch-app/model/gesuch-abschluss';
-import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
+import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 import { GesuchAppFeatureGesuchFormAbschlussComponent } from './gesuch-app-feature-gesuch-form-abschluss.component';
 
@@ -13,6 +13,8 @@ const abschlussPhase: Record<AbschlussPhase, string> = {
   NOT_READY: 'NOT_READY',
   READY_TO_SEND: 'READY_TO_SEND',
   SUBMITTED: 'SUBMITTED',
+  ABGELEHNT: 'ABGELEHNT',
+  AKZETPIERT: 'AKZETPIERT',
 };
 
 async function setup(abschlussPhase: AbschlussPhase) {

@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -33,12 +34,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchDokumentAblehnenRequestDtoSpec {
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
-  private String kommentar;
+  private GesuchDokumentKommentarDtoSpec kommentar;
 
   public GesuchDokumentAblehnenRequestDtoSpec() {
   }
 
-  public GesuchDokumentAblehnenRequestDtoSpec kommentar(String kommentar) {
+  public GesuchDokumentAblehnenRequestDtoSpec kommentar(GesuchDokumentKommentarDtoSpec kommentar) {
     
     this.kommentar = kommentar;
     return this;
@@ -52,14 +53,14 @@ public class GesuchDokumentAblehnenRequestDtoSpec {
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getKommentar() {
+  public GesuchDokumentKommentarDtoSpec getKommentar() {
     return kommentar;
   }
 
 
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setKommentar(String kommentar) {
+  public void setKommentar(GesuchDokumentKommentarDtoSpec kommentar) {
     this.kommentar = kommentar;
   }
 

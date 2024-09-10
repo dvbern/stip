@@ -137,21 +137,28 @@ public class BerechnungRequestV1 implements DmnRequest {
         );
     }
 
-    public static int getGrundbedarf(final Gesuchsperiode gesuchsperiode, final int anzahlPersonenImHaushalt) {
-        return switch (anzahlPersonenImHaushalt) {
+    public static int getGrundbedarf(
+        final Gesuchsperiode gesuchsperiode,
+        final int anzahlPersonenImHaushalt,
+        final boolean wohntInWG
+    ) {
+        int grundbedarf = switch (anzahlPersonenImHaushalt) {
             case 1 -> gesuchsperiode.getPerson1();
-            // TODO:
-            // if (wohntInWG) {
-            //     grundbedarf -= gesuchsperiode.getW
-            // }
             case 2 -> gesuchsperiode.getPersonen2();
             case 3 -> gesuchsperiode.getPersonen3();
             case 4 -> gesuchsperiode.getPersonen4();
             case 5 -> gesuchsperiode.getPersonen5();
             case 6 -> gesuchsperiode.getPersonen6();
             case 7 -> gesuchsperiode.getPersonen7();
-            default -> gesuchsperiode.getPersonen7() + (anzahlPersonenImHaushalt - 7) * gesuchsperiode.getProWeiterePerson();
+            default ->
+                gesuchsperiode.getPersonen7() + (anzahlPersonenImHaushalt - 7) * gesuchsperiode.getProWeiterePerson();
         };
+
+        if (wohntInWG) {
+            grundbedarf -= gesuchsperiode.getReduzierungDesGrundbedarfs();
+        }
+
+        return grundbedarf;
     }
 
     public static int getEffektiveWohnkosten(

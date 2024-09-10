@@ -1,8 +1,13 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,6 +20,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
@@ -46,16 +52,34 @@ public class GesuchTranche extends AbstractEntity {
     )
     private @Valid GesuchFormular gesuchFormular;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(
+        optional = false,
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH,
+        },
+        fetch = FetchType.LAZY
+    )
     @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_gesuch_tranche_gesuch_id"), nullable = false)
     private Gesuch gesuch;
 
     @NotNull
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Audited(withModifiedFlag = true, modifiedColumnName = "status_mod")
     private GesuchTrancheStatus status = GesuchTrancheStatus.IN_BEARBEITUNG_GS;
 
     @Nullable
     @Column(name = "comment")
     private String comment;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuchTranche")
+    private @Valid List<GesuchDokument> gesuchDokuments = new ArrayList<>();
+
+    @NotNull
+    @Column(name = "typ", nullable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    private GesuchTrancheTyp typ;
 }

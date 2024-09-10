@@ -8,6 +8,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
+import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -16,12 +17,14 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -78,7 +81,7 @@ class BerechnungServiceTest {
         "5, 39751", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
         "6, 27179",
         "7, 6669",
-        "8, 266",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
+        "8, 0",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
         "9, 23527"
     })
     void testBerechnungFaelle(final int fall, final int expectedStipendien) {
@@ -96,6 +99,7 @@ class BerechnungServiceTest {
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
 
         gesuchFormular.getPersonInAusbildung()
+            .setZivilstand(Zivilstand.LEDIG)
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1));
 
@@ -131,7 +135,9 @@ class BerechnungServiceTest {
         //Act
         BerechnungsresultatDto berechnungsresultatDto = null;
         for (int i = 0; i< 1; i++) { // for profiling
-            berechnungsresultatDto = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);
+            berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuchTranche(
+                gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
+            );
         }
 
         //Assert
@@ -150,6 +156,7 @@ class BerechnungServiceTest {
             .setAnzahlWochenSchule(38);
 
         gesuchFormular.getPersonInAusbildung()
+            .setZivilstand(Zivilstand.LEDIG)
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.now().minusDays(1).minusYears(23));
 
@@ -182,7 +189,6 @@ class BerechnungServiceTest {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
-                    .setWohnkosten(14000)
                     .setGeburtsdatum(LocalDate.now().minusYears(45))
             )
         );
@@ -190,17 +196,17 @@ class BerechnungServiceTest {
         gesuchFormular.setSteuerdaten(
             Set.of(
                 new Steuerdaten()
+                    .setWohnkosten(14000)
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
                     .setVerpflegung(3200)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(3696)
                     .setFahrkostenPartner(0)
-                    // .setIntegrationszulage(7200) TODO: Missing
                     .setSteuernBund(0)
-                    .setSteuernStaat(0)
+                    .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(1026)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setErgaenzungsleistungen(21000 - 2400)  // TODO: adaption for integrationszulage
+                    .setErgaenzungsleistungen(21000)
             )
         );
 
@@ -216,7 +222,9 @@ class BerechnungServiceTest {
         );
 
         //Act
-        final BerechnungsresultatDto berechnungsresultatDto = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);;
+        final BerechnungsresultatDto berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuchTranche(
+            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0)
+            ;;
 
         //Assert
         assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(6669)));
@@ -234,6 +242,7 @@ class BerechnungServiceTest {
             .setAnzahlWochenSchule(38);
 
         gesuchFormular.getPersonInAusbildung()
+            .setZivilstand(Zivilstand.LEDIG)
             .setWohnsitz(Wohnsitz.FAMILIE)
             .setGeburtsdatum(LocalDate.now().minusDays(1).minusYears(29));
 
@@ -264,7 +273,6 @@ class BerechnungServiceTest {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
-                    .setWohnkosten(20000)
                     .setGeburtsdatum(LocalDate.now().minusYears(45))
             )
         );
@@ -272,16 +280,16 @@ class BerechnungServiceTest {
         gesuchFormular.setSteuerdaten(
             Set.of(
                 new Steuerdaten()
+                    .setWohnkosten(20000)
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
                     .setVerpflegung(3200)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(3696)
                     .setFahrkostenPartner(0)
-                    // .setIntegrationszulage(7200) TODO: Missing
                     .setSteuernBund(0)
-                    .setSteuernStaat(1857)
+                    .setSteuernKantonGemeinde(1857)
                     .setEigenmietwert(10500)
-                    .setTotalEinkuenfte(87516 - 7200) // TODO: adaption for integrationszulage
+                    .setTotalEinkuenfte(87516)
                     .setSaeule2(1500)
                     .setVermoegen(100000)
                     .setIsArbeitsverhaeltnisSelbstaendig(true)
@@ -292,9 +300,11 @@ class BerechnungServiceTest {
         gesuchFormular.setGeschwisters(
             Set.of(
                 (Geschwister) new Geschwister()
+                    .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
                     .setWohnsitz(Wohnsitz.FAMILIE)
                     .setGeburtsdatum(LocalDate.now().minusDays(1).minusYears(17)),
                 (Geschwister) new Geschwister()
+                    .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
                     .setWohnsitz(Wohnsitz.FAMILIE)
                     .setGeburtsdatum(LocalDate.now().minusDays(1).minusYears(27))
             )
@@ -312,9 +322,11 @@ class BerechnungServiceTest {
         );
 
         //Act
-        final BerechnungsresultatDto berechnungsresultatDto = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);
+        final BerechnungsresultatDto berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuchTranche(
+            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
+        );
 
         //Assert
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(266)));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(0)));
     }
 }

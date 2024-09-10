@@ -3,6 +3,7 @@ import { createSelector } from '@ngrx/store';
 import { selectSharedDataAccessAusbildungsstaettesView } from '@dv/shared/data-access/ausbildungsstaette';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { Wohnsitz } from '@dv/shared/model/gesuch';
+import { getChangesForForm } from '@dv/shared/util-fn/gesuch-util';
 
 export const selectSharedFeatureGesuchFormEinnahmenkostenView = createSelector(
   selectSharedDataAccessGesuchsView,
@@ -10,7 +11,12 @@ export const selectSharedFeatureGesuchFormEinnahmenkostenView = createSelector(
   (gesuchsView, ausbildungsstaettesView) => ({
     loading: gesuchsView.loading,
     gesuch: gesuchsView.gesuch,
-    gesuchId: gesuchsView.gesuch?.id,
+    gesuchId: gesuchsView.gesuchId,
+    trancheId: gesuchsView.trancheId,
+    formChanges: getChangesForForm(
+      gesuchsView.gesuchFormular?.einnahmenKosten,
+      gesuchsView.tranchenChanges?.tranche.gesuchFormular?.einnahmenKosten,
+    ),
     allowTypes: gesuchsView.allowTypes,
     ausbildungsstaettes: ausbildungsstaettesView.ausbildungsstaettes,
     gesuchFormular: gesuchsView.gesuchFormular,

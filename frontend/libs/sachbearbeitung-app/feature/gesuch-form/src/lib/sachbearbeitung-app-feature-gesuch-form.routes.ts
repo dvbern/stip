@@ -14,9 +14,21 @@ import {
   PARTNER,
   PERSON,
   PROTOKOLL,
+  TRANCHE,
 } from '@dv/shared/model/gesuch-form';
 
 export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
+  {
+    path: TRANCHE.route,
+    resolve: {
+      step: () => TRANCHE,
+    },
+    title: TRANCHE.translationKey,
+    loadChildren: () =>
+      import('@dv/shared/feature/gesuch-form-tranche').then(
+        (m) => m.sharedFeatureGesuchFormTrancheRoutes,
+      ),
+  },
   {
     path: KINDER.route,
     resolve: {
@@ -163,5 +175,9 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
   {
     path: ':id',
     redirectTo: PERSON.route + '/:id',
+  },
+  {
+    path: ':id/tranche/:trancheId',
+    redirectTo: PERSON.route + '/:id/tranche/:trancheId',
   },
 ];

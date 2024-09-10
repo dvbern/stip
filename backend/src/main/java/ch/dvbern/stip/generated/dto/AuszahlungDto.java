@@ -25,7 +25,6 @@ public class AuszahlungDto  implements Serializable {
   private @Valid String iban;
   private @Valid String nachname;
   private @Valid ch.dvbern.stip.api.auszahlung.type.Kontoinhaber kontoinhaber;
-  private @Valid Integer businessPartnerId;
 
   /**
    **/
@@ -122,24 +121,6 @@ public class AuszahlungDto  implements Serializable {
     this.kontoinhaber = kontoinhaber;
   }
 
-  /**
-   **/
-  public AuszahlungDto businessPartnerId(Integer businessPartnerId) {
-    this.businessPartnerId = businessPartnerId;
-    return this;
-  }
-
-  
-  @JsonProperty("businessPartnerId")
-  public Integer getBusinessPartnerId() {
-    return businessPartnerId;
-  }
-
-  @JsonProperty("businessPartnerId")
-  public void setBusinessPartnerId(Integer businessPartnerId) {
-    this.businessPartnerId = businessPartnerId;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -154,13 +135,12 @@ public class AuszahlungDto  implements Serializable {
         Objects.equals(this.adresse, auszahlung.adresse) &&
         Objects.equals(this.iban, auszahlung.iban) &&
         Objects.equals(this.nachname, auszahlung.nachname) &&
-        Objects.equals(this.kontoinhaber, auszahlung.kontoinhaber) &&
-        Objects.equals(this.businessPartnerId, auszahlung.businessPartnerId);
+        Objects.equals(this.kontoinhaber, auszahlung.kontoinhaber);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, iban, nachname, kontoinhaber, businessPartnerId);
+    return Objects.hash(vorname, adresse, iban, nachname, kontoinhaber);
   }
 
   @Override
@@ -173,7 +153,6 @@ public class AuszahlungDto  implements Serializable {
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    kontoinhaber: ").append(toIndentedString(kontoinhaber)).append("\n");
-    sb.append("    businessPartnerId: ").append(toIndentedString(businessPartnerId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

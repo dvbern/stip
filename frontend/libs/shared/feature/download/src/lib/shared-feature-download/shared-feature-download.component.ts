@@ -23,7 +23,7 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureDownloadComponent implements OnInit {
-  gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
+  gesuchTrancheIdSig = input.required<string>({ alias: 'gesuchTrancheId' });
   typeSig = input.required<DokumentTyp>({ alias: 'type' });
   dokumentIdSig = input.required<string>({ alias: 'dokumentId' });
   oauthService = inject(OAuthService);
@@ -44,7 +44,7 @@ export class SharedFeatureDownloadComponent implements OnInit {
 
       this.dokumentService
         .getDokumentDownloadToken$({
-          gesuchId: this.gesuchIdSig(),
+          gesuchTrancheId: this.gesuchTrancheIdSig(),
           dokumentId: this.dokumentIdSig(),
           dokumentTyp: this.typeSig(),
         })

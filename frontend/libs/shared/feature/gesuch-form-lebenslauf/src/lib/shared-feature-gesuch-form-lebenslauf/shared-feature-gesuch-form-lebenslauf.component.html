@@ -17,25 +17,25 @@
   } @else {
     @if (minDatesSig() && maxDateSig()) {
       <!-- Infobx -->
-      <div class="row">
-        <div class="col-12 col-xl-8 my-3">
-          <span>{{
-            'shared.form.lebenslauf.top.info'
-              | translate
-                : {
-                    von: minDatesSig() ? printDateAsMonthYear(minDatesSig()!.required) : '?',
-                    bis: maxDateSig() ? printDateAsMonthYear(maxDateSig()!) : '?'
-                  }
-          }}</span>
+      @if (!viewSig().readonly) {
+        <div class="row">
+          <div class="col-12 col-xl-8 my-3">
+            <span>{{
+              'shared.form.lebenslauf.top.info'
+                | translate
+                  : {
+                      von: minDatesSig() ? printDateAsMonthYear(minDatesSig()!.required) : '?',
+                      bis: maxDateSig() ? printDateAsMonthYear(maxDateSig()!) : '?',
+                    }
+            }}</span>
+          </div>
         </div>
-      </div>
 
-      <!-- ADD -->
-      <div class="row">
-        <div class="col-12 col-xl-8 my-3">
-          <div class="row add-buttons">
-            <div class="col-6 my-3">
-              @if (!viewSig().readonly) {
+        <!-- ADD -->
+        <div class="row">
+          <div class="col-12 col-xl-8 my-3">
+            <div class="row add-buttons">
+              <div class="col-6 my-3">
                 <button
                   type="button"
                   class="btn btn-outline-info w-100 d-flex flex-column align-items-center rounded-2 fs-5"
@@ -45,10 +45,8 @@
                   <i class="material-symbols-rounded fs-1">school</i>
                   {{ 'shared.form.lebenslauf.add.ausbildung' | translate }}
                 </button>
-              }
-            </div>
-            <div class="col-6 my-3">
-              @if (!viewSig().readonly) {
+              </div>
+              <div class="col-6 my-3">
                 <button
                   type="button"
                   class="btn btn-outline-dark w-100 d-flex flex-column align-items-center rounded-2 fs-5"
@@ -58,11 +56,11 @@
                   <i class="material-symbols-rounded fs-1">work</i>
                   {{ 'shared.form.lebenslauf.add.taetigkeit' | translate }}
                 </button>
-              }
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      }
 
       <!-- visual -->
       @if (viewSig().lebenslaufItems; as items) {

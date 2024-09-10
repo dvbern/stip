@@ -44,6 +44,7 @@ const initialState: GesuchsperiodeState = {
 
 @Injectable()
 export class GesuchsperiodeStore extends signalStore(
+  { protectedState: false },
   withState(initialState),
   withDevtools('GesuchsperiodeStore'),
 ) {

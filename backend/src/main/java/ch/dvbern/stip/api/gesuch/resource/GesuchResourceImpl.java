@@ -8,7 +8,6 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
-import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -75,16 +74,16 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getGesuch(UUID gesuchId) {
-        var gesuch = gesuchService.findGesuch(gesuchId).orElseThrow(NotFoundException::new);
+    public Response getCurrentGesuch(UUID gesuchId) {
+        var gesuch = gesuchService.findGesuchWithCurrentTranche(gesuchId).orElseThrow(NotFoundException::new);
         return Response.ok(gesuch).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getGesuchDokumente(UUID gesuchId) {
-        var gesuchDokumente = gesuchService.getAndCheckGesuchDokumentsForGesuch(gesuchId);
-        return Response.ok(gesuchDokumente).build();
+    public Response getGesuch(UUID gesuchId, UUID gesuchTrancheId) {
+        var gesuch = gesuchService.findGesuchWithTranche(gesuchId, gesuchTrancheId).orElseThrow(NotFoundException::new);
+        return Response.ok(gesuch).build();
     }
 
     @RolesAllowed({ GESUCH_READ})
@@ -107,13 +106,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getRequiredGesuchDokumentTyp(UUID gesuchId) {
-        final var requiredTypes = gesuchService.getRequiredDokumentTypes(gesuchId);
-        return Response.ok(requiredTypes).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
     public Response getStatusProtokoll(UUID gesuchId) {
         final var statusprotokoll = gesuchHistoryService.getStatusprotokoll(gesuchId);
         return Response.ok(statusprotokoll).build();
@@ -128,27 +120,21 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response validateGesuchPages(UUID gesuchId) {
-        return Response.ok(gesuchService.validatePages(gesuchId)).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
     public Response getBerechnungForGesuch(UUID gesuchId) {
         return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
+    @RolesAllowed(GESUCH_READ)
     @Override
-    public Response createAenderungsantrag(UUID gesuchId, AenderungsantragCreateDto aenderungsantragCreateDto) {
-        final var gesuchDto = gesuchService.createAenderungsantrag(gesuchId, aenderungsantragCreateDto);
-        return Response.ok(gesuchDto).build();
+    public Response getGsTrancheChanges(UUID aenderungId) {
+        final var changes = gesuchService.getGsTrancheChanges(aenderungId);
+        return Response.ok(changes).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getAenderungsantrag(UUID gesuchId) {
-        final var gesuchDto = gesuchService.getAenderungsantrag(gesuchId);
-        return Response.ok(gesuchDto).build();
+    public Response getSbTrancheChanges(UUID aenderungId) {
+        final var changes = gesuchService.getSbTrancheChanges(aenderungId);
+        return Response.ok(changes).build();
     }
 }

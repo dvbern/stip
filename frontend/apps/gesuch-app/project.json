@@ -30,7 +30,7 @@
         "outputPath": "dist/apps/gesuch-app",
         "index": "apps/gesuch-app/src/index.html",
         "browser": "apps/gesuch-app/src/main.ts",
-        "polyfills": ["zone.js", "apps/gesuch-app/src/polyfills.ts"],
+        "polyfills": ["@angular/localize/init", "zone.js"],
         "tsConfig": "apps/gesuch-app/tsconfig.app.json",
         "assets": [
           {

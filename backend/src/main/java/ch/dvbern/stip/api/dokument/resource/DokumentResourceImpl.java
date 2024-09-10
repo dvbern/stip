@@ -40,6 +40,8 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -52,14 +54,20 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchId) {
-        List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchId, dokumentTyp);
+    public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+        List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchTrancheId, dokumentTyp);
         return Response.ok(dokumentDtoList).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGesuchDokumentKommentare(DokumentTyp dokumentTyp, UUID gesuchId) {
+        return Response.ok().entity(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchId, dokumentTyp)).build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchId, FileUpload fileUpload) {
+    public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
         if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
@@ -73,7 +81,7 @@ public class DokumentResourceImpl implements DokumentResource {
             .completionStage(() -> gesuchDokumentService.getCreateDokumentFuture(objectId, fileUpload))
             .onItem()
             .invoke(() -> gesuchDokumentService.uploadDokument(
-                gesuchId,
+                gesuchTrancheId,
                 dokumentTyp,
                 fileUpload,
                 objectId
@@ -140,18 +148,12 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_DELETE)
     @Override
     @Blocking
-    public Uni<Response> deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
-        final var dokumentObjectId = gesuchDokumentService.deleteDokument(dokumentId);
-
-        return Uni.createFrom().completionStage(() -> gesuchDokumentService.getDeleteDokumentFuture(dokumentObjectId))
-            .onItem()
-            .ignore()
-            .andSwitchTo(Uni.createFrom().item(Response.noContent().build()))
-            .onFailure()
-            .recoverWithItem(Response.serverError().build());
+    public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
+        gesuchDokumentService.removeDokument(dokumentId);
+        return Response.ok().build();
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
+    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
     @Override
     public Response gesuchDokumentAblehnen(
         UUID gesuchDokumentId,
@@ -161,7 +163,7 @@ public class DokumentResourceImpl implements DokumentResource {
         return Response.ok().build();
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
+    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
     @Override
     public Response gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);

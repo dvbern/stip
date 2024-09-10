@@ -1,8 +1,9 @@
 package ch.dvbern.stip.berechnung.service;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,17 +15,20 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
+import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.FamilienBudgetresultatMapper;
 import ch.dvbern.stip.berechnung.dto.PersoenlichesBudgetResultatMapper;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
 import ch.dvbern.stip.berechnung.util.DmnRequestContextUtil;
+import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
@@ -33,7 +37,6 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kie.api.io.Resource;
@@ -53,6 +56,7 @@ public class BerechnungService {
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
     private final Instance<PersoenlichesBudgetResultatMapper> persoenlichesBudgetResultatMappers;
     private final Instance<FamilienBudgetresultatMapper> familienBudgetresultatMappers;
+    private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final DMNService dmnService;
     private final TenantService tenantService;
 
@@ -84,7 +88,9 @@ public class BerechnungService {
         }).findFirst();
 
         if (mapper.isEmpty()) {
-            throw new IllegalArgumentException("Cannot find a PersoenlichesBudgetResultatMapper for version " + majorVersion + '.' + minorVersion);
+            throw new IllegalArgumentException(
+                "Cannot find a PersoenlichesBudgetResultatMapper for version " + majorVersion + '.' + minorVersion
+            );
         }
         final var decisionResults = berechnungResult.getDecisionEventList().stream().filter(
             afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("PersoenlichesbudgetBerechnet")
@@ -115,6 +121,7 @@ public class BerechnungService {
         final DmnRequest berechnungRequest,
         final BerechnungResult berechnungResult,
         final SteuerdatenTyp steuerdatenTyp,
+        final BigDecimal kinderProzente,
         final int budgetToUse,
         final int majorVersion,
         final int minorVersion
@@ -127,7 +134,9 @@ public class BerechnungService {
         }).findFirst();
 
         if (mapper.isEmpty()) {
-            throw new IllegalArgumentException("Cannot find a FamilienBudgetresultatMapper for version " + majorVersion + '.' + minorVersion);
+            throw new IllegalArgumentException(
+                "Cannot find a FamilienBudgetresultatMapper for version " + majorVersion + '.' + minorVersion
+            );
         }
         final var decisionResults = berechnungResult.getDecisionEventList().stream().filter(
             afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("Familienbudget_" + budgetToUse)
@@ -158,12 +167,73 @@ public class BerechnungService {
             budgetToUse,
             einnahmenFamilienbudget,
             ausgabenFamilienbudget,
-            familienbudgetBerechnet
+            familienbudgetBerechnet,
+            kinderProzente
         );
     }
 
-    public BerechnungsresultatDto getBerechnungsResultatFromGesuch(final Gesuch gesuch, final int majorVersion, final int minorVersion) {
-        final var gesuchTranche = gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new);
+    private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(
+        final DmnRequest berechnungRequest,
+        final int majorVersion,
+        final int minorVersion
+    ) {
+        final var mapper = berechnungsStammdatenMappers.stream().filter(berechnungsStammdatenMapper -> {
+            final var versionAnnotation = berechnungsStammdatenMapper.getClass().getAnnotation(DmnModelVersion.class);
+            return (versionAnnotation != null) &&
+                (versionAnnotation.major() == majorVersion) &&
+                (versionAnnotation.minor() == minorVersion);
+        }).findFirst();
+
+        if (mapper.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Cannot find a BerechnungsStammdatenMapper for version " + majorVersion + '.' + minorVersion
+            );
+        }
+
+        return mapper.get().mapFromRequest(berechnungRequest);
+    }
+
+    private int calcMonthsBetween(final LocalDate from, final LocalDate to) {
+        return (int) ChronoUnit.MONTHS.between(
+            from,
+            to.plusDays(1)
+        );
+    }
+
+    public List<BerechnungsresultatDto> getBerechnungsresultateFromGesuch(
+        final Gesuch gesuch,
+        final int majorVersion,
+        final int minorVersion
+    ) {
+        final var gesuchStatusToFilterFor = List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN);
+        final var gesuchTranchen = gesuch.getGesuchTranchen().stream().filter(gesuchTranche -> gesuchStatusToFilterFor.contains(gesuchTranche.getStatus())).toList();
+
+        List<BerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
+        for (final var gesuchTranche : gesuchTranchen) {
+            final var berechnungsresultat = getBerechnungsresultatFromGesuchTranche(
+                gesuchTranche,
+                majorVersion,
+                minorVersion
+            );
+
+            final var monthsValid = calcMonthsBetween(
+                gesuchTranche.getGueltigkeit().getGueltigAb(),
+                gesuchTranche.getGueltigkeit().getGueltigBis()
+            );
+            berechnungsresultat.setBerechnung(
+                (berechnungsresultat.getBerechnung() * monthsValid / 12)
+            );
+            berechnungsresultate.add(berechnungsresultat);
+        }
+        return berechnungsresultate;
+    }
+
+    public BerechnungsresultatDto getBerechnungsresultatFromGesuchTranche(
+        final GesuchTranche gesuchTranche,
+        final int majorVersion,
+        final int minorVersion
+    ) {
+        final var gesuch = gesuchTranche.getGesuch();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         // Use DMN model simply to get the number of budgets required. Bit overkill to do it for both parents but may serve as sanity check.
         final var personenImHaushaltRequestForVater = personenImHaushaltService.getPersonenImHaushaltRequest(
@@ -201,6 +271,7 @@ public class BerechnungService {
         // If only one budget is required then there is no need to calculate the proportional stipendium based on the kids in the houshold. So we just take the one of the father
         var berechnung = stipendienCalculatedForVater.getStipendien();
         BerechnungRequestV1 stipendienBerechnungsRequestForMutter = null;
+        List<BigDecimal> kinderProzenteList = List.of(BigDecimal.valueOf(personenImHaushaltForVater.getKinderImHaushalt1()), BigDecimal.ZERO);
         if (noBudgetsRequired > 1) {
             stipendienBerechnungsRequestForMutter = (BerechnungRequestV1) getBerechnungRequest(
                 majorVersion,
@@ -248,16 +319,17 @@ public class BerechnungService {
             }
             // If all kids have their own living arrangement the calcualtion is moot and would lead to a /0 error. So we just the previously assigned value
             if (noKinderOhneEigenenHaushalt > 0) {
+                kinderProzenteList = List.of(kinderProzenteVater, kinderProzenteMutter);
                 // Calculate the relative percentage (i.e. how much of all kids live with each parent)
-                kinderProzenteVater = kinderProzenteVater.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt)).round(new MathContext(2, RoundingMode.HALF_UP));
-                kinderProzenteMutter = kinderProzenteMutter.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt)).round(new MathContext(2, RoundingMode.HALF_UP));
+                final BigDecimal kinderProzenteVaterNormalized = kinderProzenteVater.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP);
+                final BigDecimal kinderProzenteMutterNormalized = kinderProzenteMutter.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP);
 
                 // Calculate the total stipendien amount based on the respective amounts and their relative kid percentages.
                 berechnung =
-                    kinderProzenteVater.multiply(BigDecimal.valueOf(stipendienCalculatedForVater.getStipendien())
-                        .divide(BigDecimal.valueOf(100))).round(new MathContext(2, RoundingMode.HALF_UP)).intValue()
-                        + kinderProzenteMutter.multiply(BigDecimal.valueOf(stipendienCalculatedForMutter.getStipendien())
-                        .divide(BigDecimal.valueOf(100))).round(new MathContext(2, RoundingMode.HALF_UP)).intValue();
+                    kinderProzenteVaterNormalized.multiply(BigDecimal.valueOf(stipendienCalculatedForVater.getStipendien())
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).intValue()
+                    + kinderProzenteMutterNormalized.multiply(BigDecimal.valueOf(stipendienCalculatedForMutter.getStipendien())
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).intValue();
             }
         } else {
             // If there is only one budget.
@@ -271,12 +343,14 @@ public class BerechnungService {
         List<FamilienBudgetresultatDto> familienBudgetresultatList = new ArrayList<>();
         while (steuerdatenListIterator.hasNext()) {
             final Steuerdaten steuerdaten = steuerdatenListIterator.next();
+            final int budgetIndex = steuerdatenListIterator.nextIndex();
             familienBudgetresultatList.add(
                 familienBudgetresultatFromRequest(
                     stipendienBerechnungsRequestForVater,
                     stipendienCalculatedForVater,
                     steuerdaten.getSteuerdatenTyp(),
-                    steuerdatenListIterator.nextIndex(),
+                    kinderProzenteList.get(budgetIndex - 1),
+                    budgetIndex,
                     majorVersion,
                     minorVersion
                 )
@@ -285,6 +359,13 @@ public class BerechnungService {
 
         return new BerechnungsresultatDto(
             berechnung,
+            gesuchTranche.getGueltigkeit().getGueltigAb(),
+            gesuchTranche.getGueltigkeit().getGueltigBis(),
+            berechnungsStammdatenFromRequest(
+                stipendienBerechnungsRequestForVater,
+                majorVersion,
+                minorVersion
+            ),
             persoenlichesBudgetresultatFromRequest(
                 stipendienBerechnungsRequestForVater,
                 stipendienCalculatedForVater,

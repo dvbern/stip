@@ -10,8 +10,8 @@ import {
   PersonInAusbildung,
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
-import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { mockElementScrollIntoView } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormEinnahmenkostenComponent } from './shared-feature-gesuch-form-einnahmenkosten.component';
@@ -37,6 +37,11 @@ async function setup(gesuchFormular: GesuchFormularUpdate) {
               },
             },
             gesuchFormular,
+            cache: {
+              gesuch: null,
+              gesuchId: null,
+              gesuchFormular: null,
+            },
           },
           language: { language: 'de' },
           configs: {},

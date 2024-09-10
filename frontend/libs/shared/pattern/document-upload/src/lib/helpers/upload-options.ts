@@ -24,26 +24,20 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
     'shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_MUTTER',
   FAMILIENSITUATION_TRENNUNGSKONVENTION:
     'shared.form.familiensituation.file.TRENNUNGSKONVENTION',
-  ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER:
-    'shared.form.eltern.file.LOHNABRECHNUNG_VERMOEGEN_VATER',
-  ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER:
-    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER',
-  ELTERN_ERGAENZUNGSLEISTUNGEN_VATER:
+  STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER:
+    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
+  STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER:
+    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
+  STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE:
+    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
+  STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER:
     'shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_VATER',
-  ELTERN_SOZIALHILFEBUDGET_VATER:
+  STEUERDATEN_SOZIALHILFEBUDGET_VATER:
     'shared.form.eltern.file.SOZIALHILFEBUDGET_VATER',
-  ELTERN_STEUERUNTERLAGEN_VATER:
-    'shared.form.eltern.file.STEUERUNTERLAGEN_VATER',
-  ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER:
-    'shared.form.eltern.file.LOHNABRECHNUNG_VERMOEGEN_MUTTER',
-  ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER:
-    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER',
-  ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER:
+  STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER:
     'shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_MUTTER',
-  ELTERN_SOZIALHILFEBUDGET_MUTTER:
+  STEUERDATEN_SOZIALHILFEBUDGET_MUTTER:
     'shared.form.eltern.file.SOZIALHILFEBUDGET_MUTTER',
-  ELTERN_STEUERUNTERLAGEN_MUTTER:
-    'shared.form.eltern.file.STEUERUNTERLAGEN_MUTTER',
   GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE:
     'shared.form.geschwister.file.AUSBILDUNGSSTAETTE',
   KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION:
@@ -76,8 +70,9 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
  * Factory function to create a computed signal that returns an upload options object for a given view
  *
  * The view should have the following properties:
- * - **gesuchId**:   string | undefined
- * - **allowTypes**: string | undefined
+ * - **gesuchTrancheId**: string | undefined
+ * - **allowTypes**:      string | undefined
+ * - **readonly**:        boolean
  *
  * @example
  * ```typescript
@@ -102,7 +97,7 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
  */
 export function createUploadOptionsFactory<
   T extends Signal<{
-    gesuchId: string | undefined;
+    trancheId: string | undefined;
     allowTypes: string | undefined;
     readonly: boolean;
   }>,
@@ -129,17 +124,17 @@ export function createUploadOptionsFactory<
     options?: { singleUpload?: boolean; initialDocuments?: Dokument[] },
   ) => {
     return computed<DocumentOptions | null>(() => {
-      const gesuchId = view().gesuchId;
+      const trancheId = view().trancheId;
       const allowTypes = view().allowTypes;
       const readonly = view().readonly;
       const dokumentTyp = lazyDokumentTyp(view);
-      return dokumentTyp && gesuchId && allowTypes
+      return dokumentTyp && trancheId && allowTypes
         ? {
             allowTypes,
             titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
             dokumentTyp,
             singleUpload: options?.singleUpload ?? false,
-            gesuchId,
+            trancheId,
             initialDocuments: options?.initialDocuments,
             readonly,
           }
@@ -149,7 +144,7 @@ export function createUploadOptionsFactory<
 }
 
 export function createDocumentOptions(options: {
-  gesuchId: string;
+  trancheId: string;
   allowTypes: string;
   dokumentTyp: DokumentTyp;
   initialDocuments?: Dokument[];
@@ -157,7 +152,7 @@ export function createDocumentOptions(options: {
   readonly: boolean;
 }): DocumentOptions {
   const {
-    gesuchId,
+    trancheId,
     allowTypes,
     dokumentTyp,
     initialDocuments,
@@ -169,7 +164,7 @@ export function createDocumentOptions(options: {
     titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
     dokumentTyp,
     singleUpload: singleUpload ?? false,
-    gesuchId,
+    trancheId,
     initialDocuments,
     readonly,
   };

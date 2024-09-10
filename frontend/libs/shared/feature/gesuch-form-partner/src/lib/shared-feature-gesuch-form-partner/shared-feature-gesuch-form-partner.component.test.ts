@@ -7,7 +7,7 @@ import { userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { GesuchFormular, PartnerUpdate } from '@dv/shared/model/gesuch';
-import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
+import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { checkMatCheckbox } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormPartnerComponent } from './shared-feature-gesuch-form-partner.component';

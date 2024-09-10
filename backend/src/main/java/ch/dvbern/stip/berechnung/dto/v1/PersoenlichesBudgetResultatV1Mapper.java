@@ -1,5 +1,7 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
@@ -24,20 +26,50 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
     ) {
         final BerechnungRequestV1 berechnungsRequest = (BerechnungRequestV1) request;
         final var antragssteller = berechnungsRequest.getInputPersoenlichesBudget().antragssteller;
+        final var stammdaten = berechnungsRequest.getStammdaten();
+
+        var einkommen = antragssteller.getEinkommen();
+        if (antragssteller.isTertiaerstufe()) {
+            einkommen -= stammdaten.getEinkommensfreibetrag();
+            einkommen = Integer.max(einkommen, 0);
+        }
+        var verpflegung = 0;
+        if (!antragssteller.isEigenerHaushalt()) {
+            final var wochenProJahr =
+                berechnungsRequest.getInputPersoenlichesBudget().antragssteller.isLehre()
+                    ? stammdaten.getAnzahlWochenLehre()
+                    : stammdaten.getAnzahlWochenSchule();
+            verpflegung = antragssteller.getVerpflegung() * wochenProJahr * stammdaten.getPreisProMahlzeit();
+        }
+
+        final int anzahlPersonenImHaushalt = antragssteller.getAnzahlPersonenImHaushalt();
+        int fahrkosten = antragssteller.getFahrkosten();
+        int ausbildungskosten = antragssteller.getAusbildungskosten();
+
+        if (antragssteller.isVerheiratetKonkubinat()) {
+            fahrkosten *= anzahlPersonenImHaushalt;
+            ausbildungskosten *= anzahlPersonenImHaushalt;
+
+        }
 
         return new PersoenlichesBudgetresultatDto()
-            .anzahlPersonenImHaushalt(antragssteller.getAnzahlPersonenImHaushalt())
+            .anzahlPersonenImHaushalt(anzahlPersonenImHaushalt)
             .anteilLebenshaltungskosten(
                 getAnteilLebenshaltungskosten(familienBudgetresultatList, antragssteller)
             )
             .eigenerHaushalt(antragssteller.isEigenerHaushalt())
-            .einkommen(antragssteller.getEinkommen())
+            .einkommen(einkommen)
+            .alimente(antragssteller.getAlimente())
             .leistungenEO(antragssteller.getLeistungenEO())
             .rente(antragssteller.getRente())
             .kinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagen())
             .ergaenzungsleistungen(antragssteller.getErgaenzungsleistungen())
             .gemeindeInstitutionen(antragssteller.getGemeindeInstitutionen())
-            .vermoegen(antragssteller.getVermoegen())
+            .steuerbaresVermoegen(antragssteller.getVermoegen())
+            .anrechenbaresVermoegen(
+                BigDecimal.valueOf(antragssteller.getVermoegen() * 0.15) // TODO: KSTIP-1362, Stammdaten aus request lesen)
+                    .setScale(0, RoundingMode.HALF_UP).intValue()
+            )
             .anteilFamilienbudget(
                 getAnteilFamilienBudget(familienBudgetresultatList, antragssteller)
             )
@@ -47,12 +79,12 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             .wohnkosten(antragssteller.getWohnkosten())
             .medizinischeGrundversorgung(antragssteller.getMedizinischeGrundversorgung())
             .steuernKantonGemeinde(antragssteller.getSteuern())
-            .fahrkosten(antragssteller.getFahrkosten())
+            .fahrkosten(fahrkosten)
             .fahrkostenPartner(antragssteller.getFahrkostenPartner())
-            .verpflegung(antragssteller.getVerpflegung())
+            .verpflegung(verpflegung)
             .verpflegungPartner(antragssteller.getVerpflegungPartner())
             .fremdbetreuung(antragssteller.getFremdbetreuung())
-            .ausbildungskosten(antragssteller.getAusbildungskosten())
+            .ausbildungskosten(ausbildungskosten)
             .ausgabenPersoenlichesBudget(ausgabenPersoenlichesBudget)
             .persoenlichesbudgetBerechnet(persoenlichesbudgetBerechnet);
     }

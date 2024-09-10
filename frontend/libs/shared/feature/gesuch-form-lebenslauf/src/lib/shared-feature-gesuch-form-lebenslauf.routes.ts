@@ -7,6 +7,7 @@ import {
   gesuchAppDataAccessAusbildungsstaettesFeature,
 } from '@dv/shared/data-access/ausbildungsstaette';
 import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
+import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
 import { SharedFeatureGesuchFormLebenslaufComponent } from './shared-feature-gesuch-form-lebenslauf/shared-feature-gesuch-form-lebenslauf.component';
 
@@ -20,16 +21,17 @@ export const gesuchAppFeatureGesuchFormLebenslaufRoutes: Route[] = [
       provideEffects(gesuchAppDataAccessAusbildungsstaetteEffects),
     ],
     children: [
-      routeWithUnsavedChangesGuard({
-        path: ':id',
-        title: 'shared.lebenslauf.title',
-        component: SharedFeatureGesuchFormLebenslaufComponent,
-        runGuardsAndResolvers: 'always',
-        data: {
-          // reinitialize when navigated to the same route
-          shouldReuseRoute: false,
-        },
-      }),
+      ...idAndTrancheIdRoutes(
+        routeWithUnsavedChangesGuard({
+          title: 'shared.lebenslauf.title',
+          component: SharedFeatureGesuchFormLebenslaufComponent,
+          runGuardsAndResolvers: 'always',
+          data: {
+            // reinitialize when navigated to the same route
+            shouldReuseRoute: false,
+          },
+        }),
+      ),
     ],
   },
 ];

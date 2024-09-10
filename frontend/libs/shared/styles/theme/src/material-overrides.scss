@@ -7,19 +7,19 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$gesuch-app-primary: mat.define-palette(mat.$blue-grey-palette);
-$gesuch-app-accent: mat.define-palette(mat.$blue-palette, A200, A100, A400);
+$gesuch-app-primary: mat.m2-define-palette(mat.$m2-blue-grey-palette);
+$gesuch-app-accent: mat.m2-define-palette(mat.$m2-blue-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to yellow).
-$gesuch-app-success: mat.define-palette(dvColors.$md-dv-success);
-$gesuch-app-caution: mat.define-palette(dvColors.$md-dv-caution);
-$gesuch-app-warn: mat.define-palette(dvColors.$md-dv-warn);
-$gesuch-app-info: mat.define-palette(dvColors.$md-dv-info);
+$gesuch-app-success: mat.m2-define-palette(dvColors.$md-dv-success);
+$gesuch-app-caution: mat.m2-define-palette(dvColors.$md-dv-caution);
+$gesuch-app-warn: mat.m2-define-palette(dvColors.$md-dv-warn);
+$gesuch-app-info: mat.m2-define-palette(dvColors.$md-dv-info);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
 $gesuch-app-theme: map.deep-merge(
-  mat.define-light-theme(
+  mat.m2-define-light-theme(
     (
       color: (
         primary: $gesuch-app-primary,
@@ -138,10 +138,10 @@ form .readonly {
   width: 100%;
 }
 .mat-mdc-radio-group.ng-invalid.ng-touched .mat-mdc-radio-button {
-  --mdc-radio-unselected-icon-color: #{mat.get-color-from-palette(
+  --mdc-radio-unselected-icon-color: #{mat.m2-get-color-from-palette(
       $gesuch-app-warn
     )};
-  --mdc-radio-unselected-focus-icon-color: #{mat.get-color-from-palette(
+  --mdc-radio-unselected-focus-icon-color: #{mat.m2-get-color-from-palette(
       $gesuch-app-warn
     )};
 }
@@ -184,8 +184,8 @@ $dv-custom-colors: (
   @each $name, $color in $dv-custom-colors {
     &.mat-#{$name}:not([disabled]),
     & .mat-#{$name}:not([disabled]) {
-      $base-color: mat.get-color-from-palette($color, 500);
-      $contrast-color: mat.get-color-from-palette($color, 500-contrast);
+      $base-color: mat.m2-get-color-from-palette($color, 500);
+      $contrast-color: mat.m2-get-color-from-palette($color, 500-contrast);
       background-color: $base-color;
       color: $contrast-color;
       --mdc-chip-label-text-color: #{$contrast-color};
@@ -193,8 +193,8 @@ $dv-custom-colors: (
     }
     &.mat-#{$name}[disabled],
     & .mat-#{$name}[disabled] {
-      $contrast-color: mat.get-color-from-palette($color, 100-contrast);
-      background-color: mat.get-color-from-palette($color, 100);
+      $contrast-color: mat.m2-get-color-from-palette($color, 100-contrast);
+      background-color: mat.m2-get-color-from-palette($color, 100);
       color: $contrast-color;
       --mdc-chip-disabled-label-text-color: #{$contrast-color};
     }
@@ -213,8 +213,8 @@ $dv-all-colors: (
 .cdk-overlay-container {
   @each $name, $color in $dv-all-colors {
     .mat-#{$name} {
-      $base-color: mat.get-color-from-palette($color, 500);
-      $mild-color: mat.get-color-from-palette($color, 100);
+      $base-color: mat.m2-get-color-from-palette($color, 500);
+      $mild-color: mat.m2-get-color-from-palette($color, 100);
       --mdc-snackbar-container-color: #{$base-color};
       --mdc-linear-progress-active-indicator-color: #{$base-color};
       --mdc-linear-progress-track-color: #{$mild-color};
@@ -235,7 +235,7 @@ $dv-all-colors: (
 }
 
 .mat-mdc-form-field-hint.mat-caution {
-  color: mat.get-color-from-palette($gesuch-app-caution, 500);
+  color: mat.m2-get-color-from-palette($gesuch-app-caution, 500);
 }
 
 .info-dialog-columnar {

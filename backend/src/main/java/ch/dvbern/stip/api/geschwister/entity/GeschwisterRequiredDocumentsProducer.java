@@ -29,6 +29,6 @@ public class GeschwisterRequiredDocumentsProducer implements RequiredDocumentPro
             requiredDocs.add(DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
         }
 
-        return ImmutablePair.of("geschwister", requiredDocs);
+        return ImmutablePair.of("geschwisters", requiredDocs);
     }
 }

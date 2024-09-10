@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.dokument.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,11 +17,15 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import io.smallrye.mutiny.Uni;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -41,6 +46,9 @@ import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchDokumentService {
@@ -49,24 +57,31 @@ public class GesuchDokumentService {
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchRepository gesuchRepository;
+    private final GesuchTrancheRepository gesuchTrancheRepository;
     private final S3AsyncClient s3;
     private final ConfigService configService;
     private final DokumentstatusService dokumentstatusService;
 
     @Transactional
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(UUID gesuchDokumentId, DokumentTyp dokumentTyp) {
+        return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchDokumentId,dokumentTyp);
+    }
+
+    @Transactional
     public DokumentDto uploadDokument(
-        final UUID gesuchId,
+        final UUID gesuchTrancheId,
         final DokumentTyp dokumentTyp,
         final FileUpload fileUpload,
         final String objectId
     ) {
-        Gesuch gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+        GesuchTranche gesuchTranche = gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
         GesuchDokument gesuchDokument =
-            gesuchDokumentRepository.findByGesuchAndDokumentType(gesuch.getId(), dokumentTyp).orElseGet(
-                () -> createGesuchDokument(gesuch, dokumentTyp)
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTranche.getId(), dokumentTyp).orElseGet(
+                () -> createGesuchDokument(gesuchTranche, dokumentTyp)
             );
         Dokument dokument = new Dokument();
-        dokument.setGesuchDokument(gesuchDokument);
+        dokument.getGesuchDokumente().add(gesuchDokument);
+        gesuchDokument.getDokumente().add(dokument);
         dokument.setFilename(fileUpload.fileName());
         dokument.setObjectId(objectId);
         dokument.setFilesize(String.valueOf(fileUpload.size()));
@@ -77,9 +92,9 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public List<DokumentDto> findGesuchDokumenteForTyp(final UUID gesuchId, final DokumentTyp dokumentTyp) {
+    public List<DokumentDto> findGesuchDokumenteForTyp(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
         GesuchDokument gesuchDokument =
-            gesuchDokumentRepository.findByGesuchAndDokumentType(gesuchId, dokumentTyp).orElse(null);
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp).orElse(null);
         if (gesuchDokument == null) {
             return new ArrayList<>();
         }
@@ -93,20 +108,17 @@ public class GesuchDokumentService {
         return Optional.ofNullable(dokumentMapper.toDto(dokument));
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
-    public void deleteAllDokumentForGesuchInRepository(final UUID gesuchId) {
-        gesuchDokumentRepository.findAllForGesuch(gesuchId)
-            .forEach(gesuchDokumentRepository::delete);
+    public void removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
+        gesuchRepository.requireById(gesuchId).getGesuchTranchen().forEach(
+            gesuchTranche -> removeAllDokumentsForGesuchTranche(gesuchTranche.getId())
+        );
     }
 
-    @Transactional
-    public List<String> getAllDokumentObjectIdsForGesuch(final UUID gesuchId) {
-        return gesuchDokumentRepository.findAllForGesuch(gesuchId)
-            .map(GesuchDokument::getDokumente)
-            .flatMap(dokuments -> dokuments
-                .stream()
-                .map(Dokument::getObjectId)
-            ).toList();
+    @Transactional(TxType.REQUIRES_NEW)
+    public void removeAllDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
+        gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId).forEach(
+            gesuchDokument -> removeGesuchDokument(gesuchDokument.getId())
+        );
     }
 
     private static void gesuchstatusIsNotOrElseThrow(final Gesuch gesuch, final Gesuchstatus statusToVerify) {
@@ -116,11 +128,11 @@ public class GesuchDokumentService {
             );
         }
     }
-
+    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
         dokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
             DokumentstatusChangeEvent.ABGELEHNT,
@@ -131,16 +143,11 @@ public class GesuchDokumentService {
     @Transactional
     public void gesuchDokumentAkzeptieren(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
         dokumentstatusService.triggerStatusChange(
             gesuchDokument,
             DokumentstatusChangeEvent.AKZEPTIERT
         );
-    }
-
-    public void deleteAllDokumentForGesuch(final UUID gesuchId) {
-        executeDeleteDokumentsFromS3(getAllDokumentObjectIdsForGesuch(gesuchId));
-        deleteAllDokumentForGesuchInRepository(gesuchId);
     }
 
     public CompletableFuture<DeleteObjectsResponse> deleteDokumentsFromS3Blocking(final List<String> objectIds) {
@@ -169,13 +176,56 @@ public class GesuchDokumentService {
             .indefinitely();
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public String deleteDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
-        dokumentRepository.delete(dokument);
-        gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(dokument.getGesuchDokument().getId());
+        for (final var gesuchDokument : dokument.getGesuchDokumente()) {
+            gesuchDokument.getDokumente().remove(dokument);
+            gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
+        }
+        if (dokument.getGesuchDokumente().isEmpty()) {
+            dokumentRepository.delete(dokument);
+        }
+
         return dokumentObjectId;
+    }
+
+    @Transactional
+    public void removeDokument(final UUID dokumentId) {
+        Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+        final var dokumentObjectId = dokument.getObjectId();
+        for (final var gesuchDokument : dokument.getGesuchDokumente()) {
+            gesuchDokument.getDokumente().remove(dokument);
+            gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
+        }
+        if (dokument.getGesuchDokumente().isEmpty()) {
+            dokumentRepository.delete(dokument);
+            executeDeleteDokumentsFromS3(List.of(dokumentObjectId));
+        }
+    }
+
+    @Transactional
+    public void removeGesuchDokument(final UUID gesuchDokumentId) {
+        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        final var dokuments = gesuchDokument.getDokumente();
+
+        List<String> dokumentObjectIds = new ArrayList<>();
+        // Using Iterator to be able to remove while looping
+        for (Iterator<Dokument> iterator = dokuments.iterator(); iterator.hasNext(); ) {
+            final var dokument = iterator.next();
+            iterator.remove();
+            if (dokument.getGesuchDokumente().isEmpty()) {
+                dokumentRepository.delete(dokument);
+                dokumentObjectIds.add(dokument.getObjectId());
+            }
+        }
+        if (gesuchDokument.getDokumente().isEmpty()) {
+            gesuchDokumentRepository.delete(gesuchDokument);
+        }
+        if (!dokumentObjectIds.isEmpty()) {
+            executeDeleteDokumentsFromS3(dokumentObjectIds);
+        }
     }
 
     @Transactional
@@ -260,8 +310,8 @@ public class GesuchDokumentService {
             .build();
     }
 
-    private GesuchDokument createGesuchDokument(final Gesuch gesuch, final DokumentTyp dokumentTyp) {
-        GesuchDokument gesuchDokument = new GesuchDokument().setGesuch(gesuch).setDokumentTyp(dokumentTyp);
+    private GesuchDokument createGesuchDokument(final GesuchTranche gesuchTranche, final DokumentTyp dokumentTyp) {
+        GesuchDokument gesuchDokument = new GesuchDokument().setGesuchTranche(gesuchTranche).setDokumentTyp(dokumentTyp);
         gesuchDokumentRepository.persist(gesuchDokument);
         return gesuchDokument;
     }

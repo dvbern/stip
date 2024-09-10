@@ -30,7 +30,7 @@
         "outputPath": "dist/apps/sachbearbeitung-app",
         "index": "apps/sachbearbeitung-app/src/index.html",
         "browser": "apps/sachbearbeitung-app/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": ["@angular/localize/init", "zone.js"],
         "tsConfig": "apps/sachbearbeitung-app/tsconfig.app.json",
         "assets": [
           {

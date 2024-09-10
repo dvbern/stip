@@ -6,8 +6,8 @@ import { RenderResult, render, within } from '@testing-library/angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { GesuchFormular, PersonInAusbildung } from '@dv/shared/model/gesuch';
-import { provideMaterialDefaultOptions } from '@dv/shared/pattern/angular-material-config';
 import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
+import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person.component';
 import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
@@ -106,6 +106,7 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
       store.overrideSelector(selectSharedFeatureGesuchFormPersonView, {
         loading: false,
         gesuchId: '1',
+        trancheId: '1',
         allowTypes: '',
         gesuch: null,
         gesuchFormular: {
@@ -113,6 +114,7 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
             adresse: {},
           } as PersonInAusbildung,
         } as GesuchFormular,
+        formChanges: null,
         benutzerEinstellungen: {
           digitaleKommunikation: undefined,
         },

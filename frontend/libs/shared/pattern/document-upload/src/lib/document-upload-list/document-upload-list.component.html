@@ -1,7 +1,7 @@
 @if (storeSig().hasEntriesSig()) {
-  <ul class="d-flex flex-column mb-2 list-unstyled">
+  <ul class="d-flex flex-column list-unstyled gap-2 mb-0">
     @for (document of storeSig().documentsView(); track document.file.id) {
-      <li class="mb-2">
+      <li>
         <dv-shared-pattern-document-upload-entry
           [loadingSig]="storeSig().isLoading()"
           [uploadViewSig]="uploadViewSig()"

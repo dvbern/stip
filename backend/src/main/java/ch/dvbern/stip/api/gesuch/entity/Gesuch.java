@@ -8,10 +8,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -82,19 +83,28 @@ public class Gesuch extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
-    private @Valid List<GesuchDokument> gesuchDokuments;
-
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
             .filter(t -> t.getId().equals(id))
             .findFirst();
     }
 
-    public Optional<GesuchTranche> getGesuchTrancheValidOnDate(LocalDate date) {
-        return gesuchTranchen.stream()
-            .filter(t -> t.getGueltigkeit().contains(date))
+    public Optional<GesuchTranche> getTrancheValidOnDate(LocalDate date) {
+        return tranchenValidOnDateStream(date)
+            .filter(tranche -> tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .findFirst();
+    }
+
+    public Optional<GesuchTranche> getAllTranchenValidOnDate(LocalDate date) {
+        return tranchenValidOnDateStream(date).findFirst();
+    }
+
+    private Stream<GesuchTranche> tranchenValidOnDateStream(LocalDate date) {
+        return gesuchTranchen.stream().filter(t -> t.getGueltigkeit().contains(date));
+    }
+
+    public GesuchTranche getCurrentGesuchTranche() {
+        return getAllTranchenValidOnDate(LocalDate.now()).orElseThrow();
     }
 
     public Optional<GesuchTranche> getNewestGesuchTranche() {

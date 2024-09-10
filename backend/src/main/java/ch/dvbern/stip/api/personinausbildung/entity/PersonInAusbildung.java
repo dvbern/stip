@@ -69,8 +69,8 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Setter
 public class PersonInAusbildung extends AbstractFamilieEntity {
     @NotNull
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_adresse_id"), nullable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_person_in_ausbildung_adresse_id"))
     private @Valid Adresse adresse;
 
     @NotNull

@@ -4,6 +4,7 @@ import { libraryGenerator } from '@nx/angular/generators';
 
 import { NormalizedSchema, LibTypeGenerator } from '../generator.interface';
 import { extendEslintJson } from './helpers/eslint';
+import { extendJestConfigSwc, extendTestSetupSwc } from './helpers/swc';
 
 export function utilDataAccessTypeFactory(
   options: NormalizedSchema,
@@ -12,6 +13,12 @@ export function utilDataAccessTypeFactory(
     libGenerator: libraryGenerator,
     libDefaultOptions: {
       skipModule: true,
+      flat: true,
+      style: 'none',
+      skipSelector: true,
+      skipTests: true,
+      inlineStyle: true,
+      inlineTemplate: true,
     },
     generators: [],
     postprocess,
@@ -20,6 +27,9 @@ export function utilDataAccessTypeFactory(
 
 function postprocess(tree: Tree, options: NormalizedSchema) {
   extendEslintJson(tree, 'angular', options);
+  extendTestSetupSwc(tree, options);
+  extendJestConfigSwc(tree, options);
+
   tree.delete(
     path.join(
       options.projectRoot,
@@ -27,6 +37,15 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
       'src',
       'lib',
       options.name + 'service.ts',
+    ),
+  );
+  tree.delete(
+    path.join(
+      options.projectRoot,
+      options.nameDasherized,
+      'src',
+      'lib',
+      options.projectName + '.component.ts',
     ),
   );
   tree.delete(

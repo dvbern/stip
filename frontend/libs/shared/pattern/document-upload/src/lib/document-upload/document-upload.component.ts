@@ -75,13 +75,13 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
 
         this.globalStore.dispatch(
           SharedDataAccessGesuchEvents.gesuchValidateSteps({
-            id: this.optionsSig().gesuchId,
+            gesuchTrancheId: this.optionsSig().trancheId,
           }),
         );
 
         if (initialDocuments) {
           this.dokumentsStore.getDokumenteAndRequired$(
-            this.optionsSig().gesuchId,
+            this.optionsSig().trancheId,
           );
         }
       });

@@ -51,8 +51,8 @@ public class Auszahlung extends AbstractMandantEntity {
     private String nachname;
 
     @NotNull
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_auszahlung_adresse_id"), nullable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_auszahlung_adresse_id"))
     private Adresse adresse;
 
     @NotNull

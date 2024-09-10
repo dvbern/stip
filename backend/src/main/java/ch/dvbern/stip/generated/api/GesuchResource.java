@@ -1,24 +1,12 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
-import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
-
-
-
-import java.io.InputStream;
-import java.util.Map;
-import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
@@ -31,12 +19,6 @@ public interface GesuchResource {
     @Path("/status/in-bearbeitung/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     Response changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
-
-    @POST
-    @Path("/{gesuchId}/aenderungsantrag")
-    @Consumes({ "application/json" })
-    @Produces({ "application/json", "text/plain" })
-    Response createAenderungsantrag(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull AenderungsantragCreateDto aenderungsantragCreateDto);
 
     @POST
     @Consumes({ "application/json" })
@@ -64,24 +46,19 @@ public interface GesuchResource {
     Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/aenderungsantrag")
-    @Produces({ "application/json", "text/plain" })
-    Response getAenderungsantrag(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
     @Path("/{gesuchId}/berechnung")
     @Produces({ "application/json", "text/plain" })
     Response getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}")
+    @Path("/{gesuchId}/current")
     @Produces({ "application/json", "text/plain" })
-    Response getGesuch(@PathParam("gesuchId") UUID gesuchId);
+    Response getCurrentGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/dokumente")
+    @Path("/{gesuchId}/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesuchDokumente(@PathParam("gesuchId") UUID gesuchId);
+    Response getGesuch(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/fall/{fallId}")
@@ -99,9 +76,14 @@ public interface GesuchResource {
     Response getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType);
 
     @GET
-    @Path("/{gesuchId}/requiredDokumente")
+    @Path("/{aenderungId}/aenderung/gs/changes")
     @Produces({ "application/json", "text/plain" })
-    Response getRequiredGesuchDokumentTyp(@PathParam("gesuchId") UUID gesuchId);
+    Response getGsTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
+
+    @GET
+    @Path("/{aenderungId}/aenderung/sb/changes")
+    @Produces({ "application/json", "text/plain" })
+    Response getSbTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
     @Path("/{gesuchId}/statusprotokoll")
@@ -113,9 +95,4 @@ public interface GesuchResource {
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     Response updateGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
-
-    @GET
-    @Path("/validatePages/{gesuchId}")
-    @Produces({ "application/json" })
-    Response validateGesuchPages(@PathParam("gesuchId") UUID gesuchId);
 }

@@ -31,7 +31,7 @@ export const prepareGesuchsperiode = <T extends GesuchsperiodeDateProperties>(
 ) => ({
   ...periode,
   semester:
-    getMonth(Date.parse(periode.gesuchsperiodeStart)) === 7
+    getMonth(Date.parse(periode.gesuchsperiodeStart)) === 6
       ? GesuchsperiodeSemester.HERBST
       : GesuchsperiodeSemester.FRUEHLING,
   yearsLabel: [

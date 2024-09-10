@@ -1,10 +1,8 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
-import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -12,9 +10,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Resultat der Berechnung (eine Tranche)
@@ -27,6 +22,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer berechnung;
+  private @Valid LocalDate gueltigAb;
+  private @Valid LocalDate gueltigBis;
+  private @Valid BerechnungsStammdatenDto berechnungsStammdaten;
   private @Valid PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
   private @Valid List<FamilienBudgetresultatDto> familienBudgetresultate = new ArrayList<>();
 
@@ -38,7 +36,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("berechnung")
   @NotNull
   public Integer getBerechnung() {
@@ -52,12 +50,69 @@ public class BerechnungsresultatDto  implements Serializable {
 
   /**
    **/
+  public BerechnungsresultatDto gueltigAb(LocalDate gueltigAb) {
+    this.gueltigAb = gueltigAb;
+    return this;
+  }
+
+
+  @JsonProperty("gueltigAb")
+  @NotNull
+  public LocalDate getGueltigAb() {
+    return gueltigAb;
+  }
+
+  @JsonProperty("gueltigAb")
+  public void setGueltigAb(LocalDate gueltigAb) {
+    this.gueltigAb = gueltigAb;
+  }
+
+  /**
+   **/
+  public BerechnungsresultatDto gueltigBis(LocalDate gueltigBis) {
+    this.gueltigBis = gueltigBis;
+    return this;
+  }
+
+
+  @JsonProperty("gueltigBis")
+  @NotNull
+  public LocalDate getGueltigBis() {
+    return gueltigBis;
+  }
+
+  @JsonProperty("gueltigBis")
+  public void setGueltigBis(LocalDate gueltigBis) {
+    this.gueltigBis = gueltigBis;
+  }
+
+  /**
+   **/
+  public BerechnungsresultatDto berechnungsStammdaten(BerechnungsStammdatenDto berechnungsStammdaten) {
+    this.berechnungsStammdaten = berechnungsStammdaten;
+    return this;
+  }
+
+
+  @JsonProperty("berechnungsStammdaten")
+  @NotNull
+  public BerechnungsStammdatenDto getBerechnungsStammdaten() {
+    return berechnungsStammdaten;
+  }
+
+  @JsonProperty("berechnungsStammdaten")
+  public void setBerechnungsStammdaten(BerechnungsStammdatenDto berechnungsStammdaten) {
+    this.berechnungsStammdaten = berechnungsStammdaten;
+  }
+
+  /**
+   **/
   public BerechnungsresultatDto persoenlichesBudgetresultat(PersoenlichesBudgetresultatDto persoenlichesBudgetresultat) {
     this.persoenlichesBudgetresultat = persoenlichesBudgetresultat;
     return this;
   }
 
-  
+
   @JsonProperty("persoenlichesBudgetresultat")
   @NotNull
   public PersoenlichesBudgetresultatDto getPersoenlichesBudgetresultat() {
@@ -77,7 +132,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("familienBudgetresultate")
   @NotNull
   public List<FamilienBudgetresultatDto> getFamilienBudgetresultate() {
@@ -116,21 +171,27 @@ public class BerechnungsresultatDto  implements Serializable {
     }
     BerechnungsresultatDto berechnungsresultat = (BerechnungsresultatDto) o;
     return Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
+        Objects.equals(this.gueltigAb, berechnungsresultat.gueltigAb) &&
+        Objects.equals(this.gueltigBis, berechnungsresultat.gueltigBis) &&
+        Objects.equals(this.berechnungsStammdaten, berechnungsresultat.berechnungsStammdaten) &&
         Objects.equals(this.persoenlichesBudgetresultat, berechnungsresultat.persoenlichesBudgetresultat) &&
         Objects.equals(this.familienBudgetresultate, berechnungsresultat.familienBudgetresultate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(berechnung, gueltigAb, gueltigBis, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BerechnungsresultatDto {\n");
-    
+
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
+    sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
+    sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");
     sb.append("    persoenlichesBudgetresultat: ").append(toIndentedString(persoenlichesBudgetresultat)).append("\n");
     sb.append("    familienBudgetresultate: ").append(toIndentedString(familienBudgetresultate)).append("\n");
     sb.append("}");

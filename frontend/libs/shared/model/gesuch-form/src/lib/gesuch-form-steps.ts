@@ -2,6 +2,7 @@ import {
   DokumentTyp,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
+  SteuerdatenSteps,
   SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
@@ -11,6 +12,13 @@ import {
   StepState,
   StepValidation,
 } from './shared-model-gesuch-form';
+
+export const TRANCHE: SharedModelGesuchFormStep = {
+  route: 'tranche',
+  translationKey: 'shared.tranche.title',
+  titleTranslationKey: 'shared.nothing',
+  iconSymbolName: 'info',
+} satisfies SharedModelGesuchFormStep;
 
 export const PERSON = {
   route: 'person',
@@ -157,6 +165,26 @@ export const gesuchFormSteps = {
 };
 export type GesuchFormSteps = keyof typeof gesuchFormSteps;
 
+export const gesuchFormStepsFieldMap: Record<
+  string,
+  SharedModelGesuchFormularProps
+> = {
+  [PERSON.route]: 'personInAusbildung',
+  [AUSBILDUNG.route]: 'ausbildung',
+  [LEBENSLAUF.route]: 'lebenslaufItems',
+  [FAMILIENSITUATION.route]: 'familiensituation',
+  [ELTERN.route]: 'elterns',
+  [ELTERN_STEUER_MUTTER.route]: 'steuerdatenMutter',
+  [ELTERN_STEUER_VATER.route]: 'steuerdatenVater',
+  [ELTERN_STEUER_FAMILIE.route]: 'steuerdaten',
+  [GESCHWISTER.route]: 'geschwisters',
+  [PARTNER.route]: 'partner',
+  [KINDER.route]: 'kinds',
+  [AUSZAHLUNG.route]: 'auszahlung',
+  [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
+  [DOKUMENTE.route]: 'dokuments',
+};
+
 export const findStepIndex = (
   step: SharedModelGesuchFormStep,
   steps: SharedModelGesuchFormStep[],
@@ -165,6 +193,7 @@ export const findStepIndex = (
 export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
   formular: SharedModelGesuchFormular | null,
+  readonly = false,
 ) => {
   if (step === PARTNER) {
     const zivilstand = formular?.personInAusbildung?.zivilstand;
@@ -176,6 +205,14 @@ export const isStepDisabled = (
         Zivilstand.EINGETRAGENE_PARTNERSCHAFT,
       ].includes(zivilstand)
     );
+  }
+  if (step === GESCHWISTER) {
+    const geschwister = formular?.geschwisters;
+    return readonly && (!geschwister || geschwister.length === 0);
+  }
+  if (step === KINDER) {
+    const kinder = formular?.kinds;
+    return readonly && (!kinder || kinder.length === 0);
   }
   if (step === ELTERN) {
     const werZahltAlimente = formular?.familiensituation?.werZahltAlimente;
@@ -208,9 +245,9 @@ export const isStepValid = (
     [LEBENSLAUF.route]: 'lebenslaufItems',
     [FAMILIENSITUATION.route]: 'familiensituation',
     [ELTERN.route]: 'elterns',
-    [ELTERN_STEUER_MUTTER.route]: 'steuerdatenTabs',
-    [ELTERN_STEUER_VATER.route]: 'steuerdatenTabs',
-    [ELTERN_STEUER_FAMILIE.route]: 'steuerdatenTabs',
+    [ELTERN_STEUER_MUTTER.route]: 'steuerdatenMutter',
+    [ELTERN_STEUER_VATER.route]: 'steuerdatenVater',
+    [ELTERN_STEUER_FAMILIE.route]: 'steuerdaten',
     [GESCHWISTER.route]: 'geschwisters',
     [PARTNER.route]: 'partner',
     [KINDER.route]: 'kinds',
@@ -221,8 +258,11 @@ export const isStepValid = (
 
   const field = stepFieldMap[step.route];
 
-  if (field === 'steuerdatenTabs') {
-    const thereAreSteuerdaten = formular?.steuerdaten?.some((data) => !!data);
+  if (!field) {
+    return undefined;
+  }
+
+  if (isSteuerdatenStep(field)) {
     const [stepSteuerdatenTyp] =
       Object.entries(ELTERN_STEUER_STEPS).find(
         ([, s]) => s.route === step.route,
@@ -230,10 +270,10 @@ export const isStepValid = (
     const currentHasDaten = formular?.steuerdaten?.find(
       (s) => s.steuerdatenTyp === stepSteuerdatenTyp,
     );
-    const isValid = thereAreSteuerdaten
+    const isValid = currentHasDaten
       ? toStepState(field, invalidProps)
       : undefined;
-    return currentHasDaten ? 'VALID' : isValid;
+    return isValid; // Mit Juri schauen ob wenn beide da sind auch zwei rückgabewerte kommen
   }
 
   if (field === 'lebenslaufItems') {
@@ -256,18 +296,10 @@ export const getFormStepByDocumentType = (
     case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
       return gesuchFormSteps.DOKUMENTE;
     }
-    case DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER:
-    case DokumentTyp.EK_BELEG_KINDERZULAGEN: {
-      return gesuchFormSteps.EINNAHMEN_KOSTEN;
-    }
-    case DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE: {
-      return gesuchFormSteps.GESCHWISTER;
-    }
-    case DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG:
-    case DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT: {
-      return gesuchFormSteps.PARTNER;
-    }
     default: {
+      if (dokumentTyp.startsWith('STEUERDATEN')) {
+        return ELTERN_STEUER_STEPS[getTypeOfSteuerdatenDokument(dokumentTyp)];
+      }
       const step = (Object.keys(gesuchFormSteps) as GesuchFormSteps[]).find(
         (key) => {
           if (key === 'EINNAHMEN_KOSTEN') {
@@ -316,4 +348,20 @@ const toStepState = (
     return undefined;
   }
   return 'VALID';
+};
+
+const isSteuerdatenStep = (
+  step: SharedModelGesuchFormularProps,
+): step is SteuerdatenSteps => step.startsWith('steuerdaten');
+
+const getTypeOfSteuerdatenDokument = (
+  dokument: DokumentTyp,
+): SteuerdatenTyp => {
+  if (dokument.endsWith('MUTTER')) {
+    return 'MUTTER';
+  }
+  if (dokument.endsWith('VATER')) {
+    return 'VATER';
+  }
+  return 'FAMILIE';
 };

@@ -12,7 +12,7 @@ export interface SharedModelTableDokument {
 export interface DocumentOptions {
   singleUpload: boolean;
   titleKey: string;
-  gesuchId: string;
+  trancheId: string;
   allowTypes: string;
   dokumentTyp: DokumentTyp;
   initialDocuments?: Dokument[];
@@ -40,8 +40,9 @@ export interface DocumentState {
 }
 
 export interface UploadView {
-  gesuchId: string;
+  trancheId: string;
   type: DokumentTyp;
   readonly: boolean;
+  initialDocuments?: Dokument[];
   isSachbearbeitungApp: boolean;
 }

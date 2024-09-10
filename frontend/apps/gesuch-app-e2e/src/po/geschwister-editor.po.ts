@@ -16,6 +16,8 @@ export class GeschwisterEditorPO {
     vorname: Locator;
     geburtsdatum: Locator;
     wohnsitzSelect: Locator;
+    wohnsitzMutter: Locator;
+    wohnsitzVater: Locator;
     ausbildungssituationRadio: Locator;
 
     buttonSave: Locator;
@@ -32,6 +34,8 @@ export class GeschwisterEditorPO {
       vorname: page.getByTestId('form-geschwister-vorname'),
       geburtsdatum: page.getByTestId('form-geschwister-geburtsdatum'),
       wohnsitzSelect: page.getByTestId('form-geschwister-wohnsitz'),
+      wohnsitzMutter: page.getByTestId('component-percentage-splitter-a'),
+      wohnsitzVater: page.getByTestId('component-percentage-splitter-b'),
       ausbildungssituationRadio: page.getByTestId(
         'form-geschwister-ausbildungssituation',
       ),
@@ -47,6 +51,13 @@ export class GeschwisterEditorPO {
     await this.elems.geburtsdatum.fill(item.geburtsdatum);
 
     await selectMatOption(this.elems.wohnsitzSelect, item.wohnsitz);
+
+    if (item.wohnsitzAnteilMutter) {
+      await this.elems.wohnsitzMutter.fill(`${item.wohnsitzAnteilMutter}`);
+    }
+    if (item.wohnsitzAnteilVater) {
+      await this.elems.wohnsitzVater.fill(`${item.wohnsitzAnteilVater}`);
+    }
 
     await selectMatRadio(
       this.elems.ausbildungssituationRadio,

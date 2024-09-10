@@ -10,7 +10,7 @@ import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 
 public class SteuerdatenUpdateTabsDtoSpecModel {
     public static SteuerdatenUpdateDtoSpec steuerdatenDtoSpec(final SteuerdatenTypDtoSpec steuerdatenTypDtoSpec) {
-        return TestUtil.createUpdateDtoSpec(SteuerdatenUpdateDtoSpec::new, (model, faker) -> {
+        return TestUtil.createUpdateDtoSpec(SteuerdatenUpdateDtoSpec::new, (model) -> {
             model.setSteuerdatenTyp(steuerdatenTypDtoSpec);
             model.setTotalEinkuenfte(TestUtil.getRandomInt(1, 10000));
             model.setEigenmietwert(TestUtil.getRandomInt(1, 10000));
@@ -20,7 +20,7 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setKinderalimente(TestUtil.getRandomInt(1, 10000));
             model.ergaenzungsleistungen(TestUtil.getRandomInt(1, 10000));
             model.setVermoegen(TestUtil.getRandomInt(1, 10000));
-            model.setSteuernStaat(TestUtil.getRandomInt(1, 10000));
+            model.setSteuernKantonGemeinde(TestUtil.getRandomInt(1, 10000));
             model.steuernBund(TestUtil.getRandomInt(1, 10000));
             model.setFahrkosten(TestUtil.getRandomInt(1, 10000));
             model.setFahrkostenPartner(TestUtil.getRandomInt(1, 10000));
@@ -28,6 +28,11 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setVerpflegungPartner(TestUtil.getRandomInt(1, 10000));
             model.setVeranlagungsCode(0);
             model.setSteuerjahr(2022);
+            model.setSozialhilfebeitraege(100);
+            model.setSozialhilfebeitraegePartner(100);
+            model.setErgaenzungsleistungen(100);
+            model.setErgaenzungsleistungenPartner(100);
+            model.setWohnkosten(100);
         });
     }
 
@@ -40,12 +45,13 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
         return list;
     }
 
-    public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecSteuerdaten =
-        TestUtil.createUpdateDtoSpec(
+    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecSteuerdaten() {
+        return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model, faker) -> {
+            (model) -> {
                 model.setSteuerdaten(steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
-                model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec);
+                model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
             }
         );
+    }
 }

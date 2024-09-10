@@ -7,7 +7,7 @@ import {
   OPTION_ZUSAMMENFASSUNG,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { SharedUiCommingSoonComponent } from '@dv/shared/ui/comming-soon';
+import { SharedFeatureVerfuegungZusammenfassungComponent } from '@dv/shared/feature/verfuegung-zusammenfassung';
 
 export const sachbearbeitungAppFeatureVerfuegungRoutes: Route[] = [
   {
@@ -21,7 +21,7 @@ export const sachbearbeitungAppFeatureVerfuegungRoutes: Route[] = [
     children: [
       {
         path: OPTION_ZUSAMMENFASSUNG.route,
-        component: SharedUiCommingSoonComponent,
+        component: SharedFeatureVerfuegungZusammenfassungComponent,
       },
       {
         path: BERECHNUNG_ROUTE + '/:index',

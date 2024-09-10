@@ -31,31 +31,22 @@ import { Berechnung, BerechnungsValue } from '../../../models';
       >
         <mat-expansion-panel-header>
           <mat-panel-title
-            class="mb-0 d-flex py-4"
+            class="mb-0 me-0 d-flex py-3"
             [ngClass]="panel.expanded && view.shouldChangeSize ? 'h3' : 'h4'"
           >
-            <div class="d-flex flex-column flex-grow-1">
+            <div class="d-flex flex-column flex-grow-1 fs-5">
               {{ view.titleKey | translate }}
               @if (!panel.expanded) {
-                @if (view.shouldChangeSize) {
-                  <span class="fw-normal mt-2">{{
-                    view.infoKey | translate
-                  }}</span>
-                } @else {
-                  <div class="row mt-2">
-                    <span class="col-7 fs-5 fw-normal">{{
-                      view.infoKey | translate
-                    }}</span>
-                    <span class="col-5 text-end text-muted text-nowrap">
-                      {{ view.total | formatChf: false }}
-                    </span>
+                <span class="row fw-normal mt-1 fs-6 text-muted">
+                  <div class="col-12">
+                    {{ view.infoKey | translate }}
                   </div>
-                }
+                </span>
               }
             </div>
-            @if (!panel.expanded && view.shouldChangeSize) {
+            @if (!panel.expanded) {
               <span class="text-end flex-grow-1 align-self-start text-nowrap">
-                {{ view.total | formatChf: false }}
+                {{ view.total | formatChf }}
               </span>
             }
           </mat-panel-title>

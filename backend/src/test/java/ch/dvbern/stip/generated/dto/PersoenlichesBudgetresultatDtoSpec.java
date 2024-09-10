@@ -31,12 +31,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EIGENER_HAUSHALT,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EINKOMMEN,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ALIMENTE,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_LEISTUNGEN_E_O,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_RENTE,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_GEMEINDE_INSTITUTIONEN,
-  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_VERMOEGEN,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_STEUERBARES_VERMOEGEN,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANRECHENBARES_VERMOEGEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANTEIL_FAMILIENBUDGET,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EINKOMMEN_PARTNER,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EINNAHMEN_PERSOENLICHES_BUDGET,
@@ -68,6 +70,9 @@ public class PersoenlichesBudgetresultatDtoSpec {
   public static final String JSON_PROPERTY_EINKOMMEN = "einkommen";
   private Integer einkommen;
 
+  public static final String JSON_PROPERTY_ALIMENTE = "alimente";
+  private Integer alimente;
+
   public static final String JSON_PROPERTY_LEISTUNGEN_E_O = "leistungenEO";
   private Integer leistungenEO;
 
@@ -83,8 +88,11 @@ public class PersoenlichesBudgetresultatDtoSpec {
   public static final String JSON_PROPERTY_GEMEINDE_INSTITUTIONEN = "gemeindeInstitutionen";
   private Integer gemeindeInstitutionen;
 
-  public static final String JSON_PROPERTY_VERMOEGEN = "vermoegen";
-  private Integer vermoegen;
+  public static final String JSON_PROPERTY_STEUERBARES_VERMOEGEN = "steuerbaresVermoegen";
+  private Integer steuerbaresVermoegen;
+
+  public static final String JSON_PROPERTY_ANRECHENBARES_VERMOEGEN = "anrechenbaresVermoegen";
+  private Integer anrechenbaresVermoegen;
 
   public static final String JSON_PROPERTY_ANTEIL_FAMILIENBUDGET = "anteilFamilienbudget";
   private Integer anteilFamilienbudget;
@@ -238,6 +246,32 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
+  public PersoenlichesBudgetresultatDtoSpec alimente(Integer alimente) {
+    
+    this.alimente = alimente;
+    return this;
+  }
+
+   /**
+   * Get alimente
+   * @return alimente
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ALIMENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAlimente() {
+    return alimente;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ALIMENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAlimente(Integer alimente) {
+    this.alimente = alimente;
+  }
+
+
   public PersoenlichesBudgetresultatDtoSpec leistungenEO(Integer leistungenEO) {
     
     this.leistungenEO = leistungenEO;
@@ -368,29 +402,55 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  public PersoenlichesBudgetresultatDtoSpec vermoegen(Integer vermoegen) {
+  public PersoenlichesBudgetresultatDtoSpec steuerbaresVermoegen(Integer steuerbaresVermoegen) {
     
-    this.vermoegen = vermoegen;
+    this.steuerbaresVermoegen = steuerbaresVermoegen;
     return this;
   }
 
    /**
-   * Get vermoegen
-   * @return vermoegen
+   * Get steuerbaresVermoegen
+   * @return steuerbaresVermoegen
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERMOEGEN)
+  @JsonProperty(JSON_PROPERTY_STEUERBARES_VERMOEGEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getVermoegen() {
-    return vermoegen;
+  public Integer getSteuerbaresVermoegen() {
+    return steuerbaresVermoegen;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERMOEGEN)
+  @JsonProperty(JSON_PROPERTY_STEUERBARES_VERMOEGEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVermoegen(Integer vermoegen) {
-    this.vermoegen = vermoegen;
+  public void setSteuerbaresVermoegen(Integer steuerbaresVermoegen) {
+    this.steuerbaresVermoegen = steuerbaresVermoegen;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec anrechenbaresVermoegen(Integer anrechenbaresVermoegen) {
+    
+    this.anrechenbaresVermoegen = anrechenbaresVermoegen;
+    return this;
+  }
+
+   /**
+   * Get anrechenbaresVermoegen
+   * @return anrechenbaresVermoegen
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ANRECHENBARES_VERMOEGEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAnrechenbaresVermoegen() {
+    return anrechenbaresVermoegen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANRECHENBARES_VERMOEGEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAnrechenbaresVermoegen(Integer anrechenbaresVermoegen) {
+    this.anrechenbaresVermoegen = anrechenbaresVermoegen;
   }
 
 
@@ -796,12 +856,14 @@ public class PersoenlichesBudgetresultatDtoSpec {
         Objects.equals(this.eigenerHaushalt, persoenlichesBudgetresultat.eigenerHaushalt) &&
         Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultat.anteilLebenshaltungskosten) &&
         Objects.equals(this.einkommen, persoenlichesBudgetresultat.einkommen) &&
+        Objects.equals(this.alimente, persoenlichesBudgetresultat.alimente) &&
         Objects.equals(this.leistungenEO, persoenlichesBudgetresultat.leistungenEO) &&
         Objects.equals(this.rente, persoenlichesBudgetresultat.rente) &&
         Objects.equals(this.kinderAusbildungszulagen, persoenlichesBudgetresultat.kinderAusbildungszulagen) &&
         Objects.equals(this.ergaenzungsleistungen, persoenlichesBudgetresultat.ergaenzungsleistungen) &&
         Objects.equals(this.gemeindeInstitutionen, persoenlichesBudgetresultat.gemeindeInstitutionen) &&
-        Objects.equals(this.vermoegen, persoenlichesBudgetresultat.vermoegen) &&
+        Objects.equals(this.steuerbaresVermoegen, persoenlichesBudgetresultat.steuerbaresVermoegen) &&
+        Objects.equals(this.anrechenbaresVermoegen, persoenlichesBudgetresultat.anrechenbaresVermoegen) &&
         Objects.equals(this.anteilFamilienbudget, persoenlichesBudgetresultat.anteilFamilienbudget) &&
         Objects.equals(this.einkommenPartner, persoenlichesBudgetresultat.einkommenPartner) &&
         Objects.equals(this.einnahmenPersoenlichesBudget, persoenlichesBudgetresultat.einnahmenPersoenlichesBudget) &&
@@ -821,7 +883,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilLebenshaltungskosten, einkommen, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, vermoegen, anteilFamilienbudget, einkommenPartner, einnahmenPersoenlichesBudget, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
+    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilLebenshaltungskosten, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, anteilFamilienbudget, einkommenPartner, einnahmenPersoenlichesBudget, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
   }
 
   @Override
@@ -832,12 +894,14 @@ public class PersoenlichesBudgetresultatDtoSpec {
     sb.append("    eigenerHaushalt: ").append(toIndentedString(eigenerHaushalt)).append("\n");
     sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("    einkommen: ").append(toIndentedString(einkommen)).append("\n");
+    sb.append("    alimente: ").append(toIndentedString(alimente)).append("\n");
     sb.append("    leistungenEO: ").append(toIndentedString(leistungenEO)).append("\n");
     sb.append("    rente: ").append(toIndentedString(rente)).append("\n");
     sb.append("    kinderAusbildungszulagen: ").append(toIndentedString(kinderAusbildungszulagen)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    gemeindeInstitutionen: ").append(toIndentedString(gemeindeInstitutionen)).append("\n");
-    sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
+    sb.append("    steuerbaresVermoegen: ").append(toIndentedString(steuerbaresVermoegen)).append("\n");
+    sb.append("    anrechenbaresVermoegen: ").append(toIndentedString(anrechenbaresVermoegen)).append("\n");
     sb.append("    anteilFamilienbudget: ").append(toIndentedString(anteilFamilienbudget)).append("\n");
     sb.append("    einkommenPartner: ").append(toIndentedString(einkommenPartner)).append("\n");
     sb.append("    einnahmenPersoenlichesBudget: ").append(toIndentedString(einnahmenPersoenlichesBudget)).append("\n");

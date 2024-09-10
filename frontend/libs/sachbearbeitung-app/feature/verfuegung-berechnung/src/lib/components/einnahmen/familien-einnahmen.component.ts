@@ -2,147 +2,154 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
+import {
+  SharedUiFormatChfNegativePipe,
+  SharedUiFormatChfPipe,
+  SharedUiFormatChfPositivePipe,
+} from '@dv/shared/ui/format-chf-pipe';
 
 import { FamilienBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-familien-einnahmen',
   standalone: true,
-  imports: [CommonModule, TranslateModule, SharedUiFormatChfPipe],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    SharedUiFormatChfPipe,
+    SharedUiFormatChfNegativePipe,
+    SharedUiFormatChfPositivePipe,
+  ],
   template: `
     <!-- Total Einkünfte -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
-            | translate
-        }}
-      </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().totalEinkuenfte }}
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
+          | translate
+      }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().totalEinkuenfte | formatChfPositive }}
       </div>
     </div>
 
     <!-- Ergänzungsleistungen -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
-            | translate
-        }}
-      </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().ergaenzungsleistungen }}
-      </div>
-    </div>
-
-    <!-- Steuerbares Vermögen -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.steuerbaresVermoegen'
-            | translate
-        }}
-      </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().steuerbaresVermoegen }}
-      </div>
-    </div>
-
-    <!-- 15 % Vermögensaufrechnung -->
-    <div class="d-flex">
-      <div classs="d-flex flex-column">
-        <div class="fs-4">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.vermoegensaufrechnung'
-              | translate
-          }}
-        </div>
-        <div class="text-muted">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.vermoegensaufrechnung.info'
-              | translate
-          }}
-        </div>
-      </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().vermoegensaufrechnung }}
-      </div>
-    </div>
-
-    <!-- Abzüge -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
-            | translate
-        }}
-      </div>
-      <div class="text-muted text-end flex-grow-1"></div>
-    </div>
-
-    <!-- Beiträge von Selbständigerwerbenden in die 2.Säule /Säule 3a -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule'
-            | translate
-        }}
-      </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().beitraegeSaule }}
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
+          | translate
+      }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
       </div>
     </div>
 
     <!-- Abzüglich Mietwert -->
-    <div class="d-flex">
-      <div class="fs-4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
-            | translate
-        }}
-      </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().mietwert }}
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
+          | translate
+      }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().mietwert | formatChfNegative: true }}
       </div>
     </div>
 
     <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
-    <div class="d-flex">
-      <div class="fs-4">
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.alimenteOderRenten'
+          | translate
+      }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().alimenteOderRenten | formatChfNegative: true }}
+      </div>
+    </div>
+
+    <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
+    <div class="d-flex gap-2">
+      <div classs="d-flex flex-column">
         {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.alimenteOderRenten'
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
             | translate
         }}
+        <div class="text-muted fs-7">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
+              | translate: einnahmenSig()
+          }}
+        </div>
       </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().alimenteOderRenten }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().sauele3 | formatChfNegative: true }}
+      </div>
+    </div>
+
+    <!-- Beiträge von Selbständigerwerbenden in die 2.Säule -->
+    <div class="d-flex gap-2">
+      <div classs="d-flex flex-column">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
+            | translate
+        }}
+        <div class="text-muted fs-7">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
+              | translate
+          }}
+        </div>
+      </div>
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().sauele2 | formatChfNegative: true }}
       </div>
     </div>
 
     <!-- Einkommensfreibetrag -->
-    <div class="d-flex">
-      <div class="fs-4">
+    <div class="d-flex gap-2">
+      <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
             | translate
         }}
+        <div class="text-muted fs-7">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag.info'
+              | translate
+          }}
+        </div>
       </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().einkommensfreibeitrag }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().einkommensfreibeitrag | formatChfNegative: true }}
+      </div>
+    </div>
+
+    <!-- Anrechenbares Vermögen -->
+    <div class="d-flex gap-2">
+      <div classs="d-flex flex-column">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen'
+            | translate
+        }}
+        <div class="text-muted fs-7">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen.info'
+              | translate: einnahmenSig()
+          }}
+        </div>
+      </div>
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().anrechenbaresVermoegen | formatChfPositive }}
       </div>
     </div>
 
     <!-- Total -->
-    <div class="d-flex mt-3">
+    <div class="d-flex mt-3 gap-2">
       <div class="h4 m-0">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total'
             | translate
         }}
       </div>
-      <div class="text-muted text-end flex-grow-1">
+      <div class="text-end h4 flex-grow-1 text-nowrap">
         {{ einnahmenSig().total | formatChf }}
       </div>
     </div>

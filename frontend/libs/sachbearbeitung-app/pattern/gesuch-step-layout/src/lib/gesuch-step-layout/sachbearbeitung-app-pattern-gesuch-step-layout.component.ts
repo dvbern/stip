@@ -25,6 +25,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
+import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-step-layout',
@@ -47,6 +48,7 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
     './sachbearbeitung-app-pattern-gesuch-step-layout.component.scss',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SharedUtilHeaderService],
 })
 export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   stepSig = input<SharedModelGesuchFormStep | undefined>(undefined, {
@@ -54,6 +56,7 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   });
   navClicked$ = new EventEmitter();
 
+  headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   private store = inject(Store);
   cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
@@ -63,6 +66,8 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
     this.stepManager.getValidatedSteps(
       this.stepsViewSig().steps,
       this.cacheSig().gesuchFormular,
+      undefined,
+      this.viewSig().readonly,
     ),
   );
   currentStepProgressSig = computed(() => {

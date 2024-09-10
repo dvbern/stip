@@ -48,11 +48,14 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -80,6 +83,9 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     NgbAlert,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
+    SharedUiZuvorHintDirective,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
   ],
@@ -270,7 +276,9 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
       case Kontoinhaber.ANDERE:
       case Kontoinhaber.SOZIALDIENST_INSTITUTION:
       default:
-        this.enableNameAndAdresse();
+        if (!this.viewSig().readonly) {
+          this.enableNameAndAdresse();
+        }
         break;
     }
   }

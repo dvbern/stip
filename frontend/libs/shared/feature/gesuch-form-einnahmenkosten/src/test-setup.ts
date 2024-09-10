@@ -1,3 +1,4 @@
 import 'jest-preset-angular/setup-jest';
+import 'reflect-metadata';
 import '@testing-library/jest-dom';
 import '@angular/localize/init';

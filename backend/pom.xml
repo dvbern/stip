@@ -36,7 +36,6 @@
     </sonar.exclusions>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
-    <javafaker.version>1.0.2</javafaker.version>
     <rest-assured.version>4.5.1</rest-assured.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
     <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
@@ -276,12 +275,6 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-test-security-oidc</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.javafaker</groupId>
-      <artifactId>javafaker</artifactId>
-      <version>${javafaker.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -644,7 +637,9 @@
                     SteuerdatenTyp=ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp,
                     GetGesucheSBQueryType=ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType,
                     NotificationType=ch.dvbern.stip.api.notification.type.NotificationType,
-                    Dokumentstatus=ch.dvbern.stip.api.dokument.type.Dokumentstatus
+                    Dokumentstatus=ch.dvbern.stip.api.dokument.type.Dokumentstatus,
+                    GesuchTrancheStatus=ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus,
+                    GesuchTrancheTyp=ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

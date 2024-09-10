@@ -79,10 +79,25 @@
     <dmn:itemComponent id="_2D7A8EC6-871D-4E59-A3FF-51E843B2C8BF" name="einkommensfreibetrag" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
+    <dmn:itemComponent id="_4F18510F-4538-40E6-8FBD-F876CB3657FE" name="freibetragErwerbseinkommen" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_102E15EF-6D1A-44D2-94DA-1F9A3D800470" name="freibetragVermoegen" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_3B62AF46-DB1A-4947-B252-3064802FE467" name="vermoegensanteilInProzent" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
     <dmn:itemComponent id="_73B92A57-2F79-4F5D-A2B1-E4E58DF84D15" name="anzahlWochenLehre" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
     <dmn:itemComponent id="_78FF46A8-394F-4799-99FF-974E5A2A49FC" name="anzahlWochenSchule" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_2370FABC-6C40-45FE-A429-DDCB64D3A0AA" name="stipLimiteMinimalstipendium" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
+    <dmn:itemComponent id="_87272540-FFAB-433C-B853-557108025B05" name="limiteAlterAntragsstellerHalbierungElternbeitrag" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
   </dmn:itemDefinition>
@@ -266,7 +281,7 @@
               <dmn:text>true</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_8CEF44A3-682D-4352-803C-67960D1E3C3D">
-              <dmn:text>max(InputFamilienbudget.elternteil.steuerbaresVermoegen -30000,0) * 0.15</dmn:text>
+              <dmn:text>max(InputFamilienbudget.elternteil.steuerbaresVermoegen - Stammdaten.freibetragVermoegen,0) * Stammdaten.vermoegensanteilInProzent / 100</dmn:text>
             </dmn:outputEntry>
             <dmn:annotationEntry>
               <dmn:text/>
@@ -277,7 +292,7 @@
               <dmn:text>false</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_3AAD035E-C6D6-409E-89A3-DD7DA8C219C4">
-              <dmn:text>InputFamilienbudget.elternteil.steuerbaresVermoegen * 0.15</dmn:text>
+              <dmn:text>InputFamilienbudget.elternteil.steuerbaresVermoegen * Stammdaten.vermoegensanteilInProzent / 100</dmn:text>
             </dmn:outputEntry>
             <dmn:annotationEntry>
               <dmn:text/>
@@ -532,7 +547,7 @@
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="1378" y="571" width="142" height="50"/>
+        <dc:Bounds x="1375" y="571" width="142" height="50"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNShape id="dmnshape-drg-_00A869A3-C329-408B-91FF-4C40A7BE7D25" dmnElementRef="_00A869A3-C329-408B-91FF-4C40A7BE7D25" isCollapsed="false">
@@ -581,7 +596,7 @@
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNEdge id="dmnedge-drg-_85C06AEA-E6A1-4A39-84B1-F4C63838ADF4-AUTO-TARGET" dmnElementRef="_85C06AEA-E6A1-4A39-84B1-F4C63838ADF4">
-        <di:waypoint x="1449" y="596"/>
+        <di:waypoint x="1446" y="596"/>
         <di:waypoint x="1119.5" y="218"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_79C3E7EC-4A79-4944-B98C-5917EEABF614-AUTO-TARGET" dmnElementRef="_79C3E7EC-4A79-4944-B98C-5917EEABF614">
@@ -590,11 +605,11 @@
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_E177DC15-40CA-45BA-8D37-A6F1BF2F0986-AUTO-TARGET" dmnElementRef="_E177DC15-40CA-45BA-8D37-A6F1BF2F0986">
         <di:waypoint x="829.2990654205607" y="999"/>
-        <di:waypoint x="1449" y="621"/>
+        <di:waypoint x="1446" y="621"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_EA769C99-6AE1-432C-8CC3-F33CB27D41AF-AUTO-TARGET" dmnElementRef="_EA769C99-6AE1-432C-8CC3-F33CB27D41AF">
         <di:waypoint x="1372.2990654205607" y="975.5"/>
-        <di:waypoint x="1449" y="621"/>
+        <di:waypoint x="1446" y="621"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_EFE45371-68A1-4871-B5F1-B5CDE68F4579-AUTO-TARGET" dmnElementRef="_EFE45371-68A1-4871-B5F1-B5CDE68F4579">
         <di:waypoint x="1372.2990654205607" y="975.5"/>

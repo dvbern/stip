@@ -8,7 +8,7 @@ import {
   inject,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -54,7 +54,6 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
 export class GesuchAppFeatureCockpitComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
-  private router = inject(Router);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   fallStore = inject(FallStore);
@@ -66,43 +65,26 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
 
-  periodenSig = computed(() => {
-    const perioden = this.cockpitViewSig().gesuchsperiodes;
-    const aenderungsAntraege =
-      this.gesuchAenderungStore.cachedAenderungsGesuche().data ?? [];
-
-    return perioden.map((periode) => {
-      const aenderungsAntrag = aenderungsAntraege.find(
-        (a) => a.id === periode.gesuch?.id,
-      );
-      return {
-        ...periode,
-        aenderungsAntrag, // check for status and date in future (1104), sice there is an antrag if the gesuch is not submitted
-      };
-    });
-  });
-
   constructor() {
     effect(
       () => {
-        const aenderung = this.gesuchAenderungStore.cachedGesuchAenderung();
-        if (isSuccess(aenderung)) {
-          // this.gesuchAenderungStore.resetCachedGesuchAenderung(); reset in future (1104)
-          // this.router.navigate(['/', 'aenderung', aenderung.data.id]); navigate to aenderung in future (1104)
+        // TODO (KSTIP-1189): use correct Aenderungs-Widget and loading mechanism
+        const gesuchId = this.cockpitViewSig().gesuchsperiodes?.[0]?.gesuch?.id;
+        if (gesuchId) {
+          this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
         }
       },
       { allowSignalWrites: true },
     );
-
-    effect(() => {
-      const gesuchIds = this.cockpitViewSig()
-        .gesuchsperiodes.map((p) => p.gesuch?.id)
-        .filter((g) => g !== undefined) as string[];
-
-      if (gesuchIds.length > 0) {
-        this.gesuchAenderungStore.getAllGesuchAenderungen$(gesuchIds);
-      }
-    });
+    effect(
+      () => {
+        const aenderung = this.gesuchAenderungStore.cachedGesuchAenderung();
+        if (isSuccess(aenderung)) {
+          this.gesuchAenderungStore.resetCachedGesuchAenderung();
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   ngOnInit() {
@@ -154,7 +136,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
         if (result) {
           this.gesuchAenderungStore.createGesuchAenderung$({
             gesuchId,
-            aenderungsantrag: result,
+            createAenderungsantragRequest: result,
           });
         }
       });

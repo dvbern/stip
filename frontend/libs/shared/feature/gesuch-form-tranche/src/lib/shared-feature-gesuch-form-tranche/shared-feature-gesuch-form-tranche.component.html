@@ -1,0 +1,50 @@
+<ng-template dvHeaderSuffix>
+  <h2 class="fw-bold">
+    @let tranche = viewSig().gesuchstranche;
+    @if (tranche) {
+      {{ 'shared.form.title.suffix.' + tranche.typ | translate: { position: currentTrancheIndexSig() + 1 } }}
+      {{ tranche.gueltigAb | date: 'MM.YYYY' }} -
+      {{ tranche.gueltigBis | date: 'MM.YYYY' }}
+    }
+  </h2>
+</ng-template>
+
+<form [formGroup]="form">
+  <div class="row g-4 mt-4">
+    <!-- Von -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.tranche.von.label' | translate }} </mat-label>
+
+      <input readonly type="text" matInput formControlName="von" data-testid="form-tranche-von" />
+    </mat-form-field>
+
+    <!-- Bis -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.tranche.bis.label' | translate }} </mat-label>
+
+      <input
+        readonly
+        type="text"
+        matInput
+        formControlName="bis"
+        placeholder="dd.mm.yyyy"
+        data-testid="form-tranche-bis"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="row g-4 mt-0">
+    <!-- Bemerkung -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-12 col-xl-8">
+      <mat-label>{{ 'shared.form.tranche.bemerkung.label' | translate }} </mat-label>
+      <textarea
+        readonly
+        rows="3"
+        type="text"
+        matInput
+        formControlName="bemerkung"
+        data-testid="form-tranche-bemerkung"
+      ></textarea>
+    </mat-form-field>
+  </div>
+</form>

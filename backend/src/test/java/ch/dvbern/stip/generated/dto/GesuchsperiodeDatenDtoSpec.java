@@ -74,7 +74,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_PREIS_PRO_MAHLZEIT,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_MAX_SAEULE3A,
   GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE,
-  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE
+  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE,
+  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT,
+  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS,
+  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG,
+  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT,
+  GesuchsperiodeDatenDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG
 })
 @JsonTypeName("GesuchsperiodeDaten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -216,6 +221,21 @@ public class GesuchsperiodeDatenDtoSpec {
 
   public static final String JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE = "anzahlWochenSchule";
   private Integer anzahlWochenSchule;
+
+  public static final String JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT = "vermoegensanteilInProzent";
+  private Integer vermoegensanteilInProzent;
+
+  public static final String JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS = "reduzierungDesGrundbedarfs";
+  private Integer reduzierungDesGrundbedarfs;
+
+  public static final String JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG = "limiteAlterAntragsstellerHalbierungElternbeitrag";
+  private Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
+
+  public static final String JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT = "zweiterAuszahlungsterminMonat";
+  private Integer zweiterAuszahlungsterminMonat;
+
+  public static final String JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG = "zweiterAuszahlungsterminTag";
+  private Integer zweiterAuszahlungsterminTag;
 
   public GesuchsperiodeDatenDtoSpec() {
   }
@@ -1415,6 +1435,136 @@ public class GesuchsperiodeDatenDtoSpec {
     this.anzahlWochenSchule = anzahlWochenSchule;
   }
 
+
+  public GesuchsperiodeDatenDtoSpec vermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+    
+    this.vermoegensanteilInProzent = vermoegensanteilInProzent;
+    return this;
+  }
+
+   /**
+   * Get vermoegensanteilInProzent
+   * @return vermoegensanteilInProzent
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getVermoegensanteilInProzent() {
+    return vermoegensanteilInProzent;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+    this.vermoegensanteilInProzent = vermoegensanteilInProzent;
+  }
+
+
+  public GesuchsperiodeDatenDtoSpec reduzierungDesGrundbedarfs(Integer reduzierungDesGrundbedarfs) {
+    
+    this.reduzierungDesGrundbedarfs = reduzierungDesGrundbedarfs;
+    return this;
+  }
+
+   /**
+   * Get reduzierungDesGrundbedarfs
+   * @return reduzierungDesGrundbedarfs
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getReduzierungDesGrundbedarfs() {
+    return reduzierungDesGrundbedarfs;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setReduzierungDesGrundbedarfs(Integer reduzierungDesGrundbedarfs) {
+    this.reduzierungDesGrundbedarfs = reduzierungDesGrundbedarfs;
+  }
+
+
+  public GesuchsperiodeDatenDtoSpec limiteAlterAntragsstellerHalbierungElternbeitrag(Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
+    
+    this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
+    return this;
+  }
+
+   /**
+   * Get limiteAlterAntragsstellerHalbierungElternbeitrag
+   * @return limiteAlterAntragsstellerHalbierungElternbeitrag
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getLimiteAlterAntragsstellerHalbierungElternbeitrag() {
+    return limiteAlterAntragsstellerHalbierungElternbeitrag;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setLimiteAlterAntragsstellerHalbierungElternbeitrag(Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
+    this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
+  }
+
+
+  public GesuchsperiodeDatenDtoSpec zweiterAuszahlungsterminMonat(Integer zweiterAuszahlungsterminMonat) {
+    
+    this.zweiterAuszahlungsterminMonat = zweiterAuszahlungsterminMonat;
+    return this;
+  }
+
+   /**
+   * Get zweiterAuszahlungsterminMonat
+   * @return zweiterAuszahlungsterminMonat
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getZweiterAuszahlungsterminMonat() {
+    return zweiterAuszahlungsterminMonat;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setZweiterAuszahlungsterminMonat(Integer zweiterAuszahlungsterminMonat) {
+    this.zweiterAuszahlungsterminMonat = zweiterAuszahlungsterminMonat;
+  }
+
+
+  public GesuchsperiodeDatenDtoSpec zweiterAuszahlungsterminTag(Integer zweiterAuszahlungsterminTag) {
+    
+    this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
+    return this;
+  }
+
+   /**
+   * Get zweiterAuszahlungsterminTag
+   * @return zweiterAuszahlungsterminTag
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getZweiterAuszahlungsterminTag() {
+    return zweiterAuszahlungsterminTag;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setZweiterAuszahlungsterminTag(Integer zweiterAuszahlungsterminTag) {
+    this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -1469,12 +1619,17 @@ public class GesuchsperiodeDatenDtoSpec {
         Objects.equals(this.preisProMahlzeit, gesuchsperiodeDaten.preisProMahlzeit) &&
         Objects.equals(this.maxSaeule3a, gesuchsperiodeDaten.maxSaeule3a) &&
         Objects.equals(this.anzahlWochenLehre, gesuchsperiodeDaten.anzahlWochenLehre) &&
-        Objects.equals(this.anzahlWochenSchule, gesuchsperiodeDaten.anzahlWochenSchule);
+        Objects.equals(this.anzahlWochenSchule, gesuchsperiodeDaten.anzahlWochenSchule) &&
+        Objects.equals(this.vermoegensanteilInProzent, gesuchsperiodeDaten.vermoegensanteilInProzent) &&
+        Objects.equals(this.reduzierungDesGrundbedarfs, gesuchsperiodeDaten.reduzierungDesGrundbedarfs) &&
+        Objects.equals(this.limiteAlterAntragsstellerHalbierungElternbeitrag, gesuchsperiodeDaten.limiteAlterAntragsstellerHalbierungElternbeitrag) &&
+        Objects.equals(this.zweiterAuszahlungsterminMonat, gesuchsperiodeDaten.zweiterAuszahlungsterminMonat) &&
+        Objects.equals(this.zweiterAuszahlungsterminTag, gesuchsperiodeDaten.zweiterAuszahlungsterminTag);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag);
   }
 
   @Override
@@ -1527,6 +1682,11 @@ public class GesuchsperiodeDatenDtoSpec {
     sb.append("    maxSaeule3a: ").append(toIndentedString(maxSaeule3a)).append("\n");
     sb.append("    anzahlWochenLehre: ").append(toIndentedString(anzahlWochenLehre)).append("\n");
     sb.append("    anzahlWochenSchule: ").append(toIndentedString(anzahlWochenSchule)).append("\n");
+    sb.append("    vermoegensanteilInProzent: ").append(toIndentedString(vermoegensanteilInProzent)).append("\n");
+    sb.append("    reduzierungDesGrundbedarfs: ").append(toIndentedString(reduzierungDesGrundbedarfs)).append("\n");
+    sb.append("    limiteAlterAntragsstellerHalbierungElternbeitrag: ").append(toIndentedString(limiteAlterAntragsstellerHalbierungElternbeitrag)).append("\n");
+    sb.append("    zweiterAuszahlungsterminMonat: ").append(toIndentedString(zweiterAuszahlungsterminMonat)).append("\n");
+    sb.append("    zweiterAuszahlungsterminTag: ").append(toIndentedString(zweiterAuszahlungsterminTag)).append("\n");
     sb.append("}");
     return sb.toString();
   }

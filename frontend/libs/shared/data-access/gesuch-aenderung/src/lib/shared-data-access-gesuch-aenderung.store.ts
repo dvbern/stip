@@ -1,87 +1,137 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, forkJoin, map, pipe, switchMap, tap } from 'rxjs';
+import { map, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
-  AenderungsantragCreate,
-  Gesuch,
-  GesuchService,
+  CreateAenderungsantragRequest,
+  CreateGesuchTrancheRequest,
+  GesuchTranche,
+  GesuchTrancheService,
+  GesuchTrancheSlim,
 } from '@dv/shared/model/gesuch';
+import { PERSON } from '@dv/shared/model/gesuch-form';
 import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
   cachedPending,
   handleApiResponse,
   initial,
-  isSuccess,
-  success,
+  isPending,
 } from '@dv/shared/util/remote-data';
 
 type GesuchAenderungState = {
-  cachedGesuchAenderung: CachedRemoteData<Gesuch>;
-  cachedAenderungsGesuche: CachedRemoteData<Gesuch[]>;
+  cachedGesuchAenderung: CachedRemoteData<GesuchTranche>;
+  cachedTranchenSlim: CachedRemoteData<GesuchTrancheSlim[]>;
 };
 
 const initialState: GesuchAenderungState = {
   cachedGesuchAenderung: initial(),
-  cachedAenderungsGesuche: initial(),
+  cachedTranchenSlim: initial(),
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GesuchAenderungStore extends signalStore(
+  { protectedState: false },
   withState(initialState),
   withDevtools('GesuchAenderungStore'),
 ) {
-  private gesuchService = inject(GesuchService);
+  private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+  private router = inject(Router);
+
+  aenderungenViewSig = computed(() => {
+    const tranchen = this.cachedTranchenSlim();
+    return {
+      loading: isPending(tranchen),
+      list: tranchen.data?.filter((t) => t.typ === 'AENDERUNG') ?? [],
+    };
+  });
+
+  tranchenViewSig = computed(() => {
+    const tranchen = this.cachedTranchenSlim();
+    return {
+      loading: isPending(tranchen),
+      list: tranchen.data?.filter((t) => t.typ === 'TRANCHE') ?? [],
+    };
+  });
 
   resetCachedGesuchAenderung() {
     patchState(this, { cachedGesuchAenderung: initial() });
   }
 
-  loadCachedGesuchAenderung$ = rxMethod<{ gesuchId: string }>(
+  getAllTranchenForGesuch$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
+          cachedTranchenSlim: cachedPending(state.cachedTranchenSlim),
         }));
       }),
-      switchMap(({ gesuchId }) =>
-        this.gesuchService.getAenderungsantrag$({ gesuchId }).pipe(
-          handleApiResponse((gesuche) => {
-            patchState(this, { cachedAenderungsGesuche: gesuche });
-          }),
-        ),
+      switchMap((req) =>
+        this.gesuchTrancheService
+          .getAllTranchenForGesuch$(req, undefined, undefined, {
+            context: shouldIgnoreNotFoundErrorsIf(true),
+          })
+          .pipe(map((tranchen) => tranchen ?? [])),
       ),
-    ),
-  );
-
-  getAllGesuchAenderungen$ = rxMethod<string[]>(
-    pipe(
-      exhaustMap((gesuchIds) => {
-        return forkJoin(
-          gesuchIds.map((gesuchId) =>
-            this.gesuchService
-              .getAenderungsantrag$({ gesuchId }, undefined, undefined, {
-                context: shouldIgnoreNotFoundErrorsIf(true),
-              })
-              .pipe(map((gesuch) => gesuch ?? [])),
-          ),
-        );
-      }),
-      map((gesuche) => gesuche.flat()),
-      handleApiResponse((gesuche) => {
-        patchState(this, { cachedAenderungsGesuche: gesuche });
+      handleApiResponse((tranchen) => {
+        patchState(this, () => ({
+          cachedTranchenSlim: tranchen,
+        }));
       }),
     ),
   );
 
   createGesuchAenderung$ = rxMethod<{
     gesuchId: string;
-    aenderungsantrag: AenderungsantragCreate;
+    createAenderungsantragRequest: CreateAenderungsantragRequest;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          // change to not cached?
+          cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
+        }));
+      }),
+      switchMap(({ gesuchId, createAenderungsantragRequest }) =>
+        this.gesuchTrancheService
+          .createAenderungsantrag$({
+            gesuchId,
+            createAenderungsantragRequest,
+          })
+          .pipe(
+            handleApiResponse(
+              (gesuchAenderung) => {
+                patchState(this, () => ({
+                  cachedGesuchAenderung: gesuchAenderung,
+                }));
+              },
+              {
+                onSuccess: (data) => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey: 'shared.dialog.gesuch-aenderung.success',
+                  });
+                  this.router.navigate([
+                    'gesuch',
+                    PERSON.route,
+                    gesuchId,
+                    'tranche',
+                    data.id,
+                  ]);
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  createGesuchTrancheCopy$ = rxMethod<{
+    gesuchId: string;
+    createGesuchTrancheRequest?: CreateGesuchTrancheRequest;
   }>(
     pipe(
       tap(() => {
@@ -89,30 +139,25 @@ export class GesuchAenderungStore extends signalStore(
           cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
         }));
       }),
-      switchMap((aenderung) =>
-        this.gesuchService
-          .createAenderungsantrag$({
-            gesuchId: aenderung.gesuchId,
-            aenderungsantragCreate: aenderung.aenderungsantrag,
+      switchMap(({ gesuchId, createGesuchTrancheRequest }) =>
+        this.gesuchTrancheService
+          .createGesuchTrancheCopy$({
+            gesuchId,
+            createGesuchTrancheRequest,
           })
           .pipe(
             handleApiResponse(
               (gesuchAenderung) => {
-                patchState(this, (state) => ({
+                patchState(this, () => ({
                   cachedGesuchAenderung: gesuchAenderung,
-                  cachedAenderungsGesuche: isSuccess(gesuchAenderung)
-                    ? success([
-                        ...(state.cachedAenderungsGesuche.data ?? []),
-                        gesuchAenderung.data,
-                      ])
-                    : cachedPending(state.cachedAenderungsGesuche),
                 }));
               },
               {
                 onSuccess: () => {
                   this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'shared.dialog.gesuch-aenderung.success',
+                    messageKey: 'shared.dialog.gesuch.tranche.success',
                   });
+                  this.getAllTranchenForGesuch$({ gesuchId });
                 },
               },
             ),

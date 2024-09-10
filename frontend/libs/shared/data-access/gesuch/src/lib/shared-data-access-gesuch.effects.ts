@@ -5,6 +5,7 @@ import { concatLatestFrom } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
 import {
   catchError,
+  combineLatestWith,
   concatMap,
   debounceTime,
   distinctUntilChanged,
@@ -18,6 +19,7 @@ import {
   withLatestFrom,
 } from 'rxjs';
 
+import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
@@ -33,10 +35,12 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
+import { AppType } from '@dv/shared/model/config';
 import {
   AusbildungUpdate,
   GesuchFormularUpdate,
   GesuchService,
+  GesuchTrancheService,
   GesuchUpdate,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
@@ -54,7 +58,9 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import {
   selectRouteId,
+  selectRouteTrancheId,
   selectSharedDataAccessGesuchStepsView,
+  selectSharedDataAccessGesuchsView,
 } from './shared-data-access-gesuch.selectors';
 
 export const LOAD_ALL_DEBOUNCE_TIME = 300;
@@ -144,28 +150,70 @@ export const loadGesuch = createEffect(
         SharedEventGesuchFormAbschluss.init,
         SharedEventGesuchFormProtokoll.init,
       ),
-      concatLatestFrom(() => store.select(selectRouteId)),
-      switchMap(([, id]) => {
+      concatLatestFrom(() =>
+        store
+          .select(selectRouteId)
+          .pipe(combineLatestWith(store.select(selectRouteTrancheId))),
+      ),
+      withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
+      switchMap(([[, [id, trancheId]], { compileTimeConfig }]) => {
         if (!id) {
           throw new Error(
             'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id',
           );
         }
-        return gesuchService
-          .getGesuch$({ gesuchId: id }, undefined, undefined, {
-            context: noGlobalErrorsIf(
-              true,
-              handleNotFound((error) => {
-                globalNotifications.createNotification({
-                  type: 'ERROR',
-                  messageKey:
-                    'shared.genericError.gesuch-not-found-redirection',
-                  content: error,
-                });
-                router.navigate(['/'], { replaceUrl: true });
+
+        const navigateIfNotFound = {
+          context: noGlobalErrorsIf(
+            true,
+            handleNotFound((error) => {
+              globalNotifications.createNotification({
+                type: 'ERROR',
+                messageKey: 'shared.genericError.gesuch-not-found-redirection',
+                content: error,
+              });
+              router.navigate(['/'], { replaceUrl: true });
+            }),
+          ),
+        };
+
+        if (trancheId && compileTimeConfig) {
+          const services$ = {
+            'gesuch-app': gesuchService.getGsTrancheChanges$(
+              { aenderungId: trancheId },
+              undefined,
+              undefined,
+              navigateIfNotFound,
+            ),
+            'sachbearbeitung-app': gesuchService.getSbTrancheChanges$(
+              { aenderungId: trancheId },
+              undefined,
+              undefined,
+              navigateIfNotFound,
+            ),
+          } satisfies Record<AppType, unknown>;
+          return services$[compileTimeConfig.appType].pipe(
+            map((gesuch) =>
+              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
+                gesuch,
+                trancheId,
               }),
             ),
-          })
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
+        }
+
+        return gesuchService
+          .getCurrentGesuch$(
+            { gesuchId: id },
+            undefined,
+            undefined,
+            navigateIfNotFound,
+          )
           .pipe(
             map((gesuch) =>
               SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
@@ -308,14 +356,22 @@ export const removeGesuch = createEffect(
 );
 
 export const gesuchValidateSteps = createEffect(
-  (events$ = inject(Actions), gesuchService = inject(GesuchService)) => {
+  (
+    events$ = inject(Actions),
+    gesuchTranchenService = inject(GesuchTrancheService),
+  ) => {
     return events$.pipe(
       ofType(SharedDataAccessGesuchEvents.gesuchValidateSteps),
-      switchMap(({ id: gesuchId }) =>
-        gesuchService
-          .validateGesuchPages$({ gesuchId }, undefined, undefined, {
-            context: shouldIgnoreNotFoundErrorsIf(true),
-          })
+      switchMap(({ gesuchTrancheId }) =>
+        gesuchTranchenService
+          .validateGesuchTranchePages$(
+            { gesuchTrancheId },
+            undefined,
+            undefined,
+            {
+              context: shouldIgnoreNotFoundErrorsIf(true),
+            },
+          )
           .pipe(
             switchMap((validation) => [
               SharedDataAccessGesuchEvents.gesuchValidationSuccess({
@@ -369,25 +425,47 @@ export const redirectToGesuchFormNextStep = createEffect(
         SharedEventGesuchFormEinnahmenkosten.nextTriggered,
         SharedEventGesuchDokumente.nextTriggered,
       ),
-      withLatestFrom(store.select(selectSharedDataAccessGesuchStepsView)),
-      tap(([{ id, origin }, { stepsFlow: stepFlowSig }]) => {
-        router.navigate([
-          'gesuch',
-          ...stepManager.getNextStepOf(stepFlowSig, origin).route.split('/'),
-          id,
-        ]);
-      }),
+      withLatestFrom(
+        store.select(selectSharedDataAccessGesuchStepsView),
+        store.select(selectSharedDataAccessGesuchsView),
+      ),
+      tap(
+        ([
+          { id, origin },
+          { stepsFlow: stepFlowSig },
+          { gesuchFormular, readonly, specificTrancheId },
+        ]) => {
+          router.navigate([
+            'gesuch',
+            ...stepManager
+              .getNextStepOf(stepFlowSig, origin, gesuchFormular, readonly)
+              .route.split('/'),
+            id,
+            ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
+          ]);
+        },
+      ),
     );
   },
   { functional: true, dispatch: false },
 );
 
 export const refreshGesuchFormStep = createEffect(
-  (actions$ = inject(Actions), router = inject(Router)) => {
+  (
+    store = inject(Store),
+    actions$ = inject(Actions),
+    router = inject(Router),
+  ) => {
     return actions$.pipe(
       ofType(SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess),
-      tap(({ id, origin }) => {
-        router.navigate(['gesuch', origin.route, id]);
+      withLatestFrom(store.select(selectSharedDataAccessGesuchsView)),
+      tap(([{ id, origin }, { specificTrancheId }]) => {
+        router.navigate([
+          'gesuch',
+          origin.route,
+          id,
+          ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
+        ]);
       }),
     );
   },
@@ -537,6 +615,6 @@ const toAusbildung = (ausbildung: ViewOrUpdateData<'ausbildung'>) => {
   return {
     ...ausbildung,
     ausbildungsgang: undefined,
-    ausbildungsgangId: ausbildung.ausbildungsgang.id,
+    ausbildungsgangId: ausbildung.ausbildungsgang?.id,
   };
 };

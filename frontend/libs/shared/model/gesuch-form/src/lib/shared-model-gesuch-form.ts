@@ -26,3 +26,5 @@ export interface GesuchFormStepView extends SharedModelGesuchFormStep {
   status?: StepState;
   disabled: boolean;
 }
+
+export type FormularChangeTypes = string | number | boolean | undefined | null;

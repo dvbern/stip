@@ -1,6 +1,6 @@
-import path from 'path';
 import { Tree } from '@nx/devkit';
 import { libraryGenerator } from '@nx/js';
+import path from 'path';
 
 import { LibTypeGenerator, NormalizedSchema } from '../generator.interface';
 

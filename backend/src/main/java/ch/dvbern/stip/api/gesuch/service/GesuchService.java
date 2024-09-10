@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -36,31 +34,28 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
-import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
-import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
-import ch.dvbern.stip.api.gesuch.validation.AusbildungPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.DocumentsRequiredValidationGroup;
-import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
-import ch.dvbern.stip.api.gesuch.validation.PersonInAusbildungPageValidation;
+import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.generated.dto.AenderungsantragCreateDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -68,13 +63,13 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,16 +89,29 @@ public class GesuchService {
     private final GesuchValidatorService validationService;
     private final BenutzerService benutzerService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentService gesuchDokumentService;
     private final SachbearbeiterZuordnungStammdatenWorker szsWorker;
     private final GesuchDokumentMapper gesuchDokumentMapper;
-    private final RequiredDokumentService requiredDokumentService;
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
+    private final GesuchMapperUtil gesuchMapperUtil;
+    private final GesuchTrancheService gesuchTrancheService;
+    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    private final GesuchTrancheRepository gesuchTrancheRepository;
 
     @Transactional
-    public Optional<GesuchDto> findGesuch(UUID id) {
-        return gesuchRepository.findByIdOptional(id).map(this::mapWithTrancheToWorkWith);
+    public Optional<GesuchDto> findGesuchWithCurrentTranche(UUID id) {
+        return gesuchRepository.findByIdOptional(id).map(gesuchMapperUtil::mapWithCurrentTranche);
+    }
+
+    @Transactional
+    public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
+        return gesuchRepository.findByIdOptional(gesuchId)
+            .map(gesuch -> gesuchMapperUtil.mapWithTranche(
+                gesuch,
+                gesuch.getGesuchTrancheById(gesuchTrancheId).orElseThrow(NotFoundException::new))
+            );
     }
 
     @Transactional
@@ -230,7 +238,7 @@ public class GesuchService {
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
-        removeSuperfluousDokumentsForGesuch(newFormular);
+        gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
 
         final var updatePia = gesuchUpdateDto
             .getGesuchTrancheToWorkWith()
@@ -254,7 +262,9 @@ public class GesuchService {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         createInitialGesuchTranche(gesuch);
         gesuchRepository.persistAndFlush(gesuch);
-        return mapWithTrancheToWorkWith(gesuch);
+        return gesuchMapperUtil.mapWithTranche(
+            gesuch, gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
+        );
     }
 
     private void createInitialGesuchTranche(Gesuch gesuch) {
@@ -265,7 +275,8 @@ public class GesuchService {
         var tranche = new GesuchTranche()
             .setGueltigkeit(new DateRange(periode.getGesuchsperiodeStart(), periode.getGesuchsperiodeStopp()))
             .setGesuch(gesuch)
-            .setGesuchFormular(new GesuchFormular());
+            .setGesuchFormular(new GesuchFormular())
+            .setTyp(GesuchTrancheTyp.TRANCHE);
 
         gesuch.getGesuchTranchen().add(tranche);
     }
@@ -288,28 +299,31 @@ public class GesuchService {
     }
 
     private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
-        return gesuche.map(this::mapWithTrancheToWorkWith).toList();
+        return gesuche.map(gesuchMapperUtil::mapWithNewestTranche).toList();
     }
 
     @Transactional
     public List<GesuchDto> findGesucheGs() {
         final var benutzer = benutzerService.getCurrentBenutzer();
         return gesuchRepository.findForGs(benutzer.getId())
-            .map(this::mapWithTrancheToWorkWith)
+            .map(gesuchMapperUtil::mapWithNewestTranche)
             .toList();
     }
 
     @Transactional
     public List<GesuchDto> findAllForFall(UUID fallId) {
-        return gesuchRepository.findAllForFall(fallId).map(this::mapWithTrancheToWorkWith).toList();
+        return gesuchRepository.findAllForFall(fallId).map(gesuchMapperUtil::mapWithNewestTranche).toList();
     }
 
     @Transactional
     public void deleteGesuch(UUID gesuchId) {
         Gesuch gesuch = gesuchRepository.requireById(gesuchId);
         preventUpdateVonGesuchIfReadOnly(gesuch);
-        gesuchDokumentService.deleteAllDokumentForGesuch(gesuchId);
+        gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
+        gesuch.getGesuchTranchen().forEach(
+            gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
+        );
         gesuchRepository.delete(gesuch);
     }
 
@@ -326,45 +340,13 @@ public class GesuchService {
     public GesuchDto gesuchStatusToInBearbeitung(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
-        return mapWithTrancheToWorkWith(gesuch);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
     public void gesuchFehlendeDokumente(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
-    }
-
-    @Transactional
-    public GesuchDto createAenderungsantrag(
-        final UUID gesuchId,
-        final AenderungsantragCreateDto aenderungsantragCreateDto
-    ) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var trancheToCopy = getCurrentGesuchTranche(gesuch);
-        final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
-        gesuch.getGesuchTranchen().add(newTranche);
-
-        final var violations = validator.validate(gesuch);
-        if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
-        }
-
-        // Manually persist so that when mapping happens the IDs on the new objects are set
-        gesuchRepository.persistAndFlush(gesuch);
-        return mapWithTranche(gesuch, newTranche);
-    }
-
-    public GesuchDto getAenderungsantrag(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        return mapWithTranche(
-            gesuch,
-            gesuch.getGesuchTranchen()
-                .stream()
-                .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
-                .findFirst()
-                .orElseThrow(NotFoundException::new)
-        );
     }
 
     public ValidationReportDto validateGesuchEinreichen(UUID gesuchId) {
@@ -381,116 +363,16 @@ public class GesuchService {
         return new ValidationReportDto();
     }
 
-    public ValidationReportDto validatePages(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        return validatePages(gesuch);
-    }
-
-    public ValidationReportDto validatePages(final Gesuch gesuch) {
-        final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
-            .orElseThrow(NotFoundException::new)
-            .getGesuchFormular();
-
-        if (formular == null) {
-            throw new NotFoundException();
-        }
-
-        return validatePages(formular, gesuch.getId());
-    }
-
-    public ValidationReportDto validatePages(final @NotNull GesuchFormular gesuchFormular, UUID gesuchId) {
-        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
-        validationGroups.add(DocumentsRequiredValidationGroup.class);
-        // Since lebenslaufItems are nullable in GesuchFormular the validator has to be added manually if it is not
-        // already present
-        // Only do this if we are also validating PersonInAusbildungPage and AusbildungPage and not already
-        // validating LebenslaufItemPage
-        // (i.e. no lebenslaufitem is present)
-        if (
-            validationGroups.contains(PersonInAusbildungPageValidation.class) &&
-                validationGroups.contains(AusbildungPageValidation.class) &&
-                !validationGroups.contains(LebenslaufItemPageValidation.class)
-        ) {
-            validationGroups.add(LebenslaufItemPageValidation.class);
-        }
-
-        final var violations = new HashSet<>(
-            validator.validate(
-                gesuchFormular,
-                validationGroups.toArray(new Class<?>[0])
-            )
-        );
-        violations.addAll(validator.validate(gesuchFormular));
-
-        final var validationReportDto = ValidationsExceptionMapper.toDto(violations);
-        final var documents = gesuchFormular.getTranche().getGesuch().getGesuchDokuments();
-        validationReportDto.hasDocuments(documents != null && !documents.isEmpty());
-
-        try {
-            validateNoOtherGesuchEingereichtWithSameSvNumber(gesuchFormular, gesuchId);
-        } catch (CustomValidationsException exception) {
-            CustomValidationsExceptionMapper
-                .toDto(exception)
-                .getValidationErrors()
-                .forEach(validationReportDto::addValidationErrorsItem);
-        }
-
-        return validationReportDto;
-    }
-
-    private void removeSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
-        List<String> dokumentObjectIds = new ArrayList<>();
-
-        requiredDokumentService.getSuperfluousDokumentsForGesuch(formular).forEach(
-            gesuchDokument -> gesuchDokument.getDokumente().forEach(
-                dokument -> dokumentObjectIds.add(
-                    gesuchDokumentService.deleteDokument(dokument.getId())
-                )
-            )
-        );
-
-        if (!dokumentObjectIds.isEmpty()) {
-            gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);
-        }
-    }
-
-    public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuch(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
-            .orElseThrow(NotFoundException::new)
-            .getGesuchFormular();
-
-        removeSuperfluousDokumentsForGesuch(formular);
-        return getGesuchDokumenteForGesuch(gesuchId);
-    }
-
     @Transactional
     public List<GesuchDokumentDto> getGesuchDokumenteForGesuch(final UUID gesuchId) {
-        return gesuchDokumentRepository.findAllForGesuch(gesuchId).map(gesuchDokumentMapper::toDto).toList();
-    }
-
-    public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var formular = gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
-            .orElseThrow(NotFoundException::new)
-            .getGesuchFormular();
 
-        return requiredDokumentService.getRequiredDokumentsForGesuch(formular);
-    }
-
-    private GesuchDto mapWithTrancheToWorkWith(Gesuch gesuch) {
-        return mapWithTranche(gesuch, getCurrentGesuchTranche(gesuch));
-    }
-
-    private GesuchDto mapWithTranche(final Gesuch gesuch, final GesuchTranche tranche) {
-        final var gesuchDto = gesuchMapper.toDto(gesuch);
-        gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
-        return gesuchDto;
-    }
-
-    private GesuchTranche getCurrentGesuchTranche(Gesuch gesuch) {
-        return gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
-            .orElseThrow();
+        return gesuch.getGesuchTranchen().stream().filter(
+                gesuchTranche -> gesuchTranche.getStatus() != GesuchTrancheStatus.ABGELEHNT
+            ).flatMap(
+                gesuchTranche -> gesuchDokumentRepository.findAllForGesuchTranche(gesuchTranche.getId())
+            ).map(gesuchDokumentMapper::toDto)
+            .toList();
     }
 
     private void validateGesuchEinreichen(Gesuch gesuch) {
@@ -514,13 +396,18 @@ public class GesuchService {
     }
 
     private void validateNoOtherGesuchEingereichtWithSameSvNumber(Gesuch gesuch) {
+        // If a Gesuch with more than one tranche is supposed to be validated throw as this is not an expected state.
+        if (gesuch.getGesuchTranchen().size() != 1) {
+            throw new IllegalStateException();
+        }
+
         validateNoOtherGesuchEingereichtWithSameSvNumber(
-            getCurrentGesuchTranche(gesuch).getGesuchFormular(),
+            gesuch.getGesuchTranchen().get(0).getGesuchFormular(),
             gesuch.getId()
         );
     }
 
-    private void validateNoOtherGesuchEingereichtWithSameSvNumber(
+    public void validateNoOtherGesuchEingereichtWithSameSvNumber(
         final GesuchFormular gesuchFormular,
         final UUID gesuchId
     ) {
@@ -556,7 +443,23 @@ public class GesuchService {
 
     public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
-        final var resultat = berechnungService.getBerechnungsResultatFromGesuch(gesuch, 1, 0);
-        return List.of(resultat);
+        return berechnungService.getBerechnungsresultateFromGesuch(gesuch, 1, 0);
+    }
+
+    public GesuchWithChangesDto getGsTrancheChanges(final UUID aenderungId) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+        return gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision);
+    }
+
+    public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+        final var latestWhereStatusChanged = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+        return gesuchMapperUtil.toWithChangesDto(
+            aenderung.getGesuch(),
+            aenderung,
+            List.of(initialRevision, latestWhereStatusChanged)
+        );
     }
 }

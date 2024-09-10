@@ -7,15 +7,20 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.KontoinhaberDtoSpec;
 
 public final class AuszahlungUpdateDtoSpecModel {
-    public static final AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec =
-        TestUtil.createUpdateDtoSpec(AuszahlungUpdateDtoSpec::new, (model, faker) -> {
-            model.setAdresse(AdresseSpecModel.adresseDtoSpec);
+    public static AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec() {
+        return TestUtil.createUpdateDtoSpec(AuszahlungUpdateDtoSpec::new, (model) -> {
+            model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             model.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
-            model.setVorname(faker.name().firstName());
-            model.setNachname(faker.name().lastName());
+            model.setVorname("John");
+            model.setNachname("Doe");
             model.setKontoinhaber(KontoinhaberDtoSpec.SOZIALDIENST_INSTITUTION);
         });
+    }
 
-    public static final GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAuszahlung =
-        TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model, faker) -> model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec));
+    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAuszahlung() {
+        return TestUtil.createUpdateDtoSpec(
+            GesuchFormularUpdateDtoSpec::new,
+            (model) -> model.setAuszahlung(AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec())
+        );
+    }
 }

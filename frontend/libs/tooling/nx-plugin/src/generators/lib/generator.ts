@@ -6,7 +6,9 @@ import {
   getWorkspaceLayout,
   names,
   offsetFromRoot,
+  updateProjectConfiguration,
   Tree,
+  readProjectConfiguration,
 } from '@nx/devkit';
 import {
   classify,
@@ -67,12 +69,38 @@ export default async function (tree: Tree, options: LibGeneratorSchema) {
 
   const { libGenerator, libDefaultOptions, generators, postprocess } =
     libTypeFactory(normalizedOptions);
+
   await libGenerator(tree, {
     ...libDefaultOptions,
     name: normalizedOptions.name,
     directory: normalizedOptions.projectDirectory,
     tags: normalizedOptions.parsedTags.join(','),
   });
+  const projectConfig = readProjectConfiguration(
+    tree,
+    normalizedOptions.projectName,
+  );
+  // Add a dummy build target if it no target exists which configures
+  // the location of the tsconfig file.
+  // @see {@link file://./../../../../../../.eslintrc.json} -> enforceBuildableLibDependency
+  if (
+    ['test', 'build'].some(
+      (target) => !projectConfig.targets?.[target]?.options?.tsConfig,
+    )
+  ) {
+    updateProjectConfiguration(tree, normalizedOptions.projectName, {
+      ...projectConfig,
+      targets: {
+        build: {
+          executor: 'nx:noop',
+          options: {
+            tsConfig: `${normalizedOptions.projectRoot}/tsconfig.lib.json`,
+          },
+        },
+        ...projectConfig.targets,
+      },
+    });
+  }
 
   for (const { generator, defaultOptions } of generators) {
     await generator(tree, {
