@@ -47,6 +47,9 @@ public class SapAuszahlungService {
 
     @Transactional
     public Response createVendorPosting(Auszahlung auszahlung) {
+        // todo: KSTIP 1229: add proper handling for newly created
+        //  user that are not yet active in SAP
+        //  todo: KSTIP 1229: add proper handling for "no action" events
         //generate new deliveryId
         BigDecimal deliveryId = SAPUtils.generateDeliveryId();
         //createOrUpdateBusinessPartner

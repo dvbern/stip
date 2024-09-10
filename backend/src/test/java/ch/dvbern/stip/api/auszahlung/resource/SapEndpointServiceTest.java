@@ -59,14 +59,19 @@ class SapEndpointServiceTest {
     @TestAsSachbearbeiter
     @Test
     void getImportStatusTest() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/getImportStatusExampleResponse.xml"),
             "UTF-8"
         );
         when(importStatusReadClient.getImportStatus(any())).thenReturn(xml);
+
+        //act
         final var response = auszahlungSapService.getImportStatus(EXAMPLE_DELIVERY_ID);
-        assertEquals(HttpStatus.SC_OK,response.getStatus());
         final var responseDto = (ImportStatusReadResponse) response.getEntity();
+
+        //assert
+        assertEquals(HttpStatus.SC_OK,response.getStatus());
         assertEquals("S",responseDto.getRETURNCODE().get(0).getTYPE());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
@@ -74,7 +79,9 @@ class SapEndpointServiceTest {
     @TestAsSachbearbeiter
     @Test
     void getImportStatusInvalidDeliveryIdTest(){
+        //arrange
         when(importStatusReadClient.getImportStatus(any())).thenThrow(WebApplicationException.class);
+        // act & assert
         assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(BigDecimal.valueOf(-1)));
         assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(BigDecimal.valueOf(0)));
         assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(null));
@@ -83,114 +90,156 @@ class SapEndpointServiceTest {
     @TestAsSachbearbeiter
     @Test
     void getImportStatusDeliveryIdNotFoundTest() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/getImportStatusDeliveryIdNotFoundExampleResponse.xml"),
             "UTF-8"
         );
         when(importStatusReadClient.getImportStatus(any())).thenReturn(xml);
+
+        //act
         final var response = auszahlungSapService.getImportStatus(EXAMPLE_DELIVERY_ID);
-        assertEquals(HttpStatus.SC_OK,response.getStatus());
         final var responseDto = (ImportStatusReadResponse) response.getEntity();
+
+        //assert
+        assertEquals(HttpStatus.SC_OK,response.getStatus());
         assertEquals("E",responseDto.getRETURNCODE().get(0).getTYPE());
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test
     void createBusinessPartnerSucessTest() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerSuccessResponse.xml"),
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
+        //act
         final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
+        //assert
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test
     void createBusinessPartnerAlreadyExistingParnterTest() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/createBusinessParnterAlreadyExistingPartnerResponse.xml"),
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
+        //act
         final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
         final var businessPartnerId = ((BusinessPartnerCreateResponse) response.getEntity()).getBUSINESSPARTNER().getHEADER().getBPARTNER();
+
+        //assert
         assertNotNull(businessPartnerId);
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test
     void createBusinessPartnerAlreadyExistingDeliveryIdTest() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
+
+        //act
         final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
+
+        //assert
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test
     void createBusinessPartnerInvalidDtoTest() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
+
+        //act
         final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
+
+        //assert
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test
     void changeBusinessPartnerAlreadyExistingDeliveryIdTest() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
             "UTF-8"
         );
         final Auszahlung requestDto1 = AuszahlungGenerator.initAuszahlung();
         requestDto1.setAdresse(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.changeBusinessPartner(requestDto1,EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID));
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(xml);
+
+        //act
         final var response = auszahlungSapService.changeBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
+
+        //assert
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.changeBusinessPartner(requestDto1,EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID));
         assertEquals(HttpStatus.SC_OK, response.getStatus());
+
     }
 
     @Test
     void changeBusinessPartnerSuccessTest() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/changeBusinessPartnerSuccessResponse.xml"),
             "UTF-8"
         );
         when(businessPartnerChangeClient.changeBusinessPartner(any())).thenReturn(xml);
         Auszahlung requestDto1 = AuszahlungGenerator.initAuszahlung();
+
+        //act
         final var response = auszahlungSapService.changeBusinessPartner(requestDto1,EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
+
+        //assert
         assertEquals(HttpStatus.SC_OK, response.getStatus());
 
     }
 
     @Test
     void createAuszahlungInvalidDtoTest() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/vendorPostingAlreadyExistingDeliveryResponse.xml"),
             "UTF-8"
         );
         final Auszahlung requestDto1 = AuszahlungGenerator.initAuszahlung();
         requestDto1.setAdresse(null);
-        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.createVendorPosting(requestDto1,EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID));
-
         when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(xml);
+
+        //act
         final var response = auszahlungSapService.createVendorPosting(AuszahlungGenerator.initAuszahlung(),EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
+
+        //assert
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.createVendorPosting(requestDto1,EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID));
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
     @Test
     void createAuszahlungTest() throws IOException {
+        //arrange
         String xml = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/vendorPostingCreateSuccess.xml"),
             "UTF-8"
         );
         when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(xml);
+
+        //act
         final var response = auszahlungSapService.createVendorPosting(AuszahlungGenerator.initAuszahlung(),EXAMPLE_BUSINESS_PARTNER_ID,DELIVERY_ID);
+
+        //assert
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
