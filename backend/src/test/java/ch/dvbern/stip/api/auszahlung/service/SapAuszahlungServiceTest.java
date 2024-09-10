@@ -194,7 +194,8 @@ class SapAuszahlungServiceTest {
         String vendorPostingCreateResponse = IOUtils.toString(
             this.getClass().getResourceAsStream("/auszahlung/vendorPostingAlreadyExistingDeliveryResponse.xml"),
             "UTF-8"
-        );        when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(vendorPostingCreateResponse);
+        );
+        when(vendorPostingCreateClient.createVendorPosting(any())).thenReturn(vendorPostingCreateResponse);
         Auszahlung auszahlung= initAuszahlung();
         auszahlung.setSapBusinessPartnerId(EXAMPLE_BUSINESS_PARTNER_ID);
 
