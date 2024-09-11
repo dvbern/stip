@@ -28,8 +28,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.soap.SOAPException;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -38,7 +36,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -65,7 +62,7 @@ public class SapEndpointService {
     @RestClient
     BusinessPartnerReadClient businessPartnerReadClient;
 
-    private ImportStatusReadResponse  getAndParseGetSAPImportStatusResponse(BigDecimal deliveryId) throws JAXBException, SOAPException, IOException {
+    private ImportStatusReadResponse getAndParseGetSAPImportStatusResponse(BigDecimal deliveryId) {
         var request = new ImportStatusReadRequest();
         var senderParms = new SenderParms();
         senderParms.setSYSID(BigInteger.valueOf(configService.getSystemid()));
@@ -74,17 +71,16 @@ public class SapEndpointService {
         filterparms.setDELIVERYID(deliveryId);
         request.setFILTERPARMS(filterparms);
 
-        final var xmlRequest = SoapUtils.buildXmlRequest(request,ImportStatusReadRequest.class, SapEndpointName.IMPORT_STATUS);
+        final var xmlRequest = SoapUtils.buildXmlRequest(request, ImportStatusReadRequest.class, SapEndpointName.IMPORT_STATUS);
         final var xmlResponse = importStatusReadClient.getImportStatus(xmlRequest);
         return SoapUtils.parseSoapResponse(xmlResponse, ImportStatusReadResponse.class);
     }
 
-    public Response getImportStatus(@Valid @Positive @NotNull BigDecimal deliveryId){
-        try{
+    public Response getImportStatus(@Valid @Positive @NotNull BigDecimal deliveryId) {
+        try {
             return Response.status(HttpStatus.SC_OK).entity(getAndParseGetSAPImportStatusResponse(deliveryId)).build();
 
-        }
-        catch(WebApplicationException | JAXBException | SOAPException | IOException ex){
+        } catch (WebApplicationException webApplicationException) {
             return Response.status(HttpStatus.SC_BAD_REQUEST).build();
         }
     }
@@ -95,12 +91,7 @@ public class SapEndpointService {
         request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
 
         String xmlRequest = null;
-        try {
-            xmlRequest = SoapUtils.buildXmlRequest(request, BusinessPartnerReadRequest.class, SapEndpointName.BUSINESPARTNER);
-
-        } catch (JAXBException | SOAPException | IOException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        xmlRequest = SoapUtils.buildXmlRequest(request, BusinessPartnerReadRequest.class, SapEndpointName.BUSINESPARTNER);
         String xmlResponse = null;
 
         try {
@@ -109,17 +100,14 @@ public class SapEndpointService {
         } catch (WebApplicationException webApplicationException) {
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
         }
-        try {
-            final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerReadResponse.class);
-            return Response.status(HttpStatus.SC_OK).entity(result).build();
-        } catch (SOAPException | IOException | JAXBException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerReadResponse.class);
+        return Response.status(HttpStatus.SC_OK).entity(result).build();
     }
 
     /*
     Note: specific values are still hardcoded or commented - these have to be discussed in the near future
  */
+
     /**
      * Important: it can take up to 48 hours until a newly created user will be set active in SAP!
      */
@@ -142,12 +130,7 @@ public class SapEndpointService {
         request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo KSTIP-1229: set iso country (max 3 instead of "Schweiz"
 
         String xmlRequest = null;
-        try {
-            xmlRequest = SoapUtils.buildXmlRequest(request, BusinessPartnerCreateRequest.class, SapEndpointName.BUSINESPARTNER);
-
-        } catch (JAXBException | SOAPException | IOException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        xmlRequest = SoapUtils.buildXmlRequest(request, BusinessPartnerCreateRequest.class, SapEndpointName.BUSINESPARTNER);
 
         String xmlResponse = null;
         try {
@@ -157,12 +140,8 @@ public class SapEndpointService {
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
         }
 
-        try {
-            final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerCreateResponse.class);
-            return Response.status(HttpStatus.SC_OK).entity(result).build();
-        } catch (SOAPException | IOException | JAXBException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerCreateResponse.class);
+        return Response.status(HttpStatus.SC_OK).entity(result).build();
 
     }
 
@@ -191,11 +170,7 @@ public class SapEndpointService {
         request.getBUSINESSPARTNER().getADDRESS().get(0).setCOUNTRY("CH");//todo KSTIP-1229: set iso country (max 3 instead of "Schweiz"
 
         String xmlRequest = null;
-        try {
-            xmlRequest = SoapUtils.buildXmlRequest(request, BusinessPartnerChangeRequest.class, SapEndpointName.BUSINESPARTNER);
-        } catch (JAXBException | SOAPException | IOException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        xmlRequest = SoapUtils.buildXmlRequest(request, BusinessPartnerChangeRequest.class, SapEndpointName.BUSINESPARTNER);
         String xmlResponse = null;
         try {
             xmlResponse = businessPartnerChangeClient.changeBusinessPartner(xmlRequest);
@@ -203,75 +178,61 @@ public class SapEndpointService {
             return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
         }
 
-        try {
-            final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerChangeResponse.class);
-            return Response.status(HttpStatus.SC_OK).entity(result).build();
-        } catch (SOAPException | IOException | JAXBException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerChangeResponse.class);
+        return Response.status(HttpStatus.SC_OK).entity(result).build();
     }
 
     /*
     Note: specific values are still hardcoded or commented - these have to be discussed in the near future
  */
-    public Response createVendorPosting(@Valid Auszahlung auszahlung, Integer businessPartnerId,BigDecimal deliveryId){
-            final var  mapper = new VendorPostingCreateRequestMapper();
-            var request = mapper.toVendorPostingCreateRequest(auszahlung, BigInteger.valueOf(configService.getSystemid()), deliveryId);
-            request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
-            request.getSENDER().setDELIVERYID(deliveryId);
+    public Response createVendorPosting(@Valid Auszahlung auszahlung, Integer businessPartnerId, BigDecimal deliveryId) {
+        final var mapper = new VendorPostingCreateRequestMapper();
+        var request = mapper.toVendorPostingCreateRequest(auszahlung, BigInteger.valueOf(configService.getSystemid()), deliveryId);
+        request.getSENDER().setSYSID(BigInteger.valueOf(configService.getSystemid()));
+        request.getSENDER().setDELIVERYID(deliveryId);
 
-            request.getVENDORPOSTING().forEach(vendorposting -> {
-                vendorposting.getVENDOR().setVENDORNO(String.valueOf(businessPartnerId));
-                vendorposting.getVENDOR().setAMTDOCCUR(BigDecimal.valueOf(7162.0));
-                vendorposting.getVENDOR().setZTERM("ZB04");
+        request.getVENDORPOSTING().forEach(vendorposting -> {
+            vendorposting.getVENDOR().setVENDORNO(String.valueOf(businessPartnerId));
+            vendorposting.getVENDOR().setAMTDOCCUR(BigDecimal.valueOf(7162.0));
+            vendorposting.getVENDOR().setZTERM("ZB04");
 
-                vendorposting.getGLACCOUNT().add(new VendorPostingCreateRequest.VENDORPOSTING.GLACCOUNT());
-                vendorposting.getGLACCOUNT().get(0).setGLACCOUNT("363710000");
-                vendorposting.getGLACCOUNT().get(0).setITEMNOACC(BigDecimal.valueOf(1));
-                vendorposting.getPOSITION().add(new VendorPostingCreateRequest.VENDORPOSTING.POSITION());
-                vendorposting.getPOSITION().get(0).setITEMNOACC(BigDecimal.valueOf(1));
-                vendorposting.getPOSITION().get(0).setAMTDOCCUR(BigDecimal.valueOf(17779.0));
+            vendorposting.getGLACCOUNT().add(new VendorPostingCreateRequest.VENDORPOSTING.GLACCOUNT());
+            vendorposting.getGLACCOUNT().get(0).setGLACCOUNT("363710000");
+            vendorposting.getGLACCOUNT().get(0).setITEMNOACC(BigDecimal.valueOf(1));
+            vendorposting.getPOSITION().add(new VendorPostingCreateRequest.VENDORPOSTING.POSITION());
+            vendorposting.getPOSITION().get(0).setITEMNOACC(BigDecimal.valueOf(1));
+            vendorposting.getPOSITION().get(0).setAMTDOCCUR(BigDecimal.valueOf(17779.0));
 
-                vendorposting.setHEADER(new VendorPostingCreateRequest.VENDORPOSTING.HEADER());
-                vendorposting.getHEADER().setDOCTYPE("YK");
-                vendorposting.getHEADER().setCOMPCODE("4800");
-                vendorposting.getHEADER().setHEADERTXT("4890");
-                vendorposting.getHEADER().setREFDOCNO("0001544323");
+            vendorposting.setHEADER(new VendorPostingCreateRequest.VENDORPOSTING.HEADER());
+            vendorposting.getHEADER().setDOCTYPE("YK");
+            vendorposting.getHEADER().setCOMPCODE("4800");
+            vendorposting.getHEADER().setHEADERTXT("4890");
+            vendorposting.getHEADER().setREFDOCNO("0001544323");
 
-                XMLGregorianCalendar date;
-                try {
-                    LocalDate localDate = LocalDate.now();
-                    date = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(localDate.getYear(),localDate.getMonthValue(), localDate.getDayOfMonth(), DatatypeConstants. FIELD_UNDEFINED);
-                } catch (DatatypeConfigurationException e) {
-                    throw new RuntimeException(e);
-                }
-                vendorposting.getHEADER().setDOCDATE(date);
-                vendorposting.getHEADER().setPSTNGDATE(date);
-                vendorposting.getHEADER().setCURRENCY("CHF");
-            });
-
-            String xmlRequest = null;
-            try{
-                xmlRequest = SoapUtils.buildXmlRequest(request,VendorPostingCreateRequest.class, SapEndpointName.VENDORPOSTING);
-            }catch (JAXBException | SOAPException | IOException ex) {
-                throw new RuntimeException(ex.getMessage());
+            XMLGregorianCalendar date;
+            try {
+                LocalDate localDate = LocalDate.now();
+                date = DatatypeFactory.newInstance().newXMLGregorianCalendarDate(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth(), DatatypeConstants.FIELD_UNDEFINED);
+            } catch (DatatypeConfigurationException e) {
+                throw new RuntimeException(e);
             }
-            String xmlResponse = null;
+            vendorposting.getHEADER().setDOCDATE(date);
+            vendorposting.getHEADER().setPSTNGDATE(date);
+            vendorposting.getHEADER().setCURRENCY("CHF");
+        });
 
-            try{
-                xmlResponse = vendorPostingCreateClient.createVendorPosting(xmlRequest);
-            }
-            catch(WebApplicationException webApplicationException){
-                return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
-            }
+        String xmlRequest = null;
+        xmlRequest = SoapUtils.buildXmlRequest(request, VendorPostingCreateRequest.class, SapEndpointName.VENDORPOSTING);
+        String xmlResponse = null;
 
-            try{
-                final var result = SoapUtils.parseSoapResponse(xmlResponse, VendorPostingCreateResponse.class);
-                return Response.status(HttpStatus.SC_OK).entity(result).build();
-            }
-            catch (SOAPException | IOException | JAXBException ex){
-                throw new RuntimeException(ex.getMessage());
-            }
+        try {
+            xmlResponse = vendorPostingCreateClient.createVendorPosting(xmlRequest);
+        } catch (WebApplicationException webApplicationException) {
+            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
+        }
+
+        final var result = SoapUtils.parseSoapResponse(xmlResponse, VendorPostingCreateResponse.class);
+        return Response.status(HttpStatus.SC_OK).entity(result).build();
     }
 
 }
