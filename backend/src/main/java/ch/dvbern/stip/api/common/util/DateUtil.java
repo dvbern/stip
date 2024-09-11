@@ -38,12 +38,21 @@ public class DateUtil {
     }
 
     /**
+     * Defaults the midpoint to 15
+     *
+     * @see DateUtil#roundToPeriodStart(LocalDate, int, boolean)
+     */
+    public LocalDate roundToStart(final LocalDate date, final boolean roundUpIfEnd) {
+        return roundToPeriodStart(date, 15, roundUpIfEnd);
+    }
+
+    /**
      * Defaults the midpoint to 14
      *
-     * @see DateUtil#roundToStartOrEnd(LocalDate, int, boolean)
+     * @see DateUtil#roundToPeriodStart(LocalDate, int, boolean)
      */
-    public LocalDate roundToStartOrEnd(final LocalDate date, final boolean roundUpIfEnd) {
-        return roundToStartOrEnd(date, 15, roundUpIfEnd);
+    public LocalDate roundToEnd(final LocalDate date, final boolean roundOffIfEnd) {
+        return roundToPeriodEnd(date, 14, roundOffIfEnd);
     }
 
     /**
@@ -52,7 +61,7 @@ public class DateUtil {
      * all after are clamped up the end of the month.
      * If the param {@code roundUpIfEnd} is {@code true}, then rounds up the date to the start of next month
      */
-    public LocalDate roundToStartOrEnd(final LocalDate date, final int midpoint, final boolean roundUpIfEnd) {
+    public LocalDate roundToPeriodStart(final LocalDate date, final int midpoint, final boolean roundUpIfEnd) {
         if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");
         }
@@ -64,6 +73,28 @@ public class DateUtil {
                 return date.plusMonths(1).with(firstDayOfMonth());
             }
 
+            return date.with(lastDayOfMonth());
+        }
+    }
+
+    /**
+     * Rounds the given date to the start or end of month.
+     * All dates up to and including the midpoint of the month are rounded down to the start,
+     * all after are clamped up the end of the month.
+     * If the param {@code roundOffIfBeginning} is {@code true}, then rounds off the date to the start of next month
+     */
+    public LocalDate roundToPeriodEnd(final LocalDate date, final int midpoint, final boolean roundOffIfBeginning) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+
+        if (date.getDayOfMonth() <= midpoint) {
+            if(roundOffIfBeginning){
+                return date.minusMonths(1).with(lastDayOfMonth());
+            }else{
+                return date.with(firstDayOfMonth());
+            }
+        } else {
             return date.with(lastDayOfMonth());
         }
     }

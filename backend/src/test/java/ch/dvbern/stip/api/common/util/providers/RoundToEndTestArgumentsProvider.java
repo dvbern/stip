@@ -1,13 +1,13 @@
 package ch.dvbern.stip.api.common.util.providers;
 
-import java.time.LocalDate;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 
-public class RoundToStartOrEndTestArgumentsProvider implements ArgumentsProvider {
+import java.time.LocalDate;
+import java.util.stream.Stream;
+
+public class RoundToEndTestArgumentsProvider implements ArgumentsProvider {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
             return Stream.of(

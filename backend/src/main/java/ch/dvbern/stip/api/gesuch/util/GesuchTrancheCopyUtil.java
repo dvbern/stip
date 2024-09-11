@@ -26,6 +26,8 @@ import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import lombok.experimental.UtilityClass;
 
+import java.time.LocalDate;
+
 @UtilityClass
 // TODO KSTIP-1236: Once proper test data generation is in place, test copying
 public class GesuchTrancheCopyUtil {
@@ -100,7 +102,7 @@ public class GesuchTrancheCopyUtil {
     DateRange clampStartStop(final Gesuchsperiode gesuchsperiode, final DateRange createDateRange) {
         final var gesuchsperiodeStart = gesuchsperiode.getGesuchsperiodeStart();
         final var gesuchsperiodeStopp = gesuchsperiode.getGesuchsperiodeStopp();
-        final var startDate = DateUtil.roundToStartOrEnd(
+        final var startDate = DateUtil.roundToStart(
             DateUtil.clamp(
                 createDateRange.getGueltigAb(),
                 gesuchsperiodeStart,
@@ -108,13 +110,16 @@ public class GesuchTrancheCopyUtil {
             ),
             true
         );
-        final var endDate = DateUtil.roundToStartOrEnd(
-            DateUtil.clamp(
-                createDateRange.getGueltigBis() != null ? createDateRange.getGueltigBis() : gesuchsperiodeStopp,
-                gesuchsperiodeStart,
-                gesuchsperiodeStopp
-            ),
-            false
+
+        LocalDate clampedDate =             DateUtil.clamp(
+            createDateRange.getGueltigBis() != null ? createDateRange.getGueltigBis() : gesuchsperiodeStopp,
+            gesuchsperiodeStart,
+            gesuchsperiodeStopp
+        );
+        boolean roundOffIfBeginning = createDateRange.getGueltigBis() != null && createDateRange.getGueltigBis()
+            .isBefore(gesuchsperiodeStopp);
+        final var endDate = DateUtil.roundToEnd(
+            clampedDate, roundOffIfBeginning
         );
 
         if (startDate.isAfter(endDate)) {
