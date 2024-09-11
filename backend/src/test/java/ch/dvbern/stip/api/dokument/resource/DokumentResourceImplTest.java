@@ -1,5 +1,8 @@
 package ch.dvbern.stip.api.dokument.resource;
 
+import java.util.List;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
@@ -13,10 +16,8 @@ import jakarta.inject.Inject;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.List;
-import java.util.UUID;
+
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -35,7 +36,7 @@ class DokumentResourceImplTest {
     @BeforeEach
     void setUp() {
         GesuchDokumentKommentar kommentar = new GesuchDokumentKommentar();
-        when(dokumentKommentarRepository.getByTypAndGesuchId(any(), any())).thenReturn(List.of(kommentar));
+        when(dokumentKommentarRepository.getByTypAndGesuchTrancheId(any(), any())).thenReturn(List.of(kommentar));
     }
 
     @Test

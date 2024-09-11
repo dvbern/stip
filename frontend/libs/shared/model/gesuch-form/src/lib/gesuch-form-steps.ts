@@ -13,6 +13,13 @@ import {
   StepValidation,
 } from './shared-model-gesuch-form';
 
+export const TRANCHE: SharedModelGesuchFormStep = {
+  route: 'tranche',
+  translationKey: 'shared.tranche.title',
+  titleTranslationKey: 'shared.nothing',
+  iconSymbolName: 'info',
+} satisfies SharedModelGesuchFormStep;
+
 export const PERSON = {
   route: 'person',
   translationKey: 'shared.person.title',
@@ -158,6 +165,26 @@ export const gesuchFormSteps = {
 };
 export type GesuchFormSteps = keyof typeof gesuchFormSteps;
 
+export const gesuchFormStepsFieldMap: Record<
+  string,
+  SharedModelGesuchFormularProps
+> = {
+  [PERSON.route]: 'personInAusbildung',
+  [AUSBILDUNG.route]: 'ausbildung',
+  [LEBENSLAUF.route]: 'lebenslaufItems',
+  [FAMILIENSITUATION.route]: 'familiensituation',
+  [ELTERN.route]: 'elterns',
+  [ELTERN_STEUER_MUTTER.route]: 'steuerdatenMutter',
+  [ELTERN_STEUER_VATER.route]: 'steuerdatenVater',
+  [ELTERN_STEUER_FAMILIE.route]: 'steuerdaten',
+  [GESCHWISTER.route]: 'geschwisters',
+  [PARTNER.route]: 'partner',
+  [KINDER.route]: 'kinds',
+  [AUSZAHLUNG.route]: 'auszahlung',
+  [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
+  [DOKUMENTE.route]: 'dokuments',
+};
+
 export const findStepIndex = (
   step: SharedModelGesuchFormStep,
   steps: SharedModelGesuchFormStep[],
@@ -166,6 +193,7 @@ export const findStepIndex = (
 export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
   formular: SharedModelGesuchFormular | null,
+  readonly = false,
 ) => {
   if (step === PARTNER) {
     const zivilstand = formular?.personInAusbildung?.zivilstand;
@@ -177,6 +205,14 @@ export const isStepDisabled = (
         Zivilstand.EINGETRAGENE_PARTNERSCHAFT,
       ].includes(zivilstand)
     );
+  }
+  if (step === GESCHWISTER) {
+    const geschwister = formular?.geschwisters;
+    return readonly && (!geschwister || geschwister.length === 0);
+  }
+  if (step === KINDER) {
+    const kinder = formular?.kinds;
+    return readonly && (!kinder || kinder.length === 0);
   }
   if (step === ELTERN) {
     const werZahltAlimente = formular?.familiensituation?.werZahltAlimente;

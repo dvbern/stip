@@ -1,12 +1,13 @@
 package ch.dvbern.stip.api.dokument.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -21,7 +22,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Table(
     name = "dokument",
     indexes = {
-        @Index(name = "IX_dokument_gesuch_dokument_id", columnList = "gesuch_dokument_id"),
         @Index(name = "IX_dokument_mandant", columnList = "mandant")
     }
 )
@@ -29,9 +29,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Setter
 public class Dokument extends AbstractMandantEntity {
     @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "gesuch_dokument_id", foreignKey = @ForeignKey(name = "FK_dokument_gesuch_dokument_id"), nullable = false)
-    private GesuchDokument gesuchDokument;
+    @ManyToMany(mappedBy = "dokumente")
+    private List<GesuchDokument> gesuchDokumente = new ArrayList<>();
 
     @NotNull
     @Size(max = DB_DEFAULT_MAX_LENGTH)

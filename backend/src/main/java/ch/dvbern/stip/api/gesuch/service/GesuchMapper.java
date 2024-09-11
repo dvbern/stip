@@ -6,6 +6,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -25,6 +26,11 @@ public abstract class GesuchMapper {
     @Mapping(source = "fallId", target = "fall.id")
     @Mapping(source = "gesuchsperiodeId", target = "gesuchsperiode.id")
     public abstract Gesuch toNewEntity(GesuchCreateDto gesuchCreateDto);
+
+    @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
+    @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
+    public abstract GesuchWithChangesDto toWithChangesDto(Gesuch gesuch);
+
 
     @Named("getFullNameOfSachbearbeiter")
     String getFullNameOfSachbearbeiter(Gesuch gesuch) {

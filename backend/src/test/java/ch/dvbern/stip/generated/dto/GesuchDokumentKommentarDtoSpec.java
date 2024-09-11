@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Kommentar zu einem (abgelehnten) GesuchDokument
  */
 @JsonPropertyOrder({
-  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DOKUMENT_TYP,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_DOKUMENT_STATUS,
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_KOMMENTAR,
@@ -41,8 +41,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("GesuchDokumentKommentar")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchDokumentKommentarDtoSpec {
-  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
-  private UUID gesuchId;
+  public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  private UUID gesuchTrancheId;
 
   public static final String JSON_PROPERTY_DOKUMENT_TYP = "dokumentTyp";
   private DokumentTypDtoSpec dokumentTyp;
@@ -62,29 +62,29 @@ public class GesuchDokumentKommentarDtoSpec {
   public GesuchDokumentKommentarDtoSpec() {
   }
 
-  public GesuchDokumentKommentarDtoSpec gesuchId(UUID gesuchId) {
+  public GesuchDokumentKommentarDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
     
-    this.gesuchId = gesuchId;
+    this.gesuchTrancheId = gesuchTrancheId;
     return this;
   }
 
    /**
-   * Get gesuchId
-   * @return gesuchId
+   * Get gesuchTrancheId
+   * @return gesuchTrancheId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public UUID getGesuchId() {
-    return gesuchId;
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
   }
 
 
@@ -226,7 +226,7 @@ public class GesuchDokumentKommentarDtoSpec {
       return false;
     }
     GesuchDokumentKommentarDtoSpec gesuchDokumentKommentar = (GesuchDokumentKommentarDtoSpec) o;
-    return Objects.equals(this.gesuchId, gesuchDokumentKommentar.gesuchId) &&
+    return Objects.equals(this.gesuchTrancheId, gesuchDokumentKommentar.gesuchTrancheId) &&
         Objects.equals(this.dokumentTyp, gesuchDokumentKommentar.dokumentTyp) &&
         Objects.equals(this.dokumentStatus, gesuchDokumentKommentar.dokumentStatus) &&
         Objects.equals(this.kommentar, gesuchDokumentKommentar.kommentar) &&
@@ -236,14 +236,14 @@ public class GesuchDokumentKommentarDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, dokumentTyp, dokumentStatus, kommentar, userErstellt, timestampErstellt);
+    return Objects.hash(gesuchTrancheId, dokumentTyp, dokumentStatus, kommentar, userErstellt, timestampErstellt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentKommentarDtoSpec {\n");
-    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");

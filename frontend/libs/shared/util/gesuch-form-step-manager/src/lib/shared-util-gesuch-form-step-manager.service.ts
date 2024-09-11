@@ -47,12 +47,13 @@ export class SharedUtilGesuchFormStepManagerService {
     steps: SharedModelGesuchFormStep[],
     gesuchFormular: SharedModelGesuchFormular | null,
     invalidProps?: StepValidation,
+    readonly = false,
   ): GesuchFormStepView[] {
     return steps.map((step, index) => ({
       ...step,
       nextStep: steps[index + 1],
       status: isStepValid(step, gesuchFormular, invalidProps),
-      disabled: isStepDisabled(step, gesuchFormular),
+      disabled: isStepDisabled(step, gesuchFormular, readonly),
     }));
   }
 
@@ -62,12 +63,25 @@ export class SharedUtilGesuchFormStepManagerService {
   getNextStepOf(
     stepsFlow: SharedModelGesuchFormStep[],
     step: SharedModelGesuchFormStep,
+    gesuchFormular: SharedModelGesuchFormular | null,
+    readonly = false,
   ): SharedModelGesuchFormStep {
     const currentIndex = findStepIndex(step, stepsFlow);
+
     if (currentIndex === -1 || !stepsFlow[currentIndex + 1]) {
       return RETURN_TO_HOME;
     }
-    return stepsFlow[currentIndex + 1];
+
+    let nextIndex = 0;
+
+    for (let i = currentIndex + 1; i < stepsFlow.length; i++) {
+      if (!isStepDisabled(stepsFlow[i], gesuchFormular, readonly)) {
+        nextIndex = i;
+        break;
+      }
+    }
+
+    return stepsFlow[nextIndex];
   }
 
   /**

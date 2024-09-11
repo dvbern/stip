@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class CreateGesuchTrancheRequestDto  implements Serializable {
   private @Valid LocalDate start;
-  private @Valid LocalDate end;
   private @Valid String comment;
+  private @Valid LocalDate end;
 
   /**
    **/
@@ -45,6 +45,25 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
 
   /**
    **/
+  public CreateGesuchTrancheRequestDto comment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+  
+  @JsonProperty("comment")
+  @NotNull
+  public String getComment() {
+    return comment;
+  }
+
+  @JsonProperty("comment")
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
+
+  /**
+   **/
   public CreateGesuchTrancheRequestDto end(LocalDate end) {
     this.end = end;
     return this;
@@ -61,24 +80,6 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
     this.end = end;
   }
 
-  /**
-   **/
-  public CreateGesuchTrancheRequestDto comment(String comment) {
-    this.comment = comment;
-    return this;
-  }
-
-  
-  @JsonProperty("comment")
-  public String getComment() {
-    return comment;
-  }
-
-  @JsonProperty("comment")
-  public void setComment(String comment) {
-    this.comment = comment;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -90,13 +91,13 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
     }
     CreateGesuchTrancheRequestDto createGesuchTrancheRequest = (CreateGesuchTrancheRequestDto) o;
     return Objects.equals(this.start, createGesuchTrancheRequest.start) &&
-        Objects.equals(this.end, createGesuchTrancheRequest.end) &&
-        Objects.equals(this.comment, createGesuchTrancheRequest.comment);
+        Objects.equals(this.comment, createGesuchTrancheRequest.comment) &&
+        Objects.equals(this.end, createGesuchTrancheRequest.end);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(start, end, comment);
+    return Objects.hash(start, comment, end);
   }
 
   @Override
@@ -105,8 +106,8 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
     sb.append("class CreateGesuchTrancheRequestDto {\n");
     
     sb.append("    start: ").append(toIndentedString(start)).append("\n");
-    sb.append("    end: ").append(toIndentedString(end)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
+    sb.append("    end: ").append(toIndentedString(end)).append("\n");
     sb.append("}");
     return sb.toString();
   }

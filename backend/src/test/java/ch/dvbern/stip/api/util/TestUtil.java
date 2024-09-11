@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
@@ -92,7 +93,7 @@ public class TestUtil {
 
         for (final var dokTyp : DokumentTypDtoSpec.values()) {
             final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, gesuch.getId(), dokTyp, file);
+            TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokTyp, file);
         }
     }
 
@@ -231,11 +232,11 @@ public class TestUtil {
 
     public static void uploadFile(
         DokumentApiSpec dokumentApiSpec,
-        UUID gesuchId,
+        UUID gesuchTrancheId,
         DokumentTypDtoSpec dokTyp,
         File file) {
         dokumentApiSpec.createDokument()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(dokTyp)
             .reqSpec(req -> {
                 req.addMultiPart("fileUpload", file, "image/png");
@@ -251,6 +252,10 @@ public class TestUtil {
             new Gesuchsperiode()
                 .setMaxSaeule3a(7000)
                 .setEinkommensfreibetrag(6000)
+                .setFreibetragErwerbseinkommen(6000)
+                .setFreibetragVermoegen(30000)
+                .setStipLimiteMinimalstipendium(500)
+                .setVermoegensanteilInProzent(15)
                 .setAnzahlWochenLehre(42)
                 .setAnzahlWochenSchule(37)
                 .setPreisProMahlzeit(7)
@@ -299,6 +304,7 @@ public class TestUtil {
         final var baseGesuch = getBaseGesuchForBerechnung(trancheUuid);
         final var gesuchFormular = baseGesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuchFormular.getPersonInAusbildung()
+            .setZivilstand(Zivilstand.LEDIG)
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1));
 

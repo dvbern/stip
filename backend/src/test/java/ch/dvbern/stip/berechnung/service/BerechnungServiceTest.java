@@ -17,6 +17,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -80,7 +81,7 @@ class BerechnungServiceTest {
         "5, 39751", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
         "6, 27179",
         "7, 6669",
-        "8, 266",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
+        "8, 0",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
         "9, 23527"
     })
     void testBerechnungFaelle(final int fall, final int expectedStipendien) {
@@ -98,6 +99,7 @@ class BerechnungServiceTest {
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
 
         gesuchFormular.getPersonInAusbildung()
+            .setZivilstand(Zivilstand.LEDIG)
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1));
 
@@ -154,6 +156,7 @@ class BerechnungServiceTest {
             .setAnzahlWochenSchule(38);
 
         gesuchFormular.getPersonInAusbildung()
+            .setZivilstand(Zivilstand.LEDIG)
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.now().minusDays(1).minusYears(23));
 
@@ -239,6 +242,7 @@ class BerechnungServiceTest {
             .setAnzahlWochenSchule(38);
 
         gesuchFormular.getPersonInAusbildung()
+            .setZivilstand(Zivilstand.LEDIG)
             .setWohnsitz(Wohnsitz.FAMILIE)
             .setGeburtsdatum(LocalDate.now().minusDays(1).minusYears(29));
 
@@ -323,6 +327,6 @@ class BerechnungServiceTest {
         );
 
         //Assert
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(266)));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(0)));
     }
 }

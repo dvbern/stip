@@ -18,7 +18,6 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -31,6 +30,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -72,8 +72,6 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.LEDIG;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -111,7 +109,7 @@ class GesuchServiceTest {
     void setup() {
         final var requiredDokumentServiceMock = Mockito.mock(RequiredDokumentService.class);
         Mockito.when(requiredDokumentServiceMock.getSuperfluousDokumentsForGesuch(any())).thenReturn(List.of());
-        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuch(any())).thenReturn(List.of());
+        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         QuarkusMock.installMockForType(requiredDokumentServiceMock, RequiredDokumentService.class);
     }
 
@@ -789,25 +787,24 @@ class GesuchServiceTest {
         famsit.setElternteilUnbekanntVerstorben(true);
         famsit.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
         famsit.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>());
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(famsit);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        tranche.getGesuch().setGesuchNummer("TEST.20XX.213981");
         tranche.getGesuchFormular()
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
 
         tranche.getGesuchFormular().setTranche(tranche);
-        tranche.getGesuch().setGesuchDokuments(
+        tranche.setGesuchDokuments(
             Arrays.stream(DokumentTyp.values())
-                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
+                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche))
                 .toList()
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
+        tranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
         Set<Steuerdaten> list = new LinkedHashSet<>();
         list.add(TestUtil.prepareSteuerdaten());
@@ -1111,30 +1108,6 @@ class GesuchServiceTest {
         );
     }
 
-    @Test
-    void pageValidation() {
-        final var gesuch = new Gesuch();
-        final var gesuchTranche = new GesuchTranche();
-        final var gesuchFormular = new GesuchFormular();
-        gesuchTranche.setGesuch(gesuch);
-        gesuchFormular.setTranche(gesuchTranche);
-        var reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        assertThat(reportDto.getValidationErrors(), Matchers.is(empty()));
-
-        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
-        reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        var violationCount = reportDto.getValidationErrors().size();
-        assertThat(reportDto.getValidationErrors(), Matchers.is(not(empty())));
-
-        gesuchFormular.setFamiliensituation(
-            new Familiensituation()
-                .setElternteilUnbekanntVerstorben(true)
-                .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
-        );
-        reportDto = gesuchService.validatePages(gesuchFormular, gesuch.getId());
-        assertThat(reportDto.getValidationErrors().size(), Matchers.is(greaterThan(violationCount)));
-    }
-
     @TestAsSachbearbeiter
     @Test
     void findAlleGesucheSBShouldIgnoreGesucheWithoutPIA(){
@@ -1272,6 +1245,7 @@ class GesuchServiceTest {
     private GesuchTranche prepareGesuchTrancheWithIds(GesuchTrancheUpdateDto trancheUpdate) {
         GesuchTranche tranche = initGesuchTranche();
         GesuchFormular gesuchFormular = new GesuchFormular();
+        tranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
         trancheUpdate.getGesuchFormular().getElterns().forEach(elternUpdateDto -> {
             elternUpdateDto.setId(UUID.randomUUID());

@@ -46,7 +46,7 @@ export class SharedPatternDocumentUploadDialogComponent {
   config = inject(SharedModelCompileTimeConfig);
 
   uploadViewSig = computed<UploadView>(() => ({
-    gesuchId: this.data.options.gesuchId,
+    trancheId: this.data.options.trancheId,
     type: this.data.options.dokumentTyp,
     readonly: this.data.options.readonly,
     initialDocuments: this.data.options.initialDocuments,

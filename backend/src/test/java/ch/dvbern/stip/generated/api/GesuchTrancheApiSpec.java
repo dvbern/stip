@@ -15,9 +15,13 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,11 +64,20 @@ public class GesuchTrancheApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                aenderungEinreichen(),
                 createAenderungsantrag(),
                 createGesuchTrancheCopy(),
                 getAenderungsantrag(),
-                getAllTranchenForGesuch()
+                getAllTranchenForGesuch(),
+                getGesuchDokument(),
+                getGesuchDokumente(),
+                getRequiredGesuchDokumentTyp(),
+                validateGesuchTranchePages()
         );
+    }
+
+    public AenderungEinreichenOper aenderungEinreichen() {
+        return new AenderungEinreichenOper(createReqSpec());
     }
 
     public CreateAenderungsantragOper createAenderungsantrag() {
@@ -83,6 +96,22 @@ public class GesuchTrancheApiSpec {
         return new GetAllTranchenForGesuchOper(createReqSpec());
     }
 
+    public GetGesuchDokumentOper getGesuchDokument() {
+        return new GetGesuchDokumentOper(createReqSpec());
+    }
+
+    public GetGesuchDokumenteOper getGesuchDokumente() {
+        return new GetGesuchDokumenteOper(createReqSpec());
+    }
+
+    public GetRequiredGesuchDokumentTypOper getRequiredGesuchDokumentTyp() {
+        return new GetRequiredGesuchDokumentTypOper(createReqSpec());
+    }
+
+    public ValidateGesuchTranchePagesOper validateGesuchTranchePages() {
+        return new ValidateGesuchTranchePagesOper(createReqSpec());
+    }
+
     /**
      * Customize request specification
      * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
@@ -97,9 +126,71 @@ public class GesuchTrancheApiSpec {
      * 
      * 
      *
+     * @see #aenderungIdPath Die ID der Aenderung (required)
+     */
+    public static class AenderungEinreichenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchtranche/{aenderungId}/aenderung/einreichen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public AenderungEinreichenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchtranche/{aenderungId}/aenderung/einreichen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String AENDERUNG_ID_PATH = "aenderungId";
+
+        /**
+         * @param aenderungId (UUID) Die ID der Aenderung (required)
+         * @return operation
+         */
+        public AenderungEinreichenOper aenderungIdPath(Object aenderungId) {
+            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public AenderungEinreichenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public AenderungEinreichenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
      * @see #gesuchIdPath  (required)
      * @see #body  (required)
-     * return GesuchDtoSpec
+     * return GesuchTrancheDtoSpec
      */
     public static class CreateAenderungsantragOper implements Oper {
 
@@ -130,10 +221,10 @@ public class GesuchTrancheApiSpec {
         /**
          * POST /gesuchtranche/{gesuchId}/aenderungsantrag
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchTrancheDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchTrancheDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchTrancheDtoSpec> type = new TypeRef<GesuchTrancheDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -183,7 +274,7 @@ public class GesuchTrancheApiSpec {
      *
      * @see #gesuchIdPath  (required)
      * @see #body  (optional)
-     * return GesuchDtoSpec
+     * return GesuchTrancheDtoSpec
      */
     public static class CreateGesuchTrancheCopyOper implements Oper {
 
@@ -214,10 +305,10 @@ public class GesuchTrancheApiSpec {
         /**
          * POST /gesuchtranche/{gesuchId}/tranche
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchTrancheDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchTrancheDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchTrancheDtoSpec> type = new TypeRef<GesuchTrancheDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -344,7 +435,7 @@ public class GesuchTrancheApiSpec {
     public static class GetAllTranchenForGesuchOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/tranche/{gesuchId}";
+        public static final String REQ_URI = "/gesuchtranche/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -356,7 +447,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * GET /tranche/{gesuchId}
+         * GET /gesuchtranche/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -367,7 +458,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * GET /tranche/{gesuchId}
+         * GET /gesuchtranche/{gesuchId}
          * @param handler handler
          * @return List&lt;GesuchTrancheSlimDtoSpec&gt;
          */
@@ -403,6 +494,310 @@ public class GesuchTrancheApiSpec {
          * @return operation
          */
         public GetAllTranchenForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * @see #dokumentTypPath  (required)
+     * return GesuchDokumentDtoSpec
+     */
+    public static class GetGesuchDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/dokumente/{dokumentTyp}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuchtranche/{gesuchTrancheId}/dokumente/{dokumentTyp}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuchtranche/{gesuchTrancheId}/dokumente/{dokumentTyp}
+         * @param handler handler
+         * @return GesuchDokumentDtoSpec
+         */
+        public GesuchDokumentDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDokumentDtoSpec> type = new TypeRef<GesuchDokumentDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
+
+        /**
+         * @param dokumentTyp (DokumentTypDtoSpec)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumentOper dokumentTypPath(Object dokumentTyp) {
+            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return List&lt;GesuchDokumentDtoSpec&gt;
+     */
+    public static class GetGesuchDokumenteOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/dokumente";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchDokumenteOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuchtranche/{gesuchTrancheId}/dokumente
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuchtranche/{gesuchTrancheId}/dokumente
+         * @param handler handler
+         * @return List&lt;GesuchDokumentDtoSpec&gt;
+         */
+        public List<GesuchDokumentDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchDokumentDtoSpec>> type = new TypeRef<List<GesuchDokumentDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchDokumenteOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumenteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchDokumenteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return List&lt;DokumentTypDtoSpec&gt;
+     */
+    public static class GetRequiredGesuchDokumentTypOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/requiredDokumente";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetRequiredGesuchDokumentTypOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuchtranche/{gesuchTrancheId}/requiredDokumente
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuchtranche/{gesuchTrancheId}/requiredDokumente
+         * @param handler handler
+         * @return List&lt;DokumentTypDtoSpec&gt;
+         */
+        public List<DokumentTypDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<DokumentTypDtoSpec>> type = new TypeRef<List<DokumentTypDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GetRequiredGesuchDokumentTypOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetRequiredGesuchDokumentTypOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetRequiredGesuchDokumentTypOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return ValidationReportDtoSpec
+     */
+    public static class ValidateGesuchTranchePagesOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuchtranche/validatePages/{gesuchTrancheId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ValidateGesuchTranchePagesOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuchtranche/validatePages/{gesuchTrancheId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuchtranche/validatePages/{gesuchTrancheId}
+         * @param handler handler
+         * @return ValidationReportDtoSpec
+         */
+        public ValidationReportDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<ValidationReportDtoSpec> type = new TypeRef<ValidationReportDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public ValidateGesuchTranchePagesOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ValidateGesuchTranchePagesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ValidateGesuchTranchePagesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

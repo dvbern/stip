@@ -1,3 +1,5 @@
+import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
+
 /* eslint-disable */
 export default {
   displayName: 'shared-ui-translated-property-pipe',
@@ -6,7 +8,8 @@ export default {
   coverageDirectory:
     '../../../../coverage/libs/shared/ui/translated-property-pipe',
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': [
+    '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
+    '^.+\\.(html)$': [
       'jest-preset-angular',
       {
         tsconfig: '<rootDir>/tsconfig.spec.json',

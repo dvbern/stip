@@ -2,14 +2,22 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
+import {
+  SharedUiFormatChfPipe,
+  SharedUiFormatChfPositivePipe,
+} from '@dv/shared/ui/format-chf-pipe';
 
 import { PersoenlicheBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-persoenliche-einnahmen',
   standalone: true,
-  imports: [CommonModule, TranslateModule, SharedUiFormatChfPipe],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    SharedUiFormatChfPipe,
+    SharedUiFormatChfPositivePipe,
+  ],
   template: `
     <!-- Nettoerwerbseinkommen -->
     <div class="d-flex gap-2">
@@ -18,15 +26,25 @@ import { PersoenlicheBerechnung } from '../../../models';
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen'
             | translate
         }}
-        <div class="text-muted">
+        <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen.info'
               | translate
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().nettoerwerbseinkommen }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().nettoerwerbseinkommen | formatChfPositive }}
+      </div>
+    </div>
+    <!-- Unterhaltsbeiträge -->
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.alimente'
+          | translate
+      }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().alimente | formatChfPositive }}
       </div>
     </div>
 
@@ -37,15 +55,15 @@ import { PersoenlicheBerechnung } from '../../../models';
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen'
             | translate
         }}
-        <div class="text-muted">
+        <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen.info'
               | translate
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().eoLeistungen }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().eoLeistungen | formatChfPositive }}
       </div>
     </div>
 
@@ -55,8 +73,8 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
           | translate
       }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().unterhaltsbeitraege }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().unterhaltsbeitraege | formatChfPositive }}
       </div>
     </div>
 
@@ -66,8 +84,8 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.kinderUndAusbildungszulagen'
           | translate
       }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().kinderUndAusbildungszulagen }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().kinderUndAusbildungszulagen | formatChfPositive }}
       </div>
     </div>
 
@@ -77,8 +95,8 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.ergaenzungsleistungen'
           | translate
       }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().ergaenzungsleistungen }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
       </div>
     </div>
 
@@ -88,19 +106,27 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitution'
           | translate
       }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().beitraegeGemeindeInstitution }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().beitraegeGemeindeInstitution | formatChfPositive }}
       </div>
     </div>
 
-    <!-- Steuerbares Vermögen -->
+    <!-- Anrechenbares Vermögen -->
     <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.steuerbaresVermoegen'
-          | translate
-      }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().steuerbaresVermoegen }}
+      <div classs="d-flex flex-column">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen'
+            | translate
+        }}
+        <div class="text-muted fs-7">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen.info'
+              | translate: einnahmenSig()
+          }}
+        </div>
+      </div>
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().anrechenbaresVermoegen | formatChfPositive }}
       </div>
     </div>
 
@@ -110,8 +136,8 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
           | translate
       }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().elterlicheLeistung }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().elterlicheLeistung | formatChfPositive }}
       </div>
     </div>
 
@@ -121,21 +147,21 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner'
           | translate
       }}
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().einkommenPartner }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().einkommenPartner | formatChfPositive }}
       </div>
     </div>
 
     <!-- Total -->
-    <div class="d-flex gap-2">
-      <div class="h4 mt-3">
+    <div class="mt-3 d-flex gap-2">
+      <div class="h4">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total'
             | translate
         }}
       </div>
-      <div class="text-muted text-end flex-grow-1">
-        {{ einnahmenSig().total | formatChf: false }}
+      <div class="h4 text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().total | formatChf }}
       </div>
     </div>
   `,

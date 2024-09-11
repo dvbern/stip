@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BerechnungsStammdaten } from './berechnungsStammdaten';
 import { FamilienBudgetresultat } from './familienBudgetresultat';
 import { PersoenlichesBudgetresultat } from './persoenlichesBudgetresultat';
 
@@ -22,6 +23,7 @@ export interface Berechnungsresultat {
     berechnung: number;
     gueltigAb: string;
     gueltigBis: string;
+    berechnungsStammdaten: BerechnungsStammdaten;
     persoenlichesBudgetresultat: PersoenlichesBudgetresultat;
     /**
      * Berechnungsdaten der Familienbudgets

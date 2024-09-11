@@ -86,9 +86,9 @@ public class AusbildungDtoSpec {
    * Get ausbildungsgang
    * @return ausbildungsgang
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGANG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public AusbildungsgangDtoSpec getAusbildungsgang() {
     return ausbildungsgang;
@@ -96,7 +96,7 @@ public class AusbildungDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGANG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAusbildungsgang(AusbildungsgangDtoSpec ausbildungsgang) {
     this.ausbildungsgang = ausbildungsgang;
   }

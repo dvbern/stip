@@ -13,6 +13,7 @@ import {
   GesuchDokument,
   GesuchDokumentKommentar,
   GesuchService,
+  GesuchTrancheService,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -48,6 +49,7 @@ export class DokumentsStore extends signalStore(
 ) {
   private dokumentService = inject(DokumentService);
   private gesuchService = inject(GesuchService);
+  private trancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   dokumenteViewSig = computed(() => ({
@@ -82,6 +84,26 @@ export class DokumentsStore extends signalStore(
     );
   });
 
+  getGesuchDokument$ = rxMethod<{
+    trancheId: string;
+    dokumentTyp: DokumentTyp;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          dokument: cachedPending(state.dokument),
+        }));
+      }),
+      switchMap(({ trancheId, dokumentTyp }) =>
+        this.trancheService.getGesuchDokument$({
+          gesuchTrancheId: trancheId,
+          dokumentTyp,
+        }),
+      ),
+      handleApiResponse((dokument) => patchState(this, { dokument })),
+    ),
+  );
+
   resetGesuchDokumentStateToInitial = rxMethod(
     tap(() => {
       patchState(this, {
@@ -92,7 +114,7 @@ export class DokumentsStore extends signalStore(
 
   getGesuchDokumentKommentare$ = rxMethod<{
     dokumentTyp: DokumentTyp;
-    gesuchId: string;
+    gesuchTrancheId: string;
   }>(
     pipe(
       tap(() => {
@@ -110,7 +132,7 @@ export class DokumentsStore extends signalStore(
   );
 
   gesuchDokumentAblehnen$ = rxMethod<{
-    gesuchId: string;
+    gesuchTrancheId: string;
     gesuchDokumentId: string;
     dokumentTyp: DokumentTyp;
     kommentar: string;
@@ -119,7 +141,7 @@ export class DokumentsStore extends signalStore(
     pipe(
       switchMap(
         ({
-          gesuchId,
+          gesuchTrancheId,
           gesuchDokumentId,
           dokumentTyp,
           kommentar,
@@ -132,7 +154,7 @@ export class DokumentsStore extends signalStore(
                 kommentar: {
                   kommentar,
                   dokumentTyp,
-                  gesuchId,
+                  gesuchTrancheId,
                 },
               },
             })
@@ -176,23 +198,6 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  getGesuchDokument$ = rxMethod<{
-    gesuchsId: string;
-    dokumentTyp: DokumentTyp;
-  }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          dokument: cachedPending(state.dokument),
-        }));
-      }),
-      switchMap(({ gesuchsId, dokumentTyp }) =>
-        this.gesuchService.getGesuchDokument$({ gesuchsId, dokumentTyp }),
-      ),
-      handleApiResponse((dokument) => patchState(this, { dokument })),
-    ),
-  );
-
   //TODO: akzeptieren und ablehnen umbenennen fuer liste und duplizieren und umschreiben fuer einzeln
 
   /**
@@ -202,10 +207,11 @@ export class DokumentsStore extends signalStore(
    */
   fehlendeDokumenteUebermitteln$ = rxMethod<{
     gesuchId: string;
+    trancheId: string;
     onSuccess: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchId, onSuccess }) => {
+      switchMap(({ gesuchId, trancheId, onSuccess }) => {
         return this.gesuchService
           .gesuchFehlendeDokumenteUebermitteln$({ gesuchId })
           .pipe(
@@ -215,7 +221,9 @@ export class DokumentsStore extends signalStore(
               }));
             }),
             switchMap(() =>
-              this.gesuchService.getGesuchDokumente$({ gesuchId }),
+              this.trancheService.getGesuchDokumente$({
+                gesuchTrancheId: trancheId,
+              }),
             ),
             tapResponse({
               next: (dokuments) => {
@@ -239,9 +247,9 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  getDokumenteAndRequired$(gesuchId: string) {
-    this.getGesuchDokumente$(gesuchId);
-    this.getRequiredDocumentTypes$(gesuchId);
+  getDokumenteAndRequired$(trancheId: string) {
+    this.getGesuchDokumente$(trancheId);
+    this.getRequiredDocumentTypes$(trancheId);
   }
 
   private getGesuchDokumente$ = rxMethod<string>(
@@ -251,8 +259,8 @@ export class DokumentsStore extends signalStore(
           dokuments: cachedPending(state.dokuments),
         }));
       }),
-      switchMap((gesuchId) =>
-        this.gesuchService.getGesuchDokumente$({ gesuchId }),
+      switchMap((gesuchTrancheId) =>
+        this.trancheService.getGesuchDokumente$({ gesuchTrancheId }),
       ),
       handleApiResponse((dokuments) => patchState(this, { dokuments })),
     ),
@@ -265,9 +273,9 @@ export class DokumentsStore extends signalStore(
           requiredDocumentTypes: cachedPending(state.requiredDocumentTypes),
         }));
       }),
-      switchMap((gesuchId) =>
-        this.gesuchService
-          .getRequiredGesuchDokumentTyp$({ gesuchId })
+      switchMap((gesuchTrancheId) =>
+        this.trancheService
+          .getRequiredGesuchDokumentTyp$({ gesuchTrancheId })
           .pipe(
             handleApiResponse((requiredDocumentTypes) =>
               patchState(this, { requiredDocumentTypes }),

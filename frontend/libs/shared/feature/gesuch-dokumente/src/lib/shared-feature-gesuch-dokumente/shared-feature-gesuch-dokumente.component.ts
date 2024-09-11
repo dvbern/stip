@@ -49,7 +49,7 @@ import {
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
-import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
+import { getLatestTrancheIdFromGesuch$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 
 @Component({
@@ -113,12 +113,13 @@ export class SharedFeatureGesuchDokumenteComponent {
     const { dokuments, requiredDocumentTypes } =
       this.dokumentsStore.dokumenteViewSig();
 
-    const { gesuchId, readonly } = this.gesuchViewSig();
+    const { readonly } = this.gesuchViewSig();
+    const trancheId = this.gesuchViewSig().trancheId;
 
     const allowTypes = this.gesuchViewSig().allowTypes;
     const stepsFlow = this.stepViewSig().stepsFlow;
 
-    if (!gesuchId || !allowTypes) {
+    if (!trancheId || !allowTypes) {
       return new MatTableDataSource<SharedModelTableDokument>([]);
     }
 
@@ -131,7 +132,7 @@ export class SharedFeatureGesuchDokumenteComponent {
         }
 
         const documentOptions = createDocumentOptions({
-          gesuchId,
+          trancheId,
           allowTypes,
           dokumentTyp,
           initialDocuments: document.dokumente,
@@ -155,7 +156,7 @@ export class SharedFeatureGesuchDokumenteComponent {
         const formStep = getFormStepByDocumentType(dokumentTyp);
 
         const documentOptions = createDocumentOptions({
-          gesuchId,
+          trancheId,
           allowTypes,
           dokumentTyp,
           initialDocuments: [],
@@ -187,32 +188,32 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   constructor() {
-    getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
+    getLatestTrancheIdFromGesuch$(this.gesuchViewSig)
       .pipe(takeUntilDestroyed())
-      .subscribe((gesuchId) => {
-        this.dokumentsStore.getDokumenteAndRequired$(gesuchId);
+      .subscribe((trancheId) => {
+        this.dokumentsStore.getDokumenteAndRequired$(trancheId);
       });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
   dokumentAkzeptieren(document: SharedModelTableDokument) {
-    const gesuchId = this.gesuchViewSig().gesuchId;
+    const trancheId = this.gesuchViewSig().trancheId;
 
-    if (!document?.gesuchDokument?.id || !gesuchId) return;
+    if (!document?.gesuchDokument?.id || !trancheId) return;
 
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: document.gesuchDokument.id,
       afterSuccess: () => {
-        this.dokumentsStore.getDokumenteAndRequired$(gesuchId);
+        this.dokumentsStore.getDokumenteAndRequired$(trancheId);
       },
     });
   }
 
   dokumentAblehnen(document: SharedModelTableDokument) {
-    const { gesuchId } = this.gesuchViewSig();
+    const { trancheId } = this.gesuchViewSig();
 
-    if (!gesuchId) return;
+    if (!trancheId) return;
 
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
@@ -228,12 +229,12 @@ export class SharedFeatureGesuchDokumenteComponent {
       .subscribe((result) => {
         if (result) {
           this.dokumentsStore.gesuchDokumentAblehnen$({
-            gesuchId,
+            gesuchTrancheId: trancheId,
             kommentar: result.kommentar,
             gesuchDokumentId: result.id,
             dokumentTyp: document.dokumentTyp as DokumentTyp,
             afterSuccess: () => {
-              this.dokumentsStore.getDokumenteAndRequired$(gesuchId);
+              this.dokumentsStore.getDokumenteAndRequired$(trancheId);
             },
           });
         }
@@ -250,21 +251,22 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   getGesuchDokumentKommentare(dokument: SharedModelTableDokument) {
-    const { gesuchId } = this.gesuchViewSig();
-    if (!gesuchId) return;
+    const { trancheId } = this.gesuchViewSig();
+    if (!trancheId) return;
 
     this.dokumentsStore.getGesuchDokumentKommentare$({
       dokumentTyp: dokument.dokumentTyp as DokumentTyp,
-      gesuchId,
+      gesuchTrancheId: trancheId,
     });
   }
 
   fehlendeDokumenteUebermitteln() {
-    const { gesuchId } = this.gesuchViewSig();
+    const { gesuchId, trancheId } = this.gesuchViewSig();
 
-    if (gesuchId) {
+    if (gesuchId && trancheId) {
       this.dokumentsStore.fehlendeDokumenteUebermitteln$({
         gesuchId,
+        trancheId,
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());

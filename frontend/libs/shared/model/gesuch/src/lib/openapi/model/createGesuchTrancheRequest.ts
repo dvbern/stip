@@ -13,6 +13,6 @@
 export interface CreateGesuchTrancheRequest { 
     start: string;
     end?: string;
-    comment?: string;
+    comment: string;
 }
 

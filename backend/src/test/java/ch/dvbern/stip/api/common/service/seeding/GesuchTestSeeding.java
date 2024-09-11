@@ -112,24 +112,29 @@ public class GesuchTestSeeding extends Seeder {
             .setPreisProMahlzeit(1)
             .setMaxSaeule3a(1)
             .setAnzahlWochenLehre(1)
-            .setAnzahlWochenSchule(1);
+            .setAnzahlWochenSchule(1)
+            .setVermoegensanteilInProzent(15)
+            .setLimiteAlterAntragsstellerHalbierungElternbeitrag(25)
+            .setReduzierungDesGrundbedarfs(2754)
+            .setZweiterAuszahlungsterminMonat(6)
+            .setZweiterAuszahlungsterminTag(1);
     }
 
     private static LocalDate getGesuchsperiodeStart() {
         var jahr = LocalDate.now().getYear();
-        if (LocalDate.now().isBefore(LocalDate.of(jahr, 8, 1))) {
+        if (LocalDate.now().isBefore(LocalDate.of(jahr, 7, 1))) {
             jahr -= 1;
         }
 
-        return LocalDate.of(jahr, 8, 1);
+        return LocalDate.of(jahr, 7, 1);
     }
 
     private static LocalDate getGesuchsperiodeStopp() {
         var jahr = LocalDate.now().getYear();
-        if (LocalDate.now().isAfter(LocalDate.of(jahr, 7, 31))) {
+        if (LocalDate.now().isAfter(LocalDate.of(jahr, 6, 30))) {
             jahr += 1;
         }
 
-        return LocalDate.of(jahr, 7, 31);
+        return LocalDate.of(jahr, 6, 30);
     }
 }

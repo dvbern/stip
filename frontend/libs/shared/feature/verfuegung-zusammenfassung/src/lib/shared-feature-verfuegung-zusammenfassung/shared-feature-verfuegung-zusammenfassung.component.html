@@ -18,11 +18,11 @@
 
     <mat-card-content class="p-5">
       @if (zusammenfassung.totalBetragStipendium > 0) {
-        <div class="accept p-4 rounded-4 fs-3 fw-bold">
+        <div class="accept p-4 rounded-4 fs-3 fw-bold" data-testid="zusammenfassung-resultat">
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen' | translate }}
         </div>
       } @else {
-        <div class="reject p-4 rounded-4 fs-3 fw-bold">
+        <div class="reject p-4 rounded-4 fs-3 fw-bold" data-testid="zusammenfassung-resultat">
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt' | translate }}
         </div>
       }
@@ -49,7 +49,7 @@
             <span class="">
               {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.item.total' | translate: { index: $index + 1 } }}
             </span>
-            <div class="">{{ berechnung.berechnung | formatNoChf }}</div>
+            <div class="">{{ berechnung.berechnung | formatChf }}</div>
           </div>
           <a class="text-decoration-none text-info" [routerLink]="['../berechnung', $index + 1]">
             <div class="d-flex align-items-center gap-2">
@@ -71,7 +71,7 @@
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
         </div>
         <div>
-          {{ zusammenfassung.totalBetragStipendium | formatChf: false }}
+          {{ zusammenfassung.totalBetragStipendium | formatChf }}
         </div>
       </div>
     </mat-card-footer>

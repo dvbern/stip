@@ -17,13 +17,13 @@
 
 package ch.dvbern.stip.api.dokument.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import jakarta.persistence.CascadeType;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -31,8 +31,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -44,8 +45,8 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "gesuch_dokument",
     indexes = {
-        @Index(name = "IX_gesuch_dokument_gesuch_id", columnList = "gesuch_id"),
-        @Index(name = "IX_gesuch_dokument_gesuch_id_dokument_typ", columnList = "gesuch_id,dokument_typ"),
+        @Index(name = "IX_gesuch_dokument_gesuch_tranche_id", columnList = "gesuch_tranche_id"),
+        @Index(name = "IX_gesuch_dokument_gesuch_tranche_id_dokument_typ", columnList = "gesuch_tranche_id,dokument_typ"),
         @Index(name = "IX_gesuch_dokument_mandant", columnList = "mandant")
     }
 )
@@ -54,8 +55,8 @@ import org.hibernate.envers.Audited;
 public class GesuchDokument extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_id"))
-    private Gesuch gesuch;
+    @JoinColumn(name = "gesuch_tranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_tranche_id"))
+    private GesuchTranche gesuchTranche;
 
     @NotNull
     @Column(name = "dokument_typ", nullable = false)
@@ -67,6 +68,23 @@ public class GesuchDokument extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private Dokumentstatus status = Dokumentstatus.AUSSTEHEND;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchDokument")
-    private List<Dokument> dokumente;
+    @ManyToMany
+    @JoinTable(
+        name = "gesuch_dokument_dokument",
+        joinColumns = @JoinColumn(
+            name = "gesuch_dokument_id",
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "FK_gesuch_dokument_dokumente")
+        ),
+        inverseJoinColumns = @JoinColumn(
+            name = "dokument_id",
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "FK_dokument_gesuch_dokumente")
+        ),
+        indexes = {
+            @Index(name = "gesuch_dokument_dokument_gesuch_dokument_id", columnList = "gesuch_dokument_id"),
+            @Index(name = "gesuch_dokument_dokument_dokument_id", columnList = "dokument_id")
+        }
+    )
+    private List<Dokument> dokumente = new ArrayList<>();
 }

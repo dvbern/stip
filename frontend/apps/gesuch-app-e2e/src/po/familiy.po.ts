@@ -5,6 +5,7 @@ import {
   expectFormToBeValid,
   selectMatRadio,
 } from '@dv/shared/util-fn/e2e-util';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 export class FamilyPO {
   public elems: {
@@ -60,7 +61,7 @@ export class FamilyPO {
         'form-family-vaterUnbekanntGrund',
       ),
       mutterWiederVerheiratetRadio: page.getByTestId(
-        'form-family-mutterWiederVerheiratet',
+        'form-family-mutterWiederverheiratet',
       ),
       vaterWiederverheiratetRadio: page.getByTestId(
         'form-family-vaterWiederverheiratet',
@@ -79,6 +80,43 @@ export class FamilyPO {
       this.elems.elternVerheiratetZusammenRadio,
       item.elternVerheiratetZusammen,
     );
+
+    await expectFormToBeValid(this.elems.form);
+  }
+
+  async fillUnbekanntOderVerstorben(item: Familiensituation) {
+    await selectMatRadio(
+      this.elems.elternVerheiratetZusammenRadio,
+      item.elternVerheiratetZusammen,
+    );
+    await selectMatRadio(
+      this.elems.gerichtlicheAlimentenregelungRadio,
+      item.gerichtlicheAlimentenregelung ?? false,
+    );
+    await selectMatRadio(
+      this.elems.elternteilUnbekanntVerstorbenRadio,
+      item.elternteilUnbekanntVerstorben ?? true,
+    );
+    await selectMatRadio(
+      this.elems.mutterUnbekanntVerstorbenRadio,
+      item.mutterUnbekanntVerstorben ?? 'WEDER_NOCH',
+    );
+    await selectMatRadio(
+      this.elems.vaterUnbekanntVerstorbenRadio,
+      item.vaterUnbekanntVerstorben ?? 'WEDER_NOCH',
+    );
+    if (isDefined(item.mutterWiederverheiratet)) {
+      await selectMatRadio(
+        this.elems.mutterWiederVerheiratetRadio,
+        item.mutterWiederverheiratet,
+      );
+    }
+    if (isDefined(item.vaterWiederverheiratet)) {
+      await selectMatRadio(
+        this.elems.vaterWiederverheiratetRadio,
+        item.vaterWiederverheiratet,
+      );
+    }
 
     await expectFormToBeValid(this.elems.form);
   }

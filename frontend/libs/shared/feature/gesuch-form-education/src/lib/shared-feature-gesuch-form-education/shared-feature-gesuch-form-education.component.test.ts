@@ -47,7 +47,13 @@ async function setup() {
             ],
           },
           gesuchs: {
+            gesuch: null,
             gesuchFormular: {},
+            cache: {
+              gesuch: null,
+              gesuchId: null,
+              gesuchFormular: null,
+            },
           },
           language: { language: 'de' },
           configs: {},

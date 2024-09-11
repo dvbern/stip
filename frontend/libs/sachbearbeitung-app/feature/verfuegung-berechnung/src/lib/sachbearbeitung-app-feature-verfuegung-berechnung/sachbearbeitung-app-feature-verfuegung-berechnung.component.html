@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="row mt-4 mb-4">
-        @for (familienbudget of berechnung.familien; track familienbudget) {
+        @for (familienbudget of berechnung.familien; track $index) {
           <div class="col-6">
             <dv-berechnungs-card [berechnungSig]="familienbudget">
               <dv-familien-einnahmen

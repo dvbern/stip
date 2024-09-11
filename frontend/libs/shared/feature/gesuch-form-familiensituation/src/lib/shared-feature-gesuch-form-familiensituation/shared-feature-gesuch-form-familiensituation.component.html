@@ -1,9 +1,11 @@
+@let readonly = viewSig().readonly;
+
 @if (viewSig().loading) {
   <dv-shared-ui-loading data-testid="form-family-loading"></dv-shared-ui-loading>
 } @else {
   <form
     [formGroup]="form"
-    [dvSharedUiFormReadonly]="viewSig().readonly"
+    [dvSharedUiFormReadonly]="readonly"
     (gotReenabledSig)="gotReenabled$.next({})"
     data-testid="form-family-form"
     novalidate
@@ -11,18 +13,23 @@
     (ngSubmit)="handleSave()"
   >
     <div class="col-12 col-xl-6 col-md-9">
-      <dv-shared-ui-stepper-navigation
-        [nextStepVisible]="hasNextStep()"
-        [prevStepVisible]="hasPreviousStep()"
-        (nextStep)="goNextStep()"
-        (prevStep)="goPreviousStep()"
-      ></dv-shared-ui-stepper-navigation>
+      @if (!readonly) {
+        <dv-shared-ui-stepper-navigation
+          [nextStepVisible]="hasNextStep()"
+          [prevStepVisible]="hasPreviousStep()"
+          (nextStep)="goNextStep()"
+          (prevStep)="goPreviousStep()"
+        ></dv-shared-ui-stepper-navigation>
+      }
+
+      <!-- elternVerheiratetZusammen -->
       <div class="questions-wrapper">
         <div
           class="row g-4 mt-3"
           (@inOutPaneAnimation.start)="duringAnimation = 'hide'"
           (@inOutPaneAnimation.done)="duringAnimation = 'show'"
-          [@inOutPaneAnimation]="stateSig()['ELTERN_VERHEIRATET_ZUSAMMEN'] ?? 'hidden'"
+          [@inOutPaneAnimation]="readonly ? 'in' : (stateSig()['ELTERN_VERHEIRATET_ZUSAMMEN'] ?? 'hidden')"
+          [@.disabled]="readonly"
         >
           <mat-radio-group
             formControlName="elternVerheiratetZusammen"
@@ -48,10 +55,16 @@
           </mat-radio-group>
         </div>
 
+        <!-- gerichtlicheAlimentenregelung -->
         <div
           (@inOutPaneAnimation.start)="duringAnimation = 'hide'"
           (@inOutPaneAnimation.done)="duringAnimation = 'show'"
-          [@inOutPaneAnimation]="stateSig()['ALIMENTENREGELUNG'] ?? 'hidden'"
+          [@inOutPaneAnimation]="
+            readonly && form.controls.elternVerheiratetZusammen.value === false
+              ? 'in'
+              : (stateSig()['ALIMENTENREGELUNG'] ?? 'hidden')
+          "
+          [@.disabled]="readonly"
         >
           <div class="row g-4 mt-3">
             <mat-radio-group
@@ -122,10 +135,17 @@
             <ng-container [ngTemplateOutlet]="vaterWiederverheiratet"></ng-container>
           }
         </div>
+
+        <!-- elternteilUnbekanntVerstorben -->
         <div
           (@inOutPaneAnimation.start)="duringAnimation = 'hide'"
           (@inOutPaneAnimation.done)="duringAnimation = 'show'"
-          [@inOutPaneAnimation]="stateSig()['ELTERN_UNBEKANNT_VERSTORBEN'] ?? 'hidden'"
+          [@inOutPaneAnimation]="
+            readonly && form.controls.gerichtlicheAlimentenregelung.value === false
+              ? 'in'
+              : (stateSig()['ELTERN_UNBEKANNT_VERSTORBEN'] ?? 'hidden')
+          "
+          [@.disabled]="readonly"
         >
           <div class="row g-4 mt-3">
             <mat-radio-group
@@ -325,10 +345,16 @@
           }
         </div>
 
+        <!-- Elternteil Wiederverheiratet  -->
         <div
           (@inOutPaneAnimation.start)="duringAnimation = 'hide'"
           (@inOutPaneAnimation.done)="duringAnimation = 'show'"
-          [@inOutPaneAnimation]="stateSig()['ZWEI_FAMILIENBUDGET'] ?? 'hidden'"
+          [@inOutPaneAnimation]="
+            readonly && form.controls.elternteilUnbekanntVerstorben.value === false
+              ? 'in'
+              : (stateSig()['ZWEI_FAMILIENBUDGET'] ?? 'hidden')
+          "
+          [@.disabled]="readonly"
         >
           @if (!hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet)) {
             <ng-container [ngTemplateOutlet]="mutterWiederverheiratet"></ng-container>
@@ -399,8 +425,8 @@
                 [controlB]="form.controls.obhutVater"
               >
                 <label>{{ 'shared.form.familiensituation.obhutsaufteilung.label' | translate }}</label>
-                <span class="label-a">{{ 'shared.form.familiensituation.obhutsaufteilung.mutter' | translate }}</span>
-                <span class="label-b">{{ 'shared.form.familiensituation.obhutsaufteilung.vater' | translate }}</span>
+                <span dvLabelA>{{ 'shared.form.familiensituation.obhutsaufteilung.mutter' | translate }}</span>
+                <span dvLabelB>{{ 'shared.form.familiensituation.obhutsaufteilung.vater' | translate }}</span>
               </dv-shared-ui-percentage-splitter>
             }
           </div>
@@ -409,7 +435,7 @@
     </div>
     <!-- buttons -->
     <dv-shared-ui-step-form-buttons [@hideDuringAnimation]="duringAnimation">
-      @if (!viewSig().readonly) {
+      @if (!readonly) {
         <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | translate }}
         </button>
@@ -419,7 +445,6 @@
         </button>
       }
     </dv-shared-ui-step-form-buttons>
-
     <ng-template #mutterWiederverheiratet>
       <div class="row g-4 mt-3">
         <mat-radio-group

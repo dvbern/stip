@@ -30,27 +30,23 @@ import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
-import { PlzOrtStore } from '@dv/shared/data-access/plz-ort';
 import {
-  DokumentTyp,
   ElternTyp,
   ElternUpdate,
   Land,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   SharedModelGesuchFormular,
-  WohnsitzKanton,
 } from '@dv/shared/model/gesuch';
-import {
-  SharedPatternDocumentUploadComponent,
-  createUploadOptionsFactory,
-} from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -92,7 +88,9 @@ const MEDIUM_AGE_ADULT = 40;
     SharedUiFormMessageErrorDirective,
     SharedUiFormAddressComponent,
     SharedUiStepFormButtonsComponent,
-    SharedPatternDocumentUploadComponent,
+    SharedUiZuvorHintDirective,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
     SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',
@@ -104,7 +102,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private store = inject(Store);
-  private plzStore = inject(PlzOrtStore);
 
   @Input({ required: true }) elternteil!: Omit<
     Partial<ElternUpdate>,
@@ -113,6 +110,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     Required<Pick<ElternUpdate, 'elternTyp'>>;
   @Input({ required: true }) laender!: Land[];
   @Input({ required: true }) gesuchFormular!: SharedModelGesuchFormular;
+  @Input({ required: true }) changes: Partial<ElternUpdate> | undefined | null;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();
@@ -122,7 +120,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   gotReenabled$ = new Subject<object>();
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
-  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
 
@@ -173,43 +170,6 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   });
 
   svnIsRequiredSig = signal(false);
-
-  ausweisbFluechtlingSig = toSignal(
-    this.form.controls.ausweisbFluechtling.valueChanges,
-  );
-
-  landChangedSig = toSignal(
-    this.form.controls.adresse.controls.land.valueChanges,
-  );
-
-  lohnabrechnungVermoegenDocumentSig = this.createUploadOptionsSig(() => {
-    const elternTyp = this.elternteil.elternTyp;
-    const fluechtling = this.ausweisbFluechtlingSig();
-
-    if (fluechtling) {
-      return DokumentTyp[`ELTERN_LOHNABRECHNUNG_VERMOEGEN_${elternTyp}`];
-    }
-
-    return null;
-  });
-
-  plzChangedSig = toSignal(
-    this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
-  );
-
-  steuerunterlagenDocumentSig = this.createUploadOptionsSig(() => {
-    const plz = this.plzChangedSig();
-    const land = this.landChangedSig();
-    const elternTyp = this.elternteil.elternTyp;
-
-    const kanton = this.plzStore.getKantonByPlz(plz);
-
-    if (land !== 'CH' || kanton !== WohnsitzKanton.BE) {
-      return DokumentTyp[`ELTERN_STEUERUNTERLAGEN_${elternTyp}`];
-    }
-
-    return null;
-  });
 
   constructor() {
     this.formIsUnsaved = observeUnsavedChanges(

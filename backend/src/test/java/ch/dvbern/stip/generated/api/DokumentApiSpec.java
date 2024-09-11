@@ -119,13 +119,13 @@ public class DokumentApiSpec {
      * 
      *
      * @see #dokumentTypPath  (required)
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * @see #fileUploadMultiPart  (required)
      */
     public static class CreateDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/dokument/{gesuchId}/{dokumentTyp}";
+        public static final String REQ_URI = "/dokument/{gesuchTrancheId}/{dokumentTyp}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -138,7 +138,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * POST /dokument/{gesuchId}/{dokumentTyp}
+         * POST /dokument/{gesuchTrancheId}/{dokumentTyp}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -159,14 +159,14 @@ public class DokumentApiSpec {
             return this;
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public CreateDokumentOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public CreateDokumentOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -207,12 +207,12 @@ public class DokumentApiSpec {
      *
      * @see #dokumentIdPath  (required)
      * @see #dokumentTypPath  (required)
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      */
     public static class DeleteDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = DELETE;
-        public static final String REQ_URI = "/dokument/{gesuchId}/{dokumentTyp}/{dokumentId}";
+        public static final String REQ_URI = "/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -224,7 +224,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * DELETE /dokument/{gesuchId}/{dokumentTyp}/{dokumentId}
+         * DELETE /dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -256,14 +256,14 @@ public class DokumentApiSpec {
             return this;
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public DeleteDokumentOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public DeleteDokumentOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -499,7 +499,7 @@ public class DokumentApiSpec {
      * get Dokument Download Token
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * @see #dokumentTypPath  (required)
      * @see #dokumentIdPath  (required)
      * return String
@@ -507,7 +507,7 @@ public class DokumentApiSpec {
     public static class GetDokumentDownloadTokenOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/dokument/{gesuchId}/{dokumentTyp}/{dokumentId}";
+        public static final String REQ_URI = "/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -519,7 +519,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/{gesuchId}/{dokumentTyp}/{dokumentId}
+         * GET /dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -530,7 +530,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/{gesuchId}/{dokumentTyp}/{dokumentId}
+         * GET /dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}
          * @param handler handler
          * @return String
          */
@@ -539,14 +539,14 @@ public class DokumentApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GetDokumentDownloadTokenOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetDokumentDownloadTokenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -593,17 +593,17 @@ public class DokumentApiSpec {
         }
     }
     /**
-     * Returniert der GesuchDokument mit der gegebene Id und alle Dokument die dazu gehoeren.
+     * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
      * 
      *
      * @see #dokumentTypPath  (required)
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return List&lt;DokumentDtoSpec&gt;
      */
     public static class GetDokumenteForTypOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/dokument/{gesuchId}/{dokumentTyp}";
+        public static final String REQ_URI = "/dokument/{gesuchTrancheId}/{dokumentTyp}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -615,7 +615,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/{gesuchId}/{dokumentTyp}
+         * GET /dokument/{gesuchTrancheId}/{dokumentTyp}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -626,7 +626,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/{gesuchId}/{dokumentTyp}
+         * GET /dokument/{gesuchTrancheId}/{dokumentTyp}
          * @param handler handler
          * @return List&lt;DokumentDtoSpec&gt;
          */
@@ -646,14 +646,14 @@ public class DokumentApiSpec {
             return this;
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GetDokumenteForTypOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetDokumenteForTypOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -682,13 +682,13 @@ public class DokumentApiSpec {
      * 
      *
      * @see #dokumentTypPath  (required)
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return List&lt;GesuchDokumentKommentarDtoSpec&gt;
      */
     public static class GetGesuchDokumentKommentareOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare";
+        public static final String REQ_URI = "/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -700,7 +700,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare
+         * GET /gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare
          * @param handler handler
          * @param <T> type
          * @return type
@@ -711,7 +711,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuchDokument/{gesuchId}/{dokumentTyp}/kommentare
+         * GET /gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare
          * @param handler handler
          * @return List&lt;GesuchDokumentKommentarDtoSpec&gt;
          */
@@ -731,14 +731,14 @@ public class DokumentApiSpec {
             return this;
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GetGesuchDokumentKommentareOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetGesuchDokumentKommentareOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 

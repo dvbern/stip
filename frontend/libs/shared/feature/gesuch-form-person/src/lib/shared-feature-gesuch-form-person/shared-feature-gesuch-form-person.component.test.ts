@@ -106,6 +106,7 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
       store.overrideSelector(selectSharedFeatureGesuchFormPersonView, {
         loading: false,
         gesuchId: '1',
+        trancheId: '1',
         allowTypes: '',
         gesuch: null,
         gesuchFormular: {
@@ -113,6 +114,7 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
             adresse: {},
           } as PersonInAusbildung,
         } as GesuchFormular,
+        formChanges: null,
         benutzerEinstellungen: {
           digitaleKommunikation: undefined,
         },

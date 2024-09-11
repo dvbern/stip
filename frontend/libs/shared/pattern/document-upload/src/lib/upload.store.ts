@@ -96,7 +96,10 @@ export class UploadStore {
     this.loadDocuments$
       .pipe(
         exhaustMap((options) =>
-          this.documentService.getDokumenteForTyp$(options),
+          this.documentService.getDokumenteForTyp$({
+            ...options,
+            gesuchTrancheId: options.trancheId,
+          }),
         ),
         takeUntilDestroyed(),
       )
@@ -123,10 +126,15 @@ export class UploadStore {
             ? // If the document is temporary, just remove it from the state
               of(action)
             : this.documentService
-                .deleteDokument$(action, undefined, undefined, {
-                  // Ignore http errors if the upload is already in error state
-                  context: shouldIgnoreErrorsIf(!!dokumentToDelete?.error),
-                })
+                .deleteDokument$(
+                  { ...action, gesuchTrancheId: action.trancheId },
+                  undefined,
+                  undefined,
+                  {
+                    // Ignore http errors if the upload is already in error state
+                    context: shouldIgnoreErrorsIf(!!dokumentToDelete?.error),
+                  },
+                )
                 .pipe(
                   map(() => action),
                   tap(() => this.documentChangedSig.set({ hasChanged: true })),
@@ -283,9 +291,14 @@ export class UploadStore {
     );
 
     const upload$ = this.documentService
-      .createDokument$(action, 'events', undefined, {
-        context: noGlobalErrorsIf(true),
-      })
+      .createDokument$(
+        { ...action, gesuchTrancheId: action.trancheId },
+        'events',
+        undefined,
+        {
+          context: noGlobalErrorsIf(true),
+        },
+      )
       .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
     // Merge the upload stream with a fake progress stream

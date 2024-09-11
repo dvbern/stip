@@ -8,6 +8,7 @@ describe('selectGesuchAppDataAccessAbschlussView', () => {
       checkResult: undefined,
       error: undefined,
       gesuch: null,
+      specificTrancheId: null,
       lastUpdate: null,
       loading: false,
       validations: [],
@@ -15,6 +16,7 @@ describe('selectGesuchAppDataAccessAbschlussView', () => {
     };
     const result = selectGesuchAppDataAccessAbschlussView.projector(
       state,
+      null,
       null,
       null,
       { errors: [], hasDocuments: null },

@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuch.service.GesuchTrancheService.OverlapType;
-import ch.dvbern.stip.api.gesuch.service.GesuchTrancheService.TrancheRange;
+import ch.dvbern.stip.api.gesuch.service.GesuchTrancheTruncateService.OverlapType;
+import ch.dvbern.stip.api.gesuch.service.GesuchTrancheTruncateService.TrancheRange;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

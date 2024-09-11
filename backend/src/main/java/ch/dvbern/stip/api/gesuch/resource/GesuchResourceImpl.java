@@ -3,7 +3,6 @@ package ch.dvbern.stip.api.gesuch.resource;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -87,19 +86,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuch).build();
     }
 
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGesuchDokumente(UUID gesuchId) {
-        var gesuchDokumente = gesuchService.getAndCheckGesuchDokumentsForGesuch(gesuchId);
-        return Response.ok(gesuchDokumente).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGesuchDokument(UUID gesuchId, DokumentTyp dokumentTyp){
-        return Response.ok(gesuchService.getGesuchDokumentForGesuch(gesuchId, dokumentTyp)).build();
-    }
-
     @RolesAllowed({ GESUCH_READ})
     @Override
     public Response getGesucheSb(GetGesucheSBQueryType getGesucheSBQueryType) {
@@ -120,13 +106,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getRequiredGesuchDokumentTyp(UUID gesuchId) {
-        final var requiredTypes = gesuchService.getRequiredDokumentTypes(gesuchId);
-        return Response.ok(requiredTypes).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
     public Response getStatusProtokoll(UUID gesuchId) {
         final var statusprotokoll = gesuchHistoryService.getStatusprotokoll(gesuchId);
         return Response.ok(statusprotokoll).build();
@@ -141,13 +120,21 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response validateGesuchPages(UUID gesuchId) {
-        return Response.ok(gesuchService.validatePages(gesuchId)).build();
+    public Response getBerechnungForGesuch(UUID gesuchId) {
+        return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getBerechnungForGesuch(UUID gesuchId) {
-        return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
+    public Response getGsTrancheChanges(UUID aenderungId) {
+        final var changes = gesuchService.getGsTrancheChanges(aenderungId);
+        return Response.ok(changes).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getSbTrancheChanges(UUID aenderungId) {
+        final var changes = gesuchService.getSbTrancheChanges(aenderungId);
+        return Response.ok(changes).build();
     }
 }

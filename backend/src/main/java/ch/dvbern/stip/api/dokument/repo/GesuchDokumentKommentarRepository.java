@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.dokument.repo;
 
 import java.util.List;
 import java.util.UUID;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.entity.QGesuchDokumentKommentar;
@@ -19,23 +20,22 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
     private static QGesuchDokumentKommentar gesuchDokumentKommentar = QGesuchDokumentKommentar.gesuchDokumentKommentar;
 
     @Transactional
-    public void deleteAllForGesuch(final UUID gesuchId) {
-        final var kommentar = QGesuchDokumentKommentar.gesuchDokumentKommentar;
+    public void deleteAllForGesuchTranche(final UUID gesuchTrancheId) {
         new JPAQueryFactory(entityManager)
-            .delete(kommentar)
-            .where(kommentar.gesuch.id.eq(gesuchId))
+            .delete(gesuchDokumentKommentar)
+            .where(gesuchDokumentKommentar.gesuchTranche.id.eq(gesuchTrancheId))
             .execute();
     }
 
-    public List<GesuchDokumentKommentar> getByTypAndGesuchId(
+    public List<GesuchDokumentKommentar> getByTypAndGesuchTrancheId(
         final DokumentTyp dokumentTyp,
-        final UUID gesuchId
+        final UUID gesuchTrancheId
     ) {
         return
             new JPAQueryFactory(entityManager)
                 .selectFrom(gesuchDokumentKommentar)
                 .where(
-                    gesuchDokumentKommentar.gesuch.id.eq(gesuchId)
+                    gesuchDokumentKommentar.gesuchTranche.id.eq(gesuchTrancheId)
                         .and(gesuchDokumentKommentar.dokumentTyp.eq(dokumentTyp))
                 )
                 .orderBy(gesuchDokumentKommentar.timestampErstellt.desc())

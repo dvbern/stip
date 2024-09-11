@@ -14,6 +14,8 @@ import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
+
 @Singleton
 @RequiredArgsConstructor
 @Slf4j
@@ -48,15 +50,15 @@ GesuchsperiodeSeeding extends Seeder{
                 "Herbst",
                 "Automne",
                 newJahr,
-                LocalDate.of(currentYear, 8, 1),
-                LocalDate.of(currentYear + 1, 7, 31)
+                LocalDate.of(currentYear, 7, 1),
+                LocalDate.of(currentYear + 1, 6, 30)
             ),
             getPeriodeForSeeding(
                 "Frühling",
                 "Printemps",
                 newJahr,
-                LocalDate.of(currentYear, 2, 1),
-                LocalDate.of(currentYear + 1, 1, 31)
+                LocalDate.of(currentYear, 1, 1),
+                LocalDate.of(currentYear, 12, 31)
             )
         );
 
@@ -98,8 +100,8 @@ GesuchsperiodeSeeding extends Seeder{
             .setGesuchsperiodeStopp(to)
             .setAufschaltterminStart(from)
             .setAufschaltterminStopp(to)
-            .setEinreichefristNormal(to.minusMonths(7))
-            .setEinreichefristReduziert(to.minusMonths(4))
+            .setEinreichefristNormal(to.minusMonths(7).with(lastDayOfMonth()))
+            .setEinreichefristReduziert(to.minusMonths(4).with(lastDayOfMonth()))
             .setAusbKostenSekII(2000)
             .setAusbKostenTertiaer(3000)
             .setFreibetragVermoegen(0)
@@ -136,6 +138,11 @@ GesuchsperiodeSeeding extends Seeder{
             .setPreisProMahlzeit(7)
             .setMaxSaeule3a(7000)
             .setAnzahlWochenLehre(47)
-            .setAnzahlWochenSchule(38);
+            .setAnzahlWochenSchule(38)
+            .setVermoegensanteilInProzent(15)
+            .setLimiteAlterAntragsstellerHalbierungElternbeitrag(25)
+            .setReduzierungDesGrundbedarfs(2754)
+            .setZweiterAuszahlungsterminMonat(6)
+            .setZweiterAuszahlungsterminTag(1);
     }
 }

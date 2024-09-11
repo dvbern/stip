@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
@@ -21,9 +22,9 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Response createAenderungsantrag(UUID gesuchId, CreateAenderungsantragRequestDto aenderungsantragCreateDto) {
-        final var gesuchDto = gesuchTrancheService.createAenderungsantrag(gesuchId, aenderungsantragCreateDto);
-        return Response.ok(gesuchDto).build();
+    public Response createAenderungsantrag(UUID gesuchId, CreateAenderungsantragRequestDto createAenderungsantragRequestDto) {
+        final var trancheDto = gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
+        return Response.ok(trancheDto).build();
     }
 
     @RolesAllowed(GESUCH_READ)
@@ -46,10 +47,46 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         UUID gesuchId,
         CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto
     ) {
-        final var gesuchDto = gesuchTrancheService.createTrancheCopy(
+        final var trancheDto = gesuchTrancheService.createTrancheCopy(
             gesuchId,
             createGesuchTrancheRequestDto
         );
-        return Response.ok(gesuchDto).build();
+        return Response.ok(trancheDto).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGesuchDokumente(UUID gesuchTrancheId) {
+        var gesuchDokumente = gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
+        return Response.ok(gesuchDokumente).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGesuchDokument(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
+        final var gesuchDokument = gesuchTrancheService.getGesuchDokument(gesuchTrancheId, dokumentTyp);
+        return Response.ok(gesuchDokument).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getRequiredGesuchDokumentTyp(UUID gesuchTrancheId) {
+        final var requiredTypes = gesuchTrancheService.getRequiredDokumentTypes(gesuchTrancheId);
+        return Response.ok(requiredTypes).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response validateGesuchTranchePages(UUID gesuchTrancheId) {
+        return Response.ok(
+            gesuchTrancheService.validatePages(gesuchTrancheId)
+        ).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response aenderungEinreichen(UUID aenderungId) {
+        gesuchTrancheService.aenderungEinreichen(aenderungId);
+        return Response.ok().build();
     }
 }

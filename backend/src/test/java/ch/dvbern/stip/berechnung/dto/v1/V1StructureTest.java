@@ -28,9 +28,14 @@ class V1StructureTest {
                 "Stammdaten_V1": {
                     "maxSaeule3a": 7000,
                     "einkommensfreibetrag": 6000,
+                    "freibetragErwerbseinkommen": 6000,
+                    "freibetragVermoegen": 30000,
+                    "vermoegensanteilInProzent": 15,
                     "anzahlWochenLehre": 42,
                     "anzahlWochenSchule": 37,
-                    "preisProMahlzeit": 7
+                    "preisProMahlzeit": 7,
+                    "stipLimiteMinimalstipendium": 500,
+                    "limiteAlterAntragsstellerHalbierungElternbeitrag": 25
                 },
                 "InputFamilienbudget_1_V1": {
                     "elternteil": {
@@ -39,7 +44,7 @@ class V1StructureTest {
                         "grundbedarf": 21816,
                         "fahrkostenPerson1": 0,
                         "fahrkostenPerson2": 0,
-                        "integrationszulage": 0,
+                        "integrationszulage": 2400,
                         "steuernBund": 0,
                         "steuernStaat": 0,
                         "medizinischeGrundversorgung": 8200,
@@ -63,7 +68,7 @@ class V1StructureTest {
                         "grundbedarf": 21816,
                         "fahrkostenPerson1": 0,
                         "fahrkostenPerson2": 0,
-                        "integrationszulage": 0,
+                        "integrationszulage": 2400,
                         "steuernBund": 0,
                         "steuernStaat": 0,
                         "medizinischeGrundversorgung": 6800,
@@ -108,7 +113,8 @@ class V1StructureTest {
                         "lehre": false,
                         "eigenerHaushalt": true,
                         "abgeschlosseneErstausbildung": false,
-                        "anzahlPersonenImHaushalt": 2
+                        "anzahlPersonenImHaushalt": 2,
+                        "verheiratetKonkubinat": false
                     }
                 }
             }

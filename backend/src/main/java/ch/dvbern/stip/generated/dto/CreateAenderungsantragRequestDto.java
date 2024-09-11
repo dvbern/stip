@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class CreateAenderungsantragRequestDto  implements Serializable {
   private @Valid LocalDate start;
-  private @Valid LocalDate end;
   private @Valid String comment;
+  private @Valid LocalDate end;
 
   /**
    **/
@@ -45,6 +45,25 @@ public class CreateAenderungsantragRequestDto  implements Serializable {
 
   /**
    **/
+  public CreateAenderungsantragRequestDto comment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+  
+  @JsonProperty("comment")
+  @NotNull
+  public String getComment() {
+    return comment;
+  }
+
+  @JsonProperty("comment")
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
+
+  /**
+   **/
   public CreateAenderungsantragRequestDto end(LocalDate end) {
     this.end = end;
     return this;
@@ -61,24 +80,6 @@ public class CreateAenderungsantragRequestDto  implements Serializable {
     this.end = end;
   }
 
-  /**
-   **/
-  public CreateAenderungsantragRequestDto comment(String comment) {
-    this.comment = comment;
-    return this;
-  }
-
-  
-  @JsonProperty("comment")
-  public String getComment() {
-    return comment;
-  }
-
-  @JsonProperty("comment")
-  public void setComment(String comment) {
-    this.comment = comment;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -90,13 +91,13 @@ public class CreateAenderungsantragRequestDto  implements Serializable {
     }
     CreateAenderungsantragRequestDto createAenderungsantragRequest = (CreateAenderungsantragRequestDto) o;
     return Objects.equals(this.start, createAenderungsantragRequest.start) &&
-        Objects.equals(this.end, createAenderungsantragRequest.end) &&
-        Objects.equals(this.comment, createAenderungsantragRequest.comment);
+        Objects.equals(this.comment, createAenderungsantragRequest.comment) &&
+        Objects.equals(this.end, createAenderungsantragRequest.end);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(start, end, comment);
+    return Objects.hash(start, comment, end);
   }
 
   @Override
@@ -105,8 +106,8 @@ public class CreateAenderungsantragRequestDto  implements Serializable {
     sb.append("class CreateAenderungsantragRequestDto {\n");
     
     sb.append("    start: ").append(toIndentedString(start)).append("\n");
-    sb.append("    end: ").append(toIndentedString(end)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
+    sb.append("    end: ").append(toIndentedString(end)).append("\n");
     sb.append("}");
     return sb.toString();
   }
