@@ -43,7 +43,7 @@ public class DateUtil {
      * @see DateUtil#roundToStartOrEnd(LocalDate, int, boolean)
      */
     public LocalDate roundToStartOrEnd(final LocalDate date, final boolean roundUpIfEnd) {
-        return roundToStartOrEnd(date, 14, roundUpIfEnd);
+        return roundToStartOrEnd(date, 15, roundUpIfEnd);
     }
 
     /**

@@ -89,7 +89,7 @@ class GesuchTrancheCopyUtilTest {
                 Arguments.of(
                     LocalDate.of(2024, 2, 1),
                     LocalDate.of(2024, 10, 1),
-                    LocalDate.of(2024, 2, 14),
+                    LocalDate.of(2024, 2, 15),
                     LocalDate.of(2024, 10, 14),
                     LocalDate.of(2024, 2, 1),
                     LocalDate.of(2024, 10, 1)
