@@ -1,7 +1,9 @@
 package ch.dvbern.stip.api.sap.endpoints.vendorposting;
 
+import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.read.BusinessPartnerReadResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.util.SoapUtils;
 import ch.dvbern.stip.api.sap.service.endpoints.vendorposting.VendorPostingCreateResponse;
+import ch.dvbern.stip.api.sap.util.SapMessageType;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.soap.SOAPException;
 import org.junit.jupiter.api.Test;
@@ -19,7 +21,12 @@ class VendorPostingCreateResponseTest {
             "UTF-8"
         );
         final var response = SoapUtils.parseSoapResponse(xml, VendorPostingCreateResponse.class);
+        //assert
         assertNotNull(response);
+        assertDoesNotThrow(() -> {
+            SoapUtils.parseSoapResponse(xml, VendorPostingCreateResponse.class);
+        });
+        assertEquals(SapMessageType.S,SapMessageType.valueOf(response.getRETURNCODE().get(0).getTYPE()));
     }
 
     @Test
@@ -29,6 +36,11 @@ class VendorPostingCreateResponseTest {
             "UTF-8"
         );
         final var response = SoapUtils.parseSoapResponse(xml, VendorPostingCreateResponse.class);
+        //assert
         assertNotNull(response);
+        assertDoesNotThrow(() -> {
+            SoapUtils.parseSoapResponse(xml, VendorPostingCreateResponse.class);
+        });
+        assertEquals(SapMessageType.E, SapMessageType.valueOf(response.getRETURNCODE().get(0).getTYPE()));
     }
 }
