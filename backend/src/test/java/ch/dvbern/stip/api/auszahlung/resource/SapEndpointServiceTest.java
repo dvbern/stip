@@ -2,12 +2,12 @@ package ch.dvbern.stip.api.auszahlung.resource;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.generator.entities.service.AuszahlungGenerator;
-import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.create.BusinessPartnerCreateResponse;
+import ch.dvbern.stip.api.sap.generated.businesspartner.create.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerChangeClient;
 import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerCreateClient;
 import ch.dvbern.stip.api.sap.service.endpoints.clients.ImportStatusReadClient;
 import ch.dvbern.stip.api.sap.service.endpoints.clients.VendorPostingCreateClient;
-import ch.dvbern.stip.api.sap.service.endpoints.importstatus.ImportStatusReadResponse;
+import ch.dvbern.stip.api.sap.generated.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.auszahlung.service.*;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.sap.service.*;

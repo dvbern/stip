@@ -2,7 +2,7 @@ package ch.dvbern.stip.api.auszahlung.service;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.sap.service.endpoints.clients.*;
-import ch.dvbern.stip.api.sap.service.endpoints.importstatus.ImportStatusReadResponse;
+import ch.dvbern.stip.api.sap.generated.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.sap.service.*;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;

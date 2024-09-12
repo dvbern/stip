@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.sap.endpoints.vendorposting;
 
 import ch.dvbern.stip.api.sap.service.endpoints.util.SoapUtils;
-import ch.dvbern.stip.api.sap.service.endpoints.vendorposting.VendorPostingCreateResponse;
+import ch.dvbern.stip.api.sap.generated.vendorposting.VendorPostingCreateResponse;
 import ch.dvbern.stip.api.sap.util.SapMessageType;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.soap.SOAPException;

@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.sap.endpoints.importstatus;
 
-import ch.dvbern.stip.api.sap.service.endpoints.importstatus.ImportStatusReadResponse;
+import ch.dvbern.stip.api.sap.generated.importstatus.ImportStatusReadResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.util.SoapUtils;
 import jakarta.xml.bind.JAXBException;
 import org.junit.jupiter.api.Test;

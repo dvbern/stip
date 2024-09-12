@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.sap.endpoints.businesspartner.create;
 
-import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.create.BusinessPartnerCreateResponse;
+import ch.dvbern.stip.api.sap.generated.businesspartner.create.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.util.SoapUtils;
 import ch.dvbern.stip.api.sap.util.SapMessageType;
 import jakarta.xml.bind.JAXBException;

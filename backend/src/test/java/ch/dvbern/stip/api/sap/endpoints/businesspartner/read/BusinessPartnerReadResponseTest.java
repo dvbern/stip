@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.sap.endpoints.businesspartner.read;
 
-import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.read.BusinessPartnerReadResponse;
+import ch.dvbern.stip.api.sap.generated.businesspartner.read.BusinessPartnerReadResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.util.SoapUtils;
 import ch.dvbern.stip.api.sap.util.SapMessageType;
 import jakarta.xml.bind.JAXBException;

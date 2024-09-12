@@ -1,9 +1,9 @@
 package ch.dvbern.stip.api.sap.util;
 
-import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.change.BusinessPartnerChangeResponse;
-import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.create.BusinessPartnerCreateResponse;
-import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.read.BusinessPartnerReadResponse;
-import ch.dvbern.stip.api.sap.service.endpoints.vendorposting.VendorPostingCreateResponse;
+import ch.dvbern.stip.api.sap.generated.businesspartner.change.BusinessPartnerChangeResponse;
+import ch.dvbern.stip.api.sap.generated.businesspartner.create.BusinessPartnerCreateResponse;
+import ch.dvbern.stip.api.sap.generated.businesspartner.read.BusinessPartnerReadResponse;
+import ch.dvbern.stip.api.sap.generated.vendorposting.VendorPostingCreateResponse;
 import jakarta.ws.rs.core.Response;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
