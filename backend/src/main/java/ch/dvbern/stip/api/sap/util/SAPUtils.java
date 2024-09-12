@@ -31,8 +31,7 @@ public class SAPUtils {
         }
     }
 
-    //todo KSTIP-1229: make generic
-    public <T> boolean noSapActionHasBeenPerformed(Response response) {
+    public boolean noSapActionHasBeenPerformed(Response response) {
         if (response.getEntity() instanceof VendorPostingCreateResponse) {
             return SapMessageType.valueOf(
                     ((VendorPostingCreateResponse) response.getEntity()).getRETURNCODE().get(0).getTYPE())
