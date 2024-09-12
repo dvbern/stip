@@ -28,7 +28,7 @@ class BusinessPartnerChangeResponseTest {
         assertDoesNotThrow(() -> {
             SoapUtils.parseSoapResponse(xml, BusinessPartnerChangeResponse.class);
         });
-        assertEquals(SapMessageType.S, SapMessageType.valueOf(response.getRETURNCODE().get(0).getTYPE()) );
+        assertEquals(SapMessageType.SUCCESS, SapMessageType.parse(response.getRETURNCODE().get(0).getTYPE()) );
     }
 
     @Test
@@ -45,6 +45,6 @@ class BusinessPartnerChangeResponseTest {
         assertDoesNotThrow(() -> {
             SoapUtils.parseSoapResponse(xml, BusinessPartnerChangeResponse.class);
         });
-        assertEquals(SapMessageType.E, SapMessageType.valueOf(response.getRETURNCODE().get(0).getTYPE()));
+        assertEquals(SapMessageType.ERROR, SapMessageType.parse(response.getRETURNCODE().get(0).getTYPE()));
     }
 }

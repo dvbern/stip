@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.sap.endpoints.businesspartner.create;
 
-import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.change.BusinessPartnerChangeResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.create.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.util.SoapUtils;
 import ch.dvbern.stip.api.sap.util.SapMessageType;
@@ -28,7 +27,7 @@ class BusinessPartnerCreateResponseTest {
         assertDoesNotThrow(() -> {
             SoapUtils.parseSoapResponse(xml, BusinessPartnerCreateResponse.class);
         });
-        assertEquals(SapMessageType.S, SapMessageType.valueOf(response.getRETURNCODE().get(0).getTYPE()) );
+        assertEquals(SapMessageType.SUCCESS, SapMessageType.parse(response.getRETURNCODE().get(0).getTYPE()) );
     }
 
     @Test
@@ -45,7 +44,7 @@ class BusinessPartnerCreateResponseTest {
         assertDoesNotThrow(() -> {
             SoapUtils.parseSoapResponse(xml, BusinessPartnerCreateResponse.class);
         });
-        assertEquals(SapMessageType.E, SapMessageType.valueOf(response.getRETURNCODE().get(0).getTYPE()));
+        assertEquals(SapMessageType.ERROR, SapMessageType.parse(response.getRETURNCODE().get(0).getTYPE()));
 
     }
 
@@ -63,7 +62,7 @@ class BusinessPartnerCreateResponseTest {
         assertDoesNotThrow(() -> {
             SoapUtils.parseSoapResponse(xml, BusinessPartnerCreateResponse.class);
         });
-        assertEquals(SapMessageType.E, SapMessageType.valueOf(response.getRETURNCODE().get(0).getTYPE()));
+        assertEquals(SapMessageType.ERROR, SapMessageType.parse(response.getRETURNCODE().get(0).getTYPE()));
     }
 
 }

@@ -32,25 +32,24 @@ public class SAPUtils {
     }
 
     public boolean noSapActionHasBeenPerformed(Response response) {
-        if (response.getEntity() instanceof VendorPostingCreateResponse) {
-            return SapMessageType.valueOf(
-                    ((VendorPostingCreateResponse) response.getEntity()).getRETURNCODE().get(0).getTYPE())
-                .equals(SapMessageType.E);
-        } else if (response.getEntity() instanceof BusinessPartnerCreateResponse) {
-            return SapMessageType.valueOf(
-                    ((BusinessPartnerCreateResponse) response.getEntity()).getRETURNCODE().get(0).getTYPE())
-                .equals(SapMessageType.E);
-        } else if (response.getEntity() instanceof BusinessPartnerChangeResponse) {
-            return SapMessageType.valueOf(
-                    ((BusinessPartnerChangeResponse) response.getEntity()).getRETURNCODE().get(0).getTYPE())
-                .equals(SapMessageType.E);
-        } else if (response.getEntity() instanceof BusinessPartnerReadResponse) {
-            return SapMessageType.valueOf(
-                    ((BusinessPartnerReadResponse) response.getEntity()).getRETURNCODE().get(0).getTYPE())
-                .equals(SapMessageType.E);
+        if (response.getEntity() instanceof VendorPostingCreateResponse entity) {
+            return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
         }
+        else if (response.getEntity() instanceof BusinessPartnerCreateResponse entity) {
+            return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
+        } else if (response.getEntity() instanceof BusinessPartnerChangeResponse entity) {
+            return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
+        } else if (response.getEntity() instanceof BusinessPartnerReadResponse entity) {
+            return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
+        }
+
         return false;
     }
+
+    private boolean isSuccess(final String rawMessageType) {
+        return SapMessageType.parse(rawMessageType).equals(SapMessageType.SUCCESS);
+    }
+
 
     private void logAsWarning(Response response) {
         String message = "";

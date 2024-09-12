@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.sap.endpoints.vendorposting;
 
-import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.read.BusinessPartnerReadResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.util.SoapUtils;
 import ch.dvbern.stip.api.sap.service.endpoints.vendorposting.VendorPostingCreateResponse;
 import ch.dvbern.stip.api.sap.util.SapMessageType;
@@ -26,7 +25,7 @@ class VendorPostingCreateResponseTest {
         assertDoesNotThrow(() -> {
             SoapUtils.parseSoapResponse(xml, VendorPostingCreateResponse.class);
         });
-        assertEquals(SapMessageType.S,SapMessageType.valueOf(response.getRETURNCODE().get(0).getTYPE()));
+        assertEquals(SapMessageType.SUCCESS,SapMessageType.parse(response.getRETURNCODE().get(0).getTYPE()));
     }
 
     @Test
@@ -41,6 +40,6 @@ class VendorPostingCreateResponseTest {
         assertDoesNotThrow(() -> {
             SoapUtils.parseSoapResponse(xml, VendorPostingCreateResponse.class);
         });
-        assertEquals(SapMessageType.E, SapMessageType.valueOf(response.getRETURNCODE().get(0).getTYPE()));
+        assertEquals(SapMessageType.ERROR, SapMessageType.parse(response.getRETURNCODE().get(0).getTYPE()));
     }
 }

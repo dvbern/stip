@@ -1,14 +1,21 @@
 package ch.dvbern.stip.api.sap.util;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum SapMessageType {
-    S("success"), E("no action | failure");
+    SUCCESS("success"), ERROR("no action | failure");
 
-    public String getDescription() {
-        return description;
+    private final String description;
+
+    public static SapMessageType parse(final String raw) {
+        return switch (raw) {
+            case "S" -> SapMessageType.SUCCESS;
+            case "E" -> SapMessageType.ERROR;
+            default -> throw new IllegalStateException("Unexpected value: " + raw);
+        };
     }
 
-    private String description;
-    SapMessageType(String descritpion){
-        this.description = descritpion;
-    }
 }

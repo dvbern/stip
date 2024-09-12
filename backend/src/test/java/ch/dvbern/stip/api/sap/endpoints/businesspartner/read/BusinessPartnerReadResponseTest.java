@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.sap.endpoints.businesspartner.read;
 
-import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.create.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.businesspartner.read.BusinessPartnerReadResponse;
 import ch.dvbern.stip.api.sap.service.endpoints.util.SoapUtils;
 import ch.dvbern.stip.api.sap.util.SapMessageType;
@@ -26,6 +25,6 @@ class BusinessPartnerReadResponseTest {
         assertDoesNotThrow(() -> {
             SoapUtils.parseSoapResponse(xml, BusinessPartnerReadResponse.class);
         });
-        assertEquals(SapMessageType.S,SapMessageType.valueOf(response.getRETURNCODE().get(0).getTYPE()));
+        assertEquals(SapMessageType.SUCCESS,SapMessageType.parse(response.getRETURNCODE().get(0).getTYPE()));
     }
 }
