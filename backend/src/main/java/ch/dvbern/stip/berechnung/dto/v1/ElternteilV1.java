@@ -9,6 +9,7 @@ import java.util.Objects;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -54,7 +55,8 @@ public class ElternteilV1 {
         final int anzahlPersonenImHaushalt,
         final List<AbstractFamilieEntity> kinderDerElternInHaushalten,
         final int anzahlGeschwisterInAusbildung,
-        final ElternTyp elternTyp
+        final ElternTyp elternTyp,
+        final Familiensituation familiensituation
     ) {
         final ElternteilV1Builder builder = new ElternteilV1Builder();
 
@@ -128,13 +130,6 @@ public class ElternteilV1 {
             }
         }
 
-        builder.integrationszulage(
-            Integer.min(
-                gesuchsperiode.getIntegrationszulage() * (anzahlGeschwisterInAusbildung + 1),
-                gesuchsperiode.getLimiteEkFreibetragIntegrationszulage() - gesuchsperiode.getEinkommensfreibetrag()
-            )
-        );
-
         switch (steuerdaten.getSteuerdatenTyp()) {
             case VATER -> {
                 final var elternteilToUse = eltern.stream().filter(
@@ -144,6 +139,11 @@ public class ElternteilV1 {
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
                 );
+                if (Boolean.TRUE.equals(familiensituation.getVaterWiederverheiratet())) {
+                    medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
+                        29, gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29 für margin
+                    );
+                }
             }
             case MUTTER -> {
                 final var elternteilToUse = eltern.stream().filter(
@@ -153,10 +153,24 @@ public class ElternteilV1 {
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
                 );
+                if (Boolean.TRUE.equals(familiensituation.getMutterWiederverheiratet())) {
+                    medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
+                        29, gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29 für margin
+                    );
+                }
             }
         }
 
         builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
+
+        builder.integrationszulage(
+            Integer.min(
+                gesuchsperiode.getIntegrationszulage() * (anzahlGeschwisterInAusbildung + 1),
+                gesuchsperiode.getLimiteEkFreibetragIntegrationszulage() - gesuchsperiode.getEinkommensfreibetrag()
+            )
+        );
+
+
 
         builder.effektiveWohnkosten(
             BerechnungRequestV1.getEffektiveWohnkosten(
@@ -186,7 +200,8 @@ public class ElternteilV1 {
         final int anzahlPersonenImHaushalt,
         final List<AbstractFamilieEntity> kinderDerElternInHaushalten,
         final int anzahlGeschwisterInAusbildung,
-        final ElternTyp elternTyp
+        final ElternTyp elternTyp,
+        final Familiensituation familiensituation
     ) {
         return builderFromDependants(
             gesuchsperiode,
@@ -195,7 +210,8 @@ public class ElternteilV1 {
             anzahlPersonenImHaushalt,
             kinderDerElternInHaushalten,
             anzahlGeschwisterInAusbildung,
-            elternTyp
+            elternTyp,
+            familiensituation
         ).build();
     }
 }
