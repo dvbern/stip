@@ -23,10 +23,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -37,6 +39,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGS_STAMMDATEN,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE
@@ -52,6 +56,12 @@ public class BerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
   private LocalDate gueltigBis;
+
+  public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  private UUID gesuchTrancheId;
+
+  public static final String JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER = "berechnungsanteilKinder";
+  private BigDecimal berechnungsanteilKinder;
 
   public static final String JSON_PROPERTY_BERECHNUNGS_STAMMDATEN = "berechnungsStammdaten";
   private BerechnungsStammdatenDtoSpec berechnungsStammdaten;
@@ -140,6 +150,58 @@ public class BerechnungsresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGueltigBis(LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
+  }
+
+
+  public BerechnungsresultatDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+    
+    this.gesuchTrancheId = gesuchTrancheId;
+    return this;
+  }
+
+   /**
+   * Get gesuchTrancheId
+   * @return gesuchTrancheId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+  }
+
+
+  public BerechnungsresultatDtoSpec berechnungsanteilKinder(BigDecimal berechnungsanteilKinder) {
+    
+    this.berechnungsanteilKinder = berechnungsanteilKinder;
+    return this;
+  }
+
+   /**
+   * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert &#x3D;&#x3D; 1.
+   * @return berechnungsanteilKinder
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public BigDecimal getBerechnungsanteilKinder() {
+    return berechnungsanteilKinder;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBerechnungsanteilKinder(BigDecimal berechnungsanteilKinder) {
+    this.berechnungsanteilKinder = berechnungsanteilKinder;
   }
 
 
@@ -240,6 +302,8 @@ public class BerechnungsresultatDtoSpec {
     return Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
         Objects.equals(this.gueltigAb, berechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, berechnungsresultat.gueltigBis) &&
+        Objects.equals(this.gesuchTrancheId, berechnungsresultat.gesuchTrancheId) &&
+        Objects.equals(this.berechnungsanteilKinder, berechnungsresultat.berechnungsanteilKinder) &&
         Objects.equals(this.berechnungsStammdaten, berechnungsresultat.berechnungsStammdaten) &&
         Objects.equals(this.persoenlichesBudgetresultat, berechnungsresultat.persoenlichesBudgetresultat) &&
         Objects.equals(this.familienBudgetresultate, berechnungsresultat.familienBudgetresultate);
@@ -247,7 +311,7 @@ public class BerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, gueltigAb, gueltigBis, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(berechnung, gueltigAb, gueltigBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
@@ -257,6 +321,8 @@ public class BerechnungsresultatDtoSpec {
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
+    sb.append("    berechnungsanteilKinder: ").append(toIndentedString(berechnungsanteilKinder)).append("\n");
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");
     sb.append("    persoenlichesBudgetresultat: ").append(toIndentedString(persoenlichesBudgetresultat)).append("\n");
     sb.append("    familienBudgetresultate: ").append(toIndentedString(familienBudgetresultate)).append("\n");

@@ -4,10 +4,12 @@ import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -31,6 +33,8 @@ public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer berechnung;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
+  private @Valid UUID gesuchTrancheId;
+  private @Valid BigDecimal berechnungsanteilKinder;
   private @Valid BerechnungsStammdatenDto berechnungsStammdaten;
   private @Valid PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
   private @Valid List<FamilienBudgetresultatDto> familienBudgetresultate = new ArrayList<>();
@@ -91,6 +95,45 @@ public class BerechnungsresultatDto  implements Serializable {
   @JsonProperty("gueltigBis")
   public void setGueltigBis(LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
+  }
+
+  /**
+   **/
+  public BerechnungsresultatDto gesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchTrancheId")
+  @NotNull
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
+  }
+
+  @JsonProperty("gesuchTrancheId")
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+  }
+
+  /**
+   * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert &#x3D;&#x3D; 1.
+   **/
+  public BerechnungsresultatDto berechnungsanteilKinder(BigDecimal berechnungsanteilKinder) {
+    this.berechnungsanteilKinder = berechnungsanteilKinder;
+    return this;
+  }
+
+  
+  @JsonProperty("berechnungsanteilKinder")
+  @NotNull
+  public BigDecimal getBerechnungsanteilKinder() {
+    return berechnungsanteilKinder;
+  }
+
+  @JsonProperty("berechnungsanteilKinder")
+  public void setBerechnungsanteilKinder(BigDecimal berechnungsanteilKinder) {
+    this.berechnungsanteilKinder = berechnungsanteilKinder;
   }
 
   /**
@@ -180,6 +223,8 @@ public class BerechnungsresultatDto  implements Serializable {
     return Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
         Objects.equals(this.gueltigAb, berechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, berechnungsresultat.gueltigBis) &&
+        Objects.equals(this.gesuchTrancheId, berechnungsresultat.gesuchTrancheId) &&
+        Objects.equals(this.berechnungsanteilKinder, berechnungsresultat.berechnungsanteilKinder) &&
         Objects.equals(this.berechnungsStammdaten, berechnungsresultat.berechnungsStammdaten) &&
         Objects.equals(this.persoenlichesBudgetresultat, berechnungsresultat.persoenlichesBudgetresultat) &&
         Objects.equals(this.familienBudgetresultate, berechnungsresultat.familienBudgetresultate);
@@ -187,7 +232,7 @@ public class BerechnungsresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, gueltigAb, gueltigBis, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(berechnung, gueltigAb, gueltigBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
@@ -198,6 +243,8 @@ public class BerechnungsresultatDto  implements Serializable {
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
+    sb.append("    berechnungsanteilKinder: ").append(toIndentedString(berechnungsanteilKinder)).append("\n");
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");
     sb.append("    persoenlichesBudgetresultat: ").append(toIndentedString(persoenlichesBudgetresultat)).append("\n");
     sb.append("    familienBudgetresultate: ").append(toIndentedString(familienBudgetresultate)).append("\n");
