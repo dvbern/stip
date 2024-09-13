@@ -163,7 +163,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
                   sauele2: f.saeule2,
                   sauele3: f.saeule3a,
                   mietwert: f.eigenmietwert,
-                  alimenteOderRenten: f.alimente,
+                  kinderalimente: f.alimente,
                   einkommensfreibeitrag: sd.einkommensfreibetrag,
                   maxSaeule3a: sd.maxSaeule3a,
                   freibetragVermoegen: sd.freibetragVermoegen,
