@@ -32,13 +32,13 @@ public class RoundToStartTestArgumentsProvider implements ArgumentsProvider {
                 // Above midpoint is rounded up
                 Arguments.of(
                     LocalDate.of(2024, 1, 16),
-                    LocalDate.of(2024, 1, 31),
+                    LocalDate.of(2024, 2, 1),
                     15
                 ),
-                // End of month stays end of month
+                // End of month is rounded up
                 Arguments.of(
                     LocalDate.of(2024, 1, 31),
-                    LocalDate.of(2024, 1, 31),
+                    LocalDate.of(2024, 2, 1),
                     15
                 ),
                 // Custom midpoint rounds down
@@ -49,9 +49,9 @@ public class RoundToStartTestArgumentsProvider implements ArgumentsProvider {
                 ),
                 // Custom midpoint rounds up
                 Arguments.of(
-                    LocalDate.of(2024, 1, 4),
-                    LocalDate.of(2024, 1, 31),
-                    3
+                    LocalDate.of(2024, 1, 16),
+                    LocalDate.of(2024, 2, 1),
+                    15
                 )
             );
         }

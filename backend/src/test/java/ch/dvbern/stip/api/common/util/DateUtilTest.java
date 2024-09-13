@@ -15,14 +15,14 @@ class DateUtilTest {
     @ParameterizedTest
     @ArgumentsSource(RoundToStartTestArgumentsProvider.class)
     void roundToStartTest(final LocalDate toRound, final LocalDate expected, final int midpoint) {
-        final var roundedStart = DateUtil.roundToPeriodStart(toRound, midpoint, false);
+        final var roundedStart = DateUtil.roundToStartOrEnd(toRound, midpoint, false,true);
         assertThat(roundedStart, is(expected));
     }
 
     @ParameterizedTest
     @ArgumentsSource(RoundToEndTestArgumentsProvider.class)
     void roundToStartEndTest(final LocalDate toRound, final LocalDate expected, final int midpoint) {
-        final var roundedEnd = DateUtil.roundToPeriodEnd(toRound, midpoint, false);
+        final var roundedEnd = DateUtil.roundToStartOrEnd(toRound, midpoint, true,false);
         assertThat(roundedEnd, is(expected));
     }
 

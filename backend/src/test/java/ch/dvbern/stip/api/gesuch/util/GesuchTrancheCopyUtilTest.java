@@ -65,7 +65,7 @@ class GesuchTrancheCopyUtilTest {
                     LocalDate.of(2024, 2, 1),
                     LocalDate.of(2024, 11, 1),
                     LocalDate.of(2024, 2, 1),
-                    LocalDate.of(2024, 10, 1)
+                    LocalDate.of(2024, 9, 30)
                 ),
                 // Aenderung starts before and ends after Gesuchsperiode does
                 Arguments.of(
@@ -74,7 +74,7 @@ class GesuchTrancheCopyUtilTest {
                     LocalDate.of(2024, 1, 1),
                     LocalDate.of(2024, 11, 1),
                     LocalDate.of(2024, 2, 1),
-                    LocalDate.of(2024, 10, 1)
+                    LocalDate.of(2024, 9, 30)
                 ),
                 // Aenderung has no end date
                 Arguments.of(
@@ -83,7 +83,7 @@ class GesuchTrancheCopyUtilTest {
                     LocalDate.of(2024, 2, 1),
                     null,
                     LocalDate.of(2024, 2, 1),
-                    LocalDate.of(2024, 10, 1)
+                    LocalDate.of(2024, 9, 30)
                 ),
                 // Aenderung clamped to beginning of start month
                 Arguments.of(
@@ -92,7 +92,7 @@ class GesuchTrancheCopyUtilTest {
                     LocalDate.of(2024, 2, 15),
                     LocalDate.of(2024, 10, 14),
                     LocalDate.of(2024, 2, 1),
-                    LocalDate.of(2024, 10, 1)
+                    LocalDate.of(2024, 9, 30)
                 ),
 
                 // Aenderung clamped to end of end month

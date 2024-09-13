@@ -102,25 +102,35 @@ public class GesuchTrancheCopyUtil {
     DateRange clampStartStop(final Gesuchsperiode gesuchsperiode, final DateRange createDateRange) {
         final var gesuchsperiodeStart = gesuchsperiode.getGesuchsperiodeStart();
         final var gesuchsperiodeStopp = gesuchsperiode.getGesuchsperiodeStopp();
-        final var startDate = DateUtil.roundToStart(
+        final var startDate = DateUtil.roundToStartOrEnd(
             DateUtil.clamp(
                 createDateRange.getGueltigAb(),
                 gesuchsperiodeStart,
                 gesuchsperiodeStopp
-            ),
+            ),15,false,
             true
         );
 
-        LocalDate clampedDate =             DateUtil.clamp(
-            createDateRange.getGueltigBis() != null ? createDateRange.getGueltigBis() : gesuchsperiodeStopp,
-            gesuchsperiodeStart,
-            gesuchsperiodeStopp
-        );
-        boolean roundOffIfBeginning = createDateRange.getGueltigBis() != null && createDateRange.getGueltigBis()
-            .isBefore(gesuchsperiodeStopp);
-        final var endDate = DateUtil.roundToEnd(
-            clampedDate, roundOffIfBeginning
-        );
+        LocalDate endDate = null;
+        if(createDateRange.getGueltigBis() != null) {
+            endDate = DateUtil.roundToStartOrEnd(
+                DateUtil.clamp(
+                    createDateRange.getGueltigBis(),
+                    gesuchsperiodeStart,
+                    gesuchsperiodeStopp
+                ),14,true,
+                false
+            );
+        }else{
+            endDate = DateUtil.roundToStartOrEnd(
+                DateUtil.clamp(
+                    gesuchsperiodeStopp,
+                    gesuchsperiodeStart,
+                    gesuchsperiodeStopp
+                ),14,true,
+                false
+            );
+        }
 
         if (startDate.isAfter(endDate)) {
             throw new AppErrorException("Start date for new GesuchTranche must be after end date");

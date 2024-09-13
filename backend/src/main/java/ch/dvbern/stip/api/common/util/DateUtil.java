@@ -37,64 +37,31 @@ public class DateUtil {
         throw new AppErrorException("Unreachable code was reached!");
     }
 
-    /**
-     * Defaults the midpoint to 15
-     *
-     * @see DateUtil#roundToPeriodStart(LocalDate, int, boolean)
-     */
-    public LocalDate roundToStart(final LocalDate date, final boolean roundUpIfEnd) {
-        return roundToPeriodStart(date, 15, roundUpIfEnd);
-    }
-
-    /**
-     * Defaults the midpoint to 14
-     *
-     * @see DateUtil#roundToPeriodStart(LocalDate, int, boolean)
-     */
-    public LocalDate roundToEnd(final LocalDate date, final boolean roundOffIfEnd) {
-        return roundToPeriodEnd(date, 14, roundOffIfEnd);
-    }
 
     /**
      * Rounds the given date to the start or end of month.
      * All dates up to and including the midpoint of the month are rounded down to the start,
      * all after are clamped up the end of the month.
      * If the param {@code roundUpIfEnd} is {@code true}, then rounds up the date to the start of next month
+     * If the param {@code roundDownIfStart} is {@code true}, then rounds down the date to the end of month
      */
-    public LocalDate roundToPeriodStart(final LocalDate date, final int midpoint, final boolean roundUpIfEnd) {
-        if (date == null) {
-            throw new IllegalArgumentException("Date cannot be null");
-        }
-
+    public LocalDate roundToStartOrEnd(
+        final LocalDate date,
+        final int midpoint,
+        final boolean roundDownIfStart,
+        final boolean roundUpIfEnd
+    ) {
         if (date.getDayOfMonth() <= midpoint) {
+            if (roundDownIfStart) {
+                return date.minusMonths(1).with(lastDayOfMonth());
+            }
+
             return date.with(firstDayOfMonth());
         } else {
             if (roundUpIfEnd) {
                 return date.plusMonths(1).with(firstDayOfMonth());
             }
 
-            return date.with(lastDayOfMonth());
-        }
-    }
-
-    /**
-     * Rounds the given date to the start or end of month.
-     * All dates up to and including the midpoint of the month are rounded down to the start,
-     * all after are clamped up the end of the month.
-     * If the param {@code roundOffIfBeginning} is {@code true}, then rounds off the date to the start of next month
-     */
-    public LocalDate roundToPeriodEnd(final LocalDate date, final int midpoint, final boolean roundOffIfBeginning) {
-        if (date == null) {
-            throw new IllegalArgumentException("Date cannot be null");
-        }
-
-        if (date.getDayOfMonth() <= midpoint) {
-            if(roundOffIfBeginning){
-                return date.minusMonths(1).with(lastDayOfMonth());
-            }else{
-                return date.with(firstDayOfMonth());
-            }
-        } else {
             return date.with(lastDayOfMonth());
         }
     }
