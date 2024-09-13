@@ -41,7 +41,8 @@ public class GesuchTrancheValidatorService {
     }
 
     public void validateGesuchTrancheForEinreichen(final GesuchTranche toValidate) {
-
+        validateAdditionalEinreichenCriteria(toValidate);
+        validateGesuchTrancheForStatus(toValidate, GesuchTrancheStatus.AKZEPTIERT);
     }
 
     public void validateAdditionalEinreichenCriteria(final GesuchTranche toValidate) {
