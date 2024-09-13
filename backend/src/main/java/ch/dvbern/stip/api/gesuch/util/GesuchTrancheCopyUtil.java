@@ -26,8 +26,6 @@ import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import lombok.experimental.UtilityClass;
 
-import java.time.LocalDate;
-
 @UtilityClass
 // TODO KSTIP-1236: Once proper test data generation is in place, test copying
 public class GesuchTrancheCopyUtil {
@@ -107,36 +105,33 @@ public class GesuchTrancheCopyUtil {
                 createDateRange.getGueltigAb(),
                 gesuchsperiodeStart,
                 gesuchsperiodeStopp
-            ),15,false,
+            ),
+            15,
+            false,
             true
         );
 
-        LocalDate endDate = null;
-        if(createDateRange.getGueltigBis() != null) {
-            endDate = DateUtil.roundToStartOrEnd(
-                DateUtil.clamp(
-                    createDateRange.getGueltigBis(),
-                    gesuchsperiodeStart,
-                    gesuchsperiodeStopp
-                ),14,true,
-                false
-            );
-        }else{
-            endDate = DateUtil.roundToStartOrEnd(
-                DateUtil.clamp(
-                    gesuchsperiodeStopp,
-                    gesuchsperiodeStart,
-                    gesuchsperiodeStopp
-                ),14,true,
-                false
-            );
+        var endDate = createDateRange.getGueltigBis();
+        if (endDate == null) {
+            endDate = gesuchsperiodeStopp;
         }
 
-        if (startDate.isAfter(endDate)) {
+        final var roundedEndDate = DateUtil.roundToStartOrEnd(
+            DateUtil.clamp(
+                endDate,
+                gesuchsperiodeStart,
+                gesuchsperiodeStopp
+            ),
+            14,
+            true,
+            false
+        );
+
+        if (startDate.isAfter(roundedEndDate)) {
             throw new AppErrorException("Start date for new GesuchTranche must be after end date");
         }
 
-        return new DateRange(startDate, endDate);
+        return new DateRange(startDate, roundedEndDate);
     }
 
     GesuchFormular copy(final GesuchFormular other) {
