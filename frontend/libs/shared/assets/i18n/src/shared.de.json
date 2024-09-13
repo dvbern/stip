@@ -105,7 +105,6 @@
   "shared.dialog.gesuch-aenderung.von.label": "Von *",
   "shared.dialog.gesuch-aenderung.bis.label": "Bis (optional)",
   "shared.dialog.gesuch-aenderung.date.placeholder": "dd.mm.yyyy",
-  "shared.dialog.gesuch-aenderung.date.placeholder.month": "mm.yyyy",
   "shared.dialog.gesuch-aenderung.comment.label": "Bemerkung *",
   "shared.dialog.gesuch-aenderung.comment.placeholder": "Begründung schreiben",
   "shared.dialog.gesuch-aenderung.success": "Die Änderung wurde erfolgreich erstellt",

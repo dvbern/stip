@@ -17,7 +17,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
-import { endOfMonth } from 'date-fns';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { CreateAenderungsantragRequest } from '@dv/shared/model/gesuch';
@@ -87,7 +87,7 @@ export class SharedUiAenderungMeldenDialogComponent {
   monthSelectedGueltigAb(event: Date, picker: MatDatepicker<Date>) {
     if (this.config.isGesuchApp) return;
 
-    this.form.get('gueltigAb')?.setValue(event);
+    this.form.get('gueltigAb')?.setValue(startOfMonth(event));
     picker.close();
   }
 
@@ -107,6 +107,14 @@ export class SharedUiAenderungMeldenDialogComponent {
       'gueltigAb',
       'kommentar',
     ]);
+
+    if (this.config.isSachbearbeitungApp) {
+      aenderungsAntrag.gueltigAb = startOfMonth(aenderungsAntrag.gueltigAb);
+      aenderungsAntrag.gueltigBis = aenderungsAntrag.gueltigBis
+        ? endOfMonth(aenderungsAntrag.gueltigBis)
+        : null;
+    }
+
     return this.dialogRef.close({
       start: toBackendLocalDate(aenderungsAntrag.gueltigAb),
       end: aenderungsAntrag.gueltigBis
