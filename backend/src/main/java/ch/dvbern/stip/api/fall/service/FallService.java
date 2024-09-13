@@ -44,9 +44,11 @@ public class FallService {
     }
 
     private String createFallNummer() {
-        var nextValue = fallNummerSeqRepository.getNextValue();
-        var encoded = sqidsService.encodeLenghtSix(nextValue);
+        // TODO KSTIP-1411: Mandantenkürzel
+        var nextValue = fallNummerSeqRepository.getNextValue("BE");
+        var encoded = sqidsService.encodeLengthSix(nextValue);
 
-        return String.format("BE.G.%s", encoded);
+        // TODO KSTIP-1411: Mandantenkürzel
+        return String.format("BE.F.%s", encoded);
     }
 }

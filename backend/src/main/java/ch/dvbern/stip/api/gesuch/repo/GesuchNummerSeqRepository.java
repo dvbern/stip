@@ -17,21 +17,16 @@ public class GesuchNummerSeqRepository {
     }
 
     @Transactional(TxType.REQUIRES_NEW)
-    public void createSequenceIfNotExists(final String seqName) {
-        // It seems like nativeQueries (Which we need for 'CREATE SEQUENCE') does not support parameters
-        // (both positional and named) which means we need to use string formatting
-        //        String createSql = "CREATE SEQUENCE IF NOT EXISTS :seqName AS INTEGER";
-        //        Query createQuery = entityManager.createNativeQuery(createSql);
-        //        createQuery.setParameter("seqName", seqName);
-        //        createQuery.executeUpdate();
-        // TODO: ???? Fix this as soon as possible
+    void createSequenceIfNotExists(final String seqName) {
+        // Native queries with parameters result in a prepared statement, which cannot create a sequence
+        // Which means we sadly have to String.format this...
         String createSql = String.format("CREATE SEQUENCE IF NOT EXISTS %s AS INTEGER", seqName);
         Query createQuery = entityManager.createNativeQuery(createSql);
         createQuery.executeUpdate();
     }
 
     @Transactional(TxType.REQUIRES_NEW)
-    public int getNextValueFromSequence(final String seqName) {
+    int getNextValueFromSequence(final String seqName) {
         String selectSql = "SELECT nextval(:seqName)";
         Query selectQuery = entityManager.createQuery(selectSql);
         selectQuery.setParameter("seqName", seqName);
