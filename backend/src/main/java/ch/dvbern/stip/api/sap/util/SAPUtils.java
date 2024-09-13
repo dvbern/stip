@@ -1,5 +1,8 @@
 package ch.dvbern.stip.api.sap.util;
 
+import java.math.BigDecimal;
+import java.util.concurrent.ThreadLocalRandom;
+
 import ch.dvbern.stip.api.sap.generated.businesspartner.change.BusinessPartnerChangeResponse;
 import ch.dvbern.stip.api.sap.generated.businesspartner.create.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.sap.generated.businesspartner.read.BusinessPartnerReadResponse;
@@ -7,9 +10,6 @@ import ch.dvbern.stip.api.sap.generated.vendorposting.VendorPostingCreateRespons
 import jakarta.ws.rs.core.Response;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-
-import java.math.BigDecimal;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @UtilityClass
@@ -34,8 +34,7 @@ public class SAPUtils {
     public boolean noSapActionHasBeenPerformed(Response response) {
         if (response.getEntity() instanceof VendorPostingCreateResponse entity) {
             return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
-        }
-        else if (response.getEntity() instanceof BusinessPartnerCreateResponse entity) {
+        } else if (response.getEntity() instanceof BusinessPartnerCreateResponse entity) {
             return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
         } else if (response.getEntity() instanceof BusinessPartnerChangeResponse entity) {
             return isSuccess(entity.getRETURNCODE().get(0).getTYPE());
@@ -49,7 +48,6 @@ public class SAPUtils {
     private boolean isSuccess(final String rawMessageType) {
         return SapMessageType.parse(rawMessageType).equals(SapMessageType.SUCCESS);
     }
-
 
     private void logAsWarning(Response response) {
         String message = "";
