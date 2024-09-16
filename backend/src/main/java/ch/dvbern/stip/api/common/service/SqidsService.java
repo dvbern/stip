@@ -16,20 +16,19 @@ public class SqidsService {
         this.sqidsLengthSix = Sqids.builder().alphabet(UPPERCASE_ALPHANUMERIC).minLength(6).build();
     }
 
-    public String encodeLenghtFive(int numberToEncode) {
+    public String encodeWithMaxLength(int numberToEncode, int maximumLength) {
         var encoded =  sqidsLengthFive.encode(List.of((long) numberToEncode));
-        if (encoded.length() > 5) {
-            // TODO: Handle cases where the encoded string length exceeds 5 characters
+        if (encoded.length() >= maximumLength) {
+            throw new IllegalArgumentException("Sqids length exceeds maximum length");
         }
         return encoded;
     }
 
-    public String encodeLenghtSix(int numberToEncode) {
-        var encoded = sqidsLengthSix.encode(List.of((long) numberToEncode));
-        if (encoded.length() > 6) {
+    public String encodeLenghtFive(int numberToEncode) {
+        return encodeWithMaxLength(numberToEncode, 5);
+    }
 
-            // TODO: Handle cases where the encoded string length exceeds 6 characters
-        }
-        return encoded;
+    public String encodeLenghtSix(int numberToEncode) {
+        return encodeWithMaxLength(numberToEncode, 6);
     }
 }
