@@ -35,10 +35,13 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
 
         int anrechenbaresVermoegen = elternteil.getSteuerbaresVermoegen();
         if (elternteil.isSelbststaendigErwerbend()) {
-            anrechenbaresVermoegen = Integer.max(anrechenbaresVermoegen - 30000, 0); // TODO: KSTIP-1362, Stammdaten aus request lesen
+            anrechenbaresVermoegen = Integer.max(
+                anrechenbaresVermoegen - berechnungsRequest.getStammdaten().getFreibetragVermoegen(), 0
+            );
         }
-        anrechenbaresVermoegen = BigDecimal.valueOf(anrechenbaresVermoegen * 0.15) // TODO: KSTIP-1362, Stammdaten aus request lesen
-            .setScale(0, RoundingMode.HALF_UP).intValue();
+        anrechenbaresVermoegen = BigDecimal.valueOf(
+                anrechenbaresVermoegen * berechnungsRequest.getStammdaten().getVermoegensanteilInProzent() / 100.0
+            ).setScale(0, RoundingMode.HALF_UP).intValue();
 
         return new FamilienBudgetresultatDto()
             .familienBudgetTyp(steuerdatenTyp)
