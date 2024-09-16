@@ -5,7 +5,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatDatepicker,
+  MatDatepickerModule,
+} from '@angular/material/datepicker';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -14,13 +17,15 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { CreateAenderungsantragRequest } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
+import { provideMonthYearSachbearbeiterDateAdapter } from '@dv/shared/util/date-adapter';
 import {
   convertTempFormToRealValues,
   provideMaterialDefaultOptions,
@@ -48,7 +53,7 @@ type GesuchAenderungData = {
   templateUrl: './shared-ui-aenderung-melden-dialog.component.html',
   styleUrl: './shared-ui-aenderung-melden-dialog.component.scss',
   providers: [
-    provideDvDateAdapter(),
+    provideMonthYearSachbearbeiterDateAdapter(),
     provideMaterialDefaultOptions({
       subscriptSizing: 'dynamic',
     }),
@@ -62,6 +67,8 @@ export class SharedUiAenderungMeldenDialogComponent {
     SharedUiAenderungMeldenDialogComponent,
     CreateAenderungsantragRequest | null
   > = inject(MatDialogRef);
+
+  config = inject(SharedModelCompileTimeConfig);
 
   form = this.formBuilder.group({
     gueltigAb: [<Date | null>null, Validators.required],
@@ -77,6 +84,20 @@ export class SharedUiAenderungMeldenDialogComponent {
     >(SharedUiAenderungMeldenDialogComponent, { data });
   }
 
+  monthSelectedGueltigAb(event: Date, picker: MatDatepicker<Date>) {
+    if (this.config.isGesuchApp) return;
+
+    this.form.get('gueltigAb')?.setValue(startOfMonth(event));
+    picker.close();
+  }
+
+  monthSelectedGueltigBis(event: Date, picker: MatDatepicker<Date>) {
+    if (this.config.isGesuchApp) return;
+
+    this.form.get('gueltigBis')?.setValue(endOfMonth(event));
+    picker.close();
+  }
+
   confirm() {
     this.form.markAllAsTouched();
     if (this.form.invalid) {
@@ -86,6 +107,14 @@ export class SharedUiAenderungMeldenDialogComponent {
       'gueltigAb',
       'kommentar',
     ]);
+
+    if (this.config.isSachbearbeitungApp) {
+      aenderungsAntrag.gueltigAb = startOfMonth(aenderungsAntrag.gueltigAb);
+      aenderungsAntrag.gueltigBis = aenderungsAntrag.gueltigBis
+        ? endOfMonth(aenderungsAntrag.gueltigBis)
+        : null;
+    }
+
     return this.dialogRef.close({
       start: toBackendLocalDate(aenderungsAntrag.gueltigAb),
       end: aenderungsAntrag.gueltigBis
