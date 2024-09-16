@@ -4,6 +4,7 @@ import {
   Component,
   DestroyRef,
   OnInit,
+  effect,
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
@@ -43,6 +44,11 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   viewSig = this.store.selectSignal(selectGesuchAppDataAccessAbschlussView);
 
   constructor() {
+    effect(() => {
+      const view = this.viewSig();
+
+      console.log(view);
+    });
     // validate form only if no formErrors form validatePages are present
     combineLatest([
       getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig).pipe(
