@@ -313,6 +313,11 @@
       <artifactId>kie-dmn-core</artifactId>
       <version>${kie.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.sqids</groupId>
+      <artifactId>sqids</artifactId>
+      <version>${sqids.version}</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/jakarta.xml.soap/jakarta.xml.soap-api -->
     <dependency>
       <groupId>jakarta.xml.soap</groupId>

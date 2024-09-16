@@ -67,8 +67,9 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             .gemeindeInstitutionen(antragssteller.getGemeindeInstitutionen())
             .steuerbaresVermoegen(antragssteller.getVermoegen())
             .anrechenbaresVermoegen(
-                BigDecimal.valueOf(antragssteller.getVermoegen() * 0.15) // TODO: KSTIP-1362, Stammdaten aus request lesen)
-                    .setScale(0, RoundingMode.HALF_UP).intValue()
+                BigDecimal.valueOf(
+                    antragssteller.getVermoegen() * berechnungsRequest.getStammdaten().getVermoegensanteilInProzent() / 100.0
+                    ).setScale(0, RoundingMode.HALF_UP).intValue()
             )
             .anteilFamilienbudget(
                 getAnteilFamilienBudget(familienBudgetresultatList, antragssteller)

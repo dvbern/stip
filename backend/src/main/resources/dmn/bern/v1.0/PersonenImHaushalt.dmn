@@ -410,7 +410,7 @@
           <dmn:text>0</dmn:text>
         </dmn:outputEntry>
         <dmn:outputEntry id="_5A76E4D1-E66F-48F1-ABE8-746D73AA52A7">
-          <dmn:text>elternImHaushalt.elternImHaushalt1+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
+          <dmn:text>elternImHaushalt.elternImHaushalt2+personInAusbildungPersonenImHaushaltContributionNo+personenImHaushaltInput.geschwisterMutterVollzeit+personenImHaushaltInput.geschwisterVaterVollzeit+personenImHaushaltInput.geschwisterTeilzeit</dmn:text>
         </dmn:outputEntry>
         <dmn:outputEntry id="_1D707434-0940-4F56-A1CE-EDA7CAA04481">
           <dmn:text>0</dmn:text>
@@ -1110,12 +1110,12 @@
           <kie:ComponentWidths dmnElementRef="_32CF9452-745D-4BA9-9DD8-395C207761CE">
             <kie:width>50</kie:width>
             <kie:width>100</kie:width>
-            <kie:width>100</kie:width>
+            <kie:width>363</kie:width>
             <kie:width>100</kie:width>
             <kie:width>115</kie:width>
             <kie:width>100</kie:width>
-            <kie:width>100</kie:width>
-            <kie:width>100</kie:width>
+            <kie:width>465</kie:width>
+            <kie:width>551</kie:width>
             <kie:width>100</kie:width>
             <kie:width>103</kie:width>
             <kie:width>100</kie:width>
@@ -1133,9 +1133,9 @@
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_941E0914-A702-4F30-AB13-E6DC4B3B4936">
             <kie:width>50</kie:width>
-            <kie:width>155</kie:width>
-            <kie:width>131</kie:width>
-            <kie:width>100</kie:width>
+            <kie:width>470</kie:width>
+            <kie:width>511</kie:width>
+            <kie:width>456</kie:width>
             <kie:width>160</kie:width>
             <kie:width>180</kie:width>
             <kie:width>100</kie:width>
