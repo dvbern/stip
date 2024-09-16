@@ -18,7 +18,7 @@ export interface Gesuch {
     fall: Fall;
     gesuchsperiode: Gesuchsperiode;
     gesuchStatus: Gesuchstatus;
-    gesuchNummer: number;
+    gesuchNummer: string;
     id: string;
     aenderungsdatum: string;
     /**
