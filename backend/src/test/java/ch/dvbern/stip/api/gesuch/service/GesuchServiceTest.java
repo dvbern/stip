@@ -787,11 +787,9 @@ class GesuchServiceTest {
         famsit.setElternteilUnbekanntVerstorben(true);
         famsit.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
         famsit.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setElterns(new ArrayList<>());
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(famsit);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        tranche.getGesuch().setGesuchNummer("TEST.20XX.213981");
         tranche.getGesuchFormular()
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));

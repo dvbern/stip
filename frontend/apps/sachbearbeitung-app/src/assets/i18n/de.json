@@ -266,7 +266,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a": "Säule 3a",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info": "Wird nur bei Selbstständigerwerbenden berücksichtigt. Nach Abzug des Maximalbetrags von CHF {{ maxSaeule3a }}.--",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert": "Eigenmietwert",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.alimenteOderRenten": "Kinderalimente",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente": "Kinderalimente",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag": "Einkommensfreibetrag",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag.info": "Einkünfte nach Abzug der Einkommensfreibetrag können nicht negativ sein",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.title": "Kosten",

@@ -71,7 +71,7 @@ class V1StructureTest {
                         "integrationszulage": 2400,
                         "steuernBund": 0,
                         "steuernStaat": 0,
-                        "medizinischeGrundversorgung": 6800,
+                        "medizinischeGrundversorgung": 12200,
                         "effektiveWohnkosten": 0,
                         "totalEinkuenfte": 0,
                         "ergaenzungsleistungen": 0,

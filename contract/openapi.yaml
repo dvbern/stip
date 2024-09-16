@@ -1926,8 +1926,7 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
-          format: int64
-          type: integer
+          type: string
         mandant:
           type: string
     Gesuchsjahr:
@@ -2198,8 +2197,7 @@ components:
         gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
         gesuchNummer:
-          format: int32
-          type: integer
+          type: string
         id:
           $ref: '#/components/schemas/UUID'
         aenderungsdatum:

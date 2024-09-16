@@ -264,7 +264,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a": "Pilier 3a",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info": "N'est pris en compte que pour les indépendants. Après déduction du montant maximal de CHF {{ maxSaeule3a }}.--",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert": "Valeur locative",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.alimenteOderRenten": "Alimentaires des enfants",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente": "Alimentaires des enfants",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag": "*Abattement sur le revenu",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag.info": "Les revenus après déduction de l'abattement sur le revenu ne peuvent pas être négatifs",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.title": "Coûts",

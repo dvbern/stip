@@ -12,7 +12,7 @@
 
 export interface Fall { 
     id: string;
-    fallNummer: number;
+    fallNummer: string;
     mandant: string;
 }
 
