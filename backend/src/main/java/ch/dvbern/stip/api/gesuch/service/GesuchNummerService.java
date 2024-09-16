@@ -30,7 +30,7 @@ public class GesuchNummerService {
 
         var nextValue = gesuchNummerSeqRepository.getNextSequenceValue(MANDANT, technischesJahr);
 
-        var encoded = sqidsService.encodeLenghtFive(nextValue);
+        var encoded = sqidsService.encodeLengthFive(nextValue);
 
         return String.format("%s.%s.G.%s", technischesJahr, MANDANT, encoded);
     }

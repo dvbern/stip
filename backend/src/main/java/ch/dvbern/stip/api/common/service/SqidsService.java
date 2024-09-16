@@ -7,28 +7,47 @@ import org.sqids.Sqids;
 
 @ApplicationScoped
 public class SqidsService {
+    private static final String UPPERCASE_ALPHANUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
     private final Sqids sqidsLengthFive;
     private final Sqids sqidsLengthSix;
-    private final String UPPERCASE_ALPHANUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     public SqidsService() {
         this.sqidsLengthFive = Sqids.builder().alphabet(UPPERCASE_ALPHANUMERIC).minLength(5).build();
         this.sqidsLengthSix = Sqids.builder().alphabet(UPPERCASE_ALPHANUMERIC).minLength(6).build();
     }
 
-    public String encodeWithMaxLength(int numberToEncode, int maximumLength) {
-        var encoded =  sqidsLengthFive.encode(List.of((long) numberToEncode));
-        if (encoded.length() >= maximumLength) {
-            throw new IllegalArgumentException("Sqids length exceeds maximum length");
+    private static String encodeWithMax(
+        final int numberToEncode,
+        final Sqids sqids,
+        final int maxInt,
+        final int sqidsLength
+    ) {
+        if (numberToEncode > maxInt) {
+            throw new IllegalArgumentException("numberToEncode is too large");
+        }
+
+        var encoded = sqids.encode(List.of((long) numberToEncode));
+        if (encoded.length() > sqidsLength) {
+            throwEncodedTooLong(numberToEncode, encoded, sqidsLength);
         }
         return encoded;
     }
 
-    public String encodeLenghtFive(int numberToEncode) {
-        return encodeWithMaxLength(numberToEncode, 5);
+    private static void throwEncodedTooLong(final int numberToEncode, final String encoded, final int sqidsLength) {
+        throw new IllegalStateException(String.format(
+            "This should be unreachable, trying to encode %s resulted in %s, SqidsLength: %s",
+            numberToEncode,
+            encoded,
+            sqidsLength
+        ));
     }
 
-    public String encodeLenghtSix(int numberToEncode) {
-        return encodeWithMaxLength(numberToEncode, 6);
+    public String encodeLengthFive(int numberToEncode) {
+        return encodeWithMax(numberToEncode, sqidsLengthFive, 99_999, 5);
+    }
+
+    public String encodeLengthSix(int numberToEncode) {
+        return encodeWithMax(numberToEncode, sqidsLengthSix, 999_999, 6);
     }
 }
