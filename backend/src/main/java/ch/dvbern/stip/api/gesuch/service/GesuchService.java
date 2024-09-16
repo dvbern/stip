@@ -99,6 +99,7 @@ public class GesuchService {
     private final GesuchTrancheService gesuchTrancheService;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
+    private final GesuchNummerService gesuchNummerService;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithCurrentTranche(UUID id) {
@@ -261,6 +262,7 @@ public class GesuchService {
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         createInitialGesuchTranche(gesuch);
+        gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
         gesuchRepository.persistAndFlush(gesuch);
         return gesuchMapperUtil.mapWithTranche(
             gesuch, gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)

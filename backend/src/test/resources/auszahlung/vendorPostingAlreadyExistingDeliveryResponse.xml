@@ -1,0 +1,12 @@
+<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP:Header/>
+  <SOAP:Body xmlns:urn="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING">
+    <n0:VendorPostingCreate_Response xmlns:n0="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING" xmlns:prx="urn:sap.com:proxy:QEA:/1SAI/TASCAA36E893C82E420D198:757">
+      <RETURN_CODE>
+        <TYPE>E</TYPE>
+        <MSG_NR>5</MSG_NR>
+        <MESSAGE>Die Delivery 2778 existiert bereits.</MESSAGE>
+      </RETURN_CODE>
+    </n0:VendorPostingCreate_Response>
+  </SOAP:Body>
+</SOAP:Envelope>
