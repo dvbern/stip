@@ -130,7 +130,7 @@ class SapEndpointServiceTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"/auszahlung/createBusinessPartnerSuccessResponse.xml",
-        "/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml")
+        "/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"})
     void createBusinessPartnerTest(String xmlFilePath) throws IOException {
         //arrange
         String xml = IOUtils.toString(

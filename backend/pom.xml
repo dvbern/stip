@@ -40,6 +40,7 @@
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
     <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
     <kie.version>8.41.0.Final</kie.version>
+    <sqids.version>0.1.0</sqids.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -329,20 +330,6 @@
       <groupId>com.sun.xml.messaging.saaj</groupId>
       <artifactId>saaj-impl</artifactId>
       <version>3.0.4</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.xmlunit/xmlunit-core -->
-    <dependency>
-      <groupId>org.xmlunit</groupId>
-      <artifactId>xmlunit-core</artifactId>
-      <version>2.10.0</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.xmlunit/xmlunit-matchers -->
-    <dependency>
-      <groupId>org.xmlunit</groupId>
-      <artifactId>xmlunit-matchers</artifactId>
-      <version>2.10.0</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Meta information um ein GesuchDokument abzulehnen
  **/
