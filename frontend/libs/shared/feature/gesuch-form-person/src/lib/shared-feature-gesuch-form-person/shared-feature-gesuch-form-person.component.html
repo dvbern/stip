@@ -218,7 +218,7 @@
             data-testid="form-person-geburtsdatum"
             (blur)="onGeburtsdatumBlur()"
           />
-          <mat-hint *dvZuvorHint="view.formChanges?.geburtsdatum | date: 'dd.MM.YYYY'"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
 
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -381,7 +381,7 @@
               data-testid="form-person-einreisedatum"
               (blur)="onEinreisedatumBlur()"
             />
-            <mat-hint *dvZuvorHint="view.formChanges?.einreisedatum | date: 'dd.MM.YYYY'"></mat-hint>
+            <mat-hint *dvZuvorHint="view.formChanges?.einreisedatum | date: 'dd.MM.yyyy'"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>

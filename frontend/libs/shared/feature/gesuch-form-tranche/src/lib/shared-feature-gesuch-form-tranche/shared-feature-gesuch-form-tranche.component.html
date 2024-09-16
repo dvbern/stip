@@ -3,8 +3,8 @@
     @let tranche = viewSig().gesuchstranche;
     @if (tranche) {
       {{ 'shared.form.title.suffix.' + tranche.typ | translate: { position: currentTrancheIndexSig() + 1 } }}
-      {{ tranche.gueltigAb | date: 'MM.YYYY' }} -
-      {{ tranche.gueltigBis | date: 'MM.YYYY' }}
+      {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
+      {{ tranche.gueltigBis | date: 'MM.yyyy' }}
     }
   </h2>
 </ng-template>

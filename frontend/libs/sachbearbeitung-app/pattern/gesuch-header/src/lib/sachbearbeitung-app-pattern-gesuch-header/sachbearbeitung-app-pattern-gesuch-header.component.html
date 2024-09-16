@@ -31,10 +31,10 @@
             <span>
               {{
                 'sachbearbeitung-app.header.tranche.item'
-                  | translate: { date: tranche.gueltigAb | date: 'MM.YYYY', index: $index + 1 }
+                  | translate: { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }
               }}
               -
-              {{ tranche.gueltigBis | date: 'MM.YYYY' }}
+              {{ tranche.gueltigBis | date: 'MM.yyyy' }}
             </span>
           </a>
         }

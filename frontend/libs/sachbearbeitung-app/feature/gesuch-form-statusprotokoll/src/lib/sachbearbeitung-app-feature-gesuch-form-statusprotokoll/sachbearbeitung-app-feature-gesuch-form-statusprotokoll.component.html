@@ -17,7 +17,7 @@
         {{ 'sachbearbeitung-app.gesuch-form.protokoll.table.datum' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="text-nowrap">
-        {{ protokoll.timestamp | date: 'dd.MM.YYYY' }}
+        {{ protokoll.timestamp | date: 'dd.MM.yyyy' }}
       </td>
     </ng-container>
 
