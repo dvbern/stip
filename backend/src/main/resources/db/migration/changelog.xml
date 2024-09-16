@@ -14,7 +14,7 @@
   <include file="db/migration/0.20/0.20.0-KSTIP-991.xml" />
   <include file="/db/migration/0.20/0.20.0-KSTIP-46.xml" />
   <!--  </editor-fold> -->
-
+  
   <!-- <editor-fold desc="v0.21" defaultstate="collapsed"> -->
   <include file="db/migration/0.21/0.21.0-KSTIP-1055.xml" />
   <!--  </editor-fold> -->
@@ -56,6 +56,7 @@
   <!--  </editor-fold> -->
 
   <!-- <editor-fold desc="v0.28" defaultstate="collapsed"> -->
+  <include file="db/migration/0.28/0.28.0-KSTIP-1229.xml" />
   <include file="/db/migration/0.28/0.28.0-KSTIP-1291.xml"/>
   <!--  </editor-fold> -->
 

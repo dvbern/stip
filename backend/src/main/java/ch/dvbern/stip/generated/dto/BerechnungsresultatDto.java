@@ -1,12 +1,8 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
-import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
-import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -14,9 +10,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Resultat der Berechnung (eine Tranche)
@@ -43,7 +36,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("berechnung")
   @NotNull
   public Integer getBerechnung() {
@@ -62,7 +55,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gueltigAb")
   @NotNull
   public LocalDate getGueltigAb() {
@@ -81,7 +74,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gueltigBis")
   @NotNull
   public LocalDate getGueltigBis() {
@@ -100,7 +93,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("berechnungsStammdaten")
   @NotNull
   public BerechnungsStammdatenDto getBerechnungsStammdaten() {
@@ -119,7 +112,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("persoenlichesBudgetresultat")
   @NotNull
   public PersoenlichesBudgetresultatDto getPersoenlichesBudgetresultat() {
@@ -139,7 +132,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("familienBudgetresultate")
   @NotNull
   public List<FamilienBudgetresultatDto> getFamilienBudgetresultate() {
@@ -194,7 +187,7 @@ public class BerechnungsresultatDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BerechnungsresultatDto {\n");
-    
+
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");

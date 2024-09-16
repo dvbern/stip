@@ -74,6 +74,10 @@ public class ConfigService {
     @ConfigProperty(name = "kstip.welcome-mail.kc-scope")
     String welcomeEmailKcScope;
 
+    @Getter
+    @ConfigProperty(name = "kstip.sap.system-id")
+    Integer systemid;
+
     public DeploymentConfigDto getDeploymentConfiguration() {
         return new DeploymentConfigDto()
             .version(version)
