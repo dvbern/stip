@@ -11,14 +11,14 @@
       type="button"
       class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-tranche-auswahl"
-      [class.active]="isGesuchRouteSig()"
+      [class.active]="isTrancheRouteSig()"
       [matMenuTriggerFor]="gesuchMenu"
     >
       <i class="material-symbols-rounded text-white me-2">checklist</i>
       <span>{{ 'sachbearbeitung-app.header.tranchenAuswahl' | translate }}</span>
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
-    <mat-menu #gesuchMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'">
+    <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
       <div class="d-flex flex-column gap-2">
         @for (tranche of gesuchAenderungStore.tranchenViewSig().list; track $index) {
           <a
@@ -54,18 +54,41 @@
     </a>
 
     <!-- Änderungen -->
+    @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
     <button
       type="button"
       class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-aenderungen"
-      routerLinkActive="active"
-      disabled
+      [class.active]="isAenderungRouteSig()"
+      [disabled]="!aenderungen.list.length"
       [matMenuTriggerFor]="aenderungenMenu"
     >
       <i class="material-symbols-rounded text-white me-2">info</i>
       <span>{{ 'sachbearbeitung-app.header.aenderungen' | translate }}</span>
+      <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
-    <mat-menu #aenderungenMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'"> </mat-menu>
+    <mat-menu #aenderungenMenu="matMenu" [class]="'header-menu-panel mt-2 rounded col-12'">
+      <div class="d-flex flex-column gap-2">
+        @for (aenderung of aenderungen.list; track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'aenderung', aenderung.id]"
+            class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+            data-testid="gesuch-step-nav-overview"
+            mat-menu-item
+            [class.active]="currentGesuchSig()?.gesuchTrancheToWorkWith?.id === aenderung.id"
+          >
+            <span>
+              {{
+                'sachbearbeitung-app.header.aenderung.item'
+                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: $index + 1 }
+              }}
+              -
+              {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }}
+            </span>
+          </a>
+        }
+      </div>
+    </mat-menu>
 
     <!-- Separator -->
     <div class="my-1 text-body-tertiary vr"></div>

@@ -91,5 +91,9 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
       ...route,
       path: ':id/tranche/:trancheId',
     },
+    {
+      ...route,
+      path: ':id/aenderung/:trancheId',
+    },
   ];
 }

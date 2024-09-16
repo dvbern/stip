@@ -14,7 +14,7 @@ import {
 } from './shared-model-gesuch-form';
 
 export const TRANCHE: SharedModelGesuchFormStep = {
-  route: 'tranche',
+  route: 'info',
   translationKey: 'shared.tranche.title',
   titleTranslationKey: 'shared.nothing',
   iconSymbolName: 'info',
