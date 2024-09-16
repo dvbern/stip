@@ -16,8 +16,19 @@ public class GesuchFormularCalculationUtil {
     public LocalDate getVorjahrGesuchsjahrAsLocalDate(final GesuchFormular gesuchFormular) {
         int vorjahrGesuchsjahr = LocalDate.now().getYear() - 1;
         if (gesuchFormular.getTranche() != null) {
-            vorjahrGesuchsjahr =
-                gesuchFormular.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1;
+            final var vorjahrGesuchsperiode = gesuchFormular
+                .getTranche()
+                .getGesuch()
+                .getGesuchsperiode();
+
+            if (vorjahrGesuchsperiode != null) {
+                vorjahrGesuchsjahr = gesuchFormular
+                    .getTranche()
+                    .getGesuch()
+                    .getGesuchsperiode()
+                    .getGesuchsjahr()
+                    .getTechnischesJahr() - 1;
+            }
         }
         return LocalDate.of(vorjahrGesuchsjahr, 12, 31);
     }
