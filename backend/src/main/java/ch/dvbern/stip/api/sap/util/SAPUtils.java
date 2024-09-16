@@ -10,18 +10,19 @@ import ch.dvbern.stip.api.sap.generated.vendorposting.VendorPostingCreateRespons
 import jakarta.ws.rs.core.Response;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import java.security.SecureRandom;
 
 @Slf4j
 @UtilityClass
 public class SAPUtils {
     public BigDecimal generateDeliveryId() {
         /*length should be max 19;*/
-        return BigDecimal.valueOf(Math.abs(ThreadLocalRandom.current().nextLong()));
+        return BigDecimal.valueOf(Math.abs(generateSecureRandomLong()));
     }
 
     public String generateExtId() {
         /*length should be max 20;*/
-        return String.valueOf(BigDecimal.valueOf(Math.abs(ThreadLocalRandom.current().nextLong())));
+        return String.valueOf(BigDecimal.valueOf(Math.abs(generateSecureRandomLong())));
     }
 
     public void logAsWarningIfNoAction(Response response) {
@@ -45,6 +46,10 @@ public class SAPUtils {
         return false;
     }
 
+    private long generateSecureRandomLong(){
+        SecureRandom secureRandom = new SecureRandom();
+        return secureRandom.nextLong();
+    }
     private boolean isSuccess(final String rawMessageType) {
         return SapMessageType.parse(rawMessageType).equals(SapMessageType.SUCCESS);
     }
