@@ -19,6 +19,8 @@ import jakarta.ws.rs.WebApplicationException;
 import org.apache.http.HttpStatus;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -82,8 +84,10 @@ class SapEndpointServiceTest {
         //arrange
         when(importStatusReadClient.getImportStatus(any())).thenThrow(WebApplicationException.class);
         // act & assert
-        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(BigDecimal.valueOf(-1)));
-        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(BigDecimal.valueOf(0)));
+        final var deliveryId1 = BigDecimal.valueOf(-1);
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(deliveryId1));
+        final var deliveryId2 = BigDecimal.valueOf(0);
+        assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(deliveryId2));
         assertThrows(ConstraintViolationException.class, () -> auszahlungSapService.getImportStatus(null));
     }
 
@@ -108,20 +112,6 @@ class SapEndpointServiceTest {
     }
 
     @Test
-    void createBusinessPartnerSucessTest() throws IOException {
-        //arrange
-        String xml = IOUtils.toString(
-            this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerSuccessResponse.xml"),
-            "UTF-8"
-        );
-        when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-        //act
-        final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
-        //assert
-        assertEquals(HttpStatus.SC_OK, response.getStatus());
-    }
-
-    @Test
     void createBusinessPartnerAlreadyExistingParnterTest() throws IOException {
         //arrange
         String xml = IOUtils.toString(
@@ -138,34 +128,18 @@ class SapEndpointServiceTest {
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }
 
-    @Test
-    void createBusinessPartnerAlreadyExistingDeliveryIdTest() throws IOException {
+    @ParameterizedTest
+    @ValueSource(strings = {"/auszahlung/createBusinessPartnerSuccessResponse.xml",
+        "/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml")
+    void createBusinessPartnerTest(String xmlFilePath) throws IOException {
         //arrange
         String xml = IOUtils.toString(
-            this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
+            this.getClass().getResourceAsStream(xmlFilePath),
             "UTF-8"
         );
         when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-
         //act
         final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
-
-        //assert
-        assertEquals(HttpStatus.SC_OK, response.getStatus());
-    }
-
-    @Test
-    void createBusinessPartnerInvalidDtoTest() throws IOException {
-        //arrange
-        String xml = IOUtils.toString(
-            this.getClass().getResourceAsStream("/auszahlung/createBusinessPartnerAlreadyExistingDeliveryIdResponse.xml"),
-            "UTF-8"
-        );
-        when(businessPartnerCreateClient.createBusinessPartner(any())).thenReturn(xml);
-
-        //act
-        final var response = auszahlungSapService.createBusinessPartner(AuszahlungGenerator.initAuszahlung(),EXAMPLE_EXTERNAL_ID,DELIVERY_ID);
-
         //assert
         assertEquals(HttpStatus.SC_OK, response.getStatus());
     }

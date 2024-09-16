@@ -16,12 +16,10 @@ import java.security.SecureRandom;
 @UtilityClass
 public class SAPUtils {
     public BigDecimal generateDeliveryId() {
-        /*length should be max 19;*/
         return BigDecimal.valueOf(Math.abs(generateSecureRandomLong()));
     }
 
     public String generateExtId() {
-        /*length should be max 20;*/
         return String.valueOf(BigDecimal.valueOf(Math.abs(generateSecureRandomLong())));
     }
 
