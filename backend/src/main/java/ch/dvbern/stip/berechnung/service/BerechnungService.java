@@ -210,7 +210,7 @@ public class BerechnungService {
 
         List<BerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
         for (final var gesuchTranche : gesuchTranchen) {
-            final var berechnungsresultat = getBerechnungsresultatFromGesuchTranche(
+            final var trancheBerechnungsresultate = getBerechnungsresultatFromGesuchTranche(
                 gesuchTranche,
                 majorVersion,
                 minorVersion
@@ -220,15 +220,56 @@ public class BerechnungService {
                 gesuchTranche.getGueltigkeit().getGueltigAb(),
                 gesuchTranche.getGueltigkeit().getGueltigBis()
             );
-            berechnungsresultat.setBerechnung(
-                (berechnungsresultat.getBerechnung() * monthsValid / 12)
-            );
-            berechnungsresultate.add(berechnungsresultat);
+            for (final var berechnungsresultat : trancheBerechnungsresultate) {
+                berechnungsresultat.setBerechnung(
+                    (berechnungsresultat.getBerechnung() * monthsValid / 12)
+                );
+            }
+            berechnungsresultate.addAll(trancheBerechnungsresultate);
         }
         return berechnungsresultate;
     }
 
-    public BerechnungsresultatDto getBerechnungsresultatFromGesuchTranche(
+    public FamilienBudgetresultatDto getBerechnungsresultatDtoFromGesuchTrancheForSteuerdatenTyp(
+        final GesuchTranche gesuchTranche,
+        final SteuerdatenTyp steuerdatenTyp,
+        final int majorVersion,
+        final int minorVersion
+    ) {
+        ElternTyp elternTypToSolveFor = ElternTyp.VATER;
+        if (steuerdatenTyp == SteuerdatenTyp.MUTTER) {
+            elternTypToSolveFor = ElternTyp.MUTTER;
+        }
+
+        final var gesuch = gesuchTranche.getGesuch();
+        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+
+        // Use DMN model simply to get the number of budgets required. Bit overkill to do it for both parents but may serve as sanity check.
+        final var personenImHaushaltRequest = personenImHaushaltService.getPersonenImHaushaltRequest(
+            majorVersion,
+            minorVersion,
+            gesuchFormular,
+            elternTypToSolveFor
+        );
+
+        final var personenImHaushalt = personenImHaushaltService.calculatePersonenImHaushalt(personenImHaushaltRequest);
+
+        final var noBudgetsRequired = personenImHaushalt.getNoBudgetsRequired();
+
+        // Get the Request and run the DMN for the stipendien berechnung
+        final var stipendienBerechnungsRequest = (BerechnungRequestV1) getBerechnungRequest(
+            majorVersion,
+            minorVersion,
+            gesuch,
+            gesuchTranche,
+            elternTypToSolveFor
+        );
+
+        final var stipendienCalculatedForVater = calculateStipendien(stipendienBerechnungsRequest);
+
+    }
+
+    public List<BerechnungsresultatDto> getBerechnungsresultatFromGesuchTranche(
         final GesuchTranche gesuchTranche,
         final int majorVersion,
         final int minorVersion
@@ -255,7 +296,7 @@ public class BerechnungService {
         }
         final var noBudgetsRequired = personenImHaushaltForVater.getNoBudgetsRequired();
 
-        // Run the DMN for the stipendien berechnung
+        // Buiild and run the DMN request for the stipendien berechnung
         final var stipendienBerechnungsRequestForVater = (BerechnungRequestV1) getBerechnungRequest(
             majorVersion,
             minorVersion,
@@ -266,9 +307,8 @@ public class BerechnungService {
 
         final var stipendienCalculatedForVater = calculateStipendien(stipendienBerechnungsRequestForVater);
 
-        final var factory = Json.createBuilderFactory(null);
-        JsonObjectBuilder baseObjectBuilder = factory.createObjectBuilder();
-        // If only one budget is required then there is no need to calculate the proportional stipendium based on the kids in the houshold. So we just take the one of the father
+        // If only one budget is required then there is no need to calculate the proportional stipendium based on the kids in the houshold.
+        // So we just take the one of the father
         var berechnung = stipendienCalculatedForVater.getStipendien();
         BerechnungRequestV1 stipendienBerechnungsRequestForMutter = null;
         List<BigDecimal> kinderProzenteList = List.of(BigDecimal.valueOf(personenImHaushaltForVater.getKinderImHaushalt1()), BigDecimal.ZERO);
@@ -282,8 +322,6 @@ public class BerechnungService {
             );
             final var stipendienCalculatedForMutter = calculateStipendien(stipendienBerechnungsRequestForMutter);
 
-            baseObjectBuilder.add("vaterBerechnungsDaten", decisionEventListToJSON(stipendienCalculatedForVater.getDecisionEventList()));
-            baseObjectBuilder.add("mutterBerechnungsDaten", decisionEventListToJSON(stipendienCalculatedForMutter.getDecisionEventList()));
 
             // To address differences in the stipendienberechnung based on how many kids are in the households and how their care is divided between father and mother,
             // we calculate how many "kidpercentages" each household has and divide this by the total number of kids in all households.
@@ -295,16 +333,6 @@ public class BerechnungService {
             if (gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitz() == Wohnsitz.MUTTER_VATER) {
                 kinderProzenteVater = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilVater();
                 kinderProzenteMutter = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilMutter();
-                noKinderOhneEigenenHaushalt += 1;
-            } else if (gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitz() == Wohnsitz.FAMILIE) {
-                if (gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilVater() == null &&
-                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilMutter() == null) {
-                    kinderProzenteVater = BigDecimal.valueOf(50);
-                    kinderProzenteMutter = BigDecimal.valueOf(50);
-                } else {
-                    kinderProzenteVater = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilVater();
-                    kinderProzenteMutter = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilMutter();
-                }
                 noKinderOhneEigenenHaushalt += 1;
             }
 
@@ -331,9 +359,6 @@ public class BerechnungService {
                     + kinderProzenteMutterNormalized.multiply(BigDecimal.valueOf(stipendienCalculatedForMutter.getStipendien())
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).intValue();
             }
-        } else {
-            // If there is only one budget.
-            baseObjectBuilder.add("berechnungsDaten", decisionEventListToJSON(stipendienCalculatedForVater.getDecisionEventList()));
         }
 
         final ListIterator<Steuerdaten> steuerdatenListIterator = gesuchFormular.getSteuerdaten().stream().sorted(
@@ -342,14 +367,14 @@ public class BerechnungService {
 
         List<FamilienBudgetresultatDto> familienBudgetresultatList = new ArrayList<>();
         while (steuerdatenListIterator.hasNext()) {
-            final Steuerdaten steuerdaten = steuerdatenListIterator.next();
             final int budgetIndex = steuerdatenListIterator.nextIndex();
+            final Steuerdaten steuerdaten = steuerdatenListIterator.next();
             familienBudgetresultatList.add(
                 familienBudgetresultatFromRequest(
                     stipendienBerechnungsRequestForVater,
                     stipendienCalculatedForVater,
                     steuerdaten.getSteuerdatenTyp(),
-                    kinderProzenteList.get(budgetIndex - 1),
+                    kinderProzenteList.get(budgetIndex),
                     budgetIndex,
                     majorVersion,
                     minorVersion
@@ -357,10 +382,12 @@ public class BerechnungService {
             );
         }
 
-        return new BerechnungsresultatDto(
+        return List.of(new BerechnungsresultatDto(
             berechnung,
             gesuchTranche.getGueltigkeit().getGueltigAb(),
             gesuchTranche.getGueltigkeit().getGueltigBis(),
+            gesuchTranche.getId(),
+            BigDecimal.valueOf(0.0),
             berechnungsStammdatenFromRequest(
                 stipendienBerechnungsRequestForVater,
                 majorVersion,
@@ -374,7 +401,7 @@ public class BerechnungService {
                 minorVersion
             ),
             familienBudgetresultatList
-        );
+        ));
     }
 
     public DmnRequest getBerechnungRequest(
