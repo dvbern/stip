@@ -92,7 +92,7 @@ public class AntragsstellerV1 {
             }
             for (final var kind : gesuchFormular.getKinds()) {
                 // if child does still live with the parents/ a parent
-                if (kind.getWohnsitzAnteilPia() < 0) {
+                if (kind.getWohnsitzAnteilPia() == 0) {
                     anzahlPersonenImHaushalt += 1;
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()), gesuchsperiode

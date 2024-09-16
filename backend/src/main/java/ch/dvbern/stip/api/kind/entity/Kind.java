@@ -11,9 +11,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -42,7 +40,7 @@ public class Kind extends AbstractPerson {
 
     @NotNull
     @Column(name = "wohnsitz_anteil_pia", nullable = false)
-    @DecimalMax("100.00")
-    @DecimalMin("0.00")
+    @Max(100)
+    @Min(0)
     private Integer wohnsitzAnteilPia;
 }
