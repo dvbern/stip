@@ -24,7 +24,7 @@ export const selectGesuchAppDataAccessAbschlussView = createSelector(
       ...state,
       gesuch,
       specificTrancheId,
-      trancheId: specificTrancheId ?? gesuch?.gesuchTrancheToWorkWith.id,
+      trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       lastUpdate,
       validations: allValidations,
       specialValidationErrors: allValidations
