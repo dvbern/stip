@@ -15,7 +15,7 @@ import { Wohnsitz } from './wohnsitz';
 export interface Kind { 
     vorname: string;
     /**
-     * dd.MM.YYYY
+     * dd.MM.yyyy
      */
     geburtsdatum: string;
     wohnsitz: Wohnsitz;

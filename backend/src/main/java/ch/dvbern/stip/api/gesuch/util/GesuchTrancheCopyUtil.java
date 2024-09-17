@@ -106,22 +106,32 @@ public class GesuchTrancheCopyUtil {
                 gesuchsperiodeStart,
                 gesuchsperiodeStopp
             ),
+            15,
+            false,
             true
         );
-        final var endDate = DateUtil.roundToStartOrEnd(
+
+        var endDate = createDateRange.getGueltigBis();
+        if (endDate == null) {
+            endDate = gesuchsperiodeStopp;
+        }
+
+        final var roundedEndDate = DateUtil.roundToStartOrEnd(
             DateUtil.clamp(
-                createDateRange.getGueltigBis() != null ? createDateRange.getGueltigBis() : gesuchsperiodeStopp,
+                endDate,
                 gesuchsperiodeStart,
                 gesuchsperiodeStopp
             ),
+            14,
+            true,
             false
         );
 
-        if (startDate.isAfter(endDate)) {
+        if (startDate.isAfter(roundedEndDate)) {
             throw new AppErrorException("Start date for new GesuchTranche must be after end date");
         }
 
-        return new DateRange(startDate, endDate);
+        return new DateRange(startDate, roundedEndDate);
     }
 
     GesuchFormular copy(final GesuchFormular other) {
