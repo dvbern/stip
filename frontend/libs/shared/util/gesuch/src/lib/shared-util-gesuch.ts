@@ -23,7 +23,6 @@ export function getLatestGesuchIdFromGesuch$(
  */
 export function getLatestTrancheIdFromGesuch$(
   viewSig: Signal<{
-    gesuch?: { id: string } | null;
     trancheId?: string | null;
   }>,
 ) {
@@ -34,32 +33,8 @@ export function getLatestTrancheIdFromGesuch$(
   );
 }
 
-/**
- * Emits each time the gesuch has been updated
- */
-export function getLatestGesuchIdFromGesuchOnUpdate$(
-  viewSig: Signal<{
-    gesuch?: { id: string } | null;
-    lastUpdate: string | null;
-  }>,
-) {
-  return combineLatest([
-    // Get the last update time distinctly
-    toObservable(viewSig).pipe(map(({ lastUpdate }) => lastUpdate)),
-    // Get the latest gesuch id
-    getLatestGesuchIdFromGesuch$(viewSig).pipe(),
-  ]).pipe(
-    distinctUntilChanged(
-      ([lastUpdate1, gesuchId1], [lastUpdate2, gesuchId2]) =>
-        lastUpdate1 === lastUpdate2 && gesuchId1 === gesuchId2,
-    ),
-    map(([, gesuchId]) => gesuchId),
-  );
-}
-
 export function getLatestTrancheIdFromGesuchOnUpdate$(
   viewSig: Signal<{
-    gesuch?: { id: string } | null;
     trancheId?: string | null;
     lastUpdate: string | null;
   }>,
