@@ -16,7 +16,7 @@ export const toAbschlussPhase = (
   if (options?.checkTranche) {
     switch (gesuch.gesuchTrancheToWorkWith.status) {
       case 'IN_BEARBEITUNG_GS':
-        return 'READY_TO_SEND';
+        return options?.isComplete ? 'READY_TO_SEND' : 'NOT_READY';
       case 'UEBERPRUEFEN':
         return 'SUBMITTED';
       default:
