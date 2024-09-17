@@ -19,4 +19,9 @@
   .container {
     position: relative;
   }
+
+  .card{
+    flex-direction: row;
+    width: 100%;
+  }
 }

@@ -18,6 +18,7 @@
 
   "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft",
 
-  "gesuch-app.aenderungsentry.titel": "Hallo",
-  "gesuch-app.cockpit.gesuch.aenderungsentry.edit": "eeee"
+  "gesuch-app.aenderungs-entry.title": "Änderungen",
+  "gesuch-app.aenderungs-entry.status.title": "Status des Antrags",
+  "gesuch-app.cockpit.gesuch.aenderungs-entry": "Änderung öffnen"
 }

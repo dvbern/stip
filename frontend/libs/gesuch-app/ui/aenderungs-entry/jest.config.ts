@@ -2,11 +2,10 @@ import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 /* eslint-disable */
 export default {
-  displayName: 'gesuch-app-feature-aenderungsentry',
+  displayName: 'gesuch-app-ui-aenderungs-entry',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory:
-    '../../../../coverage/libs/gesuch-app/feature/aenderungsentry',
+  coverageDirectory: '../../../../coverage/libs/gesuch-app/ui/aenderungs-entry',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

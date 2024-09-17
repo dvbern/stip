@@ -20,7 +20,7 @@
 
         <!-- period 1-2 -->
         @if (fallStore.currentFallViewSig(); as fall) {
-          <div>
+          <div class="container">
             @for (periode of cockpitViewSig().gesuchsperiodes; track trackByPerioden($index, periode)) {
               <div class="card mb-5 shadow-lg" [class.col-md-6]="!periode.gesuch" [class.col-md-12]="periode.gesuch">
                 <div class="card-body">
@@ -156,8 +156,11 @@
                         {{ 'gesuch-app.cockpit.gesuch.new' | translate }}
                       </button>
                     </div>
-                    <lib-gesuch-app-feature-aenderungsentry></lib-gesuch-app-feature-aenderungsentry>
                   }
+                </div>
+                <div class="card-vl"></div>
+                <div class="col-md d-flex justify-content-end">
+                  <dv-gesuch-app-ui-aenderungs-entry [tranche]="trancheSlim"></dv-gesuch-app-ui-aenderungs-entry>
                 </div>
               </div>
 
