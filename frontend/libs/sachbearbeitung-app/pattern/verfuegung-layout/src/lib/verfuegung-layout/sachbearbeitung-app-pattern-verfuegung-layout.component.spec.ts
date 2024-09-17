@@ -25,6 +25,15 @@ describe('SachbearbeitungAppPatternVerfuegungLayoutComponent', () => {
         provideOAuthClient(),
         provideMockStore({
           initialState: {
+            gesuchs: {
+              gesuch: null,
+              gesuchFormular: null,
+              cache: {
+                gesuch: null,
+                gesuchId: null,
+                gesuchFormular: null,
+              },
+            },
             configs: {},
           },
         }),

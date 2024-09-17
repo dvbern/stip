@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class FallDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid Long fallNummer;
+  private @Valid String fallNummer;
   private @Valid String mandant;
 
   /**
@@ -45,7 +45,7 @@ public class FallDto  implements Serializable {
 
   /**
    **/
-  public FallDto fallNummer(Long fallNummer) {
+  public FallDto fallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
     return this;
   }
@@ -53,12 +53,12 @@ public class FallDto  implements Serializable {
   
   @JsonProperty("fallNummer")
   @NotNull
-  public Long getFallNummer() {
+  public String getFallNummer() {
     return fallNummer;
   }
 
   @JsonProperty("fallNummer")
-  public void setFallNummer(Long fallNummer) {
+  public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
 

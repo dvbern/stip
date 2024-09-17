@@ -10,6 +10,7 @@ import {
   computed,
   effect,
   inject,
+  input,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -41,12 +42,16 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
+  SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
+import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
@@ -94,9 +99,13 @@ const MEDIUM_AGE = 20;
     MatRadioModule,
     MaskitoDirective,
     SharedUiWohnsitzSplitterComponent,
+    SharedUiZuvorHintDirective,
+    SharedUiFormZuvorHintComponent,
+    SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiChangeIndicatorComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-kind-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-kind-editor.component.scss'],
@@ -108,7 +117,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   private formUtils = inject(SharedUtilFormService);
 
   @Input({ required: true }) kind!: Partial<KindUpdate>;
-
+  changesSig = input<Partial<KindUpdate> | undefined | null>(undefined);
   @Output() saveTriggered = new EventEmitter<KindUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() formIsUnsaved: Observable<boolean>;
@@ -172,6 +181,16 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     const alimente = fromFormatedNumber(this.alimentenBeitraegeSig() ?? '0');
 
     return alimente > 0 ? DokumentTyp.KINDER_ALIMENTENVERORDUNG : null;
+  });
+
+  alimentenregelungExistiertChangeSig = computed(() => {
+    const changes = this.changesSig();
+
+    if (!changes || changes.erhalteneAlimentebeitraege === undefined) {
+      return;
+    }
+
+    return changes.erhalteneAlimentebeitraege !== null;
   });
 
   constructor() {

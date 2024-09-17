@@ -1,0 +1,17 @@
+<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP:Header/>
+  <SOAP:Body xmlns:urn="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING">
+    <n0:VendorPostingCreate_Response xmlns:n0="urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING" xmlns:prx="urn:sap.com:proxy:QEA:/1SAI/TASCAA36E893C82E420D198:757">
+      <RETURN_CODE>
+        <TYPE>S</TYPE>
+        <MSG_NR>101</MSG_NR>
+        <MESSAGE>Daten wurden erfolgreich an SAP KTBE übermittelt. (1 Position/en)</MESSAGE>
+      </RETURN_CODE>
+      <RETURN_CODE>
+        <TYPE>I</TYPE>
+        <MSG_NR>102</MSG_NR>
+        <MESSAGE>Verarbeitungsstatus via SST-073 abfragen</MESSAGE>
+      </RETURN_CODE>
+    </n0:VendorPostingCreate_Response>
+  </SOAP:Body>
+</SOAP:Envelope>

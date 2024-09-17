@@ -77,10 +77,6 @@ import org.hibernate.envers.Audited;
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class
 }, property = "einnahmenKosten")
-@EinnahmenKostenRentenRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
 @EinnahmenKostenZulagenRequiredConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     EinnahmenKostenPageValidation.class

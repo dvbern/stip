@@ -17,7 +17,6 @@ import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { toFormatedNumber } from '@dv/shared/util/maskito-util';
 
 import { GesamtBerechnung } from '../../models';
 import {
@@ -94,6 +93,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
             berechnung,
             gueltigAb,
             gueltigBis,
+            berechnungsStammdaten: sd,
             persoenlichesBudgetresultat: p,
             familienBudgetresultate,
           }) => ({
@@ -110,39 +110,39 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
               einnahmen: {
                 anzahlPersonenImHaushalt: p.anzahlPersonenImHaushalt ?? 0,
                 eigenerHaushalt: p.eigenerHaushalt,
-                ...formatAllNumbersExceptTotal({
-                  total: p.einnahmenPersoenlichesBudget,
-                  nettoerwerbseinkommen: p.einkommen,
-                  alimente: p.alimente,
-                  eoLeistungen: p.leistungenEO,
-                  unterhaltsbeitraege: p.rente,
-                  kinderUndAusbildungszulagen: p.kinderAusbildungszulagen,
-                  ergaenzungsleistungen: p.ergaenzungsleistungen,
-                  beitraegeGemeindeInstitution: p.gemeindeInstitutionen,
-                  steuerbaresVermoegen: p.steuerbaresVermoegen,
-                  anrechenbaresVermoegen: p.anrechenbaresVermoegen,
-                  elterlicheLeistung: p.anteilFamilienbudget,
-                  einkommenPartner: p.einkommenPartner,
-                }),
+                total: p.einnahmenPersoenlichesBudget,
+                nettoerwerbseinkommen: p.einkommen,
+                alimente: p.alimente,
+                eoLeistungen: p.leistungenEO,
+                unterhaltsbeitraege: p.rente,
+                kinderUndAusbildungszulagen: p.kinderAusbildungszulagen,
+                ergaenzungsleistungen: p.ergaenzungsleistungen,
+                beitraegeGemeindeInstitution: p.gemeindeInstitutionen,
+                steuerbaresVermoegen: p.steuerbaresVermoegen,
+                anrechenbaresVermoegen: p.anrechenbaresVermoegen,
+                elterlicheLeistung: p.anteilFamilienbudget,
+                einkommenPartner: p.einkommenPartner,
+                freibetragErwerbseinkommen: sd.freibetragErwerbseinkommen,
+                vermoegensanteilInProzent: sd.vermoegensanteilInProzent,
+                limiteAlterAntragsstellerHalbierungElternbeitrag:
+                  sd.limiteAlterAntragsstellerHalbierungElternbeitrag,
               },
               kosten: {
                 anzahlPersonenImHaushalt: p.anzahlPersonenImHaushalt ?? 0,
-                ...formatAllNumbersExceptTotal({
-                  total: p.ausgabenPersoenlichesBudget,
-                  anteilLebenshaltungskosten: p.anteilLebenshaltungskosten,
-                  mehrkostenVerpflegung: p.verpflegung,
-                  grundbedarfPersonen: p.grundbedarf,
-                  wohnkostenPersonen: p.wohnkosten,
-                  medizinischeGrundversorgungPersonen:
-                    p.medizinischeGrundversorgung,
-                  kantonsGemeindesteuern: p.steuernKantonGemeinde,
-                  bundessteuern: 0,
-                  fahrkostenPartner: p.fahrkostenPartner,
-                  verpflegungPartner: p.verpflegungPartner,
-                  betreuungskostenKinder: p.fremdbetreuung,
-                  ausbildungskosten: p.ausbildungskosten,
-                  fahrkosten: p.fahrkosten,
-                }),
+                total: p.ausgabenPersoenlichesBudget,
+                anteilLebenshaltungskosten: p.anteilLebenshaltungskosten,
+                mehrkostenVerpflegung: p.verpflegung,
+                grundbedarfPersonen: p.grundbedarf,
+                wohnkostenPersonen: p.wohnkosten,
+                medizinischeGrundversorgungPersonen:
+                  p.medizinischeGrundversorgung,
+                kantonsGemeindesteuern: p.steuernKantonGemeinde,
+                bundessteuern: 0,
+                fahrkosten: p.fahrkosten,
+                fahrkostenPartner: p.fahrkostenPartner,
+                verpflegungPartner: p.verpflegungPartner,
+                betreuungskostenKinder: p.fremdbetreuung,
+                ausbildungskosten: p.ausbildungskosten,
               },
             },
             familien:
@@ -153,7 +153,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
                 total: f.familienbudgetBerechnet,
                 totalEinnahmen: f.einnahmenFamilienbudget,
                 totalKosten: f.ausgabenFamilienbudget,
-                einnahmen: formatAllNumbersExceptTotal({
+                einnahmen: {
                   total: f.einnahmenFamilienbudget,
                   totalEinkuenfte: f.totalEinkuenfte,
                   ergaenzungsleistungen: f.ergaenzungsleistungen,
@@ -163,10 +163,13 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
                   sauele2: f.saeule2,
                   sauele3: f.saeule3a,
                   mietwert: f.eigenmietwert,
-                  alimenteOderRenten: f.alimente,
-                  einkommensfreibeitrag: f.einkommensfreibetrag,
-                }),
-                kosten: formatAllNumbersExceptTotal({
+                  kinderalimente: f.alimente,
+                  einkommensfreibeitrag: sd.einkommensfreibetrag,
+                  maxSaeule3a: sd.maxSaeule3a,
+                  freibetragVermoegen: sd.freibetragVermoegen,
+                  vermoegensanteilInProzent: sd.vermoegensanteilInProzent,
+                },
+                kosten: {
                   total: f.ausgabenFamilienbudget,
                   anzahlPersonen: f.anzahlPersonenImHaushalt,
                   grundbedarf: f.grundbedarf,
@@ -179,7 +182,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
                   fahrkostenPartner: f.fahrkostenPerson2,
                   verpflegung: f.essenskostenPerson1,
                   verpflegungPartner: f.essenskostenPerson2,
-                }),
+                },
               })) ?? [],
           }),
         ),
@@ -201,22 +204,3 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     );
   }
 }
-
-type FormatedBerechnung<T extends Record<string, number>> = {
-  [K in keyof T]: string;
-};
-
-const formatAllNumbersExceptTotal = <
-  T extends Record<string, number> & { total: number },
->(
-  obj: T,
-) => {
-  const newObj = {} as unknown as FormatedBerechnung<T>;
-  for (const key in obj) {
-    const value = obj[key];
-    if (typeof value === 'number') {
-      newObj[key] = toFormatedNumber(value);
-    }
-  }
-  return { ...newObj, total: obj['total'] };
-};

@@ -17,27 +17,27 @@ export interface GesuchsperiodeDaten {
     fiskaljahr: number;
     gesuchsjahrId: string;
     /**
-     * dd.MM.YYYY
+     * dd.MM.yyyy
      */
     gesuchsperiodeStart: string;
     /**
-     * dd.MM.YYYY
+     * dd.MM.yyyy
      */
     gesuchsperiodeStopp: string;
     /**
-     * dd.MM.YYYY
+     * dd.MM.yyyy
      */
     aufschaltterminStart: string;
     /**
-     * dd.MM.YYYY
+     * dd.MM.yyyy
      */
     aufschaltterminStopp: string;
     /**
-     * dd.MM.YYYY
+     * dd.MM.yyyy
      */
     einreichefristNormal: string;
     /**
-     * dd.MM.YYYY
+     * dd.MM.yyyy
      */
     einreichefristReduziert: string;
     ausbKosten_SekII: number;
@@ -77,6 +77,7 @@ export interface GesuchsperiodeDaten {
     anzahlWochenSchule: number;
     vermoegensanteilInProzent: number;
     reduzierungDesGrundbedarfs: number;
+    limiteAlterAntragsstellerHalbierungElternbeitrag: number;
     zweiterAuszahlungsterminMonat: number;
     zweiterAuszahlungsterminTag: number;
 }

@@ -10,11 +10,18 @@
  * Do not edit the class manually.
  */
 import { GesuchFormular } from './gesuchFormular';
+import { GesuchTrancheTyp } from './gesuchTrancheTyp';
+import { GesuchTrancheStatus } from './gesuchTrancheStatus';
 
 export interface GesuchTranche { 
     id: string;
     gueltigAb: string;
     gueltigBis: string;
+    comment?: string;
     gesuchFormular?: GesuchFormular;
+    status: GesuchTrancheStatus;
+    typ: GesuchTrancheTyp;
 }
+
+
 

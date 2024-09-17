@@ -4,6 +4,10 @@ export function isDefined<T>(
   return value !== undefined && value !== null;
 }
 
+export function type<T>(value: T): T {
+  return value;
+}
+
 /**
  * @deprecated use {@link isDefined} instead
  */

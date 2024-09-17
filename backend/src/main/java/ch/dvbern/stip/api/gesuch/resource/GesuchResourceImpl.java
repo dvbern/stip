@@ -74,7 +74,8 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getCurrentGesuch(UUID gesuchId) {
+    public Response
+    getCurrentGesuch(UUID gesuchId) {
         var gesuch = gesuchService.findGesuchWithCurrentTranche(gesuchId).orElseThrow(NotFoundException::new);
         return Response.ok(gesuch).build();
     }
@@ -124,4 +125,17 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
     }
 
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGsTrancheChanges(UUID aenderungId) {
+        final var changes = gesuchService.getGsTrancheChanges(aenderungId);
+        return Response.ok(changes).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getSbTrancheChanges(UUID aenderungId) {
+        final var changes = gesuchService.getSbTrancheChanges(aenderungId);
+        return Response.ok(changes).build();
+    }
 }

@@ -1129,6 +1129,50 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenValidieren
       summary: Das Gesuch Einreichen Validation Report generieren
+  '/gesuch/{aenderungId}/aenderung/gs/changes':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGsTrancheChanges
+  '/gesuch/{aenderungId}/aenderung/sb/changes':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getSbTrancheChanges
   /tenant/current:
     get:
       tags:
@@ -1542,7 +1586,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchTranche'
           description: Aenderungsantrag wurde erstellt
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1593,7 +1637,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchTranche'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1603,6 +1647,22 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createGesuchTrancheCopy
+  '/gesuchtranche/{aenderungId}/aenderung/einreichen':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: Eingereicht
+        '400':
+          description: Falsche Tranche eingereicht
+        '404':
+          description: Die Tranche gibt es nicht
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungEinreichen
   /bildungskategorie:
     get:
       tags:
@@ -1866,8 +1926,7 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
-          format: int64
-          type: integer
+          type: string
         mandant:
           type: string
     Gesuchsjahr:
@@ -2020,7 +2079,7 @@ components:
           type: string
         geburtsdatum:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         wohnsitz:
           $ref: '#/components/schemas/Wohnsitz'
@@ -2051,7 +2110,7 @@ components:
           type: string
         geburtsdatum:
           $ref: '#/components/schemas/LocalDate'
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
         sozialversicherungsnummer:
           type: string
         nachname:
@@ -2081,7 +2140,7 @@ components:
           type: string
         geburtsdatum:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         wohnsitz:
           $ref: '#/components/schemas/Wohnsitz'
@@ -2143,8 +2202,7 @@ components:
         gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
         gesuchNummer:
-          format: int32
-          type: integer
+          type: string
         id:
           $ref: '#/components/schemas/UUID'
         aenderungsdatum:
@@ -2155,6 +2213,15 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
+    GesuchWithChanges:
+      allOf:
+        - $ref: '#/components/schemas/Gesuch'
+      description: '1 or 2 Aenderungstranche in relation to another Tranche'
+      properties:
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTranche'
     GesuchCreate:
       required:
         - fallId
@@ -2308,7 +2375,7 @@ components:
           type: string
         geburtsdatum:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         ausweisbFluechtling:
           type: boolean
@@ -2699,8 +2766,6 @@ components:
         isAusbildungAusland:
           type: boolean
     Ausbildung:
-      required:
-        - ausbildungsgang
       type: object
       properties:
         ausbildungsgang:
@@ -2878,6 +2943,7 @@ components:
         - anzahlWochenSchule
         - vermoegensanteilInProzent
         - reduzierungDesGrundbedarfs
+        - limiteAlterAntragsstellerHalbierungElternbeitrag
         - zweiterAuszahlungsterminMonat
         - zweiterAuszahlungsterminTag
       properties:
@@ -2893,27 +2959,27 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchsperiodeStart:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         gesuchsperiodeStopp:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         aufschaltterminStart:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         aufschaltterminStopp:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         einreichefristNormal:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         einreichefristReduziert:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         ausbKosten_SekII:
           type: integer
@@ -2989,6 +3055,8 @@ components:
           type: integer
         reduzierungDesGrundbedarfs:
           type: integer
+        limiteAlterAntragsstellerHalbierungElternbeitrag:
+          type: integer
         zweiterAuszahlungsterminMonat:
           type: integer
         zweiterAuszahlungsterminTag:
@@ -3042,6 +3110,8 @@ components:
         - id
         - gueltigAb
         - gueltigBis
+        - status
+        - typ
       type: object
       properties:
         id:
@@ -3050,8 +3120,14 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gueltigBis:
           $ref: '#/components/schemas/LocalDate'
+        comment:
+          type: string
         gesuchFormular:
           $ref: '#/components/schemas/GesuchFormular'
+        status:
+          $ref: '#/components/schemas/GesuchTrancheStatus'
+        typ:
+          $ref: '#/components/schemas/GesuchTrancheTyp'
     GesuchTrancheUpdate:
       required:
         - gesuchFormular
@@ -3073,6 +3149,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         status:
           $ref: '#/components/schemas/GesuchTrancheStatus'
+        typ:
+          $ref: '#/components/schemas/GesuchTrancheTyp'
     SachbearbeiterZuordnungStammdaten:
       type: object
       properties:
@@ -3233,6 +3311,10 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+    GesuchTrancheTyp:
+      enum:
+        - AENDERUNG
+        - TRANCHE
     Dokumentstatus:
       enum:
         - AUSSTEHEND
@@ -3244,6 +3326,7 @@ components:
         - berechnung
         - gueltigAb
         - gueltigBis
+        - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
       type: object
@@ -3255,6 +3338,9 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gueltigBis:
           $ref: '#/components/schemas/LocalDate'
+        berechnungsStammdaten:
+          description: 'Stammdaten für die Stipendienberechnung'
+          $ref: '#/components/schemas/BerechnungsStammdaten'
         persoenlichesBudgetresultat:
           description: 'Berechnungsdaten des persönlichen Budgets'
           $ref: '#/components/schemas/PersoenlichesBudgetresultat'
@@ -3263,6 +3349,41 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FamilienBudgetresultat'
+    BerechnungsStammdaten:
+      description: Stammdaten used for the calculation of the stipendium
+      required:
+        - maxSaeule3a
+        - einkommensfreibetrag
+        - freibetragErwerbseinkommen
+        - freibetragVermoegen
+        - vermoegensanteilInProzent
+        - anzahlWochenLehre
+        - anzahlWochenSchule
+        - preisProMahlzeit
+        - stipLimiteMinimalstipendium
+        - limiteAlterAntragsstellerHalbierungElternbeitrag
+      type: object
+      properties:
+        maxSaeule3a:
+          type: integer
+        einkommensfreibetrag:
+          type: integer
+        freibetragErwerbseinkommen:
+          type: integer
+        freibetragVermoegen:
+          type: integer
+        vermoegensanteilInProzent:
+          type: integer
+        anzahlWochenLehre:
+          type: integer
+        anzahlWochenSchule:
+          type: integer
+        preisProMahlzeit:
+          type: integer
+        stipLimiteMinimalstipendium:
+          type: integer
+        limiteAlterAntragsstellerHalbierungElternbeitrag:
+          type: integer
     PersoenlichesBudgetresultat:
       description: Persoenliche Budget daten fuer und von der Berechnung
       required:
@@ -3364,7 +3485,6 @@ components:
         - saeule3a
         - eigenmietwert
         - alimente
-        - einkommensfreibetrag
         - einnahmenFamilienbudget
         - grundbedarf
         - effektiveWohnkosten
@@ -3403,8 +3523,6 @@ components:
         eigenmietwert:
           type: integer
         alimente:
-          type: integer
-        einkommensfreibetrag:
           type: integer
         einnahmenFamilienbudget:
           type: integer
@@ -3489,6 +3607,14 @@ components:
       type: openIdConnect
       openIdConnectUrl: https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern
       description: Bern (DEV)
+  parameters:
+    aenderungId:
+      name: aenderungId
+      in: path
+      required: true
+      description: Die ID der Aenderung
+      schema:
+        $ref: '#/components/schemas/UUID'
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []

@@ -27,7 +27,6 @@ export interface FamilienBudgetresultat {
     saeule3a: number;
     eigenmietwert: number;
     alimente: number;
-    einkommensfreibetrag: number;
     einnahmenFamilienbudget: number;
     grundbedarf: number;
     effektiveWohnkosten: number;

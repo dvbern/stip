@@ -487,6 +487,30 @@
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-form-field>
+
+        <!-- Limite des Alters des Antragsstellers für die Halbierung des Elternbeitrags-->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{
+            'sachbearbeitung-app.admin.gesuchsperiode.limiteAlterAntragsstellerHalbierungElternbeitrag.label'
+              | translate
+          }}</mat-label>
+          <input
+            formControlName="limiteAlterAntragsstellerHalbierungElternbeitrag"
+            data-testid="form-gesuchsperiode-limiteAlterAntragsstellerHalbierungElternbeitrag"
+            matInput
+            min="1"
+            type="number"
+          />
+          <mat-hint translate>
+            sachbearbeitung-app.admin.gesuchsperiode.limiteAlterAntragsstellerHalbierungElternbeitrag.info
+          </mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+          <mat-error *dvSharedUiFormMessageError="'min'">
+            {{ 'shared.form.error.min' | translate: { min: 1 } }}
+          </mat-error>
+        </mat-form-field>
       </div>
 
       <!-- Ausbildungskosten (pers. Budget) -->

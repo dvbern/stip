@@ -20,7 +20,7 @@
     </button>
     <mat-menu #gesuchMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'">
       <div class="d-flex flex-column gap-2">
-        @for (tranche of tranchenSig(); track $index) {
+        @for (tranche of gesuchAenderungStore.tranchenViewSig().list; track $index) {
           <a
             [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'tranche', tranche.id]"
             class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
@@ -31,10 +31,10 @@
             <span>
               {{
                 'sachbearbeitung-app.header.tranche.item'
-                  | translate: { date: tranche.gueltigAb | date: 'MM.YYYY', index: $index + 1 }
+                  | translate: { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }
               }}
               -
-              {{ tranche.gueltigBis | date: 'MM.YYYY' }}
+              {{ tranche.gueltigBis | date: 'MM.yyyy' }}
             </span>
           </a>
         }

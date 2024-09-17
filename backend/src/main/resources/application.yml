@@ -12,6 +12,9 @@ kstip:
     issuer: 'https://stip.kibon.ch'
     expires-in-minutes: 1
     secret: '${STIP_PRE_SIGNED_REQUEST_SECRET}'
+  sap:
+    system-id: '${STIP_SAP_SYSID}'
+    auth-header-value: '${STIP_SAP_AUTH_HEADER_VALUE}'
   seeding:
     seed-on:
       - 'dev'
@@ -24,7 +27,6 @@ kstip:
     kc-path: '${STIP_WELCOME_MAIL_PATH}'
     kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
     kc-scope: '${STIP_WELCOME_MAIL_SCOPE}'
-
 quarkus:
   execution-model-annotations:
     # TODO: use FAIL as soon as @Blocking is detected on subclasses
@@ -84,9 +86,17 @@ quarkus:
   rest-client:
     GeoCollection-api:
       url: 'https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo-vd.ortschaftenverzeichnis_plz'
-#  quartz:
-#    store-type: jdbc-tx
-
+    AuszahlungSapImportStatusEndpoint:
+      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_ImportStatusRead&interfaceNamespace=urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS'
+    AuszahlungSapBusinessPartnerCreateEndpoint:
+      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerCreate&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
+    AuszahlungSapBusinessPartnerChangeEndpoint:
+      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerChange&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
+    AuszahlungSapVendorPostingCreateEndpoint:
+      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_VendorPostingCreate&interfaceNamespace=urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING'
+    AuszahlungSapBusinessPartnerReadEndpoint:
+      url: 'https://sap-po-qas.infra.be.ch:443/XISOAPAdapter/MessageServlet?senderParty=&senderService=BC_2080&receiverParty=&receiverService=&interface=os_BusinessPartnerRead&interfaceNamespace=urn:be.ch:KTBE_MDG:BUSINESS_PARTNER'
+#   store-type: jdbc-tx
 '%dev':
   quarkus:
     http:

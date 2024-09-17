@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
@@ -15,6 +16,7 @@ import ch.dvbern.stip.api.geschwister.util.GeschwisterCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.util.KindCopyUtil;
 import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
@@ -22,7 +24,6 @@ import ch.dvbern.stip.api.partner.util.PartnerCopyUtil;
 import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
-import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -35,11 +36,21 @@ public class GesuchTrancheCopyUtil {
         final GesuchTranche original,
         final CreateAenderungsantragRequestDto createDto
     ) {
-        return copyTranche(
+        // TODO KSTIP-????: Don't truncate dates
+        final var copy = copyTranche(
             original,
             new DateRange(createDto.getStart(), createDto.getEnd()),
             createDto.getComment()
-        ).setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+        );
+
+        copy.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+        copy.setTyp(GesuchTrancheTyp.AENDERUNG);
+
+        return copy;
+    }
+
+    public GesuchTranche createNewTranche(final GesuchTranche gesuchTranche) {
+        return createNewTranche(gesuchTranche, gesuchTranche.getGueltigkeit(), gesuchTranche.getComment());
     }
 
     /**
@@ -58,6 +69,8 @@ public class GesuchTrancheCopyUtil {
         );
 
         newTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+        newTranche.setTyp(GesuchTrancheTyp.TRANCHE);
+
         return newTranche;
     }
 
@@ -74,6 +87,11 @@ public class GesuchTrancheCopyUtil {
         newTranche.setGueltigkeit(clampStartStop(gesuch.getGesuchsperiode(), createDateRange));
         newTranche.setComment(comment);
         newTranche.setGesuchFormular(copy(original.getGesuchFormular()));
+        newTranche.setGesuchDokuments(GesuchDokumentCopyUtil.copyGesuchDokumenteWithDokumentReferences(
+                newTranche,
+                original.getGesuchDokuments()
+            )
+        );
         newTranche.getGesuchFormular().setTranche(newTranche);
         newTranche.setGesuch(original.getGesuch());
         return newTranche;
@@ -88,22 +106,32 @@ public class GesuchTrancheCopyUtil {
                 gesuchsperiodeStart,
                 gesuchsperiodeStopp
             ),
+            15,
+            false,
             true
         );
-        final var endDate = DateUtil.roundToStartOrEnd(
+
+        var endDate = createDateRange.getGueltigBis();
+        if (endDate == null) {
+            endDate = gesuchsperiodeStopp;
+        }
+
+        final var roundedEndDate = DateUtil.roundToStartOrEnd(
             DateUtil.clamp(
-                createDateRange.getGueltigBis() != null ? createDateRange.getGueltigBis() : gesuchsperiodeStopp,
+                endDate,
                 gesuchsperiodeStart,
                 gesuchsperiodeStopp
             ),
+            14,
+            true,
             false
         );
 
-        if (startDate.isAfter(endDate)) {
+        if (startDate.isAfter(roundedEndDate)) {
             throw new AppErrorException("Start date for new GesuchTranche must be after end date");
         }
 
-        return new DateRange(startDate, endDate);
+        return new DateRange(startDate, roundedEndDate);
     }
 
     GesuchFormular copy(final GesuchFormular other) {
