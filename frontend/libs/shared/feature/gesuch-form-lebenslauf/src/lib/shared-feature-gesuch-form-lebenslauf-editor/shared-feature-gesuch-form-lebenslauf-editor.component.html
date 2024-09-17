@@ -108,7 +108,7 @@
         matInput
         formControlName="von"
         data-testid="lebenslauf-editor-von"
-        placeholder="MM.YYYY"
+        placeholder="MM.yyyy"
         (blur)="onDateBlur(form.controls.von)"
       />
 
@@ -123,7 +123,7 @@
           'shared.form.lebenslauf.form.error.monthYearMin'
             | translate
               : {
-                  min: form.controls.von.errors?.['minDate']?.minDate
+                  min: form.controls.von.errors?.['minDate']?.minDate,
                 }
         }}
       </mat-error>
@@ -140,7 +140,7 @@
         matInput
         formControlName="bis"
         data-testid="lebenslauf-editor-bis"
-        placeholder="MM.YYYY"
+        placeholder="MM.yyyy"
         (blur)="onDateBlur(form.controls.bis)"
       />
 

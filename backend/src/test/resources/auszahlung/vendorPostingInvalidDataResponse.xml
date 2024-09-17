@@ -1,0 +1,18 @@
+<!--see the documentation-->
+<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP:Body>
+    <SOAP:Fault>
+      <faultcode>SOAP:Server</faultcode>
+      <faultstring>Server Error</faultstring>
+      <detail>
+        <s:SystemError xmlns:s="http://sap.com/xi/WebService/xi2.0">
+          <context>XIAdapter</context>
+          <code>ADAPTER.JAVA_EXCEPTION</code>
+          <text>Reason : com.sap.aii.adapter.xi.routing.RoutingException: com.sap.aii.utilxi.xmlvalidation.impl.XMLValidationException: XML Validation for payload with root element name os_VendorPostingCreate , target namespace urn:be.ch:KTBE_ERP_FI:VENDOR_POSTING Failed!Errors Encountered During Parsing
+            1.cvc-complex-type.2.4.b: The content of element 'VENDOR_POSTING' is not complete. One of '{GL_ACCOUNT, POSITION}' is expected.
+            See log trace with id: n/a</text>
+        </s:SystemError>
+      </detail>
+    </SOAP:Fault>
+  </SOAP:Body>
+</SOAP:Envelope>

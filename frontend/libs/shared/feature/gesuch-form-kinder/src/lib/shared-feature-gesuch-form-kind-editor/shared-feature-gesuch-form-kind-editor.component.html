@@ -39,7 +39,7 @@
         data-testid="form-kind-geburtsdatum"
         (blur)="onGeburtsdatumBlur()"
       />
-      <mat-hint *dvZuvorHint="changes?.geburtsdatum | date: 'dd.MM.YYYY'"></mat-hint>
+      <mat-hint *dvZuvorHint="changes?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}

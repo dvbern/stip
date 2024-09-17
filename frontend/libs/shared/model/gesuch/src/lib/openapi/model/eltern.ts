@@ -27,7 +27,7 @@ export interface Eltern {
     telefonnummer: string;
     sozialversicherungsnummer?: string;
     /**
-     * dd.MM.YYYY
+     * dd.MM.yyyy
      */
     geburtsdatum: string;
     ausweisbFluechtling: boolean;

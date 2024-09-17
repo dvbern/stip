@@ -1141,7 +1141,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GesuchWithChanges'
-          description: Returns 
+          description: Returns
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1163,7 +1163,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GesuchWithChanges'
-          description: Returns 
+          description: Returns
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1926,8 +1926,7 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
-          format: int64
-          type: integer
+          type: string
         mandant:
           type: string
     Gesuchsjahr:
@@ -2080,7 +2079,7 @@ components:
           type: string
         geburtsdatum:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         wohnsitz:
           $ref: '#/components/schemas/Wohnsitz'
@@ -2111,7 +2110,7 @@ components:
           type: string
         geburtsdatum:
           $ref: '#/components/schemas/LocalDate'
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
         sozialversicherungsnummer:
           type: string
         nachname:
@@ -2141,7 +2140,7 @@ components:
           type: string
         geburtsdatum:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         wohnsitz:
           $ref: '#/components/schemas/Wohnsitz'
@@ -2203,8 +2202,7 @@ components:
         gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
         gesuchNummer:
-          format: int32
-          type: integer
+          type: string
         id:
           $ref: '#/components/schemas/UUID'
         aenderungsdatum:
@@ -2377,7 +2375,7 @@ components:
           type: string
         geburtsdatum:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         ausweisbFluechtling:
           type: boolean
@@ -2961,27 +2959,27 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchsperiodeStart:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         gesuchsperiodeStopp:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         aufschaltterminStart:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         aufschaltterminStopp:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         einreichefristNormal:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         einreichefristReduziert:
           format: date
-          description: dd.MM.YYYY
+          description: dd.MM.yyyy
           type: string
         ausbKosten_SekII:
           type: integer

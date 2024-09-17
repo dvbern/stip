@@ -39,7 +39,7 @@ public class FallDtoSpec {
   private UUID id;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
-  private Long fallNummer;
+  private String fallNummer;
 
   public static final String JSON_PROPERTY_MANDANT = "mandant";
   private String mandant;
@@ -73,7 +73,7 @@ public class FallDtoSpec {
   }
 
 
-  public FallDtoSpec fallNummer(Long fallNummer) {
+  public FallDtoSpec fallNummer(String fallNummer) {
     
     this.fallNummer = fallNummer;
     return this;
@@ -87,14 +87,14 @@ public class FallDtoSpec {
   @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Long getFallNummer() {
+  public String getFallNummer() {
     return fallNummer;
   }
 
 
   @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallNummer(Long fallNummer) {
+  public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
 

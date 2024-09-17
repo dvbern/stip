@@ -745,6 +745,73 @@ class GesuchServiceTest {
         );
     }
 
+    @Test
+    @TestAsGesuchsteller
+    void validateEinreichenInvalid() {
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createGesuch());
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.EINGEREICHT);
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of((Gesuch)
+            new Gesuch()
+                .setGesuchStatus(Gesuchstatus.EINGEREICHT)
+                .setId(UUID.randomUUID())
+        ));
+
+        ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
+
+        assertThat(
+            reportDto.getValidationErrors().size(),
+            Matchers.is(1)
+        );
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void validateEinreichenValid() {
+        EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec().setSteuerjahr(0);
+        final var gesuchUpdateDto = GesuchGenerator.createFullGesuch();
+        final var famsit = new FamiliensituationUpdateDto();
+        famsit.setElternVerheiratetZusammen(false);
+        famsit.setGerichtlicheAlimentenregelung(false);
+        famsit.setElternteilUnbekanntVerstorben(true);
+        famsit.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+        famsit.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        tranche.getGesuch().setGesuchNummer("TEST.20XX.213981");
+        tranche.getGesuchFormular()
+            .getAusbildung()
+            .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
+
+        tranche.getGesuchFormular().setTranche(tranche);
+        tranche.setGesuchDokuments(
+            Arrays.stream(DokumentTyp.values())
+                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche))
+                .toList()
+        );
+
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
+        tranche.setTyp(GesuchTrancheTyp.TRANCHE);
+
+        Set<Steuerdaten> list = new LinkedHashSet<>();
+        list.add(TestUtil.prepareSteuerdaten());
+        tranche.getGesuchFormular().setSteuerdaten(list);
+
+        ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
+
+        assertThat(
+            reportDto.toString() + "\nEltern: " + gesuchUpdateDto.getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getElterns()
+                .size(),
+            reportDto.getValidationErrors().size(),
+            Matchers.is(0)
+        );
+    }
+
     // TODO KSTIP-1236: Enable this test
 //    @Test
 //    @TestAsGesuchsteller

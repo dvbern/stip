@@ -68,7 +68,8 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getCurrentGesuch(UUID gesuchId) {
+    public Response
+    getCurrentGesuch(UUID gesuchId) {
         var gesuch = gesuchService.findGesuchWithCurrentTranche(gesuchId).orElseThrow(NotFoundException::new);
         return Response.ok(gesuch).build();
     }

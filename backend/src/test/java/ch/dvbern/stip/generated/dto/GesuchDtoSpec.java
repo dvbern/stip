@@ -55,7 +55,7 @@ public class GesuchDtoSpec {
   private GesuchstatusDtoSpec gesuchStatus;
 
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
-  private Integer gesuchNummer;
+  private String gesuchNummer;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -150,7 +150,7 @@ public class GesuchDtoSpec {
   }
 
 
-  public GesuchDtoSpec gesuchNummer(Integer gesuchNummer) {
+  public GesuchDtoSpec gesuchNummer(String gesuchNummer) {
     
     this.gesuchNummer = gesuchNummer;
     return this;
@@ -164,14 +164,14 @@ public class GesuchDtoSpec {
   @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getGesuchNummer() {
+  public String getGesuchNummer() {
     return gesuchNummer;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchNummer(Integer gesuchNummer) {
+  public void setGesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
 

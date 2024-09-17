@@ -6,9 +6,9 @@
     @if (berechnungenSig().list[indexSig() - 1]; as berechnung) {
       <dl class="d-flex g-2">
         <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.from' | translate }}:</dt>
-        <dd class="me-4">{{ berechnung.gueltigAb | date: 'MM.YYYY' }}</dd>
+        <dd class="me-4">{{ berechnung.gueltigAb | date: 'MM.yyyy' }}</dd>
         <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.to' | translate }}:</dt>
-        <dd class="me-4">{{ berechnung.gueltigBis | date: 'MM.YYYY' }}</dd>
+        <dd class="me-4">{{ berechnung.gueltigBis | date: 'MM.yyyy' }}</dd>
         <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.months' | translate }}:</dt>
         <dd class="me-4">{{ berechnung.monate }}</dd>
       </dl>
