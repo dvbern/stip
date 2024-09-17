@@ -4,23 +4,26 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenDiffUtil;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import jakarta.ws.rs.NotFoundException;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
-public interface SteuerdatenMapper {
-    Steuerdaten toEntity(SteuerdatenDto steuerdatenDto);
+public abstract class SteuerdatenMapper extends EntityUpdateMapper<SteuerdatenUpdateDto, Steuerdaten> {
+    public abstract Steuerdaten toEntity(SteuerdatenDto steuerdatenDto);
 
-    SteuerdatenDto toDto(Steuerdaten steuerdaten);
+    public abstract SteuerdatenDto toDto(Steuerdaten steuerdaten);
 
-    Steuerdaten partialUpdate(SteuerdatenUpdateDto steuerdatenDto, @MappingTarget Steuerdaten steuerdaten);
+    public abstract Steuerdaten partialUpdate(SteuerdatenUpdateDto steuerdatenDto, @MappingTarget Steuerdaten steuerdaten);
 
-    default Set<Steuerdaten> map(
+    public Set<Steuerdaten> map(
         final List<SteuerdatenUpdateDto> steuerdatenUpdateDtos,
         final @MappingTarget Set<Steuerdaten> steuerdatenSet
     ) {
@@ -50,5 +53,18 @@ public interface SteuerdatenMapper {
             }
         }
         return steuerdatenSet;
+    }
+
+    @Override
+    @BeforeMapping
+    protected void resetDependentDataBeforeUpdate(SteuerdatenUpdateDto source, @MappingTarget Steuerdaten target) {
+        resetFieldIf(
+            () -> SteuerdatenDiffUtil.hasArbeitsverhaeltnissChangedToUnselbstaendig(source, target),
+            "Clear Saeulen because Arbeitsverhaeltniss is unselbstaendig",
+            () -> {
+                source.setSaeule2(null);
+                source.setSaeule3a(null);
+            }
+        );
     }
 }
