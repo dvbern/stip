@@ -35,7 +35,13 @@ public class AbstractEntityListener {
     private String getBenutzername() {
         if (token != null && token.isResolvable()) {
             final var jwt = token.get();
-            return jwt.getClaim(Claims.given_name) + " " + jwt.getClaim(Claims.family_name);
+            final var givenName = jwt.getClaim(Claims.given_name);
+            final var familyName = jwt.getClaim(Claims.family_name);
+            if (givenName == null && familyName == null) {
+                return "System";
+            }
+
+            return givenName + " " + familyName;
         } else {
             return "System";
         }

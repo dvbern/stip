@@ -9,7 +9,6 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.bildungskategorie.repo.BildungskategorieRepository;
 import ch.dvbern.stip.api.util.TestConstants;
-import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 
@@ -23,9 +22,8 @@ public class AusbildungTestSeeding extends Seeder {
     private Bildungskategorie bildungskategorie;
 
     @Override
-    @Startup
-    public void startup() {
-        seed();
+    public int getPriority() {
+        return 100;
     }
 
     @Override

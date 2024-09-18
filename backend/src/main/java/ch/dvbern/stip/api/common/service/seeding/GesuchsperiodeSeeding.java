@@ -9,7 +9,6 @@ import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
-import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,15 +19,14 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 @RequiredArgsConstructor
 @Slf4j
 public class
-GesuchsperiodeSeeding extends Seeder{
+GesuchsperiodeSeeding extends Seeder {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
     private final ConfigService configService;
 
     @Override
-    @Startup
-    public void startup() {
-        seed();
+    public int getPriority() {
+        return 100;
     }
 
     @Override

@@ -6,7 +6,6 @@ import java.util.List;
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.runtime.configuration.ConfigUtils;
-import org.checkerframework.dataflow.qual.Pure;
 
 public abstract class Seeder {
     protected void seed() {
@@ -19,19 +18,20 @@ public abstract class Seeder {
         }
     }
 
-    public abstract void startup();
+    //    public abstract void startup();
+
+    public abstract int getPriority();
 
     protected abstract void doSeed();
 
     /**
      * Returns a list of profiles on which to run seeding.
-     * */
-    @Pure
+     */
     protected abstract List<String> getProfiles();
 
     /**
      * Returns the tenant for which the seeding is to be ran
-     * */
+     */
     protected String getTenant() {
         return "bern";
     }
