@@ -206,7 +206,6 @@ class BerechnungServiceTest {
                     .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(1026)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setErgaenzungsleistungen(21000)
             )
         );
 
@@ -293,7 +292,6 @@ class BerechnungServiceTest {
                     .setSaeule2(1500)
                     .setVermoegen(100000)
                     .setIsArbeitsverhaeltnisSelbstaendig(true)
-                    .setErgaenzungsleistungen(0)
             )
         );
 

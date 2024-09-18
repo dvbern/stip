@@ -76,6 +76,7 @@ public class ElternteilV1 {
         int medizinischeGrundversorgung = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
             for (final var elternteil : eltern) {
+                builder.ergaenzungsleistungen(Objects.requireNonNullElse(elternteil.getErgaenzungsleistungen(), 0));
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteil.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -181,7 +182,6 @@ public class ElternteilV1 {
         );
 
         builder.totalEinkuenfte(Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0));
-        builder.ergaenzungsleistungen(Objects.requireNonNullElse(steuerdaten.getErgaenzungsleistungen(), 0));
         builder.eigenmietwert(Objects.requireNonNullElse(steuerdaten.getEigenmietwert(), 0));
         builder.alimente(Objects.requireNonNullElse(steuerdaten.getKinderalimente(), 0));
         builder.einzahlungSaeule2(Objects.requireNonNullElse(steuerdaten.getSaeule2(), 0));

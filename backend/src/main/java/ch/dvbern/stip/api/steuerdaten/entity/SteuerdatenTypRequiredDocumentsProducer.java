@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+
 public class SteuerdatenTypRequiredDocumentsProducer {
     private SteuerdatenTypRequiredDocumentsProducer() {}
 
@@ -25,40 +26,6 @@ public class SteuerdatenTypRequiredDocumentsProducer {
 
     private static boolean nullOrEmpty(final Set<Steuerdaten> steuerdatenSet) {
         return steuerdatenSet == null || steuerdatenSet.isEmpty();
-    }
-
-    @ApplicationScoped
-    @RequiredArgsConstructor
-    public static class MutterRequiredDocumentsProducer implements RequiredDocumentProducer {
-        private final SteuerdatenRequiredDocumentsProducer producer;
-
-        @Override
-        public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-            final var steuerdatenSet = formular.getSteuerdaten();
-            if (nullOrEmpty(steuerdatenSet)) {
-                return ImmutablePair.of("", List.of());
-            }
-
-            final var mutterSteuerdaten = getForTyp(steuerdatenSet, SteuerdatenTyp.MUTTER);
-            return ImmutablePair.of("steuerdatenMutter", producer.getForSteuerdaten(mutterSteuerdaten));
-        }
-    }
-
-    @ApplicationScoped
-    @RequiredArgsConstructor
-    public static class VaterRequiredDocumentsProducer implements RequiredDocumentProducer {
-        private final SteuerdatenRequiredDocumentsProducer producer;
-
-        @Override
-        public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-            final var steuerdatenSet = formular.getSteuerdaten();
-            if (nullOrEmpty(steuerdatenSet)) {
-                return ImmutablePair.of("", List.of());
-            }
-
-            final var vaterSteuerdaten = getForTyp(steuerdatenSet, SteuerdatenTyp.VATER);
-            return ImmutablePair.of("steuerdatenVater", producer.getForSteuerdaten(vaterSteuerdaten));
-        }
     }
 
     @ApplicationScoped

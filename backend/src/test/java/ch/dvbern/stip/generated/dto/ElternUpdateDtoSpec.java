@@ -42,7 +42,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ElternUpdateDtoSpec.JSON_PROPERTY_AUSWEISB_FLUECHTLING,
   ElternUpdateDtoSpec.JSON_PROPERTY_ID,
   ElternUpdateDtoSpec.JSON_PROPERTY_ELTERN_TYP,
-  ElternUpdateDtoSpec.JSON_PROPERTY_NACHNAME
+  ElternUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
+  ElternUpdateDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
+  ElternUpdateDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE
 })
 @JsonTypeName("ElternUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -82,6 +84,12 @@ public class ElternUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
+
+  public static final String JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN = "ergaenzungsleistungen";
+  private Integer ergaenzungsleistungen;
+
+  public static final String JSON_PROPERTY_SOZIALHILFEBEITRAEGE = "sozialhilfebeitraege";
+  private Integer sozialhilfebeitraege;
 
   public ElternUpdateDtoSpec() {
   }
@@ -275,7 +283,7 @@ public class ElternUpdateDtoSpec {
   }
 
    /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    * @return geburtsdatum
   **/
   @jakarta.annotation.Nonnull
@@ -397,6 +405,58 @@ public class ElternUpdateDtoSpec {
     this.nachname = nachname;
   }
 
+
+  public ElternUpdateDtoSpec ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+    
+    this.ergaenzungsleistungen = ergaenzungsleistungen;
+    return this;
+  }
+
+   /**
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Ergaenzungsleistungen Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Ergaenzungsleistungen steuerdatenTyp&#39; 
+   * @return ergaenzungsleistungen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getErgaenzungsleistungen() {
+    return ergaenzungsleistungen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
+    this.ergaenzungsleistungen = ergaenzungsleistungen;
+  }
+
+
+  public ElternUpdateDtoSpec sozialhilfebeitraege(Integer sozialhilfebeitraege) {
+    
+    this.sozialhilfebeitraege = sozialhilfebeitraege;
+    return this;
+  }
+
+   /**
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Sozialhilfebeitraege Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Sozialhilfebeitraege steuerdatenTyp&#39; 
+   * @return sozialhilfebeitraege
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOZIALHILFEBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getSozialhilfebeitraege() {
+    return sozialhilfebeitraege;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SOZIALHILFEBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSozialhilfebeitraege(Integer sozialhilfebeitraege) {
+    this.sozialhilfebeitraege = sozialhilfebeitraege;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -417,12 +477,14 @@ public class ElternUpdateDtoSpec {
         Objects.equals(this.ausweisbFluechtling, elternUpdate.ausweisbFluechtling) &&
         Objects.equals(this.id, elternUpdate.id) &&
         Objects.equals(this.elternTyp, elternUpdate.elternTyp) &&
-        Objects.equals(this.nachname, elternUpdate.nachname);
+        Objects.equals(this.nachname, elternUpdate.nachname) &&
+        Objects.equals(this.ergaenzungsleistungen, elternUpdate.ergaenzungsleistungen) &&
+        Objects.equals(this.sozialhilfebeitraege, elternUpdate.sozialhilfebeitraege);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, telefonnummer, sozialversicherungsnummer, geburtsdatum, ausweisbFluechtling, id, elternTyp, nachname);
+    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, telefonnummer, sozialversicherungsnummer, geburtsdatum, ausweisbFluechtling, id, elternTyp, nachname, ergaenzungsleistungen, sozialhilfebeitraege);
   }
 
   @Override
@@ -441,6 +503,8 @@ public class ElternUpdateDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    elternTyp: ").append(toIndentedString(elternTyp)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
+    sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
     sb.append("}");
     return sb.toString();
   }

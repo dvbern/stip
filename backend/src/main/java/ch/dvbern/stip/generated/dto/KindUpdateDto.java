@@ -52,7 +52,7 @@ public class KindUpdateDto  implements Serializable {
   }
 
   /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    **/
   public KindUpdateDto geburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;

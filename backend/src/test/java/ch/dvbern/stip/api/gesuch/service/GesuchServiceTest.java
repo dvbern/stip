@@ -864,10 +864,6 @@ class GesuchServiceTest {
         steuerdatenUpdateDto.setSteuerjahr(2010);
         steuerdatenUpdateDto.setFahrkosten(0);
         steuerdatenUpdateDto.setEigenmietwert(0);
-        steuerdatenUpdateDto.setErgaenzungsleistungen(0);
-        steuerdatenUpdateDto.setErgaenzungsleistungenPartner(0);
-        steuerdatenUpdateDto.setSozialhilfebeitraege(0);
-        steuerdatenUpdateDto.setSozialhilfebeitraegePartner(0);
         steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
         steuerdatenUpdateDto.setKinderalimente(0);
         steuerdatenUpdateDto.setSteuernBund(0);

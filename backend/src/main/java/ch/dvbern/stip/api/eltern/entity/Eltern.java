@@ -81,4 +81,12 @@ public class Eltern extends AbstractPerson {
     @Nullable
     @Column(name = "copy_of_id")
     private UUID copyOfId;
+
+    @NotNull
+    @Column(name = "sozialhilfebeitraege", nullable = false)
+    private Integer sozialhilfebeitraege;
+
+    @NotNull
+    @Column(name = "ergaenzungsleistungen", nullable = false)
+    private Integer ergaenzungsleistungen;
 }
