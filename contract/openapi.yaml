@@ -1087,9 +1087,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Berechnungsresultat'
+                $ref: '#/components/schemas/Berechnungsresultat'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -3321,6 +3319,21 @@ components:
         - ABGELEHNT
         - AKZEPTIERT
     Berechnungsresultat:
+      description: Resultat der Berechnung (gesamtes Gesuch)
+      required:
+        - berechnung
+        - tranchenBerechnungsresultate
+      type: object
+      properties:
+        berechnung:
+          description: 'Berechneter Stpendiumsanspruch für das Gesuch'
+          type: integer
+        tranchenBerechnungsresultate:
+          description: 'Resultate der Berechnung für die Tranchen des Gesuchs'
+          type: array
+          items:
+            $ref: '#/components/schemas/TranchenBerechnungsresultat'
+    TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
         - berechnung
