@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
@@ -36,13 +37,9 @@ import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kie.api.io.Resource;
-import org.kie.dmn.api.core.DMNDecisionResult;
 import org.kie.dmn.api.core.event.AfterEvaluateDecisionEvent;
 import org.kie.dmn.core.api.event.DefaultDMNRuntimeEventListener;
 
@@ -61,19 +58,6 @@ public class BerechnungService {
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final DMNService dmnService;
     private final TenantService tenantService;
-
-    private static JsonObject decisionEventListToJSON(final List<AfterEvaluateDecisionEvent> decisionEventList) {
-        final var factory = Json.createBuilderFactory(null);
-        final JsonObjectBuilder baseObjectBuilder = factory.createObjectBuilder();
-        for (final AfterEvaluateDecisionEvent event : decisionEventList) {
-            final JsonObjectBuilder eventObjectBuilder = factory.createObjectBuilder();
-            for (final DMNDecisionResult result : event.getResult().getDecisionResults()) {
-                eventObjectBuilder.add(result.getDecisionName(), result.getResult().toString());
-            }
-            baseObjectBuilder.add(event.getDecision().getName(), eventObjectBuilder);
-        }
-        return baseObjectBuilder.build();
-    }
 
     private PersoenlichesBudgetresultatDto persoenlichesBudgetresultatFromRequest(
         final DmnRequest berechnungRequest,
@@ -206,7 +190,11 @@ public class BerechnungService {
         final int minorVersion
     ) {
         final var gesuchStatusToFilterFor = List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN);
-        final var gesuchTranchen = gesuch.getGesuchTranchen().stream().filter(gesuchTranche -> gesuchStatusToFilterFor.contains(gesuchTranche.getStatus())).toList();
+        final var gesuchTranchen = gesuch.getGesuchTranchen().stream().filter(
+            gesuchTranche -> gesuchStatusToFilterFor.contains(gesuchTranche.getStatus())
+        ).sorted(
+            Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb())
+        ).toList();
 
         List<TranchenBerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
         for (final var gesuchTranche : gesuchTranchen) {
@@ -259,7 +247,12 @@ public class BerechnungService {
             kinderDerElternInHaushalten.add(gesuchFormular.getPersonInAusbildung());
         }
 
-        int noKinderOhneEigenenHaushalt = kinderDerElternInHaushalten.size();
+        final var teilZeitKinderInHaushalten = kinderDerElternInHaushalten.stream().filter(
+            geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilVater(),  BigDecimal.ZERO).intValue() > 0 &&
+                           Objects.requireNonNullElse(geschwister.getWohnsitzAnteilMutter(), BigDecimal.ZERO).intValue() > 0
+        ).toList();
+
+        int noKinderOhneEigenenHaushalt = teilZeitKinderInHaushalten.size();
 
         List<TranchenBerechnungsresultatDto> berechnungsresultatDtoList = new ArrayList<>();
 
@@ -336,12 +329,14 @@ public class BerechnungService {
                 // This value can then be multiplied with the respective stipendienberechnung to get a proportianal stipendienamount.
                 BigDecimal kinderProzente = BigDecimal.ZERO;
 
-                for (final var kindDerElternInHaushalten : kinderDerElternInHaushalten) {
-                    kinderProzente.add(kindDerElternInHaushalten.getWohnsitzAnteil(elternTypToSolveFor));
+
+
+                for (final var kindDerElternInHaushalten : teilZeitKinderInHaushalten) {
+                    kinderProzente = kinderProzente.add(kindDerElternInHaushalten.getWohnsitzAnteil(elternTypToSolveFor));
                 }
 
                 final BigDecimal kinderProzenteNormalized = kinderProzente.divide(
-                    BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP
+                    BigDecimal.valueOf(teilZeitKinderInHaushalten.size()), 2, RoundingMode.HALF_UP
                 );
 
                 // Calculate the total stipendien amount based on the respective amounts and their relative kid percentages.

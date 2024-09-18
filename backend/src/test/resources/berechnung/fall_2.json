@@ -61,6 +61,7 @@
   },
   "InputPersoenlichesbudget_V1": {
     "antragssteller": {
+      "piaWohntInElternHaushalt": 1,
       "tertiaerstufe": false,
       "einkommen": 4000,
       "einkommenPartner": 0,

@@ -12,6 +12,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -170,7 +171,6 @@ class BerechnungServiceTest {
             new EinnahmenKosten()
                 .setNettoerwerbseinkommen(16701)
                 .setVermoegen(0)
-                .setFahrkosten(0)
                 .setRenten(0)
                 .setErgaenzungsleistungen(1800)
                 .setAusbildungskostenSekundarstufeZwei(2000)
@@ -259,7 +259,6 @@ class BerechnungServiceTest {
                 .setFahrkosten(0)
                 .setRenten(0)
                 .setAusbildungskostenSekundarstufeZwei(750)
-                .setFahrkosten(0)
                 .setAuswaertigeMittagessenProWoche(0)
         );
 
@@ -343,6 +342,178 @@ class BerechnungServiceTest {
         //Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+        gesuch.setGesuchTranchen(
+            List.of(
+                gesuch.getNewestGesuchTranche().get()
+                    .setGueltigkeit(
+                        new DateRange(
+                            LocalDate.of(2023, 8, 1),
+                            LocalDate.of(2024, 7, 31)
+                        )
+                    )
+            )
+        );
+
+        gesuch.getGesuchsperiode()
+            .setAnzahlWochenLehre(47)
+            .setAnzahlWochenSchule(38);
+
+        gesuchFormular.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
+                        )
+                )
+        );
+
+        gesuchFormular.getPersonInAusbildung()
+            .setZivilstand(Zivilstand.LEDIG)
+            .setSozialhilfebeitraege(false)
+            .setWohnsitz(Wohnsitz.MUTTER_VATER)
+            .setWohnsitzAnteilMutter(BigDecimal.valueOf(0))
+            .setWohnsitzAnteilVater(BigDecimal.valueOf(100))
+            .setGeburtsdatum( // Was 2000-01-01, used LocalDate.now to ensure complicity in the future
+                LocalDate.now().minusYears(24).minusMonths(6)
+            );
+
+        gesuchFormular.setFamiliensituation(
+            new Familiensituation()
+                .setElternVerheiratetZusammen(false)
+                .setGerichtlicheAlimentenregelung(false)
+                .setElternteilUnbekanntVerstorben(false)
+                .setMutterWiederverheiratet(false)
+                .setVaterWiederverheiratet(false)
+        );
+
+        gesuchFormular.setElterns(
+            Set.of(
+                (Eltern) new Eltern()
+                    .setElternTyp(ElternTyp.VATER)
+                    .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
+                (Eltern) new Eltern()
+                    .setElternTyp(ElternTyp.MUTTER)
+                    .setGeburtsdatum(LocalDate.of(1961, 1, 1))
+            )
+        );
+
+        gesuchFormular.setGeschwisters(
+            Set.of(
+                (Geschwister) new Geschwister()
+                    .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
+                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                    .setWohnsitzAnteilVater(BigDecimal.valueOf(100))
+                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(0))
+                    .setGeburtsdatum(LocalDate.now().minusYears(19)),
+                (Geschwister) new Geschwister()
+                    .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
+                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                    .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
+                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(100))
+                    .setGeburtsdatum(LocalDate.now().minusYears(16)),
+                (Geschwister) new Geschwister()
+                    .setAusbildungssituation(Ausbildungssituation.KEINE)
+                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                    .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
+                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
+                    .setGeburtsdatum(LocalDate.now().minusYears(16)),
+                (Geschwister) new Geschwister()
+                    .setAusbildungssituation(Ausbildungssituation.KEINE)
+                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                    .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
+                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
+                    .setGeburtsdatum(LocalDate.now().minusYears(16))
+            )
+        );
+
+        gesuchFormular.setLebenslaufItems(
+            Set.of(
+                new LebenslaufItem()
+                    .setVon(LocalDate.of(2016, 8 ,1))
+                    .setBis(LocalDate.of(2023, 8 ,1))
+                    .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
+            )
+        );
+
+        gesuchFormular.setKinds(Set.of());
+
+        gesuchFormular.setEinnahmenKosten(
+            new EinnahmenKosten()
+                .setNettoerwerbseinkommen(0)
+                .setVermoegen(0)
+                .setFahrkosten(925)
+                .setRenten(0)
+                .setAusbildungskostenTertiaerstufe(0)
+                .setAusbildungskostenSekundarstufeZwei(950)
+                .setAuswaertigeMittagessenProWoche(5)
+        );
+
+
+        gesuchFormular.setSteuerdaten(
+            Set.of(
+                new Steuerdaten()
+                    .setSteuerdatenTyp(SteuerdatenTyp.VATER)
+                    .setSteuernKantonGemeinde(0)
+                    .setSteuernBund(0)
+                    .setFahrkosten(0)
+                    .setVerpflegung(0)
+                    .setTotalEinkuenfte(38_820)
+                    .setIsArbeitsverhaeltnisSelbstaendig(false)
+                    .setKinderalimente(0)
+                    .setVermoegen(2717)
+                    .setWohnkosten(9_000)
+                    .setFahrkostenPartner(0)
+                    .setVerpflegungPartner(0)
+                    .setEigenmietwert(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0),
+                new Steuerdaten()
+                    .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+                    .setSteuernKantonGemeinde(1_192)
+                    .setSteuernBund(0)
+                    .setFahrkosten(0)
+                    .setVerpflegung(0)
+                    .setTotalEinkuenfte(63_484)
+                    .setIsArbeitsverhaeltnisSelbstaendig(false)
+                    .setKinderalimente(0)
+                    .setVermoegen(918)
+                    .setWohnkosten(12_720)
+                    .setFahrkostenPartner(0)
+                    .setVerpflegungPartner(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0)
+            )
+        );
+
+        //Act
+        final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+
+        LOG.info(berechnungsresultatDto.toString());
+
+        //Assert
+        assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(2));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(7044)));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void testFall14GesuchBerechnung() {
+        //Arrange
+        final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+        gesuch.setGesuchTranchen(
+            List.of(
+                gesuch.getNewestGesuchTranche().get()
+                    .setGueltigkeit(
+                        new DateRange(
+                            LocalDate.of(2023, 8, 1),
+                            LocalDate.of(2024, 7, 31)
+                        )
+                    )
+            )
+        );
 
         gesuch.getGesuchsperiode()
             .setAnzahlWochenLehre(47)
@@ -365,18 +536,9 @@ class BerechnungServiceTest {
             .setWohnsitz(Wohnsitz.MUTTER_VATER)
             .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
             .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
-            .setGeburtsdatum( // Was 2000-01-01, used LocalDate.now to ensure complicity in the future
-                LocalDate.now().minusYears(24).minusMonths(6)
+            .setGeburtsdatum(
+                LocalDate.now().minusYears(23)
             );
-
-        gesuchFormular.setFamiliensituation(
-            new Familiensituation()
-                .setElternVerheiratetZusammen(false)
-                .setElternteilUnbekanntVerstorben(false)
-                .setGerichtlicheAlimentenregelung(false)
-                .setMutterWiederverheiratet(false)
-                .setVaterWiederverheiratet(false)
-        );
 
         gesuchFormular.setFamiliensituation(
             new Familiensituation()
@@ -398,7 +560,22 @@ class BerechnungServiceTest {
             )
         );
 
-        gesuchFormular.setGeschwisters(Set.of());
+        gesuchFormular.setGeschwisters(
+            Set.of(
+                (Geschwister) new Geschwister()
+                    .setAusbildungssituation(Ausbildungssituation.KEINE)
+                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                    .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
+                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
+                    .setGeburtsdatum(LocalDate.now().minusYears(16)),
+                (Geschwister) new Geschwister()
+                    .setAusbildungssituation(Ausbildungssituation.KEINE)
+                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                    .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
+                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
+                    .setGeburtsdatum(LocalDate.now().minusYears(16))
+            )
+        );
 
         gesuchFormular.setLebenslaufItems(
             Set.of(
@@ -413,13 +590,12 @@ class BerechnungServiceTest {
 
         gesuchFormular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setNettoerwerbseinkommen(0)
-                .setVermoegen(21432)
-                .setFahrkosten(600)
+                .setNettoerwerbseinkommen(9_100+gesuch.getGesuchsperiode().getEinkommensfreibetrag())
+                .setVermoegen(0)
+                .setFahrkosten(2_760)
                 .setRenten(0)
-                .setAusbildungskostenTertiaerstufe(3000)
+                .setAusbildungskostenTertiaerstufe(1_500)
                 .setAusbildungskostenSekundarstufeZwei(0)
-                .setFahrkosten(0)
                 .setAuswaertigeMittagessenProWoche(0)
         );
 
@@ -427,181 +603,44 @@ class BerechnungServiceTest {
         gesuchFormular.setSteuerdaten(
             Set.of(
                 new Steuerdaten()
-                    .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
-                    .setSteuernKantonGemeinde(7395)
-                    .setSteuernBund(1522)
-                    .setFahrkosten(200)
-                    .setVerpflegung(450)
-                    .setTotalEinkuenfte(23374)
-                    .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setKinderalimente(0)
-                    .setVermoegen(102337)
-                    .setWohnkosten(16260)
-                    .setFahrkostenPartner(0)
-                    .setVerpflegungPartner(0)
-                    .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0),
-                new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.VATER)
+                    .setTotalEinkuenfte(45_000)
                     .setSteuernKantonGemeinde(0)
                     .setSteuernBund(0)
                     .setFahrkosten(0)
                     .setVerpflegung(0)
-                    .setTotalEinkuenfte(0)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
                     .setKinderalimente(0)
-                    .setVermoegen(211)
-                    .setWohnkosten(16260)
+                    .setVermoegen(0)
+                    .setWohnkosten(19_992)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
                     .setEigenmietwert(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0),
+                new Steuerdaten()
+                    .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+                    .setTotalEinkuenfte(5_667)
+                    .setSteuernKantonGemeinde(0)
+                    .setSteuernBund(0)
+                    .setFahrkosten(0)
+                    .setVerpflegung(0)
+                    .setIsArbeitsverhaeltnisSelbstaendig(false)
+                    .setKinderalimente(0)
+                    .setVermoegen(0)
+                    .setWohnkosten(18_000)
+                    .setFahrkostenPartner(0)
+                    .setVerpflegungPartner(0)
                     .setErgaenzungsleistungen(0)
                     .setSozialhilfebeitraege(0)
             )
         );
 
         //Act
-        final var tranchenBerechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
-            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
-        );
+        final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
         //Assert
-        assertThat(tranchenBerechnungsresultatDtos.size(), is(2));
-        assertThat(tranchenBerechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(0)));
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void testFall14GesuchBerechnung() {
-        //Arrange
-        final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
-        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
-
-        gesuch.getGesuchsperiode()
-            .setAnzahlWochenLehre(47)
-            .setAnzahlWochenSchule(38)
-            .setAusbKostenSekII(2000)
-            .setAusbKostenTertiaer(3000);
-
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(9)
-                        )
-                )
-        );
-
-        gesuchFormular.getPersonInAusbildung()
-            .setZivilstand(Zivilstand.LEDIG)
-            .setSozialhilfebeitraege(false)
-            .setWohnsitz(Wohnsitz.MUTTER_VATER)
-            .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
-            .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
-            .setGeburtsdatum( // Was 2000-01-01, used LocalDate.now to ensure complicity in the future
-                LocalDate.now().minusYears(24).minusMonths(6)
-            );
-
-        gesuchFormular.setFamiliensituation(
-            new Familiensituation()
-                .setElternVerheiratetZusammen(false)
-                .setElternteilUnbekanntVerstorben(false)
-                .setGerichtlicheAlimentenregelung(false)
-                .setMutterWiederverheiratet(false)
-                .setVaterWiederverheiratet(false)
-        );
-
-        gesuchFormular.setFamiliensituation(
-            new Familiensituation()
-                .setElternVerheiratetZusammen(false)
-                .setGerichtlicheAlimentenregelung(false)
-                .setElternteilUnbekanntVerstorben(false)
-                .setMutterWiederverheiratet(false)
-                .setVaterWiederverheiratet(false)
-        );
-
-        gesuchFormular.setElterns(
-            Set.of(
-                (Eltern) new Eltern()
-                    .setElternTyp(ElternTyp.VATER)
-                    .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
-                (Eltern) new Eltern()
-                    .setElternTyp(ElternTyp.MUTTER)
-                    .setGeburtsdatum(LocalDate.of(1961, 1, 1))
-            )
-        );
-
-        gesuchFormular.setGeschwisters(Set.of());
-
-        gesuchFormular.setLebenslaufItems(
-            Set.of(
-                new LebenslaufItem()
-                    .setVon(LocalDate.of(2016, 8 ,1))
-                    .setBis(LocalDate.of(2023, 8 ,1))
-                    .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
-            )
-        );
-
-        gesuchFormular.setKinds(Set.of());
-
-        gesuchFormular.setEinnahmenKosten(
-            new EinnahmenKosten()
-                .setNettoerwerbseinkommen(0)
-                .setVermoegen(21432)
-                .setFahrkosten(600)
-                .setRenten(0)
-                .setAusbildungskostenTertiaerstufe(3000)
-                .setAusbildungskostenSekundarstufeZwei(0)
-                .setFahrkosten(0)
-                .setAuswaertigeMittagessenProWoche(0)
-        );
-
-
-        gesuchFormular.setSteuerdaten(
-            Set.of(
-                new Steuerdaten()
-                    .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
-                    .setSteuernKantonGemeinde(7395)
-                    .setSteuernBund(1522)
-                    .setFahrkosten(200)
-                    .setVerpflegung(450)
-                    .setTotalEinkuenfte(23374)
-                    .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setKinderalimente(0)
-                    .setVermoegen(102337)
-                    .setWohnkosten(16260)
-                    .setFahrkostenPartner(0)
-                    .setVerpflegungPartner(0)
-                    .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0),
-                new Steuerdaten()
-                    .setSteuerdatenTyp(SteuerdatenTyp.VATER)
-                    .setSteuernKantonGemeinde(0)
-                    .setSteuernBund(0)
-                    .setFahrkosten(0)
-                    .setVerpflegung(0)
-                    .setTotalEinkuenfte(0)
-                    .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setKinderalimente(0)
-                    .setVermoegen(211)
-                    .setWohnkosten(16260)
-                    .setFahrkostenPartner(0)
-                    .setVerpflegungPartner(0)
-                    .setEigenmietwert(0)
-                    .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0)
-            )
-        );
-
-        //Act
-        final var tranchenBerechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
-            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
-        );
-
-        //Assert
-        assertThat(tranchenBerechnungsresultatDtos.size(), is(2));
-        assertThat(tranchenBerechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(0)));
+        assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(2));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(2126)));
     }
 }

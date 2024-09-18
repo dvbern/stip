@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Value
 @Slf4j
 public class AntragsstellerV1 {
+    int piaWohntInElternHaushalt;
     boolean tertiaerstufe;
     int einkommen;
     int einkommenPartner;
@@ -54,7 +55,8 @@ public class AntragsstellerV1 {
     boolean verheiratetKonkubinat;
 
     public static AntragsstellerV1 buildFromDependants(
-        final GesuchFormular gesuchFormular
+        final GesuchFormular gesuchFormular,
+        final int piaWohntInElternHaushalt
     ) {
         final var personInAusbildung = gesuchFormular.getPersonInAusbildung();
         final var partner = gesuchFormular.getPartner();
@@ -64,6 +66,7 @@ public class AntragsstellerV1 {
 
         final AntragsstellerV1Builder builder = new AntragsstellerV1Builder();
         builder
+            .piaWohntInElternHaushalt(piaWohntInElternHaushalt)
             .tertiaerstufe(ausbildung.getAusbildungsgang().getBildungskategorie().getBildungsstufe()
                 == Bildungsstufe.TERTIAER)
             .einkommen(einnahmenKosten.getNettoerwerbseinkommen())

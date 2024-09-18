@@ -87,6 +87,7 @@ class V1StructureTest {
                 },
                 "InputPersoenlichesbudget_V1": {
                     "antragssteller": {
+			            "piaWohntInElternHaushalt": 0,
                         "tertiaerstufe": true,
                         "einkommen": 12916,
                         "einkommenPartner": 0,

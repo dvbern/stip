@@ -104,9 +104,22 @@ public class BerechnungRequestV1 implements DmnRequest {
                 ).map(AbstractFamilieEntity.class::cast)
                 .toList()
         );
-
-        if (gesuchFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
-            kinderDerElternInHaushalten.add(gesuchFormular.getPersonInAusbildung());
+        final var personInAusbildung = gesuchFormular.getPersonInAusbildung();
+        int piaWohntInElternHaushalt = 0;
+        if (personInAusbildung.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
+            kinderDerElternInHaushalten.add(personInAusbildung);
+            if (personInAusbildung.getWohnsitz() == Wohnsitz.FAMILIE) {
+                piaWohntInElternHaushalt = 1;
+            } else if (personInAusbildung.getWohnsitz() == Wohnsitz.MUTTER_VATER) {
+                switch (elternTyp) {
+                    case VATER -> {
+                        piaWohntInElternHaushalt = personInAusbildung.getWohnsitzAnteilVater().intValue() > 0 ? 1 : 2;
+                    }
+                    case MUTTER -> {
+                        piaWohntInElternHaushalt = personInAusbildung.getWohnsitzAnteilMutter().intValue() > 0 ? 2 : 1;
+                    }
+                }
+            }
         }
 
         while (steuerdatenListIterator.hasNext()) {
@@ -128,7 +141,7 @@ public class BerechnungRequestV1 implements DmnRequest {
             );
         }
 
-        final var antragssteller = AntragsstellerV1.buildFromDependants(gesuchFormular);
+        final var antragssteller = AntragsstellerV1.buildFromDependants(gesuchFormular, piaWohntInElternHaushalt);
 
         return new BerechnungRequestV1(
             StammdatenV1.fromGesuchsperiode(gesuch.getGesuchsperiode()),
