@@ -1,0 +1,13 @@
+<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP:Header/>
+  <SOAP:Body xmlns:urn="urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS">
+    <n0:ImportStatusRead_Response xmlns:n0="urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS" xmlns:prx="urn:sap.com:proxy:QEA:/1SAI/TASF1A86D86632931183F59:757">
+      <RETURN_CODE>
+        <TYPE>E</TYPE>
+        <MSG_NR>11</MSG_NR>
+        <MESSAGE>Delivery 2767 wurde nicht gefunden.</MESSAGE>
+        <ID>ZCA_SSC</ID>
+      </RETURN_CODE>
+    </n0:ImportStatusRead_Response>
+  </SOAP:Body>
+</SOAP:Envelope>
