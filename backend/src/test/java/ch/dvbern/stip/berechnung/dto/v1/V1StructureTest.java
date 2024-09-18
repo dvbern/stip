@@ -34,7 +34,7 @@ class V1StructureTest {
                     "anzahlWochenLehre": 42,
                     "anzahlWochenSchule": 37,
                     "preisProMahlzeit": 7,
-                    "stipLimiteMinimalstipendium": 500,
+                    "stipLimiteMinimalstipendium": 0,
                     "limiteAlterAntragsstellerHalbierungElternbeitrag": 25
                 },
                 "InputFamilienbudget_1_V1": {
