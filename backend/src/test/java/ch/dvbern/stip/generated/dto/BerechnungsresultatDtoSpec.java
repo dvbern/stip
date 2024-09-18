@@ -15,35 +15,24 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDtoSpec;
-import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDtoSpec;
-import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDtoSpec;
+import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * Resultat der Berechnung (eine Tranche)
+ * Resultat der Berechnung (gesamtes Gesuch)
  */
 @JsonPropertyOrder({
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_AB,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGS_STAMMDATEN,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE
 })
 @JsonTypeName("Berechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -51,26 +40,8 @@ public class BerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_BERECHNUNG = "berechnung";
   private Integer berechnung;
 
-  public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
-  private LocalDate gueltigAb;
-
-  public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
-  private LocalDate gueltigBis;
-
-  public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
-  private UUID gesuchTrancheId;
-
-  public static final String JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER = "berechnungsanteilKinder";
-  private BigDecimal berechnungsanteilKinder;
-
-  public static final String JSON_PROPERTY_BERECHNUNGS_STAMMDATEN = "berechnungsStammdaten";
-  private BerechnungsStammdatenDtoSpec berechnungsStammdaten;
-
-  public static final String JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT = "persoenlichesBudgetresultat";
-  private PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat;
-
-  public static final String JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE = "familienBudgetresultate";
-  private List<FamilienBudgetresultatDtoSpec> familienBudgetresultate;
+  public static final String JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE = "tranchenBerechnungsresultate";
+  private List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate;
 
   public BerechnungsresultatDtoSpec() {
   }
@@ -82,7 +53,7 @@ public class BerechnungsresultatDtoSpec {
   }
 
    /**
-   * Berechneter Stpendiumsanspruch für diese Tranche
+   * Berechneter Stpendiumsanspruch für das Gesuch
    * @return berechnung
   **/
   @jakarta.annotation.Nonnull
@@ -101,193 +72,37 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  public BerechnungsresultatDtoSpec gueltigAb(LocalDate gueltigAb) {
+  public BerechnungsresultatDtoSpec tranchenBerechnungsresultate(List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate) {
     
-    this.gueltigAb = gueltigAb;
+    this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
     return this;
   }
 
-   /**
-   * Get gueltigAb
-   * @return gueltigAb
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getGueltigAb() {
-    return gueltigAb;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
-  }
-
-
-  public BerechnungsresultatDtoSpec gueltigBis(LocalDate gueltigBis) {
-    
-    this.gueltigBis = gueltigBis;
-    return this;
-  }
-
-   /**
-   * Get gueltigBis
-   * @return gueltigBis
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getGueltigBis() {
-    return gueltigBis;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
-  }
-
-
-  public BerechnungsresultatDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
-    
-    this.gesuchTrancheId = gesuchTrancheId;
-    return this;
-  }
-
-   /**
-   * Get gesuchTrancheId
-   * @return gesuchTrancheId
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getGesuchTrancheId() {
-    return gesuchTrancheId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
-    this.gesuchTrancheId = gesuchTrancheId;
-  }
-
-
-  public BerechnungsresultatDtoSpec berechnungsanteilKinder(BigDecimal berechnungsanteilKinder) {
-    
-    this.berechnungsanteilKinder = berechnungsanteilKinder;
-    return this;
-  }
-
-   /**
-   * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert &#x3D;&#x3D; 1.
-   * @return berechnungsanteilKinder
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public BigDecimal getBerechnungsanteilKinder() {
-    return berechnungsanteilKinder;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungsanteilKinder(BigDecimal berechnungsanteilKinder) {
-    this.berechnungsanteilKinder = berechnungsanteilKinder;
-  }
-
-
-  public BerechnungsresultatDtoSpec berechnungsStammdaten(BerechnungsStammdatenDtoSpec berechnungsStammdaten) {
-    
-    this.berechnungsStammdaten = berechnungsStammdaten;
-    return this;
-  }
-
-   /**
-   * Get berechnungsStammdaten
-   * @return berechnungsStammdaten
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGS_STAMMDATEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public BerechnungsStammdatenDtoSpec getBerechnungsStammdaten() {
-    return berechnungsStammdaten;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGS_STAMMDATEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungsStammdaten(BerechnungsStammdatenDtoSpec berechnungsStammdaten) {
-    this.berechnungsStammdaten = berechnungsStammdaten;
-  }
-
-
-  public BerechnungsresultatDtoSpec persoenlichesBudgetresultat(PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat) {
-    
-    this.persoenlichesBudgetresultat = persoenlichesBudgetresultat;
-    return this;
-  }
-
-   /**
-   * Get persoenlichesBudgetresultat
-   * @return persoenlichesBudgetresultat
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public PersoenlichesBudgetresultatDtoSpec getPersoenlichesBudgetresultat() {
-    return persoenlichesBudgetresultat;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersoenlichesBudgetresultat(PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat) {
-    this.persoenlichesBudgetresultat = persoenlichesBudgetresultat;
-  }
-
-
-  public BerechnungsresultatDtoSpec familienBudgetresultate(List<FamilienBudgetresultatDtoSpec> familienBudgetresultate) {
-    
-    this.familienBudgetresultate = familienBudgetresultate;
-    return this;
-  }
-
-  public BerechnungsresultatDtoSpec addFamilienBudgetresultateItem(FamilienBudgetresultatDtoSpec familienBudgetresultateItem) {
-    if (this.familienBudgetresultate == null) {
-      this.familienBudgetresultate = new ArrayList<>();
+  public BerechnungsresultatDtoSpec addTranchenBerechnungsresultateItem(TranchenBerechnungsresultatDtoSpec tranchenBerechnungsresultateItem) {
+    if (this.tranchenBerechnungsresultate == null) {
+      this.tranchenBerechnungsresultate = new ArrayList<>();
     }
-    this.familienBudgetresultate.add(familienBudgetresultateItem);
+    this.tranchenBerechnungsresultate.add(tranchenBerechnungsresultateItem);
     return this;
   }
 
    /**
-   * Berechnungsdaten der Familienbudgets
-   * @return familienBudgetresultate
+   * Resultate der Berechnung für die Tranchen des Gesuchs
+   * @return tranchenBerechnungsresultate
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE)
+  @JsonProperty(JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public List<FamilienBudgetresultatDtoSpec> getFamilienBudgetresultate() {
-    return familienBudgetresultate;
+  public List<TranchenBerechnungsresultatDtoSpec> getTranchenBerechnungsresultate() {
+    return tranchenBerechnungsresultate;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE)
+  @JsonProperty(JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFamilienBudgetresultate(List<FamilienBudgetresultatDtoSpec> familienBudgetresultate) {
-    this.familienBudgetresultate = familienBudgetresultate;
+  public void setTranchenBerechnungsresultate(List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate) {
+    this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
   }
 
   @Override
@@ -300,18 +115,12 @@ public class BerechnungsresultatDtoSpec {
     }
     BerechnungsresultatDtoSpec berechnungsresultat = (BerechnungsresultatDtoSpec) o;
     return Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
-        Objects.equals(this.gueltigAb, berechnungsresultat.gueltigAb) &&
-        Objects.equals(this.gueltigBis, berechnungsresultat.gueltigBis) &&
-        Objects.equals(this.gesuchTrancheId, berechnungsresultat.gesuchTrancheId) &&
-        Objects.equals(this.berechnungsanteilKinder, berechnungsresultat.berechnungsanteilKinder) &&
-        Objects.equals(this.berechnungsStammdaten, berechnungsresultat.berechnungsStammdaten) &&
-        Objects.equals(this.persoenlichesBudgetresultat, berechnungsresultat.persoenlichesBudgetresultat) &&
-        Objects.equals(this.familienBudgetresultate, berechnungsresultat.familienBudgetresultate);
+        Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, gueltigAb, gueltigBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(berechnung, tranchenBerechnungsresultate);
   }
 
   @Override
@@ -319,13 +128,7 @@ public class BerechnungsresultatDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class BerechnungsresultatDtoSpec {\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
-    sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
-    sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
-    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
-    sb.append("    berechnungsanteilKinder: ").append(toIndentedString(berechnungsanteilKinder)).append("\n");
-    sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");
-    sb.append("    persoenlichesBudgetresultat: ").append(toIndentedString(persoenlichesBudgetresultat)).append("\n");
-    sb.append("    familienBudgetresultate: ").append(toIndentedString(familienBudgetresultate)).append("\n");
+    sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

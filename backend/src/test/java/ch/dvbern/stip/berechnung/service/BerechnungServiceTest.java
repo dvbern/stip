@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
-import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -137,15 +137,15 @@ class BerechnungServiceTest {
         );
 
         //Act
-        List<BerechnungsresultatDto> berechnungsresultatDtos = null;
+        List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultatDtos = null;
         for (int i = 0; i< 1; i++) { // for profiling
-            berechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
+            tranchenBerechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
                 gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
             );
         }
 
         //Assert
-        for (final var berechnungsresultatDto : berechnungsresultatDtos) {
+        for (final var berechnungsresultatDto : tranchenBerechnungsresultatDtos) {
             assertThat(berechnungsresultatDto.getBerechnung(), is(not(nullValue())));
         }
     }
@@ -228,12 +228,12 @@ class BerechnungServiceTest {
         );
 
         //Act
-        final var berechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
+        final var tranchenBerechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0);
 
         //Assert
-        assertThat(berechnungsresultatDtos.size(), is(1));
-        assertThat(berechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(6669)));
+        assertThat(tranchenBerechnungsresultatDtos.size(), is(1));
+        assertThat(tranchenBerechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(6669)));
     }
 
     @Test
@@ -328,18 +328,151 @@ class BerechnungServiceTest {
         );
 
         //Act
-        final var berechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
+        final var tranchenBerechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
         );
 
         //Assert
-        assertThat(berechnungsresultatDtos.size(), is(1));
-        assertThat(berechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(0)));
+        assertThat(tranchenBerechnungsresultatDtos.size(), is(1));
+        assertThat(tranchenBerechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(0)));
     }
 
     @Test
     @TestAsGesuchsteller
     void testFall11GesuchBerechnung() {
+        //Arrange
+        final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+
+        gesuch.getGesuchsperiode()
+            .setAnzahlWochenLehre(47)
+            .setAnzahlWochenSchule(38);
+
+        gesuchFormular.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(9)
+                        )
+                )
+        );
+
+        gesuchFormular.getPersonInAusbildung()
+            .setZivilstand(Zivilstand.LEDIG)
+            .setSozialhilfebeitraege(false)
+            .setWohnsitz(Wohnsitz.MUTTER_VATER)
+            .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
+            .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
+            .setGeburtsdatum( // Was 2000-01-01, used LocalDate.now to ensure complicity in the future
+                LocalDate.now().minusYears(24).minusMonths(6)
+            );
+
+        gesuchFormular.setFamiliensituation(
+            new Familiensituation()
+                .setElternVerheiratetZusammen(false)
+                .setElternteilUnbekanntVerstorben(false)
+                .setGerichtlicheAlimentenregelung(false)
+                .setMutterWiederverheiratet(false)
+                .setVaterWiederverheiratet(false)
+        );
+
+        gesuchFormular.setFamiliensituation(
+            new Familiensituation()
+                .setElternVerheiratetZusammen(false)
+                .setGerichtlicheAlimentenregelung(false)
+                .setElternteilUnbekanntVerstorben(false)
+                .setMutterWiederverheiratet(false)
+                .setVaterWiederverheiratet(false)
+        );
+
+        gesuchFormular.setElterns(
+            Set.of(
+                (Eltern) new Eltern()
+                    .setElternTyp(ElternTyp.VATER)
+                    .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
+                (Eltern) new Eltern()
+                    .setElternTyp(ElternTyp.MUTTER)
+                    .setGeburtsdatum(LocalDate.of(1961, 1, 1))
+            )
+        );
+
+        gesuchFormular.setGeschwisters(Set.of());
+
+        gesuchFormular.setLebenslaufItems(
+            Set.of(
+                new LebenslaufItem()
+                    .setVon(LocalDate.of(2016, 8 ,1))
+                    .setBis(LocalDate.of(2023, 8 ,1))
+                    .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
+            )
+        );
+
+        gesuchFormular.setKinds(Set.of());
+
+        gesuchFormular.setEinnahmenKosten(
+            new EinnahmenKosten()
+                .setNettoerwerbseinkommen(0)
+                .setVermoegen(21432)
+                .setFahrkosten(600)
+                .setRenten(0)
+                .setAusbildungskostenTertiaerstufe(3000)
+                .setAusbildungskostenSekundarstufeZwei(0)
+                .setFahrkosten(0)
+                .setAuswaertigeMittagessenProWoche(0)
+        );
+
+
+        gesuchFormular.setSteuerdaten(
+            Set.of(
+                new Steuerdaten()
+                    .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+                    .setSteuernKantonGemeinde(7395)
+                    .setSteuernBund(1522)
+                    .setFahrkosten(200)
+                    .setVerpflegung(450)
+                    .setTotalEinkuenfte(23374)
+                    .setIsArbeitsverhaeltnisSelbstaendig(false)
+                    .setKinderalimente(0)
+                    .setVermoegen(102337)
+                    .setWohnkosten(16260)
+                    .setFahrkostenPartner(0)
+                    .setVerpflegungPartner(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0),
+                new Steuerdaten()
+                    .setSteuerdatenTyp(SteuerdatenTyp.VATER)
+                    .setSteuernKantonGemeinde(0)
+                    .setSteuernBund(0)
+                    .setFahrkosten(0)
+                    .setVerpflegung(0)
+                    .setTotalEinkuenfte(0)
+                    .setIsArbeitsverhaeltnisSelbstaendig(false)
+                    .setKinderalimente(0)
+                    .setVermoegen(211)
+                    .setWohnkosten(16260)
+                    .setFahrkostenPartner(0)
+                    .setVerpflegungPartner(0)
+                    .setEigenmietwert(0)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0)
+            )
+        );
+
+        //Act
+        final var tranchenBerechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
+            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
+        );
+
+        //Assert
+        assertThat(tranchenBerechnungsresultatDtos.size(), is(2));
+        assertThat(tranchenBerechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(0)));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void testFall14GesuchBerechnung() {
         //Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
@@ -463,12 +596,12 @@ class BerechnungServiceTest {
         );
 
         //Act
-        final var berechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
+        final var tranchenBerechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
         );
 
         //Assert
-        assertThat(berechnungsresultatDtos.size(), is(2));
-        assertThat(berechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(0)));
+        assertThat(tranchenBerechnungsresultatDtos.size(), is(2));
+        assertThat(tranchenBerechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(0)));
     }
 }

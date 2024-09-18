@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.json.Json;
@@ -199,7 +200,7 @@ public class BerechnungService {
         );
     }
 
-    public List<BerechnungsresultatDto> getBerechnungsresultateFromGesuch(
+    public BerechnungsresultatDto getBerechnungsresultatFromGesuch(
         final Gesuch gesuch,
         final int majorVersion,
         final int minorVersion
@@ -207,7 +208,7 @@ public class BerechnungService {
         final var gesuchStatusToFilterFor = List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN);
         final var gesuchTranchen = gesuch.getGesuchTranchen().stream().filter(gesuchTranche -> gesuchStatusToFilterFor.contains(gesuchTranche.getStatus())).toList();
 
-        List<BerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
+        List<TranchenBerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
         for (final var gesuchTranche : gesuchTranchen) {
             final var trancheBerechnungsresultate = getBerechnungsresultatFromGesuchTranche(
                 gesuchTranche,
@@ -226,10 +227,19 @@ public class BerechnungService {
             }
             berechnungsresultate.addAll(trancheBerechnungsresultate);
         }
-        return berechnungsresultate;
+
+        int berechnungsresultat = berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnung).sum();
+        if (berechnungsresultat < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
+            berechnungsresultat = 0;
+        }
+
+        return new BerechnungsresultatDto(
+            berechnungsresultat,
+            berechnungsresultate
+        );
     }
 
-    public List<BerechnungsresultatDto> getBerechnungsresultatFromGesuchTranche(
+    public List<TranchenBerechnungsresultatDto> getBerechnungsresultatFromGesuchTranche(
         final GesuchTranche gesuchTranche,
         final int majorVersion,
         final int minorVersion
@@ -251,7 +261,7 @@ public class BerechnungService {
 
         int noKinderOhneEigenenHaushalt = kinderDerElternInHaushalten.size();
 
-        List<BerechnungsresultatDto> berechnungsresultatDtoList = new ArrayList<>();
+        List<TranchenBerechnungsresultatDto> berechnungsresultatDtoList = new ArrayList<>();
 
         for (final var stuerdatum : steuerdaten) {
             final var steuerdatenTyp = stuerdatum.getSteuerdatenTyp();
@@ -299,7 +309,7 @@ public class BerechnungService {
                     continue;
                 }
                 berechnungsresultatDtoList.add(
-                    new BerechnungsresultatDto(
+                    new TranchenBerechnungsresultatDto(
                         stipendienCalculated.getStipendien(),
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
@@ -341,7 +351,7 @@ public class BerechnungService {
                     ).intValue();
 
                 berechnungsresultatDtoList.add(
-                    new BerechnungsresultatDto(
+                    new TranchenBerechnungsresultatDto(
                         berechnung,
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
