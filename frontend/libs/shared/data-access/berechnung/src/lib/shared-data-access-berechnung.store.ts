@@ -4,20 +4,26 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, pipe, tap } from 'rxjs';
 
-import { Berechnungsresultat, GesuchService } from '@dv/shared/model/gesuch';
+import {
+  Berechnungsresultat,
+  GesuchService,
+  TranchenBerechnungsresultat,
+} from '@dv/shared/model/gesuch';
+import { TeilberechnungsArt } from '@dv/shared/model/verfuegung';
 import {
   CachedRemoteData,
   cachedPending,
   handleApiResponse,
   initial,
+  isPending,
 } from '@dv/shared/util/remote-data';
 
 type BerechnungState = {
-  berechnungen: CachedRemoteData<Berechnungsresultat[]>;
+  berechnung: CachedRemoteData<Berechnungsresultat>;
 };
 
 const initialState: BerechnungState = {
-  berechnungen: initial(),
+  berechnung: initial(),
 };
 
 @Injectable()
@@ -29,36 +35,54 @@ export class BerechnungStore extends signalStore(
   private gesuchService = inject(GesuchService);
 
   berechnungZusammenfassungViewSig = computed(() => {
-    const value = { totalBetragStipendium: 0, berechnungsresultate: [] };
-    const data = this.berechnungen.data();
+    const value: {
+      totalBetragStipendium: number;
+      berechnungsresultate: Record<string, TranchenBerechnungsresultat[]>;
+    } = { totalBetragStipendium: 0, berechnungsresultate: {} };
+    const berechnungRd = this.berechnung();
 
-    return data
-      ? data.reduce<{
-          totalBetragStipendium: number;
-          berechnungsresultate: Berechnungsresultat[];
-        }>((acc, curr) => {
+    const byTrancheId = berechnungRd.data
+      ? berechnungRd.data.tranchenBerechnungsresultate.reduce((acc, curr) => {
+          if (!acc.berechnungsresultate[curr.gesuchTrancheId]) {
+            acc.berechnungsresultate[curr.gesuchTrancheId] = [];
+          }
+          acc.berechnungsresultate[curr.gesuchTrancheId].push(curr);
           return {
             totalBetragStipendium: acc.totalBetragStipendium + curr.berechnung,
-            berechnungsresultate: [...acc.berechnungsresultate, curr],
+            berechnungsresultate: acc.berechnungsresultate,
           };
         }, value)
       : value;
+
+    return {
+      loading: isPending(berechnungRd),
+      ...byTrancheId,
+      berechnungsresultate: Object.values(byTrancheId.berechnungsresultate).map(
+        (r) =>
+          r.map((b, index) => ({
+            ...b,
+            type:
+              r.length > 1
+                ? // It should only be possible to split a berechnung into two parts, a and b
+                  ('ab'.charAt(index % 2) as TeilberechnungsArt)
+                : '',
+          })),
+      ),
+    };
   });
 
   getBerechnungForGesuch$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          berechnungen: cachedPending(state.berechnungen),
+          berechnung: cachedPending(state.berechnung),
         }));
       }),
       exhaustMap(({ gesuchId }) =>
         this.gesuchService
           .getBerechnungForGesuch$({ gesuchId })
           .pipe(
-            handleApiResponse((berechnung) =>
-              patchState(this, { berechnungen: berechnung }),
-            ),
+            handleApiResponse((berechnung) => patchState(this, { berechnung })),
           ),
       ),
     ),

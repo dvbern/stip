@@ -202,7 +202,7 @@
 
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",
-  "sachbearbeitung-app.verfuegung.option.berechnung": "Calcul {{ index }}",
+  "sachbearbeitung-app.verfuegung.option.berechnung": "Calcul {{ index }}{{ type }} à la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.berechnung.months": "Mois",
   "sachbearbeitung-app.verfuegung.berechnung.from": "de",
   "sachbearbeitung-app.verfuegung.berechnung.to": "à",
@@ -246,6 +246,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten": "Coûts de formation de l'apprenti(e)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten": "Frais de déplacement de l'apprenti(e)*",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.total": "Montant total du budget",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.geteilteBerechnung": "Montant du budget imputable ({{ berechnungsanteilKinder }}%)",
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Aucune donnée de calcul disponible",
 
   "sachbearbeitung-app.verfuegung.berechnung.familien.title": "Budget familial",
@@ -289,8 +290,8 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Résumé",
   "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Détails du calcul",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Montant total de la bourse",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total du calcul {{ index }}",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total de calcul {{ index }}{{ type }} à la tranche {{ index }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}{{ type }}",
 
   "sachbearbeitung-app.gesuch-form.protokoll.description": "Un aperçu de toutes les modifications apportées à la demande",
   "sachbearbeitung-app.gesuch-form.protokoll.text": "Voici un aperçu de toutes les actions de cette demande.",

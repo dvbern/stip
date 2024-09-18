@@ -4,6 +4,10 @@ export type PersoenlicheBerechnung = {
   total: number;
   totalEinnahmen: number;
   totalKosten: number;
+  geteilteBerechnung: {
+    berechnungsanteilKinder: number;
+    anteil: number;
+  } | null;
   einnahmen: {
     total: number;
     anzahlPersonenImHaushalt: number;
