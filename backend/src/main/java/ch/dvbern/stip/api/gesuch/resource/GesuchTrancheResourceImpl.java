@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.service.GesuchTrancheService;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
@@ -23,6 +25,9 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response createAenderungsantrag(UUID gesuchId, CreateAenderungsantragRequestDto createAenderungsantragRequestDto) {
+        if(openAenderungAlreadyExists(gesuchId)) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         final var trancheDto = gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
         return Response.ok(trancheDto).build();
     }
@@ -88,5 +93,14 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     public Response aenderungEinreichen(UUID aenderungId) {
         gesuchTrancheService.aenderungEinreichen(aenderungId);
         return Response.ok().build();
+    }
+
+    private boolean openAenderungAlreadyExists(UUID gesuchId){
+        final var tranchenAndAenderungen = gesuchTrancheService.getAllTranchenForGesuch(gesuchId);
+        return tranchenAndAenderungen != null
+            && tranchenAndAenderungen.stream().filter(item -> item.getTyp() == GesuchTrancheTyp.AENDERUNG)
+            .anyMatch(item -> item.getStatus() != GesuchTrancheStatus.AKZEPTIERT)
+            && tranchenAndAenderungen.stream().filter(item -> item.getTyp() == GesuchTrancheTyp.AENDERUNG)
+            .anyMatch(item -> item.getStatus() != GesuchTrancheStatus.ABGELEHNT);
     }
 }
