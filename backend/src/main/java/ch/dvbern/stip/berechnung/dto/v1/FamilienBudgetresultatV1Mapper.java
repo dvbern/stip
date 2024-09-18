@@ -21,8 +21,7 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
         final int budgetToUse,
         final int einnahmenFamilienbudget,
         final int ausgabenFamilienbudget,
-        final int familienbudgetBerechnet,
-        final BigDecimal kinderProzente
+        final int familienbudgetBerechnet
     ) {
         final BerechnungRequestV1 berechnungsRequest = (BerechnungRequestV1) request;
         InputFamilienbudgetV1 inputFamilienbudget = null;

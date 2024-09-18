@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
+import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -121,7 +122,6 @@ public class BerechnungService {
         final DmnRequest berechnungRequest,
         final BerechnungResult berechnungResult,
         final SteuerdatenTyp steuerdatenTyp,
-        final BigDecimal kinderProzente,
         final int budgetToUse,
         final int majorVersion,
         final int minorVersion
@@ -139,25 +139,25 @@ public class BerechnungService {
             );
         }
         final var decisionResults = berechnungResult.getDecisionEventList().stream().filter(
-            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("Familienbudget_" + budgetToUse)
+            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("Familienbudget_" + (budgetToUse + 1))
         ).toList().get(0).getResult().getDecisionResults();
 
         @SuppressWarnings("unchecked") // It's fine (and necessary)
         final var familienbudgetMap = ((HashMap<String, BigDecimal>) decisionResults.stream().filter(
-                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("Familienbudget_" + budgetToUse)
+                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("Familienbudget_" + (budgetToUse + 1))
         ).toList().get(0).getResult());
         final int familienbudgetBerechnet = familienbudgetMap.get("familienbudgetBerechnet").intValue();
 
         final String fambudgetKey = "familienbudgetBerechnet";
         final var einnahmenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList().stream().filter(
             afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals(fambudgetKey)
-        ).toList().get(budgetToUse-1).getResult().getDecisionResults().stream().filter(
+        ).toList().get(budgetToUse).getResult().getDecisionResults().stream().filter(
             dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenFamilienbudget")
         ).toList().get(0).getResult()).intValue();
 
         final var ausgabenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList().stream().filter(
             afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals(fambudgetKey)
-        ).toList().get(budgetToUse-1).getResult().getDecisionResults().stream().filter(
+        ).toList().get(budgetToUse).getResult().getDecisionResults().stream().filter(
             dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenFamilienbudget")
         ).toList().get(0).getResult()).intValue();
 
@@ -167,8 +167,7 @@ public class BerechnungService {
             budgetToUse,
             einnahmenFamilienbudget,
             ausgabenFamilienbudget,
-            familienbudgetBerechnet,
-            kinderProzente
+            familienbudgetBerechnet
         );
     }
 
@@ -230,178 +229,142 @@ public class BerechnungService {
         return berechnungsresultate;
     }
 
-    public FamilienBudgetresultatDto getBerechnungsresultatDtoFromGesuchTrancheForSteuerdatenTyp(
-        final GesuchTranche gesuchTranche,
-        final SteuerdatenTyp steuerdatenTyp,
-        final int majorVersion,
-        final int minorVersion
-    ) {
-        ElternTyp elternTypToSolveFor = ElternTyp.VATER;
-        if (steuerdatenTyp == SteuerdatenTyp.MUTTER) {
-            elternTypToSolveFor = ElternTyp.MUTTER;
-        }
-
-        final var gesuch = gesuchTranche.getGesuch();
-        final var gesuchFormular = gesuchTranche.getGesuchFormular();
-
-        // Use DMN model simply to get the number of budgets required. Bit overkill to do it for both parents but may serve as sanity check.
-        final var personenImHaushaltRequest = personenImHaushaltService.getPersonenImHaushaltRequest(
-            majorVersion,
-            minorVersion,
-            gesuchFormular,
-            elternTypToSolveFor
-        );
-
-        final var personenImHaushalt = personenImHaushaltService.calculatePersonenImHaushalt(personenImHaushaltRequest);
-
-        final var noBudgetsRequired = personenImHaushalt.getNoBudgetsRequired();
-
-        // Get the Request and run the DMN for the stipendien berechnung
-        final var stipendienBerechnungsRequest = (BerechnungRequestV1) getBerechnungRequest(
-            majorVersion,
-            minorVersion,
-            gesuch,
-            gesuchTranche,
-            elternTypToSolveFor
-        );
-
-        final var stipendienCalculatedForVater = calculateStipendien(stipendienBerechnungsRequest);
-
-    }
-
     public List<BerechnungsresultatDto> getBerechnungsresultatFromGesuchTranche(
         final GesuchTranche gesuchTranche,
         final int majorVersion,
         final int minorVersion
     ) {
-        final var gesuch = gesuchTranche.getGesuch();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
-        // Use DMN model simply to get the number of budgets required. Bit overkill to do it for both parents but may serve as sanity check.
-        final var personenImHaushaltRequestForVater = personenImHaushaltService.getPersonenImHaushaltRequest(
-            majorVersion,
-            minorVersion,
-            gesuchFormular,
-            ElternTyp.VATER
+        final var steuerdaten = gesuchFormular.getSteuerdaten();
+
+        List<AbstractFamilieEntity> kinderDerElternInHaushalten = new ArrayList<>(
+            gesuchFormular.getGeschwisters().stream()
+                .filter(
+                    geschwister -> geschwister.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT
+                ).map(AbstractFamilieEntity.class::cast)
+                .toList()
         );
-        final var personenImHaushaltRequestForMutter = personenImHaushaltService.getPersonenImHaushaltRequest(
-            majorVersion,
-            minorVersion,
-            gesuchFormular,
-            ElternTyp.MUTTER
-        );
-        final var personenImHaushaltForVater = personenImHaushaltService.calculatePersonenImHaushalt(personenImHaushaltRequestForVater);
-        final var personenImHaushaltForMutter = personenImHaushaltService.calculatePersonenImHaushalt(personenImHaushaltRequestForMutter);
-        if (personenImHaushaltForVater.getNoBudgetsRequired() != personenImHaushaltForMutter.getNoBudgetsRequired()) {
-            throw new IllegalStateException("noBudgetsRequired do not match between parents");
+
+        if (gesuchFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
+            kinderDerElternInHaushalten.add(gesuchFormular.getPersonInAusbildung());
         }
-        final var noBudgetsRequired = personenImHaushaltForVater.getNoBudgetsRequired();
 
-        // Buiild and run the DMN request for the stipendien berechnung
-        final var stipendienBerechnungsRequestForVater = (BerechnungRequestV1) getBerechnungRequest(
-            majorVersion,
-            minorVersion,
-            gesuch,
-            gesuchTranche,
-            ElternTyp.VATER
-        );
+        int noKinderOhneEigenenHaushalt = kinderDerElternInHaushalten.size();
 
-        final var stipendienCalculatedForVater = calculateStipendien(stipendienBerechnungsRequestForVater);
+        List<BerechnungsresultatDto> berechnungsresultatDtoList = new ArrayList<>();
 
-        // If only one budget is required then there is no need to calculate the proportional stipendium based on the kids in the houshold.
-        // So we just take the one of the father
-        var berechnung = stipendienCalculatedForVater.getStipendien();
-        BerechnungRequestV1 stipendienBerechnungsRequestForMutter = null;
-        List<BigDecimal> kinderProzenteList = List.of(BigDecimal.valueOf(personenImHaushaltForVater.getKinderImHaushalt1()), BigDecimal.ZERO);
-        if (noBudgetsRequired > 1) {
-            stipendienBerechnungsRequestForMutter = (BerechnungRequestV1) getBerechnungRequest(
+        for (final var stuerdatum : steuerdaten) {
+            final var steuerdatenTyp = stuerdatum.getSteuerdatenTyp();
+            final var elternTypToSolveFor =
+                steuerdatenTyp == SteuerdatenTyp.MUTTER
+                    ? ElternTyp.MUTTER
+                    : ElternTyp.VATER;
+
+            final var berechnungsRequest = (BerechnungRequestV1) getBerechnungRequest(
                 majorVersion,
                 minorVersion,
-                gesuch,
+                gesuchTranche.getGesuch(),
                 gesuchTranche,
-                ElternTyp.MUTTER
+                elternTypToSolveFor
             );
-            final var stipendienCalculatedForMutter = calculateStipendien(stipendienBerechnungsRequestForMutter);
 
+            final var stipendienCalculated = calculateStipendien(berechnungsRequest);
 
-            // To address differences in the stipendienberechnung based on how many kids are in the households and how their care is divided between father and mother,
-            // we calculate how many "kidpercentages" each household has and divide this by the total number of kids in all households.
-            // This value can then be multiplied with the respective stipendienberechnung to get a proportianal stipendienamount.
-            BigDecimal kinderProzenteVater = BigDecimal.ZERO;
-            BigDecimal kinderProzenteMutter = BigDecimal.ZERO;
-            int noKinderOhneEigenenHaushalt = 0;
-            // If the PIA is living split between both we take the noted percentage. Otherwise we assume 50/50
-            if (gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitz() == Wohnsitz.MUTTER_VATER) {
-                kinderProzenteVater = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilVater();
-                kinderProzenteMutter = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getWohnsitzAnteilMutter();
-                noKinderOhneEigenenHaushalt += 1;
+            final List<FamilienBudgetresultatDto> familienBudgetresultatList = new ArrayList<>();
+
+            final ListIterator<Steuerdaten> steuerdatenListIterator = steuerdaten.stream().sorted(
+                Comparator.comparing(Steuerdaten::getSteuerdatenTyp)
+            ).toList().listIterator();
+
+            while (steuerdatenListIterator.hasNext()) {
+                final var budgetIndex = steuerdatenListIterator.nextIndex();
+                final Steuerdaten steuerdatum = steuerdatenListIterator.next();
+                familienBudgetresultatList.add(
+                    familienBudgetresultatFromRequest(
+                        berechnungsRequest,
+                        stipendienCalculated,
+                        steuerdatum.getSteuerdatenTyp(),
+                        budgetIndex,
+                        majorVersion,
+                        minorVersion
+                    )
+                );
             }
 
-            // Sum up the percentages for all siblings
-            final var geschwisters = gesuchTranche.getGesuchFormular().getGeschwisters();
-            for (final var geschwister : geschwisters) {
-                if (geschwister.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
-                    kinderProzenteVater = kinderProzenteVater.add(geschwister.getWohnsitzAnteilVater());
-                    kinderProzenteMutter = kinderProzenteMutter.add(geschwister.getWohnsitzAnteilMutter());
-                    noKinderOhneEigenenHaushalt += 1;
+            if (
+                steuerdaten.size() <= 1
+                || noKinderOhneEigenenHaushalt == 0
+            ) {
+                if (!berechnungsresultatDtoList.isEmpty()) {
+                    continue;
                 }
-            }
-            // If all kids have their own living arrangement the calcualtion is moot and would lead to a /0 error. So we just the previously assigned value
-            if (noKinderOhneEigenenHaushalt > 0) {
-                kinderProzenteList = List.of(kinderProzenteVater, kinderProzenteMutter);
-                // Calculate the relative percentage (i.e. how much of all kids live with each parent)
-                final BigDecimal kinderProzenteVaterNormalized = kinderProzenteVater.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP);
-                final BigDecimal kinderProzenteMutterNormalized = kinderProzenteMutter.divide(BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP);
+                berechnungsresultatDtoList.add(
+                    new BerechnungsresultatDto(
+                        stipendienCalculated.getStipendien(),
+                        gesuchTranche.getGueltigkeit().getGueltigAb(),
+                        gesuchTranche.getGueltigkeit().getGueltigBis(),
+                        gesuchTranche.getId(),
+                        BigDecimal.ONE,
+                        berechnungsStammdatenFromRequest(
+                            berechnungsRequest,
+                            majorVersion,
+                            minorVersion
+                        ),
+                        persoenlichesBudgetresultatFromRequest(
+                            berechnungsRequest,
+                            stipendienCalculated,
+                            familienBudgetresultatList,
+                            majorVersion,
+                            minorVersion
+                        ),
+                        familienBudgetresultatList
+                    )
+                );
+            } else {
+                // To address differences in the stipendienberechnung based on how many kids are in the households and how their care is divided between father and mother,
+                // we calculate how many "kidpercentages" each household has and divide this by the total number of kids in all households.
+                // This value can then be multiplied with the respective stipendienberechnung to get a proportianal stipendienamount.
+                BigDecimal kinderProzente = BigDecimal.ZERO;
+
+                for (final var kindDerElternInHaushalten : kinderDerElternInHaushalten) {
+                    kinderProzente.add(kindDerElternInHaushalten.getWohnsitzAnteil(elternTypToSolveFor));
+                }
+
+                final BigDecimal kinderProzenteNormalized = kinderProzente.divide(
+                    BigDecimal.valueOf(noKinderOhneEigenenHaushalt), 2, RoundingMode.HALF_UP
+                );
 
                 // Calculate the total stipendien amount based on the respective amounts and their relative kid percentages.
-                berechnung =
-                    kinderProzenteVaterNormalized.multiply(BigDecimal.valueOf(stipendienCalculatedForVater.getStipendien())
-                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).intValue()
-                    + kinderProzenteMutterNormalized.multiply(BigDecimal.valueOf(stipendienCalculatedForMutter.getStipendien())
-                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)).intValue();
+                final var berechnung = kinderProzenteNormalized.multiply(
+                    BigDecimal.valueOf(stipendienCalculated.getStipendien())
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+                    ).intValue();
+
+                berechnungsresultatDtoList.add(
+                    new BerechnungsresultatDto(
+                        berechnung,
+                        gesuchTranche.getGueltigkeit().getGueltigAb(),
+                        gesuchTranche.getGueltigkeit().getGueltigBis(),
+                        gesuchTranche.getId(),
+                        kinderProzenteNormalized,
+                        berechnungsStammdatenFromRequest(
+                            berechnungsRequest,
+                            majorVersion,
+                            minorVersion
+                        ),
+                        persoenlichesBudgetresultatFromRequest(
+                            berechnungsRequest,
+                            stipendienCalculated,
+                            familienBudgetresultatList,
+                            majorVersion,
+                            minorVersion
+                        ),
+                        familienBudgetresultatList
+                    )
+                );
             }
         }
-
-        final ListIterator<Steuerdaten> steuerdatenListIterator = gesuchFormular.getSteuerdaten().stream().sorted(
-            Comparator.comparing(Steuerdaten::getSteuerdatenTyp)
-        ).toList().listIterator();
-
-        List<FamilienBudgetresultatDto> familienBudgetresultatList = new ArrayList<>();
-        while (steuerdatenListIterator.hasNext()) {
-            final int budgetIndex = steuerdatenListIterator.nextIndex();
-            final Steuerdaten steuerdaten = steuerdatenListIterator.next();
-            familienBudgetresultatList.add(
-                familienBudgetresultatFromRequest(
-                    stipendienBerechnungsRequestForVater,
-                    stipendienCalculatedForVater,
-                    steuerdaten.getSteuerdatenTyp(),
-                    kinderProzenteList.get(budgetIndex),
-                    budgetIndex,
-                    majorVersion,
-                    minorVersion
-                )
-            );
-        }
-
-        return List.of(new BerechnungsresultatDto(
-            berechnung,
-            gesuchTranche.getGueltigkeit().getGueltigAb(),
-            gesuchTranche.getGueltigkeit().getGueltigBis(),
-            gesuchTranche.getId(),
-            BigDecimal.valueOf(0.0),
-            berechnungsStammdatenFromRequest(
-                stipendienBerechnungsRequestForVater,
-                majorVersion,
-                minorVersion
-            ),
-            persoenlichesBudgetresultatFromRequest(
-                stipendienBerechnungsRequestForVater,
-                stipendienCalculatedForVater,
-                familienBudgetresultatList,
-                majorVersion,
-                minorVersion
-            ),
-            familienBudgetresultatList
-        ));
+        return berechnungsresultatDtoList;
     }
 
     public DmnRequest getBerechnungRequest(
