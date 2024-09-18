@@ -202,7 +202,7 @@
 
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
-  "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}",
+  "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.berechnung.months": "Monate",
   "sachbearbeitung-app.verfuegung.berechnung.from": "von",
   "sachbearbeitung-app.verfuegung.berechnung.to": "bis",
@@ -248,6 +248,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten": "Fahrkosten der/des Auszubildenden*",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.total": "Total anerkannte Kosten",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.total": "Totaler Betrag des Budgets",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.geteilteBerechnung": "Anrechenbarer Betrag des Budgets ({{ berechnungsanteilKinder }}%)",
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Keine Berechnungsdaten vorhanden",
 
   "sachbearbeitung-app.verfuegung.berechnung.familien.title": "Familien Budget",
@@ -291,8 +292,8 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Details der Berechnung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Stipendium Betrag",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung  {{ index }}",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}{{ type }}",
 
   "sachbearbeitung-app.gesuch-form.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.gesuch-form.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",

@@ -94,6 +94,7 @@ export * from './steuerdatenUpdate';
 export * from './taetigkeitsart';
 export * from './tenantAuthConfig';
 export * from './tenantInfo';
+export * from './tranchenBerechnungsresultat';
 export * from './validationError';
 export * from './validationMessage';
 export * from './validationReport';
