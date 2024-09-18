@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.kie.dmn.api.core.DMNDecisionResult;
 import org.kie.dmn.api.core.event.AfterEvaluateDecisionEvent;
-@RequiredArgsConstructor
 
+@RequiredArgsConstructor
 @Getter
 public class BerechnungResult {
     private final Integer stipendien;
