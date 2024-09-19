@@ -38,6 +38,10 @@ import {
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
+import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
@@ -51,7 +55,10 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import { maskitoNumber } from '@dv/shared/util/maskito-util';
+import {
+  fromFormatedNumber,
+  maskitoNumber,
+} from '@dv/shared/util/maskito-util';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
@@ -92,6 +99,7 @@ const MEDIUM_AGE_ADULT = 40;
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedUiFormReadonlyDirective,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-eltern-editor.component.scss'],
@@ -149,6 +157,8 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       [Validators.required, sharedUtilValidatorTelefonNummer()],
     ],
     sozialversicherungsnummer: [<string | undefined>undefined, []],
+    ergaenzungsleistungen: [<string | null>null, [Validators.required]],
+    sozialhilfebeitraege: [<string | null>null, [Validators.required]],
     geburtsdatum: [
       '',
       [
@@ -170,6 +180,32 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
   });
 
   svnIsRequiredSig = signal(false);
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+
+  private ergaenzungsleistungChangedSig = toSignal(
+    this.form.controls.ergaenzungsleistungen.valueChanges,
+  );
+  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
+    const elternTyp = this.elternteil.elternTyp;
+    const ergaenzungsleistung =
+      fromFormatedNumber(this.ergaenzungsleistungChangedSig() ?? undefined) ??
+      0;
+
+    return ergaenzungsleistung > 0
+      ? `ELTERN_ERGAENZUNGSLEISTUNGEN_${elternTyp}`
+      : null;
+  });
+
+  private sozialhilfeChangedSig = toSignal(
+    this.form.controls.sozialhilfebeitraege.valueChanges,
+  );
+  sozialhilfeDocumentSig = this.createUploadOptionsSig(() => {
+    const elternTyp = this.elternteil.elternTyp;
+    const sozialhilfe =
+      fromFormatedNumber(this.sozialhilfeChangedSig() ?? undefined) ?? 0;
+
+    return sozialhilfe > 0 ? `ELTERN_SOZIALHILFEBUDGET_${elternTyp}` : null;
+  });
 
   constructor() {
     this.formIsUnsaved = observeUnsavedChanges(
@@ -227,6 +263,9 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     if (changes['elternteil']?.currentValue) {
       this.form.patchValue({
         ...this.elternteil,
+        sozialhilfebeitraege: this.elternteil.sozialhilfebeitraege?.toString(),
+        ergaenzungsleistungen:
+          this.elternteil.ergaenzungsleistungen?.toString(),
         geburtsdatum: parseBackendLocalDateAndPrint(
           this.elternteil.geburtsdatum,
           this.languageSig(),
@@ -256,6 +295,8 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     this.formUtils.focusFirstInvalid(this.elementRef);
     const formValues = convertTempFormToRealValues(this.form, [
       'ausweisbFluechtling',
+      'ergaenzungsleistungen',
+      'sozialhilfebeitraege',
     ]);
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       formValues.geburtsdatum,
@@ -274,6 +315,12 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
         id: this.elternteil.id,
         elternTyp: this.elternteil.elternTyp,
         geburtsdatum,
+        ergaenzungsleistungen: fromFormatedNumber(
+          formValues.ergaenzungsleistungen,
+        ),
+        sozialhilfebeitraege: fromFormatedNumber(
+          formValues.sozialhilfebeitraege,
+        ),
       });
       this.form.markAsPristine();
     }

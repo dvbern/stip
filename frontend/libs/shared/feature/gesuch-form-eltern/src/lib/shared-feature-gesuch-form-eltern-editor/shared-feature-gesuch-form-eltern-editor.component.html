@@ -124,7 +124,65 @@
   }
 
   <h3 class="pt-5">{{ 'shared.weiterangaben' | translate }}</h3>
+  <div class="row g-4 my-2">
+    <!-- Ergaenzungsleistungen-->
+    <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+      <mat-form-field dvSharedUiFormField class="flex-grow-1">
+        <mat-label>{{
+          'shared.form.eltern.ergaenzungsleistungen.' + elternteil.elternTyp + '.label' | translate
+        }}</mat-label>
+        <input
+          formControlName="ergaenzungsleistungen"
+          data-testid="form-eltern-steuerdaten.ergaenzungsleistungen"
+          matInput
+          [maskito]="maskitoNumber"
+          type="text"
+        />
+        <mat-hint *dvZuvorHint="changes?.ergaenzungsleistungen"></mat-hint>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
 
+      @if (ergaenzungsleistungenDocumentSig(); as options) {
+        <div class="d-flex gap-2 align-items-center">
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        </div>
+      }
+    </div>
+    <!-- Sozialhilfebeitraege-->
+    <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+      <mat-form-field dvSharedUiFormField class="flex-grow-1">
+        <mat-label>{{
+          'shared.form.eltern.sozialhilfebeitraege.' + elternteil.elternTyp + '.label' | translate
+        }}</mat-label>
+        <input
+          formControlName="sozialhilfebeitraege"
+          data-testid="form-eltern-steuerdaten.sozialhilfebeitraege"
+          matInput
+          [maskito]="maskitoNumber"
+          type="text"
+        />
+        <mat-hint *dvZuvorHint="changes?.sozialhilfebeitraege"></mat-hint>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      @if (sozialhilfeDocumentSig(); as options) {
+        <div class="d-flex gap-2 align-items-center">
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="row g-4 my-2"></div>
   <div class="row g-4 my-2">
     <!-- GEBURTSDATUM -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">

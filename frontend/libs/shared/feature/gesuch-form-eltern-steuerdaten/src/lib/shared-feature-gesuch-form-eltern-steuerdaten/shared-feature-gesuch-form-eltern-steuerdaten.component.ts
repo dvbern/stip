@@ -104,10 +104,6 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     vermoegen: [<string | null>null, [Validators.required]],
     wohnkosten: [<string | null>null, [Validators.required]],
     steuernKantonGemeinde: [<string | null>null, [Validators.required]],
-    ergaenzungsleistungen: [<string | null>null, [Validators.required]],
-    ergaenzungsleistungenPartner: [<string | null>null, [Validators.required]],
-    sozialhilfebeitraege: [<string | null>null, [Validators.required]],
-    sozialhilfebeitraegePartner: [<string | null>null, [Validators.required]],
     steuernBund: [<string | null>null, [Validators.required]],
     fahrkosten: [<string | null>null, [Validators.required]],
     fahrkostenPartner: [<string | null>null, [Validators.required]],
@@ -144,10 +140,6 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     'saeule3a',
     'saeule2',
     'kinderalimente',
-    'ergaenzungsleistungen',
-    'ergaenzungsleistungenPartner',
-    'sozialhilfebeitraege',
-    'sozialhilfebeitraegePartner',
     'vermoegen',
     'wohnkosten',
     'steuernKantonGemeinde',
@@ -174,55 +166,6 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     return wohnkosten > 0
       ? `STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_${steuerdatenTyp}`
       : null;
-  });
-
-  private ergaenzungsleistungChangedSig = toSignal(
-    this.form.controls.ergaenzungsleistungen.valueChanges,
-  );
-  private ergaenzungsleistungPartnerChangedSig = toSignal(
-    this.form.controls.ergaenzungsleistungenPartner.valueChanges,
-  );
-  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
-    const steuerdatenTyp = this.stepSig().type;
-    const ergaenzungsleistung =
-      fromFormatedNumber(this.ergaenzungsleistungChangedSig() ?? undefined) ??
-      0;
-
-    return ergaenzungsleistung > 0
-      ? `STEUERDATEN_ERGAENZUNGSLEISTUNGEN_${defaultVater(steuerdatenTyp)}`
-      : null;
-  });
-  ergaenzungsleistungenPartnerDocumentSig = this.createUploadOptionsSig(() => {
-    const ergaenzungsleistung =
-      fromFormatedNumber(
-        this.ergaenzungsleistungPartnerChangedSig() ?? undefined,
-      ) ?? 0;
-
-    return ergaenzungsleistung
-      ? 'STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER'
-      : null;
-  });
-
-  private sozialhilfeChangedSig = toSignal(
-    this.form.controls.sozialhilfebeitraege.valueChanges,
-  );
-  private sozialhilfePartnerChangedSig = toSignal(
-    this.form.controls.sozialhilfebeitraegePartner.valueChanges,
-  );
-  sozialhilfeDocumentSig = this.createUploadOptionsSig(() => {
-    const steuerdatenTyp = this.stepSig().type;
-    const sozialhilfe =
-      fromFormatedNumber(this.sozialhilfeChangedSig() ?? undefined) ?? 0;
-
-    return sozialhilfe > 0
-      ? `STEUERDATEN_SOZIALHILFEBUDGET_${defaultVater(steuerdatenTyp)}`
-      : null;
-  });
-  sozialhilfePartnerDocumentSig = this.createUploadOptionsSig(() => {
-    const sozialhilfe =
-      fromFormatedNumber(this.sozialhilfePartnerChangedSig() ?? undefined) ?? 0;
-
-    return sozialhilfe ? 'STEUERDATEN_SOZIALHILFEBUDGET_MUTTER' : null;
   });
 
   constructor() {
@@ -262,23 +205,6 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
         });
       }
     });
-
-    effect(
-      () => {
-        const steuerdatenTyp = this.stepSig().type;
-        const partnerRequired = steuerdatenTyp === 'FAMILIE';
-
-        this.hiddenFieldSet.setFieldVisibility(
-          this.form.controls.ergaenzungsleistungenPartner,
-          partnerRequired,
-        );
-        this.hiddenFieldSet.setFieldVisibility(
-          this.form.controls.sozialhilfebeitraegePartner,
-          partnerRequired,
-        );
-      },
-      { allowSignalWrites: true },
-    );
   }
 
   handleSave(): void {
@@ -320,10 +246,6 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
       'saeule3a',
       'saeule2',
       'kinderalimente',
-      'ergaenzungsleistungen',
-      'ergaenzungsleistungenPartner',
-      'sozialhilfebeitraege',
-      'ergaenzungsleistungenPartner',
       'vermoegen',
       'wohnkosten',
       'steuernKantonGemeinde',
@@ -379,11 +301,4 @@ const upsertSteuerdaten = (
   }
 
   return result;
-};
-
-const defaultVater = (steuerdatenTyp: SteuerdatenTyp) => {
-  if (steuerdatenTyp !== 'FAMILIE') {
-    return steuerdatenTyp;
-  }
-  return 'VATER';
 };

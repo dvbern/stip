@@ -34,6 +34,14 @@ export interface Eltern {
     id?: string;
     elternTyp: ElternTyp;
     nachname: string;
+    /**
+     * \'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater\' \'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp\' 
+     */
+    ergaenzungsleistungen: number;
+    /**
+     * \'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater\' \'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp\' 
+     */
+    sozialhilfebeitraege: number;
 }
 
 

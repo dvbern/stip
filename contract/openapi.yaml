@@ -2355,6 +2355,8 @@ components:
         - telefonnummer
         - vorname
         - elternTyp
+        - sozialhilfebeitraege
+        - ergaenzungsleistungen
       type: object
       properties:
         vorname:
