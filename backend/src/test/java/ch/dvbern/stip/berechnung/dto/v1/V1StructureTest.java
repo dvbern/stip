@@ -113,7 +113,7 @@ class V1StructureTest {
                         "anteilFamilienbudget": 0,
                         "lehre": false,
                         "eigenerHaushalt": true,
-                        "abgeschlosseneErstausbildung": false,
+                        "halbierungElternbeitrag": false,
                         "anzahlPersonenImHaushalt": 2,
                         "verheiratetKonkubinat": false
                     }

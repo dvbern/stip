@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -11,6 +12,8 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
+import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import lombok.Builder;
 import lombok.Data;
@@ -50,7 +53,7 @@ public class AntragsstellerV1 {
     int anteilFamilienbudget;
     boolean lehre;
     boolean eigenerHaushalt;
-    boolean abgeschlosseneErstausbildung;
+    boolean halbierungElternbeitrag;
     int anzahlPersonenImHaushalt;
     boolean verheiratetKonkubinat;
 
@@ -143,16 +146,21 @@ public class AntragsstellerV1 {
         // TODO: builder.lehre(Objects.requireNonNullElse());
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
-        builder.abgeschlosseneErstausbildung(
-            gesuchFormular.getLebenslaufItems()
-                .stream()
-                .filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null)
-                .anyMatch(
-                    lebenslaufItem ->
-                        lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
-                            && lebenslaufItem.isAusbildungAbgeschlossen()
-                )
-        );
+        boolean halbierungElternbeitrag = false;
+        if (gesuchFormular.getLebenslaufItems()
+            .stream()
+            .filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null)
+            .anyMatch(
+                lebenslaufItem ->
+                    lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
+                        && lebenslaufItem.isAusbildungAbgeschlossen()
+            )
+            && alter > gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag()
+        ) {
+
+        }
+
+        builder.halbierungElternbeitrag(getHalbierungElternbeitrag(alter, gesuchFormular.getLebenslaufItems(), gesuchsperiode));
 
         if (partner != null) {
             builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
@@ -183,5 +191,27 @@ public class AntragsstellerV1 {
                 gesuchsperiode.getAusbKostenTertiaer()
             );
         };
+    }
+
+    private static boolean getHalbierungElternbeitrag(
+        final int alter,
+        final Set<LebenslaufItem> lebenslaufItemSet,
+        final Gesuchsperiode gesuchsperiode
+    ) {
+        final boolean abgeschlosseneErstausbildung = lebenslaufItemSet.stream()
+            .filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null)
+            .anyMatch(
+                lebenslaufItem ->
+                    lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
+                        && lebenslaufItem.isAusbildungAbgeschlossen()
+            );
+        final boolean halbierungAbgeschlosseneErstausbildung =
+            abgeschlosseneErstausbildung && (alter >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
+        final var beruftaetigkeiten = Set.of(Taetigkeitsart.ERWERBSTAETIGKEIT); // TODO KSTIP-789: add Taetigkeitsart.BETREUUNG
+        final var berufstaetigeItems = lebenslaufItemSet.stream().filter(lebenslaufItem -> beruftaetigkeiten.contains(lebenslaufItem.getTaetigkeitsart()));
+        final int monthsBerufstaetig = berufstaetigeItems.mapToInt(lebenslaufItem -> (int) ChronoUnit.DAYS.between(lebenslaufItem.getVon(), lebenslaufItem.getBis())).sum() / 30;
+        final boolean halbierungBerufstaetig = monthsBerufstaetig >= 72;
+
+        return halbierungAbgeschlosseneErstausbildung || halbierungBerufstaetig;
     }
 }

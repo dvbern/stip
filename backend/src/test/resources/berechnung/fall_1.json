@@ -87,7 +87,7 @@
       "anteilFamilienbudget": 0,
       "lehre": true,
       "eigenerHaushalt": true,
-      "abgeschlosseneErstausbildung": true
+      "halbierungElternbeitrag": false
     }
   }
 }

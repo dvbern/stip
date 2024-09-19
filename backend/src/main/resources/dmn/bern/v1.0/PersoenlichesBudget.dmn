@@ -85,7 +85,7 @@
     <dmn:itemComponent id="_27259543-5D4D-40FE-AFA2-7B31206A06F1" name="alimente" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
-    <dmn:itemComponent id="_4BFA3AAF-812C-4E70-A5C4-4A5A04BC3872" name="abgeschlosseneErstausbildung" isCollection="false">
+    <dmn:itemComponent id="_4BFA3AAF-812C-4E70-A5C4-4A5A04BC3872" name="halbierungElternbeitrag" isCollection="false">
       <dmn:typeRef>boolean</dmn:typeRef>
     </dmn:itemComponent>
     <dmn:itemComponent id="_AntragsstelleV1_verheiratetKonkubinat" name="verheiratetKonkubinat" isCollection="false">
@@ -215,29 +215,21 @@
       <dmn:contextEntry>
         <dmn:variable id="_C4443D22-1B3C-4B6F-84BA-D4A70EF1C367" name="Elternbeitrag_1" typeRef="number"/>
         <dmn:decisionTable id="_97F8FB31-B0E2-46BD-9C84-735AA1EA9633" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
-          <dmn:input id="_D8661B8A-620C-4D6B-892B-0650FF38B92F">
-            <dmn:inputExpression id="_009AFE90-2225-47E9-AC99-3273413354BBX12" typeRef="number">
+          <dmn:input id="_745190AF-5F3D-40D2-AE45-1AB19F09D861">
+            <dmn:inputExpression typeRef="number">
               <dmn:text>Familienbudget_1.familienbudgetBerechnet</dmn:text>
-            </dmn:inputExpression>
-          </dmn:input>
-          <dmn:input id="_50C8B315-2A46-4B93-9074-230E6A67A2F4">
-            <dmn:inputExpression id="_4B16CC2A-1C13-42F4-B9DC-1BB8D44E135B" typeRef="number">
-              <dmn:text>InputPersoenlichesbudget.antragssteller.alter</dmn:text>
             </dmn:inputExpression>
           </dmn:input>
           <dmn:input id="_A0E673EB-F13E-439A-95F7-A698C1D22A79">
             <dmn:inputExpression id="_551E3DB2-4A02-496F-ADBD-B03FD6D5DF1E" typeRef="boolean">
-              <dmn:text>InputPersoenlichesbudget.antragssteller.abgeschlosseneErstausbildung</dmn:text>
+              <dmn:text>InputPersoenlichesbudget.antragssteller.halbierungElternbeitrag</dmn:text>
             </dmn:inputExpression>
           </dmn:input>
           <dmn:output id="_D5FB750C-C133-46B6-A759-E3452B914A8E"/>
           <dmn:annotation name="annotation-1"/>
           <dmn:rule id="_A69101E2-E141-408D-A23C-691FFED1C30B">
-            <dmn:inputEntry id="_19B2DC77-CE20-434A-AA76-7A428D418945">
+            <dmn:inputEntry id="_4A6B0D67-6B9F-48D1-8171-6B7229155756">
               <dmn:text>&gt; 0</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_49CE832B-581A-464B-A04D-0E0478D5156E">
-              <dmn:text>&gt;= Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_B8CB4B44-0E2A-46AA-A545-34400D2202BD">
               <dmn:text>true</dmn:text>
@@ -252,11 +244,8 @@
             </dmn:annotationEntry>
           </dmn:rule>
           <dmn:rule id="_AEBCDEC6-A1BC-40D7-89AA-BF5F9CDBE561">
-            <dmn:inputEntry id="_F97F9519-F82C-4B48-BB8E-6C3E9356155D">
-              <dmn:text>&gt;0</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_B7AE0476-D6D5-4C9C-BC32-ABE8E9BE6EDA">
-              <dmn:text>&gt;=Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
+            <dmn:inputEntry id="_0581F1D7-03A3-4932-8FF7-EB7467388477">
+              <dmn:text>&gt; 0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_E324DAFA-701F-4DC0-B820-9582128EB725">
               <dmn:text>false</dmn:text>
@@ -270,30 +259,8 @@
               <dmn:text/>
             </dmn:annotationEntry>
           </dmn:rule>
-          <dmn:rule id="_8950D47E-B7CE-4E34-8D61-0585F866E131">
-            <dmn:inputEntry id="_6F1C8CED-B82C-4F84-97C5-6EAF80BD66EE">
-              <dmn:text>&gt; 0</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_1364A275-75DA-4CD8-B496-A6BF86657B42">
-              <dmn:text>&lt; Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_D5BACFD7-471C-4A93-A40D-AB83DE85D3A0">
-              <dmn:text>-</dmn:text>
-            </dmn:inputEntry>
-            <dmn:outputEntry id="_FC4D8B07-5F29-4950-A989-81D240669D45">
-              <dmn:text>Familienbudget_1.familienbudgetBerechnet / (Familienbudget_1.anzahlGeschwisterInAusbildung
-                +1)
-              </dmn:text>
-            </dmn:outputEntry>
-            <dmn:annotationEntry>
-              <dmn:text/>
-            </dmn:annotationEntry>
-          </dmn:rule>
           <dmn:rule id="_4242B8A1-1177-488C-BF52-DF9F85B6CCAA">
-            <dmn:inputEntry id="_B96DAA16-16B2-41B6-99EB-3B8C49202C8B">
-              <dmn:text>&lt;= 0</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_A8A9FE44-0592-4E57-B3D7-A596C816CF41">
+            <dmn:inputEntry id="_73A1CF87-F4AB-4396-9EB1-26E7A7C1C2E4">
               <dmn:text>-</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_C9E288BA-5AF5-4CB5-8820-16E21AF541F8">
@@ -316,14 +283,9 @@
               <dmn:text>Familienbudget_2.familienbudgetBerechnet</dmn:text>
             </dmn:inputExpression>
           </dmn:input>
-          <dmn:input id="_83DE001D-E0FF-4D1C-A597-4DD1D897CDBD">
-            <dmn:inputExpression id="_4B16CC2A-1C13-42F4-B9DC-1BB8D44E135BVFS332" typeRef="number">
-              <dmn:text>InputPersoenlichesbudget.antragssteller.alter</dmn:text>
-            </dmn:inputExpression>
-          </dmn:input>
           <dmn:input id="_644EA82C-9335-45EE-BFBD-A2B35AC76593">
             <dmn:inputExpression id="_551E3DB2-4A02-496F-ADBD-B03FD6D5DF1EAASW" typeRef="boolean">
-              <dmn:text>InputPersoenlichesbudget.antragssteller.abgeschlosseneErstausbildung</dmn:text>
+              <dmn:text>InputPersoenlichesbudget.antragssteller.halbierungElternbeitrag</dmn:text>
             </dmn:inputExpression>
           </dmn:input>
           <dmn:output id="_F6E51FF6-CBA9-47A7-A7DE-6761E17DCA74"/>
@@ -331,9 +293,6 @@
           <dmn:rule id="_F80B3DA3-CDD5-4104-9A9A-4752B55BD9F6">
             <dmn:inputEntry id="_BFC812F4-1B2E-408A-BB8B-05FC6B26DEB1">
               <dmn:text>&gt; 0</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_1983C428-8190-4088-8A3E-1580750FD3A7">
-              <dmn:text>&gt;= Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_84AF5E0F-E185-4DB9-9A1B-F44E74E5DE39">
               <dmn:text>true</dmn:text>
@@ -349,10 +308,7 @@
           </dmn:rule>
           <dmn:rule id="_6257ADE1-2E76-4C64-BF8A-1A3E4B4B0664">
             <dmn:inputEntry id="_D9B9622B-7773-4B25-9CF5-82CD9675F9A7">
-              <dmn:text>&gt;0</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_E16768F8-CF2B-4AEC-8395-31CB89872361">
-              <dmn:text>&gt;=Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
+              <dmn:text>&gt; 0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_9D91C6D5-4D1E-449D-858A-228DD98D9110">
               <dmn:text>false</dmn:text>
@@ -366,31 +322,9 @@
               <dmn:text/>
             </dmn:annotationEntry>
           </dmn:rule>
-          <dmn:rule id="_CAACBD94-AEEA-4AE6-BA87-5D2D6CC6267F">
-            <dmn:inputEntry id="_026F9A6A-265E-416B-ACDA-048B816B0E2A">
-              <dmn:text>&gt; 0</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_81914D82-7867-464B-830D-C5D99EDF6703">
-              <dmn:text>&lt; Stammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_5B884FD3-F298-495B-B026-6AEBA5506ADD">
-              <dmn:text>-</dmn:text>
-            </dmn:inputEntry>
-            <dmn:outputEntry id="_B28713B4-3664-474E-A02E-FF3DBC358F74">
-              <dmn:text>Familienbudget_2.familienbudgetBerechnet / (Familienbudget_2.anzahlGeschwisterInAusbildung
-                +1)
-              </dmn:text>
-            </dmn:outputEntry>
-            <dmn:annotationEntry>
-              <dmn:text/>
-            </dmn:annotationEntry>
-          </dmn:rule>
           <dmn:rule id="_8282B47F-2D02-4DA0-830F-4B6B8E2A1AF8">
             <dmn:inputEntry id="_1F6AFF44-E180-43BC-A7C0-95297CFEB48B">
               <dmn:text>&lt;= 0</dmn:text>
-            </dmn:inputEntry>
-            <dmn:inputEntry id="_039CB986-6FE1-4535-822C-8AB15D29A8C0">
-              <dmn:text>-</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_463CAE48-C7AC-4890-BB49-1C9CDF6AA5E3">
               <dmn:text>-</dmn:text>
@@ -754,7 +688,7 @@
             </dmn:inputExpression>
           </dmn:input>
           <dmn:input id="_C46AE779-BB63-46FE-BE4E-82957628077B">
-            <dmn:inputExpression typeRef="number">
+            <dmn:inputExpression id="_4D7AD38F-25B3-4EB7-9CEE-F4AE0B948983" typeRef="number">
               <dmn:text>InputPersoenlichesbudget.antragssteller.piaWohntInElternHaushalt</dmn:text>
             </dmn:inputExpression>
           </dmn:input>
@@ -846,7 +780,7 @@
             </dmn:inputExpression>
           </dmn:input>
           <dmn:input id="_1005D687-C8DA-46D2-8AB4-3FF37123780A">
-            <dmn:inputExpression typeRef="number">
+            <dmn:inputExpression id="_9865B3F6-369F-4559-BCCC-FE8B3064980D" typeRef="number">
               <dmn:text>InputPersoenlichesbudget.antragssteller.piaWohntInElternHaushalt</dmn:text>
             </dmn:inputExpression>
           </dmn:input>
@@ -1060,56 +994,54 @@
           <kie:ComponentWidths dmnElementRef="_BE790BD7-3F07-4A38-B8BC-A1CB8B1CCAAD">
             <kie:width>50</kie:width>
             <kie:width>486</kie:width>
-            <kie:width>2184</kie:width>
+            <kie:width>1645</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_9FED5CEC-A307-48A8-8F24-3AC3F1D11798">
             <kie:width>50</kie:width>
-            <kie:width>832</kie:width>
-            <kie:width>831</kie:width>
-            <kie:width>451</kie:width>
+            <kie:width>627</kie:width>
+            <kie:width>624</kie:width>
+            <kie:width>324</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_755947E1-6E70-4FF5-8522-2ED83D2CE003">
-            <kie:width>2184</kie:width>
+            <kie:width>1645</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_1B7E8C1E-3022-4B7A-97EA-24C362B0CBE6">
-            <kie:width>2184</kie:width>
+            <kie:width>1645</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_17342D0F-9FF8-4DA1-9536-503DD90FD3AD">
-            <kie:width>2184</kie:width>
+            <kie:width>1645</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_FA0B9700-570F-4F99-8F9D-E1D324124378">
-            <kie:width>2184</kie:width>
+            <kie:width>1645</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_C5531645-CBDB-4FF3-9F93-B1A34C1B92D7">
-            <kie:width>2184</kie:width>
+            <kie:width>1645</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_01822BE2-1AAB-436D-B55F-D952FB257D55">
-            <kie:width>2184</kie:width>
+            <kie:width>1645</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_6A36654E-244B-4A28-9CBC-AF2FD2E3452F">
-            <kie:width>2184</kie:width>
+            <kie:width>1645</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_8094C2C1-3CED-4234-90C9-7EFAF91AF79F">
-            <kie:width>2184</kie:width>
+            <kie:width>1645</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_97F8FB31-B0E2-46BD-9C84-735AA1EA9633">
             <kie:width>50</kie:width>
-            <kie:width>577</kie:width>
-            <kie:width>374</kie:width>
-            <kie:width>236</kie:width>
-            <kie:width>827</kie:width>
+            <kie:width>290</kie:width>
+            <kie:width>445</kie:width>
+            <kie:width>740</kie:width>
             <kie:width>100</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_3D610F30-23DB-4141-96A2-7C67DEE99887">
             <kie:width>50</kie:width>
-            <kie:width>571</kie:width>
-            <kie:width>370</kie:width>
-            <kie:width>491</kie:width>
-            <kie:width>571</kie:width>
-            <kie:width>111</kie:width>
+            <kie:width>278</kie:width>
+            <kie:width>436</kie:width>
+            <kie:width>715</kie:width>
+            <kie:width>146</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_A6A12F98-C80F-40EA-BBEB-C48E23A16586">
-            <kie:width>2184</kie:width>
+            <kie:width>1645</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_F1D17AB9-F16D-4019-899C-D4FBEB5C8239">
             <kie:width>50</kie:width>
@@ -1260,7 +1192,7 @@
           <dmndi:StrokeColor red="0" green="0" blue="0"/>
           <dmndi:FontColor red="0" green="0" blue="0"/>
         </dmndi:DMNStyle>
-        <dc:Bounds x="2125" y="600" width="158" height="80"/>
+        <dc:Bounds x="2120" y="600" width="158" height="80"/>
         <dmndi:DMNLabel/>
       </dmndi:DMNShape>
       <dmndi:DMNShape id="dmnshape-drg-_A7445250-235B-4A27-A6D2-B3706C8E40CE" dmnElementRef="_A7445250-235B-4A27-A6D2-B3706C8E40CE" isCollapsed="false">
@@ -1328,19 +1260,19 @@
       </dmndi:DMNShape>
       <dmndi:DMNEdge id="dmnedge-drg-_E900D281-EBFA-41C6-BDC0-F6F71411078F" dmnElementRef="_E900D281-EBFA-41C6-BDC0-F6F71411078F">
         <di:waypoint x="2152.2990654205605" y="1301"/>
-        <di:waypoint x="2204" y="680"/>
+        <di:waypoint x="2199" y="680"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_F56308B7-D413-4562-B4B0-9D72A1262EE4-AUTO-TARGET" dmnElementRef="_F56308B7-D413-4562-B4B0-9D72A1262EE4">
         <di:waypoint x="2469.5" y="978"/>
-        <di:waypoint x="2204" y="680"/>
+        <di:waypoint x="2199" y="680"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_88356BB1-C2C9-4877-9398-F582F6552564" dmnElementRef="_88356BB1-C2C9-4877-9398-F582F6552564">
         <di:waypoint x="2074" y="822"/>
-        <di:waypoint x="2204" y="640"/>
+        <di:waypoint x="2199" y="640"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_8D9ACB41-1751-4C05-AA9B-4798A430463C-AUTO-TARGET" dmnElementRef="_8D9ACB41-1751-4C05-AA9B-4798A430463C">
         <di:waypoint x="2811" y="610.6842105263158"/>
-        <di:waypoint x="2204" y="680"/>
+        <di:waypoint x="2199" y="680"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_7ABDE3D7-9C89-4D5E-944B-A3A7136E1537-AUTO-TARGET" dmnElementRef="_7ABDE3D7-9C89-4D5E-944B-A3A7136E1537">
         <di:waypoint x="2811" y="610.6842105263158"/>
@@ -1387,7 +1319,7 @@
         <di:waypoint x="2325" y="497"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_5BF0BB12-FF04-4035-82CD-D6A2F1AB8C5D-AUTO-TARGET" dmnElementRef="_5BF0BB12-FF04-4035-82CD-D6A2F1AB8C5D">
-        <di:waypoint x="2204" y="640"/>
+        <di:waypoint x="2199" y="640"/>
         <di:waypoint x="2325" y="497"/>
       </dmndi:DMNEdge>
       <dmndi:DMNEdge id="dmnedge-drg-_3EE7BB2B-F2AD-4E4F-B466-0559CB5D64DE-AUTO-TARGET" dmnElementRef="_3EE7BB2B-F2AD-4E4F-B466-0559CB5D64DE">

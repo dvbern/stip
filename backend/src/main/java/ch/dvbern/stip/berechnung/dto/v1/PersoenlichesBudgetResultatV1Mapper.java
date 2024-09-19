@@ -101,10 +101,10 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             if (familienBudget <= 0) {
                 continue;
             }
-            if (antragssteller.getAlter() < 25 || !antragssteller.isAbgeschlosseneErstausbildung()) {
-                anteilFamilienBudget += familienBudget / (familienBudgetresultat.getAnzahlGeschwisterInAusbildung() + 1);
-            } else {
+            if (antragssteller.isHalbierungElternbeitrag()) {
                 anteilFamilienBudget += (familienBudget / (familienBudgetresultat.getAnzahlGeschwisterInAusbildung() + 1)) / 2;
+            } else {
+                anteilFamilienBudget += familienBudget / (familienBudgetresultat.getAnzahlGeschwisterInAusbildung() + 1);
             }
         }
         return anteilFamilienBudget;
