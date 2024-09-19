@@ -16,7 +16,6 @@ import org.apache.commons.lang3.tuple.Pair;
 public class VaterRequiredDocumentsProducer implements RequiredDocumentProducer {
     private final ElternRequiredDocumentsProducer producer;
 
-
     @Override
     public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         final var eltern = formular.getElterns();

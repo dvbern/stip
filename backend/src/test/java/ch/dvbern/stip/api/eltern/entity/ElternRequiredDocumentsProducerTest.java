@@ -13,8 +13,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
-
 class ElternRequiredDocumentsProducerTest {
     private List<RequiredDocumentProducer> producers;
     private GesuchFormular formular;
@@ -81,6 +79,7 @@ class ElternRequiredDocumentsProducerTest {
             DokumentTyp.ELTERN_SOZIALHILFEBUDGET_VATER
         );
     }
+
     List<Pair<String, List<DokumentTyp>>> getRequiredDocuments(final GesuchFormular formular) {
         final var requiredTypes = new ArrayList<Pair<String, List<DokumentTyp>>>();
         for (final var producer : producers) {

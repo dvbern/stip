@@ -32,8 +32,8 @@ public class ElternRequiredDocumentsProducer {
 
         if((elternteil.getErgaenzungsleistungen() != null && elternteil.getErgaenzungsleistungen() > 0)){
             requiredDocs.add(ERGAENZUNGSLEISTUNGEN_MAP.get(elternteil.getElternTyp()));
-
         }
+
         if(elternteil.getSozialhilfebeitraege() != null && elternteil.getSozialhilfebeitraege() > 0){
             requiredDocs.add(SOZIALHILFEBUDGET_MAP.get(elternteil.getElternTyp()));
         }
