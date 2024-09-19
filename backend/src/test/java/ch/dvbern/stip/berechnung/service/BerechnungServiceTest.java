@@ -103,18 +103,6 @@ class BerechnungServiceTest {
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
 
-        gesuch.setGesuchTranchen(
-            List.of(
-                gesuch.getNewestGesuchTranche().get()
-                    .setGueltigkeit(
-                        new DateRange(
-                            LocalDate.of(2023, 8, 1),
-                            LocalDate.of(2024, 7, 31)
-                        )
-                    )
-            )
-        );
-
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
@@ -671,8 +659,6 @@ class BerechnungServiceTest {
 
         //Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
-
-        LOG.info(berechnungsresultatDto.toString());
 
         //Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(2));
