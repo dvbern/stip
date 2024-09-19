@@ -15,13 +15,14 @@ public class ElternCopyUtil {
         AbstractPersonCopyUtil.copy(other, copy);
         copy.setAdresse(other.getAdresse());
         copy.setSozialversicherungsnummer(other.getSozialversicherungsnummer());
+        copy.setSozialhilfebeitraege(other.getSozialhilfebeitraege());
+        copy.setErgaenzungsleistungen(other.getErgaenzungsleistungen());
         copy.setElternTyp(other.getElternTyp());
         copy.setTelefonnummer(other.getTelefonnummer());
         copy.setAusweisbFluechtling(other.getAusweisbFluechtling());
         copy.setIdentischerZivilrechtlicherWohnsitz(other.isIdentischerZivilrechtlicherWohnsitz());
         copy.setIdentischerZivilrechtlicherWohnsitzOrt(other.getIdentischerZivilrechtlicherWohnsitzOrt());
         copy.setIdentischerZivilrechtlicherWohnsitzPLZ(other.getIdentischerZivilrechtlicherWohnsitzPLZ());
-
         return copy;
     }
 
