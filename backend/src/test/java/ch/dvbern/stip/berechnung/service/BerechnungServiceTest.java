@@ -79,15 +79,15 @@ class BerechnungServiceTest {
     @TestAsGesuchsteller
     @ParameterizedTest
     @CsvSource({
-        "1, 6427",
-        "2, 14192",
-        "3, 0",
-        "4, 17986",
-        "5, 39751", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
-        "6, 27179",
-        "7, 6669",
-        "8, 266",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
-        "9, 23527"
+        "1, -6427",
+        "2, -14192",
+        "3, 6441",
+        "4, -17986",
+        "5, -39751", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
+        "6, -27179",
+        "7, -6669",
+        "8, -266",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
+        "9, -23527"
     })
     void testBerechnungFaelle(final int fall, final int expectedStipendien) {
         // Load Fall resources/berechnung/fall_{fall}.json, deserialize to a BerechnungRequestV1
@@ -157,6 +157,17 @@ class BerechnungServiceTest {
         //Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+        gesuch.setGesuchTranchen(
+            List.of(
+                gesuch.getNewestGesuchTranche().get()
+                    .setGueltigkeit(
+                        new DateRange(
+                            LocalDate.of(2023, 8, 1),
+                            LocalDate.of(2024, 7, 31)
+                        )
+                    )
+            )
+        );
 
         gesuch.getGesuchsperiode()
             .setAnzahlWochenLehre(47)
@@ -228,12 +239,13 @@ class BerechnungServiceTest {
         );
 
         //Act
-        final var tranchenBerechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
-            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0);
+        final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+
+        LOG.info(berechnungsresultatDto.toString());
 
         //Assert
-        assertThat(tranchenBerechnungsresultatDtos.size(), is(1));
-        assertThat(tranchenBerechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(6669)));
+        assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(6669)));
     }
 
     @Test
@@ -242,6 +254,17 @@ class BerechnungServiceTest {
         //Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+        gesuch.setGesuchTranchen(
+            List.of(
+                gesuch.getNewestGesuchTranche().get()
+                    .setGueltigkeit(
+                        new DateRange(
+                            LocalDate.of(2023, 8, 1),
+                            LocalDate.of(2024, 7, 31)
+                        )
+                    )
+            )
+        );
 
         gesuch.getGesuchsperiode()
             .setAnzahlWochenLehre(47)
@@ -327,13 +350,13 @@ class BerechnungServiceTest {
         );
 
         //Act
-        final var tranchenBerechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
-            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
-        );
+        final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+
+        LOG.info(berechnungsresultatDto.toString());
 
         //Assert
-        assertThat(tranchenBerechnungsresultatDtos.size(), is(1));
-        assertThat(tranchenBerechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(266)));
+        assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(266)));
     }
 
     @Test
