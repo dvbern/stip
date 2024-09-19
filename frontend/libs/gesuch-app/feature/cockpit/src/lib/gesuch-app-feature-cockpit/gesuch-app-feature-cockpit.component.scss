@@ -18,10 +18,15 @@
 
   .container {
     position: relative;
+    justify-content: space-between;
   }
 
-  .card{
+  .card {
     flex-direction: row;
     width: 100%;
+  }
+
+  .card-body {
+    width: 0%;
   }
 }

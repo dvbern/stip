@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  Input,
   OnInit,
   computed,
   effect,
@@ -58,11 +59,6 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
-  trancheSlim: GesuchTrancheSlim = {
-    status: 'IN_BEARBEITUNG_GS',
-    gueltigAb: new Date().toISOString(),
-  };
-
   fallStore = inject(FallStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
@@ -71,6 +67,8 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
+  getStatus = this.gesuchAenderungStore.createGesuchAenderung$;
+  @Input({ required: true }) tranche?: GesuchTrancheSlim;
 
   constructor() {
     effect(
@@ -148,6 +146,4 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
         }
       });
   }
-
-  protected readonly Date = Date;
 }

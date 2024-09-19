@@ -158,10 +158,13 @@
                     </div>
                   }
                 </div>
-                <div class="card-vl"></div>
-                <div class="col-md d-flex justify-content-end">
-                  <dv-gesuch-app-ui-aenderungs-entry [tranche]="trancheSlim"></dv-gesuch-app-ui-aenderungs-entry>
+
+                <!--                @if (getStatus()) {-->
+                <!-- Einbettung Änderungs Widget -->
+                <div class="card-body">
+                  <dv-gesuch-app-ui-aenderungs-entry [tranche]="tranche"></dv-gesuch-app-ui-aenderungs-entry>
                 </div>
+                <!--                }-->
               </div>
 
               <ng-template #einreichefrist>
