@@ -6,6 +6,7 @@ import java.util.Map;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.steuerdaten.util.RequiredDocumentsProducerUtils;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -30,11 +31,11 @@ public class ElternRequiredDocumentsProducer {
 
         final var requiredDocs = new ArrayList<DokumentTyp>();
 
-        if((elternteil.getErgaenzungsleistungen() != null && elternteil.getErgaenzungsleistungen() > 0)){
+        if(RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getErgaenzungsleistungen())){
             requiredDocs.add(ERGAENZUNGSLEISTUNGEN_MAP.get(elternteil.getElternTyp()));
-
         }
-        if(elternteil.getSozialhilfebeitraege() != null && elternteil.getSozialhilfebeitraege() > 0){
+
+        if(RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getSozialhilfebeitraege())){
             requiredDocs.add(SOZIALHILFEBUDGET_MAP.get(elternteil.getElternTyp()));
         }
 
