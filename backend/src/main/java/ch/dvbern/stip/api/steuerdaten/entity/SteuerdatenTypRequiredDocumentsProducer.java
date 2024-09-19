@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-
 public class SteuerdatenTypRequiredDocumentsProducer {
     private SteuerdatenTypRequiredDocumentsProducer() {}
 
@@ -44,6 +43,4 @@ public class SteuerdatenTypRequiredDocumentsProducer {
             return ImmutablePair.of("steuerdaten", producer.getForSteuerdaten(familieSteuerdaten));
         }
     }
-
-
 }

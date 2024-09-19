@@ -6,12 +6,11 @@ import java.util.Map;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
-import jakarta.enterprise.context.ApplicationScoped;
 import ch.dvbern.stip.api.steuerdaten.util.RequiredDocumentsProducerUtils;
+import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class SteuerdatenRequiredDocumentsProducer {
-
     private static final Map<SteuerdatenTyp, DokumentTyp> WOHNKOSTEN_MAP = Map.of(
         SteuerdatenTyp.MUTTER, DokumentTyp.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
         SteuerdatenTyp.VATER, DokumentTyp.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER,
@@ -30,5 +29,4 @@ public class SteuerdatenRequiredDocumentsProducer {
 
         return requiredDocs;
     }
-
 }
