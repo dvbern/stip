@@ -47,12 +47,12 @@ export class BerechnungStore extends signalStore(
             acc.berechnungsresultate[curr.gesuchTrancheId] = [];
           }
           acc.berechnungsresultate[curr.gesuchTrancheId].push(curr);
-          return {
-            totalBetragStipendium: acc.totalBetragStipendium + curr.berechnung,
-            berechnungsresultate: acc.berechnungsresultate,
-          };
+          return acc;
         }, value)
       : value;
+    if (berechnungRd.data) {
+      byTrancheId.totalBetragStipendium = berechnungRd.data?.berechnung;
+    }
 
     return {
       loading: isPending(berechnungRd),
