@@ -139,8 +139,6 @@ public class GesuchTrancheService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var trancheToCopy = gesuch.getCurrentGesuchTranche();
 
-
-
         final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
         gesuch.getGesuchTranchen().add(newTranche);
 
