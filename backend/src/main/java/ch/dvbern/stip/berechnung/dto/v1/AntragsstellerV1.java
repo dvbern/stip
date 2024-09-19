@@ -146,20 +146,6 @@ public class AntragsstellerV1 {
         // TODO: builder.lehre(Objects.requireNonNullElse());
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
-        boolean halbierungElternbeitrag = false;
-        if (gesuchFormular.getLebenslaufItems()
-            .stream()
-            .filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null)
-            .anyMatch(
-                lebenslaufItem ->
-                    lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
-                        && lebenslaufItem.isAusbildungAbgeschlossen()
-            )
-            && alter > gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag()
-        ) {
-
-        }
-
         builder.halbierungElternbeitrag(getHalbierungElternbeitrag(alter, gesuchFormular.getLebenslaufItems(), gesuchsperiode));
 
         if (partner != null) {
