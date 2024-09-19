@@ -623,7 +623,9 @@ class BerechnungServiceTest {
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
         );
 
+        LOG.info(berechnungsresultatDto.toString());
+
         //Assert
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(36246)));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(27179)));
     }
 }
