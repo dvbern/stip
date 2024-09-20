@@ -9,9 +9,9 @@
 @if (editedElternteil) {
   @if (view.gesuchFormular; as gesuchFormular) {
     <dv-shared-feature-gesuch-form-eltern-editor
-      [elternteil]="editedElternteil"
+      [elternteilSig]="editedElternteil"
+      [gesuchFormularSig]="gesuchFormular"
       [changes]="changes?.changesByIdentifier?.[editedElternteil.elternTyp]"
-      [gesuchFormular]="gesuchFormular"
       [laender]="laenderSig()"
       (saveTriggered)="handleEditorSave($event)"
       (closeTriggered)="handleEditorClose()"
