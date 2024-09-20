@@ -5,11 +5,10 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
-  SimpleChanges,
   effect,
   inject,
+  input,
   signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -71,6 +70,7 @@ import {
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
 import { capitalized } from '@dv/shared/util-fn/string-helper';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormElternView } from '../shared-feature-gesuch-form-eltern/shared-feature-gesuch-form-eltern.selector';
 
@@ -105,19 +105,18 @@ const MEDIUM_AGE_ADULT = 40;
   styleUrls: ['./shared-feature-gesuch-form-eltern-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
+export class SharedFeatureGesuchFormElternEditorComponent {
   private elementRef = inject(ElementRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private store = inject(Store);
 
-  @Input({ required: true }) elternteil!: Omit<
-    Partial<ElternUpdate>,
-    'elternTyp'
-  > &
-    Required<Pick<ElternUpdate, 'elternTyp'>>;
+  gesuchFormularSig = input.required<SharedModelGesuchFormular>();
+  elternteilSig = input.required<
+    Omit<Partial<ElternUpdate>, 'elternTyp'> &
+      Required<Pick<ElternUpdate, 'elternTyp'>>
+  >();
   @Input({ required: true }) laender!: Land[];
-  @Input({ required: true }) gesuchFormular!: SharedModelGesuchFormular;
   @Input({ required: true }) changes: Partial<ElternUpdate> | undefined | null;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
@@ -159,6 +158,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     sozialversicherungsnummer: [<string | undefined>undefined, []],
     ergaenzungsleistungen: [<string | null>null, [Validators.required]],
     sozialhilfebeitraege: [<string | null>null, [Validators.required]],
+    wohnkosten: [<string | null>null, [Validators.required]],
     geburtsdatum: [
       '',
       [
@@ -178,6 +178,11 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     ],
     ausweisbFluechtling: [<boolean | null>null, [Validators.required]],
   });
+  private numberConverter = this.formUtils.createNumberConverter(this.form, [
+    'ergaenzungsleistungen',
+    'sozialhilfebeitraege',
+    'wohnkosten',
+  ]);
 
   svnIsRequiredSig = signal(false);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
@@ -186,7 +191,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     this.form.controls.ergaenzungsleistungen.valueChanges,
   );
   ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
-    const elternTyp = this.elternteil.elternTyp;
+    const elternTyp = this.elternteilSig().elternTyp;
     const ergaenzungsleistung =
       fromFormatedNumber(this.ergaenzungsleistungChangedSig() ?? undefined) ??
       0;
@@ -200,11 +205,28 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
     this.form.controls.sozialhilfebeitraege.valueChanges,
   );
   sozialhilfeDocumentSig = this.createUploadOptionsSig(() => {
-    const elternTyp = this.elternteil.elternTyp;
+    const elternTyp = this.elternteilSig().elternTyp;
     const sozialhilfe =
       fromFormatedNumber(this.sozialhilfeChangedSig() ?? undefined) ?? 0;
 
     return sozialhilfe > 0 ? `ELTERN_SOZIALHILFEBUDGET_${elternTyp}` : null;
+  });
+
+  private wohnkostenChangedSig = toSignal(
+    this.form.controls.wohnkosten.valueChanges,
+  );
+  wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
+    const gesuchFormular = this.gesuchFormularSig();
+    const elternTyp = gesuchFormular.familiensituation
+      ?.elternVerheiratetZusammen
+      ? 'FAMILIE'
+      : this.elternteilSig().elternTyp;
+    const wohnkosten =
+      fromFormatedNumber(this.wohnkostenChangedSig() ?? undefined) ?? 0;
+
+    return wohnkosten > 0
+      ? `ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_${elternTyp}`
+      : null;
   });
 
   constructor() {
@@ -243,6 +265,7 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       this.form.controls.adresse.controls.land,
       { useDefault: true },
     );
+
     // make SVN required if CH
     effect(
       () => {
@@ -257,37 +280,45 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       },
       { allowSignalWrites: true },
     );
-  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['elternteil']?.currentValue) {
+    effect(() => {
+      const elternteil = this.elternteilSig();
+      const gesuchFormular = this.gesuchFormularSig();
+
       this.form.patchValue({
-        ...this.elternteil,
-        sozialhilfebeitraege: this.elternteil.sozialhilfebeitraege?.toString(),
-        ergaenzungsleistungen:
-          this.elternteil.ergaenzungsleistungen?.toString(),
+        ...elternteil,
+        ...this.numberConverter.toString(elternteil),
         geburtsdatum: parseBackendLocalDateAndPrint(
-          this.elternteil.geburtsdatum,
+          elternteil.geburtsdatum,
           this.languageSig(),
         ),
       });
 
-      if (this.elternteil.adresse) {
+      if (elternteil.adresse) {
         SharedUiFormAddressComponent.patchForm(
           this.form.controls.adresse,
-          this.elternteil.adresse,
+          elternteil.adresse,
+        );
+      }
+
+      const otherElternteil = gesuchFormular.elterns?.find(
+        (e) => e.elternTyp !== elternteil.elternTyp,
+      );
+      if (otherElternteil && !isDefined(elternteil.wohnkosten)) {
+        this.form.controls.wohnkosten.patchValue(
+          otherElternteil.wohnkosten.toString(),
         );
       }
 
       const svValidators = [
         sharedUtilValidatorAhv(
-          `eltern${capitalized(this.elternteil.elternTyp)}`,
-          this.gesuchFormular,
+          `eltern${capitalized(elternteil.elternTyp)}`,
+          gesuchFormular,
         ),
       ];
       this.form.controls.sozialversicherungsnummer.clearValidators();
       this.form.controls.sozialversicherungsnummer.addValidators(svValidators);
-    }
+    });
   }
 
   handleSave() {
@@ -297,12 +328,14 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
       'ausweisbFluechtling',
       'ergaenzungsleistungen',
       'sozialhilfebeitraege',
+      'wohnkosten',
     ]);
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       formValues.geburtsdatum,
       this.languageSig(),
       subYears(new Date(), MEDIUM_AGE_ADULT),
     );
+    const elternteil = this.elternteilSig();
     if (this.form.valid && geburtsdatum) {
       this.saveTriggered.emit({
         ...formValues,
@@ -310,25 +343,21 @@ export class SharedFeatureGesuchFormElternEditorComponent implements OnChanges {
           ...SharedUiFormAddressComponent.getRealValues(
             this.form.controls.adresse,
           ),
-          id: this.elternteil.adresse?.id,
+          id: elternteil.adresse?.id,
         },
-        id: this.elternteil.id,
-        elternTyp: this.elternteil.elternTyp,
+        id: elternteil.id,
+        elternTyp: elternteil.elternTyp,
         geburtsdatum,
-        ergaenzungsleistungen: fromFormatedNumber(
-          formValues.ergaenzungsleistungen,
-        ),
-        sozialhilfebeitraege: fromFormatedNumber(
-          formValues.sozialhilfebeitraege,
-        ),
+        ...this.numberConverter.toNumber(formValues),
       });
       this.form.markAsPristine();
     }
   }
 
   handleDelete() {
-    if (this.elternteil?.id) {
-      this.deleteTriggered.emit(this.elternteil.id);
+    const elternteilId = this.elternteilSig()?.id;
+    if (elternteilId) {
+      this.deleteTriggered.emit(elternteilId);
     }
   }
 

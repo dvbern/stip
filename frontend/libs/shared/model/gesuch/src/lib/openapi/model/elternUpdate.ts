@@ -42,6 +42,10 @@ export interface ElternUpdate {
      * \'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater\' \'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp\' 
      */
     sozialhilfebeitraege: number;
+    /**
+     * Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen
+     */
+    wohnkosten: number;
 }
 
 

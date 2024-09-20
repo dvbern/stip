@@ -29,7 +29,6 @@ export interface Steuerdaten {
     saeule2?: number;
     kinderalimente: number;
     vermoegen: number;
-    wohnkosten: number;
 }
 
 

@@ -30,10 +30,7 @@ import {
   SteuerdatenUpdate,
 } from '@dv/shared/model/gesuch';
 import { ELTERN_STEUER_STEPS } from '@dv/shared/model/gesuch-form';
-import {
-  SharedPatternDocumentUploadComponent,
-  createUploadOptionsFactory,
-} from '@dv/shared/pattern/document-upload';
+import { SharedPatternDocumentUploadComponent } from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -48,10 +45,7 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import {
-  fromFormatedNumber,
-  maskitoNumber,
-} from '@dv/shared/util/maskito-util';
+import { maskitoNumber } from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
@@ -102,7 +96,6 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     saeule2: [<string | null>null, [Validators.required]],
     kinderalimente: [<string | null>null, [Validators.required]],
     vermoegen: [<string | null>null, [Validators.required]],
-    wohnkosten: [<string | null>null, [Validators.required]],
     steuernKantonGemeinde: [<string | null>null, [Validators.required]],
     steuernBund: [<string | null>null, [Validators.required]],
     fahrkosten: [<string | null>null, [Validators.required]],
@@ -122,7 +115,6 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
-  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
   private arbeitsverhaeltnisChangedSig = toSignal(
     this.form.controls.arbeitsverhaeltnis.valueChanges,
   );
@@ -134,14 +126,13 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     );
   });
 
-  numberConverter = this.formUtils.createNumberConverter(this.form, [
+  private numberConverter = this.formUtils.createNumberConverter(this.form, [
     'totalEinkuenfte',
     'eigenmietwert',
     'saeule3a',
     'saeule2',
     'kinderalimente',
     'vermoegen',
-    'wohnkosten',
     'steuernKantonGemeinde',
     'steuernBund',
     'fahrkosten',
@@ -154,19 +145,6 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     this.form.controls.steuerjahr,
     this.viewSig,
   );
-
-  private wohnkostenChangedSig = toSignal(
-    this.form.controls.wohnkosten.valueChanges,
-  );
-  wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
-    const steuerdatenTyp = this.stepSig().type;
-    const wohnkosten =
-      fromFormatedNumber(this.wohnkostenChangedSig() ?? undefined) ?? 0;
-
-    return wohnkosten > 0
-      ? `STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_${steuerdatenTyp}`
-      : null;
-  });
 
   constructor() {
     this.store.dispatch(SharedEventGesuchFormElternSteuerdaten.init());
@@ -242,12 +220,12 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     const { gesuch, gesuchFormular } = this.viewSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'totalEinkuenfte',
+      'eigenmietwert',
       'arbeitsverhaeltnis',
       'saeule3a',
       'saeule2',
       'kinderalimente',
       'vermoegen',
-      'wohnkosten',
       'steuernKantonGemeinde',
       'steuernBund',
       'fahrkosten',
@@ -264,7 +242,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
       steuerdatenTyp: this.stepSig().type,
       arbeitsverhaeltnis: undefined,
       isArbeitsverhaeltnisSelbstaendig: formValues.arbeitsverhaeltnis,
-      ...this.numberConverter.toNumber(),
+      ...this.numberConverter.toNumber(formValues),
     };
     return {
       gesuchId: gesuch?.id,
