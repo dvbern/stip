@@ -16,6 +16,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.eltern.util.ElternDiffUtil;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
@@ -149,6 +150,60 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         case VATER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.VATER));
         case MUTTER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.MUTTER));
         case GESUCHSTELLER, ANDERE, SOZIALDIENST_INSTITUTION -> {/* Wir setzen hier nur adressen für eltern */}
+        }
+    }
+
+    @BeforeMapping
+    protected void mirrorWohnkosten(
+        final GesuchFormularUpdateDto newFormular,
+        final @MappingTarget GesuchFormular targetFormular
+    ) {
+        if (newFormular.getFamiliensituation() == null ||
+            !newFormular.getFamiliensituation().getElternVerheiratetZusammen() ||
+            newFormular.getElterns() == null ||
+            newFormular.getElterns().isEmpty()
+        ) {
+            return;
+        }
+
+        // Get Elternteil where wohnkosten changed
+        ElternUpdateDto changed = null;
+        for (final var elternDto : newFormular.getElterns()) {
+            // If the DTOs ID is null, then it's a new Eltern entity
+            if (elternDto.getId() == null) {
+                changed = elternDto;
+                break;
+            }
+
+            // Compare to DB Entities and set changed if wohnkosten changed
+            for (final var eltern : targetFormular.getElterns()) {
+                if (elternDto.getId().equals(eltern.getId()) &&
+                    ElternDiffUtil.hasWohnkostenCHanged(elternDto, eltern)
+                ) {
+                    changed = elternDto;
+                    break;
+                }
+            }
+
+            if (changed != null) {
+                break;
+            }
+        }
+
+        if (changed == null) {
+            return;
+        }
+
+        // Mirror Wohnkosten to the other Elternteil
+        final var finalChanged = changed;
+        final var other = newFormular.getElterns()
+            .stream()
+            .filter(elternteil -> elternteil.getElternTyp() != finalChanged.getElternTyp())
+            .findFirst()
+            .orElse(null);
+
+        if (other != null) {
+            other.setWohnkosten(changed.getWohnkosten());
         }
     }
 

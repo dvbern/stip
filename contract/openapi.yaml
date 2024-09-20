@@ -2357,6 +2357,7 @@ components:
         - elternTyp
         - sozialhilfebeitraege
         - ergaenzungsleistungen
+        - wohnkosten
       type: object
       properties:
         vorname:
@@ -2396,6 +2397,9 @@ components:
           description: |
             'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater'
             'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp'
+          type: integer
+        wohnkosten:
+          description: 'Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen'
           type: integer
     Eltern:
       title: Root Type for Eltern
