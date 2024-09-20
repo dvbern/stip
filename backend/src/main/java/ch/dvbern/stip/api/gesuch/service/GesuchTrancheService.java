@@ -188,4 +188,13 @@ public class GesuchTrancheService {
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
 
+    public boolean openAenderungAlreadyExists(UUID gesuchId){
+        final var tranchenAndAenderungen = getAllTranchenForGesuch(gesuchId);
+        return tranchenAndAenderungen != null
+            && tranchenAndAenderungen.stream().filter(item -> item.getTyp() == GesuchTrancheTyp.AENDERUNG)
+            .anyMatch(item -> item.getStatus() != GesuchTrancheStatus.AKZEPTIERT)
+            && tranchenAndAenderungen.stream().filter(item -> item.getTyp() == GesuchTrancheTyp.AENDERUNG)
+            .anyMatch(item -> item.getStatus() != GesuchTrancheStatus.ABGELEHNT);
+    }
+
 }
