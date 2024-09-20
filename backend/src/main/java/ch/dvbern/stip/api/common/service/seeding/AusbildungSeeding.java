@@ -9,7 +9,6 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.bildungskategorie.repo.BildungskategorieRepository;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +21,6 @@ public class AusbildungSeeding extends Seeder {
     private final AusbildungsgangRepository ausbildungsgangRepository;
     private final BildungskategorieRepository bildungskategorieRepository;
     private final ConfigService configService;
-
-    @Override
-    @Startup
-    public void startup() {
-        seed();
-    }
 
     @Override
     protected void doSeed() {

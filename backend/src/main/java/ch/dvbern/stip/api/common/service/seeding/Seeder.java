@@ -6,9 +6,10 @@ import java.util.List;
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.runtime.configuration.ConfigUtils;
-import org.checkerframework.dataflow.qual.Pure;
 
 public abstract class Seeder {
+    public static final int DEFAULT_PRIORITY = 1_000;
+
     protected void seed() {
         final var tenant = getTenant();
         if (!Collections.disjoint(ConfigUtils.getProfiles(), getProfiles())) {
@@ -19,19 +20,23 @@ public abstract class Seeder {
         }
     }
 
-    public abstract void startup();
+    /**
+     * Returns the priority in which this Seeder should execute. Higher number means executes earlier
+     */
+    public int getPriority() {
+        return DEFAULT_PRIORITY;
+    }
 
     protected abstract void doSeed();
 
     /**
      * Returns a list of profiles on which to run seeding.
-     * */
-    @Pure
+     */
     protected abstract List<String> getProfiles();
 
     /**
      * Returns the tenant for which the seeding is to be ran
-     * */
+     */
     protected String getTenant() {
         return "bern";
     }
