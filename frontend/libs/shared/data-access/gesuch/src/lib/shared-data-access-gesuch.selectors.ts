@@ -5,6 +5,7 @@ import { IChange, diff } from 'json-diff-ts';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
+  AppTrancheChange,
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
@@ -275,19 +276,33 @@ function getStepsByAppType(
 /**
  * Calculates the changes between the gesuchTrancheToWorkWith and previous tranches
  *
- * Returns:
+ * Returns an object of changes for GS and SB:
  * - hasChanges: true if there are changes
  * - tranche: the tranche containing the previous gesuchFormular
  * - affectedSteps: the steps that have changed
  */
-export function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
+export function prepareTranchenChanges(
+  gesuch: SharedModelGesuch | null,
+): AppTrancheChange | null {
   if (!gesuch) {
     return null;
   }
-  const allChanges = gesuch.changes?.map((tranche) => {
+  /**
+   * Changes have Zero, one or max two tranches
+   * - Zero: No changes
+   * - One: GS erstellt einen Antrag. Changes should be calculated between gesuchTrancheToWorkWith and changes[0]
+   * - Two: SB bearbeitet einen Antrag (As soon as he changes status). Changes should be calculated between changes[1] and gesuchTrancheToWorkWith
+   *
+   */
+  const allChanges = gesuch.changes?.map((tranche, index) => {
     const changes = diff(
-      gesuch.gesuchTrancheToWorkWith.gesuchFormular,
+      // index === 0
+      //   ? gesuch.gesuchTrancheToWorkWith.gesuchFormular
+      //   : gesuch.changes?.[index - 1].gesuchFormular,
+      // tranche.gesuchFormular,
+
       tranche.gesuchFormular,
+      gesuch.gesuchTrancheToWorkWith.gesuchFormular,
       {
         keysToSkip: ['id'],
         embeddedObjKeys: {
@@ -297,7 +312,7 @@ export function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
       },
     );
     return {
-      hasChanges: changes.length > 0,
+      // hasChanges: changes.length > 0
       tranche,
       affectedSteps: [
         ...changes
@@ -314,10 +329,17 @@ export function prepareTranchenChanges(gesuch: SharedModelGesuch | null) {
       ],
     };
   });
+
   if (!allChanges || allChanges.length <= 0) {
     return null;
   }
-  return allChanges[allChanges.length - 1];
+
+  console.log(allChanges);
+
+  return {
+    gs: allChanges[0],
+    sb: allChanges[1],
+  };
 }
 
 /**

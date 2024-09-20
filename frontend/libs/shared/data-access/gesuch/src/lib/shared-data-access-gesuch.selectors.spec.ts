@@ -225,10 +225,16 @@ describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => 
       changes: [changed],
     } satisfies DeepPartial<SharedModelGesuch> as SharedModelGesuch);
 
-    expect(changes).toMatchObject({
-      affectedSteps: ['elterns', 'kinds'],
-      hasChanges: true,
-    });
+    expect(changes).toEqual(
+      expect.objectContaining({
+        sb: undefined,
+        gs: {
+          hasChanges: true,
+          affectedSteps: expect.arrayContaining(['elterns', 'kinds']),
+          tranche: expect.any(Object),
+        },
+      }),
+    );
   });
 
   it.each([
@@ -318,11 +324,15 @@ describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => 
         changes: [changed],
       } satisfies DeepPartial<SharedModelGesuch> as SharedModelGesuch);
 
+      // imporove test data to include sb changes
       expect(changes).toEqual(
         expect.objectContaining({
-          hasChanges: true,
-          affectedSteps: expect.arrayContaining(affectedSteps),
-          tranche: expect.any(Object),
+          sb: undefined,
+          gs: {
+            hasChanges: true,
+            affectedSteps: expect.arrayContaining(affectedSteps),
+            tranche: expect.any(Object),
+          },
         }),
       );
     },

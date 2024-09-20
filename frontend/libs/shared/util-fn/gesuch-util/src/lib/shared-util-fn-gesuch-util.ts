@@ -1,11 +1,18 @@
 import { IChange, diff } from 'json-diff-ts';
 
 import {
+  AppTrancheChange,
   ElternTyp,
   ElternUpdate,
   FamiliensituationUpdate,
+  GesuchFormular,
   SharedModelGesuchFormular,
+  SharedModelGesuchFormularPropsReal,
 } from '@dv/shared/model/gesuch';
+import {
+  GesuchFormStepView,
+  gesuchFormStepsFieldMap,
+} from '@dv/shared/model/gesuch-form';
 import { lowercased } from '@dv/shared/util-fn/string-helper';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -91,6 +98,48 @@ type ArrayForms = Extract<
  * Keys to skip when calculating the changes between two versions of a form.
  */
 const keysToSkip = ['id'];
+
+/**
+ * Select the changes of a GesuchFormular property. add description
+ */
+export const selectChanges = <K extends SharedModelGesuchFormularPropsReal>(
+  view: {
+    gesuchFormular: GesuchFormular | null;
+    tranchenChanges: AppTrancheChange | null;
+  },
+  key: K,
+): {
+  changed: SharedModelGesuchFormular[K] | undefined;
+  original: SharedModelGesuchFormular[K];
+} => {
+  const changes = view.tranchenChanges;
+  const currentFormular = view.gesuchFormular?.[key];
+
+  const sachbearbeiterHasChangesOnView =
+    changes?.sb?.affectedSteps.includes(key) ?? false;
+
+  const changed = currentFormular;
+
+  const original = sachbearbeiterHasChangesOnView
+    ? changes?.sb?.tranche?.gesuchFormular?.[key]
+    : changes?.gs?.tranche?.gesuchFormular?.[key];
+
+  return { changed, original };
+};
+
+export const stepHasChanges = (
+  tranchenChanges: AppTrancheChange | null,
+  step: GesuchFormStepView,
+) => {
+  return (
+    tranchenChanges?.gs?.affectedSteps.includes(
+      gesuchFormStepsFieldMap[step.route] ?? -1,
+    ) ||
+    tranchenChanges?.sb?.affectedSteps.includes(
+      gesuchFormStepsFieldMap[step.route] ?? -1,
+    )
+  );
+};
 
 /**
  * Calculate the changes between two versions of a GesuchFormular property.

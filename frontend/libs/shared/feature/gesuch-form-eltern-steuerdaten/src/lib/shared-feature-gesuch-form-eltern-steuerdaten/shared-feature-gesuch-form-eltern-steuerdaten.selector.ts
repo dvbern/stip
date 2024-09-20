@@ -1,16 +1,21 @@
 import { createSelector } from '@ngrx/store';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { getChangesForList } from '@dv/shared/util-fn/gesuch-util';
+import {
+  getChangesForList,
+  selectChanges,
+} from '@dv/shared/util-fn/gesuch-util';
 
 export const selectSharedFeatureGesuchFormSteuerdatenView = createSelector(
   selectSharedDataAccessGesuchsView,
   (gesuchView) => {
+    const { changed, original } = selectChanges(gesuchView, 'steuerdaten');
+
     return {
       ...gesuchView,
       listChanges: getChangesForList(
-        gesuchView.gesuchFormular?.steuerdaten,
-        gesuchView.tranchenChanges?.tranche.gesuchFormular?.steuerdaten,
+        changed,
+        original,
         (e) => e.steuerdatenTyp,
       ),
     };

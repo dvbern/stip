@@ -67,7 +67,7 @@
       <span>{{ 'sachbearbeitung-app.header.aenderungen' | translate }}</span>
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
-    <mat-menu #aenderungenMenu="matMenu" [class]="'header-menu-panel mt-2 rounded col-12'">
+    <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel mt-2 rounded col-12">
       <div class="d-flex flex-column gap-2">
         @for (aenderung of aenderungen.list; track $index) {
           <a
