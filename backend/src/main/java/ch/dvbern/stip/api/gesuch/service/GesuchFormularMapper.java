@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -12,6 +13,8 @@ import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
@@ -62,6 +65,9 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
     @Inject
     FamiliensituationMapper familiensituationMapper;
+
+    @Inject
+    GesuchDokumentService gesuchDokumentService;
 
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
@@ -331,6 +337,31 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                         != ElternAbwesenheitsGrund.WEDER_NOCH) {
                     removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
                 }
+            }
+        );
+
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasElternVerheiratetZusammenChanged(newFormular, targetFormular),
+            "Clear Mietvertrag/ Hypothekarzins Dokument because ElternVerheiratetZusammen changed",
+            () -> {
+                Set<DokumentTyp> dokumentTypsToRemove;
+
+                if (newFormular.getFamiliensituation().getElternVerheiratetZusammen()) {
+                    // Delete Mutter/ Vater Dokument(e)
+                    dokumentTypsToRemove = Set.of(
+                        DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
+                        DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+                    );
+                } else {
+                    // Delete Familie Dokument
+                    dokumentTypsToRemove = Set.of(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
+                }
+
+                targetFormular.getTranche()
+                    .getGesuchDokuments()
+                    .stream()
+                    .filter(gesuchDokument -> dokumentTypsToRemove.contains(gesuchDokument.getDokumentTyp()))
+                    .forEach(gesuchDokument -> gesuchDokumentService.removeGesuchDokument(gesuchDokument));
             }
         );
     }

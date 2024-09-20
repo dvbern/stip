@@ -26,7 +26,7 @@ public class VaterRequiredDocumentsProducer implements RequiredDocumentProducer 
         final var vater = eltern.stream()
             .filter(x -> x.getElternTyp() == ElternTyp.VATER)
             .findFirst().orElse(null);
-        return ImmutablePair.of("elterns", producer.getForElternteil(vater));
+        return ImmutablePair.of("elterns", producer.getForElternteil(vater, formular.getFamiliensituation()));
     }
 }
 

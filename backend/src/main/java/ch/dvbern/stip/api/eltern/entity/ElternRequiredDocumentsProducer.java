@@ -6,6 +6,7 @@ import java.util.Map;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.steuerdaten.util.RequiredDocumentsProducerUtils;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,12 @@ public class ElternRequiredDocumentsProducer {
         ElternTyp.VATER, DokumentTyp.ELTERN_SOZIALHILFEBUDGET_VATER
     );
 
-    public List<DokumentTyp> getForElternteil(final Eltern elternteil) {
+    private static final Map<ElternTyp, DokumentTyp> WOHNKOSTEN_MAP = Map.of(
+        ElternTyp.MUTTER, DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
+        ElternTyp.VATER, DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+    );
+
+    public List<DokumentTyp> getForElternteil(final Eltern elternteil, final Familiensituation familiensituation) {
         if (elternteil == null) {
             return List.of();
         }
@@ -38,6 +44,15 @@ public class ElternRequiredDocumentsProducer {
         if(RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getSozialhilfebeitraege())){
             requiredDocs.add(SOZIALHILFEBUDGET_MAP.get(elternteil.getElternTyp()));
         }
+
+        if (RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getWohnkosten())) {
+            if (familiensituation != null && familiensituation.getElternVerheiratetZusammen()) {
+                requiredDocs.add(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
+            } else {
+                requiredDocs.add(WOHNKOSTEN_MAP.get(elternteil.getElternTyp()));
+            }
+        }
+
 
         return requiredDocs;
     }

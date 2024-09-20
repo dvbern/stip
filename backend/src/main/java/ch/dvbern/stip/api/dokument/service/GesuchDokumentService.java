@@ -208,6 +208,11 @@ public class GesuchDokumentService {
     @Transactional
     public void removeGesuchDokument(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        removeGesuchDokument(gesuchDokument);
+    }
+
+    @Transactional
+    public void removeGesuchDokument(final GesuchDokument gesuchDokument) {
         final var dokuments = gesuchDokument.getDokumente();
 
         List<String> dokumentObjectIds = new ArrayList<>();

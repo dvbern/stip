@@ -14,7 +14,6 @@ public class SteuerdatenCopyUtil {
         copy.setSteuerdatenTyp(other.getSteuerdatenTyp());
         copy.setTotalEinkuenfte(other.getTotalEinkuenfte());
         copy.setEigenmietwert(other.getEigenmietwert());
-        copy.setWohnkosten(other.getWohnkosten());
         copy.setIsArbeitsverhaeltnisSelbstaendig(other.getIsArbeitsverhaeltnisSelbstaendig());
         copy.setSaeule3a(other.getSaeule3a());
         copy.setSaeule2(other.getSaeule2());

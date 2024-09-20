@@ -131,11 +131,13 @@ public class ElternteilV1 {
             }
         }
 
+        int wohnkosten = 0;
         switch (steuerdaten.getSteuerdatenTyp()) {
             case VATER -> {
                 final var elternteilToUse = eltern.stream().filter(
                     elternteil -> elternteil.getElternTyp() == ElternTyp.VATER
                 ).toList().get(0);
+                wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -150,6 +152,7 @@ public class ElternteilV1 {
                 final var elternteilToUse = eltern.stream().filter(
                     elternteil -> elternteil.getElternTyp() == ElternTyp.MUTTER
                 ).toList().get(0);
+                wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -159,6 +162,10 @@ public class ElternteilV1 {
                         29, gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29 für margin
                     );
                 }
+            }
+            case FAMILIE -> {
+                final var elternteilToUse = eltern.stream().findFirst().get();
+                wohnkosten += elternteilToUse.getWohnkosten();
             }
         }
 
@@ -171,11 +178,9 @@ public class ElternteilV1 {
             )
         );
 
-
-
         builder.effektiveWohnkosten(
             BerechnungRequestV1.getEffektiveWohnkosten(
-                steuerdaten.getWohnkosten(),
+                wohnkosten,
                 gesuchsperiode,
                 anzahlPersonenImHaushalt
             )

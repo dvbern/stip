@@ -11,47 +11,49 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class GesuchFormularDiffUtil {
     /**
-     * Checks if the Geburtsdatum (date of birth) of the PersonInAusbildung (person in education) in the GesuchFormular (application form) has changed.
+     * Checks if the Geburtsdatum (date of birth) of the PersonInAusbildung (person in education) in the
+     * GesuchFormular (application form) has changed.
      *
      * @param toUpdate the original GesuchFormular object
-     * @param update   the updated GesuchFormular object
+     * @param update the updated GesuchFormular object
      * @return true if the Geburtsdatum of the PersonInAusbildung has changed, false otherwise
      */
     public static boolean hasGeburtsdatumOfPersonInAusbildungChanged(
-            GesuchFormular toUpdate,
-            GesuchFormularUpdateDto update) {
+        GesuchFormular toUpdate,
+        GesuchFormularUpdateDto update) {
         if (toUpdate.getPersonInAusbildung() == null
-                || toUpdate.getPersonInAusbildung().getGeburtsdatum() == null
-                || update.getPersonInAusbildung() == null) {
+            || toUpdate.getPersonInAusbildung().getGeburtsdatum() == null
+            || update.getPersonInAusbildung() == null) {
             return false;
         }
 
         return !toUpdate.getPersonInAusbildung()
-                .getGeburtsdatum()
-                .equals(update.getPersonInAusbildung().getGeburtsdatum());
+            .getGeburtsdatum()
+            .equals(update.getPersonInAusbildung().getGeburtsdatum());
     }
 
     /**
      * Checks if the Zivilstand (marital status) of a GesuchFormular has changed to one person.
      *
      * @param toUpdate the original GesuchFormular object
-     * @param update   the updated GesuchFormular object
+     * @param update the updated GesuchFormular object
      * @return true if the Zivilstand has changed to one person, false otherwise
      */
     public static boolean hasZivilstandChangedToOnePerson(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
         if (toUpdate.getPersonInAusbildung() == null
-                || toUpdate.getPersonInAusbildung().getZivilstand() == null
-                || update.getPersonInAusbildung() == null
-                || update.getPersonInAusbildung().getZivilstand() == null) {
+            || toUpdate.getPersonInAusbildung().getZivilstand() == null
+            || update.getPersonInAusbildung() == null
+            || update.getPersonInAusbildung().getZivilstand() == null) {
             return false;
         }
 
         return toUpdate.getPersonInAusbildung().getZivilstand().hasPartnerschaft() &&
-                !update.getPersonInAusbildung().getZivilstand().hasPartnerschaft();
+            !update.getPersonInAusbildung().getZivilstand().hasPartnerschaft();
     }
 
     /**
-     * Checks if the update to the "Eigener Haushalt" (own household) status has been made in the GesuchFormularUpdateDto object.
+     * Checks if the update to the "Eigener Haushalt" (own household) status has been made in the
+     * GesuchFormularUpdateDto object.
      *
      * @param update the GesuchFormularUpdateDto object to check for the "Eigener Haushalt" update
      * @return true if the update to "Eigener Haushalt" has been made, false otherwise
@@ -65,10 +67,11 @@ public final class GesuchFormularDiffUtil {
     }
 
     /**
-     * Checks if the "Gerichtliche Alimentenregelung" flag has changed in the "Familiensituation" of the given updated "GesuchFormular".
+     * Checks if the "Gerichtliche Alimentenregelung" flag has changed in the "Familiensituation" of the given
+     * updated "GesuchFormular".
      *
      * @param toUpdate the original GesuchFormular object
-     * @param update   the updated GesuchFormular object
+     * @param update the updated GesuchFormular object
      * @return true if the "Gerichtliche Alimentenregelung" flag has changed, false otherwise
      */
     public boolean hasGerichtlicheAlimenteregelungChanged(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
@@ -85,7 +88,7 @@ public final class GesuchFormularDiffUtil {
         }
 
         return !toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung()
-                .equals(update.getFamiliensituation().getGerichtlicheAlimentenregelung());
+            .equals(update.getFamiliensituation().getGerichtlicheAlimentenregelung());
     }
 
     public boolean hasWerZahltAlimenteChanged(GesuchFormularUpdateDto newFormular, GesuchFormular toUpdate) {
@@ -97,9 +100,9 @@ public final class GesuchFormularDiffUtil {
             return false;
         }
 
-		return newFormular.getFamiliensituation().getWerZahltAlimente() != toUpdate.getFamiliensituation()
+        return newFormular.getFamiliensituation().getWerZahltAlimente() != toUpdate.getFamiliensituation()
             .getWerZahltAlimente();
-	}
+    }
 
     public boolean hasElternteilVerstorbenOrUnbekanntChanged(
         GesuchFormularUpdateDto newFormular,
@@ -115,11 +118,14 @@ public final class GesuchFormularDiffUtil {
         }
 
         // Boxed !=
-        return !Objects.equals(newFormular.getFamiliensituation().getElternteilUnbekanntVerstorben(),
+        return !Objects.equals(
+            newFormular.getFamiliensituation().getElternteilUnbekanntVerstorben(),
             toUpdate.getFamiliensituation().getElternteilUnbekanntVerstorben()) ||
-            !Objects.equals(newFormular.getFamiliensituation().getMutterUnbekanntVerstorben(),
+            !Objects.equals(
+                newFormular.getFamiliensituation().getMutterUnbekanntVerstorben(),
                 toUpdate.getFamiliensituation().getMutterUnbekanntVerstorben()) ||
-            !Objects.equals(newFormular.getFamiliensituation().getVaterUnbekanntVerstorben(),
+            !Objects.equals(
+                newFormular.getFamiliensituation().getVaterUnbekanntVerstorben(),
                 toUpdate.getFamiliensituation().getVaterUnbekanntVerstorben());
     }
 
@@ -148,5 +154,17 @@ public final class GesuchFormularDiffUtil {
         }
 
         return newFormular.getKinds().size() != toUpdate.getKinds().size();
+    }
+
+    public boolean hasElternVerheiratetZusammenChanged(
+        final GesuchFormularUpdateDto newFormular,
+        final GesuchFormular toUpdate
+    ) {
+        if (newFormular.getFamiliensituation() == null || toUpdate.getFamiliensituation() == null) {
+            return false;
+        }
+
+        return !newFormular.getFamiliensituation().getElternVerheiratetZusammen()
+            .equals(toUpdate.getFamiliensituation().getElternVerheiratetZusammen());
     }
 }

@@ -63,4 +63,10 @@
       <column name="wohnkosten" type="integer"/>
     </addColumn>
   </changeSet>
+  <changeSet id="1726838214726-1" author="Juri Furer">
+    <dropColumn columnName="wohnkosten" tableName="steuerdaten" />
+  </changeSet>
+  <changeSet id="1726838214727-1" author="Juri Furer">
+    <dropColumn columnName="wohnkosten" tableName="steuerdaten_aud" />
+  </changeSet>
 </databaseChangeLog>

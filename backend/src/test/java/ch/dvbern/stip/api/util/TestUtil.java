@@ -171,7 +171,6 @@ public class TestUtil {
         steuerdaten.setSteuernKantonGemeinde(0);
         steuerdaten.setVermoegen(0);
         steuerdaten.setSteuerjahr(0);
-        steuerdaten.setWohnkosten(0);
         return steuerdaten;
     }
 
@@ -386,7 +385,6 @@ public class TestUtil {
             Set.of(
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.VATER)
-                    .setWohnkosten(0)
                     .setVerpflegung(0)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(0)
@@ -401,7 +399,6 @@ public class TestUtil {
                     .setIsArbeitsverhaeltnisSelbstaendig(false),
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
-                    .setWohnkosten(0)
                     .setVerpflegung(0)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(0)
