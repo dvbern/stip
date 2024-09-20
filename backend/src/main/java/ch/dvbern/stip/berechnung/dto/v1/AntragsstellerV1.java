@@ -90,7 +90,8 @@ public class AntragsstellerV1 {
                 );
             }
             for (final var kind : gesuchFormular.getKinds()) {
-                if (kind.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
+                // if child does still live with the parents/ a parent
+                if (kind.getWohnsitzAnteilPia() > 0) {
                     anzahlPersonenImHaushalt += 1;
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()), gesuchsperiode
@@ -113,7 +114,7 @@ public class AntragsstellerV1 {
         builder.wohnkosten(0);
         if (einnahmenKosten.getWohnkosten() != null && anzahlPersonenImHaushalt > 0) {
             builder.wohnkosten(
-                BerechnungRequestV1.getEffektiveWohnkosten(
+                getEffektiveWohnkosten(
                     einnahmenKosten.getWohnkosten(),
                     gesuchsperiode,
                     anzahlPersonenImHaushalt)
@@ -180,5 +181,21 @@ public class AntragsstellerV1 {
                 gesuchsperiode.getAusbKostenTertiaer()
             );
         };
+    }
+
+    public static int getEffektiveWohnkosten(
+        final int eingegebeneWohnkosten,
+        final Gesuchsperiode gesuchsperiode,
+        int anzahlPersonenImHaushalt
+    ) {
+        int maxWohnkosten = switch (anzahlPersonenImHaushalt) {
+            case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
+            case 1 -> gesuchsperiode.getWohnkostenPersoenlich1pers();
+            case 2 -> gesuchsperiode.getWohnkostenPersoenlich2pers();
+            case 3 -> gesuchsperiode.getWohnkostenPersoenlich3pers();
+            case 4 -> gesuchsperiode.getWohnkostenPersoenlich4pers();
+            default -> gesuchsperiode.getWohnkostenPersoenlich5pluspers();
+        };
+        return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }
 }

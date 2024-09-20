@@ -73,6 +73,10 @@ public class TestcaseSeeding extends Seeder {
 
     @Override
     protected void doSeed() {
+        if (gesuchRepository.count() != 0) {
+            return;
+        }
+
         // Find the JSONs to import
         final var testcasesJson = getJsons();
         final var gesuchperiodeToAttach =
