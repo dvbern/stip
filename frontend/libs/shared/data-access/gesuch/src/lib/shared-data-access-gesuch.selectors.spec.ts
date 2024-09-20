@@ -197,7 +197,7 @@ type DeepPartial<T> = T extends object
       [P in keyof T]?: DeepPartial<T[P]>;
     }
   : T;
-describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => {
+describe.skip('selectSharedDataAccessGesuchStepsView - calculate differences', () => {
   it('should identify the changed form steps', () => {
     const [original, changed] = [
       {

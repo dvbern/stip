@@ -61,6 +61,7 @@ import {
   selectRouteTrancheId,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
+  selectTrancheTyp,
 } from './shared-data-access-gesuch.selectors';
 
 export const LOAD_ALL_DEBOUNCE_TIME = 300;
@@ -153,10 +154,15 @@ export const loadGesuch = createEffect(
       concatLatestFrom(() =>
         store
           .select(selectRouteId)
-          .pipe(combineLatestWith(store.select(selectRouteTrancheId))),
+          .pipe(
+            combineLatestWith(
+              store.select(selectTrancheTyp),
+              store.select(selectRouteTrancheId),
+            ),
+          ),
       ),
       withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
-      switchMap(([[, [id, trancheId]], { compileTimeConfig }]) => {
+      switchMap(([[, [id, trancheTyp, trancheId]], { compileTimeConfig }]) => {
         if (!id) {
           throw new Error(
             'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id',
@@ -177,7 +183,7 @@ export const loadGesuch = createEffect(
           ),
         };
 
-        if (trancheId && compileTimeConfig) {
+        if (trancheId && trancheTyp === 'AENDERUNG' && compileTimeConfig) {
           const services$ = {
             'gesuch-app': gesuchService.getGsTrancheChanges$(
               { aenderungId: trancheId },
@@ -433,7 +439,7 @@ export const redirectToGesuchFormNextStep = createEffect(
         ([
           { id, origin },
           { stepsFlow: stepFlowSig },
-          { gesuchFormular, readonly, specificTrancheId },
+          { gesuchFormular, readonly, trancheSetting },
         ]) => {
           router.navigate([
             'gesuch',
@@ -441,7 +447,7 @@ export const redirectToGesuchFormNextStep = createEffect(
               .getNextStepOf(stepFlowSig, origin, gesuchFormular, readonly)
               .route.split('/'),
             id,
-            ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
+            ...(trancheSetting?.routesSuffix ?? []),
           ]);
         },
       ),
@@ -459,12 +465,12 @@ export const refreshGesuchFormStep = createEffect(
     return actions$.pipe(
       ofType(SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess),
       withLatestFrom(store.select(selectSharedDataAccessGesuchsView)),
-      tap(([{ id, origin }, { specificTrancheId }]) => {
+      tap(([{ id, origin }, { trancheSetting }]) => {
         router.navigate([
           'gesuch',
           origin.route,
           id,
-          ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
+          ...(trancheSetting?.routesSuffix ?? []),
         ]);
       }),
     );

@@ -6,6 +6,7 @@ import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
   AppTrancheChange,
+  GesuchTrancheTyp,
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
@@ -37,7 +38,7 @@ import {
   isGesuchReadonly,
   isTrancheReadonly,
 } from '@dv/shared/util/readonly-state';
-import { capitalized } from '@dv/shared/util-fn/string-helper';
+import { capitalized, lowercased } from '@dv/shared/util-fn/string-helper';
 import { isDefined, type } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
@@ -60,6 +61,19 @@ const baseSteps = [
 const { selectRouteParam } = getRouterSelectors();
 
 export const selectRouteId = selectRouteParam('id');
+
+const isExistingTrancheTyp = (
+  trancheTyp: string | undefined,
+): trancheTyp is GesuchTrancheTyp => {
+  return Object.keys(GesuchTrancheTyp).includes(trancheTyp ?? '');
+};
+export const selectTrancheTyp = createSelector(
+  selectRouteParam('trancheTyp'),
+  (trancheTyp) =>
+    isExistingTrancheTyp(trancheTyp?.toUpperCase())
+      ? trancheTyp.toUpperCase()
+      : undefined,
+);
 
 export const selectRouteTrancheId = selectRouteParam('trancheId');
 
@@ -89,6 +103,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
     gesuchFormular,
     specificTrancheId,
   ) => {
+    const gesuchTranche = gesuch?.gesuchTrancheToWorkWith;
     return {
       config,
       lastUpdate,
@@ -103,7 +118,12 @@ export const selectSharedDataAccessGesuchsView = createSelector(
           )
         : isGesuchReadonly(gesuch, config.compileTimeConfig?.appType),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
-      specificTrancheId,
+      trancheSetting: gesuchTranche
+        ? ({
+            type: gesuchTranche.typ,
+            routesSuffix: [lowercased(gesuchTranche.typ), gesuchTranche.id],
+          } as const)
+        : null,
       gesuchId: gesuch?.id,
       allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
     };
@@ -115,8 +135,14 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   ({ tranchenChanges }, state) => {
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
+    const gesuchTranche = state.gesuch?.gesuchTrancheToWorkWith;
     return {
-      specificTrancheId: state.specificTrancheId,
+      trancheSetting: gesuchTranche
+        ? ({
+            type: gesuchTranche.typ,
+            routesSuffix: [lowercased(gesuchTranche.typ), gesuchTranche.id],
+          } as const)
+        : null,
       cachedGesuchId: state.cache.gesuchId,
       cachedGesuchFormular: currentForm,
       tranchenChanges,
@@ -292,15 +318,9 @@ export function prepareTranchenChanges(
    * - Zero: No changes
    * - One: GS erstellt einen Antrag. Changes should be calculated between gesuchTrancheToWorkWith and changes[0]
    * - Two: SB bearbeitet einen Antrag (As soon as he changes status). Changes should be calculated between changes[1] and gesuchTrancheToWorkWith
-   *
    */
-  const allChanges = gesuch.changes?.map((tranche, index) => {
+  const allChanges = gesuch.changes?.map((tranche) => {
     const changes = diff(
-      // index === 0
-      //   ? gesuch.gesuchTrancheToWorkWith.gesuchFormular
-      //   : gesuch.changes?.[index - 1].gesuchFormular,
-      // tranche.gesuchFormular,
-
       tranche.gesuchFormular,
       gesuch.gesuchTrancheToWorkWith.gesuchFormular,
       {
@@ -333,8 +353,6 @@ export function prepareTranchenChanges(
   if (!allChanges || allChanges.length <= 0) {
     return null;
   }
-
-  console.log(allChanges);
 
   return {
     gs: allChanges[0],

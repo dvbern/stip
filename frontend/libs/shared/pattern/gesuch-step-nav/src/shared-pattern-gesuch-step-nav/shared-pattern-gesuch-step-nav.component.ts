@@ -43,8 +43,7 @@ export class SharedPatternGesuchStepNavComponent {
   };
   stepsSig = input<GesuchFormStepView[]>();
   stepsViewSig = computed(() => {
-    const { cachedGesuchId, specificTrancheId, tranchenChanges } =
-      this.viewSig();
+    const { cachedGesuchId, trancheSetting, tranchenChanges } = this.viewSig();
     return this.stepsSig()?.map((step) => ({
       ...step,
       hasChanges: stepHasChanges(tranchenChanges, step),
@@ -53,7 +52,7 @@ export class SharedPatternGesuchStepNavComponent {
         'gesuch',
         ...step.route.split('/'),
         cachedGesuchId,
-        ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
+        ...(trancheSetting?.routesSuffix ?? []),
       ],
       isActive: this.route.isActive(`gesuch/${step.route}`, {
         paths: 'subset',

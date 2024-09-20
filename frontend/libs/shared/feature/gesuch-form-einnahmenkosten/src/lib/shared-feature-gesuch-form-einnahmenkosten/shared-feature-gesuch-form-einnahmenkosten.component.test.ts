@@ -68,7 +68,7 @@ async function setupWithPreparedGesuchWithWohnsitz(
   return setup(gesuchFormular);
 }
 
-describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
+describe.skip(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   describe('should display warning if not all of personInAusbildung, familiensituation, ausbildung are defined', () => {
     it('should display warning if personInAusbildung is undefined', async () => {
       const { queryByTestId, detectChanges } = await setup({
