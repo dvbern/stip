@@ -3221,7 +3221,6 @@ components:
         - kinderalimente
         - vermoegen
         - steuerdatenTyp
-        - wohnkosten
       type: object
       properties:
         id:
@@ -3257,8 +3256,6 @@ components:
         kinderalimente:
           type: integer
         vermoegen:
-          type: integer
-        wohnkosten:
           type: integer
     Steuerdaten:
       title: Root Type for Steuerdaten
