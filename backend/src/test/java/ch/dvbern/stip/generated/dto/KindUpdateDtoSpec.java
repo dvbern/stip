@@ -16,13 +16,11 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
-import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -34,11 +32,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   KindUpdateDtoSpec.JSON_PROPERTY_VORNAME,
   KindUpdateDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
-  KindUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ,
   KindUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNGSSITUATION,
   KindUpdateDtoSpec.JSON_PROPERTY_ID,
-  KindUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
-  KindUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
+  KindUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA,
   KindUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
   KindUpdateDtoSpec.JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE
 })
@@ -51,20 +47,14 @@ public class KindUpdateDtoSpec {
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
   private LocalDate geburtsdatum;
 
-  public static final String JSON_PROPERTY_WOHNSITZ = "wohnsitz";
-  private WohnsitzDtoSpec wohnsitz;
-
   public static final String JSON_PROPERTY_AUSBILDUNGSSITUATION = "ausbildungssituation";
   private AusbildungssituationDtoSpec ausbildungssituation;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
 
-  public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER = "wohnsitzAnteilMutter";
-  private BigDecimal wohnsitzAnteilMutter;
-
-  public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER = "wohnsitzAnteilVater";
-  private BigDecimal wohnsitzAnteilVater;
+  public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA = "wohnsitzAnteilPia";
+  private Integer wohnsitzAnteilPia;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
@@ -127,32 +117,6 @@ public class KindUpdateDtoSpec {
   }
 
 
-  public KindUpdateDtoSpec wohnsitz(WohnsitzDtoSpec wohnsitz) {
-    
-    this.wohnsitz = wohnsitz;
-    return this;
-  }
-
-   /**
-   * Get wohnsitz
-   * @return wohnsitz
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public WohnsitzDtoSpec getWohnsitz() {
-    return wohnsitz;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnsitz(WohnsitzDtoSpec wohnsitz) {
-    this.wohnsitz = wohnsitz;
-  }
-
-
   public KindUpdateDtoSpec ausbildungssituation(AusbildungssituationDtoSpec ausbildungssituation) {
     
     this.ausbildungssituation = ausbildungssituation;
@@ -205,55 +169,29 @@ public class KindUpdateDtoSpec {
   }
 
 
-  public KindUpdateDtoSpec wohnsitzAnteilMutter(BigDecimal wohnsitzAnteilMutter) {
+  public KindUpdateDtoSpec wohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
     
-    this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
+    this.wohnsitzAnteilPia = wohnsitzAnteilPia;
     return this;
   }
 
    /**
-   * Required wenn Wohnsitz.MUTTER_VATER.
-   * @return wohnsitzAnteilMutter
+   * Get wohnsitzAnteilPia
+   * @return wohnsitzAnteilPia
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public BigDecimal getWohnsitzAnteilMutter() {
-    return wohnsitzAnteilMutter;
+  public Integer getWohnsitzAnteilPia() {
+    return wohnsitzAnteilPia;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWohnsitzAnteilMutter(BigDecimal wohnsitzAnteilMutter) {
-    this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
-  }
-
-
-  public KindUpdateDtoSpec wohnsitzAnteilVater(BigDecimal wohnsitzAnteilVater) {
-    
-    this.wohnsitzAnteilVater = wohnsitzAnteilVater;
-    return this;
-  }
-
-   /**
-   * Required wenn Wohnsitz.MUTTER_VATER.
-   * @return wohnsitzAnteilVater
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public BigDecimal getWohnsitzAnteilVater() {
-    return wohnsitzAnteilVater;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWohnsitzAnteilVater(BigDecimal wohnsitzAnteilVater) {
-    this.wohnsitzAnteilVater = wohnsitzAnteilVater;
+  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
+    this.wohnsitzAnteilPia = wohnsitzAnteilPia;
   }
 
 
@@ -319,18 +257,16 @@ public class KindUpdateDtoSpec {
     KindUpdateDtoSpec kindUpdate = (KindUpdateDtoSpec) o;
     return Objects.equals(this.vorname, kindUpdate.vorname) &&
         Objects.equals(this.geburtsdatum, kindUpdate.geburtsdatum) &&
-        Objects.equals(this.wohnsitz, kindUpdate.wohnsitz) &&
         Objects.equals(this.ausbildungssituation, kindUpdate.ausbildungssituation) &&
         Objects.equals(this.id, kindUpdate.id) &&
-        Objects.equals(this.wohnsitzAnteilMutter, kindUpdate.wohnsitzAnteilMutter) &&
-        Objects.equals(this.wohnsitzAnteilVater, kindUpdate.wohnsitzAnteilVater) &&
+        Objects.equals(this.wohnsitzAnteilPia, kindUpdate.wohnsitzAnteilPia) &&
         Objects.equals(this.nachname, kindUpdate.nachname) &&
         Objects.equals(this.erhalteneAlimentebeitraege, kindUpdate.erhalteneAlimentebeitraege);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname, erhalteneAlimentebeitraege);
+    return Objects.hash(vorname, geburtsdatum, ausbildungssituation, id, wohnsitzAnteilPia, nachname, erhalteneAlimentebeitraege);
   }
 
   @Override
@@ -339,11 +275,9 @@ public class KindUpdateDtoSpec {
     sb.append("class KindUpdateDtoSpec {\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
-    sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
-    sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
+    sb.append("    wohnsitzAnteilPia: ").append(toIndentedString(wohnsitzAnteilPia)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    erhalteneAlimentebeitraege: ").append(toIndentedString(erhalteneAlimentebeitraege)).append("\n");
     sb.append("}");

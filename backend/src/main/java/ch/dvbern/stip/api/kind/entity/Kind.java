@@ -2,7 +2,7 @@ package ch.dvbern.stip.api.kind.entity;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
+import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -11,6 +11,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +26,7 @@ import org.hibernate.envers.Audited;
 )
 @Getter
 @Setter
-public class Kind extends AbstractFamilieEntity {
+public class Kind extends AbstractPerson {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "ausbildungssituation", nullable = false)
@@ -37,4 +39,10 @@ public class Kind extends AbstractFamilieEntity {
     @Nullable
     @Column(name = "copy_of_id")
     private UUID copyOfId;
+
+    @NotNull
+    @Column(name = "wohnsitz_anteil_pia", nullable = false)
+    @Max(100)
+    @Min(0)
+    private Integer wohnsitzAnteilPia;
 }

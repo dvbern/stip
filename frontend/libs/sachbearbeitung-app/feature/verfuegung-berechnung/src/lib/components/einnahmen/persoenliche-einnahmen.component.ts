@@ -37,16 +37,6 @@ import { PersoenlicheBerechnung } from '../../../models';
         {{ einnahmenSig().nettoerwerbseinkommen | formatChfPositive }}
       </div>
     </div>
-    <!-- Unterhaltsbeiträge -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.alimente'
-          | translate
-      }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
-        {{ einnahmenSig().alimente | formatChfPositive }}
-      </div>
-    </div>
 
     <!-- EO -->
     <div class="d-flex gap-2">
@@ -64,6 +54,17 @@ import { PersoenlicheBerechnung } from '../../../models';
       </div>
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().eoLeistungen | formatChfPositive }}
+      </div>
+    </div>
+
+    <!-- Alimente -->
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.alimente'
+          | translate
+      }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().alimente | formatChfPositive }}
       </div>
     </div>
 
@@ -130,17 +131,6 @@ import { PersoenlicheBerechnung } from '../../../models';
       </div>
     </div>
 
-    <!-- Elterliche Leistung -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
-          | translate
-      }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
-        {{ einnahmenSig().elterlicheLeistung | formatChfPositive }}
-      </div>
-    </div>
-
     <!-- Einkommen Partner -->
     <div class="d-flex gap-2">
       {{
@@ -149,6 +139,17 @@ import { PersoenlicheBerechnung } from '../../../models';
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().einkommenPartner | formatChfPositive }}
+      </div>
+    </div>
+
+    <!-- Elterliche Leistung -->
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
+          | translate
+      }}
+      <div class="text-muted text-end flex-grow-1 text-nowrap">
+        {{ einnahmenSig().elterlicheLeistung | formatChfPositive }}
       </div>
     </div>
 

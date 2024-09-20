@@ -1,3 +1,7 @@
+export function percentStringToNumber(value: string): number;
+export function percentStringToNumber(
+  value: string | undefined,
+): number | undefined;
 export function percentStringToNumber(
   value?: string | undefined,
 ): number | undefined {
