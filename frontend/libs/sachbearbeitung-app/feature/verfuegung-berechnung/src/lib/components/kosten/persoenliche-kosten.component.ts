@@ -77,10 +77,8 @@ import { PersoenlicheBerechnung } from '../../../models';
         }}
         <div class="text-muted fs-7">
           {{
-            (kostenSig().anzahlPersonenImHaushalt > 1
-              ? 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarfPersonen.info'
-              : 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info'
-            ) | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info'
+              | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
           }}
         </div>
       </div>
@@ -98,10 +96,8 @@ import { PersoenlicheBerechnung } from '../../../models';
         }}
         <div class="text-muted fs-7">
           {{
-            (kostenSig().anzahlPersonenImHaushalt > 1
-              ? 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen.info'
-              : 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info'
-            ) | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info'
+              | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
           }}
         </div>
       </div>
@@ -119,10 +115,8 @@ import { PersoenlicheBerechnung } from '../../../models';
         }}
         <div class="text-muted fs-7">
           {{
-            (kostenSig().anzahlPersonenImHaushalt > 1
-              ? 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.medizinischeGrundversorgungPersonen.info'
-              : 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info'
-            ) | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info'
+              | translate: { anzahl: kostenSig().anzahlPersonenImHaushalt }
           }}
         </div>
       </div>
