@@ -21,7 +21,6 @@ kstip:
     testcases:
       seed-on:
         - 'prod'
-        - 'dev'
       to-seed:
         - 'UATTestcase1'
         - 'UATTestcase2'

@@ -256,13 +256,14 @@ public class BerechnungService {
 
         List<TranchenBerechnungsresultatDto> berechnungsresultatDtoList = new ArrayList<>();
 
-        for (final var stuerdatum : steuerdaten) {
-            final var steuerdatenTyp = stuerdatum.getSteuerdatenTyp();
-            final var elternTypToSolveFor =
-                steuerdatenTyp == SteuerdatenTyp.MUTTER
-                    ? ElternTyp.MUTTER
-                    : ElternTyp.VATER;
+        List<ElternTyp> toSolveFor;
+        if (gesuchFormular.getFamiliensituation().getElternVerheiratetZusammen()) {
+            toSolveFor = List.of(ElternTyp.VATER);
+        } else {
+            toSolveFor = List.of(ElternTyp.MUTTER, ElternTyp.VATER);
+        }
 
+        for (final var elternTypToSolveFor : toSolveFor) {
             final var berechnungsRequest = (BerechnungRequestV1) getBerechnungRequest(
                 majorVersion,
                 minorVersion,

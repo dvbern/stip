@@ -2132,6 +2132,7 @@ components:
         - nachname
         - geburtsdatum
         - ausbildungssituation
+        - wohnsitzAnteilPia
       type: object
       properties:
         vorname:
@@ -2140,18 +2141,12 @@ components:
           format: date
           description: dd.MM.yyyy
           type: string
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
         ausbildungssituation:
           $ref: '#/components/schemas/Ausbildungssituation'
         id:
           $ref: '#/components/schemas/UUID'
-        wohnsitzAnteilMutter:
-          description: Required wenn Wohnsitz.MUTTER_VATER.
-          type: number
-        wohnsitzAnteilVater:
-          description: Required wenn Wohnsitz.MUTTER_VATER.
-          type: number
+        wohnsitzAnteilPia:
+          type: integer
         nachname:
           type: string
         erhalteneAlimentebeitraege:

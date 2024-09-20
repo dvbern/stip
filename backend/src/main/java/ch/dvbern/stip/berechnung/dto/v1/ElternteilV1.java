@@ -164,7 +164,7 @@ public class ElternteilV1 {
 
 
         builder.effektiveWohnkosten(
-            BerechnungRequestV1.getEffektiveWohnkosten(
+            getEffektiveWohnkosten(
                 steuerdaten.getWohnkosten(),
                 gesuchsperiode,
                 anzahlPersonenImHaushalt
@@ -205,5 +205,21 @@ public class ElternteilV1 {
             elternTyp,
             familiensituation
         ).build();
+    }
+
+    public static int getEffektiveWohnkosten(
+        final int eingegebeneWohnkosten,
+        final Gesuchsperiode gesuchsperiode,
+        int anzahlPersonenImHaushalt
+    ) {
+        int maxWohnkosten = switch (anzahlPersonenImHaushalt) {
+            case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
+            case 1 -> gesuchsperiode.getWohnkostenFam1pers();
+            case 2 -> gesuchsperiode.getWohnkostenFam2pers();
+            case 3 -> gesuchsperiode.getWohnkostenFam3pers();
+            case 4 -> gesuchsperiode.getWohnkostenFam4pers();
+            default -> gesuchsperiode.getWohnkostenFam5pluspers();
+        };
+        return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }
 }
