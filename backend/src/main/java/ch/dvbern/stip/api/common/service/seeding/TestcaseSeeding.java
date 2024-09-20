@@ -12,8 +12,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
-import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
@@ -59,9 +57,7 @@ public class TestcaseSeeding extends Seeder {
     private final ObjectMapper objectMapper;
     private final FallRepository fallRepository;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
-    private final AdresseRepository adresseRepository;
     private final GesuchTrancheMapper gesuchTrancheMapper;
-    private final AdresseMapper adresseMapper;
     private final AusbildungsgangRepository ausbildungsgangRepository;
     private final BenutzerRepository benutzerRepository;
     private final BildungskategorieRepository bildungskategorieRepository;
@@ -79,80 +75,89 @@ public class TestcaseSeeding extends Seeder {
         final var gesuchperiodeToAttach =
             gesuchsperiodeRepository.findAll(Sort.by("gesuchsperiodeStart").descending()).firstResult();
         final var possibleAusbildungsgaenge = ausbildungsgangRepository.findAll().stream().toList();
-        final Function<AusbildungsgangDto, UUID> getAusbildungsgang =
-            (dto) -> possibleAusbildungsgaenge.stream()
-                .filter(x -> x.getBildungskategorie().getBfs() == dto.getBildungskategorie().getBfs()
-                    && x.getBezeichnungDe().equals(dto.getBezeichnungDe()))
-                .findFirst()
-                .orElseGet(() -> {
-                    final var bildungskategorieToCreate = ((Bildungskategorie) new Bildungskategorie()
-                        .setBfs(dto.getBildungskategorie().getBfs())
-                        .setBezeichnungFr(dto.getBildungskategorie().getBezeichnungFr())
-                        .setBezeichnungDe(dto.getBildungskategorie().getBezeichnungDe()));
-
-                    bildungskategorieRepository.persist(bildungskategorieToCreate);
-
-                    final var toCreate = new Ausbildungsgang()
-                        .setAusbildungsstaette(((Ausbildungsstaette) new Ausbildungsstaette()
-                            .setNameDe(dto.getBildungskategorie().getBezeichnungDe())
-                            .setNameFr(dto.getBildungskategorie().getBezeichnungFr())
-                            .setId(dto.getAusbildungsstaetteId()))
-                        )
-                        .setBezeichnungFr(dto.getBezeichnungFr())
-                        .setBezeichnungDe(dto.getBezeichnungDe())
-                        .setBildungskategorie(bildungskategorieToCreate);
-
-                    ausbildungsgangRepository.persist(toCreate);
-                    return toCreate;
-                })
-                .getId();
 
         final int year = LocalDate.now().getYear();
         int index = 0;
         for (final var testcaseJson : testcasesJson) {
             final var testcase = testcaseJson.getLeft();
             final var json = testcaseJson.getRight();
+            GesuchDto dto;
             try {
                 // Deserialize to GesuchUpdateDto
-                final var dto = objectMapper.readValue(json, GesuchDto.class);
-
-                // Find and map to already seeded values
-                final var ausbildung = dto.getGesuchTrancheToWorkWith().getGesuchFormular().getAusbildung();
-                ausbildung.getAusbildungsgang().setId(getAusbildungsgang.apply(ausbildung.getAusbildungsgang()));
-
-                // Map to entity and correct the mapping
-                final var tranche = gesuchTrancheMapper.toEntity(dto.getGesuchTrancheToWorkWith());
-                correctAuszahlungAdresse(tranche.getGesuchFormular());
-
-                // Clear IDs
-                clearIds(tranche);
-
-                // Create Gesuchsteller, Fall and Gesuch
-                final var fall = createFall(String.format("BE.F.T%04d", index), createGesuchsteller(testcase));
-                final var gesuch = createGesuch(
-                    gesuchperiodeToAttach,
-                    String.format("BE.%s.G.T%04d", year, index),
-                    tranche
-                );
-
-                gesuch.setFall(fall);
-                fall.setGesuch(Set.of(gesuch));
-                tranche.setGesuch(gesuch);
-
-                // Persist to database
-                fallRepository.persist(fall);
-                gesuchRepository.persist(gesuch);
-
-                index++;
+                dto = objectMapper.readValue(json, GesuchDto.class);
             } catch (JsonProcessingException e) {
                 LOG.error(String.format("Failed to deserialize testcase %s", testcase), e);
+                continue;
             }
+
+            // Find and map to already seeded values
+            final var ausbildung = dto.getGesuchTrancheToWorkWith().getGesuchFormular().getAusbildung();
+            ausbildung.getAusbildungsgang()
+                .setId(getOrCreateAusbildungsgaenge(possibleAusbildungsgaenge, ausbildung.getAusbildungsgang()));
+
+            // Map to entity and correct the mapping
+            final var tranche = gesuchTrancheMapper.toEntity(dto.getGesuchTrancheToWorkWith());
+            correctAuszahlungAdresse(tranche.getGesuchFormular());
+
+            // Clear IDs
+            clearIds(tranche);
+
+            // Create Gesuchsteller, Fall and Gesuch
+            final var fall = createFall(String.format("BE.F.T%04d", index), createGesuchsteller(testcase));
+            final var gesuch = createGesuch(
+                gesuchperiodeToAttach,
+                String.format("BE.%s.G.T%04d", year, index),
+                tranche
+            );
+
+            gesuch.setFall(fall);
+            fall.setGesuch(Set.of(gesuch));
+            tranche.setGesuch(gesuch);
+
+            // Persist to database
+            fallRepository.persist(fall);
+            gesuchRepository.persist(gesuch);
+
+            index++;
         }
     }
 
     @Override
     protected List<String> getProfiles() {
         return configService.getSeedTestcasesOnProfile();
+    }
+
+    UUID getOrCreateAusbildungsgaenge(
+        final List<Ausbildungsgang> possibleAusbildungsgaenge,
+        final AusbildungsgangDto dto
+    ) {
+        return possibleAusbildungsgaenge.stream()
+            .filter(possibleAusbildungsgang ->
+                possibleAusbildungsgang.getBildungskategorie().getBfs() == dto.getBildungskategorie().getBfs() &&
+                    possibleAusbildungsgang.getBezeichnungDe().equals(dto.getBezeichnungDe()))
+            .findFirst()
+            .orElseGet(() -> {
+                final var bildungskategorieToCreate = new Bildungskategorie()
+                    .setBfs(dto.getBildungskategorie().getBfs())
+                    .setBezeichnungFr(dto.getBildungskategorie().getBezeichnungFr())
+                    .setBezeichnungDe(dto.getBildungskategorie().getBezeichnungDe());
+
+                bildungskategorieRepository.persist(bildungskategorieToCreate);
+
+                final var toCreate = new Ausbildungsgang()
+                    .setAusbildungsstaette(((Ausbildungsstaette) new Ausbildungsstaette()
+                        .setNameDe(dto.getBildungskategorie().getBezeichnungDe())
+                        .setNameFr(dto.getBildungskategorie().getBezeichnungFr())
+                        .setId(dto.getAusbildungsstaetteId()))
+                    )
+                    .setBezeichnungFr(dto.getBezeichnungFr())
+                    .setBezeichnungDe(dto.getBezeichnungDe())
+                    .setBildungskategorie(bildungskategorieToCreate);
+
+                ausbildungsgangRepository.persist(toCreate);
+                return toCreate;
+            })
+            .getId();
     }
 
     List<Pair<String, String>> getJsons() {
@@ -178,7 +183,7 @@ public class TestcaseSeeding extends Seeder {
     }
 
     void correctAuszahlungAdresse(final GesuchFormular formular) {
-        final Function<ElternTyp, Eltern> getAdresseForElternteil = elternTyp -> {
+        final Function<ElternTyp, Eltern> getElternteilByTyp = elternTyp -> {
             if (formular.getElterns() == null) {
                 return null;
             }
@@ -191,8 +196,8 @@ public class TestcaseSeeding extends Seeder {
         };
 
         final var piaAdresse = formular.getPersonInAusbildung().getAdresse();
-        final var mutterAdresse = getAdresseForElternteil.apply(ElternTyp.MUTTER);
-        final var vaterAdresse = getAdresseForElternteil.apply(ElternTyp.VATER);
+        final var mutterAdresse = getElternteilByTyp.apply(ElternTyp.MUTTER);
+        final var vaterAdresse = getElternteilByTyp.apply(ElternTyp.VATER);
 
         final var auszahlungAdresse = switch (formular.getAuszahlung().getKontoinhaber()) {
             case GESUCHSTELLER -> piaAdresse;

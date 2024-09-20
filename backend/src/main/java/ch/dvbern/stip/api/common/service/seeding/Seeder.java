@@ -8,6 +8,8 @@ import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.runtime.configuration.ConfigUtils;
 
 public abstract class Seeder {
+    public static final int DEFAULT_PRIORITY = 1_000;
+
     protected void seed() {
         final var tenant = getTenant();
         if (!Collections.disjoint(ConfigUtils.getProfiles(), getProfiles())) {
@@ -18,9 +20,12 @@ public abstract class Seeder {
         }
     }
 
-    //    public abstract void startup();
-
-    public abstract int getPriority();
+    /**
+     * Returns the priority in which this Seeder should execute. Higher number means executes earlier
+     */
+    public int getPriority() {
+        return DEFAULT_PRIORITY;
+    }
 
     protected abstract void doSeed();
 

@@ -25,11 +25,6 @@ GesuchsperiodeSeeding extends Seeder {
     private final ConfigService configService;
 
     @Override
-    public int getPriority() {
-        return 100;
-    }
-
-    @Override
     protected void doSeed() {
         LOG.info("Seeding Gesuchsperiode");
         Gesuchsjahr newJahr = null;

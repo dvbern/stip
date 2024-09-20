@@ -22,11 +22,6 @@ public class AusbildungTestSeeding extends Seeder {
     private Bildungskategorie bildungskategorie;
 
     @Override
-    public int getPriority() {
-        return 100;
-    }
-
-    @Override
     protected void doSeed() {
 		createBildungskategorie();
         seedUni();

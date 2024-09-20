@@ -23,11 +23,6 @@ public class AusbildungSeeding extends Seeder {
     private final ConfigService configService;
 
     @Override
-    public int getPriority() {
-        return 100;
-    }
-
-    @Override
     protected void doSeed() {
         if (ausbildungsstaetteRepository.count() == 0) {
             LOG.info("Seeding Uni and FH");

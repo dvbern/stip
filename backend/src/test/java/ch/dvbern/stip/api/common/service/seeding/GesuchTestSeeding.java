@@ -25,11 +25,6 @@ public class GesuchTestSeeding extends Seeder {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
 
     @Override
-    public int getPriority() {
-        return 100;
-    }
-
-    @Override
     protected void doSeed() {
         if (gesuchsperiodeRepository.count() == 0) {
             LOG.info("Seeding Gesuchsjahr and Gesuchsperiode");
