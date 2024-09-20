@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.bildungskategorie.repo.BildungskategorieRepository;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -32,6 +33,8 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
@@ -97,6 +100,13 @@ public class TestcaseSeeding extends Seeder {
 
             // Map to entity and correct the mapping
             final var tranche = gesuchTrancheMapper.toEntity(dto.getGesuchTrancheToWorkWith());
+            tranche.setTyp(GesuchTrancheTyp.TRANCHE);
+            tranche.setStatus(GesuchTrancheStatus.AKZEPTIERT);
+            tranche.setGueltigkeit(new DateRange(
+                gesuchperiodeToAttach.getGesuchsperiodeStart(),
+                gesuchperiodeToAttach.getGesuchsperiodeStopp()
+            ));
+
             correctAuszahlungAdresse(tranche.getGesuchFormular());
 
             // Clear IDs
