@@ -1,143 +1,102 @@
 package ch.dvbern.stip.api.gesuch.service;
 
-import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
-import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
-import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
-import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuch.resource.GesuchTrancheResourceImpl;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.stammdaten.type.Land;
-import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
-import io.quarkus.test.InjectMock;
-import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.ForbiddenException;
-import jakarta.ws.rs.core.Response;
-import org.checkerframework.checker.units.qual.A;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import wiremock.org.eclipse.jetty.http.HttpStatus;
-
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-@QuarkusTest
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class GesuchTrancheServiceTest {
-    @InjectMock
-    GesuchRepository gesuchRepository;
-    @InjectMock
-    GesuchTrancheRepository gesuchTrancheRepository;
-    @Inject
-    GesuchTrancheService gesuchTrancheService;
-
     private Gesuch gesuch;
-    private CreateAenderungsantragRequestDto dto;
+    private GesuchTrancheService gesuchTrancheService;
 
     @BeforeEach
-    void setUp(){
-        gesuch = GesuchGenerator.initGesuch();
-        gesuch.setId(UUID.randomUUID());
-        Adresse adresse = new Adresse().setPlz("3011").setLand(Land.CH).setOrt("Bern").setStrasse("Musterstrasse").setHausnummer("1");
-        Ausbildungsgang ausbildungsgang = new Ausbildungsgang();
-        ausbildungsgang.setBildungskategorie(new Bildungskategorie().setBfs(5));
-        gesuch.setGesuchTranchen(List.of(new GesuchTranche().setGueltigkeit(new DateRange()
-                .setGueltigAb(LocalDate.now())
-                .setGueltigBis(LocalDate.now()))));
-        gesuch.getCurrentGesuchTranche().setGesuchFormular(new GesuchFormular());
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setFamiliensituation(new Familiensituation()
-                .setElternVerheiratetZusammen(true));
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setAuszahlung(new Auszahlung()
-                .setKontoinhaber(Kontoinhaber.GESUCHSTELLER));
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung()
-                .setAdresse(adresse)
-                .setGeburtsdatum(LocalDate.now().minusYears(10)));
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setAusbildung(new Ausbildung()
-                .setAusbildungsgang(ausbildungsgang)
-                .setAusbildungBegin(gesuch.getNewestGesuchTranche().get().getGueltigkeit().getGueltigAb())
-                .setAusbildungEnd(gesuch.getNewestGesuchTranche().get().getGueltigkeit().getGueltigBis()));
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(0));
+    void setUp() {
+        gesuch = new Gesuch().setGesuchTranchen(List.of(new GesuchTranche()
+            .setGueltigkeit(new DateRange(LocalDate.MIN, LocalDate.MAX)))
+        );
 
-        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        when(gesuchTrancheRepository.findForGesuch(any())).thenReturn(gesuch.getGesuchTranchen().stream());
-
-        dto = new CreateAenderungsantragRequestDto();
-        dto.setComment("");
-        dto.setStart(gesuch.getNewestGesuchTranche().get().getGueltigkeit().getGueltigAb());
-        dto.setEnd(gesuch.getNewestGesuchTranche().get().getGueltigkeit().getGueltigBis());
+        gesuchTrancheService = new GesuchTrancheService(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
     }
 
     @TestAsGesuchsteller
     @Test
-    void onlyOneAenderungShouldBeAllowed(){
+    void onlyOneAenderungShouldBeAllowed() {
         // arrange
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         // act & assert
-        assertTrue(gesuchTrancheService.openAenderungAlreadyExists(gesuch.getId()));
+        assertTrue(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
     }
+
     @TestAsGesuchsteller
     @Test
-    void onlyOneAenderungShouldBeAllowed_Tranche(){
+    void onlyOneAenderungShouldBeAllowed_Tranche() {
         // arrange
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         // assert
-        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch.getId()));
+        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
     }
+
     @TestAsGesuchsteller
     @Test
-    void aenderungShouldBeAllowedWhenStateAbgelehnt(){
+    void aenderungShouldBeAllowedWhenStateAbgelehnt() {
         // arrange
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.ABGELEHNT);
         // assert
-        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch.getId()));
+        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
     }
+
     @TestAsGesuchsteller
     @Test
-    void aenderungShouldBeAllowedWhenStateAbgelehnt_Tranche(){
+    void aenderungShouldBeAllowedWhenStateAbgelehnt_Tranche() {
         // arrange
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.ABGELEHNT);
         // assert
-        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch.getId()));
+        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
     }
+
     @TestAsGesuchsteller
     @Test
-    void aenderungShouldBeAllowedWhenStateAngenommen(){
+    void aenderungShouldBeAllowedWhenStateAngenommen() {
         // arrange
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.AKZEPTIERT);
         // assert
-        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch.getId()));
+        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
     }
+
     @TestAsGesuchsteller
     @Test
-    void aenderungShouldBeAllowedWhenStateAngenommen_Tranche(){
+    void aenderungShouldBeAllowedWhenStateAngenommen_Tranche() {
         // arrange
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.AKZEPTIERT);
         // assert
-        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch.getId()));
+        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
     }
 }

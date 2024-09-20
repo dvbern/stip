@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -10,6 +11,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -55,7 +57,7 @@ public class GesuchTrancheService {
                 .stream()
                 .filter(tranche ->
                     tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS &&
-                    tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                        tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
                 )
                 .findFirst()
                 .orElseThrow(NotFoundException::new)
@@ -137,10 +139,11 @@ public class GesuchTrancheService {
         final UUID gesuchId,
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
-        if(openAenderungAlreadyExists(gesuchId)){
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (openAenderungAlreadyExists(gesuch)) {
             throw new ForbiddenException();
         }
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+
         final var trancheToCopy = gesuch.getCurrentGesuchTranche();
 
         final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
@@ -192,13 +195,12 @@ public class GesuchTrancheService {
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
 
-    public boolean openAenderungAlreadyExists(UUID gesuchId){
-        final var tranchenAndAenderungen = getAllTranchenForGesuch(gesuchId);
-        return tranchenAndAenderungen != null
-            && tranchenAndAenderungen.stream().filter(item -> item.getTyp() == GesuchTrancheTyp.AENDERUNG)
-            .anyMatch(item -> item.getStatus() != GesuchTrancheStatus.AKZEPTIERT)
-            && tranchenAndAenderungen.stream().filter(item -> item.getTyp() == GesuchTrancheTyp.AENDERUNG)
-            .anyMatch(item -> item.getStatus() != GesuchTrancheStatus.ABGELEHNT);
-    }
+    public boolean openAenderungAlreadyExists(final Gesuch gesuch) {
+        final var allowedStates = Set.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.ABGELEHNT);
+        final var trancheInDisallowedStates = gesuch.getAenderungen()
+                .filter(gesuchTranche -> !allowedStates.contains(gesuchTranche.getStatus()))
+                .toList();
 
+        return !trancheInDisallowedStates.isEmpty();
+    }
 }
