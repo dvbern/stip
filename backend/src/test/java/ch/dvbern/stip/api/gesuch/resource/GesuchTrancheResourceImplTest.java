@@ -6,140 +6,116 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.stammdaten.type.Land;
+import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.generated.api.FallApiSpec;
+import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
+import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import io.quarkus.test.InjectMock;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.core.Response;
-import org.checkerframework.checker.units.qual.A;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import jdk.jfr.Description;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import wiremock.org.eclipse.jetty.http.HttpStatus;
 
+import javax.management.DescriptorKey;
 import java.time.LocalDate;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+@QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ExtendWith(StepwiseExtension.class)
+@RequiredArgsConstructor
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Slf4j
 class GesuchTrancheResourceImplTest {
-    @InjectMock
-    GesuchRepository gesuchRepository;
-    @InjectMock
-    GesuchTrancheRepository gesuchTrancheRepository;
-    @Inject
-    GesuchTrancheResourceImpl gesuchTrancheResource;
+    private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final GesuchTrancheApiSpec gesuchTrancheApiSpec = GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
+    private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
+    private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    private Gesuch gesuch;
-    private CreateAenderungsantragRequestDto dto;
+    private GesuchDtoSpec gesuch;
 
-    @BeforeEach
-    void setup(){
-        gesuch = GesuchGenerator.initGesuch();
-        Adresse adresse = new Adresse().setPlz("3011").setLand(Land.CH).setOrt("Bern").setStrasse("Musterstrasse").setHausnummer("1");
-        Ausbildungsgang ausbildungsgang = new Ausbildungsgang();
-        ausbildungsgang.setBildungskategorie(new Bildungskategorie().setBfs(5));
-        gesuch.getCurrentGesuchTranche().setGesuchFormular(new GesuchFormular());
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setFamiliensituation(new Familiensituation()
-            .setElternVerheiratetZusammen(true));
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setAuszahlung(new Auszahlung()
-            .setKontoinhaber(Kontoinhaber.GESUCHSTELLER));
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setPersonInAusbildung((PersonInAusbildung) new PersonInAusbildung()
-            .setAdresse(adresse)
-            .setGeburtsdatum(LocalDate.now().minusYears(10)));
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setAusbildung(new Ausbildung()
-            .setAusbildungsgang(ausbildungsgang)
-            .setAusbildungBegin(gesuch.getNewestGesuchTranche().get().getGueltigkeit().getGueltigAb())
-            .setAusbildungEnd(gesuch.getNewestGesuchTranche().get().getGueltigkeit().getGueltigBis()));
-        gesuch.getCurrentGesuchTranche().getGesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(0));
-
-        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        when(gesuchTrancheRepository.findForGesuch(any())).thenReturn(gesuch.getGesuchTranchen().stream());
-
-        dto = new CreateAenderungsantragRequestDto();
-        dto.setComment("");
-        dto.setStart(gesuch.getNewestGesuchTranche().get().getGueltigkeit().getGueltigAb());
-        dto.setEnd(gesuch.getNewestGesuchTranche().get().getGueltigkeit().getGueltigBis());
+    @Test
+    @TestAsGesuchsteller
+    @Order(1)
+    void gesuchErstellen() {
+        gesuch= TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
     }
 
-    @TestAsGesuchsteller
     @Test
-    void onlyOneAenderungShouldBeAllowed(){
-        // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
-        gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
-        // act & assert
-        assertThrows(ForbiddenException.class, () -> gesuchTrancheResource.createAenderungsantrag(gesuch.getId(),dto));
-    }
     @TestAsGesuchsteller
-    @Test
-    void onlyOneAenderungShouldBeAllowed_Tranche(){
-        // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
-        gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
-        // act
-        Response response = gesuchTrancheResource.createAenderungsantrag(gesuch.getId(),dto);
-        // assert
-        assertNotEquals(HttpStatus.FORBIDDEN_403,response.getStatus());
+    @Order(2)
+    void fillGesuch() {
+        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
     }
+
+    @Test
     @TestAsGesuchsteller
-    @Test
-    void aenderungShouldBeAllowedWhenStateAbgelehnt(){
-        // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
-        gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.ABGELEHNT);
-        // act
-        Response response = gesuchTrancheResource.createAenderungsantrag(gesuch.getId(),dto);
-        // assert
-        assertNotEquals(HttpStatus.FORBIDDEN_403,response.getStatus());
+    @Order(3)
+    void gesuchEinreichen() {
+        gesuchApiSpec.gesuchEinreichen()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.ACCEPTED.getStatusCode());
     }
+
+    @Test
     @TestAsGesuchsteller
-    @Test
-    void aenderungShouldBeAllowedWhenStateAbgelehnt_Tranche(){
-        // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
-        gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.ABGELEHNT);
-        // act
-        Response response = gesuchTrancheResource.createAenderungsantrag(gesuch.getId(),dto);
-        // assert
-        assertNotEquals(HttpStatus.FORBIDDEN_403,response.getStatus());
+    @Order(4)
+    @Description("Only one (open: NOT in State ABGELEHNT|AKZEPTIIERT) Aenderungsantrag should be allowed")
+    void testGesuchAenderungsAntrag(){
+        gesuchTrancheApiSpec.createAenderungsantrag()
+            .gesuchIdPath(gesuch.getId())
+            .body(new CreateAenderungsantragRequestDtoSpec().comment("aenderung1")
+                .start(gesuch.getGesuchTrancheToWorkWith().getGueltigAb())
+                .end(gesuch.getGesuchTrancheToWorkWith().getGueltigBis()))
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+
+        gesuchTrancheApiSpec.createAenderungsantrag()
+            .gesuchIdPath(gesuch.getId())
+            .body(new CreateAenderungsantragRequestDtoSpec().comment("aenderung2")
+                .start(gesuch.getGesuchTrancheToWorkWith().getGueltigAb())
+                .end(gesuch.getGesuchTrancheToWorkWith().getGueltigBis()))
+            . execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
-    @TestAsGesuchsteller
-    @Test
-    void aenderungShouldBeAllowedWhenStateAngenommen(){
-        // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
-        gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.AKZEPTIERT);
-        // act
-        Response response = gesuchTrancheResource.createAenderungsantrag(gesuch.getId(),dto);
-        // assert
-        assertNotEquals(HttpStatus.FORBIDDEN_403,response.getStatus());
-    }
-    @TestAsGesuchsteller
-    @Test
-    void aenderungShouldBeAllowedWhenStateAngenommen_Tranche(){
-        // arrange
-        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE);
-        gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.AKZEPTIERT);
-        // act
-        Response response = gesuchTrancheResource.createAenderungsantrag(gesuch.getId(),dto);
-        // assert
-        assertNotEquals(HttpStatus.FORBIDDEN_403,response.getStatus());
-    }
+
+    // todo KSTIP-XXXX: a Aenderung should be accepted/denied by an SB
 }

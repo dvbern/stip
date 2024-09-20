@@ -192,7 +192,7 @@ public class GesuchTrancheService {
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
 
-    private boolean openAenderungAlreadyExists(UUID gesuchId){
+    public boolean openAenderungAlreadyExists(UUID gesuchId){
         final var tranchenAndAenderungen = getAllTranchenForGesuch(gesuchId);
         return tranchenAndAenderungen != null
             && tranchenAndAenderungen.stream().filter(item -> item.getTyp() == GesuchTrancheTyp.AENDERUNG)
