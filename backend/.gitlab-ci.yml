@@ -14,6 +14,8 @@ include:
       context-dir: backend
       sonar-project-key: "$SONAR_PROJECT_KEY_BACKEND"
       sonar-token: "$SONAR_TOKEN_BACKEND"
+      needs:
+        - "build-api"
 
   - component: 'gitlab.dvbern.ch/components/package/buildah@1.3.0'
     inputs:
@@ -22,4 +24,4 @@ include:
       image-name: 'api'
       dockerfile-path: ./src/main/docker/Dockerfile.jvm
       version: '$VERSION'
-      build-latest: 'false'
+      build-latest: false

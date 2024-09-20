@@ -30,7 +30,7 @@ include:
       context-dir: frontend
       image-name: 'sachbearbeitung-app'
       version: '$VERSION'
-      build-latest: 'false'
+      build-latest: false
       build-args: |
         APP=sachbearbeitung-app
 
@@ -40,6 +40,6 @@ include:
       context-dir: frontend
       image-name: 'gesuch-app'
       version: '$VERSION'
-      build-latest: 'false'
+      build-latest: false
       build-args: |
         APP=gesuch-app
