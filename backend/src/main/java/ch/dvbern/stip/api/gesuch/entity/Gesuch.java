@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -116,5 +117,11 @@ public class Gesuch extends AbstractMandantEntity {
                 Comparator.comparing(x -> x.getGueltigkeit().getGueltigBis())
             )
         );
+    }
+
+    public Stream<GesuchTranche> getAenderungen() {
+        return getGesuchTranchen()
+            .stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
     }
 }

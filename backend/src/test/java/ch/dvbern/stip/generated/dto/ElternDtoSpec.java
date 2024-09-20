@@ -275,7 +275,7 @@ public class ElternDtoSpec {
   }
 
    /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    * @return geburtsdatum
   **/
   @jakarta.annotation.Nonnull
