@@ -41,6 +41,7 @@
     <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
     <kie.version>8.41.0.Final</kie.version>
     <sqids.version>0.1.0</sqids.version>
+    <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -213,6 +214,11 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-quartz</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkiverse.antivirus</groupId>
+      <artifactId>quarkus-antivirus</artifactId>
+      <version>${quarkus-antivirus.version}</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
