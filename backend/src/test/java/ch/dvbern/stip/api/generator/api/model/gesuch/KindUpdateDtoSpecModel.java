@@ -19,9 +19,7 @@ public class KindUpdateDtoSpecModel {
                 LocalDate.of(1990, 1, 1),
                 LocalDate.of(2002, 1, 1)));
             model.setAusbildungssituation(TestUtil.getRandomElementFromArray(AusbildungssituationDtoSpec.values()));
-            model.setWohnsitz(WohnsitzDtoSpec.MUTTER_VATER);
-            model.setWohnsitzAnteilMutter(TestUtil.getRandomBigDecimal(0, 100, 0));
-            model.setWohnsitzAnteilVater(BigDecimal.valueOf(100).subtract(model.getWohnsitzAnteilMutter()));
+            model.setWohnsitzAnteilPia(TestUtil.getRandomInt(0,100));
         }, 1);
     }
 

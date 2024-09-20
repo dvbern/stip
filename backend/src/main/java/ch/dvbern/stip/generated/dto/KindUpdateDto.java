@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.io.Serializable;
@@ -24,12 +23,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class KindUpdateDto  implements Serializable {
   private @Valid String vorname;
   private @Valid LocalDate geburtsdatum;
-  private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
   private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
+  private @Valid Integer wohnsitzAnteilPia;
   private @Valid String nachname;
   private @Valid UUID id;
-  private @Valid BigDecimal wohnsitzAnteilMutter;
-  private @Valid BigDecimal wohnsitzAnteilVater;
   private @Valid Integer erhalteneAlimentebeitraege;
 
   /**
@@ -73,25 +70,6 @@ public class KindUpdateDto  implements Serializable {
 
   /**
    **/
-  public KindUpdateDto wohnsitz(ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz) {
-    this.wohnsitz = wohnsitz;
-    return this;
-  }
-
-  
-  @JsonProperty("wohnsitz")
-  @NotNull
-  public ch.dvbern.stip.api.common.type.Wohnsitz getWohnsitz() {
-    return wohnsitz;
-  }
-
-  @JsonProperty("wohnsitz")
-  public void setWohnsitz(ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz) {
-    this.wohnsitz = wohnsitz;
-  }
-
-  /**
-   **/
   public KindUpdateDto ausbildungssituation(ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation) {
     this.ausbildungssituation = ausbildungssituation;
     return this;
@@ -107,6 +85,25 @@ public class KindUpdateDto  implements Serializable {
   @JsonProperty("ausbildungssituation")
   public void setAusbildungssituation(ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation) {
     this.ausbildungssituation = ausbildungssituation;
+  }
+
+  /**
+   **/
+  public KindUpdateDto wohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
+    this.wohnsitzAnteilPia = wohnsitzAnteilPia;
+    return this;
+  }
+
+  
+  @JsonProperty("wohnsitzAnteilPia")
+  @NotNull
+  public Integer getWohnsitzAnteilPia() {
+    return wohnsitzAnteilPia;
+  }
+
+  @JsonProperty("wohnsitzAnteilPia")
+  public void setWohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
+    this.wohnsitzAnteilPia = wohnsitzAnteilPia;
   }
 
   /**
@@ -147,44 +144,6 @@ public class KindUpdateDto  implements Serializable {
   }
 
   /**
-   * Required wenn Wohnsitz.MUTTER_VATER.
-   **/
-  public KindUpdateDto wohnsitzAnteilMutter(BigDecimal wohnsitzAnteilMutter) {
-    this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
-    return this;
-  }
-
-  
-  @JsonProperty("wohnsitzAnteilMutter")
-  public BigDecimal getWohnsitzAnteilMutter() {
-    return wohnsitzAnteilMutter;
-  }
-
-  @JsonProperty("wohnsitzAnteilMutter")
-  public void setWohnsitzAnteilMutter(BigDecimal wohnsitzAnteilMutter) {
-    this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
-  }
-
-  /**
-   * Required wenn Wohnsitz.MUTTER_VATER.
-   **/
-  public KindUpdateDto wohnsitzAnteilVater(BigDecimal wohnsitzAnteilVater) {
-    this.wohnsitzAnteilVater = wohnsitzAnteilVater;
-    return this;
-  }
-
-  
-  @JsonProperty("wohnsitzAnteilVater")
-  public BigDecimal getWohnsitzAnteilVater() {
-    return wohnsitzAnteilVater;
-  }
-
-  @JsonProperty("wohnsitzAnteilVater")
-  public void setWohnsitzAnteilVater(BigDecimal wohnsitzAnteilVater) {
-    this.wohnsitzAnteilVater = wohnsitzAnteilVater;
-  }
-
-  /**
    **/
   public KindUpdateDto erhalteneAlimentebeitraege(Integer erhalteneAlimentebeitraege) {
     this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
@@ -214,18 +173,16 @@ public class KindUpdateDto  implements Serializable {
     KindUpdateDto kindUpdate = (KindUpdateDto) o;
     return Objects.equals(this.vorname, kindUpdate.vorname) &&
         Objects.equals(this.geburtsdatum, kindUpdate.geburtsdatum) &&
-        Objects.equals(this.wohnsitz, kindUpdate.wohnsitz) &&
         Objects.equals(this.ausbildungssituation, kindUpdate.ausbildungssituation) &&
+        Objects.equals(this.wohnsitzAnteilPia, kindUpdate.wohnsitzAnteilPia) &&
         Objects.equals(this.nachname, kindUpdate.nachname) &&
         Objects.equals(this.id, kindUpdate.id) &&
-        Objects.equals(this.wohnsitzAnteilMutter, kindUpdate.wohnsitzAnteilMutter) &&
-        Objects.equals(this.wohnsitzAnteilVater, kindUpdate.wohnsitzAnteilVater) &&
         Objects.equals(this.erhalteneAlimentebeitraege, kindUpdate.erhalteneAlimentebeitraege);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, erhalteneAlimentebeitraege);
+    return Objects.hash(vorname, geburtsdatum, ausbildungssituation, wohnsitzAnteilPia, nachname, id, erhalteneAlimentebeitraege);
   }
 
   @Override
@@ -235,12 +192,10 @@ public class KindUpdateDto  implements Serializable {
     
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
-    sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");
+    sb.append("    wohnsitzAnteilPia: ").append(toIndentedString(wohnsitzAnteilPia)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
-    sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
     sb.append("    erhalteneAlimentebeitraege: ").append(toIndentedString(erhalteneAlimentebeitraege)).append("\n");
     sb.append("}");
     return sb.toString();

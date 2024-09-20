@@ -52,9 +52,7 @@ class KindMapperTest {
         kind.setVorname("Kindvorname");
         kind.setGeburtsdatum(LocalDate.of(2011, 1, 1));
         kind.setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG);
-        kind.setWohnsitz(Wohnsitz.MUTTER_VATER);
-        kind.setWohnsitzAnteilMutter(new BigDecimal(40));
-        kind.setWohnsitzAnteilVater(new BigDecimal(60));
+        kind.setWohnsitzAnteilPia(60);
         return kind;
     }
 }
