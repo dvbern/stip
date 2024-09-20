@@ -10,6 +10,11 @@ public class SteuerdatenDiffUtil {
         final SteuerdatenUpdateDto updateDto,
         final Steuerdaten toUpdate
     ) {
+        if (updateDto.getIsArbeitsverhaeltnisSelbstaendig() == null) {
+            // This shouldn't happen unless when using stubbed test data
+            return false;
+        }
+
         if (updateDto.getIsArbeitsverhaeltnisSelbstaendig().equals(toUpdate.getIsArbeitsverhaeltnisSelbstaendig())) {
             return false;
         }

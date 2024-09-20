@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -104,6 +105,9 @@ class GesuchServiceTest {
 
     @Inject
     GesuchTrancheService gesuchTrancheService;
+
+    @InjectMock
+    GesuchTrancheRepository gesuchTrancheRepository;
 
     static final String TENANT_ID = "bern";
 
@@ -763,7 +767,7 @@ class GesuchServiceTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createGesuch());
         tranche.getGesuch().setGesuchStatus(Gesuchstatus.EINGEREICHT);
 
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of((Gesuch)
             new Gesuch()
                 .setGesuchStatus(Gesuchstatus.EINGEREICHT)
@@ -803,7 +807,7 @@ class GesuchServiceTest {
                 .toList()
         );
 
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
         tranche.setTyp(GesuchTrancheTyp.TRANCHE);
