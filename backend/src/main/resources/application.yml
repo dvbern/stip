@@ -18,6 +18,20 @@ kstip:
   seeding:
     seed-on:
       - 'dev'
+    testcases:
+      seed-on:
+        - 'prod'
+        - 'dev'
+      to-seed:
+        - 'UATTestcase1'
+        - 'UATTestcase2'
+        - 'UATTestcase3'
+        - 'UATTestcase4'
+        - 'UATTestcase5'
+        - 'UATTestcase6'
+        - 'UATTestcase8'
+        - 'UATTestcase9'
+        - 'UATTestcase11'
   plzdata:
     cron: '0 15 10 10W * ?' # Fires at 10:15 on the closest weekday to the 10th of each month
     featurekey: 'ortschaftenverzeichnis_plz_2056.csv.zip'
