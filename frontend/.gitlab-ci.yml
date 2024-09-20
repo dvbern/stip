@@ -1,7 +1,7 @@
 stages: [build, validate, test, analyze, package]
 
 include:
-  - component: 'gitlab.dvbern.ch/components/build/nx@v1.3.0'
+  - component: 'gitlab.dvbern.ch/components/build/nx@11e3c678'
     inputs:
       app-name: '*-app'
       test-app-name: '*'
@@ -13,7 +13,7 @@ include:
       lint-on: '(branch|mr|default)'
       test-on: '(branch|mr|default)'
       build-additional-args: '--verbose'
-      
+
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.8.0'
     inputs:
       sonar-scanner: cli
