@@ -23,6 +23,7 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.core.Response;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,10 +84,8 @@ class GesuchTrancheResourceImplTest {
         // arrange
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
-        // act
-        Response response = gesuchTrancheResource.createAenderungsantrag(gesuch.getId(),dto);
-        // assert
-        assertEquals(HttpStatus.FORBIDDEN_403,response.getStatus());
+        // act & assert
+        assertThrows(ForbiddenException.class, () -> gesuchTrancheResource.createAenderungsantrag(gesuch.getId(),dto));
     }
     @TestAsGesuchsteller
     @Test

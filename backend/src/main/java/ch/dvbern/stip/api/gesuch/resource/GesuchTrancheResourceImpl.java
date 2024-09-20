@@ -23,9 +23,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response createAenderungsantrag(UUID gesuchId, CreateAenderungsantragRequestDto createAenderungsantragRequestDto) {
-        if(gesuchTrancheService.openAenderungAlreadyExists(gesuchId)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
         final var trancheDto = gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
         return Response.ok(trancheDto).build();
     }

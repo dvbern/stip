@@ -28,6 +28,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -136,6 +137,9 @@ public class GesuchTrancheService {
         final UUID gesuchId,
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
+        if(openAenderungAlreadyExists(gesuchId)){
+            throw new ForbiddenException();
+        }
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var trancheToCopy = gesuch.getCurrentGesuchTranche();
 
@@ -188,7 +192,7 @@ public class GesuchTrancheService {
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
 
-    public boolean openAenderungAlreadyExists(UUID gesuchId){
+    private boolean openAenderungAlreadyExists(UUID gesuchId){
         final var tranchenAndAenderungen = getAllTranchenForGesuch(gesuchId);
         return tranchenAndAenderungen != null
             && tranchenAndAenderungen.stream().filter(item -> item.getTyp() == GesuchTrancheTyp.AENDERUNG)
