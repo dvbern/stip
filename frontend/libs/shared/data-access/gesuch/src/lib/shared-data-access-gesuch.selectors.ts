@@ -6,6 +6,7 @@ import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config
 import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
   AppTrancheChange,
+  GesuchTranche,
   GesuchTrancheTyp,
   SharedModelGesuch,
   SharedModelGesuchFormular,
@@ -118,12 +119,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
           )
         : isGesuchReadonly(gesuch, config.compileTimeConfig?.appType),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
-      trancheSetting: gesuchTranche
-        ? ({
-            type: gesuchTranche.typ,
-            routesSuffix: [lowercased(gesuchTranche.typ), gesuchTranche.id],
-          } as const)
-        : null,
+      trancheSetting: createTrancheSetting(gesuchTranche),
       gesuchId: gesuch?.id,
       allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
     };
@@ -137,12 +133,7 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
     const gesuchTranche = state.gesuch?.gesuchTrancheToWorkWith;
     return {
-      trancheSetting: gesuchTranche
-        ? ({
-            type: gesuchTranche.typ,
-            routesSuffix: [lowercased(gesuchTranche.typ), gesuchTranche.id],
-          } as const)
-        : null,
+      trancheSetting: createTrancheSetting(gesuchTranche),
       cachedGesuchId: state.cache.gesuchId,
       cachedGesuchFormular: currentForm,
       tranchenChanges,
@@ -166,6 +157,15 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
     };
   },
 );
+
+const createTrancheSetting = (gesuchTranche: GesuchTranche | undefined) => {
+  return gesuchTranche
+    ? ({
+        type: gesuchTranche.typ,
+        routesSuffix: [lowercased(gesuchTranche.typ), gesuchTranche.id],
+      } as const)
+    : null;
+};
 
 export const selectSharedDataAccessGesuchStepsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
@@ -261,6 +261,7 @@ type AdditionalSteps = {
   after: SharedModelGesuchFormStep;
   steps: SharedModelGesuchFormStep[];
 };
+
 /**
  * Append additional steps after the given step
  */
@@ -332,7 +333,6 @@ export function prepareTranchenChanges(
       },
     );
     return {
-      // hasChanges: changes.length > 0
       tranche,
       affectedSteps: [
         ...changes

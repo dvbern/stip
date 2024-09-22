@@ -197,7 +197,8 @@ type DeepPartial<T> = T extends object
       [P in keyof T]?: DeepPartial<T[P]>;
     }
   : T;
-describe.skip('selectSharedDataAccessGesuchStepsView - calculate differences', () => {
+
+describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => {
   it('should identify the changed form steps', () => {
     const [original, changed] = [
       {
@@ -229,7 +230,6 @@ describe.skip('selectSharedDataAccessGesuchStepsView - calculate differences', (
       expect.objectContaining({
         sb: undefined,
         gs: {
-          hasChanges: true,
           affectedSteps: expect.arrayContaining(['elterns', 'kinds']),
           tranche: expect.any(Object),
         },
@@ -329,7 +329,6 @@ describe.skip('selectSharedDataAccessGesuchStepsView - calculate differences', (
         expect.objectContaining({
           sb: undefined,
           gs: {
-            hasChanges: true,
             affectedSteps: expect.arrayContaining(affectedSteps),
             tranche: expect.any(Object),
           },

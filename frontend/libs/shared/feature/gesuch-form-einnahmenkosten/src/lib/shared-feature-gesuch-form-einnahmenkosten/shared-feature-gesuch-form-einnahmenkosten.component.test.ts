@@ -29,7 +29,7 @@ async function setup(gesuchFormular: GesuchFormularUpdate) {
           ausbildungsstaettes: { ausbildungsstaettes: [] },
           gesuchs: {
             gesuch: {
-              gesuchTrancheToWorkWith: { id: '1' },
+              gesuchTrancheToWorkWith: { id: '1', typ: 'tranche' },
               gesuchsperiode: {
                 gesuchsjahr: {
                   technischesJahr: new Date().getFullYear(),
@@ -68,7 +68,7 @@ async function setupWithPreparedGesuchWithWohnsitz(
   return setup(gesuchFormular);
 }
 
-describe.skip(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
+describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   describe('should display warning if not all of personInAusbildung, familiensituation, ausbildung are defined', () => {
     it('should display warning if personInAusbildung is undefined', async () => {
       const { queryByTestId, detectChanges } = await setup({
