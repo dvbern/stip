@@ -195,7 +195,13 @@ public class AntragsstellerV1 {
         final boolean halbierungAbgeschlosseneErstausbildung =
             abgeschlosseneErstausbildung && (alter >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
         final var beruftaetigkeiten = Set.of(Taetigkeitsart.ERWERBSTAETIGKEIT); // TODO KSTIP-789: add Taetigkeitsart.BETREUUNG
-        final var berufstaetigeItems = lebenslaufItemSet.stream().filter(lebenslaufItem -> beruftaetigkeiten.contains(lebenslaufItem.getTaetigkeitsart()));
+        final var berufstaetigeItems = lebenslaufItemSet.stream()
+            .filter(
+                lebenslaufItem -> lebenslaufItem.getTaetigkeitsart() != null)
+            .filter(
+                lebenslaufItem -> beruftaetigkeiten.contains(lebenslaufItem.getTaetigkeitsart()
+            )
+        );
         final int monthsBerufstaetig = berufstaetigeItems.mapToInt(lebenslaufItem -> (int) ChronoUnit.DAYS.between(lebenslaufItem.getVon(), lebenslaufItem.getBis())).sum() / 30;
         final boolean halbierungBerufstaetig = monthsBerufstaetig >= 72;
 
