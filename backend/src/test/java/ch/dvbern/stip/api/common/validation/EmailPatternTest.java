@@ -18,25 +18,26 @@ public class EmailPatternTest {
 
     @Test
     void testEmailPattern() {
-        // Unvalid Email
-        assertThat(checkEmailPattern(""), is(false));
         assertThat(checkEmailPattern(""), is(false));
         assertThat(checkEmailPattern("hallo@welt"), is(false));
         assertThat(checkEmailPattern("hallo@welt."), is(false));
         assertThat(checkEmailPattern("welt.ch"), is(false));
         assertThat(checkEmailPattern("@welt.ch"), is(false));
-        assertThat(checkEmailPattern("_hallo@welt.ch"), is(false));
-        assertThat(checkEmailPattern("_hallo@welt.ch"), is(false));
-        assertThat(checkEmailPattern("hallo@welt.c"), is(false));
-
-        // Email valid
+        assertThat(checkEmailPattern("hallo@welt.c"), is(true));
+        assertThat(checkEmailPattern("_hallo@welt.ch"), is(true));
+        assertThat(checkEmailPattern("hallo_@welt.ch"), is(true));
+        assertThat(checkEmailPattern(".hallo@welt.ch"), is(false));
+        assertThat(checkEmailPattern("hallo.@welt.ch"), is(false));
+        assertThat(checkEmailPattern("hans..muster@welt.ch"), is(false));
         assertThat(checkEmailPattern("heinz.mueller@dvbern.ch"), is(true));
-        assertThat(checkEmailPattern("heinz_mueller@dvbern.ch"), is(true));
         assertThat(checkEmailPattern("heinz-mueller@dvbern.ch"), is(true));
+        assertThat(checkEmailPattern("heinz_mueller@dvbern.ch"), is(true));
+        assertThat(checkEmailPattern("aaa|asdsads@sdsdsd.com"), is(true));
+        assertThat(checkEmailPattern("heinz-mueller+001@dvbern.ch"), is(true));
+        assertThat(checkEmailPattern("aaa%asdsads@sdsdsd.com"), is(true));
+        assertThat(checkEmailPattern("aaa&asdsads@sdsdsd.com"), is(true));
         assertThat(checkEmailPattern("h@dvbern.ch"), is(true));
         assertThat(checkEmailPattern("h@b.ch"), is(true));
-
-        // Valid Email mit ungueltige Karaktern
         assertThat(checkEmailPattern("()<>,;:\"[]|ç%&@adsad.com"), is(false));
         assertThat(checkEmailPattern("aaa(asdsads@sdsdsd.com"), is(false));
         assertThat(checkEmailPattern("aaa)asdsads@sdsdsd.com"), is(false));
@@ -49,10 +50,7 @@ public class EmailPatternTest {
         assertThat(checkEmailPattern("aaa\"asdsads@sdsdsd.com"), is(false));
         assertThat(checkEmailPattern("aaa[asdsads@sdsdsd.com"), is(false));
         assertThat(checkEmailPattern("aaa]asdsads@sdsdsd.com"), is(false));
-        assertThat(checkEmailPattern("aaa|asdsads@sdsdsd.com"), is(false));
         assertThat(checkEmailPattern("aaaçasdsads@sdsdsd.com"), is(false));
-        assertThat(checkEmailPattern("aaa%asdsads@sdsdsd.com"), is(false));
-        assertThat(checkEmailPattern("aaa&asdsads@sdsdsd.com"), is(false));
         assertThat(checkEmailPattern("aaa asdsads@sdsdsd.com"), is(false));
         assertThat(checkEmailPattern("aaaäasdsads@sdsdsd.com"), is(false));
         assertThat(checkEmailPattern("aaaéasdsads@sdsdsd.com"), is(false));
