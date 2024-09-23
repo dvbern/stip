@@ -9,7 +9,6 @@ import lombok.Value;
 @AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
 public class AppValidationMessage {
 
-
     private static final String APP_VALIDATION = "AppValidation.";
 
     public static AppValidationMessage invalidDate(String monthYear) {
@@ -17,6 +16,11 @@ public class AppValidationMessage {
             "InvalidDate",
             I18nMessage.of(APP_VALIDATION + "INVALID_DATE", "date", monthYear)
         );
+    }
+
+    public static AppValidationMessage badSignatureDetectedInUpload() {
+        return of("BadSignatureDetectedInUpload",
+            I18nMessage.of(APP_VALIDATION + "BAD_SIGNATURE_DETECTED_IN_UPLOAD"));
     }
 
     // This key is sent to the client in the error response
