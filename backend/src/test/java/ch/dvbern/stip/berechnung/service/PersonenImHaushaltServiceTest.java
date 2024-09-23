@@ -150,7 +150,7 @@ class PersonenImHaushaltServiceTest {
     }
 
     @Test
-    void testPersonenImHaushaltElternteilUnbekanntVerstorben() {
+    void testPersonenImHaushaltElternteilVaterUnbekanntVerstorben() {
         gesuchFormular.getPersonInAusbildung()
             .setWohnsitz(Wohnsitz.MUTTER_VATER)
             .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
@@ -162,6 +162,43 @@ class PersonenImHaushaltServiceTest {
             .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
             .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH)
             .setVaterWiederverheiratet(false)
+            .setMutterWiederverheiratet(true);
+        gesuchFormular.setGeschwisters(
+            Set.of(
+                (Geschwister) new Geschwister()
+                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
+                    .setWohnsitzAnteilVater(BigDecimal.valueOf(30))
+                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(70))
+            )
+        );
+
+        final var request = personenImHaushaltService.getPersonenImHaushaltRequest(
+            1,
+            0,
+            gesuchFormular,
+            ElternTyp.VATER
+        );
+        final var ret = personenImHaushaltService.calculatePersonenImHaushalt(request);
+        assertThat(ret.getNoBudgetsRequired(), equalTo(1));
+        assertThat(ret.getKinderImHaushalt1(), equalTo(2));
+        assertThat(ret.getKinderImHaushalt2(), equalTo(0));
+        assertThat(ret.getPersonenImHaushalt1(), equalTo(4));
+        assertThat(ret.getPersonenImHaushalt2(), equalTo(0));
+    }
+
+    @Test
+    void testPersonenImHaushaltElternteilMutterUnbekanntVerstorben() {
+        gesuchFormular.getPersonInAusbildung()
+            .setWohnsitz(Wohnsitz.MUTTER_VATER)
+            .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
+            .setWohnsitzAnteilMutter(BigDecimal.valueOf(100));
+        gesuchFormular.getFamiliensituation()
+            .setElternVerheiratetZusammen(false)
+            .setGerichtlicheAlimentenregelung(false)
+            .setElternteilUnbekanntVerstorben(true)
+            .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH)
+            .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
+            .setVaterWiederverheiratet(true)
             .setMutterWiederverheiratet(false);
         gesuchFormular.setGeschwisters(
             Set.of(
@@ -182,7 +219,7 @@ class PersonenImHaushaltServiceTest {
         assertThat(ret.getNoBudgetsRequired(), equalTo(1));
         assertThat(ret.getKinderImHaushalt1(), equalTo(2));
         assertThat(ret.getKinderImHaushalt2(), equalTo(0));
-        assertThat(ret.getPersonenImHaushalt1(), equalTo(3));
+        assertThat(ret.getPersonenImHaushalt1(), equalTo(4));
         assertThat(ret.getPersonenImHaushalt2(), equalTo(0));
     }
 

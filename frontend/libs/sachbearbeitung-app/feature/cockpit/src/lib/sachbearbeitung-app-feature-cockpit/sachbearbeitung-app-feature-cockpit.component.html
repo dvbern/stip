@@ -2,7 +2,7 @@
   <div class="container pt-4 mt-2">
     <div class="row g-4" [formGroup]="quickFilterForm">
       @for (quickFilter of quickFilters; track quickFilter) {
-        <div class="col-12 col-md-4 col-lg-2 d-flex">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2 d-flex">
           <button
             type="button"
             (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
@@ -194,7 +194,7 @@
                     </div>
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
-                    {{ gesuch.geburtsdatum | date: 'dd.MM.YYYY' }}
+                    {{ gesuch.geburtsdatum | date: 'dd.MM.yyyy' }}
                   </td>
                 </ng-container>
 
@@ -322,7 +322,7 @@
                     </div>
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
-                    {{ gesuch.letzteAktivitaet | date: 'dd.MM.YYYY' }}
+                    {{ gesuch.letzteAktivitaet | date: 'dd.MM.yyyy' }}
                   </td>
                 </ng-container>
 

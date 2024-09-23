@@ -9,25 +9,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BerechnungsStammdaten } from './berechnungsStammdaten';
-import { FamilienBudgetresultat } from './familienBudgetresultat';
-import { PersoenlichesBudgetresultat } from './persoenlichesBudgetresultat';
+import { TranchenBerechnungsresultat } from './tranchenBerechnungsresultat';
 
 /**
- * Resultat der Berechnung (eine Tranche)
+ * Resultat der Berechnung (gesamtes Gesuch)
  */
 export interface Berechnungsresultat { 
     /**
-     * Berechneter Stpendiumsanspruch für diese Tranche
+     * Berechneter Stpendiumsanspruch für das Gesuch
      */
     berechnung: number;
-    gueltigAb: string;
-    gueltigBis: string;
-    berechnungsStammdaten: BerechnungsStammdaten;
-    persoenlichesBudgetresultat: PersoenlichesBudgetresultat;
     /**
-     * Berechnungsdaten der Familienbudgets
+     * Resultate der Berechnung für die Tranchen des Gesuchs
      */
-    familienBudgetresultate: Array<FamilienBudgetresultat>;
+    tranchenBerechnungsresultate: Array<TranchenBerechnungsresultat>;
 }
 

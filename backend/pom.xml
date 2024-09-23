@@ -40,6 +40,8 @@
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
     <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
     <kie.version>8.41.0.Final</kie.version>
+    <sqids.version>0.1.0</sqids.version>
+    <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -214,6 +216,11 @@
       <artifactId>quarkus-quartz</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkiverse.antivirus</groupId>
+      <artifactId>quarkus-antivirus</artifactId>
+      <version>${quarkus-antivirus.version}</version>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
@@ -312,6 +319,23 @@
       <groupId>org.kie</groupId>
       <artifactId>kie-dmn-core</artifactId>
       <version>${kie.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sqids</groupId>
+      <artifactId>sqids</artifactId>
+      <version>${sqids.version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/jakarta.xml.soap/jakarta.xml.soap-api -->
+    <dependency>
+      <groupId>jakarta.xml.soap</groupId>
+      <artifactId>jakarta.xml.soap-api</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.sun.xml.messaging.saaj/saaj-impl -->
+    <dependency>
+      <groupId>com.sun.xml.messaging.saaj</groupId>
+      <artifactId>saaj-impl</artifactId>
+      <version>3.0.4</version>
     </dependency>
   </dependencies>
   <build>

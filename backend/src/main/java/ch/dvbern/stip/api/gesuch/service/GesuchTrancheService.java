@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
@@ -14,6 +15,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -32,6 +34,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -142,7 +145,12 @@ public class GesuchTrancheService {
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (openAenderungAlreadyExists(gesuch)) {
+            throw new ForbiddenException();
+        }
+
         final var trancheToCopy = gesuch.getCurrentGesuchTranche();
+
         final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
         gesuch.getGesuchTranchen().add(newTranche);
 
@@ -204,5 +212,14 @@ public class GesuchTrancheService {
         }
 
         return new ValidationReportDto();
+    }
+
+    public boolean openAenderungAlreadyExists(final Gesuch gesuch) {
+        final var allowedStates = Set.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.ABGELEHNT);
+        final var trancheInDisallowedStates = gesuch.getAenderungen()
+            .filter(gesuchTranche -> !allowedStates.contains(gesuchTranche.getStatus()))
+            .toList();
+
+        return !trancheInDisallowedStates.isEmpty();
     }
 }

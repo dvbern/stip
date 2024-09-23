@@ -1,0 +1,13 @@
+<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP:Header/>
+  <SOAP:Body xmlns:urn="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER">
+    <n0:BusinessPartnerChange_Response xmlns:n0="urn:be.ch:KTBE_MDG:BUSINESS_PARTNER" xmlns:prx="urn:sap.com:proxy:QMA:/1SAI/TAS7DAF8BFDA61C530AEB5C:757">
+      <RETURN_CODE>
+        <TYPE>E</TYPE>
+        <MSG_NR>5</MSG_NR>
+        <MESSAGE>Die Delivery 27612 existiert bereits.</MESSAGE>
+        <ID>ZCA_SSC</ID>
+      </RETURN_CODE>
+    </n0:BusinessPartnerChange_Response>
+  </SOAP:Body>
+</SOAP:Envelope>

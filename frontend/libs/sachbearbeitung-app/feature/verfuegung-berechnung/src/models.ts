@@ -4,6 +4,10 @@ export type PersoenlicheBerechnung = {
   total: number;
   totalEinnahmen: number;
   totalKosten: number;
+  geteilteBerechnung: {
+    berechnungsanteilKinder: number;
+    anteil: number;
+  } | null;
   einnahmen: {
     total: number;
     anzahlPersonenImHaushalt: number;
@@ -57,7 +61,7 @@ export type FamilienBerechnung = {
     sauele2: number;
     sauele3: number;
     mietwert: number;
-    alimenteOderRenten: number;
+    kinderalimente: number;
     einkommensfreibeitrag: number;
     maxSaeule3a: number;
     freibetragVermoegen: number;

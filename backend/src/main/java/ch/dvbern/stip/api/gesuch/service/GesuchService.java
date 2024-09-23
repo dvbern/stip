@@ -91,6 +91,7 @@ public class GesuchService {
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
+    private final GesuchNummerService gesuchNummerService;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithCurrentTranche(UUID id) {
@@ -205,6 +206,7 @@ public class GesuchService {
         final String tenantId
     ) throws ValidationsException {
         var gesuch = gesuchRepository.requireById(gesuchId);
+        preventUpdateVonGesuchIfReadOnly(gesuch);
         var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
             .orElseThrow(NotFoundException::new);
         if (trancheToUpdate.getTyp() == GesuchTrancheTyp.TRANCHE) {
@@ -257,6 +259,7 @@ public class GesuchService {
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         createInitialGesuchTranche(gesuch);
+        gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
         gesuchRepository.persistAndFlush(gesuch);
         return gesuchMapperUtil.mapWithTranche(
             gesuch, gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
@@ -378,9 +381,9 @@ public class GesuchService {
         }
     }
 
-    public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) {
+    public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
-        return berechnungService.getBerechnungsresultateFromGesuch(gesuch, 1, 0);
+        return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
     public GesuchWithChangesDto getGsTrancheChanges(final UUID aenderungId) {

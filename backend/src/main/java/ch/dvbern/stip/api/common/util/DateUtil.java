@@ -37,27 +37,25 @@ public class DateUtil {
         throw new AppErrorException("Unreachable code was reached!");
     }
 
-    /**
-     * Defaults the midpoint to 14
-     *
-     * @see DateUtil#roundToStartOrEnd(LocalDate, int, boolean)
-     */
-    public LocalDate roundToStartOrEnd(final LocalDate date, final boolean roundUpIfEnd) {
-        return roundToStartOrEnd(date, 14, roundUpIfEnd);
-    }
 
     /**
      * Rounds the given date to the start or end of month.
      * All dates up to and including the midpoint of the month are rounded down to the start,
      * all after are clamped up the end of the month.
      * If the param {@code roundUpIfEnd} is {@code true}, then rounds up the date to the start of next month
+     * If the param {@code roundDownIfStart} is {@code true}, then rounds down the date to the end of month
      */
-    public LocalDate roundToStartOrEnd(final LocalDate date, final int midpoint, final boolean roundUpIfEnd) {
-        if (date == null) {
-            throw new IllegalArgumentException("Date cannot be null");
-        }
-
+    public LocalDate roundToStartOrEnd(
+        final LocalDate date,
+        final int midpoint,
+        final boolean roundDownIfStart,
+        final boolean roundUpIfEnd
+    ) {
         if (date.getDayOfMonth() <= midpoint) {
+            if (roundDownIfStart) {
+                return date.minusMonths(1).with(lastDayOfMonth());
+            }
+
             return date.with(firstDayOfMonth());
         } else {
             if (roundUpIfEnd) {

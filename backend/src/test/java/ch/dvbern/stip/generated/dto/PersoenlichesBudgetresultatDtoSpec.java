@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EIGENER_HAUSHALT,
-  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANTEIL_FAMILIENBUDGET,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EINKOMMEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ALIMENTE,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_LEISTUNGEN_E_O,
@@ -39,9 +39,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_GEMEINDE_INSTITUTIONEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_STEUERBARES_VERMOEGEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANRECHENBARES_VERMOEGEN,
-  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANTEIL_FAMILIENBUDGET,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EINKOMMEN_PARTNER,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EINNAHMEN_PERSOENLICHES_BUDGET,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_GRUNDBEDARF,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG,
@@ -64,8 +64,8 @@ public class PersoenlichesBudgetresultatDtoSpec {
   public static final String JSON_PROPERTY_EIGENER_HAUSHALT = "eigenerHaushalt";
   private Boolean eigenerHaushalt;
 
-  public static final String JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN = "anteilLebenshaltungskosten";
-  private Integer anteilLebenshaltungskosten;
+  public static final String JSON_PROPERTY_ANTEIL_FAMILIENBUDGET = "anteilFamilienbudget";
+  private Integer anteilFamilienbudget;
 
   public static final String JSON_PROPERTY_EINKOMMEN = "einkommen";
   private Integer einkommen;
@@ -94,14 +94,14 @@ public class PersoenlichesBudgetresultatDtoSpec {
   public static final String JSON_PROPERTY_ANRECHENBARES_VERMOEGEN = "anrechenbaresVermoegen";
   private Integer anrechenbaresVermoegen;
 
-  public static final String JSON_PROPERTY_ANTEIL_FAMILIENBUDGET = "anteilFamilienbudget";
-  private Integer anteilFamilienbudget;
-
   public static final String JSON_PROPERTY_EINKOMMEN_PARTNER = "einkommenPartner";
   private Integer einkommenPartner;
 
   public static final String JSON_PROPERTY_EINNAHMEN_PERSOENLICHES_BUDGET = "einnahmenPersoenlichesBudget";
   private Integer einnahmenPersoenlichesBudget;
+
+  public static final String JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN = "anteilLebenshaltungskosten";
+  private Integer anteilLebenshaltungskosten;
 
   public static final String JSON_PROPERTY_GRUNDBEDARF = "grundbedarf";
   private Integer grundbedarf;
@@ -194,29 +194,29 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  public PersoenlichesBudgetresultatDtoSpec anteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
+  public PersoenlichesBudgetresultatDtoSpec anteilFamilienbudget(Integer anteilFamilienbudget) {
     
-    this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
+    this.anteilFamilienbudget = anteilFamilienbudget;
     return this;
   }
 
    /**
-   * Get anteilLebenshaltungskosten
-   * @return anteilLebenshaltungskosten
+   * Get anteilFamilienbudget
+   * @return anteilFamilienbudget
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN)
+  @JsonProperty(JSON_PROPERTY_ANTEIL_FAMILIENBUDGET)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getAnteilLebenshaltungskosten() {
-    return anteilLebenshaltungskosten;
+  public Integer getAnteilFamilienbudget() {
+    return anteilFamilienbudget;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN)
+  @JsonProperty(JSON_PROPERTY_ANTEIL_FAMILIENBUDGET)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
-    this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
+  public void setAnteilFamilienbudget(Integer anteilFamilienbudget) {
+    this.anteilFamilienbudget = anteilFamilienbudget;
   }
 
 
@@ -454,32 +454,6 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  public PersoenlichesBudgetresultatDtoSpec anteilFamilienbudget(Integer anteilFamilienbudget) {
-    
-    this.anteilFamilienbudget = anteilFamilienbudget;
-    return this;
-  }
-
-   /**
-   * Get anteilFamilienbudget
-   * @return anteilFamilienbudget
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANTEIL_FAMILIENBUDGET)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getAnteilFamilienbudget() {
-    return anteilFamilienbudget;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ANTEIL_FAMILIENBUDGET)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnteilFamilienbudget(Integer anteilFamilienbudget) {
-    this.anteilFamilienbudget = anteilFamilienbudget;
-  }
-
-
   public PersoenlichesBudgetresultatDtoSpec einkommenPartner(Integer einkommenPartner) {
     
     this.einkommenPartner = einkommenPartner;
@@ -529,6 +503,32 @@ public class PersoenlichesBudgetresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEinnahmenPersoenlichesBudget(Integer einnahmenPersoenlichesBudget) {
     this.einnahmenPersoenlichesBudget = einnahmenPersoenlichesBudget;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec anteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
+    
+    this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
+    return this;
+  }
+
+   /**
+   * Get anteilLebenshaltungskosten
+   * @return anteilLebenshaltungskosten
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAnteilLebenshaltungskosten() {
+    return anteilLebenshaltungskosten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAnteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
+    this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
   }
 
 
@@ -854,7 +854,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
     PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat = (PersoenlichesBudgetresultatDtoSpec) o;
     return Objects.equals(this.anzahlPersonenImHaushalt, persoenlichesBudgetresultat.anzahlPersonenImHaushalt) &&
         Objects.equals(this.eigenerHaushalt, persoenlichesBudgetresultat.eigenerHaushalt) &&
-        Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultat.anteilLebenshaltungskosten) &&
+        Objects.equals(this.anteilFamilienbudget, persoenlichesBudgetresultat.anteilFamilienbudget) &&
         Objects.equals(this.einkommen, persoenlichesBudgetresultat.einkommen) &&
         Objects.equals(this.alimente, persoenlichesBudgetresultat.alimente) &&
         Objects.equals(this.leistungenEO, persoenlichesBudgetresultat.leistungenEO) &&
@@ -864,9 +864,9 @@ public class PersoenlichesBudgetresultatDtoSpec {
         Objects.equals(this.gemeindeInstitutionen, persoenlichesBudgetresultat.gemeindeInstitutionen) &&
         Objects.equals(this.steuerbaresVermoegen, persoenlichesBudgetresultat.steuerbaresVermoegen) &&
         Objects.equals(this.anrechenbaresVermoegen, persoenlichesBudgetresultat.anrechenbaresVermoegen) &&
-        Objects.equals(this.anteilFamilienbudget, persoenlichesBudgetresultat.anteilFamilienbudget) &&
         Objects.equals(this.einkommenPartner, persoenlichesBudgetresultat.einkommenPartner) &&
         Objects.equals(this.einnahmenPersoenlichesBudget, persoenlichesBudgetresultat.einnahmenPersoenlichesBudget) &&
+        Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultat.anteilLebenshaltungskosten) &&
         Objects.equals(this.grundbedarf, persoenlichesBudgetresultat.grundbedarf) &&
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultat.wohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultat.medizinischeGrundversorgung) &&
@@ -883,7 +883,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilLebenshaltungskosten, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, anteilFamilienbudget, einkommenPartner, einnahmenPersoenlichesBudget, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
+    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
   }
 
   @Override
@@ -892,7 +892,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
     sb.append("class PersoenlichesBudgetresultatDtoSpec {\n");
     sb.append("    anzahlPersonenImHaushalt: ").append(toIndentedString(anzahlPersonenImHaushalt)).append("\n");
     sb.append("    eigenerHaushalt: ").append(toIndentedString(eigenerHaushalt)).append("\n");
-    sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
+    sb.append("    anteilFamilienbudget: ").append(toIndentedString(anteilFamilienbudget)).append("\n");
     sb.append("    einkommen: ").append(toIndentedString(einkommen)).append("\n");
     sb.append("    alimente: ").append(toIndentedString(alimente)).append("\n");
     sb.append("    leistungenEO: ").append(toIndentedString(leistungenEO)).append("\n");
@@ -902,9 +902,9 @@ public class PersoenlichesBudgetresultatDtoSpec {
     sb.append("    gemeindeInstitutionen: ").append(toIndentedString(gemeindeInstitutionen)).append("\n");
     sb.append("    steuerbaresVermoegen: ").append(toIndentedString(steuerbaresVermoegen)).append("\n");
     sb.append("    anrechenbaresVermoegen: ").append(toIndentedString(anrechenbaresVermoegen)).append("\n");
-    sb.append("    anteilFamilienbudget: ").append(toIndentedString(anteilFamilienbudget)).append("\n");
     sb.append("    einkommenPartner: ").append(toIndentedString(einkommenPartner)).append("\n");
     sb.append("    einnahmenPersoenlichesBudget: ").append(toIndentedString(einnahmenPersoenlichesBudget)).append("\n");
+    sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("    grundbedarf: ").append(toIndentedString(grundbedarf)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");

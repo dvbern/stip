@@ -1,10 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
-import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
-import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * Resultat der Berechnung (eine Tranche)
+ * Resultat der Berechnung (gesamtes Gesuch)
  **/
 
 @JsonTypeName("Berechnungsresultat")
@@ -29,14 +26,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer berechnung;
-  private @Valid LocalDate gueltigAb;
-  private @Valid LocalDate gueltigBis;
-  private @Valid BerechnungsStammdatenDto berechnungsStammdaten;
-  private @Valid PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
-  private @Valid List<FamilienBudgetresultatDto> familienBudgetresultate = new ArrayList<>();
+  private @Valid List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
 
   /**
-   * Berechneter Stpendiumsanspruch für diese Tranche
+   * Berechneter Stpendiumsanspruch für das Gesuch
    **/
   public BerechnungsresultatDto berechnung(Integer berechnung) {
     this.berechnung = berechnung;
@@ -56,113 +49,37 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   /**
+   * Resultate der Berechnung für die Tranchen des Gesuchs
    **/
-  public BerechnungsresultatDto gueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
+  public BerechnungsresultatDto tranchenBerechnungsresultate(List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate) {
+    this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
     return this;
   }
 
   
-  @JsonProperty("gueltigAb")
+  @JsonProperty("tranchenBerechnungsresultate")
   @NotNull
-  public LocalDate getGueltigAb() {
-    return gueltigAb;
+  public List<TranchenBerechnungsresultatDto> getTranchenBerechnungsresultate() {
+    return tranchenBerechnungsresultate;
   }
 
-  @JsonProperty("gueltigAb")
-  public void setGueltigAb(LocalDate gueltigAb) {
-    this.gueltigAb = gueltigAb;
+  @JsonProperty("tranchenBerechnungsresultate")
+  public void setTranchenBerechnungsresultate(List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate) {
+    this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
   }
 
-  /**
-   **/
-  public BerechnungsresultatDto gueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
-    return this;
-  }
-
-  
-  @JsonProperty("gueltigBis")
-  @NotNull
-  public LocalDate getGueltigBis() {
-    return gueltigBis;
-  }
-
-  @JsonProperty("gueltigBis")
-  public void setGueltigBis(LocalDate gueltigBis) {
-    this.gueltigBis = gueltigBis;
-  }
-
-  /**
-   **/
-  public BerechnungsresultatDto berechnungsStammdaten(BerechnungsStammdatenDto berechnungsStammdaten) {
-    this.berechnungsStammdaten = berechnungsStammdaten;
-    return this;
-  }
-
-  
-  @JsonProperty("berechnungsStammdaten")
-  @NotNull
-  public BerechnungsStammdatenDto getBerechnungsStammdaten() {
-    return berechnungsStammdaten;
-  }
-
-  @JsonProperty("berechnungsStammdaten")
-  public void setBerechnungsStammdaten(BerechnungsStammdatenDto berechnungsStammdaten) {
-    this.berechnungsStammdaten = berechnungsStammdaten;
-  }
-
-  /**
-   **/
-  public BerechnungsresultatDto persoenlichesBudgetresultat(PersoenlichesBudgetresultatDto persoenlichesBudgetresultat) {
-    this.persoenlichesBudgetresultat = persoenlichesBudgetresultat;
-    return this;
-  }
-
-  
-  @JsonProperty("persoenlichesBudgetresultat")
-  @NotNull
-  public PersoenlichesBudgetresultatDto getPersoenlichesBudgetresultat() {
-    return persoenlichesBudgetresultat;
-  }
-
-  @JsonProperty("persoenlichesBudgetresultat")
-  public void setPersoenlichesBudgetresultat(PersoenlichesBudgetresultatDto persoenlichesBudgetresultat) {
-    this.persoenlichesBudgetresultat = persoenlichesBudgetresultat;
-  }
-
-  /**
-   * Berechnungsdaten der Familienbudgets
-   **/
-  public BerechnungsresultatDto familienBudgetresultate(List<FamilienBudgetresultatDto> familienBudgetresultate) {
-    this.familienBudgetresultate = familienBudgetresultate;
-    return this;
-  }
-
-  
-  @JsonProperty("familienBudgetresultate")
-  @NotNull
-  public List<FamilienBudgetresultatDto> getFamilienBudgetresultate() {
-    return familienBudgetresultate;
-  }
-
-  @JsonProperty("familienBudgetresultate")
-  public void setFamilienBudgetresultate(List<FamilienBudgetresultatDto> familienBudgetresultate) {
-    this.familienBudgetresultate = familienBudgetresultate;
-  }
-
-  public BerechnungsresultatDto addFamilienBudgetresultateItem(FamilienBudgetresultatDto familienBudgetresultateItem) {
-    if (this.familienBudgetresultate == null) {
-      this.familienBudgetresultate = new ArrayList<>();
+  public BerechnungsresultatDto addTranchenBerechnungsresultateItem(TranchenBerechnungsresultatDto tranchenBerechnungsresultateItem) {
+    if (this.tranchenBerechnungsresultate == null) {
+      this.tranchenBerechnungsresultate = new ArrayList<>();
     }
 
-    this.familienBudgetresultate.add(familienBudgetresultateItem);
+    this.tranchenBerechnungsresultate.add(tranchenBerechnungsresultateItem);
     return this;
   }
 
-  public BerechnungsresultatDto removeFamilienBudgetresultateItem(FamilienBudgetresultatDto familienBudgetresultateItem) {
-    if (familienBudgetresultateItem != null && this.familienBudgetresultate != null) {
-      this.familienBudgetresultate.remove(familienBudgetresultateItem);
+  public BerechnungsresultatDto removeTranchenBerechnungsresultateItem(TranchenBerechnungsresultatDto tranchenBerechnungsresultateItem) {
+    if (tranchenBerechnungsresultateItem != null && this.tranchenBerechnungsresultate != null) {
+      this.tranchenBerechnungsresultate.remove(tranchenBerechnungsresultateItem);
     }
 
     return this;
@@ -178,16 +95,12 @@ public class BerechnungsresultatDto  implements Serializable {
     }
     BerechnungsresultatDto berechnungsresultat = (BerechnungsresultatDto) o;
     return Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
-        Objects.equals(this.gueltigAb, berechnungsresultat.gueltigAb) &&
-        Objects.equals(this.gueltigBis, berechnungsresultat.gueltigBis) &&
-        Objects.equals(this.berechnungsStammdaten, berechnungsresultat.berechnungsStammdaten) &&
-        Objects.equals(this.persoenlichesBudgetresultat, berechnungsresultat.persoenlichesBudgetresultat) &&
-        Objects.equals(this.familienBudgetresultate, berechnungsresultat.familienBudgetresultate);
+        Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, gueltigAb, gueltigBis, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(berechnung, tranchenBerechnungsresultate);
   }
 
   @Override
@@ -196,11 +109,7 @@ public class BerechnungsresultatDto  implements Serializable {
     sb.append("class BerechnungsresultatDto {\n");
     
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
-    sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
-    sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
-    sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");
-    sb.append("    persoenlichesBudgetresultat: ").append(toIndentedString(persoenlichesBudgetresultat)).append("\n");
-    sb.append("    familienBudgetresultate: ").append(toIndentedString(familienBudgetresultate)).append("\n");
+    sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

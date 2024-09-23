@@ -1,0 +1,51 @@
+<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'>
+  <SOAP:Header/>
+  <SOAP:Body xmlns:urn='urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS'>
+    <n0:ImportStatusRead_Response xmlns:n0='urn:be.ch:KTBE_ERP_FI:IMPORT_STATUS' xmlns:prx='urn:sap.com:proxy:QEA:/1SAI/TASF1A86D86632931183F59:757'>
+      <DELIVERY>
+        <DELIVERY_ID>UNIT TEST</DELIVERY_ID>
+        <TYPE>077 - GP-Change</TYPE>
+        <STATUS>1</STATUS>
+        <KTEXT>Erfolgreich verarbeitet</KTEXT>
+        <LAST_ACTION>2024-08-16T09:07:53Z</LAST_ACTION>
+        <COUNTER_SUCCESS>1</COUNTER_SUCCESS>
+        <COUNTER_ERROR>0</COUNTER_ERROR>
+        <COUNTER_INITIAL>0</COUNTER_INITIAL>
+        <COUNTER_TOTAL>1</COUNTER_TOTAL>
+        <POSITION>
+          <POSID>1</POSID>
+          <STATUS>SUCCESS</STATUS>
+          <SAP_KEY>1000569588</SAP_KEY>
+          <EXT_KEY>848931</EXT_KEY>
+          <LOGS>
+            <DATETIME>2024-07-29T14:48:46Z</DATETIME>
+            <TYPE>I</TYPE>
+            <MSG_NR>32</MSG_NR>
+            <MESSAGE>Anderungsantrag 161705 (Schnittstellenänderung (2080)) wurde aktiviert</MESSAGE>
+            <ID>USMD5</ID>
+          </LOGS>
+          <LOGS>
+            <DATETIME>2024-07-29T14:48:40Z</DATETIME>
+            <TYPE>I</TYPE>
+            <MSG_NR>52</MSG_NR>
+            <MESSAGE>Änderungsantragsnummer 000000161705 wurde erstellt.</MESSAGE>
+            <ID>ZCA_SSC</ID>
+          </LOGS>
+          <LOGS>
+            <DATETIME>2024-07-29T14:48:40Z</DATETIME>
+            <TYPE>S</TYPE>
+            <MSG_NR>51</MSG_NR>
+            <MESSAGE>SAP Geschäftspartner wurde erfolgreich geändert.</MESSAGE>
+            <ID>ZCA_SSC</ID>
+          </LOGS>
+        </POSITION>
+      </DELIVERY>
+      <RETURN_CODE>
+        <TYPE>S</TYPE>
+        <MSG_NR>200</MSG_NR>
+        <MESSAGE>Es wurden 1 Deliveries erfolgreich übermittelt.</MESSAGE>
+        <ID>ZCA_SSC</ID>
+      </RETURN_CODE>
+    </n0:ImportStatusRead_Response>
+  </SOAP:Body>
+</SOAP:Envelope>

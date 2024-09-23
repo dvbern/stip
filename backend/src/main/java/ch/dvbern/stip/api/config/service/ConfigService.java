@@ -59,6 +59,14 @@ public class ConfigService {
     List<String> seedOnProfile;
 
     @Getter
+    @ConfigProperty(name = "kstip.seeding.testcases.seed-on")
+    List<String> seedTestcasesOnProfile;
+
+    @Getter
+    @ConfigProperty(name = "kstip.seeding.testcases.to-seed")
+    List<String> testcasesToSeed;
+
+    @Getter
     @ConfigProperty(name = "kstip.welcome-mail.kc-url")
     String welcomeEmailKcUrl;
 
@@ -73,6 +81,10 @@ public class ConfigService {
     @Getter
     @ConfigProperty(name = "kstip.welcome-mail.kc-scope")
     String welcomeEmailKcScope;
+
+    @Getter
+    @ConfigProperty(name = "kstip.sap.system-id")
+    Integer systemid;
 
     public DeploymentConfigDto getDeploymentConfiguration() {
         return new DeploymentConfigDto()

@@ -3,6 +3,7 @@ package ch.dvbern.stip.berechnung.dto.v1;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.ListIterator;
 
 import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
@@ -46,7 +47,7 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
         int fahrkosten = antragssteller.getFahrkosten();
         int ausbildungskosten = antragssteller.getAusbildungskosten();
 
-        if (antragssteller.isVerheiratetKonkubinat()) {
+        if (antragssteller.isVerheiratetKonkubinat() && anzahlPersonenImHaushalt > 0) {
             fahrkosten *= anzahlPersonenImHaushalt;
             ausbildungskosten *= anzahlPersonenImHaushalt;
 
@@ -67,8 +68,9 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             .gemeindeInstitutionen(antragssteller.getGemeindeInstitutionen())
             .steuerbaresVermoegen(antragssteller.getVermoegen())
             .anrechenbaresVermoegen(
-                BigDecimal.valueOf(antragssteller.getVermoegen() * 0.15) // TODO: KSTIP-1362, Stammdaten aus request lesen)
-                    .setScale(0, RoundingMode.HALF_UP).intValue()
+                BigDecimal.valueOf(
+                    antragssteller.getVermoegen() * berechnungsRequest.getStammdaten().getVermoegensanteilInProzent() / 100.0
+                    ).setScale(0, RoundingMode.HALF_UP).intValue()
             )
             .anteilFamilienbudget(
                 getAnteilFamilienBudget(familienBudgetresultatList, antragssteller)
@@ -99,10 +101,10 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             if (familienBudget <= 0) {
                 continue;
             }
-            if (antragssteller.getAlter() < 25 || !antragssteller.isAbgeschlosseneErstausbildung()) {
-                anteilFamilienBudget += familienBudget / (familienBudgetresultat.getAnzahlGeschwisterInAusbildung() + 1);
-            } else {
+            if (antragssteller.isHalbierungElternbeitrag()) {
                 anteilFamilienBudget += (familienBudget / (familienBudgetresultat.getAnzahlGeschwisterInAusbildung() + 1)) / 2;
+            } else {
+                anteilFamilienBudget += familienBudget / (familienBudgetresultat.getAnzahlGeschwisterInAusbildung() + 1);
             }
         }
         return anteilFamilienBudget;
@@ -113,9 +115,13 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
         AntragsstellerV1 antragssteller
     ) {
         int anteilLebenshaltungskosten = 0;
-        for (final FamilienBudgetresultatDto familienBudgetresultat : familienBudgetresultatList) {
+        int piaWohntInElternHaushalt = antragssteller.getPiaWohntInElternHaushalt();
+        ListIterator<FamilienBudgetresultatDto> iterator = familienBudgetresultatList.listIterator();
+        while (iterator.hasNext()) {
+            final FamilienBudgetresultatDto familienBudgetresultat = iterator.next();
+            final var budgetIdx = iterator.nextIndex();
             final var familienBudget = familienBudgetresultat.getFamilienbudgetBerechnet();
-            if (familienBudget >= 0 || antragssteller.isEigenerHaushalt()) {
+            if (familienBudget >= 0 || antragssteller.isEigenerHaushalt() || budgetIdx != piaWohntInElternHaushalt) {
                 continue;
             }
             anteilLebenshaltungskosten += familienBudget / familienBudgetresultat.getAnzahlPersonenImHaushalt();

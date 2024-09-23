@@ -2,28 +2,37 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -34,6 +43,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -92,6 +102,12 @@ class GesuchServiceTest {
 
     @InjectMock
     NotificationService notificationService;
+
+    @Inject
+    GesuchTrancheService gesuchTrancheService;
+
+    @InjectMock
+    GesuchTrancheRepository gesuchTrancheRepository;
 
     static final String TENANT_ID = "bern";
 
@@ -742,6 +758,73 @@ class GesuchServiceTest {
         assertThat(
             tranche.getGesuchFormular().getLebenslaufItems().size(),
             Matchers.is(1)
+        );
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void validateEinreichenInvalid() {
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createGesuch());
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.EINGEREICHT);
+
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of((Gesuch)
+            new Gesuch()
+                .setGesuchStatus(Gesuchstatus.EINGEREICHT)
+                .setId(UUID.randomUUID())
+        ));
+
+        final var reportDto = gesuchTrancheService.einreichenValidieren(tranche.getId());
+
+        assertThat(
+            reportDto.getValidationErrors().size(),
+            Matchers.is(1)
+        );
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void validateEinreichenValid() {
+        EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec().setSteuerjahr(0);
+        final var gesuchUpdateDto = GesuchGenerator.createFullGesuch();
+        final var famsit = new FamiliensituationUpdateDto();
+        famsit.setElternVerheiratetZusammen(false);
+        famsit.setGerichtlicheAlimentenregelung(false);
+        famsit.setElternteilUnbekanntVerstorben(true);
+        famsit.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+        famsit.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+
+        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        tranche.getGesuch().setGesuchNummer("TEST.20XX.213981");
+        tranche.getGesuchFormular()
+            .getAusbildung()
+            .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
+
+        tranche.getGesuchFormular().setTranche(tranche);
+        tranche.setGesuchDokuments(
+            Arrays.stream(DokumentTyp.values())
+                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche))
+                .toList()
+        );
+
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
+        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
+        tranche.setTyp(GesuchTrancheTyp.TRANCHE);
+
+        Set<Steuerdaten> list = new LinkedHashSet<>();
+        list.add(TestUtil.prepareSteuerdaten());
+        tranche.getGesuchFormular().setSteuerdaten(list);
+
+        final var reportDto = gesuchTrancheService.einreichenValidieren(tranche.getId());
+
+        assertThat(
+            reportDto.toString() + "\nEltern: " + gesuchUpdateDto.getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getElterns()
+                .size(),
+            reportDto.getValidationErrors().size(),
+            Matchers.is(0)
         );
     }
 

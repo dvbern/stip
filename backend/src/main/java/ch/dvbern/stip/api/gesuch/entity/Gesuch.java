@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -29,7 +30,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -70,9 +70,8 @@ public class Gesuch extends AbstractMandantEntity {
     private Gesuchstatus gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
     @NotNull
-    @Min(0)
-    @Column(name = "gesuch_nummer", nullable = false)
-    private int gesuchNummer = 0;
+    @Column(name = "gesuch_nummer", nullable = false, updatable = false)
+    private String gesuchNummer;
 
     @NotNull
     @Column(name = "gesuch_status_aenderung_datum", nullable = false)
@@ -118,5 +117,11 @@ public class Gesuch extends AbstractMandantEntity {
                 Comparator.comparing(x -> x.getGueltigkeit().getGueltigBis())
             )
         );
+    }
+
+    public Stream<GesuchTranche> getAenderungen() {
+        return getGesuchTranchen()
+            .stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
     }
 }

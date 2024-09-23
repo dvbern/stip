@@ -10,7 +10,6 @@ import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.api.util.TestConstants;
-import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,12 +23,6 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 public class GesuchTestSeeding extends Seeder {
     private final GesuchsjahrRepository gesuchsjahrRepository;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
-
-    @Override
-    @Startup
-    public void startup() {
-        seed();
-    }
 
     @Override
     protected void doSeed() {

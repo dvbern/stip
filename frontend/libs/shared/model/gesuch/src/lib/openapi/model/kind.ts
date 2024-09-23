@@ -10,25 +10,16 @@
  * Do not edit the class manually.
  */
 import { Ausbildungssituation } from './ausbildungssituation';
-import { Wohnsitz } from './wohnsitz';
 
 export interface Kind { 
     vorname: string;
     /**
-     * dd.MM.YYYY
+     * dd.MM.yyyy
      */
     geburtsdatum: string;
-    wohnsitz: Wohnsitz;
     ausbildungssituation: Ausbildungssituation;
     id?: string;
-    /**
-     * Required wenn Wohnsitz.MUTTER_VATER.
-     */
-    wohnsitzAnteilMutter?: number;
-    /**
-     * Required wenn Wohnsitz.MUTTER_VATER.
-     */
-    wohnsitzAnteilVater?: number;
+    wohnsitzAnteilPia: number;
     nachname: string;
     erhalteneAlimentebeitraege?: number;
 }

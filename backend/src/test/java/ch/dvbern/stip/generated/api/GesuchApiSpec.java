@@ -477,7 +477,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
-     * return List&lt;BerechnungsresultatDtoSpec&gt;
+     * return BerechnungsresultatDtoSpec
      */
     public static class GetBerechnungForGesuchOper implements Oper {
 
@@ -507,10 +507,10 @@ public class GesuchApiSpec {
         /**
          * GET /gesuch/{gesuchId}/berechnung
          * @param handler handler
-         * @return List&lt;BerechnungsresultatDtoSpec&gt;
+         * @return BerechnungsresultatDtoSpec
          */
-        public List<BerechnungsresultatDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<BerechnungsresultatDtoSpec>> type = new TypeRef<List<BerechnungsresultatDtoSpec>>(){};
+        public BerechnungsresultatDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<BerechnungsresultatDtoSpec> type = new TypeRef<BerechnungsresultatDtoSpec>(){};
             return execute(handler).as(type);
         }
 

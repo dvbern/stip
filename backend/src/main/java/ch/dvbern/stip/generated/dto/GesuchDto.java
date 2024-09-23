@@ -27,7 +27,7 @@ public class GesuchDto  implements Serializable {
   private @Valid FallDto fall;
   private @Valid GesuchsperiodeDto gesuchsperiode;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
-  private @Valid Integer gesuchNummer;
+  private @Valid String gesuchNummer;
   private @Valid UUID id;
   private @Valid LocalDate aenderungsdatum;
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
@@ -92,7 +92,7 @@ public class GesuchDto  implements Serializable {
 
   /**
    **/
-  public GesuchDto gesuchNummer(Integer gesuchNummer) {
+  public GesuchDto gesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
     return this;
   }
@@ -100,12 +100,12 @@ public class GesuchDto  implements Serializable {
   
   @JsonProperty("gesuchNummer")
   @NotNull
-  public Integer getGesuchNummer() {
+  public String getGesuchNummer() {
     return gesuchNummer;
   }
 
   @JsonProperty("gesuchNummer")
-  public void setGesuchNummer(Integer gesuchNummer) {
+  public void setGesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
 

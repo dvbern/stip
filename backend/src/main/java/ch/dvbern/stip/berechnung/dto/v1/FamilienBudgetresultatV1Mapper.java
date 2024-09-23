@@ -21,24 +21,26 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
         final int budgetToUse,
         final int einnahmenFamilienbudget,
         final int ausgabenFamilienbudget,
-        final int familienbudgetBerechnet,
-        final BigDecimal kinderProzente
+        final int familienbudgetBerechnet
     ) {
         final BerechnungRequestV1 berechnungsRequest = (BerechnungRequestV1) request;
         InputFamilienbudgetV1 inputFamilienbudget = null;
         switch (budgetToUse) {
-            case 1 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget1();
-            case 2 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget2();
+            case 0 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget1();
+            case 1 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget2();
             default -> throw new IllegalArgumentException("Budget " + budgetToUse + " is not a possible choice");
         }
         final var elternteil = inputFamilienbudget.elternteil;
 
         int anrechenbaresVermoegen = elternteil.getSteuerbaresVermoegen();
         if (elternteil.isSelbststaendigErwerbend()) {
-            anrechenbaresVermoegen = Integer.max(anrechenbaresVermoegen - 30000, 0); // TODO: KSTIP-1362, Stammdaten aus request lesen
+            anrechenbaresVermoegen = Integer.max(
+                anrechenbaresVermoegen - berechnungsRequest.getStammdaten().getFreibetragVermoegen(), 0
+            );
         }
-        anrechenbaresVermoegen = BigDecimal.valueOf(anrechenbaresVermoegen * 0.15) // TODO: KSTIP-1362, Stammdaten aus request lesen
-            .setScale(0, RoundingMode.HALF_UP).intValue();
+        anrechenbaresVermoegen = BigDecimal.valueOf(
+                anrechenbaresVermoegen * berechnungsRequest.getStammdaten().getVermoegensanteilInProzent() / 100.0
+            ).setScale(0, RoundingMode.HALF_UP).intValue();
 
         return new FamilienBudgetresultatDto()
             .familienBudgetTyp(steuerdatenTyp)

@@ -57,11 +57,11 @@ import { FamilienBerechnung } from '../../../models';
     <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
     <div class="d-flex gap-2">
       {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.alimenteOderRenten'
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente'
           | translate
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
-        {{ einnahmenSig().alimenteOderRenten | formatChfNegative: true }}
+        {{ einnahmenSig().kinderalimente | formatChfNegative: true }}
       </div>
     </div>
 
