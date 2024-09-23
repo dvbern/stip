@@ -34,7 +34,7 @@ class V1StructureTest {
                     "anzahlWochenLehre": 42,
                     "anzahlWochenSchule": 37,
                     "preisProMahlzeit": 7,
-                    "stipLimiteMinimalstipendium": 500,
+                    "stipLimiteMinimalstipendium": 0,
                     "limiteAlterAntragsstellerHalbierungElternbeitrag": 25
                 },
                 "InputFamilienbudget_1_V1": {
@@ -87,6 +87,7 @@ class V1StructureTest {
                 },
                 "InputPersoenlichesbudget_V1": {
                     "antragssteller": {
+			            "piaWohntInElternHaushalt": 0,
                         "tertiaerstufe": true,
                         "einkommen": 12916,
                         "einkommenPartner": 0,
@@ -112,7 +113,7 @@ class V1StructureTest {
                         "anteilFamilienbudget": 0,
                         "lehre": false,
                         "eigenerHaushalt": true,
-                        "abgeschlosseneErstausbildung": false,
+                        "halbierungElternbeitrag": false,
                         "anzahlPersonenImHaushalt": 2,
                         "verheiratetKonkubinat": false
                     }

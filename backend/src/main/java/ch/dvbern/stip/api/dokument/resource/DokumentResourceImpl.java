@@ -37,11 +37,11 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -55,14 +55,16 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchTrancheId, dokumentTyp);
+        List<DokumentDto> dokumentDtoList =
+            gesuchDokumentService.findGesuchDokumenteForTyp(gesuchTrancheId, dokumentTyp);
         return Response.ok(dokumentDtoList).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesuchDokumentKommentare(DokumentTyp dokumentTyp, UUID gesuchId) {
-        return Response.ok().entity(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchId, dokumentTyp)).build();
+        return Response.ok()
+            .entity(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchId, dokumentTyp)).build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -75,6 +77,8 @@ public class DokumentResourceImpl implements DokumentResource {
         if (!FileUtil.checkFileExtensionAllowed(fileUpload.uploadedFile(), configService.getAllowedMimeTypes())) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
+
+        gesuchDokumentService.scanDokument(fileUpload);
 
         String objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
         return Uni.createFrom()
@@ -112,7 +116,8 @@ public class DokumentResourceImpl implements DokumentResource {
 
         final var dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
         return RestMulti.fromUniResponse(
-            Uni.createFrom().completionStage(() -> gesuchDokumentService.getGetDokumentFuture(dokumentDto.getObjectId())),
+            Uni.createFrom()
+                .completionStage(() -> gesuchDokumentService.getGetDokumentFuture(dokumentDto.getObjectId())),
             response -> Multi.createFrom()
                 .safePublisher(AdaptersToFlow.publisher(response))
                 .map(DokumentResourceImpl::toBuffer),
@@ -153,7 +158,7 @@ public class DokumentResourceImpl implements DokumentResource {
         return Response.ok().build();
     }
 
-    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
     public Response gesuchDokumentAblehnen(
         UUID gesuchDokumentId,
@@ -163,7 +168,7 @@ public class DokumentResourceImpl implements DokumentResource {
         return Response.ok().build();
     }
 
-    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
     public Response gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);

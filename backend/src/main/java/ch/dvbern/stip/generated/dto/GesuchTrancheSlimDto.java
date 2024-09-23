@@ -4,10 +4,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("GesuchTrancheSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -28,7 +34,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -46,7 +52,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gueltigAb")
   public LocalDate getGueltigAb() {
     return gueltigAb;
@@ -64,7 +70,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gueltigBis")
   public LocalDate getGueltigBis() {
     return gueltigBis;
@@ -82,7 +88,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("status")
   public ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus getStatus() {
     return status;
@@ -100,7 +106,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("typ")
   public ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp getTyp() {
     return typ;
@@ -137,7 +143,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchTrancheSlimDto {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");

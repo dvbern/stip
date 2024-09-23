@@ -57,39 +57,26 @@
 
     <!-- Wohnsitz -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.shared.wohnsitz.label' | translate }}</mat-label>
-      <mat-select matInput formControlName="wohnsitz" data-testid="form-kind-wohnsitz">
-        <mat-option [value]="null" disabled selected>
-          {{ 'shared.form.select.empty' | translate }}
-        </mat-option>
-        @for (a of wohnsitzValues; track trackByIndex($index)) {
-          <mat-option [value]="a" [attr.data-testid]="a">
-            {{ 'shared.form.shared.wohnsitz.' + a | translate }}
-          </mat-option>
-        }
-      </mat-select>
-      <mat-hint *dvZuvorHint="changes?.wohnsitz | translateChange: 'shared.form.shared.wohnsitz.$VALUE'"></mat-hint>
+      <mat-label>{{ 'shared.form.shared.wohnsitzAnteilPia.label' | translate }}</mat-label>
+      <input
+        type="text"
+        data-testid="form-kind-wohnsitzAnteilPia"
+        matInput
+        formControlName="wohnsitzAnteilPia"
+        [maskito]="maskitoOptionsPercent"
+      />
+      <mat-hint *dvZuvorHint="changes?.wohnsitzAnteilPia | translateChange: '$VALUE%'"></mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'pattern'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'minlength'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-form-field>
   </div>
-
-  <!-- WOHNSITZ AUFTEILUNG -->
-  @if (showWohnsitzSplitterSig()) {
-    <div class="row g-4 my-2">
-      <div class="col-12 col-md-6 col-xl-4">
-        <dv-shared-ui-wohnsitz-splitter
-          [updateValidity]="updateValidity$ | async"
-          [changes]="{
-            wohnsitzAnteilVater: changes?.wohnsitzAnteilVater,
-            wohnsitzAnteilMutter: changes?.wohnsitzAnteilMutter,
-          }"
-          [controls]="form.controls"
-        ></dv-shared-ui-wohnsitz-splitter>
-      </div>
-    </div>
-  }
 
   <div class="row g-4 my-2">
     <!-- Ausbildungssituation -->

@@ -366,9 +366,9 @@ public class GesuchService {
         }
     }
 
-    public List<BerechnungsresultatDto> getBerechnungsresultat(UUID gesuchId) {
+    public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
-        return berechnungService.getBerechnungsresultateFromGesuch(gesuch, 1, 0);
+        return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
     public GesuchWithChangesDto getGsTrancheChanges(final UUID aenderungId) {

@@ -32,7 +32,7 @@ public class StammdatenV1 {
             .anzahlWochenLehre(gesuchsperiode.getAnzahlWochenLehre())
             .anzahlWochenSchule(gesuchsperiode.getAnzahlWochenSchule())
             .preisProMahlzeit(gesuchsperiode.getPreisProMahlzeit())
-            .stipLimiteMinimalstipendium(gesuchsperiode.getStipLimiteMinimalstipendium())
+            .stipLimiteMinimalstipendium(0) // set to zero as we don't apply this limit in the DMN model TODO: remove from model
             .limiteAlterAntragsstellerHalbierungElternbeitrag(25)
             .build();
     }

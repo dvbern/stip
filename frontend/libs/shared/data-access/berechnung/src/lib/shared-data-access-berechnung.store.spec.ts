@@ -18,7 +18,7 @@ describe('BerechnungStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.berechnungen()).toEqual({
+    expect(store.berechnung()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,
