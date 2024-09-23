@@ -76,6 +76,7 @@ public class ElternteilV1 {
         int medizinischeGrundversorgung = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
             for (final var elternteil : eltern) {
+                builder.ergaenzungsleistungen(Objects.requireNonNullElse(elternteil.getErgaenzungsleistungen(), 0));
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteil.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -121,11 +122,13 @@ public class ElternteilV1 {
             }
         }
 
+        int wohnkosten = 0;
         switch (steuerdaten.getSteuerdatenTyp()) {
             case VATER -> {
                 final var elternteilToUse = eltern.stream().filter(
                     elternteil -> elternteil.getElternTyp() == ElternTyp.VATER
                 ).toList().get(0);
+                wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -140,6 +143,7 @@ public class ElternteilV1 {
                 final var elternteilToUse = eltern.stream().filter(
                     elternteil -> elternteil.getElternTyp() == ElternTyp.MUTTER
                 ).toList().get(0);
+                wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -149,6 +153,10 @@ public class ElternteilV1 {
                         29, gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29 für margin
                     );
                 }
+            }
+            case FAMILIE -> {
+                final var elternteilToUse = eltern.stream().findFirst().get();
+                wohnkosten += elternteilToUse.getWohnkosten();
             }
         }
 
@@ -161,18 +169,15 @@ public class ElternteilV1 {
             )
         );
 
-
-
         builder.effektiveWohnkosten(
-            getEffektiveWohnkosten(
-                steuerdaten.getWohnkosten(),
+            BerechnungRequestV1.getEffektiveWohnkosten(
+                wohnkosten,
                 gesuchsperiode,
                 anzahlPersonenImHaushalt
             )
         );
 
         builder.totalEinkuenfte(Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0));
-        builder.ergaenzungsleistungen(Objects.requireNonNullElse(steuerdaten.getErgaenzungsleistungen(), 0));
         builder.eigenmietwert(Objects.requireNonNullElse(steuerdaten.getEigenmietwert(), 0));
         builder.alimente(Objects.requireNonNullElse(steuerdaten.getKinderalimente(), 0));
         builder.einzahlungSaeule2(Objects.requireNonNullElse(steuerdaten.getSaeule2(), 0));

@@ -870,10 +870,6 @@ class GesuchServiceTest {
         steuerdatenUpdateDto.setSteuerjahr(2010);
         steuerdatenUpdateDto.setFahrkosten(0);
         steuerdatenUpdateDto.setEigenmietwert(0);
-        steuerdatenUpdateDto.setErgaenzungsleistungen(0);
-        steuerdatenUpdateDto.setErgaenzungsleistungenPartner(0);
-        steuerdatenUpdateDto.setSozialhilfebeitraege(0);
-        steuerdatenUpdateDto.setSozialhilfebeitraegePartner(0);
         steuerdatenUpdateDto.setIsArbeitsverhaeltnisSelbstaendig(false);
         steuerdatenUpdateDto.setKinderalimente(0);
         steuerdatenUpdateDto.setSteuernBund(0);
@@ -882,7 +878,6 @@ class GesuchServiceTest {
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setVerpflegung(0);
         steuerdatenUpdateDto.setVermoegen(0);
-        steuerdatenUpdateDto.setWohnkosten(0);
         return steuerdatenUpdateDto;
     }
 
@@ -1251,6 +1246,7 @@ class GesuchServiceTest {
     private GesuchTranche prepareGesuchTrancheWithIds(GesuchTrancheUpdateDto trancheUpdate) {
         GesuchTranche tranche = initGesuchTranche();
         GesuchFormular gesuchFormular = new GesuchFormular();
+        gesuchFormular.setTranche(tranche);
         tranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
         trancheUpdate.getGesuchFormular().getElterns().forEach(elternUpdateDto -> {

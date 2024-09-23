@@ -212,6 +212,7 @@ class BerechnungServiceTest {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWohnkosten(14000)
                     .setGeburtsdatum(LocalDate.now().minusYears(45))
             )
         );
@@ -219,7 +220,6 @@ class BerechnungServiceTest {
         gesuchFormular.setSteuerdaten(
             Set.of(
                 new Steuerdaten()
-                    .setWohnkosten(14000)
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
                     .setVerpflegung(3200)
                     .setVerpflegungPartner(0)
@@ -229,7 +229,6 @@ class BerechnungServiceTest {
                     .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(1026)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setErgaenzungsleistungen(21000)
             )
         );
 
@@ -306,6 +305,7 @@ class BerechnungServiceTest {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWohnkosten(20000)
                     .setGeburtsdatum(LocalDate.now().minusYears(45))
             )
         );
@@ -313,7 +313,6 @@ class BerechnungServiceTest {
         gesuchFormular.setSteuerdaten(
             Set.of(
                 new Steuerdaten()
-                    .setWohnkosten(20000)
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
                     .setVerpflegung(3200)
                     .setVerpflegungPartner(0)
@@ -326,7 +325,6 @@ class BerechnungServiceTest {
                     .setSaeule2(1500)
                     .setVermoegen(100000)
                     .setIsArbeitsverhaeltnisSelbstaendig(true)
-                    .setErgaenzungsleistungen(0)
             )
         );
 
@@ -418,9 +416,15 @@ class BerechnungServiceTest {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
+                    .setWohnkosten(9_000)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0)
                     .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWohnkosten(12_720)
+                    .setErgaenzungsleistungen(0)
+                    .setSozialhilfebeitraege(0)
                     .setGeburtsdatum(LocalDate.of(1961, 1, 1))
             )
         );
@@ -489,12 +493,9 @@ class BerechnungServiceTest {
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
                     .setKinderalimente(0)
                     .setVermoegen(2717)
-                    .setWohnkosten(9_000)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
-                    .setEigenmietwert(0)
-                    .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0),
+                    .setEigenmietwert(0),
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
                     .setSteuernKantonGemeinde(1_192)
@@ -505,11 +506,8 @@ class BerechnungServiceTest {
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
                     .setKinderalimente(0)
                     .setVermoegen(918)
-                    .setWohnkosten(12_720)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
-                    .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0)
             )
         );
 
@@ -579,9 +577,11 @@ class BerechnungServiceTest {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
+                    .setWohnkosten(19_992)
                     .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWohnkosten(18_000)
                     .setGeburtsdatum(LocalDate.of(1961, 1, 1))
             )
         );
@@ -638,12 +638,9 @@ class BerechnungServiceTest {
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
                     .setKinderalimente(0)
                     .setVermoegen(0)
-                    .setWohnkosten(19_992)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
-                    .setEigenmietwert(0)
-                    .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0),
+                    .setEigenmietwert(0),
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
                     .setTotalEinkuenfte(5_667)
@@ -654,11 +651,8 @@ class BerechnungServiceTest {
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
                     .setKinderalimente(0)
                     .setVermoegen(0)
-                    .setWohnkosten(18_000)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
-                    .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0)
             )
         );
 
@@ -890,11 +884,15 @@ class BerechnungServiceTest {
 
         gesuchFormular.setElterns(
             Set.of( ((Eltern)
-                new Eltern().setGeburtsdatum(LocalDate.of(1963,8,1)))
+                new Eltern()
+                    .setWohnkosten(0)
+                    .setGeburtsdatum(LocalDate.of(1963,8,1)))
                     .setElternTyp(ElternTyp.VATER)
                     ,
                 ((Eltern)
-                    new Eltern().setGeburtsdatum(LocalDate.of(1963,6,1)))
+                    new Eltern()
+                    .setWohnkosten(0)
+                    .setGeburtsdatum(LocalDate.of(1963,6,1)))
                     .setElternTyp(ElternTyp.MUTTER)
             )
         );
@@ -909,7 +907,6 @@ class BerechnungServiceTest {
                     .setFahrkostenPartner(0)
                     .setSteuernBund(0)
                     .setSteuernKantonGemeinde(0)
-                    .setWohnkosten(0)
                     .setEigenmietwert(0),
                 new Steuerdaten().setSteuerdatenTyp(SteuerdatenTyp.VATER)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
@@ -919,7 +916,6 @@ class BerechnungServiceTest {
                     .setFahrkostenPartner(0)
                     .setSteuernBund(0)
                     .setSteuernKantonGemeinde(0)
-                    .setWohnkosten(0)
                     .setEigenmietwert(0)
             )
         );

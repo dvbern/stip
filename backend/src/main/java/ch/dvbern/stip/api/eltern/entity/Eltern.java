@@ -17,6 +17,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -81,4 +82,19 @@ public class Eltern extends AbstractPerson {
     @Nullable
     @Column(name = "copy_of_id")
     private UUID copyOfId;
+
+    @NotNull
+    @Column(name = "sozialhilfebeitraege", nullable = false)
+    @Min(0)
+    private Integer sozialhilfebeitraege;
+
+    @NotNull
+    @Column(name = "ergaenzungsleistungen", nullable = false)
+    @Min(0)
+    private Integer ergaenzungsleistungen;
+
+    @NotNull
+    @Column(name = "wohnkosten", nullable = false)
+    @Min(0)
+    private Integer wohnkosten;
 }

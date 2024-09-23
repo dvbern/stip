@@ -28,6 +28,7 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
         GesuchFormular gesuchFormular = new GesuchFormular();
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternteilUnbekanntVerstorben(false);
+        familiensituation.setElternVerheiratetZusammen(true);
         gesuchFormular.setFamiliensituation(familiensituation);
         assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
             , is(false));
@@ -57,6 +58,9 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
             , is(true));
 
         // Elternteil unbekannt, Vater verstorben, Mutter Pflichtig:
+        familiensituation.setElternVerheiratetZusammen(false);
+        familiensituation.setGerichtlicheAlimentenregelung(false);
+        familiensituation.setElternteilUnbekanntVerstorben(true);
         familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
         gesuchFormular.setFamiliensituation(familiensituation);
         assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
@@ -99,6 +103,7 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
         GesuchFormular gesuchFormular = new GesuchFormular();
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternteilUnbekanntVerstorben(false);
+        familiensituation.setGerichtlicheAlimentenregelung(true);
         familiensituation.setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
         gesuchFormular.setFamiliensituation(familiensituation);
         assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)

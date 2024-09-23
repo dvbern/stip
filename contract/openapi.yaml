@@ -1745,13 +1745,13 @@ components:
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
         - FAMILIENSITUATION_TRENNUNGSKONVENTION
-        - STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER
-        - STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
-        - STEUERDATEN_SOZIALHILFEBUDGET_VATER
-        - STEUERDATEN_SOZIALHILFEBUDGET_MUTTER
-        - STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
-        - STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
-        - STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
+        - ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
+        - ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
+        - ELTERN_SOZIALHILFEBUDGET_VATER
+        - ELTERN_SOZIALHILFEBUDGET_MUTTER
+        - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+        - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
+        - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
         - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
         - KINDER_ALIMENTENVERORDUNG
@@ -2348,6 +2348,9 @@ components:
         - telefonnummer
         - vorname
         - elternTyp
+        - sozialhilfebeitraege
+        - ergaenzungsleistungen
+        - wohnkosten
       type: object
       properties:
         vorname:
@@ -2378,6 +2381,19 @@ components:
           $ref: '#/components/schemas/ElternTyp'
         nachname:
           type: string
+        ergaenzungsleistungen:
+          description: |
+            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater'
+            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp'
+          type: integer
+        sozialhilfebeitraege:
+          description: |
+            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater'
+            'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp'
+          type: integer
+        wohnkosten:
+          description: 'Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen'
+          type: integer
     Eltern:
       title: Root Type for Eltern
       type: object
@@ -3194,11 +3210,11 @@ components:
         - fahrkosten
         - verpflegung
         - totalEinkuenfte
+        - eigenmietwert
         - isArbeitsverhaeltnisSelbstaendig
         - kinderalimente
         - vermoegen
         - steuerdatenTyp
-        - wohnkosten
       type: object
       properties:
         id:
@@ -3233,29 +3249,7 @@ components:
           type: integer
         kinderalimente:
           type: integer
-        ergaenzungsleistungen:
-          description: |
-            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater'
-            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp'
-          type: integer
-        ergaenzungsleistungenPartner:
-          description: |
-            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Mutter'
-            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen null'
-          type: integer
         vermoegen:
-          type: integer
-        wohnkosten:
-          type: integer
-        sozialhilfebeitraege:
-          description: |
-            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater'
-            'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp'
-          type: integer
-        sozialhilfebeitraegePartner:
-          description: |
-            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Mutter'
-            'Falls steuerdatenTyp != Famile: null'
           type: integer
     Steuerdaten:
       title: Root Type for Steuerdaten

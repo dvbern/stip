@@ -18,7 +18,6 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.saeule3a(TestUtil.getRandomInt(1, 10000));
             model.saeule2(TestUtil.getRandomInt(1, 10000));
             model.setKinderalimente(TestUtil.getRandomInt(1, 10000));
-            model.ergaenzungsleistungen(TestUtil.getRandomInt(1, 10000));
             model.setVermoegen(TestUtil.getRandomInt(1, 10000));
             model.setSteuernKantonGemeinde(TestUtil.getRandomInt(1, 10000));
             model.steuernBund(TestUtil.getRandomInt(1, 10000));
@@ -28,11 +27,6 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setVerpflegungPartner(TestUtil.getRandomInt(1, 10000));
             model.setVeranlagungsCode(0);
             model.setSteuerjahr(2022);
-            model.setSozialhilfebeitraege(100);
-            model.setSozialhilfebeitraegePartner(100);
-            model.setErgaenzungsleistungen(100);
-            model.setErgaenzungsleistungenPartner(100);
-            model.setWohnkosten(100);
         });
     }
 
