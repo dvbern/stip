@@ -9,12 +9,4 @@
     <modifyDataType tableName="gesuch" columnName="gesuch_nummer" newDataType="varchar"/>
     <modifyDataType tableName="gesuch_aud" columnName="gesuch_nummer" newDataType="varchar"/>
   </changeSet>
-  
-  <changeSet id="1725356129101-1" author="luca.fondo">
-    <createSequence sequenceName="fall_nummer_seq"
-                    startValue="1"
-                    minValue="1"
-                    incrementBy="1"
-                    dataType="int"/>
-  </changeSet>
 </databaseChangeLog>
