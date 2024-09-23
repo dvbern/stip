@@ -94,7 +94,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   sharedDataAccessGesuchsFeature.selectLoading,
   sharedDataAccessGesuchsFeature.selectGesuch,
   sharedDataAccessGesuchsFeature.selectGesuchFormular,
-  sharedDataAccessGesuchsFeature.selectSpecificTrancheId,
+  sharedDataAccessGesuchsFeature.selectIsEditingTranche,
   (
     config,
     { tranchenChanges },
@@ -102,9 +102,13 @@ export const selectSharedDataAccessGesuchsView = createSelector(
     loading,
     gesuch,
     gesuchFormular,
-    specificTrancheId,
+    isEditingTranche,
   ) => {
     const gesuchTranche = gesuch?.gesuchTrancheToWorkWith;
+    const trancheSetting = createTrancheSetting(
+      isEditingTranche,
+      gesuchTranche,
+    );
     return {
       config,
       lastUpdate,
@@ -112,14 +116,14 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       gesuch,
       gesuchFormular,
       tranchenChanges,
-      readonly: specificTrancheId
+      readonly: trancheSetting?.type
         ? isTrancheReadonly(
             gesuch?.gesuchTrancheToWorkWith ?? null,
             config.compileTimeConfig?.appType,
           )
         : isGesuchReadonly(gesuch, config.compileTimeConfig?.appType),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
-      trancheSetting: createTrancheSetting(gesuchTranche),
+      trancheSetting,
       gesuchId: gesuch?.id,
       allowTypes: config.deploymentConfig?.allowedMimeTypes?.join(','),
     };
@@ -133,7 +137,10 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
     const gesuchTranche = state.gesuch?.gesuchTrancheToWorkWith;
     return {
-      trancheSetting: createTrancheSetting(gesuchTranche),
+      trancheSetting: createTrancheSetting(
+        state.isEditingTranche,
+        gesuchTranche,
+      ),
       cachedGesuchId: state.cache.gesuchId,
       cachedGesuchFormular: currentForm,
       tranchenChanges,
@@ -158,8 +165,11 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
   },
 );
 
-const createTrancheSetting = (gesuchTranche: GesuchTranche | undefined) => {
-  return gesuchTranche
+const createTrancheSetting = (
+  isEditingTranche: boolean | null,
+  gesuchTranche: GesuchTranche | undefined,
+) => {
+  return gesuchTranche && isEditingTranche
     ? ({
         type: gesuchTranche.typ,
         routesSuffix: [lowercased(gesuchTranche.typ), gesuchTranche.id],
@@ -197,16 +207,16 @@ export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
 
 export const selectSharedDataAccessGesuchCache = createSelector(
   sharedDataAccessGesuchsFeature.selectCache,
-  sharedDataAccessGesuchsFeature.selectSpecificTrancheId,
-  (cache, specificTrancheId) => ({ ...cache, specificTrancheId }),
+  sharedDataAccessGesuchsFeature.selectIsEditingTranche,
+  (cache, isEditingTranche) => ({ ...cache, isEditingTranche }),
 );
 export const selectSharedDataAccessGesuchCacheView = createSelector(
   selectSharedDataAccessGesuchCache,
   selectSharedDataAccessConfigsView,
-  ({ specificTrancheId, ...cache }, config) => {
+  ({ isEditingTranche, ...cache }, config) => {
     return {
       cache,
-      readonly: specificTrancheId
+      readonly: isEditingTranche
         ? isTrancheReadonly(
             cache.gesuch?.gesuchTrancheToWorkWith ?? null,
             config.compileTimeConfig?.appType,
