@@ -316,7 +316,6 @@ function getStepsByAppType(
  * Calculates the changes between the gesuchTrancheToWorkWith and previous tranches
  *
  * Returns an object of changes for GS and SB:
- * - hasChanges: true if there are changes
  * - tranche: the tranche containing the previous gesuchFormular
  * - affectedSteps: the steps that have changed
  */
