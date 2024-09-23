@@ -72,7 +72,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
             AUSBILDUNGS_MONTH - 1,
           ),
         ];
-        const [optional, required] = dates.map(startOfMonth);
+        const [optional, required] = dates.map((date) => startOfMonth(date));
         return { optional, required };
       }
       return null;

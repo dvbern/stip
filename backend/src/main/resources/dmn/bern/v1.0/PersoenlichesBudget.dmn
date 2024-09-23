@@ -4,6 +4,9 @@
   <dmn:extensionElements/>
   <dmn:import id="_1774F3A7-11FA-48BC-A1FA-2E55E6E481FC" name="FamBudget" namespace="stip.kibon.ch" locationURI="Familienbudget.dmn" importType="http://www.omg.org/spec/DMN/20180521/MODEL/"/>
   <dmn:itemDefinition id="_57CF76C6-469E-47B7-A809-5D9E5DD5C1AC" name="AntragsstellerV1" isCollection="false">
+    <dmn:itemComponent id="_97667DE2-23BD-4999-9F7E-CFB8CE28E973" name="piaWohntInElternHaushalt" isCollection="false">
+      <dmn:typeRef>number</dmn:typeRef>
+    </dmn:itemComponent>
     <dmn:itemComponent id="_853A60E8-7CBD-4318-8CBB-D5A33C440A2C" name="wohnkosten" isCollection="false">
       <dmn:typeRef>number</dmn:typeRef>
     </dmn:itemComponent>
@@ -750,14 +753,39 @@
               <dmn:text>InputPersoenlichesbudget.antragssteller.eigenerHaushalt</dmn:text>
             </dmn:inputExpression>
           </dmn:input>
+          <dmn:input id="_C46AE779-BB63-46FE-BE4E-82957628077B">
+            <dmn:inputExpression typeRef="number">
+              <dmn:text>InputPersoenlichesbudget.antragssteller.piaWohntInElternHaushalt</dmn:text>
+            </dmn:inputExpression>
+          </dmn:input>
           <dmn:output id="_25CBB0CD-3506-4967-ABF0-02719C5BFAF2"/>
           <dmn:annotation name="annotation-1"/>
+          <dmn:rule id="_378FB3D1-3027-4ACF-BFA8-3FF5467CEE0B">
+            <dmn:inputEntry id="_8271A35D-D90A-4EE2-85EA-F695421F817B">
+              <dmn:text>&lt; 0</dmn:text>
+            </dmn:inputEntry>
+            <dmn:inputEntry id="_E2F95B76-C986-44E7-9A05-D6A67BE4F766">
+              <dmn:text>false</dmn:text>
+            </dmn:inputEntry>
+            <dmn:inputEntry id="_1F4D315B-D0CD-455E-A71A-C178EC370AD6">
+              <dmn:text>2</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_71BD53DB-5618-4659-A9AD-D69A9D15E8E9">
+              <dmn:text>0</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
           <dmn:rule id="_DDF4855C-4B5C-4150-AC21-9DBAECDAD550">
             <dmn:inputEntry id="_B0C10B81-62B0-49E6-8D6C-E59CDC2A5B54">
               <dmn:text>&lt; 0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_F39C2CA3-0486-4560-AC63-6D339C8F1072">
               <dmn:text>false</dmn:text>
+            </dmn:inputEntry>
+            <dmn:inputEntry id="_58AEC09D-8AD6-42D5-99B9-ABB61CBB9491">
+              <dmn:text>1</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_CE5ED059-E183-4B30-88C9-9F033BEE1DAB">
               <dmn:text>round half up(abs(Familienbudget_1.familienbudgetBerechnet /
@@ -775,6 +803,9 @@
             <dmn:inputEntry id="_F9EA4EDF-BE52-40C4-9160-D453A60674F1">
               <dmn:text>true</dmn:text>
             </dmn:inputEntry>
+            <dmn:inputEntry id="_D4E6A88F-3118-4508-9AA8-2E8D4722C0B6">
+              <dmn:text>-</dmn:text>
+            </dmn:inputEntry>
             <dmn:outputEntry id="_2F40419E-F079-4977-A1C8-EF33609F9F2A">
               <dmn:text>0</dmn:text>
             </dmn:outputEntry>
@@ -787,6 +818,9 @@
               <dmn:text>&gt;= 0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_9B924104-A838-451E-B459-FE841E7BB029">
+              <dmn:text>-</dmn:text>
+            </dmn:inputEntry>
+            <dmn:inputEntry id="_440DCA2C-7D4A-4196-9181-4134F7E0EE6C">
               <dmn:text>-</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_8672E604-FD95-4CA8-B8DB-A1DADC851390">
@@ -811,14 +845,39 @@
               <dmn:text>InputPersoenlichesbudget.antragssteller.eigenerHaushalt</dmn:text>
             </dmn:inputExpression>
           </dmn:input>
+          <dmn:input id="_1005D687-C8DA-46D2-8AB4-3FF37123780A">
+            <dmn:inputExpression typeRef="number">
+              <dmn:text>InputPersoenlichesbudget.antragssteller.piaWohntInElternHaushalt</dmn:text>
+            </dmn:inputExpression>
+          </dmn:input>
           <dmn:output id="_75FE494C-04C4-4E73-83CC-6217873911B3"/>
           <dmn:annotation name="annotation-1"/>
+          <dmn:rule id="_854A6037-7BE8-48DC-B984-46AF07C028A9">
+            <dmn:inputEntry id="_1BEB1A1E-7EB5-4CF4-B0AC-7996FB2B0387">
+              <dmn:text>&lt; 0</dmn:text>
+            </dmn:inputEntry>
+            <dmn:inputEntry id="_6766201A-FCFA-470A-8DEE-EF73860F14B4">
+              <dmn:text>false</dmn:text>
+            </dmn:inputEntry>
+            <dmn:inputEntry id="_7910873A-C661-4EF3-B18B-9E8C394DF58E">
+              <dmn:text>1</dmn:text>
+            </dmn:inputEntry>
+            <dmn:outputEntry id="_D8177FA3-E0C5-40B1-A3EE-7F3EF87C6591">
+              <dmn:text>0</dmn:text>
+            </dmn:outputEntry>
+            <dmn:annotationEntry>
+              <dmn:text/>
+            </dmn:annotationEntry>
+          </dmn:rule>
           <dmn:rule id="_5403719C-F1B2-4E9A-8D44-C38A48EEB85C">
             <dmn:inputEntry id="_4FA96BEC-5A88-4FC5-81BD-6CDA695819A7">
               <dmn:text>&lt; 0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_131D7D5E-23C5-4E2D-B1C4-27614F4AB282">
               <dmn:text>false</dmn:text>
+            </dmn:inputEntry>
+            <dmn:inputEntry id="_37BE06DD-0564-41C9-87E7-E7166E1C379B">
+              <dmn:text>2</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_5246BD54-17EF-4B8A-9998-32EA78C95DAA">
               <dmn:text>round half up(abs(Familienbudget_2.familienbudgetBerechnet /
@@ -836,6 +895,9 @@
             <dmn:inputEntry id="_3D758967-381B-4D1C-8871-5D5000F1EFA3">
               <dmn:text>true</dmn:text>
             </dmn:inputEntry>
+            <dmn:inputEntry id="_4805CDDD-B3DF-495F-8EAB-59F9CE039925">
+              <dmn:text>-</dmn:text>
+            </dmn:inputEntry>
             <dmn:outputEntry id="_0FC29785-3CBD-4B30-B8C7-3AF082AA4AFE">
               <dmn:text>0</dmn:text>
             </dmn:outputEntry>
@@ -848,6 +910,9 @@
               <dmn:text>&gt;= 0</dmn:text>
             </dmn:inputEntry>
             <dmn:inputEntry id="_1706E36C-8EB0-4AD6-BDF9-88E4E909A008">
+              <dmn:text>-</dmn:text>
+            </dmn:inputEntry>
+            <dmn:inputEntry id="_7B956289-4AF3-44AF-95D1-8B5C2FC469ED">
               <dmn:text>-</dmn:text>
             </dmn:inputEntry>
             <dmn:outputEntry id="_E127F94D-99CD-44EA-AA3F-475E559215B8">
@@ -1049,76 +1114,78 @@
           <kie:ComponentWidths dmnElementRef="_F1D17AB9-F16D-4019-899C-D4FBEB5C8239">
             <kie:width>50</kie:width>
             <kie:width>487</kie:width>
-            <kie:width>3422</kie:width>
+            <kie:width>2031</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_6FB3E248-7FEF-4B57-9C2B-48A3000CEEF4">
             <kie:width>50</kie:width>
-            <kie:width>1831</kie:width>
-            <kie:width>1413</kie:width>
-            <kie:width>108</kie:width>
+            <kie:width>1052</kie:width>
+            <kie:width>802</kie:width>
+            <kie:width>107</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_5C0E9371-59FD-498F-A47A-E69450FC1670">
             <kie:width>50</kie:width>
-            <kie:width>1831</kie:width>
-            <kie:width>1413</kie:width>
-            <kie:width>108</kie:width>
+            <kie:width>1052</kie:width>
+            <kie:width>802</kie:width>
+            <kie:width>107</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_E5B83CC3-5505-4D49-959D-374BE181E2DF">
             <kie:width>50</kie:width>
-            <kie:width>1831</kie:width>
-            <kie:width>1413</kie:width>
-            <kie:width>108</kie:width>
+            <kie:width>1052</kie:width>
+            <kie:width>802</kie:width>
+            <kie:width>107</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_F4421A24-82D5-4256-96B1-9634070EF583">
             <kie:width>50</kie:width>
-            <kie:width>128</kie:width>
-            <kie:width>128</kie:width>
-            <kie:width>3096</kie:width>
+            <kie:width>127</kie:width>
+            <kie:width>126</kie:width>
+            <kie:width>1708</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_133E5586-4653-46BB-96DB-13BFA1FF0409">
-            <kie:width>3422</kie:width>
+            <kie:width>2031</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_CC22856B-5441-48F7-ACB5-B36E9F8EDD09">
-            <kie:width>3422</kie:width>
+            <kie:width>2031</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_0A0C76ED-E6B7-4443-ABC9-DB4E4EE33C71">
             <kie:width>50</kie:width>
-            <kie:width>815</kie:width>
-            <kie:width>101</kie:width>
-            <kie:width>2436</kie:width>
+            <kie:width>446</kie:width>
+            <kie:width>127</kie:width>
+            <kie:width>1388</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_306C57B1-F84B-4EFC-A952-8CECB471C0E7">
-            <kie:width>3422</kie:width>
+            <kie:width>2031</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_CF93DD6E-D339-46DE-AFBB-9212CA2B0F8B">
             <kie:width>50</kie:width>
-            <kie:width>568</kie:width>
-            <kie:width>511</kie:width>
-            <kie:width>1586</kie:width>
-            <kie:width>687</kie:width>
+            <kie:width>337</kie:width>
+            <kie:width>300</kie:width>
+            <kie:width>939</kie:width>
+            <kie:width>385</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_4815FF19-F782-490C-A466-69D4676EFCDC">
-            <kie:width>3422</kie:width>
+            <kie:width>2031</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_FB16687F-9A0A-40EB-9C73-26025392B4A7">
-            <kie:width>3422</kie:width>
+            <kie:width>2031</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_501A419A-D9FE-4F8C-9022-80B32B6105D2">
             <kie:width>50</kie:width>
-            <kie:width>1016</kie:width>
-            <kie:width>905</kie:width>
-            <kie:width>1016</kie:width>
-            <kie:width>415</kie:width>
+            <kie:width>303</kie:width>
+            <kie:width>401</kie:width>
+            <kie:width>455</kie:width>
+            <kie:width>503</kie:width>
+            <kie:width>299</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_D3E6E9B0-8D85-4CE3-9ACD-98705675A326">
             <kie:width>50</kie:width>
-            <kie:width>1016</kie:width>
-            <kie:width>905</kie:width>
-            <kie:width>1016</kie:width>
-            <kie:width>415</kie:width>
+            <kie:width>294</kie:width>
+            <kie:width>388</kie:width>
+            <kie:width>441</kie:width>
+            <kie:width>542</kie:width>
+            <kie:width>296</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_E8B1E0CA-D060-4CF0-ACB4-3354516BD0DB">
-            <kie:width>3422</kie:width>
+            <kie:width>2031</kie:width>
           </kie:ComponentWidths>
           <kie:ComponentWidths dmnElementRef="_39FB4C55-B6C3-4755-A197-8A1078AF2DF1">
             <kie:width>50</kie:width>

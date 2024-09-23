@@ -88,30 +88,21 @@ public class ElternteilV1 {
                 );
             }
         } else {
-            switch (steuerdaten.getSteuerdatenTyp()) {
-                case VATER -> {
-                    final var kinderDerElternVaterVollzeit  = kinderDerElternInHaushalten.stream().filter(
-                        kind -> Objects.requireNonNullElse(kind.getWohnsitzAnteilVater(), BigDecimal.valueOf(100)).intValue() == 100
-                    ).toList();
-                    for (final var kind : kinderDerElternVaterVollzeit) {
-                        medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                            (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
-                            gesuchsperiode
-                        );
-                    }
-                }
-                case MUTTER -> {
-                    final var kinderDerElternMutterVollzeit = kinderDerElternInHaushalten.stream().filter(
-                        kind -> Objects.requireNonNullElse(kind.getWohnsitzAnteilMutter(), BigDecimal.valueOf(100)).intValue() == 100
-                    ).toList();
-                    for (final var kind : kinderDerElternMutterVollzeit) {
-                        medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                            (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
-                            gesuchsperiode
-                        );
-                    }
-                }
+            final var steuernElternTyp =
+                steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER
+                    ? ElternTyp.MUTTER
+                    : ElternTyp.VATER; // Never is Family
+
+            final var kindDesElternteilsVollzeit = kinderDerElternInHaushalten.stream().filter(
+                kind -> Objects.requireNonNullElse(kind.getWohnsitzAnteil(steuernElternTyp), BigDecimal.valueOf(100)).intValue() == 100
+            ).toList();
+            for (final var kind : kindDesElternteilsVollzeit) {
+                medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
+                    (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
+                    gesuchsperiode
+                );
             }
+
             final var kinderDerElternTeilzeit = kinderDerElternInHaushalten.stream()
                 .filter(
                     kind -> Objects.requireNonNullElse(kind.getWohnsitzAnteilMutter(), BigDecimal.ZERO).intValue() > 0 &&

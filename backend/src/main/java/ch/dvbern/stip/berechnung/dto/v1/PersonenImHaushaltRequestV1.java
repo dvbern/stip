@@ -61,8 +61,12 @@ public class PersonenImHaushaltRequestV1 implements DmnRequest {
                 geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilMutter(), BigDecimal.ZERO).intValue() > 0 &&
                                Objects.requireNonNullElse(geschwister.getWohnsitzAnteilVater(),  BigDecimal.ZERO).intValue() > 0
             ).count();
-        final int geschwisterVaterVollzeit  = (int) geschwisterOhneEigenerHaushalt.stream().filter(geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilVater(),  BigDecimal.valueOf(100)).intValue()  == 100).count();
-        final int geschwisterMutterVollzeit = (int) geschwisterOhneEigenerHaushalt.stream().filter(geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilMutter(), BigDecimal.valueOf(0)).intValue()    == 100).count();
+        final int geschwisterVaterVollzeit  = (int) geschwisterOhneEigenerHaushalt.stream().filter(
+            geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilVater(), BigDecimal.valueOf(100)).intValue() == 100
+        ).count();
+        final int geschwisterMutterVollzeit = (int) geschwisterOhneEigenerHaushalt.stream().filter(
+            geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilMutter(), BigDecimal.valueOf(0)).intValue()  == 100
+        ).count();
         return new PersonenImHaushaltRequestV1(
             new PersonenImHaushaltInputV1(
                 FamiliensituationV1.fromFamiliensituation(gesuchFormular.getFamiliensituation()),
