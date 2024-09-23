@@ -297,7 +297,7 @@
   "shared.elternteil-steuer.title.VATER": "Données fiscales pour le père",
   "shared.form.shared.section.einnahmen": "Revenus",
   "shared.form.eltern-steuerdaten.totalEinkuenfte.label": "Total des revenus",
-  "shared.form.eltern-steuerdaten.eigenmietwert.label": "Valeur locative (facultatif)",
+  "shared.form.eltern-steuerdaten.eigenmietwert.label": "Valeur locative",
   "shared.form.eltern-steuerdaten.arbeitsverhaeltnis.label": "Relation de travail",
   "shared.form.eltern-steuerdaten.arbeitsverhaeltnis.true": "indépendant",
   "shared.form.eltern-steuerdaten.arbeitsverhaeltnis.false": "non indépendant",

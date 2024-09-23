@@ -297,7 +297,7 @@
   "shared.eltern-steuer.title.VATER": "Steuerdaten für Vater",
   "shared.form.shared.section.einnahmen": "Einnahmen",
   "shared.form.eltern-steuerdaten.totalEinkuenfte.label": "Total der Einkünfte",
-  "shared.form.eltern-steuerdaten.eigenmietwert.label": "Eigenmietwert (optional)",
+  "shared.form.eltern-steuerdaten.eigenmietwert.label": "Eigenmietwert",
   "shared.form.eltern-steuerdaten.arbeitsverhaeltnis.label": "Arbeitsverhältnis",
   "shared.form.eltern-steuerdaten.arbeitsverhaeltnis.true": "selbständig",
   "shared.form.eltern-steuerdaten.arbeitsverhaeltnis.false": "unselbständig",

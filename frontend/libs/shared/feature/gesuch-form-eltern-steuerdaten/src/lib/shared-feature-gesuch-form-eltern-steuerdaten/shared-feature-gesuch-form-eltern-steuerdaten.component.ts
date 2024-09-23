@@ -90,7 +90,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
   maskitoNumber = maskitoNumber;
   form = this.formBuilder.group({
     totalEinkuenfte: [<string | null>null, [Validators.required]],
-    eigenmietwert: [<string | null>null, []],
+    eigenmietwert: [<string | null>null, [Validators.required]],
     arbeitsverhaeltnis: [<boolean | null>null, [Validators.required]],
     saeule3a: [<string | null>null, [Validators.required]],
     saeule2: [<string | null>null, [Validators.required]],
