@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -47,7 +48,6 @@ import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
@@ -102,6 +102,12 @@ class GesuchServiceTest {
 
     @InjectMock
     NotificationService notificationService;
+
+    @Inject
+    GesuchTrancheService gesuchTrancheService;
+
+    @InjectMock
+    GesuchTrancheRepository gesuchTrancheRepository;
 
     static final String TENANT_ID = "bern";
 
@@ -761,14 +767,14 @@ class GesuchServiceTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createGesuch());
         tranche.getGesuch().setGesuchStatus(Gesuchstatus.EINGEREICHT);
 
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of((Gesuch)
             new Gesuch()
                 .setGesuchStatus(Gesuchstatus.EINGEREICHT)
                 .setId(UUID.randomUUID())
         ));
 
-        ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
+        final var reportDto = gesuchTrancheService.einreichenValidieren(tranche.getId());
 
         assertThat(
             reportDto.getValidationErrors().size(),
@@ -801,7 +807,7 @@ class GesuchServiceTest {
                 .toList()
         );
 
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
         tranche.setTyp(GesuchTrancheTyp.TRANCHE);
@@ -810,7 +816,7 @@ class GesuchServiceTest {
         list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
 
-        ValidationReportDto reportDto = gesuchService.validateGesuchEinreichen(tranche.getGesuch().getId());
+        final var reportDto = gesuchTrancheService.einreichenValidieren(tranche.getId());
 
         assertThat(
             reportDto.toString() + "\nEltern: " + gesuchUpdateDto.getGesuchTrancheToWorkWith()

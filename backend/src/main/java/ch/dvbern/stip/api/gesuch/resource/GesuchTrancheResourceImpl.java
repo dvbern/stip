@@ -89,4 +89,11 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         gesuchTrancheService.aenderungEinreichen(aenderungId);
         return Response.ok().build();
     }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response gesuchTrancheEinreichenValidieren(UUID gesuchTrancheId) {
+        final var validationReport = gesuchTrancheService.einreichenValidieren(gesuchTrancheId);
+        return Response.ok(validationReport).build();
+    }
 }

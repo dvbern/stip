@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class GesuchFormularService {
     private final GesuchService gesuchService;
     private final Validator validator;
+    private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
 
     public ValidationReportDto validatePages(final GesuchFormular gesuchFormular) {
         final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
@@ -50,7 +51,7 @@ public class GesuchFormularService {
         validationReportDto.hasDocuments(documents != null && !documents.isEmpty());
 
         try {
-            gesuchService.validateNoOtherGesuchEingereichtWithSameSvNumber(
+            gesuchTrancheValidatorService.validateNoOtherGesuchWithSameSvNumber(
                 gesuchFormular,
                 gesuchFormular.getTranche().getGesuch().getId()
             );

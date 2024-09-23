@@ -44,6 +44,11 @@ public interface GesuchTrancheResource {
     Response createGesuchTrancheCopy(@PathParam("gesuchId") UUID gesuchId,@Valid CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto);
 
     @GET
+    @Path("/{gesuchTrancheId}/einreichen/validieren")
+    @Produces({ "application/json", "text/plain" })
+    Response gesuchTrancheEinreichenValidieren(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
     @Path("/{gesuchId}/aenderungsantrag")
     @Produces({ "application/json", "text/plain" })
     Response getAenderungsantrag(@PathParam("gesuchId") UUID gesuchId);
