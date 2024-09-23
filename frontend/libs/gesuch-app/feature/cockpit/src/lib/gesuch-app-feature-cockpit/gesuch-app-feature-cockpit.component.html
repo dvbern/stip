@@ -95,7 +95,7 @@
                             @if (aenderungen.loading) {
                               <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
                             } @else {
-                              <div class="d-flex flex-column gap-2 w-100">
+                              <div class="d-flex flex-column gap-4 w-100">
                                 @for (aenderung of aenderungen.list; track aenderung) {
                                   <dv-gesuch-app-ui-aenderungs-entry
                                     [tranche]="aenderung"
