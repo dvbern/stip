@@ -20,7 +20,7 @@ import {
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
+import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
@@ -45,7 +45,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   constructor() {
     // validate form only if no formErrors form validatePages are present
     combineLatest([
-      getLatestGesuchIdFromGesuchOnUpdate$(this.viewSig).pipe(
+      getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig).pipe(
         filter(isDefined),
       ),
       toObservable(this.viewSig).pipe(
@@ -54,10 +54,10 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
         filter((canCheck) => !!canCheck),
         takeUntilDestroyed(),
       ),
-    ]).subscribe(([gesuchId]) => {
+    ]).subscribe(([gesuchTrancheId]) => {
       this.store.dispatch(
         GesuchAppDataAccessAbschlussApiEvents.check({
-          gesuchId,
+          gesuchTrancheId,
         }),
       );
     });
@@ -68,8 +68,8 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   }
 
   abschliessen() {
-    const { specificTrancheId, gesuch } = this.viewSig();
-    if (!gesuch) {
+    const { isEditingTranche, gesuch, trancheId } = this.viewSig();
+    if (!gesuch || !trancheId) {
       return;
     }
     const dialogRef = SharedUiConfirmDialogComponent.open(this.dialog, {
@@ -84,10 +84,10 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
-          if (specificTrancheId) {
+          if (isEditingTranche) {
             this.store.dispatch(
               GesuchAppDataAccessAbschlussApiEvents.trancheAbschliessen({
-                trancheId: specificTrancheId,
+                trancheId,
               }),
             );
           } else {

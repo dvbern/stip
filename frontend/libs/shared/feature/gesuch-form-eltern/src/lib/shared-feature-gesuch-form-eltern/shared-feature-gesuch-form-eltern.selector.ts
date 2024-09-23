@@ -5,25 +5,24 @@ import { selectSharedDataAccessStammdatensView } from '@dv/shared/data-access/st
 import {
   calculateElternSituationGesuch,
   getChangesForList,
+  selectChangeForView,
 } from '@dv/shared/util-fn/gesuch-util';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 export const selectSharedFeatureGesuchFormElternView = createSelector(
   selectSharedDataAccessGesuchsView,
   selectSharedDataAccessStammdatensView,
-  (gesuchView, stammdatenView) => {
+  (gesuchsView, stammdatenView) => {
     const elternSituation = calculateElternSituationGesuch(
-      gesuchView.gesuchFormular,
+      gesuchsView.gesuchFormular,
     );
 
+    const { current, previous } = selectChangeForView(gesuchsView, 'elterns');
+
     return {
-      ...gesuchView,
-      elterns: (gesuchView.gesuchFormular?.elterns ?? []).filter(isDefined),
-      listChanges: getChangesForList(
-        gesuchView.gesuchFormular?.elterns,
-        gesuchView.tranchenChanges?.tranche.gesuchFormular?.elterns,
-        (e) => e.elternTyp,
-      ),
+      ...gesuchsView,
+      elterns: (gesuchsView.gesuchFormular?.elterns ?? []).filter(isDefined),
+      listChanges: getChangesForList(current, previous, (e) => e.elternTyp),
       expectVater: elternSituation.expectVater,
       expectMutter: elternSituation.expectMutter,
       vater: elternSituation.vater,
