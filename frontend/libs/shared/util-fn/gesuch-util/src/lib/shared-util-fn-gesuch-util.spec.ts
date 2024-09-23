@@ -162,7 +162,7 @@ describe('calculate differences', () => {
   });
 });
 
-describe('selectChanges', () => {
+describe('selectChangeForView', () => {
   it('should return sachbearbeiter changes when sachbearbeiter has changes on the view', () => {
     const view = {
       gesuchFormular: {

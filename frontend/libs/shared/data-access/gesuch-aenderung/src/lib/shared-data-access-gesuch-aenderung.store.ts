@@ -47,7 +47,10 @@ export class GesuchAenderungStore extends signalStore(
     const tranchen = this.cachedTranchenSlim();
     return {
       loading: isPending(tranchen),
-      list: tranchen.data?.filter((t) => t.typ === 'AENDERUNG') ?? [],
+      list:
+        tranchen.data?.filter(
+          (t) => t.typ === 'AENDERUNG' && t.status !== 'IN_BEARBEITUNG_GS',
+        ) ?? [],
     };
   });
 
