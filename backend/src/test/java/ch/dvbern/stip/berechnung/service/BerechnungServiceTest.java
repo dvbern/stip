@@ -162,6 +162,7 @@ class BerechnungServiceTest {
         //Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+
         gesuch.setGesuchTranchen(
             List.of(
                 gesuch.getNewestGesuchTranche().get()
@@ -257,6 +258,7 @@ class BerechnungServiceTest {
         //Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+
         gesuch.setGesuchTranchen(
             List.of(
                 gesuch.getNewestGesuchTranche().get()
@@ -354,8 +356,6 @@ class BerechnungServiceTest {
 
         //Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
-
-        LOG.info(berechnungsresultatDto.toString());
 
         //Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
@@ -459,7 +459,7 @@ class BerechnungServiceTest {
                 new LebenslaufItem()
                     .setVon(LocalDate.of(2016, 8 ,1))
                     .setBis(LocalDate.of(2023, 8 ,1))
-                    .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
+                    .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
             )
         );
 
@@ -608,7 +608,7 @@ class BerechnungServiceTest {
                 new LebenslaufItem()
                     .setVon(LocalDate.of(2016, 8 ,1))
                     .setBis(LocalDate.of(2023, 8 ,1))
-                    .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
+                    .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
             )
         );
 
