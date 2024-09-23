@@ -2,7 +2,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.service.SqidsService;
+import ch.dvbern.stip.api.common.service.IdEncryptionService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchNummerSeqRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GesuchNummerService {
     private final GesuchNummerSeqRepository gesuchNummerSeqRepository;
-    private final SqidsService sqidsService;
+    private final IdEncryptionService idEncryptionService;
     private final GesuchsperiodenService gesuchsperiodenService;
     private final GesuchsjahrService gesuchsjahrService;
 
-    private static final String MANDANT = "BE"; // TODO: KSTIP-1411
+    private static final String MANDANT = "BE"; // TODO KSTIP-1411: Mandantenkürzel
 
     @Transactional
     public String createGesuchNummer(final UUID gesuchsperiodeId) {
@@ -30,7 +30,7 @@ public class GesuchNummerService {
 
         var nextValue = gesuchNummerSeqRepository.getNextSequenceValue(MANDANT, technischesJahr);
 
-        var encoded = sqidsService.encodeLengthFive(nextValue);
+        var encoded = idEncryptionService.encryptLengthFive(nextValue);
 
         return String.format("%s.%s.G.%s", technischesJahr, MANDANT, encoded);
     }
