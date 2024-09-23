@@ -1240,6 +1240,7 @@ class GesuchServiceTest {
     private GesuchTranche prepareGesuchTrancheWithIds(GesuchTrancheUpdateDto trancheUpdate) {
         GesuchTranche tranche = initGesuchTranche();
         GesuchFormular gesuchFormular = new GesuchFormular();
+        gesuchFormular.setTranche(tranche);
         tranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
         trancheUpdate.getGesuchFormular().getElterns().forEach(elternUpdateDto -> {

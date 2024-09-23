@@ -373,9 +373,11 @@ public class TestUtil {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
+                    .setWohnkosten(0)
                     .setGeburtsdatum(LocalDate.now().minusYears(30)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWohnkosten(0)
                     .setGeburtsdatum(LocalDate.now().minusYears(30))
 
             )

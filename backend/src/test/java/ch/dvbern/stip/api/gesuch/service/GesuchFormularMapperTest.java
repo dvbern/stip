@@ -441,7 +441,10 @@ class GesuchFormularMapperTest {
 
         // Act
         final var targetFormular =
-            mapper.partialUpdate(updateFormular, new GesuchFormular().setFamiliensituation(new Familiensituation()));
+            mapper.partialUpdate(
+                updateFormular,
+                new GesuchFormular().setFamiliensituation(new Familiensituation()).setTranche(new GesuchTranche())
+            );
 
         // Assert
         assertThat(targetFormular.getSteuerdaten().size(), is(1));
@@ -472,7 +475,10 @@ class GesuchFormularMapperTest {
 
         // Init target
         var targetFormular =
-            mapper.partialUpdate(updateFormular, new GesuchFormular().setFamiliensituation(new Familiensituation()));
+            mapper.partialUpdate(
+                updateFormular,
+                new GesuchFormular().setFamiliensituation(new Familiensituation()).setTranche(new GesuchTranche())
+            );
 
         // Rearrange
         updateFamsit.setElternVerheiratetZusammen(false);

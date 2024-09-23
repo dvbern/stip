@@ -118,7 +118,7 @@ class ElternRequiredDocumentsProducerTest {
 
         RequiredDocsUtil.requiresOneOfManyAndType(
             getRequiredDocuments(formular),
-            DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
+            DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
         );
     }
 

@@ -48,9 +48,6 @@
   <changeSet author="anna-lea.fuhrer (generated)" id="1726658191149-12">
     <dropColumn columnName="sozialhilfebeitraege_partner" tableName="steuerdaten_aud"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1726658191149-13">
-    <dropSequence sequenceName="fall_nummer_seq"/>
-  </changeSet>
   <changeSet author="fuju (generated)" id="1726755958795-1">
     <addColumn tableName="eltern">
       <column name="wohnkosten" type="integer">
