@@ -118,7 +118,7 @@ export class GesuchAenderungStore extends signalStore(
                     'gesuch',
                     PERSON.route,
                     gesuchId,
-                    'tranche',
+                    'aenderung',
                     data.id,
                   ]);
                 },

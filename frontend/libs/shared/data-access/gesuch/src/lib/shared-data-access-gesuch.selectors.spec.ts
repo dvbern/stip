@@ -28,7 +28,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       gesuchs: [],
       validations: { errors: [], hasDocuments: null },
       gesuchFormular: null,
-      specificTrancheId: null,
+      isEditingTranche: null,
       cache: {
         gesuch: null,
         gesuchId: null,
@@ -56,7 +56,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       state.loading,
       state.gesuch,
       state.gesuchFormular,
-      state.specificTrancheId,
+      state.isEditingTranche,
     );
     expect(result.loading).toBeFalsy();
   });
@@ -127,7 +127,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
         partner: {} as any,
         kinds: [],
       },
-      specificTrancheId: null,
+      isEditingTranche: null,
       steuerdatenTabs: initial(),
       cache: {
         gesuch: null,
@@ -160,7 +160,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
         hasDocuments: null,
       },
       gesuchFormular: null,
-      specificTrancheId: null,
+      isEditingTranche: null,
       steuerdatenTabs: success([SteuerdatenTyp.FAMILIE]),
       cache: {
         gesuch: null,

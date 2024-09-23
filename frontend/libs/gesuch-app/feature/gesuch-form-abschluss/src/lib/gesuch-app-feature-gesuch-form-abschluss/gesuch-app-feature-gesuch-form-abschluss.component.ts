@@ -68,8 +68,8 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   }
 
   abschliessen() {
-    const { specificTrancheId, gesuch } = this.viewSig();
-    if (!gesuch) {
+    const { isEditingTranche, gesuch, trancheId } = this.viewSig();
+    if (!gesuch || !trancheId) {
       return;
     }
     const dialogRef = SharedUiConfirmDialogComponent.open(this.dialog, {
@@ -84,10 +84,10 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
-          if (specificTrancheId) {
+          if (isEditingTranche) {
             this.store.dispatch(
               GesuchAppDataAccessAbschlussApiEvents.trancheAbschliessen({
-                trancheId: specificTrancheId,
+                trancheId,
               }),
             );
           } else {

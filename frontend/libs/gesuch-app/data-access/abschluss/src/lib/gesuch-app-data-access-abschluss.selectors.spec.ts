@@ -8,7 +8,7 @@ describe('selectGesuchAppDataAccessAbschlussView', () => {
       checkResult: undefined,
       error: undefined,
       gesuch: null,
-      specificTrancheId: null,
+      isEditingTranche: null,
       lastUpdate: null,
       loading: false,
       validations: [],
