@@ -222,7 +222,10 @@ export const loadGesuch = createEffect(
           )
           .pipe(
             map((gesuch) =>
-              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
+              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
+                gesuch,
+                trancheId,
+              }),
             ),
             catchError((error) => [
               SharedDataAccessGesuchEvents.gesuchLoadedFailure({
