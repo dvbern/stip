@@ -54,7 +54,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       return false;
     }
 
-    return !this.router.url.includes('aenderung');
+    return this.router.url.includes('/tranche/');
   });
 
   isAenderungRouteSig = computed(() => {
@@ -64,7 +64,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       return false;
     }
 
-    return this.router.url.includes('aenderung');
+    return this.router.url.includes('/aenderung/');
   });
 
   constructor() {
