@@ -9,7 +9,6 @@ import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
-import io.quarkus.runtime.Startup;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,16 +19,10 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 @RequiredArgsConstructor
 @Slf4j
 public class
-GesuchsperiodeSeeding extends Seeder{
+GesuchsperiodeSeeding extends Seeder {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
     private final ConfigService configService;
-
-    @Override
-    @Startup
-    public void startup() {
-        seed();
-    }
 
     @Override
     protected void doSeed() {
@@ -124,13 +117,13 @@ GesuchsperiodeSeeding extends Seeder{
             .setKinder0018(1400)
             .setJugendlicheErwachsene1925(4600)
             .setErwachsene2699(5400)
-            .setWohnkostenFam1pers(10009)
-            .setWohnkostenFam2pers(13536)
+            .setWohnkostenFam1pers(13536)
+            .setWohnkostenFam2pers(16260)
             .setWohnkostenFam3pers(16260)
             .setWohnkostenFam4pers(19932)
             .setWohnkostenFam5pluspers(25260)
-            .setWohnkostenPersoenlich1pers(13536)
-            .setWohnkostenPersoenlich2pers(16260)
+            .setWohnkostenPersoenlich1pers(10009)
+            .setWohnkostenPersoenlich2pers(13536)
             .setWohnkostenPersoenlich3pers(16260)
             .setWohnkostenPersoenlich4pers(19932)
             .setWohnkostenPersoenlich5pluspers(25260)
