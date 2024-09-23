@@ -184,7 +184,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             // Compare to DB Entities and set changed if wohnkosten changed
             for (final var eltern : targetFormular.getElterns()) {
                 if (elternDto.getId().equals(eltern.getId()) &&
-                    ElternDiffUtil.hasWohnkostenCHanged(elternDto, eltern)
+                    ElternDiffUtil.hasWohnkostenChanged(elternDto, eltern)
                 ) {
                     changed = elternDto;
                     break;

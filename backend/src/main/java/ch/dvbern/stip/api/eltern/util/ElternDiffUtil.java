@@ -8,7 +8,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ElternDiffUtil {
-    public static boolean hasWohnkostenCHanged(final ElternUpdateDto updateDto, final Eltern target) {
+    public static boolean hasWohnkostenChanged(final ElternUpdateDto updateDto, final Eltern target) {
         if (updateDto == null || target == null) {
             return false;
         }
