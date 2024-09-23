@@ -27,7 +27,6 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setVerpflegungPartner(TestUtil.getRandomInt(1, 10000));
             model.setVeranlagungsCode(0);
             model.setSteuerjahr(2022);
-            model.setWohnkosten(100);
         });
     }
 

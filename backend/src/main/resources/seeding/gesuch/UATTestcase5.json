@@ -55,6 +55,7 @@
           "bezeichnungFr": "EBA-Lehre",
           "ausbildungsstaetteId": null
         },
+<<<<<<< HEAD
         "ausbildungNichtGefunden": false,
         "alternativeAusbildungsstaette": null,
         "alternativeAusbildungsgang": null,
@@ -194,8 +195,7 @@
           "ausbildungssituation": "VORSCHULPFLICHTIG",
           "nachname": "Testfall5",
           "id": "414171f5-8409-449f-b18d-f702e4c27cfd",
-          "wohnsitzAnteilMutter": null,
-          "wohnsitzAnteilVater": null,
+          "wohnsitzAnteilPia": 0,
           "erhalteneAlimentebeitraege": null
         },
         {
@@ -205,8 +205,7 @@
           "ausbildungssituation": "VORSCHULPFLICHTIG",
           "nachname": "Testfall5",
           "id": "113275f7-ec3a-4236-96d6-ad82ba1d24c3",
-          "wohnsitzAnteilMutter": null,
-          "wohnsitzAnteilVater": null,
+          "wohnsitzAnteilPia": 0,
           "erhalteneAlimentebeitraege": null
         }
       ],

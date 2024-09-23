@@ -45,8 +45,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SteuerdatenDtoSpec.JSON_PROPERTY_SAEULE3A,
   SteuerdatenDtoSpec.JSON_PROPERTY_SAEULE2,
   SteuerdatenDtoSpec.JSON_PROPERTY_KINDERALIMENTE,
-  SteuerdatenDtoSpec.JSON_PROPERTY_VERMOEGEN,
-  SteuerdatenDtoSpec.JSON_PROPERTY_WOHNKOSTEN
+  SteuerdatenDtoSpec.JSON_PROPERTY_VERMOEGEN
 })
 @JsonTypeName("Steuerdaten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -101,9 +100,6 @@ public class SteuerdatenDtoSpec {
 
   public static final String JSON_PROPERTY_VERMOEGEN = "vermoegen";
   private Integer vermoegen;
-
-  public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
-  private Integer wohnkosten;
 
   public SteuerdatenDtoSpec() {
   }
@@ -549,32 +545,6 @@ public class SteuerdatenDtoSpec {
     this.vermoegen = vermoegen;
   }
 
-
-  public SteuerdatenDtoSpec wohnkosten(Integer wohnkosten) {
-    
-    this.wohnkosten = wohnkosten;
-    return this;
-  }
-
-   /**
-   * Get wohnkosten
-   * @return wohnkosten
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getWohnkosten() {
-    return wohnkosten;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkosten(Integer wohnkosten) {
-    this.wohnkosten = wohnkosten;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -600,13 +570,12 @@ public class SteuerdatenDtoSpec {
         Objects.equals(this.saeule3a, steuerdaten.saeule3a) &&
         Objects.equals(this.saeule2, steuerdaten.saeule2) &&
         Objects.equals(this.kinderalimente, steuerdaten.kinderalimente) &&
-        Objects.equals(this.vermoegen, steuerdaten.vermoegen) &&
-        Objects.equals(this.wohnkosten, steuerdaten.wohnkosten);
+        Objects.equals(this.vermoegen, steuerdaten.vermoegen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsCode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, vermoegen, wohnkosten);
+    return Objects.hash(id, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsCode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, vermoegen);
   }
 
   @Override
@@ -630,7 +599,6 @@ public class SteuerdatenDtoSpec {
     sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
     sb.append("    kinderalimente: ").append(toIndentedString(kinderalimente)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
-    sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -29,7 +29,6 @@ public class SteuerdatenDto  implements Serializable {
   private @Valid Boolean isArbeitsverhaeltnisSelbstaendig;
   private @Valid Integer kinderalimente;
   private @Valid Integer vermoegen;
-  private @Valid Integer wohnkosten;
   private @Valid UUID id;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
@@ -212,25 +211,6 @@ public class SteuerdatenDto  implements Serializable {
 
   /**
    **/
-  public SteuerdatenDto wohnkosten(Integer wohnkosten) {
-    this.wohnkosten = wohnkosten;
-    return this;
-  }
-
-  
-  @JsonProperty("wohnkosten")
-  @NotNull
-  public Integer getWohnkosten() {
-    return wohnkosten;
-  }
-
-  @JsonProperty("wohnkosten")
-  public void setWohnkosten(Integer wohnkosten) {
-    this.wohnkosten = wohnkosten;
-  }
-
-  /**
-   **/
   public SteuerdatenDto id(UUID id) {
     this.id = id;
     return this;
@@ -392,7 +372,6 @@ public class SteuerdatenDto  implements Serializable {
         Objects.equals(this.isArbeitsverhaeltnisSelbstaendig, steuerdaten.isArbeitsverhaeltnisSelbstaendig) &&
         Objects.equals(this.kinderalimente, steuerdaten.kinderalimente) &&
         Objects.equals(this.vermoegen, steuerdaten.vermoegen) &&
-        Objects.equals(this.wohnkosten, steuerdaten.wohnkosten) &&
         Objects.equals(this.id, steuerdaten.id) &&
         Objects.equals(this.fahrkostenPartner, steuerdaten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, steuerdaten.verpflegungPartner) &&
@@ -405,7 +384,7 @@ public class SteuerdatenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, isArbeitsverhaeltnisSelbstaendig, kinderalimente, vermoegen, wohnkosten, id, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungsCode, eigenmietwert, saeule3a, saeule2);
+    return Objects.hash(steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, isArbeitsverhaeltnisSelbstaendig, kinderalimente, vermoegen, id, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungsCode, eigenmietwert, saeule3a, saeule2);
   }
 
   @Override
@@ -422,7 +401,6 @@ public class SteuerdatenDto  implements Serializable {
     sb.append("    isArbeitsverhaeltnisSelbstaendig: ").append(toIndentedString(isArbeitsverhaeltnisSelbstaendig)).append("\n");
     sb.append("    kinderalimente: ").append(toIndentedString(kinderalimente)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
-    sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");

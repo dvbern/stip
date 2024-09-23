@@ -872,7 +872,6 @@ class GesuchServiceTest {
         steuerdatenUpdateDto.setTotalEinkuenfte(0);
         steuerdatenUpdateDto.setVerpflegung(0);
         steuerdatenUpdateDto.setVermoegen(0);
-        steuerdatenUpdateDto.setWohnkosten(0);
         return steuerdatenUpdateDto;
     }
 

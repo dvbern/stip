@@ -1087,9 +1087,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Berechnungsresultat'
+                $ref: '#/components/schemas/Berechnungsresultat'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -3309,11 +3307,28 @@ components:
         - ABGELEHNT
         - AKZEPTIERT
     Berechnungsresultat:
+      description: Resultat der Berechnung (gesamtes Gesuch)
+      required:
+        - berechnung
+        - tranchenBerechnungsresultate
+      type: object
+      properties:
+        berechnung:
+          description: 'Berechneter Stpendiumsanspruch für das Gesuch'
+          type: integer
+        tranchenBerechnungsresultate:
+          description: 'Resultate der Berechnung für die Tranchen des Gesuchs'
+          type: array
+          items:
+            $ref: '#/components/schemas/TranchenBerechnungsresultat'
+    TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
         - berechnung
         - gueltigAb
         - gueltigBis
+        - gesuchTrancheId
+        - berechnungsanteilKinder
         - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
@@ -3326,6 +3341,15 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gueltigBis:
           $ref: '#/components/schemas/LocalDate'
+        gesuchTrancheId:
+          description: 'ID der tranche für welche die Berechnung ausgeführt wurde. 
+                        Mehrere resultate mit der gleichen ID sind die berechnungen für 
+                        getrennte eltern mit Kindern die eine Obhutsteilung haben'
+          $ref: '#/components/schemas/UUID' 
+        berechnungsanteilKinder:
+          description: 'Anteil dieser Berechnung am Berechnungstotal. 
+                        Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
+          type: number
         berechnungsStammdaten:
           description: 'Stammdaten für die Stipendienberechnung'
           $ref: '#/components/schemas/BerechnungsStammdaten'
@@ -3377,7 +3401,7 @@ components:
       required:
         - anzahlPersonenImHaushalt
         - eigenerHaushalt
-        - anteilLebenshaltungskosten
+        - anteilFamilienbudget
         - einkommen
         - alimente
         - leistungenEO
@@ -3387,9 +3411,9 @@ components:
         - gemeindeInstitutionen
         - steuerbaresVermoegen
         - anrechenbaresVermoegen
-        - anteilFamilienbudget
         - einkommenPartner
         - einnahmenPersoenlichesBudget
+        - anteilLebenshaltungskosten
         - grundbedarf
         - wohnkosten
         - medizinischeGrundversorgung
@@ -3408,7 +3432,7 @@ components:
           type: integer
         eigenerHaushalt:
           type: boolean
-        anteilLebenshaltungskosten:
+        anteilFamilienbudget:
           type: integer
         einkommen:
           type: integer
@@ -3428,11 +3452,11 @@ components:
           type: integer
         anrechenbaresVermoegen:
           type: integer
-        anteilFamilienbudget:
-          type: integer
         einkommenPartner:
           type: integer
         einnahmenPersoenlichesBudget:
+          type: integer
+        anteilLebenshaltungskosten:
           type: integer
         grundbedarf:
           type: integer
