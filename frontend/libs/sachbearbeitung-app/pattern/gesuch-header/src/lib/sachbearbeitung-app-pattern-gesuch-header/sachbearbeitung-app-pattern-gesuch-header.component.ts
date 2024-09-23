@@ -54,7 +54,13 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       return false;
     }
 
-    return this.router.url.includes('/tranche/');
+    return (
+      // If it is a tranche route
+      this.router.url.includes('/tranche/') ||
+      // or a normal current gesuch route
+      (this.router.url.includes('/gesuch/') &&
+        !this.router.url.includes('/aenderung/'))
+    );
   });
 
   isAenderungRouteSig = computed(() => {
