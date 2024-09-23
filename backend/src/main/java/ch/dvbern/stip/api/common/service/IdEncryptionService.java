@@ -10,9 +10,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class IdEncryptionService {
+    private static final Character[] baseCharSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
     private final Character[][] charSetLengthSix;
     private final Character[][] charSetLengthFive;
-    private static final Character[] baseCharSet = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     public IdEncryptionService() {
         charSetLengthSix = new Character[6][baseCharSet.length];
@@ -35,29 +35,28 @@ public class IdEncryptionService {
 
     private static String encodeWithMax(
         final int idToEncode,
-        final Character[][] charSet,
-        final int maxInt,
-        final int length
+        final Character[][] charSet
     ) {
-        if (idToEncode > maxInt) {
+        if (idToEncode > (Math.pow(10, charSet.length) - 1)) {
             throw new IllegalArgumentException("idToEncode is too large");
         }
 
-        final String paddedId = String.format("%0" + length + "d", idToEncode);
+        final String paddedIdFormatString = "%0" + charSet.length + "d";
+        final String paddedId = String.format(paddedIdFormatString, idToEncode);
 
         StringBuilder encryptedId = new StringBuilder();
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < charSet.length; i++) {
             int digitIndex = Character.getNumericValue(paddedId.charAt(i));
 
             encryptedId.append(charSet[i][digitIndex]);
         }
-        if (encryptedId.length() > length) {
-            throwEncodedTooLong(idToEncode, encryptedId.toString(), length);
+        if (encryptedId.length() > charSet.length) {
+            throwEncodedTooLong(idToEncode, encryptedId.toString(), charSet.length);
         }
         return encryptedId.toString();
     }
-//
+
     private static void throwEncodedTooLong(final int idToEncode, final String encoded, final int length) {
         throw new IllegalStateException(String.format(
             "This should be unreachable, trying to encode %s resulted in %s, length: %s",
@@ -66,12 +65,12 @@ public class IdEncryptionService {
             length
         ));
     }
-//
+
     public String encryptLengthFive(int idToEncode) {
-        return encodeWithMax(idToEncode, charSetLengthFive, 99_999, 5);
+        return encodeWithMax(idToEncode, charSetLengthFive);
     }
 
     public String encryptLengthSix(int idToEncode) {
-        return encodeWithMax(idToEncode, charSetLengthSix, 999_999, 6);
+        return encodeWithMax(idToEncode, charSetLengthSix);
     }
 }
