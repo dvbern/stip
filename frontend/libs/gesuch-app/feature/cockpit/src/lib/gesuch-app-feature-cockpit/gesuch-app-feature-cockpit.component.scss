@@ -18,5 +18,11 @@
 
   .container {
     position: relative;
+    justify-content: space-between;
+  }
+
+  .divider {
+    width: 3px;
+    background-color: var(--dv-light-border-subtle);
   }
 }

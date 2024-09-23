@@ -16,5 +16,16 @@
   "gesuch-app.cockpit.aenderung.create": "Änderung melden",
   "gesuch-app.cockpit.aenderung.edit": "Änderung bearbeiten",
 
-  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft"
+  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft",
+
+  "gesuch-app.aenderungs-entry.title": "Änderungen",
+  "gesuch-app.aenderungs-entry.status.title": "Status des Antrags",
+  "gesuch-app.cockpit.gesuch.aenderungs-entry": "Änderung öffnen",
+  "gesuch-app.cockpit.gesuch.status.IN_BEARBEITUNG_GS": "In Bearbeitung GS",
+  "gesuch-app.cockpit.gesuch.status.UEBERPRUEFEN": "Überprüfen",
+  "gesuch-app.cockpit.gesuch.status.AKZETPIERT": "Akzeptiert",
+  "gesuch-app.cockpit.gesuch.status.ABGELEHNT": "Abgelehnt"
+
+
+
 }
