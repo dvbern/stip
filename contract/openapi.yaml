@@ -3133,6 +3133,12 @@ components:
           $ref: '#/components/schemas/UUID'
     GesuchTrancheSlim:
       type: object
+      required:
+        - id
+        - gueltigAb
+        - gueltigBis
+        - status
+        - typ
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -3142,6 +3148,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         status:
           $ref: '#/components/schemas/GesuchTrancheStatus'
+        comment:
+          type: string
         typ:
           $ref: '#/components/schemas/GesuchTrancheTyp'
     SachbearbeiterZuordnungStammdaten:

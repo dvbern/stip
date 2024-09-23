@@ -20,7 +20,7 @@
 
         <!-- period 1-2 -->
         @if (fallStore.currentFallViewSig(); as fall) {
-          <div class="container">
+          <div>
             @for (periode of cockpitViewSig().gesuchsperiodes; track trackByPerioden($index, periode)) {
               <div class="card mb-5 shadow-lg" [class.col-md-6]="!periode.gesuch" [class.col-md-12]="periode.gesuch">
                 <div class="card-body">
@@ -73,59 +73,41 @@
                             *ngTemplateOutlet="einreichefrist; context: { periode: periode }"
                           ></ng-container>
                         </div>
+                        <a
+                          class="btn btn-primary mt-3 w-100"
+                          data-testid="cockpit-gesuch-edit"
+                          [routerLink]="['/gesuch', periode.gesuch.id]"
+                        >
+                          {{ 'gesuch-app.cockpit.gesuch.edit' | translate }}
+                        </a>
                       }
                     </div>
-                    <!-- existing Gesuch (right pic) -->
-                    @if (periode.gesuch) {
-                      <div class="col-md p-4">
-                        <img
-                          src="/assets/images/undraw_exams_re_4ios.svg"
-                          [alt]="'gesuch-app.cockpit.gesuch.img.alt' | translate"
-                          class="w-100"
-                          style="max-width: 300px"
-                        />
-                      </div>
-                    }
-                  </div>
-                  <!-- existing Gesuch buttons -->
-                  @if (periode.gesuch) {
-                    <div class="row">
-                      @if (gesuchAenderungStore.cachedGesuchAenderung() | rdIsPending) {
-                        <div class="col-12 mt-2">
-                          <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
-                        </div>
-                      } @else {
-                        <div class="col-md">
-                          <a
-                            class="btn btn-primary mt-3 w-100"
-                            data-testid="cockpit-gesuch-edit"
-                            [routerLink]="['/gesuch', periode.gesuch.id]"
-                          >
-                            {{ 'gesuch-app.cockpit.gesuch.edit' | translate }}
-                          </a>
-                        </div>
-                        <div class="col-md">
+                    <div class="col-md d-flex">
+                      @if (periode.gesuch) {
+                        @if (periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
                           @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
-                          @if (aenderungen.list.length > 0) {
+                          @if (gesuchAenderungStore.cachedTranchenSlim() | rdIsPending) {
+                            <div class="col-12 mt-2">
+                              <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
+                            </div>
+                          } @else if (aenderungen.list.length > 0) {
+                            <div class="divider me-4"></div>
                             @if (aenderungen.loading) {
                               <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
                             } @else {
-                              <div class="d-flex flex-column gap-2">
+                              <div class="d-flex flex-column gap-2 w-100">
                                 @for (aenderung of aenderungen.list; track aenderung) {
-                                  <a
-                                    class="btn btn-outline-primary mt-3 w-100"
-                                    data-testid="cockpit-gesuch-aenderung-edit"
-                                    [routerLink]="['/gesuch', periode.gesuch.id, 'tranche', aenderung.id]"
-                                  >
-                                    {{ 'gesuch-app.cockpit.aenderung.edit' | translate }}
-                                  </a>
+                                  <dv-gesuch-app-ui-aenderungs-entry
+                                    [tranche]="aenderung"
+                                    [gesuchId]="periode.gesuch.id"
+                                  ></dv-gesuch-app-ui-aenderungs-entry>
                                 }
                               </div>
                             }
                           } @else {
                             <button
                               type="button"
-                              class="btn btn-outline-primary mt-3 w-100"
+                              class="btn btn-outline-primary mt-3 w-100 align-self-end"
                               data-testid="cockpit-gesuch-aenderung-create"
                               (click)="
                                 aenderungMelden(
@@ -138,10 +120,18 @@
                               {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
                             </button>
                           }
-                        </div>
+                        } @else {
+                          <!-- existing Gesuch (right pic) -->
+                          <img
+                            src="/assets/images/undraw_exams_re_4ios.svg"
+                            [alt]="'gesuch-app.cockpit.gesuch.img.alt' | translate"
+                            class="w-100"
+                            style="max-width: 300px"
+                          />
+                        }
                       }
                     </div>
-                  }
+                  </div>
                   <!-- no Gesuch yet -->
                   @if (!periode.gesuch && !periode.gesuchLoading) {
                     <div class="d-flex flex-column align-items-start">
@@ -158,14 +148,6 @@
                     </div>
                   }
                 </div>
-                <div class="divider"></div>
-                @if (gesuchAenderungStore) {}
-                <!--                @if (getStatus()) {-->
-                <!-- Einbettung Änderungs Widget -->
-                <div class="card-body">
-                  <dv-gesuch-app-ui-aenderungs-entry [tranche]="tranche"></dv-gesuch-app-ui-aenderungs-entry>
-                </div>
-                <!--                }-->
               </div>
 
               <ng-template #einreichefrist>

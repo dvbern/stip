@@ -73,7 +73,6 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
   constructor() {
     effect(
       () => {
-        // TODO (KSTIP-1189): use correct Aenderungs-Widget and loading mechanism
         const gesuchId = this.cockpitViewSig().gesuchsperiodes?.[0]?.gesuch?.id;
         if (gesuchId) {
           this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });

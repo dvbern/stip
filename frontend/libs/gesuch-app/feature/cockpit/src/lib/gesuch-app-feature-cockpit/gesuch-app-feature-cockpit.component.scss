@@ -21,19 +21,8 @@
     justify-content: space-between;
   }
 
-  .card {
-    flex-direction: row;
-    width: 100%;
-  }
-
-  .card-body {
-    width: 0%;
-  }
-
   .divider {
     width: 3px;
-    background-color: grey;
-    margin-top: 24px;
-    margin-bottom: 24px;
+    background-color: var(--dv-light-border-subtle);
   }
 }

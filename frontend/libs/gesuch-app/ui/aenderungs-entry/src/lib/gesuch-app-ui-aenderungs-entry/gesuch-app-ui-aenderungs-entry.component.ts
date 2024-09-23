@@ -24,5 +24,6 @@ import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppUiAenderungsEntryComponent {
-  @Input({ required: true }) tranche?: GesuchTrancheSlim;
+  @Input({ required: true }) tranche!: GesuchTrancheSlim;
+  @Input({ required: true }) gesuchId!: string;
 }
