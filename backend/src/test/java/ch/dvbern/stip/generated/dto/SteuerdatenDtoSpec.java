@@ -400,9 +400,9 @@ public class SteuerdatenDtoSpec {
    * Get eigenmietwert
    * @return eigenmietwert
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EIGENMIETWERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEigenmietwert() {
     return eigenmietwert;
@@ -410,7 +410,7 @@ public class SteuerdatenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EIGENMIETWERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEigenmietwert(Integer eigenmietwert) {
     this.eigenmietwert = eigenmietwert;
   }

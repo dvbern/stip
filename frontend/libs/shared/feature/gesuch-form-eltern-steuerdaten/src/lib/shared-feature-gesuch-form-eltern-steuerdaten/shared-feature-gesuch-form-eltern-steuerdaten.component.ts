@@ -220,6 +220,7 @@ export class SharedFeatureGesuchFormElternSteuerdatenComponent {
     const { gesuch, gesuchFormular } = this.viewSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'totalEinkuenfte',
+      'eigenmietwert',
       'arbeitsverhaeltnis',
       'saeule3a',
       'saeule2',
