@@ -76,6 +76,7 @@ public class GesuchService {
     private final GesuchTrancheMapper gesuchTrancheMapper;
     private final Validator validator;
     private final GesuchStatusService gesuchStatusService;
+    private final GesuchTrancheStatusService gesuchTrancheStatusService;
     private final GesuchsperiodenService gesuchsperiodeService;
     private final BenutzerService benutzerService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
@@ -208,6 +209,11 @@ public class GesuchService {
         preventUpdateVonGesuchIfReadOnly(gesuch);
         var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
             .orElseThrow(NotFoundException::new);
+        if (trancheToUpdate.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            preventUpdateVonGesuchIfReadOnly(gesuch);
+        } else if (trancheToUpdate.getTyp() == GesuchTrancheTyp.AENDERUNG) {
+            preventUpdateVonAenderungIfReadOnly(trancheToUpdate);
+        }
 
         if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten() != null) {
             setAndValidateEinnahmenkostenUpdateLegality(
@@ -362,6 +368,15 @@ public class GesuchService {
         if (!gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())) {
             throw new IllegalStateException(
                 "Cannot update or delete das Gesuchsformular when parent status is: " + gesuch.getGesuchStatus()
+            );
+        }
+    }
+
+    private void preventUpdateVonAenderungIfReadOnly(GesuchTranche gesuchTranche) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (!gesuchTrancheStatusService.benutzerCanEdit(currentBenutzer, gesuchTranche.getStatus())) {
+            throw new IllegalStateException(
+                "Cannot update or delete the Aenderung when status is: " + gesuchTranche.getStatus()
             );
         }
     }
