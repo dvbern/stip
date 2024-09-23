@@ -82,8 +82,8 @@
                         </a>
                       }
                     </div>
-                    <div class="col-md d-flex">
-                      @if (periode.gesuch) {
+                    @if (periode.gesuch) {
+                      <div class="col-md d-flex">
                         @if (periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
                           @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
                           @if (gesuchAenderungStore.cachedTranchenSlim() | rdIsPending) {
@@ -129,8 +129,8 @@
                             style="max-width: 300px"
                           />
                         }
-                      }
-                    </div>
+                      </div>
+                    }
                   </div>
                   <!-- no Gesuch yet -->
                   @if (!periode.gesuch && !periode.gesuchLoading) {
