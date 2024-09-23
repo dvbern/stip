@@ -3,8 +3,10 @@ import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { Store } from '@ngrx/store';
 import { map, pipe, switchMap, tap } from 'rxjs';
 
+import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
   CreateAenderungsantragRequest,
@@ -39,17 +41,24 @@ export class GesuchAenderungStore extends signalStore(
   withState(initialState),
   withDevtools('GesuchAenderungStore'),
 ) {
+  private store = inject(Store);
+  private configSig = this.store.selectSignal(
+    selectSharedDataAccessConfigsView,
+  );
   private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private router = inject(Router);
 
   aenderungenViewSig = computed(() => {
     const tranchen = this.cachedTranchenSlim();
+    const { isSachbearbeitungApp } = this.configSig();
     return {
       loading: isPending(tranchen),
       list:
         tranchen.data?.filter(
-          (t) => t.typ === 'AENDERUNG' && t.status !== 'IN_BEARBEITUNG_GS',
+          (t) =>
+            t.typ === 'AENDERUNG' &&
+            (!isSachbearbeitungApp || t.status !== 'IN_BEARBEITUNG_GS'),
         ) ?? [],
     };
   });
