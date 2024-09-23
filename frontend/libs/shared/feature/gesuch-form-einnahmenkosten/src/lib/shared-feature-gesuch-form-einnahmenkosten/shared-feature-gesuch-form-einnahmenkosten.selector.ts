@@ -5,21 +5,24 @@ import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch
 import { Wohnsitz } from '@dv/shared/model/gesuch';
 import {
   getChangesForForm,
-  selectChanges,
+  selectChangeForView,
 } from '@dv/shared/util-fn/gesuch-util';
 
 export const selectSharedFeatureGesuchFormEinnahmenkostenView = createSelector(
   selectSharedDataAccessGesuchsView,
   selectSharedDataAccessAusbildungsstaettesView,
   (gesuchsView, ausbildungsstaettesView) => {
-    const { changed, original } = selectChanges(gesuchsView, 'einnahmenKosten');
+    const { current, previous } = selectChangeForView(
+      gesuchsView,
+      'einnahmenKosten',
+    );
 
     return {
       loading: gesuchsView.loading,
       gesuch: gesuchsView.gesuch,
       gesuchId: gesuchsView.gesuchId,
       trancheId: gesuchsView.trancheId,
-      formChanges: getChangesForForm(changed, original),
+      formChanges: getChangesForForm(current, previous),
       allowTypes: gesuchsView.allowTypes,
       ausbildungsstaettes: ausbildungsstaettesView.ausbildungsstaettes,
       gesuchFormular: gesuchsView.gesuchFormular,

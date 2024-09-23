@@ -6,7 +6,7 @@ import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch
 import { parseDateForVariant } from '@dv/shared/util/validator-date';
 import {
   getChangesForForm,
-  selectChanges,
+  selectChangeForView,
 } from '@dv/shared/util-fn/gesuch-util';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -14,7 +14,10 @@ export const selectSharedFeatureGesuchFormEducationView = createSelector(
   selectSharedDataAccessGesuchsView,
   selectSharedDataAccessAusbildungsstaettesView,
   (gesuchsView, ausbildungsstaettesView) => {
-    const { changed, original } = selectChanges(gesuchsView, 'ausbildung');
+    const { current, previous } = selectChangeForView(
+      gesuchsView,
+      'ausbildung',
+    );
 
     const lastLebenslaufDate = gesuchsView.gesuchFormular?.lebenslaufItems
       ?.slice()
@@ -27,7 +30,7 @@ export const selectSharedFeatureGesuchFormEducationView = createSelector(
       loading: gesuchsView.loading || ausbildungsstaettesView.loading,
       gesuch: gesuchsView.gesuch,
       gesuchFormular: gesuchsView.gesuchFormular,
-      formChanges: getChangesForForm(changed, original),
+      formChanges: getChangesForForm(current, previous),
       minAusbildungBeginDate: lastLebenslaufDate
         ? addMonths(lastLebenslaufDate, 1)
         : undefined,

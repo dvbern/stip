@@ -1,7 +1,7 @@
 import {
   DokumentTyp,
   SharedModelGesuchFormular,
-  SharedModelGesuchFormularProps,
+  SharedModelGesuchFormularPropsSteuerdatenSteps,
   SteuerdatenSteps,
   SteuerdatenTyp,
   Zivilstand,
@@ -167,7 +167,7 @@ export type GesuchFormSteps = keyof typeof gesuchFormSteps;
 
 export const gesuchFormStepsFieldMap: Record<
   string,
-  SharedModelGesuchFormularProps
+  SharedModelGesuchFormularPropsSteuerdatenSteps
 > = {
   [PERSON.route]: 'personInAusbildung',
   [AUSBILDUNG.route]: 'ausbildung',
@@ -239,7 +239,10 @@ export const isStepValid = (
   if (invalidProps?.errors === undefined) {
     return undefined;
   }
-  const stepFieldMap: Record<string, SharedModelGesuchFormularProps> = {
+  const stepFieldMap: Record<
+    string,
+    SharedModelGesuchFormularPropsSteuerdatenSteps
+  > = {
     [PERSON.route]: 'personInAusbildung',
     [AUSBILDUNG.route]: 'ausbildung',
     [LEBENSLAUF.route]: 'lebenslaufItems',
@@ -334,7 +337,7 @@ const toDocumentStepState = (
 };
 
 const toStepState = (
-  field: SharedModelGesuchFormularProps,
+  field: SharedModelGesuchFormularPropsSteuerdatenSteps,
   invalidProps?: StepValidation,
 ): StepState | undefined => {
   if (invalidProps?.errors?.includes(field)) {
@@ -351,7 +354,7 @@ const toStepState = (
 };
 
 const isSteuerdatenStep = (
-  step: SharedModelGesuchFormularProps,
+  step: SharedModelGesuchFormularPropsSteuerdatenSteps,
 ): step is SteuerdatenSteps => step.startsWith('steuerdaten');
 
 const getTypeOfSteuerdatenDokument = (

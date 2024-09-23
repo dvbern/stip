@@ -5,7 +5,7 @@ import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch
 import { selectSharedDataAccessStammdatensView } from '@dv/shared/data-access/stammdaten';
 import {
   getChangesForForm,
-  selectChanges,
+  selectChangeForView,
 } from '@dv/shared/util-fn/gesuch-util';
 
 export const selectSharedFeatureGesuchFormPersonView = createSelector(
@@ -13,7 +13,7 @@ export const selectSharedFeatureGesuchFormPersonView = createSelector(
   selectSharedDataAccessBenutzer,
   selectSharedDataAccessStammdatensView,
   (gesuchsView, benutzerView, stammdatenView) => {
-    const { changed, original } = selectChanges(
+    const { current, previous } = selectChangeForView(
       gesuchsView,
       'personInAusbildung',
     );
@@ -22,7 +22,7 @@ export const selectSharedFeatureGesuchFormPersonView = createSelector(
       loading: gesuchsView.loading || stammdatenView.loading,
       gesuchId: gesuchsView.gesuchId,
       trancheId: gesuchsView.trancheId,
-      formChanges: getChangesForForm(changed, original),
+      formChanges: getChangesForForm(current, previous),
       allowTypes: gesuchsView.allowTypes,
       gesuch: gesuchsView.gesuch,
       gesuchFormular: gesuchsView.gesuchFormular,

@@ -12,7 +12,6 @@ export interface SharedModelGesuch extends GesuchWithChanges {
 }
 
 export type TrancheChange = {
-  // hasChanges: boolean;
   tranche: GesuchTranche;
   affectedSteps: string[];
 };
@@ -28,13 +27,13 @@ export type SharedModelGesuchFormularUpdate = GesuchFormularUpdate;
 export type SteuerdatenSteps =
   `steuerdaten${Capitalize<Lowercase<Exclude<SteuerdatenTyp, 'FAMILIE'>>> | ''}`;
 
-export type SharedModelGesuchFormularPropsReal = Exclude<
+export type SharedModelGesuchFormularProps = Exclude<
   keyof SharedModelGesuchFormular,
   'steuerdatenTabs'
 >;
 
-export type SharedModelGesuchFormularProps =
-  | SharedModelGesuchFormularPropsReal
+export type SharedModelGesuchFormularPropsSteuerdatenSteps =
+  | SharedModelGesuchFormularProps
   | SteuerdatenSteps
   | 'dokuments';
 

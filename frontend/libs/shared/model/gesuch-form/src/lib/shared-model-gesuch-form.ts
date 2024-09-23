@@ -1,8 +1,8 @@
-import { SharedModelGesuchFormularProps } from '@dv/shared/model/gesuch';
+import { SharedModelGesuchFormularPropsSteuerdatenSteps } from '@dv/shared/model/gesuch';
 
 export type StepValidation = {
-  errors?: SharedModelGesuchFormularProps[];
-  warnings?: SharedModelGesuchFormularProps[];
+  errors?: SharedModelGesuchFormularPropsSteuerdatenSteps[];
+  warnings?: SharedModelGesuchFormularPropsSteuerdatenSteps[];
   hasDocuments: boolean | null;
 };
 

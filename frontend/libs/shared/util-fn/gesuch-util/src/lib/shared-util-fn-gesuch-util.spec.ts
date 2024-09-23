@@ -1,15 +1,19 @@
 import {
+  AppTrancheChange,
   Eltern,
   ElternAbwesenheitsGrund,
   ElternTyp,
   Familiensituation,
+  GesuchFormular,
   PersonInAusbildung,
+  SharedModelGesuchFormularProps,
 } from '@dv/shared/model/gesuch';
 
 import {
   calculateExpectElternteil,
   getChangesForForm,
   getChangesForList,
+  selectChangeForView,
 } from './shared-util-fn-gesuch-util';
 
 describe('calculateExpectElternteil', () => {
@@ -154,6 +158,93 @@ describe('calculate differences', () => {
         MUTTER: { nachname: 'Sanchez' },
       },
       newEntries: { VATER: true },
+    });
+  });
+});
+
+describe('selectChanges', () => {
+  it('should return sachbearbeiter changes when sachbearbeiter has changes on the view', () => {
+    const view = {
+      gesuchFormular: {
+        personInAusbildung: { nachname: 'AlvarezSB' },
+      } as GesuchFormular,
+      tranchenChanges: {
+        sb: {
+          affectedSteps: ['personInAusbildung'],
+          tranche: {
+            gesuchFormular: {
+              personInAusbildung: { nachname: 'MusterGS' },
+            },
+          },
+        },
+        gs: {
+          affectedSteps: ['personInAusbildung'],
+          tranche: {
+            gesuchFormular: {
+              personInAusbildung: { nachname: 'Muster' },
+            },
+          },
+        },
+      } as AppTrancheChange,
+    };
+    const key: SharedModelGesuchFormularProps = 'personInAusbildung';
+
+    const result = selectChangeForView(view, key);
+
+    expect(result).toEqual({
+      current: { nachname: 'AlvarezSB' },
+      previous: { nachname: 'MusterGS' },
+    });
+  });
+
+  it('should return gesuchsteller changes when sachbearbeiter has no changes on the view', () => {
+    const view = {
+      gesuchFormular: {
+        personInAusbildung: { nachname: 'AlvarezGS' },
+      } as GesuchFormular,
+      tranchenChanges: {
+        sb: {
+          affectedSteps: ['einhamenKosten'],
+          tranche: {
+            gesuchFormular: {
+              einnahmenKosten: { vermoegen: 1000 },
+            },
+          },
+        },
+        gs: {
+          affectedSteps: ['personInAusbildung'],
+          tranche: {
+            gesuchFormular: {
+              personInAusbildung: { nachname: 'AlvarezGS' },
+            },
+          },
+        },
+      } as AppTrancheChange,
+    };
+    const key: SharedModelGesuchFormularProps = 'personInAusbildung';
+
+    const result = selectChangeForView(view, key);
+
+    expect(result).toEqual({
+      current: { nachname: 'AlvarezGS' },
+      previous: { nachname: 'AlvarezGS' },
+    });
+  });
+
+  it('should handle null tranchenChanges gracefully', () => {
+    const view = {
+      gesuchFormular: {
+        personInAusbildung: { nachname: 'AlvarezGS' },
+      } as GesuchFormular,
+      tranchenChanges: null,
+    };
+    const key: SharedModelGesuchFormularProps = 'personInAusbildung';
+
+    const result = selectChangeForView(view, key);
+
+    expect(result).toEqual({
+      current: { nachname: 'AlvarezGS' },
+      previous: undefined,
     });
   });
 });

@@ -4,7 +4,7 @@ import {
   GesuchTranche,
   SharedModelGesuch,
   SharedModelGesuchFormular,
-  SharedModelGesuchFormularProps,
+  SharedModelGesuchFormularPropsSteuerdatenSteps,
   Steuerdaten,
   SteuerdatenTyp,
 } from '@dv/shared/model/gesuch';
@@ -200,7 +200,8 @@ type DeepPartial<T> = T extends object
 
 describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => {
   it('should identify the changed form steps', () => {
-    const [original, changed] = [
+    const originalAndChangedGS = [
+      // Original
       {
         gesuchFormular: {
           elterns: [
@@ -210,6 +211,7 @@ describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => 
           kinds: [{ id: '1', nachname: 'Muster' }],
         },
       },
+      // Changes GS
       {
         gesuchFormular: {
           elterns: [
@@ -221,16 +223,78 @@ describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => 
       },
     ] satisfies DeepPartial<GesuchTranche>[] as GesuchTranche[];
 
+    // changes SB
+    const currentTrancheSB = {
+      // SB
+      gesuchFormular: {
+        elterns: [
+          { id: '1', elternTyp: 'VATER', nachname: 'Alvarez' },
+          { id: '2', elternTyp: 'MUTTER', nachname: 'SanchezGS' },
+        ],
+        kinds: [],
+      },
+    } as unknown as GesuchTranche;
+
     const changes = prepareTranchenChanges({
-      gesuchTrancheToWorkWith: original,
-      changes: [changed],
-    } satisfies DeepPartial<SharedModelGesuch> as SharedModelGesuch);
+      gesuchTrancheToWorkWith: currentTrancheSB,
+      changes: originalAndChangedGS,
+    } as SharedModelGesuch);
 
     expect(changes).toEqual(
       expect.objectContaining({
-        sb: undefined,
+        sb: {
+          affectedSteps: expect.arrayContaining(['elterns']),
+          tranche: expect.any(Object),
+        },
         gs: {
           affectedSteps: expect.arrayContaining(['elterns', 'kinds']),
+          tranche: expect.any(Object),
+        },
+      }),
+    );
+  });
+
+  it('should identify the changed form steps for gs und sb', () => {
+    const originalAndChangedGS = [
+      // Original
+      {
+        gesuchFormular: {
+          personInAusbildung: { vorname: 'Max', nachname: 'Muster' },
+        },
+      },
+      // Changes GS
+      {
+        gesuchFormular: {
+          personInAusbildung: { vorname: 'Max', nachname: 'AlvarezGS' },
+        },
+      },
+    ] satisfies DeepPartial<GesuchTranche>[] as GesuchTranche[];
+
+    // changes SB
+    const currentTrancheSB = {
+      // SB
+      gesuchFormular: {
+        personInAusbildung: { vorname: 'Max', nachname: 'AlvarezSB' },
+        einnahmenKosten: { vermoegen: 1000 },
+      },
+    } as unknown as GesuchTranche;
+
+    const changes = prepareTranchenChanges({
+      gesuchTrancheToWorkWith: currentTrancheSB,
+      changes: originalAndChangedGS,
+    } as SharedModelGesuch);
+
+    expect(changes).toEqual(
+      expect.objectContaining({
+        sb: {
+          affectedSteps: expect.arrayContaining(['personInAusbildung']),
+          tranche: expect.any(Object),
+        },
+        gs: {
+          affectedSteps: expect.arrayContaining([
+            'personInAusbildung',
+            'einnahmenKosten',
+          ]),
           tranche: expect.any(Object),
         },
       }),
@@ -302,7 +366,7 @@ describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => 
     string,
     DeepPartial<Steuerdaten[]>,
     DeepPartial<Steuerdaten[]>,
-    SharedModelGesuchFormularProps[],
+    SharedModelGesuchFormularPropsSteuerdatenSteps[],
   ][])(
     'should identify correctly the steuerdaten changes: %s',
     (_, steuerdatenA, steuerdatenB, affectedSteps) => {

@@ -3,17 +3,20 @@ import { createSelector } from '@ngrx/store';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import {
   getChangesForList,
-  selectChanges,
+  selectChangeForView,
 } from '@dv/shared/util-fn/gesuch-util';
 
 export const selectSharedFeatureGesuchFormGeschwisterView = createSelector(
   selectSharedDataAccessGesuchsView,
   (gesuchsView) => {
-    const { changed, original } = selectChanges(gesuchsView, 'geschwisters');
+    const { current, previous } = selectChangeForView(
+      gesuchsView,
+      'geschwisters',
+    );
 
     return {
       ...gesuchsView,
-      listChanges: getChangesForList(changed, original, (g) => g.id),
+      listChanges: getChangesForList(current, previous, (g) => g.id),
     };
   },
 );

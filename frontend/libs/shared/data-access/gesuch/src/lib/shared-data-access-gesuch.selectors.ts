@@ -10,7 +10,7 @@ import {
   GesuchTrancheTyp,
   SharedModelGesuch,
   SharedModelGesuchFormular,
-  SharedModelGesuchFormularProps,
+  SharedModelGesuchFormularPropsSteuerdatenSteps,
   SteuerdatenTyp,
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
@@ -220,8 +220,10 @@ const transformValidationMessagesToFormKeys = (
   messages?: ValidationMessage[],
   currentForm?: SharedModelGesuchFormular | null,
 ) => {
-  const formKeys: SharedModelGesuchFormularProps[] = [
-    ...(Object.keys(currentForm ?? {}) as SharedModelGesuchFormularProps[]),
+  const formKeys: SharedModelGesuchFormularPropsSteuerdatenSteps[] = [
+    ...(Object.keys(
+      currentForm ?? {},
+    ) as SharedModelGesuchFormularPropsSteuerdatenSteps[]),
     'steuerdaten',
     'steuerdatenMutter',
     'steuerdatenVater',
@@ -252,7 +254,7 @@ const transformValidationMessagesToFormKeys = (
  */
 export const isGesuchFormularProp =
   (formKeys: string[]) =>
-  (prop?: string): prop is SharedModelGesuchFormularProps => {
+  (prop?: string): prop is SharedModelGesuchFormularPropsSteuerdatenSteps => {
     if (!prop) return false;
     return formKeys.includes(prop);
   };
@@ -339,7 +341,10 @@ export function prepareTranchenChanges(
           .filter(
             (c) =>
               // Ignore steuerdaten changes, they are handled separately
-              c.key !== type<SharedModelGesuchFormularProps>('steuerdaten') &&
+              c.key !==
+                type<SharedModelGesuchFormularPropsSteuerdatenSteps>(
+                  'steuerdaten',
+                ) &&
               ((c.changes?.length ?? 0) > 0 ||
                 // Also mark the step as affected if a new entry has been added or removed
                 c.type !== 'UPDATE'),
@@ -366,13 +371,15 @@ export function prepareTranchenChanges(
  */
 export const hasSteuerdatenChanges = (
   changes: IChange[],
-): SharedModelGesuchFormularProps[] => {
+): SharedModelGesuchFormularPropsSteuerdatenSteps[] => {
   const steuerdatenChange = changes.find(
     (c) =>
-      c.key === type<SharedModelGesuchFormularProps>('steuerdaten') &&
+      c.key ===
+        type<SharedModelGesuchFormularPropsSteuerdatenSteps>('steuerdaten') &&
       c.type === 'UPDATE',
   );
-  const affectedSteps = new Set<SharedModelGesuchFormularProps>();
+  const affectedSteps =
+    new Set<SharedModelGesuchFormularPropsSteuerdatenSteps>();
 
   // Check if steuerdaten have changed
   (['MUTTER', 'VATER', 'FAMILIE'] satisfies SteuerdatenTyp[]).forEach(
