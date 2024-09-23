@@ -234,8 +234,7 @@
                     "ausbildungssituation": "VORSCHULPFLICHTIG",
                     "nachname": "Testfall6",
                     "id": "fec9473a-70ce-4fa0-87ce-45dbe4ce72b7",
-                    "wohnsitzAnteilMutter": 100.00,
-                    "wohnsitzAnteilVater": 0.00,
+                    "wohnsitzAnteilPia": 100,
                     "erhalteneAlimentebeitraege": null
                 }
             ],

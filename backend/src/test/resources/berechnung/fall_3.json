@@ -8,7 +8,7 @@
     "anzahlWochenLehre": 42,
     "anzahlWochenSchule": 38,
     "preisProMahlzeit": 7,
-    "stipLimiteMinimalstipendium": 500,
+    "stipLimiteMinimalstipendium": 0,
     "limiteAlterAntragsstellerHalbierungElternbeitrag": 25
   },
   "InputFamilienbudget_1_V1": {
@@ -61,6 +61,7 @@
   },
   "InputPersoenlichesbudget_V1": {
     "antragssteller": {
+      "piaWohntInElternHaushalt": 1,
       "tertiaerstufe": false,
       "einkommen": 1500,
       "einkommenPartner": 0,

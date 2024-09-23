@@ -377,7 +377,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    * @return gesuchsperiodeStart
   **/
   @jakarta.annotation.Nonnull
@@ -403,7 +403,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    * @return gesuchsperiodeStopp
   **/
   @jakarta.annotation.Nonnull
@@ -429,7 +429,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    * @return aufschaltterminStart
   **/
   @jakarta.annotation.Nonnull
@@ -455,7 +455,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    * @return aufschaltterminStopp
   **/
   @jakarta.annotation.Nonnull
@@ -481,7 +481,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    * @return einreichefristNormal
   **/
   @jakarta.annotation.Nonnull
@@ -507,7 +507,7 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
    /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    * @return einreichefristReduziert
   **/
   @jakarta.annotation.Nonnull

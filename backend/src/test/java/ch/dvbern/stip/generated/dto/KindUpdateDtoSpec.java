@@ -98,7 +98,7 @@ public class KindUpdateDtoSpec {
   }
 
    /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    * @return geburtsdatum
   **/
   @jakarta.annotation.Nonnull

@@ -150,7 +150,7 @@ public class GesuchsperiodeCreateDto  implements Serializable {
   }
 
   /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    **/
   public GesuchsperiodeCreateDto gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
     this.gesuchsperiodeStart = gesuchsperiodeStart;
@@ -170,7 +170,7 @@ public class GesuchsperiodeCreateDto  implements Serializable {
   }
 
   /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    **/
   public GesuchsperiodeCreateDto gesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
     this.gesuchsperiodeStopp = gesuchsperiodeStopp;
@@ -190,7 +190,7 @@ public class GesuchsperiodeCreateDto  implements Serializable {
   }
 
   /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    **/
   public GesuchsperiodeCreateDto aufschaltterminStart(LocalDate aufschaltterminStart) {
     this.aufschaltterminStart = aufschaltterminStart;
@@ -210,7 +210,7 @@ public class GesuchsperiodeCreateDto  implements Serializable {
   }
 
   /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    **/
   public GesuchsperiodeCreateDto aufschaltterminStopp(LocalDate aufschaltterminStopp) {
     this.aufschaltterminStopp = aufschaltterminStopp;
@@ -230,7 +230,7 @@ public class GesuchsperiodeCreateDto  implements Serializable {
   }
 
   /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    **/
   public GesuchsperiodeCreateDto einreichefristNormal(LocalDate einreichefristNormal) {
     this.einreichefristNormal = einreichefristNormal;
@@ -250,7 +250,7 @@ public class GesuchsperiodeCreateDto  implements Serializable {
   }
 
   /**
-   * dd.MM.YYYY
+   * dd.MM.yyyy
    **/
   public GesuchsperiodeCreateDto einreichefristReduziert(LocalDate einreichefristReduziert) {
     this.einreichefristReduziert = einreichefristReduziert;

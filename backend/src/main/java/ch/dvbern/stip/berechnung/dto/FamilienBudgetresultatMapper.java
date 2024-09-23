@@ -1,7 +1,5 @@
 package ch.dvbern.stip.berechnung.dto;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 
@@ -12,7 +10,6 @@ public interface FamilienBudgetresultatMapper {
         final int budgetToUse,
         final int einnahmenFamilienbudget,
         final int ausgabenFamilienbudget,
-        final int familienbudgetBerechnet,
-        final BigDecimal kinderProzente
+        final int familienbudgetBerechnet
     );
 }
