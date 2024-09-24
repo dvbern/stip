@@ -183,34 +183,55 @@ export const loadGesuch = createEffect(
           ),
         };
 
-        if (trancheId && trancheTyp === 'AENDERUNG' && compileTimeConfig) {
-          const services$ = {
-            'gesuch-app': gesuchService.getGsTrancheChanges$(
-              { aenderungId: trancheId },
-              undefined,
-              undefined,
-              navigateIfNotFound,
-            ),
-            'sachbearbeitung-app': gesuchService.getSbTrancheChanges$(
-              { aenderungId: trancheId },
-              undefined,
-              undefined,
-              navigateIfNotFound,
-            ),
-          } satisfies Record<AppType, unknown>;
-          return services$[compileTimeConfig.appType].pipe(
-            map((gesuch) =>
-              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
-                gesuch,
-                trancheId,
-              }),
-            ),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
+        if (trancheId && compileTimeConfig) {
+          if (trancheTyp === 'AENDERUNG') {
+            const services$ = {
+              'gesuch-app': gesuchService.getGsTrancheChanges$(
+                { aenderungId: trancheId },
+                undefined,
+                undefined,
+                navigateIfNotFound,
+              ),
+              'sachbearbeitung-app': gesuchService.getSbTrancheChanges$(
+                { aenderungId: trancheId },
+                undefined,
+                undefined,
+                navigateIfNotFound,
+              ),
+            } satisfies Record<AppType, unknown>;
+            return services$[compileTimeConfig.appType].pipe(
+              map((gesuch) =>
+                SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
+                  gesuch,
+                  trancheId,
+                }),
+              ),
+              catchError((error) => [
+                SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                  error: sharedUtilFnErrorTransformer(error),
+                }),
+              ]),
+            );
+          } else if (trancheTyp === 'TRANCHE') {
+            return gesuchService
+              .getGesuch$({
+                gesuchId: id,
+                gesuchTrancheId: trancheId,
+              })
+              .pipe(
+                map((gesuch) =>
+                  SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
+                    gesuch,
+                    trancheId,
+                  }),
+                ),
+                catchError((error) => [
+                  SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                    error: sharedUtilFnErrorTransformer(error),
+                  }),
+                ]),
+              );
+          }
         }
 
         return gesuchService
