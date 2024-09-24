@@ -54,6 +54,9 @@ export const baseConfig = defineConfig({
       // smaller video size to reduce file size
       size: { width: 1280, height: 720 },
     },
+    contextOptions: {
+      ignoreHTTPSErrors: true,
+    },
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
