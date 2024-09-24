@@ -49,14 +49,6 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
         assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
             , is(true));
 
-        // Elternteil unbekannt, Vater und Mutter pflichitg
-        familiensituation.setElternteilUnbekanntVerstorben(true);
-        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
-        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
-        gesuchFormular.setFamiliensituation(familiensituation);
-        assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
-            , is(true));
-
         // Elternteil unbekannt, Vater verstorben, Mutter Pflichtig:
         familiensituation.setElternVerheiratetZusammen(false);
         familiensituation.setGerichtlicheAlimentenregelung(false);
@@ -69,7 +61,7 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
         elternSet.add(mutter);
         gesuchFormular.setElterns(elternSet);
         assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
-            , is(true));
+            , is(false));
 
         // Elternteil unbekannt, Vater verstorben, Mutter Verstorben:
         familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
@@ -91,6 +83,68 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
         gesuchFormular.setElterns(elternSet);
         assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
             , is(true));
+    }
+
+    @Test
+    void familienSituationAbwesenheitValidTest_VerheiratetZusammen(){
+        FamiliensituationElternEntityRequiredConstraintValidator
+            familiensituationElternEntityRequiredConstraintValidator =
+            new FamiliensituationElternEntityRequiredConstraintValidator();
+
+        GesuchFormular gesuchFormular = new GesuchFormular();
+        Familiensituation familiensituation = new Familiensituation();
+        familiensituation.setElternteilUnbekanntVerstorben(true);
+        familiensituation.setElternVerheiratetZusammen(true);
+        gesuchFormular.setFamiliensituation(familiensituation);
+        assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+            , is(false));
+
+        // Elternteil unbekannt, Vater und Mutter pflichitg
+        familiensituation.setElternteilUnbekanntVerstorben(true);
+        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        gesuchFormular.setFamiliensituation(familiensituation);
+        assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+            , is(false));
+
+        // Elternteil unbekannt, Vater und Mutter pflichitg
+        familiensituation.setElternteilUnbekanntVerstorben(true);
+        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT);
+        gesuchFormular.setFamiliensituation(familiensituation);
+        assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+            , is(false));
+    }
+
+    @Test
+    void familienSituationAbwesenheitValidTest_NOT_ZUSAMMEN_VERHEIRATET(){
+        FamiliensituationElternEntityRequiredConstraintValidator
+            familiensituationElternEntityRequiredConstraintValidator =
+            new FamiliensituationElternEntityRequiredConstraintValidator();
+
+        GesuchFormular gesuchFormular = new GesuchFormular();
+        Familiensituation familiensituation = new Familiensituation();
+        familiensituation.setElternteilUnbekanntVerstorben(true);
+        familiensituation.setElternVerheiratetZusammen(false);
+        gesuchFormular.setFamiliensituation(familiensituation);
+        assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+            , is(true));
+
+        // Elternteil unbekannt, Vater und Mutter pflichitg
+        familiensituation.setElternteilUnbekanntVerstorben(true);
+        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        gesuchFormular.setFamiliensituation(familiensituation);
+        assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+            , is(false));
+
+        // Elternteil unbekannt, Vater und Mutter pflichitg
+        familiensituation.setElternteilUnbekanntVerstorben(true);
+        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT);
+        gesuchFormular.setFamiliensituation(familiensituation);
+        assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+            , is(false));
     }
 
     @Test
