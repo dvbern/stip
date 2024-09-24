@@ -41,6 +41,7 @@ import {
   GesuchFormularUpdate,
   GesuchService,
   GesuchTrancheService,
+  GesuchTrancheTyp,
   GesuchUpdate,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
@@ -183,77 +184,60 @@ export const loadGesuch = createEffect(
           ),
         };
 
-        if (trancheId && compileTimeConfig) {
-          if (trancheTyp === 'AENDERUNG') {
-            const services$ = {
-              'gesuch-app': gesuchService.getGsTrancheChanges$(
-                { aenderungId: trancheId },
-                undefined,
-                undefined,
-                navigateIfNotFound,
-              ),
-              'sachbearbeitung-app': gesuchService.getSbTrancheChanges$(
-                { aenderungId: trancheId },
-                undefined,
-                undefined,
-                navigateIfNotFound,
-              ),
-            } satisfies Record<AppType, unknown>;
-            return services$[compileTimeConfig.appType].pipe(
-              map((gesuch) =>
-                SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
-                  gesuch,
-                  trancheId,
-                }),
-              ),
-              catchError((error) => [
-                SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                  error: sharedUtilFnErrorTransformer(error),
-                }),
-              ]),
-            );
-          } else if (trancheTyp === 'TRANCHE') {
-            return gesuchService
-              .getGesuch$({
-                gesuchId: id,
-                gesuchTrancheId: trancheId,
-              })
-              .pipe(
-                map((gesuch) =>
-                  SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
-                    gesuch,
-                    trancheId,
-                  }),
-                ),
-                catchError((error) => [
-                  SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                    error: sharedUtilFnErrorTransformer(error),
-                  }),
-                ]),
-              );
-          }
-        }
-
-        return gesuchService
-          .getCurrentGesuch$(
-            { gesuchId: id },
-            undefined,
-            undefined,
-            navigateIfNotFound,
-          )
-          .pipe(
-            map((gesuch) =>
-              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
-                gesuch,
-                trancheId,
-              }),
+        // Call the correct service based on the app type
+        const aenderungServices$ = {
+          'gesuch-app': (aenderungId: string) =>
+            gesuchService.getGsTrancheChanges$(
+              { aenderungId },
+              undefined,
+              undefined,
+              navigateIfNotFound,
             ),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
+          'sachbearbeitung-app': (aenderungId: string) =>
+            gesuchService.getSbTrancheChanges$(
+              { aenderungId },
+              undefined,
+              undefined,
+              navigateIfNotFound,
+            ),
+        } satisfies Record<AppType, unknown>;
+
+        // Different services for different types of tranches
+        const services$ = {
+          AENDERUNG: (appType: AppType) => aenderungServices$[appType],
+          TRANCHE: () => (gesuchTrancheId: string) =>
+            gesuchService.getGesuch$(
+              { gesuchId: id, gesuchTrancheId },
+              undefined,
+              undefined,
+              navigateIfNotFound,
+            ),
+        } satisfies Record<GesuchTrancheTyp, unknown>;
+
+        return (
+          trancheTyp && trancheId && compileTimeConfig
+            ? // If there is a trancheTyp, trancheId and compileTimeConfig, use the matching service call
+              services$[trancheTyp](compileTimeConfig.appType)(trancheId)
+            : // Otherwise use the normal current gesuch service call
+              gesuchService.getCurrentGesuch$(
+                { gesuchId: id },
+                undefined,
+                undefined,
+                navigateIfNotFound,
+              )
+        ).pipe(
+          map((gesuch) =>
+            SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
+              gesuch,
+              trancheId,
+            }),
+          ),
+          catchError((error) => [
+            SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+              error: sharedUtilFnErrorTransformer(error),
+            }),
+          ]),
+        );
       }),
     );
   },
