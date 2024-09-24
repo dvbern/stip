@@ -8,7 +8,7 @@ include:
       java-image-version: 17-jdk-alpine
       maven-goal: -Drevision=$VERSION -Pcoverage install
 
-  - component: 'gitlab.dvbern.ch/components/verify/sonarqube@1.1.0'
+  - component: 'gitlab.dvbern.ch/components/verify/sonarqube@1.2.0'
     inputs:
       sonar-scanner: maven
       context-dir: backend
