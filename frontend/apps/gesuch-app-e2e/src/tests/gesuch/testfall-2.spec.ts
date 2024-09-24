@@ -1,4 +1,4 @@
-import { Response, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { addYears, format } from 'date-fns';
 
 import {
@@ -285,21 +285,18 @@ test.describe('Neues gesuch erstellen', () => {
     const uploads = await page
       .locator('[data-testid^="button-document-upload"]')
       .all();
-    const uploadCalls: Promise<Response>[] = [];
     for (const upload of uploads) {
-      uploadCalls.push(
-        page.waitForResponse(
-          (response) =>
-            response.url().includes('/api/v1/dokument') &&
-            response.request().method() === 'POST',
-        ),
+      const uploadCall = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/v1/dokument') &&
+          response.request().method() === 'POST',
       );
       await upload.click();
       await page.getByTestId('file-input').setInputFiles(SmallImageFile);
       await page.keyboard.press('Escape');
       await expect(page.getByTestId('file-input')).toHaveCount(0);
+      await uploadCall;
     }
-    await Promise.all(uploadCalls);
 
     await page.getByTestId('button-continue').click();
 
