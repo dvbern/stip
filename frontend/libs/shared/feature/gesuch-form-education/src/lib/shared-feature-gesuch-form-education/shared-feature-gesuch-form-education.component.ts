@@ -431,7 +431,6 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     }
   }
 
-  // TODO we should clean up this logic once we have final data structure
   // eg extract to util service (for every form step)
   private buildUpdatedGesuchFromForm() {
     this.onDateBlur(this.form.controls.ausbildungBegin);
