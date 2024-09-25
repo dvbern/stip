@@ -29,13 +29,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getAenderungsantrag(UUID gesuchId) {
-        final var gesuchDto = gesuchTrancheService.getAenderungsantrag(gesuchId);
-        return Response.ok(gesuchDto).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
     public Response getAllTranchenForGesuch(UUID gesuchId) {
         final var tranchenDtos = gesuchTrancheService.getAllTranchenForGesuch(gesuchId);
         return Response.ok(tranchenDtos).build();

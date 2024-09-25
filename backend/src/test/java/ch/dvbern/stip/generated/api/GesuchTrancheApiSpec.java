@@ -17,7 +17,6 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import java.util.UUID;
@@ -71,7 +70,6 @@ public class GesuchTrancheApiSpec {
                 createAenderungsantrag(),
                 createGesuchTrancheCopy(),
                 gesuchTrancheEinreichenValidieren(),
-                getAenderungsantrag(),
                 getAllTranchenForGesuch(),
                 getGesuchDokument(),
                 getGesuchDokumente(),
@@ -106,10 +104,6 @@ public class GesuchTrancheApiSpec {
 
     public GesuchTrancheEinreichenValidierenOper gesuchTrancheEinreichenValidieren() {
         return new GesuchTrancheEinreichenValidierenOper(createReqSpec());
-    }
-
-    public GetAenderungsantragOper getAenderungsantrag() {
-        return new GetAenderungsantragOper(createReqSpec());
     }
 
     public GetAllTranchenForGesuchOper getAllTranchenForGesuch() {
@@ -638,79 +632,6 @@ public class GesuchTrancheApiSpec {
          * @return operation
          */
         public GesuchTrancheEinreichenValidierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
-     * @see #gesuchIdPath  (required)
-     * return List&lt;GesuchDtoSpec&gt;
-     */
-    public static class GetAenderungsantragOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchtranche/{gesuchId}/aenderungsantrag";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetAenderungsantragOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuchtranche/{gesuchId}/aenderungsantrag
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuchtranche/{gesuchId}/aenderungsantrag
-         * @param handler handler
-         * @return List&lt;GesuchDtoSpec&gt;
-         */
-        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID)  (required)
-         * @return operation
-         */
-        public GetAenderungsantragOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetAenderungsantragOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetAenderungsantragOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

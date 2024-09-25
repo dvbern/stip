@@ -3,7 +3,6 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import java.util.UUID;
@@ -62,11 +61,6 @@ public interface GesuchTrancheResource {
     @Path("/{gesuchTrancheId}/einreichen/validieren")
     @Produces({ "application/json", "text/plain" })
     Response gesuchTrancheEinreichenValidieren(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @GET
-    @Path("/{gesuchId}/aenderungsantrag")
-    @Produces({ "application/json", "text/plain" })
-    Response getAenderungsantrag(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}")
