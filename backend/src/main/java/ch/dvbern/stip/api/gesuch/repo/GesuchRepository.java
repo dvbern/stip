@@ -17,6 +17,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -138,5 +139,18 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .join(gesuchFormular.personInAusbildung, personInAubsilung)
             .where(personInAubsilung.sozialversicherungsnummer.eq(svNummer))
             .stream();
+    }
+
+    public Gesuch requireGesuchByTrancheId(final UUID gesuchTrancheId) {
+        final var gesuch = QGesuch.gesuch;
+        final var gesuchTranche = QGesuchTranche.gesuchTranche;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuch)
+            .join(gesuchTranche).on(gesuchTranche.gesuch.id.eq(gesuch.id))
+            .where(gesuchTranche.id.eq(gesuchTrancheId))
+            .stream()
+            .findFirst()
+            .orElseThrow(NotFoundException::new);
     }
 }

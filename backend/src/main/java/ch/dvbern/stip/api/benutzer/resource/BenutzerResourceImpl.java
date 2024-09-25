@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
+import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.api.BenutzerResource;
@@ -30,6 +31,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
 
     @Override
     @RolesAllowed(STAMMDATEN_CREATE)
+    @AllowAll
     public Response createOrUpdateSachbearbeiterStammdaten(
         UUID benutzerId,
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto) {
@@ -40,6 +42,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
 
     @Override
     @RolesAllowed(STAMMDATEN_CREATE)
+    @AllowAll
     public Response createOrUpdateSachbearbeiterStammdatenList(
         List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdatenListDto
     ) {
@@ -49,6 +52,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
     }
 
     @Override
+    @AllowAll
     public Response deleteBenutzer(String benutzerId) {
         benutzerService.deleteBenutzer(benutzerId);
         worker.updateZuordnung(tenantService.getCurrentTenant().getIdentifier());
@@ -56,22 +60,25 @@ public class BenutzerResourceImpl implements BenutzerResource {
     }
 
     @Override
+    @AllowAll
     public Response prepareCurrentBenutzer() {
         final var benutzer = benutzerService.getOrCreateAndUpdateCurrentBenutzer();
         return Response.ok(benutzer).build();
     }
 
     @Override
+    @AllowAll
     public Response getSachbearbeitende() {
         return Response.ok(benutzerService.getAllSachbearbeitendeMitZuordnungStammdaten()).build();
     }
 
     @Override
+    @AllowAll
     @RolesAllowed(STAMMDATEN_READ)
     public Response getSachbearbeiterStammdaten(UUID benutzerId) {
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto =
-            benutzerService.findSachbearbeiterZuordnungStammdatenWithBenutzerId(benutzerId).orElseThrow(
-                NotFoundException::new);
+            benutzerService.findSachbearbeiterZuordnungStammdatenWithBenutzerId(benutzerId)
+                .orElseThrow(NotFoundException::new);
         return Response.ok(sachbearbeiterZuordnungStammdatenDto).build();
     }
 }
