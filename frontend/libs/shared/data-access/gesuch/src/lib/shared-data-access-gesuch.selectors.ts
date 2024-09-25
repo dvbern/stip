@@ -25,7 +25,6 @@ import {
   LEBENSLAUF,
   PARTNER,
   PERSON,
-  PROTOKOLL,
   RETURN_TO_HOME,
   SPECIAL_VALIDATION_ERRORS,
   SharedModelGesuchFormStep,
@@ -266,11 +265,21 @@ function getStepsByAppType(
     case 'gesuch-app':
       return [...sharedSteps, ABSCHLUSS];
     case 'sachbearbeitung-app':
-      return [...sharedSteps, PROTOKOLL];
+      return [...sharedSteps];
     default:
       return [];
   }
 }
+// function getStepsByAppType2(
+//   sharedSteps: SharedModelGesuchFormStep[],
+//   compileTimeConfig?: CompileTimeConfig,
+// ) {
+//   if (compileTimeConfig?.appType === 'sachbearbeitung-app') {
+//     return [...sharedSteps, ABSCHLUSS];
+//   } else {
+//     return [];
+//   }
+// }
 
 /**
  * Calculates the changes between the gesuchTrancheToWorkWith and previous tranches

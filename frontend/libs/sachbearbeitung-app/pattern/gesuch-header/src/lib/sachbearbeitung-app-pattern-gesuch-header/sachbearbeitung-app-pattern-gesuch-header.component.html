@@ -65,6 +65,18 @@
       <i class="material-symbols-rounded text-white me-2">info</i>
       <span>{{ 'sachbearbeitung-app.header.aenderungen' | translate }}</span>
     </button>
+
+    <!-- Infos-->
+    <a
+      [routerLink]="['/', 'infos', currentGesuchSig()?.id]"
+      routerLinkActive="active"
+      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      data-testid="gesuch-header-nav-infos"
+      [class.disabled]="!currentGesuchSig()"
+    >
+      <i class="material-symbols-rounded text-white me-2">equal</i>
+      <span>{{ 'sachbearbeitung-app.header.infos' | translate }}</span>
+    </a>
     <mat-menu #aenderungenMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'"> </mat-menu>
 
     <!-- Separator -->

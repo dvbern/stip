@@ -5,6 +5,7 @@
   "sachbearbeitung-app.header.administration": "Administration",
   "sachbearbeitung-app.header.verfuegung": "Verfügung",
   "sachbearbeitung-app.header.aenderungen": "Änderungen",
+  "sachbearbeitung-app.header.infos": "Infos",
   "sachbearbeitung-app.header.tranche.item": "Tranche {{ index }} vom {{ date }}",
   "sachbearbeitung-app.header.gesuch-bearbeiten": "Gesuch bearbeiten",
   "sachbearbeitung-app.header.tranche.erstellen": "Tranche erstellen",

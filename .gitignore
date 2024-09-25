@@ -102,3 +102,7 @@ hs_err_pid*.log
 
 ## nx
 .nx/
+
+.nx/installation
+.nx/cache
+.nx/workspace-data
