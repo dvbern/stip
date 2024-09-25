@@ -64,7 +64,10 @@ public class GesuchTrancheApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                aenderungAblehnen(),
+                aenderungAkzeptieren(),
                 aenderungEinreichen(),
+                aenderungManuellAnpassen(),
                 createAenderungsantrag(),
                 createGesuchTrancheCopy(),
                 gesuchTrancheEinreichenValidieren(),
@@ -77,8 +80,20 @@ public class GesuchTrancheApiSpec {
         );
     }
 
+    public AenderungAblehnenOper aenderungAblehnen() {
+        return new AenderungAblehnenOper(createReqSpec());
+    }
+
+    public AenderungAkzeptierenOper aenderungAkzeptieren() {
+        return new AenderungAkzeptierenOper(createReqSpec());
+    }
+
     public AenderungEinreichenOper aenderungEinreichen() {
         return new AenderungEinreichenOper(createReqSpec());
+    }
+
+    public AenderungManuellAnpassenOper aenderungManuellAnpassen() {
+        return new AenderungManuellAnpassenOper(createReqSpec());
     }
 
     public CreateAenderungsantragOper createAenderungsantrag() {
@@ -127,6 +142,141 @@ public class GesuchTrancheApiSpec {
         return this;
     }
 
+    /**
+     * 
+     * 
+     *
+     * @see #aenderungIdPath Die ID der Aenderung (required)
+     */
+    public static class AenderungAblehnenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchtranche/{aenderungId}/aenderung/ablehnen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public AenderungAblehnenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchtranche/{aenderungId}/aenderung/ablehnen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String AENDERUNG_ID_PATH = "aenderungId";
+
+        /**
+         * @param aenderungId (UUID) Die ID der Aenderung (required)
+         * @return operation
+         */
+        public AenderungAblehnenOper aenderungIdPath(Object aenderungId) {
+            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public AenderungAblehnenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public AenderungAblehnenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #aenderungIdPath Die ID der Aenderung (required)
+     * return GesuchTrancheDtoSpec
+     */
+    public static class AenderungAkzeptierenOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuchtranche/{aenderungId}/aenderung/akzeptieren";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public AenderungAkzeptierenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuchtranche/{aenderungId}/aenderung/akzeptieren
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuchtranche/{aenderungId}/aenderung/akzeptieren
+         * @param handler handler
+         * @return GesuchTrancheDtoSpec
+         */
+        public GesuchTrancheDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchTrancheDtoSpec> type = new TypeRef<GesuchTrancheDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String AENDERUNG_ID_PATH = "aenderungId";
+
+        /**
+         * @param aenderungId (UUID) Die ID der Aenderung (required)
+         * @return operation
+         */
+        public AenderungAkzeptierenOper aenderungIdPath(Object aenderungId) {
+            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public AenderungAkzeptierenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public AenderungAkzeptierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
     /**
      * 
      * 
@@ -185,6 +335,68 @@ public class GesuchTrancheApiSpec {
          * @return operation
          */
         public AenderungEinreichenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #aenderungIdPath Die ID der Aenderung (required)
+     */
+    public static class AenderungManuellAnpassenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuchtranche/{aenderungId}/aenderung/manuelleAenderung";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public AenderungManuellAnpassenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuchtranche/{aenderungId}/aenderung/manuelleAenderung
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String AENDERUNG_ID_PATH = "aenderungId";
+
+        /**
+         * @param aenderungId (UUID) Die ID der Aenderung (required)
+         * @return operation
+         */
+        public AenderungManuellAnpassenOper aenderungIdPath(Object aenderungId) {
+            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public AenderungManuellAnpassenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public AenderungManuellAnpassenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

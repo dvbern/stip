@@ -27,9 +27,24 @@ import jakarta.validation.Valid;
 public interface GesuchTrancheResource {
 
     @PATCH
+    @Path("/{aenderungId}/aenderung/ablehnen")
+    @Produces({ "text/plain" })
+    Response aenderungAblehnen(@PathParam("aenderungId") UUID aenderungId);
+
+    @POST
+    @Path("/{aenderungId}/aenderung/akzeptieren")
+    @Produces({ "application/json", "text/plain" })
+    Response aenderungAkzeptieren(@PathParam("aenderungId") UUID aenderungId);
+
+    @PATCH
     @Path("/{aenderungId}/aenderung/einreichen")
     @Produces({ "text/plain" })
     Response aenderungEinreichen(@PathParam("aenderungId") UUID aenderungId);
+
+    @PATCH
+    @Path("/{aenderungId}/aenderung/manuelleAenderung")
+    @Produces({ "text/plain" })
+    Response aenderungManuellAnpassen(@PathParam("aenderungId") UUID aenderungId);
 
     @POST
     @Path("/{gesuchId}/aenderungsantrag")

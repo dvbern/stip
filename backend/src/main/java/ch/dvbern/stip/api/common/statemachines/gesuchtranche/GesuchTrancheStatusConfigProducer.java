@@ -31,6 +31,11 @@ public class GesuchTrancheStatusConfigProducer {
 
         config.configure(GesuchTrancheStatus.UEBERPRUEFEN)
             .permit(GesuchTrancheStatusChangeEvent.ABGELEHNT, GesuchTrancheStatus.ABGELEHNT)
+            .permit(GesuchTrancheStatusChangeEvent.AKZETPIERT, GesuchTrancheStatus.AKZEPTIERT)
+            .permit(GesuchTrancheStatusChangeEvent.MANUELLE_AENDERUNG, GesuchTrancheStatus.MANUELLE_AENDERUNG);
+
+        config.configure(GesuchTrancheStatus.MANUELLE_AENDERUNG)
+            .permit(GesuchTrancheStatusChangeEvent.ABGELEHNT, GesuchTrancheStatus.ABGELEHNT)
             .permit(GesuchTrancheStatusChangeEvent.AKZETPIERT, GesuchTrancheStatus.AKZEPTIERT);
 
         config.configure(GesuchTrancheStatus.ABGELEHNT);

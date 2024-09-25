@@ -62,7 +62,7 @@ public class GesuchTrancheService {
                 .stream()
                 .filter(tranche ->
                     tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS &&
-                    tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                        tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
                 )
                 .findFirst()
                 .orElseThrow(NotFoundException::new)
@@ -200,6 +200,30 @@ public class GesuchTrancheService {
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
 
+    @Transactional
+    public GesuchTrancheDto aenderungAkzeptieren(final UUID aenderungId) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.AKZETPIERT);
+
+        final var newTranche = gesuchTrancheRepository.findMostRecentCreatedTranche(aenderung.getGesuch());
+        return gesuchTrancheMapper.toDto(newTranche.orElseThrow(NotFoundException::new));
+    }
+
+    @Transactional
+    public void aenderungAblehnen(final UUID aenderungId) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.ABGELEHNT);
+    }
+
+    @Transactional
+    public void aenderungManuellAnpassen(final UUID aenderungId) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        gesuchTrancheStatusService.triggerStateMachineEvent(
+            aenderung,
+            GesuchTrancheStatusChangeEvent.MANUELLE_AENDERUNG
+        );
+    }
+
     public ValidationReportDto einreichenValidieren(final UUID trancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
 
@@ -207,7 +231,7 @@ public class GesuchTrancheService {
             gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
         } catch (ValidationsException e) {
             return ValidationsExceptionMapper.toDto(e);
-        } catch (CustomValidationsException e){
+        } catch (CustomValidationsException e) {
             return CustomValidationsExceptionMapper.toDto(e);
         }
 
