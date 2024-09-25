@@ -90,6 +90,7 @@ import {
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
+import { prepareWohnsitzValues } from '@dv/shared/util-fn/gesuch-util';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
@@ -142,7 +143,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly Zivilstand = Zivilstand;
   readonly spracheValues = Object.values(Sprache);
   readonly zivilstandValues = Object.values(Zivilstand);
-  readonly wohnsitzValues = Object.values(Wohnsitz);
+  readonly wohnsitzValuesSig = computed(() => {
+    const { gesuchFormular } = this.viewSig();
+    return prepareWohnsitzValues(gesuchFormular?.familiensituation);
+  });
   readonly niederlassungsStatusValues = Object.values(Niederlassungsstatus);
 
   languageSig = this.store.selectSignal(selectLanguage);
@@ -280,7 +284,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   });
 
   showWohnsitzSplitterSig = computed(() => {
-    return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
+    return (
+      this.wohnsitzChangedSig() === 'MUTTER_VATER' &&
+      this.wohnsitzValuesSig().includes('MUTTER_VATER')
+    );
   });
 
   showEinreiseDatumWarningSig = signal(false);
@@ -326,6 +333,14 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         return null;
       }
     };
+
+    effect(() => {
+      this.formUtils.invalidateControlIfValidationFails(
+        this.form,
+        ['wohnsitz'],
+        this.validationViewSig().invalidFormularProps.specialValidationErrors,
+      );
+    });
 
     // visibility and disabled state for wohnsitzAnteilMutter and wohnsitzAnteilVater
     effect(
@@ -598,10 +613,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         }),
       );
     }
-  }
-
-  trackByIndex(index: number) {
-    return index;
   }
 
   onGeburtsdatumBlur() {

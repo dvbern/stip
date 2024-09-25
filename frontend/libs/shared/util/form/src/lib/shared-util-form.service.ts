@@ -17,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject, concat, from, of } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 
+import { SpecialValidationError } from '@dv/shared/model/gesuch-form';
 import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
 import {
   ComponentWithForm,
@@ -275,4 +276,28 @@ export class SharedUtilFormService {
         })
       : toSignal<R>(control.valueChanges);
   }
+
+  invalidateControlIfValidationFails<T extends FormGroup>(
+    form: T,
+    expectedFields: KeysOfForm<T>[],
+    specialValidationErrors?: SpecialValidationError[],
+  ) {
+    if (!specialValidationErrors || specialValidationErrors.length === 0) {
+      return;
+    }
+
+    specialValidationErrors.forEach((error) => {
+      const field = error.field;
+      if (
+        expectedFields.findIndex((f) => f === field) >= 0 &&
+        field in form.controls
+      ) {
+        const control = form.get(field);
+        control?.markAllAsTouched();
+        control?.patchValue(null);
+      }
+    });
+  }
 }
+
+type KeysOfForm<T> = T extends FormGroup<infer K> ? keyof K : never;
