@@ -132,7 +132,7 @@
         <mat-label>{{ 'shared.form.eltern.ergaenzungsleistungen.label' | translate }}</mat-label>
         <input
           formControlName="ergaenzungsleistungen"
-          data-testid="form-eltern-steuerdaten.ergaenzungsleistungen"
+          data-testid="form-eltern.ergaenzungsleistungen"
           matInput
           [maskito]="maskitoNumber"
           type="text"
@@ -159,7 +159,7 @@
         <mat-label>{{ 'shared.form.eltern.sozialhilfebeitraege.label' | translate }}</mat-label>
         <input
           formControlName="sozialhilfebeitraege"
-          data-testid="form-eltern-steuerdaten.sozialhilfebeitraege"
+          data-testid="form-eltern.sozialhilfebeitraege"
           matInput
           [maskito]="maskitoNumber"
           type="text"
@@ -190,7 +190,7 @@
           matInput
           type="text"
           formControlName="wohnkosten"
-          data-testid="form-eltern-steuerdaten-wohnkosten"
+          data-testid="form-eltern.wohnkosten"
           [maskito]="maskitoNumber"
         />
         <mat-hint *dvZuvorHint="changes?.wohnkosten"></mat-hint>
