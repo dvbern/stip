@@ -1,24 +1,14 @@
-package ch.dvbern.stip.api.gesuch.entity;
+package ch.dvbern.stip.api.common.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import jakarta.enterprise.context.ApplicationScoped;
 
-public class AbstractFamilienEntityWohnsitzConstraintValidator
-    implements ConstraintValidator<AbstractFamilieEntityWohnsitzConstraint, GesuchFormular>
-{
-    private String property = "";
+@ApplicationScoped
+public class AbstractFamilieEntityWohnsitzValidator {
+    //todo: refactor method
 
-    @Override
-    public void initialize(AbstractFamilieEntityWohnsitzConstraint constraintAnnotation) {
-        property = constraintAnnotation.property();    }
-
-    @Override
-    public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
-        Familiensituation familiensituation = gesuchFormular.getFamiliensituation();
+    public boolean isValid(AbstractFamilieEntity personInAusbildung, Familiensituation familiensituation) {
         if (familiensituation != null) {
-            AbstractFamilieEntity personInAusbildung = gesuchFormular.getPersonInAusbildung();
             if (personInAusbildung != null) {
                 if(!familiensituation.getElternVerheiratetZusammen()){
                     if(familiensituation.getElternteilUnbekanntVerstorben()){

@@ -9,9 +9,9 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = AbstractFamilienEntityWohnsitzConstraintValidator.class)
+@Constraint(validatedBy = FamiliensituationGeschwisterWohnsitzConstraintValidator.class)
 @Documented
-public @interface AbstractFamilieEntityWohnsitzConstraint {
+public @interface FamiliensituationGeschwisterWohnsitzConstraint {
     String message() default VALIDATION_FAMILIENSITUATION_WOHNSITUATION_MESSAGE;
 
     Class<?>[] groups() default {};
