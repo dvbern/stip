@@ -198,6 +198,7 @@
                 <mat-radio-button
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.WEDER_NOCH"
                   [value]="ELTERN_ABWESENHEITS_GRUND.WEDER_NOCH"
+                  [disabled]="form.controls.vaterUnbekanntVerstorben.value === 'WEDER_NOCH'"
                   >{{
                     'shared.form.familiensituation.elternteil-verstorben-unbekannt.keine' | translate
                   }}</mat-radio-button
@@ -284,6 +285,7 @@
                 <mat-radio-button
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.WEDER_NOCH"
                   [value]="ELTERN_ABWESENHEITS_GRUND.WEDER_NOCH"
+                  [disabled]="form.controls.mutterUnbekanntVerstorben.value === 'WEDER_NOCH'"
                   >{{
                     'shared.form.familiensituation.elternteil-verstorben-unbekannt.keine' | translate
                   }}</mat-radio-button
