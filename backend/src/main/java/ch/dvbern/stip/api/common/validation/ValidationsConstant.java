@@ -84,6 +84,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.familiensituation.eltern.entity.message}";
     public static final String VALIDATION_FAMILIENSITUATION_STEUERDATEN_ENTITY_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.familiensituation.steuerdaten.entity.message}";
+    public static final String VALIDATION_FAMILIENSITUATION_ELTERN_ABWESENHEITSGRUND_WEDERNOCH_MESSAGE =
+        "{jakarta.validation.constraints.familiensituation.eltern.abwesenheitsgrund.both.wedernoch.message}";
     public static final String VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE =
         "{jakarta.validation.constraints.lebenslauf.luckenlos.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE =
