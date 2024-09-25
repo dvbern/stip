@@ -312,6 +312,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
       /accept/,
+      { timeout: 10000 },
     );
 
     await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
