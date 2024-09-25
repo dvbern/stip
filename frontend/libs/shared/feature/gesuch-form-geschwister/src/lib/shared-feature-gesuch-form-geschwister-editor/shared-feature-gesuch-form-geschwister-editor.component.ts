@@ -28,7 +28,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import {
+  selectSharedDataAccessGesuchValidationView,
+  selectSharedDataAccessGesuchsView,
+} from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   Ausbildungssituation,
@@ -66,6 +69,7 @@ import {
   parseStringAndPrintForBackendLocalDate,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
+import { prepareWohnsitzValues } from '@dv/shared/util-fn/gesuch-util';
 
 const MAX_AGE_ADULT = 130;
 const MIN_AGE_CHILD = 0;
@@ -116,8 +120,17 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
   @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
+  protected readonly wohnsitzValuesSig = computed(() => {
+    const { gesuchFormular } = this.viewSig();
+    return prepareWohnsitzValues(gesuchFormular?.familiensituation);
+  });
+  protected readonly ausbildungssituationValues =
+    Object.values(Ausbildungssituation);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  validationViewSig = this.store.selectSignal(
+    selectSharedDataAccessGesuchValidationView,
+  );
   gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject<unknown>();
 
@@ -151,7 +164,10 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
   wohnsitzChangedSig = toSignal(this.form.controls.wohnsitz.valueChanges);
 
   showWohnsitzSplitterSig = computed(() => {
-    return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
+    return (
+      this.wohnsitzChangedSig() === 'MUTTER_VATER' &&
+      this.wohnsitzValuesSig().includes('MUTTER_VATER')
+    );
   });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
@@ -186,6 +202,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
       },
       { allowSignalWrites: true },
     );
+
     effect(
       () => {
         this.gotReenabledSig();
@@ -205,6 +222,14 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
       },
       { allowSignalWrites: true },
     );
+
+    effect(() => {
+      this.formUtils.invalidateControlIfValidationFails(
+        this.form,
+        ['wohnsitz'],
+        this.validationViewSig().invalidFormularProps.specialValidationErrors,
+      );
+    });
   }
 
   ngOnChanges() {
@@ -239,10 +264,6 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
     }
   }
 
-  trackByIndex(index: number) {
-    return index;
-  }
-
   handleCancel() {
     this.form.markAsPristine();
     this.closeTriggered.emit();
@@ -255,8 +276,4 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
       this.languageSig(),
     );
   }
-
-  protected readonly wohnsitzValues = Object.values(Wohnsitz);
-  protected readonly ausbildungssituationValues =
-    Object.values(Ausbildungssituation);
 }
