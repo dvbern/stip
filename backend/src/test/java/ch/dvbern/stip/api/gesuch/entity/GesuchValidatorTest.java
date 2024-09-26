@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -70,7 +69,6 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertTrue;
 
 @QuarkusTest
 @RequiredArgsConstructor
@@ -400,10 +398,9 @@ class GesuchValidatorTest {
     void testGesuchEinreichenValidationEinnahmenKostenEltern() {
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
-        familiensituation.setElternteilUnbekanntVerstorben(true);
-        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
-        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
         familiensituation.setGerichtlicheAlimentenregelung(true);
+        familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
+        familiensituation.setMutterWiederverheiratet(false);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();

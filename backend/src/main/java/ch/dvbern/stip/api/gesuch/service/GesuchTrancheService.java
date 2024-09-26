@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
+import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -48,6 +52,7 @@ public class GesuchTrancheService {
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchTrancheTruncateService gesuchTrancheTruncateService;
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
+    private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
 
     public GesuchDto getAenderungsantrag(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
@@ -57,7 +62,7 @@ public class GesuchTrancheService {
                 .stream()
                 .filter(tranche ->
                     tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS &&
-                        tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                    tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
                 )
                 .findFirst()
                 .orElseThrow(NotFoundException::new)
@@ -195,11 +200,25 @@ public class GesuchTrancheService {
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
 
+    public ValidationReportDto einreichenValidieren(final UUID trancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
+
+        try {
+            gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
+        } catch (ValidationsException e) {
+            return ValidationsExceptionMapper.toDto(e);
+        } catch (CustomValidationsException e){
+            return CustomValidationsExceptionMapper.toDto(e);
+        }
+
+        return new ValidationReportDto();
+    }
+
     public boolean openAenderungAlreadyExists(final Gesuch gesuch) {
         final var allowedStates = Set.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.ABGELEHNT);
         final var trancheInDisallowedStates = gesuch.getAenderungen()
-                .filter(gesuchTranche -> !allowedStates.contains(gesuchTranche.getStatus()))
-                .toList();
+            .filter(gesuchTranche -> !allowedStates.contains(gesuchTranche.getStatus()))
+            .toList();
 
         return !trancheInDisallowedStates.isEmpty();
     }

@@ -25,6 +25,7 @@ import {
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 type OnlyString<T> = T extends string ? T : never;
+type StringToNumber<T> = Exclude<T, string> | number;
 
 @Injectable({
   providedIn: 'root',
@@ -119,14 +120,16 @@ export class SharedUtilFormService {
   createNumberConverter<
     T extends { [k: string]: AbstractControl<unknown> },
     K extends OnlyString<keyof T>,
-  >(group: FormGroup<T>, numberFields: K[]) {
+  >(_group: FormGroup<T>, numberFields: K[]) {
     return {
-      toNumber: () =>
+      toNumber: <V extends { [key in K]: string | null | undefined }>(
+        values: V,
+      ) =>
         numberFields.reduce(
           (acc, key) => {
-            return { ...acc, [key]: fromFormatedNumber(group.get(key)?.value) };
+            return { ...acc, [key]: fromFormatedNumber(values[key] ?? null) };
           },
-          {} as Record<K, number>,
+          {} as { [key in K]: StringToNumber<V[key]> },
         ),
       toString: (values: { [key in K]?: number }) =>
         numberFields.reduce(

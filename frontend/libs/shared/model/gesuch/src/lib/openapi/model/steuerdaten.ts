@@ -28,24 +28,7 @@ export interface Steuerdaten {
     saeule3a?: number;
     saeule2?: number;
     kinderalimente: number;
-    /**
-     * \'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater\' \'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp\' 
-     */
-    ergaenzungsleistungen?: number;
-    /**
-     * \'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Mutter\' \'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen null\' 
-     */
-    ergaenzungsleistungenPartner?: number;
     vermoegen: number;
-    wohnkosten: number;
-    /**
-     * \'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater\' \'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp\' 
-     */
-    sozialhilfebeitraege?: number;
-    /**
-     * \'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Mutter\' \'Falls steuerdatenTyp != Famile: null\' 
-     */
-    sozialhilfebeitraegePartner?: number;
 }
 
 

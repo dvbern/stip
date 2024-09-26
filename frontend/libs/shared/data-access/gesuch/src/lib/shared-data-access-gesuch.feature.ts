@@ -35,7 +35,7 @@ export interface State {
   } | null;
   gesuch: SharedModelGesuch | null;
   gesuchFormular: SharedModelGesuchFormular | null;
-  specificTrancheId: string | null;
+  isEditingTranche: boolean | null;
   gesuchs: SharedModelGesuch[];
   cache: {
     gesuch: SharedModelGesuch | null;
@@ -52,7 +52,7 @@ const initialState: State = {
   validations: null,
   gesuch: null,
   gesuchFormular: null,
-  specificTrancheId: null,
+  isEditingTranche: null,
   gesuchs: [],
   cache: {
     gesuch: null,
@@ -160,7 +160,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
           ...state,
           gesuch,
           gesuchFormular: gesuchFormular,
-          specificTrancheId: trancheId ?? null,
+          isEditingTranche: !!trancheId,
           steuerdatenTabs: success(
             gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.steuerdatenTabs ??
               [],

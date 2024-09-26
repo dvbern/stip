@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  Input,
   OnInit,
   computed,
   effect,
@@ -14,13 +15,14 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { GesuchAppEventCockpit } from '@dv/gesuch-app/event/cockpit';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
+import { GesuchAppUiAenderungsEntryComponent } from '@dv/gesuch-app/ui/aenderungs-entry';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
-import { Gesuchsperiode } from '@dv/shared/model/gesuch';
+import { GesuchTrancheSlim, Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -45,6 +47,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
     SharedUiRdIsPendingPipe,
+    GesuchAppUiAenderungsEntryComponent,
   ],
   providers: [FallStore],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
@@ -64,11 +67,12 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
+  getStatus = this.gesuchAenderungStore.createGesuchAenderung$;
+  @Input({ required: true }) tranche?: GesuchTrancheSlim;
 
   constructor() {
     effect(
       () => {
-        // TODO (KSTIP-1189): use correct Aenderungs-Widget and loading mechanism
         const gesuchId = this.cockpitViewSig().gesuchsperiodes?.[0]?.gesuch?.id;
         if (gesuchId) {
           this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });

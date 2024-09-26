@@ -29,7 +29,7 @@ async function setup(gesuchFormular: GesuchFormularUpdate) {
           ausbildungsstaettes: { ausbildungsstaettes: [] },
           gesuchs: {
             gesuch: {
-              gesuchTrancheToWorkWith: { id: '1' },
+              gesuchTrancheToWorkWith: { id: '1', typ: 'tranche' },
               gesuchsperiode: {
                 gesuchsjahr: {
                   technischesJahr: new Date().getFullYear(),

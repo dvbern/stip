@@ -10,14 +10,22 @@ import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transform
 import { GesuchAppDataAccessAbschlussApiEvents } from './gesuch-app-data-access-abschluss.events';
 
 export const gesuchCheck = createEffect(
-  (events$ = inject(Actions), gesuchService = inject(GesuchService)) => {
+  (
+    events$ = inject(Actions),
+    tranchenService = inject(GesuchTrancheService),
+  ) => {
     return events$.pipe(
       ofType(GesuchAppDataAccessAbschlussApiEvents.check),
-      switchMap(({ gesuchId }) =>
-        gesuchService
-          .gesuchEinreichenValidieren$({ gesuchId }, undefined, undefined, {
-            context: shouldIgnoreErrorsIf(true),
-          })
+      switchMap(({ gesuchTrancheId }) =>
+        tranchenService
+          .gesuchTrancheEinreichenValidieren$(
+            { gesuchTrancheId },
+            undefined,
+            undefined,
+            {
+              context: shouldIgnoreErrorsIf(true),
+            },
+          )
           .pipe(
             switchMap((validation) => [
               GesuchAppDataAccessAbschlussApiEvents.gesuchCheckSuccess({

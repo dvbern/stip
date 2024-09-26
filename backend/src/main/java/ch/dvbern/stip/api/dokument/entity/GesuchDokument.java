@@ -87,4 +87,10 @@ public class GesuchDokument extends AbstractMandantEntity {
         }
     )
     private List<Dokument> dokumente = new ArrayList<>();
+
+    public void addDokument(final Dokument dokument) {
+        // Bi-Directional associations must set both sides of the relation
+        dokumente.add(dokument);
+        dokument.getGesuchDokumente().add(this);
+    }
 }

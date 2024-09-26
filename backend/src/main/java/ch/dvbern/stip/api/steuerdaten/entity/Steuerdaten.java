@@ -1,9 +1,7 @@
 package ch.dvbern.stip.api.steuerdaten.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.gesuch.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
-import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,10 +20,6 @@ import org.hibernate.envers.Audited;
 @Table(name = "steuerdaten")
 @Getter
 @Setter
-@SteuerdatenFieldsRequiredIfTypeConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    SteuerdatenPageValidation.class
-})
 public class Steuerdaten extends AbstractEntity {
     @NotNull
     @Column(name = "steuerdaten_typ", nullable = false)
@@ -39,10 +33,6 @@ public class Steuerdaten extends AbstractEntity {
     @NotNull
     @Column(name = "eigenmietwert", nullable = false)
     private Integer eigenmietwert;
-
-    @NotNull
-    @Column(name = "wohnkosten", nullable = false)
-    private Integer wohnkosten;
 
     @NotNull
     @Column(name = "is_arbeitsverhaeltnis_selbstaendig", nullable = false)
@@ -59,22 +49,6 @@ public class Steuerdaten extends AbstractEntity {
     @NotNull
     @Column(name = "kinderalimente", nullable = false)
     private Integer kinderalimente;
-
-    @NotNull
-    @Column(name = "ergaenzungsleistungen", nullable = false)
-    private Integer ergaenzungsleistungen;
-
-    @Nullable
-    @Column(name = "ergaenzungsleistungen_partner")
-    private Integer ergaenzungsleistungenPartner;
-
-    @NotNull
-    @Column(name = "sozialhilfebeitraege", nullable = false)
-    private Integer sozialhilfebeitraege;
-
-    @Nullable
-    @Column(name = "sozialhilfebeitraege_partner")
-    private Integer sozialhilfebeitraegePartner;
 
     @NotNull
     @Column(name = "vermoegen", nullable = false)

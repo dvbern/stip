@@ -6,10 +6,7 @@ import * as dotenv from 'dotenv';
 
 import { baseConfig, getE2eUrls } from '@dv/shared/util-fn/e2e-util';
 
-const env = dotenv.config({ path: join(__dirname, '../../.env') });
-if (env.error) {
-  throw env.error;
-}
+dotenv.config({ path: join(__dirname, '../../.env') });
 
 const urls = getE2eUrls();
 

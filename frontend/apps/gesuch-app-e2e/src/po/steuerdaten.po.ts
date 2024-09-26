@@ -18,11 +18,6 @@ export class SteuerdatenPO {
     saeule2: Locator;
     kinderalimente: Locator;
     vermoegen: Locator;
-    ergaenzungsleistungen: Locator;
-    ergaenzungsleistungenPartner: Locator;
-    sozialhilfebeitraege: Locator;
-    sozialhilfebeitraegePartner: Locator;
-    wohnkosten: Locator;
     steuernBund: Locator;
     steuernKantonGemeinde: Locator;
     fahrkosten: Locator;
@@ -56,19 +51,6 @@ export class SteuerdatenPO {
         'form-eltern-steuerdaten.kinderalimente',
       ),
       vermoegen: page.getByTestId('form-eltern-steuerdaten.vermoegen'),
-      ergaenzungsleistungen: page.getByTestId(
-        'form-eltern-steuerdaten.ergaenzungsleistungen',
-      ),
-      ergaenzungsleistungenPartner: page.getByTestId(
-        'form-eltern-steuerdaten.ergaenzungsleistungenPartner',
-      ),
-      sozialhilfebeitraege: page.getByTestId(
-        'form-eltern-steuerdaten.sozialhilfebeitraege',
-      ),
-      sozialhilfebeitraegePartner: page.getByTestId(
-        'form-eltern-steuerdaten.sozialhilfebeitraegePartner',
-      ),
-      wohnkosten: page.getByTestId('form-eltern-steuerdaten-wohnkosten'),
       steuernKantonGemeinde: page.getByTestId(
         'form-eltern-steuerdaten.steuernKantonGemeinde',
       ),
@@ -108,19 +90,6 @@ export class SteuerdatenPO {
 
     await this.elems.kinderalimente.fill(`${item.kinderalimente}`);
     await this.elems.vermoegen.fill(`${item.vermoegen}`);
-    await this.elems.ergaenzungsleistungen.fill(
-      `${item.ergaenzungsleistungen}`,
-    );
-    await this.elems.sozialhilfebeitraege.fill(`${item.sozialhilfebeitraege}`);
-    if (item.steuerdatenTyp === 'FAMILIE') {
-      await this.elems.ergaenzungsleistungenPartner.fill(
-        `${item.ergaenzungsleistungenPartner}`,
-      );
-      await this.elems.sozialhilfebeitraegePartner.fill(
-        `${item.sozialhilfebeitraegePartner}`,
-      );
-    }
-    await this.elems.wohnkosten.fill(`${item.wohnkosten}`);
     await this.elems.steuernKantonGemeinde.fill(
       `${item.steuernKantonGemeinde}`,
     );

@@ -47,17 +47,30 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private dialog = inject(MatDialog);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
-  isGesuchRouteSig = computed(() => {
+  isTrancheRouteSig = computed(() => {
     const gesuch = this.currentGesuchSig();
+
     if (!gesuch) {
       return false;
     }
-    return this.router.isActive('/gesuch', {
-      paths: 'subset',
-      fragment: 'ignored',
-      matrixParams: 'ignored',
-      queryParams: 'ignored',
-    });
+
+    return (
+      // If it is a tranche route
+      this.router.url.includes('/tranche/') ||
+      // or a normal current gesuch route
+      (this.router.url.includes('/gesuch/') &&
+        !this.router.url.includes('/aenderung/'))
+    );
+  });
+
+  isAenderungRouteSig = computed(() => {
+    const gesuch = this.currentGesuchSig();
+
+    if (!gesuch) {
+      return false;
+    }
+
+    return this.router.url.includes('/aenderung/');
   });
 
   constructor() {

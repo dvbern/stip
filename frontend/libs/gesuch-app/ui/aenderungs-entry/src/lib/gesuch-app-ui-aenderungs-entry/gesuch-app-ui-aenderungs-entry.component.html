@@ -1,0 +1,47 @@
+<!-- Änderung Titel -->
+<div class="col-md">
+  <div class="card-title d-flex align-items-baseline">
+    <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
+      <i class="material-symbols-rounded fs-5">edit</i>
+    </dv-shared-ui-icon-chip>
+    @if (tranche.status === 'IN_BEARBEITUNG_GS') {
+      <h3 data-testid="cockpit-periode-title">
+        <span>{{ 'gesuch-app.aenderungs-entry.title' | translate }}</span>
+        <span>&nbsp;</span>
+      </h3>
+    } @else {
+      <div>
+        <h3 data-testid="cockpit-periode-title">
+          <span>{{ 'gesuch-app.aenderungs-entry.title' | translate }}</span>
+          <span>&nbsp;</span>
+        </h3>
+        <h6 class="card-subtitle fw-medium mt-2 mb-2 small">
+          <span>{{ tranche.gueltigAb | date: 'dd.MM.yyyy' }}</span>
+          <span> - </span>
+          <span>{{ tranche.gueltigBis | date: 'dd.MM.yyyy' }}</span>
+        </h6>
+      </div>
+    }
+  </div>
+
+  <!-- Status des Antrags -->
+  <div class="d-flex flex-column align-items-start ng-star-inserted">
+    @if (tranche.comment) {
+      <span class="mt-4 fw-normal small">{{ tranche.comment }}</span>
+    }
+    <span class="mt-4 fw-normal small">{{ 'gesuch-app.aenderungs-entry.status.title' | translate }}</span>
+    <span class="fw-medium">
+      {{ 'gesuch-app.cockpit.gesuch.status.' + tranche.status | translate }}
+    </span>
+    <!-- Button -->
+    <div class="col-md w-100">
+      <a
+        class="btn btn-primary mt-3 w-100"
+        data-testid="cockpit-gesuch-edit"
+        [routerLink]="['/gesuch', gesuchId, 'aenderung', tranche.id]"
+      >
+        {{ 'gesuch-app.cockpit.gesuch.aenderungs-entry' | translate }}
+      </a>
+    </div>
+  </div>
+</div>

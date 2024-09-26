@@ -224,7 +224,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const istErwachsen = !geburtsdatum
       ? false
       : (getDateDifference(geburtsdatum, new Date())?.years ?? 0) > 18;
-    // TODO: Use stammdaten info once available
     const ausbildungsgang = ausbildungsstaettes
       .find((a) =>
         a.ausbildungsgaenge?.some(
