@@ -299,12 +299,24 @@ export const getFormStepByDocumentType = (
     case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
       return gesuchFormSteps.DOKUMENTE;
     }
+    case DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE: {
+      return gesuchFormSteps.GESCHWISTER;
+    }
+    // has overlapp with kinder step so include in default case step mapping below would not work
+    case DokumentTyp.EK_BELEG_KINDERZULAGEN: {
+      return gesuchFormSteps.EINNAHMEN_KOSTEN;
+    }
+    // has overlapp with kinder step so include in default case step mapping below would not work
+    case DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER: {
+      return gesuchFormSteps.EINNAHMEN_KOSTEN;
+    }
+    case DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG: {
+      return gesuchFormSteps.PARTNER;
+    }
     default: {
-      if (dokumentTyp.startsWith('STEUERDATEN')) {
-        return ELTERN_STEUER_STEPS[getTypeOfSteuerdatenDokument(dokumentTyp)];
-      }
       const step = (Object.keys(gesuchFormSteps) as GesuchFormSteps[]).find(
         (key) => {
+          // map all remaining einnahmen kosten to the einnahmen kosten step
           if (key === 'EINNAHMEN_KOSTEN') {
             return dokumentTyp.includes('EK');
           }
@@ -356,15 +368,3 @@ const toStepState = (
 const isSteuerdatenStep = (
   step: SharedModelGesuchFormularPropsSteuerdatenSteps,
 ): step is SteuerdatenSteps => step.startsWith('steuerdaten');
-
-const getTypeOfSteuerdatenDokument = (
-  dokument: DokumentTyp,
-): SteuerdatenTyp => {
-  if (dokument.endsWith('MUTTER')) {
-    return 'MUTTER';
-  }
-  if (dokument.endsWith('VATER')) {
-    return 'VATER';
-  }
-  return 'FAMILIE';
-};
