@@ -100,6 +100,27 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesucheGs
       summary: Returns gesuche filtered by gs
+  /gesuch/benutzer/me/gs-dashboard:
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GsDashboard'
+          description: Returns gesuche for dashboard filtered by gs
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGsDashboard
+      summary: Returns gesuche for dashboard filtered by gs
   /gesuch/status/in-bearbeitung/{gesuchId}:
     post:
       tags:
@@ -2206,6 +2227,19 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
+    GsDashboard:
+      type: object
+      properties:
+        gesuchsperiode:
+          $ref: '#/components/schemas/Gesuchsperiode'
+        gesuchStatus:
+          $ref: '#/components/schemas/Gesuchstatus'
+        id:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheSlim:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
+        gesuchTrancheWithMissingDocumentsId:
+          $ref: '#/components/schemas/UUID'
     GesuchWithChanges:
       allOf:
         - $ref: '#/components/schemas/Gesuch'
@@ -3351,12 +3385,12 @@ components:
         gueltigBis:
           $ref: '#/components/schemas/LocalDate'
         gesuchTrancheId:
-          description: 'ID der tranche für welche die Berechnung ausgeführt wurde. 
-                        Mehrere resultate mit der gleichen ID sind die berechnungen für 
+          description: 'ID der tranche für welche die Berechnung ausgeführt wurde.
+                        Mehrere resultate mit der gleichen ID sind die berechnungen für
                         getrennte eltern mit Kindern die eine Obhutsteilung haben'
-          $ref: '#/components/schemas/UUID' 
+          $ref: '#/components/schemas/UUID'
         berechnungsanteilKinder:
-          description: 'Anteil dieser Berechnung am Berechnungstotal. 
+          description: 'Anteil dieser Berechnung am Berechnungstotal.
                         Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
           type: number
         berechnungsStammdaten:
