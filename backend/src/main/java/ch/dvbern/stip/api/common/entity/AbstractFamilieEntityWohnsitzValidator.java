@@ -3,6 +3,8 @@ package ch.dvbern.stip.api.common.entity;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.math.BigDecimal;
+
 @ApplicationScoped
 public class AbstractFamilieEntityWohnsitzValidator {
     //todo: refactor method
@@ -43,15 +45,23 @@ public class AbstractFamilieEntityWohnsitzValidator {
     }
 
     private boolean isWohnsitzanteilValidWhenOneEltnernteilIsAbsent(AbstractFamilieEntity familieEntity, Familiensituation familiensituation) {
-        if (familiensituation.getElternteilUnbekanntVerstorben()) {
-            // mutter is absent: wohnsitzanteil vater is not null
-            if (familiensituation.getMutterUnbekanntVerstorben() != null) {
-                return (familieEntity.getWohnsitzAnteilMutter() == null) && (familieEntity.getWohnsitzAnteilVater() != null);
-            }
-            // vater is absent: : wohnsitzanteil mutter is not null
-            if (familiensituation.getVaterUnbekanntVerstorben() != null) {
-                return (familieEntity.getWohnsitzAnteilVater() == null) && (familieEntity.getWohnsitzAnteilMutter() != null);
+        boolean isAnteilMutter100Percent = familieEntity.getWohnsitzAnteilMutter().equals(BigDecimal.valueOf(100));
+        boolean isAnteilVater100Percent = familieEntity.getWohnsitzAnteilVater().equals(BigDecimal.valueOf(100));
 
+        if (familiensituation.getElternteilUnbekanntVerstorben()) {
+            if(familiensituation.getVaterUnbekanntVerstorben() != null
+            && familiensituation.getMutterUnbekanntVerstorben() != null){
+                // one of both anteile has to be 100 %
+                return isAnteilMutter100Percent
+                        || isAnteilVater100Percent;
+            }
+            // mutter is absent: wohnsitzanteil vater has to be 100 %
+            if (familiensituation.getMutterUnbekanntVerstorben() != null) {
+                return isAnteilVater100Percent;
+            }
+            // vater is absent: : wohnsitzanteil mutter has to be 100 %
+            if (familiensituation.getVaterUnbekanntVerstorben() != null) {
+                return isAnteilMutter100Percent;
             }
         }
         return true;
