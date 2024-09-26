@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.common.entity;
 
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -9,21 +10,21 @@ import java.math.BigDecimal;
 public class AbstractFamilieEntityWohnsitzValidator {
     //todo: refactor method
 
-    public boolean isValid(AbstractFamilieEntity personInAusbildung, Familiensituation familiensituation) {
+    public boolean isValid(AbstractFamilieEntity familieEntity, Familiensituation familiensituation) {
         if (familiensituation != null) {
-            if (personInAusbildung != null) {
-                if(!familiensituation.getElternVerheiratetZusammen()){
-                    if(familiensituation.getElternteilUnbekanntVerstorben()){
-                        switch(personInAusbildung.getWohnsitz()){
+            if (familieEntity != null) {
+                if(!familiensituation.getElternVerheiratetZusammen().booleanValue()){
+                    if(familiensituation.getElternteilUnbekanntVerstorben().booleanValue()){
+                        switch(familieEntity.getWohnsitz()){
                             // validate wohnsitzanteil
-                            case MUTTER_VATER: return isWohnsitzanteilValidWhenOneEltnernteilIsAbsent(personInAusbildung,familiensituation);
+                            case MUTTER_VATER: return isWohnsitzanteilValidWhenOneEltnernteilIsAbsent(familieEntity,familiensituation);
                             // option is not valid
                             case FAMILIE: return false;
                             // all other options are valid
                             default: return true;
                         }
                     }else{
-                        switch(personInAusbildung.getWohnsitz()){
+                        switch(familieEntity.getWohnsitz()){
                             // validate wohnsitzanteil
                             case MUTTER_VATER: return true;
                             // option is not valid
@@ -35,8 +36,8 @@ public class AbstractFamilieEntityWohnsitzValidator {
 
 
                 }else{
-                    // every wohnsituation option is allowed, but wohnsitzanteile have to be null
-                    return personInAusbildung.getWohnsitzAnteilMutter() == null && personInAusbildung.getWohnsitzAnteilVater() == null;
+                    // when elterns are together or married, the option MUTTER_VATER is not available
+                    return familieEntity.getWohnsitz() != Wohnsitz.MUTTER_VATER;
                 }
 
             }
@@ -48,7 +49,7 @@ public class AbstractFamilieEntityWohnsitzValidator {
         boolean isAnteilMutter100Percent = familieEntity.getWohnsitzAnteilMutter().equals(BigDecimal.valueOf(100));
         boolean isAnteilVater100Percent = familieEntity.getWohnsitzAnteilVater().equals(BigDecimal.valueOf(100));
 
-        if (familiensituation.getElternteilUnbekanntVerstorben()) {
+        if (familiensituation.getElternteilUnbekanntVerstorben().booleanValue()) {
             if(familiensituation.getVaterUnbekanntVerstorben() != null
             && familiensituation.getMutterUnbekanntVerstorben() != null){
                 // one of both anteile has to be 100 %
