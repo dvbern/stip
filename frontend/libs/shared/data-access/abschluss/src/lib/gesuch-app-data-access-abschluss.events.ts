@@ -2,7 +2,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { SharedModelError } from '@dv/shared/model/error';
 
-export const GesuchAppDataAccessAbschlussApiEvents = createActionGroup({
+export const SharedDataAccessAbschlussApiEvents = createActionGroup({
   source: 'Abschluss API',
   events: {
     gesuchAbschliessen: props<{

@@ -7,7 +7,7 @@ import { GesuchService, GesuchTrancheService } from '@dv/shared/model/gesuch';
 import { shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
-import { GesuchAppDataAccessAbschlussApiEvents } from './gesuch-app-data-access-abschluss.events';
+import { SharedDataAccessAbschlussApiEvents } from './gesuch-app-data-access-abschluss.events';
 
 export const gesuchCheck = createEffect(
   (
@@ -15,7 +15,7 @@ export const gesuchCheck = createEffect(
     tranchenService = inject(GesuchTrancheService),
   ) => {
     return events$.pipe(
-      ofType(GesuchAppDataAccessAbschlussApiEvents.check),
+      ofType(SharedDataAccessAbschlussApiEvents.check),
       switchMap(({ gesuchTrancheId }) =>
         tranchenService
           .gesuchTrancheEinreichenValidieren$(
@@ -28,12 +28,12 @@ export const gesuchCheck = createEffect(
           )
           .pipe(
             switchMap((validation) => [
-              GesuchAppDataAccessAbschlussApiEvents.gesuchCheckSuccess({
+              SharedDataAccessAbschlussApiEvents.gesuchCheckSuccess({
                 error: sharedUtilFnErrorTransformer({ error: validation }),
               }),
             ]),
             catchError((error) => [
-              GesuchAppDataAccessAbschlussApiEvents.gesuchCheckFailure({
+              SharedDataAccessAbschlussApiEvents.gesuchCheckFailure({
                 error: sharedUtilFnErrorTransformer(error),
               }),
             ]),
@@ -47,15 +47,15 @@ export const gesuchCheck = createEffect(
 export const gesuchEinreichen = createEffect(
   (events$ = inject(Actions), gesuchService = inject(GesuchService)) => {
     return events$.pipe(
-      ofType(GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen),
+      ofType(SharedDataAccessAbschlussApiEvents.gesuchAbschliessen),
       switchMap(({ gesuchId }) =>
         gesuchService.gesuchEinreichen$({ gesuchId }).pipe(
           switchMap(() => [
-            GesuchAppDataAccessAbschlussApiEvents.abschlussSuccess(),
+            SharedDataAccessAbschlussApiEvents.abschlussSuccess(),
             SharedEventGesuchFormAbschluss.init(),
           ]),
           catchError((error) => [
-            GesuchAppDataAccessAbschlussApiEvents.abschlussFailure({
+            SharedDataAccessAbschlussApiEvents.abschlussFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
           ]),
@@ -69,15 +69,15 @@ export const gesuchEinreichen = createEffect(
 export const trancheEinreichen = createEffect(
   (events$ = inject(Actions), trancheService = inject(GesuchTrancheService)) =>
     events$.pipe(
-      ofType(GesuchAppDataAccessAbschlussApiEvents.trancheAbschliessen),
+      ofType(SharedDataAccessAbschlussApiEvents.trancheAbschliessen),
       switchMap(({ trancheId }) =>
         trancheService.aenderungEinreichen$({ aenderungId: trancheId }).pipe(
           switchMap(() => [
-            GesuchAppDataAccessAbschlussApiEvents.abschlussSuccess(),
+            SharedDataAccessAbschlussApiEvents.abschlussSuccess(),
             SharedEventGesuchFormAbschluss.init(),
           ]),
           catchError((error) => [
-            GesuchAppDataAccessAbschlussApiEvents.abschlussFailure({
+            SharedDataAccessAbschlussApiEvents.abschlussFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
           ]),
@@ -88,7 +88,7 @@ export const trancheEinreichen = createEffect(
 );
 
 // add effects here
-export const gesuchAppDataAccessAbschlussEffects = {
+export const sharedDataAccessAbschlussEffects = {
   gesuchCheck,
   gesuchEinreichen,
   trancheEinreichen,

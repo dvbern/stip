@@ -14,6 +14,7 @@ import {
   SteuerdatenTyp,
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
+import { toAbschlussPhase } from '@dv/shared/model/gesuch-abschluss';
 import {
   ABSCHLUSS,
   AUSBILDUNG,
@@ -180,7 +181,18 @@ const createTrancheSetting = (
 export const selectSharedDataAccessGesuchStepsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   selectSharedDataAccessConfigsView,
-  (state, config) => {
+  selectSharedDataAccessGesuchValidationView,
+  (state, config, { trancheSetting }) => {
+    const hasAbschlussPhase =
+      toAbschlussPhase(state.gesuch, {
+        checkTranche: true,
+        appType: 'sachbearbeitung-app',
+      }) !== null;
+    const shouldAppendAbschluss =
+      config.isSachbearbeitungApp &&
+      trancheSetting?.type === 'AENDERUNG' &&
+      hasAbschlussPhase;
+
     const sharedSteps = state.steuerdatenTabs.data
       ? appendSteps(baseSteps, [
           {
@@ -189,6 +201,14 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
               (typ) => ELTERN_STEUER_STEPS[typ],
             ),
           },
+          ...(shouldAppendAbschluss
+            ? [
+                {
+                  after: DOKUMENTE,
+                  steps: [ABSCHLUSS],
+                },
+              ]
+            : []),
         ])
       : baseSteps;
 

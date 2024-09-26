@@ -14,9 +14,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
 import {
-  GesuchAppDataAccessAbschlussApiEvents,
+  SharedDataAccessAbschlussApiEvents,
   selectGesuchAppDataAccessAbschlussView,
-} from '@dv/gesuch-app/data-access/abschluss';
+} from '@dv/shared/data-access/abschluss';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -24,7 +24,7 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
-  selector: 'dv-gesuch-app-feature-gesuch-form-abschluss',
+  selector: 'dv-shared-feature-gesuch-form-abschluss',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,10 +32,10 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
     TranslateModule,
     SharedUiLoadingComponent,
   ],
-  templateUrl: './gesuch-app-feature-gesuch-form-abschluss.component.html',
+  templateUrl: './shared-feature-gesuch-form-abschluss.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
+export class SharedFeatureGesuchFormAbschlussComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
   destroyRef = inject(DestroyRef);
@@ -56,7 +56,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
       ),
     ]).subscribe(([gesuchTrancheId]) => {
       this.store.dispatch(
-        GesuchAppDataAccessAbschlussApiEvents.check({
+        SharedDataAccessAbschlussApiEvents.check({
           gesuchTrancheId,
         }),
       );
@@ -86,13 +86,13 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
         if (confirmed) {
           if (isEditingTranche) {
             this.store.dispatch(
-              GesuchAppDataAccessAbschlussApiEvents.trancheAbschliessen({
+              SharedDataAccessAbschlussApiEvents.trancheAbschliessen({
                 trancheId,
               }),
             );
           } else {
             this.store.dispatch(
-              GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen({
+              SharedDataAccessAbschlussApiEvents.gesuchAbschliessen({
                 gesuchId: gesuch.id,
               }),
             );
