@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractFamilieEntityWohnsitzValidator;
+import ch.dvbern.stip.api.common.entity.FamilieEntityWohnsitzValidator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -8,7 +8,7 @@ public class FamiliensituationPersonInAusbildungWohnsitzConstraintValidator
     implements ConstraintValidator<FamiliensituationPersonInAusbildungWohnsitzConstraint, GesuchFormular>
 {
     private String property = "";
-    private AbstractFamilieEntityWohnsitzValidator validator;
+    private FamilieEntityWohnsitzValidator validator;
 
     @Override
     public void initialize(FamiliensituationPersonInAusbildungWohnsitzConstraint constraintAnnotation) {
@@ -16,7 +16,7 @@ public class FamiliensituationPersonInAusbildungWohnsitzConstraintValidator
     }
 
     public FamiliensituationPersonInAusbildungWohnsitzConstraintValidator(){
-        validator = new AbstractFamilieEntityWohnsitzValidator();
+        validator = new FamilieEntityWohnsitzValidator();
     }
 
     @Override
