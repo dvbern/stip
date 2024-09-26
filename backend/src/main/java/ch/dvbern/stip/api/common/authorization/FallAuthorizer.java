@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -16,6 +17,7 @@ public class FallAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final FallRepository fallRepository;
 
+    @Transactional
     public void canRead(final UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 

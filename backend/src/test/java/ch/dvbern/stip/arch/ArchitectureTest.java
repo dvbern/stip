@@ -45,7 +45,7 @@ class ArchitectureTest {
         var rule = LAYERS.whereLayer("Resource")
             .mayNotBeAccessedByAnyLayer()
             .whereLayer("Repository")
-            .mayOnlyBeAccessedByLayers("Service")
+            .mayOnlyBeAccessedByLayers("Service", "Authorization")
             .whereLayer("Entity")
             .mayOnlyBeAccessedByLayers(
                 "Service",

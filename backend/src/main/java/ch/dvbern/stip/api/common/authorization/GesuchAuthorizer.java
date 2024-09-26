@@ -1,13 +1,17 @@
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -17,7 +21,9 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final GesuchRepository gesuchRepository;
     private final GesuchStatusService gesuchStatusService;
+    private final FallRepository fallRepository;
 
+    @Transactional
     public void canRead(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
@@ -35,7 +41,13 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         throw new UnauthorizedException();
     }
 
+    @Transactional
     public void canUpdate(final UUID gesuchId) {
+        canUpdate(gesuchId, false);
+    }
+
+    @Transactional
+    public void canUpdate(final UUID gesuchId, final boolean aenderung) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         if (isAdminOrSb(currentBenutzer)) {
@@ -44,7 +56,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
-            gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus())
+            (gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung)
         ) {
             return;
         }
@@ -52,6 +64,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         throw new UnauthorizedException();
     }
 
+    @Transactional
     public void canDelete(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
@@ -60,11 +73,30 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
 
         // TODO KSTIP-1057: Check if Gesuchsteller can delete their Gesuch
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (isGesuchstellerAndNotAdmin(currentBenutzer) &&
+            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
+            gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
+        ) {
+            return;
+        }
+
         throw new UnauthorizedException();
     }
 
+    @Transactional
     public void canCreate() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var fall = fallRepository.findFallForGsOptional(currentBenutzer.getId());
 
+        if (fall.isEmpty()) {
+            return;
+        }
+
+        if (Objects.equals(currentBenutzer.getId(), fall.get().getGesuchsteller().getId())) {
+            return;
+        }
+
+        throw new UnauthorizedException();
     }
 }

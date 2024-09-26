@@ -26,4 +26,8 @@ public class BaseAuthorizer {
     protected boolean isGesuchsteller(final Benutzer currentBenutzer) {
         return currentBenutzer.hasRole(OidcConstants.ROLE_GESUCHSTELLER);
     }
+
+    protected boolean isGesuchstellerAndNotAdmin(final Benutzer currentBenutzer) {
+        return isGesuchsteller(currentBenutzer) && !isAdmin(currentBenutzer);
+    }
 }

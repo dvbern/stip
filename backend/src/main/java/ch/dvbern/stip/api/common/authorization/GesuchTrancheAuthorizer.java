@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -19,6 +20,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchRepository gesuchRepository;
 
+    @Transactional
     public void canRead(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         // Admins can always read every GesuchTranche
@@ -34,6 +36,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         throw new UnauthorizedException();
     }
 
+    @Transactional
     public void canUpdate(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
