@@ -85,24 +85,21 @@
                     @if (periode.gesuch) {
                       <div class="col-md d-flex">
                         @if (periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
-                          @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
+                          @let aenderung = gesuchAenderungStore.openAenderungViewSig();
                           @if (gesuchAenderungStore.cachedTranchenSlim() | rdIsPending) {
                             <div class="col-12 mt-2">
                               <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
                             </div>
-                          } @else if (aenderungen.list.length > 0) {
+                          } @else if (aenderung) {
                             <div class="divider me-4"></div>
-                            @if (aenderungen.loading) {
+                            @if (aenderung.loading) {
                               <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
-                            } @else {
-                              <div class="d-flex flex-column gap-4 w-100">
-                                @for (aenderung of aenderungen.list; track aenderung) {
-                                  <dv-gesuch-app-ui-aenderungs-entry
-                                    [tranche]="aenderung"
-                                    [gesuchId]="periode.gesuch.id"
-                                  ></dv-gesuch-app-ui-aenderungs-entry>
-                                }
-                              </div>
+                            } @else if (aenderung.openAenderung) {
+                              <dv-gesuch-app-ui-aenderungs-entry
+                                class="d-flex flex-column gap-4 w-100"
+                                [tranche]="aenderung.openAenderung"
+                                [gesuchId]="periode.gesuch.id"
+                              ></dv-gesuch-app-ui-aenderungs-entry>
                             }
                           } @else {
                             <button
