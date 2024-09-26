@@ -2283,6 +2283,7 @@ components:
       enum:
         - ERWERBSTAETIGKEIT
         - ANDERE_TAETIGKEIT
+        - BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
       type: string
     Bildungsstufe:
       enum:
@@ -3349,12 +3350,12 @@ components:
         gueltigBis:
           $ref: '#/components/schemas/LocalDate'
         gesuchTrancheId:
-          description: 'ID der tranche für welche die Berechnung ausgeführt wurde. 
-                        Mehrere resultate mit der gleichen ID sind die berechnungen für 
+          description: 'ID der tranche für welche die Berechnung ausgeführt wurde.
+                        Mehrere resultate mit der gleichen ID sind die berechnungen für
                         getrennte eltern mit Kindern die eine Obhutsteilung haben'
-          $ref: '#/components/schemas/UUID' 
+          $ref: '#/components/schemas/UUID'
         berechnungsanteilKinder:
-          description: 'Anteil dieser Berechnung am Berechnungstotal. 
+          description: 'Anteil dieser Berechnung am Berechnungstotal.
                         Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
           type: number
         berechnungsStammdaten:
