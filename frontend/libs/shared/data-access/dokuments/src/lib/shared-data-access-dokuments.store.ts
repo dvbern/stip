@@ -198,8 +198,6 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  //TODO: akzeptieren und ablehnen umbenennen fuer liste und duplizieren und umschreiben fuer einzeln
-
   /**
    * Send missing documents to the backend
    * only possible if there are documents in status "AGBELEHNT"
