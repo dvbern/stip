@@ -368,6 +368,7 @@
   "shared.form.lebenslaufitem.delete": "Supprimer une entrée",
   "shared.form.lebenslauf.item.subtype.taetigkeitsart.ANDERE_TAETIGKEIT": "Autre activité",
   "shared.form.lebenslauf.item.subtype.taetigkeitsart.ERWERBSTAETIGKEIT": "Activité professionnelle",
+  "shared.form.lebenslauf.item.subtype.taetigkeitsart.BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT": "Prise en charge de membres de la famille dans le propre ménage",
   "shared.form.lebenslauf.item.subtype.bildungsart.BERUFSVORBEREITENDES_SCHULJAHR": "Année scolaire de préparation professionnelle",
   "shared.form.lebenslauf.item.subtype.bildungsart.VORLEHRE": "Préapprentissage",
   "shared.form.lebenslauf.item.subtype.bildungsart.GESTALTERISCHE_VORKURSE": "Cours préparatoire de création (certificat de fin d'études)",
