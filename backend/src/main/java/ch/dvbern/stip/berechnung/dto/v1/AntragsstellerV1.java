@@ -194,7 +194,10 @@ public class AntragsstellerV1 {
             );
         final boolean halbierungAbgeschlosseneErstausbildung =
             abgeschlosseneErstausbildung && (alter >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
-        final var beruftaetigkeiten = Set.of(Taetigkeitsart.ERWERBSTAETIGKEIT);
+        final var beruftaetigkeiten = Set.of(
+            Taetigkeitsart.ERWERBSTAETIGKEIT,
+            Taetigkeitsart.BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
+        );
         final var berufstaetigeItems = lebenslaufItemSet.stream()
             .filter(
                 lebenslaufItem -> lebenslaufItem.getTaetigkeitsart() != null)
