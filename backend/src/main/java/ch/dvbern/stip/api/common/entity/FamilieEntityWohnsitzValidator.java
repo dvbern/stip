@@ -27,11 +27,11 @@ public class FamilieEntityWohnsitzValidator {
 
     public boolean isValid(AbstractFamilieEntity familieEntity, Familiensituation familiensituation) {
         if ((familiensituation != null) && (familieEntity != null)) {
-                if(!familiensituation.getElternVerheiratetZusammen().booleanValue()){
-                    if(familiensituation.getElternteilUnbekanntVerstorben().booleanValue()){
+                if(!familiensituation.getElternVerheiratetZusammen()){
+                    if(familiensituation.getElternteilUnbekanntVerstorben()){
                         return ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz()).orElseGet(() -> isWohnsitzanteilValidWhenOneEltnernteilIsAbsent(familieEntity,familiensituation));
                     }else{
-                        return ELTERN_SEPARATED_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz()).booleanValue();
+                        return ELTERN_SEPARATED_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz());
                     }
                 }else{
                     // when elterns are together or married, the option MUTTER_VATER is not available
@@ -45,7 +45,7 @@ public class FamilieEntityWohnsitzValidator {
         boolean isAnteilMutter100Percent = familieEntity.getWohnsitzAnteilMutter().equals(BigDecimal.valueOf(100));
         boolean isAnteilVater100Percent = familieEntity.getWohnsitzAnteilVater().equals(BigDecimal.valueOf(100));
 
-        if (familiensituation.getElternteilUnbekanntVerstorben().booleanValue()) {
+        if (familiensituation.getElternteilUnbekanntVerstorben()) {
             // both parents absent: one of both anteile has to be 100 %
             if(familiensituation.getVaterUnbekanntVerstorben() != null
             && familiensituation.getMutterUnbekanntVerstorben() != null){
