@@ -1,12 +1,12 @@
 package ch.dvbern.stip.api.common.entity;
 
-import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import jakarta.enterprise.context.ApplicationScoped;
-
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Optional;
+
+import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class FamilieEntityWohnsitzValidator {
@@ -27,16 +27,16 @@ public class FamilieEntityWohnsitzValidator {
 
     public boolean isValid(AbstractFamilieEntity familieEntity, Familiensituation familiensituation) {
         if ((familiensituation != null) && (familieEntity != null)) {
-                if(!familiensituation.getElternVerheiratetZusammen().booleanValue()){
-                    if(familiensituation.getElternteilUnbekanntVerstorben().booleanValue()){
-                        return ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz()).orElseGet(() -> isWohnsitzanteilValidWhenOneEltnernteilIsAbsent(familieEntity,familiensituation));
-                    }else{
-                        return ELTERN_SEPARATED_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz()).booleanValue();
-                    }
+            if(!familiensituation.getElternVerheiratetZusammen().booleanValue()){
+                if(familiensituation.getElternteilUnbekanntVerstorben().booleanValue()){
+                    return ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz()).orElseGet(() -> isWohnsitzanteilValidWhenOneEltnernteilIsAbsent(familieEntity,familiensituation));
                 }else{
-                    // when elterns are together or married, the option MUTTER_VATER is not available
-                    return familieEntity.getWohnsitz() != Wohnsitz.MUTTER_VATER;
+                    return ELTERN_SEPARATED_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz()).booleanValue();
                 }
+            }else{
+                // when elterns are together or married, the option MUTTER_VATER is not available
+                return familieEntity.getWohnsitz() != Wohnsitz.MUTTER_VATER;
+            }
         }
         return true;
     }

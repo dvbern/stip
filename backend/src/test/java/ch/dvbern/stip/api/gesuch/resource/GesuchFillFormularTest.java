@@ -146,8 +146,7 @@ class GesuchFillFormularTest {
             .assertThat()
             .statusCode(Status.NOT_FOUND.getStatusCode());
     }
-// todo KSTIP-1335 : fix test case scenarios
-    /*
+
     @Test
     @TestAsGesuchsteller
     @Order(5)
@@ -404,8 +403,6 @@ class GesuchFillFormularTest {
         return returnedGesuch;
     }
 
-
-     */
     private GesuchDtoSpec patchGesuch() {
         final var gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
         gesuchUpdateDtoSpec.setGesuchTrancheToWorkWith(trancheUpdateDtoSpec);

@@ -52,8 +52,6 @@ class GesuchStatusprotokollTest {
         gesuch = TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
     }
 
-    // todo KSTIP-1335 : fix test case scenarios
-/*
     @Test
     @TestAsGesuchsteller
     @Order(2)
@@ -120,6 +118,4 @@ class GesuchStatusprotokollTest {
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
-
- */
 }
