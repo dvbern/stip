@@ -1,10 +1,11 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,13 +13,14 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@QuarkusTest
 class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
     final BigDecimal ZERO_PERCENT = BigDecimal.ZERO;
     final BigDecimal FIFTY_PERCENT = BigDecimal.valueOf(50);
     final BigDecimal HUNDRED_PERCENT = BigDecimal.valueOf(100);
 
     GesuchFormular gesuchFormular;
+    @Inject
     FamiliensituationPersonInAusbildungWohnsitzConstraintValidator validator;
 
     @BeforeEach
@@ -27,8 +29,6 @@ class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
         // init pia
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         gesuchFormular.setPersonInAusbildung(personInAusbildung);
-
-        validator = new FamiliensituationPersonInAusbildungWohnsitzConstraintValidator();
     }
 
     @Test
