@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
+import ch.dvbern.stip.api.common.entity.FamilieEntityWohnsitzValidator;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
@@ -13,14 +14,12 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
-@QuarkusTest
 class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
     final BigDecimal ZERO_PERCENT = BigDecimal.ZERO;
     final BigDecimal FIFTY_PERCENT = BigDecimal.valueOf(50);
     final BigDecimal HUNDRED_PERCENT = BigDecimal.valueOf(100);
 
     GesuchFormular gesuchFormular;
-    @Inject
     FamiliensituationPersonInAusbildungWohnsitzConstraintValidator validator;
 
     @BeforeEach
@@ -29,6 +28,8 @@ class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
         // init pia
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         gesuchFormular.setPersonInAusbildung(personInAusbildung);
+        validator = new FamiliensituationPersonInAusbildungWohnsitzConstraintValidator();
+        validator.validator = new FamilieEntityWohnsitzValidator();
     }
 
     @Test
