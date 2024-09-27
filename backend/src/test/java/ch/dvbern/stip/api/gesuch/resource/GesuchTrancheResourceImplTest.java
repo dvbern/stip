@@ -47,8 +47,6 @@ class GesuchTrancheResourceImplTest {
         gesuch = TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
     }
 
-    // todo KSTIP-1335 : fix test case scenarios
-/*
     @Test
     @TestAsGesuchsteller
     @Order(2)
@@ -99,7 +97,5 @@ class GesuchTrancheResourceImplTest {
             .execute(TestUtil.PEEK_IF_ENV_SET);
     }
 
-
- */
     // todo KSTIP-KSTIP-1158: a Aenderung should be accepted/denied by an SB
 }

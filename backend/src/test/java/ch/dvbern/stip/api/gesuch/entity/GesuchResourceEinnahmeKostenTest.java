@@ -71,8 +71,6 @@ class GesuchResourceEinnahmeKostenTest {
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigBis(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis()));
     }
 
-    // todo KSTIP-1335 : fix test case scenarios
-/*
     @Test
     @TestAsGesuchsteller
     void testUpdateGesuchEmptyEinnahmenKosten() {
@@ -104,6 +102,4 @@ class GesuchResourceEinnahmeKostenTest {
         partnerAdresseId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().getAdresse().getId();
         assertNull(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten());
     }
-
- */
 }

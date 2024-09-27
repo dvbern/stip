@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import ch.dvbern.stip.api.util.TestUtil;
@@ -21,15 +20,13 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             model.setIdentischerZivilrechtlicherWohnsitz(false);
             model.setNationalitaet(LandDtoSpec.CH);
-            model.setWohnsitz(WohnsitzDtoSpec.MUTTER_VATER);
+            model.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
             model.setNiederlassungsstatus(null);
             model.setEmail("valid@mailbucket.dvbern.ch");
             model.setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG);
             model.setVorname("Reed");
             model.setNachname("Richards");
             model.setGeburtsdatum(LocalDate.now().with(firstDayOfYear()).minusYears(17));
-            model.setWohnsitzAnteilMutter(TestUtil.getRandomBigDecimal(0, 100, 0));
-            model.setWohnsitzAnteilVater(BigDecimal.valueOf(100).subtract(model.getWohnsitzAnteilMutter()));
             model.setAnrede(TestUtil.getRandomElementFromArray(AnredeDtoSpec.values()));
             model.setTelefonnummer("+41 79 111 11 11");
             model.setEinreisedatum(TestUtil.getRandomLocalDateBetween(
