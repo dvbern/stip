@@ -26,24 +26,26 @@ public class FamilieEntityWohnsitzValidator {
     );
 
     public boolean isValid(AbstractFamilieEntity familieEntity, Familiensituation familiensituation) {
-        if ((familiensituation != null) && (familieEntity != null)) {
-                if(!familiensituation.getElternVerheiratetZusammen()){
-                    if(familiensituation.getElternteilUnbekanntVerstorben()){
-                        return ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz()).orElseGet(() -> isWohnsitzanteilValidWhenOneEltnernteilIsAbsent(familieEntity,familiensituation));
-                    }else{
-                        return ELTERN_SEPARATED_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz());
-                    }
-                }else{
-                    // when elterns are together or married, the option MUTTER_VATER is not available
-                    return familieEntity.getWohnsitz() != Wohnsitz.MUTTER_VATER;
-                }
+        if((familiensituation == null) || (familieEntity == null)){
+            return true;
         }
-        return true;
+        if(familiensituation.getElternVerheiratetZusammen()){
+            // when elterns are together or married, the option MUTTER_VATER is not available
+            return familieEntity.getWohnsitz() != Wohnsitz.MUTTER_VATER;
+        }
+        if(familiensituation.getElternteilUnbekanntVerstorben()){
+            return ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz())
+                .orElseGet(() -> isWohnsitzanteilValidWhenOneEltnernteilIsAbsent(familieEntity,familiensituation));
+        }
+        return ELTERN_SEPARATED_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz());
     }
 
-    private boolean isWohnsitzanteilValidWhenOneEltnernteilIsAbsent(AbstractFamilieEntity familieEntity, Familiensituation familiensituation) {
-        boolean isAnteilMutter100Percent = familieEntity.getWohnsitzAnteilMutter().equals(BigDecimal.valueOf(100));
-        boolean isAnteilVater100Percent = familieEntity.getWohnsitzAnteilVater().equals(BigDecimal.valueOf(100));
+    private boolean isWohnsitzanteilValidWhenOneEltnernteilIsAbsent(AbstractFamilieEntity familieEntity,
+                                                                    Familiensituation familiensituation) {
+        boolean isAnteilMutter100Percent = familieEntity.getWohnsitzAnteilMutter()
+            .equals(BigDecimal.valueOf(100));
+        boolean isAnteilVater100Percent = familieEntity.getWohnsitzAnteilVater()
+            .equals(BigDecimal.valueOf(100));
 
         if (familiensituation.getElternteilUnbekanntVerstorben()) {
             // both parents absent: one of both anteile has to be 100 %
