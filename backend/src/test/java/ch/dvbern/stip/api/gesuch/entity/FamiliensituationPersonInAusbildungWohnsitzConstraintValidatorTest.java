@@ -92,16 +92,18 @@ class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
 
 
     @Test
-    @Description("Wohnistz 'Familie' should not be valid when 1 elternteil is absent")
+    @Description("Wohnsitz 'Familie' should not be valid when 1 elternteil is absent")
     void familiensituation_motherAbsent_wohnsitz_validationTest(){
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
         familiensituation.setElternteilUnbekanntVerstorben(true);
         familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+
         gesuchFormular.setFamiliensituation(familiensituation);
+
         // just a setup - wohnsitzanteile are covered in toher unit tests
-        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilVater(HUNDRED_PERCENT);
-        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilMutter(ZERO_PERCENT);
+        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilVater(ZERO_PERCENT);
+        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilMutter(HUNDRED_PERCENT);
 
         // WOHSNITZ.FAMILIE is not valid
         gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.FAMILIE);
@@ -123,7 +125,7 @@ class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
         familiensituation.setElternteilUnbekanntVerstorben(true);
-        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT);
         gesuchFormular.setFamiliensituation(familiensituation);
 
         gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.MUTTER_VATER);
@@ -146,7 +148,37 @@ class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
     }
 
     @Test
-    @Description("Wohnistz 'Familie' should not be valid when 1 elternteil is absent")
+    @Description("Wohnsitzanteil at parent A should be 100 % when Abwesenheitsstatus of A is 'WEDER_NOCH' ")
+    void familiensituation_motherWederNoch_wohnsitzanteil_validationTest(){
+        Familiensituation familiensituation = new Familiensituation();
+        familiensituation.setElternVerheiratetZusammen(false);
+        familiensituation.setElternteilUnbekanntVerstorben(true);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT);
+
+        gesuchFormular.setFamiliensituation(familiensituation);
+
+        gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.MUTTER_VATER);
+
+        // even if both are absent, one part has to be 100 %
+        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilMutter(HUNDRED_PERCENT);
+        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilVater(ZERO_PERCENT);
+        assertTrue(validator.isValid(gesuchFormular, null));
+
+        // it matters, which parent is absent
+        // inverted order is not valid as a consequence
+        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilMutter(ZERO_PERCENT);
+        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilVater(HUNDRED_PERCENT);
+        assertFalse(validator.isValid(gesuchFormular, null));
+
+        // only 100 % and 0 % are allowed as inputs
+        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilMutter(FIFTY_PERCENT);
+        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilVater(FIFTY_PERCENT);
+        assertFalse(validator.isValid(gesuchFormular, null));
+    }
+
+    @Test
+    @Description("Wohnistz 'Familie' should not be valid when eltern are not together")
     void familiensituation_parentsNotTogehter_wohnsitz_validationTest(){
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
