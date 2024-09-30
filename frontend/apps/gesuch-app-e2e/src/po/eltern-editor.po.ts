@@ -20,6 +20,9 @@ export class ElternEditorPO {
     identischerZivilrechtlicherWohnsitzCheckbox: Locator;
     identischerZivilrechtlicherWohnsitzPLZ: Locator;
     identischerZivilrechtlicherWohnsitzOrt: Locator;
+    ergaenzungsleistungen: Locator;
+    sozialhilfebeitraege: Locator;
+    wohnkosten: Locator;
     geburtsdatum: Locator;
     telefonnummer: Locator;
     ausweisbFluechtlingRadio: Locator;
@@ -48,6 +51,13 @@ export class ElternEditorPO {
       identischerZivilrechtlicherWohnsitzOrt: page.getByTestId(
         'form-eltern-identischerZivilrechtlicherWohnsitzOrt',
       ),
+      ergaenzungsleistungen: page.getByTestId(
+        'form-eltern.ergaenzungsleistungen',
+      ),
+      sozialhilfebeitraege: page.getByTestId(
+        'form-eltern.sozialhilfebeitraege',
+      ),
+      wohnkosten: page.getByTestId('form-eltern.wohnkosten'),
       geburtsdatum: page.getByTestId('form-eltern-geburtsdatum'),
       telefonnummer: page.getByTestId('form-eltern-telefonnummer'),
       ausweisbFluechtlingRadio: page.getByTestId(
@@ -69,6 +79,11 @@ export class ElternEditorPO {
 
     await this.elems.adresse.fillAddressForm(item.adresse);
 
+    await this.elems.ergaenzungsleistungen.fill(
+      `${item.ergaenzungsleistungen}`,
+    );
+    await this.elems.sozialhilfebeitraege.fill(`${item.sozialhilfebeitraege}`);
+    await this.elems.wohnkosten.fill(`${item.wohnkosten}`);
     await this.elems.geburtsdatum.fill(item.geburtsdatum);
     await this.elems.telefonnummer.fill(item.telefonnummer);
 

@@ -170,7 +170,6 @@ export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
 
   const difference = rawDiff.reduce(
     (acc, c) => {
-      // TODO (KSTIP-1436): Handle nested objects (recursively)
       if (c.changes) {
         acc[c.key as K] = c.changes.reduce(
           (sub, s) => addChange(sub, s),

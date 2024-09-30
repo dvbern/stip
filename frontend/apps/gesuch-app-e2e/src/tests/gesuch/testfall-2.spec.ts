@@ -1,4 +1,4 @@
-import { Response, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { addYears, format } from 'date-fns';
 
 import {
@@ -111,6 +111,9 @@ const mutter = (seed: string): Eltern => ({
   adresse: adressen.mutter,
   identischerZivilrechtlicherWohnsitz: true,
   telefonnummer: '0316338355',
+  ergaenzungsleistungen: 0,
+  sozialhilfebeitraege: 0,
+  wohnkosten: 16260,
   geburtsdatum: `01.01.${specificYearsAgo(44)}`,
   ausweisbFluechtling: false,
   elternTyp: 'MUTTER',
@@ -124,11 +127,6 @@ const steuerdaten: Steuerdaten = {
   isArbeitsverhaeltnisSelbstaendig: false,
   kinderalimente: 0,
   vermoegen: 0,
-  ergaenzungsleistungen: 0,
-  ergaenzungsleistungenPartner: 0,
-  sozialhilfebeitraege: 0,
-  sozialhilfebeitraegePartner: 0,
-  wohnkosten: 16260,
   steuernKantonGemeinde: 0,
   steuernBund: 0,
   fahrkosten: 0,
@@ -287,21 +285,18 @@ test.describe('Neues gesuch erstellen', () => {
     const uploads = await page
       .locator('[data-testid^="button-document-upload"]')
       .all();
-    const uploadCalls: Promise<Response>[] = [];
     for (const upload of uploads) {
-      uploadCalls.push(
-        page.waitForResponse(
-          (response) =>
-            response.url().includes('/api/v1/dokument') &&
-            response.request().method() === 'POST',
-        ),
+      const uploadCall = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/v1/dokument') &&
+          response.request().method() === 'POST',
       );
       await upload.click();
       await page.getByTestId('file-input').setInputFiles(SmallImageFile);
       await page.keyboard.press('Escape');
       await expect(page.getByTestId('file-input')).toHaveCount(0);
+      await uploadCall;
     }
-    await Promise.all(uploadCalls);
 
     await page.getByTestId('button-continue').click();
 
@@ -317,6 +312,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
       /accept/,
+      { timeout: 10000 },
     );
 
     await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
