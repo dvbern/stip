@@ -17,18 +17,23 @@ import { MatOption } from '@angular/material/autocomplete';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import {
+  AenderungChangeState,
+  GesuchAenderungStore,
+} from '@dv/shared/data-access/gesuch-aenderung';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
 import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
@@ -51,6 +56,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiHeaderSuffixDirective,
+    SharedUiIfSachbearbeiterDirective,
     TranslateModule,
   ],
   templateUrl: './shared-feature-gesuch-form-tranche.component.html',
@@ -58,6 +64,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
 })
 export class SharedFeatureGesuchFormTrancheComponent {
   private store = inject(Store);
+  private router = inject(Router);
   private translate = inject(TranslateService);
   private formBuilder = inject(NonNullableFormBuilder);
   private defaultCommentSig = toSignal(
@@ -119,5 +126,27 @@ export class SharedFeatureGesuchFormTrancheComponent {
     );
 
     this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+  }
+
+  changeAenderungState(
+    aenderungId: string,
+    target: AenderungChangeState,
+    gesuchId: string,
+  ) {
+    this.gesuchAenderungStore.changeAenderungState$({
+      aenderungId,
+      target,
+      gesuchId,
+      onSuccess: (trancheId) => {
+        const routesMap = {
+          AKZEPTIERT: ['gesuch', gesuchId, 'tranche', trancheId],
+          ABGELEHNT: ['/'],
+          MANUELLE_AENDERUNG: ['gesuch', gesuchId],
+        } satisfies Record<AenderungChangeState, unknown>;
+
+        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+        this.router.navigate(routesMap[target]);
+      },
+    });
   }
 }

@@ -14,7 +14,7 @@ const abschlussPhase: Record<AbschlussPhase, string> = {
   READY_TO_SEND: 'READY_TO_SEND',
   SUBMITTED: 'SUBMITTED',
   ABGELEHNT: 'ABGELEHNT',
-  AKZETPIERT: 'AKZETPIERT',
+  AKZEPTIERT: 'AKZEPTIERT',
 };
 
 async function setup(abschlussPhase: AbschlussPhase) {

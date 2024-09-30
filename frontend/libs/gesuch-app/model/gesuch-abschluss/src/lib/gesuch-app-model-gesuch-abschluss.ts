@@ -1,11 +1,16 @@
-import { SharedModelGesuch } from '@dv/shared/model/gesuch';
+import {
+  GesuchTrancheStatus,
+  SharedModelGesuch,
+} from '@dv/shared/model/gesuch';
 
 export type AbschlussPhase =
   | 'NOT_READY'
   | 'READY_TO_SEND'
   | 'SUBMITTED'
-  | 'AKZETPIERT'
-  | 'ABGELEHNT';
+  | Extract<
+      GesuchTrancheStatus,
+      'AKZEPTIERT' | 'ABGELEHNT' | 'MANUELLE_AENDERUNG'
+    >;
 export const toAbschlussPhase = (
   gesuch: SharedModelGesuch | null,
   options?: { isComplete?: boolean; checkTranche?: boolean },

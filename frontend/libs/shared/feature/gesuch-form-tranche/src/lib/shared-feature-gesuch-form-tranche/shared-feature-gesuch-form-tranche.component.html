@@ -1,6 +1,7 @@
+@let tranche = viewSig().gesuchstranche;
+
 <ng-template dvHeaderSuffix>
   <h2 class="fw-bold">
-    @let tranche = viewSig().gesuchstranche;
     @if (tranche) {
       {{ 'shared.form.title.suffix.' + tranche.typ | translate: { position: currentTrancheIndexSig() + 1 } }}
       {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
@@ -48,3 +49,37 @@
     </mat-form-field>
   </div>
 </form>
+
+<ng-container *dvIfSachbearbeiter>
+  @let gesuchId = viewSig().gesuchId;
+  @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
+    <div class="row mt-5">
+      <div class="col-12 col-md-12 col-xl-8 d-flex gap-5">
+        <button
+          class="btn btn-outline-primary flex-grow-1"
+          data-testid="aenderung-reject"
+          type="button"
+          (click)="changeAenderungState(tranche.id, 'ABGELEHNT', gesuchId)"
+        >
+          {{ 'shared.form.aenderung.action.reject' | translate }}
+        </button>
+        <button
+          class="btn btn-primary flex-grow-1"
+          data-testid="aenderung-accept"
+          type="button"
+          (click)="changeAenderungState(tranche.id, 'AKZEPTIERT', gesuchId)"
+        >
+          {{ 'shared.form.aenderung.action.accept' | translate }}
+        </button>
+        <button
+          class="btn btn-link"
+          data-testid="aenderung-manually-change"
+          type="button"
+          (click)="changeAenderungState(tranche.id, 'MANUELLE_AENDERUNG', gesuchId)"
+        >
+          {{ 'shared.form.aenderung.action.manuallyChange' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+</ng-container>
