@@ -1124,13 +1124,15 @@ class GesuchServiceTest {
 
     @TestAsSachbearbeiter
     @Test
+    /**
+     * When a gesuch contains a gesuchtranche which is a aenderung,
+     * the service will return 2 gesuchDtos instead of one:
+     * one for the gesuch
+     * the other for the aenderung
+     */
     void findAlleGesucheSBShouldContainAenderungen(){
         setupGesucheWithAndWithoutAenderung(Gesuchstatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         var alleGesuche = gesuchService.findGesucheSB(GetGesucheSBQueryType.ALLE);
-
-        //todo: gesuch ohne aenderung -> output 1x gesuch ; newest tranche = newest tranche
-        // todo: gesuch mit aenderung -> output (1xgesuch *) + 1xaenderung ;newest tranche = aenderung
-
         //size has to be 3 instead of 2 entries
         assertThat(alleGesuche.size(), Matchers.equalTo(3));
 
@@ -1149,9 +1151,6 @@ class GesuchServiceTest {
         // the other entry (gesuch) has to be the "normal" tranche
         assertTrue(gesuchMitAenderung1.getGesuchTrancheToWorkWith().getTyp() != GesuchTrancheTyp.AENDERUNG
             || gesuchMitAenderung2.getGesuchTrancheToWorkWith().getTyp() != GesuchTrancheTyp.AENDERUNG);
-        //todo: check for getGesuchTrancheToWorkWith().getStatus()
-        //                == GesuchTrancheStatus.UEBERPRUEFEN
-
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {

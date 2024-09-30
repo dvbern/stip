@@ -294,47 +294,13 @@ public class GesuchService {
         };
     }
 
-
     private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
         List<GesuchDto> gesuchDtos = new ArrayList<>();
         gesuche.forEach(gesuch -> {
             if(gesuchMapperUtil.hasAenderung(gesuch)) {
-                final var aenderung = gesuch.getGesuchTranchen().stream().filter(x -> x.getTyp() == GesuchTrancheTyp.AENDERUNG
-                    && x.getStatus().equals(GesuchTrancheStatus.UEBERPRUEFEN)).findFirst().get();
-
-                final var tranchen = gesuch.getGesuchTranchen().stream().filter(x -> x.getTyp() != GesuchTrancheTyp.AENDERUNG
-                    && !x.getStatus().equals(GesuchTrancheStatus.UEBERPRUEFEN)
-                ).toList() ;
-
-                final var newestNormalTranche = Collections.max(
-                    tranchen,
-                    Comparator.comparing(x -> x.getGueltigkeit().getGueltigBis())
-                );
-
-
-                final var aenderungTrancheDto = gesuchTrancheMapper.toDto(aenderung);
-                final var normaleTrancheDto = gesuchTrancheMapper.toDto(newestNormalTranche);
-
-                var gesuchDto = gesuchMapperUtil.mapWithNewestTranche(gesuch);
-                gesuchDto.setGesuchTrancheToWorkWith(normaleTrancheDto);
-
-                var aenderungDto = new GesuchDto();
-                aenderungDto.setAenderungsdatum(gesuchDto.getAenderungsdatum());
-                aenderungDto.setFall(gesuchDto.getFall());
-                aenderungDto.setBearbeiter(gesuchDto.getBearbeiter());
-                aenderungDto.setGesuchNummer(gesuchDto.getGesuchNummer());
-                aenderungDto.setGesuchStatus(gesuchDto.getGesuchStatus());
-                aenderungDto.setGesuchsperiode(gesuchDto.getGesuchsperiode());
-                aenderungDto.setId(gesuchDto.getId());
-                aenderungDto.setGesuchTrancheToWorkWith(aenderungTrancheDto);
-
-                gesuchDtos.add(aenderungDto);
-                gesuchDtos.add(gesuchDto);
-
-
+                gesuchDtos.addAll(gesuchMapperUtil.mapWithAenderung(gesuch));
             }else{
                 gesuchDtos.add(gesuchMapperUtil.mapWithNewestTranche(gesuch));
-
             }
         });
         return gesuchDtos;
