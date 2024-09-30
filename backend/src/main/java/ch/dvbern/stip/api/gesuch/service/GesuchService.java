@@ -94,8 +94,8 @@ public class GesuchService {
     private final GesuchNummerService gesuchNummerService;
 
     @Transactional
-    public Optional<GesuchDto> findGesuchWithCurrentTranche(UUID id) {
-        return gesuchRepository.findByIdOptional(id).map(gesuchMapperUtil::mapWithCurrentTranche);
+    public Optional<GesuchDto> findGesuchWithOldestTranche(UUID id) {
+        return gesuchRepository.findByIdOptional(id).map(gesuchMapperUtil::mapWithOldestTranche);
     }
 
     @Transactional

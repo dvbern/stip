@@ -119,6 +119,16 @@ public class Gesuch extends AbstractMandantEntity {
         );
     }
 
+    public Optional<GesuchTranche> getOldestGesuchTranche() {
+        if (gesuchTranchen.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return gesuchTranchen.stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+            .min(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb()));
+    }
+
     public Stream<GesuchTranche> getAenderungen() {
         return getGesuchTranchen()
             .stream()
