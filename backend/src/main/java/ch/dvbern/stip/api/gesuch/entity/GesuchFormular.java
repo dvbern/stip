@@ -76,7 +76,7 @@ import org.hibernate.envers.Audited;
 @FamiliensituationGeschwisterWohnsitzConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     GeschwisterPageValidation.class
-}, property = "geschwister")
+}, property = "geschwisters")
 @LebenslaufLuckenlosConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     LebenslaufItemPageValidation.class

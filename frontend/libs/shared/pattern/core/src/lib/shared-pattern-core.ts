@@ -60,7 +60,6 @@ import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
 import { withDvGlobalHttpErrorInterceptorFn } from '@dv/shared/pattern/http-error-interceptor';
 import { provideSharedPatternI18nTitleStrategy } from '@dv/shared/pattern/i18n-title-strategy';
 import { SharedPatternInterceptorDeploymentConfig } from '@dv/shared/pattern/interceptor-deployment-config';
-import { provideSharedPatternNgbDatepickerAdapter } from '@dv/shared/pattern/ngb-datepicker-adapter';
 import { provideSharedPatternRouteReuseStrategyConfigurable } from '@dv/shared/pattern/route-reuse-strategy-configurable';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
@@ -105,7 +104,6 @@ export function provideSharedPatternCore(
       }),
     ),
     provideSharedPatternI18nTitleStrategy(),
-    provideSharedPatternNgbDatepickerAdapter(),
     provideSharedPatternRouteReuseStrategyConfigurable(),
     provideMaterialDefaultOptions(),
 

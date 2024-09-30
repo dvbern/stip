@@ -70,10 +70,10 @@ const isExistingTrancheTyp = (
 };
 export const selectTrancheTyp = createSelector(
   selectRouteParam('trancheTyp'),
-  (trancheTyp) =>
-    isExistingTrancheTyp(trancheTyp?.toUpperCase())
-      ? trancheTyp.toUpperCase()
-      : undefined,
+  (trancheTyp) => {
+    const typ = trancheTyp?.toUpperCase();
+    return isExistingTrancheTyp(typ) ? typ : undefined;
+  },
 );
 
 export const selectRouteTrancheId = selectRouteParam('trancheId');
@@ -159,7 +159,9 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
         },
         specialValidationErrors: state.validations?.errors
           .filter(isSpecialValidationError)
-          .map((error) => SPECIAL_VALIDATION_ERRORS[error.messageTemplate]),
+          .map((error) =>
+            SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error),
+          ),
       },
     };
   },

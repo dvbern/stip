@@ -22,6 +22,7 @@ export const createTest = (authType: E2eUser) => {
   const test = baseTest.extend<object, { workerStorageState: string }>({
     contextOptions: async ({ baseURL }, use) => {
       await use({
+        ignoreHTTPSErrors: true,
         baseURL,
       });
     },
@@ -50,6 +51,7 @@ export const createTest = (authType: E2eUser) => {
           storageState: undefined,
           // Don't know why it is necessary to set the baseURL again, should be inherited from the use context.
           baseURL: workerInfo.project.use.baseURL,
+          ignoreHTTPSErrors: true,
         });
 
         const username = process.env[`E2E_${authType}_${id}_USERNAME`];

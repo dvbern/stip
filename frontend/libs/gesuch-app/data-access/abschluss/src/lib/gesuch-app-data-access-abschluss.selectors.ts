@@ -18,8 +18,8 @@ export const selectGesuchAppDataAccessAbschlussView = createSelector(
   sharedDataAccessGesuchsFeature.selectValidations,
   (state, gesuch, isEditingTranche, lastUpdate, validations) => {
     const checkValidationErrors = getValidationErrors(state.checkResult?.error);
-    const allErrors = validations?.errors ?? [];
-    const allValidations = allErrors.concat(checkValidationErrors ?? []);
+    const allErrors = validations?.errors;
+    const allValidations = allErrors?.concat(checkValidationErrors ?? []);
     return {
       ...state,
       gesuch,
@@ -28,9 +28,11 @@ export const selectGesuchAppDataAccessAbschlussView = createSelector(
       lastUpdate,
       validations: allValidations,
       specialValidationErrors: allValidations
-        .filter(isSpecialValidationError)
-        .map((error) => SPECIAL_VALIDATION_ERRORS[error.messageTemplate]),
-      canCheck: allErrors.length === 0,
+        ?.filter(isSpecialValidationError)
+        .map((error) =>
+          SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error),
+        ),
+      canCheck: allErrors && allErrors.length === 0,
       abschlussPhase: toAbschlussPhase(gesuch, {
         isComplete: !!state.checkResult?.success,
         checkTranche: !!isEditingTranche,
