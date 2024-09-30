@@ -1,7 +1,7 @@
 {
-  "name": "shared-model-gesuch-abschluss",
+  "name": "gesuch-app-model-gesuch-abschluss",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/model/gesuch-abschluss/src",
+  "sourceRoot": "libs/gesuch-app/model/gesuch-abschluss/src",
   "projectType": "library",
   "targets": {
     "lint": {
@@ -9,5 +9,5 @@
       "outputs": ["{options.outputFile}"]
     }
   },
-  "tags": ["type:model", "scope:shared"]
+  "tags": ["type:model", "scope:gesuch-app"]
 }

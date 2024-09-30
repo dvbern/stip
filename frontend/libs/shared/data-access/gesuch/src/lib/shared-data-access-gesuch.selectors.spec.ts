@@ -171,35 +171,17 @@ describe('selectSharedDataAccessGesuchsView', () => {
       loading: false,
       error: undefined,
     };
-    const result = selectSharedDataAccessGesuchStepsView.projector(
-      state,
-      {
-        deploymentConfig: undefined,
-        compileTimeConfig: {
-          appType: 'gesuch-app',
-          authClientId: 'stip-gesuch-app',
-        },
-        loading: false,
-        error: undefined,
-        isGesuchApp: true,
-        isSachbearbeitungApp: false,
+    const result = selectSharedDataAccessGesuchStepsView.projector(state, {
+      deploymentConfig: undefined,
+      compileTimeConfig: {
+        appType: 'gesuch-app',
+        authClientId: 'stip-gesuch-app',
       },
-      {
-        trancheSetting: null,
-        cachedGesuchFormular: null,
-        cachedGesuchId: null,
-        invalidFormularProps: {
-          lastUpdate: null,
-          specialValidationErrors: [],
-          validations: {
-            errors: [],
-            warnings: [],
-            hasDocuments: null,
-          },
-        },
-        tranchenChanges: null,
-      },
-    );
+      loading: false,
+      error: undefined,
+      isGesuchApp: true,
+      isSachbearbeitungApp: false,
+    });
     const elternIndex = result.steps.findIndex(
       (step) => step.route === ELTERN.route,
     );

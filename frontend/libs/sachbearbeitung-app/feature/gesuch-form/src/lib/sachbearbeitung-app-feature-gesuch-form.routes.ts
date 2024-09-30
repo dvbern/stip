@@ -1,7 +1,6 @@
 import { Route } from '@angular/router';
 
 import {
-  ABSCHLUSS,
   AUSBILDUNG,
   AUSZAHLUNG,
   DOKUMENTE,
@@ -160,17 +159,6 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-dokumente').then(
         (m) => m.sharedFeatureGesuchDokumenteRoutes,
-      ),
-  },
-  {
-    path: ABSCHLUSS.route,
-    resolve: {
-      step: () => ABSCHLUSS,
-    },
-    title: ABSCHLUSS.translationKey,
-    loadChildren: () =>
-      import('@dv/shared/feature/gesuch-form-abschluss').then(
-        (m) => m.sharedFeatureGesuchFormAbschlussRoutes,
       ),
   },
   {

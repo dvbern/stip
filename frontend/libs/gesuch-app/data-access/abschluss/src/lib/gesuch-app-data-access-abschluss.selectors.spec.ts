@@ -20,14 +20,6 @@ describe('selectGesuchAppDataAccessAbschlussView', () => {
       null,
       null,
       { errors: [], hasDocuments: null },
-      {
-        deploymentConfig: undefined,
-        compileTimeConfig: undefined,
-        loading: false,
-        error: undefined,
-        isGesuchApp: true,
-        isSachbearbeitungApp: false,
-      },
     );
     expect(result).toEqual(state);
   });

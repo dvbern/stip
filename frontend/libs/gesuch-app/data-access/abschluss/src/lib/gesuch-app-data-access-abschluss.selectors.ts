@@ -1,31 +1,22 @@
 import { createSelector } from '@ngrx/store';
 
-import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { toAbschlussPhase } from '@dv/gesuch-app/model/gesuch-abschluss';
 import { sharedDataAccessGesuchsFeature } from '@dv/shared/data-access/gesuch';
 import { SharedModelError } from '@dv/shared/model/error';
-import { toAbschlussPhase } from '@dv/shared/model/gesuch-abschluss';
 import {
   SPECIAL_VALIDATION_ERRORS,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
 
-import { sharedDataAccessAbschlussFeature } from './gesuch-app-data-access-abschluss.feature';
+import { gesuchAppDataAccessAbschlussFeature } from './gesuch-app-data-access-abschluss.feature';
 
 export const selectGesuchAppDataAccessAbschlussView = createSelector(
-  sharedDataAccessAbschlussFeature.selectAbschlussState,
+  gesuchAppDataAccessAbschlussFeature.selectAbschlussState,
   sharedDataAccessGesuchsFeature.selectGesuch,
   sharedDataAccessGesuchsFeature.selectIsEditingTranche,
   sharedDataAccessGesuchsFeature.selectLastUpdate,
   sharedDataAccessGesuchsFeature.selectValidations,
-  selectSharedDataAccessConfigsView,
-  (
-    state,
-    gesuch,
-    isEditingTranche,
-    lastUpdate,
-    validations,
-    { compileTimeConfig },
-  ) => {
+  (state, gesuch, isEditingTranche, lastUpdate, validations) => {
     const checkValidationErrors = getValidationErrors(state.checkResult?.error);
     const allErrors = validations?.errors ?? [];
     const allValidations = allErrors.concat(checkValidationErrors ?? []);
@@ -43,7 +34,6 @@ export const selectGesuchAppDataAccessAbschlussView = createSelector(
       abschlussPhase: toAbschlussPhase(gesuch, {
         isComplete: !!state.checkResult?.success,
         checkTranche: !!isEditingTranche,
-        appType: compileTimeConfig?.appType,
       }),
     };
   },

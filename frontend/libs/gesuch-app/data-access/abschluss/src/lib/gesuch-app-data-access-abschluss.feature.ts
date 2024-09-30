@@ -3,7 +3,7 @@ import { createFeature, createReducer, on } from '@ngrx/store';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedModelError } from '@dv/shared/model/error';
 
-import { SharedDataAccessAbschlussApiEvents } from './gesuch-app-data-access-abschluss.events';
+import { GesuchAppDataAccessAbschlussApiEvents } from './gesuch-app-data-access-abschluss.events';
 
 export interface State {
   checkResult:
@@ -19,12 +19,12 @@ const initialState: State = {
   error: undefined,
 };
 
-export const sharedDataAccessAbschlussFeature = createFeature({
+export const gesuchAppDataAccessAbschlussFeature = createFeature({
   name: 'abschluss',
   reducer: createReducer(
     initialState,
     on(
-      SharedDataAccessAbschlussApiEvents.check,
+      GesuchAppDataAccessAbschlussApiEvents.check,
       (state): State => ({
         ...state,
         checkResult: undefined,
@@ -33,7 +33,7 @@ export const sharedDataAccessAbschlussFeature = createFeature({
       }),
     ),
     on(
-      SharedDataAccessAbschlussApiEvents.gesuchCheckSuccess,
+      GesuchAppDataAccessAbschlussApiEvents.gesuchCheckSuccess,
       (state, { error }): State => ({
         ...state,
         checkResult: {
@@ -45,7 +45,7 @@ export const sharedDataAccessAbschlussFeature = createFeature({
       }),
     ),
     on(
-      SharedDataAccessAbschlussApiEvents.gesuchCheckFailure,
+      GesuchAppDataAccessAbschlussApiEvents.gesuchCheckFailure,
       (state, { error }): State => ({
         ...state,
         checkResult: { success: false, error },
@@ -54,7 +54,7 @@ export const sharedDataAccessAbschlussFeature = createFeature({
       }),
     ),
     on(
-      SharedDataAccessAbschlussApiEvents.gesuchAbschliessen,
+      GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen,
       (state): State => ({
         ...state,
         checkResult: undefined,
@@ -64,7 +64,7 @@ export const sharedDataAccessAbschlussFeature = createFeature({
     ),
     on(
       SharedEventGesuchFormAbschluss.init,
-      SharedDataAccessAbschlussApiEvents.abschlussSuccess,
+      GesuchAppDataAccessAbschlussApiEvents.abschlussSuccess,
       (state): State => ({
         ...state,
         checkResult: undefined,
@@ -73,7 +73,7 @@ export const sharedDataAccessAbschlussFeature = createFeature({
       }),
     ),
     on(
-      SharedDataAccessAbschlussApiEvents.abschlussFailure,
+      GesuchAppDataAccessAbschlussApiEvents.abschlussFailure,
       (state, { error }): State => ({
         ...state,
         checkResult: undefined,
@@ -90,7 +90,7 @@ export const {
   selectAbschlussState,
   selectLoading,
   selectError,
-} = sharedDataAccessAbschlussFeature;
+} = gesuchAppDataAccessAbschlussFeature;
 
 const hasNoValidationErrors = (error: SharedModelError | undefined): boolean =>
   !error ||

@@ -3,11 +3,11 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
-import { selectGesuchAppDataAccessAbschlussView } from '@dv/shared/data-access/abschluss';
-import { AbschlussPhase } from '@dv/shared/model/gesuch-abschluss';
+import { selectGesuchAppDataAccessAbschlussView } from '@dv/gesuch-app/data-access/abschluss';
+import { AbschlussPhase } from '@dv/gesuch-app/model/gesuch-abschluss';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
-import { SharedFeatureGesuchFormAbschlussComponent } from './shared-feature-gesuch-form-abschluss.component';
+import { GesuchAppFeatureGesuchFormAbschlussComponent } from './gesuch-app-feature-gesuch-form-abschluss.component';
 
 const abschlussPhase: Record<AbschlussPhase, string> = {
   NOT_READY: 'NOT_READY',
@@ -18,7 +18,7 @@ const abschlussPhase: Record<AbschlussPhase, string> = {
 };
 
 async function setup(abschlussPhase: AbschlussPhase) {
-  return await render(SharedFeatureGesuchFormAbschlussComponent, {
+  return await render(GesuchAppFeatureGesuchFormAbschlussComponent, {
     imports: [
       TranslateTestingModule.withTranslations({}),
       NoopAnimationsModule,
@@ -45,7 +45,7 @@ async function setup(abschlussPhase: AbschlussPhase) {
   });
 }
 
-describe(SharedFeatureGesuchFormAbschlussComponent.name, () => {
+describe(GesuchAppFeatureGesuchFormAbschlussComponent.name, () => {
   it('should render a warning alert if the gesuch is not ready', async () => {
     const { getByTestId, detectChanges } = await setup(
       abschlussPhase.NOT_READY as AbschlussPhase,
