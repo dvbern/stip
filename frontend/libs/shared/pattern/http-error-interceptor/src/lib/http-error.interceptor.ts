@@ -104,6 +104,11 @@ const handleUnknownHttpError = (
         router.navigateByUrl('/').then(() => {
           window.location.reload();
         });
+        notificationStore.createNotification({
+          type: 'ERROR',
+          messageKey: 'shared.genericError.gesuch-unauthorized',
+          content: error,
+        });
         return handledError(EMPTY);
       }
       // Check for 403 FORBIDDEN
