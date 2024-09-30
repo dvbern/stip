@@ -87,36 +87,32 @@
                       <div class="col-md d-flex">
                         @if (periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
                           @let aenderung = gesuchAenderungStore.openAenderungViewSig();
-                          @if (gesuchAenderungStore.cachedTranchenSlim() | rdIsPending) {
-                            <div class="col-12 mt-2">
-                              <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
-                            </div>
-                          } @else if (aenderung) {
-                            <div class="divider me-4"></div>
+                          @if (aenderung) {
                             @if (aenderung.loading) {
                               <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
                             } @else if (aenderung.openAenderung) {
+                              <div class="divider me-4"></div>
                               <dv-gesuch-app-ui-aenderungs-entry
                                 class="d-flex flex-column gap-4 w-100"
                                 [tranche]="aenderung.openAenderung"
                                 [gesuchId]="periode.gesuch.id"
                               ></dv-gesuch-app-ui-aenderungs-entry>
+                            } @else {
+                              <button
+                                type="button"
+                                class="btn btn-outline-primary mt-3 w-100 align-self-end"
+                                data-testid="cockpit-gesuch-aenderung-create"
+                                (click)="
+                                  aenderungMelden(
+                                    periode.gesuch.id,
+                                    periode.gesuchsperiodeStart,
+                                    periode.gesuchsperiodeStopp
+                                  )
+                                "
+                              >
+                                {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
+                              </button>
                             }
-                          } @else {
-                            <button
-                              type="button"
-                              class="btn btn-outline-primary mt-3 w-100 align-self-end"
-                              data-testid="cockpit-gesuch-aenderung-create"
-                              (click)="
-                                aenderungMelden(
-                                  periode.gesuch.id,
-                                  periode.gesuchsperiodeStart,
-                                  periode.gesuchsperiodeStopp
-                                )
-                              "
-                            >
-                              {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
-                            </button>
                           }
                         } @else {
                           <!-- existing Gesuch (right pic) -->
