@@ -30,7 +30,7 @@ public interface GesuchResource {
     @PATCH
     @Path("/{gesuchId}/bearbeitungAbschliessen")
     @Produces({ "application/json", "text/plain" })
-    Response bearbeitungAbschliesssen(@PathParam("gesuchId") UUID gesuchId);
+    Response bearbeitungAbschliessen(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Path("/status/in-bearbeitung/{gesuchId}")

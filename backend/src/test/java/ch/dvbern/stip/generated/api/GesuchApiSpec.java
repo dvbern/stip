@@ -65,7 +65,7 @@ public class GesuchApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                bearbeitungAbschliesssen(),
+                bearbeitungAbschliessen(),
                 changeGesuchStatusToInBearbeitung(),
                 createGesuch(),
                 deleteGesuch(),
@@ -86,8 +86,8 @@ public class GesuchApiSpec {
         );
     }
 
-    public BearbeitungAbschliesssenOper bearbeitungAbschliesssen() {
-        return new BearbeitungAbschliesssenOper(createReqSpec());
+    public BearbeitungAbschliessenOper bearbeitungAbschliessen() {
+        return new BearbeitungAbschliessenOper(createReqSpec());
     }
 
     public ChangeGesuchStatusToInBearbeitungOper changeGesuchStatusToInBearbeitung() {
@@ -174,7 +174,7 @@ public class GesuchApiSpec {
      *
      * @see #gesuchIdPath Die ID vom Gesuch (required)
      */
-    public static class BearbeitungAbschliesssenOper implements Oper {
+    public static class BearbeitungAbschliessenOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
         public static final String REQ_URI = "/gesuch/{gesuchId}/bearbeitungAbschliessen";
@@ -182,7 +182,7 @@ public class GesuchApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public BearbeitungAbschliesssenOper(RequestSpecBuilder reqSpec) {
+        public BearbeitungAbschliessenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -205,7 +205,7 @@ public class GesuchApiSpec {
          * @param gesuchId (UUID) Die ID vom Gesuch (required)
          * @return operation
          */
-        public BearbeitungAbschliesssenOper gesuchIdPath(Object gesuchId) {
+        public BearbeitungAbschliessenOper gesuchIdPath(Object gesuchId) {
             reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
@@ -215,7 +215,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public BearbeitungAbschliesssenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public BearbeitungAbschliessenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -225,7 +225,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public BearbeitungAbschliesssenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public BearbeitungAbschliessenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

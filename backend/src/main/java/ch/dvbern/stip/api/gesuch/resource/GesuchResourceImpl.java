@@ -158,19 +158,22 @@ public class GesuchResourceImpl implements GesuchResource {
     // TODO KSTIP-1247: Only SB can execute these next 3
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Response bearbeitungAbschliesssen(UUID gesuchId) {
-        return null;
+    public Response bearbeitungAbschliessen(UUID gesuchId) {
+        gesuchService.bearbeitungAbschliessen(gesuchId);
+        return Response.ok().build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response gesuchZurueckweisen(UUID gesuchId, KommentarDto kommentarDto) {
-        return null;
+        gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
+        return Response.ok().build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response juristischAbklaeren(UUID gesuchId) {
-        return null;
+        gesuchService.juristischAbklaeren(gesuchId);
+        return Response.ok().build();
     }
 }
