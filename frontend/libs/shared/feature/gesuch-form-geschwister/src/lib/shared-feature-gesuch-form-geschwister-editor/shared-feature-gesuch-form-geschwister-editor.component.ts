@@ -5,11 +5,11 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
   computed,
   effect,
   inject,
+  input,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -55,6 +55,7 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
+  prepareWohnsitzValues,
   updateWohnsitzControlsState,
   wohnsitzAnteileNumber,
   wohnsitzAnteileString,
@@ -69,7 +70,6 @@ import {
   parseStringAndPrintForBackendLocalDate,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { prepareWohnsitzValues } from '@dv/shared/util-fn/gesuch-util';
 
 const MAX_AGE_ADULT = 130;
 const MIN_AGE_CHILD = 0;
@@ -102,14 +102,14 @@ const MEDIUM_AGE = 20;
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureGesuchFormGeschwisterEditorComponent
-  implements OnChanges
-{
+export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   private elementRef = inject(ElementRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
 
-  @Input({ required: true }) geschwister!: Partial<GeschwisterUpdate>;
+  geschwisterSig = input.required<Partial<GeschwisterUpdate>>({
+    alias: 'geschwister',
+  });
   @Input({ required: true }) changes:
     | Partial<GeschwisterUpdate>
     | undefined
@@ -192,33 +192,22 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
       this.closeTriggered,
     );
     this.formUtils.registerFormForUnsavedCheck(this);
-    effect(
-      () => {
-        updateWohnsitzControlsState(
-          this.formUtils,
-          this.form.controls,
-          this.viewSig().readonly || !this.showWohnsitzSplitterSig(),
-        );
-      },
-      { allowSignalWrites: true },
-    );
 
     effect(
       () => {
         this.gotReenabledSig();
-        const wohnsitzChanged = this.wohnsitzChangedSig();
-        if (wohnsitzChanged !== Wohnsitz.MUTTER_VATER) {
-          this.formUtils.setDisabledState(
-            this.form.controls.wohnsitzAnteilMutter,
-            true,
-            true,
-          );
-          this.formUtils.setDisabledState(
-            this.form.controls.wohnsitzAnteilVater,
-            true,
-            true,
-          );
-        }
+        const { elternteilUnbekanntVerstorben } =
+          this.viewSig().gesuchFormular?.familiensituation ?? {};
+        const wohnsitzNotMutterVater =
+          this.wohnsitzChangedSig() !== Wohnsitz.MUTTER_VATER;
+
+        updateWohnsitzControlsState(
+          this.form.controls,
+          wohnsitzNotMutterVater ||
+            this.viewSig().readonly ||
+            !this.showWohnsitzSplitterSig() ||
+            !!elternteilUnbekanntVerstorben,
+        );
       },
       { allowSignalWrites: true },
     );
@@ -230,16 +219,22 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
         this.validationViewSig().invalidFormularProps.specialValidationErrors,
       );
     });
-  }
 
-  ngOnChanges() {
-    this.form.patchValue({
-      ...this.geschwister,
-      geburtsdatum: parseBackendLocalDateAndPrint(
-        this.geschwister.geburtsdatum,
-        this.languageSig(),
-      ),
-      ...wohnsitzAnteileString(this.geschwister),
+    effect(() => {
+      const geschwister = this.geschwisterSig();
+      const { gesuchFormular } = this.viewSig();
+
+      this.form.patchValue({
+        ...geschwister,
+        geburtsdatum: parseBackendLocalDateAndPrint(
+          geschwister.geburtsdatum,
+          this.languageSig(),
+        ),
+        ...wohnsitzAnteileString(
+          geschwister,
+          gesuchFormular?.familiensituation,
+        ),
+      });
     });
   }
 
@@ -255,7 +250,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
     if (this.form.valid && geburtsdatum) {
       this.saveTriggered.emit({
         ...this.form.getRawValue(),
-        id: this.geschwister.id,
+        id: this.geschwisterSig().id,
         geburtsdatum,
         wohnsitz: this.form.getRawValue().wohnsitz as Wohnsitz,
         ...wohnsitzAnteileNumber(this.form.getRawValue()),

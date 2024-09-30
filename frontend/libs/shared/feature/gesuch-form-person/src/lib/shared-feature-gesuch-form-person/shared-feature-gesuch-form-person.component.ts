@@ -69,6 +69,7 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
+  prepareWohnsitzValues,
   updateWohnsitzControlsState,
   wohnsitzAnteileNumber,
   wohnsitzAnteileString,
@@ -90,7 +91,6 @@ import {
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
-import { prepareWohnsitzValues } from '@dv/shared/util-fn/gesuch-util';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
@@ -346,25 +346,18 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     effect(
       () => {
         this.gotReenabledSig();
+        const { elternteilUnbekanntVerstorben } =
+          this.viewSig().gesuchFormular?.familiensituation ?? {};
+        const wohnsitzNotMutterVater =
+          this.wohnsitzChangedSig() !== Wohnsitz.MUTTER_VATER;
+
         updateWohnsitzControlsState(
-          this.formUtils,
           this.form.controls,
-          this.viewSig().readonly,
+          wohnsitzNotMutterVater ||
+            this.viewSig().readonly ||
+            !this.showWohnsitzSplitterSig() ||
+            !!elternteilUnbekanntVerstorben,
         );
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.wohnsitzAnteilMutter,
-          visible: this.showWohnsitzSplitterSig(),
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
-        });
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.wohnsitzAnteilVater,
-          visible: this.showWohnsitzSplitterSig(),
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
-        });
       },
       { allowSignalWrites: true },
     );
@@ -396,9 +389,13 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
               this.languageSig(),
             ),
           };
+          const wohnsitzAnteile = wohnsitzAnteileString(
+            person,
+            gesuchFormular.familiensituation,
+          );
           this.form.patchValue({
             ...personForForm,
-            ...wohnsitzAnteileString(person),
+            ...wohnsitzAnteile,
           });
           SharedUiFormAddressComponent.patchForm(
             this.form.controls.adresse,

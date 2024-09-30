@@ -1,5 +1,7 @@
 import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 
+import { ElternAbwesenheitsGrund } from '@dv/shared/model/gesuch';
+
 type NonNullableRecord<T extends Record<string, unknown>> = {
   [K in keyof T]: NonNullable<T[K]>;
 };
@@ -60,3 +62,37 @@ export function convertTempFormToRealValues<
 
   return fromRequired(values, required);
 }
+
+/**
+ * Convert a percent string to a number
+ */
+export function percentStringToNumber(value: string): number;
+export function percentStringToNumber(
+  value: string | undefined,
+): number | undefined;
+export function percentStringToNumber(
+  value?: string | undefined,
+): number | undefined {
+  const parsed = parseInt(value ?? '');
+  if (isNaN(parsed)) {
+    return undefined;
+  } else {
+    return parsed;
+  }
+}
+
+/**
+ * Convert a number to a percent string or an empty string if the value is undefined or null
+ */
+export function numberToPercentString(value?: number): string {
+  return value?.toString() ?? '';
+}
+
+/**
+ * Check if the Eltern Abwesenheits Grund is either 'VERSTORBEN' or 'UNBEKANNT'
+ */
+export const isVerstorbenOrUnbekannt = (grund?: ElternAbwesenheitsGrund) => {
+  return (['VERSTORBEN', 'UNBEKANNT'] satisfies ElternAbwesenheitsGrund[]).some(
+    (s) => s === grund,
+  );
+};

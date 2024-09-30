@@ -8,7 +8,6 @@ import {
   GesuchFormular,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularProps,
-  Wohnsitz,
 } from '@dv/shared/model/gesuch';
 import {
   GesuchFormStepView,
@@ -265,20 +264,4 @@ export function getChangesForList<
     ),
     newEntries,
   };
-}
-
-export function prepareWohnsitzValues(
-  familiensituation?: FamiliensituationUpdate,
-) {
-  const availableWohnsitz = Object.values(Wohnsitz);
-
-  if (!familiensituation) {
-    return availableWohnsitz;
-  }
-
-  if (familiensituation.elternVerheiratetZusammen) {
-    return availableWohnsitz.filter((v) => v !== 'MUTTER_VATER');
-  } else {
-    return availableWohnsitz.filter((v) => v !== 'FAMILIE');
-  }
 }
