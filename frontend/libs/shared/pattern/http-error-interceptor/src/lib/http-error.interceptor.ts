@@ -101,7 +101,9 @@ const handleUnknownHttpError = (
   return (error: SharedModelError) => {
     if (error.type === 'unknownHttpError') {
       if (error.status === 401 && !req.context.get(IGNORE_ERRORS)) {
-        oauth.logOut(false, router.url);
+        router.navigateByUrl('/').then(() => {
+          window.location.reload();
+        });
         return handledError(EMPTY);
       }
       // Check for 403 FORBIDDEN
