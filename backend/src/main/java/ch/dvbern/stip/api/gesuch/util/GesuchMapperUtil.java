@@ -6,6 +6,8 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuch.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,6 +21,10 @@ public class GesuchMapperUtil {
 
     public GesuchDto mapWithCurrentTranche(final Gesuch gesuch) {
         return mapWithTranche(gesuch, gesuch.getCurrentGesuchTranche());
+    }
+
+    public boolean hasAenderung(final Gesuch gesuch) {
+        return gesuch.getGesuchTranchen().stream().filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN).count() > 0;
     }
 
     public GesuchDto mapWithNewestTranche(final Gesuch gesuch) {

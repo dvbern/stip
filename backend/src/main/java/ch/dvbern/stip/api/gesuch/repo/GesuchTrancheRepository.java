@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -25,6 +26,10 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
             .where(gesuchTranche.gesuch.id.eq(gesuchId))
             .orderBy(gesuchTranche.gueltigkeit.gueltigAb.asc())
             .stream();
+    }
+
+    public Stream<GesuchTranche> findForGesuchAndStatus(final UUID gesuchId, GesuchTrancheStatus status) {
+        return findForGesuch(gesuchId).filter(gesuchTranche -> gesuchTranche.getStatus().equals(status));
     }
 
     public GesuchTranche requireAenderungById(final UUID aenderungId) {

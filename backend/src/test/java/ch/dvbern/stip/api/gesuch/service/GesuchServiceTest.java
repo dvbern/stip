@@ -15,6 +15,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -31,6 +32,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -73,6 +75,7 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -1119,6 +1122,37 @@ class GesuchServiceTest {
                 .getPersonInAusbildung() == null).count(), Matchers.is(0L));
     }
 
+    @TestAsSachbearbeiter
+    @Test
+    void findAlleGesucheSBShouldContainAenderungen(){
+        setupGesucheWithAndWithoutAenderung(Gesuchstatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+        var alleGesuche = gesuchService.findGesucheSB(GetGesucheSBQueryType.ALLE);
+
+        //todo: gesuch ohne aenderung -> output 1x gesuch ; newest tranche = newest tranche
+        // todo: gesuch mit aenderung -> output (1xgesuch *) + 1xaenderung ;newest tranche = aenderung
+
+        //size has to be 3 instead of 2 entries
+        assertThat(alleGesuche.size(), Matchers.equalTo(3));
+
+        // ohne aenderung
+        final var gesuch = alleGesuche.get(0);
+        assertTrue(gesuch.getGesuchTrancheToWorkWith().getTyp() == GesuchTrancheTyp.TRANCHE);
+
+        // mit anenderung
+        final var gesuchMitAenderung1 = alleGesuche.get(1);
+        final var gesuchMitAenderung2 = alleGesuche.get(2);
+
+        // one of both entries (gesuch) has to have the aenderung as newest gesuch tranche
+        assertTrue(gesuchMitAenderung1.getGesuchTrancheToWorkWith().getTyp() == GesuchTrancheTyp.AENDERUNG
+        || gesuchMitAenderung2.getGesuchTrancheToWorkWith().getTyp() == GesuchTrancheTyp.AENDERUNG);
+
+        // the other entry (gesuch) has to be the "normal" tranche
+        assertTrue(gesuchMitAenderung1.getGesuchTrancheToWorkWith().getTyp() != GesuchTrancheTyp.AENDERUNG
+            || gesuchMitAenderung2.getGesuchTrancheToWorkWith().getTyp() != GesuchTrancheTyp.AENDERUNG);
+        //todo: check for getGesuchTrancheToWorkWith().getStatus()
+        //                == GesuchTrancheStatus.UEBERPRUEFEN
+
+    }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
@@ -1206,6 +1240,34 @@ class GesuchServiceTest {
         gesuchWithPia.getNewestGesuchTranche().get().getGesuchFormular()
             .setPersonInAusbildung(new PersonInAusbildung());
         when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuchWithoutPia, gesuchWithPia));
+    }
+
+    private void setupGesucheWithAndWithoutAenderung(Gesuchstatus status, GesuchTrancheStatus trancheStatus){
+        Gesuch gesuchWithoutAenderung = GesuchGenerator.initGesuch();
+        gesuchWithoutAenderung.setGesuchStatus(status);
+        gesuchWithoutAenderung.getGesuchTranchen().add(GesuchGenerator.initGesuchTranche());
+        gesuchWithoutAenderung.getGesuchTranchen().get(0).setGueltigkeit(new DateRange(gesuchWithoutAenderung.getGesuchsperiode().getGesuchsperiodeStart().plusDays(1),gesuchWithoutAenderung.getGesuchsperiode().getGesuchsperiodeStopp()));
+        gesuchWithoutAenderung.getNewestGesuchTranche().get().
+            setGesuchFormular(new GesuchFormular())
+            .setStatus(trancheStatus)
+            .setTyp(GesuchTrancheTyp.TRANCHE);
+        gesuchWithoutAenderung.getNewestGesuchTranche().get().getGesuchFormular()
+            .setPersonInAusbildung(new PersonInAusbildung());
+
+        //todo: setup gesuch with 1 tranche + 1 aenderung
+        Gesuch gesuchWithAenderung = GesuchGenerator.initGesuch();
+        gesuchWithAenderung.setGesuchStatus(status);
+        gesuchWithAenderung.getGesuchTranchen().add(GesuchGenerator.initGesuchTranche());
+        gesuchWithAenderung.getGesuchTranchen().get(0).setGueltigkeit(new DateRange(gesuchWithAenderung.getGesuchsperiode().getGesuchsperiodeStart().plusDays(1),gesuchWithAenderung.getGesuchsperiode().getGesuchsperiodeStopp()));
+        gesuchWithAenderung.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular())
+            .setStatus(GesuchTrancheStatus.UEBERPRUEFEN)
+            .setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuchWithAenderung.getNewestGesuchTranche().get().getGesuchFormular()
+            .setPersonInAusbildung(new PersonInAusbildung());
+
+        //todo: add with aenderung, but aenderung is NOT newest...
+
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuchWithoutAenderung, gesuchWithAenderung));
     }
 
     private GesuchTranche updateWerZahltAlimente(
