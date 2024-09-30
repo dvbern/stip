@@ -10,6 +10,9 @@
   "sachbearbeitung-app.header.gesuch-bearbeiten": "Modifier la demande",
   "sachbearbeitung-app.header.tranche.erstellen": "Créer une tranche",
   "sachbearbeitung-app.header.back": "Retour",
+  "sachbearbeitung-app.header.status-uebergang.title": "Terminer la rédaction",
+  "sachbearbeitung-app.header.status-uebergang.VERFUEGUNG_OR_FREIGABE": "Terminer",
+  "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN": "Rejeter",
 
   "sachbearbeitung-app.admin.title": "Administration",
   "sachbearbeitung-app.admin.save-and-publish": "Enregistrer et publier",

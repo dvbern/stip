@@ -73,6 +73,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     return this.router.url.includes('/aenderung/');
   });
 
+  statusUebergaengeMenu = [
+    {
+      icon: 'check',
+      titleKey: 'VERFUEGUNG_OR_FREIGABE',
+      type: 'VERFUEGUNG_OR_FREIGABE',
+    },
+    { icon: 'undo', titleKey: 'ZURUECKWEISEN', type: 'ZURUECKWEISEN' },
+  ];
+
   constructor() {
     effect(
       () => {
@@ -97,6 +106,19 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   setToBearbeitung() {
     this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchToBearbeitung());
+  }
+
+  canEndBearbeitungOrRejectSig = computed(() => {
+    const gesuch = this.currentGesuchSig();
+    const status = gesuch?.gesuchStatus;
+    if (!status) {
+      return false;
+    }
+    return status === 'IN_BEARBEITUNG_SB';
+  });
+
+  setStatusUebergang(status: string) {
+    console.log('setStatusUebergang', status);
   }
 
   createTranche() {

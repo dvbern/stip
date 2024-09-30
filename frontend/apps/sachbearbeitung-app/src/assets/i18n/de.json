@@ -10,6 +10,9 @@
   "sachbearbeitung-app.header.gesuch-bearbeiten": "Gesuch bearbeiten",
   "sachbearbeitung-app.header.tranche.erstellen": "Tranche erstellen",
   "sachbearbeitung-app.header.back": "Zurück",
+  "sachbearbeitung-app.header.status-uebergang.title": "Bearbeitung abschliessen",
+  "sachbearbeitung-app.header.status-uebergang.VERFUEGUNG_OR_FREIGABE": "Abschliessen",
+  "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN": "Zurückweisen",
 
   "sachbearbeitung-app.admin.title": "Administration",
   "sachbearbeitung-app.admin.save-and-publish": "Speichern und publizieren",
