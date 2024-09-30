@@ -191,18 +191,22 @@ public class GesuchTrancheService {
     }
 
     @Transactional
-    public void aenderungAblehnen(final UUID aenderungId) {
+    public GesuchTrancheDto aenderungAblehnen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.ABGELEHNT);
+
+        return gesuchTrancheMapper.toDto(aenderung);
     }
 
     @Transactional
-    public void aenderungManuellAnpassen(final UUID aenderungId) {
+    public GesuchTrancheDto aenderungManuellAnpassen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(
             aenderung,
             GesuchTrancheStatusChangeEvent.MANUELLE_AENDERUNG
         );
+
+        return gesuchTrancheMapper.toDto(aenderung);
     }
 
     public ValidationReportDto einreichenValidieren(final UUID trancheId) {

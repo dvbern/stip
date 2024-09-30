@@ -100,14 +100,14 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response aenderungAblehnen(UUID aenderungId) {
-        gesuchTrancheService.aenderungAblehnen(aenderungId);
-        return Response.ok().build();
+        final var tranche = gesuchTrancheService.aenderungAblehnen(aenderungId);
+        return Response.ok(tranche).build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response aenderungManuellAnpassen(UUID aenderungId) {
-        gesuchTrancheService.aenderungManuellAnpassen(aenderungId);
-        return Response.ok().build();
+        final var tranche = gesuchTrancheService.aenderungManuellAnpassen(aenderungId);
+        return Response.ok(tranche).build();
     }
 }

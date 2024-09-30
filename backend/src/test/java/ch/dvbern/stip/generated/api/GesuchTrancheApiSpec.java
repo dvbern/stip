@@ -141,6 +141,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #aenderungIdPath Die ID der Aenderung (required)
+     * return GesuchTrancheDtoSpec
      */
     public static class AenderungAblehnenOper implements Oper {
 
@@ -152,7 +153,7 @@ public class GesuchTrancheApiSpec {
 
         public AenderungAblehnenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -165,6 +166,16 @@ public class GesuchTrancheApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuchtranche/{aenderungId}/aenderung/ablehnen
+         * @param handler handler
+         * @return GesuchTrancheDtoSpec
+         */
+        public GesuchTrancheDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchTrancheDtoSpec> type = new TypeRef<GesuchTrancheDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
         public static final String AENDERUNG_ID_PATH = "aenderungId";
@@ -338,6 +349,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #aenderungIdPath Die ID der Aenderung (required)
+     * return GesuchTrancheDtoSpec
      */
     public static class AenderungManuellAnpassenOper implements Oper {
 
@@ -349,7 +361,7 @@ public class GesuchTrancheApiSpec {
 
         public AenderungManuellAnpassenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -362,6 +374,16 @@ public class GesuchTrancheApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuchtranche/{aenderungId}/aenderung/manuelleAenderung
+         * @param handler handler
+         * @return GesuchTrancheDtoSpec
+         */
+        public GesuchTrancheDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchTrancheDtoSpec> type = new TypeRef<GesuchTrancheDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
         public static final String AENDERUNG_ID_PATH = "aenderungId";

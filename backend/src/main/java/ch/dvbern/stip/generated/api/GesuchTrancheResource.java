@@ -27,7 +27,7 @@ public interface GesuchTrancheResource {
 
     @PATCH
     @Path("/{aenderungId}/aenderung/ablehnen")
-    @Produces({ "text/plain" })
+    @Produces({ "application/json", "text/plain" })
     Response aenderungAblehnen(@PathParam("aenderungId") UUID aenderungId);
 
     @POST
@@ -42,7 +42,7 @@ public interface GesuchTrancheResource {
 
     @PATCH
     @Path("/{aenderungId}/aenderung/manuelleAenderung")
-    @Produces({ "text/plain" })
+    @Produces({ "application/json", "text/plain" })
     Response aenderungManuellAnpassen(@PathParam("aenderungId") UUID aenderungId);
 
     @POST

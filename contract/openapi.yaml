@@ -1670,9 +1670,13 @@ paths:
         - GesuchTranche
       responses:
         '200':
-          description: Eingereicht
+          description: 'Aenderung wurde erflogreich auf manuell gesetzt'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTranche'
         '400':
-          description: Falsche Tranche akzeptiert
+          description: Falsche Tranche versucht auf manuell zu setzen
         '404':
           description: Die Aenderung gibt es nicht
         '500':
@@ -1686,9 +1690,13 @@ paths:
         - GesuchTranche
       responses:
         '200':
-          description: Eingereicht
+          description: 'Aenderung wurde erflogreich abgelehnt'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTranche'
         '400':
-          description: Falsche Tranche akzeptiert
+          description: Falsche Tranche abgelehnt
         '404':
           description: Die Aenderung gibt es nicht
         '500':
