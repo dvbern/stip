@@ -1059,7 +1059,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: bearbeitungAbschliesssen
+      operationId: bearbeitungAbschliessen
       summary: Die Bearbeitung des Gesuch durch den SB abschliessen
   '/gesuch/{gesuchId}/gesuchZurueckweisen':
     parameters:
