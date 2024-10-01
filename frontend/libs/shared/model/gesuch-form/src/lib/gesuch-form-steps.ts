@@ -295,42 +295,20 @@ export const isStepValid = (
 export const getFormStepByDocumentType = (
   dokumentTyp: DokumentTyp,
 ): SharedModelGesuchFormStep => {
-  switch (dokumentTyp) {
-    case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
-      return gesuchFormSteps.DOKUMENTE;
-    }
-    case DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE: {
-      return gesuchFormSteps.GESCHWISTER;
-    }
-    // has overlapp with kinder step so include in default case step mapping below would not work
-    case DokumentTyp.EK_BELEG_KINDERZULAGEN: {
-      return gesuchFormSteps.EINNAHMEN_KOSTEN;
-    }
-    // has overlapp with kinder step so include in default case step mapping below would not work
-    case DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER: {
-      return gesuchFormSteps.EINNAHMEN_KOSTEN;
-    }
-    case DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG: {
-      return gesuchFormSteps.PARTNER;
-    }
-    default: {
-      const step = (Object.keys(gesuchFormSteps) as GesuchFormSteps[]).find(
-        (key) => {
-          // map all remaining einnahmen kosten to the einnahmen kosten step
-          if (key === 'EINNAHMEN_KOSTEN') {
-            return dokumentTyp.includes('EK');
-          }
-          return dokumentTyp.includes(key);
-        },
-      );
-      if (!step) {
-        console.error(`No step found for document type "${dokumentTyp}"`);
-        return gesuchFormSteps.DOKUMENTE;
+  const step = (Object.keys(gesuchFormSteps) as GesuchFormSteps[]).find(
+    (key) => {
+      if (key === 'EINNAHMEN_KOSTEN') {
+        return dokumentTyp.startsWith('EK');
       }
-
-      return gesuchFormSteps[step];
-    }
+      return dokumentTyp.startsWith(key);
+    },
+  );
+  if (!step) {
+    console.error(`No step found for document type "${dokumentTyp}"`);
+    return gesuchFormSteps.DOKUMENTE;
   }
+
+  return gesuchFormSteps[step];
 };
 
 const toDocumentStepState = (
