@@ -50,9 +50,9 @@ public class FamilieEntityWohnsitzValidator {
         }
 
         boolean isAnteilMutter100Percent = familieEntity.getWohnsitzAnteilMutter()
-            .equals(BigDecimal.valueOf(100));
+            .compareTo(BigDecimal.valueOf(100)) == 0;
         boolean isAnteilVater100Percent = familieEntity.getWohnsitzAnteilVater()
-            .equals(BigDecimal.valueOf(100));
+            .compareTo(BigDecimal.valueOf(100)) == 0;
 
         final boolean isMutterAbsent = familiensituation.getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.VERSTORBEN
             || familiensituation.getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.UNBEKANNT;

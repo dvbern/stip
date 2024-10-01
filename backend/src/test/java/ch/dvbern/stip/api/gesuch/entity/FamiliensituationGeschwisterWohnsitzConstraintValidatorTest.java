@@ -43,7 +43,7 @@ class FamiliensituationGeschwisterWohnsitzConstraintValidatorTest {
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
         familiensituation.setElternteilUnbekanntVerstorben(true);
-        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT);
         familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
         gesuchFormular.setFamiliensituation(familiensituation);
 
@@ -76,7 +76,7 @@ class FamiliensituationGeschwisterWohnsitzConstraintValidatorTest {
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
         familiensituation.setElternteilUnbekanntVerstorben(true);
-        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT);
         familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
         gesuchFormular.setFamiliensituation(familiensituation);
         // just a setup - wohnsitzanteile are covered in toher unit tests
@@ -90,10 +90,10 @@ class FamiliensituationGeschwisterWohnsitzConstraintValidatorTest {
         gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitz(Wohnsitz.MUTTER_VATER);
 
         // even if both are absent, one part has to be 100 %
-        gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitzAnteilMutter(HUNDRED_PERCENT);
-        gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitzAnteilVater(ZERO_PERCENT);
-        gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitzAnteilMutter(HUNDRED_PERCENT);
-        gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitzAnteilVater(ZERO_PERCENT);
+        gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitzAnteilVater(HUNDRED_PERCENT);
+        gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitzAnteilMutter(ZERO_PERCENT);
+        gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitzAnteilVater(HUNDRED_PERCENT);
+        gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitzAnteilMutter(ZERO_PERCENT);
         assertTrue(validator.isValid(gesuchFormular, null));
 
         // inverted is also valid, we make no difference in this case
@@ -119,6 +119,7 @@ class FamiliensituationGeschwisterWohnsitzConstraintValidatorTest {
         familiensituation.setElternVerheiratetZusammen(false);
         familiensituation.setElternteilUnbekanntVerstorben(true);
         familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT);
         gesuchFormular.setFamiliensituation(familiensituation);
         // just a setup - wohnsitzanteile are covered in toher unit tests
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitzAnteilVater(ZERO_PERCENT);
@@ -150,6 +151,7 @@ class FamiliensituationGeschwisterWohnsitzConstraintValidatorTest {
         familiensituation.setElternVerheiratetZusammen(false);
         familiensituation.setElternteilUnbekanntVerstorben(true);
         familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT);
+        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
         gesuchFormular.setFamiliensituation(familiensituation);
 
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitz(Wohnsitz.MUTTER_VATER);
