@@ -45,6 +45,7 @@ import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbe
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import {
   GesuchFilter,
+  GesuchTrancheTyp,
   Gesuchstatus,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
@@ -124,6 +125,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   displayedColumns = [
     'fall',
     'svNummer',
+    'typ',
     'nachname',
     'vorname',
     'geburtsdatum',
@@ -136,6 +138,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   filterForm = this.formBuilder.group({
     fall: [<string | undefined>undefined],
     svNummer: [<string | undefined>undefined],
+    typ: [''],
     nachname: [<string | undefined>undefined],
     vorname: [<string | undefined>undefined],
     geburtsdatum: [<Date | undefined>undefined],
@@ -181,6 +184,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
       [],
     );
   });
+  availableStatus = Object.values(GesuchTrancheTyp);
   private letzteAktivitaetStartChangedSig = toSignal(
     this.filterForm.controls.letzteAktivitaetStart.valueChanges,
   );
@@ -212,6 +216,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
       id: gesuch.id,
       fall: gesuch.fall.fallNummer,
+      typ: gesuch.gesuchTrancheToWorkWith?.typ,
       svNummer:
         gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
           ?.sozialversicherungsnummer,
@@ -244,6 +249,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
         [
           checkFilter(data.fall, filterForm.fall),
           checkFilter(data.svNummer, filterForm.svNummer),
+          checkFilter(data.typ, filterForm.typ),
           checkFilter(data.nachname, filterForm.nachname),
           checkFilter(data.vorname, filterForm.vorname),
           checkFilter(data.geburtsdatum, filterForm.geburtsdatum),

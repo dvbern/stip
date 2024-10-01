@@ -146,6 +146,9 @@
   "shared.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Prêt pour traitement",
   "shared.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Documents manquants",
 
+  "shared.gesuch.tranche.typ.AENDERUNG": "Changement",
+  "shared.gesuch.tranche.typ.TRANCHE": "Demande",
+
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",
   "shared.form.gonext": "Continuer",

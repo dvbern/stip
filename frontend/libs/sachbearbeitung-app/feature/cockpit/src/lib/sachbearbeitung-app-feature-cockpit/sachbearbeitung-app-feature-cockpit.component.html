@@ -116,6 +116,33 @@
                   </td>
                 </ng-container>
 
+                <!-- typ -->
+                <ng-container matColumnDef="typ">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
+                    {{ 'sachbearbeitung-app.cockpit.table.typ' | translate }}
+                    <mat-form-field>
+                      <mat-select
+                        formControlName="typ"
+                        (click)="$event.stopPropagation()"
+                        class="fw-normal"
+                        panelClass="table-select"
+                      >
+                        <mat-option [value]="''">
+                          {{ 'sachbearbeitung-app.cockpit.no-status-filter' | translate }}
+                        </mat-option>
+                        @for (typ of availableStatus; track typ) {
+                          <mat-option [value]="typ">
+                            {{ 'shared.gesuch.tranche.typ.' + typ | translate }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  </th>
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
+                    {{ 'shared.gesuch.tranche.typ.' + gesuch.typ | translate }}
+                  </td>
+                </ng-container>
+
                 <ng-container matColumnDef="nachname">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.nachname' | translate }}
