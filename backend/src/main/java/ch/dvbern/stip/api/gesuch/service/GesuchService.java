@@ -363,8 +363,7 @@ public class GesuchService {
     @Transactional
     public void juristischAbklaeren(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        // TODO KSTIP-1419: Rename Jour Fix to Juristische Abklaerung
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.JOUR_FIX);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG);
     }
 
     @Transactional
