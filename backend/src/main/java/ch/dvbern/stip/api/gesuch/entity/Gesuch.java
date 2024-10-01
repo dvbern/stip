@@ -142,4 +142,9 @@ public class Gesuch extends AbstractMandantEntity {
             .stream()
             .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
     }
+
+    public Optional<GesuchTranche> getAenderungZuUeberpruefen(){
+        return getGesuchTranchen().stream().filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+            && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN).findFirst();
+    }
 }

@@ -31,14 +31,11 @@ public class GesuchMapperUtil {
      */
     public List<GesuchDto> mapWithAenderung(final Gesuch gesuch) {
         List<GesuchDto> gesuchDtos = new ArrayList<>();
-        final var aenderung = gesuch.getGesuchTranchen().stream()
-            .filter(GesuchUtils::isAenderung).findFirst().get();
+        final var aenderung = gesuch.getAenderungZuUeberpruefen();
 
         // find newest tranche (without aenderungen)
         final var newestTrancheWithoutAenderung = gesuch.getNewestGesuchTrancheWithoutAenderungen().orElseThrow();
 
-        // map aenderung tranche to dto
-        final var aenderungTrancheDto = gesuchTrancheMapper.toDto(aenderung);
         // map gesuch tranche to dto
         final var gesuchTrancheDto = gesuchTrancheMapper.toDto(newestTrancheWithoutAenderung);
 
@@ -47,13 +44,16 @@ public class GesuchMapperUtil {
         // set trancheToWorkWith to the newest tranche
         gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheDto);
 
-        // the second dto to be returned: Aenderung
-        var aenderungDto = copyGesuchDto(gesuchDto);
-        // set trancheToWorkWith to aenderung
-        aenderungDto.setGesuchTrancheToWorkWith(aenderungTrancheDto);
-
-        gesuchDtos.add(aenderungDto);
         gesuchDtos.add(gesuchDto);
+        if(aenderung.isPresent()){
+            // map aenderung tranche to dto
+            final var aenderungTrancheDto = gesuchTrancheMapper.toDto(aenderung.get());
+            // the second dto to be returned: Aenderung
+            var aenderungDto = copyGesuchDto(gesuchDto);
+            // set trancheToWorkWith to aenderung
+            aenderungDto.setGesuchTrancheToWorkWith(aenderungTrancheDto);
+            gesuchDtos.add(aenderungDto);
+        }
         return gesuchDtos;
     }
 
