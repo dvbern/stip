@@ -8,6 +8,7 @@ import { GlobalNotificationStore } from '@dv/shared/data-access/global-notificat
 import { SharedModelError } from '@dv/shared/model/error';
 import {
   HANDLE_NOT_FOUND,
+  HANDLE_UNAUTHORIZED,
   IGNORE_ERRORS,
   IGNORE_NOT_FOUND_ERRORS,
   NO_GLOBAL_ERRORS,
@@ -100,15 +101,15 @@ const handleUnknownHttpError = (
 ) => {
   return (error: SharedModelError) => {
     if (error.type === 'unknownHttpError') {
-      if (error.status === 401 && !req.context.get(IGNORE_ERRORS)) {
-        router.navigateByUrl('/').then(() => {
-          window.location.reload();
-        });
-        notificationStore.createNotification({
-          type: 'ERROR',
-          messageKey: 'shared.genericError.gesuch-unauthorized',
-          content: error,
-        });
+      if (error.status === 401) {
+        const unauthorizedHandler = req.context.get(HANDLE_UNAUTHORIZED);
+        if (unauthorizedHandler) {
+          unauthorizedHandler(error);
+        } else {
+          router.navigateByUrl('/').then(() => {
+            window.location.reload();
+          });
+        }
         return handledError(EMPTY);
       }
       // Check for 403 FORBIDDEN

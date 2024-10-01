@@ -18,15 +18,18 @@ import { NotificationType } from '@dv/shared/model/global-notification';
 const PANEL_MAP: Record<NotificationType, `mat-${StatusColor}`> = {
   SEVERE: 'mat-warn',
   ERROR: 'mat-warn',
+  ERROR_PERMANENT: 'mat-warn',
   INFO: 'mat-info',
   WARNING: 'mat-caution',
   SUCCESS: 'mat-success',
   SUCCESS_PERMANENT: 'mat-success',
 };
+
 const ALWAYS_REFRESH_TYPES: (NotificationType | undefined)[] = [
   'INFO',
   'SUCCESS',
 ];
+
 const NOTIFICATION_TIME = 5000;
 
 @Component({
@@ -83,7 +86,7 @@ export class GlobalNotificationsComponent {
     this.router.events
       .pipe(filter(byNavigationEnd), takeUntilDestroyed())
       .subscribe(() => {
-        this.store.clearPersistentNotifications();
+        this.store.clearNonPermanentNotifications();
       });
   }
 

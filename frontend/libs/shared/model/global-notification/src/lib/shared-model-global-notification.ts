@@ -13,6 +13,7 @@ export type CreateNotification = Omit<Notification, 'id'>;
 export type NotificationType =
   | 'SEVERE'
   | 'ERROR'
+  | 'ERROR_PERMANENT'
   | 'INFO'
   | 'WARNING'
   | 'SUCCESS'

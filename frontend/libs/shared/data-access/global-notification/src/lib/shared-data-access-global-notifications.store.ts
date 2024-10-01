@@ -16,8 +16,8 @@ type MessageOrKey =
 
 const CRITICAL_NOTIFICATIONS: NotificationType[] = ['ERROR', 'SEVERE'];
 const PERMANENT_NOTIFICATIONS: NotificationType[] = [
-  ...CRITICAL_NOTIFICATIONS,
   'SUCCESS_PERMANENT',
+  'ERROR_PERMANENT',
 ];
 
 export interface State {
@@ -132,9 +132,9 @@ export class GlobalNotificationStore extends signalStore(
   /**
    * Clear all persistent notifications.
    */
-  clearPersistentNotifications() {
-    const notifications = this.notifications().filter(
-      (n) => !PERMANENT_NOTIFICATIONS.includes(n.type),
+  clearNonPermanentNotifications() {
+    const notifications = this.notifications().filter((n) =>
+      PERMANENT_NOTIFICATIONS.includes(n.type),
     );
 
     return patchState(this, {
@@ -149,6 +149,7 @@ const PRIORITY: NotificationType[] = [
   'INFO',
   'SEVERE',
   'ERROR',
+  'ERROR_PERMANENT',
   'WARNING',
 ];
 /**
