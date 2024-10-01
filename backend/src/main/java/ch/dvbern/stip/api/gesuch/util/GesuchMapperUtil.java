@@ -1,16 +1,12 @@
 package ch.dvbern.stip.api.gesuch.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuch.service.GesuchTrancheMapper;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,11 +22,6 @@ public class GesuchMapperUtil {
         return mapWithTranche(gesuch, gesuch.getCurrentGesuchTranche());
     }
 
-    public boolean hasAenderung(final Gesuch gesuch) {
-        return gesuch.getGesuchTranchen().stream().filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-            && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN).count() > 0;
-    }
-
     /**
      * If a Gesuch contains a aenderung, two GesuchDtos will be returned.
      * One for the Gesuch
@@ -41,18 +32,15 @@ public class GesuchMapperUtil {
     public List<GesuchDto> mapWithAenderung(final Gesuch gesuch) {
         List<GesuchDto> gesuchDtos = new ArrayList<>();
         final var aenderung = gesuch.getGesuchTranchen().stream()
-            .filter(this::isAenderung).findFirst().get();
-        final var tranchen = gesuch.getGesuchTranchen().stream()
-            .filter(tranche -> !isAenderung(tranche)
-        ).toList() ;
+            .filter(GesuchUtils::isAenderung).findFirst().get();
 
         // find newest tranche (without aenderungen)
-        final var newestTranche = findNewestTranche(tranchen);
+        final var newestTrancheWithoutAenderung = gesuch.getNewestGesuchTrancheWithoutAenderungen().orElseThrow();
 
         // map aenderung tranche to dto
         final var aenderungTrancheDto = gesuchTrancheMapper.toDto(aenderung);
         // map gesuch tranche to dto
-        final var gesuchTrancheDto = gesuchTrancheMapper.toDto(newestTranche);
+        final var gesuchTrancheDto = gesuchTrancheMapper.toDto(newestTrancheWithoutAenderung);
 
         // the first dto to be returned: Gesuch
         var gesuchDto = mapWithNewestTranche(gesuch);
@@ -99,18 +87,6 @@ public class GesuchMapperUtil {
         dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
         dto.setChanges(changes.stream().map(gesuchTrancheMapper::toDto).toList());
         return dto;
-    }
-
-    private boolean isAenderung(final GesuchTranche tranche) {
-        return tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-            && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN;
-    }
-
-    private GesuchTranche findNewestTranche(final List<GesuchTranche> tranchen) {
-        return Collections.max(
-            tranchen,
-            Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis())
-        );
     }
 
     private GesuchDto copyGesuchDto(final GesuchDto gesuchDtoToCopy) {
