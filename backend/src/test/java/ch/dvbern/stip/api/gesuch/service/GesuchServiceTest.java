@@ -1139,7 +1139,7 @@ class GesuchServiceTest {
 
         // ohne aenderung
         final var gesuch = alleGesuche.get(0);
-        assertSame(gesuch.getGesuchTrancheToWorkWith().getTyp(), GesuchTrancheTyp.TRANCHE);
+        assertSame(GesuchTrancheTyp.TRANCHE,gesuch.getGesuchTrancheToWorkWith().getTyp());
 
         // mit anenderung
         final var gesuchMitAenderung1 = alleGesuche.get(1);
@@ -1260,7 +1260,6 @@ class GesuchServiceTest {
         gesuchWithoutAenderung.getNewestGesuchTranche().get().getGesuchFormular()
             .setPersonInAusbildung(new PersonInAusbildung());
 
-        //todo: setup gesuch with 1 tranche + 1 aenderung
         Gesuch gesuchWithAenderung = GesuchGenerator.initGesuch();
         gesuchWithAenderung.setGesuchStatus(status);
         gesuchWithAenderung.getGesuchTranchen().add(GesuchGenerator.initGesuchTranche());
@@ -1270,8 +1269,6 @@ class GesuchServiceTest {
             .setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuchWithAenderung.getNewestGesuchTranche().get().getGesuchFormular()
             .setPersonInAusbildung(new PersonInAusbildung());
-
-        //todo: add with aenderung, but aenderung is NOT newest...
 
         when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuchWithoutAenderung, gesuchWithAenderung));
     }
