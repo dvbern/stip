@@ -295,20 +295,27 @@ export const isStepValid = (
 export const getFormStepByDocumentType = (
   dokumentTyp: DokumentTyp,
 ): SharedModelGesuchFormStep => {
-  const step = (Object.keys(gesuchFormSteps) as GesuchFormSteps[]).find(
-    (key) => {
-      if (key === 'EINNAHMEN_KOSTEN') {
-        return dokumentTyp.startsWith('EK');
+  switch (dokumentTyp) {
+    case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
+      return gesuchFormSteps.DOKUMENTE;
+    }
+    default: {
+      const step = (Object.keys(gesuchFormSteps) as GesuchFormSteps[]).find(
+        (key) => {
+          if (key === 'EINNAHMEN_KOSTEN') {
+            return dokumentTyp.startsWith('EK');
+          }
+          return dokumentTyp.startsWith(key);
+        },
+      );
+      if (!step) {
+        console.error(`No step found for document type "${dokumentTyp}"`);
+        return gesuchFormSteps.DOKUMENTE;
       }
-      return dokumentTyp.startsWith(key);
-    },
-  );
-  if (!step) {
-    console.error(`No step found for document type "${dokumentTyp}"`);
-    return gesuchFormSteps.DOKUMENTE;
-  }
 
-  return gesuchFormSteps[step];
+      return gesuchFormSteps[step];
+    }
+  }
 };
 
 const toDocumentStepState = (
