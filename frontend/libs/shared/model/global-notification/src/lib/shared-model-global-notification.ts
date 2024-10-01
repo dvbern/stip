@@ -16,8 +16,7 @@ export type NotificationType =
   | 'ERROR_PERMANENT'
   | 'INFO'
   | 'WARNING'
-  | 'SUCCESS'
-  | 'SUCCESS_PERMANENT';
+  | 'SUCCESS';
 
 export type SharedModelGlobalNotification = {
   autohide: boolean;

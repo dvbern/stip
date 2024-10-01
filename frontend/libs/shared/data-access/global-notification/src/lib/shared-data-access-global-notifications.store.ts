@@ -15,10 +15,7 @@ type MessageOrKey =
   | Required<Pick<CreateNotification, 'messageKey'>>;
 
 const CRITICAL_NOTIFICATIONS: NotificationType[] = ['ERROR', 'SEVERE'];
-const PERMANENT_NOTIFICATIONS: NotificationType[] = [
-  'SUCCESS_PERMANENT',
-  'ERROR_PERMANENT',
-];
+const PERMANENT_NOTIFICATIONS: NotificationType[] = ['ERROR_PERMANENT'];
 
 export interface State {
   nextNotificationId: number;
@@ -61,16 +58,6 @@ export class GlobalNotificationStore extends signalStore(
   createSuccessNotification(notification: MessageOrKey) {
     return this.createNotification({
       type: 'SUCCESS',
-      ...notification,
-    });
-  }
-
-  /**
-   * Helper function to create a new permanent success notification.
-   */
-  createPermanentSuccessNotification(notification: MessageOrKey) {
-    return this.createNotification({
-      type: 'SUCCESS_PERMANENT',
       ...notification,
     });
   }
@@ -133,8 +120,10 @@ export class GlobalNotificationStore extends signalStore(
    * Clear all persistent notifications.
    */
   clearNonPermanentNotifications() {
-    const notifications = this.notifications().filter((n) =>
-      PERMANENT_NOTIFICATIONS.includes(n.type),
+    const notifications = this.notifications().filter(
+      (notification) =>
+        PERMANENT_NOTIFICATIONS.includes(notification.type) ||
+        notification.type === 'SUCCESS',
     );
 
     return patchState(this, {
@@ -145,7 +134,6 @@ export class GlobalNotificationStore extends signalStore(
 
 const PRIORITY: NotificationType[] = [
   'SUCCESS',
-  'SUCCESS_PERMANENT',
   'INFO',
   'SEVERE',
   'ERROR',

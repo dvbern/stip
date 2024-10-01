@@ -22,7 +22,6 @@ const PANEL_MAP: Record<NotificationType, `mat-${StatusColor}`> = {
   INFO: 'mat-info',
   WARNING: 'mat-caution',
   SUCCESS: 'mat-success',
-  SUCCESS_PERMANENT: 'mat-success',
 };
 
 const ALWAYS_REFRESH_TYPES: (NotificationType | undefined)[] = [
