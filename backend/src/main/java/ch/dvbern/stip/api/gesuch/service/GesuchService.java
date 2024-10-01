@@ -301,9 +301,9 @@ public class GesuchService {
     private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
         List<GesuchDto> gesuchDtos = new ArrayList<>();
         gesuche.forEach(gesuch -> {
-            if(gesuchMapperUtil.hasAenderung(gesuch)) {
+            if (gesuchMapperUtil.hasAenderung(gesuch)) {
                 gesuchDtos.addAll(gesuchMapperUtil.mapWithAenderung(gesuch));
-            }else{
+            } else{
                 gesuchDtos.add(gesuchMapperUtil.mapWithNewestTranche(gesuch));
             }
         });
