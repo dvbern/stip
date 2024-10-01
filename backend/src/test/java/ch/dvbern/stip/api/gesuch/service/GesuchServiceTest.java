@@ -75,7 +75,8 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -1138,19 +1139,25 @@ class GesuchServiceTest {
 
         // ohne aenderung
         final var gesuch = alleGesuche.get(0);
-        assertTrue(gesuch.getGesuchTrancheToWorkWith().getTyp() == GesuchTrancheTyp.TRANCHE);
+        assertSame(gesuch.getGesuchTrancheToWorkWith().getTyp(), GesuchTrancheTyp.TRANCHE);
 
         // mit anenderung
         final var gesuchMitAenderung1 = alleGesuche.get(1);
         final var gesuchMitAenderung2 = alleGesuche.get(2);
 
         // one of both entries (gesuch) has to have the aenderung as newest gesuch tranche
-        assertTrue(gesuchMitAenderung1.getGesuchTrancheToWorkWith().getTyp() == GesuchTrancheTyp.AENDERUNG
-        || gesuchMitAenderung2.getGesuchTrancheToWorkWith().getTyp() == GesuchTrancheTyp.AENDERUNG);
+        assertTrue(
+            gesuchMitAenderung1.getGesuchTrancheToWorkWith().getTyp() == GesuchTrancheTyp.AENDERUNG
+                || gesuchMitAenderung2.getGesuchTrancheToWorkWith().getTyp() == GesuchTrancheTyp.AENDERUNG,
+            "Keine der Gesuche hatte eine Aenderung attached"
+        );
 
         // the other entry (gesuch) has to be the "normal" tranche
-        assertTrue(gesuchMitAenderung1.getGesuchTrancheToWorkWith().getTyp() != GesuchTrancheTyp.AENDERUNG
-            || gesuchMitAenderung2.getGesuchTrancheToWorkWith().getTyp() != GesuchTrancheTyp.AENDERUNG);
+        assertTrue(
+            gesuchMitAenderung1.getGesuchTrancheToWorkWith().getTyp() != GesuchTrancheTyp.AENDERUNG
+            || gesuchMitAenderung2.getGesuchTrancheToWorkWith().getTyp() != GesuchTrancheTyp.AENDERUNG,
+            "Beide Gesuche hatten eine Aenderung attached"
+        );
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
