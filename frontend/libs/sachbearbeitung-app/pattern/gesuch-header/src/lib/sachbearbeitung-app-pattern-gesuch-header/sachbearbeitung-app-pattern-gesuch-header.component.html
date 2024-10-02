@@ -62,22 +62,21 @@
       disabled
       [matMenuTriggerFor]="aenderungenMenu"
     >
-      <i class="material-symbols-rounded text-white me-2">info</i>
+      <i class="material-symbols-rounded text-white me-2">update</i>
       <span>{{ 'sachbearbeitung-app.header.aenderungen' | translate }}</span>
     </button>
+    <mat-menu #aenderungenMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'"> </mat-menu>
 
     <!-- Infos-->
     <a
       [routerLink]="['/', 'infos', currentGesuchSig()?.id]"
-      routerLinkActive="active"
       class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-infos"
-      [class.disabled]="!currentGesuchSig()"
+      [class.active]="isInfosRouteSig()"
     >
-      <i class="material-symbols-rounded text-white me-2">equal</i>
+      <i class="material-symbols-rounded text-white me-2">info</i>
       <span>{{ 'sachbearbeitung-app.header.infos' | translate }}</span>
     </a>
-    <mat-menu #aenderungenMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'"> </mat-menu>
 
     <!-- Separator -->
     <div class="my-1 text-body-tertiary vr"></div>

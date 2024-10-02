@@ -48,16 +48,24 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
   isGesuchRouteSig = computed(() => {
-    const gesuch = this.currentGesuchSig();
-    if (!gesuch) {
-      return false;
-    }
     return this.router.isActive('/gesuch', {
       paths: 'subset',
       fragment: 'ignored',
       matrixParams: 'ignored',
       queryParams: 'ignored',
     });
+  });
+
+  isInfosRouteSig = computed(() => {
+    console.log('router', this.router, this.router.url);
+    const isActive = this.router.isActive('infos', {
+      paths: 'subset',
+      fragment: 'ignored',
+      matrixParams: 'ignored',
+      queryParams: 'ignored',
+    });
+    console.log('isActive', isActive);
+    return isActive;
   });
 
   constructor() {
