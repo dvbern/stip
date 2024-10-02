@@ -215,6 +215,7 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     const sort = this.sortSig();
     const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
       id: gesuch.id,
+      trancheId: gesuch.gesuchTrancheToWorkWith?.id,
       fall: gesuch.fall.fallNummer,
       typ: gesuch.gesuchTrancheToWorkWith?.typ,
       svNummer:

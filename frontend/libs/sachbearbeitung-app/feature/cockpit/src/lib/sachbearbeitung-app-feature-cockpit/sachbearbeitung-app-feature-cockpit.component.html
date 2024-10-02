@@ -45,7 +45,7 @@
           <form class="row overflow-auto position-relative" [formGroup]="filterForm">
             <div [class.opacity-50]="cockpitViewSig().gesucheLoading">
               <table
-                class="dv-crud-table"
+                class="dv-crud-table small-spacing"
                 [dvSharedUiFocusableList]="items"
                 [dataSource]="gesucheDataSourceSig()"
                 data-testid="cockpit-table"
@@ -359,7 +359,11 @@
                   mat-row
                   tabindex="-1"
                   *dvMatRowDef="let gesuch; dataSource: gesucheDataSourceSig(); columns: displayedColumns"
-                  [routerLink]="['/gesuch/person', gesuch.id]"
+                  [routerLink]="
+                    gesuch.typ === 'AENDERUNG'
+                      ? ['/gesuch/person', gesuch.id, 'aenderung', gesuch.trancheId]
+                      : ['/gesuch/person', gesuch.id]
+                  "
                   class="highlightable"
                 ></tr>
               </table>
