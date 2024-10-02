@@ -32,6 +32,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final TenantService tenantService;
     private final GesuchHistoryService gesuchHistoryService;
 
+    // todo KSTIP-1532: which roles allowed?
     @Override
     public Response changeGesuchStatusToInBearbeitung(UUID gesuchId) {
         GesuchDto gesuchDto = gesuchService.gesuchStatusToInBearbeitung(gesuchId);
