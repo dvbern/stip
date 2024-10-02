@@ -44,6 +44,8 @@ quarkus:
   antivirus:
     clamav:
       enabled: true
+      devservice:
+        image-name: clamav/clamav-debian
       health:
         enabled: true
   execution-model-annotations:
