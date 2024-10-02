@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -1130,7 +1131,7 @@ class GesuchServiceTest {
     @Test
     @Description("It should be possible to change Gesuchstatus from JURISTISCHE_ABKLAERUNG to IN_BEARBEITUNG_SB")
     void changeGesuchstatusFromJuristischeAbklaerungToInBearbeitungSBTest(){
-        Gesuch gesuch = setupValidGesuch();
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuch();
         when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
@@ -1225,42 +1226,6 @@ class GesuchServiceTest {
         gesuchWithPia.getNewestGesuchTranche().get().getGesuchFormular()
             .setPersonInAusbildung(new PersonInAusbildung());
         when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuchWithoutPia, gesuchWithPia));
-    }
-
-    private Gesuch setupValidGesuch(){
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        gesuch.setId(UUID.randomUUID());
-        gesuch.setGesuchStatus(Gesuchstatus.JOUR_FIX);
-        gesuch.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
-        gesuch.getNewestGesuchTranche().get().getGesuchFormular().setId(UUID.randomUUID());
-        gesuch.setGesuchNummer(UUID.randomUUID().toString());
-        gesuch.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(setupValidPersonInAusbildung());
-        gesuch.getNewestGesuchTranche().get().setTyp(GesuchTrancheTyp.TRANCHE);
-        return gesuch;
-    }
-
-    private PersonInAusbildung setupValidPersonInAusbildung() {
-        PersonInAusbildung personInAusbildung = new PersonInAusbildung();
-        personInAusbildung.setSozialversicherungsnummer("756.1119.8398.42");
-        personInAusbildung.setVorname("A");
-        personInAusbildung.setNachname("B");
-        Adresse adresse = new Adresse();
-        adresse.setStrasse("a");
-        adresse.setHausnummer("1");
-        adresse.setId(UUID.randomUUID());
-        adresse.setPlz("3333");
-        adresse.setLand(Land.CH);
-        adresse.setOrt("b");
-        personInAusbildung.setHeimatort("B");
-        personInAusbildung.setAdresse(adresse);
-        personInAusbildung.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
-        personInAusbildung.setTelefonnummer(UUID.randomUUID().toString());
-        personInAusbildung.setGeburtsdatum(LocalDate.now());
-        personInAusbildung.setKorrespondenzSprache(Sprache.DEUTSCH);
-        personInAusbildung.setAnrede(Anrede.FRAU);
-        personInAusbildung.setEmail("test@test.com");
-
-        return personInAusbildung;
     }
 
     private GesuchTranche updateWerZahltAlimente(
