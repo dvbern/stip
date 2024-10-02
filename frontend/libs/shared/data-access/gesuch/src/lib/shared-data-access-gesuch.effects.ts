@@ -514,6 +514,69 @@ export const setGesuchToBearbeitung = createEffect(
   { functional: true },
 );
 
+export const setGesuchBearbeitungAbschliessen = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen),
+      concatLatestFrom(() => store.select(selectRouteId)),
+      concatMap(([, id]) => {
+        if (!id) {
+          throw new Error(
+            'Make sure that the route is correct and contains the gesuch :id',
+          );
+        }
+        return gesuchService.bearbeitungAbschliessen$({ gesuchId: id }).pipe(
+          map(() => SharedDataAccessGesuchEvents.loadGesuch()),
+          catchError((error) => [
+            SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+              error: sharedUtilFnErrorTransformer(error),
+            }),
+          ]),
+        );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+export const setGesuchZurueckweisen = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.setGesuchZurueckweisen),
+      concatLatestFrom(() => store.select(selectRouteId)),
+      concatMap(([{ kommentar }, id]) => {
+        if (!id) {
+          throw new Error(
+            'Make sure that the route is correct and contains the gesuch :id',
+          );
+        }
+        return gesuchService
+          .gesuchZurueckweisen$({
+            gesuchId: id,
+            kommentar: { text: kommentar },
+          })
+          .pipe(
+            map(() => SharedDataAccessGesuchEvents.loadGesuch()),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
+      }),
+    );
+  },
+  { functional: true },
+);
+
 // add effects here
 export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
@@ -528,6 +591,8 @@ export const sharedDataAccessGesuchEffects = {
   redirectToGesuchFormNextStep,
   refreshGesuchFormStep,
   setGesuchToBearbeitung,
+  setGesuchBearbeitungAbschliessen,
+  setGesuchZurueckweisen,
 };
 
 const viewOnlyFields = ['steuerdatenTabs'] as const satisfies [
