@@ -1252,6 +1252,7 @@ class GesuchServiceTest {
         Gesuch gesuchWithoutAenderung = GesuchGenerator.initGesuch();
         gesuchWithoutAenderung.setGesuchStatus(status);
         gesuchWithoutAenderung.getGesuchTranchen().add(GesuchGenerator.initGesuchTranche());
+        gesuchWithoutAenderung.getGesuchTranchen().forEach(tranche -> tranche.setTyp(GesuchTrancheTyp.TRANCHE));
         gesuchWithoutAenderung.getGesuchTranchen().get(0).setGueltigkeit(new DateRange(gesuchWithoutAenderung.getGesuchsperiode().getGesuchsperiodeStart().plusDays(1),gesuchWithoutAenderung.getGesuchsperiode().getGesuchsperiodeStopp()));
         gesuchWithoutAenderung.getNewestGesuchTranche().get().
             setGesuchFormular(new GesuchFormular())
@@ -1263,10 +1264,16 @@ class GesuchServiceTest {
         Gesuch gesuchWithAenderung = GesuchGenerator.initGesuch();
         gesuchWithAenderung.setGesuchStatus(status);
         gesuchWithAenderung.getGesuchTranchen().add(GesuchGenerator.initGesuchTranche());
-        gesuchWithAenderung.getGesuchTranchen().get(0).setGueltigkeit(new DateRange(gesuchWithAenderung.getGesuchsperiode().getGesuchsperiodeStart().plusDays(1),gesuchWithAenderung.getGesuchsperiode().getGesuchsperiodeStopp()));
-        gesuchWithAenderung.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular())
+        gesuchWithAenderung.getGesuchTranchen().forEach(tranche -> tranche.setTyp(GesuchTrancheTyp.TRANCHE));
+        gesuchWithAenderung.getGesuchTranchen().get(0)
+            .setGueltigkeit(new DateRange(gesuchWithAenderung
+            .getGesuchsperiode()
+            .getGesuchsperiodeStart()
+            .plusDays(1),
+            gesuchWithAenderung.getGesuchsperiode().getGesuchsperiodeStopp()))
             .setStatus(GesuchTrancheStatus.UEBERPRUEFEN)
             .setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuchWithAenderung.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
         gesuchWithAenderung.getNewestGesuchTranche().get().getGesuchFormular()
             .setPersonInAusbildung(new PersonInAusbildung());
 
