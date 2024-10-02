@@ -69,10 +69,7 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
-  prepareWohnsitzValues,
-  updateWohnsitzControlsState,
-  wohnsitzAnteileNumber,
-  wohnsitzAnteileString,
+  prepareWohnsitzForm,
 } from '@dv/shared/ui/wohnsitz-splitter';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import {
@@ -143,10 +140,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly Zivilstand = Zivilstand;
   readonly spracheValues = Object.values(Sprache);
   readonly zivilstandValues = Object.values(Zivilstand);
-  readonly wohnsitzValuesSig = computed(() => {
-    const { gesuchFormular } = this.viewSig();
-    return prepareWohnsitzValues(gesuchFormular?.familiensituation);
-  });
   readonly niederlassungsStatusValues = Object.values(Niederlassungsstatus);
 
   languageSig = this.store.selectSignal(selectLanguage);
@@ -283,13 +276,12 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     }),
   });
 
-  showWohnsitzSplitterSig = computed(() => {
-    return (
-      this.wohnsitzChangedSig() === 'MUTTER_VATER' &&
-      this.wohnsitzValuesSig().includes('MUTTER_VATER')
-    );
+  wohnsitzHelper = prepareWohnsitzForm({
+    projector: (formular) => formular?.personInAusbildung,
+    form: this.form.controls,
+    viewSig: this.viewSig,
+    refreshSig: this.gotReenabledSig,
   });
-
   showEinreiseDatumWarningSig = signal(false);
 
   private wohnsitzChangedSig = toSignal(
@@ -342,26 +334,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       );
     });
 
-    // visibility and disabled state for wohnsitzAnteilMutter and wohnsitzAnteilVater
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const { elternteilUnbekanntVerstorben } =
-          this.viewSig().gesuchFormular?.familiensituation ?? {};
-        const wohnsitzNotMutterVater =
-          this.wohnsitzChangedSig() !== Wohnsitz.MUTTER_VATER;
-
-        updateWohnsitzControlsState(
-          this.form.controls,
-          wohnsitzNotMutterVater ||
-            this.viewSig().readonly ||
-            !this.showWohnsitzSplitterSig() ||
-            !!elternteilUnbekanntVerstorben,
-        );
-      },
-      { allowSignalWrites: true },
-    );
-
     // patch form value
     effect(
       () => {
@@ -389,13 +361,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
               this.languageSig(),
             ),
           };
-          const wohnsitzAnteile = wohnsitzAnteileString(
-            person,
-            gesuchFormular.familiensituation,
-          );
           this.form.patchValue({
             ...personForForm,
-            ...wohnsitzAnteile,
+            ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
           });
           SharedUiFormAddressComponent.patchForm(
             this.form.controls.adresse,
@@ -657,7 +625,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             this.languageSig(),
             new Date(),
           ),
-          ...wohnsitzAnteileNumber(values),
+          ...this.wohnsitzHelper.wohnsitzAnteileFromNumber(),
         },
       },
     };

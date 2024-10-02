@@ -6,7 +6,6 @@ import {
   EventEmitter,
   Input,
   Output,
-  computed,
   effect,
   inject,
   input,
@@ -55,10 +54,7 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
-  prepareWohnsitzValues,
-  updateWohnsitzControlsState,
-  wohnsitzAnteileNumber,
-  wohnsitzAnteileString,
+  prepareWohnsitzForm,
 } from '@dv/shared/ui/wohnsitz-splitter';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
@@ -120,10 +116,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
-  protected readonly wohnsitzValuesSig = computed(() => {
-    const { gesuchFormular } = this.viewSig();
-    return prepareWohnsitzValues(gesuchFormular?.familiensituation);
-  });
+
   protected readonly ausbildungssituationValues =
     Object.values(Ausbildungssituation);
   languageSig = this.store.selectSignal(selectLanguage);
@@ -133,6 +126,9 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   );
   gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject<unknown>();
+
+  private gotReenabledSig = toSignal(this.gotReenabled$);
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   form = this.formBuilder.group({
     nachname: ['', [Validators.required]],
@@ -161,22 +157,15 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
     ),
   });
 
-  wohnsitzChangedSig = toSignal(this.form.controls.wohnsitz.valueChanges);
-
-  showWohnsitzSplitterSig = computed(() => {
-    return (
-      this.wohnsitzChangedSig() === 'MUTTER_VATER' &&
-      this.wohnsitzValuesSig().includes('MUTTER_VATER')
-    );
+  wohnsitzHelper = prepareWohnsitzForm({
+    projector: (formular) => formular?.personInAusbildung,
+    form: this.form.controls,
+    viewSig: this.viewSig,
+    refreshSig: this.gotReenabledSig,
   });
-
-  private gotReenabledSig = toSignal(this.gotReenabled$);
-  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
-
   ausbildungssituationSig = toSignal(
     this.form.controls.ausbildungssituation.valueChanges,
   );
-
   ausbildungssituationDocumentSig = this.createUploadOptionsSig(() => {
     const ausbildungssituation = this.ausbildungssituationSig();
 
@@ -193,36 +182,10 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
     );
     this.formUtils.registerFormForUnsavedCheck(this);
 
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const { elternteilUnbekanntVerstorben } =
-          this.viewSig().gesuchFormular?.familiensituation ?? {};
-        const wohnsitzNotMutterVater =
-          this.wohnsitzChangedSig() !== Wohnsitz.MUTTER_VATER;
-
-        updateWohnsitzControlsState(
-          this.form.controls,
-          wohnsitzNotMutterVater ||
-            this.viewSig().readonly ||
-            !this.showWohnsitzSplitterSig() ||
-            !!elternteilUnbekanntVerstorben,
-        );
-      },
-      { allowSignalWrites: true },
-    );
-
-    effect(() => {
-      this.formUtils.invalidateControlIfValidationFails(
-        this.form,
-        ['wohnsitz'],
-        this.validationViewSig().invalidFormularProps.specialValidationErrors,
-      );
-    });
-
     effect(() => {
       const geschwister = this.geschwisterSig();
-      const { gesuchFormular } = this.viewSig();
+      const invalidFormularProps =
+        this.validationViewSig().invalidFormularProps;
 
       this.form.patchValue({
         ...geschwister,
@@ -230,11 +193,13 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
           geschwister.geburtsdatum,
           this.languageSig(),
         ),
-        ...wohnsitzAnteileString(
-          geschwister,
-          gesuchFormular?.familiensituation,
-        ),
+        ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
       });
+      this.formUtils.invalidateControlIfValidationFails(
+        this.form,
+        ['wohnsitz'],
+        invalidFormularProps.specialValidationErrors,
+      );
     });
   }
 
@@ -253,7 +218,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
         id: this.geschwisterSig().id,
         geburtsdatum,
         wohnsitz: this.form.getRawValue().wohnsitz as Wohnsitz,
-        ...wohnsitzAnteileNumber(this.form.getRawValue()),
+        ...this.wohnsitzHelper.wohnsitzAnteileFromNumber(),
       });
       this.form.markAsPristine();
     }

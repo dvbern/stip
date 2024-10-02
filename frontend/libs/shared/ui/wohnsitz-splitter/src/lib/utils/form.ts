@@ -1,15 +1,12 @@
+import { Signal, computed, effect } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   NonNullableFormBuilder,
   Validators,
 } from '@angular/forms';
 
-import {
-  ElternTyp,
-  Familiensituation,
-  FamiliensituationUpdate,
-  Wohnsitz,
-} from '@dv/shared/model/gesuch';
+import { ElternTyp, GesuchFormular, Wohnsitz } from '@dv/shared/model/gesuch';
 import {
   isVerstorbenOrUnbekannt,
   numberToPercentString,
@@ -22,9 +19,136 @@ type WohnsitzAnteile<T> = {
   wohnsitzAnteilMutter: T;
 };
 
-export const addWohnsitzControls = (fb: NonNullableFormBuilder) => {
+type WohnsitzValuesGetter = (
+  gesuchFormular?: GesuchFormular | null,
+) => Partial<WohnsitzAnteile<number>> | undefined;
+
+export const prepareWohnsitzForm = (payload: {
+  projector: WohnsitzValuesGetter;
+  viewSig: Signal<{ gesuchFormular: GesuchFormular | null; readonly: boolean }>;
+  form: WohnsitzAnteile<FormControl<string | undefined>> & {
+    wohnsitz: FormControl<Wohnsitz>;
+  };
+  refreshSig: Signal<unknown>;
+}) => {
+  const { projector, viewSig, form, refreshSig } = payload;
+
+  const wohnsitzChangedSig = toSignal(form.wohnsitz.valueChanges);
+  const wohnsitzValuesSig = computed(() => {
+    const familiensituation = viewSig().gesuchFormular?.familiensituation;
+    let availableWohnsitz = Object.values(Wohnsitz);
+
+    if (!familiensituation) {
+      return availableWohnsitz;
+    }
+
+    if (familiensituation.elternVerheiratetZusammen) {
+      availableWohnsitz = availableWohnsitz.filter((v) => v !== 'MUTTER_VATER');
+    } else {
+      availableWohnsitz = availableWohnsitz.filter((v) => v !== 'FAMILIE');
+    }
+
+    if (
+      isVerstorbenOrUnbekannt(familiensituation.mutterUnbekanntVerstorben) &&
+      isVerstorbenOrUnbekannt(familiensituation.vaterUnbekanntVerstorben)
+    ) {
+      availableWohnsitz = availableWohnsitz.filter((v) => v !== 'MUTTER_VATER');
+    }
+
+    return availableWohnsitz;
+  });
+
+  const wohnsitzAnteileFromNumber = () => {
+    return {
+      wohnsitzAnteilMutter: percentStringToNumber(
+        form.wohnsitzAnteilMutter.getRawValue(),
+      ),
+      wohnsitzAnteilVater: percentStringToNumber(
+        form.wohnsitzAnteilVater.getRawValue(),
+      ),
+    };
+  };
+
+  const wohnsitzAnteileAsString = () => {
+    const formular = viewSig().gesuchFormular;
+    const familiensituation = formular?.familiensituation;
+    const mutterMissing = isVerstorbenOrUnbekannt(
+      familiensituation?.mutterUnbekanntVerstorben,
+    );
+    const vaterMissing = isVerstorbenOrUnbekannt(
+      familiensituation?.vaterUnbekanntVerstorben,
+    );
+    const getAnteil = (elternTyp: ElternTyp, missing: boolean) =>
+      familiensituation?.elternteilUnbekanntVerstorben
+        ? missing
+          ? // If the current eltenteil is unknown or dead, we set the Anteil to 0%.
+            '0%'
+          : // Otherwise we set the anteil to 100% as the other parent is unknown or dead.
+            '100%'
+        : // If no elternteil is unknown or dead, we set the anteil to the value.
+          numberToPercentString(
+            projector(formular)?.[`wohnsitzAnteil${capitalized(elternTyp)}`],
+          );
+    return mutterMissing && vaterMissing
+      ? {
+          wohnsitzAnteilMutter: undefined,
+          wohnsitzAnteilVater: undefined,
+        }
+      : {
+          wohnsitzAnteilMutter: getAnteil('MUTTER', mutterMissing),
+          wohnsitzAnteilVater: getAnteil('VATER', vaterMissing),
+        };
+  };
+
+  const showWohnsitzSplitterSig = computed(() => {
+    return (
+      wohnsitzChangedSig() === 'MUTTER_VATER' &&
+      wohnsitzValuesSig().includes('MUTTER_VATER')
+    );
+  });
+
+  effect(
+    () => {
+      refreshSig();
+      const { gesuchFormular } = viewSig();
+      const { elternteilUnbekanntVerstorben } =
+        viewSig().gesuchFormular?.familiensituation ?? {};
+      const wohnsitzNotMutterVater =
+        wohnsitzChangedSig() !== Wohnsitz.MUTTER_VATER;
+
+      updateWohnsitzControlsState(
+        form,
+        wohnsitzNotMutterVater ||
+          viewSig().readonly ||
+          !showWohnsitzSplitterSig() ||
+          !!elternteilUnbekanntVerstorben,
+      );
+
+      if (wohnsitzNotMutterVater) {
+        form.wohnsitzAnteilMutter.reset();
+        form.wohnsitzAnteilVater.reset();
+      } else if (gesuchFormular) {
+        const anteile = wohnsitzAnteileAsString();
+        form.wohnsitzAnteilMutter.patchValue(anteile.wohnsitzAnteilMutter);
+        form.wohnsitzAnteilVater.patchValue(anteile.wohnsitzAnteilVater);
+      }
+    },
+    { allowSignalWrites: true },
+  );
+
   return {
-    wohnsitz: fb.control<Wohnsitz>('' as Wohnsitz, [Validators.required]),
+    wohnsitzAnteileFromNumber,
+    wohnsitzAnteileAsString,
+    wohnsitzValuesSig,
+    showWohnsitzSplitterSig,
+  };
+};
+
+export const addWohnsitzControls = (formBuilder: NonNullableFormBuilder) => {
+  return {
+    wohnsitz: formBuilder.control<Wohnsitz>('' as Wohnsitz, [
+      Validators.required,
+    ]),
     wohnsitzAnteilMutter: [
       <string | undefined>undefined,
       [Validators.required],
@@ -32,72 +156,6 @@ export const addWohnsitzControls = (fb: NonNullableFormBuilder) => {
     wohnsitzAnteilVater: [<string | undefined>undefined, [Validators.required]],
   };
 };
-
-export function wohnsitzAnteileNumber(
-  anteile: Partial<WohnsitzAnteile<string>>,
-) {
-  return {
-    wohnsitzAnteilMutter: percentStringToNumber(anteile.wohnsitzAnteilMutter),
-    wohnsitzAnteilVater: percentStringToNumber(anteile.wohnsitzAnteilVater),
-  };
-}
-
-export function prepareWohnsitzValues(
-  familiensituation?: FamiliensituationUpdate,
-) {
-  let availableWohnsitz = Object.values(Wohnsitz);
-
-  if (!familiensituation) {
-    return availableWohnsitz;
-  }
-
-  if (familiensituation.elternVerheiratetZusammen) {
-    availableWohnsitz = availableWohnsitz.filter((v) => v !== 'MUTTER_VATER');
-  } else {
-    availableWohnsitz = availableWohnsitz.filter((v) => v !== 'FAMILIE');
-  }
-
-  if (
-    isVerstorbenOrUnbekannt(familiensituation.mutterUnbekanntVerstorben) &&
-    isVerstorbenOrUnbekannt(familiensituation.vaterUnbekanntVerstorben)
-  ) {
-    availableWohnsitz = availableWohnsitz.filter((v) => v !== 'MUTTER_VATER');
-  }
-
-  return availableWohnsitz;
-}
-
-export function wohnsitzAnteileString(
-  anteile: Partial<WohnsitzAnteile<number>>,
-  familiensituation: Familiensituation | undefined,
-): WohnsitzAnteile<string | undefined> {
-  const mutterMissing = isVerstorbenOrUnbekannt(
-    familiensituation?.mutterUnbekanntVerstorben,
-  );
-  const vaterMissing = isVerstorbenOrUnbekannt(
-    familiensituation?.vaterUnbekanntVerstorben,
-  );
-  const getAnteil = (elternTyp: ElternTyp, missing: boolean) =>
-    familiensituation?.elternteilUnbekanntVerstorben
-      ? missing
-        ? // If the current eltenteil is unknown or dead, we set the Anteil to 0%.
-          '0%'
-        : // Otherwise we set the anteil to 100% as the other parent is unknown or dead.
-          '100%'
-      : // If no elternteil is unknown or dead, we set the anteil to the value.
-        numberToPercentString(
-          anteile[`wohnsitzAnteil${capitalized(elternTyp)}`],
-        );
-  return mutterMissing && vaterMissing
-    ? {
-        wohnsitzAnteilMutter: undefined,
-        wohnsitzAnteilVater: undefined,
-      }
-    : {
-        wohnsitzAnteilMutter: getAnteil('MUTTER', mutterMissing),
-        wohnsitzAnteilVater: getAnteil('VATER', vaterMissing),
-      };
-}
 
 export function updateWohnsitzControlsState(
   form: WohnsitzAnteile<FormControl>,
