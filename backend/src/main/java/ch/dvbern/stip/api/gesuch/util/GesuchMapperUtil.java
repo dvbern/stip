@@ -34,26 +34,10 @@ public class GesuchMapperUtil {
         final var aenderung = gesuch.getAenderungZuUeberpruefen();
 
         // find newest tranche (without aenderungen)
-        final var newestTrancheWithoutAenderung = gesuch.getNewestGesuchTrancheWithoutAenderungen().orElseThrow();
-
-        // map gesuch tranche to dto
-        final var gesuchTrancheDto = gesuchTrancheMapper.toDto(newestTrancheWithoutAenderung);
-
         // the first dto to be returned: Gesuch
-        var gesuchDto = mapWithNewestTranche(gesuch);
-        // set trancheToWorkWith to the newest tranche
-        gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheDto);
-
-        gesuchDtos.add(gesuchDto);
-        if(aenderung.isPresent()){
-            // map aenderung tranche to dto
-            final var aenderungTrancheDto = gesuchTrancheMapper.toDto(aenderung.get());
-            // the second dto to be returned: Aenderung
-            var aenderungDto = copyGesuchDto(gesuchDto);
-            // set trancheToWorkWith to aenderung
-            aenderungDto.setGesuchTrancheToWorkWith(aenderungTrancheDto);
-            gesuchDtos.add(aenderungDto);
-        }
+        gesuch.getNewestGesuchTrancheWithoutAenderungen().ifPresent(tranche -> gesuchDtos.add(mapWithTranche(gesuch,tranche)));
+        // the second dto to be returned: Aenderung
+        aenderung.ifPresent(tranche -> gesuchDtos.add(mapWithTranche(gesuch, tranche)));
         return gesuchDtos;
     }
 
@@ -87,17 +71,5 @@ public class GesuchMapperUtil {
         dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
         dto.setChanges(changes.stream().map(gesuchTrancheMapper::toDto).toList());
         return dto;
-    }
-
-    private GesuchDto copyGesuchDto(final GesuchDto gesuchDtoToCopy) {
-        var copiedGesuchDto = new GesuchDto();
-        copiedGesuchDto.setAenderungsdatum(gesuchDtoToCopy.getAenderungsdatum());
-        copiedGesuchDto.setFall(gesuchDtoToCopy.getFall());
-        copiedGesuchDto.setBearbeiter(gesuchDtoToCopy.getBearbeiter());
-        copiedGesuchDto.setGesuchNummer(gesuchDtoToCopy.getGesuchNummer());
-        copiedGesuchDto.setGesuchStatus(gesuchDtoToCopy.getGesuchStatus());
-        copiedGesuchDto.setGesuchsperiode(gesuchDtoToCopy.getGesuchsperiode());
-        copiedGesuchDto.setId(gesuchDtoToCopy.getId());
-        return copiedGesuchDto;
     }
 }

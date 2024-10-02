@@ -45,7 +45,6 @@ import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
-import ch.dvbern.stip.api.gesuch.util.GesuchUtils;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -302,7 +301,7 @@ public class GesuchService {
     private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
         List<GesuchDto> gesuchDtos = new ArrayList<>();
         gesuche.forEach(gesuch -> {
-            if (GesuchUtils.hasAenderung(gesuch)) {
+            if (gesuch.getAenderungZuUeberpruefen().isPresent()) {
                 gesuchDtos.addAll(gesuchMapperUtil.mapWithAenderung(gesuch));
             } else{
                 gesuchDtos.add(gesuchMapperUtil.mapWithNewestTranche(gesuch));
