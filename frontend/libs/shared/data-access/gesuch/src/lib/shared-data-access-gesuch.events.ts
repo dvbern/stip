@@ -46,5 +46,7 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     gesuchsLoadedSuccess: props<{ gesuchs: SharedModelGesuch[] }>(),
     gesuchsLoadedFailure: props<{ error: SharedModelError }>(),
     setGesuchToBearbeitung: emptyProps(),
+    setGesuchBearbeitungAbschliessen: emptyProps(),
+    setGesuchZurueckweisen: props<{ kommentar: string }>(),
   },
 });

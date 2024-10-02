@@ -9,9 +9,9 @@
   </button>
 
   <h1 class="title h5 mb-4 d-flex">
-    {{ 'shared.dokumente.reject.title' | translate }}
+    {{ dialogData.titleKey | translate }}
   </h1>
-  <p class="content mb-0" [innerHTML]="'shared.dokumente.reject.message' | translate"></p>
+  <p class="content mb-0" [innerHTML]="dialogData.messageKey | translate"></p>
 
   <form [formGroup]="form" class="mt-4" novalidate>
     <mat-form-field dvSharedUiFormField class="col-12">
@@ -19,7 +19,7 @@
         rows="4"
         matInput
         formControlName="kommentar"
-        [placeholder]="'shared.dokumente.reject.placeholder' | translate"
+        [placeholder]="dialogData.placeholderKey | translate"
       ></textarea>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -30,8 +30,8 @@
       <button type="button" class="btn btn-secondary" (click)="cancel()">
         {{ 'shared.cancel' | translate }}
       </button>
-      <button type="submit" [disabled]="form.invalid" class="btn btn-primary ms-2" (click)="rejectDocument()">
-        {{ 'shared.dokumente.reject.action' | translate }}
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary ms-2" (click)="confirm()">
+        {{ dialogData.confirmKey | translate }}
       </button>
     </div>
   </form>

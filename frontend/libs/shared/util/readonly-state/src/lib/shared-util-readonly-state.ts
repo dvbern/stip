@@ -32,7 +32,7 @@ export const readWriteStatusByAppType = {
   ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: R__, [sb]: R__ },
   FEHLENDE_DOKUMENTE /**               */: { [gs]: __W, [sb]: R__ },
   GESUCH_ABGELEHNT /**                 */: { [gs]: R__, [sb]: R__ },
-  JOUR_FIX /**                         */: { [gs]: R__, [sb]: R__ },
+  JURISTISCHE_ABKLAERUNG /**           */: { [gs]: R__, [sb]: R__ },
   KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: R__, [sb]: R__ },
   NICHT_ANSPRUCHSBERECHTIGT /**        */: { [gs]: R__, [sb]: R__ },
   NICHT_BEITRAGSBERECHTIGT /**         */: { [gs]: R__, [sb]: R__ },

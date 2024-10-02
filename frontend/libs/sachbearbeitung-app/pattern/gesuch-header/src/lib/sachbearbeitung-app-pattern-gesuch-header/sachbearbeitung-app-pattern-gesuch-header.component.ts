@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   computed,
   effect,
   inject,
   input,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -21,6 +23,22 @@ import {
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
+import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
+
+type StatusUebergang = 'BEARBEITUNG_ABSCHIESSEN' | 'ZURUECKWEISEN';
+
+const statusUebergaenge = {
+  BEARBEITUNG_ABSCHIESSEN: {
+    icon: 'check',
+    titleKey: 'BEARBEITUNG_ABSCHIESSEN',
+    typ: 'BEARBEITUNG_ABSCHIESSEN' as const,
+  },
+  ZURUECKWEISEN: {
+    icon: 'undo',
+    titleKey: 'ZURUECKWEISEN',
+    typ: 'ZURUECKWEISEN' as const,
+  },
+} satisfies Record<StatusUebergang, unknown>;
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
@@ -44,6 +62,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   navClickedSig = input.required<{ value: unknown }>({ alias: 'navClicked' });
   store = inject(Store);
   router = inject(Router);
+  destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
@@ -73,14 +92,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     return this.router.url.includes('/aenderung/');
   });
 
-  statusUebergaengeMenu = [
-    {
-      icon: 'check',
-      titleKey: 'VERFUEGUNG_OR_FREIGABE',
-      type: 'VERFUEGUNG_OR_FREIGABE',
-    },
-    { icon: 'undo', titleKey: 'ZURUECKWEISEN', type: 'ZURUECKWEISEN' },
-  ];
+  statusUebergaengeMenu = Object.values(statusUebergaenge);
 
   constructor() {
     effect(
@@ -117,8 +129,39 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     return status === 'IN_BEARBEITUNG_SB';
   });
 
-  setStatusUebergang(status: string) {
-    console.log('setStatusUebergang', status);
+  setStatusUebergang(status: StatusUebergang) {
+    const gesuchId = this.currentGesuchSig()?.id;
+
+    if (status === 'BEARBEITUNG_ABSCHIESSEN') {
+      this.store.dispatch(
+        SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen(),
+      );
+    }
+
+    if (status === 'ZURUECKWEISEN' && gesuchId) {
+      SharedUiKommentarDialogComponent.open(this.dialog, {
+        entityId: gesuchId,
+        titleKey:
+          'sachbearbeitung-app.header.status-uebergang.zurueckweisen.title',
+        messageKey:
+          'sachbearbeitung-app.header.status-uebergang.zurueckweisen.message',
+        placeholderKey:
+          'sachbearbeitung-app.header.status-uebergang.zurueckweisen.placeholder',
+        confirmKey:
+          'sachbearbeitung-app.header.status-uebergang.zurueckweisen.confirm',
+      })
+        .afterClosed()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((result) => {
+          if (result) {
+            this.store.dispatch(
+              SharedDataAccessGesuchEvents.setGesuchZurueckweisen({
+                kommentar: result.kommentar,
+              }),
+            );
+          }
+        });
+    }
   }
 
   createTranche() {
@@ -130,6 +173,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       maxDate: new Date(gesuch.gesuchsperiode.gesuchsperiodeStopp),
     })
       .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         if (result) {
           this.gesuchAenderungStore.createGesuchTrancheCopy$({
