@@ -10,10 +10,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
+import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
@@ -38,7 +40,9 @@ import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -53,6 +57,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jdk.jfr.Description;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
@@ -73,6 +78,8 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -1119,6 +1126,18 @@ class GesuchServiceTest {
                 .getPersonInAusbildung() == null).count(), Matchers.is(0L));
     }
 
+    @TestAsSachbearbeiter
+    @Test
+    @Description("It should be possible to change Gesuchstatus from JURISTISCHE_ABKLAERUNG to IN_BEARBEITUNG_SB")
+    void changeGesuchstatusFromJuristischeAbklaerungToInBearbeitungSBTest(){
+        Gesuch gesuch = setupValidGesuch();
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        assertDoesNotThrow(() ->gesuchService.gesuchStatusToInBearbeitung(gesuch.getId()));
+        assertTrue(gesuchRepository.findAlle().findFirst().get().getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB));
+    }
+
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
@@ -1206,6 +1225,42 @@ class GesuchServiceTest {
         gesuchWithPia.getNewestGesuchTranche().get().getGesuchFormular()
             .setPersonInAusbildung(new PersonInAusbildung());
         when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuchWithoutPia, gesuchWithPia));
+    }
+
+    private Gesuch setupValidGesuch(){
+        Gesuch gesuch = GesuchGenerator.initGesuch();
+        gesuch.setId(UUID.randomUUID());
+        gesuch.setGesuchStatus(Gesuchstatus.JOUR_FIX);
+        gesuch.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
+        gesuch.getNewestGesuchTranche().get().getGesuchFormular().setId(UUID.randomUUID());
+        gesuch.setGesuchNummer(UUID.randomUUID().toString());
+        gesuch.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(setupValidPersonInAusbildung());
+        gesuch.getNewestGesuchTranche().get().setTyp(GesuchTrancheTyp.TRANCHE);
+        return gesuch;
+    }
+
+    private PersonInAusbildung setupValidPersonInAusbildung() {
+        PersonInAusbildung personInAusbildung = new PersonInAusbildung();
+        personInAusbildung.setSozialversicherungsnummer("756.1119.8398.42");
+        personInAusbildung.setVorname("A");
+        personInAusbildung.setNachname("B");
+        Adresse adresse = new Adresse();
+        adresse.setStrasse("a");
+        adresse.setHausnummer("1");
+        adresse.setId(UUID.randomUUID());
+        adresse.setPlz("3333");
+        adresse.setLand(Land.CH);
+        adresse.setOrt("b");
+        personInAusbildung.setHeimatort("B");
+        personInAusbildung.setAdresse(adresse);
+        personInAusbildung.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        personInAusbildung.setTelefonnummer(UUID.randomUUID().toString());
+        personInAusbildung.setGeburtsdatum(LocalDate.now());
+        personInAusbildung.setKorrespondenzSprache(Sprache.DEUTSCH);
+        personInAusbildung.setAnrede(Anrede.FRAU);
+        personInAusbildung.setEmail("test@test.com");
+
+        return personInAusbildung;
     }
 
     private GesuchTranche updateWerZahltAlimente(
