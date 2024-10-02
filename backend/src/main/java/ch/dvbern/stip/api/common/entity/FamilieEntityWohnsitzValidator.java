@@ -39,6 +39,11 @@ public class FamilieEntityWohnsitzValidator {
         }
 
         if (familiensituation.getElternteilUnbekanntVerstorben()) {
+            // when both elternteils are dead, the only valid option is EIGENER_HAUSHALT
+            if(familiensituation.getMutterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.VERSTORBEN)
+                && familiensituation.getVaterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.VERSTORBEN)){
+                return familieEntity.getWohnsitz().equals(Wohnsitz.EIGENER_HAUSHALT);
+            }
             return ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz())
                 .orElseGet(() -> isWohnsitzanteilValidWhenOneElternteilIsAbsent(familieEntity, familiensituation));
         }

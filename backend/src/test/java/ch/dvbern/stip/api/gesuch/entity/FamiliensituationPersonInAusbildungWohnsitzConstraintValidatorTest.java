@@ -33,6 +33,29 @@ class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
     }
 
     @Test
+    @Description("Only Wohnsitz 'EIGENER_HAUSHALT' should be valid when both elternteils are dead")
+    void familiensituation_bothParentsVerstorben_wohnsitz_validationTest(){
+        Familiensituation familiensituation = new Familiensituation();
+        familiensituation.setElternVerheiratetZusammen(false);
+        familiensituation.setElternteilUnbekanntVerstorben(true);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+        gesuchFormular.setFamiliensituation(familiensituation);
+
+        // WOHSNITZ.MUTTER_VATER is valid
+        gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.MUTTER_VATER);
+        assertFalse(validator.isValid(gesuchFormular, null));
+
+        // WOHSNITZ.FAMILIE is not valid
+        gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.FAMILIE);
+        assertFalse(validator.isValid(gesuchFormular, null));
+
+        // WOHSNITZ.EIGENER_HAUSHALT ist valid
+        gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        assertTrue(validator.isValid(gesuchFormular, null));
+    }
+
+    @Test
     @Description("Wohnsitz 'Familie' should not be valid when both elternteils are absent")
     void familiensituation_bothParentsAbsent_wohnsitz_validationTest(){
         Familiensituation familiensituation = new Familiensituation();
