@@ -33,6 +33,15 @@ class GesuchStatusServiceTest {
     }
 
     @Test
+    @Description("Statusuebergang aus 'Juristische Abklaerung' to 'Bereit fuer Bearbeitung' should work correctly")
+    void statusUebergang_JuristischeAbklaerung_BereitFuerBearbeitung_Test() {
+        gesuch.setGesuchStatus(Gesuchstatus.JURISTISCHE_ABKLAERUNG);
+        assertDoesNotThrow(() ->gesuchStatusService.triggerStateMachineEvent(gesuch,
+            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG));
+        assertSame(Gesuchstatus.BEREIT_FUER_BEARBEITUNG,gesuch.getGesuchStatus());
+    }
+
+    @Test
     @Description("Statusuebergang aus 'In Freigabe' to 'Verfuegt' should work correctly")
     void statusUebergang_InFreigabe_Verfuegt_Test() {
         gesuch.setGesuchStatus(Gesuchstatus.IN_FREIGABE);

@@ -10,6 +10,7 @@ import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import lombok.experimental.UtilityClass;
 
@@ -21,7 +22,7 @@ public class GesuchTestUtil {
     public Gesuch setupValidGesuch(){
         Gesuch gesuch = GesuchGenerator.initGesuch();
         gesuch.setId(UUID.randomUUID());
-        gesuch.setGesuchStatus(Gesuchstatus.JOUR_FIX);
+        gesuch.setGesuchStatus(Gesuchstatus.JURISTISCHE_ABKLAERUNG);
         gesuch.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setId(UUID.randomUUID());
         gesuch.setGesuchNummer(UUID.randomUUID().toString());
@@ -50,6 +51,7 @@ public class GesuchTestUtil {
         personInAusbildung.setKorrespondenzSprache(Sprache.DEUTSCH);
         personInAusbildung.setAnrede(Anrede.FRAU);
         personInAusbildung.setEmail("test@test.com");
+        personInAusbildung.setZivilstand(Zivilstand.LEDIG);
 
         return personInAusbildung;
     }
