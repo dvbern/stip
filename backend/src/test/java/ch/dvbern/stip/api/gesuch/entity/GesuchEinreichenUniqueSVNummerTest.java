@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -60,8 +61,9 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
     }
 
+
     @Test
-    @Order(2)
+    @Order(3)
     @TestAsGesuchsteller
     void gesuchEinreichenWithNonUniqueSvNummerError() {
         RestAssured.filters(new RequestLoggingFilter());
@@ -80,6 +82,8 @@ public class GesuchEinreichenUniqueSVNummerTest {
             is(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE));
 
     }
+
+
 
     private UUID createFullGesuch() {
         var response = gesuchApiSpec.createGesuch()
