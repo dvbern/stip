@@ -18,8 +18,8 @@ public class GesuchMapperUtil {
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
 
-    public GesuchDto mapWithCurrentTranche(final Gesuch gesuch) {
-        return mapWithTranche(gesuch, gesuch.getCurrentGesuchTranche());
+    public GesuchDto mapWithOldestTranche(final Gesuch gesuch) {
+        return mapWithTranche(gesuch, gesuch.getOldestGesuchTranche().orElseThrow(IllegalStateException::new));
     }
 
     /**
@@ -31,13 +31,14 @@ public class GesuchMapperUtil {
      */
     public List<GesuchDto> mapWithAenderung(final Gesuch gesuch) {
         List<GesuchDto> gesuchDtos = new ArrayList<>();
-        final var aenderung = gesuch.getAenderungZuUeberpruefen();
 
-        // find newest tranche (without aenderungen)
-        // the first dto to be returned: Gesuch
-        gesuch.getNewestGesuchTrancheWithoutAenderungen().ifPresent(tranche -> gesuchDtos.add(mapWithTranche(gesuch,tranche)));
-        // the second dto to be returned: Aenderung
-        aenderung.ifPresent(tranche -> gesuchDtos.add(mapWithTranche(gesuch, tranche)));
+        // find oldest tranche (without aenderungen)
+        // the first dto to be returned: Tranche
+        gesuch.getOldestGesuchTranche().ifPresent(tranche -> gesuchDtos.add(mapWithTranche(gesuch,tranche)));
+
+        // the first dto to be returned: Aenderung
+        gesuch.getAenderungZuUeberpruefen().ifPresent(tranche -> gesuchDtos.add(mapWithTranche(gesuch, tranche)));
+
         return gesuchDtos;
     }
 

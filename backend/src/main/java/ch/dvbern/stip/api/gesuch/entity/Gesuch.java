@@ -15,8 +15,6 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
-import ch.dvbern.stip.api.gesuch.util.GesuchUtils;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import jakarta.persistence.CascadeType;
@@ -121,20 +119,14 @@ public class Gesuch extends AbstractMandantEntity {
         );
     }
 
-    public Optional<GesuchTranche> getNewestGesuchTrancheWithoutAenderungen() {
-        final var tranchenWithoutAenderungen = getGesuchTranchen().stream()
-            .filter(tranche -> !GesuchUtils.isAenderung(tranche)
-            ).toList() ;
-        if (tranchenWithoutAenderungen.isEmpty()) {
+    public Optional<GesuchTranche> getOldestGesuchTranche() {
+        if (gesuchTranchen.isEmpty()) {
             return Optional.empty();
         }
 
-        return Optional.ofNullable(
-            Collections.max(
-                tranchenWithoutAenderungen,
-                Comparator.comparing(x -> x.getGueltigkeit().getGueltigBis())
-            )
-        );
+        return gesuchTranchen.stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+            .min(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb()));
     }
 
     public Stream<GesuchTranche> getAenderungen() {
@@ -143,8 +135,11 @@ public class Gesuch extends AbstractMandantEntity {
             .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
     }
 
-    public Optional<GesuchTranche> getAenderungZuUeberpruefen(){
-        return getGesuchTranchen().stream().filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-            && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN).findFirst();
+    public Optional<GesuchTranche> getAenderungZuUeberpruefen() {
+        return getGesuchTranchen().stream()
+            .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN
+            )
+            .findFirst();
     }
 }
