@@ -367,6 +367,7 @@
   "shared.form.lebenslaufitem.delete": "Eintrag löschen",
   "shared.form.lebenslauf.item.subtype.taetigkeitsart.ANDERE_TAETIGKEIT": "Andere Tätigkeit",
   "shared.form.lebenslauf.item.subtype.taetigkeitsart.ERWERBSTAETIGKEIT": "Erwerbstätigkeit",
+  "shared.form.lebenslauf.item.subtype.taetigkeitsart.BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT": "Betreuung von Familienmitglieder im eigenen Haushalt",
   "shared.form.lebenslauf.item.subtype.bildungsart.BERUFSVORBEREITENDES_SCHULJAHR": "Berufsvorbereitendes Schuljahr",
   "shared.form.lebenslauf.item.subtype.bildungsart.VORLEHRE": "Vorlehre",
   "shared.form.lebenslauf.item.subtype.bildungsart.GESTALTERISCHE_VORKURSE": "Gestalterische Vorkurse (Abschlusszeugnis)",

@@ -17,8 +17,8 @@ public class GesuchMapperUtil {
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
 
-    public GesuchDto mapWithCurrentTranche(final Gesuch gesuch) {
-        return mapWithTranche(gesuch, gesuch.getCurrentGesuchTranche());
+    public GesuchDto mapWithOldestTranche(final Gesuch gesuch) {
+        return mapWithTranche(gesuch, gesuch.getOldestGesuchTranche().orElseThrow(IllegalStateException::new));
     }
 
     public GesuchDto mapWithNewestTranche(final Gesuch gesuch) {

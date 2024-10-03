@@ -42,6 +42,7 @@ import {
   GesuchFormularUpdate,
   GesuchService,
   GesuchTrancheService,
+  GesuchTrancheTyp,
   GesuchUpdate,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
@@ -195,56 +196,60 @@ export const loadGesuch = createEffect(
           ),
         };
 
-        if (trancheId && trancheTyp === 'AENDERUNG' && compileTimeConfig) {
-          const services$ = {
-            'gesuch-app': gesuchService.getGsTrancheChanges$(
-              { aenderungId: trancheId },
+        // Call the correct service based on the app type
+        const aenderungServices$ = {
+          'gesuch-app': (aenderungId: string) =>
+            gesuchService.getGsTrancheChanges$(
+              { aenderungId },
               undefined,
               undefined,
               handle404And401,
             ),
-            'sachbearbeitung-app': gesuchService.getSbTrancheChanges$(
-              { aenderungId: trancheId },
+          'sachbearbeitung-app': (aenderungId: string) =>
+            gesuchService.getSbTrancheChanges$(
+              { aenderungId },
               undefined,
               undefined,
               handle404And401,
             ),
-          } satisfies Record<AppType, unknown>;
-          return services$[compileTimeConfig.appType].pipe(
-            map((gesuch) =>
-              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
-                gesuch,
-                trancheId,
-              }),
-            ),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
-        }
+        } satisfies Record<AppType, unknown>;
 
-        return gesuchService
-          .getCurrentGesuch$(
-            { gesuchId: id },
-            undefined,
-            undefined,
-            handle404And401,
-          )
-          .pipe(
-            map((gesuch) =>
-              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
-                gesuch,
-                trancheId,
-              }),
+        // Different services for different types of tranches
+        const services$ = {
+          AENDERUNG: (appType: AppType) => aenderungServices$[appType],
+          TRANCHE: () => (gesuchTrancheId: string) =>
+            gesuchService.getGesuch$(
+              { gesuchId: id, gesuchTrancheId },
+              undefined,
+              undefined,
+              handle404And401,
             ),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
+        } satisfies Record<GesuchTrancheTyp, unknown>;
+
+        return (
+          trancheTyp && trancheId && compileTimeConfig
+            ? // If there is a trancheTyp, trancheId and compileTimeConfig, use the matching service call
+              services$[trancheTyp](compileTimeConfig.appType)(trancheId)
+            : // Otherwise use the normal current gesuch service call
+              gesuchService.getCurrentGesuch$(
+                { gesuchId: id },
+                undefined,
+                undefined,
+                handle404And401,
+              )
+        ).pipe(
+          map((gesuch) =>
+            SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
+              gesuch,
+              trancheId,
+            }),
+          ),
+          catchError((error) => [
+            SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+              error: sharedUtilFnErrorTransformer(error),
+            }),
+          ]),
+        );
       }),
     );
   },
