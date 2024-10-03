@@ -36,6 +36,7 @@ import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partn
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
 import { AppType } from '@dv/shared/model/config';
+import { SharedModelError } from '@dv/shared/model/error';
 import {
   AusbildungUpdate,
   GesuchFormularUpdate,
@@ -48,7 +49,7 @@ import {
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import {
-  handleNotFound,
+  handleNotFoundAndUnauthorized,
   noGlobalErrorsIf,
   shouldIgnoreNotFoundErrorsIf,
 } from '@dv/shared/util/http';
@@ -170,17 +171,28 @@ export const loadGesuch = createEffect(
           );
         }
 
-        const navigateIfNotFound = {
+        const handle404And401 = {
           context: noGlobalErrorsIf(
             true,
-            handleNotFound((error) => {
-              globalNotifications.createNotification({
-                type: 'ERROR',
-                messageKey: 'shared.genericError.gesuch-not-found-redirection',
-                content: error,
-              });
-              router.navigate(['/'], { replaceUrl: true });
-            }),
+            handleNotFoundAndUnauthorized(
+              (error: SharedModelError) => {
+                globalNotifications.createNotification({
+                  type: 'ERROR_PERMANENT',
+                  messageKey:
+                    'shared.genericError.gesuch-not-found-redirection',
+                  content: error,
+                });
+                router.navigate(['/'], { replaceUrl: true });
+              },
+              (error: SharedModelError) => {
+                globalNotifications.createNotification({
+                  type: 'ERROR_PERMANENT',
+                  messageKey: 'shared.genericError.gesuch-unauthorized',
+                  content: error,
+                });
+                router.navigate(['/'], { replaceUrl: true });
+              },
+            ),
           ),
         };
 
@@ -191,14 +203,14 @@ export const loadGesuch = createEffect(
               { aenderungId },
               undefined,
               undefined,
-              navigateIfNotFound,
+              handle404And401,
             ),
           'sachbearbeitung-app': (aenderungId: string) =>
             gesuchService.getSbTrancheChanges$(
               { aenderungId },
               undefined,
               undefined,
-              navigateIfNotFound,
+              handle404And401,
             ),
         } satisfies Record<AppType, unknown>;
 
@@ -210,7 +222,7 @@ export const loadGesuch = createEffect(
               { gesuchId: id, gesuchTrancheId },
               undefined,
               undefined,
-              navigateIfNotFound,
+              handle404And401,
             ),
         } satisfies Record<GesuchTrancheTyp, unknown>;
 
@@ -223,7 +235,7 @@ export const loadGesuch = createEffect(
                 { gesuchId: id },
                 undefined,
                 undefined,
-                navigateIfNotFound,
+                handle404And401,
               )
         ).pipe(
           map((gesuch) =>

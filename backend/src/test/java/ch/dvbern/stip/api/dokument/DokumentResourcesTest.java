@@ -60,8 +60,12 @@ class DokumentResourcesTest {
         gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
         gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
 
-        var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
-            .then();
+        var response = gesuchApiSpec.createGesuch()
+            .body(gesuchDTO)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.CREATED.getStatusCode());
 
         response.assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
