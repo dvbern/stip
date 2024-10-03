@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
@@ -33,11 +34,26 @@ public class GesuchResourceImpl implements GesuchResource {
     private final TenantService tenantService;
     private final GesuchHistoryService gesuchHistoryService;
 
-    // todo KSTIP-1532: which roles allowed?
     @Override
     public Response changeGesuchStatusToInBearbeitung(UUID gesuchId) {
         GesuchDto gesuchDto = gesuchService.gesuchStatusToInBearbeitung(gesuchId);
         return Response.ok(gesuchDto).build();
+    }
+
+    //todo  KSTIP-1532: roles allowed?
+    @RolesAllowed({ ROLE_SACHBEARBEITER })
+    @Override
+    public Response changeGesuchStatusToVerfuegt(UUID gesuchId) {
+        gesuchService.gesuchStatusToVerfuegt(gesuchId);
+        return Response.ok().build();
+    }
+
+    //todo  KSTIP-1532: roles allowed?
+    @RolesAllowed({ ROLE_SACHBEARBEITER })
+    @Override
+    public Response changeGesuchStatusToVersendet(UUID gesuchId) {
+        gesuchService.gesuchStatusToVersendet(gesuchId);
+        return Response.ok().build();
     }
 
     @RolesAllowed(GESUCH_CREATE)
@@ -139,6 +155,14 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response bearbeitungAbschliessen(UUID gesuchId) {
         gesuchService.bearbeitungAbschliessen(gesuchId);
+        return Response.ok().build();
+    }
+
+    //todo  KSTIP-1532: roles allowed?
+    @RolesAllowed({ ROLE_SACHBEARBEITER })
+    @Override
+    public Response changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+        gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId);
         return Response.ok().build();
     }
 

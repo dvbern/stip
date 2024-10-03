@@ -1,6 +1,7 @@
 package ch.dvbern.stip.api.gesuch.util;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
@@ -22,13 +23,19 @@ public class GesuchTestUtil {
     public Gesuch setupValidGesuch(){
         Gesuch gesuch = GesuchGenerator.initGesuch();
         gesuch.setId(UUID.randomUUID());
-        gesuch.setGesuchStatus(Gesuchstatus.JURISTISCHE_ABKLAERUNG);
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         gesuch.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setId(UUID.randomUUID());
         gesuch.setGesuchNummer(UUID.randomUUID().toString());
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(setupValidPersonInAusbildung());
         gesuch.getNewestGesuchTranche().get().setTyp(GesuchTrancheTyp.TRANCHE);
+
         return gesuch;
+    }
+
+    public Gesuch setupValidGesuchInState(Gesuchstatus status){
+        Gesuch gesuch = setupValidGesuch();
+        return gesuch.setGesuchStatus(status);
     }
 
     public PersonInAusbildung setupValidPersonInAusbildung() {

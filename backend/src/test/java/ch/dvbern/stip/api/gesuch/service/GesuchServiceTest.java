@@ -79,9 +79,9 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -116,6 +116,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchTrancheRepository gesuchTrancheRepository;
+
+    @InjectMock
+    GesuchValidatorService gesuchValidatorService;
 
     static final String TENANT_ID = "bern";
 
@@ -1129,16 +1132,52 @@ class GesuchServiceTest {
 
     @TestAsSachbearbeiter
     @Test
-    @Description("It should be possible to change Gesuchstatus from JURISTISCHE_ABKLAERUNG to IN_BEARBEITUNG_SB")
-    void changeGesuchstatusFromJuristischeAbklaerungToInBearbeitungSBTest(){
-        Gesuch gesuch = GesuchTestUtil.setupValidGesuch();
+    @Description("It should be possible to change Gesuchstatus from JURISTISCHE_ABKLAERUNG to BEREIT_FUER_BEARBEITUNG")
+    void changeGesuchstatus_from_JuristischeAbklaerung_to_BereitFuerBearbeitungTest(){
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.JURISTISCHE_ABKLAERUNG);
         when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
-        assertDoesNotThrow(() ->gesuchService.gesuchStatusToInBearbeitung(gesuch.getId()));
-        assertTrue(gesuchRepository.findAlle().findFirst().get().getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB));
+        assertDoesNotThrow(() ->gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
+        assertTrue(gesuchRepository.findAlle().findFirst().get().getGesuchStatus().equals(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
     }
 
+    @TestAsSachbearbeiter
+    @Test
+    @Description("It should be possible to change Gesuchstatus from IN_FREIGABE to VERFUEGT")
+    void changeGesuchstatus_from_InFreigabe_to_VerfuegtTest(){
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        doNothing().when(gesuchValidatorService).validateGesuchForStatus(any(),any());
+
+        assertDoesNotThrow(() ->gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
+        assertEquals(Gesuchstatus.VERFUEGT,gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Description("It should be possible to change Gesuchstatus from IN_FREIGABE to BEREIT_FUER_BEARBEITUNG")
+    void changeGesuchstatus_from_InFreigabe_to_BereitFuerBearbeitungTest(){
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        assertDoesNotThrow(() ->gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
+        assertEquals(Gesuchstatus.BEREIT_FUER_BEARBEITUNG,gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Description("It should be possible to change Gesuchstatus from VERSANDBEREIT to VERSENDET")
+    void changeGesuchstatus_from_Versandbereit_to_VersendetTest(){
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSANDBEREIT);
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        assertDoesNotThrow(() ->gesuchService.gesuchStatusToVersendet(gesuch.getId()));
+        assertEquals(Gesuchstatus.VERSENDET,gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+    }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
