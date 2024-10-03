@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.common.entity;
 
-import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Optional;
 
@@ -13,7 +12,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class FamilieEntityWohnsitzValidator {
     // map of valid Wohnsitz values when ElternteilUnbekanntVerstorben is true
-    private static final Map<Wohnsitz, Optional<Boolean>> ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP = Map.of(
+    private static final Map<Wohnsitz, Optional<Boolean>> ONE_ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP = Map.of(
         // will be evaluated
         Wohnsitz.MUTTER_VATER, Optional.empty(),
         Wohnsitz.FAMILIE, Optional.of(false),
@@ -34,36 +33,54 @@ public class FamilieEntityWohnsitzValidator {
             return true;
         }
 
-        if (Boolean.TRUE.equals(familiensituation.getElternVerheiratetZusammen())) {
-            // when elterns are together or married, the option MUTTER_VATER is not available
-            return familieEntity.getWohnsitz() != Wohnsitz.MUTTER_VATER;
+        boolean elternTogetherOrMarried = Boolean.TRUE.equals(familiensituation.getElternVerheiratetZusammen());
+        boolean alimentenregelungExisting = Boolean.TRUE.equals(familiensituation.getGerichtlicheAlimentenregelung());
+        boolean oneOrMoreElternteilAbsent = Boolean.TRUE.equals(familiensituation.getElternteilUnbekanntVerstorben());
+
+        if (elternTogetherOrMarried) {
+            return isWohnsitzValidWhenElternTogetherOrMarried(familieEntity);
         }
 
-        // check alimentenregelung
-        if (Boolean.TRUE.equals(familiensituation.getGerichtlicheAlimentenregelung())){
-            boolean isAnteilMutter100Percent = getIsWohnsitzanteilMutter100Percent(familieEntity);
-            boolean isAnteilVater100Percent = getIsWohnsitzanteilVater100Percent(familieEntity);
-
-            if(familiensituation.getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM){
-                return familieEntity.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
-            }
-            else if(familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER){
-                return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE && isAnteilMutter100Percent;
-            }
-            return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE &&  isAnteilVater100Percent;
+        if (alimentenregelungExisting){
+            return isWohnsitzanteilValidWithAlimente(familieEntity, familiensituation);
         }
 
-        if (Boolean.TRUE.equals(familiensituation.getElternteilUnbekanntVerstorben())) {
-            // when both elternteils are dead, the only valid option is EIGENER_HAUSHALT
-            if(familiensituation.getMutterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.VERSTORBEN)
-                && familiensituation.getVaterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.VERSTORBEN)){
-                return familieEntity.getWohnsitz().equals(Wohnsitz.EIGENER_HAUSHALT);
-            }
-            return ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz())
-                .orElseGet(() -> isWohnsitzanteilValidWhenOneElternteilIsAbsent(familieEntity, familiensituation));
+        if (oneOrMoreElternteilAbsent) {
+            return isWohnsitzValidWhenOneElternteilIsAbsent(familieEntity, familiensituation);
         }
+        return isWohnsitzValidWhenElternSeparated(familieEntity);
+    }
 
+    private boolean isWohnsitzValidWhenElternTogetherOrMarried(AbstractFamilieEntity familieEntity){
+        return familieEntity.getWohnsitz() != Wohnsitz.MUTTER_VATER;
+    }
+
+    private boolean isWohnsitzValidWhenElternSeparated(AbstractFamilieEntity familieEntity){
         return ELTERN_SEPARATED_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz());
+    }
+
+    private boolean isWohnsitzValidWhenOneElternteilIsAbsent(AbstractFamilieEntity familieEntity, Familiensituation familiensituation){
+        boolean bothElternteilsDead = familiensituation.getMutterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.VERSTORBEN)
+            && familiensituation.getVaterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.VERSTORBEN);
+        if(bothElternteilsDead){
+            return familieEntity.getWohnsitz().equals(Wohnsitz.EIGENER_HAUSHALT);
+        }
+        return ONE_ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz())
+            .orElseGet(() -> isWohnsitzanteilValidWhenOneElternteilIsAbsent(familieEntity, familiensituation));
+    }
+
+    private boolean isWohnsitzanteilValidWithAlimente(AbstractFamilieEntity familieEntity,
+                                                              Familiensituation familiensituation){
+        boolean isAnteilMutter100Percent = FamilieEntityWohnsitzValidatorUtils.getIsWohnsitzanteilMutter100Percent(familieEntity);
+        boolean isAnteilVater100Percent = FamilieEntityWohnsitzValidatorUtils.getIsWohnsitzanteilVater100Percent(familieEntity);
+
+        if(familiensituation.getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM){
+            return familieEntity.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
+        }
+        else if(familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER){
+            return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE && isAnteilMutter100Percent;
+        }
+        return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE &&  isAnteilVater100Percent;
     }
 
     private boolean isWohnsitzanteilValidWhenOneElternteilIsAbsent(
@@ -74,19 +91,14 @@ public class FamilieEntityWohnsitzValidator {
             return true;
         }
 
-        boolean isAnteilMutter100Percent = getIsWohnsitzanteilMutter100Percent(familieEntity);
-        boolean isAnteilVater100Percent = getIsWohnsitzanteilVater100Percent(familieEntity);
+        boolean isAnteilMutter100Percent = FamilieEntityWohnsitzValidatorUtils.getIsWohnsitzanteilMutter100Percent(familieEntity);
+        boolean isAnteilVater100Percent = FamilieEntityWohnsitzValidatorUtils.getIsWohnsitzanteilVater100Percent(familieEntity);
 
-        final boolean isMutterAbsent =
-            familiensituation.getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.VERSTORBEN
-                || familiensituation.getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.UNBEKANNT;
-        final boolean isVaterAbsent =
-            familiensituation.getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.UNBEKANNT
-                || familiensituation.getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.VERSTORBEN;
-        final boolean isMutterExisting = familiensituation.getMutterUnbekanntGrund() == null ||
-            familiensituation.getMutterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.WEDER_NOCH);
-        final boolean isVaterExisting = familiensituation.getVaterUnbekanntGrund() == null
-            || familiensituation.getVaterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.WEDER_NOCH);
+        final boolean isMutterAbsent = FamilieEntityWohnsitzValidatorUtils.getIsMutterAbsent(familiensituation);
+        final boolean isVaterAbsent = FamilieEntityWohnsitzValidatorUtils.getIsVaterAbsent(familiensituation);
+
+        final boolean isMutterExisting = FamilieEntityWohnsitzValidatorUtils.getIsMutterExisting(familiensituation);
+        final boolean isVaterExisting = FamilieEntityWohnsitzValidatorUtils.getIsVaterExisting(familiensituation);
 
         // mutter is absent - vater must be 100%
         if (isMutterAbsent && isVaterExisting) {
@@ -102,15 +114,4 @@ public class FamilieEntityWohnsitzValidator {
         }
     }
 
-    private boolean getIsWohnsitzanteilVater100Percent(AbstractFamilieEntity familieEntity) {
-        return familieEntity.getWohnsitzAnteilVater() != null
-            && familieEntity.getWohnsitzAnteilVater()
-            .compareTo(BigDecimal.valueOf(100)) == 0;
-    }
-
-    private boolean getIsWohnsitzanteilMutter100Percent(AbstractFamilieEntity familieEntity) {
-        return familieEntity.getWohnsitzAnteilMutter() != null
-            && familieEntity.getWohnsitzAnteilMutter()
-            .compareTo(BigDecimal.valueOf(100)) == 0;
-    }
 }
