@@ -57,16 +57,25 @@ export class GesuchAenderungStore extends signalStore(
 
   aenderungenViewSig = computed(() => {
     const tranchen = this.cachedTranchenSlim();
-    const { isSachbearbeitungApp } = this.configSig();
     return {
       loading: isPending(tranchen),
       list:
         tranchen.data?.filter(
-          (t) =>
-            t.typ === 'AENDERUNG' &&
-            t.status !== 'ABGELEHNT' &&
-            (!isSachbearbeitungApp || t.status !== 'IN_BEARBEITUNG_GS'),
+          (t) => t.typ === 'AENDERUNG' && t.status !== 'ABGELEHNT',
         ) ?? [],
+    };
+  });
+
+  openAenderungViewSig = computed(() => {
+    const tranchen = this.cachedTranchenSlim();
+    const { isSachbearbeitungApp } = this.configSig();
+    return {
+      loading: isPending(tranchen),
+      openAenderung: tranchen.data?.find(
+        (t) =>
+          t.typ === 'AENDERUNG' &&
+          (!isSachbearbeitungApp || t.status !== 'IN_BEARBEITUNG_GS'),
+      ),
     };
   });
 

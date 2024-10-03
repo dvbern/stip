@@ -2,6 +2,8 @@ package ch.dvbern.stip.api.gesuch.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.authorization.FallAuthorizer;
+import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
@@ -31,9 +33,12 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchService gesuchService;
     private final TenantService tenantService;
     private final GesuchHistoryService gesuchHistoryService;
+    private final GesuchAuthorizer gesuchAuthorizer;
+    private final FallAuthorizer fallAuthorizer;
 
     @Override
     public Response changeGesuchStatusToInBearbeitung(UUID gesuchId) {
+        gesuchAuthorizer.canUpdate(gesuchId);
         GesuchDto gesuchDto = gesuchService.gesuchStatusToInBearbeitung(gesuchId);
         return Response.ok(gesuchDto).build();
     }
@@ -41,6 +46,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_CREATE)
     @Override
     public Response createGesuch(GesuchCreateDto gesuchCreateDto) {
+        gesuchAuthorizer.canCreate();
         GesuchDto created = gesuchService.createGesuch(gesuchCreateDto);
         return CreatedResponseBuilder.of(created.getId(), GesuchResource.class).build();
     }
@@ -48,6 +54,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_DELETE)
     @Override
     public Response deleteGesuch(UUID gesuchId) {
+        gesuchAuthorizer.canDelete(gesuchId);
         gesuchService.deleteGesuch(gesuchId);
         return Response.noContent().build();
     }
@@ -55,13 +62,16 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response gesuchEinreichen(UUID gesuchId) {
+        gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchEinreichen(gesuchId);
         return Response.accepted().build();
     }
 
+    // TODO KSTIP-1247: Update which roles can do this
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response gesuchFehlendeDokumenteUebermitteln(UUID gesuchId) {
+        gesuchAuthorizer.allowAllow();
         gesuchService.gesuchFehlendeDokumente(gesuchId);
         return Response.ok().build();
     }
@@ -69,6 +79,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getCurrentGesuch(UUID gesuchId) {
+        gesuchAuthorizer.canRead(gesuchId);
         var gesuch = gesuchService.findGesuchWithOldestTranche(gesuchId).orElseThrow(NotFoundException::new);
         return Response.ok(gesuch).build();
     }
@@ -76,31 +87,37 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesuch(UUID gesuchId, UUID gesuchTrancheId) {
+        gesuchAuthorizer.canRead(gesuchId);
         var gesuch = gesuchService.findGesuchWithTranche(gesuchId, gesuchTrancheId).orElseThrow(NotFoundException::new);
         return Response.ok(gesuch).build();
     }
 
-    @RolesAllowed({ GESUCH_READ})
+    // TODO KSTIP-1247: Update which roles can do this
+    @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesucheSb(GetGesucheSBQueryType getGesucheSBQueryType) {
+        gesuchAuthorizer.allowAllow();
         return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryType)).build();
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
     @Override
     public Response getGesucheGs() {
+        gesuchAuthorizer.allowAllow();
         return Response.ok(gesuchService.findGesucheGs()).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesucheForFall(UUID fallId) {
+        fallAuthorizer.canRead(fallId);
         return Response.ok(gesuchService.findAllForFall(fallId)).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getStatusProtokoll(UUID gesuchId) {
+        gesuchAuthorizer.canRead(gesuchId);
         final var statusprotokoll = gesuchHistoryService.getStatusprotokoll(gesuchId);
         return Response.ok(statusprotokoll).build();
     }
@@ -108,6 +125,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
+        gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, tenantService.getCurrentTenant().getIdentifier());
         return Response.accepted().build();
     }
@@ -115,19 +133,23 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getBerechnungForGesuch(UUID gesuchId) {
+        gesuchAuthorizer.canRead(gesuchId);
         return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGsTrancheChanges(UUID aenderungId) {
+        gesuchAuthorizer.canRead(aenderungId);
         final var changes = gesuchService.getGsTrancheChanges(aenderungId);
         return Response.ok(changes).build();
     }
 
+    // TODO KSTIP-1247: Update which roles can do this
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getSbTrancheChanges(UUID aenderungId) {
+        gesuchAuthorizer.allowAllow();
         final var changes = gesuchService.getSbTrancheChanges(aenderungId);
         return Response.ok(changes).build();
     }
