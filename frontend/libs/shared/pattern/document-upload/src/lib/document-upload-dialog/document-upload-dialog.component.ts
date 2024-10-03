@@ -50,6 +50,7 @@ export class SharedPatternDocumentUploadDialogComponent {
     type: this.data.options.dokumentTyp,
     readonly: this.data.options.readonly,
     initialDocuments: this.data.options.initialDocuments,
+    hasEntries: this.data.store.hasEntriesSig(),
     isSachbearbeitungApp: this.config.isSachbearbeitungApp,
   }));
 

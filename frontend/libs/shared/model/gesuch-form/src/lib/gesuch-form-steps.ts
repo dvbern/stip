@@ -300,15 +300,12 @@ export const getFormStepByDocumentType = (
       return gesuchFormSteps.DOKUMENTE;
     }
     default: {
-      if (dokumentTyp.startsWith('STEUERDATEN')) {
-        return ELTERN_STEUER_STEPS[getTypeOfSteuerdatenDokument(dokumentTyp)];
-      }
       const step = (Object.keys(gesuchFormSteps) as GesuchFormSteps[]).find(
         (key) => {
           if (key === 'EINNAHMEN_KOSTEN') {
-            return dokumentTyp.includes('EK');
+            return dokumentTyp.startsWith('EK');
           }
-          return dokumentTyp.includes(key);
+          return dokumentTyp.startsWith(key);
         },
       );
       if (!step) {
@@ -356,15 +353,3 @@ const toStepState = (
 const isSteuerdatenStep = (
   step: SharedModelGesuchFormularPropsSteuerdatenSteps,
 ): step is SteuerdatenSteps => step.startsWith('steuerdaten');
-
-const getTypeOfSteuerdatenDokument = (
-  dokument: DokumentTyp,
-): SteuerdatenTyp => {
-  if (dokument.endsWith('MUTTER')) {
-    return 'MUTTER';
-  }
-  if (dokument.endsWith('VATER')) {
-    return 'VATER';
-  }
-  return 'FAMILIE';
-};
