@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GsDashboardDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
   GsDashboardDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GsDashboardDtoSpec.JSON_PROPERTY_ID,
-  GsDashboardDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_SLIM,
+  GsDashboardDtoSpec.JSON_PROPERTY_OFFENE_AENDERUNG,
   GsDashboardDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_WITH_MISSING_DOCUMENTS_ID
 })
 @JsonTypeName("GsDashboard")
@@ -43,8 +43,8 @@ public class GsDashboardDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
 
-  public static final String JSON_PROPERTY_GESUCH_TRANCHE_SLIM = "gesuchTrancheSlim";
-  private GesuchTrancheSlimDtoSpec gesuchTrancheSlim;
+  public static final String JSON_PROPERTY_OFFENE_AENDERUNG = "offeneAenderung";
+  private GesuchTrancheSlimDtoSpec offeneAenderung;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_WITH_MISSING_DOCUMENTS_ID = "gesuchTrancheWithMissingDocumentsId";
   private UUID gesuchTrancheWithMissingDocumentsId;
@@ -130,29 +130,29 @@ public class GsDashboardDtoSpec {
   }
 
 
-  public GsDashboardDtoSpec gesuchTrancheSlim(GesuchTrancheSlimDtoSpec gesuchTrancheSlim) {
+  public GsDashboardDtoSpec offeneAenderung(GesuchTrancheSlimDtoSpec offeneAenderung) {
 
-    this.gesuchTrancheSlim = gesuchTrancheSlim;
+    this.offeneAenderung = offeneAenderung;
     return this;
   }
 
    /**
-   * Get gesuchTrancheSlim
-   * @return gesuchTrancheSlim
+   * Get offeneAenderung
+   * @return offeneAenderung
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_SLIM)
+  @JsonProperty(JSON_PROPERTY_OFFENE_AENDERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public GesuchTrancheSlimDtoSpec getGesuchTrancheSlim() {
-    return gesuchTrancheSlim;
+  public GesuchTrancheSlimDtoSpec getOffeneAenderung() {
+    return offeneAenderung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_SLIM)
+  @JsonProperty(JSON_PROPERTY_OFFENE_AENDERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGesuchTrancheSlim(GesuchTrancheSlimDtoSpec gesuchTrancheSlim) {
-    this.gesuchTrancheSlim = gesuchTrancheSlim;
+  public void setOffeneAenderung(GesuchTrancheSlimDtoSpec offeneAenderung) {
+    this.offeneAenderung = offeneAenderung;
   }
 
 
@@ -193,13 +193,13 @@ public class GsDashboardDtoSpec {
     return Objects.equals(this.gesuchsperiode, gsDashboard.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gsDashboard.gesuchStatus) &&
         Objects.equals(this.id, gsDashboard.id) &&
-        Objects.equals(this.gesuchTrancheSlim, gsDashboard.gesuchTrancheSlim) &&
+        Objects.equals(this.offeneAenderung, gsDashboard.offeneAenderung) &&
         Objects.equals(this.gesuchTrancheWithMissingDocumentsId, gsDashboard.gesuchTrancheWithMissingDocumentsId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, gesuchTrancheSlim, gesuchTrancheWithMissingDocumentsId);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, offeneAenderung, gesuchTrancheWithMissingDocumentsId);
   }
 
   @Override
@@ -209,7 +209,7 @@ public class GsDashboardDtoSpec {
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    gesuchTrancheSlim: ").append(toIndentedString(gesuchTrancheSlim)).append("\n");
+    sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
     sb.append("    gesuchTrancheWithMissingDocumentsId: ").append(toIndentedString(gesuchTrancheWithMissingDocumentsId)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -19,7 +19,7 @@ public class GsDashboardDto  implements Serializable {
   private @Valid GesuchsperiodeDto gesuchsperiode;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
   private @Valid UUID id;
-  private @Valid GesuchTrancheSlimDto gesuchTrancheSlim;
+  private @Valid GesuchTrancheSlimDto offeneAenderung;
   private @Valid UUID gesuchTrancheWithMissingDocumentsId;
 
   /**
@@ -78,20 +78,20 @@ public class GsDashboardDto  implements Serializable {
 
   /**
    **/
-  public GsDashboardDto gesuchTrancheSlim(GesuchTrancheSlimDto gesuchTrancheSlim) {
-    this.gesuchTrancheSlim = gesuchTrancheSlim;
+  public GsDashboardDto offeneAenderung(GesuchTrancheSlimDto offeneAenderung) {
+    this.offeneAenderung = offeneAenderung;
     return this;
   }
 
 
-  @JsonProperty("gesuchTrancheSlim")
-  public GesuchTrancheSlimDto getGesuchTrancheSlim() {
-    return gesuchTrancheSlim;
+  @JsonProperty("offeneAenderung")
+  public GesuchTrancheSlimDto getOffeneAenderung() {
+    return offeneAenderung;
   }
 
-  @JsonProperty("gesuchTrancheSlim")
-  public void setGesuchTrancheSlim(GesuchTrancheSlimDto gesuchTrancheSlim) {
-    this.gesuchTrancheSlim = gesuchTrancheSlim;
+  @JsonProperty("offeneAenderung")
+  public void setOffeneAenderung(GesuchTrancheSlimDto offeneAenderung) {
+    this.offeneAenderung = offeneAenderung;
   }
 
   /**
@@ -125,13 +125,13 @@ public class GsDashboardDto  implements Serializable {
     return Objects.equals(this.gesuchsperiode, gsDashboard.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gsDashboard.gesuchStatus) &&
         Objects.equals(this.id, gsDashboard.id) &&
-        Objects.equals(this.gesuchTrancheSlim, gsDashboard.gesuchTrancheSlim) &&
+        Objects.equals(this.offeneAenderung, gsDashboard.offeneAenderung) &&
         Objects.equals(this.gesuchTrancheWithMissingDocumentsId, gsDashboard.gesuchTrancheWithMissingDocumentsId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, gesuchTrancheSlim, gesuchTrancheWithMissingDocumentsId);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, offeneAenderung, gesuchTrancheWithMissingDocumentsId);
   }
 
   @Override
@@ -142,7 +142,7 @@ public class GsDashboardDto  implements Serializable {
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    gesuchTrancheSlim: ").append(toIndentedString(gesuchTrancheSlim)).append("\n");
+    sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
     sb.append("    gesuchTrancheWithMissingDocumentsId: ").append(toIndentedString(gesuchTrancheWithMissingDocumentsId)).append("\n");
     sb.append("}");
     return sb.toString();
