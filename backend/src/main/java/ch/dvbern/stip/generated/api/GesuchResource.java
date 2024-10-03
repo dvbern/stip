@@ -1,25 +1,20 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
-import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
-import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Response;
-
-
-
-
-import java.io.InputStream;
-import java.util.Map;
-import java.util.List;
-import jakarta.validation.constraints.*;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Response;
 
 
 @Path("/gesuch")
@@ -80,6 +75,11 @@ public interface GesuchResource {
     @Path("/benutzer/me/sb/{getGesucheSBQueryType}")
     @Produces({ "application/json", "text/plain" })
     Response getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType);
+
+    @GET
+    @Path("/benutzer/me/gs-dashboard")
+    @Produces({ "application/json", "text/plain" })
+    Response getGsDashboard();
 
     @GET
     @Path("/{aenderungId}/aenderung/gs/changes")

@@ -87,6 +87,11 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryType)).build();
     }
 
+    @Override
+    public Response getGsDashboard() {
+        return Response.ok(gesuchService.findGsDashboard()).build();
+    }
+
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
     @Override
     public Response getGesucheGs() {

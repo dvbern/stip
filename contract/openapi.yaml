@@ -2236,7 +2236,7 @@ components:
           $ref: '#/components/schemas/Gesuchstatus'
         id:
           $ref: '#/components/schemas/UUID'
-        gesuchTrancheSlim:
+        offeneAenderung:
           $ref: '#/components/schemas/GesuchTrancheSlim'
         gesuchTrancheWithMissingDocumentsId:
           $ref: '#/components/schemas/UUID'
