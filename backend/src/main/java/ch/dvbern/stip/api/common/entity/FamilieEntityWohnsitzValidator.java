@@ -7,6 +7,7 @@ import java.util.Optional;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
@@ -33,12 +34,26 @@ public class FamilieEntityWohnsitzValidator {
             return true;
         }
 
-        if (familiensituation.getElternVerheiratetZusammen()) {
+        if (Boolean.TRUE.equals(familiensituation.getElternVerheiratetZusammen())) {
             // when elterns are together or married, the option MUTTER_VATER is not available
             return familieEntity.getWohnsitz() != Wohnsitz.MUTTER_VATER;
         }
 
-        if (familiensituation.getElternteilUnbekanntVerstorben()) {
+        // check alimentenregelung
+        if (Boolean.TRUE.equals(familiensituation.getGerichtlicheAlimentenregelung())){
+            boolean isAnteilMutter100Percent = getIsWohnsitzanteilMutter100Percent(familieEntity);
+            boolean isAnteilVater100Percent = getIsWohnsitzanteilVater100Percent(familieEntity);
+
+            if(familiensituation.getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM){
+                return familieEntity.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
+            }
+            else if(familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER){
+                return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE && isAnteilMutter100Percent;
+            }
+            return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE &&  isAnteilVater100Percent;
+        }
+
+        if (Boolean.TRUE.equals(familiensituation.getElternteilUnbekanntVerstorben())) {
             // when both elternteils are dead, the only valid option is EIGENER_HAUSHALT
             if(familiensituation.getMutterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.VERSTORBEN)
                 && familiensituation.getVaterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.VERSTORBEN)){
@@ -59,10 +74,8 @@ public class FamilieEntityWohnsitzValidator {
             return true;
         }
 
-        boolean isAnteilMutter100Percent = familieEntity.getWohnsitzAnteilMutter()
-            .compareTo(BigDecimal.valueOf(100)) == 0;
-        boolean isAnteilVater100Percent = familieEntity.getWohnsitzAnteilVater()
-            .compareTo(BigDecimal.valueOf(100)) == 0;
+        boolean isAnteilMutter100Percent = getIsWohnsitzanteilMutter100Percent(familieEntity);
+        boolean isAnteilVater100Percent = getIsWohnsitzanteilVater100Percent(familieEntity);
 
         final boolean isMutterAbsent =
             familiensituation.getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.VERSTORBEN
@@ -87,5 +100,17 @@ public class FamilieEntityWohnsitzValidator {
             return isAnteilMutter100Percent
                 || isAnteilVater100Percent;
         }
+    }
+
+    private boolean getIsWohnsitzanteilVater100Percent(AbstractFamilieEntity familieEntity) {
+        return familieEntity.getWohnsitzAnteilVater() != null
+            && familieEntity.getWohnsitzAnteilVater()
+            .compareTo(BigDecimal.valueOf(100)) == 0;
+    }
+
+    private boolean getIsWohnsitzanteilMutter100Percent(AbstractFamilieEntity familieEntity) {
+        return familieEntity.getWohnsitzAnteilMutter() != null
+            && familieEntity.getWohnsitzAnteilMutter()
+            .compareTo(BigDecimal.valueOf(100)) == 0;
     }
 }
