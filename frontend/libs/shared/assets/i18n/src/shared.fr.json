@@ -190,7 +190,7 @@
   "shared.form.title.suffix.AENDERUNG": "Changement {{ position }} du",
   "shared.form.tranche.von.label": "De",
   "shared.form.tranche.bis.label": "Jusqu'à",
-  "shared.form.tranche.bemerkung.label": "Bemerkung",
+  "shared.form.tranche.bemerkung.label": "Commentaire",
   "shared.form.tranche.bemerkung.initialgesuch": "Demande initiale",
   "shared.form.aenderung.action.accept": "Accepter",
   "shared.form.aenderung.action.reject": "Rejeter",
@@ -491,6 +491,7 @@
   "shared.form.abschluss.dialog.text": "Les modifications ultérieures ne seront pas possibles.",
   "shared.form.abschluss.submitted": "La demande a été validée. Vous avez maintenant un accès en lecture seule à la demande.",
   "shared.form.abschluss.abschliessen": "Valider",
+  "shared.form.tranche-abschluss.notReady": "Il manque encore des informations. Veuillez remplir tous les champs obligatoires.",
 
   "shared.protokoll.title": "Protocole",
 

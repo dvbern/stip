@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 
 import {} from '@dv/shared/feature/gesuch-form-geschwister';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
 import { SharedFeatureGesuchFormTrancheComponent } from './shared-feature-gesuch-form-tranche/shared-feature-gesuch-form-tranche.component';
@@ -9,10 +10,7 @@ export const sharedFeatureGesuchFormTrancheRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
-    providers: [
-      // feature specific services and other providers
-      // always remove { providedIn: 'root' } from the feature specific services
-    ],
+    providers: [EinreichenStore],
     children: [
       ...idAndTrancheIdRoutes({
         title: 'shared.tranche.title',

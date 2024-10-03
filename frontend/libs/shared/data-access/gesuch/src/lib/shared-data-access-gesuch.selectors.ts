@@ -136,6 +136,7 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
   ({ tranchenChanges }, state) => {
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
     const gesuchTranche = state.gesuch?.gesuchTrancheToWorkWith;
+
     return {
       trancheSetting: createTrancheSetting(
         state.isEditingTranche,
@@ -240,7 +241,7 @@ const transformValidationMessagesToFormKeys = (
     'dokuments',
   ];
 
-  return messages
+  const ers = messages
     ?.filter(isDefined)
     .filter(
       (m) =>
@@ -257,6 +258,8 @@ const transformValidationMessagesToFormKeys = (
     .map((m) => m.propertyPath)
     .filter(isDefined)
     .filter(isGesuchFormularProp(formKeys));
+  console.log('ERRS', { ers, messages, formKeys, currentForm });
+  return ers;
 };
 
 /**

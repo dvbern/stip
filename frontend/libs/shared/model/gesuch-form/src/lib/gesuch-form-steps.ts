@@ -6,6 +6,7 @@ import {
   SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import {
   SharedModelGesuchFormStep,
@@ -273,23 +274,22 @@ export const isStepValid = (
     const currentHasDaten = formular?.steuerdaten?.find(
       (s) => s.steuerdatenTyp === stepSteuerdatenTyp,
     );
-    const isValid = currentHasDaten
-      ? toStepState(field, invalidProps)
-      : undefined;
-    return isValid; // Mit Juri schauen ob wenn beide da sind auch zwei rückgabewerte kommen
+    return toStepState(field, isDefined(currentHasDaten), invalidProps);
   }
 
   if (field === 'lebenslaufItems') {
-    return formular?.personInAusbildung && formular.ausbildung
-      ? toStepState(field, invalidProps)
-      : undefined;
+    return toStepState(
+      field,
+      isDefined(formular?.personInAusbildung && formular.ausbildung),
+      invalidProps,
+    );
   }
 
   if (field === 'dokuments') {
     return toDocumentStepState(invalidProps);
   }
 
-  return formular?.[field] ? toStepState(field, invalidProps) : undefined;
+  return toStepState(field, isDefined(formular?.[field]), invalidProps);
 };
 
 export const getFormStepByDocumentType = (
@@ -335,6 +335,7 @@ const toDocumentStepState = (
 
 const toStepState = (
   field: SharedModelGesuchFormularPropsSteuerdatenSteps,
+  isDefined: boolean,
   invalidProps?: StepValidation,
 ): StepState | undefined => {
   if (invalidProps?.errors?.includes(field)) {
@@ -347,7 +348,7 @@ const toStepState = (
   if (invalidProps?.errors === undefined) {
     return undefined;
   }
-  return 'VALID';
+  return isDefined ? 'VALID' : undefined;
 };
 
 const isSteuerdatenStep = (

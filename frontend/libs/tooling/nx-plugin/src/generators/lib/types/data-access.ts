@@ -3,7 +3,6 @@ import { Tree, updateJson } from '@nx/devkit';
 import { libraryGenerator } from '@nx/angular/generators';
 
 import { NormalizedSchema, LibTypeGenerator } from '../generator.interface';
-import { extendEslintJson } from './helpers/eslint';
 import { extendJestConfigSwc, extendTestSetupSwc } from './helpers/swc';
 
 export function dataAccessTypeFactory(
@@ -26,7 +25,6 @@ export function dataAccessTypeFactory(
 }
 
 function postprocess(tree: Tree, options: NormalizedSchema) {
-  extendEslintJson(tree, 'ngrx', options);
   extendTestSetupSwc(tree, options);
   extendJestConfigSwc(tree, options);
 

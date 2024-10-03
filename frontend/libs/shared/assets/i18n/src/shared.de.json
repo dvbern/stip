@@ -491,6 +491,7 @@
   "shared.form.abschluss.dialog.text": "Nachträgliche Änderungen sind nicht mehr möglich.",
   "shared.form.abschluss.submitted": "Gesuch wurde freigegeben. Sie haben nur noch lesend Zugriff auf das Gesuch.",
   "shared.form.abschluss.abschliessen": "Freigeben",
+  "shared.form.tranche-abschluss.notReady": "Es fehlen noch Angaben. Bitte füllen Sie alle Pflichtfelder aus.",
 
   "shared.protokoll.title": "Protokoll",
 

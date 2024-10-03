@@ -56,6 +56,7 @@ export class SharedPatternDocumentUploadDialogComponent {
 
   showUplaodSig = computed(() => {
     const { options, store } = this.data;
+
     if (options.readonly) {
       return false;
     }

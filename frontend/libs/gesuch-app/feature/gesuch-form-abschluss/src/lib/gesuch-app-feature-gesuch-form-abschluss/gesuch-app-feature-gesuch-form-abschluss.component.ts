@@ -6,22 +6,16 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
-import {
-  GesuchAppDataAccessAbschlussApiEvents,
-  selectGesuchAppDataAccessAbschlussView,
-} from '@dv/gesuch-app/data-access/abschluss';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-gesuch-app-feature-gesuch-form-abschluss',
@@ -37,29 +31,17 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 })
 export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   private store = inject(Store);
+  private einreichenStore = inject(EinreichenStore);
   private dialog = inject(MatDialog);
   destroyRef = inject(DestroyRef);
 
-  viewSig = this.store.selectSignal(selectGesuchAppDataAccessAbschlussView);
+  viewSig = this.einreichenStore.einreichenViewSig;
 
   constructor() {
-    // validate form only if no formErrors form validatePages are present
-    combineLatest([
-      getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig).pipe(
-        filter(isDefined),
-      ),
-      toObservable(this.viewSig).pipe(
-        map((view) => view.canCheck),
-        distinctUntilChanged(),
-        filter((canCheck) => !!canCheck),
-        takeUntilDestroyed(),
-      ),
-    ]).subscribe(([gesuchTrancheId]) => {
-      this.store.dispatch(
-        GesuchAppDataAccessAbschlussApiEvents.check({
-          gesuchTrancheId,
-        }),
-      );
+    this.einreichenStore.onCheckIsPossible$.subscribe(([gesuchTrancheId]) => {
+      this.einreichenStore.validateEinreichen$({
+        gesuchTrancheId,
+      });
     });
   }
 
@@ -85,17 +67,13 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
       .subscribe((confirmed) => {
         if (confirmed) {
           if (isEditingTranche) {
-            this.store.dispatch(
-              GesuchAppDataAccessAbschlussApiEvents.trancheAbschliessen({
-                trancheId,
-              }),
-            );
+            this.einreichenStore.trancheEinreichen$({
+              trancheId,
+            });
           } else {
-            this.store.dispatch(
-              GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen({
-                gesuchId: gesuch.id,
-              }),
-            );
+            this.einreichenStore.gesuchEinreichen$({
+              gesuchId: gesuch.id,
+            });
           }
         }
       });

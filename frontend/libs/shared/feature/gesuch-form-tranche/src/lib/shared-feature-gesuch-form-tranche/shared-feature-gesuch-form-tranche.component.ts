@@ -17,11 +17,12 @@ import { MatOption } from '@angular/material/autocomplete';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import {
   AenderungChangeState,
@@ -53,6 +54,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     MatOption,
     MatSelect,
     ReactiveFormsModule,
+    RouterLink,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiHeaderSuffixDirective,
@@ -70,7 +72,19 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private defaultCommentSig = toSignal(
     this.translate.stream('shared.form.tranche.bemerkung.initialgesuch'),
   );
+  private einreichenStore = inject(EinreichenStore);
+
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  einreichenViewSig = this.einreichenStore.einreichenViewSig;
+
+  languageSig = this.store.selectSignal(selectLanguage);
+  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
+
+  form = this.formBuilder.group({
+    von: ['', [Validators.required]],
+    bis: ['', [Validators.required]],
+    bemerkung: ['', [Validators.required]],
+  });
 
   currentTrancheIndexSig = computed(() => {
     const currentTranche = this.viewSig().gesuchstranche;
@@ -90,15 +104,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
     );
 
     return index ?? 0;
-  });
-
-  languageSig = this.store.selectSignal(selectLanguage);
-  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
-
-  form = this.formBuilder.group({
-    von: ['', [Validators.required]],
-    bis: ['', [Validators.required]],
-    bemerkung: ['', [Validators.required]],
   });
 
   constructor() {
@@ -126,6 +131,12 @@ export class SharedFeatureGesuchFormTrancheComponent {
     );
 
     this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+
+    this.einreichenStore.onCheckIsPossible$.subscribe(([gesuchTrancheId]) => {
+      this.einreichenStore.validateEinreichen$({
+        gesuchTrancheId,
+      });
+    });
   }
 
   changeAenderungState(
