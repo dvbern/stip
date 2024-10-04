@@ -6,7 +6,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { AbschlussPhase } from '@dv/shared/model/einreichen';
-import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
+import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
 
 import { GesuchAppFeatureGesuchFormAbschlussComponent } from './gesuch-app-feature-gesuch-form-abschluss.component';
 
@@ -25,19 +25,24 @@ async function setup(abschlussPhase: AbschlussPhase) {
           >({
             loading: false,
             abschlussPhase,
-            gesuch: {
-              id: '1',
-            } as any,
-            canCheck: true,
-            isEditingTranche: false,
-            lastUpdate: null,
             specialValidationErrors: [],
-            trancheId: '1',
           }),
         },
       },
-      provideMockStore(),
-      provideMaterialDefaultOptions(),
+      provideSharedPatternJestTestSetup(),
+      provideMockStore({
+        initialState: {
+          gesuchs: {
+            gesuch: {
+              gesuchTrancheToWorkWith: {},
+            },
+            cache: {},
+          },
+          configs: {
+            compileTimeConfig: undefined,
+          },
+        },
+      }),
     ],
   });
 }

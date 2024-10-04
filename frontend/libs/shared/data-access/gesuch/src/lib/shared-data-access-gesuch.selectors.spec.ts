@@ -9,6 +9,8 @@ import {
   SteuerdatenTyp,
 } from '@dv/shared/model/gesuch';
 import { ELTERN, ELTERN_STEUER_FAMILIE } from '@dv/shared/model/gesuch-form';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { DeepPartial } from '@dv/shared/pattern/jest-test-setup';
 import { initial, success } from '@dv/shared/util/remote-data';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
@@ -146,12 +148,6 @@ describe('selectSharedDataAccessGesuchsView', () => {
     expect(elternIndex + 1).toEqual(steuerdatenTabIndex);
   });
 });
-
-type DeepPartial<T> = T extends object
-  ? {
-      [P in keyof T]?: DeepPartial<T[P]>;
-    }
-  : T;
 
 describe('selectSharedDataAccessGesuchStepsView - calculate differences', () => {
   it('should identify the changed form steps', () => {

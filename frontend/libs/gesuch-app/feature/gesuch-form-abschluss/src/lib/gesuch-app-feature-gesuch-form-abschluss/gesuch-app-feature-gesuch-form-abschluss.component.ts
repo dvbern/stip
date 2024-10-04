@@ -35,12 +35,11 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 })
 export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   private store = inject(Store);
-  private einreichenStore = inject(EinreichenStore);
   private dialog = inject(MatDialog);
   destroyRef = inject(DestroyRef);
 
+  einreichenStore = inject(EinreichenStore);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
-  einreichenViewSig = this.einreichenStore.einreichenViewSig;
 
   constructor() {
     getLatestTrancheIdFromGesuchOnUpdate$(this.gesuchViewSig)
