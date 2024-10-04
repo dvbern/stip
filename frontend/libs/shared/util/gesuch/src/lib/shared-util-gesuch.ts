@@ -3,6 +3,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { Route } from '@angular/router';
 import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
+import { Gesuchstatus } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 /**
@@ -68,3 +69,33 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
     },
   ];
 }
+
+export type StatusUebergang = 'BEARBEITUNG_ABSCHLIESSEN' | 'ZURUECKWEISEN';
+
+export const StatusUebergaengeMap: Partial<
+  Record<Gesuchstatus, StatusUebergang[]>
+> = {
+  IN_BEARBEITUNG_SB: ['BEARBEITUNG_ABSCHLIESSEN', 'ZURUECKWEISEN'],
+};
+
+export type StatusUebergangOption = {
+  icon: string;
+  titleKey: StatusUebergang;
+  typ: StatusUebergang;
+};
+
+export const StatusUebergaengeOptions: Record<
+  StatusUebergang,
+  StatusUebergangOption
+> = {
+  BEARBEITUNG_ABSCHLIESSEN: {
+    icon: 'check',
+    titleKey: 'BEARBEITUNG_ABSCHLIESSEN',
+    typ: 'BEARBEITUNG_ABSCHLIESSEN',
+  },
+  ZURUECKWEISEN: {
+    icon: 'undo',
+    titleKey: 'ZURUECKWEISEN',
+    typ: 'ZURUECKWEISEN',
+  },
+};
