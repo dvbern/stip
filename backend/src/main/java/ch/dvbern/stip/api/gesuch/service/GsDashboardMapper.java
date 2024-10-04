@@ -10,12 +10,21 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GsDashboardMapper {
-
     private final GesuchsperiodeMapper gesuchsperiodeMapper;
 
-    public GsDashboardDto toDto(final Gesuch gesuch, final GesuchTrancheSlimDto offeneAenderung, final GesuchTrancheSlimDto missingDocuments) {
+    public GsDashboardDto toDto(
+        final Gesuch gesuch,
+        final GesuchTrancheSlimDto offeneAenderung,
+        final GesuchTrancheSlimDto missingDocuments
+    ) {
         final var periodeDto = gesuchsperiodeMapper.toDto(gesuch.getGesuchsperiode());
 
-        return new GsDashboardDto(periodeDto, gesuch.getGesuchStatus(), gesuch.getId(), offeneAenderung, missingDocuments.getId());
+        return new GsDashboardDto(
+            periodeDto,
+            gesuch.getGesuchStatus(),
+            gesuch.getId(),
+            offeneAenderung,
+            missingDocuments.getId()
+        );
     }
 }

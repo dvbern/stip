@@ -321,7 +321,8 @@ public class GesuchService {
             final var gesuchTranchen = gesuchTrancheService.getAllTranchenForGesuch(gesuch.getId());
 
             final var offeneAenderung = gesuchTranchen.stream()
-                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG) && tranche.getStatus().equals(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
+                    && tranche.getStatus().equals(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
                 .findFirst().orElse(null);
 
             final var missingDocuments = gesuchTranchen.stream()
