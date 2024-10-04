@@ -40,7 +40,7 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchDto).build();
     }
 
-    //todo  KSTIP-1532: roles allowed?
+    // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
     public Response changeGesuchStatusToVerfuegt(UUID gesuchId) {
@@ -48,7 +48,7 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok().build();
     }
 
-    //todo  KSTIP-1532: roles allowed?
+    // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
     public Response changeGesuchStatusToVersendet(UUID gesuchId) {
@@ -158,7 +158,7 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok().build();
     }
 
-    //todo  KSTIP-1532: roles allowed?
+    // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
     public Response changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {

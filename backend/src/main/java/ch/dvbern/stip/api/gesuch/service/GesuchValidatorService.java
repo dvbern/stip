@@ -19,9 +19,11 @@ public class GesuchValidatorService {
 
     static {
         statusToValidationGroup.put(Gesuchstatus.EINGEREICHT, GesuchEinreichenValidationGroup.class);
+        statusToValidationGroup.put(Gesuchstatus.BEREIT_FUER_BEARBEITUNG, GesuchEinreichenValidationGroup.class);
         statusToValidationGroup.put(Gesuchstatus.FEHLENDE_DOKUMENTE, GesuchFehlendeDokumenteValidationGroup.class);
         statusToValidationGroup.put(Gesuchstatus.VERFUEGT, GesuchEinreichenValidationGroup.class);
         statusToValidationGroup.put(Gesuchstatus.IN_FREIGABE, GesuchEinreichenValidationGroup.class);
+        statusToValidationGroup.put(Gesuchstatus.VERSENDET, GesuchEinreichenValidationGroup.class);
     }
 
     private final Validator validator;
