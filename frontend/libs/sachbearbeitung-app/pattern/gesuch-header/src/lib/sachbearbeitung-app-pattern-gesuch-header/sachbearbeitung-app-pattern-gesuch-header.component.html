@@ -118,20 +118,33 @@
     }
 
     @switch (canSetCurrentStatusUebergangSig()) {
-      @case ('IN_BEARBEITUNG_SB' || 'DOKUMENTE_OFFEN') {
-        <!-- Status Uebergbang Menu Button -->
-        <button
-          type="button"
-          class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-          data-testid="gesuch-header-nav-status-uebergang"
-          [matMenuTriggerFor]="statusUebergangMenu"
-        >
-          <i class="material-symbols-rounded text-white me-2">sync_alt</i>
-          <span>{{ 'sachbearbeitung-app.header.status-uebergang.abschliessen' | translate }}</span>
-          <i class="material-symbols-rounded ms-2">expand_more</i>
-        </button>
+      @case ('IN_BEARBEITUNG_SB') {
+        <ng-container
+          *ngTemplateOutlet="statusButtonTemplate; context: { translationKey: 'abschliessen' }"
+        ></ng-container>
+      }
+      @case ('IN_FREIGABE') {
+        <ng-container *ngTemplateOutlet="statusButtonTemplate; context: { translationKey: 'freigabe' }"></ng-container>
+      }
+      @case ('DOKUMENTE_OFFEN') {
+        <dv-shared-ui-icon-badge class="text-muted" type="warning">
+          {{ 'sachbearbeitung-app.header.status-uebergang.dokumente-offen' | translate }}
+        </dv-shared-ui-icon-badge>
       }
     }
+
+    <ng-template #statusButtonTemplate let-translationKey="translationKey">
+      <button
+        type="button"
+        class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+        data-testid="gesuch-header-nav-status-uebergang"
+        [matMenuTriggerFor]="statusUebergangMenu"
+      >
+        <i class="material-symbols-rounded text-white me-2">sync_alt</i>
+        <span>{{ 'sachbearbeitung-app.header.status-uebergang.' + translationKey | translate }}</span>
+        <i class="material-symbols-rounded ms-2">expand_more</i>
+      </button>
+    </ng-template>
 
     <!-- Status Uebergang Menu -->
     <mat-menu #statusUebergangMenu="matMenu" class="header-menu-panel mt-2 rounded">

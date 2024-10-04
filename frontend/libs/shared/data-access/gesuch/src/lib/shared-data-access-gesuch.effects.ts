@@ -576,6 +576,67 @@ export const setGesuchZurueckweisen = createEffect(
   { functional: true },
 );
 
+export const setGesuchVerfuegt = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.setGesuchVerfuegt),
+      concatLatestFrom(() => store.select(selectRouteId)),
+      concatMap(([, id]) => {
+        if (!id) {
+          throw new Error(ROUTE_ID_MISSING);
+        }
+        return gesuchService
+          .changeGesuchStatusToVerfuegt$({ gesuchId: id })
+          .pipe(
+            map(() => SharedDataAccessGesuchEvents.loadGesuch()),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+export const setGesuchBereitFuerBearbeitung = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung),
+      concatLatestFrom(() => store.select(selectRouteId)),
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      concatMap(([{ kommentar }, id]) => {
+        if (!id) {
+          throw new Error(ROUTE_ID_MISSING);
+        }
+        return gesuchService
+          .changeGesuchStatusToBereitFuerBearbeitung$({
+            gesuchId: id,
+          })
+          .pipe(
+            map(() => SharedDataAccessGesuchEvents.loadGesuch()),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
+      }),
+    );
+  },
+  { functional: true },
+);
+
 // add effects here
 export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
@@ -592,6 +653,8 @@ export const sharedDataAccessGesuchEffects = {
   setGesuchToBearbeitung,
   setGesuchBearbeitungAbschliessen,
   setGesuchZurueckweisen,
+  setGesuchVerfuegt,
+  setGesuchBereitFuerBearbeitung,
 };
 
 const viewOnlyFields = ['steuerdatenTabs'] as const satisfies [

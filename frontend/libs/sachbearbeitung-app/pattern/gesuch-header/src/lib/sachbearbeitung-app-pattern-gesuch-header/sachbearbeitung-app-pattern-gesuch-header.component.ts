@@ -24,6 +24,7 @@ import {
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
+import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import {
   StatusUebergaengeMap,
@@ -42,6 +43,7 @@ import {
     MatMenuModule,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
+    SharedUiIconBadgeComponent,
   ],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -114,6 +116,8 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'IN_BEARBEITUNG_SB':
         // somit koennte auch ein grund angezeigt werden
         return hasOpenDokument ? 'DOKUMENTE_OFFEN' : gesuchStatus;
+      case 'IN_FREIGABE':
+        return gesuchStatus;
       default:
         return 'NO_UEBERGANG';
     }
@@ -140,6 +144,12 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'ZURUECKWEISEN':
         this.setStatusZurueckweisen();
         break;
+      case 'VERFUEGT':
+        this.setStatusVerfuegt();
+        break;
+      case 'BEREIT_FUER_BEARBEITUNG':
+        this.setStatusBereitFuerBearbeitung();
+        break;
     }
   }
 
@@ -147,6 +157,39 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     this.store.dispatch(
       SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen(),
     );
+  }
+
+  private setStatusVerfuegt() {
+    this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchVerfuegt());
+  }
+
+  private setStatusBereitFuerBearbeitung() {
+    const gesuchId = this.currentGesuchSig()?.id;
+
+    if (gesuchId) {
+      SharedUiKommentarDialogComponent.open(this.dialog, {
+        entityId: gesuchId,
+        titleKey:
+          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.title',
+        messageKey:
+          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.message',
+        placeholderKey:
+          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.placeholder',
+        confirmKey:
+          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.confirm',
+      })
+        .afterClosed()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((result) => {
+          if (result) {
+            this.store.dispatch(
+              SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung({
+                kommentar: result.kommentar,
+              }),
+            );
+          }
+        });
+    }
   }
 
   private setStatusZurueckweisen() {

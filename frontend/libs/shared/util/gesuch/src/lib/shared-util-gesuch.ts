@@ -70,12 +70,17 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
   ];
 }
 
-export type StatusUebergang = 'BEARBEITUNG_ABSCHLIESSEN' | 'ZURUECKWEISEN';
+export type StatusUebergang =
+  | 'BEARBEITUNG_ABSCHLIESSEN'
+  | 'ZURUECKWEISEN'
+  | 'VERFUEGT'
+  | 'BEREIT_FUER_BEARBEITUNG';
 
 export const StatusUebergaengeMap: Partial<
   Record<Gesuchstatus, StatusUebergang[]>
 > = {
   IN_BEARBEITUNG_SB: ['BEARBEITUNG_ABSCHLIESSEN', 'ZURUECKWEISEN'],
+  IN_FREIGABE: ['VERFUEGT', 'BEREIT_FUER_BEARBEITUNG'],
 };
 
 export type StatusUebergangOption = {
@@ -97,5 +102,15 @@ export const StatusUebergaengeOptions: Record<
     icon: 'undo',
     titleKey: 'ZURUECKWEISEN',
     typ: 'ZURUECKWEISEN',
+  },
+  VERFUEGT: {
+    icon: 'done',
+    titleKey: 'VERFUEGT',
+    typ: 'VERFUEGT',
+  },
+  BEREIT_FUER_BEARBEITUNG: {
+    icon: 'play_arrow',
+    titleKey: 'BEREIT_FUER_BEARBEITUNG',
+    typ: 'BEREIT_FUER_BEARBEITUNG',
   },
 };
