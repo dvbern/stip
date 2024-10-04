@@ -65,6 +65,8 @@ import {
 } from './shared-data-access-gesuch.selectors';
 
 export const LOAD_ALL_DEBOUNCE_TIME = 300;
+export const ROUTE_ID_MISSING =
+  'Make sure that the route is correct and contains the gesuch :id';
 
 export const loadOwnGesuchs = createEffect(
   (
@@ -164,9 +166,7 @@ export const loadGesuch = createEffect(
       withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
       switchMap(([[, [id, trancheTyp, trancheId]], { compileTimeConfig }]) => {
         if (!id) {
-          throw new Error(
-            'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id',
-          );
+          throw new Error(ROUTE_ID_MISSING);
         }
 
         const navigateIfNotFound = {
@@ -492,9 +492,7 @@ export const setGesuchToBearbeitung = createEffect(
       concatLatestFrom(() => store.select(selectRouteId)),
       concatMap(([, id]) => {
         if (!id) {
-          throw new Error(
-            'Make sure that the route is correct and contains the gesuch :id',
-          );
+          throw new Error(ROUTE_ID_MISSING);
         }
         return gesuchService
           .changeGesuchStatusToInBearbeitung$({ gesuchId: id })
@@ -525,9 +523,7 @@ export const setGesuchBearbeitungAbschliessen = createEffect(
       concatLatestFrom(() => store.select(selectRouteId)),
       concatMap(([, id]) => {
         if (!id) {
-          throw new Error(
-            'Make sure that the route is correct and contains the gesuch :id',
-          );
+          throw new Error(ROUTE_ID_MISSING);
         }
         return gesuchService.bearbeitungAbschliessen$({ gesuchId: id }).pipe(
           map(() => SharedDataAccessGesuchEvents.loadGesuch()),
@@ -554,9 +550,7 @@ export const setGesuchZurueckweisen = createEffect(
       concatLatestFrom(() => store.select(selectRouteId)),
       concatMap(([{ kommentar }, id]) => {
         if (!id) {
-          throw new Error(
-            'Make sure that the route is correct and contains the gesuch :id',
-          );
+          throw new Error(ROUTE_ID_MISSING);
         }
         return gesuchService
           .gesuchZurueckweisen$({
