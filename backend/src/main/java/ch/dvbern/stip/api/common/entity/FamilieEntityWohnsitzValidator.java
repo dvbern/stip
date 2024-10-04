@@ -84,6 +84,7 @@ public class FamilieEntityWohnsitzValidator {
             FamilieEntityWohnsitzValidatorUtils.getIsWohnsitzanteilVater100Percent(familieEntity);
 
         if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM) {
+            // TODO KSTIP-1539: Check if EIGENER_HAUSHALT is correct
             return familieEntity.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
         } else if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER) {
             return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE && isAnteilMutter100Percent;
