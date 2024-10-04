@@ -93,7 +93,6 @@
     <!-- Separator -->
     <div class="my-1 text-body-tertiary vr"></div>
 
-    <!-- Tranche erstellen -->
     @if (canSetToBearbeitungSig()) {
       <!-- Switch to In Bearbeitung SB -->
       <button
@@ -106,6 +105,7 @@
         <span>{{ 'sachbearbeitung-app.header.gesuch-bearbeiten' | translate }}</span>
       </button>
     } @else {
+      <!-- Tranche erstellen -->
       <button
         type="button"
         class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
@@ -117,38 +117,41 @@
       </button>
     }
 
-    @if (canEndBearbeitungOrRejectSig()) {
-      <!-- Status Uebergbang Menu Button -->
-      <button
-        type="button"
-        class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-        data-testid="gesuch-header-nav-status-uebergang"
-        [matMenuTriggerFor]="statusUebergangMenu"
-      >
-        <span>{{ 'sachbearbeitung-app.header.status-uebergang.title' | translate }}</span>
-        <i class="material-symbols-rounded ms-2">expand_more</i>
-      </button>
-
-      <!-- Status Uebergang Menu -->
-      <mat-menu #statusUebergangMenu="matMenu" class="header-menu-panel mt-2 rounded">
-        <div class="d-flex flex-column gap-2">
-          @for (uebergang of statusUebergaengeMenu; track $index) {
-            <button
-              type="button"
-              class="btn fw-normal shadow-none"
-              [attr.data-testid]="'gesuch-header-nav-status-uebergang-item-' + uebergang.typ"
-              mat-menu-item
-              (click)="setStatusUebergang(uebergang.typ)"
-            >
-              <div class="d-flex gap-2 align-items-center">
-                <i class="material-symbols-rounded ms-2">{{ uebergang.icon }}</i>
-                <span>{{ 'sachbearbeitung-app.header.status-uebergang.' + uebergang.titleKey | translate }}</span>
-              </div>
-            </button>
-          }
-        </div>
-      </mat-menu>
+    @switch (canSetCurrentStatusUebergangSig()) {
+      @case ('IN_BEARBEITUNG_SB' || 'DOKUMENTE_OFFEN') {
+        <!-- Status Uebergbang Menu Button -->
+        <button
+          type="button"
+          class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          data-testid="gesuch-header-nav-status-uebergang"
+          [matMenuTriggerFor]="statusUebergangMenu"
+        >
+          <i class="material-symbols-rounded text-white me-2">sync_alt</i>
+          <span>{{ 'sachbearbeitung-app.header.status-uebergang.abschliessen' | translate }}</span>
+          <i class="material-symbols-rounded ms-2">expand_more</i>
+        </button>
+      }
     }
+
+    <!-- Status Uebergang Menu -->
+    <mat-menu #statusUebergangMenu="matMenu" class="header-menu-panel mt-2 rounded">
+      <div class="d-flex flex-column gap-2">
+        @for (uebergang of statusUebergaengeOptionsSig(); track $index) {
+          <button
+            type="button"
+            class="btn fw-normal shadow-none"
+            [attr.data-testid]="'gesuch-header-nav-status-uebergang-item-' + uebergang.typ"
+            mat-menu-item
+            (click)="setStatusUebergang(uebergang.typ)"
+          >
+            <div class="d-flex gap-2 align-items-center">
+              <i class="material-symbols-rounded ms-2">{{ uebergang.icon }}</i>
+              <span>{{ 'sachbearbeitung-app.header.status-uebergang.' + uebergang.titleKey | translate }}</span>
+            </div>
+          </button>
+        }
+      </div>
+    </mat-menu>
   </div>
   <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
 </dv-shared-pattern-app-header>

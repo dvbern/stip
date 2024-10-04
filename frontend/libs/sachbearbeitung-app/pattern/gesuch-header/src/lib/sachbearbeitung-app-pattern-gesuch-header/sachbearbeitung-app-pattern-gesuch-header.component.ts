@@ -15,6 +15,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
@@ -24,21 +25,11 @@ import {
 } from '@dv/shared/pattern/app-header';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
-
-type StatusUebergang = 'BEARBEITUNG_ABSCHIESSEN' | 'ZURUECKWEISEN';
-
-const statusUebergaenge = {
-  BEARBEITUNG_ABSCHIESSEN: {
-    icon: 'check',
-    titleKey: 'BEARBEITUNG_ABSCHIESSEN',
-    typ: 'BEARBEITUNG_ABSCHIESSEN' as const,
-  },
-  ZURUECKWEISEN: {
-    icon: 'undo',
-    titleKey: 'ZURUECKWEISEN',
-    typ: 'ZURUECKWEISEN' as const,
-  },
-} satisfies Record<StatusUebergang, unknown>;
+import {
+  StatusUebergaengeMap,
+  StatusUebergaengeOptions,
+  StatusUebergang,
+} from '@dv/shared/util/gesuch';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
@@ -65,13 +56,11 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  dokumentsStore = inject(DokumentsStore);
 
   isTrancheRouteSig = computed(() => {
     const gesuch = this.currentGesuchSig();
-
-    if (!gesuch) {
-      return false;
-    }
+    if (!gesuch) return false;
 
     return (
       // If it is a tranche route
@@ -84,23 +73,22 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   isAenderungRouteSig = computed(() => {
     const gesuch = this.currentGesuchSig();
-
-    if (!gesuch) {
-      return false;
-    }
+    if (!gesuch) return false;
 
     return this.router.url.includes('/aenderung/');
   });
-
-  statusUebergaengeMenu = Object.values(statusUebergaenge);
 
   constructor() {
     effect(
       () => {
         const gesuchId = this.currentGesuchSig()?.id;
-
         if (gesuchId) {
           this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+        }
+
+        const trancheId = this.currentGesuchSig()?.gesuchTrancheToWorkWith.id;
+        if (trancheId) {
+          this.dokumentsStore.getDokumenteAndRequired$(trancheId);
         }
       },
       { allowSignalWrites: true },
@@ -108,37 +96,63 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   }
 
   canSetToBearbeitungSig = computed(() => {
-    const gesuch = this.currentGesuchSig();
-    const status = gesuch?.gesuchStatus;
-    if (!status) {
-      return false;
+    const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
+    if (!gesuchStatus) return false;
+
+    return gesuchStatus === 'BEREIT_FUER_BEARBEITUNG';
+  });
+
+  canSetCurrentStatusUebergangSig = computed(() => {
+    const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
+    if (!gesuchStatus) return false;
+
+    const hasOpenDokument =
+      this.dokumentsStore.hasAbgelehnteDokumentsSig() ||
+      this.dokumentsStore.hasAusstehendeDokumentsSig();
+
+    switch (gesuchStatus) {
+      case 'IN_BEARBEITUNG_SB':
+        // somit koennte auch ein grund angezeigt werden
+        return hasOpenDokument ? 'DOKUMENTE_OFFEN' : gesuchStatus;
+      default:
+        return 'NO_UEBERGANG';
     }
-    return status === 'BEREIT_FUER_BEARBEITUNG';
   });
 
   setToBearbeitung() {
     this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchToBearbeitung());
   }
 
-  canEndBearbeitungOrRejectSig = computed(() => {
+  statusUebergaengeOptionsSig = computed(() => {
     const gesuch = this.currentGesuchSig();
-    const status = gesuch?.gesuchStatus;
-    if (!status) {
-      return false;
-    }
-    return status === 'IN_BEARBEITUNG_SB';
+    if (!gesuch) return [];
+
+    return StatusUebergaengeMap[gesuch.gesuchStatus]?.map(
+      (status) => StatusUebergaengeOptions[status],
+    );
   });
 
-  setStatusUebergang(status: StatusUebergang) {
+  setStatusUebergang(nextStatus: StatusUebergang) {
+    switch (nextStatus) {
+      case 'BEARBEITUNG_ABSCHLIESSEN':
+        this.setStatusBearbeitungAbschliessen();
+        break;
+      case 'ZURUECKWEISEN':
+        this.setStatusZurueckweisen();
+        break;
+    }
+  }
+
+  private setStatusBearbeitungAbschliessen() {
+    this.store.dispatch(
+      SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen(),
+    );
+  }
+
+  private setStatusZurueckweisen() {
     const gesuchId = this.currentGesuchSig()?.id;
 
-    if (status === 'BEARBEITUNG_ABSCHIESSEN') {
-      this.store.dispatch(
-        SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen(),
-      );
-    }
-
-    if (status === 'ZURUECKWEISEN' && gesuchId) {
+    if (gesuchId) {
       SharedUiKommentarDialogComponent.open(this.dialog, {
         entityId: gesuchId,
         titleKey:
