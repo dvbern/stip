@@ -9,10 +9,8 @@ import {
   GesuchTranche,
   GesuchTrancheTyp,
   SharedModelGesuch,
-  SharedModelGesuchFormular,
   SharedModelGesuchFormularPropsSteuerdatenSteps,
   SteuerdatenTyp,
-  ValidationMessage,
 } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
@@ -30,17 +28,15 @@ import {
   PERSON,
   PROTOKOLL,
   RETURN_TO_HOME,
-  SPECIAL_VALIDATION_ERRORS,
   SharedModelGesuchFormStep,
   TRANCHE,
-  isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
 import {
   isGesuchReadonly,
   isTrancheReadonly,
 } from '@dv/shared/util/readonly-state';
 import { capitalized, lowercased } from '@dv/shared/util-fn/string-helper';
-import { isDefined, type } from '@dv/shared/util-fn/type-guards';
+import { type } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
@@ -116,6 +112,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       gesuch,
       gesuchFormular,
       tranchenChanges,
+      isEditingTranche,
       readonly: trancheSetting?.type
         ? isTrancheReadonly(
             gesuch?.gesuchTrancheToWorkWith ?? null,
@@ -130,7 +127,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   },
 );
 
-export const selectSharedDataAccessGesuchValidationView = createSelector(
+export const selectSharedDataAccessGesuchTrancheSettingsView = createSelector(
   selectSharedDataAccessCachedGesuchChanges,
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   ({ tranchenChanges }, state) => {
@@ -145,23 +142,6 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
       cachedGesuchId: state.cache.gesuchId,
       cachedGesuchFormular: currentForm,
       tranchenChanges,
-      invalidFormularProps: {
-        lastUpdate: state.lastUpdate,
-        validations: {
-          errors: transformValidationMessagesToFormKeys(
-            state.validations?.errors,
-            currentForm,
-          ),
-          warnings: transformValidationMessagesToFormKeys(
-            state.validations?.warnings,
-            currentForm,
-          ),
-          hasDocuments: state.validations?.hasDocuments ?? null,
-        },
-        specialValidationErrors: state.validations?.errors
-          .filter(isSpecialValidationError)
-          .map((error) => SPECIAL_VALIDATION_ERRORS[error.messageTemplate]),
-      },
     };
   },
 );
@@ -226,41 +206,6 @@ export const selectSharedDataAccessGesuchCacheView = createSelector(
     };
   },
 );
-
-const transformValidationMessagesToFormKeys = (
-  messages?: ValidationMessage[],
-  currentForm?: SharedModelGesuchFormular | null,
-) => {
-  const formKeys: SharedModelGesuchFormularPropsSteuerdatenSteps[] = [
-    ...(Object.keys(
-      currentForm ?? {},
-    ) as SharedModelGesuchFormularPropsSteuerdatenSteps[]),
-    'steuerdaten',
-    'steuerdatenMutter',
-    'steuerdatenVater',
-    'dokuments',
-  ];
-
-  const ers = messages
-    ?.filter(isDefined)
-    .filter(
-      (m) =>
-        isGesuchFormularProp(formKeys)(m.propertyPath) ||
-        isSpecialValidationError(m),
-    )
-    .map((m) => {
-      if (m.messageTemplate?.includes('documents.required')) {
-        return [{ ...m, propertyPath: 'dokuments' }, { ...m }];
-      }
-      return m;
-    })
-    .flat()
-    .map((m) => m.propertyPath)
-    .filter(isDefined)
-    .filter(isGesuchFormularProp(formKeys));
-  console.log('ERRS', { ers, messages, formKeys, currentForm });
-  return ers;
-};
 
 /**
  * Returns true if the gesuchFormular has the given property

@@ -11,11 +11,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { filter } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-gesuch-app-feature-gesuch-form-abschluss',
@@ -35,14 +39,17 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   private dialog = inject(MatDialog);
   destroyRef = inject(DestroyRef);
 
-  viewSig = this.einreichenStore.einreichenViewSig;
+  gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  einreichenViewSig = this.einreichenStore.einreichenViewSig;
 
   constructor() {
-    this.einreichenStore.onCheckIsPossible$.subscribe(([gesuchTrancheId]) => {
-      this.einreichenStore.validateEinreichen$({
-        gesuchTrancheId,
+    getLatestTrancheIdFromGesuchOnUpdate$(this.gesuchViewSig)
+      .pipe(filter(isDefined), takeUntilDestroyed())
+      .subscribe((gesuchTrancheId) => {
+        this.einreichenStore.validateEinreichen$({
+          gesuchTrancheId,
+        });
       });
-    });
   }
 
   ngOnInit(): void {
@@ -50,7 +57,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   }
 
   abschliessen() {
-    const { isEditingTranche, gesuch, trancheId } = this.viewSig();
+    const { isEditingTranche, gesuch, trancheId } = this.gesuchViewSig();
     if (!gesuch || !trancheId) {
       return;
     }

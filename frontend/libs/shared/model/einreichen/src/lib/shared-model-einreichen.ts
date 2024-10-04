@@ -53,7 +53,6 @@ export const toAbschlussPhase = (
   options: { appType?: AppType; isComplete?: boolean; checkTranche?: boolean },
 ): AbschlussPhase | null => {
   const appType = options?.appType;
-  console.log('ASDF', { gesuch, appType, options });
   if (!gesuch || !appType) {
     return 'NOT_READY';
   }

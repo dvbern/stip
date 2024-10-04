@@ -41,7 +41,6 @@ import {
   AusbildungUpdate,
   GesuchFormularUpdate,
   GesuchService,
-  GesuchTrancheService,
   GesuchTrancheTyp,
   GesuchUpdate,
   SharedModelGesuchFormular,
@@ -51,7 +50,6 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
 import {
   handleNotFoundAndUnauthorized,
   noGlobalErrorsIf,
-  shouldIgnoreNotFoundErrorsIf,
 } from '@dv/shared/util/http';
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
@@ -61,7 +59,6 @@ import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events
 import {
   selectRouteId,
   selectRouteTrancheId,
-  selectSharedDataAccessGesuchCache,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
   selectTrancheTyp,
@@ -382,52 +379,6 @@ export const removeGesuch = createEffect(
   { functional: true },
 );
 
-export const gesuchValidateSteps = createEffect(
-  (
-    events$ = inject(Actions),
-    store = inject(Store),
-    gesuchTranchenService = inject(GesuchTrancheService),
-  ) => {
-    return events$.pipe(
-      ofType(SharedDataAccessGesuchEvents.gesuchValidateSteps),
-      withLatestFrom(
-        store.select(selectSharedDataAccessGesuchCache).pipe(
-          map(({ gesuch }) => ({
-            typ: gesuch?.gesuchTrancheToWorkWith.typ,
-            status: gesuch?.gesuchTrancheToWorkWith.status,
-          })),
-        ),
-      ),
-      switchMap(([{ gesuchTrancheId }, { typ, status }]) => {
-        const service$ =
-          // If it is a tranche > IN_BEARBEITUNG_GS or the tranche is an AENDERUNG
-          // use the stricter gesuchTrancheEinreichenValidieren$ call
-          (
-            typ === 'AENDERUNG' || status !== 'IN_BEARBEITUNG_GS' || !status
-              ? gesuchTranchenService.gesuchTrancheEinreichenValidieren$
-              : gesuchTranchenService.validateGesuchTranchePages$
-          ).bind(gesuchTranchenService);
-
-        return service$({ gesuchTrancheId }, undefined, undefined, {
-          context: shouldIgnoreNotFoundErrorsIf(true),
-        }).pipe(
-          switchMap((validation) => [
-            SharedDataAccessGesuchEvents.gesuchValidationSuccess({
-              error: sharedUtilFnErrorTransformer({ error: validation }),
-            }),
-          ]),
-          catchError((error) => [
-            SharedDataAccessGesuchEvents.gesuchValidationFailure({
-              error: sharedUtilFnErrorTransformer(error),
-            }),
-          ]),
-        );
-      }),
-    );
-  },
-  { functional: true },
-);
-
 export const redirectToGesuchForm = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
@@ -552,7 +503,6 @@ export const sharedDataAccessGesuchEffects = {
   updateGesuch,
   updateGesuchSubform,
   removeGesuch,
-  gesuchValidateSteps,
   redirectToGesuchForm,
   redirectToGesuchFormNextStep,
   refreshGesuchFormStep,

@@ -6,7 +6,6 @@ import {
   SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import {
   SharedModelGesuchFormStep,
@@ -265,6 +264,8 @@ export const isStepValid = (
   if (!field) {
     return undefined;
   }
+
+  const isDefined = (value: unknown) => value !== null && value !== undefined;
 
   if (isSteuerdatenStep(field)) {
     const [stepSteuerdatenTyp] =

@@ -31,7 +31,7 @@ import { isAfter, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { selectSharedDataAccessGesuchValidationView } from '@dv/shared/data-access/gesuch';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { PlzOrtStore } from '@dv/shared/data-access/plz-ort';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
@@ -136,6 +136,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private formUtils = inject(SharedUtilFormService);
   private countriesService = inject(SharedUtilCountriesService);
   private plzStore = inject(PlzOrtStore);
+  private einreichenStore = inject(EinreichenStore);
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
   readonly anredeValues = Object.values(Anrede);
@@ -148,10 +149,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
   gotReenabled$ = new Subject<object>();
-
-  validationViewSig = this.store.selectSignal(
-    selectSharedDataAccessGesuchValidationView,
-  );
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
@@ -312,7 +309,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     const isUniqueSozialversicherungsnummer = (control: AbstractControl) => {
       const {
         invalidFormularProps: { specialValidationErrors },
-      } = untracked(this.validationViewSig);
+      } = untracked(this.einreichenStore.validationViewSig);
       if (
         specialValidationErrors?.some(
           (e) => e.field === 'sozialversicherungsnummer',

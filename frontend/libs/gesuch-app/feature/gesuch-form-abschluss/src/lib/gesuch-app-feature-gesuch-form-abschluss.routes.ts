@@ -1,5 +1,4 @@
 import { Route } from '@angular/router';
-import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 
 import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
@@ -9,7 +8,6 @@ export const gesuchAppFeatureGesuchFormAbschlussRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
-    providers: [EinreichenStore],
     children: [
       ...idAndTrancheIdRoutes({
         title: 'shared.abschluss.title',

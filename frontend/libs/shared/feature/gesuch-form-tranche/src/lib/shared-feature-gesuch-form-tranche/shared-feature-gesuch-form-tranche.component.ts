@@ -35,7 +35,10 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
-import { getLatestGesuchIdFromGesuch$ } from '@dv/shared/util/gesuch';
+import {
+  getLatestGesuchIdFromGesuch$,
+  getLatestTrancheIdFromGesuchOnUpdate$,
+} from '@dv/shared/util/gesuch';
 import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -72,10 +75,9 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private defaultCommentSig = toSignal(
     this.translate.stream('shared.form.tranche.bemerkung.initialgesuch'),
   );
-  private einreichenStore = inject(EinreichenStore);
 
+  einreichenStore = inject(EinreichenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
-  einreichenViewSig = this.einreichenStore.einreichenViewSig;
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
@@ -132,11 +134,13 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
     this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
 
-    this.einreichenStore.onCheckIsPossible$.subscribe(([gesuchTrancheId]) => {
-      this.einreichenStore.validateEinreichen$({
-        gesuchTrancheId,
+    getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
+      .pipe(filter(isDefined), takeUntilDestroyed())
+      .subscribe((gesuchTrancheId) => {
+        this.einreichenStore.validateEinreichen$({
+          gesuchTrancheId,
+        });
       });
-    });
   }
 
   changeAenderungState(

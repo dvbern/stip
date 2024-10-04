@@ -12,12 +12,15 @@ import { ELTERN, ELTERN_STEUER_FAMILIE } from '@dv/shared/model/gesuch-form';
 import { initial, success } from '@dv/shared/util/remote-data';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
-import { State, reducer } from './shared-data-access-gesuch.feature';
+import {
+  State,
+  reducer,
+  sharedDataAccessGesuchsFeature,
+} from './shared-data-access-gesuch.feature';
 import {
   isGesuchFormularProp,
   prepareTranchenChanges,
   selectSharedDataAccessGesuchStepsView,
-  selectSharedDataAccessGesuchValidationView,
   selectSharedDataAccessGesuchsView,
 } from './shared-data-access-gesuch.selectors';
 
@@ -26,7 +29,6 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const state: State = {
       gesuch: null,
       gesuchs: [],
-      validations: { errors: [], hasDocuments: null },
       gesuchFormular: null,
       isEditingTranche: null,
       cache: {
@@ -87,11 +89,9 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const firstState = reducer(undefined, firstAction);
     const secondAction = SharedEventGesuchFormPerson.init();
     const secondState = reducer(firstState, secondAction);
-    const result = selectSharedDataAccessGesuchValidationView.projector(
-      { tranchenChanges: null },
-      secondState,
-    );
-    expect(result.cachedGesuchFormular).toEqual(
+    const result =
+      sharedDataAccessGesuchsFeature.selectCache.projector(secondState);
+    expect(result.gesuchFormular).toEqual(
       firstUpdate.gesuchTrancheToWorkWith.gesuchFormular,
     );
   });
@@ -110,55 +110,10 @@ describe('selectSharedDataAccessGesuchsView', () => {
     },
   );
 
-  it('should select correct invalidFormularProps', () => {
-    const state: State = {
-      gesuch: null,
-      gesuchs: [],
-      validations: {
-        errors: [
-          { message: '', messageTemplate: '', propertyPath: 'partner' },
-          { message: '', messageTemplate: '', propertyPath: 'kinds' },
-          { message: '', messageTemplate: '', propertyPath: 'invalid' },
-        ],
-        hasDocuments: null,
-      },
-      gesuchFormular: {
-        personInAusbildung: {} as any,
-        partner: {} as any,
-        kinds: [],
-      },
-      isEditingTranche: null,
-      steuerdatenTabs: initial(),
-      cache: {
-        gesuch: null,
-        gesuchId: null,
-        gesuchFormular: null,
-      },
-      lastUpdate: null,
-      loading: false,
-      error: undefined,
-    };
-    const result = selectSharedDataAccessGesuchValidationView.projector(
-      {
-        tranchenChanges: null,
-      },
-      state,
-    );
-    expect(result.invalidFormularProps.validations).toEqual({
-      errors: ['partner', 'kinds'],
-      warnings: undefined,
-      hasDocuments: null,
-    });
-  });
-
   it('should append steuerdatenTab Familie to steps after Eltern', () => {
     const state: State = {
       gesuch: null,
       gesuchs: [],
-      validations: {
-        errors: [],
-        hasDocuments: null,
-      },
       gesuchFormular: null,
       isEditingTranche: null,
       steuerdatenTabs: success([SteuerdatenTyp.FAMILIE]),
