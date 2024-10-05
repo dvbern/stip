@@ -106,6 +106,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response aenderungAkzeptieren(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canUpdate(aenderungId);
         final var newTranche = gesuchTrancheService.aenderungAkzeptieren(aenderungId);
         return Response.ok(newTranche).build();
     }
@@ -113,6 +114,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response aenderungAblehnen(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canUpdate(aenderungId);
         final var tranche = gesuchTrancheService.aenderungAblehnen(aenderungId);
         return Response.ok(tranche).build();
     }
@@ -120,6 +122,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response aenderungManuellAnpassen(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canUpdate(aenderungId);
         final var tranche = gesuchTrancheService.aenderungManuellAnpassen(aenderungId);
         return Response.ok(tranche).build();
     }
