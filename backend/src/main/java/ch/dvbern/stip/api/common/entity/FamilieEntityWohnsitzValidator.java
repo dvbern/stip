@@ -78,15 +78,21 @@ public class FamilieEntityWohnsitzValidator {
         AbstractFamilieEntity familieEntity,
         Familiensituation familiensituation
     ) {
+        if (familieEntity.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
+            return true;
+        }
+        if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM) {
+            // As Wohnsitz is not EIGENER_HAUSHALT, every other wohnsitz value is not valid if GEMEINSAM
+            // TODO KSTIP-1539: Check if EIGENER_HAUSHALT is correct
+            return false;
+        }
+
         boolean isAnteilMutter100Percent =
             FamilieEntityWohnsitzValidatorUtils.getIsWohnsitzanteilMutter100Percent(familieEntity);
         boolean isAnteilVater100Percent =
             FamilieEntityWohnsitzValidatorUtils.getIsWohnsitzanteilVater100Percent(familieEntity);
 
-        if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM) {
-            // TODO KSTIP-1539: Check if EIGENER_HAUSHALT is correct
-            return familieEntity.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
-        } else if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER) {
+        if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER) {
             return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE && isAnteilMutter100Percent;
         }
         return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE && isAnteilVater100Percent;

@@ -1,6 +1,11 @@
 import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 
-import { ElternAbwesenheitsGrund } from '@dv/shared/model/gesuch';
+import {
+  ElternAbwesenheitsGrund,
+  ElternTyp,
+  Familiensituation,
+} from '@dv/shared/model/gesuch';
+import { lowercased } from '@dv/shared/util-fn/string-helper';
 
 type NonNullableRecord<T extends Record<string, unknown>> = {
   [K in keyof T]: NonNullable<T[K]>;
@@ -91,8 +96,14 @@ export function numberToPercentString(value?: number): string {
 /**
  * Check if the Eltern Abwesenheits Grund is either 'VERSTORBEN' or 'UNBEKANNT'
  */
-export const isVerstorbenOrUnbekannt = (grund?: ElternAbwesenheitsGrund) => {
+export const isVerstorbenUnbekanntOrZahltAlimente = (
+  elternTyp: ElternTyp,
+  familiensituation?: Familiensituation,
+) => {
   return (['VERSTORBEN', 'UNBEKANNT'] satisfies ElternAbwesenheitsGrund[]).some(
-    (s) => s === grund,
+    (s) =>
+      s ===
+        familiensituation?.[`${lowercased(elternTyp)}UnbekanntVerstorben`] ||
+      familiensituation?.werZahltAlimente === elternTyp,
   );
 };
