@@ -118,10 +118,10 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
                         .join(formular).on(formular.tranche.id.eq(tranche.id))
                         .join(pia).on(formular.personInAusbildung.id.eq(pia.id))
                         .join(gesuchsperiode).on(gesuch.gesuchsperiode.id.eq(gesuchsperiode.id))
-                        .orderBy(gesuchsperiode.gesuchsperiodeStart.desc(), gesuch.fall.id.asc())
                         .limit(1)
                 )
             )
+            .orderBy(tranche.gueltigkeit.gueltigBis.desc())
             .stream();
     }
 
