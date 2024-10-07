@@ -367,9 +367,8 @@ class FamiliensituationGeschwisterWohnsitzConstraintValidatorTest {
         assertFalse(validator.isValid(gesuchFormular, null));
     }
 
-    //TODO KSTIP-1335 mit Dänu besprechen
     @Test
-    @Description("Only Wohnsitz 'Eigener Haushalt' should be valid when Alimente is GEMEINSAM")
+    @Description("All Wohnsitz options should be valid when Alimente is GEMEINSAM")
     void familiensituation_alimente_gemeinsam_wohnsitz_validationTest(){
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
@@ -377,20 +376,17 @@ class FamiliensituationGeschwisterWohnsitzConstraintValidatorTest {
         familiensituation.setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
         gesuchFormular.setFamiliensituation(familiensituation);
 
-        // WOHSNITZ.FAMILIE is NOT valid
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitz(Wohnsitz.FAMILIE);
         gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitz(Wohnsitz.FAMILIE);
-        assertFalse(validator.isValid(gesuchFormular, null));
+        assertTrue(validator.isValid(gesuchFormular, null));
 
-        // WOHSNITZ.EIGENER_HAUSHALT ist valid
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         assertTrue(validator.isValid(gesuchFormular, null));
 
-        // WOHSNITZ.MUTTER_VATER is NOT valid
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitz(Wohnsitz.MUTTER_VATER);
         gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitz(Wohnsitz.MUTTER_VATER);
-        assertFalse(validator.isValid(gesuchFormular, null));
+        assertTrue(validator.isValid(gesuchFormular, null));
     }
 
 }

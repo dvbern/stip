@@ -75,7 +75,7 @@ public class FamilieEntityWohnsitzValidator {
         boolean isAnteilVater100Percent = FamilieEntityWohnsitzValidatorUtils.getIsWohnsitzanteilVater100Percent(familieEntity);
 
         if(familiensituation.getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM){
-            return familieEntity.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
+            return true;
         }
         else if(familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER){
             return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE && isAnteilMutter100Percent;
