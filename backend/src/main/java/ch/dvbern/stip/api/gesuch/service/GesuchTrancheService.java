@@ -194,7 +194,11 @@ public class GesuchTrancheService {
     @Transactional
     public GesuchTrancheDto aenderungAblehnen(final UUID aenderungId, KommentarDto kommentarDto) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
-        gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.ABGELEHNT);
+        gesuchTrancheStatusService.triggerStateMachineEventWithComment(
+            aenderung,
+            GesuchTrancheStatusChangeEvent.ABGELEHNT,
+            kommentarDto
+        );
 
         return gesuchTrancheMapper.toDto(aenderung);
     }
