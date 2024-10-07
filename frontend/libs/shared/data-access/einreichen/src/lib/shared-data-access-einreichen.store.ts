@@ -93,7 +93,9 @@ export class EinreichenStore extends signalStore(
         },
         specialValidationErrors: validationReport?.validationErrors
           .filter(isSpecialValidationError)
-          .map((error) => SPECIAL_VALIDATION_ERRORS[error.messageTemplate]),
+          .map((error) =>
+            SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error),
+          ),
       },
     };
   });
@@ -112,7 +114,9 @@ export class EinreichenStore extends signalStore(
       loading: isPending(this.validationResult()),
       specialValidationErrors: validationErrors
         .filter(isSpecialValidationError)
-        .map((error) => SPECIAL_VALIDATION_ERRORS[error.messageTemplate]),
+        .map((error) =>
+          SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error),
+        ),
       abschlussPhase: toAbschlussPhase(gesuch, {
         appType: compileTimeConfig?.appType,
         isComplete: hasNoValidationErrors(error),

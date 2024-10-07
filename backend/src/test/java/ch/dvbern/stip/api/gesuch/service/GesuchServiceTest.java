@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -627,10 +628,13 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+        final var pia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setWohnsitz(Wohnsitz.MUTTER_VATER);
+            .getPersonInAusbildung();
+
+        pia.setWohnsitz(Wohnsitz.MUTTER_VATER);
+        pia.setWohnsitzAnteilVater(BigDecimal.valueOf(50));
+        pia.setWohnsitzAnteilMutter(BigDecimal.valueOf(50));
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
@@ -833,38 +837,38 @@ class GesuchServiceTest {
     }
 
     // TODO KSTIP-1236: Enable this test
-//    @Test
-//    @TestAsGesuchsteller
-//    void gesuchEinreichenTest() {
-//        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
-//        tranche.getGesuchFormular()
-//            .getAusbildung()
-//            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
-//        final var oldZivilstand = tranche.getGesuchFormular().getPersonInAusbildung().getZivilstand();
-//        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(LEDIG);
-//
-//        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-//        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-//        doNothing().when(notificationService).createNotification(any(), any());
-//
-//        tranche.getGesuchFormular().setTranche(tranche);
-//        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
-//        tranche.getGesuchFormular().setPartner(null);
-//        tranche.getGesuch().setGesuchDokuments(
-//            Arrays.stream(DokumentTyp.values())
-//                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
-//                .toList()
-//        );
-//
-//        gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
-//
-//        assertThat(
-//            tranche.getGesuch().getGesuchStatus(),
-//            Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-//        );
-//
-//        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
-//    }
+    //    @Test
+    //    @TestAsGesuchsteller
+    //    void gesuchEinreichenTest() {
+    //        GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+    //        tranche.getGesuchFormular()
+    //            .getAusbildung()
+    //            .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
+    //        final var oldZivilstand = tranche.getGesuchFormular().getPersonInAusbildung().getZivilstand();
+    //        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(LEDIG);
+    //
+    //        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+    //        when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
+    //        doNothing().when(notificationService).createNotification(any(), any());
+    //
+    //        tranche.getGesuchFormular().setTranche(tranche);
+    //        tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
+    //        tranche.getGesuchFormular().setPartner(null);
+    //        tranche.getGesuch().setGesuchDokuments(
+    //            Arrays.stream(DokumentTyp.values())
+    //                .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
+    //                .toList()
+    //        );
+    //
+    //        gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
+    //
+    //        assertThat(
+    //            tranche.getGesuch().getGesuchStatus(),
+    //            Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+    //        );
+    //
+    //        tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
+    //    }
 
     private SteuerdatenUpdateDto initSteuerdatenUpdateDto(SteuerdatenTyp typ) {
         SteuerdatenUpdateDto steuerdatenUpdateDto = new SteuerdatenUpdateDto();
@@ -1020,7 +1024,7 @@ class GesuchServiceTest {
         steuerdatenUpdateDto1.setSteuerjahr(null);
         steuerdatenUpdateDto1.setVeranlagungsCode(null);
 
-        SteuerdatenUpdateDto steuerdatenUpdateDto2 =  initSteuerdatenUpdateDto(SteuerdatenTyp.MUTTER);
+        SteuerdatenUpdateDto steuerdatenUpdateDto2 = initSteuerdatenUpdateDto(SteuerdatenTyp.MUTTER);
         steuerdatenUpdateDto2.setSteuerjahr(null);
         steuerdatenUpdateDto2.setVeranlagungsCode(null);
 
@@ -1085,7 +1089,7 @@ class GesuchServiceTest {
 
     @TestAsGesuchsteller
     @Test
-    void emptyPageSteuerdatenTest(){
+    void emptyPageSteuerdatenTest() {
         GesuchUpdateDto gesuchUpdateDto = createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setSteuerdaten(new ArrayList<>());
         SteuerdatenUpdateDto steuerdatenUpdateDto1 = initSteuerdatenUpdateDto(SteuerdatenTyp.FAMILIE);
@@ -1115,7 +1119,7 @@ class GesuchServiceTest {
 
     @TestAsSachbearbeiter
     @Test
-    void findAlleGesucheSBShouldIgnoreGesucheWithoutPIA(){
+    void findAlleGesucheSBShouldIgnoreGesucheWithoutPIA() {
         setupGesucheWithAndWithoutPia();
         var alleGesuche = gesuchService.findGesucheSB(GetGesucheSBQueryType.ALLE);
         assertThat(alleGesuche.stream().filter(gesuch ->
@@ -1236,7 +1240,7 @@ class GesuchServiceTest {
         return tranche;
     }
 
-    private void setupGesucheWithAndWithoutPia(){
+    private void setupGesucheWithAndWithoutPia() {
         Gesuch gesuchWithoutPia = GesuchGenerator.initGesuch();
         gesuchWithoutPia.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
         gesuchWithoutPia.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(null);
@@ -1331,8 +1335,8 @@ class GesuchServiceTest {
             gesuchFormular.getLebenslaufItems().add(lebenslaufItemMapper.partialUpdate(item, new LebenslaufItem()));
         });
 
-        if(trancheUpdate.getGesuchFormular().getSteuerdaten() != null){
-            trancheUpdate.getGesuchFormular().getSteuerdaten().forEach(item ->{
+        if (trancheUpdate.getGesuchFormular().getSteuerdaten() != null) {
+            trancheUpdate.getGesuchFormular().getSteuerdaten().forEach(item -> {
                 item.setId(UUID.randomUUID());
                 gesuchFormular.getSteuerdaten().add(steuerdatenMapper.partialUpdate(item, new Steuerdaten()));
             });

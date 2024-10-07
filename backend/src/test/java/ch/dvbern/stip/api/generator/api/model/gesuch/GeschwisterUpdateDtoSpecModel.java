@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.generator.api.model.gesuch;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,10 +17,8 @@ public final class GeschwisterUpdateDtoSpecModel {
             model.setGeburtsdatum(TestUtil.getRandomLocalDateBetween(
                 LocalDate.of(1990, 1, 1),
                 LocalDate.of(2002, 1, 1)));
-            model.setWohnsitz(WohnsitzDtoSpec.MUTTER_VATER);
+            model.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
             model.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
-            model.setWohnsitzAnteilMutter(TestUtil.getRandomBigDecimal(0, 100, 0));
-            model.setWohnsitzAnteilVater(BigDecimal.valueOf(100).subtract(model.getWohnsitzAnteilMutter()));
         }, 1);
     }
 

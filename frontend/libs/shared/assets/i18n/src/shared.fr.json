@@ -141,8 +141,9 @@
   "shared.dokumente.dokumentStatus.action.sendMissingDocuments": "Informer le demandeur aux changements de documents",
 
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
-  "shared.gesuch.validation.uniqueSvnummer.message": "Le numéro AVS indiqué a déjà été utilisé dans une autre demande.<br>Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis:",
-  "shared.gesuch.validation.uniqueSvnummer.link": "Personne en formation",
+  "shared.gesuch.validation.wohnsitz.message": "Les informations de résidence ne correspondent pas aux informations de la situation familiale. Veuillez vérifier vos saisies dans:",
+  "shared.gesuch.validation.link.personInAusbildung": "Personne en formation",
+  "shared.gesuch.validation.link.geschwister": "Frères et sœurs",
 
   "shared.gesuch.status.ENTWURF": "Brouillon",
   "shared.gesuch.status.PUBLIZIERT": "Publié - Actif",
@@ -244,6 +245,7 @@
   "shared.form.person.korrespondenzSprache.DEUTSCH": "Allemand",
   "shared.form.person.korrespondenzSprache.FRANZOESISCH": "Français",
   "shared.form.person.validation.uniqueSvnummer": "Le numéro AVS indiqué a déjà été utilisé dans cette demande.",
+  "shared.form.person.validation.wohnsitz": "Les informations de résidence ne correspondent pas aux informations de la situation familiale.",
 
   "shared.education.title": "Formation",
   "shared.form.education.place.title": "Informations sur la formation",

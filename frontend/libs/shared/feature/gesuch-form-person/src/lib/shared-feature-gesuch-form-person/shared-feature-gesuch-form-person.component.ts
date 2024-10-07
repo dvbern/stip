@@ -69,9 +69,7 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
-  updateWohnsitzControlsState,
-  wohnsitzAnteileNumber,
-  wohnsitzAnteileString,
+  prepareWohnsitzForm,
 } from '@dv/shared/ui/wohnsitz-splitter';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import {
@@ -143,7 +141,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly Zivilstand = Zivilstand;
   readonly spracheValues = Object.values(Sprache);
   readonly zivilstandValues = Object.values(Zivilstand);
-  readonly wohnsitzValues = Object.values(Wohnsitz);
   readonly niederlassungsStatusValues = Object.values(Niederlassungsstatus);
 
   languageSig = this.store.selectSignal(selectLanguage);
@@ -276,10 +273,12 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     }),
   });
 
-  showWohnsitzSplitterSig = computed(() => {
-    return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
+  wohnsitzHelper = prepareWohnsitzForm({
+    projector: (formular) => formular?.personInAusbildung,
+    form: this.form.controls,
+    viewSig: this.viewSig,
+    refreshSig: this.gotReenabledSig,
   });
-
   showEinreiseDatumWarningSig = signal(false);
 
   private wohnsitzChangedSig = toSignal(
@@ -324,32 +323,14 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       }
     };
 
-    // visibility and disabled state for wohnsitzAnteilMutter and wohnsitzAnteilVater
-    effect(
-      () => {
-        this.gotReenabledSig();
-        updateWohnsitzControlsState(
-          this.formUtils,
-          this.form.controls,
-          this.viewSig().readonly,
-        );
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.wohnsitzAnteilMutter,
-          visible: this.showWohnsitzSplitterSig(),
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
-        });
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.wohnsitzAnteilVater,
-          visible: this.showWohnsitzSplitterSig(),
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.formUtils.invalidateControlIfValidationFails(
+        this.form,
+        ['wohnsitz'],
+        this.einreichenStore.validationViewSig().invalidFormularProps
+          .specialValidationErrors,
+      );
+    });
 
     // patch form value
     effect(
@@ -380,7 +361,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           };
           this.form.patchValue({
             ...personForForm,
-            ...wohnsitzAnteileString(person),
+            ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
           });
           SharedUiFormAddressComponent.patchForm(
             this.form.controls.adresse,
@@ -597,10 +578,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     }
   }
 
-  trackByIndex(index: number) {
-    return index;
-  }
-
   onGeburtsdatumBlur() {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
@@ -646,7 +623,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             this.languageSig(),
             new Date(),
           ),
-          ...wohnsitzAnteileNumber(values),
+          ...this.wohnsitzHelper.wohnsitzAnteileFromNumber(),
         },
       },
     };

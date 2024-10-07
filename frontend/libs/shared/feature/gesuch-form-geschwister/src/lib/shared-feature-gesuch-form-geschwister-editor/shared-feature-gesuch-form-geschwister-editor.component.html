@@ -61,7 +61,7 @@
         <mat-option [value]="null" disabled selected>
           {{ 'shared.form.select.empty' | translate }}
         </mat-option>
-        @for (a of wohnsitzValues; track trackByIndex($index)) {
+        @for (a of wohnsitzHelper.wohnsitzValuesSig(); track $index) {
           <mat-option [attr.data-testid]="a" [value]="a">
             {{ 'shared.form.shared.wohnsitz.' + a | translate }}
           </mat-option>
@@ -75,7 +75,7 @@
   </div>
 
   <!-- WOHNSITZ AUFTEILUNG -->
-  @if (showWohnsitzSplitterSig()) {
+  @if (wohnsitzHelper.showWohnsitzSplitterSig()) {
     <div class="row g-4 my-2">
       <div class="col-12 col-md-6 col-xl-4">
         <dv-shared-ui-wohnsitz-splitter
@@ -101,7 +101,7 @@
       <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | translate }}</label>
       <div class="d-flex gap-2 flex-wrap col-12 justify-content-between">
         <div class="d-flex flex-column">
-          @for (a of ausbildungssituationValues; track trackByIndex($index)) {
+          @for (a of ausbildungssituationValues; track $index) {
             <mat-radio-button [attr.data-testid]="a" [value]="a">{{
               'shared.form.geschwister.ausbildungssituation.select.' + a | translate
             }}</mat-radio-button>
