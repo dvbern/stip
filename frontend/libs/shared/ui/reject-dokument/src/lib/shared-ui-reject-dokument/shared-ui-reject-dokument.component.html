@@ -30,7 +30,7 @@
       <button type="button" class="btn btn-secondary" (click)="cancel()">
         {{ 'shared.cancel' | translate }}
       </button>
-      <button type="button" class="btn btn-primary ms-2" (click)="rejectDocument()">
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary ms-2" (click)="rejectDocument()">
         {{ 'shared.dokumente.reject.action' | translate }}
       </button>
     </div>

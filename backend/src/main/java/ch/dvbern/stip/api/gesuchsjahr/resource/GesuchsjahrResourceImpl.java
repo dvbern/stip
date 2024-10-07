@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuchsjahr.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrService;
 import ch.dvbern.stip.generated.api.GesuchsjahrResource;
 import ch.dvbern.stip.generated.dto.GesuchsjahrCreateDto;
@@ -23,6 +24,7 @@ public class GesuchsjahrResourceImpl implements GesuchsjahrResource {
 
     @RolesAllowed(STAMMDATEN_READ)
     @Override
+    @AllowAll
     public Response getGesuchsjahr(UUID gesuchsjahrId) {
         final var gesuchsjahr = gesuchsjahrService.getGesuchsjahr(gesuchsjahrId);
         return Response.ok(gesuchsjahr).build();
@@ -30,6 +32,7 @@ public class GesuchsjahrResourceImpl implements GesuchsjahrResource {
 
     @RolesAllowed(STAMMDATEN_READ)
     @Override
+    @AllowAll
     public Response getGesuchsjahre() {
         final var gesuchsjahre = gesuchsjahrService.getGesuchsjahre();
         return Response.ok(gesuchsjahre).build();
@@ -37,6 +40,7 @@ public class GesuchsjahrResourceImpl implements GesuchsjahrResource {
 
     @RolesAllowed(STAMMDATEN_CREATE)
     @Override
+    @AllowAll
     public Response createGesuchsjahr(GesuchsjahrCreateDto gesuchsjahrCreateDto) {
         final var gesuchsjahr = gesuchsjahrService.createGesuchsjahr(gesuchsjahrCreateDto);
         return Response.ok(gesuchsjahr).build();
@@ -44,6 +48,7 @@ public class GesuchsjahrResourceImpl implements GesuchsjahrResource {
 
     @RolesAllowed(STAMMDATEN_UPDATE)
     @Override
+    @AllowAll
     public Response updateGesuchsjahr(UUID gesuchsjahrId, GesuchsjahrUpdateDto gesuchsjahrUpdateDto) {
         final var gesuchsjahr = gesuchsjahrService.updateGesuchsjahr(gesuchsjahrId, gesuchsjahrUpdateDto);
         return Response.ok(gesuchsjahr).build();
@@ -51,6 +56,7 @@ public class GesuchsjahrResourceImpl implements GesuchsjahrResource {
 
     @RolesAllowed(STAMMDATEN_UPDATE)
     @Override
+    @AllowAll
     public Response publishGesuchsjahr(UUID gesuchsjahrId) {
         final var gesuchsjahr = gesuchsjahrService.publishGesuchsjahr(gesuchsjahrId);
         return Response.ok(gesuchsjahr).build();
@@ -58,6 +64,7 @@ public class GesuchsjahrResourceImpl implements GesuchsjahrResource {
 
     @RolesAllowed(STAMMDATEN_DELETE)
     @Override
+    @AllowAll
     public Response deleteGesuchsjahr(UUID gesuchsjahrId) {
         gesuchsjahrService.deleteGesuchsjahr(gesuchsjahrId);
         return Response.noContent().build();

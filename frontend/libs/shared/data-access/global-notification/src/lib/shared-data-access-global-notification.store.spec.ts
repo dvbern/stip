@@ -60,7 +60,7 @@ describe('GlobalNotificationStore', () => {
     expect(store.mostImportantNotificationSig()).toEqual(<
       SharedModelGlobalNotification
     >{
-      autohide: false,
+      autohide: true,
       list: [
         {
           content: {

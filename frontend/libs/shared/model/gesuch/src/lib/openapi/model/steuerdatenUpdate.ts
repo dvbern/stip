@@ -23,7 +23,7 @@ export interface SteuerdatenUpdate {
     steuerjahr?: number;
     veranlagungsCode?: number;
     totalEinkuenfte: number;
-    eigenmietwert?: number;
+    eigenmietwert: number;
     isArbeitsverhaeltnisSelbstaendig: boolean;
     saeule3a?: number;
     saeule2?: number;
