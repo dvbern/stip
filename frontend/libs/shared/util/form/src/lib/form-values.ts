@@ -96,14 +96,12 @@ export function numberToPercentString(value?: number): string {
 /**
  * Check if the Eltern Abwesenheits Grund is either 'VERSTORBEN' or 'UNBEKANNT'
  */
-export const isVerstorbenUnbekanntOrZahltAlimente = (
+export const isVerstorbenUnbekannt = (
   elternTyp: ElternTyp,
   familiensituation?: Familiensituation,
 ) => {
   return (['VERSTORBEN', 'UNBEKANNT'] satisfies ElternAbwesenheitsGrund[]).some(
     (s) =>
-      s ===
-        familiensituation?.[`${lowercased(elternTyp)}UnbekanntVerstorben`] ||
-      familiensituation?.werZahltAlimente === elternTyp,
+      s === familiensituation?.[`${lowercased(elternTyp)}UnbekanntVerstorben`],
   );
 };

@@ -158,7 +158,8 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   });
 
   wohnsitzHelper = prepareWohnsitzForm({
-    projector: (formular) => formular?.personInAusbildung,
+    projector: (formular) =>
+      formular?.geschwisters?.find((g) => g.id === this.geschwisterSig().id),
     form: this.form.controls,
     viewSig: this.viewSig,
     refreshSig: this.gotReenabledSig,

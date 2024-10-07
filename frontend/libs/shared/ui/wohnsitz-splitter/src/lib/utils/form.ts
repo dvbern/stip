@@ -6,14 +6,9 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { ElternTyp, GesuchFormular, Wohnsitz } from '@dv/shared/model/gesuch';
 import {
-  ElternTyp,
-  Familiensituation,
-  GesuchFormular,
-  Wohnsitz,
-} from '@dv/shared/model/gesuch';
-import {
-  isVerstorbenUnbekanntOrZahltAlimente,
+  isVerstorbenUnbekannt,
   numberToPercentString,
   percentStringToNumber,
 } from '@dv/shared/util/form';
@@ -54,9 +49,8 @@ export const prepareWohnsitzForm = (payload: {
     }
 
     if (
-      (isVerstorbenUnbekanntOrZahltAlimente('MUTTER', familiensituation) &&
-        isVerstorbenUnbekanntOrZahltAlimente('VATER', familiensituation)) ||
-      familiensituation.werZahltAlimente === 'GEMEINSAM'
+      isVerstorbenUnbekannt('MUTTER', familiensituation) &&
+      isVerstorbenUnbekannt('VATER', familiensituation)
     ) {
       availableWohnsitz = availableWohnsitz.filter((v) => v !== 'MUTTER_VATER');
     }
@@ -78,17 +72,10 @@ export const prepareWohnsitzForm = (payload: {
   const wohnsitzAnteileAsString = () => {
     const formular = viewSig().gesuchFormular;
     const familiensituation = formular?.familiensituation;
-    const mutterMissing = isVerstorbenUnbekanntOrZahltAlimente(
-      'MUTTER',
-      familiensituation,
-    );
-    const vaterMissing = isVerstorbenUnbekanntOrZahltAlimente(
-      'VATER',
-      familiensituation,
-    );
+    const mutterMissing = isVerstorbenUnbekannt('MUTTER', familiensituation);
+    const vaterMissing = isVerstorbenUnbekannt('VATER', familiensituation);
     const getAnteil = (elternTyp: ElternTyp, missing: boolean) =>
-      familiensituation?.elternteilUnbekanntVerstorben ||
-      isSomeParentPayingAlimente(familiensituation)
+      familiensituation?.elternteilUnbekanntVerstorben
         ? missing
           ? // If the current eltenteil is unknown or dead, we set the Anteil to 0%.
             '0%'
@@ -130,8 +117,7 @@ export const prepareWohnsitzForm = (payload: {
         wohnsitzNotMutterVater ||
           viewSig().readonly ||
           !showWohnsitzSplitterSig() ||
-          !!elternteilUnbekanntVerstorben ||
-          isSomeParentPayingAlimente(gesuchFormular?.familiensituation),
+          !!elternteilUnbekanntVerstorben,
       );
 
       if (wohnsitzNotMutterVater) {
@@ -179,7 +165,3 @@ export function updateWohnsitzControlsState(
     form.wohnsitzAnteilVater.enable();
   }
 }
-
-const isSomeParentPayingAlimente = (familiensituation?: Familiensituation) =>
-  !!familiensituation?.werZahltAlimente &&
-  familiensituation?.werZahltAlimente !== 'GEMEINSAM';
