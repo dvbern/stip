@@ -47,11 +47,11 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
   private dialog = inject(MatDialog);
   private globalStore = inject(Store);
   private dokumentsStore = inject(DokumentsStore);
-  private store = inject(UploadStore);
+  private uploadStore = inject(UploadStore);
   optionsSig = input.required<DocumentOptions>();
 
   mainDocumentSig = computed(() => {
-    const documents = this.store.documentsView();
+    const documents = this.uploadStore.documentsView();
     if (!documents.length) return;
     return (
       // If there are any documents in error state, show the first one
@@ -65,7 +65,7 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
 
   constructor() {
     // Load the gesuch step validity after the state of uploaded documents changes
-    toObservable(this.store.documentChangedSig)
+    toObservable(this.uploadStore.documentChangedSig)
       .pipe(
         filter((x) => x.hasChanged),
         takeUntilDestroyed(),
@@ -91,10 +91,10 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
     const initialDocuments = this.optionsSig()?.initialDocuments;
 
     if (initialDocuments) {
-      this.store.setInitialDocuments(initialDocuments);
+      this.uploadStore.setInitialDocuments(initialDocuments);
     } else {
       // Only load the documents with the initial required options, not on every change with for example an effect
-      this.store.loadDocuments(this.optionsSig());
+      this.uploadStore.loadDocuments(this.optionsSig());
     }
   }
 
@@ -104,7 +104,7 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
     this.dialog.open<DialogType, DialogData>(
       SharedPatternDocumentUploadDialogComponent,
       {
-        data: { options: this.optionsSig(), store: this.store },
+        data: { options: this.optionsSig(), store: this.uploadStore },
       },
     );
   }

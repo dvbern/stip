@@ -10,6 +10,13 @@
   "sachbearbeitung-app.header.gesuch-bearbeiten": "Modifier la demande",
   "sachbearbeitung-app.header.tranche.erstellen": "Créer une tranche",
   "sachbearbeitung-app.header.back": "Retour",
+  "sachbearbeitung-app.header.status-uebergang.abschliessen": "Terminer la rédaction",
+  "sachbearbeitung-app.header.status-uebergang.BEARBEITUNG_ABSCHLIESSEN": "Terminer",
+  "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN": "Rejeter",
+  "sachbearbeitung-app.header.status-uebergang.zurueckweisen.title": "Rejeter la demande",
+  "sachbearbeitung-app.header.status-uebergang.zurueckweisen.message": "Pour rejeter une demande, vous devez fournir une justification.",
+  "sachbearbeitung-app.header.status-uebergang.zurueckweisen.placeholder": "Écrire une justification...",
+  "sachbearbeitung-app.header.status-uebergang.zurueckweisen.confirm": "Rejeter",
 
   "sachbearbeitung-app.admin.title": "Administration",
   "sachbearbeitung-app.admin.save-and-publish": "Enregistrer et publier",
@@ -320,6 +327,7 @@
   "sachbearbeitung-app.cockpit.table.status": "État",
   "sachbearbeitung-app.cockpit.table.bearbeiter": "Agent",
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Dernière activité",
+  "sachbearbeitung-app.cockpit.table.typ": "Type",
 
   "sachbearbeitung-app.gesuch-form.title": "Demande"
 }

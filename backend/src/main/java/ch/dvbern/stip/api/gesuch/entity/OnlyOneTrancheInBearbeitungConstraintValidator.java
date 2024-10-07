@@ -16,6 +16,6 @@ public class OnlyOneTrancheInBearbeitungConstraintValidator
         return gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
-            .count() == 1;
+            .count() <= 1;
     }
 }

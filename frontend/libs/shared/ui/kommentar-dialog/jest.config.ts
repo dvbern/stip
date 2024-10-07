@@ -1,12 +1,10 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
-  displayName: 'shared-pattern-ngb-datepicker-adapter',
+  displayName: 'shared-ui-kommentar-dialog',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory:
-    '../../../../coverage/libs/shared/pattern/ngb-datepicker-adapter',
+  coverageDirectory: '../../../../coverage/libs/shared/ui/kommentar-dialog',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

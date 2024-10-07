@@ -13,10 +13,10 @@ export type CreateNotification = Omit<Notification, 'id'>;
 export type NotificationType =
   | 'SEVERE'
   | 'ERROR'
+  | 'ERROR_PERMANENT'
   | 'INFO'
   | 'WARNING'
-  | 'SUCCESS'
-  | 'SUCCESS_PERMANENT';
+  | 'SUCCESS';
 
 export type SharedModelGlobalNotification = {
   autohide: boolean;
