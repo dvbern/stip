@@ -148,6 +148,9 @@
   "shared.gesuch.status.contract.IN_FREIGABE": "En attente de validation",
   "shared.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Documents manquants",
 
+  "shared.gesuch.tranche.typ.AENDERUNG": "Changement",
+  "shared.gesuch.tranche.typ.TRANCHE": "Demande",
+
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",
   "shared.form.gonext": "Continuer",
