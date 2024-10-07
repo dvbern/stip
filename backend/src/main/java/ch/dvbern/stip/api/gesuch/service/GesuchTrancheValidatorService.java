@@ -28,6 +28,7 @@ public class GesuchTrancheValidatorService {
         new EnumMap<>(GesuchTrancheStatus.class);
 
     static {
+        statusToValidationGroup.put(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchEinreichenValidationGroup.class);
         statusToValidationGroup.put(GesuchTrancheStatus.UEBERPRUEFEN, GesuchEinreichenValidationGroup.class);
         statusToValidationGroup.put(GesuchTrancheStatus.AKZEPTIERT, GesuchEinreichenValidationGroup.class);
     }

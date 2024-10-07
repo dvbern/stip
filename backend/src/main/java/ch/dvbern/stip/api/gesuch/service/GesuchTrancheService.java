@@ -196,7 +196,7 @@ public class GesuchTrancheService {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEventWithComment(
             aenderung,
-            GesuchTrancheStatusChangeEvent.ABGELEHNT,
+            GesuchTrancheStatusChangeEvent.ABLEHNEN,
             kommentarDto
         );
 

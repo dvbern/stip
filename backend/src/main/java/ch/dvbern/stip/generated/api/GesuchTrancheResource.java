@@ -30,7 +30,7 @@ public interface GesuchTrancheResource {
     @Path("/{aenderungId}/aenderung/ablehnen")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response aenderungAblehnen(@PathParam("aenderungId") UUID aenderungId,@Valid KommentarDto kommentarDto);
+    Response aenderungAblehnen(@PathParam("aenderungId") UUID aenderungId,@Valid @NotNull KommentarDto kommentarDto);
 
     @POST
     @Path("/{aenderungId}/aenderung/akzeptieren")
