@@ -4,6 +4,8 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.util.FamiliensituationUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
@@ -28,8 +30,15 @@ public class FamiliensituationElternEntityRequiredConstraintValidator
 
         final var mutterValid = isElternTeilRequiredAndVorhanden(ElternTyp.MUTTER, gesuchFormular, constraintValidatorContext);
         final var vaterValid = isElternTeilRequiredAndVorhanden(ElternTyp.VATER, gesuchFormular, constraintValidatorContext);
+        final var familiensituationAbwesenheitValid = isFamiliensituationAbwesenheitValid(gesuchFormular.getFamiliensituation());
 
-        return mutterValid && vaterValid;
+        return mutterValid && vaterValid && familiensituationAbwesenheitValid;
+    }
+
+
+    private boolean isFamiliensituationAbwesenheitValid(final Familiensituation familiensituation){
+        return !(familiensituation.getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH
+            && familiensituation.getMutterUnbekanntVerstorben()== ElternAbwesenheitsGrund.WEDER_NOCH);
     }
 
     private boolean isElternTeilRequiredAndVorhanden(

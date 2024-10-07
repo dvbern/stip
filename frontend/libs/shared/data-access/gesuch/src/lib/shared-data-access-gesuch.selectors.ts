@@ -159,7 +159,9 @@ export const selectSharedDataAccessGesuchValidationView = createSelector(
         },
         specialValidationErrors: state.validations?.errors
           .filter(isSpecialValidationError)
-          .map((error) => SPECIAL_VALIDATION_ERRORS[error.messageTemplate]),
+          .map((error) =>
+            SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error),
+          ),
       },
     };
   },
