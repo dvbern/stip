@@ -1,10 +1,10 @@
 package ch.dvbern.stip.api.common.entity;
 
+import java.math.BigDecimal;
+
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import lombok.experimental.UtilityClass;
-
-import java.math.BigDecimal;
 
 @UtilityClass
 public class FamilieEntityWohnsitzValidatorUtils {
@@ -14,7 +14,7 @@ public class FamilieEntityWohnsitzValidatorUtils {
     }
     boolean getIsMutterExisting(Familiensituation familiensituation) {
         return familiensituation.getMutterUnbekanntGrund() == null ||
-            familiensituation.getMutterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.WEDER_NOCH);
+            familiensituation.getMutterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH;
     }
     boolean getIsVaterAbsent(Familiensituation familiensituation) {
         return familiensituation.getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.VERSTORBEN
@@ -22,7 +22,7 @@ public class FamilieEntityWohnsitzValidatorUtils {
     }
     boolean getIsVaterExisting(Familiensituation familiensituation) {
         return familiensituation.getVaterUnbekanntGrund() == null ||
-            familiensituation.getVaterUnbekanntVerstorben().equals(ElternAbwesenheitsGrund.WEDER_NOCH);
+            familiensituation.getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.WEDER_NOCH;
     }
     boolean getIsWohnsitzanteilVater100Percent(AbstractFamilieEntity familieEntity) {
         return familieEntity.getWohnsitzAnteilVater() != null
