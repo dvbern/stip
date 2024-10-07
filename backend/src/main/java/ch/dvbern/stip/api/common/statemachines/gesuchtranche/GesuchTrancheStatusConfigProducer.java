@@ -30,13 +30,15 @@ public class GesuchTrancheStatusConfigProducer {
             .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN);
 
         config.configure(GesuchTrancheStatus.UEBERPRUEFEN)
-            .permit(GesuchTrancheStatusChangeEvent.ABLEHNEN, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+            .permit(GesuchTrancheStatusChangeEvent.ABGELEHNT, GesuchTrancheStatus.ABGELEHNT)
             .permit(GesuchTrancheStatusChangeEvent.AKZETPIERT, GesuchTrancheStatus.AKZEPTIERT)
             .permit(GesuchTrancheStatusChangeEvent.MANUELLE_AENDERUNG, GesuchTrancheStatus.MANUELLE_AENDERUNG);
 
         config.configure(GesuchTrancheStatus.MANUELLE_AENDERUNG)
+            .permit(GesuchTrancheStatusChangeEvent.ABGELEHNT, GesuchTrancheStatus.ABGELEHNT)
             .permit(GesuchTrancheStatusChangeEvent.AKZETPIERT, GesuchTrancheStatus.AKZEPTIERT);
 
+        config.configure(GesuchTrancheStatus.ABGELEHNT);
         config.configure(GesuchTrancheStatus.AKZEPTIERT);
 
         for (final var status : GesuchTrancheStatus.values()) {
