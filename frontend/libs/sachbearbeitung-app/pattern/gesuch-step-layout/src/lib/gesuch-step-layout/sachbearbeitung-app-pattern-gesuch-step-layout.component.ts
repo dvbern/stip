@@ -7,13 +7,16 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
+import { combineLatest, filter } from 'rxjs';
 
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
-  selectSharedDataAccessGesuchCache,
+  selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
@@ -24,8 +27,10 @@ import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notifica
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
+import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
+import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-step-layout',
@@ -56,20 +61,27 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   });
   navClicked$ = new EventEmitter();
 
+  private store = inject(Store);
+  private einreichenStore = inject(EinreichenStore);
+
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
-  private store = inject(Store);
-  cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
-  stepsSig = computed(() =>
-    this.stepManager.getValidatedSteps(
-      this.stepsViewSig().steps,
-      this.cacheSig().gesuchFormular,
-      undefined,
-      this.viewSig().readonly,
-    ),
-  );
+  stepsSig = computed(() => {
+    const cachedGesuchFormular = this.cacheViewSig().cache.gesuchFormular;
+    const { invalidFormularProps } = this.einreichenStore.validationViewSig();
+    const steps = this.stepsViewSig().steps;
+    const readonly = this.cacheViewSig().readonly;
+    const validatedSteps = this.stepManager.getValidatedSteps(
+      steps,
+      cachedGesuchFormular,
+      invalidFormularProps.validations,
+      readonly,
+    );
+    return validatedSteps;
+  });
   currentStepProgressSig = computed(() => {
     const currentStep = this.stepSig();
     const stepsFlow = this.stepsViewSig().stepsFlow;
@@ -80,4 +92,16 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
     const steps = this.stepsSig();
     return steps.find((step) => step.route === currentStep?.route);
   });
+
+  constructor() {
+    combineLatest([
+      getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig).pipe(
+        filter(isDefined),
+      ),
+    ])
+      .pipe(takeUntilDestroyed())
+      .subscribe(([gesuchTrancheId]) => {
+        this.einreichenStore.validateSteps$({ gesuchTrancheId });
+      });
+  }
 }

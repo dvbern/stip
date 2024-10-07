@@ -2,11 +2,10 @@ import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 /* eslint-disable */
 export default {
-  displayName: 'gesuch-app-data-access-abschluss',
+  displayName: 'shared-data-access-einreichen',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory:
-    '../../../../coverage/libs/gesuch-app/data-access/abschluss',
+  coverageDirectory: '../../../../coverage/libs/shared/data-access/einreichen',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

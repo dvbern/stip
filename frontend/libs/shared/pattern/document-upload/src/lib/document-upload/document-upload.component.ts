@@ -11,12 +11,11 @@ import {
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { DocumentOptions } from '@dv/shared/model/dokument';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -45,9 +44,9 @@ type DialogData = SharedPatternDocumentUploadDialogComponent['data'];
 })
 export class SharedPatternDocumentUploadComponent implements OnInit {
   private dialog = inject(MatDialog);
-  private globalStore = inject(Store);
   private dokumentsStore = inject(DokumentsStore);
   private uploadStore = inject(UploadStore);
+  private einreichStore = inject(EinreichenStore);
   optionsSig = input.required<DocumentOptions>();
 
   mainDocumentSig = computed(() => {
@@ -73,11 +72,9 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
       .subscribe(() => {
         const initialDocuments = this.optionsSig().initialDocuments;
 
-        this.globalStore.dispatch(
-          SharedDataAccessGesuchEvents.gesuchValidateSteps({
-            gesuchTrancheId: this.optionsSig().trancheId,
-          }),
-        );
+        this.einreichStore.validateSteps$({
+          gesuchTrancheId: this.optionsSig().trancheId,
+        });
 
         if (initialDocuments) {
           this.dokumentsStore.getDokumenteAndRequired$(

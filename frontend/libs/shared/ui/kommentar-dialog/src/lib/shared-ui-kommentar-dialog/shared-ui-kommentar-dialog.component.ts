@@ -22,6 +22,7 @@ import {
 export interface KommentarDialogData {
   entityId: string;
   titleKey: string;
+  labelKey?: string;
   messageKey: string;
   placeholderKey: string;
   confirmKey: string;

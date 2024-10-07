@@ -7,6 +7,7 @@ import java.util.Set;
 public enum GesuchTrancheStatus {
     IN_BEARBEITUNG_GS,
     UEBERPRUEFEN,
+    MANUELLE_AENDERUNG,
     AKZEPTIERT,
     ABGELEHNT;
 
@@ -18,7 +19,8 @@ public enum GesuchTrancheStatus {
 
     public static final Set<GesuchTrancheStatus> SACHBEARBEITER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
-            UEBERPRUEFEN
+            UEBERPRUEFEN,
+            MANUELLE_AENDERUNG
         )
     );
 

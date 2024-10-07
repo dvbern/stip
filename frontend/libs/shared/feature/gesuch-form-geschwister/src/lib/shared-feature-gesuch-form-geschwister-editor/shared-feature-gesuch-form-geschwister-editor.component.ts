@@ -27,10 +27,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
-import {
-  selectSharedDataAccessGesuchValidationView,
-  selectSharedDataAccessGesuchsView,
-} from '@dv/shared/data-access/gesuch';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   Ausbildungssituation,
@@ -121,9 +119,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
     Object.values(Ausbildungssituation);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
-  validationViewSig = this.store.selectSignal(
-    selectSharedDataAccessGesuchValidationView,
-  );
+  einreichenStore = inject(EinreichenStore);
   gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject<unknown>();
 
@@ -186,7 +182,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
     effect(() => {
       const geschwister = this.geschwisterSig();
       const invalidFormularProps =
-        this.validationViewSig().invalidFormularProps;
+        this.einreichenStore.validationViewSig().invalidFormularProps;
 
       this.form.patchValue({
         ...geschwister,

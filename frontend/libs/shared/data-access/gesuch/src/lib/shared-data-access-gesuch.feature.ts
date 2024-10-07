@@ -10,12 +10,11 @@ import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-g
 import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
 import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
-import { SharedModelError, ValidationWarning } from '@dv/shared/model/error';
+import { SharedModelError } from '@dv/shared/model/error';
 import {
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SteuerdatenTyp,
-  ValidationError,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -28,11 +27,6 @@ import {
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 
 export interface State {
-  validations: {
-    errors: ValidationError[];
-    warnings?: ValidationWarning[];
-    hasDocuments: boolean | null;
-  } | null;
   gesuch: SharedModelGesuch | null;
   gesuchFormular: SharedModelGesuchFormular | null;
   isEditingTranche: boolean | null;
@@ -49,7 +43,6 @@ export interface State {
 }
 
 const initialState: State = {
-  validations: null,
   gesuch: null,
   gesuchFormular: null,
   isEditingTranche: null,
@@ -200,23 +193,6 @@ export const sharedDataAccessGesuchsFeature = createFeature({
     ),
 
     on(
-      SharedDataAccessGesuchEvents.gesuchValidationSuccess,
-      (state, { error }): State => ({
-        ...state,
-        validations:
-          error.type === 'validationError'
-            ? {
-                errors: error.validationErrors,
-                warnings: error.validationWarnings,
-                hasDocuments: error.hasDocuments,
-              }
-            : null,
-        loading: false,
-        error: error.type === 'validationError' ? undefined : error,
-      }),
-    ),
-
-    on(
       SharedDataAccessGesuchEvents.gesuchsLoadedFailure,
       SharedDataAccessGesuchEvents.gesuchLoadedFailure,
       SharedDataAccessGesuchEvents.gesuchCreatedFailure,
@@ -245,7 +221,6 @@ export const {
   selectLoading,
   selectError,
   selectCache,
-  selectValidations,
 } = sharedDataAccessGesuchsFeature;
 
 const getGesuchFormular = (
