@@ -1751,6 +1751,7 @@ paths:
       tags:
         - GesuchTranche
       requestBody:
+        required: true
         content:
           application/json:
             schema:
