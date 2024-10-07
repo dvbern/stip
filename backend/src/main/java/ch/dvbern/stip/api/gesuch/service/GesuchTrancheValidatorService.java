@@ -38,7 +38,9 @@ public class GesuchTrancheValidatorService {
 
     public void validateGesuchTrancheForStatus(final GesuchTranche toValidate, final GesuchTrancheStatus status) {
         final var validationGroup = statusToValidationGroup.getOrDefault(status, null);
-        ValidatorUtil.validate(validator, toValidate.getGesuchFormular(), validationGroup);
+        if (validationGroup != null) {
+            ValidatorUtil.validate(validator, toValidate.getGesuchFormular(), validationGroup);
+        }
     }
 
     public void validateGesuchTrancheForEinreichen(final GesuchTranche toValidate) {
