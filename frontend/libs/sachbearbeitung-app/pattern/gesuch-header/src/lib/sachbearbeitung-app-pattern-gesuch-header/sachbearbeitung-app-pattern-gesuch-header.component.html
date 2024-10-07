@@ -124,6 +124,7 @@
           type="button"
           class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
           data-testid="gesuch-header-nav-status-uebergang"
+          [disabled]="isLoadingSig()"
           [matMenuTriggerFor]="statusUebergangMenu"
         >
           <i class="material-symbols-rounded text-white me-2">sync_alt</i>

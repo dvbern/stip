@@ -1,6 +1,7 @@
 <dv-sachbearbeitung-app-pattern-gesuch-header
   [navClicked]="navClicked$ | async"
   [currentGesuch]="gesuchViewSig().gesuch"
+  [isLoading]="gesuchViewSig().loading"
 >
 </dv-sachbearbeitung-app-pattern-gesuch-header>
 
@@ -26,7 +27,7 @@
     @for (option of berechnungenSig(); track $index) {
       <ng-container
         *ngIf="{
-          active: route.isActive(option.route, false)
+          active: route.isActive(option.route, false),
         } as stepRoute"
       >
         <a
