@@ -50,6 +50,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   currentGesuchSig = input.required<SharedModelGesuch | null>({
     alias: 'currentGesuch',
   });
+  isLoadingSig = input.required<boolean>({ alias: 'isLoading' });
   navClickedSig = input.required<{ value: unknown }>({ alias: 'navClicked' });
   store = inject(Store);
   router = inject(Router);
@@ -60,7 +61,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   isTrancheRouteSig = computed(() => {
     const gesuch = this.currentGesuchSig();
-    if (!gesuch) return false;
+    if (!gesuch) {
+      return false;
+    }
 
     return (
       // If it is a tranche route
@@ -73,7 +76,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   isAenderungRouteSig = computed(() => {
     const gesuch = this.currentGesuchSig();
-    if (!gesuch) return false;
+    if (!gesuch) {
+      return false;
+    }
 
     return this.router.url.includes('/aenderung/');
   });
@@ -97,23 +102,26 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   canSetToBearbeitungSig = computed(() => {
     const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
-    if (!gesuchStatus) return false;
+    if (!gesuchStatus) {
+      return false;
+    }
 
     return gesuchStatus === 'BEREIT_FUER_BEARBEITUNG';
   });
 
   canSetCurrentStatusUebergangSig = computed(() => {
     const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
-    if (!gesuchStatus) return false;
+    if (!gesuchStatus) {
+      return false;
+    }
 
-    const hasOpenDokument =
-      this.dokumentsStore.hasAbgelehnteDokumentsSig() ||
-      this.dokumentsStore.hasAusstehendeDokumentsSig();
+    const hasAcceptedAllDokuments =
+      this.dokumentsStore.hasAcceptedAllDokumentsSig();
 
     switch (gesuchStatus) {
       case 'IN_BEARBEITUNG_SB':
-        // somit koennte auch ein grund angezeigt werden
-        return hasOpenDokument ? 'DOKUMENTE_OFFEN' : gesuchStatus;
+        // 'DOKUMENTE_OFFEN' could be used to notify the SB user that there are still documents to be accepted
+        return hasAcceptedAllDokuments ? gesuchStatus : 'DOKUMENTE_OFFEN';
       default:
         return 'NO_UEBERGANG';
     }
@@ -125,7 +133,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   statusUebergaengeOptionsSig = computed(() => {
     const gesuch = this.currentGesuchSig();
-    if (!gesuch) return [];
+    if (!gesuch) {
+      return [];
+    }
 
     return StatusUebergaengeMap[gesuch.gesuchStatus]?.map(
       (status) => StatusUebergaengeOptions[status],
