@@ -3223,7 +3223,6 @@ components:
         - UEBERPRUEFEN
         - MANUELLE_AENDERUNG
         - AKZEPTIERT
-        - ABGELEHNT
     GesuchTranche:
       required:
         - id

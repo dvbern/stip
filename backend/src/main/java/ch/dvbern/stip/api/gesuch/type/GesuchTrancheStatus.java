@@ -8,8 +8,7 @@ public enum GesuchTrancheStatus {
     IN_BEARBEITUNG_GS,
     UEBERPRUEFEN,
     MANUELLE_AENDERUNG,
-    AKZEPTIERT,
-    ABGELEHNT;
+    AKZEPTIERT;
 
     public static final Set<GesuchTrancheStatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
@@ -28,8 +27,7 @@ public enum GesuchTrancheStatus {
         EnumSet.of(
             IN_BEARBEITUNG_GS,
             UEBERPRUEFEN,
-            AKZEPTIERT,
-            ABGELEHNT
+            AKZEPTIERT
         )
     );
 }
