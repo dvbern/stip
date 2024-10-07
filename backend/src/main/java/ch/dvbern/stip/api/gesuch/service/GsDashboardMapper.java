@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
@@ -19,12 +21,17 @@ public class GsDashboardMapper {
     ) {
         final var periodeDto = gesuchsperiodeMapper.toDto(gesuch.getGesuchsperiode());
 
+        UUID missingDocumentsId = null;
+        if (missingDocuments != null) {
+            missingDocumentsId = missingDocuments.getId();
+        }
+
         return new GsDashboardDto(
             periodeDto,
             gesuch.getGesuchStatus(),
             gesuch.getId(),
             offeneAenderung,
-            missingDocuments.getId()
+            missingDocumentsId
         );
     }
 }
