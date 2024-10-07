@@ -1042,6 +1042,68 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchFehlendeDokumenteUebermitteln
       summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
+  '/gesuch/{gesuchId}/bearbeitungAbschliessen':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Bearbeitung des Gesuch Abschliessen
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: bearbeitungAbschliessen
+      summary: Die Bearbeitung des Gesuch durch den SB abschliessen
+  '/gesuch/{gesuchId}/gesuchZurueckweisen':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    patch:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
+      responses:
+        '200':
+          description: Gesuch zurueckweisen and GS
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchZurueckweisen
+      summary: Gas Gesuch an den GS zurueckweisen
+  '/gesuch/{gesuchId}/juristischAbklaeren':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Gesuch wird juristisch abgeklaert
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: juristischAbklaeren
+      summary: Gas Gesuch an die Juristen ueberweisen
   '/gesuch/{gesuchId}/statusprotokoll':
     parameters:
       - name: gesuchId
@@ -1801,7 +1863,7 @@ components:
         - ANSPRUCH_MANUELL_PRUEFEN
         - BEREIT_FUER_BEARBEITUNG
         - EINGEREICHT
-        - JOUR_FIX
+        - JURISTISCHE_ABKLAERUNG
         - FEHLENDE_DOKUMENTE
         - NICHT_ANSPRUCHSBERECHTIGT
         - NICHT_BEITRAGSBERECHTIGT
@@ -3597,6 +3659,13 @@ components:
           required:
             - start
             - comment
+    Kommentar:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
   responses:
     Unauthorized:
       content:
@@ -3635,6 +3704,13 @@ components:
       in: path
       required: true
       description: Die ID der Aenderung
+      schema:
+        $ref: '#/components/schemas/UUID'
+    gesuchId:
+      name: gesuchId
+      in: path
+      required: true
+      description: Die ID vom Gesuch
       schema:
         $ref: '#/components/schemas/UUID'
 security:

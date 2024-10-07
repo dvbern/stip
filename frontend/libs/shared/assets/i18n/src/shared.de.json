@@ -142,9 +142,10 @@
   "shared.gesuch.status.PUBLIZIERT": "Publik - Aktiv",
   "shared.gesuch.status.ARCHIVIERT": "Archiviert",
   "shared.gesuch.status.contract.IN_BEARBEITUNG_GS": "In Erarbeitung",
-  "shared.gesuch.status.contract.IN_BEARBEITUNG_SB": "In Bearbeitung",
   "shared.gesuch.status.contract.EINGEREICHT": "Eingereicht",
   "shared.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Bereit für Bearbeitung",
+  "shared.gesuch.status.contract.IN_BEARBEITUNG_SB": "In Bearbeitung",
+  "shared.gesuch.status.contract.IN_FREIGABE": "In Freigabe",
   "shared.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
 
   "shared.form.next": "Nächstes",

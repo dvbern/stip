@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -58,6 +59,7 @@ import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -92,6 +94,7 @@ public class GesuchService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
     private final GesuchNummerService gesuchNummerService;
+    private final ConfigService configService;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithOldestTranche(UUID id) {
@@ -336,6 +339,38 @@ public class GesuchService {
         // No need to validate the entire Gesuch here, as it's done in the state machine
         gesuchTrancheValidatorService.validateAdditionalEinreichenCriteria(gesuch.getGesuchTranchen().get(0));
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
+    }
+
+    @Transactional
+    public void bearbeitungAbschliessen(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+            gesuch,
+            configService.getCurrentDmnMajorVersion(),
+            configService.getCurrentDmnMinorVersion()
+        );
+
+        if (stipendien.getBerechnung() <= 0) {
+            // Keine Stipendien, next Status = Verfuegt
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
+        } else {
+            // Yes Stipendien, next Status = In Freigabe
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_FREIGABE);
+        }
+    }
+
+    @Transactional
+    public void gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
+        // TODO KSTIP-1130: Juristische Notiz erstellen anhand Kommentar
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS);
+    }
+
+    @Transactional
+    public void juristischAbklaeren(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG);
     }
 
     @Transactional

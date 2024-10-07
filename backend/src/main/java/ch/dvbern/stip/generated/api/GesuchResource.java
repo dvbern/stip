@@ -5,6 +5,7 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -25,6 +26,11 @@ import jakarta.validation.Valid;
 @Path("/gesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface GesuchResource {
+
+    @PATCH
+    @Path("/{gesuchId}/bearbeitungAbschliessen")
+    @Produces({ "application/json", "text/plain" })
+    Response bearbeitungAbschliessen(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Path("/status/in-bearbeitung/{gesuchId}")
@@ -50,6 +56,12 @@ public interface GesuchResource {
     @Path("/{gesuchId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
     Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
+
+    @PATCH
+    @Path("/{gesuchId}/gesuchZurueckweisen")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    Response gesuchZurueckweisen(@PathParam("gesuchId") UUID gesuchId,@Valid KommentarDto kommentarDto);
 
     @GET
     @Path("/{gesuchId}/berechnung")
@@ -95,6 +107,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}/statusprotokoll")
     @Produces({ "application/json", "text/plain" })
     Response getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);
+
+    @PATCH
+    @Path("/{gesuchId}/juristischAbklaeren")
+    @Produces({ "application/json", "text/plain" })
+    Response juristischAbklaeren(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
     @Path("/{gesuchId}")

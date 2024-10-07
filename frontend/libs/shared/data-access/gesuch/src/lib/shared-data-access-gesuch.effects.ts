@@ -67,6 +67,8 @@ import {
 } from './shared-data-access-gesuch.selectors';
 
 export const LOAD_ALL_DEBOUNCE_TIME = 300;
+export const ROUTE_ID_MISSING =
+  'Make sure that the route is correct and contains the gesuch :id';
 
 export const loadOwnGesuchs = createEffect(
   (
@@ -166,9 +168,7 @@ export const loadGesuch = createEffect(
       withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
       switchMap(([[, [id, trancheTyp, trancheId]], { compileTimeConfig }]) => {
         if (!id) {
-          throw new Error(
-            'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id',
-          );
+          throw new Error(ROUTE_ID_MISSING);
         }
 
         const handle404And401 = {
@@ -509,9 +509,7 @@ export const setGesuchToBearbeitung = createEffect(
       concatLatestFrom(() => store.select(selectRouteId)),
       concatMap(([, id]) => {
         if (!id) {
-          throw new Error(
-            'Make sure that the route is correct and contains the gesuch :id',
-          );
+          throw new Error(ROUTE_ID_MISSING);
         }
         return gesuchService
           .changeGesuchStatusToInBearbeitung$({ gesuchId: id })
@@ -519,6 +517,65 @@ export const setGesuchToBearbeitung = createEffect(
             map((gesuch) =>
               SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
             ),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+export const setGesuchBearbeitungAbschliessen = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen),
+      concatLatestFrom(() => store.select(selectRouteId)),
+      concatMap(([, id]) => {
+        if (!id) {
+          throw new Error(ROUTE_ID_MISSING);
+        }
+        return gesuchService.bearbeitungAbschliessen$({ gesuchId: id }).pipe(
+          map(() => SharedDataAccessGesuchEvents.loadGesuch()),
+          catchError((error) => [
+            SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+              error: sharedUtilFnErrorTransformer(error),
+            }),
+          ]),
+        );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+export const setGesuchZurueckweisen = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.setGesuchZurueckweisen),
+      concatLatestFrom(() => store.select(selectRouteId)),
+      concatMap(([{ kommentar }, id]) => {
+        if (!id) {
+          throw new Error(ROUTE_ID_MISSING);
+        }
+        return gesuchService
+          .gesuchZurueckweisen$({
+            gesuchId: id,
+            kommentar: { text: kommentar },
+          })
+          .pipe(
+            map(() => SharedDataAccessGesuchEvents.loadGesuch()),
             catchError((error) => [
               SharedDataAccessGesuchEvents.gesuchLoadedFailure({
                 error: sharedUtilFnErrorTransformer(error),
@@ -545,6 +602,8 @@ export const sharedDataAccessGesuchEffects = {
   redirectToGesuchFormNextStep,
   refreshGesuchFormStep,
   setGesuchToBearbeitung,
+  setGesuchBearbeitungAbschliessen,
+  setGesuchZurueckweisen,
 };
 
 const viewOnlyFields = ['steuerdatenTabs'] as const satisfies [

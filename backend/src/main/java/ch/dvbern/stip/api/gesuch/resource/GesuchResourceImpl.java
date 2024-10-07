@@ -13,6 +13,7 @@ import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -152,5 +153,27 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.allowAllow();
         final var changes = gesuchService.getSbTrancheChanges(aenderungId);
         return Response.ok(changes).build();
+    }
+
+    // TODO KSTIP-1247: Only SB can execute these next 3
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response bearbeitungAbschliessen(UUID gesuchId) {
+        gesuchService.bearbeitungAbschliessen(gesuchId);
+        return Response.ok().build();
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response gesuchZurueckweisen(UUID gesuchId, KommentarDto kommentarDto) {
+        gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
+        return Response.ok().build();
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response juristischAbklaeren(UUID gesuchId) {
+        gesuchService.juristischAbklaeren(gesuchId);
+        return Response.ok().build();
     }
 }

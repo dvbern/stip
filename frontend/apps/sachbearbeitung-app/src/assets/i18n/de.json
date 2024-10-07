@@ -10,6 +10,13 @@
   "sachbearbeitung-app.header.gesuch-bearbeiten": "Gesuch bearbeiten",
   "sachbearbeitung-app.header.tranche.erstellen": "Tranche erstellen",
   "sachbearbeitung-app.header.back": "Zurück",
+  "sachbearbeitung-app.header.status-uebergang.abschliessen": "Bearbeitung abschliessen",
+  "sachbearbeitung-app.header.status-uebergang.BEARBEITUNG_ABSCHLIESSEN": "Abschliessen",
+  "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN": "Zurückweisen",
+  "sachbearbeitung-app.header.status-uebergang.zurueckweisen.title": "Gesuch zurückweisen",
+  "sachbearbeitung-app.header.status-uebergang.zurueckweisen.message": "Um ein Gesuch zurückzuweisen, müssen Sie eine Begründung angeben.",
+  "sachbearbeitung-app.header.status-uebergang.zurueckweisen.placeholder": "Begründung schreiben...",
+  "sachbearbeitung-app.header.status-uebergang.zurueckweisen.confirm": "Zurückweisen",
 
   "sachbearbeitung-app.admin.title": "Administration",
   "sachbearbeitung-app.admin.save-and-publish": "Speichern und publizieren",
