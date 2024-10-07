@@ -5,6 +5,7 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -27,8 +28,9 @@ public interface GesuchTrancheResource {
 
     @PATCH
     @Path("/{aenderungId}/aenderung/ablehnen")
+    @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response aenderungAblehnen(@PathParam("aenderungId") UUID aenderungId);
+    Response aenderungAblehnen(@PathParam("aenderungId") UUID aenderungId,@Valid KommentarDto kommentarDto);
 
     @POST
     @Path("/{aenderungId}/aenderung/akzeptieren")

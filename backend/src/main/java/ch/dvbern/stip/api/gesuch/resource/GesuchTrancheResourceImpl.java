@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.gesuch.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
@@ -113,9 +114,9 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Response aenderungAblehnen(UUID aenderungId) {
+    public Response aenderungAblehnen(UUID aenderungId, KommentarDto kommentarDto) {
         gesuchTrancheAuthorizer.canUpdate(aenderungId);
-        final var tranche = gesuchTrancheService.aenderungAblehnen(aenderungId);
+        final var tranche = gesuchTrancheService.aenderungAblehnen(aenderungId, kommentarDto);
         return Response.ok(tranche).build();
     }
 

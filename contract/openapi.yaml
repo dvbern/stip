@@ -1750,6 +1750,11 @@ paths:
     patch:
       tags:
         - GesuchTranche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
       responses:
         '200':
           description: 'Aenderung wurde erflogreich abgelehnt'

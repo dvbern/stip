@@ -28,6 +28,7 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -191,7 +192,7 @@ public class GesuchTrancheService {
     }
 
     @Transactional
-    public GesuchTrancheDto aenderungAblehnen(final UUID aenderungId) {
+    public GesuchTrancheDto aenderungAblehnen(final UUID aenderungId, KommentarDto kommentarDto) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.ABGELEHNT);
 

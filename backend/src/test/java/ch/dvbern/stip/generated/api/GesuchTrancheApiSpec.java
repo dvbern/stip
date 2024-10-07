@@ -19,6 +19,7 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
@@ -141,6 +142,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #aenderungIdPath Die ID der Aenderung (required)
+     * @see #body  (optional)
      * return GesuchTrancheDtoSpec
      */
     public static class AenderungAblehnenOper implements Oper {
@@ -153,6 +155,7 @@ public class GesuchTrancheApiSpec {
 
         public AenderungAblehnenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
@@ -176,6 +179,15 @@ public class GesuchTrancheApiSpec {
         public GesuchTrancheDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<GesuchTrancheDtoSpec> type = new TypeRef<GesuchTrancheDtoSpec>(){};
             return execute(handler).as(type);
+        }
+
+         /**
+         * @param kommentarDtoSpec (KommentarDtoSpec)  (optional)
+         * @return operation
+         */
+        public AenderungAblehnenOper body(KommentarDtoSpec kommentarDtoSpec) {
+            reqSpec.setBody(kommentarDtoSpec);
+            return this;
         }
 
         public static final String AENDERUNG_ID_PATH = "aenderungId";
