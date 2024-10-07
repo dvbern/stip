@@ -270,17 +270,6 @@ function getStepsByAppType(
       return [];
   }
 }
-// function getStepsByAppType2(
-//   sharedSteps: SharedModelGesuchFormStep[],
-//   compileTimeConfig?: CompileTimeConfig,
-// ) {
-//   if (compileTimeConfig?.appType === 'sachbearbeitung-app') {
-//     return [...sharedSteps, ABSCHLUSS];
-//   } else {
-//     return [];
-//   }
-// }
-
 /**
  * Calculates the changes between the gesuchTrancheToWorkWith and previous tranches
  *

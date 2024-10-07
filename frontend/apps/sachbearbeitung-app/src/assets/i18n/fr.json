@@ -208,6 +208,13 @@
   "sachbearbeitung-app.verfuegung.berechnung.to": "à",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Détails du calcul",
 
+  "sachbearbeitung-app.infos.title":"Infos",
+  "sachbearbeitung-app.infos.protokoll":"Protocole",
+  "sachbearbeitung-app.infos.notizen":"Notes",
+  "sachbearbeitung-app.infos.buchhaltung":"Comptabilité",
+  "sachbearbeitung-app.infos.darlehen":"Prêt",
+  "sachbearbeitung-app.infos.beschwerden":"Plaintes",
+
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Budget personnel",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.title": "Revenu",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total": "Revenu personnel de l'apprenti(e)",

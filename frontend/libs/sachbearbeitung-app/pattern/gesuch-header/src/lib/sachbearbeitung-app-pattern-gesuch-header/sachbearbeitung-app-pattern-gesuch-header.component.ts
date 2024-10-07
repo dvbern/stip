@@ -57,14 +57,12 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   });
 
   isInfosRouteSig = computed(() => {
-    console.log('router', this.router, this.router.url);
     const isActive = this.router.isActive('infos', {
       paths: 'subset',
       fragment: 'ignored',
       matrixParams: 'ignored',
       queryParams: 'ignored',
     });
-    console.log('isActive', isActive);
     return isActive;
   });
 
