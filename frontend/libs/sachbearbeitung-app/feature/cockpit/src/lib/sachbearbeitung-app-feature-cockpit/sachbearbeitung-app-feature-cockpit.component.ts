@@ -124,12 +124,10 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   @ViewChild('gesuchePaginator', { static: true }) paginator!: MatPaginator;
   displayedColumns = [
     'fall',
-    'svNummer',
     'typ',
     'nachname',
     'vorname',
     'geburtsdatum',
-    'ort',
     'status',
     'bearbeiter',
     'letzteAktivitaet',
@@ -137,12 +135,10 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
 
   filterForm = this.formBuilder.group({
     fall: [<string | undefined>undefined],
-    svNummer: [<string | undefined>undefined],
     typ: [''],
     nachname: [<string | undefined>undefined],
     vorname: [<string | undefined>undefined],
     geburtsdatum: [<Date | undefined>undefined],
-    ort: [<string | undefined>undefined],
     status: [''],
     bearbeiter: [<string | undefined>undefined],
     letzteAktivitaetStart: [<Date | undefined>undefined],
@@ -218,9 +214,6 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
       trancheId: gesuch.gesuchTrancheToWorkWith?.id,
       fall: gesuch.fall.fallNummer,
       typ: gesuch.gesuchTrancheToWorkWith?.typ,
-      svNummer:
-        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
-          ?.sozialversicherungsnummer,
       nachname:
         gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
           ?.nachname,
@@ -230,8 +223,6 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
       geburtsdatum:
         gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
           ?.geburtsdatum,
-      ort: gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
-        ?.adresse.ort,
       status: gesuch.gesuchStatus,
       bearbeiter: gesuch.bearbeiter,
       letzteAktivitaet: gesuch.aenderungsdatum,
@@ -249,12 +240,10 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
       dataSource.filterPredicate = (data) =>
         [
           checkFilter(data.fall, filterForm.fall),
-          checkFilter(data.svNummer, filterForm.svNummer),
           checkFilter(data.typ, filterForm.typ),
           checkFilter(data.nachname, filterForm.nachname),
           checkFilter(data.vorname, filterForm.vorname),
           checkFilter(data.geburtsdatum, filterForm.geburtsdatum),
-          checkFilter(data.ort, filterForm.ort),
           checkFilter(data.status, filterForm.status),
           checkFilter(data.bearbeiter, filterForm.bearbeiter),
           checkFilter(data.letzteAktivitaet, [
