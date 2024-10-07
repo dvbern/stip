@@ -159,6 +159,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response bearbeitungAbschliessen(UUID gesuchId) {
+        gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.bearbeitungAbschliessen(gesuchId);
         return Response.ok().build();
     }
@@ -166,6 +167,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response gesuchZurueckweisen(UUID gesuchId, KommentarDto kommentarDto) {
+        gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
         return Response.ok().build();
     }
@@ -173,6 +175,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response juristischAbklaeren(UUID gesuchId) {
+        gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.juristischAbklaeren(gesuchId);
         return Response.ok().build();
     }
