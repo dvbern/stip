@@ -260,7 +260,7 @@ class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
     }
 
     @Test
-    @Description("Wohnsitz 'Familie' should not be valid when Elternteil A pays Alimente")
+    @Description("All Wohnsitz options except Familie should be valid when Elternteil A pays Alimente")
     void familiensituation_alimente_vater_wohnsitz_validationTest(){
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
@@ -271,44 +271,18 @@ class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
         // just a setup...
         gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilMutter(HUNDRED_PERCENT);
 
-        // WOHSNITZ.FAMILIE is NOT valid
         gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.FAMILIE);
         assertFalse(validator.isValid(gesuchFormular, null));
 
-        // WOHSNITZ.EIGENER_HAUSHALT ist valid
         gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         assertTrue(validator.isValid(gesuchFormular, null));
 
-        // WOHSNITZ.MUTTER_VATER is valid
         gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.MUTTER_VATER);
         assertTrue(validator.isValid(gesuchFormular, null));
     }
 
     @Test
-    @Description("Wohnsitzanteil of Elternteil B should be 100% when Elternteil A pays Alimente")
-    void familiensituation_alimente_vater_wohnsitzanteil_validationTest(){
-        Familiensituation familiensituation = new Familiensituation();
-        familiensituation.setElternVerheiratetZusammen(false);
-        familiensituation.setGerichtlicheAlimentenregelung(true);
-        familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
-        gesuchFormular.setFamiliensituation(familiensituation);
-        gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.MUTTER_VATER);
-
-        // valid constellation
-        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilVater(ZERO_PERCENT);
-        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilMutter(HUNDRED_PERCENT);
-        assertTrue(validator.isValid(gesuchFormular, null));
-
-        // invalid constellation
-        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilMutter(ZERO_PERCENT);
-        gesuchFormular.getPersonInAusbildung().setWohnsitzAnteilVater(HUNDRED_PERCENT);
-
-        // invalid constellation
-        assertFalse(validator.isValid(gesuchFormular, null));
-    }
-
-    @Test
-    @Description("All Wohnsitz options should be valid when Alimente is GEMEINSAM")
+    @Description("All Wohnsitz options except Familie should be valid when Alimente is GEMEINSAM")
     void familiensituation_alimente_gemeinsam_wohnsitz_validationTest(){
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
@@ -317,7 +291,7 @@ class FamiliensituationPersonInAusbildungWohnsitzConstraintValidatorTest {
         gesuchFormular.setFamiliensituation(familiensituation);
 
         gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.FAMILIE);
-        assertTrue(validator.isValid(gesuchFormular, null));
+        assertFalse(validator.isValid(gesuchFormular, null));
 
         gesuchFormular.getPersonInAusbildung().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         assertTrue(validator.isValid(gesuchFormular, null));

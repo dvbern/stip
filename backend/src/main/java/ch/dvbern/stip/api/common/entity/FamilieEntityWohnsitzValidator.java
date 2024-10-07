@@ -6,7 +6,6 @@ import java.util.Optional;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
-import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
@@ -34,15 +33,10 @@ public class FamilieEntityWohnsitzValidator {
         }
 
         boolean elternTogetherOrMarried = Boolean.TRUE.equals(familiensituation.getElternVerheiratetZusammen());
-        boolean alimentenregelungExisting = Boolean.TRUE.equals(familiensituation.getGerichtlicheAlimentenregelung());
         boolean oneOrMoreElternteilAbsent = Boolean.TRUE.equals(familiensituation.getElternteilUnbekanntVerstorben());
 
         if (elternTogetherOrMarried) {
             return isWohnsitzValidWhenElternTogetherOrMarried(familieEntity);
-        }
-
-        if (alimentenregelungExisting) {
-            return isWohnsitzanteilValidWithAlimente(familieEntity, familiensituation);
         }
 
         if (oneOrMoreElternteilAbsent) {
@@ -72,28 +66,6 @@ public class FamilieEntityWohnsitzValidator {
         }
         return ONE_ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz())
             .orElseGet(() -> isWohnsitzanteilValidWhenOneElternteilIsAbsent(familieEntity, familiensituation));
-    }
-
-    private boolean isWohnsitzanteilValidWithAlimente(
-        AbstractFamilieEntity familieEntity,
-        Familiensituation familiensituation
-    ) {
-        if (familieEntity.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
-            return true;
-        }
-        if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.GEMEINSAM) {
-            return true;
-        }
-
-        boolean isAnteilMutter100Percent =
-            FamilieEntityWohnsitzValidatorUtils.getIsWohnsitzanteilMutter100Percent(familieEntity);
-        boolean isAnteilVater100Percent =
-            FamilieEntityWohnsitzValidatorUtils.getIsWohnsitzanteilVater100Percent(familieEntity);
-
-        if (familiensituation.getWerZahltAlimente() == Elternschaftsteilung.VATER) {
-            return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE && isAnteilMutter100Percent;
-        }
-        return familieEntity.getWohnsitz() != Wohnsitz.FAMILIE && isAnteilVater100Percent;
     }
 
     private boolean isWohnsitzanteilValidWhenOneElternteilIsAbsent(

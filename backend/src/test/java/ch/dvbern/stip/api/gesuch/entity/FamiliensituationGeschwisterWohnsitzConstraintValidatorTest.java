@@ -310,7 +310,7 @@ class FamiliensituationGeschwisterWohnsitzConstraintValidatorTest {
     }
 
     @Test
-    @Description("Wohnsitz 'Familie' should not be valid when Elternteil A pays Alimente")
+    @Description("All Wohnsitz options except Familie should be valid when Elternteil A pays Alimente")
     void familiensituation_alimente_vater_wohnsitz_validationTest(){
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
@@ -322,53 +322,21 @@ class FamiliensituationGeschwisterWohnsitzConstraintValidatorTest {
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitzAnteilMutter(HUNDRED_PERCENT);
         gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitzAnteilMutter(HUNDRED_PERCENT);
 
-        // WOHSNITZ.FAMILIE is NOT valid
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitz(Wohnsitz.FAMILIE);
         gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitz(Wohnsitz.FAMILIE);
         assertFalse(validator.isValid(gesuchFormular, null));
 
-        // WOHSNITZ.EIGENER_HAUSHALT ist valid
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         assertTrue(validator.isValid(gesuchFormular, null));
 
-        // WOHSNITZ.MUTTER_VATER is valid
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitz(Wohnsitz.MUTTER_VATER);
         gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitz(Wohnsitz.MUTTER_VATER);
         assertTrue(validator.isValid(gesuchFormular, null));
     }
 
     @Test
-    @Description("Wohnsitzanteil of Elternteil B should be 100% when Elternteil A pays Alimente")
-    void familiensituation_alimente_vater_wohnsitzanteil_validationTest(){
-        Familiensituation familiensituation = new Familiensituation();
-        familiensituation.setElternVerheiratetZusammen(false);
-        familiensituation.setGerichtlicheAlimentenregelung(true);
-        familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
-        gesuchFormular.setFamiliensituation(familiensituation);
-
-        gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitz(Wohnsitz.MUTTER_VATER);
-        gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitz(Wohnsitz.MUTTER_VATER);
-
-        // valid constellation
-        gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitzAnteilVater(ZERO_PERCENT);
-        gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitzAnteilVater(ZERO_PERCENT);
-        gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitzAnteilMutter(HUNDRED_PERCENT);
-        gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitzAnteilMutter(HUNDRED_PERCENT);
-        assertTrue(validator.isValid(gesuchFormular, null));
-
-        // invalid constellation
-        gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitzAnteilMutter(ZERO_PERCENT);
-        gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitzAnteilMutter(ZERO_PERCENT);
-        gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitzAnteilVater(HUNDRED_PERCENT);
-        gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitzAnteilVater(HUNDRED_PERCENT);
-
-        // invalid constellation
-        assertFalse(validator.isValid(gesuchFormular, null));
-    }
-
-    @Test
-    @Description("All Wohnsitz options should be valid when Alimente is GEMEINSAM")
+    @Description("All Wohnsitz options except Familie should be valid when Alimente is GEMEINSAM")
     void familiensituation_alimente_gemeinsam_wohnsitz_validationTest(){
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
@@ -378,7 +346,7 @@ class FamiliensituationGeschwisterWohnsitzConstraintValidatorTest {
 
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitz(Wohnsitz.FAMILIE);
         gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitz(Wohnsitz.FAMILIE);
-        assertTrue(validator.isValid(gesuchFormular, null));
+        assertFalse(validator.isValid(gesuchFormular, null));
 
         gesuchFormular.getGeschwisters().stream().findFirst().get().setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         gesuchFormular.getGeschwisters().stream().toList().get(1).setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
