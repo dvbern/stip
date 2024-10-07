@@ -28,7 +28,7 @@ const AbschlussPhaseMap = {
   GESUCH_ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: S__, [sb]: S__ },
   GESUCH_FEHLENDE_DOKUMENTE /**               */: { [gs]: _R_, [sb]: S__ },
   GESUCH_GESUCH_ABGELEHNT /**                 */: { [gs]: S__, [sb]: S__ },
-  GESUCH_JOUR_FIX /**                         */: { [gs]: S__, [sb]: S__ },
+  GESUCH_JURISTISCHE_ABKLAERUNG /**           */: { [gs]: S__, [sb]: S__ },
   GESUCH_KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: S__, [sb]: S__ },
   GESUCH_NICHT_ANSPRUCHSBERECHTIGT /**        */: { [gs]: S__, [sb]: S__ },
   GESUCH_NICHT_BEITRAGSBERECHTIGT /**         */: { [gs]: S__, [sb]: S__ },

@@ -24,6 +24,7 @@ import { DokumentTyp } from '../model/dokumentTyp';
 import { GesuchDokument } from '../model/gesuchDokument';
 import { GesuchTranche } from '../model/gesuchTranche';
 import { GesuchTrancheSlim } from '../model/gesuchTrancheSlim';
+import { Kommentar } from '../model/kommentar';
 import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -33,6 +34,7 @@ import { Configuration }                                     from '../configurat
 export interface GesuchTrancheServiceAenderungAblehnenRequestParams {
     /** Die ID der Aenderung */
     aenderungId: string;
+    kommentar: Kommentar;
 }
 
 export interface GesuchTrancheServiceAenderungAkzeptierenRequestParams {
@@ -162,6 +164,10 @@ export class GesuchTrancheService {
         if (aenderungId === null || aenderungId === undefined) {
             throw new Error('Required parameter aenderungId was null or undefined when calling aenderungAblehnen$.');
         }
+        const kommentar = requestParameters.kommentar;
+        if (kommentar === null || kommentar === undefined) {
+            throw new Error('Required parameter kommentar was null or undefined when calling aenderungAblehnen$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -197,6 +203,15 @@ export class GesuchTrancheService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -212,6 +227,7 @@ export class GesuchTrancheService {
         return this.httpClient.request<GesuchTranche>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: kommentar,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

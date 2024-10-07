@@ -15,6 +15,9 @@
 
   <form [formGroup]="form" class="mt-4" novalidate>
     <mat-form-field dvSharedUiFormField class="col-12">
+      @if (dialogData.labelKey; as commentLabel) {
+        <mat-label>{{ commentLabel | translate }}</mat-label>
+      }
       <textarea
         rows="4"
         matInput

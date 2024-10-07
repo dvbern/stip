@@ -6,7 +6,6 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { map, pipe, switchMap, tap } from 'rxjs';
 
-import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
   CreateAenderungsantragRequest,
@@ -48,9 +47,6 @@ export class GesuchAenderungStore extends signalStore(
   withDevtools('GesuchAenderungStore'),
 ) {
   private store = inject(Store);
-  private configSig = this.store.selectSignal(
-    selectSharedDataAccessConfigsView,
-  );
   private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private router = inject(Router);
@@ -68,13 +64,14 @@ export class GesuchAenderungStore extends signalStore(
 
   openAenderungViewSig = computed(() => {
     const tranchen = this.cachedTranchenSlim();
-    const { isSachbearbeitungApp } = this.configSig();
     return {
       loading: isPending(tranchen),
       openAenderung: tranchen.data?.find(
         (t) =>
           t.typ === 'AENDERUNG' &&
-          (!isSachbearbeitungApp || t.status !== 'IN_BEARBEITUNG_GS'),
+          (
+            ['IN_BEARBEITUNG_GS', 'UEBERPRUEFEN'] as GesuchTrancheStatus[]
+          ).includes(t.status),
       ),
     };
   });
@@ -197,6 +194,7 @@ export class GesuchAenderungStore extends signalStore(
   changeAenderungState$ = rxMethod<{
     aenderungId: string;
     gesuchId: string;
+    comment: string;
     target: AenderungChangeState;
     onSuccess: (trancheId: string) => void;
   }>(
@@ -207,12 +205,21 @@ export class GesuchAenderungStore extends signalStore(
         }));
       }),
       switchMap(
-        ({ aenderungId, target, gesuchId, onSuccess: additionalOnSuccess }) => {
+        ({
+          aenderungId,
+          target,
+          gesuchId,
+          comment,
+          onSuccess: additionalOnSuccess,
+        }) => {
           const services$ = {
             AKZEPTIERT: () =>
               this.gesuchTrancheService.aenderungAkzeptieren$({ aenderungId }),
             ABGELEHNT: () =>
-              this.gesuchTrancheService.aenderungAblehnen$({ aenderungId }),
+              this.gesuchTrancheService.aenderungAblehnen$({
+                aenderungId,
+                kommentar: { text: comment },
+              }),
             MANUELLE_AENDERUNG: () =>
               this.gesuchTrancheService.aenderungManuellAnpassen$({
                 aenderungId,

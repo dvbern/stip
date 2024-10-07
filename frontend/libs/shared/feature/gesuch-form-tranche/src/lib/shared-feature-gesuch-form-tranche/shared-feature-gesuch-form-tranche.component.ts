@@ -14,13 +14,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatOption } from '@angular/material/autocomplete';
+import { MatDialog } from '@angular/material/dialog';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { filter } from 'rxjs';
+import { filter, firstValueFrom } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
@@ -35,6 +36,7 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
+import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import {
   getLatestGesuchIdFromGesuch$,
   getLatestTrancheIdFromGesuchOnUpdate$,
@@ -70,6 +72,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
 export class SharedFeatureGesuchFormTrancheComponent {
   private store = inject(Store);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
   private translate = inject(TranslateService);
   private formBuilder = inject(NonNullableFormBuilder);
   private defaultCommentSig = toSignal(
@@ -143,14 +146,31 @@ export class SharedFeatureGesuchFormTrancheComponent {
       });
   }
 
-  changeAenderungState(
+  async changeAenderungState(
     aenderungId: string,
     target: AenderungChangeState,
     gesuchId: string,
   ) {
+    let comment = undefined;
+    if (target === 'ABGELEHNT') {
+      comment = (
+        await firstValueFrom(
+          SharedUiKommentarDialogComponent.open(this.dialog, {
+            entityId: aenderungId,
+            titleKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.title',
+            messageKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.description',
+            labelKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.comment.label',
+            placeholderKey: '',
+            confirmKey: 'shared.form.send',
+          }).afterClosed(),
+        )
+      )?.kommentar;
+    }
+
     this.gesuchAenderungStore.changeAenderungState$({
       aenderungId,
       target,
+      comment: comment ?? '',
       gesuchId,
       onSuccess: (trancheId) => {
         const routesMap = {
