@@ -258,6 +258,7 @@ function getStepsByAppType(
       return [];
   }
 }
+
 /**
  * Calculates the changes between the gesuchTrancheToWorkWith and previous tranches
  *
