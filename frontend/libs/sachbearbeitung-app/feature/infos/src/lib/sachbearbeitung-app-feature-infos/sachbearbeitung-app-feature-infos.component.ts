@@ -6,7 +6,7 @@ import { SachbearbeitungAppPatterninfosLayoutComponent } from '@dv/sachbearbeitu
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 
 @Component({
-  selector: 'lib-sachbearbeitung-app-feature-infos',
+  selector: 'dv-sachbearbeitung-app-feature-infos',
   standalone: true,
   imports: [
     CommonModule,

@@ -19,7 +19,7 @@ import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-pro
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
 @Component({
-  selector: 'lib-sachbearbeitung-app-feature-infos-protokoll',
+  selector: 'dv-sachbearbeitung-app-feature-infos-protokoll',
   standalone: true,
   imports: [
     CommonModule,
