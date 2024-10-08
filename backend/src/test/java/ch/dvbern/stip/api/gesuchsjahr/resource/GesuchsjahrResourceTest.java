@@ -5,6 +5,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.api.model.GesuchsjahrTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.GesuchsjahrApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchsjahrDtoSpec;
@@ -26,6 +27,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
+@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
