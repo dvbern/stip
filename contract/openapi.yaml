@@ -1042,6 +1042,68 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchFehlendeDokumenteUebermitteln
       summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
+  '/gesuch/{gesuchId}/bearbeitungAbschliessen':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Bearbeitung des Gesuch Abschliessen
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: bearbeitungAbschliessen
+      summary: Die Bearbeitung des Gesuch durch den SB abschliessen
+  '/gesuch/{gesuchId}/gesuchZurueckweisen':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    patch:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
+      responses:
+        '200':
+          description: Gesuch zurueckweisen and GS
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchZurueckweisen
+      summary: Gas Gesuch an den GS zurueckweisen
+  '/gesuch/{gesuchId}/juristischAbklaeren':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Gesuch wird juristisch abgeklaert
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: juristischAbklaeren
+      summary: Gas Gesuch an die Juristen ueberweisen
   '/gesuch/{gesuchId}/statusprotokoll':
     parameters:
       - name: gesuchId
@@ -1087,9 +1149,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Berechnungsresultat'
+                $ref: '#/components/schemas/Berechnungsresultat'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1102,12 +1162,12 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBerechnungForGesuch
       summary: Berechnet und holt die Berechnung für ein Gesuch
-  '/gesuch/{gesuchId}/einreichen/validieren':
+  '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren':
     get:
       tags:
-        - Gesuch
+        - GesuchTranche
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -1127,7 +1187,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchEinreichenValidieren
+      operationId: gesuchTrancheEinreichenValidieren
       summary: Das Gesuch Einreichen Validation Report generieren
   '/gesuch/{aenderungId}/aenderung/gs/changes':
     parameters:
@@ -1597,25 +1657,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createAenderungsantrag
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Returns gesuche filtered by gs
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAenderungsantrag
   '/gesuchtranche/{gesuchId}/tranche':
     parameters:
       - name: gesuchId
@@ -1663,6 +1704,72 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: aenderungEinreichen
+  '/gesuchtranche/{aenderungId}/aenderung/akzeptieren':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    post:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: 'Aenderung wurde erflogreich akzeptiert'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTranche'
+        '400':
+          description: Falsche Tranche akzeptiert
+        '404':
+          description: Die Aenderung gibt es nicht
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungAkzeptieren
+  '/gesuchtranche/{aenderungId}/aenderung/manuelleAenderung':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: 'Aenderung wurde erflogreich auf manuell gesetzt'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTranche'
+        '400':
+          description: Falsche Tranche versucht auf manuell zu setzen
+        '404':
+          description: Die Aenderung gibt es nicht
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungManuellAnpassen
+  '/gesuchtranche/{aenderungId}/aenderung/ablehnen':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    patch:
+      tags:
+        - GesuchTranche
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
+      responses:
+        '200':
+          description: 'Aenderung wurde erflogreich abgelehnt'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTranche'
+        '400':
+          description: Falsche Tranche abgelehnt
+        '404':
+          description: Die Aenderung gibt es nicht
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungAblehnen
   /bildungskategorie:
     get:
       tags:
@@ -1747,13 +1854,13 @@ components:
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
         - FAMILIENSITUATION_TRENNUNGSKONVENTION
-        - STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER
-        - STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER
-        - STEUERDATEN_SOZIALHILFEBUDGET_VATER
-        - STEUERDATEN_SOZIALHILFEBUDGET_MUTTER
-        - STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
-        - STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
-        - STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
+        - ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
+        - ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
+        - ELTERN_SOZIALHILFEBUDGET_VATER
+        - ELTERN_SOZIALHILFEBUDGET_MUTTER
+        - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+        - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
+        - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
         - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
         - KINDER_ALIMENTENVERORDUNG
@@ -1803,7 +1910,7 @@ components:
         - ANSPRUCH_MANUELL_PRUEFEN
         - BEREIT_FUER_BEARBEITUNG
         - EINGEREICHT
-        - JOUR_FIX
+        - JURISTISCHE_ABKLAERUNG
         - FEHLENDE_DOKUMENTE
         - NICHT_ANSPRUCHSBERECHTIGT
         - NICHT_BEITRAGSBERECHTIGT
@@ -2134,6 +2241,7 @@ components:
         - nachname
         - geburtsdatum
         - ausbildungssituation
+        - wohnsitzAnteilPia
       type: object
       properties:
         vorname:
@@ -2142,18 +2250,12 @@ components:
           format: date
           description: dd.MM.yyyy
           type: string
-        wohnsitz:
-          $ref: '#/components/schemas/Wohnsitz'
         ausbildungssituation:
           $ref: '#/components/schemas/Ausbildungssituation'
         id:
           $ref: '#/components/schemas/UUID'
-        wohnsitzAnteilMutter:
-          description: Required wenn Wohnsitz.MUTTER_VATER.
-          type: number
-        wohnsitzAnteilVater:
-          description: Required wenn Wohnsitz.MUTTER_VATER.
-          type: number
+        wohnsitzAnteilPia:
+          type: integer
         nachname:
           type: string
         erhalteneAlimentebeitraege:
@@ -2290,6 +2392,7 @@ components:
       enum:
         - ERWERBSTAETIGKEIT
         - ANDERE_TAETIGKEIT
+        - BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
       type: string
     Bildungsstufe:
       enum:
@@ -2355,6 +2458,9 @@ components:
         - telefonnummer
         - vorname
         - elternTyp
+        - sozialhilfebeitraege
+        - ergaenzungsleistungen
+        - wohnkosten
       type: object
       properties:
         vorname:
@@ -2385,6 +2491,19 @@ components:
           $ref: '#/components/schemas/ElternTyp'
         nachname:
           type: string
+        ergaenzungsleistungen:
+          description: |
+            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater'
+            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp'
+          type: integer
+        sozialhilfebeitraege:
+          description: |
+            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater'
+            'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp'
+          type: integer
+        wohnkosten:
+          description: 'Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen'
+          type: integer
     Eltern:
       title: Root Type for Eltern
       type: object
@@ -3103,7 +3222,8 @@ components:
       enum:
         - IN_BEARBEITUNG_GS
         - UEBERPRUEFEN
-        - AKZETPIERT
+        - MANUELLE_AENDERUNG
+        - AKZEPTIERT
         - ABGELEHNT
     GesuchTranche:
       required:
@@ -3140,6 +3260,12 @@ components:
           $ref: '#/components/schemas/UUID'
     GesuchTrancheSlim:
       type: object
+      required:
+        - id
+        - gueltigAb
+        - gueltigBis
+        - status
+        - typ
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -3149,6 +3275,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         status:
           $ref: '#/components/schemas/GesuchTrancheStatus'
+        comment:
+          type: string
         typ:
           $ref: '#/components/schemas/GesuchTrancheTyp'
     SachbearbeiterZuordnungStammdaten:
@@ -3201,11 +3329,11 @@ components:
         - fahrkosten
         - verpflegung
         - totalEinkuenfte
+        - eigenmietwert
         - isArbeitsverhaeltnisSelbstaendig
         - kinderalimente
         - vermoegen
         - steuerdatenTyp
-        - wohnkosten
       type: object
       properties:
         id:
@@ -3240,29 +3368,7 @@ components:
           type: integer
         kinderalimente:
           type: integer
-        ergaenzungsleistungen:
-          description: |
-            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater'
-            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp'
-          type: integer
-        ergaenzungsleistungenPartner:
-          description: |
-            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Mutter'
-            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen null'
-          type: integer
         vermoegen:
-          type: integer
-        wohnkosten:
-          type: integer
-        sozialhilfebeitraege:
-          description: |
-            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater'
-            'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp'
-          type: integer
-        sozialhilfebeitraegePartner:
-          description: |
-            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Mutter'
-            'Falls steuerdatenTyp != Famile: null'
           type: integer
     Steuerdaten:
       title: Root Type for Steuerdaten
@@ -3321,11 +3427,28 @@ components:
         - ABGELEHNT
         - AKZEPTIERT
     Berechnungsresultat:
+      description: Resultat der Berechnung (gesamtes Gesuch)
+      required:
+        - berechnung
+        - tranchenBerechnungsresultate
+      type: object
+      properties:
+        berechnung:
+          description: 'Berechneter Stpendiumsanspruch für das Gesuch'
+          type: integer
+        tranchenBerechnungsresultate:
+          description: 'Resultate der Berechnung für die Tranchen des Gesuchs'
+          type: array
+          items:
+            $ref: '#/components/schemas/TranchenBerechnungsresultat'
+    TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
         - berechnung
         - gueltigAb
         - gueltigBis
+        - gesuchTrancheId
+        - berechnungsanteilKinder
         - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
@@ -3338,6 +3461,15 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gueltigBis:
           $ref: '#/components/schemas/LocalDate'
+        gesuchTrancheId:
+          description: 'ID der tranche für welche die Berechnung ausgeführt wurde.
+                        Mehrere resultate mit der gleichen ID sind die berechnungen für
+                        getrennte eltern mit Kindern die eine Obhutsteilung haben'
+          $ref: '#/components/schemas/UUID'
+        berechnungsanteilKinder:
+          description: 'Anteil dieser Berechnung am Berechnungstotal.
+                        Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
+          type: number
         berechnungsStammdaten:
           description: 'Stammdaten für die Stipendienberechnung'
           $ref: '#/components/schemas/BerechnungsStammdaten'
@@ -3389,7 +3521,7 @@ components:
       required:
         - anzahlPersonenImHaushalt
         - eigenerHaushalt
-        - anteilLebenshaltungskosten
+        - anteilFamilienbudget
         - einkommen
         - alimente
         - leistungenEO
@@ -3399,9 +3531,9 @@ components:
         - gemeindeInstitutionen
         - steuerbaresVermoegen
         - anrechenbaresVermoegen
-        - anteilFamilienbudget
         - einkommenPartner
         - einnahmenPersoenlichesBudget
+        - anteilLebenshaltungskosten
         - grundbedarf
         - wohnkosten
         - medizinischeGrundversorgung
@@ -3420,7 +3552,7 @@ components:
           type: integer
         eigenerHaushalt:
           type: boolean
-        anteilLebenshaltungskosten:
+        anteilFamilienbudget:
           type: integer
         einkommen:
           type: integer
@@ -3440,11 +3572,11 @@ components:
           type: integer
         anrechenbaresVermoegen:
           type: integer
-        anteilFamilienbudget:
-          type: integer
         einkommenPartner:
           type: integer
         einnahmenPersoenlichesBudget:
+          type: integer
+        anteilLebenshaltungskosten:
           type: integer
         grundbedarf:
           type: integer
@@ -3575,6 +3707,13 @@ components:
           required:
             - start
             - comment
+    Kommentar:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
   responses:
     Unauthorized:
       content:
@@ -3613,6 +3752,13 @@ components:
       in: path
       required: true
       description: Die ID der Aenderung
+      schema:
+        $ref: '#/components/schemas/UUID'
+    gesuchId:
+      name: gesuchId
+      in: path
+      required: true
+      description: Die ID vom Gesuch
       schema:
         $ref: '#/components/schemas/UUID'
 security:

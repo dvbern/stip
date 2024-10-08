@@ -6,6 +6,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
+import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from './sachbearbeitung-app-pattern-gesuch-header.component';
 
 describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
@@ -23,7 +25,14 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideOAuthClient(),
-        provideMockStore(),
+        provideMockStore({
+          initialState: {
+            configs: {
+              compileTimeConfig: undefined,
+            },
+          },
+        }),
+        provideSharedPatternJestTestSetup(),
       ],
     }).compileComponents();
 

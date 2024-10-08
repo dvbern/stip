@@ -309,13 +309,13 @@ export class GesuchsperiodeDetailComponent {
     if (this.form.invalid) {
       return;
     }
-    const value = convertTempFormToRealValues(this.form);
+    const formValues = convertTempFormToRealValues(this.form);
     const isNew = !this.idSig();
     this.store.saveGesuchsperiode$({
       gesuchsperiodeId: this.idSig(),
       gesuchsperiodenDaten: {
-        ...value,
-        ...this.numberConverter.toNumber(),
+        ...formValues,
+        ...this.numberConverter.toNumber(formValues),
       },
       onAfterSave: (gesuchsjahr) => {
         this.form.markAsPristine();

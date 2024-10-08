@@ -4,10 +4,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("GesuchTrancheSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -20,6 +26,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
   private @Valid LocalDate gueltigBis;
   private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status;
   private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
+  private @Valid String comment;
 
   /**
    **/
@@ -28,8 +35,9 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
+  @NotNull
   public UUID getId() {
     return id;
   }
@@ -46,8 +54,9 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gueltigAb")
+  @NotNull
   public LocalDate getGueltigAb() {
     return gueltigAb;
   }
@@ -64,8 +73,9 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gueltigBis")
+  @NotNull
   public LocalDate getGueltigBis() {
     return gueltigBis;
   }
@@ -82,8 +92,9 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("status")
+  @NotNull
   public ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus getStatus() {
     return status;
   }
@@ -100,8 +111,9 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("typ")
+  @NotNull
   public ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp getTyp() {
     return typ;
   }
@@ -109,6 +121,24 @@ public class GesuchTrancheSlimDto  implements Serializable {
   @JsonProperty("typ")
   public void setTyp(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
     this.typ = typ;
+  }
+
+  /**
+   **/
+  public GesuchTrancheSlimDto comment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+  
+  @JsonProperty("comment")
+  public String getComment() {
+    return comment;
+  }
+
+  @JsonProperty("comment")
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
 
@@ -125,24 +155,26 @@ public class GesuchTrancheSlimDto  implements Serializable {
         Objects.equals(this.gueltigAb, gesuchTrancheSlim.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchTrancheSlim.gueltigBis) &&
         Objects.equals(this.status, gesuchTrancheSlim.status) &&
-        Objects.equals(this.typ, gesuchTrancheSlim.typ);
+        Objects.equals(this.typ, gesuchTrancheSlim.typ) &&
+        Objects.equals(this.comment, gesuchTrancheSlim.comment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, status, typ);
+    return Objects.hash(id, gueltigAb, gueltigBis, status, typ, comment);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchTrancheSlimDto {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("}");
     return sb.toString();
   }

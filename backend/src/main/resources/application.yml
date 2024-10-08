@@ -18,6 +18,19 @@ kstip:
   seeding:
     seed-on:
       - 'dev'
+    testcases:
+      seed-on:
+        - 'prod'
+      to-seed:
+        - 'UATTestcase1'
+        - 'UATTestcase2'
+        - 'UATTestcase3'
+        - 'UATTestcase4'
+        - 'UATTestcase5'
+        - 'UATTestcase6'
+        - 'UATTestcase8'
+        - 'UATTestcase9'
+        - 'UATTestcase11'
   plzdata:
     cron: '0 15 10 10W * ?' # Fires at 10:15 on the closest weekday to the 10th of each month
     featurekey: 'ortschaftenverzeichnis_plz_2056.csv.zip'
@@ -27,7 +40,18 @@ kstip:
     kc-path: '${STIP_WELCOME_MAIL_PATH}'
     kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
     kc-scope: '${STIP_WELCOME_MAIL_SCOPE}'
+  dmn:
+    current-major-version: 1
+    current-minor-version: 0
+
 quarkus:
+  antivirus:
+    clamav:
+      enabled: true
+      devservice:
+        image-name: clamav/clamav-debian
+      health:
+        enabled: true
   execution-model-annotations:
     # TODO: use FAIL as soon as @Blocking is detected on subclasses
     # see: https://github.com/quarkusio/quarkus/issues/38275
@@ -165,6 +189,10 @@ quarkus:
   quarkus:
     s3:
       endpoint-override: '${STIP_S3_ENDPOINT}'
+    antivirus:
+      clamav:
+        host: '${STIP_CLAMAV_HOST}'
+        port: '${STIP_CLAMAV_PORT:3310}'
 mp:
   openapi:
     scan:

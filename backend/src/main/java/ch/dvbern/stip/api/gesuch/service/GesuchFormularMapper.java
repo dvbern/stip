@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -12,10 +13,13 @@ import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.eltern.util.ElternDiffUtil;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
@@ -61,6 +65,9 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
     @Inject
     FamiliensituationMapper familiensituationMapper;
+
+    @Inject
+    GesuchDokumentService gesuchDokumentService;
 
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
@@ -149,6 +156,60 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         case VATER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.VATER));
         case MUTTER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.MUTTER));
         case GESUCHSTELLER, ANDERE, SOZIALDIENST_INSTITUTION -> {/* Wir setzen hier nur adressen für eltern */}
+        }
+    }
+
+    @BeforeMapping
+    protected void mirrorWohnkosten(
+        final GesuchFormularUpdateDto newFormular,
+        final @MappingTarget GesuchFormular targetFormular
+    ) {
+        if (newFormular.getFamiliensituation() == null ||
+            !newFormular.getFamiliensituation().getElternVerheiratetZusammen() ||
+            newFormular.getElterns() == null ||
+            newFormular.getElterns().isEmpty()
+        ) {
+            return;
+        }
+
+        // Get Elternteil where wohnkosten changed
+        ElternUpdateDto changed = null;
+        for (final var elternDto : newFormular.getElterns()) {
+            // If the DTOs ID is null, then it's a new Eltern entity
+            if (elternDto.getId() == null) {
+                changed = elternDto;
+                break;
+            }
+
+            // Compare to DB Entities and set changed if wohnkosten changed
+            for (final var eltern : targetFormular.getElterns()) {
+                if (elternDto.getId().equals(eltern.getId()) &&
+                    ElternDiffUtil.hasWohnkostenChanged(elternDto, eltern)
+                ) {
+                    changed = elternDto;
+                    break;
+                }
+            }
+
+            if (changed != null) {
+                break;
+            }
+        }
+
+        if (changed == null) {
+            return;
+        }
+
+        // Mirror Wohnkosten to the other Elternteil
+        final var finalChanged = changed;
+        final var other = newFormular.getElterns()
+            .stream()
+            .filter(elternteil -> elternteil.getElternTyp() != finalChanged.getElternTyp())
+            .findFirst()
+            .orElse(null);
+
+        if (other != null) {
+            other.setWohnkosten(changed.getWohnkosten());
         }
     }
 
@@ -276,6 +337,31 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                         != ElternAbwesenheitsGrund.WEDER_NOCH) {
                     removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
                 }
+            }
+        );
+
+        resetFieldIf(
+            () -> GesuchFormularDiffUtil.hasElternVerheiratetZusammenChanged(newFormular, targetFormular),
+            "Clear Mietvertrag/ Hypothekarzins Dokument because ElternVerheiratetZusammen changed",
+            () -> {
+                Set<DokumentTyp> dokumentTypsToRemove;
+
+                if (newFormular.getFamiliensituation().getElternVerheiratetZusammen()) {
+                    // Delete Mutter/ Vater Dokument(e)
+                    dokumentTypsToRemove = Set.of(
+                        DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
+                        DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+                    );
+                } else {
+                    // Delete Familie Dokument
+                    dokumentTypsToRemove = Set.of(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
+                }
+
+                targetFormular.getTranche()
+                    .getGesuchDokuments()
+                    .stream()
+                    .filter(gesuchDokument -> dokumentTypsToRemove.contains(gesuchDokument.getDokumentTyp()))
+                    .forEach(gesuchDokument -> gesuchDokumentService.removeGesuchDokument(gesuchDokument));
             }
         );
     }

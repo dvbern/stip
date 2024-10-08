@@ -24,20 +24,20 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
     'shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_MUTTER',
   FAMILIENSITUATION_TRENNUNGSKONVENTION:
     'shared.form.familiensituation.file.TRENNUNGSKONVENTION',
-  STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER:
-    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
-  STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER:
-    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
-  STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE:
-    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
-  STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER:
+  ELTERN_ERGAENZUNGSLEISTUNGEN_VATER:
     'shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_VATER',
-  STEUERDATEN_SOZIALHILFEBUDGET_VATER:
+  ELTERN_SOZIALHILFEBUDGET_VATER:
     'shared.form.eltern.file.SOZIALHILFEBUDGET_VATER',
-  STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER:
+  ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER:
     'shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_MUTTER',
-  STEUERDATEN_SOZIALHILFEBUDGET_MUTTER:
+  ELTERN_SOZIALHILFEBUDGET_MUTTER:
     'shared.form.eltern.file.SOZIALHILFEBUDGET_MUTTER',
+  ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER:
+    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
+  ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER:
+    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
+  ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE:
+    'shared.form.eltern.file.MIETVERTRAG_HYPOTEKARZINSABRECHNUNG',
   GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE:
     'shared.form.geschwister.file.AUSBILDUNGSSTAETTE',
   KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION:
@@ -117,7 +117,9 @@ export function createUploadOptionsFactory<
    * ```
    *
    * @param lazyDokumentTyp - a function that should return the {@link DokumentTyp} or `null | undefined` if the upload is not required
-   * @param options - additional options for the upload. If initialDocuments are provided, the the upload component will not try to fetch the documents on initialization, but display the provided documents instead.
+   * @param options - additional options for the upload. If initialDocuments are provided, the the upload component will not try to fetch the documents on initialization,
+   *                  but display the provided documents instead. Primarily used for Dokument Table view.
+   *                  initialDocuments are of type {@link Dokument} which refers to the "File", not the GesuchDokument
    */
   return (
     lazyDokumentTyp: (view: T) => DokumentTyp | null | undefined,

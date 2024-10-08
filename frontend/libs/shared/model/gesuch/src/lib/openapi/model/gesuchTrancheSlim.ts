@@ -13,11 +13,12 @@ import { GesuchTrancheTyp } from './gesuchTrancheTyp';
 import { GesuchTrancheStatus } from './gesuchTrancheStatus';
 
 export interface GesuchTrancheSlim { 
-    id?: string;
-    gueltigAb?: string;
-    gueltigBis?: string;
-    status?: GesuchTrancheStatus;
-    typ?: GesuchTrancheTyp;
+    id: string;
+    gueltigAb: string;
+    gueltigBis: string;
+    status: GesuchTrancheStatus;
+    comment?: string;
+    typ: GesuchTrancheTyp;
 }
 
 

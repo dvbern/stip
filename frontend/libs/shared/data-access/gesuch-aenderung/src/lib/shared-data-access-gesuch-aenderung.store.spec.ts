@@ -1,5 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 
 import { GesuchAenderungStore } from './shared-data-access-gesuch-aenderung.store';
 
@@ -8,7 +9,11 @@ describe('GesuchAenderungStore', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GesuchAenderungStore, provideHttpClient()],
+      providers: [
+        GesuchAenderungStore,
+        provideHttpClient(),
+        provideMockStore(),
+      ],
     });
     store = TestBed.inject(GesuchAenderungStore);
   });

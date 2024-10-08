@@ -100,7 +100,7 @@ describe('handleApiResponse', () => {
     const data = 'data';
     of(data).pipe(handleApiResponse(handler)).subscribe();
 
-    jest.runOnlyPendingTimers();
+    jest.runAllTimers();
     expect(handler).toHaveBeenCalledWith({
       type: 'success',
       data,
@@ -119,7 +119,7 @@ describe('handleApiResponse', () => {
       )
       .subscribe();
 
-    jest.runOnlyPendingTimers();
+    jest.runAllTimers();
     expect(handler).toHaveBeenCalledWith({
       type: 'failure',
       data: undefined,
@@ -134,7 +134,7 @@ describe('handleApiResponse', () => {
       .pipe(handleApiResponse(handler, { onSuccess: success }))
       .subscribe();
 
-    jest.runOnlyPendingTimers();
+    jest.runAllTimers();
     expect(success).toHaveBeenCalledWith(data);
   });
   it('runs a custom error handler', () => {
@@ -150,7 +150,7 @@ describe('handleApiResponse', () => {
       )
       .subscribe();
 
-    jest.runOnlyPendingTimers();
+    jest.runAllTimers();
     expect(customError).toHaveBeenCalledWith(error);
   });
 
@@ -164,7 +164,7 @@ describe('handleApiResponse', () => {
         )
         .subscribe();
 
-      jest.runOnlyPendingTimers();
+      jest.runAllTimers();
     }).toThrow();
   });
 
@@ -179,7 +179,7 @@ describe('handleApiResponse', () => {
         )
         .subscribe();
 
-      jest.runOnlyPendingTimers();
+      jest.runAllTimers();
     }).not.toThrow();
   });
 });

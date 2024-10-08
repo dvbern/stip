@@ -56,8 +56,6 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   SharedUiPercentageSplitterComponent,
   SharedUiPercentageSplitterDirective,
-  numberToPercentString,
-  percentStringToNumber,
 } from '@dv/shared/ui/percentage-splitter';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -65,6 +63,8 @@ import { SharedUiStepperNavigationComponent } from '@dv/shared/ui/stepper-naviga
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
+  numberToPercentString,
+  percentStringToNumber,
   updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
 

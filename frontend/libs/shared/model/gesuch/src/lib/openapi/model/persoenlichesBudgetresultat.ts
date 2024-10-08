@@ -16,7 +16,7 @@
 export interface PersoenlichesBudgetresultat { 
     anzahlPersonenImHaushalt: number;
     eigenerHaushalt: boolean;
-    anteilLebenshaltungskosten: number;
+    anteilFamilienbudget: number;
     einkommen: number;
     alimente: number;
     leistungenEO: number;
@@ -26,9 +26,9 @@ export interface PersoenlichesBudgetresultat {
     gemeindeInstitutionen: number;
     steuerbaresVermoegen: number;
     anrechenbaresVermoegen: number;
-    anteilFamilienbudget: number;
     einkommenPartner: number;
     einnahmenPersoenlichesBudget: number;
+    anteilLebenshaltungskosten: number;
     grundbedarf: number;
     wohnkosten: number;
     medizinischeGrundversorgung: number;

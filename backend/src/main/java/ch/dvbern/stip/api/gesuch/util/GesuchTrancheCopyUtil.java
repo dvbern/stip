@@ -36,10 +36,14 @@ public class GesuchTrancheCopyUtil {
         final GesuchTranche original,
         final CreateAenderungsantragRequestDto createDto
     ) {
-        // TODO KSTIP-????: Don't truncate dates
+        var endDate = createDto.getEnd();
+        if (endDate == null) {
+            endDate = original.getGesuch().getGesuchsperiode().getGesuchsperiodeStopp();
+        }
+
         final var copy = copyTranche(
             original,
-            new DateRange(createDto.getStart(), createDto.getEnd()),
+            new DateRange(createDto.getStart(), endDate),
             createDto.getComment()
         );
 
@@ -68,6 +72,10 @@ public class GesuchTrancheCopyUtil {
             comment
         );
 
+        newTranche.setGueltigkeit(clampStartStop(
+            newTranche.getGesuch().getGesuchsperiode(),
+            newTranche.getGueltigkeit()
+        ));
         newTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         newTranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
@@ -82,9 +90,8 @@ public class GesuchTrancheCopyUtil {
         final DateRange createDateRange,
         final String comment
     ) {
-        final var gesuch = original.getGesuch();
         final var newTranche = new GesuchTranche();
-        newTranche.setGueltigkeit(clampStartStop(gesuch.getGesuchsperiode(), createDateRange));
+        newTranche.setGueltigkeit(createDateRange);
         newTranche.setComment(comment);
         newTranche.setGesuchFormular(copy(original.getGesuchFormular()));
         newTranche.setGesuchDokuments(GesuchDokumentCopyUtil.copyGesuchDokumenteWithDokumentReferences(

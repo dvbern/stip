@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
@@ -14,6 +15,9 @@ import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.common.service.EntityReferenceMapperImpl;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapperImpl;
 import ch.dvbern.stip.api.eltern.service.ElternMapperImpl;
@@ -53,6 +57,8 @@ import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 
 import static io.smallrye.common.constraint.Assert.assertFalse;
 import static io.smallrye.common.constraint.Assert.assertTrue;
@@ -435,7 +441,10 @@ class GesuchFormularMapperTest {
 
         // Act
         final var targetFormular =
-            mapper.partialUpdate(updateFormular, new GesuchFormular().setFamiliensituation(new Familiensituation()));
+            mapper.partialUpdate(
+                updateFormular,
+                new GesuchFormular().setFamiliensituation(new Familiensituation()).setTranche(new GesuchTranche())
+            );
 
         // Assert
         assertThat(targetFormular.getSteuerdaten().size(), is(1));
@@ -466,7 +475,10 @@ class GesuchFormularMapperTest {
 
         // Init target
         var targetFormular =
-            mapper.partialUpdate(updateFormular, new GesuchFormular().setFamiliensituation(new Familiensituation()));
+            mapper.partialUpdate(
+                updateFormular,
+                new GesuchFormular().setFamiliensituation(new Familiensituation()).setTranche(new GesuchTranche())
+            );
 
         // Rearrange
         updateFamsit.setElternVerheiratetZusammen(false);
@@ -608,6 +620,46 @@ class GesuchFormularMapperTest {
         assertThat(auszahlung.getAdresse().getId(), is(elternAdresse.getId()));
     }
 
+    @Test
+    void removeGesuchDokumenteIfFamsitChanges() {
+        // Arrange
+        final var famsit = new FamiliensituationUpdateDto();
+        famsit.setElternVerheiratetZusammen(true);
+        final var updateDto = new GesuchFormularUpdateDto();
+        updateDto.setFamiliensituation(famsit);
+
+        final var gesuchDokument =
+            new GesuchDokument().setDokumentTyp(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
+        final var gesuchDokumente = new ArrayList<GesuchDokument>();
+        gesuchDokumente.add(gesuchDokument);
+
+        final var target = new GesuchFormular();
+        target.setTranche(new GesuchTranche().setGesuchDokuments(gesuchDokumente));
+
+        final var calledWithCorrectType = new AtomicBoolean(false);
+        final var mockedService = Mockito.mock(GesuchDokumentService.class);
+        Mockito.doAnswer((Answer<Void>) invocation -> {
+            final var param = invocation.getArgument(0, GesuchDokument.class);
+            if (param.getDokumentTyp() == DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE) {
+                calledWithCorrectType.set(true);
+            }
+
+            return null;
+        }).when(mockedService).removeGesuchDokument(Mockito.any(GesuchDokument.class));
+
+        final var mapper = createMapper();
+        mapper.partialUpdate(updateDto, target);
+        mapper.gesuchDokumentService = mockedService;
+
+        updateDto.getFamiliensituation().setElternVerheiratetZusammen(false);
+
+        // Act
+        mapper.partialUpdate(updateDto, target);
+
+        // Assert
+        assertThat(calledWithCorrectType.get(), is(true));
+    }
+
     GesuchFormularMapper createMapper() {
         final var mapper = (GesuchFormularMapper) new GesuchFormularMapperImpl(
             new PersonInAusbildungMapperImpl(),
@@ -626,6 +678,7 @@ class GesuchFormularMapperTest {
         // Remove this once/ if SteuerdatenTabBerechnungsService is a DMN service and mock it
         mapper.steuerdatenTabBerechnungsService = new SteuerdatenTabBerechnungsService();
         mapper.familiensituationMapper = new FamiliensituationMapperImpl();
+        mapper.gesuchDokumentService = Mockito.mock(GesuchDokumentService.class);
 
         return mapper;
     }

@@ -3,6 +3,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { Route } from '@angular/router';
 import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
+import { Gesuchstatus } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 /**
@@ -23,7 +24,6 @@ export function getLatestGesuchIdFromGesuch$(
  */
 export function getLatestTrancheIdFromGesuch$(
   viewSig: Signal<{
-    gesuch?: { id: string } | null;
     trancheId?: string | null;
   }>,
 ) {
@@ -34,32 +34,8 @@ export function getLatestTrancheIdFromGesuch$(
   );
 }
 
-/**
- * Emits each time the gesuch has been updated
- */
-export function getLatestGesuchIdFromGesuchOnUpdate$(
-  viewSig: Signal<{
-    gesuch?: { id: string } | null;
-    lastUpdate: string | null;
-  }>,
-) {
-  return combineLatest([
-    // Get the last update time distinctly
-    toObservable(viewSig).pipe(map(({ lastUpdate }) => lastUpdate)),
-    // Get the latest gesuch id
-    getLatestGesuchIdFromGesuch$(viewSig).pipe(),
-  ]).pipe(
-    distinctUntilChanged(
-      ([lastUpdate1, gesuchId1], [lastUpdate2, gesuchId2]) =>
-        lastUpdate1 === lastUpdate2 && gesuchId1 === gesuchId2,
-    ),
-    map(([, gesuchId]) => gesuchId),
-  );
-}
-
 export function getLatestTrancheIdFromGesuchOnUpdate$(
   viewSig: Signal<{
-    gesuch?: { id: string } | null;
     trancheId?: string | null;
     lastUpdate: string | null;
   }>,
@@ -89,7 +65,37 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
     },
     {
       ...route,
-      path: ':id/tranche/:trancheId',
+      path: ':id/:trancheTyp/:trancheId',
     },
   ];
 }
+
+export type StatusUebergang = 'BEARBEITUNG_ABSCHLIESSEN' | 'ZURUECKWEISEN';
+
+export const StatusUebergaengeMap: Partial<
+  Record<Gesuchstatus, StatusUebergang[]>
+> = {
+  IN_BEARBEITUNG_SB: ['BEARBEITUNG_ABSCHLIESSEN', 'ZURUECKWEISEN'],
+};
+
+export type StatusUebergangOption = {
+  icon: string;
+  titleKey: StatusUebergang;
+  typ: StatusUebergang;
+};
+
+export const StatusUebergaengeOptions: Record<
+  StatusUebergang,
+  StatusUebergangOption
+> = {
+  BEARBEITUNG_ABSCHLIESSEN: {
+    icon: 'check',
+    titleKey: 'BEARBEITUNG_ABSCHLIESSEN',
+    typ: 'BEARBEITUNG_ABSCHLIESSEN',
+  },
+  ZURUECKWEISEN: {
+    icon: 'undo',
+    titleKey: 'ZURUECKWEISEN',
+    typ: 'ZURUECKWEISEN',
+  },
+};

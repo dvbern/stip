@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.communication.mail.resource;
 
+import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.generated.api.MailResource;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
@@ -17,6 +18,7 @@ public class MailResourceImpl implements MailResource {
     private final MailService mailService;
 
     @Override
+    @AllowAll
     @RolesAllowed(SEND_EMAIL)
     public Response sendWelcomeEmail(WelcomeMailDto welcomeMailDto) {
         mailService.sendBenutzerWelcomeEmail(welcomeMailDto);

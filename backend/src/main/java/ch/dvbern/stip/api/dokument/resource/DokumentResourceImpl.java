@@ -1,12 +1,12 @@
 package ch.dvbern.stip.api.dokument.resource;
 
-import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.common.util.StringUtil;
@@ -37,11 +37,11 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -54,19 +54,24 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
+    @AllowAll
     public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        List<DokumentDto> dokumentDtoList = gesuchDokumentService.findGesuchDokumenteForTyp(gesuchTrancheId, dokumentTyp);
+        List<DokumentDto> dokumentDtoList =
+            gesuchDokumentService.findGesuchDokumenteForTyp(gesuchTrancheId, dokumentTyp);
         return Response.ok(dokumentDtoList).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
+    @AllowAll
     public Response getGesuchDokumentKommentare(DokumentTyp dokumentTyp, UUID gesuchId) {
-        return Response.ok().entity(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchId, dokumentTyp)).build();
+        return Response.ok()
+            .entity(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchId, dokumentTyp)).build();
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
+    @AllowAll
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
         if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
@@ -75,6 +80,8 @@ public class DokumentResourceImpl implements DokumentResource {
         if (!FileUtil.checkFileExtensionAllowed(fileUpload.uploadedFile(), configService.getAllowedMimeTypes())) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
+
+        gesuchDokumentService.scanDokument(fileUpload);
 
         String objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
         return Uni.createFrom()
@@ -96,6 +103,7 @@ public class DokumentResourceImpl implements DokumentResource {
     }
 
     @Override
+    @AllowAll
     @Blocking
     public RestMulti<Buffer> getDokument(String token) {
         JsonWebToken jwt;
@@ -112,10 +120,15 @@ public class DokumentResourceImpl implements DokumentResource {
 
         final var dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
         return RestMulti.fromUniResponse(
-            Uni.createFrom().completionStage(() -> gesuchDokumentService.getGetDokumentFuture(dokumentDto.getObjectId())),
+            Uni.createFrom()
+                .completionStage(() -> gesuchDokumentService.getGetDokumentFuture(dokumentDto.getObjectId())),
             response -> Multi.createFrom()
                 .safePublisher(AdaptersToFlow.publisher(response))
-                .map(DokumentResourceImpl::toBuffer),
+                .map(byteBuffer -> {
+                    byte[] result = new byte[byteBuffer.remaining()];
+                    byteBuffer.get(result);
+                    return Buffer.buffer(result);
+                }),
             response -> Map.of(
                 "Content-Disposition",
                 List.of("attachment;filename=" + dokumentDto.getFilename()),
@@ -127,6 +140,7 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
+    @AllowAll
     public Response getDokumentDownloadToken(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
         if (gesuchDokumentService.findDokument(dokumentId).isEmpty()) {
             throw new NotFoundException();
@@ -147,14 +161,16 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_DELETE)
     @Override
+    @AllowAll
     @Blocking
     public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
         gesuchDokumentService.removeDokument(dokumentId);
         return Response.ok().build();
     }
 
-    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
+    @AllowAll
     public Response gesuchDokumentAblehnen(
         UUID gesuchDokumentId,
         GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto
@@ -163,16 +179,11 @@ public class DokumentResourceImpl implements DokumentResource {
         return Response.ok().build();
     }
 
-    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
+    @AllowAll
     public Response gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
         return Response.ok().build();
-    }
-
-    private static Buffer toBuffer(ByteBuffer bytebuffer) {
-        byte[] result = new byte[bytebuffer.remaining()];
-        bytebuffer.get(result);
-        return Buffer.buffer(result);
     }
 }

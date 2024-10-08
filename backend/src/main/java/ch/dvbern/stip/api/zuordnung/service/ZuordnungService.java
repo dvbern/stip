@@ -1,8 +1,10 @@
 package ch.dvbern.stip.api.zuordnung.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
@@ -34,7 +36,12 @@ public class ZuordnungService {
 
     public void updateZuordnungOnAllFaelle() {
         final var newestWithPia = gesuchRepository.findAllNewestWithPia().toList();
-        update(newestWithPia);
+
+        // Filter out duplicate Faelle
+        // This is okay because we only care about the newest Tranche, and findAllNewestWithPia orders them accordingly
+        final var seen = new HashSet<UUID>();
+        final var fitered = newestWithPia.stream().filter(newest -> seen.add(newest.getFall().getId())).toList();
+        update(fitered);
     }
 
     public void updateZuordnungOnGesuch(final Gesuch gesuch) {

@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_STATUS,
+  GesuchTrancheSlimDtoSpec.JSON_PROPERTY_COMMENT,
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_TYP
 })
 @JsonTypeName("GesuchTrancheSlim")
@@ -52,6 +53,9 @@ public class GesuchTrancheSlimDtoSpec {
   public static final String JSON_PROPERTY_STATUS = "status";
   private GesuchTrancheStatusDtoSpec status;
 
+  public static final String JSON_PROPERTY_COMMENT = "comment";
+  private String comment;
+
   public static final String JSON_PROPERTY_TYP = "typ";
   private GesuchTrancheTypDtoSpec typ;
 
@@ -68,9 +72,9 @@ public class GesuchTrancheSlimDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -78,7 +82,7 @@ public class GesuchTrancheSlimDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -94,9 +98,9 @@ public class GesuchTrancheSlimDtoSpec {
    * Get gueltigAb
    * @return gueltigAb
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGueltigAb() {
     return gueltigAb;
@@ -104,7 +108,7 @@ public class GesuchTrancheSlimDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGueltigAb(LocalDate gueltigAb) {
     this.gueltigAb = gueltigAb;
   }
@@ -120,9 +124,9 @@ public class GesuchTrancheSlimDtoSpec {
    * Get gueltigBis
    * @return gueltigBis
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGueltigBis() {
     return gueltigBis;
@@ -130,7 +134,7 @@ public class GesuchTrancheSlimDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGueltigBis(LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
   }
@@ -146,9 +150,9 @@ public class GesuchTrancheSlimDtoSpec {
    * Get status
    * @return status
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchTrancheStatusDtoSpec getStatus() {
     return status;
@@ -156,9 +160,35 @@ public class GesuchTrancheSlimDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setStatus(GesuchTrancheStatusDtoSpec status) {
     this.status = status;
+  }
+
+
+  public GesuchTrancheSlimDtoSpec comment(String comment) {
+    
+    this.comment = comment;
+    return this;
+  }
+
+   /**
+   * Get comment
+   * @return comment
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getComment() {
+    return comment;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
 
@@ -172,9 +202,9 @@ public class GesuchTrancheSlimDtoSpec {
    * Get typ
    * @return typ
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchTrancheTypDtoSpec getTyp() {
     return typ;
@@ -182,7 +212,7 @@ public class GesuchTrancheSlimDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTyp(GesuchTrancheTypDtoSpec typ) {
     this.typ = typ;
   }
@@ -200,12 +230,13 @@ public class GesuchTrancheSlimDtoSpec {
         Objects.equals(this.gueltigAb, gesuchTrancheSlim.gueltigAb) &&
         Objects.equals(this.gueltigBis, gesuchTrancheSlim.gueltigBis) &&
         Objects.equals(this.status, gesuchTrancheSlim.status) &&
+        Objects.equals(this.comment, gesuchTrancheSlim.comment) &&
         Objects.equals(this.typ, gesuchTrancheSlim.typ);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, status, typ);
+    return Objects.hash(id, gueltigAb, gueltigBis, status, comment, typ);
   }
 
   @Override
@@ -216,6 +247,7 @@ public class GesuchTrancheSlimDtoSpec {
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("}");
     return sb.toString();

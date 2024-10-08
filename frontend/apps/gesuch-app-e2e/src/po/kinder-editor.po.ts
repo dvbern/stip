@@ -13,7 +13,7 @@ export class KinderEditorPO {
     nachname: Locator;
     vorname: Locator;
     geburtsdatum: Locator;
-    wohnsitzSelect: Locator;
+    wohnsitzAnteilPia: Locator;
     ausbildungssituationRadio: Locator;
     formKindErhalteneAlimentebeitraege: Locator;
 
@@ -28,7 +28,7 @@ export class KinderEditorPO {
       nachname: page.getByTestId('form-kind-nachname'),
       vorname: page.getByTestId('form-kind-vorname'),
       geburtsdatum: page.getByTestId('form-kind-geburtsdatum'),
-      wohnsitzSelect: page.getByTestId('form-kind-wohnsitz'),
+      wohnsitzAnteilPia: page.getByTestId('form-kind-wohnsitzAnteilPia'),
       ausbildungssituationRadio: page.getByTestId(
         'form-kind-ausbildungssituation',
       ),
@@ -45,8 +45,7 @@ export class KinderEditorPO {
     await this.elems.nachname.fill(item.nachname);
     await this.elems.vorname.fill(item.vorname);
     await this.elems.geburtsdatum.fill(item.geburtsdatum);
-
-    await selectMatOption(this.elems.wohnsitzSelect, item.wohnsitz);
+    await this.elems.wohnsitzAnteilPia.fill(`${item.wohnsitzAnteilPia}`);
 
     await selectMatOption(
       this.elems.ausbildungssituationRadio,

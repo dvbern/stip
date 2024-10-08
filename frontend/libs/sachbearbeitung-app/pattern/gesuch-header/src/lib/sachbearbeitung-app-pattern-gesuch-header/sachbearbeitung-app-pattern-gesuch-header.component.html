@@ -11,14 +11,14 @@
       type="button"
       class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-tranche-auswahl"
-      [class.active]="isGesuchRouteSig()"
+      [class.active]="isTrancheRouteSig()"
       [matMenuTriggerFor]="gesuchMenu"
     >
       <i class="material-symbols-rounded text-white me-2">checklist</i>
       <span>{{ 'sachbearbeitung-app.header.tranchenAuswahl' | translate }}</span>
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
-    <mat-menu #gesuchMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'">
+    <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
       <div class="d-flex flex-column gap-2">
         @for (tranche of gesuchAenderungStore.tranchenViewSig().list; track $index) {
           <a
@@ -54,18 +54,41 @@
     </a>
 
     <!-- Änderungen -->
+    @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
     <button
       type="button"
       class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-aenderungen"
-      routerLinkActive="active"
-      disabled
+      [class.active]="isAenderungRouteSig()"
+      [disabled]="!aenderungen.list.length"
       [matMenuTriggerFor]="aenderungenMenu"
     >
       <i class="material-symbols-rounded text-white me-2">update</i>
       <span>{{ 'sachbearbeitung-app.header.aenderungen' | translate }}</span>
+      <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
-    <mat-menu #aenderungenMenu="matMenu" [class]="'header-menu-panel mt-2 rounded'"> </mat-menu>
+    <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel mt-2 rounded col-12">
+      <div class="d-flex flex-column gap-2">
+        @for (aenderung of aenderungen.list; track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'aenderung', aenderung.id]"
+            class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+            data-testid="gesuch-step-nav-overview"
+            mat-menu-item
+            [class.active]="currentGesuchSig()?.gesuchTrancheToWorkWith?.id === aenderung.id"
+          >
+            <span>
+              {{
+                'sachbearbeitung-app.header.aenderung.item'
+                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: $index + 1 }
+              }}
+              -
+              {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }}
+            </span>
+          </a>
+        }
+      </div>
+    </mat-menu>
 
     <!-- Infos-->
     <a
@@ -81,7 +104,6 @@
     <!-- Separator -->
     <div class="my-1 text-body-tertiary vr"></div>
 
-    <!-- Tranche erstellen -->
     @if (canSetToBearbeitungSig()) {
       <!-- Switch to In Bearbeitung SB -->
       <button
@@ -94,6 +116,7 @@
         <span>{{ 'sachbearbeitung-app.header.gesuch-bearbeiten' | translate }}</span>
       </button>
     } @else {
+      <!-- Tranche erstellen -->
       <button
         type="button"
         class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
@@ -104,6 +127,43 @@
         <span>{{ 'sachbearbeitung-app.header.tranche.erstellen' | translate }}</span>
       </button>
     }
+
+    @switch (canSetCurrentStatusUebergangSig()) {
+      @case ('IN_BEARBEITUNG_SB') {
+        <!-- Status Uebergbang Menu Button -->
+        <button
+          type="button"
+          class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          data-testid="gesuch-header-nav-status-uebergang"
+          [disabled]="isLoadingSig()"
+          [matMenuTriggerFor]="statusUebergangMenu"
+        >
+          <i class="material-symbols-rounded text-white me-2">sync_alt</i>
+          <span>{{ 'sachbearbeitung-app.header.status-uebergang.abschliessen' | translate }}</span>
+          <i class="material-symbols-rounded ms-2">expand_more</i>
+        </button>
+      }
+    }
+
+    <!-- Status Uebergang Menu -->
+    <mat-menu #statusUebergangMenu="matMenu" class="header-menu-panel mt-2 rounded">
+      <div class="d-flex flex-column gap-2">
+        @for (uebergang of statusUebergaengeOptionsSig(); track $index) {
+          <button
+            type="button"
+            class="btn fw-normal shadow-none"
+            [attr.data-testid]="'gesuch-header-nav-status-uebergang-item-' + uebergang.typ"
+            mat-menu-item
+            (click)="setStatusUebergang(uebergang.typ)"
+          >
+            <div class="d-flex gap-2 align-items-center">
+              <i class="material-symbols-rounded ms-2">{{ uebergang.icon }}</i>
+              <span>{{ 'sachbearbeitung-app.header.status-uebergang.' + uebergang.titleKey | translate }}</span>
+            </div>
+          </button>
+        }
+      </div>
+    </mat-menu>
   </div>
   <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
 </dv-shared-pattern-app-header>

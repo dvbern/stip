@@ -1,5 +1,8 @@
 package ch.dvbern.stip.api.dokument.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,6 +11,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import ch.dvbern.stip.api.common.exception.AppFailureMessage;
+import ch.dvbern.stip.api.common.exception.AppValidationMessage;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -24,13 +29,18 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
+import io.quarkiverse.antivirus.runtime.Antivirus;
+import io.quarkiverse.antivirus.runtime.AntivirusScanResult;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
@@ -49,6 +59,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 
+@Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchDokumentService {
@@ -61,10 +72,12 @@ public class GesuchDokumentService {
     private final S3AsyncClient s3;
     private final ConfigService configService;
     private final DokumentstatusService dokumentstatusService;
+    private final Antivirus antivirus;
 
     @Transactional
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(UUID gesuchDokumentId, DokumentTyp dokumentTyp) {
-        return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchDokumentId,dokumentTyp);
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(
+        UUID gesuchDokumentId, DokumentTyp dokumentTyp) {
+        return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchDokumentId, dokumentTyp);
     }
 
     @Transactional
@@ -74,7 +87,8 @@ public class GesuchDokumentService {
         final FileUpload fileUpload,
         final String objectId
     ) {
-        GesuchTranche gesuchTranche = gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
+        GesuchTranche gesuchTranche =
+            gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
         GesuchDokument gesuchDokument =
             gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTranche.getId(), dokumentTyp).orElseGet(
                 () -> createGesuchDokument(gesuchTranche, dokumentTyp)
@@ -128,7 +142,8 @@ public class GesuchDokumentService {
             );
         }
     }
-    @RolesAllowed({ROLE_SACHBEARBEITER,ROLE_ADMIN})
+
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
@@ -208,6 +223,11 @@ public class GesuchDokumentService {
     @Transactional
     public void removeGesuchDokument(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        removeGesuchDokument(gesuchDokument);
+    }
+
+    @Transactional
+    public void removeGesuchDokument(final GesuchDokument gesuchDokument) {
         final var dokuments = gesuchDokument.getDokumente();
 
         List<String> dokumentObjectIds = new ArrayList<>();
@@ -249,6 +269,26 @@ public class GesuchDokumentService {
         }
 
         executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
+    }
+
+    public void scanDokument(final FileUpload fileUpload) {
+        try (final ByteArrayInputStream inputStream = new ByteArrayInputStream(
+            IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile())).readAllBytes())) {
+            // scan the file and check the results
+            List<AntivirusScanResult> results = antivirus.scan(fileUpload.fileName(), inputStream);
+            for (AntivirusScanResult result : results) {
+                if (result.getStatus() != Response.Status.OK.getStatusCode()) {
+                    LOG.warn(
+                        "bad signature detected in file={} message={}", fileUpload.fileName(), result.getMessage());
+                    throw AppValidationMessage.badSignatureDetectedInUpload().create();
+                }
+            }
+
+            inputStream.reset();
+        } catch (IOException e) {
+            LOG.error("could not scan document", e);
+            throw AppFailureMessage.internalError("could not scan file upload").create();
+        }
     }
 
     public CompletableFuture<PutObjectResponse> getCreateDokumentFuture(
@@ -311,7 +351,8 @@ public class GesuchDokumentService {
     }
 
     private GesuchDokument createGesuchDokument(final GesuchTranche gesuchTranche, final DokumentTyp dokumentTyp) {
-        GesuchDokument gesuchDokument = new GesuchDokument().setGesuchTranche(gesuchTranche).setDokumentTyp(dokumentTyp);
+        GesuchDokument gesuchDokument =
+            new GesuchDokument().setGesuchTranche(gesuchTranche).setDokumentTyp(dokumentTyp);
         gesuchDokumentRepository.persist(gesuchDokument);
         return gesuchDokument;
     }

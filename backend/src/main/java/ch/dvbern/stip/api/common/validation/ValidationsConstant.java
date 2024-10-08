@@ -3,7 +3,11 @@ package ch.dvbern.stip.api.common.validation;
 import java.util.regex.Pattern;
 
 public final class ValidationsConstant {
-    public static final String EMAIL_VALIDATION_PATTERN = "^[a-z0-9]+[a-z0-9._-]*@[a-z0-9.-]+\\.[a-z]{2,4}$";
+    public static final String EMAIL_VALIDATION_PATTERN = "((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)" +
+        "*|\\\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\\\")@" +
+        "(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" +
+        "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01" +
+        "-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\]))";
     private static final int BUCHSTABEN_RANGE_VALIDATION_MAX_LENGTH = 3;
     public static final String BUCHSTABEN_RANGE_VALIDATION_STRING_PATTERN =
         "([A-Z]{1,%1$s}-[A-Z]{1,%1$s}|[A-Z]{1,%1$s})(,([A-Z]{1,%1$s}-[A-Z]{1,%1$s}|[A-Z]{1,%1$s}))*".formatted(
@@ -80,6 +84,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.familiensituation.eltern.entity.message}";
     public static final String VALIDATION_FAMILIENSITUATION_STEUERDATEN_ENTITY_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.familiensituation.steuerdaten.entity.message}";
+    public static final String VALIDATION_FAMILIENSITUATION_WOHNSITUATION_MESSAGE =
+        "{jakarta.validation.constraints.familiensituation.wohnsituation.message}";
     public static final String VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE =
         "{jakarta.validation.constraints.lebenslauf.luckenlos.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE =
@@ -139,6 +145,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.gesuchTranche.invalidStatus.message}";
     public static final String VALIDATION_STEUERDATEN_FIELDS_REQUIRED_IF_TYPE =
         "{jakarta.validation.constraints.steuerdaten.fieldRequiredIfType.message}";
+    public static final String VALIDATION_DOCUMENTS_STATUS_ACCEPTED_MESSAGE =
+        "{jakarta.validation.constraints.gesuchFormular.documents.mustBe.accepted.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

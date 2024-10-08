@@ -315,11 +315,11 @@ class GesuchFillFormularTest {
             DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN,
             DokumentTypDtoSpec.AUSZAHLUNG_ABTRETUNGSERKLAERUNG,
             DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
-            DokumentTypDtoSpec.STEUERDATEN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE,
-            DokumentTypDtoSpec.STEUERDATEN_SOZIALHILFEBUDGET_MUTTER,
-            DokumentTypDtoSpec.STEUERDATEN_SOZIALHILFEBUDGET_VATER,
-            DokumentTypDtoSpec.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_MUTTER,
-            DokumentTypDtoSpec.STEUERDATEN_ERGAENZUNGSLEISTUNGEN_VATER,
+            DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE,
+            DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_MUTTER,
+            DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_VATER,
+            DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER,
+            DokumentTypDtoSpec.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER,
             DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET
         };
 
@@ -360,8 +360,8 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(19)
     void gesuchEinreichenValidation() {
-        final var validationReport = gesuchApiSpec.gesuchEinreichenValidieren()
-            .gesuchIdPath(gesuchId)
+        final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidieren()
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

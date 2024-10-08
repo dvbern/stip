@@ -1,14 +1,35 @@
-import { maskitoTransform } from '@maskito/core';
-import { maskitoNumberOptionsGenerator } from '@maskito/kit';
+import {
+  MaskitoOptions,
+  maskitoTransform,
+  maskitoUpdateElement,
+} from '@maskito/core';
+import {
+  maskitoCaretGuard,
+  maskitoEventHandler,
+  maskitoNumberOptionsGenerator,
+} from '@maskito/kit';
 
 export const NUMBER_THOUSAND_SEPARATOR = "'";
 
-export const maskitoPercent = maskitoNumberOptionsGenerator({
-  postfix: '%',
+export const postfix = '%';
+const { plugins, ...numberOptions } = maskitoNumberOptionsGenerator({
+  postfix,
   min: 0,
   max: 100,
   precision: 2,
 });
+
+export const maskitoPercent = {
+  ...numberOptions,
+  plugins: [
+    ...plugins,
+    // Forbids caret to be placed after postfix
+    maskitoCaretGuard((value) => [0, value.length - 1]),
+    maskitoEventHandler('blur', (element) => {
+      maskitoUpdateElement(element, element.value.replace(/ /g, ''));
+    }),
+  ],
+} satisfies MaskitoOptions;
 
 export const maskitoNumber = maskitoNumberOptionsGenerator({
   min: 0,

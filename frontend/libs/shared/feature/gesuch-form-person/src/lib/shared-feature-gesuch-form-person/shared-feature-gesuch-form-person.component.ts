@@ -31,7 +31,7 @@ import { isAfter, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { selectSharedDataAccessGesuchValidationView } from '@dv/shared/data-access/gesuch';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { PlzOrtStore } from '@dv/shared/data-access/plz-ort';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
@@ -69,9 +69,7 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
-  updateWohnsitzControlsState,
-  wohnsitzAnteileNumber,
-  wohnsitzAnteileString,
+  prepareWohnsitzForm,
 } from '@dv/shared/ui/wohnsitz-splitter';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
 import {
@@ -136,22 +134,18 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private formUtils = inject(SharedUtilFormService);
   private countriesService = inject(SharedUtilCountriesService);
   private plzStore = inject(PlzOrtStore);
+  private einreichenStore = inject(EinreichenStore);
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
   readonly anredeValues = Object.values(Anrede);
   readonly Zivilstand = Zivilstand;
   readonly spracheValues = Object.values(Sprache);
   readonly zivilstandValues = Object.values(Zivilstand);
-  readonly wohnsitzValues = Object.values(Wohnsitz);
   readonly niederlassungsStatusValues = Object.values(Niederlassungsstatus);
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
   gotReenabled$ = new Subject<object>();
-
-  validationViewSig = this.store.selectSignal(
-    selectSharedDataAccessGesuchValidationView,
-  );
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
@@ -279,10 +273,12 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     }),
   });
 
-  showWohnsitzSplitterSig = computed(() => {
-    return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
+  wohnsitzHelper = prepareWohnsitzForm({
+    projector: (formular) => formular?.personInAusbildung,
+    form: this.form.controls,
+    viewSig: this.viewSig,
+    refreshSig: this.gotReenabledSig,
   });
-
   showEinreiseDatumWarningSig = signal(false);
 
   private wohnsitzChangedSig = toSignal(
@@ -312,7 +308,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     const isUniqueSozialversicherungsnummer = (control: AbstractControl) => {
       const {
         invalidFormularProps: { specialValidationErrors },
-      } = untracked(this.validationViewSig);
+      } = untracked(this.einreichenStore.validationViewSig);
       if (
         specialValidationErrors?.some(
           (e) => e.field === 'sozialversicherungsnummer',
@@ -327,32 +323,14 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       }
     };
 
-    // visibility and disabled state for wohnsitzAnteilMutter and wohnsitzAnteilVater
-    effect(
-      () => {
-        this.gotReenabledSig();
-        updateWohnsitzControlsState(
-          this.formUtils,
-          this.form.controls,
-          this.viewSig().readonly,
-        );
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.wohnsitzAnteilMutter,
-          visible: this.showWohnsitzSplitterSig(),
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
-        });
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.wohnsitzAnteilVater,
-          visible: this.showWohnsitzSplitterSig(),
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: true,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.formUtils.invalidateControlIfValidationFails(
+        this.form,
+        ['wohnsitz'],
+        this.einreichenStore.validationViewSig().invalidFormularProps
+          .specialValidationErrors,
+      );
+    });
 
     // patch form value
     effect(
@@ -383,7 +361,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           };
           this.form.patchValue({
             ...personForForm,
-            ...wohnsitzAnteileString(person),
+            ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
           });
           SharedUiFormAddressComponent.patchForm(
             this.form.controls.adresse,
@@ -600,10 +578,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     }
   }
 
-  trackByIndex(index: number) {
-    return index;
-  }
-
   onGeburtsdatumBlur() {
     return onDateInputBlur(
       this.form.controls.geburtsdatum,
@@ -649,7 +623,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
             this.languageSig(),
             new Date(),
           ),
-          ...wohnsitzAnteileNumber(values),
+          ...this.wohnsitzHelper.wohnsitzAnteileFromNumber(),
         },
       },
     };

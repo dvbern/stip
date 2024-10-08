@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
+import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -192,7 +193,8 @@ class GesuchDokumentServiceTest {
             new DokumentstatusService(
                 new DokumentstatusConfigProducer().createStateMachineConfig(),
                 new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository,new GesuchDokumentKommentarMapperImpl())
-            )
+            ),
+            null
         );
 
         gesuchDokumente = new HashMap<>();
@@ -232,7 +234,8 @@ class GesuchDokumentServiceTest {
             GesuchTrancheRepository gesuchTrancheRepository,
             S3AsyncClient s3,
             ConfigService configService,
-            DokumentstatusService dokumentstatusService
+            DokumentstatusService dokumentstatusService,
+            Antivirus antivirus
         ) {
             super(
                 dokumentMapper,
@@ -242,7 +245,8 @@ class GesuchDokumentServiceTest {
                 gesuchTrancheRepository,
                 s3,
                 configService,
-                dokumentstatusService
+                dokumentstatusService,
+                antivirus
             );
         }
 

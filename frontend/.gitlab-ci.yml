@@ -1,7 +1,7 @@
 stages: [build, validate, test, analyze, package]
 
 include:
-  - component: 'gitlab.dvbern.ch/components/build/nx@v1.3.0'
+  - component: 'gitlab.dvbern.ch/components/build/nx@1.5.0'
     inputs:
       app-name: '*-app'
       test-app-name: '*'
@@ -13,30 +13,33 @@ include:
       lint-on: '(branch|mr|default)'
       test-on: '(branch|mr|default)'
       build-additional-args: '--verbose'
-      
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/sonarqube@v0.8.0'
+
+  - component: 'gitlab.dvbern.ch/components/verify/sonarqube@1.2.0'
     inputs:
       sonar-scanner: cli
       context-dir: 'frontend'
       sonar-project-key: "$SONAR_PROJECT_KEY_FRONTEND"
       sonar-token: "$SONAR_TOKEN_FRONTEND"
+      needs:
+        - "nx-build"
+        - "nx-test"
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.8.0'
+  - component: 'gitlab.dvbern.ch/components/package/buildah@1.3.0'
     inputs:
       name: package:sachbearbeitung-app
       context-dir: frontend
       image-name: 'sachbearbeitung-app'
       version: '$VERSION'
-      build-latest: 'false'
+      build-latest: false
       build-args: |
         APP=sachbearbeitung-app
 
-  - component: 'gitlab.dvbern.ch/devops/gitlab/components/buildah@v0.8.0'
+  - component: 'gitlab.dvbern.ch/components/package/buildah@1.3.0'
     inputs:
       name: package:gesuch-app
       context-dir: frontend
       image-name: 'gesuch-app'
       version: '$VERSION'
-      build-latest: 'false'
+      build-latest: false
       build-args: |
         APP=gesuch-app

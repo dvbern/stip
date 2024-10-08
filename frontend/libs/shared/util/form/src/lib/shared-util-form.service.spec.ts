@@ -66,12 +66,13 @@ describe('SharedUtilFormService', () => {
       'preis',
       'menge',
     ]);
-    expect(toNumber().preis).toBe(123);
-    expect(toNumber().menge).toBe(null);
+    const formValues = form.getRawValue();
+    expect(toNumber(formValues).preis).toBe(123);
+    expect(toNumber(formValues).menge).toBe(null);
     expect(toString(state).preis).toBe('123');
     expect(toString(state).menge).toBe('456');
 
     form.patchValue({ menge: '456' });
-    expect(toNumber().menge).toBe(456);
+    expect(toNumber(form.getRawValue()).menge).toBe(456);
   });
 });

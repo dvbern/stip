@@ -52,20 +52,16 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
-import {
-  SharedUiWohnsitzSplitterComponent,
-  addWohnsitzControls,
-  updateWohnsitzControlsState,
-  wohnsitzAnteileNumber,
-  wohnsitzAnteileString,
-} from '@dv/shared/ui/wohnsitz-splitter';
+import { SharedUiWohnsitzSplitterComponent } from '@dv/shared/ui/wohnsitz-splitter';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
+  percentStringToNumber,
 } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
   maskitoNumber,
+  maskitoPercent,
 } from '@dv/shared/util/maskito-util';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import {
@@ -128,6 +124,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject();
   maskitoNumber = maskitoNumber;
+  maskitoOptionsPercent = maskitoPercent;
 
   form = this.formBuilder.group({
     nachname: ['', [Validators.required]],
@@ -149,7 +146,10 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         ),
       ],
     ],
-    ...addWohnsitzControls(this.formBuilder),
+    wohnsitzAnteilPia: [
+      <string | null>null,
+      [Validators.required, Validators.minLength(2)],
+    ],
     ausbildungssituation: this.formBuilder.control<Ausbildungssituation>(
       '' as Ausbildungssituation,
       [Validators.required],
@@ -160,14 +160,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
-
-  private wohnsitzChangedSig = toSignal(
-    this.form.controls.wohnsitz.valueChanges,
-  );
-
-  showWohnsitzSplitterSig = computed(() => {
-    return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
-  });
 
   alimentenregelungExistiertSig = toSignal(
     this.form.controls.alimentenregelungExistiert.valueChanges,
@@ -200,17 +192,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       this.closeTriggered,
     );
     this.formUtils.registerFormForUnsavedCheck(this);
-    effect(
-      () => {
-        this.gotReenabledSig();
-        updateWohnsitzControlsState(
-          this.formUtils,
-          this.form.controls,
-          !this.showWohnsitzSplitterSig() || this.viewSig().readonly,
-        );
-      },
-      { allowSignalWrites: true },
-    );
 
     effect(
       () => {
@@ -232,7 +213,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         this.kind.geburtsdatum,
         this.languageSig(),
       ),
-      ...wohnsitzAnteileString(this.kind),
+      wohnsitzAnteilPia: this.kind.wohnsitzAnteilPia?.toString(),
       erhalteneAlimentebeitraege:
         this.kind.erhalteneAlimentebeitraege?.toString(),
       alimentenregelungExistiert: isDefined(
@@ -248,6 +229,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
 
     const formValues = convertTempFormToRealValues(this.form, [
       'erhalteneAlimentebeitraege',
+      'wohnsitzAnteilPia',
     ]);
     delete formValues.alimentenregelungExistiert;
 
@@ -261,7 +243,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         ...formValues,
         id: this.kind?.id,
         geburtsdatum,
-        ...wohnsitzAnteileNumber(formValues),
+        wohnsitzAnteilPia: percentStringToNumber(formValues.wohnsitzAnteilPia),
         erhalteneAlimentebeitraege: fromFormatedNumber(
           formValues.erhalteneAlimentebeitraege,
         ),

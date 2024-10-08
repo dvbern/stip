@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -116,5 +117,29 @@ public class Gesuch extends AbstractMandantEntity {
                 Comparator.comparing(x -> x.getGueltigkeit().getGueltigBis())
             )
         );
+    }
+
+    public Optional<GesuchTranche> getOldestGesuchTranche() {
+        if (gesuchTranchen.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return gesuchTranchen.stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+            .min(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb()));
+    }
+
+    public Stream<GesuchTranche> getAenderungen() {
+        return getGesuchTranchen()
+            .stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
+    }
+
+    public Optional<GesuchTranche> getAenderungZuUeberpruefen() {
+        return getGesuchTranchen().stream()
+            .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+                && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN
+            )
+            .findFirst();
     }
 }

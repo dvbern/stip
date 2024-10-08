@@ -1,7 +1,7 @@
 import {
   DokumentTyp,
   SharedModelGesuchFormular,
-  SharedModelGesuchFormularProps,
+  SharedModelGesuchFormularPropsSteuerdatenSteps,
   SteuerdatenSteps,
   SteuerdatenTyp,
   Zivilstand,
@@ -14,7 +14,7 @@ import {
 } from './shared-model-gesuch-form';
 
 export const TRANCHE: SharedModelGesuchFormStep = {
-  route: 'tranche',
+  route: 'info',
   translationKey: 'shared.tranche.title',
   titleTranslationKey: 'shared.nothing',
   iconSymbolName: 'info',
@@ -159,7 +159,7 @@ export type GesuchFormSteps = keyof typeof gesuchFormSteps;
 
 export const gesuchFormStepsFieldMap: Record<
   string,
-  SharedModelGesuchFormularProps
+  SharedModelGesuchFormularPropsSteuerdatenSteps
 > = {
   [PERSON.route]: 'personInAusbildung',
   [AUSBILDUNG.route]: 'ausbildung',
@@ -231,7 +231,10 @@ export const isStepValid = (
   if (invalidProps?.errors === undefined) {
     return undefined;
   }
-  const stepFieldMap: Record<string, SharedModelGesuchFormularProps> = {
+  const stepFieldMap: Record<
+    string,
+    SharedModelGesuchFormularPropsSteuerdatenSteps
+  > = {
     [PERSON.route]: 'personInAusbildung',
     [AUSBILDUNG.route]: 'ausbildung',
     [LEBENSLAUF.route]: 'lebenslaufItems',
@@ -254,6 +257,8 @@ export const isStepValid = (
     return undefined;
   }
 
+  const isDefined = (value: unknown) => value !== null && value !== undefined;
+
   if (isSteuerdatenStep(field)) {
     const [stepSteuerdatenTyp] =
       Object.entries(ELTERN_STEUER_STEPS).find(
@@ -262,23 +267,22 @@ export const isStepValid = (
     const currentHasDaten = formular?.steuerdaten?.find(
       (s) => s.steuerdatenTyp === stepSteuerdatenTyp,
     );
-    const isValid = currentHasDaten
-      ? toStepState(field, invalidProps)
-      : undefined;
-    return isValid; // Mit Juri schauen ob wenn beide da sind auch zwei rückgabewerte kommen
+    return toStepState(field, isDefined(currentHasDaten), invalidProps);
   }
 
   if (field === 'lebenslaufItems') {
-    return formular?.personInAusbildung && formular.ausbildung
-      ? toStepState(field, invalidProps)
-      : undefined;
+    return toStepState(
+      field,
+      isDefined(formular?.personInAusbildung && formular.ausbildung),
+      invalidProps,
+    );
   }
 
   if (field === 'dokuments') {
     return toDocumentStepState(invalidProps);
   }
 
-  return formular?.[field] ? toStepState(field, invalidProps) : undefined;
+  return toStepState(field, isDefined(formular?.[field]), invalidProps);
 };
 
 export const getFormStepByDocumentType = (
@@ -289,15 +293,12 @@ export const getFormStepByDocumentType = (
       return gesuchFormSteps.DOKUMENTE;
     }
     default: {
-      if (dokumentTyp.startsWith('STEUERDATEN')) {
-        return ELTERN_STEUER_STEPS[getTypeOfSteuerdatenDokument(dokumentTyp)];
-      }
       const step = (Object.keys(gesuchFormSteps) as GesuchFormSteps[]).find(
         (key) => {
           if (key === 'EINNAHMEN_KOSTEN') {
-            return dokumentTyp.includes('EK');
+            return dokumentTyp.startsWith('EK');
           }
-          return dokumentTyp.includes(key);
+          return dokumentTyp.startsWith(key);
         },
       );
       if (!step) {
@@ -326,7 +327,8 @@ const toDocumentStepState = (
 };
 
 const toStepState = (
-  field: SharedModelGesuchFormularProps,
+  field: SharedModelGesuchFormularPropsSteuerdatenSteps,
+  isDefined: boolean,
   invalidProps?: StepValidation,
 ): StepState | undefined => {
   if (invalidProps?.errors?.includes(field)) {
@@ -339,21 +341,9 @@ const toStepState = (
   if (invalidProps?.errors === undefined) {
     return undefined;
   }
-  return 'VALID';
+  return isDefined ? 'VALID' : undefined;
 };
 
 const isSteuerdatenStep = (
-  step: SharedModelGesuchFormularProps,
+  step: SharedModelGesuchFormularPropsSteuerdatenSteps,
 ): step is SteuerdatenSteps => step.startsWith('steuerdaten');
-
-const getTypeOfSteuerdatenDokument = (
-  dokument: DokumentTyp,
-): SteuerdatenTyp => {
-  if (dokument.endsWith('MUTTER')) {
-    return 'MUTTER';
-  }
-  if (dokument.endsWith('VATER')) {
-    return 'VATER';
-  }
-  return 'FAMILIE';
-};

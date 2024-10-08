@@ -76,6 +76,7 @@ public class ElternteilV1 {
         int medizinischeGrundversorgung = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
             for (final var elternteil : eltern) {
+                builder.ergaenzungsleistungen(Objects.requireNonNullElse(elternteil.getErgaenzungsleistungen(), 0));
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteil.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -88,30 +89,21 @@ public class ElternteilV1 {
                 );
             }
         } else {
-            switch (steuerdaten.getSteuerdatenTyp()) {
-                case VATER -> {
-                    final var kinderDerElternVaterVollzeit  = kinderDerElternInHaushalten.stream().filter(
-                        kind -> Objects.requireNonNullElse(kind.getWohnsitzAnteilVater(), BigDecimal.valueOf(100)).intValue() == 100
-                    ).toList();
-                    for (final var kind : kinderDerElternVaterVollzeit) {
-                        medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                            (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
-                            gesuchsperiode
-                        );
-                    }
-                }
-                case MUTTER -> {
-                    final var kinderDerElternMutterVollzeit = kinderDerElternInHaushalten.stream().filter(
-                        kind -> Objects.requireNonNullElse(kind.getWohnsitzAnteilMutter(), BigDecimal.valueOf(100)).intValue() == 100
-                    ).toList();
-                    for (final var kind : kinderDerElternMutterVollzeit) {
-                        medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                            (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
-                            gesuchsperiode
-                        );
-                    }
-                }
+            final var steuernElternTyp =
+                steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER
+                    ? ElternTyp.MUTTER
+                    : ElternTyp.VATER; // Never is Family
+
+            final var kindDesElternteilsVollzeit = kinderDerElternInHaushalten.stream().filter(
+                kind -> Objects.requireNonNullElse(kind.getWohnsitzAnteil(steuernElternTyp), BigDecimal.valueOf(100)).intValue() == 100
+            ).toList();
+            for (final var kind : kindDesElternteilsVollzeit) {
+                medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
+                    (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
+                    gesuchsperiode
+                );
             }
+
             final var kinderDerElternTeilzeit = kinderDerElternInHaushalten.stream()
                 .filter(
                     kind -> Objects.requireNonNullElse(kind.getWohnsitzAnteilMutter(), BigDecimal.ZERO).intValue() > 0 &&
@@ -130,11 +122,13 @@ public class ElternteilV1 {
             }
         }
 
+        int wohnkosten = 0;
         switch (steuerdaten.getSteuerdatenTyp()) {
             case VATER -> {
                 final var elternteilToUse = eltern.stream().filter(
                     elternteil -> elternteil.getElternTyp() == ElternTyp.VATER
                 ).toList().get(0);
+                wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -149,6 +143,7 @@ public class ElternteilV1 {
                 final var elternteilToUse = eltern.stream().filter(
                     elternteil -> elternteil.getElternTyp() == ElternTyp.MUTTER
                 ).toList().get(0);
+                wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
                     gesuchsperiode
@@ -158,6 +153,10 @@ public class ElternteilV1 {
                         29, gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29 für margin
                     );
                 }
+            }
+            case FAMILIE -> {
+                final var elternteilToUse = eltern.stream().findFirst().get();
+                wohnkosten += elternteilToUse.getWohnkosten();
             }
         }
 
@@ -170,18 +169,15 @@ public class ElternteilV1 {
             )
         );
 
-
-
         builder.effektiveWohnkosten(
             BerechnungRequestV1.getEffektiveWohnkosten(
-                steuerdaten.getWohnkosten(),
+                wohnkosten,
                 gesuchsperiode,
                 anzahlPersonenImHaushalt
             )
         );
 
         builder.totalEinkuenfte(Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0));
-        builder.ergaenzungsleistungen(Objects.requireNonNullElse(steuerdaten.getErgaenzungsleistungen(), 0));
         builder.eigenmietwert(Objects.requireNonNullElse(steuerdaten.getEigenmietwert(), 0));
         builder.alimente(Objects.requireNonNullElse(steuerdaten.getKinderalimente(), 0));
         builder.einzahlungSaeule2(Objects.requireNonNullElse(steuerdaten.getSaeule2(), 0));
@@ -214,5 +210,21 @@ public class ElternteilV1 {
             elternTyp,
             familiensituation
         ).build();
+    }
+
+    public static int getEffektiveWohnkosten(
+        final int eingegebeneWohnkosten,
+        final Gesuchsperiode gesuchsperiode,
+        int anzahlPersonenImHaushalt
+    ) {
+        int maxWohnkosten = switch (anzahlPersonenImHaushalt) {
+            case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
+            case 1 -> gesuchsperiode.getWohnkostenFam1pers();
+            case 2 -> gesuchsperiode.getWohnkostenFam2pers();
+            case 3 -> gesuchsperiode.getWohnkostenFam3pers();
+            case 4 -> gesuchsperiode.getWohnkostenFam4pers();
+            default -> gesuchsperiode.getWohnkostenFam5pluspers();
+        };
+        return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }
 }

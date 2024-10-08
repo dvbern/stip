@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
-import ch.dvbern.stip.api.common.statemachines.gesuchstatus.GesuchStateMachineUtil;
+import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
@@ -25,9 +25,10 @@ public class GesuchStatusService {
 
     @Transactional
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
-        GesuchStateMachineUtil.addExit(
+        StateMachineUtil.addExit(
             config,
-            transition -> validationService.validateGesuchForStatus(gesuch, transition.getDestination())
+            transition -> validationService.validateGesuchForStatus(gesuch, transition.getDestination()),
+            Gesuchstatus.values()
         );
 
         final var sm = new StateMachine<>(

@@ -298,38 +298,23 @@ class GesuchValidatorTest {
     @Test
     void testFieldValidationErrorKind() {
         Kind kind = new Kind();
-        // beim Wohnsitz MUTTER_VATER muessen die Anteil Mutter und Vater Feldern nicht null sein
-        kind.setWohnsitz(Wohnsitz.MUTTER_VATER);
+        // feld wohnsitzAnteilPia darf nicht null sein
         Set<Kind> kindSet = new HashSet<>();
         kindSet.add(kind);
         Gesuch gesuch = prepareDummyGesuch();
+        kind.setWohnsitzAnteilPia(null);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
-        assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE }, gesuch);
+        assertAllMessagesPresent(new String[] { "{jakarta.validation.constraints.NotNull.message}" }, gesuch);
         // Test die Wohnsitzanteil Berechnung:
-        kind.setWohnsitzAnteilVater(new BigDecimal("55.00"));
-        kind.setWohnsitzAnteilMutter(new BigDecimal("55.00"));
+        kind.setWohnsitzAnteilPia(100);
         kindSet = new HashSet<>();
         kindSet.add(kind);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
-        assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
-        kind.setWohnsitzAnteilMutter(new BigDecimal("45.00"));
+        kind.setWohnsitzAnteilPia(55);
         kindSet = new HashSet<>();
         kindSet.add(kind);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
         assertAllMessagesNotPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE }, gesuch);
-    }
-
-    @Test
-    void testNullFieldValidationErrorKind() {
-        Kind kind = new Kind();
-        // beim Wohnsitz != MUTTER_VATER muessen die Anteil Mutter und Vater Feldern null sein
-        kind.setWohnsitz(Wohnsitz.FAMILIE);
-        kind.setWohnsitzAnteilMutter(BigDecimal.TEN);
-        Set<Kind> kindSet = new HashSet<>();
-        kindSet.add(kind);
-        Gesuch gesuch = prepareDummyGesuch();
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
-        assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
     }
 
     @Test
@@ -413,10 +398,9 @@ class GesuchValidatorTest {
     void testGesuchEinreichenValidationEinnahmenKostenEltern() {
         Familiensituation familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
-        familiensituation.setElternteilUnbekanntVerstorben(true);
-        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
-        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
         familiensituation.setGerichtlicheAlimentenregelung(true);
+        familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
+        familiensituation.setMutterWiederverheiratet(false);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();

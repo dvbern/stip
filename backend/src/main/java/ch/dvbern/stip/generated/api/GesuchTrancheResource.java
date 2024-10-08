@@ -2,11 +2,22 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
+
+
+
+import java.io.InputStream;
+import java.util.Map;
+import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
@@ -16,9 +27,25 @@ import jakarta.validation.Valid;
 public interface GesuchTrancheResource {
 
     @PATCH
+    @Path("/{aenderungId}/aenderung/ablehnen")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    Response aenderungAblehnen(@PathParam("aenderungId") UUID aenderungId,@Valid @NotNull KommentarDto kommentarDto);
+
+    @POST
+    @Path("/{aenderungId}/aenderung/akzeptieren")
+    @Produces({ "application/json", "text/plain" })
+    Response aenderungAkzeptieren(@PathParam("aenderungId") UUID aenderungId);
+
+    @PATCH
     @Path("/{aenderungId}/aenderung/einreichen")
     @Produces({ "text/plain" })
     Response aenderungEinreichen(@PathParam("aenderungId") UUID aenderungId);
+
+    @PATCH
+    @Path("/{aenderungId}/aenderung/manuelleAenderung")
+    @Produces({ "application/json", "text/plain" })
+    Response aenderungManuellAnpassen(@PathParam("aenderungId") UUID aenderungId);
 
     @POST
     @Path("/{gesuchId}/aenderungsantrag")
@@ -33,9 +60,9 @@ public interface GesuchTrancheResource {
     Response createGesuchTrancheCopy(@PathParam("gesuchId") UUID gesuchId,@Valid CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto);
 
     @GET
-    @Path("/{gesuchId}/aenderungsantrag")
+    @Path("/{gesuchTrancheId}/einreichen/validieren")
     @Produces({ "application/json", "text/plain" })
-    Response getAenderungsantrag(@PathParam("gesuchId") UUID gesuchId);
+    Response gesuchTrancheEinreichenValidieren(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{gesuchId}")

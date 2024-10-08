@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { Store } from '@ngrx/store';
 import { map, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
@@ -12,6 +13,7 @@ import {
   GesuchTranche,
   GesuchTrancheService,
   GesuchTrancheSlim,
+  GesuchTrancheStatus,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { shouldIgnoreNotFoundErrorsIf } from '@dv/shared/util/http';
@@ -33,12 +35,18 @@ const initialState: GesuchAenderungState = {
   cachedTranchenSlim: initial(),
 };
 
+export type AenderungChangeState = Extract<
+  GesuchTrancheStatus,
+  'MANUELLE_AENDERUNG' | 'AKZEPTIERT' | 'ABGELEHNT'
+>;
+
 @Injectable({ providedIn: 'root' })
 export class GesuchAenderungStore extends signalStore(
   { protectedState: false },
   withState(initialState),
   withDevtools('GesuchAenderungStore'),
 ) {
+  private store = inject(Store);
   private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private router = inject(Router);
@@ -47,7 +55,24 @@ export class GesuchAenderungStore extends signalStore(
     const tranchen = this.cachedTranchenSlim();
     return {
       loading: isPending(tranchen),
-      list: tranchen.data?.filter((t) => t.typ === 'AENDERUNG') ?? [],
+      list:
+        tranchen.data?.filter(
+          (t) => t.typ === 'AENDERUNG' && t.status !== 'ABGELEHNT',
+        ) ?? [],
+    };
+  });
+
+  openAenderungViewSig = computed(() => {
+    const tranchen = this.cachedTranchenSlim();
+    return {
+      loading: isPending(tranchen),
+      openAenderung: tranchen.data?.find(
+        (t) =>
+          t.typ === 'AENDERUNG' &&
+          (
+            ['IN_BEARBEITUNG_GS', 'UEBERPRUEFEN'] as GesuchTrancheStatus[]
+          ).includes(t.status),
+      ),
     };
   });
 
@@ -112,13 +137,13 @@ export class GesuchAenderungStore extends signalStore(
               {
                 onSuccess: (data) => {
                   this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'shared.dialog.gesuch-aenderung.success',
+                    messageKey: 'shared.dialog.gesuch-aenderung.create.success',
                   });
                   this.router.navigate([
                     'gesuch',
                     PERSON.route,
                     gesuchId,
-                    'tranche',
+                    'aenderung',
                     data.id,
                   ]);
                 },
@@ -155,13 +180,71 @@ export class GesuchAenderungStore extends signalStore(
               {
                 onSuccess: () => {
                   this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'shared.dialog.gesuch.tranche.success',
+                    messageKey: 'shared.dialog.gesuch.tranche.create.success',
                   });
                   this.getAllTranchenForGesuch$({ gesuchId });
                 },
               },
             ),
           ),
+      ),
+    ),
+  );
+
+  changeAenderungState$ = rxMethod<{
+    aenderungId: string;
+    gesuchId: string;
+    comment: string;
+    target: AenderungChangeState;
+    onSuccess: (trancheId: string) => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
+        }));
+      }),
+      switchMap(
+        ({
+          aenderungId,
+          target,
+          gesuchId,
+          comment,
+          onSuccess: additionalOnSuccess,
+        }) => {
+          const services$ = {
+            AKZEPTIERT: () =>
+              this.gesuchTrancheService.aenderungAkzeptieren$({ aenderungId }),
+            ABGELEHNT: () =>
+              this.gesuchTrancheService.aenderungAblehnen$({
+                aenderungId,
+                kommentar: { text: comment },
+              }),
+            MANUELLE_AENDERUNG: () =>
+              this.gesuchTrancheService.aenderungManuellAnpassen$({
+                aenderungId,
+              }),
+          } satisfies Record<AenderungChangeState, unknown>;
+
+          return services$[target]().pipe(
+            handleApiResponse(
+              (gesuchAenderung) => {
+                patchState(this, () => ({
+                  cachedGesuchAenderung: gesuchAenderung,
+                }));
+              },
+              {
+                onSuccess: (value) => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey: `shared.dialog.gesuch-aenderung.${target}.success`,
+                  });
+                  this.getAllTranchenForGesuch$({ gesuchId });
+                  additionalOnSuccess(value.id);
+                },
+              },
+            ),
+          );
+        },
       ),
     ),
   );

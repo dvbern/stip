@@ -11,13 +11,10 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import {
-  GesuchFormStepView,
-  StepState,
-  gesuchFormStepsFieldMap,
-} from '@dv/shared/model/gesuch-form';
+import { GesuchFormStepView, StepState } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
+import { stepHasChanges } from '@dv/shared/util-fn/gesuch-util';
 
 import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav.selectors';
 
@@ -46,19 +43,16 @@ export class SharedPatternGesuchStepNavComponent {
   };
   stepsSig = input<GesuchFormStepView[]>();
   stepsViewSig = computed(() => {
-    const { cachedGesuchId, specificTrancheId, tranchenChanges } =
-      this.viewSig();
+    const { cachedGesuchId, trancheSetting, tranchenChanges } = this.viewSig();
     return this.stepsSig()?.map((step) => ({
       ...step,
-      hasChanges: tranchenChanges?.affectedSteps.includes(
-        gesuchFormStepsFieldMap[step.route] ?? -1,
-      ),
+      hasChanges: stepHasChanges(tranchenChanges, step),
       routes: [
         '/',
         'gesuch',
         ...step.route.split('/'),
         cachedGesuchId,
-        ...(specificTrancheId ? ['tranche', specificTrancheId] : []),
+        ...(trancheSetting?.routesSuffix ?? []),
       ],
       isActive: this.route.isActive(`gesuch/${step.route}`, {
         paths: 'subset',

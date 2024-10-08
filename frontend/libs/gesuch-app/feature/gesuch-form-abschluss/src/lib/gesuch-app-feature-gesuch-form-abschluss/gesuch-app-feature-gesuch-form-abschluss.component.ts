@@ -6,21 +6,19 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
+import { filter } from 'rxjs';
 
-import {
-  GesuchAppDataAccessAbschlussApiEvents,
-  selectGesuchAppDataAccessAbschlussView,
-} from '@dv/gesuch-app/data-access/abschluss';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { getLatestGesuchIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
+import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
@@ -40,27 +38,17 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   private dialog = inject(MatDialog);
   destroyRef = inject(DestroyRef);
 
-  viewSig = this.store.selectSignal(selectGesuchAppDataAccessAbschlussView);
+  einreichenStore = inject(EinreichenStore);
+  gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
   constructor() {
-    // validate form only if no formErrors form validatePages are present
-    combineLatest([
-      getLatestGesuchIdFromGesuchOnUpdate$(this.viewSig).pipe(
-        filter(isDefined),
-      ),
-      toObservable(this.viewSig).pipe(
-        map((view) => view.canCheck),
-        distinctUntilChanged(),
-        filter((canCheck) => !!canCheck),
-        takeUntilDestroyed(),
-      ),
-    ]).subscribe(([gesuchId]) => {
-      this.store.dispatch(
-        GesuchAppDataAccessAbschlussApiEvents.check({
-          gesuchId,
-        }),
-      );
-    });
+    getLatestTrancheIdFromGesuchOnUpdate$(this.gesuchViewSig)
+      .pipe(filter(isDefined), takeUntilDestroyed())
+      .subscribe((gesuchTrancheId) => {
+        this.einreichenStore.validateEinreichen$({
+          gesuchTrancheId,
+        });
+      });
   }
 
   ngOnInit(): void {
@@ -68,8 +56,8 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   }
 
   abschliessen() {
-    const { specificTrancheId, gesuch } = this.viewSig();
-    if (!gesuch) {
+    const { isEditingTranche, gesuch, trancheId } = this.gesuchViewSig();
+    if (!gesuch || !trancheId) {
       return;
     }
     const dialogRef = SharedUiConfirmDialogComponent.open(this.dialog, {
@@ -84,18 +72,14 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
-          if (specificTrancheId) {
-            this.store.dispatch(
-              GesuchAppDataAccessAbschlussApiEvents.trancheAbschliessen({
-                trancheId: specificTrancheId,
-              }),
-            );
+          if (isEditingTranche) {
+            this.einreichenStore.trancheEinreichen$({
+              trancheId,
+            });
           } else {
-            this.store.dispatch(
-              GesuchAppDataAccessAbschlussApiEvents.gesuchAbschliessen({
-                gesuchId: gesuch.id,
-              }),
-            );
+            this.einreichenStore.gesuchEinreichen$({
+              gesuchId: gesuch.id,
+            });
           }
         }
       });

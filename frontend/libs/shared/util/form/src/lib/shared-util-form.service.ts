@@ -17,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject, concat, from, of } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 
+import { SpecialValidationError } from '@dv/shared/model/gesuch-form';
 import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
 import {
   ComponentWithForm,
@@ -25,6 +26,7 @@ import {
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 type OnlyString<T> = T extends string ? T : never;
+type StringToNumber<T> = Exclude<T, string> | number;
 
 @Injectable({
   providedIn: 'root',
@@ -119,14 +121,16 @@ export class SharedUtilFormService {
   createNumberConverter<
     T extends { [k: string]: AbstractControl<unknown> },
     K extends OnlyString<keyof T>,
-  >(group: FormGroup<T>, numberFields: K[]) {
+  >(_group: FormGroup<T>, numberFields: K[]) {
     return {
-      toNumber: () =>
+      toNumber: <V extends { [key in K]: string | null | undefined }>(
+        values: V,
+      ) =>
         numberFields.reduce(
           (acc, key) => {
-            return { ...acc, [key]: fromFormatedNumber(group.get(key)?.value) };
+            return { ...acc, [key]: fromFormatedNumber(values[key] ?? null) };
           },
-          {} as Record<K, number>,
+          {} as { [key in K]: StringToNumber<V[key]> },
         ),
       toString: (values: { [key in K]?: number }) =>
         numberFields.reduce(
@@ -272,4 +276,28 @@ export class SharedUtilFormService {
         })
       : toSignal<R>(control.valueChanges);
   }
+
+  invalidateControlIfValidationFails<T extends FormGroup>(
+    form: T,
+    expectedFields: KeysOfForm<T>[],
+    specialValidationErrors?: SpecialValidationError[],
+  ) {
+    if (!specialValidationErrors || specialValidationErrors.length === 0) {
+      return;
+    }
+
+    specialValidationErrors.forEach((error) => {
+      const field = error.field;
+      if (
+        expectedFields.findIndex((f) => f === field) >= 0 &&
+        field in form.controls
+      ) {
+        const control = form.get(field);
+        control?.markAllAsTouched();
+        control?.patchValue(null);
+      }
+    });
+  }
 }
+
+type KeysOfForm<T> = T extends FormGroup<infer K> ? keyof K : never;

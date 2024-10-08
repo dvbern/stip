@@ -1,11 +1,18 @@
 import { IChange, diff } from 'json-diff-ts';
 
 import {
+  AppTrancheChange,
   ElternTyp,
   ElternUpdate,
   FamiliensituationUpdate,
+  GesuchFormular,
   SharedModelGesuchFormular,
+  SharedModelGesuchFormularProps,
 } from '@dv/shared/model/gesuch';
+import {
+  GesuchFormStepView,
+  gesuchFormStepsFieldMap,
+} from '@dv/shared/model/gesuch-form';
 import { lowercased } from '@dv/shared/util-fn/string-helper';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
@@ -93,6 +100,52 @@ type ArrayForms = Extract<
 const keysToSkip = ['id'];
 
 /**
+ * This function checks which previous changes should be displayed in the view.
+ * If the sachbearbeiter has made changes on the current formular view, the those changes will be displayed and not the previous changes from the gesuchsteller.
+ * If the sachbearbeiter has not made changes on the current formular view, the previous changes from the gesuchsteller will be displayed.
+ * @param view The view containing the GesuchFormular and the changes.
+ * @param key The key of the GesuchFormular property.
+ */
+export const selectChangeForView = <K extends SharedModelGesuchFormularProps>(
+  view: {
+    gesuchFormular: GesuchFormular | null;
+    tranchenChanges: AppTrancheChange | null;
+  },
+  key: K,
+): {
+  current: SharedModelGesuchFormular[K] | undefined;
+  previous: SharedModelGesuchFormular[K];
+} => {
+  const changes = view.tranchenChanges;
+  const currentFormular = view.gesuchFormular?.[key];
+
+  const sachbearbeiterHasChangesOnView =
+    changes?.sb?.affectedSteps.includes(key) ?? false;
+
+  const current = currentFormular;
+
+  const previous = sachbearbeiterHasChangesOnView
+    ? changes?.sb?.tranche?.gesuchFormular?.[key]
+    : changes?.gs?.tranche?.gesuchFormular?.[key];
+
+  return { current, previous };
+};
+
+export const stepHasChanges = (
+  tranchenChanges: AppTrancheChange | null,
+  step: GesuchFormStepView,
+) => {
+  return (
+    tranchenChanges?.gs?.affectedSteps.includes(
+      gesuchFormStepsFieldMap[step.route] ?? -1,
+    ) ||
+    tranchenChanges?.sb?.affectedSteps.includes(
+      gesuchFormStepsFieldMap[step.route] ?? -1,
+    )
+  );
+};
+
+/**
  * Calculate the changes between two versions of a GesuchFormular property.
  */
 export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
@@ -117,7 +170,6 @@ export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
 
   const difference = rawDiff.reduce(
     (acc, c) => {
-      // TODO (KSTIP-1436): Handle nested objects (recursively)
       if (c.changes) {
         acc[c.key as K] = c.changes.reduce(
           (sub, s) => addChange(sub, s),

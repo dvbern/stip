@@ -54,18 +54,16 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   berechnungenSig = computed(() => {
     const gesuchId = this.gesuchViewSig().gesuchId;
     // berechnungenOptions will be fetched dynamically in the future
-    const berechnungenOptions = [];
+    const berechnungenOptions: VerfuegungOption[] = [];
 
-    const berechnungenRd = this.berechnungStore.berechnungen();
-    if (berechnungenRd.data) {
-      for (
-        let berechnungIndex = 0;
-        berechnungIndex < berechnungenRd.data.length;
-        berechnungIndex++
-      ) {
-        berechnungenOptions.push(createBerechnungOption(berechnungIndex));
-      }
-    }
+    const berechnung = this.berechnungStore.berechnungZusammenfassungViewSig();
+    berechnung.berechnungsresultate.forEach((berechnungen, berechnungIndex) => {
+      berechnungen.forEach((berechnung) => {
+        berechnungenOptions.push(
+          createBerechnungOption(berechnungIndex, berechnung.type),
+        );
+      });
+    });
 
     return berechnungenOptions.map((option) => ({
       ...option,
