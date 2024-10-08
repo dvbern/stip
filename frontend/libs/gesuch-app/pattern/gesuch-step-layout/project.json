@@ -3,8 +3,8 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/gesuch-app/pattern/gesuch-step-layout/src",
   "prefix": "dv",
-  "tags": ["type:pattern", "scope:gesuch-app"],
   "projectType": "library",
+  "tags": ["type:pattern", "scope:gesuch-app"],
   "targets": {
     "build": {
       "executor": "nx:noop",
