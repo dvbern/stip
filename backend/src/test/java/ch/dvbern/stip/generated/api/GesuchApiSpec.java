@@ -1070,7 +1070,7 @@ public class GesuchApiSpec {
      */
     public static class GetGsTrancheChangesOper implements Oper {
 
-        public static final Method REQ_METHOD = GET;
+        public static final Method REQ_METHOD = DELETE;
         public static final String REQ_URI = "/gesuch/{aenderungId}/aenderung/gs/changes";
 
         private RequestSpecBuilder reqSpec;
@@ -1083,7 +1083,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{aenderungId}/aenderung/gs/changes
+         * DELETE /gesuch/{aenderungId}/aenderung/gs/changes
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1094,7 +1094,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{aenderungId}/aenderung/gs/changes
+         * DELETE /gesuch/{aenderungId}/aenderung/gs/changes
          * @param handler handler
          * @return GesuchWithChangesDtoSpec
          */

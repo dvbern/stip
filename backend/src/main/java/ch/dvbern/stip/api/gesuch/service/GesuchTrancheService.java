@@ -204,6 +204,12 @@ public class GesuchTrancheService {
     }
 
     @Transactional
+    public boolean aenderungLoeschen(final UUID aenderungId) {
+        //todo: state machine trigger, dependencies?
+        return gesuchTrancheRepository.deleteById(aenderungId);
+    }
+
+    @Transactional
     public GesuchTrancheDto aenderungManuellAnpassen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(

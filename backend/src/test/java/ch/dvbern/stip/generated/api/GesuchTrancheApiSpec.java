@@ -67,6 +67,7 @@ public class GesuchTrancheApiSpec {
                 aenderungAblehnen(),
                 aenderungAkzeptieren(),
                 aenderungEinreichen(),
+                aenderungLoeschen(),
                 aenderungManuellAnpassen(),
                 createAenderungsantrag(),
                 createGesuchTrancheCopy(),
@@ -89,6 +90,10 @@ public class GesuchTrancheApiSpec {
 
     public AenderungEinreichenOper aenderungEinreichen() {
         return new AenderungEinreichenOper(createReqSpec());
+    }
+
+    public AenderungLoeschenOper aenderungLoeschen() {
+        return new AenderungLoeschenOper(createReqSpec());
     }
 
     public AenderungManuellAnpassenOper aenderungManuellAnpassen() {
@@ -142,7 +147,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #aenderungIdPath Die ID der Aenderung (required)
-     * @see #body  (optional)
+     * @see #body  (required)
      * return GesuchTrancheDtoSpec
      */
     public static class AenderungAblehnenOper implements Oper {
@@ -182,7 +187,7 @@ public class GesuchTrancheApiSpec {
         }
 
          /**
-         * @param kommentarDtoSpec (KommentarDtoSpec)  (optional)
+         * @param kommentarDtoSpec (KommentarDtoSpec)  (required)
          * @return operation
          */
         public AenderungAblehnenOper body(KommentarDtoSpec kommentarDtoSpec) {
@@ -352,6 +357,68 @@ public class GesuchTrancheApiSpec {
          * @return operation
          */
         public AenderungEinreichenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #aenderungIdPath Die ID der Aenderung (required)
+     */
+    public static class AenderungLoeschenOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/gesuchtranche/{aenderungId}/aenderung/delete";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public AenderungLoeschenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /gesuchtranche/{aenderungId}/aenderung/delete
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String AENDERUNG_ID_PATH = "aenderungId";
+
+        /**
+         * @param aenderungId (UUID) Die ID der Aenderung (required)
+         * @return operation
+         */
+        public AenderungLoeschenOper aenderungIdPath(Object aenderungId) {
+            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public AenderungLoeschenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public AenderungLoeschenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

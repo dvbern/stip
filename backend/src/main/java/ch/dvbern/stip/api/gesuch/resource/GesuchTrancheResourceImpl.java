@@ -98,6 +98,17 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
+    public Response aenderungLoeschen(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        boolean hasBeenDeleted = gesuchTrancheService.aenderungLoeschen(aenderungId);
+        if (!hasBeenDeleted) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
     public Response gesuchTrancheEinreichenValidieren(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
         final var validationReport = gesuchTrancheService.einreichenValidieren(gesuchTrancheId);
