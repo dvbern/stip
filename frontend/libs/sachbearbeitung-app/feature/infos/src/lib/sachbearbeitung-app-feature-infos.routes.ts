@@ -1,6 +1,4 @@
-import { inject } from '@angular/core';
 import { Route } from '@angular/router';
-import { Store } from '@ngrx/store';
 
 import {
   BESCHWERDEN_ROUTE,
