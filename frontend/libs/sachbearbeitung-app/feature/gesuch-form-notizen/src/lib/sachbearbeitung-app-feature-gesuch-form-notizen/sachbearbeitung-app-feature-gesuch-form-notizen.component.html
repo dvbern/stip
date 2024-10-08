@@ -1,7 +1,7 @@
 <!-- Table -->
 <div class="row g-4 mt-2">
   <p>
-    {{ 'sachbearbeitung-app.gesuch-form.protokoll.text' | translate }}
+    {{ 'sachbearbeitung-app.gesuch-form.notizen.title' | translate }}
   </p>
 </div>
 <div class="shadow rounded-4 overflow-hidden mt-2">
@@ -12,18 +12,13 @@
       }}
     </caption>
     <!-- Plus Button -->
-    <ng-container matColumnDef="kommentar">
-      <th mat-header-cell *matHeaderCellDef>
-        {{ 'sachbearbeitung-app.gesuch-form.protokoll.table.kommentar' | translate }}
-      </th>
-      <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="w-100">
-        {{ protokoll.kommentar }}
-      </td>
-    </ng-container>
+    <button type="button">
+      <input disabled />
+    </button>
     <!-- Datum -->
     <ng-container matColumnDef="datum">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.gesuch-form.protokoll.table.datum' | translate }}
+        {{ 'sachbearbeitung-app.gesuch-form.notizen.table.datum' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="text-nowrap">
         {{ protokoll.timestamp | date: 'dd.MM.yyyy' }}
@@ -31,19 +26,19 @@
     </ng-container>
 
     <!-- Typ -->
-    <ng-container matColumnDef="status">
+    <ng-container matColumnDef="typ">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.gesuch-form.protokoll.table.status' | translate }}
+        {{ 'sachbearbeitung-app.gesuch-form.notizen.table.typ' | translate }}
       </th>
-      <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="text-nowrap">
-        {{ 'shared.gesuch.status.contract.' + protokoll.status | translate }}
+      <td mat-cell *dvMatCellDef="let notizen; dataSource: statusprotokollSig()" class="text-nowrap">
+        {{ 'shared.gesuch.status.contract.' + notizen.status | translate }}
       </td>
     </ng-container>
 
     <!-- Notiz -->
-    <ng-container matColumnDef="user">
+    <ng-container matColumnDef="notiz">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.gesuch-form.protokoll.table.user' | translate }}
+        {{ 'sachbearbeitung-app.gesuch-form.notizen.table.notiz' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="text-nowrap">
         {{ protokoll.benutzer }}

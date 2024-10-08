@@ -298,6 +298,11 @@
   "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
   "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Kommentar",
 
+  "sachbearbeitung-app.gesuch-form.notizen.title": "Notizen",
+  "sachbearbeitung-app.gesuch-form.notizen.table.datum": "Datum",
+  "sachbearbeitung-app.gesuch-form.notizen.table.status": "Typ",
+  "sachbearbeitung-app.gesuch-form.notizen.table.user": "Notiz",
+
   "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Ausstehend",
 
   "sachbearbeitung-app.cockpit.title": "Cockpit",

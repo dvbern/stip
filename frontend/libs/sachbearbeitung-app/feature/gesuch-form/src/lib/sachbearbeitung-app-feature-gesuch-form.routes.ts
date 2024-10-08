@@ -11,6 +11,7 @@ import {
   GESCHWISTER,
   KINDER,
   LEBENSLAUF,
+  NOTIZEN,
   PARTNER,
   PERSON,
   PROTOKOLL,
@@ -171,6 +172,17 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
       import(
         '@dv/sachbearbeitung-app/feature/gesuch-form-statusprotokoll'
       ).then((m) => m.sachbearbeitungAppFeatureGesuchFormStatusprotokollRoutes),
+  },
+  {
+    path: NOTIZEN.route,
+    resolve: {
+      step: () => NOTIZEN,
+    },
+    title: 'shared.notizen.title',
+    loadChildren: () =>
+      import('@dv/sachbearbeitung-app/feature/gesuch-form-notizen').then(
+        (m) => m.sachbearbeitungAppFeatureGesuchFormNotizenRoutes,
+      ),
   },
   {
     path: ':id',

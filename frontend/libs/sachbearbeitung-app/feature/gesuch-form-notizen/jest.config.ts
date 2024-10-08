@@ -2,11 +2,11 @@ import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 /* eslint-disable */
 export default {
-  displayName: 'sachbearbeitung-app-feature-notizen',
+  displayName: 'sachbearbeitung-app-feature-gesuch-form-notizen',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/feature/notizen',
+    '../../../../coverage/libs/sachbearbeitung-app/feature/gesuch-form-notizen',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [
