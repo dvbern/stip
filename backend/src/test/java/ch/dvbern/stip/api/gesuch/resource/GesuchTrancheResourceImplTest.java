@@ -1,17 +1,17 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.api.DokumentApiSpec;
-import ch.dvbern.stip.generated.api.FallApiSpec;
-import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.api.*;
 import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
@@ -103,7 +103,7 @@ class GesuchTrancheResourceImplTest {
     @Test
     @TestAsGesuchsteller
     @Order(6)
-    @Description("Only one (open: NOT in State ABGELEHNT|AKZEPTIIERT) Aenderungsantrag should be allowed")
+    @Description("The GS should be able do delete a Aenderung, if it is in State 'In Bearbeitung GS'")
     void deleteAenderungTest() {
         GesuchTrancheSlimDtoSpec[] gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
             .gesuchIdPath(gesuch.getId())
@@ -116,6 +116,7 @@ class GesuchTrancheResourceImplTest {
         final var aenderung = Arrays.stream(gesuchtranchen).filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG).findFirst().get();
         //delete aenderung
         gesuchTrancheApiSpec.aenderungLoeschen().aenderungIdPath(aenderung.getId()).execute(TestUtil.PEEK_IF_ENV_SET).then().assertThat().statusCode(Response.Status.OK.getStatusCode());
+
         // assert that list size is -1 to previous
         gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
             .gesuchIdPath(gesuch.getId())
