@@ -67,7 +67,6 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
-  getStatus = this.gesuchAenderungStore.createGesuchAenderung$;
   @Input({ required: true }) tranche?: GesuchTrancheSlim;
 
   constructor() {
@@ -94,7 +93,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
   ngOnInit() {
     this.fallStore.loadCurrentFall$();
     this.store.dispatch(GesuchAppEventCockpit.init());
-    this.store.dispatch(SharedDataAccessGesuchEvents.init());
+    this.store.dispatch(SharedDataAccessGesuchEvents.loadGsDashboard());
     this.store.dispatch(sharedDataAccessGesuchsperiodeEvents.init());
   }
 

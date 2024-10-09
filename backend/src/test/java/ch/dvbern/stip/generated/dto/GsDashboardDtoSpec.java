@@ -18,6 +18,7 @@ import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.GsDashboardMissingDocumentsDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -35,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GsDashboardDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GsDashboardDtoSpec.JSON_PROPERTY_ID,
   GsDashboardDtoSpec.JSON_PROPERTY_OFFENE_AENDERUNG,
-  GsDashboardDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_WITH_MISSING_DOCUMENTS_ID
+  GsDashboardDtoSpec.JSON_PROPERTY_MISSING_DOCUMENTS
 })
 @JsonTypeName("GsDashboard")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -52,8 +53,8 @@ public class GsDashboardDtoSpec {
   public static final String JSON_PROPERTY_OFFENE_AENDERUNG = "offeneAenderung";
   private GesuchTrancheSlimDtoSpec offeneAenderung;
 
-  public static final String JSON_PROPERTY_GESUCH_TRANCHE_WITH_MISSING_DOCUMENTS_ID = "gesuchTrancheWithMissingDocumentsId";
-  private UUID gesuchTrancheWithMissingDocumentsId;
+  public static final String JSON_PROPERTY_MISSING_DOCUMENTS = "missingDocuments";
+  private GsDashboardMissingDocumentsDtoSpec missingDocuments;
 
   public GsDashboardDtoSpec() {
   }
@@ -68,9 +69,9 @@ public class GsDashboardDtoSpec {
    * Get gesuchsperiode
    * @return gesuchsperiode
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchsperiodeDtoSpec getGesuchsperiode() {
     return gesuchsperiode;
@@ -78,7 +79,7 @@ public class GsDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGesuchsperiode(GesuchsperiodeDtoSpec gesuchsperiode) {
     this.gesuchsperiode = gesuchsperiode;
   }
@@ -94,9 +95,9 @@ public class GsDashboardDtoSpec {
    * Get gesuchStatus
    * @return gesuchStatus
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchstatusDtoSpec getGesuchStatus() {
     return gesuchStatus;
@@ -104,7 +105,7 @@ public class GsDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
@@ -120,9 +121,9 @@ public class GsDashboardDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -130,7 +131,7 @@ public class GsDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -162,29 +163,29 @@ public class GsDashboardDtoSpec {
   }
 
 
-  public GsDashboardDtoSpec gesuchTrancheWithMissingDocumentsId(UUID gesuchTrancheWithMissingDocumentsId) {
+  public GsDashboardDtoSpec missingDocuments(GsDashboardMissingDocumentsDtoSpec missingDocuments) {
     
-    this.gesuchTrancheWithMissingDocumentsId = gesuchTrancheWithMissingDocumentsId;
+    this.missingDocuments = missingDocuments;
     return this;
   }
 
    /**
-   * Get gesuchTrancheWithMissingDocumentsId
-   * @return gesuchTrancheWithMissingDocumentsId
+   * Get missingDocuments
+   * @return missingDocuments
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_WITH_MISSING_DOCUMENTS_ID)
+  @JsonProperty(JSON_PROPERTY_MISSING_DOCUMENTS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public UUID getGesuchTrancheWithMissingDocumentsId() {
-    return gesuchTrancheWithMissingDocumentsId;
+  public GsDashboardMissingDocumentsDtoSpec getMissingDocuments() {
+    return missingDocuments;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_WITH_MISSING_DOCUMENTS_ID)
+  @JsonProperty(JSON_PROPERTY_MISSING_DOCUMENTS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGesuchTrancheWithMissingDocumentsId(UUID gesuchTrancheWithMissingDocumentsId) {
-    this.gesuchTrancheWithMissingDocumentsId = gesuchTrancheWithMissingDocumentsId;
+  public void setMissingDocuments(GsDashboardMissingDocumentsDtoSpec missingDocuments) {
+    this.missingDocuments = missingDocuments;
   }
 
   @Override
@@ -200,12 +201,12 @@ public class GsDashboardDtoSpec {
         Objects.equals(this.gesuchStatus, gsDashboard.gesuchStatus) &&
         Objects.equals(this.id, gsDashboard.id) &&
         Objects.equals(this.offeneAenderung, gsDashboard.offeneAenderung) &&
-        Objects.equals(this.gesuchTrancheWithMissingDocumentsId, gsDashboard.gesuchTrancheWithMissingDocumentsId);
+        Objects.equals(this.missingDocuments, gsDashboard.missingDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, offeneAenderung, gesuchTrancheWithMissingDocumentsId);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, offeneAenderung, missingDocuments);
   }
 
   @Override
@@ -216,7 +217,7 @@ public class GsDashboardDtoSpec {
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
-    sb.append("    gesuchTrancheWithMissingDocumentsId: ").append(toIndentedString(gesuchTrancheWithMissingDocumentsId)).append("\n");
+    sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");
     sb.append("}");
     return sb.toString();
   }

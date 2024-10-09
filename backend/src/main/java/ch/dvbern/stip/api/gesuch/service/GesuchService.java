@@ -70,6 +70,7 @@ import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -336,11 +337,16 @@ public class GesuchService {
                     && tranche.getStatus().equals(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
                 .findFirst().orElse(null);
 
-            final var missingDocuments = gesuchTranchen.stream()
-                .filter(tranche -> !gesuchTrancheService.getRequiredDokumentTypes(tranche.getId()).isEmpty())
-                .findFirst().orElse(null);
+            final var missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()
+                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE))
+                .map(tranche -> ImmutablePair.of(
+                    tranche.getId(),
+                    gesuchTrancheService.getRequiredDokumentTypes(tranche.getId()).size()
+                ))
+                .filter(pair -> pair.getRight() > 0)
+                .findFirst().orElse(ImmutablePair.of(null, 0));
 
-            gsDashboardDtos.add(gsDashboardMapper.toDto(gesuch, offeneAenderung, missingDocuments));
+            gsDashboardDtos.add(gsDashboardMapper.toDto(gesuch, offeneAenderung, missingDocumentsTrancheIdAndCount));
         }
 
         return gsDashboardDtos;

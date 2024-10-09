@@ -1,13 +1,16 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GsDashboardDto;
+import ch.dvbern.stip.generated.dto.GsDashboardMissingDocumentsDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -17,21 +20,19 @@ public class GsDashboardMapper {
     public GsDashboardDto toDto(
         final Gesuch gesuch,
         final GesuchTrancheSlimDto offeneAenderung,
-        final GesuchTrancheSlimDto missingDocuments
+        final Pair<UUID, Integer> missingDocumentsTrancheIdAndCount
     ) {
         final var periodeDto = gesuchsperiodeMapper.toDto(gesuch.getGesuchsperiode());
-
-        UUID missingDocumentsId = null;
-        if (missingDocuments != null) {
-            missingDocumentsId = missingDocuments.getId();
-        }
+        final var missingDocumentsDto = Optional.of(missingDocumentsTrancheIdAndCount)
+            .map(pair -> new GsDashboardMissingDocumentsDto(pair.getLeft(), pair.getRight()))
+            .orElse(null);
 
         return new GsDashboardDto(
             periodeDto,
             gesuch.getGesuchStatus(),
             gesuch.getId(),
             offeneAenderung,
-            missingDocumentsId
+            missingDocumentsDto
         );
     }
 }

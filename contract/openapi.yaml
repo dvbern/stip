@@ -2337,6 +2337,10 @@ components:
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
     GsDashboard:
+      required:
+        - id
+        - gesuchsperiode
+        - gesuchStatus
       type: object
       properties:
         gesuchsperiode:
@@ -2347,8 +2351,16 @@ components:
           $ref: '#/components/schemas/UUID'
         offeneAenderung:
           $ref: '#/components/schemas/GesuchTrancheSlim'
-        gesuchTrancheWithMissingDocumentsId:
-          $ref: '#/components/schemas/UUID'
+        missingDocuments:
+          required:
+            - trancheId
+            - count
+          type: object
+          properties:
+            trancheId:
+              $ref: '#/components/schemas/UUID'
+            count:
+              type: integer
     GesuchWithChanges:
       allOf:
         - $ref: '#/components/schemas/Gesuch'

@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
+import ch.dvbern.stip.generated.dto.GsDashboardMissingDocumentsDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -26,7 +27,7 @@ public class GsDashboardDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
   private @Valid UUID id;
   private @Valid GesuchTrancheSlimDto offeneAenderung;
-  private @Valid UUID gesuchTrancheWithMissingDocumentsId;
+  private @Valid GsDashboardMissingDocumentsDto missingDocuments;
 
   /**
    **/
@@ -37,6 +38,7 @@ public class GsDashboardDto  implements Serializable {
 
   
   @JsonProperty("gesuchsperiode")
+  @NotNull
   public GesuchsperiodeDto getGesuchsperiode() {
     return gesuchsperiode;
   }
@@ -55,6 +57,7 @@ public class GsDashboardDto  implements Serializable {
 
   
   @JsonProperty("gesuchStatus")
+  @NotNull
   public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
@@ -73,6 +76,7 @@ public class GsDashboardDto  implements Serializable {
 
   
   @JsonProperty("id")
+  @NotNull
   public UUID getId() {
     return id;
   }
@@ -102,20 +106,20 @@ public class GsDashboardDto  implements Serializable {
 
   /**
    **/
-  public GsDashboardDto gesuchTrancheWithMissingDocumentsId(UUID gesuchTrancheWithMissingDocumentsId) {
-    this.gesuchTrancheWithMissingDocumentsId = gesuchTrancheWithMissingDocumentsId;
+  public GsDashboardDto missingDocuments(GsDashboardMissingDocumentsDto missingDocuments) {
+    this.missingDocuments = missingDocuments;
     return this;
   }
 
   
-  @JsonProperty("gesuchTrancheWithMissingDocumentsId")
-  public UUID getGesuchTrancheWithMissingDocumentsId() {
-    return gesuchTrancheWithMissingDocumentsId;
+  @JsonProperty("missingDocuments")
+  public GsDashboardMissingDocumentsDto getMissingDocuments() {
+    return missingDocuments;
   }
 
-  @JsonProperty("gesuchTrancheWithMissingDocumentsId")
-  public void setGesuchTrancheWithMissingDocumentsId(UUID gesuchTrancheWithMissingDocumentsId) {
-    this.gesuchTrancheWithMissingDocumentsId = gesuchTrancheWithMissingDocumentsId;
+  @JsonProperty("missingDocuments")
+  public void setMissingDocuments(GsDashboardMissingDocumentsDto missingDocuments) {
+    this.missingDocuments = missingDocuments;
   }
 
 
@@ -132,12 +136,12 @@ public class GsDashboardDto  implements Serializable {
         Objects.equals(this.gesuchStatus, gsDashboard.gesuchStatus) &&
         Objects.equals(this.id, gsDashboard.id) &&
         Objects.equals(this.offeneAenderung, gsDashboard.offeneAenderung) &&
-        Objects.equals(this.gesuchTrancheWithMissingDocumentsId, gsDashboard.gesuchTrancheWithMissingDocumentsId);
+        Objects.equals(this.missingDocuments, gsDashboard.missingDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, offeneAenderung, gesuchTrancheWithMissingDocumentsId);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, offeneAenderung, missingDocuments);
   }
 
   @Override
@@ -149,7 +153,7 @@ public class GsDashboardDto  implements Serializable {
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
-    sb.append("    gesuchTrancheWithMissingDocumentsId: ").append(toIndentedString(gesuchTrancheWithMissingDocumentsId)).append("\n");
+    sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");
     sb.append("}");
     return sb.toString();
   }
