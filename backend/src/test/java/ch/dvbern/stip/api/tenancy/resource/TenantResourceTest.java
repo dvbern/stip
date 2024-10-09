@@ -5,6 +5,7 @@ import java.net.URL;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.TenantApiSpec;
 import ch.dvbern.stip.generated.dto.TenantInfoDtoSpec;
@@ -21,6 +22,7 @@ import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.DEFAULT_TENA
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
+@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TenantResourceTest {
