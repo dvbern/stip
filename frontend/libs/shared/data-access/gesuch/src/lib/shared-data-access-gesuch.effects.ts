@@ -2,8 +2,9 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
-import { Store } from '@ngrx/store';
+import { ActionCreator, Creator, Store } from '@ngrx/store';
 import {
+  Observable,
   catchError,
   combineLatestWith,
   concatMap,
@@ -39,6 +40,7 @@ import { AppType } from '@dv/shared/model/config';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
   AusbildungUpdate,
+  Gesuch,
   GesuchFormularUpdate,
   GesuchService,
   GesuchTrancheTyp,
@@ -498,22 +500,14 @@ export const setGesuchBearbeitungAbschliessen = createEffect(
     store = inject(Store),
     gesuchService = inject(GesuchService),
   ) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen),
-      concatLatestFrom(() => store.select(selectRouteId)),
-      concatMap(([, id]) => {
-        if (!id) {
-          throw new Error(ROUTE_ID_MISSING);
-        }
-        return gesuchService.bearbeitungAbschliessen$({ gesuchId: id }).pipe(
-          map(() => SharedDataAccessGesuchEvents.loadGesuch()),
-          catchError((error) => [
-            SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-              error: sharedUtilFnErrorTransformer(error),
-            }),
-          ]),
-        );
-      }),
+    return handleStatusChange$(
+      SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen,
+      (gesuchId) =>
+        gesuchService.bearbeitungAbschliessen$({
+          gesuchId,
+        }),
+      actions$,
+      store,
     );
   },
   { functional: true },
@@ -525,27 +519,15 @@ export const setGesuchZurueckweisen = createEffect(
     store = inject(Store),
     gesuchService = inject(GesuchService),
   ) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.setGesuchZurueckweisen),
-      concatLatestFrom(() => store.select(selectRouteId)),
-      concatMap(([{ kommentar }, id]) => {
-        if (!id) {
-          throw new Error(ROUTE_ID_MISSING);
-        }
-        return gesuchService
-          .gesuchZurueckweisen$({
-            gesuchId: id,
-            kommentar: { text: kommentar },
-          })
-          .pipe(
-            map(() => SharedDataAccessGesuchEvents.loadGesuch()),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
-      }),
+    return handleStatusChange$(
+      SharedDataAccessGesuchEvents.setGesuchZurueckweisen,
+      (gesuchId, { kommentar }) =>
+        gesuchService.gesuchZurueckweisen$({
+          gesuchId,
+          kommentar: { text: kommentar },
+        }),
+      actions$,
+      store,
     );
   },
   { functional: true },
@@ -557,24 +539,14 @@ export const setGesuchVerfuegt = createEffect(
     store = inject(Store),
     gesuchService = inject(GesuchService),
   ) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.setGesuchVerfuegt),
-      concatLatestFrom(() => store.select(selectRouteId)),
-      concatMap(([, id]) => {
-        if (!id) {
-          throw new Error(ROUTE_ID_MISSING);
-        }
-        return gesuchService
-          .changeGesuchStatusToVerfuegt$({ gesuchId: id })
-          .pipe(
-            map(() => SharedDataAccessGesuchEvents.loadGesuch()),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
-      }),
+    return handleStatusChange$(
+      SharedDataAccessGesuchEvents.setGesuchVerfuegt,
+      (gesuchId) =>
+        gesuchService.changeGesuchStatusToVerfuegt$({
+          gesuchId,
+        }),
+      actions$,
+      store,
     );
   },
   { functional: true },
@@ -586,27 +558,14 @@ export const setGesuchBereitFuerBearbeitung = createEffect(
     store = inject(Store),
     gesuchService = inject(GesuchService),
   ) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung),
-      concatLatestFrom(() => store.select(selectRouteId)),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      concatMap(([{ kommentar }, id]) => {
-        if (!id) {
-          throw new Error(ROUTE_ID_MISSING);
-        }
-        return gesuchService
-          .changeGesuchStatusToBereitFuerBearbeitung$({
-            gesuchId: id,
-          })
-          .pipe(
-            map(() => SharedDataAccessGesuchEvents.loadGesuch()),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
-      }),
+    return handleStatusChange$(
+      SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung,
+      (gesuchId) =>
+        gesuchService.changeGesuchStatusToBereitFuerBearbeitung$({
+          gesuchId,
+        }),
+      actions$,
+      store,
     );
   },
   { functional: true },
@@ -618,28 +577,43 @@ export const setGesuchVersendet = createEffect(
     store = inject(Store),
     gesuchService = inject(GesuchService),
   ) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.setGesuchVersendet),
-      concatLatestFrom(() => store.select(selectRouteId)),
-      concatMap(([, id]) => {
-        if (!id) {
-          throw new Error(ROUTE_ID_MISSING);
-        }
-        return gesuchService
-          .changeGesuchStatusToVersendet$({ gesuchId: id })
-          .pipe(
-            map(() => SharedDataAccessGesuchEvents.loadGesuch()),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
-      }),
+    return handleStatusChange$(
+      SharedDataAccessGesuchEvents.setGesuchVersendet,
+      (gesuchId) => gesuchService.changeGesuchStatusToVersendet$({ gesuchId }),
+      actions$,
+      store,
     );
   },
   { functional: true },
 );
+
+const handleStatusChange$ = <AC extends ActionCreator<string, Creator>>(
+  action: AC,
+  serviceCall: (
+    gesuchId: string,
+    payload: ReturnType<typeof action>,
+  ) => Observable<Gesuch>,
+  actions$: Actions,
+  store: Store,
+) => {
+  return actions$.pipe(
+    ofType(action),
+    concatLatestFrom(() => store.select(selectRouteId)),
+    concatMap(([payload, id]) => {
+      if (!id) {
+        throw new Error(ROUTE_ID_MISSING);
+      }
+      return serviceCall(id, payload).pipe(
+        map(() => SharedDataAccessGesuchEvents.loadGesuch()),
+        catchError((error) => [
+          SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+            error: sharedUtilFnErrorTransformer(error),
+          }),
+        ]),
+      );
+    }),
+  );
+};
 
 // add effects here
 export const sharedDataAccessGesuchEffects = {
