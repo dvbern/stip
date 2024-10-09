@@ -82,6 +82,8 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.loadGesuch,
       SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen,
       SharedDataAccessGesuchEvents.setGesuchZurueckweisen,
+      SharedDataAccessGesuchEvents.setGesuchVerfuegt,
+      SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung,
       SharedEventGesuchFormPerson.init,
       SharedEventGesuchFormEducation.init,
       SharedEventGesuchFormFamiliensituation.init,
