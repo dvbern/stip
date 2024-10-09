@@ -15,10 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as fs from 'fs';
-import { PathLike } from 'fs';
-import childProcess from 'child_process';
-import path from 'path';
+import childProcess from 'node:child_process';
+import * as fs from 'node:fs';
+import { PathLike } from 'node:fs';
+import path from 'node:path';
 
 const yaml = '../contract/openapi.yaml';
 const dependencies = require('../package.json').dependencies;
@@ -35,7 +35,7 @@ function deleteOldFilesSync(directory: string, timestamp: Date) {
     return;
   }
 
-  let files = fs.readdirSync(directory);
+  const files = fs.readdirSync(directory);
   for (const file of files) {
     const filePath = path.join(directory, file);
     const stats = fs.statSync(filePath);
@@ -50,12 +50,28 @@ function copyFilesForGesuch(directoryFrom: string, directoryTo: string) {
     return;
   }
 
-  let files = fs.readdirSync(directoryFrom);
+  const files = fs.readdirSync(directoryFrom);
   for (const file of files) {
     const filePath = path.join(directoryFrom, file);
     const filePathTo = path.join(directoryTo, file);
     fs.copyFileSync(filePath, filePathTo);
   }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function executeAndLog(command: string, env: any) {
+  return new Promise<void>((resolve, reject) =>
+    childProcess.exec(command, env, (error, stdout) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      if (stdout) {
+        console['log'](stdout.toString());
+      }
+      resolve();
+    }),
+  );
 }
 
 async function generateOpenApi(directory: string, apis: string[]) {
@@ -122,21 +138,7 @@ async function generateOpenApi(directory: string, apis: string[]) {
     ' -o ' +
     directory;
 
-  console['log']('executing command: ', cmd);
-  const child = childProcess.exec(cmd, { env });
-  child.stdout?.on('data', (data) => {
-    console['log'](data.toString());
-  });
-  child.stderr?.on('data', (data) => {
-    console.error(data.toString());
-  });
-
-  return new Promise<void>((resolve, reject) => {
-    child.on('exit', (code) =>
-      code === 0 ? resolve() : reject(new Error('exit code: ' + code)),
-    );
-    child.on('error', reject);
-  });
+  await executeAndLog(cmd, env);
 }
 
 async function sleep(msec: number) {

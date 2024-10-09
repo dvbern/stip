@@ -1227,6 +1227,16 @@ public class GesuchApiSpec {
      * 
      *
      * @see #getGesucheSBQueryTypePath  (required)
+     * @see #fallNummerQuery  (optional)
+     * @see #piaNachnameQuery  (optional)
+     * @see #piaVornameQuery  (optional)
+     * @see #piaGeburtsdatumQuery  (optional)
+     * @see #statusQuery  (optional)
+     * @see #bearbeiterQuery  (optional)
+     * @see #letzteAktivitaetFromQuery  (optional)
+     * @see #letzteAktivitaetToQuery  (optional)
+     * @see #pageQuery  (optional)
+     * @see #pageSizeQuery  (optional)
      * return List&lt;GesuchDtoSpec&gt;
      */
     public static class GetGesucheSbOper implements Oper {
@@ -1272,6 +1282,116 @@ public class GesuchApiSpec {
          */
         public GetGesucheSbOper getGesucheSBQueryTypePath(Object getGesucheSBQueryType) {
             reqSpec.addPathParam(GET_GESUCHE_S_B_QUERY_TYPE_PATH, getGesucheSBQueryType);
+            return this;
+        }
+
+        public static final String FALL_NUMMER_QUERY = "fallNummer";
+
+        /**
+         * @param fallNummer (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper fallNummerQuery(Object... fallNummer) {
+            reqSpec.addQueryParam(FALL_NUMMER_QUERY, fallNummer);
+            return this;
+        }
+
+        public static final String PIA_NACHNAME_QUERY = "piaNachname";
+
+        /**
+         * @param piaNachname (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper piaNachnameQuery(Object... piaNachname) {
+            reqSpec.addQueryParam(PIA_NACHNAME_QUERY, piaNachname);
+            return this;
+        }
+
+        public static final String PIA_VORNAME_QUERY = "piaVorname";
+
+        /**
+         * @param piaVorname (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper piaVornameQuery(Object... piaVorname) {
+            reqSpec.addQueryParam(PIA_VORNAME_QUERY, piaVorname);
+            return this;
+        }
+
+        public static final String PIA_GEBURTSDATUM_QUERY = "piaGeburtsdatum";
+
+        /**
+         * @param piaGeburtsdatum (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper piaGeburtsdatumQuery(Object... piaGeburtsdatum) {
+            reqSpec.addQueryParam(PIA_GEBURTSDATUM_QUERY, piaGeburtsdatum);
+            return this;
+        }
+
+        public static final String STATUS_QUERY = "status";
+
+        /**
+         * @param status (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper statusQuery(Object... status) {
+            reqSpec.addQueryParam(STATUS_QUERY, status);
+            return this;
+        }
+
+        public static final String BEARBEITER_QUERY = "bearbeiter";
+
+        /**
+         * @param bearbeiter (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper bearbeiterQuery(Object... bearbeiter) {
+            reqSpec.addQueryParam(BEARBEITER_QUERY, bearbeiter);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_FROM_QUERY = "letzteAktivitaetFrom";
+
+        /**
+         * @param letzteAktivitaetFrom (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_FROM_QUERY, letzteAktivitaetFrom);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_TO_QUERY = "letzteAktivitaetTo";
+
+        /**
+         * @param letzteAktivitaetTo (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
+            return this;
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
             return this;
         }
 

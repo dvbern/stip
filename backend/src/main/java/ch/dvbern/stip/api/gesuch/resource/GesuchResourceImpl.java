@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.FallAuthorizer;
@@ -113,19 +114,30 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuch).build();
     }
 
-    // TODO KSTIP-1247: Update which roles can do this
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGesucheSb(GetGesucheSBQueryType getGesucheSBQueryType) {
-        gesuchAuthorizer.allowAllow();
-        return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryType)).build();
-    }
-
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
     @Override
     public Response getGesucheGs() {
         gesuchAuthorizer.allowAllow();
         return Response.ok(gesuchService.findGesucheGs()).build();
+    }
+
+    // TODO KSTIP-1247: Update which roles can do this
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGesucheSb(
+        GetGesucheSBQueryType getGesucheSBQueryType,
+        String fallNummer,
+        String piaNachname,
+        String piaVorname,
+        String piaGeburtsdatum,
+        String status,
+        String bearbeiter,
+        String letzteAktivitaetFrom,
+        String letzteAktivitaetTo,
+        Integer page,
+        Integer pageSize
+    ) {
+        return Response.ok(List.of()).build();
     }
 
     @RolesAllowed(GESUCH_READ)

@@ -35,8 +35,20 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return query.stream();
     }
 
+    public JPAQuery<Gesuch> filterVorname(final JPAQuery<Gesuch> existing, final String vorname) {
+        final var gesuch = QGesuch.gesuch;
+        final var tranche = QGesuchTranche.gesuchTranche;
+        final var formular = QGesuchFormular.gesuchFormular;
+        final var pia = QPersonInAusbildung.personInAusbildung;
+
+        return existing.join(tranche).on(tranche.gesuch.id.eq(gesuch.id))
+            .join(formular).on(formular.id.eq(tranche.gesuchFormular.id))
+            .join(pia).on(pia.id.eq(formular.personInAusbildung.id))
+            .where(pia.vorname.like("%" + vorname + "%"));
+    }
+
     public Stream<Gesuch> findAlle() {
-        return getFindAlleQuery().stream();
+        return getFindAlleQuery().limit(10).stream();
     }
 
     public Stream<Gesuch> findAlleBearbeitbar() {
