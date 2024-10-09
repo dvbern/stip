@@ -72,6 +72,9 @@ public class ApiClient {
     public MailApiSpec mail() {
         return MailApiSpec.mail(config.reqSpecSupplier);
     }
+    public NotificationApiSpec notification() {
+        return NotificationApiSpec.notification(config.reqSpecSupplier);
+    }
     public PlzApiSpec plz() {
         return PlzApiSpec.plz(config.reqSpecSupplier);
     }
