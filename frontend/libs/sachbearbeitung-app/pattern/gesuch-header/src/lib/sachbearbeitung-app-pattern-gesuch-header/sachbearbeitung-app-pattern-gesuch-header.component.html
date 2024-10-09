@@ -126,6 +126,18 @@
       @case ('IN_FREIGABE') {
         <ng-container *ngTemplateOutlet="statusButtonTemplate; context: { translationKey: 'freigabe' }"></ng-container>
       }
+      @case ('VERSANDBEREIT') {
+        <button
+          type="button"
+          class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          data-testid="gesuch-header-nav-status-versandbereit"
+          [disabled]="isLoadingSig()"
+          (click)="setGesuchVersendet()"
+        >
+          <i class="material-symbols-rounded text-white me-2">add_circle</i>
+          <span>{{ 'sachbearbeitung-app.header.status-uebergang.VERSANDBEREIT' | translate }}</span>
+        </button>
+      }
       @case ('DOKUMENTE_OFFEN') {
         <dv-shared-ui-icon-badge class="text-muted" type="warning">
           {{ 'sachbearbeitung-app.header.status-uebergang.dokumente-offen' | translate }}

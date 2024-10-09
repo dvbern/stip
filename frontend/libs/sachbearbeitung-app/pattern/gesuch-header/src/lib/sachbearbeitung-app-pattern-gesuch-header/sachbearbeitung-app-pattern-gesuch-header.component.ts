@@ -125,6 +125,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         // 'DOKUMENTE_OFFEN' could be used to notify the SB user that there are still documents to be accepted
         return hasAcceptedAllDokuments ? gesuchStatus : 'DOKUMENTE_OFFEN';
       case 'IN_FREIGABE':
+      case 'VERSANDBEREIT':
         return gesuchStatus;
       default:
         return 'NO_UEBERGANG';
@@ -161,6 +162,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         this.setStatusBereitFuerBearbeitung();
         break;
     }
+  }
+
+  setGesuchVersendet() {
+    this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchVersendet());
   }
 
   private setStatusBearbeitungAbschliessen() {

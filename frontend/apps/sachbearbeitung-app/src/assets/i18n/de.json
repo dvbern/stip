@@ -16,6 +16,7 @@
   "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN": "Zurückweisen",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG": "Bereit für Bearbeitung",
   "sachbearbeitung-app.header.status-uebergang.VERFUEGT": "Verfügt",
+  "sachbearbeitung-app.header.status-uebergang.VERSANDBEREIT": "Verfügung versendet",
   "sachbearbeitung-app.header.status-uebergang.zurueckweisen.title": "Gesuch zurückweisen",
   "sachbearbeitung-app.header.status-uebergang.zurueckweisen.message": "Um ein Gesuch zurückzuweisen, müssen Sie eine Begründung angeben.",
   "sachbearbeitung-app.header.status-uebergang.zurueckweisen.placeholder": "Begründung schreiben...",

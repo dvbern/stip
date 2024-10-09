@@ -612,6 +612,35 @@ export const setGesuchBereitFuerBearbeitung = createEffect(
   { functional: true },
 );
 
+export const setGesuchVersendet = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.setGesuchVersendet),
+      concatLatestFrom(() => store.select(selectRouteId)),
+      concatMap(([, id]) => {
+        if (!id) {
+          throw new Error(ROUTE_ID_MISSING);
+        }
+        return gesuchService
+          .changeGesuchStatusToVersendet$({ gesuchId: id })
+          .pipe(
+            map(() => SharedDataAccessGesuchEvents.loadGesuch()),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
+      }),
+    );
+  },
+  { functional: true },
+);
+
 // add effects here
 export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
@@ -629,6 +658,7 @@ export const sharedDataAccessGesuchEffects = {
   setGesuchZurueckweisen,
   setGesuchVerfuegt,
   setGesuchBereitFuerBearbeitung,
+  setGesuchVersendet,
 };
 
 const viewOnlyFields = ['steuerdatenTabs'] as const satisfies [
