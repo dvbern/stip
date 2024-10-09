@@ -6,6 +6,7 @@ import { GesuchTranche } from './openapi/model/models';
 import { SteuerdatenTyp } from './openapi/model/steuerdatenTyp';
 
 export interface SharedModelGesuch extends GesuchWithChanges {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   view?: {
     // view specific props
   };

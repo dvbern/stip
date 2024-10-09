@@ -42,7 +42,7 @@
         {{ 'shared.form.error.requiredShort' | translate }}
       </mat-error>
       <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
-        @for (lookup of plzValues; track lookup.plz) {
+        @for (lookup of plzValues; track $index) {
           <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
             {{ lookup.plz }} {{ lookup.ort }}
           </mat-option>

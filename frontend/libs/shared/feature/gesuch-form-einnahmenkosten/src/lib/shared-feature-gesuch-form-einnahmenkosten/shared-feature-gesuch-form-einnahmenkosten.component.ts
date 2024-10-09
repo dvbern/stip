@@ -223,7 +223,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     );
     const istErwachsen = !geburtsdatum
       ? false
-      : (getDateDifference(geburtsdatum, new Date())?.years ?? 0) > 18;
+      : (getDateDifference(geburtsdatum, new Date())?.years ?? 0) >= 18;
     const ausbildungsgang = ausbildungsstaettes
       .find((a) =>
         a.ausbildungsgaenge?.some(

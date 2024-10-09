@@ -3,6 +3,8 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/sachbearbeitung-app-e2e/src",
+  "tags": ["type:e2e", "scope:sachbearbeitung-app"],
+  "implicitDependencies": ["sachbearbeitung-app"],
   "targets": {
     "e2e": {
       "executor": "@nx/playwright:playwright",
@@ -17,7 +19,5 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
-  },
-  "tags": ["type:e2e", "scope:sachbearbeitung-app"],
-  "implicitDependencies": ["sachbearbeitung-app"]
+  }
 }

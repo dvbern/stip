@@ -3,8 +3,8 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/feature/gesuch-form-kinder/src",
   "prefix": "dv",
-  "tags": ["scope:shared", "type:feature"],
   "projectType": "library",
+  "tags": ["scope:shared", "type:feature"],
   "targets": {
     "build": {
       "executor": "nx:noop",

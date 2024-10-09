@@ -3,6 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/util-fn/table-helper/src",
   "projectType": "library",
+  "tags": ["type:util-fn", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",
@@ -20,6 +21,5 @@
         "jestConfig": "libs/shared/util-fn/table-helper/jest.config.ts"
       }
     }
-  },
-  "tags": ["type:util-fn", "scope:shared"]
+  }
 }

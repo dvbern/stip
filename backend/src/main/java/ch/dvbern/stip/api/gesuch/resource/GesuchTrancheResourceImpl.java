@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.gesuch.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
@@ -30,14 +31,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         gesuchAuthorizer.canUpdate(gesuchId, true);
         final var trancheDto = gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
         return Response.ok(trancheDto).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getAenderungsantrag(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
-        final var gesuchDto = gesuchTrancheService.getAenderungsantrag(gesuchId);
-        return Response.ok(gesuchDto).build();
     }
 
     @RolesAllowed(GESUCH_READ)
@@ -109,5 +102,29 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
         final var validationReport = gesuchTrancheService.einreichenValidieren(gesuchTrancheId);
         return Response.ok(validationReport).build();
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response aenderungAkzeptieren(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        final var newTranche = gesuchTrancheService.aenderungAkzeptieren(aenderungId);
+        return Response.ok(newTranche).build();
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response aenderungAblehnen(UUID aenderungId, KommentarDto kommentarDto) {
+        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        final var tranche = gesuchTrancheService.aenderungAblehnen(aenderungId, kommentarDto);
+        return Response.ok(tranche).build();
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response aenderungManuellAnpassen(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        final var tranche = gesuchTrancheService.aenderungManuellAnpassen(aenderungId);
+        return Response.ok(tranche).build();
     }
 }
