@@ -9,8 +9,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
-import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
@@ -23,6 +22,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -96,6 +99,50 @@ class GesuchTrancheResourceImplTest {
                 .end(gesuch.getGesuchTrancheToWorkWith().getGueltigBis()))
             .execute(TestUtil.PEEK_IF_ENV_SET);
     }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(6)
+    @Description("Only one (open: NOT in State ABGELEHNT|AKZEPTIIERT) Aenderungsantrag should be allowed")
+    void deleteAenderungTest() {
+        GesuchTrancheSlimDtoSpec[] gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchTrancheSlimDtoSpec[].class);
+        int count = gesuchtranchen.length;
+        final var aenderung = Arrays.stream(gesuchtranchen).filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG).findFirst().get();
+        //delete aenderung
+        gesuchTrancheApiSpec.aenderungLoeschen().aenderungIdPath(aenderung.getId()).execute(TestUtil.PEEK_IF_ENV_SET).then().assertThat().statusCode(Response.Status.OK.getStatusCode());
+        // assert that list size is -1 to previous
+        gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchTrancheSlimDtoSpec[].class);
+        assertThat(gesuchtranchen.length).isLessThan(count);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(7)
+    @Description("Only one (open: NOT in State ABGELEHNT|AKZEPTIIERT) Aenderungsantrag should be allowed")
+    void deleteAenderungShouldFailTest() {
+        GesuchTrancheSlimDtoSpec[] gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchTrancheSlimDtoSpec[].class);
+        final var tranche = Arrays.stream(gesuchtranchen).filter(t -> t.getTyp() == GesuchTrancheTypDtoSpec.TRANCHE).findFirst().get();
+        gesuchTrancheApiSpec.aenderungLoeschen().aenderungIdPath(tranche.getId()).execute(TestUtil.PEEK_IF_ENV_SET).then().assertThat().statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+    }
+
 
     // todo KSTIP-KSTIP-1158: a Aenderung should be accepted/denied by an SB
 }
