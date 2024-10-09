@@ -3,8 +3,8 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/pattern/core/src",
   "prefix": "dv",
-  "tags": ["scope:shared", "type:pattern"],
   "projectType": "library",
+  "tags": ["scope:shared", "type:pattern"],
   "targets": {
     "build": {
       "executor": "nx:noop",

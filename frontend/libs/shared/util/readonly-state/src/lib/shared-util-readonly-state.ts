@@ -49,10 +49,11 @@ export const readWriteStatusByAppType = {
  * @see {@link readWriteStatusByAppType}
  */
 export const trancheReadWritestatusByAppType = {
-  IN_BEARBEITUNG_GS: /** */ { [gs]: __W, [sb]: R__ },
-  UEBERPRUEFEN: /**      */ { [gs]: R__, [sb]: __W },
-  AKZETPIERT: /**        */ { [gs]: R__, [sb]: R__ },
-  ABGELEHNT: /**         */ { [gs]: R__, [sb]: R__ },
+  IN_BEARBEITUNG_GS: /**  */ { [gs]: __W, [sb]: R__ },
+  UEBERPRUEFEN: /**       */ { [gs]: R__, [sb]: __W },
+  AKZEPTIERT: /**         */ { [gs]: R__, [sb]: R__ },
+  ABGELEHNT: /**          */ { [gs]: __W, [sb]: R__ },
+  MANUELLE_AENDERUNG: /** */ { [gs]: R__, [sb]: R__ },
 } as const satisfies Record<GesuchTrancheStatus, Record<AppType, Persmissions>>;
 
 export const isGesuchReadonly = (

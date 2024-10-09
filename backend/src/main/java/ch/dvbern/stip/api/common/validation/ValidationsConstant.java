@@ -84,6 +84,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.familiensituation.eltern.entity.message}";
     public static final String VALIDATION_FAMILIENSITUATION_STEUERDATEN_ENTITY_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.familiensituation.steuerdaten.entity.message}";
+    public static final String VALIDATION_FAMILIENSITUATION_WOHNSITUATION_MESSAGE =
+        "{jakarta.validation.constraints.familiensituation.wohnsituation.message}";
     public static final String VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE =
         "{jakarta.validation.constraints.lebenslauf.luckenlos.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE =
@@ -143,6 +145,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.gesuchTranche.invalidStatus.message}";
     public static final String VALIDATION_STEUERDATEN_FIELDS_REQUIRED_IF_TYPE =
         "{jakarta.validation.constraints.steuerdaten.fieldRequiredIfType.message}";
+    public static final String VALIDATION_DOCUMENTS_STATUS_ACCEPTED_MESSAGE =
+        "{jakarta.validation.constraints.gesuchFormular.documents.mustBe.accepted.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

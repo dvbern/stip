@@ -36,11 +36,11 @@ import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partn
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
 import { AppType } from '@dv/shared/model/config';
+import { SharedModelError } from '@dv/shared/model/error';
 import {
   AusbildungUpdate,
   GesuchFormularUpdate,
   GesuchService,
-  GesuchTrancheService,
   GesuchTrancheTyp,
   GesuchUpdate,
   SharedModelGesuchFormular,
@@ -48,9 +48,8 @@ import {
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import {
-  handleNotFound,
+  handleNotFoundAndUnauthorized,
   noGlobalErrorsIf,
-  shouldIgnoreNotFoundErrorsIf,
 } from '@dv/shared/util/http';
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
@@ -170,17 +169,28 @@ export const loadGesuch = createEffect(
           throw new Error(ROUTE_ID_MISSING);
         }
 
-        const navigateIfNotFound = {
+        const handle404And401 = {
           context: noGlobalErrorsIf(
             true,
-            handleNotFound((error) => {
-              globalNotifications.createNotification({
-                type: 'ERROR',
-                messageKey: 'shared.genericError.gesuch-not-found-redirection',
-                content: error,
-              });
-              router.navigate(['/'], { replaceUrl: true });
-            }),
+            handleNotFoundAndUnauthorized(
+              (error: SharedModelError) => {
+                globalNotifications.createNotification({
+                  type: 'ERROR_PERMANENT',
+                  messageKey:
+                    'shared.genericError.gesuch-not-found-redirection',
+                  content: error,
+                });
+                router.navigate(['/'], { replaceUrl: true });
+              },
+              (error: SharedModelError) => {
+                globalNotifications.createNotification({
+                  type: 'ERROR_PERMANENT',
+                  messageKey: 'shared.genericError.gesuch-unauthorized',
+                  content: error,
+                });
+                router.navigate(['/'], { replaceUrl: true });
+              },
+            ),
           ),
         };
 
@@ -191,14 +201,14 @@ export const loadGesuch = createEffect(
               { aenderungId },
               undefined,
               undefined,
-              navigateIfNotFound,
+              handle404And401,
             ),
           'sachbearbeitung-app': (aenderungId: string) =>
             gesuchService.getSbTrancheChanges$(
               { aenderungId },
               undefined,
               undefined,
-              navigateIfNotFound,
+              handle404And401,
             ),
         } satisfies Record<AppType, unknown>;
 
@@ -210,7 +220,7 @@ export const loadGesuch = createEffect(
               { gesuchId: id, gesuchTrancheId },
               undefined,
               undefined,
-              navigateIfNotFound,
+              handle404And401,
             ),
         } satisfies Record<GesuchTrancheTyp, unknown>;
 
@@ -223,7 +233,7 @@ export const loadGesuch = createEffect(
                 { gesuchId: id },
                 undefined,
                 undefined,
-                navigateIfNotFound,
+                handle404And401,
               )
         ).pipe(
           map((gesuch) =>
@@ -363,41 +373,6 @@ export const removeGesuch = createEffect(
             }),
           ]),
         ),
-      ),
-    );
-  },
-  { functional: true },
-);
-
-export const gesuchValidateSteps = createEffect(
-  (
-    events$ = inject(Actions),
-    gesuchTranchenService = inject(GesuchTrancheService),
-  ) => {
-    return events$.pipe(
-      ofType(SharedDataAccessGesuchEvents.gesuchValidateSteps),
-      switchMap(({ gesuchTrancheId }) =>
-        gesuchTranchenService
-          .validateGesuchTranchePages$(
-            { gesuchTrancheId },
-            undefined,
-            undefined,
-            {
-              context: shouldIgnoreNotFoundErrorsIf(true),
-            },
-          )
-          .pipe(
-            switchMap((validation) => [
-              SharedDataAccessGesuchEvents.gesuchValidationSuccess({
-                error: sharedUtilFnErrorTransformer({ error: validation }),
-              }),
-            ]),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchValidationFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          ),
       ),
     );
   },
@@ -646,7 +621,6 @@ export const sharedDataAccessGesuchEffects = {
   updateGesuch,
   updateGesuchSubform,
   removeGesuch,
-  gesuchValidateSteps,
   redirectToGesuchForm,
   redirectToGesuchFormNextStep,
   refreshGesuchFormStep,

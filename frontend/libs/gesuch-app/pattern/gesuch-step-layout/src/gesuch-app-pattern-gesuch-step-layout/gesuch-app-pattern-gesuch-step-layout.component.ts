@@ -14,11 +14,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
-  SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
-  selectSharedDataAccessGesuchValidationView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import {
@@ -64,6 +63,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   navClicked = new EventEmitter();
 
   private store = inject(Store);
+  private einreichenStore = inject(EinreichenStore);
 
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
@@ -71,12 +71,9 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
-  validationViewSig = this.store.selectSignal(
-    selectSharedDataAccessGesuchValidationView,
-  );
   stepsSig = computed(() => {
-    const { cachedGesuchFormular, invalidFormularProps } =
-      this.validationViewSig();
+    const cachedGesuchFormular = this.cacheViewSig().cache.gesuchFormular;
+    const { invalidFormularProps } = this.einreichenStore.validationViewSig();
     const steps = this.stepsViewSig().steps;
     const readonly = this.cacheViewSig().readonly;
     const validatedSteps = this.stepManager.getValidatedSteps(
@@ -100,9 +97,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {
-        this.store.dispatch(
-          SharedDataAccessGesuchEvents.gesuchValidateSteps({ gesuchTrancheId }),
-        );
+        this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
   }
 

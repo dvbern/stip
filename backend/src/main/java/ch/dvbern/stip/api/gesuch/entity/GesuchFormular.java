@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.gesuch.validation.EinnahmenKostenPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.ElternPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.FamiliensituationPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.GeschwisterPageValidation;
+import ch.dvbern.stip.api.gesuch.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuch.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuch.validation.KindPageValidation;
 import ch.dvbern.stip.api.gesuch.validation.LebenslaufItemPageValidation;
@@ -69,6 +70,14 @@ import org.hibernate.envers.Audited;
     GesuchEinreichenValidationGroup.class,
     ElternPageValidation.class
 }, property = "elterns")
+@FamiliensituationPersonInAusbildungWohnsitzConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    PersonInAusbildungPageValidation.class
+}, property = "personInAusbildung")
+@FamiliensituationGeschwisterWohnsitzConstraint(groups = {
+    GesuchEinreichenValidationGroup.class,
+    GeschwisterPageValidation.class
+}, property = "geschwisters")
 @LebenslaufLuckenlosConstraint(groups = {
     GesuchEinreichenValidationGroup.class,
     LebenslaufItemPageValidation.class
@@ -131,6 +140,9 @@ import org.hibernate.envers.Audited;
     GesuchEinreichenValidationGroup.class,
     SteuerdatenPageValidation.class
 }, property = "steuerdatenTabs")
+@DocumentsAcceptedConstraint(groups = {
+    GesuchDokumentsAcceptedValidationGroup.class
+})
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @UniqueSvNumberConstraint
 @Entity

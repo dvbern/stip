@@ -22,15 +22,13 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatusChangeEvent;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -43,7 +41,6 @@ import lombok.RequiredArgsConstructor;
 public class GesuchTrancheService {
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
-    private final GesuchMapperUtil gesuchMapperUtil;
     private final GesuchTrancheMapper gesuchTrancheMapper;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final GesuchFormularService gesuchFormularService;
@@ -53,21 +50,6 @@ public class GesuchTrancheService {
     private final GesuchTrancheTruncateService gesuchTrancheTruncateService;
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
-
-    public GesuchDto getAenderungsantrag(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        return gesuchMapperUtil.mapWithTranche(
-            gesuch,
-            gesuch.getGesuchTranchen()
-                .stream()
-                .filter(tranche ->
-                    tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS &&
-                    tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-                )
-                .findFirst()
-                .orElseThrow(NotFoundException::new)
-        );
-    }
 
     public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(final UUID gesuchId) {
         return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
@@ -200,6 +182,38 @@ public class GesuchTrancheService {
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
 
+    @Transactional
+    public GesuchTrancheDto aenderungAkzeptieren(final UUID aenderungId) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.AKZETPIERT);
+
+        final var newTranche = gesuchTrancheRepository.findMostRecentCreatedTranche(aenderung.getGesuch());
+        return gesuchTrancheMapper.toDto(newTranche.orElseThrow(NotFoundException::new));
+    }
+
+    @Transactional
+    public GesuchTrancheDto aenderungAblehnen(final UUID aenderungId, KommentarDto kommentarDto) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        gesuchTrancheStatusService.triggerStateMachineEventWithComment(
+            aenderung,
+            GesuchTrancheStatusChangeEvent.ABLEHNEN,
+            kommentarDto
+        );
+
+        return gesuchTrancheMapper.toDto(aenderung);
+    }
+
+    @Transactional
+    public GesuchTrancheDto aenderungManuellAnpassen(final UUID aenderungId) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        gesuchTrancheStatusService.triggerStateMachineEvent(
+            aenderung,
+            GesuchTrancheStatusChangeEvent.MANUELLE_AENDERUNG
+        );
+
+        return gesuchTrancheMapper.toDto(aenderung);
+    }
+
     public ValidationReportDto einreichenValidieren(final UUID trancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
 
@@ -207,7 +221,7 @@ public class GesuchTrancheService {
             gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
         } catch (ValidationsException e) {
             return ValidationsExceptionMapper.toDto(e);
-        } catch (CustomValidationsException e){
+        } catch (CustomValidationsException e) {
             return CustomValidationsExceptionMapper.toDto(e);
         }
 
@@ -215,7 +229,12 @@ public class GesuchTrancheService {
     }
 
     public boolean openAenderungAlreadyExists(final Gesuch gesuch) {
-        final var allowedStates = Set.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.ABGELEHNT);
+        final var allowedStates = Set.of(
+            GesuchTrancheStatus.AKZEPTIERT,
+            GesuchTrancheStatus.ABGELEHNT,
+            GesuchTrancheStatus.MANUELLE_AENDERUNG
+        );
+
         final var trancheInDisallowedStates = gesuch.getAenderungen()
             .filter(gesuchTranche -> !allowedStates.contains(gesuchTranche.getStatus()))
             .toList();

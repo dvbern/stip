@@ -1,5 +1,5 @@
 <!-- Änderung Titel -->
-<div class="col-md">
+<div class="d-flex flex-column flex-grow-1">
   <div class="card-title d-flex align-items-baseline">
     <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
       <i class="material-symbols-rounded fs-5">edit</i>
@@ -25,7 +25,7 @@
   </div>
 
   <!-- Status des Antrags -->
-  <div class="d-flex flex-column align-items-start ng-star-inserted">
+  <div class="d-flex flex-column align-items-start ng-star-inserted flex-grow-1">
     @if (tranche.comment) {
       <span class="mt-4 fw-normal small">{{ tranche.comment }}</span>
     }
@@ -33,15 +33,13 @@
     <span class="fw-medium">
       {{ 'gesuch-app.cockpit.gesuch.status.' + tranche.status | translate }}
     </span>
-    <!-- Button -->
-    <div class="col-md w-100">
-      <a
-        class="btn btn-primary mt-3 w-100"
-        data-testid="cockpit-gesuch-edit"
-        [routerLink]="['/gesuch', gesuchId, 'aenderung', tranche.id]"
-      >
-        {{ 'gesuch-app.cockpit.gesuch.aenderungs-entry' | translate }}
-      </a>
-    </div>
+    <div class="flex-grow-1"></div>
+    <a
+      class="btn btn-primary mt-3 w-100"
+      data-testid="cockpit-gesuch-edit"
+      [routerLink]="['/gesuch', gesuchId, 'aenderung', tranche.id]"
+    >
+      {{ 'gesuch-app.cockpit.gesuch.aenderungs-entry' | translate }}
+    </a>
   </div>
 </div>

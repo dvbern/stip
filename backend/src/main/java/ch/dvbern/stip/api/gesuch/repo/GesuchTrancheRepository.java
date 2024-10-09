@@ -1,9 +1,11 @@
 package ch.dvbern.stip.api.gesuch.repo;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -40,5 +42,16 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
         }
 
         throw new NotFoundException();
+    }
+
+    public Optional<GesuchTranche> findMostRecentCreatedTranche(final Gesuch gesuch) {
+        final var gesuchTranche = QGesuchTranche.gesuchTranche;
+
+        return new JPAQueryFactory(em)
+            .selectFrom(gesuchTranche)
+            .where(gesuchTranche.gesuch.id.eq(gesuch.getId()))
+            .orderBy(gesuchTranche.timestampErstellt.desc())
+            .stream()
+            .findFirst();
     }
 }

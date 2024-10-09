@@ -45,7 +45,7 @@
           <form class="row overflow-auto position-relative" [formGroup]="filterForm">
             <div [class.opacity-50]="cockpitViewSig().gesucheLoading">
               <table
-                class="dv-crud-table"
+                class="dv-crud-table small-spacing"
                 [dvSharedUiFocusableList]="items"
                 [dataSource]="gesucheDataSourceSig()"
                 data-testid="cockpit-table"
@@ -87,32 +87,30 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="svNummer">
+                <!-- typ -->
+                <ng-container matColumnDef="typ">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
-                    {{ 'sachbearbeitung-app.cockpit.table.sv-nummer' | translate }}
-                    <div class="d-flex">
-                      <mat-form-field>
-                        <input
-                          matInput
-                          class="w-100"
-                          formControlName="svNummer"
-                          data-testid="cockpit-filter-svNummer"
-                          (click)="$event.stopPropagation()"
-                        />
-                      </mat-form-field>
-                      <dv-shared-ui-clear-button
-                        class="clear d-flex align-items-center position-absolute"
-                        (clear)="filterForm.controls.svNummer.reset()"
-                        [valueSig]="filterForm.controls.svNummer.value"
-                      ></dv-shared-ui-clear-button>
-                    </div>
+                    {{ 'sachbearbeitung-app.cockpit.table.typ' | translate }}
+                    <mat-form-field>
+                      <mat-select
+                        formControlName="typ"
+                        (click)="$event.stopPropagation()"
+                        class="fw-normal"
+                        panelClass="table-select"
+                      >
+                        <mat-option [value]="''">
+                          {{ 'sachbearbeitung-app.cockpit.no-status-filter' | translate }}
+                        </mat-option>
+                        @for (typ of availableStatus; track typ) {
+                          <mat-option [value]="typ">
+                            {{ 'shared.gesuch.tranche.typ.' + typ | translate }}
+                          </mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
                   </th>
-                  <td
-                    mat-cell
-                    *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                    data-testid="cockpit-row-sv"
-                  >
-                    {{ gesuch.svNummer }}
+                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
+                    {{ 'shared.gesuch.tranche.typ.' + gesuch.typ | translate }}
                   </td>
                 </ng-container>
 
@@ -195,30 +193,6 @@
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
                     {{ gesuch.geburtsdatum | date: 'dd.MM.yyyy' }}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="ort">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
-                    {{ 'sachbearbeitung-app.cockpit.table.ort' | translate }}
-                    <div class="d-flex">
-                      <mat-form-field>
-                        <input
-                          matInput
-                          formControlName="ort"
-                          (click)="$event.stopPropagation()"
-                          example="Ostermundigen"
-                        />
-                      </mat-form-field>
-                      <dv-shared-ui-clear-button
-                        class="clear d-flex align-items-center position-absolute"
-                        (clear)="filterForm.controls.ort.reset()"
-                        [valueSig]="filterForm.controls.ort.value"
-                      ></dv-shared-ui-clear-button>
-                    </div>
-                  </th>
-                  <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
-                    {{ gesuch.ort }}
                   </td>
                 </ng-container>
 
@@ -332,7 +306,11 @@
                   mat-row
                   tabindex="-1"
                   *dvMatRowDef="let gesuch; dataSource: gesucheDataSourceSig(); columns: displayedColumns"
-                  [routerLink]="['/gesuch/person', gesuch.id]"
+                  [routerLink]="
+                    gesuch.typ === 'AENDERUNG'
+                      ? ['/gesuch/person', gesuch.id, 'aenderung', gesuch.trancheId]
+                      : ['/gesuch/person', gesuch.id]
+                  "
                   class="highlightable"
                 ></tr>
               </table>

@@ -34,6 +34,7 @@ public class GesuchTrancheHistoryRepository {
             .add(AuditEntity.property("status").eq(GesuchTrancheStatus.UEBERPRUEFEN))
             .add(AuditEntity.property("status").hasChanged())
             .addOrder(AuditEntity.revisionNumber().desc())
+            .setMaxResults(1)
             .getSingleResult();
     }
 }

@@ -7,7 +7,7 @@ export const selectSharedFeatureGesuchFormTrancheView = createSelector(
   (gesuchsView) => ({
     loading: gesuchsView.loading,
     gesuchstranche: gesuchsView.gesuch?.gesuchTrancheToWorkWith,
-    gesuch: gesuchsView.gesuch,
+    gesuchId: gesuchsView.gesuch?.id,
     lastUpdate: gesuchsView.lastUpdate,
   }),
 );

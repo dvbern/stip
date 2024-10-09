@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -72,7 +73,7 @@ class GesuchStatusprotokollTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()

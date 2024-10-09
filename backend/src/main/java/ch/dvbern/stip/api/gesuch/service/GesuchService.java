@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.ArrayList;
 
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -301,7 +302,15 @@ public class GesuchService {
     }
 
     private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
-        return gesuche.map(gesuchMapperUtil::mapWithNewestTranche).toList();
+        List<GesuchDto> gesuchDtos = new ArrayList<>();
+        gesuche.forEach(gesuch -> {
+            if (gesuch.getAenderungZuUeberpruefen().isPresent()) {
+                gesuchDtos.addAll(gesuchMapperUtil.mapWithAenderung(gesuch));
+            } else{
+                gesuchDtos.add(gesuchMapperUtil.mapWithNewestTranche(gesuch));
+            }
+        });
+        return gesuchDtos;
     }
 
     @Transactional

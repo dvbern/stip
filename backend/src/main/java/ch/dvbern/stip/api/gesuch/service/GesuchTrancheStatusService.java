@@ -10,6 +10,7 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatusChangeEvent;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import jakarta.enterprise.context.RequestScoped;
@@ -27,20 +28,24 @@ public class GesuchTrancheStatusService {
         final GesuchTranche gesuchTranche,
         final GesuchTrancheStatusChangeEvent event
     ) {
-        StateMachineUtil.addExit(
-            config,
-            transition -> validatorService.validateGesuchTrancheForStatus(gesuchTranche, transition.getDestination()),
-            GesuchTrancheStatus.values()
-        );
-
-        final var sm = new StateMachine<>(
-            gesuchTranche.getStatus(),
-            gesuchTranche::getStatus,
-            gesuchTranche::setStatus,
-            config
-        );
-
+        final var sm = createStateMachine(gesuchTranche);
         sm.fire(GesuchTrancheStatusChangeEventTrigger.createTrigger(event), gesuchTranche);
+    }
+
+    @Transactional
+    public void triggerStateMachineEventWithComment(
+        final GesuchTranche gesuchTranche,
+        final GesuchTrancheStatusChangeEvent event,
+        final KommentarDto kommentarDto
+    ) {
+        final var sm = createStateMachine(gesuchTranche);
+        sm.fire(
+            GesuchTrancheStatusChangeEventTriggerWithComment.createTrigger(event),
+            gesuchTranche,
+            kommentarDto.getText()
+        );
+
+        // TODO: KSTIP-1216 - Save kommentarDto.getText() in Nachricht and Protokoll
     }
 
     public boolean benutzerCanEdit(final Benutzer benutzer, final GesuchTrancheStatus gesuchTrancheStatus) {
@@ -62,5 +67,22 @@ public class GesuchTrancheStatusService {
         }
 
         return editStates.contains(gesuchTrancheStatus);
+    }
+
+    StateMachine<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachine(
+        final GesuchTranche gesuchTranche
+    ) {
+        StateMachineUtil.addExit(
+            config,
+            transition -> validatorService.validateGesuchTrancheForStatus(gesuchTranche, transition.getDestination()),
+            GesuchTrancheStatus.values()
+        );
+
+        return new StateMachine<>(
+            gesuchTranche.getStatus(),
+            gesuchTranche::getStatus,
+            gesuchTranche::setStatus,
+            config
+        );
     }
 }
