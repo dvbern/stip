@@ -77,8 +77,7 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -836,6 +835,14 @@ class GesuchServiceTest {
             reportDto.getValidationErrors().size(),
             Matchers.is(0)
         );
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void deleteGesuchTest(){
+        final var gesuch = GesuchGenerator.initGesuch();
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        assertDoesNotThrow(() ->gesuchService.deleteGesuch(gesuch.getId()));
     }
 
     // TODO KSTIP-1236: Enable this test
