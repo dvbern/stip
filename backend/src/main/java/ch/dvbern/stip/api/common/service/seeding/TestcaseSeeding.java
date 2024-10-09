@@ -84,10 +84,9 @@ public class TestcaseSeeding extends Seeder {
     protected void doSeed() {
         LOG.info("Starting testcase seeding");
 
-        // TODO: Reenable test case seeding once familiensituation Verstorben -> no Familie Wohnsitz is fixed
-//        if (gesuchRepository.count() != 0 || Math.floor(1.0) > 0) {
-//            return;
-//        }
+        if (gesuchRepository.count() != 0) {
+            return;
+        }
 
         // Find the JSONs to import
         final var testcasesJson = getJsons();
