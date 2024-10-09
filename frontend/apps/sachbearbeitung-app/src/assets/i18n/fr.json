@@ -16,7 +16,7 @@
   "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN": "Rejeter",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG": "Prêt pour traitement",
   "sachbearbeitung-app.header.status-uebergang.VERFUEGT": "Décision",
-  "sachbearbeitung-app.header.status-uebergang.VERSANDBEREIT": "Prêt à envoyer",
+  "sachbearbeitung-app.header.status-uebergang.VERSANDBEREIT": "Décision envoyée",
   "sachbearbeitung-app.header.status-uebergang.zurueckweisen.title": "Rejeter la demande",
   "sachbearbeitung-app.header.status-uebergang.zurueckweisen.message": "Pour rejeter une demande, vous devez fournir une justification.",
   "sachbearbeitung-app.header.status-uebergang.zurueckweisen.placeholder": "Écrire une justification...",
