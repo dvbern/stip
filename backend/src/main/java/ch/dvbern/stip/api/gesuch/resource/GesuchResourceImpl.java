@@ -38,6 +38,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchAuthorizer gesuchAuthorizer;
     private final FallAuthorizer fallAuthorizer;
 
+    @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response changeGesuchStatusToInBearbeitung(UUID gesuchId) {
         gesuchAuthorizer.canUpdate(gesuchId);
@@ -49,6 +50,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
     public Response changeGesuchStatusToVerfuegt(UUID gesuchId) {
+        gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchStatusToVerfuegt(gesuchId);
         return Response.ok().build();
     }
@@ -57,6 +59,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
     public Response changeGesuchStatusToVersendet(UUID gesuchId) {
+        gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchStatusToVersendet(gesuchId);
         return Response.ok().build();
     }
@@ -185,6 +188,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
     public Response changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+        gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId);
         return Response.ok().build();
     }
