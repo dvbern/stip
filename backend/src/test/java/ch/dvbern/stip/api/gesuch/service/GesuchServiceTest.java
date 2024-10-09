@@ -46,6 +46,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -89,6 +90,7 @@ import static org.mockito.Mockito.when;
 @Slf4j
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
+@QuarkusTestResource(TestClamAVEnvironment.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GesuchServiceTest {
 
