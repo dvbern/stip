@@ -51,7 +51,6 @@
       "backend/**": true
     },
     "eslint.validate": ["json"],
-    "eslint.workingDirectories": ["./frontend"],
     "typescript.tsdk": "frontend/node_modules/typescript/lib",
     "jest.rootPath": "frontend",
     "workbench.colorCustomizations": {
