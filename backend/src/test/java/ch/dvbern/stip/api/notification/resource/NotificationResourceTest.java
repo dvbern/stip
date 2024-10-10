@@ -2,10 +2,12 @@ package ch.dvbern.stip.api.notification.resource;
 
 import java.util.Arrays;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -17,6 +19,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -38,7 +41,7 @@ import static org.hamcrest.Matchers.is;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-public class NotificationResourceTest {
+class NotificationResourceTest {
     public final NotificationApiSpec notificationApiSpec = NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
@@ -54,7 +57,10 @@ public class NotificationResourceTest {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
         gesuchApiSpec.gesuchEinreichen()
             .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET);
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.ACCEPT0ED.getStatusCode());
     }
 
     @Test
@@ -73,6 +79,15 @@ public class NotificationResourceTest {
             Arrays.stream(notifications).toList().get(0).getNotificationType(), is(NotificationType.GESUCH_EINGEREICHT)
         );
     }
+
+    @Test
+    @TestAsAdmin
+    @Order(99)
+    @AlwaysRun
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
+
 
 
 }

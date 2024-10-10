@@ -1,8 +1,10 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -100,4 +102,12 @@ class GesuchTrancheResourceImplTest {
     }
 
     // todo KSTIP-KSTIP-1158: a Aenderung should be accepted/denied by an SB
+
+    @Test
+    @TestAsAdmin
+    @Order(21)
+    @AlwaysRun
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
 }
