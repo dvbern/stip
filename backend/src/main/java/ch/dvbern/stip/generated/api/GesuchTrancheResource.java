@@ -32,11 +32,6 @@ public interface GesuchTrancheResource {
     @Produces({ "text/plain" })
     Response aenderungEinreichen(@PathParam("aenderungId") UUID aenderungId);
 
-    @DELETE
-    @Path("/{aenderungId}/aenderung/delete")
-    @Produces({ "text/plain" })
-    Response aenderungLoeschen(@PathParam("aenderungId") UUID aenderungId);
-
     @PATCH
     @Path("/{aenderungId}/aenderung/manuelleAenderung")
     @Produces({ "application/json", "text/plain" })
@@ -53,6 +48,11 @@ public interface GesuchTrancheResource {
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     Response createGesuchTrancheCopy(@PathParam("gesuchId") UUID gesuchId,@Valid CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto);
+
+    @DELETE
+    @Path("/{aenderungId}/aenderung/delete")
+    @Produces({ "text/plain" })
+    Response deleteAenderung(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
     @Path("/{gesuchTrancheId}/einreichen/validieren")

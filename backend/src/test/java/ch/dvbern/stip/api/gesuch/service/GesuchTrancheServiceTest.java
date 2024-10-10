@@ -7,10 +7,8 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
@@ -115,8 +113,8 @@ class GesuchTrancheServiceTest {
 
         // only Aenderungen in state 'In Bearbeitung GS' should be allowed to be deleted by GS
         //assert
-        assertThrows(IllegalStateException.class, () ->gesuchTrancheService.aenderungLoeschen(gesuch.getGesuchTranchen().get(0).getId()));
+        assertThrows(IllegalStateException.class, () ->gesuchTrancheService.deleteAenderung(gesuch.getGesuchTranchen().get(0).getId()));
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
-        assertTrue(gesuchTrancheService.aenderungLoeschen(gesuch.getGesuchTranchen().get(0).getId()));
+        assertTrue(gesuchTrancheService.deleteAenderung(gesuch.getGesuchTranchen().get(0).getId()));
     }
 }

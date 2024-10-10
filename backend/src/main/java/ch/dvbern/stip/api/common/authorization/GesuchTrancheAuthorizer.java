@@ -54,10 +54,29 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             if (gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
                 throw new UnauthorizedException();
             }
-        } else{
-            int x = 0;
         }
     }
 
+    @Transactional
+    public void canDelete(final UUID gesuchTrancheId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
+        if (isAdminOrSb(currentBenutzer)) {
+            return;
+        }
+
+        final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
+        final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
+        final var isAuthorizedForCurrentOperation = isGesuchsteller(currentBenutzer) &&
+            !isSachbearbeiter(currentBenutzer) &&
+            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch);
+        // Gesuchsteller can only update their Tranchen IN_BEARBEITUNG_GS
+        if (!isAuthorizedForCurrentOperation) {
+            throw new UnauthorizedException();
+        }
+
+        if (gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
+            throw new UnauthorizedException();
+        }
+    }
 }
