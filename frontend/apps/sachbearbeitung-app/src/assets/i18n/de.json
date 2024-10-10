@@ -14,6 +14,7 @@
   "sachbearbeitung-app.header.back": "Zurück",
   "sachbearbeitung-app.header.status-uebergang.BEARBEITUNG_ABSCHLIESSEN": "Bearbeitung abschliessen",
   "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN": "Gesuch zurückweisen",
+  "sachbearbeitung-app.header.status-uebergang.disabled-reason.DOKUMENTE_OFFEN": "Es sind noch nicht überprüfte Dokumente vorhanden.",
   "sachbearbeitung-app.header.status-uebergang.zurueckweisen.title": "Gesuch zurückweisen",
   "sachbearbeitung-app.header.status-uebergang.zurueckweisen.message": "Um ein Gesuch zurückzuweisen, müssen Sie eine Begründung angeben.",
   "sachbearbeitung-app.header.status-uebergang.zurueckweisen.placeholder": "Begründung schreiben...",

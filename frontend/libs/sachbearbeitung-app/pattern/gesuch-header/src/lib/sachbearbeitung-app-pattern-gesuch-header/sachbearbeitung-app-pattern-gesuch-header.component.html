@@ -158,8 +158,15 @@
           @for (uebergang of statusUebergaenge; track $index) {
             <button
               type="button"
-              class="btn fw-normal px-2 shadow-none"
+              class="btn fw-normal px-2 shadow-none pe-auto"
               [attr.data-testid]="'gesuch-header-nav-status-uebergang-item-' + uebergang.typ"
+              [disabled]="uebergang.disabledReason"
+              [attr.title]="
+                uebergang.disabledReason
+                  ? ('sachbearbeitung-app.header.status-uebergang.disabled-reason.' + uebergang.disabledReason
+                    | translate)
+                  : null
+              "
               mat-menu-item
               (click)="setStatusUebergang(uebergang.typ)"
             >
