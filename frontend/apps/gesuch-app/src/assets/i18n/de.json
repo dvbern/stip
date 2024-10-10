@@ -20,6 +20,9 @@
 
   "gesuch-app.aenderungs-entry.title": "Änderungen",
   "gesuch-app.aenderungs-entry.status.title": "Status des Antrags",
+  "gesuch-app.aenderungs-entry.delete": "Änderung löschen",
+  "gesuch-app.aenderungs-entry.delete.dialog.title": "Änderung löschen",
+  "gesuch-app.aenderungs-entry.delete.dialog.message": "Möchten Sie die Änderung wirklich löschen?",
   "gesuch-app.cockpit.gesuch.aenderungs-entry": "Änderung öffnen",
   "gesuch-app.cockpit.gesuch.status.IN_BEARBEITUNG_GS": "In Bearbeitung GS",
   "gesuch-app.cockpit.gesuch.status.UEBERPRUEFEN": "Überprüfen",

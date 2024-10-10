@@ -109,6 +109,7 @@
   "shared.dialog.gesuch-aenderung.comment.label": "Commentaire *",
   "shared.dialog.gesuch-aenderung.comment.placeholder": "Écrire une justification",
   "shared.dialog.gesuch-aenderung.create.success": "Le changement a été créé avec succès",
+  "shared.dialog.gesuch-aenderung.delete.success": "Le changement a été supprimé avec succès",
   "shared.dialog.gesuch-aenderung.AKZEPTIERT.success": "Le changement a été accepté avec succès",
   "shared.dialog.gesuch-aenderung.ABGELEHNT.title": "Rejeter",
   "shared.dialog.gesuch-aenderung.ABGELEHNT.description": "Vous êtes sur le point de rejeter le changement.",
