@@ -147,7 +147,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
       });
   }
 
-  deleteAenderung(aenderungId: string) {
+  deleteAenderung(aenderungId: string, gesuchId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'gesuch-app.aenderungs-entry.delete.dialog.title',
       message: 'gesuch-app.aenderungs-entry.delete.dialog.message',
@@ -157,7 +157,10 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.gesuchAenderungStore.deleteGesuchAenderung$({ aenderungId });
+          this.gesuchAenderungStore.deleteGesuchAenderung$({
+            aenderungId,
+            gesuchId,
+          });
         }
       });
   }
