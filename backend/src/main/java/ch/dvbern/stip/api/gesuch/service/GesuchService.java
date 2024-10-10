@@ -344,7 +344,7 @@ public class GesuchService {
                     gesuchTrancheService.getRequiredDokumentTypes(tranche.getId()).size()
                 ))
                 .filter(pair -> pair.getRight() > 0)
-                .findFirst().orElse(ImmutablePair.of(null, 0));
+                .findFirst();
 
             gsDashboardDtos.add(gsDashboardMapper.toDto(gesuch, offeneAenderung, missingDocumentsTrancheIdAndCount));
         }

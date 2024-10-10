@@ -10,7 +10,7 @@ import ch.dvbern.stip.generated.dto.GsDashboardDto;
 import ch.dvbern.stip.generated.dto.GsDashboardMissingDocumentsDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -20,10 +20,10 @@ public class GsDashboardMapper {
     public GsDashboardDto toDto(
         final Gesuch gesuch,
         final GesuchTrancheSlimDto offeneAenderung,
-        final Pair<UUID, Integer> missingDocumentsTrancheIdAndCount
+        final Optional<ImmutablePair<UUID, Integer>> missingDocumentsTrancheIdAndCount
     ) {
         final var periodeDto = gesuchsperiodeMapper.toDto(gesuch.getGesuchsperiode());
-        final var missingDocumentsDto = Optional.of(missingDocumentsTrancheIdAndCount)
+        final var missingDocumentsDto = missingDocumentsTrancheIdAndCount
             .map(pair -> new GsDashboardMissingDocumentsDto(pair.getLeft(), pair.getRight()))
             .orElse(null);
 
