@@ -37,6 +37,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchAuthorizer gesuchAuthorizer;
     private final FallAuthorizer fallAuthorizer;
 
+    @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response changeGesuchStatusToInBearbeitung(UUID gesuchId) {
         gesuchAuthorizer.canUpdate(gesuchId);

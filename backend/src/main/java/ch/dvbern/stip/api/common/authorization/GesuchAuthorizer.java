@@ -99,4 +99,21 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         throw new UnauthorizedException();
     }
+
+    @Transactional
+    public void canCreateTranche(final UUID gesuchId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        if (isAdmin(currentBenutzer)) {
+            return;
+        }
+
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        if (isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+            return;
+        }
+
+        throw new UnauthorizedException();
+    }
 }
