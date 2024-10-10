@@ -88,10 +88,50 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         assertDoesNotThrow(() -> authorizer.canDelete(uuid));
     }
     @Test
+    void gsCannotDeleteWithoutRoleTest(){
+        UUID currentBenutzerId = UUID.randomUUID();
+        var currentBenutzer = new Benutzer();
+        currentBenutzer.setId(currentBenutzerId);
+
+        final var benutzerService = Mockito.mock(BenutzerService.class);
+        when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
+
+        final var gesuch = new Gesuch()
+            .setFall(new Fall()
+                .setGesuchsteller(currentBenutzer)
+            );
+        final var gesuchTranche_inBearbeitungGS = new GesuchTranche()
+            .setGesuch(gesuch)
+            .setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+
+        final var gesuchRepository = Mockito.mock(GesuchRepository.class);
+        when(gesuchRepository.requireById(any()))
+            .thenReturn(gesuch
+            );
+        final var gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
+        when(gesuchTrancheRepository.requireById(any()))
+            .thenReturn(gesuchTranche_inBearbeitungGS
+            );
+        when(gesuchTrancheRepository.findById(any()))
+            .thenReturn(gesuchTranche_inBearbeitungGS
+            );
+        when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
+
+        final var authorizer = new GesuchTrancheAuthorizer(benutzerService,gesuchTrancheRepository,gesuchRepository);
+        final var uuid = UUID.randomUUID();
+        assertThrows(UnauthorizedException.class, () -> authorizer.canDelete(uuid));
+    }
+    @Test
     void gsCannotDeleteOtherAenderungTest(){
-        final var currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
-        final var otherBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
+        UUID currentBenutzerId = UUID.randomUUID();
+        UUID otherBenutzerId = UUID.randomUUID();
+        var currentBenutzer = new Benutzer();
+        currentBenutzer.setId(currentBenutzerId);
+        var otherBenutzer = new Benutzer();
+        otherBenutzer.setId(otherBenutzerId);
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
+        otherBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
+
         final var benutzerService = Mockito.mock(BenutzerService.class);
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
 
@@ -121,5 +161,42 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         assertThrows(UnauthorizedException.class, () -> authorizer.canDelete(uuid));
     }
     @Test
-    void sbAndAdminCanDeleteAenderungTest(){}
+    void adminCanDeleteAenderungTest(){
+        UUID currentBenutzerAsAdminId = UUID.randomUUID();
+        UUID otherBenutzerId = UUID.randomUUID();
+        var currentBenutzerAsAdmin = new Benutzer();
+        currentBenutzerAsAdmin.setId(currentBenutzerAsAdminId);
+        var otherBenutzer = new Benutzer();
+        otherBenutzer.setId(otherBenutzerId);
+        currentBenutzerAsAdmin.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
+        otherBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
+
+        final var benutzerService = Mockito.mock(BenutzerService.class);
+        when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzerAsAdmin);
+
+        final var gesuch = new Gesuch()
+            .setFall(new Fall()
+                .setGesuchsteller(otherBenutzer)
+            );
+        final var gesuchTranche_inBearbeitungGS = new GesuchTranche()
+            .setGesuch(gesuch)
+            .setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+
+        final var gesuchRepository = Mockito.mock(GesuchRepository.class);
+        when(gesuchRepository.requireById(any()))
+            .thenReturn(gesuch
+            );
+        final var gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
+        when(gesuchTrancheRepository.requireById(any()))
+            .thenReturn(gesuchTranche_inBearbeitungGS
+            );
+        when(gesuchTrancheRepository.findById(any()))
+            .thenReturn(gesuchTranche_inBearbeitungGS
+            );
+        when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
+
+        final var authorizer = new GesuchTrancheAuthorizer(benutzerService,gesuchTrancheRepository,gesuchRepository);
+        final var uuid = UUID.randomUUID();
+        assertDoesNotThrow(() -> authorizer.canDelete(uuid));
+    }
 }
