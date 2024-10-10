@@ -154,15 +154,15 @@ export class GesuchAenderungStore extends signalStore(
     ),
   );
 
-  deleteGesuchAenderung$ = rxMethod<{ aenderungId: string }>(
+  deleteGesuchAenderung$ = rxMethod<{ aenderungId: string; gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
         }));
       }),
-      switchMap(({ aenderungId }) =>
-        this.gesuchService.getGsTrancheChanges$({ aenderungId }).pipe(
+      switchMap(({ aenderungId, gesuchId }) =>
+        this.gesuchTrancheService.deleteAenderung$({ aenderungId }).pipe(
           handleApiResponse(
             () => {
               patchState(this, () => ({
@@ -174,6 +174,7 @@ export class GesuchAenderungStore extends signalStore(
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey: 'shared.dialog.gesuch-aenderung.delete.success',
                 });
+                this.getAllTranchenForGesuch$({ gesuchId });
               },
             },
           ),
