@@ -36,7 +36,10 @@ public class NotificationService {
     }
 
     @Transactional
-    public List<NotificationDto> getNotifications() {
-        return notificationRepository.getAllForUser(benutzerService.getCurrentBenutzer().getId()).map(notificationMapper::toDto).toList();
+    public List<NotificationDto> getNotificationsForCurrentUser() {
+        return notificationRepository.getAllForUser(
+            benutzerService.getCurrentBenutzer().getId()
+        ).map(notificationMapper::toDto)
+        .toList();
     }
 }

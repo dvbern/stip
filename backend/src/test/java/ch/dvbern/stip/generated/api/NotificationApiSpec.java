@@ -56,12 +56,12 @@ public class NotificationApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                getNotifications()
+                getNotificationsForCurrentUser()
         );
     }
 
-    public GetNotificationsOper getNotifications() {
-        return new GetNotificationsOper(createReqSpec());
+    public GetNotificationsForCurrentUserOper getNotificationsForCurrentUser() {
+        return new GetNotificationsForCurrentUserOper(createReqSpec());
     }
 
     /**
@@ -80,7 +80,7 @@ public class NotificationApiSpec {
      *
      * return List&lt;NotificationDtoSpec&gt;
      */
-    public static class GetNotificationsOper implements Oper {
+    public static class GetNotificationsForCurrentUserOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/notifications";
@@ -88,7 +88,7 @@ public class NotificationApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetNotificationsOper(RequestSpecBuilder reqSpec) {
+        public GetNotificationsForCurrentUserOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -120,7 +120,7 @@ public class NotificationApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetNotificationsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetNotificationsForCurrentUserOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -130,7 +130,7 @@ public class NotificationApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetNotificationsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetNotificationsForCurrentUserOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

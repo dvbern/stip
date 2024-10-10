@@ -20,7 +20,7 @@ public class NotificationResourceImpl implements NotificationResource {
     @RolesAllowed(GESUCH_READ)
     @AllowAll
     @Override
-    public Response getNotifications() {
-        return Response.ok(notificationService.getNotifications()).build();
+    public Response getNotificationsForCurrentUser() {
+        return Response.ok(notificationService.getNotificationsForCurrentUser()).build();
     }
 }

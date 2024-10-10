@@ -60,14 +60,14 @@ class NotificationResourceTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.ACCEPT0ED.getStatusCode());
+            .statusCode(Status.ACCEPTED.getStatusCode());
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(2)
     void verifyNotification() {
-        final var notifications = notificationApiSpec.getNotifications()
+        final var notifications = notificationApiSpec.getNotificationsForCurrentUser()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
