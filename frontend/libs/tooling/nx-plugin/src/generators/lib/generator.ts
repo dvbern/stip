@@ -82,7 +82,7 @@ export default async function (tree: Tree, options: LibGeneratorSchema) {
   );
   // Add a dummy build target if it no target exists which configures
   // the location of the tsconfig file.
-  // @see {@link file://./../../../../../../.eslintrc.json} -> enforceBuildableLibDependency
+  // @see {@link file://./../../../../../../eslint.config.js} -> enforceBuildableLibDependency
   if (
     ['test', 'build'].some(
       (target) => !projectConfig.targets?.[target]?.options?.tsConfig,

@@ -30,7 +30,7 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
 
   updateJson(
     tree,
-    path.join(options.projectRoot, options.nameDasherized, '.eslintrc.json'),
+    path.join(options.projectRoot, options.nameDasherized, 'eslint.config.js'),
     (json) => {
       json.overrides = [
         {

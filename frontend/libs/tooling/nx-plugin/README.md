@@ -113,7 +113,7 @@ Model is extracted as a separate `root` library type (meaning every other librar
 - always reusable (else create inline model in a `feature` or `pattern`)
 
 > A lot of best practices above are enforced with the help of the [Nx enforce module boundaries](https://nx.dev/core-features/enforce-project-boundaries) rule.
-> as defined in the `.eslintrc.json` file in the `overrides[0].rules.@nx/enforce-module-boundaries[1].depConstraints` section.
+> as defined in the `eslint.config.js` file in the `overrides[0].rules.@nx/enforce-module-boundaries[1].depConstraints` section.
 
 ## Adding more application scopes
 
@@ -121,7 +121,7 @@ When adding new applications to the workspace with the help of `app` generator i
 automatically update the following two files by adding app as a new scope:
 
 - `libs/tooling/nx-plugin/src/generators/lib/schema.json` file
-- `.eslintrc.json` file in the `overrides[0].rules.@nx/enforce-module-boundaries[1].depConstraints` section
+- `eslint.config.js` file in the `overrides[0].rules.@nx/enforce-module-boundaries[1].depConstraints` section
 
 That way you will get the new application as an option when running the `lib` generator
 to scope your lib to that new application.

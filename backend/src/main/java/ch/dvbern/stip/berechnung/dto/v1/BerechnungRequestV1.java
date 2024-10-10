@@ -111,7 +111,9 @@ public class BerechnungRequestV1 implements DmnRequest {
             if (personInAusbildung.getWohnsitz() == Wohnsitz.FAMILIE) {
                 piaWohntInElternHaushalt = 1;
             } else if (personInAusbildung.getWohnsitz() == Wohnsitz.MUTTER_VATER) {
-                if (elternTyp == ElternTyp.VATER) {
+                if (elternteile.size() < 2) {
+                    piaWohntInElternHaushalt = 1;
+                } else if (elternTyp == ElternTyp.VATER) {
                     piaWohntInElternHaushalt = personInAusbildung.getWohnsitzAnteilVater().intValue() > 0 ? 1 : 2;
                 } else if (elternTyp == ElternTyp.MUTTER) {
                     piaWohntInElternHaushalt = personInAusbildung.getWohnsitzAnteilMutter().intValue() > 0 ? 2 : 1;

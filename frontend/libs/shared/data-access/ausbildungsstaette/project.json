@@ -3,8 +3,8 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/data-access/ausbildungsstaette/src",
   "prefix": "dv",
-  "tags": ["scope:shared", "type:data-access"],
   "projectType": "library",
+  "tags": ["scope:shared", "type:data-access"],
   "targets": {
     "build": {
       "executor": "nx:noop",
