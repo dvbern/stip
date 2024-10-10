@@ -74,6 +74,12 @@ paths:
           required: true
         - $ref: '#/components/parameters/pageSize'
           required: true
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/SbDashboardColumns'
+          in: query
+          required: false
+        - $ref: '#/components/parameters/sortOrder'
       responses:
         '200':
           content:
@@ -3919,11 +3925,6 @@ components:
       description: Die ID vom Gesuch
       schema:
         $ref: '#/components/schemas/UUID'
-    sortColumn:
-      in: query
-      name: sortColumn
-      schema:
-        $ref: '#/components/schemas/SbDashboardColumns'
     sortOrder:
       in: query
       name: sortOrder
