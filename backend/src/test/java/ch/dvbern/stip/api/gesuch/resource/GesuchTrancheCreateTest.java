@@ -9,10 +9,12 @@ import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -42,6 +44,7 @@ class GesuchTrancheCreateTest {
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    private final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
 
@@ -74,6 +77,17 @@ class GesuchTrancheCreateTest {
     @Test
     @TestAsSachbearbeiter
     @Order(4)
+    void prepareSachbearbeiter() {
+        benutzerApiSpec.prepareCurrentBenutzer()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(5)
     void createTrancheFail() {
         gesuchTrancheApiSpec.createGesuchTrancheCopy()
             .gesuchIdPath(gesuch.getId())
@@ -85,7 +99,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(6)
     void setStatusInBearbeitungSb() {
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchIdPath(gesuch.getId())
@@ -93,19 +107,25 @@ class GesuchTrancheCreateTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Response.Status.ACCEPTED.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode());
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void createTrancheSuccess() {
+        final var createGesuchTrancheRequestDtoSpec = new CreateGesuchTrancheRequestDtoSpec();
+        createGesuchTrancheRequestDtoSpec.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb());
+        createGesuchTrancheRequestDtoSpec.setEnd(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(5));
+        createGesuchTrancheRequestDtoSpec.setComment("Bla");
+
         gesuchTrancheApiSpec.createGesuchTrancheCopy()
             .gesuchIdPath(gesuch.getId())
+            .body(createGesuchTrancheRequestDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test
