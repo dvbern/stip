@@ -53,6 +53,8 @@ public class NotificationRepository implements BaseRepository<Notification> {
                             )
                         )
                 )
-            ).stream();
+            )
+            .orderBy(notification.timestampErstellt.desc())
+            .stream();
     }
 }
