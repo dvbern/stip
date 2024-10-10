@@ -4,6 +4,13 @@ import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [
   {
+    path: 'sachbearbeitung-app-feature-infos-protokoll',
+    loadChildren: () =>
+      import('@dv/sachbearbeitung-app/feature/infos-protokoll').then(
+        (m) => m.sachbearbeitungAppFeatureInfosProtokollRoutes,
+      ),
+  },
+  {
     path: 'administration',
     canActivate: [hasBenutzer],
     title: 'sachbearbeitung-app.admin.title',
@@ -49,6 +56,19 @@ export const appRoutes: Route[] = [
     loadChildren: () =>
       import('@dv/sachbearbeitung-app/feature/verfuegung').then(
         (m) => m.sachbearbeitungAppFeatureVerfuegungRoutes,
+      ),
+  },
+  {
+    path: 'infos',
+    canActivate: [hasBenutzer],
+    title: 'sachbearbeitung-app.infos.title',
+    loadComponent: () =>
+      import('@dv/sachbearbeitung-app/feature/infos').then(
+        (m) => m.SachbearbeitungAppFeatureInfosComponent,
+      ),
+    loadChildren: () =>
+      import('@dv/sachbearbeitung-app/feature/infos').then(
+        (m) => m.sachbearbeitungAppFeatureInfosRoutes,
       ),
   },
   {

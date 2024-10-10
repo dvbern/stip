@@ -26,7 +26,6 @@ import {
   LEBENSLAUF,
   PARTNER,
   PERSON,
-  PROTOKOLL,
   RETURN_TO_HOME,
   SharedModelGesuchFormStep,
   TRANCHE,
@@ -254,7 +253,7 @@ function getStepsByAppType(
     case 'gesuch-app':
       return [...sharedSteps, ABSCHLUSS];
     case 'sachbearbeitung-app':
-      return [...sharedSteps, PROTOKOLL];
+      return [...sharedSteps];
     default:
       return [];
   }
