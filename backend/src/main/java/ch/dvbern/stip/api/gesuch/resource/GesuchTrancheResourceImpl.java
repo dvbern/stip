@@ -57,6 +57,17 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
+    public Response deleteAenderung(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        boolean hasBeenDeleted = gesuchTrancheService.aenderungLoeschen(aenderungId);
+        if (!hasBeenDeleted) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
     public Response getGesuchDokumente(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         var gesuchDokumente = gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
@@ -93,17 +104,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     public Response aenderungEinreichen(UUID aenderungId) {
         gesuchTrancheAuthorizer.canUpdate(aenderungId);
         gesuchTrancheService.aenderungEinreichen(aenderungId);
-        return Response.ok().build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response aenderungLoeschen(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canUpdate(aenderungId);
-        boolean hasBeenDeleted = gesuchTrancheService.aenderungLoeschen(aenderungId);
-        if (!hasBeenDeleted) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
         return Response.ok().build();
     }
 

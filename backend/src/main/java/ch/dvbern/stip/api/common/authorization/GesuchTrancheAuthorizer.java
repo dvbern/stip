@@ -54,6 +54,8 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             if (gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
                 throw new UnauthorizedException();
             }
+        } else{
+            int x = 0;
         }
     }
 

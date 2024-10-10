@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
+;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
@@ -82,7 +82,7 @@ public interface GesuchResource {
     @Produces({ "application/json", "text/plain" })
     Response getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType);
 
-    @DELETE
+    @GET
     @Path("/{aenderungId}/aenderung/gs/changes")
     @Produces({ "application/json", "text/plain" })
     Response getGsTrancheChanges(@PathParam("aenderungId") UUID aenderungId);

@@ -117,7 +117,7 @@ class GesuchTrancheResourceImplTest {
         int count = gesuchtranchen.length;
         final var aenderung = Arrays.stream(gesuchtranchen).filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG).findFirst().get();
         //delete aenderung
-        gesuchTrancheApiSpec.aenderungLoeschen().aenderungIdPath(aenderung.getId()).execute(TestUtil.PEEK_IF_ENV_SET).then().assertThat().statusCode(Response.Status.OK.getStatusCode());
+        gesuchTrancheApiSpec.deleteAenderung().aenderungIdPath(aenderung.getId()).execute(TestUtil.PEEK_IF_ENV_SET).then().assertThat().statusCode(Response.Status.OK.getStatusCode());
 
         // assert that list size is -1 to previous
         gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
@@ -143,7 +143,7 @@ class GesuchTrancheResourceImplTest {
             .body()
             .as(GesuchTrancheSlimDtoSpec[].class);
         final var tranche = Arrays.stream(gesuchtranchen).filter(t -> t.getTyp() == GesuchTrancheTypDtoSpec.TRANCHE).findFirst().get();
-        gesuchTrancheApiSpec.aenderungLoeschen().aenderungIdPath(tranche.getId()).execute(TestUtil.PEEK_IF_ENV_SET).then().assertThat().statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+        gesuchTrancheApiSpec.deleteAenderung().aenderungIdPath(tranche.getId()).execute(TestUtil.PEEK_IF_ENV_SET).then().assertThat().statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
 
 

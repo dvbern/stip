@@ -1192,7 +1192,7 @@ paths:
   '/gesuch/{aenderungId}/aenderung/gs/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
-    delete:
+    get:
       tags:
         - Gesuch
       responses:
@@ -1785,7 +1785,7 @@ paths:
           description: Tranche nicht gefunden
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: aenderungLoeschen
+      operationId: deleteAenderung
   /bildungskategorie:
     get:
       tags:
