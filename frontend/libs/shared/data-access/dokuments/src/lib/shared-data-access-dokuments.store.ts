@@ -52,10 +52,19 @@ export class DokumentsStore extends signalStore(
   private trancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
-  dokumenteViewSig = computed(() => ({
-    dokuments: fromCachedDataSig(this.dokuments) ?? [],
-    requiredDocumentTypes: fromCachedDataSig(this.requiredDocumentTypes) ?? [],
-  }));
+  dokumenteViewSig = computed(() => {
+    const dokuments = fromCachedDataSig(this.dokuments) ?? [];
+    return {
+      dokuments,
+      requiredDocumentTypes:
+        fromCachedDataSig(this.requiredDocumentTypes)?.filter(
+          // A document can already be uploaded but later on get rejected. In this case the document list would contain
+          // both the empty gesuch dokument and a gesuch dokument typ of the rejected document. So we need to filter
+          // them out
+          (required) => !dokuments.map((d) => d.dokumentTyp).includes(required),
+        ) ?? [],
+    };
+  });
 
   kommentareViewSig = computed(() => {
     return (
