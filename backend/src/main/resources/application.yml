@@ -47,8 +47,8 @@ kstip:
 quarkus:
   antivirus:
     clamav:
-      host: '${STIP_CLAMAV_HOST}'
-      port: '${STIP_CLAMAV_PORT:3310}'
+#      host: '${STIP_CLAMAV_HOST}'
+#      port: '${STIP_CLAMAV_PORT:3310}'
       enabled: true
       health:
         enabled: true

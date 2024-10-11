@@ -23,10 +23,10 @@ services:
       - "${STIP_LOCALSTACK_PORT}:4566"
     volumes:
       - "./s3/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
-  clamav:
-    image: docker-registry.dvbern.ch/dockerhub/clamav/clamav
-    ports:
-      - "3310:3310"
+  # clamav:
+  #   image: docker-registry.dvbern.ch/dockerhub/clamav/clamav
+  #   ports:
+  #     - "3310:3310"
 
 networks:
   stip-net:
