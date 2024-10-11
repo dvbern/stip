@@ -105,4 +105,14 @@ public class DeleteGesuchAsGSTest {
             .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
 
+    /**
+     * Ensure that the remains of this whole test
+     * are cleaned
+     */
+    @Test
+    @TestAsAdmin
+    @Order(9)
+    void deleteAsAdmin() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
 }
