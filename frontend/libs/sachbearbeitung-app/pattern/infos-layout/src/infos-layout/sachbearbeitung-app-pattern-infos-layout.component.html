@@ -1,0 +1,63 @@
+<dv-sachbearbeitung-app-pattern-gesuch-header
+  [navClicked]="navClicked$ | async"
+  [currentGesuch]="gesuchViewSig().gesuch"
+  [isLoading]="gesuchViewSig().loading"
+>
+</dv-sachbearbeitung-app-pattern-gesuch-header>
+
+<ng-template #navigation>
+  <div class="sidenav p-4">
+    @for (option of infosOptions; track $index) {
+      <a
+        type="button"
+        class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal shadow-none"
+        [routerLink]="['/', infosRoute, option.route, gesuchViewSig().gesuchId]"
+        routerLinkActive="active"
+        (click)="navClicked$.emit()"
+      >
+        <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
+        <span class="text-start">
+          {{ option.translationKey | translate: option.translationOptions }}
+        </span>
+      </a>
+    }
+  </div>
+</ng-template>
+
+<!-- MAIN CONTENT -->
+<main class="page-body">
+  <div class="d-flex h-100">
+    <!-- left step nav (Desktop) -->
+    <div class="d-none d-lg-block border-end bg-white">
+      <ng-container *ngTemplateOutlet="navigation"></ng-container>
+    </div>
+    <div class="container mb-5 pt-lg-4 px-lg-4">
+      <!-- step header (mobile) -->
+      <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">
+        <ng-container *ngTemplateOutlet="navigation"></ng-container>
+      </div>
+
+      <!-- title (desktop) -->
+      @if (option) {
+        <div class="d-none d-lg-flex justify-content-start align-items-center">
+          <dv-shared-ui-icon-chip class="step-icon me-3">
+            <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
+          </dv-shared-ui-icon-chip>
+
+          <h2 class="fw-bold m-0" data-testid="step-title">
+            {{ option.titleTranslationKey | translate }}
+          </h2>
+        </div>
+      }
+
+      <div>
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+
+  <!-- notifications/errors -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <dv-global-notifications></dv-global-notifications>
+  </div>
+</main>

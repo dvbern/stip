@@ -74,43 +74,53 @@ export type StatusUebergang =
   | 'BEARBEITUNG_ABSCHLIESSEN'
   | 'ZURUECKWEISEN'
   | 'VERFUEGT'
-  | 'BEREIT_FUER_BEARBEITUNG';
+  | 'BEREIT_FUER_BEARBEITUNG'
+  | 'VERSENDET';
 
 export const StatusUebergaengeMap: Partial<
   Record<Gesuchstatus, StatusUebergang[]>
 > = {
   IN_BEARBEITUNG_SB: ['BEARBEITUNG_ABSCHLIESSEN', 'ZURUECKWEISEN'],
   IN_FREIGABE: ['VERFUEGT', 'BEREIT_FUER_BEARBEITUNG'],
+  VERSANDBEREIT: ['VERSENDET'],
 };
 
-export type StatusUebergangOption = {
-  icon: string;
-  titleKey: StatusUebergang;
-  typ: StatusUebergang;
-};
-
-export const StatusUebergaengeOptions: Record<
-  StatusUebergang,
-  StatusUebergangOption
-> = {
-  BEARBEITUNG_ABSCHLIESSEN: {
-    icon: 'check',
-    titleKey: 'BEARBEITUNG_ABSCHLIESSEN',
-    typ: 'BEARBEITUNG_ABSCHLIESSEN',
-  },
-  ZURUECKWEISEN: {
-    icon: 'undo',
-    titleKey: 'ZURUECKWEISEN',
-    typ: 'ZURUECKWEISEN',
-  },
-  VERFUEGT: {
-    icon: 'done',
-    titleKey: 'VERFUEGT',
-    typ: 'VERFUEGT',
-  },
-  BEREIT_FUER_BEARBEITUNG: {
-    icon: 'play_arrow',
-    titleKey: 'BEREIT_FUER_BEARBEITUNG',
-    typ: 'BEREIT_FUER_BEARBEITUNG',
-  },
-};
+export const StatusUebergaengeOptions = {
+  BEARBEITUNG_ABSCHLIESSEN: (context?: { hasAcceptedAllDokuments: boolean }) =>
+    ({
+      icon: 'check',
+      titleKey: 'BEARBEITUNG_ABSCHLIESSEN',
+      typ: 'BEARBEITUNG_ABSCHLIESSEN',
+      disabledReason: context?.hasAcceptedAllDokuments
+        ? undefined
+        : 'DOKUMENTE_OFFEN',
+    }) as const,
+  ZURUECKWEISEN: () =>
+    ({
+      icon: 'undo',
+      titleKey: 'ZURUECKWEISEN',
+      typ: 'ZURUECKWEISEN',
+      disabledReason: undefined,
+    }) as const,
+  VERFUEGT: () =>
+    ({
+      icon: 'done',
+      titleKey: 'VERFUEGT',
+      typ: 'VERFUEGT',
+      disabledReason: undefined,
+    }) as const,
+  BEREIT_FUER_BEARBEITUNG: () =>
+    ({
+      icon: 'play_arrow',
+      titleKey: 'BEREIT_FUER_BEARBEITUNG',
+      typ: 'BEREIT_FUER_BEARBEITUNG',
+      disabledReason: undefined,
+    }) as const,
+  VERSENDET: () =>
+    ({
+      icon: 'mark_email_read',
+      titleKey: 'VERSENDET',
+      typ: 'VERSENDET',
+      disabledReason: undefined,
+    }) as const,
+} satisfies Record<StatusUebergang, unknown>;
