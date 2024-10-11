@@ -25,6 +25,7 @@ public class RequiredDokumentService {
     private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
         return getExistingDokumentsForGesuch(formular)
             .stream()
+            .filter(dokument -> !dokument.getDokumente().isEmpty())
             .map(GesuchDokument::getDokumentTyp)
             .toList();
     }
