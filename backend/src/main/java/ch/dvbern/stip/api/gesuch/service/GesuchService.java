@@ -345,10 +345,14 @@ public class GesuchService {
             sbDashboardQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
         }
 
+        final var results = baseQuery.stream()
+            .flatMap(gesuch -> sbDashboardGesuchMapper.toDto(gesuch).stream())
+            .toList();
+
         return new PaginatedSbDashboardDto(
-            baseQuery.stream().flatMap(gesuch -> sbDashboardGesuchMapper.toDto(gesuch).stream()).toList(),
+            results,
             page,
-            pageSize,
+            results.size(),
             (int) gesuchRepository.count()
         );
     }
