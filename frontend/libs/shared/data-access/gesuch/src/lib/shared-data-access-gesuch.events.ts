@@ -48,5 +48,8 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     setGesuchToBearbeitung: emptyProps(),
     setGesuchBearbeitungAbschliessen: emptyProps(),
     setGesuchZurueckweisen: props<{ kommentar: string }>(),
+    setGesuchVerfuegt: emptyProps(),
+    setGesuchBereitFuerBearbeitung: props<{ kommentar: string }>(),
+    setGesuchVersendet: emptyProps(),
   },
 });

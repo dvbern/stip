@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
@@ -43,6 +44,24 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.canUpdate(gesuchId);
         GesuchDto gesuchDto = gesuchService.gesuchStatusToInBearbeitung(gesuchId);
         return Response.ok(gesuchDto).build();
+    }
+
+    // TODO KSTIP-1247: roles allowed
+    @RolesAllowed({ ROLE_SACHBEARBEITER })
+    @Override
+    public Response changeGesuchStatusToVerfuegt(UUID gesuchId) {
+        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchService.gesuchStatusToVerfuegt(gesuchId);
+        return Response.ok().build();
+    }
+
+    // TODO KSTIP-1247: roles allowed
+    @RolesAllowed({ ROLE_SACHBEARBEITER })
+    @Override
+    public Response changeGesuchStatusToVersendet(UUID gesuchId) {
+        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchService.gesuchStatusToVersendet(gesuchId);
+        return Response.ok().build();
     }
 
     @RolesAllowed(GESUCH_CREATE)
@@ -162,6 +181,15 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response bearbeitungAbschliessen(UUID gesuchId) {
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.bearbeitungAbschliessen(gesuchId);
+        return Response.ok().build();
+    }
+
+    // TODO KSTIP-1247: roles allowed
+    @RolesAllowed({ ROLE_SACHBEARBEITER })
+    @Override
+    public Response changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId);
         return Response.ok().build();
     }
 

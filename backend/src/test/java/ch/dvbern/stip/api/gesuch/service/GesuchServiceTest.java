@@ -37,6 +37,7 @@ import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -57,6 +58,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jdk.jfr.Description;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
@@ -77,9 +79,12 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -115,6 +120,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchTrancheRepository gesuchTrancheRepository;
+
+    @InjectMock
+    GesuchValidatorService gesuchValidatorService;
 
     static final String TENANT_ID = "bern";
 
@@ -1131,12 +1139,64 @@ class GesuchServiceTest {
 
     @TestAsSachbearbeiter
     @Test
+    @Description("It should be possible to change Gesuchstatus from JURISTISCHE_ABKLAERUNG to BEREIT_FUER_BEARBEITUNG")
+    void changeGesuchstatus_from_JuristischeAbklaerung_to_BereitFuerBearbeitungTest(){
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.JURISTISCHE_ABKLAERUNG);
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        assertDoesNotThrow(() ->gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
+        assertEquals(
+            gesuchRepository.findAlle().findFirst().get().getGesuchStatus(),
+            Gesuchstatus.BEREIT_FUER_BEARBEITUNG
+        );
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Description("It should be possible to change Gesuchstatus from IN_FREIGABE to VERFUEGT")
+    void changeGesuchstatus_from_InFreigabe_to_VerfuegtTest(){
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        doNothing().when(gesuchValidatorService).validateGesuchForStatus(any(),any());
+
+        assertDoesNotThrow(() ->gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
+        assertEquals(Gesuchstatus.VERFUEGT,gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Description("It should be possible to change Gesuchstatus from IN_FREIGABE to BEREIT_FUER_BEARBEITUNG")
+    void changeGesuchstatus_from_InFreigabe_to_BereitFuerBearbeitungTest(){
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        assertDoesNotThrow(() ->gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
+        assertEquals(Gesuchstatus.BEREIT_FUER_BEARBEITUNG,gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Description("It should be possible to change Gesuchstatus from VERSANDBEREIT to VERSENDET")
+    void changeGesuchstatus_from_Versandbereit_to_VersendetTest(){
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSANDBEREIT);
+        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        assertDoesNotThrow(() ->gesuchService.gesuchStatusToVersendet(gesuch.getId()));
+        assertEquals(Gesuchstatus.VERSENDET,gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+    }
+
     /**
      * When a gesuch contains a gesuchtranche which is a aenderung,
      * the service will return 2 gesuchDtos instead of one:
      * one for the gesuch
      * the other for the aenderung
      */
+    @TestAsSachbearbeiter
+    @Test
     void findAlleGesucheSBShouldContainAenderungen(){
         setupGesucheWithAndWithoutAenderung(Gesuchstatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         var alleGesuche = gesuchService.findGesucheSB(GetGesucheSBQueryType.ALLE);
