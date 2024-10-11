@@ -45,11 +45,6 @@
       <!-- top right -->
       <div class="d-flex flex-grow-1 ms-3 justify-content-end align-items-center">
         <ng-content select="[dvHeaderDesktopRight]"></ng-content>
-        <dv-shared-ui-language-selector
-          class="p-3"
-          [language]="languageSig()"
-          (languageChange)="handleLanguageChangeHeader($event)"
-        />
 
         <div class="d-flex gap-4 align-items-center">
           <button
@@ -65,6 +60,12 @@
           <mat-menu #profileMenu="matMenu" xPosition="before">
             <button type="button" data-testid="button-profile" mat-menu-item>Profil</button>
             <button type="button" data-testid="button-logout" mat-menu-item (click)="logout()">Logout</button>
+            <hr class="my-1" />
+            <dv-shared-ui-language-selector
+              class="px-2 d-flex justify-content-center"
+              [language]="languageSig()"
+              (languageChange)="handleLanguageChangeHeader($event)"
+            />
           </mat-menu>
         </div>
       </div>
