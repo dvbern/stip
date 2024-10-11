@@ -67,7 +67,11 @@
                             'gesuch-app.cockpit.periode.status.titel' | translate
                           }}</span>
                           <span class="fw-medium">
-                            @if (periode.gesuch.missingDocuments?.count; as count) {
+                            @if (
+                              periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' &&
+                                periode.gesuch.missingDocuments?.count;
+                              as count
+                            ) {
                               @if (count > 1) {
                                 {{ 'gesuch-app.cockpit.periode.status.missingDocuments' | translate: { count } }}
                               } @else {
@@ -82,7 +86,11 @@
                           ></ng-container>
                         </div>
                         <div class="flex-grow-1"></div>
-                        @if (periode.gesuch.missingDocuments?.trancheId; as trancheId) {
+                        @if (
+                          periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' &&
+                            periode.gesuch.missingDocuments?.trancheId;
+                          as trancheId
+                        ) {
                           <a
                             class="btn btn-primary mt-3 w-100"
                             data-testid="cockpit-gesuch-upload-missing-documents"
