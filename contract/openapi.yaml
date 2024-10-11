@@ -87,7 +87,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Gesuch'
+                  $ref: '#/components/schemas/SbDashboardGesuch'
           description: Returns gesuche filtered by status and sb
         '401':
           $ref: '#/components/responses/Unauthorized'
