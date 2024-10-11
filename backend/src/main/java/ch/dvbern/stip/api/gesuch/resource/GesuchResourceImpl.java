@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
-import java.util.List;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.FallAuthorizer;
@@ -9,6 +9,8 @@ import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
+import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -126,18 +128,35 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getGesucheSb(
         GetGesucheSBQueryType getGesucheSBQueryType,
+        Integer page,
+        Integer pageSize,
         String fallNummer,
         String piaNachname,
         String piaVorname,
-        String piaGeburtsdatum,
+        LocalDate piaGeburtsdatum,
         String status,
         String bearbeiter,
-        String letzteAktivitaetFrom,
-        String letzteAktivitaetTo,
-        Integer page,
-        Integer pageSize
+        LocalDate letzteAktivitaetFrom,
+        LocalDate letzteAktivitaetTo,
+        SbDashboardColumn sortColumn,
+        SortOrder sortOrder
     ) {
-        return Response.ok(List.of()).build();
+        final var dtos = gesuchService.findGesucheSB(
+            getGesucheSBQueryType,
+            fallNummer,
+            piaNachname,
+            piaVorname,
+            piaGeburtsdatum,
+            status,
+            bearbeiter,
+            letzteAktivitaetFrom,
+            letzteAktivitaetTo,
+            page,
+            pageSize,
+            sortColumn,
+            sortOrder
+        );
+        return Response.ok(dtos).build();
     }
 
     @RolesAllowed(GESUCH_READ)

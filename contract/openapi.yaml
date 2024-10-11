@@ -71,12 +71,10 @@ paths:
         - $ref: '#/components/parameters/letzteAktivitaetFrom'
         - $ref: '#/components/parameters/letzteAktivitaetTo'
         - $ref: '#/components/parameters/page'
-          required: true
         - $ref: '#/components/parameters/pageSize'
-          required: true
         - name: sortColumn
           schema:
-            $ref: '#/components/schemas/SbDashboardColumns'
+            $ref: '#/components/schemas/SbDashboardColumn'
           in: query
           required: false
         - $ref: '#/components/parameters/sortOrder'
@@ -87,7 +85,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SbDashboardGesuch'
+                  $ref: '#/components/schemas/PaginatedSbDashboard'
           description: Returns gesuche filtered by status and sb
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -3846,6 +3844,8 @@ components:
     SbDashboardGesuch:
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
         typ:
@@ -3856,15 +3856,15 @@ components:
           type: string
         piaGeburtsdatum:
           type: string
-          format: Date
+          format: date
         status:
           $ref: '#/components/schemas/Gesuchstatus'
         bearbeiter:
           type: string
         letzteAktivitaet:
           type: string
-          format: Date
-    SbDashboardColumns:
+          format: date
+    SbDashboardColumn:
       enum:
         - FALLNUMMER
         - TYP
@@ -3950,6 +3950,7 @@ components:
       name: piaGeburtsdatum
       schema:
         type: string
+        format: date
     status:
       in: query
       name: status
@@ -3965,19 +3966,23 @@ components:
       name: letzteAktivitaetFrom
       schema:
         type: string
+        format: date
     letzteAktivitaetTo:
       in: query
       name: letzteAktivitaetTo
       schema:
         type: string
+        format: date
     page:
       in: query
       name: page
+      required: true
       schema:
         type: integer
     pageSize:
       in: query
       name: pageSize
+      required: true
       schema:
         type: integer
     

@@ -17,13 +17,12 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.ArrayList;
 
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -44,7 +43,10 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
+import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
@@ -61,6 +63,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -96,6 +99,8 @@ public class GesuchService {
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
     private final GesuchNummerService gesuchNummerService;
     private final ConfigService configService;
+    private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
+    private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithOldestTranche(UUID id) {
@@ -285,32 +290,67 @@ public class GesuchService {
     }
 
     @Transactional
-    public List<GesuchDto> findGesucheSB(GetGesucheSBQueryType getGesucheSBQueryType) {
-        final var meId = benutzerService.getCurrentBenutzer().getId();
-        return switch (getGesucheSBQueryType) {
-            case ALLE_BEARBEITBAR -> map(gesuchRepository.findAlleBearbeitbar());
-            case ALLE_BEARBEITBAR_MEINE -> map(gesuchRepository.findAlleMeineBearbeitbar(meId));
-            case ALLE_MEINE -> map(gesuchRepository.findAlleMeine(meId));
-            case ALLE -> map(gesuchRepository.findAlle()
-                .filter(gesuch -> gesuch.getNewestGesuchTranche()
-                    .orElseThrow(NotFoundException::new)
-                    .getGesuchFormular()
-                    .getPersonInAusbildung() != null
-                )
-            );
-        };
-    }
+    public PaginatedSbDashboardDto findGesucheSB(
+        GetGesucheSBQueryType queryType,
+        String fallNummer,
+        String piaNachname,
+        String piaVorname,
+        LocalDate piaGeburtsdatum,
+        String status,
+        String bearbeiter,
+        LocalDate letzteAktivitaetFrom,
+        LocalDate letzteAktivitaetTo,
+        int page,
+        int pageSize,
+        SbDashboardColumn sortColumn,
+        SortOrder sortOrder
+    ) {
+        if (pageSize > configService.getMaxAllowedPageSize()) {
+            throw new IllegalArgumentException("Page size exceeded max allowed page size");
+        }
 
-    private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
-        List<GesuchDto> gesuchDtos = new ArrayList<>();
-        gesuche.forEach(gesuch -> {
-            if (gesuch.getAenderungZuUeberpruefen().isPresent()) {
-                gesuchDtos.addAll(gesuchMapperUtil.mapWithAenderung(gesuch));
-            } else{
-                gesuchDtos.add(gesuchMapperUtil.mapWithNewestTranche(gesuch));
-            }
-        });
-        return gesuchDtos;
+        final var baseQuery = sbDashboardQueryBuilder.baseQuery(page, pageSize, queryType);
+
+        if (fallNummer != null) {
+            sbDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
+        }
+
+        if (piaNachname != null) {
+            sbDashboardQueryBuilder.piaNachname(baseQuery, piaNachname);
+        }
+
+        if (piaVorname != null) {
+            sbDashboardQueryBuilder.piaVorname(baseQuery, piaVorname);
+        }
+
+        if (piaGeburtsdatum != null) {
+            sbDashboardQueryBuilder.piaGeburtsdatum(baseQuery, piaGeburtsdatum);
+        }
+
+        if (status != null) {
+            // TODO KSTIP-1538: Actual parsing?
+            final var statusValue = Gesuchstatus.valueOf(status);
+            sbDashboardQueryBuilder.status(baseQuery, statusValue);
+        }
+
+        if (bearbeiter != null) {
+            sbDashboardQueryBuilder.bearbeiter(baseQuery, bearbeiter);
+        }
+
+        if (letzteAktivitaetFrom != null && letzteAktivitaetTo != null) {
+            sbDashboardQueryBuilder.letzteAktivitaet(baseQuery, letzteAktivitaetFrom, letzteAktivitaetTo);
+        }
+
+        if (sortColumn != null && sortOrder != null) {
+            sbDashboardQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
+        }
+
+        return new PaginatedSbDashboardDto(
+            baseQuery.stream().flatMap(gesuch -> sbDashboardGesuchMapper.toDto(gesuch).stream()).toList(),
+            page,
+            pageSize,
+            (int) gesuchRepository.count()
+        );
     }
 
     @Transactional

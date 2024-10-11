@@ -1,6 +1,8 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -19,14 +21,33 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class SbDashboardGesuchDto  implements Serializable {
+  private @Valid UUID id;
   private @Valid String fallNummer;
   private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
   private @Valid String piaNachname;
   private @Valid String piaVorname;
-  private @Valid String piaGeburtsdatum;
+  private @Valid LocalDate piaGeburtsdatum;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus status;
   private @Valid String bearbeiter;
-  private @Valid String letzteAktivitaet;
+  private @Valid LocalDate letzteAktivitaet;
+
+  /**
+   **/
+  public SbDashboardGesuchDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   /**
    **/
@@ -102,19 +123,19 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   /**
    **/
-  public SbDashboardGesuchDto piaGeburtsdatum(String piaGeburtsdatum) {
+  public SbDashboardGesuchDto piaGeburtsdatum(LocalDate piaGeburtsdatum) {
     this.piaGeburtsdatum = piaGeburtsdatum;
     return this;
   }
 
   
   @JsonProperty("piaGeburtsdatum")
-  public String getPiaGeburtsdatum() {
+  public LocalDate getPiaGeburtsdatum() {
     return piaGeburtsdatum;
   }
 
   @JsonProperty("piaGeburtsdatum")
-  public void setPiaGeburtsdatum(String piaGeburtsdatum) {
+  public void setPiaGeburtsdatum(LocalDate piaGeburtsdatum) {
     this.piaGeburtsdatum = piaGeburtsdatum;
   }
 
@@ -156,19 +177,19 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   /**
    **/
-  public SbDashboardGesuchDto letzteAktivitaet(String letzteAktivitaet) {
+  public SbDashboardGesuchDto letzteAktivitaet(LocalDate letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
     return this;
   }
 
   
   @JsonProperty("letzteAktivitaet")
-  public String getLetzteAktivitaet() {
+  public LocalDate getLetzteAktivitaet() {
     return letzteAktivitaet;
   }
 
   @JsonProperty("letzteAktivitaet")
-  public void setLetzteAktivitaet(String letzteAktivitaet) {
+  public void setLetzteAktivitaet(LocalDate letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
   }
 
@@ -182,7 +203,8 @@ public class SbDashboardGesuchDto  implements Serializable {
       return false;
     }
     SbDashboardGesuchDto sbDashboardGesuch = (SbDashboardGesuchDto) o;
-    return Objects.equals(this.fallNummer, sbDashboardGesuch.fallNummer) &&
+    return Objects.equals(this.id, sbDashboardGesuch.id) &&
+        Objects.equals(this.fallNummer, sbDashboardGesuch.fallNummer) &&
         Objects.equals(this.typ, sbDashboardGesuch.typ) &&
         Objects.equals(this.piaNachname, sbDashboardGesuch.piaNachname) &&
         Objects.equals(this.piaVorname, sbDashboardGesuch.piaVorname) &&
@@ -194,7 +216,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
   }
 
   @Override
@@ -202,6 +224,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class SbDashboardGesuchDto {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");

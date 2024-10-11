@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -29,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * SbDashboardGesuchDtoSpec
  */
 @JsonPropertyOrder({
+  SbDashboardGesuchDtoSpec.JSON_PROPERTY_ID,
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_TYP,
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_PIA_NACHNAME,
@@ -41,6 +44,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("SbDashboardGesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class SbDashboardGesuchDtoSpec {
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
   private String fallNummer;
 
@@ -54,7 +60,7 @@ public class SbDashboardGesuchDtoSpec {
   private String piaVorname;
 
   public static final String JSON_PROPERTY_PIA_GEBURTSDATUM = "piaGeburtsdatum";
-  private String piaGeburtsdatum;
+  private LocalDate piaGeburtsdatum;
 
   public static final String JSON_PROPERTY_STATUS = "status";
   private GesuchstatusDtoSpec status;
@@ -63,10 +69,36 @@ public class SbDashboardGesuchDtoSpec {
   private String bearbeiter;
 
   public static final String JSON_PROPERTY_LETZTE_AKTIVITAET = "letzteAktivitaet";
-  private String letzteAktivitaet;
+  private LocalDate letzteAktivitaet;
 
   public SbDashboardGesuchDtoSpec() {
   }
+
+  public SbDashboardGesuchDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
 
   public SbDashboardGesuchDtoSpec fallNummer(String fallNummer) {
     
@@ -172,7 +204,7 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  public SbDashboardGesuchDtoSpec piaGeburtsdatum(String piaGeburtsdatum) {
+  public SbDashboardGesuchDtoSpec piaGeburtsdatum(LocalDate piaGeburtsdatum) {
     
     this.piaGeburtsdatum = piaGeburtsdatum;
     return this;
@@ -186,14 +218,14 @@ public class SbDashboardGesuchDtoSpec {
   @JsonProperty(JSON_PROPERTY_PIA_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getPiaGeburtsdatum() {
+  public LocalDate getPiaGeburtsdatum() {
     return piaGeburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PIA_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPiaGeburtsdatum(String piaGeburtsdatum) {
+  public void setPiaGeburtsdatum(LocalDate piaGeburtsdatum) {
     this.piaGeburtsdatum = piaGeburtsdatum;
   }
 
@@ -250,7 +282,7 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  public SbDashboardGesuchDtoSpec letzteAktivitaet(String letzteAktivitaet) {
+  public SbDashboardGesuchDtoSpec letzteAktivitaet(LocalDate letzteAktivitaet) {
     
     this.letzteAktivitaet = letzteAktivitaet;
     return this;
@@ -264,14 +296,14 @@ public class SbDashboardGesuchDtoSpec {
   @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getLetzteAktivitaet() {
+  public LocalDate getLetzteAktivitaet() {
     return letzteAktivitaet;
   }
 
 
   @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setLetzteAktivitaet(String letzteAktivitaet) {
+  public void setLetzteAktivitaet(LocalDate letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
   }
 
@@ -284,7 +316,8 @@ public class SbDashboardGesuchDtoSpec {
       return false;
     }
     SbDashboardGesuchDtoSpec sbDashboardGesuch = (SbDashboardGesuchDtoSpec) o;
-    return Objects.equals(this.fallNummer, sbDashboardGesuch.fallNummer) &&
+    return Objects.equals(this.id, sbDashboardGesuch.id) &&
+        Objects.equals(this.fallNummer, sbDashboardGesuch.fallNummer) &&
         Objects.equals(this.typ, sbDashboardGesuch.typ) &&
         Objects.equals(this.piaNachname, sbDashboardGesuch.piaNachname) &&
         Objects.equals(this.piaVorname, sbDashboardGesuch.piaVorname) &&
@@ -296,13 +329,14 @@ public class SbDashboardGesuchDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SbDashboardGesuchDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");

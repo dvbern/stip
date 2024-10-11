@@ -32,9 +32,12 @@ import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JoinFormula;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 @DocumentsRequiredFehlendeDokumenteConstraint(groups = {
     GesuchFehlendeDokumenteValidationGroup.class
@@ -81,6 +84,20 @@ public class Gesuch extends AbstractMandantEntity {
     @Size(min = 1)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinFormula(value = """
+        (
+            SELECT gesuch_tranche.id
+            FROM gesuch_tranche gesuch_tranche
+            WHERE gesuch_tranche.gesuch_id = id
+                AND gesuch_tranche.typ = 'TRANCHE'
+            ORDER BY gesuch_tranche.gueltig_bis DESC
+            LIMIT 1
+    )""")
+    @Setter(AccessLevel.NONE)
+    @NotAudited
+    private GesuchTranche latestGesuchTranche;
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
