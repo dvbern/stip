@@ -15,9 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import childProcess from 'child_process';
 import * as fs from 'fs';
 import { PathLike } from 'fs';
-import childProcess from 'child_process';
 import path from 'path';
 
 const yaml = '../contract/openapi.yaml';
@@ -35,7 +35,7 @@ function deleteOldFilesSync(directory: string, timestamp: Date) {
     return;
   }
 
-  let files = fs.readdirSync(directory);
+  const files = fs.readdirSync(directory);
   for (const file of files) {
     const filePath = path.join(directory, file);
     const stats = fs.statSync(filePath);
@@ -50,7 +50,7 @@ function copyFilesForGesuch(directoryFrom: string, directoryTo: string) {
     return;
   }
 
-  let files = fs.readdirSync(directoryFrom);
+  const files = fs.readdirSync(directoryFrom);
   for (const file of files) {
     const filePath = path.join(directoryFrom, file);
     const filePathTo = path.join(directoryTo, file);
@@ -169,6 +169,7 @@ async function sleep(msec: number) {
     'Gesuchsperiode',
     'GesuchTranche',
     'Mail',
+    'Notification',
     'Plz',
     'Stammdaten',
     'Tenant',

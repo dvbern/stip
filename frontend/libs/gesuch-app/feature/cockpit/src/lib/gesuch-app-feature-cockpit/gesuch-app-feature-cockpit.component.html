@@ -163,16 +163,14 @@
       <!-- side column -->
       <div class="col-lg-4 mb-lg-5">
         <!-- NACHRICHTEN -->
-        <div class="card mb-5 shadow-lg">
-          <div class="card-body">
-            <h3 class="card-title d-flex align-items-center" data-testid="cockpit-nachrichten-title">
-              <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
-                <i class="material-symbols-rounded fs-5">mail</i>
-              </dv-shared-ui-icon-chip>
-              <span>Nachrichten</span>
-            </h3>
+        @let notifications = notificationStore.notificationListViewSig();
+        @if (notifications.length > 0) {
+          <div class="card mb-5 shadow-lg">
+            <div class="card-body">
+              <dv-shared-ui-notifications [notifications]="notifications"></dv-shared-ui-notifications>
+            </div>
           </div>
-        </div>
+        }
 
         <!-- INFOS -->
         <div class="card mb-5 shadow-lg">

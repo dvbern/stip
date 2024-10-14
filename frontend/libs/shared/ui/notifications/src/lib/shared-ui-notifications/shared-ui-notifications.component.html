@@ -1,0 +1,33 @@
+<h3 class="card-title d-flex align-items-center" data-testid="nachrichten-title">
+  <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
+    <i class="material-symbols-rounded fs-5">mail</i>
+  </dv-shared-ui-icon-chip>
+  <span>{{ 'shared.nachrichten.title' | translate }}</span>
+</h3>
+
+<div class="notifications gap-2 mt-4">
+  <h4 class="subgrid subgrid-3 m-0">
+    <span>{{ 'shared.nachrichten.subject' | translate }}</span>
+    <span>{{ 'shared.nachrichten.sender' | translate }}</span>
+    <span>{{ 'shared.nachrichten.date' | translate }}</span>
+  </h4>
+  @for (notification of notificationsViewSig(); track notification) {
+    <button
+      class="btn btn-link text-decoration-none subgrid subgrid-3 px-0 py-2 text-start border-top border-1"
+      (click)="openNotification(notification)"
+    >
+      <span>{{ 'shared.nachrichten.type.' + notification.notificationType | translate }}</span>
+      <span>{{ notification.userErstellt }}</span>
+      <span>{{ notification.timestampErstellt | date: 'dd.MM.yyyy' }}</span>
+    </button>
+  }
+</div>
+
+@if (notificationsSig().length > 5) {
+  <mat-paginator
+    [length]="notificationsSig().length"
+    [pageSize]="pageSize"
+    (page)="newPageSig.set($event)"
+    [hidePageSize]="true"
+  ></mat-paginator>
+}
