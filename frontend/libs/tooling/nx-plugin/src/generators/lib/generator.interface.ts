@@ -19,6 +19,7 @@ export type LibScope = 'shared' | 'customer-app';
 
 export interface NormalizedSchema extends LibGeneratorSchema {
   nameDasherized: string;
+  prefix: string;
   projectName: string;
   projectRoot: string;
   projectDirectory: string;

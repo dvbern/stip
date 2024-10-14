@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { name } from '@dv/shared/data-access/gesuchsperiode';
 import {
   Tree,
   formatFiles,
@@ -50,13 +49,15 @@ function normalizeOptions(
   const nameDasherized = dasherize(options.name);
   const projectDirectory = `${getWorkspaceLayout(tree).libsDir}/${options.scope}/${options.type}/${nameDasherized}`;
   const projectName = `${options.scope}-${options.type}-${nameDasherized}`;
-  const projectImportPath = `@dv/${options.scope}/${options.type}/${nameDasherized}`;
+  const prefix = 'dv';
+  const projectImportPath = `@${prefix}/${options.scope}/${options.type}/${nameDasherized}`;
   const projectRoot = projectDirectory;
   const parsedTags = [`type:${options.type}`, `scope:${options.scope}`];
 
   return {
     ...options,
     nameDasherized,
+    prefix,
     projectName,
     projectRoot,
     projectDirectory,
@@ -75,6 +76,7 @@ export default async function (tree: Tree, options: LibGeneratorSchema) {
 
   await libGenerator(tree, {
     ...libDefaultOptions,
+    prefix: normalizedOptions.prefix,
     name: normalizedOptions.projectName,
     directory: normalizedOptions.projectDirectory,
     importPath: normalizedOptions.projectImportPath,
