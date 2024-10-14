@@ -1,34 +1,35 @@
 import * as fs from 'fs';
 import * as path from 'path';
+
+import { name } from '@dv/shared/data-access/gesuchsperiode';
 import {
+  Tree,
   formatFiles,
   generateFiles,
   getWorkspaceLayout,
   names,
   offsetFromRoot,
-  updateProjectConfiguration,
-  Tree,
   readProjectConfiguration,
+  updateProjectConfiguration,
 } from '@nx/devkit';
 import {
+  camelize,
+  capitalize,
   classify,
   dasherize,
-  capitalize,
-  camelize,
 } from '@nx/devkit/src/utils/string-utils';
 
+import { LibTypeGeneratorMap, NormalizedSchema } from './generator.interface';
 import { LibGeneratorSchema } from './schema';
-import { NormalizedSchema, LibTypeGeneratorMap } from './generator.interface';
-
-import { featureTypeFactory } from './types/feature';
-import { patternTypeFactory } from './types/pattern';
 import { dataAccessTypeFactory } from './types/data-access';
 import { eventTypeFactory } from './types/event';
-import { uiTypeFactory } from './types/ui';
-import { utilDataAccessTypeFactory } from './types/util-data-access';
-import { utilTypeFactory } from './types/util';
-import { utilFnTypeFactory } from './types/util-fn';
+import { featureTypeFactory } from './types/feature';
 import { modelTypeFactory } from './types/model';
+import { patternTypeFactory } from './types/pattern';
+import { uiTypeFactory } from './types/ui';
+import { utilTypeFactory } from './types/util';
+import { utilDataAccessTypeFactory } from './types/util-data-access';
+import { utilFnTypeFactory } from './types/util-fn';
 
 const LIB_TYPE_GENERATOR_MAP: LibTypeGeneratorMap = {
   feature: featureTypeFactory,
@@ -46,10 +47,11 @@ function normalizeOptions(
   tree: Tree,
   options: LibGeneratorSchema,
 ): NormalizedSchema {
-  const projectDirectory = `/${options.scope}/${options.type}`;
   const nameDasherized = dasherize(options.name);
+  const projectDirectory = `${getWorkspaceLayout(tree).libsDir}/${options.scope}/${options.type}/${nameDasherized}`;
   const projectName = `${options.scope}-${options.type}-${nameDasherized}`;
-  const projectRoot = `${getWorkspaceLayout(tree).libsDir}${projectDirectory}`;
+  const projectImportPath = `@dv/${options.scope}/${options.type}/${nameDasherized}`;
+  const projectRoot = projectDirectory;
   const parsedTags = [`type:${options.type}`, `scope:${options.scope}`];
 
   return {
@@ -58,6 +60,7 @@ function normalizeOptions(
     projectName,
     projectRoot,
     projectDirectory,
+    projectImportPath,
     parsedTags,
   };
 }
@@ -72,15 +75,16 @@ export default async function (tree: Tree, options: LibGeneratorSchema) {
 
   await libGenerator(tree, {
     ...libDefaultOptions,
-    name: normalizedOptions.name,
+    name: normalizedOptions.projectName,
     directory: normalizedOptions.projectDirectory,
+    importPath: normalizedOptions.projectImportPath,
     tags: normalizedOptions.parsedTags.join(','),
   });
   const projectConfig = readProjectConfiguration(
     tree,
     normalizedOptions.projectName,
   );
-  // Add a dummy build target if it no target exists which configures
+  // Add a dummy build target if it no target exists which configures    node_modules/@nx/devkit/src/generators/project-name-and-root-utils.js:115:19
   // the location of the tsconfig file.
   // @see {@link file://./../../../../../../eslint.config.js} -> enforceBuildableLibDependency
   if (
@@ -107,6 +111,7 @@ export default async function (tree: Tree, options: LibGeneratorSchema) {
       ...defaultOptions,
       name: normalizedOptions.name,
       parent: normalizedOptions.projectName,
+      directory: normalizedOptions.projectDirectory,
     });
   }
 
@@ -143,7 +148,7 @@ function addFiles(tree: Tree, options: NormalizedSchema) {
   generateFiles(
     tree,
     tplPath,
-    path.join(options.projectRoot, options.nameDasherized, 'src'),
+    path.join(options.projectRoot, 'src'),
     templateOptions,
   );
 }

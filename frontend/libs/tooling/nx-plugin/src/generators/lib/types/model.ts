@@ -1,4 +1,5 @@
 import path from 'path';
+
 import { Tree } from '@nx/devkit';
 import { libraryGenerator } from '@nx/js';
 
@@ -19,7 +20,5 @@ export function modelTypeFactory(options: NormalizedSchema): LibTypeGenerator {
 
 function postprocess(tree: Tree, options: NormalizedSchema) {
   extendEslintJson(tree, 'angular', options);
-  tree.delete(
-    path.join(options.projectRoot, options.nameDasherized, 'README.md'),
-  );
+  tree.delete(path.join(options.projectRoot, 'README.md'));
 }

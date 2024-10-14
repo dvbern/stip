@@ -1,4 +1,5 @@
 import path from 'path';
+
 import { Tree, updateJson } from '@nx/devkit';
 
 export function extendEslintJson(
@@ -8,7 +9,7 @@ export function extendEslintJson(
 ) {
   updateJson(
     tree,
-    path.join(options.projectRoot, options.nameDasherized, 'eslint.config.js'),
+    path.join(options.projectRoot, 'eslint.config.js'),
     (json) => {
       json.extends = [
         ...json.extends,

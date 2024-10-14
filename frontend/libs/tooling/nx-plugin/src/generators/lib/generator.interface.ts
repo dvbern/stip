@@ -1,8 +1,8 @@
+import { Schema } from '@nx/angular/src/generators/library/schema';
 import { Tree } from '@nx/devkit';
 import { Generator } from 'nx/src/config/misc-interfaces';
 
 import { LibGeneratorSchema } from './schema';
-import { Schema } from '@nx/angular/src/generators/library/schema';
 
 export type LibType =
   | 'feature'
@@ -22,6 +22,7 @@ export interface NormalizedSchema extends LibGeneratorSchema {
   projectName: string;
   projectRoot: string;
   projectDirectory: string;
+  projectImportPath: string;
   parsedTags: string[];
 }
 
