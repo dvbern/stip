@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.resource;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
@@ -11,12 +12,10 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
-import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
+import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +47,8 @@ class GesuchTrancheResourceImplTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private  GesuchTrancheSlimDtoSpec[] gesuchtranchen;
     private GesuchDtoSpec gesuch;
+    @Inject
+    GesuchTrancheRepository gesuchTrancheRepository;
 
     @Test
     @TestAsGesuchsteller
@@ -188,6 +189,5 @@ class GesuchTrancheResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
-
     // todo KSTIP-KSTIP-1158: a Aenderung should be accepted/denied by an SB
 }

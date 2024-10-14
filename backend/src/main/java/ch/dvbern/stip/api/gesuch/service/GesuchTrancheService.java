@@ -205,9 +205,6 @@ public class GesuchTrancheService {
 
     @Transactional
     public void deleteAenderung(final UUID aenderungId) {
-        if(gesuchTrancheRepository.requireById(aenderungId).getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS){
-            throw new IllegalStateException();
-        }
         if(!gesuchTrancheRepository.deleteById(aenderungId)){
             throw new NotFoundException();
         }
