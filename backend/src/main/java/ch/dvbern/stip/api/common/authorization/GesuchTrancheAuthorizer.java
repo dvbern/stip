@@ -61,15 +61,12 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canDeleteAenderung(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-
-        if (isAdminOrSb(currentBenutzer)) {
-            return;
-        }
-
         final var gesuchTranche = gesuchTrancheRepository.findById(gesuchTrancheId);
         final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
+
         final var isAuthorizedForCurrentOperation = isGesuchsteller(currentBenutzer) &&
             !isSachbearbeiter(currentBenutzer) &&
+            !isAdmin(currentBenutzer) &&
             AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch);
         // Gesuchsteller can only update their Tranchen IN_BEARBEITUNG_GS
         if (!isAuthorizedForCurrentOperation) {

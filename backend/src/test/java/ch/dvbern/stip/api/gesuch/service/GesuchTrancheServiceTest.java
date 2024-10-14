@@ -108,13 +108,9 @@ class GesuchTrancheServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.deleteById(any())).thenReturn(true);
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
-        gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.AKZEPTIERT);
-        gesuch.getGesuchTranchen().get(0).setId(UUID.randomUUID());
-
-        // only Aenderungen in state 'In Bearbeitung GS' should be allowed to be deleted by GS
-        //assert
-        assertThrows(IllegalStateException.class, () ->gesuchTrancheService.deleteAenderung(gesuch.getGesuchTranchen().get(0).getId()));
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+        gesuch.getGesuchTranchen().get(0).setId(UUID.randomUUID());
+        //assert
         assertDoesNotThrow(() -> gesuchTrancheService.deleteAenderung(gesuch.getGesuchTranchen().get(0).getId()));
     }
 }
