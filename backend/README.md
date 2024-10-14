@@ -51,6 +51,34 @@ triggered by enabling the `generate-stubs-from-contract` Maven profile. One migh
   ```
   * If you simply open the backend in vscode with the quarkus extension installed and launch a debug session this launch.json file is automatically created. The only thing that needs to be manually added is the "projectName" config parameter (in this case it is 'stip-api').  
 
+## Batch creation of Users
+
+Loginto Openshift and navigate to the pod running the keycloak instance.  
+Open the terminal for the pod and execute the following shell script (change credentials first):
+
+```
+server="http://localhost:8080"
+admRealm="master"
+admUser="admin"
+admPw=""
+
+userRealm="bern"
+
+createAndConfigUsr () {
+    userName=$1
+    userPw=$2
+    bin/kcadm.sh create users -r $userRealm -s username=$userName -s enabled=true -s firstName=$userName -s lastName=$userName --no-config --server $server --realm $admRealm --user $admUser --password $admPw
+    bin/kcadm.sh set-password -r $userRealm --username $userName --new-password $userPw --no-config --server $server --realm $admRealm --user $admUser --password $admPw
+    bin/kcadm.sh add-roles --uusername $userName --rolename Admin -r $userRealm --no-config --server $server --realm $admRealm --user $admUser --password $admPw
+    bin/kcadm.sh add-roles --uusername $userName --rolename Sachbearbeiter -r $userRealm --no-config --server $server --realm $admRealm --user $admUser --password $admPw
+}
+
+userNamePrefix=""
+userPassword=""
+
+for i in `seq 1 50`; do createAndConfigUsr ${userNamePrefix}${i} $userPassword; done
+```
+
 ## Contributing Guidelines
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the process for submitting pull requests to us.

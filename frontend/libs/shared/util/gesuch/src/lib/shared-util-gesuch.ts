@@ -85,24 +85,21 @@ export const StatusUebergaengeMap: Partial<
   IN_BEARBEITUNG_SB: ['BEARBEITUNG_ABSCHLIESSEN', 'ZURUECKWEISEN'],
 };
 
-export type StatusUebergangOption = {
-  icon: string;
-  titleKey: StatusUebergang;
-  typ: StatusUebergang;
-};
-
-export const StatusUebergaengeOptions: Record<
-  StatusUebergang,
-  StatusUebergangOption
-> = {
-  BEARBEITUNG_ABSCHLIESSEN: {
-    icon: 'check',
-    titleKey: 'BEARBEITUNG_ABSCHLIESSEN',
-    typ: 'BEARBEITUNG_ABSCHLIESSEN',
-  },
-  ZURUECKWEISEN: {
-    icon: 'undo',
-    titleKey: 'ZURUECKWEISEN',
-    typ: 'ZURUECKWEISEN',
-  },
-};
+export const StatusUebergaengeOptions = {
+  BEARBEITUNG_ABSCHLIESSEN: (context?: { hasAcceptedAllDokuments: boolean }) =>
+    ({
+      icon: 'check',
+      titleKey: 'BEARBEITUNG_ABSCHLIESSEN',
+      typ: 'BEARBEITUNG_ABSCHLIESSEN',
+      disabledReason: context?.hasAcceptedAllDokuments
+        ? undefined
+        : 'DOKUMENTE_OFFEN',
+    }) as const,
+  ZURUECKWEISEN: () =>
+    ({
+      icon: 'undo',
+      titleKey: 'ZURUECKWEISEN',
+      typ: 'ZURUECKWEISEN',
+      disabledReason: undefined,
+    }) as const,
+} satisfies Record<StatusUebergang, unknown>;

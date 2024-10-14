@@ -1,8 +1,9 @@
 import path from 'path';
-import { Tree, updateJson } from '@nx/devkit';
-import { libraryGenerator } from '@nx/angular/generators';
 
-import { NormalizedSchema, LibTypeGenerator } from '../generator.interface';
+import { libraryGenerator } from '@nx/angular/generators';
+import { Tree } from '@nx/devkit';
+
+import { LibTypeGenerator, NormalizedSchema } from '../generator.interface';
 import { extendJestConfigSwc, extendTestSetupSwc } from './helpers/swc';
 
 export function dataAccessTypeFactory(
@@ -28,29 +29,13 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
   extendTestSetupSwc(tree, options);
   extendJestConfigSwc(tree, options);
 
-  updateJson(
-    tree,
-    path.join(options.projectRoot, options.nameDasherized, 'eslint.config.js'),
-    (json) => {
-      json.overrides = [
-        {
-          files: ['*.ts'],
-          rules: {},
-        },
-      ];
-      return json;
-    },
-  );
   tree.delete(
     path.join(
       options.projectRoot,
-      options.nameDasherized,
       'src',
       'lib',
       options.projectName + '.component.ts',
     ),
   );
-  tree.delete(
-    path.join(options.projectRoot, options.nameDasherized, 'README.md'),
-  );
+  tree.delete(path.join(options.projectRoot, 'README.md'));
 }

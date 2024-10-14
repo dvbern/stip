@@ -1,6 +1,7 @@
-import chalk from 'chalk';
 import * as path from 'path';
-import { formatFiles, Tree, readJson, updateJson } from '@nx/devkit';
+
+import { Tree, formatFiles, readJson, updateJson } from '@nx/devkit';
+import chalk from 'chalk';
 
 import { ValidateGeneratorSchema } from './schema';
 
