@@ -1,8 +1,6 @@
 package ch.dvbern.stip.api.eltern.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -30,12 +28,12 @@ public class ElternRequiredDocumentsProducer {
         ElternTyp.VATER, DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
     );
 
-    public List<DokumentTyp> getForElternteil(final Eltern elternteil, final Familiensituation familiensituation) {
+    public Set<DokumentTyp> getForElternteil(final Eltern elternteil, final Familiensituation familiensituation) {
         if (elternteil == null) {
-            return List.of();
+            return Set.of();
         }
 
-        final var requiredDocs = new ArrayList<DokumentTyp>();
+        final var requiredDocs = new HashSet<DokumentTyp>();
 
         if(RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getErgaenzungsleistungen())){
             requiredDocs.add(ERGAENZUNGSLEISTUNGEN_MAP.get(elternteil.getElternTyp()));

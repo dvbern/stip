@@ -1,7 +1,9 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -15,12 +17,12 @@ import org.apache.commons.lang3.tuple.Pair;
 public class DokumentsRequiredDocumentProducer implements RequiredDocumentProducer {
 
     @Override
-    public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         if (formular == null) {
-            return ImmutablePair.of("", List.of());
+            return ImmutablePair.of("", Set.of());
         }
 
-        final var requiredDocs = new ArrayList<DokumentTyp>();
+        final var requiredDocs = new HashSet<DokumentTyp>();
 
         final var pia = formular.getPersonInAusbildung();
         final var kinds = formular.getKinds();
