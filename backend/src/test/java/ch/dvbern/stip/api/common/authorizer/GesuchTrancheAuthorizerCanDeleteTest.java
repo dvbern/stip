@@ -127,12 +127,22 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
     @Test
-    void adminCanDeleteAenderungAenderungTest(){
+    void adminCanNotDeleteAenderungAenderungTest(){
         // arrange
         currentBenutzer.setRollen(Set.of(new Rolle()
             .setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)));
         final var uuid = UUID.randomUUID();
         //assert
-        assertDoesNotThrow(() -> authorizer.canDeleteAenderung(uuid));
+        assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
+    }
+
+    @Test
+    void sbCanNotDeleteAenderungAenderungTest(){
+        // arrange
+        currentBenutzer.setRollen(Set.of(new Rolle()
+            .setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER)));
+        final var uuid = UUID.randomUUID();
+        //assert
+        assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
 }
