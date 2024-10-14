@@ -1145,10 +1145,10 @@ class GesuchServiceTest {
         when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
-        assertDoesNotThrow(() ->gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
         assertEquals(
-            gesuchRepository.findAlle().findFirst().get().getGesuchStatus(),
-            Gesuchstatus.BEREIT_FUER_BEARBEITUNG
+            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            gesuchRepository.findAlle().findFirst().get().getGesuchStatus()
         );
     }
 
@@ -1161,8 +1161,10 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         doNothing().when(gesuchValidatorService).validateGesuchForStatus(any(),any());
 
-        assertDoesNotThrow(() ->gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
-        assertEquals(Gesuchstatus.VERFUEGT,gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.VERFUEGT,
+            gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
     }
 
     @TestAsSachbearbeiter
@@ -1173,8 +1175,10 @@ class GesuchServiceTest {
         when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
-        assertDoesNotThrow(() ->gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
-        assertEquals(Gesuchstatus.BEREIT_FUER_BEARBEITUNG,gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
     }
 
     @TestAsSachbearbeiter
@@ -1185,8 +1189,10 @@ class GesuchServiceTest {
         when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
-        assertDoesNotThrow(() ->gesuchService.gesuchStatusToVersendet(gesuch.getId()));
-        assertEquals(Gesuchstatus.VERSENDET,gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusToVersendet(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.VERSENDET,
+            gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
     }
 
     /**
