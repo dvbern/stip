@@ -31,6 +31,7 @@ import {
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
+import { assertUnreachable } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
@@ -61,6 +62,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   gesuchAenderungStore = inject(GesuchAenderungStore);
   dokumentsStore = inject(DokumentsStore);
 
+  private hasAcceptedAllDocumentsSig = computed(() => {
+    const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
+    if (!gesuchStatus) {
+      return false;
+    }
+
+    return this.dokumentsStore.hasAcceptedAllDokumentsSig();
+  });
+
   isTrancheRouteSig = computed(() => {
     const gesuch = this.currentGesuchSig();
     if (!gesuch) {
@@ -83,6 +93,16 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     }
 
     return this.router.url.includes('/aenderung/');
+  });
+
+  isInfosRouteSig = computed(() => {
+    const isActive = this.router.isActive('infos', {
+      paths: 'subset',
+      fragment: 'ignored',
+      matrixParams: 'ignored',
+      queryParams: 'ignored',
+    });
+    return isActive;
   });
 
   constructor() {
@@ -111,39 +131,19 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     return gesuchStatus === 'BEREIT_FUER_BEARBEITUNG';
   });
 
-  canSetCurrentStatusUebergangSig = computed(() => {
-    const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
-    if (!gesuchStatus) {
-      return false;
-    }
-
-    const hasAcceptedAllDokuments =
-      this.dokumentsStore.hasAcceptedAllDokumentsSig();
-
-    switch (gesuchStatus) {
-      case 'IN_BEARBEITUNG_SB':
-        // 'DOKUMENTE_OFFEN' could be used to notify the SB user that there are still documents to be accepted
-        return hasAcceptedAllDokuments ? gesuchStatus : 'DOKUMENTE_OFFEN';
-      case 'IN_FREIGABE':
-      case 'VERSANDBEREIT':
-        return gesuchStatus;
-      default:
-        return 'NO_UEBERGANG';
-    }
-  });
-
   setToBearbeitung() {
     this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchToBearbeitung());
   }
 
   statusUebergaengeOptionsSig = computed(() => {
     const gesuch = this.currentGesuchSig();
+    const hasAcceptedAllDokuments = this.hasAcceptedAllDocumentsSig();
     if (!gesuch) {
       return [];
     }
 
-    return StatusUebergaengeMap[gesuch.gesuchStatus]?.map(
-      (status) => StatusUebergaengeOptions[status],
+    return StatusUebergaengeMap[gesuch.gesuchStatus]?.map((status) =>
+      StatusUebergaengeOptions[status]({ hasAcceptedAllDokuments }),
     );
   });
 
@@ -161,6 +161,11 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'BEREIT_FUER_BEARBEITUNG':
         this.setStatusBereitFuerBearbeitung();
         break;
+      case 'VERSENDET':
+        this.setGesuchVersendet();
+        break;
+      default:
+        assertUnreachable(nextStatus);
     }
   }
 
