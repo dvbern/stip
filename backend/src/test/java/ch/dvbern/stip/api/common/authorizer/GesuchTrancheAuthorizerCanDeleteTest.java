@@ -11,6 +11,7 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import io.quarkus.security.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
 
         gesuchTranche_inBearbeitungGS = new GesuchTranche()
             .setGesuch(gesuch)
+            .setTyp(GesuchTrancheTyp.AENDERUNG)
             .setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
 
         UUID otherBenutzerId = UUID.randomUUID();
@@ -89,14 +91,23 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
             .thenReturn(gesuchTranche_wrongState);
         final var uuid = UUID.randomUUID();
         // assert
-        assertThrows(UnauthorizedException.class, () -> authorizer.canDelete(uuid));
+        assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
     @Test
-    void gsCanDeleteOnlyOwnAenderungTest(){
+    void gsCanNotDeleteTrancheTest(){
         // arrange
+        gesuchTranche_inBearbeitungGS.setTyp(GesuchTrancheTyp.TRANCHE);
         final var uuid = UUID.randomUUID();
         // assert
-        assertDoesNotThrow(() -> authorizer.canDelete(uuid));
+        assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
+    }
+    @Test
+    void gsCanDeleteAenderungOnlyOwnAenderungTest(){
+        // arrange
+        gesuchTranche_inBearbeitungGS.setTyp(GesuchTrancheTyp.AENDERUNG);
+        final var uuid = UUID.randomUUID();
+        // assert
+        assertDoesNotThrow(() -> authorizer.canDeleteAenderung(uuid));
     }
     @Test
     void gsCannotDeleteWithoutRoleTest(){
@@ -105,7 +116,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
         final var uuid = UUID.randomUUID();
         // assert
-        assertThrows(UnauthorizedException.class, () -> authorizer.canDelete(uuid));
+        assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
     @Test
     void gsCannotDeleteOtherAenderungTest(){
@@ -113,15 +124,15 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         currentBenutzer.setRollen(Set.of());
         final var uuid = UUID.randomUUID();
         // assert
-        assertThrows(UnauthorizedException.class, () -> authorizer.canDelete(uuid));
+        assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
     @Test
-    void adminCanDeleteAenderungTest(){
+    void adminCanDeleteAenderungAenderungTest(){
         // arrange
         currentBenutzer.setRollen(Set.of(new Rolle()
             .setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)));
         final var uuid = UUID.randomUUID();
         //assert
-        assertDoesNotThrow(() -> authorizer.canDelete(uuid));
+        assertDoesNotThrow(() -> authorizer.canDeleteAenderung(uuid));
     }
 }
