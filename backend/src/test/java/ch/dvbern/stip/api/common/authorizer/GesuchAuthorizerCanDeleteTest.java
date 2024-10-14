@@ -40,6 +40,7 @@ class GesuchAuthorizerCanDeleteTest {
 
     private GesuchTrancheRepository gesuchTrancheRepository;
     private GesuchRepository gesuchRepository;
+
     @BeforeEach
     void setUp() {
         benutzerService = Mockito.mock(BenutzerService.class);
@@ -71,21 +72,18 @@ class GesuchAuthorizerCanDeleteTest {
                 .setGesuchsteller(currentBenutzer)
             );
         fall = new Fall().setGesuchsteller(currentBenutzer);
-        authorizer = new GesuchAuthorizer(benutzerService,gesuchRepository
-            ,gesuchStatusService,fallRepository);
+        authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository
+            , gesuchStatusService, fallRepository);
 
         when(gesuchRepository.requireById(any()))
-            .thenReturn(gesuch
-            );
+            .thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any()))
-            .thenReturn(gesuchTranche_inBearbeitungGS
-            );
+            .thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchTrancheRepository.findById(any()))
-            .thenReturn(gesuchTranche_inBearbeitungGS
-            );
+            .thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
         when(fallRepository.requireById(any())).thenReturn(fall);
-        when(gesuchStatusService.benutzerCanEdit(any(),any())).thenReturn(true);
+        when(gesuchStatusService.benutzerCanEdit(any(), any())).thenReturn(true);
     }
 
     @Test
@@ -99,7 +97,7 @@ class GesuchAuthorizerCanDeleteTest {
     @Test
     void canDeleteOwnTest() {
         // arrange
-        authorizer = new GesuchAuthorizer(benutzerService,gesuchRepository,
+        authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository,
             null,null );
         final var uuid = UUID.randomUUID();
         // assert
@@ -110,7 +108,7 @@ class GesuchAuthorizerCanDeleteTest {
     void cannotDeleteAnotherTest() {
         // arrange
         currentBenutzer.setRollen(Set.of());
-        final var authorizer = new GesuchAuthorizer(benutzerService,gesuchRepository,
+        final var authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository,
             null,null );
         final var uuid = UUID.randomUUID();
         // assert
@@ -122,7 +120,7 @@ class GesuchAuthorizerCanDeleteTest {
     @Test
     void adminCanDeleteTest() {
         // arrange
-        final var authorizer = new GesuchAuthorizer(benutzerService,gesuchRepository,
+        final var authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository,
             null,null );
         final var uuid = UUID.randomUUID();
         // assert

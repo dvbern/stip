@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-;
+
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
