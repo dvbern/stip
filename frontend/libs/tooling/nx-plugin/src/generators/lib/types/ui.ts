@@ -4,7 +4,6 @@ import { libraryGenerator } from '@nx/angular/generators';
 import { Tree } from '@nx/devkit';
 
 import { LibTypeGenerator, NormalizedSchema } from '../generator.interface';
-import { extendEslintJson } from './helpers/eslint';
 import { extendJestConfigSwc, extendTestSetupSwc } from './helpers/swc';
 import { updateTsConfig } from './helpers/tsconfig';
 
@@ -24,7 +23,6 @@ export function uiTypeFactory(options: NormalizedSchema): LibTypeGenerator {
 }
 
 function postprocess(tree: Tree, options: NormalizedSchema) {
-  extendEslintJson(tree, 'angular', options);
   extendTestSetupSwc(tree, options);
   extendJestConfigSwc(tree, options);
 
