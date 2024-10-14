@@ -103,8 +103,8 @@
 
     @let statusUebergaenge = statusUebergaengeOptionsSig();
     @let hasStatusUebergaenge = statusUebergaenge?.length ?? 0 > 0;
-    @let availableTrancheIneraction = availableTrancheIneractionSig();
-    @if (hasStatusUebergaenge || availableTrancheIneraction) {
+    @let availableTrancheInteraction = availableTrancheInteractionSig();
+    @if (hasStatusUebergaenge || availableTrancheInteraction) {
       <!-- Separator -->
       <div class="my-1 text-body-tertiary vr"></div>
 
@@ -127,7 +127,7 @@
     <!-- Aktion Menu -->
     <mat-menu #aktionMenu="matMenu" class="header-menu-panel mt-2 rounded">
       <div class="d-flex flex-column gap-2">
-        @switch (availableTrancheIneraction) {
+        @switch (availableTrancheInteraction) {
           @case ('SET_TO_BEARBEITUNG') {
             <!-- Switch to In Bearbeitung SB -->
             <button
@@ -160,7 +160,7 @@
           }
         }
 
-        @if (hasStatusUebergaenge && availableTrancheIneraction) {
+        @if (hasStatusUebergaenge && availableTrancheInteraction) {
           <hr class="my-1" />
         }
 

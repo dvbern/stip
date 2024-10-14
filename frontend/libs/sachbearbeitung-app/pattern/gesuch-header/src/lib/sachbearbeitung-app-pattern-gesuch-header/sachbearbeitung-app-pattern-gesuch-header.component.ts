@@ -122,7 +122,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     );
   }
 
-  availableTrancheIneractionSig = computed(() => {
+  availableTrancheInteractionSig = computed(() => {
     const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
 
     switch (gesuchStatus) {

@@ -18,7 +18,6 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -103,8 +102,7 @@ class GesuchTrancheCreateTest {
     void setStatusInBearbeitungSb() {
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchIdPath(gesuch.getId())
-//            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
