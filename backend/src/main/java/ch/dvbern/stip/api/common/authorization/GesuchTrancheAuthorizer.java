@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -58,7 +59,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canDelete(final UUID gesuchTrancheId) {
+    public void canDeleteAenderung(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         if (isAdminOrSb(currentBenutzer)) {
@@ -75,7 +76,8 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             throw new UnauthorizedException();
         }
 
-        if (gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
+        if ((gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+        || (gesuchTranche.getTyp() != GesuchTrancheTyp.AENDERUNG)) {
             throw new UnauthorizedException();
         }
     }
