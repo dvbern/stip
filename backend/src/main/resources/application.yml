@@ -47,8 +47,6 @@ kstip:
 quarkus:
   antivirus:
     clamav:
-#      host: '${STIP_CLAMAV_HOST}'
-#      port: '${STIP_CLAMAV_PORT:3310}'
       enabled: true
       health:
         enabled: true
@@ -189,6 +187,10 @@ quarkus:
   quarkus:
     s3:
       endpoint-override: '${STIP_S3_ENDPOINT}'
+    antivirus:
+      clamav:
+        host: '${STIP_CLAMAV_HOST}'
+        port: '${STIP_CLAMAV_PORT:3310}'
 
 mp:
   openapi:
