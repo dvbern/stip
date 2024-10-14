@@ -65,17 +65,14 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
             );
 
         authorizer = new GesuchTrancheAuthorizer(benutzerService,
-            gesuchTrancheRepository,gesuchRepository);
+            gesuchTrancheRepository, gesuchRepository);
 
         when(gesuchRepository.requireById(any()))
-            .thenReturn(gesuch
-            );
+            .thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any()))
-            .thenReturn(gesuchTranche_inBearbeitungGS
-            );
+            .thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchTrancheRepository.findById(any()))
-            .thenReturn(gesuchTranche_inBearbeitungGS
-            );
+            .thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
     }
 
@@ -87,13 +84,10 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
             .setStatus(GesuchTrancheStatus.AKZEPTIERT);
 
         when(gesuchTrancheRepository.requireById(any()))
-            .thenReturn(gesuchTranche_wrongState
-            );
+            .thenReturn(gesuchTranche_wrongState);
         when(gesuchTrancheRepository.findById(any()))
-            .thenReturn(gesuchTranche_wrongState
-            );
+            .thenReturn(gesuchTranche_wrongState);
         final var uuid = UUID.randomUUID();
-
         // assert
         assertThrows(UnauthorizedException.class, () -> authorizer.canDelete(uuid));
     }
@@ -101,7 +95,6 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
     void gsCanDeleteOnlyOwnAenderungTest(){
         // arrange
         final var uuid = UUID.randomUUID();
-
         // assert
         assertDoesNotThrow(() -> authorizer.canDelete(uuid));
     }
@@ -111,7 +104,6 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         currentBenutzer.setRollen(Set.of());
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
         final var uuid = UUID.randomUUID();
-
         // assert
         assertThrows(UnauthorizedException.class, () -> authorizer.canDelete(uuid));
     }
@@ -120,7 +112,6 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         // arrange
         currentBenutzer.setRollen(Set.of());
         final var uuid = UUID.randomUUID();
-
         // assert
         assertThrows(UnauthorizedException.class, () -> authorizer.canDelete(uuid));
     }
@@ -130,7 +121,6 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         currentBenutzer.setRollen(Set.of(new Rolle()
             .setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)));
         final var uuid = UUID.randomUUID();
-
         //assert
         assertDoesNotThrow(() -> authorizer.canDelete(uuid));
     }
