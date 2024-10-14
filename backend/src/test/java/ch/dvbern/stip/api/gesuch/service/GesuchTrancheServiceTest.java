@@ -115,6 +115,6 @@ class GesuchTrancheServiceTest {
         //assert
         assertThrows(IllegalStateException.class, () ->gesuchTrancheService.deleteAenderung(gesuch.getGesuchTranchen().get(0).getId()));
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
-        assertTrue(gesuchTrancheService.deleteAenderung(gesuch.getGesuchTranchen().get(0).getId()));
+        assertDoesNotThrow(() -> gesuchTrancheService.deleteAenderung(gesuch.getGesuchTranchen().get(0).getId()));
     }
 }

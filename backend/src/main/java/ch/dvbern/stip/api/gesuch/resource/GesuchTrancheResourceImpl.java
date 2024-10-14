@@ -59,10 +59,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @Override
     public Response deleteAenderung(UUID aenderungId) {
         gesuchTrancheAuthorizer.canDeleteAenderung(aenderungId);
-        boolean hasBeenDeleted = gesuchTrancheService.deleteAenderung(aenderungId);
-        if (!hasBeenDeleted) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        gesuchTrancheService.deleteAenderung(aenderungId);
         return Response.ok().build();
     }
 

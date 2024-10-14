@@ -204,11 +204,13 @@ public class GesuchTrancheService {
     }
 
     @Transactional
-    public boolean deleteAenderung(final UUID aenderungId) {
+    public void deleteAenderung(final UUID aenderungId) {
         if(gesuchTrancheRepository.requireById(aenderungId).getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS){
             throw new IllegalStateException();
         }
-        return gesuchTrancheRepository.deleteById(aenderungId);
+        if(!gesuchTrancheRepository.deleteById(aenderungId)){
+            throw new NotFoundException();
+        }
     }
 
     @Transactional
