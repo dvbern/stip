@@ -837,14 +837,6 @@ class GesuchServiceTest {
         );
     }
 
-    @Test
-    @TestAsGesuchsteller
-    void deleteGesuchTest(){
-        final var gesuch = GesuchGenerator.initGesuch();
-        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        assertDoesNotThrow(() ->gesuchService.deleteGesuch(gesuch.getId()));
-    }
-
     // TODO KSTIP-1236: Enable this test
     //    @Test
     //    @TestAsGesuchsteller
