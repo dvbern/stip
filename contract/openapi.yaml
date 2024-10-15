@@ -147,7 +147,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToInBearbeitung
-  '/dokument/{gesuchTrancheId}/{dokumentTyp}':
+  '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
         - Dokument
@@ -167,9 +167,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Dokument'
+                $ref: '#/components/schemas/NullableGesuchDokument'
           description: Returns an Array of Dokumente for a given GesuchTrancheId and a DokumentTyp
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -179,7 +177,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getDokumenteForTyp
+      operationId: getGesuchDokumenteForTyp
       summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
     post:
       requestBody:
@@ -2011,6 +2009,11 @@ components:
           items:
             type: string
     GesuchDokument:
+      required:
+        - id
+        - dokumentTyp
+        - dokumente
+        - status
       type: object
       properties:
         id:
@@ -3003,6 +3006,11 @@ components:
           $ref: '#/components/schemas/GueltigkeitStatus'
       allOf:
         - $ref: '#/components/schemas/GesuchsperiodeDaten'
+    NullableGesuchDokument:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/GesuchDokument'
     NullableGesuchsperiodeWithDaten:
       properties:
         value:
