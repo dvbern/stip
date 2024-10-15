@@ -20,9 +20,5 @@
 
   "gesuch-app.aenderungs-entry.title": "Änderungen",
   "gesuch-app.aenderungs-entry.status.title": "Status des Antrags",
-  "gesuch-app.cockpit.gesuch.aenderungs-entry": "Änderung öffnen",
-  "gesuch-app.cockpit.gesuch.status.IN_BEARBEITUNG_GS": "In Bearbeitung GS",
-  "gesuch-app.cockpit.gesuch.status.UEBERPRUEFEN": "Überprüfen",
-  "gesuch-app.cockpit.gesuch.status.AKZEPTIERT": "Akzeptiert",
-  "gesuch-app.cockpit.gesuch.status.ABGELEHNT": "Abgelehnt"
+  "gesuch-app.cockpit.gesuch.aenderungs-entry": "Änderung öffnen"
 }

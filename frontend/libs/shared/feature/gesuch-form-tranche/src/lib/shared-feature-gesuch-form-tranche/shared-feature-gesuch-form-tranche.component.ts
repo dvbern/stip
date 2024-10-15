@@ -125,16 +125,29 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
     effect(
       () => {
-        const { tranche, gesuchsNummer, fallNummer, sachbearbeiter } =
-          this.viewSig();
+        const {
+          isEditingTranche,
+          gesuch,
+          tranche,
+          gesuchsNummer,
+          fallNummer,
+          sachbearbeiter,
+        } = this.viewSig();
+
+        // React to language change
+        this.languageSig();
+
         const defaultComment = this.defaultCommentSig();
         if (!tranche) {
           return;
         }
         const pia = tranche.gesuchFormular?.personInAusbildung;
+        const status = isEditingTranche ? tranche.status : gesuch?.gesuchStatus;
 
         this.form.patchValue({
-          status: tranche.status ?? 'IN_BEARBEITUNG_GS',
+          status: this.translate.instant(
+            `shared.gesuch.status.contract.${status ?? 'IN_BEARBEITUNG_GS'}`,
+          ),
           pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
           gesuchsnummer: gesuchsNummer,
           fallnummer: fallNummer,

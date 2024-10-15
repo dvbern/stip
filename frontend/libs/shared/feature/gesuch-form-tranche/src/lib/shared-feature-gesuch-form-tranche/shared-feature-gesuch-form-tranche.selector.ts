@@ -9,8 +9,10 @@ export const selectSharedFeatureGesuchFormTrancheView = createSelector(
   selectSharedDataAccessGesuchsView,
   selectSharedDataAccessGesuchCacheView,
   (gesuchsView, { cache }) => ({
+    isEditingTranche: gesuchsView.isEditingTranche,
     loading: gesuchsView.loading,
     tranche: cache.gesuch?.gesuchTrancheToWorkWith,
+    gesuch: cache.gesuch,
     gesuchId: cache.gesuch?.id,
     fallNummer: cache.gesuch?.fall.fallNummer,
     gesuchsNummer: cache.gesuch?.gesuchNummer,
