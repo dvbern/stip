@@ -57,6 +57,14 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
+    public Response deleteAenderung(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canDeleteAenderung(aenderungId);
+        gesuchTrancheService.deleteAenderung(aenderungId);
+        return Response.ok().build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
     public Response getGesuchDokumente(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         var gesuchDokumente = gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
