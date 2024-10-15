@@ -14,7 +14,13 @@
   <div class="row g-4 mt-4">
     <!-- Status -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.tranche.status.label' | translate }} </mat-label>
+      <mat-label>
+        @if (viewSig().isEditingTranche) {
+          {{ 'shared.form.tranche.status.label.' + viewSig().tranche?.typ | translate }}
+        } @else {
+          {{ 'shared.form.tranche.status.label.GESUCH' | translate }}
+        }
+      </mat-label>
 
       <input readonly type="text" matInput formControlName="status" data-testid="form-tranche-status" />
     </mat-form-field>

@@ -142,11 +142,14 @@ export class SharedFeatureGesuchFormTrancheComponent {
           return;
         }
         const pia = tranche.gesuchFormular?.personInAusbildung;
-        const status = isEditingTranche ? tranche.status : gesuch?.gesuchStatus;
+        const useTrancheStatus =
+          isEditingTranche && tranche.status !== 'UEBERPRUEFEN';
+        const status = useTrancheStatus ? tranche.status : gesuch?.gesuchStatus;
+        const type = useTrancheStatus ? 'tranche' : 'contract';
 
         this.form.patchValue({
           status: this.translate.instant(
-            `shared.gesuch.status.contract.${status ?? 'IN_BEARBEITUNG_GS'}`,
+            `shared.gesuch.status.${type}.${status ?? 'IN_BEARBEITUNG_GS'}`,
           ),
           pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
           gesuchsnummer: gesuchsNummer,
