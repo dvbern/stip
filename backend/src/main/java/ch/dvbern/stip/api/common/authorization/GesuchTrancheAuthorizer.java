@@ -73,8 +73,8 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             throw new UnauthorizedException();
         }
 
-        if ((gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS)
-        || (gesuchTranche.getTyp() != GesuchTrancheTyp.AENDERUNG)) {
+        if ((gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) ||
+            (gesuchTranche.getTyp() != GesuchTrancheTyp.AENDERUNG)) {
             throw new UnauthorizedException();
         }
     }
