@@ -155,6 +155,7 @@
   "shared.gesuch.status.contract.IN_BEARBEITUNG_SB": "In Bearbeitung",
   "shared.gesuch.status.contract.IN_FREIGABE": "In Freigabe",
   "shared.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
+  "shared.gesuch.status.contract.VERSANDBEREIT": "Versandbereit",
 
   "shared.gesuch.tranche.typ.AENDERUNG": "Änderung",
   "shared.gesuch.tranche.typ.TRANCHE": "Gesuch",

@@ -138,7 +138,7 @@ export class EinreichenStore extends signalStore(
         this.store.select(selectSharedDataAccessGesuchCache).pipe(
           map(({ gesuch }) => ({
             typ: gesuch?.gesuchTrancheToWorkWith.typ,
-            status: gesuch?.gesuchTrancheToWorkWith.status,
+            status: gesuch?.gesuchStatus,
           })),
         ),
       ),
@@ -146,7 +146,7 @@ export class EinreichenStore extends signalStore(
         this.validate$(
           gesuchTrancheId,
           // If it is a tranche > IN_BEARBEITUNG_GS or the tranche is an AENDERUNG validate all pages fully
-          typ === 'AENDERUNG' || status !== 'IN_BEARBEITUNG_GS' || !status,
+          typ === 'AENDERUNG' || status !== 'IN_BEARBEITUNG_GS',
         ),
       ),
     ),

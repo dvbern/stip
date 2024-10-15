@@ -1,16 +1,20 @@
 import { createSelector } from '@ngrx/store';
 
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import {
+  selectSharedDataAccessGesuchCacheView,
+  selectSharedDataAccessGesuchsView,
+} from '@dv/shared/data-access/gesuch';
 
 export const selectSharedFeatureGesuchFormTrancheView = createSelector(
   selectSharedDataAccessGesuchsView,
-  (gesuchsView) => ({
+  selectSharedDataAccessGesuchCacheView,
+  (gesuchsView, { cache }) => ({
     loading: gesuchsView.loading,
-    tranche: gesuchsView.gesuch?.gesuchTrancheToWorkWith,
-    gesuchId: gesuchsView.gesuch?.id,
-    fallNummer: gesuchsView.gesuch?.fall.fallNummer,
-    gesuchsNummer: gesuchsView.gesuch?.gesuchNummer,
-    sachbearbeiter: gesuchsView.gesuch?.bearbeiter,
+    tranche: cache.gesuch?.gesuchTrancheToWorkWith,
+    gesuchId: cache.gesuch?.id,
+    fallNummer: cache.gesuch?.fall.fallNummer,
+    gesuchsNummer: cache.gesuch?.gesuchNummer,
+    sachbearbeiter: cache.gesuch?.bearbeiter,
     lastUpdate: gesuchsView.lastUpdate,
   }),
 );
