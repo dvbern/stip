@@ -166,7 +166,7 @@ class GesuchTrancheResourceImplTest {
             .extract()
             .body()
             .as(GesuchTrancheSlimDtoSpec[].class);
-        assertThat(gesuchtranchen.length).isLessThan(count);
+        assertThat(gesuchtranchen).hasSizeLessThan(count);
     }
 
     @Test
