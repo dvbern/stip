@@ -19,10 +19,9 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     loadAllDebounced: props<{
       query: GetGesucheSBQueryType;
     }>(),
-    newTriggered: props<{
+    createGesuch: props<{
       create: GesuchCreate;
     }>(),
-    removeTriggered: props<{ id: string }>(),
     gesuchLoadedSuccess: props<{
       gesuch: SharedModelGesuch;
       trancheId?: string;
@@ -41,8 +40,9 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
       origin: SharedModelGesuchFormStep;
     }>(),
     gesuchUpdatedSubformFailure: props<{ error: SharedModelError }>(),
-    gesuchRemovedSuccess: emptyProps(),
-    gesuchRemovedFailure: props<{ error: SharedModelError }>(),
+    deleteGesuch: props<{ gesuchId: string }>(),
+    deleteGesuchSuccess: emptyProps(),
+    deleteGesuchFailure: props<{ error: SharedModelError }>(),
     gesuchsLoadedSuccess: props<{ gesuchs: SharedModelGesuch[] }>(),
     gesuchsLoadedFailure: props<{ error: SharedModelError }>(),
     setGesuchToBearbeitung: emptyProps(),

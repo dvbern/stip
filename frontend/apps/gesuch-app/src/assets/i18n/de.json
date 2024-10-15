@@ -8,7 +8,6 @@
   "gesuch-app.cockpit.periode.einreichfrist.titel": "Einreichefrist",
   "gesuch-app.cockpit.periode.einreichfrist.spaetestens": "bis spätestens",
   "gesuch-app.cockpit.periode.status.titel": "Status des Antrags",
-  "gesuch-app.cockpit.periode.status.nicht_komplett": "Nicht komplett eingereicht",
   "gesuch-app.cockpit.gesuch.remove": "Löschen",
   "gesuch-app.cockpit.gesuch.semester.herbst": "Herbst",
   "gesuch-app.cockpit.gesuch.semester.fruehling": "Frühjahr",
@@ -18,6 +17,9 @@
 
   "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft",
 
+  "gesuch-app.gesuch.delete": "Gesuch löschen",
+  "gesuch-app.gesuch.delete.dialog.title": "Änderung löschen",
+  "gesuch-app.gesuch.delete.dialog.message": "Möchten Sie das Gesuch wirklich löschen?",
   "gesuch-app.aenderungs-entry.title": "Änderungen",
   "gesuch-app.aenderungs-entry.status.title": "Status des Antrags",
   "gesuch-app.aenderungs-entry.delete": "Änderung löschen",

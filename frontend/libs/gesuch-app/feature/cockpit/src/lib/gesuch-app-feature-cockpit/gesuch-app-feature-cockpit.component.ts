@@ -101,17 +101,13 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
 
   handleCreate(periode: Gesuchsperiode, fallId: string) {
     this.store.dispatch(
-      SharedDataAccessGesuchEvents.newTriggered({
+      SharedDataAccessGesuchEvents.createGesuch({
         create: {
           fallId,
           gesuchsperiodeId: periode.id,
         },
       }),
     );
-  }
-
-  handleRemove(id: string) {
-    this.store.dispatch(SharedDataAccessGesuchEvents.removeTriggered({ id }));
   }
 
   trackByPerioden(
@@ -143,6 +139,23 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
             gesuchId,
             createAenderungsantragRequest: result,
           });
+        }
+      });
+  }
+
+  deleteGesuch(gesuchId: string) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'gesuch-app.gesuch.delete.dialog.title',
+      message: 'gesuch-app.gesuch.delete.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.delete',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.store.dispatch(
+            SharedDataAccessGesuchEvents.deleteGesuch({ gesuchId }),
+          );
         }
       });
   }

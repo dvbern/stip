@@ -67,15 +67,25 @@
                             'gesuch-app.cockpit.periode.status.titel' | translate
                           }}</span>
                           <span class="fw-medium">{{
-                            'gesuch-app.cockpit.periode.status.nicht_komplett' | translate
+                            'shared.gesuch.status.contract.' + periode.gesuch.gesuchStatus | translate
                           }}</span>
                           <ng-container
                             *ngTemplateOutlet="einreichefrist; context: { periode: periode }"
                           ></ng-container>
                         </div>
-                        <div class="flex-grow-1"></div>
+                        <div class="flex-grow-1 mb-3"></div>
+                        @if (periode.gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
+                          <button
+                            type="button"
+                            class="btn btn-outline-primary mb-2 w-100"
+                            data-testid="gesuch-app.cockpit.gesuch.delete"
+                            (click)="deleteGesuch(periode.gesuch.id)"
+                          >
+                            <span>{{ 'gesuch-app.gesuch.delete' | translate }}</span>
+                          </button>
+                        }
                         <a
-                          class="btn btn-primary mt-3 w-100"
+                          class="btn btn-primary w-100"
                           data-testid="cockpit-gesuch-edit"
                           [routerLink]="['/gesuch', periode.gesuch.id]"
                         >
