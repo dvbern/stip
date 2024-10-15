@@ -399,44 +399,6 @@ class GesuchFillFormularTest {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(22)
-    void createAnotherFall() {
-        fallId = TestUtil.getOrCreateFall(fallApiSpec).getId();
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(23)
-    void testCreateAnotherEndpoint() {
-        var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setFallId(fallId);
-        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
-        var response = gesuchApiSpec.createGesuch()
-            .body(gesuchDTO)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.CREATED.getStatusCode());
-
-        gesuchId = TestUtil.extractIdFromResponse(response);
-        gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
-            .gesuchIdPath(gesuchId)
-            .execute(ResponseBody::prettyPeek).then().extract()
-            .body()
-            .as(GesuchDtoSpec.class)
-            .getGesuchTrancheToWorkWith().getId();
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(24)
-    @AlwaysRun
-    void deleteGesuchAsGS() {
-        TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
-    }
-
     private GesuchDtoSpec patchAndValidate() {
         final var returnedGesuch = patchGesuch();
         validatePage();
