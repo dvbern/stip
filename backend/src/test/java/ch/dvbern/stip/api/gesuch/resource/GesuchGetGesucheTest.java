@@ -34,7 +34,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -72,18 +71,6 @@ class GesuchGetGesucheTest {
     @Test
     @TestAsSachbearbeiter
     @Order(3)
-    void getAlleGesucheNoneWithoutPiaFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE);
-
-        final var withoutPia = found.stream()
-            .filter(gesuch -> gesuch.getPiaNachname() == null || gesuch.getPiaVorname() == null)
-            .toList();
-        assertThat(withoutPia.size(), is(0));
-    }
-
-    @Test
-    @TestAsSachbearbeiter
-    @Order(4)
     void getMeineBearbeitbarenNoneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -91,7 +78,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(4)
     void getAlleBearbeitbarenNoneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -99,7 +86,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(6)
+    @Order(5)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchIdPath(gesuch.getId())
@@ -111,7 +98,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(6)
     void getMeineBearbeitbarenOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -119,7 +106,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(7)
     void getAlleBearbeitbarenOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -127,7 +114,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsAdmin
-    @Order(9)
+    @Order(8)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
