@@ -65,9 +65,8 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
 
         final var isAuthorizedForCurrentOperation = isGesuchsteller(currentBenutzer) &&
-            !isSachbearbeiter(currentBenutzer) &&
-            !isAdmin(currentBenutzer) &&
             AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch);
+
         // Gesuchsteller can only update their Tranchen IN_BEARBEITUNG_GS
         if (!isAuthorizedForCurrentOperation) {
             throw new UnauthorizedException();
