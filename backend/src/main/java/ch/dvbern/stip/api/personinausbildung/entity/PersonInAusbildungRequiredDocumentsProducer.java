@@ -1,6 +1,8 @@
 package ch.dvbern.stip.api.personinausbildung.entity;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;

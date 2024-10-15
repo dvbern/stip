@@ -9,24 +9,18 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.eltern.entity.Eltern;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.util.TypeLiteral;
-import jdk.jfr.Description;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.when;
 
 class RequiredDokumentServiceTest {
     @Test
@@ -54,8 +48,6 @@ class RequiredDokumentServiceTest {
 
         assertThat(requiredDocuments.size(), is(0));
     }
-
-
 
     private GesuchFormular initFormular(final List<DokumentTyp> existingTypes) {
         return new GesuchFormular().setTranche(new GesuchTranche().setGesuch(
