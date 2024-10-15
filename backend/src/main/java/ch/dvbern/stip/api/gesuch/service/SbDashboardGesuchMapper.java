@@ -16,8 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SbDashboardGesuchMapper {
     public List<SbDashboardGesuchDto> toDto(final Gesuch gesuch) {
         final var dtos = new ArrayList<SbDashboardGesuchDto>();
-        // TODO KSTIP-1538: Check if this executes 2*tranchen queries
-        gesuch.getOldestGesuchTranche().ifPresent(tranche -> dtos.add(toDto(gesuch, tranche)));
+        dtos.add(toDto(gesuch, gesuch.getLatestGesuchTranche()));
         gesuch.getAenderungZuUeberpruefen().ifPresent(tranche -> dtos.add(toDto(gesuch, tranche)));
 
         return dtos;
@@ -25,7 +24,6 @@ public class SbDashboardGesuchMapper {
 
     SbDashboardGesuchDto toDto(final Gesuch gesuch, final GesuchTranche gesuchTranche) {
         final var target = new SbDashboardGesuchDto();
-        // TODO KSTIP-1538: Check if this executes 2*fall queries
         target.setId(gesuch.getId());
         target.setFallNummer(gesuch.getFall().getFallNummer());
         target.setTyp(gesuchTranche.getTyp());
