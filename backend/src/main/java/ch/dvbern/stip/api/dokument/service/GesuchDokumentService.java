@@ -269,6 +269,7 @@ public class GesuchDokumentService {
         }
 
         executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
+
     }
 
     public void scanDokument(final FileUpload fileUpload) {

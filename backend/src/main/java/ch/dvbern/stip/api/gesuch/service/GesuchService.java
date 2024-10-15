@@ -17,13 +17,13 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.ArrayList;
 
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -373,7 +373,7 @@ public class GesuchService {
     public void gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
         // TODO KSTIP-1130: Juristische Notiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS);
+        gesuchStatusService.triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto);
     }
 
     @Transactional
