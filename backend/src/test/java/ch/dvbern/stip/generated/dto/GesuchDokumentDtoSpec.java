@@ -67,9 +67,9 @@ public class GesuchDokumentDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -77,7 +77,7 @@ public class GesuchDokumentDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -93,9 +93,9 @@ public class GesuchDokumentDtoSpec {
    * Get dokumentTyp
    * @return dokumentTyp
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DokumentTypDtoSpec getDokumentTyp() {
     return dokumentTyp;
@@ -103,7 +103,7 @@ public class GesuchDokumentDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDokumentTyp(DokumentTypDtoSpec dokumentTyp) {
     this.dokumentTyp = dokumentTyp;
   }
@@ -127,9 +127,9 @@ public class GesuchDokumentDtoSpec {
    * Get dokumente
    * @return dokumente
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_DOKUMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<DokumentDtoSpec> getDokumente() {
     return dokumente;
@@ -137,7 +137,7 @@ public class GesuchDokumentDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_DOKUMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDokumente(List<DokumentDtoSpec> dokumente) {
     this.dokumente = dokumente;
   }
@@ -153,9 +153,9 @@ public class GesuchDokumentDtoSpec {
    * Get status
    * @return status
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DokumentstatusDtoSpec getStatus() {
     return status;
@@ -163,7 +163,7 @@ public class GesuchDokumentDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setStatus(DokumentstatusDtoSpec status) {
     this.status = status;
   }

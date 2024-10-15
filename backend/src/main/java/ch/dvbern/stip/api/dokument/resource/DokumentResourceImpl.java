@@ -14,8 +14,8 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
-import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkus.security.UnauthorizedException;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
@@ -55,10 +55,11 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    public Response getDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        List<DokumentDto> dokumentDtoList =
+    public Response getGesuchDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+        final var gesuchDokument =
             gesuchDokumentService.findGesuchDokumenteForTyp(gesuchTrancheId, dokumentTyp);
-        return Response.ok(dokumentDtoList).build();
+        final var wrapped = new NullableGesuchDokumentDto(gesuchDokument);
+        return Response.ok(wrapped).build();
     }
 
     @RolesAllowed(GESUCH_READ)
