@@ -2,12 +2,22 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
+
+
+
+import java.io.InputStream;
+import java.util.Map;
+import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
