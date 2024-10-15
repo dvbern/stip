@@ -144,6 +144,8 @@ public class GesuchResourceImpl implements GesuchResource {
         SbDashboardColumn sortColumn,
         SortOrder sortOrder
     ) {
+        gesuchAuthorizer.allowAllow();
+
         final var dtos = gesuchService.findGesucheSB(
             getGesucheSBQueryType,
             fallNummer,
