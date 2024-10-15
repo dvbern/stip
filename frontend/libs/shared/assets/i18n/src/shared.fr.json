@@ -147,6 +147,7 @@
   "shared.nachrichten.sender": "Expéditeur",
   "shared.nachrichten.date": "Date",
   "shared.nachrichten.type.GESUCH_EINGEREICHT": "Demande soumise",
+  "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
   "shared.gesuch.validation.wohnsitz.message": "Les informations de résidence ne correspondent pas aux informations de la situation familiale. Veuillez vérifier vos saisies dans:",

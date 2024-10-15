@@ -5,23 +5,28 @@
   <span>{{ 'shared.nachrichten.title' | translate }}</span>
 </h3>
 
-<div class="notifications gap-2 mt-4">
-  <h4 class="subgrid subgrid-3 m-0">
-    <span>{{ 'shared.nachrichten.subject' | translate }}</span>
-    <span>{{ 'shared.nachrichten.sender' | translate }}</span>
-    <span>{{ 'shared.nachrichten.date' | translate }}</span>
-  </h4>
-  @for (notification of notificationsViewSig(); track notification) {
-    <button
-      class="btn btn-link text-decoration-none subgrid subgrid-3 px-0 py-2 text-start border-top border-1"
-      (click)="openNotification(notification)"
-    >
-      <span>{{ 'shared.nachrichten.type.' + notification.notificationType | translate }}</span>
-      <span>{{ notification.userErstellt }}</span>
-      <span>{{ notification.timestampErstellt | date: 'dd.MM.yyyy' }}</span>
-    </button>
-  }
-</div>
+@let notifications = notificationsSig();
+@if (notifications.length > 0) {
+  <div class="notifications gap-2 mt-4">
+    <h4 class="subgrid subgrid-3 m-0">
+      <span>{{ 'shared.nachrichten.subject' | translate }}</span>
+      <span>{{ 'shared.nachrichten.sender' | translate }}</span>
+      <span>{{ 'shared.nachrichten.date' | translate }}</span>
+    </h4>
+    @for (notification of notificationsViewSig(); track notification) {
+      <button
+        class="btn btn-link text-decoration-none subgrid subgrid-3 px-0 py-2 text-start border-top border-1"
+        (click)="openNotification(notification)"
+      >
+        <span>{{ 'shared.nachrichten.type.' + notification.notificationType | translate }}</span>
+        <span>{{ notification.userErstellt }}</span>
+        <span>{{ notification.timestampErstellt | date: 'dd.MM.yyyy' }}</span>
+      </button>
+    }
+  </div>
+} @else {
+  <div>{{ 'shared.nachrichten.noNotifications' | translate }}</div>
+}
 
 @if (notificationsSig().length > 5) {
   <mat-paginator

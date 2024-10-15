@@ -147,6 +147,7 @@
   "shared.nachrichten.sender": "Absender",
   "shared.nachrichten.date": "Datum",
   "shared.nachrichten.type.GESUCH_EINGEREICHT": "Gesuch eingereicht",
+  "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
 
   "shared.gesuch.validation.generic": "Bitte überprüfen Sie Ihre Eingaben im Formular und füllen Sie die benötigten Felder aus.",
   "shared.gesuch.validation.uniqueSvnummer.message": "Die eingegebene AHV-Nummer wurde bereits in einem anderen Gesuch verwendet.<br>Bitte überprüfen Sie Ihre Eingaben bei:",

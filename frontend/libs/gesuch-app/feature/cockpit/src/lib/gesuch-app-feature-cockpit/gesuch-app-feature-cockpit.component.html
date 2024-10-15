@@ -164,14 +164,13 @@
       <!-- side column -->
       <div class="col-lg-4 mb-lg-5">
         <!-- NACHRICHTEN -->
-        @let notifications = notificationStore.notificationListViewSig();
-        @if (notifications.length > 0) {
-          <div class="card mb-5 shadow-lg">
-            <div class="card-body">
-              <dv-shared-ui-notifications [notifications]="notifications"></dv-shared-ui-notifications>
-            </div>
+        <div class="card mb-5 shadow-lg">
+          <div class="card-body">
+            <dv-shared-ui-notifications
+              [notifications]="notificationStore.notificationListViewSig()"
+            ></dv-shared-ui-notifications>
           </div>
-        }
+        </div>
 
         <!-- INFOS -->
         <div class="card mb-5 shadow-lg">
