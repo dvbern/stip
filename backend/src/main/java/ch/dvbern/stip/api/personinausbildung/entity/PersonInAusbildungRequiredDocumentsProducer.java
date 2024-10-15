@@ -1,8 +1,8 @@
 package ch.dvbern.stip.api.personinausbildung.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
@@ -29,13 +29,13 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
     );
 
     @Override
-    public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         final var pia = formular.getPersonInAusbildung();
         if (pia == null) {
-            return ImmutablePair.of("", List.of());
+            return ImmutablePair.of("", Set.of());
         }
 
-        final var requiredDocs = new ArrayList<DokumentTyp>();
+        final var requiredDocs = new HashSet<DokumentTyp>();
         final var niederlassungsstatus = pia.getNiederlassungsstatus();
         if (niederlassungsstatus != null && niederlassungsstatusMap.containsKey(niederlassungsstatus)) {
             requiredDocs.add(niederlassungsstatusMap.get(niederlassungsstatus));
