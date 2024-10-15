@@ -216,10 +216,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NotizUpdate'
+              $ref: '#/components/schemas/GesuchNotizUpdate'
         required: true
       tags:
-        - Gesuch
+        - GesuchNotiz
       responses:
         '201':
           description: New Notiz is created
@@ -243,10 +243,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NotizUpdate'
+              $ref: '#/components/schemas/GesuchNotizUpdate'
         required: true
       tags:
-        - Gesuch
+        - GesuchNotiz
       responses:
         '202':
           description: Notiz updated
@@ -264,7 +264,7 @@ paths:
       summary: Updates the Notiz of a Gesuch with the given Notiz-Id
     delete:
       tags:
-        - Gesuch
+        - GesuchNotiz
       responses:
         '204':
           description: |
@@ -3867,7 +3867,7 @@ components:
       properties:
         text:
           type: string
-    NotizUpdate:
+    GesuchNotizUpdate:
       type: object
       required:
         - betreff
@@ -3876,6 +3876,7 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         betreff:
+          maximum: 100
           type: string
         text:
           type: string
@@ -3883,11 +3884,11 @@ components:
           type: string
         datum:
           type: string
-    Notiz:
+    GesuchNotiz:
       type: object
       allOf:
         - type: object
-        - $ref: '#/components/schemas/NotizUpdate'
+        - $ref: '#/components/schemas/GesuchNotizUpdate'
   responses:
     Unauthorized:
       content:

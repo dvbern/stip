@@ -69,22 +69,12 @@ public class GesuchResourceImpl implements GesuchResource {
         return CreatedResponseBuilder.of(created.getId(), GesuchResource.class).build();
     }
 
-    @Override
-    public Response createNotiz(UUID gesuchId, NotizUpdateDto notizUpdateDto) {
-        return null;
-    }
-
     @RolesAllowed(GESUCH_DELETE)
     @Override
     public Response deleteGesuch(UUID gesuchId) {
         gesuchAuthorizer.canDelete(gesuchId);
         gesuchService.deleteGesuch(gesuchId);
         return Response.noContent().build();
-    }
-
-    @Override
-    public Response deleteNotiz(UUID notizId) {
-        return null;
     }
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -156,11 +146,6 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, tenantService.getCurrentTenant().getIdentifier());
         return Response.accepted().build();
-    }
-
-    @Override
-    public Response updateNotiz(UUID notizId, NotizUpdateDto notizUpdateDto) {
-        return null;
     }
 
     @RolesAllowed(GESUCH_READ)
