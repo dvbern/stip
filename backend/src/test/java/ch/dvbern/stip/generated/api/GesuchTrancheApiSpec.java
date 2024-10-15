@@ -142,7 +142,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #aenderungIdPath Die ID der Aenderung (required)
-     * @see #body  (optional)
+     * @see #body  (required)
      * return GesuchTrancheDtoSpec
      */
     public static class AenderungAblehnenOper implements Oper {
@@ -182,7 +182,7 @@ public class GesuchTrancheApiSpec {
         }
 
          /**
-         * @param kommentarDtoSpec (KommentarDtoSpec)  (optional)
+         * @param kommentarDtoSpec (KommentarDtoSpec)  (required)
          * @return operation
          */
         public AenderungAblehnenOper body(KommentarDtoSpec kommentarDtoSpec) {

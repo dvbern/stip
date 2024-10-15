@@ -20,6 +20,7 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
+import ch.dvbern.stip.generated.dto.NotizUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -71,7 +72,9 @@ public class GesuchApiSpec {
                 changeGesuchStatusToVerfuegt(),
                 changeGesuchStatusToVersendet(),
                 createGesuch(),
+                createNotiz(),
                 deleteGesuch(),
+                deleteNotiz(),
                 gesuchEinreichen(),
                 gesuchFehlendeDokumenteUebermitteln(),
                 gesuchZurueckweisen(),
@@ -85,7 +88,8 @@ public class GesuchApiSpec {
                 getSbTrancheChanges(),
                 getStatusProtokoll(),
                 juristischAbklaeren(),
-                updateGesuch()
+                updateGesuch(),
+                updateNotiz()
         );
     }
 
@@ -113,8 +117,16 @@ public class GesuchApiSpec {
         return new CreateGesuchOper(createReqSpec());
     }
 
+    public CreateNotizOper createNotiz() {
+        return new CreateNotizOper(createReqSpec());
+    }
+
     public DeleteGesuchOper deleteGesuch() {
         return new DeleteGesuchOper(createReqSpec());
+    }
+
+    public DeleteNotizOper deleteNotiz() {
+        return new DeleteNotizOper(createReqSpec());
     }
 
     public GesuchEinreichenOper gesuchEinreichen() {
@@ -171,6 +183,10 @@ public class GesuchApiSpec {
 
     public UpdateGesuchOper updateGesuch() {
         return new UpdateGesuchOper(createReqSpec());
+    }
+
+    public UpdateNotizOper updateNotiz() {
+        return new UpdateNotizOper(createReqSpec());
     }
 
     /**
@@ -599,6 +615,79 @@ public class GesuchApiSpec {
         }
     }
     /**
+     * Creates a new Notiz for an existing gesuch
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * @see #body  (required)
+     */
+    public static class CreateNotizOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/notiz";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateNotizOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/{gesuchId}/notiz
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param notizUpdateDtoSpec (NotizUpdateDtoSpec)  (required)
+         * @return operation
+         */
+        public CreateNotizOper body(NotizUpdateDtoSpec notizUpdateDtoSpec) {
+            reqSpec.setBody(notizUpdateDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public CreateNotizOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateNotizOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateNotizOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * delete a Gesuch
      * 
      *
@@ -656,6 +745,68 @@ public class GesuchApiSpec {
          * @return operation
          */
         public DeleteGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * delete a Notiz of a Gesuch with the given Notiz-Id
+     * 
+     *
+     * @see #notizIdPath  (required)
+     */
+    public static class DeleteNotizOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/gesuch/notiz/{notizId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteNotizOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /gesuch/notiz/{notizId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String NOTIZ_ID_PATH = "notizId";
+
+        /**
+         * @param notizId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteNotizOper notizIdPath(Object notizId) {
+            reqSpec.addPathParam(NOTIZ_ID_PATH, notizId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteNotizOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteNotizOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1645,6 +1796,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public UpdateGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Updates the Notiz of a Gesuch with the given Notiz-Id
+     * 
+     *
+     * @see #notizIdPath  (required)
+     * @see #body  (required)
+     */
+    public static class UpdateNotizOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/notiz/{notizId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UpdateNotizOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/notiz/{notizId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param notizUpdateDtoSpec (NotizUpdateDtoSpec)  (required)
+         * @return operation
+         */
+        public UpdateNotizOper body(NotizUpdateDtoSpec notizUpdateDtoSpec) {
+            reqSpec.setBody(notizUpdateDtoSpec);
+            return this;
+        }
+
+        public static final String NOTIZ_ID_PATH = "notizId";
+
+        /**
+         * @param notizId (UUID)  (required)
+         * @return operation
+         */
+        public UpdateNotizOper notizIdPath(Object notizId) {
+            reqSpec.addPathParam(NOTIZ_ID_PATH, notizId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UpdateNotizOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UpdateNotizOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

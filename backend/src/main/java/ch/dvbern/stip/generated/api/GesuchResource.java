@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.NotizUpdateDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
@@ -46,10 +47,21 @@ public interface GesuchResource {
     @Produces({ "text/plain" })
     Response createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
 
+    @POST
+    @Path("/{gesuchId}/notiz")
+    @Consumes({ "application/json" })
+    @Produces({ "text/plain" })
+    Response createNotiz(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull NotizUpdateDto notizUpdateDto);
+
     @DELETE
     @Path("/{gesuchId}")
     @Produces({ "text/plain" })
     Response deleteGesuch(@PathParam("gesuchId") UUID gesuchId);
+
+    @DELETE
+    @Path("/notiz/{notizId}")
+    @Produces({ "text/plain" })
+    Response deleteNotiz(@PathParam("notizId") UUID notizId);
 
     @PATCH
     @Path("/{gesuchId}/einreichen")
@@ -122,4 +134,10 @@ public interface GesuchResource {
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     Response updateGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
+
+    @PATCH
+    @Path("/notiz/{notizId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    Response updateNotiz(@PathParam("notizId") UUID notizId,@Valid @NotNull NotizUpdateDto notizUpdateDto);
 }
