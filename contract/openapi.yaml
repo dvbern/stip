@@ -204,6 +204,81 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToVersendet
+  '/gesuch/{gesuchId}/notiz':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotizUpdate'
+        required: true
+      tags:
+        - Gesuch
+      responses:
+        '201':
+          description: New Notiz is created
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createNotiz
+      summary: Creates a new Notiz for an existing gesuch
+  '/gesuch/notiz/{notizId}':
+    parameters:
+      - name: notizId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotizUpdate'
+        required: true
+      tags:
+        - Gesuch
+      responses:
+        '202':
+          description: Notiz updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateNotiz
+      summary: Updates the Notiz of a Gesuch with the given Notiz-Id
+    delete:
+      tags:
+        - Gesuch
+      responses:
+        '204':
+          description: |
+            Notiz deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteNotiz
+      summary: delete a Notiz of a Gesuch with the given Notiz-Id
   '/dokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -3792,6 +3867,27 @@ components:
       properties:
         text:
           type: string
+    NotizUpdate:
+      type: object
+      required:
+        - betreff
+        - text
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        betreff:
+          type: string
+        text:
+          type: string
+        user:
+          type: string
+        datum:
+          type: string
+    Notiz:
+      type: object
+      allOf:
+        - type: object
+        - $ref: '#/components/schemas/NotizUpdate'
   responses:
     Unauthorized:
       content:
