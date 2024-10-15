@@ -96,6 +96,7 @@
                                 class="d-flex flex-column gap-4 w-100"
                                 [tranche]="aenderung.openAenderung"
                                 [gesuchId]="periode.gesuch.id"
+                                (deleteAenderung)="deleteAenderung($event, periode.gesuch.id)"
                               ></dv-gesuch-app-ui-aenderungs-entry>
                             } @else {
                               <button

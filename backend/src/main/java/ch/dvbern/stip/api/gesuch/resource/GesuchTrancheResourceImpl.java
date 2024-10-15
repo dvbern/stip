@@ -47,12 +47,20 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         UUID gesuchId,
         CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto
     ) {
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchAuthorizer.canCreateTranche(gesuchId);
         final var trancheDto = gesuchTrancheService.createTrancheCopy(
             gesuchId,
             createGesuchTrancheRequestDto
         );
         return Response.ok(trancheDto).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response deleteAenderung(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canDeleteAenderung(aenderungId);
+        gesuchTrancheService.deleteAenderung(aenderungId);
+        return Response.ok().build();
     }
 
     @RolesAllowed(GESUCH_READ)

@@ -3,13 +3,13 @@ import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { Store } from '@ngrx/store';
 import { map, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,
+  GesuchService,
   GesuchTranche,
   GesuchTrancheService,
   GesuchTrancheSlim,
@@ -46,7 +46,7 @@ export class GesuchAenderungStore extends signalStore(
   withState(initialState),
   withDevtools('GesuchAenderungStore'),
 ) {
-  private store = inject(Store);
+  private gesuchService = inject(GesuchService);
   private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private router = inject(Router);
@@ -150,6 +150,35 @@ export class GesuchAenderungStore extends signalStore(
               },
             ),
           ),
+      ),
+    ),
+  );
+
+  deleteGesuchAenderung$ = rxMethod<{ aenderungId: string; gesuchId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
+        }));
+      }),
+      switchMap(({ aenderungId, gesuchId }) =>
+        this.gesuchTrancheService.deleteAenderung$({ aenderungId }).pipe(
+          handleApiResponse(
+            () => {
+              patchState(this, () => ({
+                cachedGesuchAenderung: initial(),
+              }));
+            },
+            {
+              onSuccess: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dialog.gesuch-aenderung.delete.success',
+                });
+                this.getAllTranchenForGesuch$({ gesuchId });
+              },
+            },
+          ),
+        ),
       ),
     ),
   );

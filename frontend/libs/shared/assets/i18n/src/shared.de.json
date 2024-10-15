@@ -109,6 +109,7 @@
   "shared.dialog.gesuch-aenderung.comment.label": "Bemerkung *",
   "shared.dialog.gesuch-aenderung.comment.placeholder": "Begründung schreiben",
   "shared.dialog.gesuch-aenderung.create.success": "Die Änderung wurde erfolgreich erstellt",
+  "shared.dialog.gesuch-aenderung.delete.success": "Die Änderung wurde erfolgreich gelöscht",
   "shared.dialog.gesuch-aenderung.AKZEPTIERT.success": "Die Änderung wurde erfolgreich akzeptiert",
   "shared.dialog.gesuch-aenderung.ABGELEHNT.title": "Ablehnen",
   "shared.dialog.gesuch-aenderung.ABGELEHNT.description": "Sie sind im Begriff die Änderung abzulehnen.",
@@ -162,6 +163,7 @@
   "shared.gesuch.status.contract.IN_BEARBEITUNG_SB": "In Bearbeitung",
   "shared.gesuch.status.contract.IN_FREIGABE": "In Freigabe",
   "shared.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
+  "shared.gesuch.status.contract.VERSANDBEREIT": "Versandbereit",
 
   "shared.gesuch.tranche.typ.AENDERUNG": "Änderung",
   "shared.gesuch.tranche.typ.TRANCHE": "Gesuch",
