@@ -86,13 +86,18 @@ export class SharedFeatureGesuchFormTrancheComponent {
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
 
   form = this.formBuilder.group({
+    status: ['', [Validators.required]],
+    pia: ['', [Validators.required]],
+    gesuchsnummer: ['', [Validators.required]],
+    fallnummer: ['', [Validators.required]],
+    sachbearbeiter: ['', [Validators.required]],
     von: ['', [Validators.required]],
     bis: ['', [Validators.required]],
     bemerkung: ['', [Validators.required]],
   });
 
   currentTrancheIndexSig = computed(() => {
-    const currentTranche = this.viewSig().gesuchstranche;
+    const currentTranche = this.viewSig().tranche;
 
     if (!currentTranche) {
       return 0;
@@ -120,13 +125,20 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
     effect(
       () => {
-        const tranche = this.viewSig().gesuchstranche;
+        const { tranche, gesuchsNummer, fallNummer, sachbearbeiter } =
+          this.viewSig();
         const defaultComment = this.defaultCommentSig();
         if (!tranche) {
           return;
         }
+        const pia = tranche.gesuchFormular?.personInAusbildung;
 
         this.form.patchValue({
+          status: tranche.status ?? 'IN_BEARBEITUNG_GS',
+          pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
+          gesuchsnummer: gesuchsNummer,
+          fallnummer: fallNummer,
+          sachbearbeiter: sachbearbeiter,
           von: formatBackendLocalDate(tranche.gueltigAb, this.languageSig()),
           bis: formatBackendLocalDate(tranche.gueltigBis, this.languageSig()),
           bemerkung: tranche.comment ?? defaultComment,
