@@ -70,6 +70,7 @@ paths:
         - $ref: '#/components/parameters/bearbeiter'
         - $ref: '#/components/parameters/letzteAktivitaetFrom'
         - $ref: '#/components/parameters/letzteAktivitaetTo'
+        - $ref: '#/components/parameters/typ'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
@@ -3955,7 +3956,7 @@ components:
       in: query
       name: status
       schema:
-        type: string
+        $ref: '#/components/schemas/Gesuchstatus'
     bearbeiter:
       in: query
       name: bearbeiter
@@ -3973,6 +3974,11 @@ components:
       schema:
         type: string
         format: date
+    typ:
+      in: query
+      name: typ
+      schema:
+        $ref: '#/components/schemas/GesuchTrancheTyp'
     page:
       in: query
       name: page

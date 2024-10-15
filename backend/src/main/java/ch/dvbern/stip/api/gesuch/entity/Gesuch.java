@@ -94,7 +94,8 @@ public class Gesuch extends AbstractMandantEntity {
                 AND gesuch_tranche.typ = 'TRANCHE'
             ORDER BY gesuch_tranche.gueltig_bis DESC
             LIMIT 1
-    )""")
+        )
+    """)
     @Setter(AccessLevel.NONE)
     @NotAudited
     private GesuchTranche latestGesuchTranche;

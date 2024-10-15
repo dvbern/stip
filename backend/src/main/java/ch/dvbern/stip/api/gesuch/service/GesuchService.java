@@ -296,10 +296,11 @@ public class GesuchService {
         String piaNachname,
         String piaVorname,
         LocalDate piaGeburtsdatum,
-        String status,
+        Gesuchstatus status,
         String bearbeiter,
         LocalDate letzteAktivitaetFrom,
         LocalDate letzteAktivitaetTo,
+        GesuchTrancheTyp typ,
         int page,
         int pageSize,
         SbDashboardColumn sortColumn,
@@ -328,9 +329,7 @@ public class GesuchService {
         }
 
         if (status != null) {
-            // TODO KSTIP-1538: Actual parsing?
-            final var statusValue = Gesuchstatus.valueOf(status);
-            sbDashboardQueryBuilder.status(baseQuery, statusValue);
+            sbDashboardQueryBuilder.status(baseQuery, status);
         }
 
         if (bearbeiter != null) {
@@ -341,10 +340,21 @@ public class GesuchService {
             sbDashboardQueryBuilder.letzteAktivitaet(baseQuery, letzteAktivitaetFrom, letzteAktivitaetTo);
         }
 
-        if (sortColumn != null && sortOrder != null) {
-            sbDashboardQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
+        if (typ != null) {
+            sbDashboardQueryBuilder.typ(baseQuery, typ);
         }
 
+        // Creating the count query must happen before ordering,
+        // otherwise the ordered column must appear in a GROUP BY clause or be used in an aggregate function
+        final var countQuery = sbDashboardQueryBuilder.getCountQuery(baseQuery);
+
+        if (sortColumn != null && sortOrder != null) {
+            sbDashboardQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
+        } else {
+            sbDashboardQueryBuilder.defaultOrder(baseQuery);
+        }
+
+        sbDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
         final var results = baseQuery.stream()
             .flatMap(gesuch -> sbDashboardGesuchMapper.toDto(gesuch).stream())
             .toList();
@@ -353,7 +363,7 @@ public class GesuchService {
             results,
             page,
             results.size(),
-            (int) gesuchRepository.count()
+            Math.toIntExact(countQuery.fetchFirst())
         );
     }
 

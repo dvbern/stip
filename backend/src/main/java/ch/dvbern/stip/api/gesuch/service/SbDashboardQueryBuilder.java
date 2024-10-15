@@ -7,7 +7,10 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
+import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
@@ -22,6 +25,7 @@ import org.apache.commons.lang3.NotImplementedException;
 public class SbDashboardQueryBuilder {
     private final QGesuch gesuch = QGesuch.gesuch;
     private final QGesuchFormular formular = QGesuchFormular.gesuchFormular;
+    private final QGesuchTranche tranche = QGesuchTranche.gesuchTranche;
 
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
@@ -29,14 +33,12 @@ public class SbDashboardQueryBuilder {
     public JPAQuery<Gesuch> baseQuery(final int page, final int pageSize, final GetGesucheSBQueryType queryType) {
         final var meId = benutzerService.getCurrentBenutzer().getId();
 
-        final var query = switch (queryType) {
+        return switch (queryType) {
             case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery();
             case ALLE_BEARBEITBAR_MEINE -> gesuchRepository.getFindAlleMeineBearbeitbar(meId);
             case ALLE_MEINE -> gesuchRepository.getFindAlleMeine(meId);
             case ALLE -> gesuchRepository.getFindAlleQuery();
         };
-
-        return query.offset((long) pageSize * page).limit(pageSize);
     }
 
     public void fallNummer(final JPAQuery<Gesuch> query, final String fallNummer) {
@@ -64,6 +66,11 @@ public class SbDashboardQueryBuilder {
     }
 
     public void status(final JPAQuery<Gesuch> query, final Gesuchstatus status) {
+        if (status == Gesuchstatus.IN_BEARBEITUNG_SB) {
+            joinTranche(query);
+            query.where(tranche.status.eq(GesuchTrancheStatus.UEBERPRUEFEN));
+        }
+
         query.where(gesuch.gesuchStatus.eq(status));
     }
 
@@ -77,8 +84,16 @@ public class SbDashboardQueryBuilder {
         final LocalDate from,
         final LocalDate to
     ) {
-        query.where(gesuch.timestampMutiert.goe(from.atStartOfDay())
-            .and(gesuch.timestampMutiert.loe(to.atTime(LocalTime.MAX))));
+        query.where(gesuch.timestampMutiert.between(from.atStartOfDay(), to.atTime(LocalTime.MAX)));
+    }
+
+    public void typ(final JPAQuery<Gesuch> query, final GesuchTrancheTyp typ) {
+        joinTranche(query);
+        query.where(tranche.typ.eq(typ));
+    }
+
+    void joinTranche(final JPAQuery<Gesuch> query) {
+        query.join(tranche).on(tranche.gesuch.id.eq(gesuch.id));
     }
 
     public void orderBy(final JPAQuery<Gesuch> query, final SbDashboardColumn column, final SortOrder sortOrder) {
@@ -99,5 +114,17 @@ public class SbDashboardQueryBuilder {
         };
 
         query.orderBy(orderSpecifier);
+    }
+
+    public void defaultOrder(final JPAQuery<Gesuch> query) {
+        query.orderBy(gesuch.timestampMutiert.desc());
+    }
+
+    public JPAQuery<Long> getCountQuery(final JPAQuery<Gesuch> query) {
+        return query.clone().select(gesuch.count());
+    }
+
+    public void paginate(final JPAQuery<Gesuch> query, final int page, final int pageSize) {
+        query.offset((long) pageSize * page).limit(pageSize);
     }
 }

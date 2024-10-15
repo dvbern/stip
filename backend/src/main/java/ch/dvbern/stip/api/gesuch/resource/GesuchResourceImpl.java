@@ -8,6 +8,8 @@ import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -134,10 +136,11 @@ public class GesuchResourceImpl implements GesuchResource {
         String piaNachname,
         String piaVorname,
         LocalDate piaGeburtsdatum,
-        String status,
+        Gesuchstatus status,
         String bearbeiter,
         LocalDate letzteAktivitaetFrom,
         LocalDate letzteAktivitaetTo,
+        GesuchTrancheTyp typ,
         SbDashboardColumn sortColumn,
         SortOrder sortOrder
     ) {
@@ -151,6 +154,7 @@ public class GesuchResourceImpl implements GesuchResource {
             bearbeiter,
             letzteAktivitaetFrom,
             letzteAktivitaetTo,
+            typ,
             page,
             pageSize,
             sortColumn,

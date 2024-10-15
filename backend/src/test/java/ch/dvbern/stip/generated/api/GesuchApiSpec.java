@@ -16,8 +16,10 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
@@ -1241,6 +1243,7 @@ public class GesuchApiSpec {
      * @see #bearbeiterQuery  (optional)
      * @see #letzteAktivitaetFromQuery  (optional)
      * @see #letzteAktivitaetToQuery  (optional)
+     * @see #typQuery  (optional)
      * @see #sortColumnQuery  (optional)
      * @see #sortOrderQuery  (optional)
      * return List&lt;PaginatedSbDashboardDtoSpec&gt;
@@ -1338,7 +1341,7 @@ public class GesuchApiSpec {
         public static final String STATUS_QUERY = "status";
 
         /**
-         * @param status (String)  (optional)
+         * @param status (GesuchstatusDtoSpec)  (optional)
          * @return operation
          */
         public GetGesucheSbOper statusQuery(Object... status) {
@@ -1376,6 +1379,17 @@ public class GesuchApiSpec {
          */
         public GetGesucheSbOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
             reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
+            return this;
+        }
+
+        public static final String TYP_QUERY = "typ";
+
+        /**
+         * @param typ (GesuchTrancheTypDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper typQuery(Object... typ) {
+            reqSpec.addQueryParam(TYP_QUERY, typ);
             return this;
         }
 
