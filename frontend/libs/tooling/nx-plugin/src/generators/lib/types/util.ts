@@ -1,10 +1,10 @@
 import path from 'path';
-import { Tree } from '@nx/devkit';
-import { libraryGenerator } from '@nx/angular/generators';
 
-import { NormalizedSchema, LibTypeGenerator } from '../generator.interface';
-import { extendEslintJson } from './helpers/eslint';
-import { extendTestSetupSwc, extendJestConfigSwc } from './helpers/swc';
+import { libraryGenerator } from '@nx/angular/generators';
+import { Tree } from '@nx/devkit';
+
+import { LibTypeGenerator, NormalizedSchema } from '../generator.interface';
+import { extendJestConfigSwc, extendTestSetupSwc } from './helpers/swc';
 
 export function utilTypeFactory(options: NormalizedSchema): LibTypeGenerator {
   return {
@@ -24,7 +24,6 @@ export function utilTypeFactory(options: NormalizedSchema): LibTypeGenerator {
 }
 
 function postprocess(tree: Tree, options: NormalizedSchema) {
-  extendEslintJson(tree, 'angular', options);
   extendTestSetupSwc(tree, options);
   extendJestConfigSwc(tree, options);
 

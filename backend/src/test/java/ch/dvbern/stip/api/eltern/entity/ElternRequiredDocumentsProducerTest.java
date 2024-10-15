@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.eltern.entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -122,8 +123,8 @@ class ElternRequiredDocumentsProducerTest {
         );
     }
 
-    List<Pair<String, List<DokumentTyp>>> getRequiredDocuments(final GesuchFormular formular) {
-        final var requiredTypes = new ArrayList<Pair<String, List<DokumentTyp>>>();
+    List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(final GesuchFormular formular) {
+        final var requiredTypes = new ArrayList<Pair<String, Set<DokumentTyp>>>();
         for (final var producer : producers) {
             requiredTypes.add(producer.getRequiredDocuments(formular));
         }

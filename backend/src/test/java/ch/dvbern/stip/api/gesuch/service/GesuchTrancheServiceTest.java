@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -18,7 +17,9 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -27,12 +28,10 @@ class GesuchTrancheServiceTest {
     private Gesuch gesuch;
 
     @InjectMock
-    private GesuchTrancheRepository gesuchTrancheRepository;
+    GesuchTrancheRepository gesuchTrancheRepository;
 
     @Inject
-    private GesuchTrancheService gesuchTrancheService;
-    @Inject
-    private BenutzerService benutzerService;
+    GesuchTrancheService gesuchTrancheService;
 
     @BeforeEach
     void setUp() {

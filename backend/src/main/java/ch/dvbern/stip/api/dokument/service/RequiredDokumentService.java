@@ -2,6 +2,8 @@ package ch.dvbern.stip.api.dokument.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -29,13 +31,13 @@ public class RequiredDokumentService {
             .toList();
     }
 
-    private List<DokumentTyp> getRequiredDokumentTypesForGesuch(final GesuchFormular formular) {
+    private Set<DokumentTyp> getRequiredDokumentTypesForGesuch(final GesuchFormular formular) {
         return requiredDocumentProducers
             .stream()
             .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(formular))
             .flatMap(
                 dokumentTypPair -> dokumentTypPair.getRight().stream()
-            ).toList();
+            ).collect(Collectors.toSet());
     }
 
     public List<DokumentTyp> getRequiredDokumentsForGesuchFormular(final GesuchFormular formular) {

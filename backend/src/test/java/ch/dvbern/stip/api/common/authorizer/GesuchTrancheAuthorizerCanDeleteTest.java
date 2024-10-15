@@ -1,5 +1,8 @@
 package ch.dvbern.stip.api.common.authorizer;
 
+import java.util.Set;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -16,9 +19,6 @@ import io.quarkus.security.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.Set;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,8 +40,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
     void setup(){
         benutzerService = Mockito.mock(BenutzerService.class);
         currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
-        currentBenutzer.getRollen().add(new Rolle()
-            .setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
+        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
         UUID currentBenutzerId = UUID.randomUUID();
         currentBenutzer.setId(currentBenutzerId);
 
@@ -53,8 +52,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         UUID otherBenutzerId = UUID.randomUUID();
         otherBenutzer = new Benutzer();
         otherBenutzer.setId(otherBenutzerId);
-        otherBenutzer.getRollen().add(new Rolle()
-            .setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
+        otherBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
 
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
 
@@ -66,15 +64,11 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
                 .setGesuchsteller(currentBenutzer)
             );
 
-        authorizer = new GesuchTrancheAuthorizer(benutzerService,
-            gesuchTrancheRepository, gesuchRepository);
+        authorizer = new GesuchTrancheAuthorizer(benutzerService, gesuchTrancheRepository, gesuchRepository);
 
-        when(gesuchRepository.requireById(any()))
-            .thenReturn(gesuch);
-        when(gesuchTrancheRepository.requireById(any()))
-            .thenReturn(gesuchTranche_inBearbeitungGS);
-        when(gesuchTrancheRepository.findById(any()))
-            .thenReturn(gesuchTranche_inBearbeitungGS);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
+        when(gesuchTrancheRepository.findById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
         when(gesuchRepository.requireGesuchByTrancheId(any())).thenReturn(gesuch);
     }
 

@@ -1,10 +1,14 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import java.util.Arrays;
+
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -12,7 +16,10 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -27,8 +34,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Arrays;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -39,7 +44,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-class GesuchTrancheResourceImplTest {
+class GesuchTrancheAenderungTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
@@ -95,6 +100,14 @@ class GesuchTrancheResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(99)
+    @AlwaysRun
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 
     io.restassured.response.Response createAenderungsanstrag() {

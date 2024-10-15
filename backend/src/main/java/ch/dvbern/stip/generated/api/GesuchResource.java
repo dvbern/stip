@@ -22,9 +22,24 @@ public interface GesuchResource {
     Response bearbeitungAbschliessen(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
+    @Path("/status/bereit-fuer-bearbeitung/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    Response changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+
+    @POST
     @Path("/status/in-bearbeitung/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     Response changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+
+    @POST
+    @Path("/status/verfuegt/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    Response changeGesuchStatusToVerfuegt(@PathParam("gesuchId") UUID gesuchId);
+
+    @POST
+    @Path("/status/versendet/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    Response changeGesuchStatusToVersendet(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Consumes({ "application/json" })

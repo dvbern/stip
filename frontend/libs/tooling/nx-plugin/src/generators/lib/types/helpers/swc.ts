@@ -1,9 +1,10 @@
 import { Tree } from '@nx/devkit';
-import { NormalizedSchema } from '../../generator.interface';
 import { tsquery } from '@phenomnomnominal/tsquery';
 
+import { NormalizedSchema } from '../../generator.interface';
+
 export function extendTestSetupSwc(tree: Tree, options: NormalizedSchema) {
-  const testSetupPath = `${options.projectRoot}/${options.nameDasherized}/src/test-setup.ts`;
+  const testSetupPath = `${options.projectRoot}/src/test-setup.ts`;
 
   const testSetupContent = tree.read(testSetupPath, 'utf-8');
 
@@ -24,7 +25,7 @@ export function extendTestSetupSwc(tree: Tree, options: NormalizedSchema) {
 }
 
 export function extendJestConfigSwc(tree: Tree, options: NormalizedSchema) {
-  const jestConfigPath = `${options.projectRoot}/${options.nameDasherized}/jest.config.ts`;
+  const jestConfigPath = `${options.projectRoot}/jest.config.ts`;
 
   const jestConfigContent = tree.read(jestConfigPath, 'utf-8');
 
