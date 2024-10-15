@@ -122,6 +122,19 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     );
   }
 
+  availableTrancheInteractionSig = computed(() => {
+    const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
+
+    switch (gesuchStatus) {
+      case 'BEREIT_FUER_BEARBEITUNG':
+        return 'SET_TO_BEARBEITUNG';
+      case 'IN_BEARBEITUNG_SB':
+        return 'CREATE_TRANCHE';
+      default:
+        return null;
+    }
+  });
+
   canSetToBearbeitungSig = computed(() => {
     const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
     if (!gesuchStatus) {

@@ -47,7 +47,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         UUID gesuchId,
         CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto
     ) {
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchAuthorizer.canCreateTranche(gesuchId);
         final var trancheDto = gesuchTrancheService.createTrancheCopy(
             gesuchId,
             createGesuchTrancheRequestDto
