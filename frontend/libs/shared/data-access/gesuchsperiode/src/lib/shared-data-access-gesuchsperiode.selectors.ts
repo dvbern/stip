@@ -1,5 +1,11 @@
 import { createSelector } from '@ngrx/store';
-import { format, getMonth, isAfter, isWithinInterval } from 'date-fns';
+import {
+  differenceInDays,
+  format,
+  getMonth,
+  isAfter,
+  isWithinInterval,
+} from 'date-fns';
 
 import {
   Gesuchsperiode,
@@ -28,23 +34,37 @@ type GesuchsperiodeDateProperties = Pick<
 
 export const prepareGesuchsperiode = <T extends GesuchsperiodeDateProperties>(
   periode: T,
-) => ({
-  ...periode,
-  semester:
-    getMonth(Date.parse(periode.gesuchsperiodeStart)) === 6
-      ? GesuchsperiodeSemester.HERBST
-      : GesuchsperiodeSemester.FRUEHLING,
-  yearsLabel: [
-    format(Date.parse(periode.gesuchsperiodeStart), 'yy'),
-    format(Date.parse(periode.gesuchsperiodeStopp), 'yy'),
-  ].join('/'),
-  reduzierterBeitrag: new Date() > new Date(periode.einreichefristNormal),
-  einreichefristAbgelaufen: isAfter(
+) => {
+  const reduzierterBeitrag =
+    new Date() > new Date(periode.einreichefristNormal);
+  const einreichefristDays = differenceInDays(
+    new Date(
+      reduzierterBeitrag
+        ? periode.einreichefristReduziert
+        : periode.einreichefristNormal,
+    ),
     new Date(),
-    new Date(periode.einreichefristReduziert),
-  ),
-  erfassbar: isWithinInterval(new Date(), {
-    start: new Date(periode.aufschaltterminStart),
-    end: new Date(periode.aufschaltterminStopp),
-  }),
-});
+  );
+
+  return {
+    ...periode,
+    semester:
+      getMonth(Date.parse(periode.gesuchsperiodeStart)) === 6
+        ? GesuchsperiodeSemester.HERBST
+        : GesuchsperiodeSemester.FRUEHLING,
+    yearsLabel: [
+      format(Date.parse(periode.gesuchsperiodeStart), 'yy'),
+      format(Date.parse(periode.gesuchsperiodeStopp), 'yy'),
+    ].join('/'),
+    reduzierterBeitrag,
+    einreichefristAbgelaufen: isAfter(
+      new Date(),
+      new Date(periode.einreichefristReduziert),
+    ),
+    erfassbar: isWithinInterval(new Date(), {
+      start: new Date(periode.aufschaltterminStart),
+      end: new Date(periode.aufschaltterminStopp),
+    }),
+    einreichefristDays: einreichefristDays >= 0 ? einreichefristDays : null,
+  };
+};
