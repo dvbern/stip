@@ -16,3 +16,7 @@ export function sharedUtilFnTypeGuardsIsDefined<T>(
 ): value is NonNullable<T> {
   return isDefined(value);
 }
+
+export function assertUnreachable(unreachable: never): never {
+  throw new Error('Not all cases were handled: ' + unreachable);
+}

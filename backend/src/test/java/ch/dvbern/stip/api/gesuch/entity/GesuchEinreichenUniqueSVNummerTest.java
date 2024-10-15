@@ -62,7 +62,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     @TestAsGesuchsteller
     void gesuchEinreichenWithNonUniqueSvNummerError() {
         RestAssured.filters(new RequestLoggingFilter());

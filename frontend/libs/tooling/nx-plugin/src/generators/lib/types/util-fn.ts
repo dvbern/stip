@@ -1,4 +1,5 @@
 import path from 'path';
+
 import { Tree } from '@nx/devkit';
 import { libraryGenerator } from '@nx/js';
 
@@ -20,10 +21,6 @@ function postprocess(tree: Tree, options: NormalizedSchema) {
   extendTestSetupSwc(tree, options);
   extendJestConfigSwc(tree, options);
 
-  tree.delete(
-    path.join(options.projectRoot, options.nameDasherized, 'package.json'),
-  );
-  tree.delete(
-    path.join(options.projectRoot, options.nameDasherized, 'README.md'),
-  );
+  tree.delete(path.join(options.projectRoot, 'package.json'));
+  tree.delete(path.join(options.projectRoot, 'README.md'));
 }
