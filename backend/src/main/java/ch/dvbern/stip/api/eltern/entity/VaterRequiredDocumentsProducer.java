@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.eltern.entity;
 
-import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -17,10 +17,10 @@ public class VaterRequiredDocumentsProducer implements RequiredDocumentProducer 
     private final ElternRequiredDocumentsProducer producer;
 
     @Override
-    public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         final var eltern = formular.getElterns();
         if (eltern.isEmpty()) {
-            return ImmutablePair.of("", List.of());
+            return ImmutablePair.of("", Set.of());
         }
 
         final var vater = eltern.stream()

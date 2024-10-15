@@ -1,7 +1,9 @@
 package ch.dvbern.stip.api.geschwister.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
@@ -14,13 +16,13 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 public class GeschwisterRequiredDocumentsProducer implements RequiredDocumentProducer {
     @Override
-    public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         final var geschwister = formular.getGeschwisters();
         if (geschwister == null) {
-            return ImmutablePair.of("", List.of());
+            return ImmutablePair.of("", Set.of());
         }
 
-        final var requiredDocs = new ArrayList<DokumentTyp>();
+        final var requiredDocs = new HashSet<DokumentTyp>();
 
         if (formular.getGeschwisters()
             .stream()
