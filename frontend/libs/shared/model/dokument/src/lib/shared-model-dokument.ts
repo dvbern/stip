@@ -6,27 +6,28 @@ export interface SharedModelTableDokument {
   titleKey: string;
   dokumentTyp: string;
   gesuchDokument?: GesuchDokument;
-  documentOptions: DocumentOptions;
+  documentOptions: DokumentOptions;
 }
 
-export interface DocumentOptions {
+export interface DokumentOptions {
   singleUpload: boolean;
   titleKey: string;
   trancheId: string;
   allowTypes: string;
   dokumentTyp: DokumentTyp;
+  gesuchDokument?: GesuchDokument;
   initialDocuments?: Dokument[];
   readonly: boolean;
 }
 
-export interface DocumentUpload {
+export interface DokumentUpload {
   file: Dokument;
   isTemporary?: boolean;
   progress?: number;
   error?: { translationKey: string; values?: unknown };
 }
 
-export interface DocumentView extends DocumentUpload {
+export interface DokumentView extends DokumentUpload {
   state: 'uploading' | 'done' | 'error';
   theme:
     | { icon: 'warning'; type: 'warn'; color: 'warn' }
@@ -34,8 +35,14 @@ export interface DocumentView extends DocumentUpload {
     | { icon: 'check'; type: 'success'; color: 'success' };
 }
 
-export interface DocumentState {
-  documents: DocumentUpload[];
+export interface DokumentListView {
+  gesuchDokument?: GesuchDokument;
+  dokuments: DokumentView[];
+}
+
+export interface DokumentState {
+  gesuchDokument?: GesuchDokument;
+  dokuments: DokumentUpload[];
   errorKey?: string;
 }
 
@@ -43,6 +50,7 @@ export interface UploadView {
   trancheId: string;
   type: DokumentTyp;
   readonly: boolean;
+  gesuchDokument?: GesuchDokument;
   initialDocuments?: Dokument[];
   hasEntries: boolean;
   isSachbearbeitungApp: boolean;

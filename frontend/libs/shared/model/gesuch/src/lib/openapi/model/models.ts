@@ -80,6 +80,7 @@ export * from './lebenslaufAusbildungsArt';
 export * from './lebenslaufItem';
 export * from './lebenslaufItemUpdate';
 export * from './niederlassungsstatus';
+export * from './nullableGesuchDokument';
 export * from './nullableGesuchsperiodeWithDaten';
 export * from './partner';
 export * from './partnerUpdate';

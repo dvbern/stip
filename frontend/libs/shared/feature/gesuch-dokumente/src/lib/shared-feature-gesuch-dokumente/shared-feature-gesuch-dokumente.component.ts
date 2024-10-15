@@ -124,8 +124,8 @@ export class SharedFeatureGesuchDokumenteComponent {
     }
 
     const uploadedDocuments: SharedModelTableDokument[] = dokuments.map(
-      (document) => {
-        const dokumentTyp = document.dokumentTyp;
+      (gesuchDokument) => {
+        const dokumentTyp = gesuchDokument.dokumentTyp;
 
         if (!dokumentTyp) {
           throw new Error('Document type is missing');
@@ -135,7 +135,8 @@ export class SharedFeatureGesuchDokumenteComponent {
           trancheId,
           allowTypes,
           dokumentTyp,
-          initialDocuments: document.dokumente,
+          gesuchDokument,
+          initialDocuments: gesuchDokument.dokumente,
           readonly,
         });
 
@@ -143,7 +144,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
         return {
           dokumentTyp,
-          gesuchDokument: document,
+          gesuchDokument,
           formStep,
           titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
           documentOptions,
