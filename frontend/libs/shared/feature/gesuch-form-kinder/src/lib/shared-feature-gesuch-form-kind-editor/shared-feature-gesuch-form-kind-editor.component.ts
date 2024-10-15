@@ -50,13 +50,13 @@ import {
   SharedUiFormZuvorHintComponent,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
-import { percentStringToNumber } from '@dv/shared/ui/percentage-splitter';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import { SharedUiWohnsitzSplitterComponent } from '@dv/shared/ui/wohnsitz-splitter';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
+  percentStringToNumber,
 } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,

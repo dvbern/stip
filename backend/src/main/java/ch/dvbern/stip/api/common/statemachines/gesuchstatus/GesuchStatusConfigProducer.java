@@ -39,12 +39,12 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
 
         config.configure(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
-            .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
+            .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
 
         config.configure(Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
-            .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
+            .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
 
@@ -53,7 +53,7 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE, Gesuchstatus.FEHLENDE_DOKUMENTE)
-            .permit(GesuchStatusChangeEvent.JOUR_FIX, Gesuchstatus.JOUR_FIX)
+            .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.IN_FREIGABE, Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS);
@@ -62,7 +62,7 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
-        config.configure(Gesuchstatus.JOUR_FIX)
+        config.configure(Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.VERFUEGT)

@@ -3,6 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/util-fn/type-guards/src",
   "projectType": "library",
+  "tags": ["type:util-fn", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",
@@ -21,6 +22,5 @@
         "jestConfig": "libs/shared/util-fn/type-guards/jest.config.ts"
       }
     }
-  },
-  "tags": ["type:util-fn", "scope:shared"]
+  }
 }

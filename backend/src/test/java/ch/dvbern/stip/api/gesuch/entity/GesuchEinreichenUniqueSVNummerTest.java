@@ -5,6 +5,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
@@ -16,7 +17,6 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
@@ -29,6 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
+@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
@@ -54,21 +55,21 @@ public class GesuchEinreichenUniqueSVNummerTest {
         }
 
         gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     @TestAsGesuchsteller
     void gesuchEinreichenWithNonUniqueSvNummerError() {
         RestAssured.filters(new RequestLoggingFilter());
         UUID gesuchId = createFullGesuch(); //neues Gesuch mit selber AHV-Nummer wird erstellt
 
         var response = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
@@ -77,14 +78,15 @@ public class GesuchEinreichenUniqueSVNummerTest {
 
         assertThat(
             response.getValidationErrors().get(0).getMessageTemplate(),
-            is(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE));
+            is(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE)
+        );
 
     }
 
     private UUID createFullGesuch() {
         var response = gesuchApiSpec.createGesuch()
             .body(TestUtil.initGesuchCreateDto())
-            .execute(ResponseBody::prettyPeek).then();
+            .execute(TestUtil.PEEK_IF_ENV_SET).then();
 
         response.assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());
@@ -92,7 +94,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
         var gesuchId = TestUtil.extractIdFromResponse(response);
         gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
-            .execute(ResponseBody::prettyPeek).then().extract()
+            .execute(TestUtil.PEEK_IF_ENV_SET).then().extract()
             .body()
             .as(GesuchDtoSpec.class)
             .getGesuchTrancheToWorkWith().getId();
@@ -103,7 +105,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .getPersonInAusbildung()
             .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung().setIban(VALID_IBAN);
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
+        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());

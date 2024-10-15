@@ -10,6 +10,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
@@ -29,6 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
+@QuarkusTestResource(TestClamAVEnvironment.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GesuchFormularServiceTest {
     @Inject

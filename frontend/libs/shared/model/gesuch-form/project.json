@@ -2,8 +2,8 @@
   "name": "shared-model-gesuch-form",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/model/gesuch-form/src",
-  "tags": ["scope:shared", "type:model"],
   "projectType": "library",
+  "tags": ["scope:shared", "type:model"],
   "targets": {
     "build": {
       "executor": "nx:noop",

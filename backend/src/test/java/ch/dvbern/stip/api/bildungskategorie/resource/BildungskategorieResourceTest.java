@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.BildungskategorieApiSpec;
@@ -22,6 +23,7 @@ import static org.hamcrest.Matchers.is;
 
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
+@QuarkusTestResource(TestClamAVEnvironment.class)
 @Slf4j
 class BildungskategorieResourceTest {
     private final BildungskategorieApiSpec api = BildungskategorieApiSpec.bildungskategorie(RequestSpecUtil.quarkusSpec());

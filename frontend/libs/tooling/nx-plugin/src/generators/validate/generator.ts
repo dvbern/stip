@@ -1,6 +1,7 @@
-import chalk from 'chalk';
 import * as path from 'path';
-import { formatFiles, Tree, readJson, updateJson } from '@nx/devkit';
+
+import { Tree, formatFiles, readJson, updateJson } from '@nx/devkit';
+import chalk from 'chalk';
 
 import { ValidateGeneratorSchema } from './schema';
 
@@ -232,14 +233,14 @@ async function validateEslintEnforceModuleBoundariesMatchesFolderStructure(
 
   const scopeFoldersDiff = diff(scopes, scopeDirs);
   if (scopeFoldersDiff.length) {
-    violations.push(`Scopes (.eslintrc.json): ${scopes.join(', ')}
+    violations.push(`Scopes (eslint.config.js): ${scopes.join(', ')}
 Folder structure:        ${scopeDirs.join(', ')}
 Difference:              ${chalk.inverse(scopeFoldersDiff.join(', '))}`);
   }
 
   const scopeGeneratorDiff = diff(scopes, scopesGenerator);
   if (scopeGeneratorDiff.length) {
-    violations.push(`Scopes (.eslintrc.json): ${scopes.join(', ')}
+    violations.push(`Scopes (eslint.config.js): ${scopes.join(', ')}
 Scopes (lib generator):  ${scopesGenerator.join(', ')}
 Difference:              ${chalk.inverse(scopeGeneratorDiff.join(', '))}`);
   }
@@ -253,7 +254,7 @@ Difference:              ${chalk.inverse(folderGeneratorDiff.join(', '))}`);
 
   if (violations.length > 0) {
     violations.unshift(
-      `Enforce module boundaries definitions in ".eslintrc.json" are out of sync with the workspace folder structure, please resolve the conflict manually by adjusting rules or removing redundant folders.`,
+      `Enforce module boundaries definitions in "eslint.config.js" are out of sync with the workspace folder structure, please resolve the conflict manually by adjusting rules or removing redundant folders.`,
     );
   }
   return violations;
@@ -300,13 +301,15 @@ async function validateTsconfigBaseJson(
 
 async function getModuleBoundaries(tree: Tree) {
   const ENFORCE_MODULE_BOUNDARIES = '@nx/enforce-module-boundaries';
-  const eslintJson = await readJson(tree, './.eslintrc.json');
-  const boundaries = eslintJson?.overrides.find(
-    (o: any) => o?.rules?.[ENFORCE_MODULE_BOUNDARIES],
+  const eslintJson: {
+    rules?: { [ENFORCE_MODULE_BOUNDARIES]?: { depConstraints?: unknown[] }[] };
+  }[] = await require(path.join(tree.root, './eslint.config.js'));
+  const boundaries = eslintJson?.find(
+    (r) => ENFORCE_MODULE_BOUNDARIES in (r.rules ?? {}),
   )?.rules?.[ENFORCE_MODULE_BOUNDARIES]?.[1]?.depConstraints;
   if (!boundaries) {
     throw new Error(
-      `The definition for eslint rule "'@nrwl/nx/enforce-module-boundaries'" not found in the root .eslintrc.json, it should be the first item in the "overrides" array`,
+      `The definition for eslint rule "'@nrwl/nx/enforce-module-boundaries'" not found in the root eslint.config.js, it should be the first item in the "overrides" array`,
     );
   }
   return boundaries;

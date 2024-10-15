@@ -61,6 +61,6 @@ public class FamiliensituationUtil {
             };
         }
 
-        return false;
+        return true;
     }
 }

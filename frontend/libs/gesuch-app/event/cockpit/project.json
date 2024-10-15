@@ -3,11 +3,11 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/gesuch-app/event/cockpit/src",
   "projectType": "library",
+  "tags": ["type:event", "scope:gesuch-app"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
-  },
-  "tags": ["type:event", "scope:gesuch-app"]
+  }
 }

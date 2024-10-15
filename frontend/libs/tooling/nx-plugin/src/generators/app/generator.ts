@@ -42,7 +42,7 @@ export default async function (tree: Tree, options: AppGeneratorSchema) {
 
   return async () => {
     console['log'](
-      `\nℹ️ Scope for "${projectName}" added to ".eslintrc.json" and "libs/tooling/nx-plugin/src/generators/lib/schema.json"\n\n`,
+      `\nℹ️ Scope for "${projectName}" added to "eslint.config.js" and "libs/tooling/nx-plugin/src/generators/lib/schema.json"\n\n`,
     );
     console['log'](`Project: --project ${projectName}\n`);
     console['log'](`Can be used to run additional commands like`);
@@ -141,7 +141,7 @@ function removeNxWelcomeComponent(tree: Tree, pathToApp: string) {
 }
 
 function addScope(tree: Tree, projectName: string) {
-  updateJson(tree, '.eslintrc.json', (json) => {
+  updateJson(tree, 'eslint.config.js', (json) => {
     json.overrides
       .find((o: any) => o.rules['@nx/enforce-module-boundaries'])
       .rules['@nx/enforce-module-boundaries'][1].depConstraints.unshift({

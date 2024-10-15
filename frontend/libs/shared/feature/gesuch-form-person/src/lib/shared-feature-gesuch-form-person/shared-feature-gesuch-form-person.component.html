@@ -69,7 +69,7 @@
             <mat-option [value]="null" disabled selected>
               {{ 'shared.form.select.empty' | translate }}
             </mat-option>
-            @for (a of anredeValues; track trackByIndex($index)) {
+            @for (a of anredeValues; track $index) {
               <mat-option [attr.data-testid]="a" [value]="a">
                 {{ 'shared.form.select.salutation.' + (a | lowercase) | translate }}
               </mat-option>
@@ -242,7 +242,7 @@
               <mat-option [value]="null" disabled selected>
                 {{ 'shared.form.select.empty' | translate }}
               </mat-option>
-              @for (z of zivilstandValues; track trackByIndex($index)) {
+              @for (z of zivilstandValues; track $index) {
                 <mat-option [value]="z" [attr.data-testid]="z">
                   {{ 'shared.form.person.zivilstand.' + z | translate }}
                 </mat-option>
@@ -283,7 +283,7 @@
               <mat-option [value]="null" disabled selected>
                 {{ 'shared.form.select.empty' | translate }}
               </mat-option>
-              @for (l of translatedLaender$ | async; track trackByIndex($index)) {
+              @for (l of translatedLaender$ | async; track $index) {
                 <mat-option [value]="l.code" [attr.data-testid]="l.code">
                   {{ l.text }}
                 </mat-option>
@@ -308,7 +308,7 @@
                 <mat-option [value]="null" disabled selected>
                   {{ 'shared.form.select.empty' | translate }}
                 </mat-option>
-                @for (n of niederlassungsStatusValues; track trackByIndex($index)) {
+                @for (n of niederlassungsStatusValues; track $index) {
                   <mat-option [value]="n" [attr.data-testid]="n">
                     {{ 'shared.form.person.niederlassungsstatus.' + n | translate }}
                   </mat-option>
@@ -409,7 +409,7 @@
               <mat-option [value]="null" disabled selected>
                 {{ 'shared.form.select.empty' | translate }}
               </mat-option>
-              @for (z of wohnsitzValues; track trackByIndex($index)) {
+              @for (z of wohnsitzHelper.wohnsitzValuesSig(); track $index) {
                 <mat-option [value]="z" [attr.data-testid]="z">
                   {{ 'shared.form.shared.wohnsitz.' + z | translate }}
                 </mat-option>
@@ -446,7 +446,7 @@
       </div>
 
       <!-- WOHNSITZ AUFTEILUNG -->
-      @if (showWohnsitzSplitterSig()) {
+      @if (wohnsitzHelper.showWohnsitzSplitterSig()) {
         <div class="row g-4 my-2">
           <div class="col-12 col-md-6 col-xl-4">
             <dv-shared-ui-wohnsitz-splitter
@@ -507,7 +507,7 @@
             data-testid="form-person-korrespondenzSprache"
             dvSharedUiFormField
           >
-            @for (s of spracheValues; track trackByIndex($index)) {
+            @for (s of spracheValues; track $index) {
               <mat-radio-button [attr.data-testid]="s" [value]="s">{{
                 'shared.form.person.korrespondenzSprache.' + s | translate
               }}</mat-radio-button>

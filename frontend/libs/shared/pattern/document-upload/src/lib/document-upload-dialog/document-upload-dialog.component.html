@@ -14,7 +14,6 @@
       [disabled]="data.store.isLoading()"
       [class.rounded-bottom-3]="!data.store.hasEntriesSig()"
       (filesDropped)="handleMultipleDocumentsAdded($event)"
-      *dvIfGesuchsteller
     >
       <label class="upload" [class.disabled]="data.store.isLoading()">
         <div

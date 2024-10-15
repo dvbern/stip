@@ -3,6 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/util-fn/translation-helper/src",
   "projectType": "library",
+  "tags": ["type:util-fn", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",
@@ -11,7 +12,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/shared/util-fn/translation-helper/**/*.ts"]
@@ -31,6 +32,5 @@
         }
       }
     }
-  },
-  "tags": ["type:util-fn", "scope:shared"]
+  }
 }

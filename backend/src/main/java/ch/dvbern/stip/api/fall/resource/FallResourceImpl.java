@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.fall.resource;
 
+import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.generated.api.FallResource;
 import jakarta.annotation.security.RolesAllowed;
@@ -37,18 +38,21 @@ public class FallResourceImpl implements FallResource {
 
     @RolesAllowed(FALL_CREATE)
     @Override
+    @AllowAll
     public Response createFallForGs() {
         return Response.ok(fallService.createFallForGs()).build();
     }
 
     @RolesAllowed({FALL_READ, ROLE_SACHBEARBEITER})
     @Override
+    @AllowAll
     public Response getFaelleForSb() {
         return Response.ok(fallService.findFaelleForSb()).build();
     }
 
     @RolesAllowed({FALL_READ, ROLE_GESUCHSTELLER})
     @Override
+    @AllowAll
     public Response getFallForGs() {
         return Response.ok(fallService.findFallForGs()).build();
     }

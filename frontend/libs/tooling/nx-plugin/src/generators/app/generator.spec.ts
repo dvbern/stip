@@ -54,7 +54,7 @@ describe('app generator', () => {
       expect(
         tree.exists('apps/example-app/src/app/app.component.spec.ts'),
       ).toBeFalsy();
-      const depConstraints = readJson(tree, '.eslintrc.json').overrides[0]
+      const depConstraints = readJson(tree, 'eslint.config.js').overrides[0]
         .rules['@nx/enforce-module-boundaries'][1].depConstraints;
       expect(
         depConstraints.find((c: any) => c.sourceTag === 'scope:example-app'),

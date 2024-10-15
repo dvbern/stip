@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.plz.resource;
 
+import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.generated.api.PlzResource;
 import jakarta.annotation.security.RolesAllowed;
@@ -18,6 +19,7 @@ public class PlzResourceImpl implements PlzResource {
 
     @RolesAllowed(STAMMDATEN_READ)
     @Override
+    @AllowAll
     public Response getPlz() {
         return Response.ok(plzService.getAllPlz()).build();
     }

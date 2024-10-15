@@ -3,7 +3,7 @@
 ## Architecture
 
 > The architecture is validated (linted) and a lot of best practices are enforced with the help of the [Nx enforce module boundaries](https://nx.dev/core-features/enforce-project-boundaries) rule.
-> as defined in the `.eslintrc.json` file in the `overrides[0].rules.@nx/enforce-module-boundaries[1].depConstraints` section.
+> as defined in the `eslint.config.js` file in the `overrides[0].rules.@nx/enforce-module-boundaries[1].depConstraints` section.
 
 The rules configuration is updated automatically when used `npm run g` (lib) and `npm run g:app` (app) generators.
 Besides that it is always a good idea to validate if architecture and module boundaries rules are still
@@ -23,7 +23,7 @@ based on new folder structure.
 
 Besides that it will print out if there are any conflicts between
 folder structure and module boundaries rules. These conflicts than have to be resolved manually
-by either renaming folders or adjusting the module boundaries rules in the `.eslintrc.json` file and scopes in `libs/tooling/nx-plugin/src/generators/lib/schema.json`.
+by either renaming folders or adjusting the module boundaries rules in the `eslint.config.js` file and scopes in `libs/tooling/nx-plugin/src/generators/lib/schema.json`.
 
 That way we can be sure our architecture stays consistent and valid.
 
@@ -45,7 +45,7 @@ Angular libs are linted using the default sets specified in
 - [plugin:@angular-eslint/recommended](https://github.com/angular-eslint/angular-eslint/blob/main/packages/eslint-plugin/src/configs/recommended.json)
 - [plugin:@angular-eslint/template/recommended](https://github.com/angular-eslint/angular-eslint/blob/main/packages/eslint-plugin-template/src/configs/recommended.json)
 
-(both of which are referenced through `plugin:@nx/angular` in the `.eslintrc.json` files)
+(both of which are referenced through `plugin:@nx/angular` in the `eslint.config.js` files)
 
 Besides these presets, we also use additional rules specified in the
 [.eslintrc-angular.json](.eslintrc-angular.json) file that proved to
@@ -64,7 +64,7 @@ be beneficial in our projects.
 - [@angular-eslint/template/no-negated-async](https://github.com/angular-eslint/angular-eslint/blob/main/packages/eslint-plugin-template/docs/rules/no-negated-async.md) - error prone, handle explicitly, eg `(stream$ | async) === false`
 
 This additional file is referenced in the `extends` section of the
-individual `.eslintrc.json` files of each library which was generated
+individual `eslint.config.js` files of each library which was generated
 using provided `lib` generator.
 
 - [Docs (rules)](https://github.com/angular-eslint/angular-eslint/tree/main/packages/eslint-plugin/src/rules)
@@ -78,7 +78,7 @@ NgRx (data-access) libraries are linted using the default sets specified in
 
 This additional NgRx config is specified in the
 [.eslintrc-ngrx.json](.eslintrc-ngrx.json) file is referenced in the `extends` section of the
-individual `.eslintrc.json` files of `data-access` type libraries which was generated
+individual `eslint.config.js` files of `data-access` type libraries which was generated
 using provided `lib` generator.
 
 - [Docs (rules)](https://ngrx.io/guide/eslint-plugin#rules)

@@ -1,4 +1,12 @@
-import { gesuchFormSteps } from './gesuch-form-steps';
+import { ValidationError } from '@dv/shared/model/error';
+import { SharedModelGesuchFormularProps } from '@dv/shared/model/gesuch';
+
+import {
+  FAMILIENSITUATION,
+  GESCHWISTER,
+  PERSON,
+  gesuchFormSteps,
+} from './gesuch-form-steps';
 import { SharedModelGesuchFormStep } from './shared-model-gesuch-form';
 
 export type SpecialValidationError = {
@@ -9,16 +17,38 @@ export type SpecialValidationError = {
   linkKey: string;
 };
 
-export const SPECIAL_VALIDATION_ERRORS: Record<string, SpecialValidationError> =
+const wohnsitzFamiliensituationMap: Record<string, SharedModelGesuchFormStep> =
   {
-    'dvbern.stip.validation.gesuch.einreichen.svnummer.unique.message': {
-      step: gesuchFormSteps.PERSON,
-      field: 'sozialversicherungsnummer',
-      fieldErrorKey: 'shared.form.person.validation.uniqueSvnummer',
-      validationErrorKey: 'shared.gesuch.validation.uniqueSvnummer.message',
-      linkKey: 'shared.gesuch.validation.uniqueSvnummer.link',
-    },
-  };
+    personInAusbildung: PERSON,
+    geschwisters: GESCHWISTER,
+  } satisfies Partial<
+    Record<SharedModelGesuchFormularProps, SharedModelGesuchFormStep>
+  >;
+export const SPECIAL_VALIDATION_ERRORS: Record<
+  string,
+  (error: ValidationError) => SpecialValidationError
+> = {
+  'dvbern.stip.validation.gesuch.einreichen.svnummer.unique.message': () => ({
+    step: gesuchFormSteps.PERSON,
+    field: 'sozialversicherungsnummer',
+    fieldErrorKey: 'shared.form.person.validation.uniqueSvnummer',
+    validationErrorKey: 'shared.gesuch.validation.uniqueSvnummer.message',
+    linkKey: 'shared.gesuch.validation.link.personInAusbildung',
+  }),
+  '{jakarta.validation.constraints.familiensituation.wohnsituation.message}': (
+    validationError,
+  ) => ({
+    step:
+      validationError.propertyPath &&
+      validationError.propertyPath in wohnsitzFamiliensituationMap
+        ? wohnsitzFamiliensituationMap[validationError.propertyPath]
+        : FAMILIENSITUATION,
+    field: 'wohnsitz',
+    fieldErrorKey: 'shared.form.person.validation.wohnsitz',
+    validationErrorKey: 'shared.gesuch.validation.wohnsitz.message',
+    linkKey: 'shared.gesuch.validation.link.' + validationError.propertyPath,
+  }),
+};
 
 export const isSpecialValidationError = (error: {
   messageTemplate: string;

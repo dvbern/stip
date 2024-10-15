@@ -11,6 +11,9 @@ export const NO_GLOBAL_ERRORS = new HttpContextToken<boolean>(() => false);
 export const HANDLE_NOT_FOUND = new HttpContextToken<
   ((error: SharedModelError) => void) | undefined
 >(() => undefined);
+export const HANDLE_UNAUTHORIZED = new HttpContextToken<
+  ((error: SharedModelError) => void) | undefined
+>(() => undefined);
 
 export const shouldNotAuthorizeRequestIf = (
   ignore: boolean,
@@ -54,4 +57,14 @@ export const handleNotFound = (
   context: HttpContext = new HttpContext(),
 ) => {
   return context.set(HANDLE_NOT_FOUND, handler);
+};
+
+export const handleNotFoundAndUnauthorized = (
+  notFoundHandler: (error: SharedModelError) => void,
+  unauthorizedHandler: (error: SharedModelError) => void,
+  context: HttpContext = new HttpContext(),
+) => {
+  context.set(HANDLE_NOT_FOUND, notFoundHandler);
+  context.set(HANDLE_UNAUTHORIZED, unauthorizedHandler);
+  return context;
 };

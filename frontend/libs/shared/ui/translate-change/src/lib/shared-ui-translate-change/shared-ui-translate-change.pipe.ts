@@ -21,7 +21,6 @@ export class SharedUiTranslateChangePipe
     translationKey:
       | `shared.form.zuvor.checkbox.${Placeholder}`
       | `shared.form.zuvor.radio.${Placeholder}`
-      // eslint-disable-next-line @typescript-eslint/ban-types -- Used to intellisense suggestions
       | (`${string}${typeof PLACEHOLDER}${string}` & {}),
   ) {
     if (value === '') {

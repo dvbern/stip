@@ -19,9 +19,9 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { percentStringToNumber } from '@dv/shared/util/form';
 import { maskitoPercent } from '@dv/shared/util/maskito-util';
 
-import { percentStringToNumber } from '../utils/form';
 @Component({
   selector: 'dv-shared-ui-percentage-splitter',
   standalone: true,

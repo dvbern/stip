@@ -3,6 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/util-fn/comp-test/src",
   "projectType": "library",
+  "tags": ["type:util-fn", "scope:shared"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"
@@ -14,6 +15,5 @@
         "jestConfig": "libs/shared/util-fn/comp-test/jest.config.ts"
       }
     }
-  },
-  "tags": ["type:util-fn", "scope:shared"]
+  }
 }

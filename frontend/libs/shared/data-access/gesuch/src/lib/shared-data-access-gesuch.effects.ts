@@ -2,8 +2,9 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
-import { Store } from '@ngrx/store';
+import { ActionCreator, Creator, Store } from '@ngrx/store';
 import {
+  Observable,
   catchError,
   combineLatestWith,
   concatMap,
@@ -36,11 +37,12 @@ import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partn
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
 import { AppType } from '@dv/shared/model/config';
+import { SharedModelError } from '@dv/shared/model/error';
 import {
   AusbildungUpdate,
+  Gesuch,
   GesuchFormularUpdate,
   GesuchService,
-  GesuchTrancheService,
   GesuchTrancheTyp,
   GesuchUpdate,
   SharedModelGesuchFormular,
@@ -48,9 +50,8 @@ import {
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import {
-  handleNotFound,
+  handleNotFoundAndUnauthorized,
   noGlobalErrorsIf,
-  shouldIgnoreNotFoundErrorsIf,
 } from '@dv/shared/util/http';
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
@@ -66,6 +67,8 @@ import {
 } from './shared-data-access-gesuch.selectors';
 
 export const LOAD_ALL_DEBOUNCE_TIME = 300;
+export const ROUTE_ID_MISSING =
+  'Make sure that the route is correct and contains the gesuch :id';
 
 export const loadOwnGesuchs = createEffect(
   (
@@ -165,22 +168,31 @@ export const loadGesuch = createEffect(
       withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
       switchMap(([[, [id, trancheTyp, trancheId]], { compileTimeConfig }]) => {
         if (!id) {
-          throw new Error(
-            'Load Gesuch without id, make sure that the route is correct and contains the gesuch :id',
-          );
+          throw new Error(ROUTE_ID_MISSING);
         }
 
-        const navigateIfNotFound = {
+        const handle404And401 = {
           context: noGlobalErrorsIf(
             true,
-            handleNotFound((error) => {
-              globalNotifications.createNotification({
-                type: 'ERROR',
-                messageKey: 'shared.genericError.gesuch-not-found-redirection',
-                content: error,
-              });
-              router.navigate(['/'], { replaceUrl: true });
-            }),
+            handleNotFoundAndUnauthorized(
+              (error: SharedModelError) => {
+                globalNotifications.createNotification({
+                  type: 'ERROR_PERMANENT',
+                  messageKey:
+                    'shared.genericError.gesuch-not-found-redirection',
+                  content: error,
+                });
+                router.navigate(['/'], { replaceUrl: true });
+              },
+              (error: SharedModelError) => {
+                globalNotifications.createNotification({
+                  type: 'ERROR_PERMANENT',
+                  messageKey: 'shared.genericError.gesuch-unauthorized',
+                  content: error,
+                });
+                router.navigate(['/'], { replaceUrl: true });
+              },
+            ),
           ),
         };
 
@@ -191,14 +203,14 @@ export const loadGesuch = createEffect(
               { aenderungId },
               undefined,
               undefined,
-              navigateIfNotFound,
+              handle404And401,
             ),
           'sachbearbeitung-app': (aenderungId: string) =>
             gesuchService.getSbTrancheChanges$(
               { aenderungId },
               undefined,
               undefined,
-              navigateIfNotFound,
+              handle404And401,
             ),
         } satisfies Record<AppType, unknown>;
 
@@ -210,7 +222,7 @@ export const loadGesuch = createEffect(
               { gesuchId: id, gesuchTrancheId },
               undefined,
               undefined,
-              navigateIfNotFound,
+              handle404And401,
             ),
         } satisfies Record<GesuchTrancheTyp, unknown>;
 
@@ -223,7 +235,7 @@ export const loadGesuch = createEffect(
                 { gesuchId: id },
                 undefined,
                 undefined,
-                navigateIfNotFound,
+                handle404And401,
               )
         ).pipe(
           map((gesuch) =>
@@ -369,41 +381,6 @@ export const removeGesuch = createEffect(
   { functional: true },
 );
 
-export const gesuchValidateSteps = createEffect(
-  (
-    events$ = inject(Actions),
-    gesuchTranchenService = inject(GesuchTrancheService),
-  ) => {
-    return events$.pipe(
-      ofType(SharedDataAccessGesuchEvents.gesuchValidateSteps),
-      switchMap(({ gesuchTrancheId }) =>
-        gesuchTranchenService
-          .validateGesuchTranchePages$(
-            { gesuchTrancheId },
-            undefined,
-            undefined,
-            {
-              context: shouldIgnoreNotFoundErrorsIf(true),
-            },
-          )
-          .pipe(
-            switchMap((validation) => [
-              SharedDataAccessGesuchEvents.gesuchValidationSuccess({
-                error: sharedUtilFnErrorTransformer({ error: validation }),
-              }),
-            ]),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchValidationFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          ),
-      ),
-    );
-  },
-  { functional: true },
-);
-
 export const redirectToGesuchForm = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
@@ -497,9 +474,7 @@ export const setGesuchToBearbeitung = createEffect(
       concatLatestFrom(() => store.select(selectRouteId)),
       concatMap(([, id]) => {
         if (!id) {
-          throw new Error(
-            'Make sure that the route is correct and contains the gesuch :id',
-          );
+          throw new Error(ROUTE_ID_MISSING);
         }
         return gesuchService
           .changeGesuchStatusToInBearbeitung$({ gesuchId: id })
@@ -519,6 +494,127 @@ export const setGesuchToBearbeitung = createEffect(
   { functional: true },
 );
 
+export const setGesuchBearbeitungAbschliessen = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return handleStatusChange$(
+      SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen,
+      (gesuchId) =>
+        gesuchService.bearbeitungAbschliessen$({
+          gesuchId,
+        }),
+      actions$,
+      store,
+    );
+  },
+  { functional: true },
+);
+
+export const setGesuchZurueckweisen = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return handleStatusChange$(
+      SharedDataAccessGesuchEvents.setGesuchZurueckweisen,
+      (gesuchId, { kommentar }) =>
+        gesuchService.gesuchZurueckweisen$({
+          gesuchId,
+          kommentar: { text: kommentar },
+        }),
+      actions$,
+      store,
+    );
+  },
+  { functional: true },
+);
+
+export const setGesuchVerfuegt = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return handleStatusChange$(
+      SharedDataAccessGesuchEvents.setGesuchVerfuegt,
+      (gesuchId) =>
+        gesuchService.changeGesuchStatusToVerfuegt$({
+          gesuchId,
+        }),
+      actions$,
+      store,
+    );
+  },
+  { functional: true },
+);
+
+export const setGesuchBereitFuerBearbeitung = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return handleStatusChange$(
+      SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung,
+      (gesuchId) =>
+        gesuchService.changeGesuchStatusToBereitFuerBearbeitung$({
+          gesuchId,
+        }),
+      actions$,
+      store,
+    );
+  },
+  { functional: true },
+);
+
+export const setGesuchVersendet = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    gesuchService = inject(GesuchService),
+  ) => {
+    return handleStatusChange$(
+      SharedDataAccessGesuchEvents.setGesuchVersendet,
+      (gesuchId) => gesuchService.changeGesuchStatusToVersendet$({ gesuchId }),
+      actions$,
+      store,
+    );
+  },
+  { functional: true },
+);
+
+const handleStatusChange$ = <AC extends ActionCreator<string, Creator>>(
+  action: AC,
+  serviceCall: (
+    gesuchId: string,
+    payload: ReturnType<typeof action>,
+  ) => Observable<Gesuch>,
+  actions$: Actions,
+  store: Store,
+) => {
+  return actions$.pipe(
+    ofType(action),
+    concatLatestFrom(() => store.select(selectRouteId)),
+    concatMap(([payload, id]) => {
+      if (!id) {
+        throw new Error(ROUTE_ID_MISSING);
+      }
+      return serviceCall(id, payload).pipe(
+        map(() => SharedDataAccessGesuchEvents.loadGesuch()),
+        catchError((error) => [
+          SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+            error: sharedUtilFnErrorTransformer(error),
+          }),
+        ]),
+      );
+    }),
+  );
+};
+
 // add effects here
 export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
@@ -528,11 +624,15 @@ export const sharedDataAccessGesuchEffects = {
   updateGesuch,
   updateGesuchSubform,
   removeGesuch,
-  gesuchValidateSteps,
   redirectToGesuchForm,
   redirectToGesuchFormNextStep,
   refreshGesuchFormStep,
   setGesuchToBearbeitung,
+  setGesuchBearbeitungAbschliessen,
+  setGesuchZurueckweisen,
+  setGesuchVerfuegt,
+  setGesuchBereitFuerBearbeitung,
+  setGesuchVersendet,
 };
 
 const viewOnlyFields = ['steuerdatenTabs'] as const satisfies [

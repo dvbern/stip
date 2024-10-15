@@ -1,6 +1,7 @@
+@let tranche = viewSig().gesuchstranche;
+
 <ng-template dvHeaderSuffix>
   <h2 class="fw-bold">
-    @let tranche = viewSig().gesuchstranche;
     @if (tranche) {
       {{ 'shared.form.title.suffix.' + tranche.typ | translate: { position: currentTrancheIndexSig() + 1 } }}
       {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
@@ -48,3 +49,65 @@
     </mat-form-field>
   </div>
 </form>
+
+<ng-container *dvIfSachbearbeiter>
+  <div class="row mt-5">
+    @let gesuchId = viewSig().gesuchId;
+    @let abschlussPhase = einreichenStore.einreichenViewSig().abschlussPhase;
+    @let specialValidationErrors = einreichenStore.einreichenViewSig().specialValidationErrors;
+    @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
+      @switch (abschlussPhase) {
+        @case ('READY_TO_SEND') {
+          <div class="col-12 col-md-12 col-xl-8 d-flex gap-5">
+            <button
+              class="btn btn-outline-primary flex-grow-1"
+              data-testid="aenderung-reject"
+              type="button"
+              (click)="changeAenderungState(tranche.id, 'ABGELEHNT', gesuchId)"
+            >
+              {{ 'shared.form.aenderung.action.reject' | translate }}
+            </button>
+            <button
+              class="btn btn-primary flex-grow-1"
+              data-testid="aenderung-accept"
+              type="button"
+              (click)="changeAenderungState(tranche.id, 'AKZEPTIERT', gesuchId)"
+            >
+              {{ 'shared.form.aenderung.action.accept' | translate }}
+            </button>
+            <button
+              class="btn btn-link"
+              data-testid="aenderung-manually-change"
+              type="button"
+              (click)="changeAenderungState(tranche.id, 'MANUELLE_AENDERUNG', gesuchId)"
+            >
+              {{ 'shared.form.aenderung.action.manuallyChange' | translate }}
+            </button>
+          </div>
+        }
+        @case ('NOT_READY') {
+          <div class="col-12 col-md-12 col-xl-8">
+            @if (specialValidationErrors.length === 0) {
+              <div class="alert alert-warning d-flex" role="alert" data-testid="alert-warning">
+                <span class="text-warning material-symbols-rounded me-3">warning</span>
+                <span [innerHTML]="'shared.form.tranche-abschluss.notReady' | translate"></span>
+              </div>
+            } @else {
+              @for (error of specialValidationErrors; track error) {
+                <div class="alert alert-danger d-flex" role="alert" data-testid="alert-danger">
+                  <span class="text-danger material-symbols-rounded">error</span>
+                  <div class="ms-3">
+                    <span [innerHTML]="error.validationErrorKey | translate"></span>
+                    &nbsp;<a [routerLink]="['/gesuch', error.step.route, viewSig().gesuchId]">{{
+                      error.linkKey | translate
+                    }}</a>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        }
+      }
+    }
+  </div>
+</ng-container>

@@ -8,6 +8,13 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapper;
+import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
+import ch.dvbern.stip.api.gesuch.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,14 +56,6 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
         assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
             , is(true));
 
-        // Elternteil unbekannt, Vater und Mutter pflichitg
-        familiensituation.setElternteilUnbekanntVerstorben(true);
-        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
-        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
-        gesuchFormular.setFamiliensituation(familiensituation);
-        assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
-            , is(true));
-
         // Elternteil unbekannt, Vater verstorben, Mutter Pflichtig:
         familiensituation.setElternVerheiratetZusammen(false);
         familiensituation.setGerichtlicheAlimentenregelung(false);
@@ -69,7 +68,7 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
         elternSet.add(mutter);
         gesuchFormular.setElterns(elternSet);
         assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
-            , is(true));
+            , is(false));
 
         // Elternteil unbekannt, Vater verstorben, Mutter Verstorben:
         familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
@@ -91,6 +90,33 @@ class FamiliensituationElternEntityRequiredConstraintValidatorTest {
         gesuchFormular.setElterns(elternSet);
         assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
             , is(true));
+    }
+
+    @Test
+    void familienSituationAbwesenheitValidTest_NOT_ZUSAMMEN_VERHEIRATET(){
+        FamiliensituationElternEntityRequiredConstraintValidator
+            familiensituationElternEntityRequiredConstraintValidator =
+            new FamiliensituationElternEntityRequiredConstraintValidator();
+
+        GesuchFormular gesuchFormular = new GesuchFormular();
+        Familiensituation familiensituation = new Familiensituation();
+        familiensituation.setElternteilUnbekanntVerstorben(true);
+        familiensituation.setElternVerheiratetZusammen(false);
+        gesuchFormular.setFamiliensituation(familiensituation);
+
+        // Elternteil unbekannt, Vater und Mutter pflichitg
+        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        gesuchFormular.setFamiliensituation(familiensituation);
+        assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+            , is(false));
+
+        // Elternteil unbekannt, Vater und Mutter pflichitg
+        familiensituation.setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        familiensituation.setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT);
+        gesuchFormular.setFamiliensituation(familiensituation);
+        assertThat(familiensituationElternEntityRequiredConstraintValidator.isValid(gesuchFormular, null)
+            , is(false));
     }
 
     @Test

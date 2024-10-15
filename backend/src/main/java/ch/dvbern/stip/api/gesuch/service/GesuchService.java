@@ -23,12 +23,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.ArrayList;
 
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -58,6 +60,7 @@ import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -92,6 +95,7 @@ public class GesuchService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
     private final GesuchNummerService gesuchNummerService;
+    private final ConfigService configService;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithOldestTranche(UUID id) {
@@ -298,7 +302,15 @@ public class GesuchService {
     }
 
     private List<GesuchDto> map(final Stream<Gesuch> gesuche) {
-        return gesuche.map(gesuchMapperUtil::mapWithNewestTranche).toList();
+        List<GesuchDto> gesuchDtos = new ArrayList<>();
+        gesuche.forEach(gesuch -> {
+            if (gesuch.getAenderungZuUeberpruefen().isPresent()) {
+                gesuchDtos.addAll(gesuchMapperUtil.mapWithAenderung(gesuch));
+            } else{
+                gesuchDtos.add(gesuchMapperUtil.mapWithNewestTranche(gesuch));
+            }
+        });
+        return gesuchDtos;
     }
 
     @Transactional
@@ -339,9 +351,62 @@ public class GesuchService {
     }
 
     @Transactional
+    public void bearbeitungAbschliessen(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+            gesuch,
+            configService.getCurrentDmnMajorVersion(),
+            configService.getCurrentDmnMinorVersion()
+        );
+
+        if (stipendien.getBerechnung() <= 0) {
+            // Keine Stipendien, next Status = Verfuegt
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
+        } else {
+            // Yes Stipendien, next Status = In Freigabe
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_FREIGABE);
+        }
+    }
+
+    @Transactional
+    public void gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
+        // TODO KSTIP-1130: Juristische Notiz erstellen anhand Kommentar
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS);
+    }
+
+    @Transactional
+    public void juristischAbklaeren(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG);
+    }
+
+    @Transactional
     public GesuchDto gesuchStatusToInBearbeitung(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
+    }
+
+    @Transactional
+    public GesuchDto gesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
+    }
+
+    @Transactional
+    public GesuchDto gesuchStatusToVerfuegt(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
+    }
+
+    @Transactional
+    public GesuchDto gesuchStatusToVersendet(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSENDET);
         return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 

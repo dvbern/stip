@@ -3,8 +3,8 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/ui/comming-soon/src",
   "prefix": "dv",
-  "tags": ["type:ui", "scope:shared"],
   "projectType": "library",
+  "tags": ["type:ui", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",

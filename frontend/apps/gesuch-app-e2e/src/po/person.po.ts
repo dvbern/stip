@@ -26,6 +26,8 @@ export class PersonPO {
     vorumundschaftCheckbox: Locator;
     zivilstandSelect: Locator;
     wohnsitzSelect: Locator;
+    wohnsitzMutter: Locator;
+    wohnsitzVater: Locator;
     sozialhilfeBeitraegeRadio: Locator;
     korrespondenzSpracheRadio: Locator;
     niederlassungsstatusSelect: Locator;
@@ -63,6 +65,8 @@ export class PersonPO {
       zivilstandSelect: page.getByTestId('form-person-zivilstand'),
       einreisedatum: page.getByTestId('form-person-einreisedatum'),
       wohnsitzSelect: page.getByTestId('form-person-wohnsitz'),
+      wohnsitzMutter: page.getByTestId('component-percentage-splitter-a'),
+      wohnsitzVater: page.getByTestId('component-percentage-splitter-b'),
       sozialhilfeBeitraegeRadio: page.getByTestId(
         'form-person-sozialhilfeBeitraege',
       ),
@@ -110,6 +114,13 @@ export class PersonPO {
 
     await this.elems.wohnsitzSelect.click();
     await this.elems.page.getByTestId(person.wohnsitz).click();
+
+    if (person.wohnsitzAnteilMutter) {
+      await this.elems.wohnsitzMutter.fill(`${person.wohnsitzAnteilMutter}`);
+    }
+    if (person.wohnsitzAnteilVater) {
+      await this.elems.wohnsitzVater.fill(`${person.wohnsitzAnteilVater}`);
+    }
 
     await selectMatRadio(
       this.elems.sozialhilfeBeitraegeRadio,

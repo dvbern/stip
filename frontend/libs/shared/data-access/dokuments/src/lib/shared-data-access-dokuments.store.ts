@@ -67,6 +67,14 @@ export class DokumentsStore extends signalStore(
     isSuccess(this.dokument()) ? this.dokument().data : undefined,
   );
 
+  hasAcceptedAllDokumentsSig = computed(() => {
+    return (
+      this.dokuments
+        .data()
+        ?.every((dokument) => dokument.status === Dokumentstatus.AKZEPTIERT) ??
+      false
+    );
+  });
   hasAbgelehnteDokumentsSig = computed(() => {
     return (
       this.dokuments

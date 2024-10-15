@@ -3,11 +3,11 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/model/api/src",
   "projectType": "library",
+  "tags": ["type:model", "scope:shared"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
-  },
-  "tags": ["type:model", "scope:shared"]
+  }
 }

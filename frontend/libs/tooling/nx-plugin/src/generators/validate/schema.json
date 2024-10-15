@@ -6,7 +6,7 @@
   "properties": {
     "fix": {
       "type": "boolean",
-      "description": "Auto fix project.json tags violation, will not fix folder structure and .eslintrc.json violations, those must be fixed manually...",
+      "description": "Auto fix project.json tags violation, will not fix folder structure and eslint.config.js violations, those must be fixed manually...",
       "default": false
     }
   },

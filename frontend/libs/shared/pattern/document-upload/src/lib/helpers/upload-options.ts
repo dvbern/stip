@@ -117,7 +117,9 @@ export function createUploadOptionsFactory<
    * ```
    *
    * @param lazyDokumentTyp - a function that should return the {@link DokumentTyp} or `null | undefined` if the upload is not required
-   * @param options - additional options for the upload. If initialDocuments are provided, the the upload component will not try to fetch the documents on initialization, but display the provided documents instead.
+   * @param options - additional options for the upload. If initialDocuments are provided, the the upload component will not try to fetch the documents on initialization,
+   *                  but display the provided documents instead. Primarily used for Dokument Table view.
+   *                  initialDocuments are of type {@link Dokument} which refers to the "File", not the GesuchDokument
    */
   return (
     lazyDokumentTyp: (view: T) => DokumentTyp | null | undefined,

@@ -25,7 +25,7 @@
               <div class="card mb-5 shadow-lg" [class.col-md-6]="!periode.gesuch" [class.col-md-12]="periode.gesuch">
                 <div class="card-body">
                   <div class="row">
-                    <div class="col-md">
+                    <div class="col-md d-flex flex-column">
                       <!-- Periode titel -->
                       <div class="card-title d-flex">
                         @if (periode.semester === 'HERBST') {
@@ -73,6 +73,7 @@
                             *ngTemplateOutlet="einreichefrist; context: { periode: periode }"
                           ></ng-container>
                         </div>
+                        <div class="flex-grow-1"></div>
                         <a
                           class="btn btn-primary mt-3 w-100"
                           data-testid="cockpit-gesuch-edit"
@@ -85,40 +86,33 @@
                     @if (periode.gesuch) {
                       <div class="col-md d-flex">
                         @if (periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
-                          @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
-                          @if (gesuchAenderungStore.cachedTranchenSlim() | rdIsPending) {
-                            <div class="col-12 mt-2">
+                          @let aenderung = gesuchAenderungStore.openAenderungViewSig();
+                          @if (aenderung) {
+                            @if (aenderung.loading) {
                               <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
-                            </div>
-                          } @else if (aenderungen.list.length > 0) {
-                            <div class="divider me-4"></div>
-                            @if (aenderungen.loading) {
-                              <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
+                            } @else if (aenderung.openAenderung) {
+                              <div class="divider me-4"></div>
+                              <dv-gesuch-app-ui-aenderungs-entry
+                                class="d-flex flex-column gap-4 w-100"
+                                [tranche]="aenderung.openAenderung"
+                                [gesuchId]="periode.gesuch.id"
+                              ></dv-gesuch-app-ui-aenderungs-entry>
                             } @else {
-                              <div class="d-flex flex-column gap-4 w-100">
-                                @for (aenderung of aenderungen.list; track aenderung) {
-                                  <dv-gesuch-app-ui-aenderungs-entry
-                                    [tranche]="aenderung"
-                                    [gesuchId]="periode.gesuch.id"
-                                  ></dv-gesuch-app-ui-aenderungs-entry>
-                                }
-                              </div>
+                              <button
+                                type="button"
+                                class="btn btn-outline-primary mt-3 w-100 align-self-end"
+                                data-testid="cockpit-gesuch-aenderung-create"
+                                (click)="
+                                  aenderungMelden(
+                                    periode.gesuch.id,
+                                    periode.gesuchsperiodeStart,
+                                    periode.gesuchsperiodeStopp
+                                  )
+                                "
+                              >
+                                {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
+                              </button>
                             }
-                          } @else {
-                            <button
-                              type="button"
-                              class="btn btn-outline-primary mt-3 w-100 align-self-end"
-                              data-testid="cockpit-gesuch-aenderung-create"
-                              (click)="
-                                aenderungMelden(
-                                  periode.gesuch.id,
-                                  periode.gesuchsperiodeStart,
-                                  periode.gesuchsperiodeStopp
-                                )
-                              "
-                            >
-                              {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
-                            </button>
                           }
                         } @else {
                           <!-- existing Gesuch (right pic) -->

@@ -16,10 +16,10 @@ VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae7', '2023-06-12 15:26:47.000000', '2
 -- This user is used as the Gesuchsteller in the tests
 INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, nachname,
                       vorname, sozialversicherungsnummer, benutzer_status, mandant,
-                      benutzereinstellungen_id)
+                      benutzereinstellungen_id, keycloak_id)
 VALUES ('9477487f-3ac4-4d02-b57c-e0cefb292ae5', '2023-06-12 15:26:47.000000', '2023-06-12 15:26:50.000000', 'Admin',
-        'Admin', 0, 'Nell', 'Frédéric', '756.1111.1111.13', 'AKTIV', 'bern',
-        '92486d34-083a-4eb2-b676-f160a99512ba');
+        'Admin', 0, 'Nell', 'Frédéric', '756.9217.0769.85', 'AKTIV', 'bern',
+        '92486d34-083a-4eb2-b676-f160a99512ba', '9477487f-3ac4-4d02-b57c-e0cefb292ae5');
 
 INSERT INTO benutzer (id, timestamp_erstellt, timestamp_mutiert, user_erstellt, user_mutiert, version, nachname,
                       vorname, sozialversicherungsnummer, benutzer_status, mandant,

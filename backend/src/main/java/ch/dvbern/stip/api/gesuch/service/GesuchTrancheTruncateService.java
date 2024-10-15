@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
@@ -27,7 +28,9 @@ public class GesuchTrancheTruncateService {
         final var added = new ArrayList<GesuchTranche>();
         final var tranchenToTruncate = gesuch.getGesuchTranchen()
             .stream()
-            .filter(tranche -> tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+            .filter(tranche -> tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS &&
+                tranche.getTyp() == GesuchTrancheTyp.TRANCHE
+            )
             .toList();
 
         for (final var existingTranche : tranchenToTruncate) {

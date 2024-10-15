@@ -3,6 +3,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { Route } from '@angular/router';
 import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
+import { Gesuchstatus } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 /**
@@ -68,3 +69,58 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
     },
   ];
 }
+
+export type StatusUebergang =
+  | 'BEARBEITUNG_ABSCHLIESSEN'
+  | 'ZURUECKWEISEN'
+  | 'VERFUEGT'
+  | 'BEREIT_FUER_BEARBEITUNG'
+  | 'VERSENDET';
+
+export const StatusUebergaengeMap: Partial<
+  Record<Gesuchstatus, StatusUebergang[]>
+> = {
+  IN_BEARBEITUNG_SB: ['BEARBEITUNG_ABSCHLIESSEN', 'ZURUECKWEISEN'],
+  IN_FREIGABE: ['VERFUEGT', 'BEREIT_FUER_BEARBEITUNG'],
+  VERSANDBEREIT: ['VERSENDET'],
+};
+
+export const StatusUebergaengeOptions = {
+  BEARBEITUNG_ABSCHLIESSEN: (context?: { hasAcceptedAllDokuments: boolean }) =>
+    ({
+      icon: 'check',
+      titleKey: 'BEARBEITUNG_ABSCHLIESSEN',
+      typ: 'BEARBEITUNG_ABSCHLIESSEN',
+      disabledReason: context?.hasAcceptedAllDokuments
+        ? undefined
+        : 'DOKUMENTE_OFFEN',
+    }) as const,
+  ZURUECKWEISEN: () =>
+    ({
+      icon: 'undo',
+      titleKey: 'ZURUECKWEISEN',
+      typ: 'ZURUECKWEISEN',
+      disabledReason: undefined,
+    }) as const,
+  VERFUEGT: () =>
+    ({
+      icon: 'done',
+      titleKey: 'VERFUEGT',
+      typ: 'VERFUEGT',
+      disabledReason: undefined,
+    }) as const,
+  BEREIT_FUER_BEARBEITUNG: () =>
+    ({
+      icon: 'play_arrow',
+      titleKey: 'BEREIT_FUER_BEARBEITUNG',
+      typ: 'BEREIT_FUER_BEARBEITUNG',
+      disabledReason: undefined,
+    }) as const,
+  VERSENDET: () =>
+    ({
+      icon: 'mark_email_read',
+      titleKey: 'VERSENDET',
+      typ: 'VERSENDET',
+      disabledReason: undefined,
+    }) as const,
+} satisfies Record<StatusUebergang, unknown>;

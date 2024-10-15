@@ -5,6 +5,12 @@
   "prefix": "dv",
   "sourceRoot": "apps/gesuch-app/src",
   "tags": ["type:app", "scope:gesuch-app"],
+  "implicitDependencies": [
+    "libs/shared/assets/i18n",
+    "libs/shared/assets/images",
+    "libs/shared/styles/theme",
+    "libs/shared/styles/components"
+  ],
   "targets": {
     "prepare": {
       "cache": false,
@@ -124,11 +130,5 @@
         "buildTarget": "gesuch-app:build"
       }
     }
-  },
-  "implicitDependencies": [
-    "libs/shared/assets/i18n",
-    "libs/shared/assets/images",
-    "libs/shared/styles/theme",
-    "libs/shared/styles/components"
-  ]
+  }
 }

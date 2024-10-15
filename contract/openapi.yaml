@@ -126,6 +126,84 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToInBearbeitung
+  /gesuch/status/bereit-fuer-bearbeitung/{gesuchId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToBereitFuerBearbeitung
+  /gesuch/status/verfuegt/{gesuchId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToVerfuegt
+  /gesuch/status/versendet/{gesuchId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToVersendet
   '/dokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -1042,6 +1120,68 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchFehlendeDokumenteUebermitteln
       summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
+  '/gesuch/{gesuchId}/bearbeitungAbschliessen':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Bearbeitung des Gesuch Abschliessen
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: bearbeitungAbschliessen
+      summary: Die Bearbeitung des Gesuch durch den SB abschliessen
+  '/gesuch/{gesuchId}/gesuchZurueckweisen':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    patch:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
+      responses:
+        '200':
+          description: Gesuch zurueckweisen and GS
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchZurueckweisen
+      summary: Gas Gesuch an den GS zurueckweisen
+  '/gesuch/{gesuchId}/juristischAbklaeren':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Gesuch wird juristisch abgeklaert
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: juristischAbklaeren
+      summary: Gas Gesuch an die Juristen ueberweisen
   '/gesuch/{gesuchId}/statusprotokoll':
     parameters:
       - name: gesuchId
@@ -1595,25 +1735,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createAenderungsantrag
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Returns gesuche filtered by gs
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAenderungsantrag
   '/gesuchtranche/{gesuchId}/tranche':
     parameters:
       - name: gesuchId
@@ -1661,6 +1782,72 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: aenderungEinreichen
+  '/gesuchtranche/{aenderungId}/aenderung/akzeptieren':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    post:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: 'Aenderung wurde erflogreich akzeptiert'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTranche'
+        '400':
+          description: Falsche Tranche akzeptiert
+        '404':
+          description: Die Aenderung gibt es nicht
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungAkzeptieren
+  '/gesuchtranche/{aenderungId}/aenderung/manuelleAenderung':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: 'Aenderung wurde erflogreich auf manuell gesetzt'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTranche'
+        '400':
+          description: Falsche Tranche versucht auf manuell zu setzen
+        '404':
+          description: Die Aenderung gibt es nicht
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungManuellAnpassen
+  '/gesuchtranche/{aenderungId}/aenderung/ablehnen':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    patch:
+      tags:
+        - GesuchTranche
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
+      responses:
+        '200':
+          description: 'Aenderung wurde erflogreich abgelehnt'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchTranche'
+        '400':
+          description: Falsche Tranche abgelehnt
+        '404':
+          description: Die Aenderung gibt es nicht
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: aenderungAblehnen
   /bildungskategorie:
     get:
       tags:
@@ -1801,7 +1988,7 @@ components:
         - ANSPRUCH_MANUELL_PRUEFEN
         - BEREIT_FUER_BEARBEITUNG
         - EINGEREICHT
-        - JOUR_FIX
+        - JURISTISCHE_ABKLAERUNG
         - FEHLENDE_DOKUMENTE
         - NICHT_ANSPRUCHSBERECHTIGT
         - NICHT_BEITRAGSBERECHTIGT
@@ -3113,7 +3300,8 @@ components:
       enum:
         - IN_BEARBEITUNG_GS
         - UEBERPRUEFEN
-        - AKZETPIERT
+        - MANUELLE_AENDERUNG
+        - AKZEPTIERT
         - ABGELEHNT
     GesuchTranche:
       required:
@@ -3597,6 +3785,13 @@ components:
           required:
             - start
             - comment
+    Kommentar:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
   responses:
     Unauthorized:
       content:
@@ -3635,6 +3830,13 @@ components:
       in: path
       required: true
       description: Die ID der Aenderung
+      schema:
+        $ref: '#/components/schemas/UUID'
+    gesuchId:
+      name: gesuchId
+      in: path
+      required: true
+      description: Die ID vom Gesuch
       schema:
         $ref: '#/components/schemas/UUID'
 security:

@@ -40,12 +40,14 @@ kstip:
     kc-path: '${STIP_WELCOME_MAIL_PATH}'
     kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
     kc-scope: '${STIP_WELCOME_MAIL_SCOPE}'
+  dmn:
+    current-major-version: 1
+    current-minor-version: 0
+
 quarkus:
   antivirus:
     clamav:
       enabled: true
-      devservice:
-        image-name: clamav/clamav-debian
       health:
         enabled: true
   execution-model-annotations:
@@ -189,6 +191,7 @@ quarkus:
       clamav:
         host: '${STIP_CLAMAV_HOST}'
         port: '${STIP_CLAMAV_PORT:3310}'
+
 mp:
   openapi:
     scan:

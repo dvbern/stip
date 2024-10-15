@@ -3,6 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/util-fn/e2e-util/src",
   "projectType": "library",
+  "tags": ["type:e2e", "type:util-fn", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",
@@ -21,6 +22,5 @@
         "jestConfig": "libs/shared/util-fn/e2e-util/jest.config.ts"
       }
     }
-  },
-  "tags": ["type:e2e", "type:util-fn", "scope:shared"]
+  }
 }

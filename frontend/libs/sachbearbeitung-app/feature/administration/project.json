@@ -3,8 +3,8 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/sachbearbeitung-app/feature/administration/src",
   "prefix": "dv",
-  "tags": ["type:feature", "scope:sachbearbeitung-app"],
   "projectType": "library",
+  "tags": ["type:feature", "scope:sachbearbeitung-app"],
   "targets": {
     "build": {
       "executor": "nx:noop",

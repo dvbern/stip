@@ -19,6 +19,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
+import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -64,11 +65,16 @@ public class GesuchApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                bearbeitungAbschliessen(),
+                changeGesuchStatusToBereitFuerBearbeitung(),
                 changeGesuchStatusToInBearbeitung(),
+                changeGesuchStatusToVerfuegt(),
+                changeGesuchStatusToVersendet(),
                 createGesuch(),
                 deleteGesuch(),
                 gesuchEinreichen(),
                 gesuchFehlendeDokumenteUebermitteln(),
+                gesuchZurueckweisen(),
                 getBerechnungForGesuch(),
                 getCurrentGesuch(),
                 getGesuch(),
@@ -78,12 +84,29 @@ public class GesuchApiSpec {
                 getGsTrancheChanges(),
                 getSbTrancheChanges(),
                 getStatusProtokoll(),
+                juristischAbklaeren(),
                 updateGesuch()
         );
     }
 
+    public BearbeitungAbschliessenOper bearbeitungAbschliessen() {
+        return new BearbeitungAbschliessenOper(createReqSpec());
+    }
+
+    public ChangeGesuchStatusToBereitFuerBearbeitungOper changeGesuchStatusToBereitFuerBearbeitung() {
+        return new ChangeGesuchStatusToBereitFuerBearbeitungOper(createReqSpec());
+    }
+
     public ChangeGesuchStatusToInBearbeitungOper changeGesuchStatusToInBearbeitung() {
         return new ChangeGesuchStatusToInBearbeitungOper(createReqSpec());
+    }
+
+    public ChangeGesuchStatusToVerfuegtOper changeGesuchStatusToVerfuegt() {
+        return new ChangeGesuchStatusToVerfuegtOper(createReqSpec());
+    }
+
+    public ChangeGesuchStatusToVersendetOper changeGesuchStatusToVersendet() {
+        return new ChangeGesuchStatusToVersendetOper(createReqSpec());
     }
 
     public CreateGesuchOper createGesuch() {
@@ -100,6 +123,10 @@ public class GesuchApiSpec {
 
     public GesuchFehlendeDokumenteUebermittelnOper gesuchFehlendeDokumenteUebermitteln() {
         return new GesuchFehlendeDokumenteUebermittelnOper(createReqSpec());
+    }
+
+    public GesuchZurueckweisenOper gesuchZurueckweisen() {
+        return new GesuchZurueckweisenOper(createReqSpec());
     }
 
     public GetBerechnungForGesuchOper getBerechnungForGesuch() {
@@ -138,6 +165,10 @@ public class GesuchApiSpec {
         return new GetStatusProtokollOper(createReqSpec());
     }
 
+    public JuristischAbklaerenOper juristischAbklaeren() {
+        return new JuristischAbklaerenOper(createReqSpec());
+    }
+
     public UpdateGesuchOper updateGesuch() {
         return new UpdateGesuchOper(createReqSpec());
     }
@@ -152,6 +183,141 @@ public class GesuchApiSpec {
         return this;
     }
 
+    /**
+     * Die Bearbeitung des Gesuch durch den SB abschliessen
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     */
+    public static class BearbeitungAbschliessenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/bearbeitungAbschliessen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public BearbeitungAbschliessenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/bearbeitungAbschliessen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public BearbeitungAbschliessenOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public BearbeitungAbschliessenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public BearbeitungAbschliessenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return GesuchDtoSpec
+     */
+    public static class ChangeGesuchStatusToBereitFuerBearbeitungOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/status/bereit-fuer-bearbeitung/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeGesuchStatusToBereitFuerBearbeitungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/status/bereit-fuer-bearbeitung/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/status/bereit-fuer-bearbeitung/{gesuchId}
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToBereitFuerBearbeitungOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToBereitFuerBearbeitungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToBereitFuerBearbeitungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
     /**
      * 
      * 
@@ -221,6 +387,152 @@ public class GesuchApiSpec {
          * @return operation
          */
         public ChangeGesuchStatusToInBearbeitungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return GesuchDtoSpec
+     */
+    public static class ChangeGesuchStatusToVerfuegtOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/status/verfuegt/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeGesuchStatusToVerfuegtOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/status/verfuegt/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/status/verfuegt/{gesuchId}
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToVerfuegtOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToVerfuegtOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToVerfuegtOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return GesuchDtoSpec
+     */
+    public static class ChangeGesuchStatusToVersendetOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/status/versendet/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeGesuchStatusToVersendetOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/status/versendet/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/status/versendet/{gesuchId}
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToVersendetOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToVersendetOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToVersendetOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -468,6 +780,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GesuchFehlendeDokumenteUebermittelnOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Gas Gesuch an den GS zurueckweisen
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #body  (optional)
+     */
+    public static class GesuchZurueckweisenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/gesuchZurueckweisen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GesuchZurueckweisenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/gesuchZurueckweisen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param kommentarDtoSpec (KommentarDtoSpec)  (optional)
+         * @return operation
+         */
+        public GesuchZurueckweisenOper body(KommentarDtoSpec kommentarDtoSpec) {
+            reqSpec.setBody(kommentarDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public GesuchZurueckweisenOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GesuchZurueckweisenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GesuchZurueckweisenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1125,6 +1510,68 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetStatusProtokollOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Gas Gesuch an die Juristen ueberweisen
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     */
+    public static class JuristischAbklaerenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/juristischAbklaeren";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public JuristischAbklaerenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/juristischAbklaeren
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public JuristischAbklaerenOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public JuristischAbklaerenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public JuristischAbklaerenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

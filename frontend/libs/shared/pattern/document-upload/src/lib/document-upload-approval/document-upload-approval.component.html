@@ -1,6 +1,12 @@
-@if (dokumentsStore.dokumentViewSig()?.id) {
+@let dokumentRd = dokumentsStore.dokument();
+
+@if (dokumentRd | rdIsPendingWithoutCache) {
+  <dv-shared-ui-loading style="height: 39px" type="icon"></dv-shared-ui-loading>
+}
+
+@if (dokumentRd.data?.id) {
   <div class="d-flex justify-content-between">
-    @switch (dokumentsStore.dokumentViewSig()?.status) {
+    @switch (dokumentRd.data?.status) {
       @case ('AUSSTEHEND') {
         @if (!uploadViewSig().readonly) {
           <button
@@ -23,13 +29,9 @@
               {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
             </span>
           </button>
-        } @else if (dokumentsStore.dokumentViewSig()?.id) {
-          <dv-shared-ui-icon-badge type="warning" class="status ms-auto">
-            {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
-          </dv-shared-ui-icon-badge>
         } @else {
           <dv-shared-ui-icon-badge type="warning" class="status ms-auto">
-            {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
+            {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
           </dv-shared-ui-icon-badge>
         }
       }
@@ -44,5 +46,13 @@
         </dv-shared-ui-icon-badge>
       }
     }
+  </div>
+}
+
+@if (isInitial(dokumentRd)) {
+  <div class="d-flex">
+    <dv-shared-ui-icon-badge type="warning" class="status ms-auto">
+      {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
+    </dv-shared-ui-icon-badge>
   </div>
 }

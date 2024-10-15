@@ -3,8 +3,8 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/util/validator-date/src",
   "prefix": "dv",
-  "tags": ["type:util", "scope:shared"],
   "projectType": "library",
+  "tags": ["type:util", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",

@@ -14,7 +14,6 @@ import {
   NOTIZEN,
   PARTNER,
   PERSON,
-  PROTOKOLL,
   TRANCHE,
 } from '@dv/shared/model/gesuch-form';
 
@@ -161,17 +160,6 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
       import('@dv/shared/feature/gesuch-dokumente').then(
         (m) => m.sharedFeatureGesuchDokumenteRoutes,
       ),
-  },
-  {
-    path: PROTOKOLL.route,
-    resolve: {
-      step: () => PROTOKOLL,
-    },
-    title: 'shared.protokoll.title',
-    loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/gesuch-form-statusprotokoll'
-      ).then((m) => m.sachbearbeitungAppFeatureGesuchFormStatusprotokollRoutes),
   },
   {
     path: NOTIZEN.route,

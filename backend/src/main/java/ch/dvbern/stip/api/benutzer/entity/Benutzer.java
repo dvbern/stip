@@ -80,10 +80,19 @@ public class Benutzer extends AbstractMandantEntity {
 
     @NotNull
     @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "benutzereinstellungen_id", foreignKey = @ForeignKey(name = "FK_benutzer_benutzereinstellungen_id"), nullable = false)
+    @JoinColumn(name = "benutzereinstellungen_id",
+        foreignKey = @ForeignKey(name = "FK_benutzer_benutzereinstellungen_id"),
+        nullable = false)
     private @Valid Benutzereinstellungen benutzereinstellungen;
 
     public String getFullName() {
         return getVorname() + " " + getNachname();
+    }
+
+    public boolean hasOneOfRoles(final Set<String> roleIds) {
+        return getRollen().stream().anyMatch(rolle -> roleIds.contains(rolle.getKeycloakIdentifier()));
+    }
+    public boolean hasRole(final String roleId) {
+        return getRollen().stream().anyMatch(rolle -> rolle.getKeycloakIdentifier().equals(roleId));
     }
 }

@@ -71,6 +71,7 @@ export * from './getGesucheSBQueryType';
 export * from './gueltigkeitStatus';
 export * from './kind';
 export * from './kindUpdate';
+export * from './kommentar';
 export * from './kontoinhaber';
 export * from './land';
 export * from './lebenslaufAusbildungsArt';

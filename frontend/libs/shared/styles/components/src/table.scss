@@ -216,6 +216,20 @@
   }
 }
 
+.mat-mdc-table.dv-crud-table.small-spacing {
+  .mat-mdc-header-cell {
+    --dv-table-header-spacing-horizontal: 10px;
+  }
+
+  .mat-mdc-cell {
+    padding: 0 10px;
+  }
+}
+
+.mat-mdc-paginator-container {
+  font-size: 14px;
+}
+
 .table-select {
   font-size: 14px;
 

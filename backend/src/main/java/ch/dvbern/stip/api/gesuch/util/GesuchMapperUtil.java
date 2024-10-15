@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -19,6 +20,26 @@ public class GesuchMapperUtil {
 
     public GesuchDto mapWithOldestTranche(final Gesuch gesuch) {
         return mapWithTranche(gesuch, gesuch.getOldestGesuchTranche().orElseThrow(IllegalStateException::new));
+    }
+
+    /**
+     * If a Gesuch contains a aenderung, two GesuchDtos will be returned.
+     * One for the Gesuch
+     * One (separate) for the Aenderung
+     * @param gesuch The Gesuch which contains a Aenderung (as tranche to work with)
+     * @return a list of GesuchDtos which includes Aenderungen
+     */
+    public List<GesuchDto> mapWithAenderung(final Gesuch gesuch) {
+        List<GesuchDto> gesuchDtos = new ArrayList<>();
+
+        // find oldest tranche (without aenderungen)
+        // the first dto to be returned: Tranche
+        gesuch.getOldestGesuchTranche().ifPresent(tranche -> gesuchDtos.add(mapWithTranche(gesuch,tranche)));
+
+        // the first dto to be returned: Aenderung
+        gesuch.getAenderungZuUeberpruefen().ifPresent(tranche -> gesuchDtos.add(mapWithTranche(gesuch, tranche)));
+
+        return gesuchDtos;
     }
 
     public GesuchDto mapWithNewestTranche(final Gesuch gesuch) {

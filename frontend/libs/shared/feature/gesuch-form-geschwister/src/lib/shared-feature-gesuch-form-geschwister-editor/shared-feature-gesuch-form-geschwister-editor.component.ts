@@ -5,11 +5,10 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
-  computed,
   effect,
   inject,
+  input,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -28,6 +27,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
@@ -52,9 +52,7 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUiWohnsitzSplitterComponent,
   addWohnsitzControls,
-  updateWohnsitzControlsState,
-  wohnsitzAnteileNumber,
-  wohnsitzAnteileString,
+  prepareWohnsitzForm,
 } from '@dv/shared/ui/wohnsitz-splitter';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
@@ -98,14 +96,14 @@ const MEDIUM_AGE = 20;
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureGesuchFormGeschwisterEditorComponent
-  implements OnChanges
-{
+export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   private elementRef = inject(ElementRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
 
-  @Input({ required: true }) geschwister!: Partial<GeschwisterUpdate>;
+  geschwisterSig = input.required<Partial<GeschwisterUpdate>>({
+    alias: 'geschwister',
+  });
   @Input({ required: true }) changes:
     | Partial<GeschwisterUpdate>
     | undefined
@@ -116,10 +114,17 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
   @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
+
+  protected readonly ausbildungssituationValues =
+    Object.values(Ausbildungssituation);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  einreichenStore = inject(EinreichenStore);
   gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject<unknown>();
+
+  private gotReenabledSig = toSignal(this.gotReenabled$);
+  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   form = this.formBuilder.group({
     nachname: ['', [Validators.required]],
@@ -148,19 +153,16 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
     ),
   });
 
-  wohnsitzChangedSig = toSignal(this.form.controls.wohnsitz.valueChanges);
-
-  showWohnsitzSplitterSig = computed(() => {
-    return this.wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER;
+  wohnsitzHelper = prepareWohnsitzForm({
+    projector: (formular) =>
+      formular?.geschwisters?.find((g) => g.id === this.geschwisterSig().id),
+    form: this.form.controls,
+    viewSig: this.viewSig,
+    refreshSig: this.gotReenabledSig,
   });
-
-  private gotReenabledSig = toSignal(this.gotReenabled$);
-  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
-
   ausbildungssituationSig = toSignal(
     this.form.controls.ausbildungssituation.valueChanges,
   );
-
   ausbildungssituationDocumentSig = this.createUploadOptionsSig(() => {
     const ausbildungssituation = this.ausbildungssituationSig();
 
@@ -176,45 +178,25 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
       this.closeTriggered,
     );
     this.formUtils.registerFormForUnsavedCheck(this);
-    effect(
-      () => {
-        updateWohnsitzControlsState(
-          this.formUtils,
-          this.form.controls,
-          this.viewSig().readonly || !this.showWohnsitzSplitterSig(),
-        );
-      },
-      { allowSignalWrites: true },
-    );
-    effect(
-      () => {
-        this.gotReenabledSig();
-        const wohnsitzChanged = this.wohnsitzChangedSig();
-        if (wohnsitzChanged !== Wohnsitz.MUTTER_VATER) {
-          this.formUtils.setDisabledState(
-            this.form.controls.wohnsitzAnteilMutter,
-            true,
-            true,
-          );
-          this.formUtils.setDisabledState(
-            this.form.controls.wohnsitzAnteilVater,
-            true,
-            true,
-          );
-        }
-      },
-      { allowSignalWrites: true },
-    );
-  }
 
-  ngOnChanges() {
-    this.form.patchValue({
-      ...this.geschwister,
-      geburtsdatum: parseBackendLocalDateAndPrint(
-        this.geschwister.geburtsdatum,
-        this.languageSig(),
-      ),
-      ...wohnsitzAnteileString(this.geschwister),
+    effect(() => {
+      const geschwister = this.geschwisterSig();
+      const invalidFormularProps =
+        this.einreichenStore.validationViewSig().invalidFormularProps;
+
+      this.form.patchValue({
+        ...geschwister,
+        geburtsdatum: parseBackendLocalDateAndPrint(
+          geschwister.geburtsdatum,
+          this.languageSig(),
+        ),
+        ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
+      });
+      this.formUtils.invalidateControlIfValidationFails(
+        this.form,
+        ['wohnsitz'],
+        invalidFormularProps.specialValidationErrors,
+      );
     });
   }
 
@@ -230,17 +212,13 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
     if (this.form.valid && geburtsdatum) {
       this.saveTriggered.emit({
         ...this.form.getRawValue(),
-        id: this.geschwister.id,
+        id: this.geschwisterSig().id,
         geburtsdatum,
         wohnsitz: this.form.getRawValue().wohnsitz as Wohnsitz,
-        ...wohnsitzAnteileNumber(this.form.getRawValue()),
+        ...this.wohnsitzHelper.wohnsitzAnteileFromNumber(),
       });
       this.form.markAsPristine();
     }
-  }
-
-  trackByIndex(index: number) {
-    return index;
   }
 
   handleCancel() {
@@ -255,8 +233,4 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent
       this.languageSig(),
     );
   }
-
-  protected readonly wohnsitzValues = Object.values(Wohnsitz);
-  protected readonly ausbildungssituationValues =
-    Object.values(Ausbildungssituation);
 }

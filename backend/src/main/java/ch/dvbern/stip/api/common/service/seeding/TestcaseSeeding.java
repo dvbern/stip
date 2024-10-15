@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.common.service.seeding;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,12 @@ import ch.dvbern.stip.api.bildungskategorie.repo.BildungskategorieRepository;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -65,6 +72,8 @@ public class TestcaseSeeding extends Seeder {
     private final BenutzerRepository benutzerRepository;
     private final BildungskategorieRepository bildungskategorieRepository;
     private final GesuchRepository gesuchRepository;
+    private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final DokumentRepository dokumentRepository;
 
     @Override
     public int getPriority() {
@@ -108,6 +117,7 @@ public class TestcaseSeeding extends Seeder {
             final var tranche = gesuchTrancheMapper.toEntity(dto.getGesuchTrancheToWorkWith());
             tranche.setTyp(GesuchTrancheTyp.TRANCHE);
             tranche.setStatus(GesuchTrancheStatus.AKZEPTIERT);
+            tranche.setGesuchDokuments(new ArrayList<>());
             tranche.setGueltigkeit(new DateRange(
                 gesuchperiodeToAttach.getGesuchsperiodeStart(),
                 gesuchperiodeToAttach.getGesuchsperiodeStopp()
@@ -133,6 +143,8 @@ public class TestcaseSeeding extends Seeder {
             // Persist to database
             fallRepository.persist(fall);
             gesuchRepository.persist(gesuch);
+
+            uploadDocuments(tranche, json);
 
             index++;
         }
@@ -223,6 +235,29 @@ public class TestcaseSeeding extends Seeder {
         };
 
         formular.getAuszahlung().setAdresse(auszahlungAdresse);
+    }
+
+    void uploadDocuments(final GesuchTranche tranche, final String json) {
+        for (final var value : DokumentTyp.values()) {
+            final var newDok = new Dokument()
+                .setFilename("testcase.json")
+                .setFilepath("testcase")
+                .setFilesize(String.valueOf(json.getBytes(StandardCharsets.UTF_8).length))
+                .setObjectId(UUID.randomUUID().toString());
+
+            final var newGesuchDok = new GesuchDokument()
+                .setDokumentTyp(value)
+                .setStatus(Dokumentstatus.AKZEPTIERT)
+                .setGesuchTranche(tranche);
+
+            newDok.setGesuchDokumente(List.of(newGesuchDok));
+            newGesuchDok.setDokumente(List.of(newDok));
+
+            gesuchDokumentRepository.persist(newGesuchDok);
+            dokumentRepository.persist(newDok);
+
+            tranche.getGesuchDokuments().add(newGesuchDok);
+        }
     }
 
     void clearIds(final GesuchTranche tranche) {

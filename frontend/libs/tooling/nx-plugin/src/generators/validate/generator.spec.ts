@@ -32,7 +32,7 @@ describe('validate generator', () => {
         },
       ],
     };
-    const mockEslintrcJsonPath = '.eslintrc.json';
+    const mockEslintrcJsonPath = 'eslint.config.js';
     tree.write(mockEslintrcJsonPath, JSON.stringify(mockEslintrcJson));
     const mockSchemaJson = {
       properties: {

@@ -16,11 +16,17 @@ import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { UploadView } from '@dv/shared/model/dokument';
 import { GesuchDokument } from '@dv/shared/model/gesuch';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
 import {
   RejectDokument,
   SharedUiRejectDokumentComponent,
 } from '@dv/shared/ui/reject-dokument';
+import {
+  SharedUiRdIsPendingPipe,
+  SharedUiRdIsPendingWithoutCachePipe,
+} from '@dv/shared/ui/remote-data-pipe';
+import { isInitial } from '@dv/shared/util/remote-data';
 
 @Component({
   selector: 'dv-shared-pattern-document-upload-approval',
@@ -29,6 +35,9 @@ import {
     CommonModule,
     SharedUiIconBadgeComponent,
     SharedUiPrefixAppTypePipe,
+    SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiRdIsPendingPipe,
+    SharedUiLoadingComponent,
     TranslateModule,
   ],
   templateUrl: './document-upload-approval.component.html',
@@ -37,12 +46,15 @@ import {
 })
 export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   uploadViewSig = input.required<UploadView>();
-  dokumentsStore = inject(DokumentsStore);
+  public dokumentsStore = inject(DokumentsStore);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
 
+  isInitial = isInitial;
+
   public ngOnInit(): void {
-    const { trancheId, type } = this.uploadViewSig();
+    const { trancheId, type, hasEntries } = this.uploadViewSig();
+    if (!hasEntries) return;
     this.dokumentsStore.getGesuchDokument$({
       trancheId,
       dokumentTyp: type,
