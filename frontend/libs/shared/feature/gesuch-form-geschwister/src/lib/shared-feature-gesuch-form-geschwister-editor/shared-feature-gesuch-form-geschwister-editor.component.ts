@@ -181,8 +181,6 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
 
     effect(() => {
       const geschwister = this.geschwisterSig();
-      const invalidFormularProps =
-        this.einreichenStore.validationViewSig().invalidFormularProps;
 
       this.form.patchValue({
         ...geschwister,
@@ -192,6 +190,12 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
         ),
         ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
       });
+    });
+
+    effect(() => {
+      const invalidFormularProps =
+        this.einreichenStore.validationViewSig().invalidFormularProps;
+
       this.formUtils.invalidateControlIfValidationFails(
         this.form,
         ['wohnsitz'],
