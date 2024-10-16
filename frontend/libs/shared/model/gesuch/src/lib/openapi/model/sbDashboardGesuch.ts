@@ -13,14 +13,16 @@ import { GesuchTrancheTyp } from './gesuchTrancheTyp';
 import { Gesuchstatus } from './gesuchstatus';
 
 export interface SbDashboardGesuch { 
-    fallNummer?: string;
-    typ?: GesuchTrancheTyp;
-    piaNachname?: string;
-    piaVorname?: string;
-    piaGeburtsdatum?: string;
-    status?: Gesuchstatus;
-    bearbeiter?: string;
-    letzteAktivitaet?: string;
+    id: string;
+    gesuchTrancheId: string;
+    fallNummer: string;
+    typ: GesuchTrancheTyp;
+    piaNachname: string;
+    piaVorname: string;
+    piaGeburtsdatum: string;
+    status: Gesuchstatus;
+    bearbeiter: string;
+    letzteAktivitaet: string;
 }
 
 

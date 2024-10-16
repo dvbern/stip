@@ -89,7 +89,7 @@ export * from './personInAusbildungUpdate';
 export * from './plz';
 export * from './sachbearbeiterZuordnungStammdaten';
 export * from './sachbearbeiterZuordnungStammdatenList';
-export * from './sbDashboardColumns';
+export * from './sbDashboardColumn';
 export * from './sbDashboardGesuch';
 export * from './sortOrder';
 export * from './sprache';

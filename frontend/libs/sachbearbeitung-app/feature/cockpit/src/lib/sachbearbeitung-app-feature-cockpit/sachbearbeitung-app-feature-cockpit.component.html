@@ -43,7 +43,7 @@
             </div>
           </div>
           <form class="row overflow-auto position-relative" [formGroup]="filterForm">
-            <div [class.opacity-50]="cockpitViewSig().gesucheLoading">
+            <div [class.opacity-50]="gesuchStore.cockpitViewSig().loading">
               <table
                 class="dv-crud-table small-spacing"
                 [dvSharedUiFocusableList]="items"
@@ -317,7 +317,7 @@
 
               <mat-paginator #gesuchePaginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
             </div>
-            @if (cockpitViewSig().gesucheLoading) {
+            @if (gesuchStore.cockpitViewSig().loading) {
               <dv-shared-ui-loading
                 class="position-absolute top-50 start-50 translate-middle"
                 [type]="'compact'"
@@ -328,5 +328,5 @@
       </div>
     </div>
   </div>
-  <dv-shared-ui-version-text [version]="cockpitViewSig().version" class="text-muted"></dv-shared-ui-version-text>
+  <dv-shared-ui-version-text [version]="versionSig()" class="text-muted"></dv-shared-ui-version-text>
 </dv-sachbearbeitung-app-pattern-overview-layout>

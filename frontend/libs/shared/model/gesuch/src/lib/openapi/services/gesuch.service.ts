@@ -21,10 +21,15 @@ import { Observable }                                        from 'rxjs';
 import { Berechnungsresultat } from '../model/berechnungsresultat';
 import { Gesuch } from '../model/gesuch';
 import { GesuchCreate } from '../model/gesuchCreate';
+import { GesuchTrancheTyp } from '../model/gesuchTrancheTyp';
 import { GesuchUpdate } from '../model/gesuchUpdate';
 import { GesuchWithChanges } from '../model/gesuchWithChanges';
+import { Gesuchstatus } from '../model/gesuchstatus';
 import { GetGesucheSBQueryType } from '../model/getGesucheSBQueryType';
 import { Kommentar } from '../model/kommentar';
+import { PaginatedSbDashboard } from '../model/paginatedSbDashboard';
+import { SbDashboardColumn } from '../model/sbDashboardColumn';
+import { SortOrder } from '../model/sortOrder';
 import { StatusprotokollEntry } from '../model/statusprotokollEntry';
 import { ValidationReport } from '../model/validationReport';
 
@@ -98,12 +103,15 @@ export interface GesuchServiceGetGesucheSbRequestParams {
     piaNachname?: string;
     piaVorname?: string;
     piaGeburtsdatum?: string;
-    status?: string;
+    status?: Gesuchstatus;
     bearbeiter?: string;
     letzteAktivitaetFrom?: string;
     letzteAktivitaetTo?: string;
-    page?: number;
-    pageSize?: number;
+    typ?: GesuchTrancheTyp;
+    page: number;
+    pageSize: number;
+    sortColumn?: SbDashboardColumn;
+    sortOrder?: SortOrder;
 }
 
 export interface GesuchServiceGetGsTrancheChangesRequestParams {
@@ -1309,9 +1317,9 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Gesuch>>;
-     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Gesuch>>>;
-     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Gesuch>>>;
+     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSbDashboard>;
+     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSbDashboard>>;
+     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSbDashboard>>;
      public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const getGesucheSBQueryType = requestParameters.getGesucheSBQueryType;
         if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
@@ -1325,8 +1333,17 @@ export class GesuchService {
         const bearbeiter = requestParameters.bearbeiter;
         const letzteAktivitaetFrom = requestParameters.letzteAktivitaetFrom;
         const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
+        const typ = requestParameters.typ;
         const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getGesucheSb$.');
+        }
         const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getGesucheSb$.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortOrder = requestParameters.sortOrder;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (fallNummer !== undefined && fallNummer !== null) {
@@ -1361,6 +1378,10 @@ export class GesuchService {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>letzteAktivitaetTo, 'letzteAktivitaetTo');
         }
+        if (typ !== undefined && typ !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>typ, 'typ');
+        }
         if (page !== undefined && page !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>page, 'page');
@@ -1368,6 +1389,14 @@ export class GesuchService {
         if (pageSize !== undefined && pageSize !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>pageSize, 'pageSize');
+        }
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'sortColumn');
+        }
+        if (sortOrder !== undefined && sortOrder !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortOrder, 'sortOrder');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1416,7 +1445,7 @@ export class GesuchService {
         }
 
         const localVarPath = `/gesuch/benutzer/me/sb/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}`;
-        return this.httpClient.request<Array<Gesuch>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PaginatedSbDashboard>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,

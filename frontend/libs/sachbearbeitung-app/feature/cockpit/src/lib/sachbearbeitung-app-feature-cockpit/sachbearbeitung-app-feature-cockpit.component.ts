@@ -41,8 +41,9 @@ import {
   startOfDay,
 } from 'date-fns';
 
+import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { selectVersion } from '@dv/shared/data-access/config';
 import {
   GesuchFilter,
   GesuchTrancheTyp,
@@ -65,8 +66,6 @@ import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
-
-import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-app-feature-cockpit.selector';
 
 const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
 
@@ -145,14 +144,13 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     letzteAktivitaetEnd: [<Date | undefined>undefined],
   });
 
+  versionSig = this.store.selectSignal(selectVersion);
+  gesuchStore = inject(GesuchStore);
   quickFilterForm = this.formBuilder.group({
     query: [<GesuchFilter | undefined>undefined],
   });
   dataSoruce = new MatTableDataSource<SharedModelGesuch>([]);
 
-  cockpitViewSig = this.store.selectSignal(
-    selectSachbearbeitungAppFeatureCockpitView,
-  );
   quickFilters: { typ: GesuchFilter; icon: string }[] = [
     {
       typ: 'ALLE_BEARBEITBAR_MEINE',
@@ -174,11 +172,11 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
 
   private filterFormChangedSig = toSignal(this.filterForm.valueChanges);
   availableStatusSig = computed(() => {
-    return this.cockpitViewSig().gesuche.reduce<Gesuchstatus[]>(
-      (acc, gesuch) =>
-        acc.includes(gesuch.gesuchStatus) ? acc : [...acc, gesuch.gesuchStatus],
-      [],
-    );
+    return this.gesuchStore
+      ?.cockpitViewSig()
+      ?.gesuche?.entries?.reduce<
+        Gesuchstatus[]
+      >((acc, entry) => (acc.includes(entry.status) ? acc : [...acc, entry.status]), []);
   });
   availableStatus = Object.values(GesuchTrancheTyp);
   private letzteAktivitaetStartChangedSig = toSignal(
@@ -209,24 +207,20 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
 
   gesucheDataSourceSig = computed(() => {
     const sort = this.sortSig();
-    const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
-      id: gesuch.id,
-      trancheId: gesuch.gesuchTrancheToWorkWith?.id,
-      fall: gesuch.fall.fallNummer,
-      typ: gesuch.gesuchTrancheToWorkWith?.typ,
-      nachname:
-        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
-          ?.nachname,
-      vorname:
-        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
-          ?.vorname,
-      geburtsdatum:
-        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
-          ?.geburtsdatum,
-      status: gesuch.gesuchStatus,
-      bearbeiter: gesuch.bearbeiter,
-      letzteAktivitaet: gesuch.aenderungsdatum,
-    }));
+    const gesuche = this.gesuchStore
+      ?.cockpitViewSig()
+      ?.gesuche?.entries?.map((entry) => ({
+        id: entry.id,
+        trancheId: entry.gesuchTrancheId,
+        fall: entry.fallNummer,
+        typ: entry.typ,
+        nachname: entry.piaNachname,
+        vorname: entry.piaVorname,
+        geburtsdatum: entry.piaGeburtsdatum,
+        status: entry.status,
+        bearbeiter: entry.bearbeiter,
+        letzteAktivitaet: entry.letzteAktivitaet,
+      }));
     const filterForm = this.filterFormChangedSig();
 
     const dataSource = new MatTableDataSource(gesuche);
@@ -264,16 +258,16 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     let isFirstChange = true;
     effect(
       () => {
-        const query = this.showViewSig();
+        // const query = this.showViewSig();
         if (isFirstChange) {
           isFirstChange = false;
           return;
         }
-        this.store.dispatch(
-          SharedDataAccessGesuchEvents.loadAllDebounced({
-            query,
-          }),
-        );
+        // this.store.dispatch(
+        //   SharedDataAccessGesuchEvents.loadAllDebounced({
+        //     query,
+        //   }),
+        // );
       },
       { allowSignalWrites: true },
     );
@@ -301,11 +295,11 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
   ngOnInit() {
     const query = this.showViewSig();
     this.quickFilterForm.reset({ query });
-    this.store.dispatch(
-      SharedDataAccessGesuchEvents.loadAll({
-        query,
-      }),
-    );
+    this.gesuchStore.loadGesuche$({
+      getGesucheSBQueryType: query,
+      page: 0,
+      pageSize: 50,
+    });
   }
 }
 
