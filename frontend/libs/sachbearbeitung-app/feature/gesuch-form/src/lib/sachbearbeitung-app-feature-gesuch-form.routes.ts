@@ -162,6 +162,6 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
   },
   {
     path: ':id',
-    redirectTo: PERSON.route + '/:id',
+    redirectTo: TRANCHE.route + '/:id',
   },
 ];

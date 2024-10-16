@@ -1906,6 +1906,25 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getPlz
       summary: Gets all PLZs
+  /notifications:
+    get:
+      tags:
+        - Notification
+      responses:
+        '200':
+          description: Returns all Notifications for the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getNotificationsForCurrentUser
+      summary: Gets all notifications for the User
 components:
   schemas:
     WelcomeMail:
@@ -3520,6 +3539,26 @@ components:
         - AUSSTEHEND
         - ABGELEHNT
         - AKZEPTIERT
+    Notification:
+      description: Notification for a Gesuch
+      type: object
+      required:
+        - notificationType
+        - gesuchId
+        - timestamp
+        - userErstellt
+      properties:
+        notificationType:
+          $ref: '#/components/schemas/NotificationType'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        userErstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
+    NotificationType:
+      enum:
+        - GESUCH_EINGEREICHT
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
