@@ -77,10 +77,7 @@ export const loadOwnGesuchs = createEffect(
     storeUtil = inject(StoreUtilService),
   ) => {
     return actions$.pipe(
-      ofType(
-        SharedDataAccessGesuchEvents.init,
-        SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
-      ),
+      ofType(SharedDataAccessGesuchEvents.init),
       storeUtil.waitForBenutzerData$(),
       concatMap(() =>
         gesuchService.getGesucheGs$().pipe(
@@ -259,7 +256,7 @@ export const loadGesuch = createEffect(
 export const createGesuch = createEffect(
   (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
     return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.newTriggered),
+      ofType(SharedDataAccessGesuchEvents.createGesuch),
       exhaustMap(({ create }) =>
         gesuchService.createGesuch$({ gesuchCreate: create }).pipe(
           switchMap(() =>
@@ -365,12 +362,15 @@ export const updateGesuchSubform = createEffect(
 export const removeGesuch = createEffect(
   (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
     return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.removeTriggered),
-      concatMap(({ id }) =>
-        gesuchService.deleteGesuch$({ gesuchId: id }).pipe(
-          map(() => SharedDataAccessGesuchEvents.gesuchRemovedSuccess()),
+      ofType(SharedDataAccessGesuchEvents.deleteGesuch),
+      concatMap(({ gesuchId }) =>
+        gesuchService.deleteGesuch$({ gesuchId }).pipe(
+          switchMap(() => [
+            SharedDataAccessGesuchEvents.deleteGesuchSuccess(),
+            SharedDataAccessGesuchEvents.init(),
+          ]),
           catchError((error) => [
-            SharedDataAccessGesuchEvents.gesuchRemovedFailure({
+            SharedDataAccessGesuchEvents.deleteGesuchFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
           ]),
