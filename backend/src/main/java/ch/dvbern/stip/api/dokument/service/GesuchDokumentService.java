@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
@@ -109,10 +108,11 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public GesuchDokumentDto findGesuchDokumenteForTyp(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+    public NullableGesuchDokumentDto findGesuchDokumentForTyp(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
         final var gesuchDokument =
             gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp);
-        return gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
+        final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
+        return new NullableGesuchDokumentDto(dto);
     }
 
     @Transactional
