@@ -61,7 +61,7 @@ public class GesuchStatusConfigProducer {
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
+            .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.BEREIT_FUER_BEARBEITUNG); // TODO: KSTIP-1583 - Remove/Add proper state change
 
 
         config.configure(Gesuchstatus.JURISTISCHE_ABKLAERUNG)
