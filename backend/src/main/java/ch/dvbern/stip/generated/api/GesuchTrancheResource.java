@@ -59,6 +59,11 @@ public interface GesuchTrancheResource {
     @Produces({ "application/json", "text/plain" })
     Response createGesuchTrancheCopy(@PathParam("gesuchId") UUID gesuchId,@Valid CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto);
 
+    @DELETE
+    @Path("/{aenderungId}/aenderung/delete")
+    @Produces({ "text/plain" })
+    Response deleteAenderung(@PathParam("aenderungId") UUID aenderungId);
+
     @GET
     @Path("/{gesuchTrancheId}/einreichen/validieren")
     @Produces({ "application/json", "text/plain" })

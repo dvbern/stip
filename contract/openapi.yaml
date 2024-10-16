@@ -1848,6 +1848,22 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: aenderungAblehnen
+  '/gesuchtranche/{aenderungId}/aenderung/delete':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    delete:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: Geloescht
+        '400':
+          description: Tranche nicht gefunden
+        '404':
+          description: Tranche nicht gefunden
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteAenderung
   /bildungskategorie:
     get:
       tags:

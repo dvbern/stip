@@ -25,6 +25,7 @@ import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language'
 import { GesuchTrancheSlim, Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
+import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -141,6 +142,24 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
           this.gesuchAenderungStore.createGesuchAenderung$({
             gesuchId,
             createAenderungsantragRequest: result,
+          });
+        }
+      });
+  }
+
+  deleteAenderung(aenderungId: string, gesuchId: string) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'gesuch-app.aenderungs-entry.delete.dialog.title',
+      message: 'gesuch-app.aenderungs-entry.delete.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.delete',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.gesuchAenderungStore.deleteGesuchAenderung$({
+            aenderungId,
+            gesuchId,
           });
         }
       });

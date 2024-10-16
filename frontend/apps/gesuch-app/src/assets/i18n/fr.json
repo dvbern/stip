@@ -18,7 +18,10 @@
 
   "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "En attente",
 
-  "gesuch-app.aenderungs-entry.title": "Änderungen",
-  "gesuch-app.aenderungs-entry.status.title": "Status des Antrags",
-  "gesuch-app.cockpit.gesuch.aenderungs-entry": "Änderung öffnen"
+  "gesuch-app.aenderungs-entry.title": "Changements",
+  "gesuch-app.aenderungs-entry.status.title": "Statut de l'application",
+  "gesuch-app.aenderungs-entry.delete": "Supprimer le changement",
+  "gesuch-app.aenderungs-entry.delete.dialog.title": "Supprimer le changement",
+  "gesuch-app.aenderungs-entry.delete.dialog.message": "Voulez-vous vraiment supprimer le changement?",
+  "gesuch-app.cockpit.gesuch.aenderungs-entry": "Ouvrir le changement"
 }

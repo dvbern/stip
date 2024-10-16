@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -26,4 +32,5 @@ import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 export class GesuchAppUiAenderungsEntryComponent {
   @Input({ required: true }) tranche!: GesuchTrancheSlim;
   @Input({ required: true }) gesuchId!: string;
+  @Output() deleteAenderung = new EventEmitter<string>();
 }
