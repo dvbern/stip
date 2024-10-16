@@ -84,9 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PaginatedSbDashboard'
+                $ref: '#/components/schemas/PaginatedSbDashboard'
           description: Returns gesuche filtered by status and sb
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -3844,8 +3842,21 @@ components:
             $ref: '#/components/schemas/SbDashboardGesuch'
     SbDashboardGesuch:
       type: object
+      required:
+        - id
+        - gesuchTrancheId
+        - fallNummer
+        - typ
+        - piaNachname
+        - piaVorname
+        - piaGeburtsdatum
+        - status
+        - bearbeiter
+        - letzteAktivitaet
       properties:
         id:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
