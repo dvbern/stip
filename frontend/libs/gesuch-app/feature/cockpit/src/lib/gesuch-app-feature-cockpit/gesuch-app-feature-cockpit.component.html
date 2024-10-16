@@ -166,12 +166,9 @@
         <!-- NACHRICHTEN -->
         <div class="card mb-5 shadow-lg">
           <div class="card-body">
-            <h3 class="card-title d-flex align-items-center" data-testid="cockpit-nachrichten-title">
-              <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
-                <i class="material-symbols-rounded fs-5">mail</i>
-              </dv-shared-ui-icon-chip>
-              <span>Nachrichten</span>
-            </h3>
+            <dv-shared-ui-notifications
+              [notifications]="notificationStore.notificationListViewSig()"
+            ></dv-shared-ui-notifications>
           </div>
         </div>
 

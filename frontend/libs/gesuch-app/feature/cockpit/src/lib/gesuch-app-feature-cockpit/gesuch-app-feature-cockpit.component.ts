@@ -22,6 +22,7 @@ import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
+import { NotificationStore } from '@dv/shared/data-access/notification';
 import { GesuchTrancheSlim, Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
@@ -29,6 +30,7 @@ import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { isSuccess } from '@dv/shared/util/remote-data';
@@ -47,6 +49,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiIconChipComponent,
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
+    SharedUiNotificationsComponent,
     SharedUiRdIsPendingPipe,
     GesuchAppUiAenderungsEntryComponent,
   ],
@@ -62,6 +65,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
 
   fallStore = inject(FallStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  notificationStore = inject(NotificationStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
   // Do not initialize signals in computed directly, just usage
   benutzerNameSig = computed(() => {
@@ -94,6 +98,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
 
   ngOnInit() {
     this.fallStore.loadCurrentFall$();
+    this.notificationStore.loadNotifications$();
     this.store.dispatch(GesuchAppEventCockpit.init());
     this.store.dispatch(SharedDataAccessGesuchEvents.init());
     this.store.dispatch(sharedDataAccessGesuchsperiodeEvents.init());

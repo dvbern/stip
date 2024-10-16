@@ -141,6 +141,14 @@
   "shared.dokumente.dokumentStatus.action.reject": "Ablehnen",
   "shared.dokumente.dokumentStatus.action.sendMissingDocuments": "Änderungen dem Gesuchsteller übermitteln",
 
+  "shared.nachrichten.title": "Nachrichten",
+  "shared.nachricht.title": "Nachricht",
+  "shared.nachrichten.subject": "Betreff",
+  "shared.nachrichten.sender": "Absender",
+  "shared.nachrichten.date": "Datum",
+  "shared.nachrichten.type.GESUCH_EINGEREICHT": "Gesuch eingereicht",
+  "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
+
   "shared.gesuch.validation.generic": "Bitte überprüfen Sie Ihre Eingaben im Formular und füllen Sie die benötigten Felder aus.",
   "shared.gesuch.validation.uniqueSvnummer.message": "Die eingegebene AHV-Nummer wurde bereits in einem anderen Gesuch verwendet.<br>Bitte überprüfen Sie Ihre Eingaben bei:",
   "shared.gesuch.validation.wohnsitz.message": "Die Wohnsitz Angaben stimmen nicht mit den Angaben der Familiensituation überein. Bitte überprüfen Sie Ihre Eingaben bei:",
