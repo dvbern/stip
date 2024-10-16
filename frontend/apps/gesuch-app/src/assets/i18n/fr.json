@@ -23,9 +23,5 @@
   "gesuch-app.aenderungs-entry.delete": "Supprimer le changement",
   "gesuch-app.aenderungs-entry.delete.dialog.title": "Supprimer le changement",
   "gesuch-app.aenderungs-entry.delete.dialog.message": "Voulez-vous vraiment supprimer le changement?",
-  "gesuch-app.cockpit.gesuch.aenderungs-entry": "Ouvrir le changement",
-  "gesuch-app.cockpit.gesuch.status.IN_BEARBEITUNG_GS": "En cours de traitement GS",
-  "gesuch-app.cockpit.gesuch.status.UEBERPRUEFEN": "Vérifier",
-  "gesuch-app.cockpit.gesuch.status.AKZEPTIERT": "Accepté",
-  "gesuch-app.cockpit.gesuch.status.ABGELEHNT": "Refusé"
+  "gesuch-app.cockpit.gesuch.aenderungs-entry": "Ouvrir le changement"
 }

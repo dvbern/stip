@@ -47,7 +47,7 @@ import {
   GesuchUpdate,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
-import { PERSON } from '@dv/shared/model/gesuch-form';
+import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import {
   handleNotFoundAndUnauthorized,
@@ -386,7 +386,7 @@ export const redirectToGesuchForm = createEffect(
     return actions$.pipe(
       ofType(SharedDataAccessGesuchEvents.gesuchCreatedSuccess),
       tap(({ id }) => {
-        router.navigate(['gesuch', PERSON.route, id]);
+        router.navigate(['gesuch', TRANCHE.route, id]);
       }),
     );
   },
