@@ -35,15 +35,11 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return query.stream();
     }
 
-    public Stream<Gesuch> findAlle() {
-        return getFindAlleQuery().limit(10).stream();
-    }
-
-    public JPAQuery<Gesuch> getFindAlleMeine(final UUID benutzerId) {
+    public JPAQuery<Gesuch> getFindAlleMeineQuery(final UUID benutzerId) {
         return addMeineFilter(benutzerId, getFindAlleQuery());
     }
 
-    public JPAQuery<Gesuch> getFindAlleMeineBearbeitbar(final UUID benutzerId) {
+    public JPAQuery<Gesuch> getFindAlleMeineBearbeitbarQuery(final UUID benutzerId) {
         return addMeineFilter(benutzerId, getFindAlleBearbeitbarQuery());
     }
 

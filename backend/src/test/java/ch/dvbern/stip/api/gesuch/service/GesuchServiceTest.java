@@ -16,7 +16,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
@@ -34,13 +33,11 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
-import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
@@ -1129,13 +1126,12 @@ class GesuchServiceTest {
     @Description("It should be possible to change Gesuchstatus from JURISTISCHE_ABKLAERUNG to BEREIT_FUER_BEARBEITUNG")
     void changeGesuchstatus_from_JuristischeAbklaerung_to_BereitFuerBearbeitungTest() {
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.JURISTISCHE_ABKLAERUNG);
-        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
         assertEquals(
             Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
-            gesuchRepository.findAlle().findFirst().get().getGesuchStatus()
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
     }
 
@@ -1144,14 +1140,14 @@ class GesuchServiceTest {
     @Description("It should be possible to change Gesuchstatus from IN_FREIGABE to VERFUEGT")
     void changeGesuchstatus_from_InFreigabe_to_VerfuegtTest() {
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
-        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         doNothing().when(gesuchValidatorService).validateGesuchForStatus(any(), any());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
         assertEquals(
             Gesuchstatus.VERFUEGT,
-            gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
     }
 
     @TestAsSachbearbeiter
@@ -1159,13 +1155,13 @@ class GesuchServiceTest {
     @Description("It should be possible to change Gesuchstatus from IN_FREIGABE to BEREIT_FUER_BEARBEITUNG")
     void changeGesuchstatus_from_InFreigabe_to_BereitFuerBearbeitungTest() {
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
-        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
         assertEquals(
             Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
-            gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
     }
 
     @TestAsSachbearbeiter
@@ -1173,13 +1169,13 @@ class GesuchServiceTest {
     @Description("It should be possible to change Gesuchstatus from VERSANDBEREIT to VERSENDET")
     void changeGesuchstatus_from_Versandbereit_to_VersendetTest() {
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSANDBEREIT);
-        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuch));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVersendet(gesuch.getId()));
         assertEquals(
             Gesuchstatus.VERSENDET,
-            gesuchRepository.findAlle().findFirst().get().getGesuchStatus());
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
@@ -1256,55 +1252,6 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         return tranche;
-    }
-
-    private void setupGesucheWithAndWithoutPia() {
-        Gesuch gesuchWithoutPia = GesuchGenerator.initGesuch();
-        gesuchWithoutPia.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
-        gesuchWithoutPia.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(null);
-
-        Gesuch gesuchWithPia = GesuchGenerator.initGesuch();
-        gesuchWithPia.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
-        gesuchWithPia.getNewestGesuchTranche().get().getGesuchFormular()
-            .setPersonInAusbildung(new PersonInAusbildung());
-        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuchWithoutPia, gesuchWithPia));
-    }
-
-    private void setupGesucheWithAndWithoutAenderung(Gesuchstatus status, GesuchTrancheStatus trancheStatus) {
-        Gesuch gesuchWithoutAenderung = GesuchGenerator.initGesuch();
-        gesuchWithoutAenderung.setGesuchStatus(status);
-        gesuchWithoutAenderung.getGesuchTranchen().add(GesuchGenerator.initGesuchTranche());
-        gesuchWithoutAenderung.getGesuchTranchen().forEach(tranche -> tranche.setTyp(GesuchTrancheTyp.TRANCHE));
-        gesuchWithoutAenderung.getGesuchTranchen()
-            .get(0)
-            .setGueltigkeit(new DateRange(gesuchWithoutAenderung.getGesuchsperiode()
-                .getGesuchsperiodeStart()
-                .plusDays(1), gesuchWithoutAenderung.getGesuchsperiode().getGesuchsperiodeStopp()));
-        gesuchWithoutAenderung.getNewestGesuchTranche().get().
-            setGesuchFormular(new GesuchFormular())
-            .setStatus(trancheStatus)
-            .setTyp(GesuchTrancheTyp.TRANCHE);
-        gesuchWithoutAenderung.getNewestGesuchTranche().get().getGesuchFormular()
-            .setPersonInAusbildung(new PersonInAusbildung());
-
-        Gesuch gesuchWithAenderung = GesuchGenerator.initGesuch();
-        gesuchWithAenderung.setGesuchStatus(status);
-        gesuchWithAenderung.getGesuchTranchen().add(GesuchGenerator.initGesuchTranche());
-        gesuchWithAenderung.getGesuchTranchen().forEach(tranche -> tranche.setTyp(GesuchTrancheTyp.TRANCHE));
-        gesuchWithAenderung.getGesuchTranchen().get(0)
-            .setGueltigkeit(new DateRange(
-                gesuchWithAenderung
-                    .getGesuchsperiode()
-                    .getGesuchsperiodeStart()
-                    .plusDays(1),
-                gesuchWithAenderung.getGesuchsperiode().getGesuchsperiodeStopp()))
-            .setStatus(GesuchTrancheStatus.UEBERPRUEFEN)
-            .setTyp(GesuchTrancheTyp.AENDERUNG);
-        gesuchWithAenderung.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
-        gesuchWithAenderung.getNewestGesuchTranche().get().getGesuchFormular()
-            .setPersonInAusbildung(new PersonInAusbildung());
-
-        when(gesuchRepository.findAlle()).thenReturn(Stream.of(gesuchWithoutAenderung, gesuchWithAenderung));
     }
 
     private GesuchTranche updateWerZahltAlimente(
