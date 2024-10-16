@@ -7,8 +7,11 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -20,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class GesuchAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final GesuchRepository gesuchRepository;
+    private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchStatusService gesuchStatusService;
     private final FallRepository fallRepository;
 
@@ -39,6 +43,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
 
         throw new UnauthorizedException();
+    }
+
+    @Transactional
+    public void canUpdate(final UUID gesuchId, final GesuchUpdateDto gesuchUpdateDto) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId());
+        canUpdate(gesuchId, gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.FallAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
+import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
@@ -36,6 +37,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final TenantService tenantService;
     private final GesuchHistoryService gesuchHistoryService;
     private final GesuchAuthorizer gesuchAuthorizer;
+    private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
     private final FallAuthorizer fallAuthorizer;
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -146,7 +148,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Response updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
-        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchAuthorizer.canUpdate(gesuchId, gesuchUpdateDto);
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, tenantService.getCurrentTenant().getIdentifier());
         return Response.accepted().build();
     }
@@ -161,7 +163,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGsTrancheChanges(UUID aenderungId) {
-        gesuchAuthorizer.canRead(aenderungId);
+        gesuchTrancheAuthorizer.canRead(aenderungId);
         final var changes = gesuchService.getGsTrancheChanges(aenderungId);
         return Response.ok(changes).build();
     }

@@ -18,6 +18,7 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
@@ -189,9 +190,11 @@ public class BerechnungService {
         final int majorVersion,
         final int minorVersion
     ) {
-        final var gesuchStatusToFilterFor = List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN);
+        final var gesuchTrancheStatusToFilterFor = List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN);
         final var gesuchTranchen = gesuch.getGesuchTranchen().stream().filter(
-            gesuchTranche -> gesuchStatusToFilterFor.contains(gesuchTranche.getStatus())
+            gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE
+        ).filter(
+            gesuchTranche -> gesuchTrancheStatusToFilterFor.contains(gesuchTranche.getStatus())
         ).sorted(
             Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb())
         ).toList();
