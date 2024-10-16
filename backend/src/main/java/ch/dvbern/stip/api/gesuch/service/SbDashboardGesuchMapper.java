@@ -1,8 +1,5 @@
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.generated.dto.SbDashboardGesuchDto;
@@ -14,12 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class SbDashboardGesuchMapper {
-    public List<SbDashboardGesuchDto> toDto(final Gesuch gesuch) {
-        final var dtos = new ArrayList<SbDashboardGesuchDto>();
-        dtos.add(toDto(gesuch, gesuch.getLatestGesuchTranche()));
-        gesuch.getAenderungZuUeberpruefen().ifPresent(tranche -> dtos.add(toDto(gesuch, tranche)));
-
-        return dtos;
+    public SbDashboardGesuchDto toDto(final GesuchTranche gesuchTranche) {
+        return toDto(gesuchTranche.getGesuch(), gesuchTranche);
     }
 
     SbDashboardGesuchDto toDto(final Gesuch gesuch, final GesuchTranche gesuchTranche) {

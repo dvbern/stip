@@ -310,7 +310,7 @@ public class GesuchService {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var baseQuery = sbDashboardQueryBuilder.baseQuery(page, pageSize, queryType);
+        final var baseQuery = sbDashboardQueryBuilder.baseQuery(queryType);
 
         if (fallNummer != null) {
             sbDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
@@ -356,7 +356,7 @@ public class GesuchService {
 
         sbDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
         final var results = baseQuery.stream()
-            .flatMap(gesuch -> sbDashboardGesuchMapper.toDto(gesuch).stream())
+            .map(sbDashboardGesuchMapper::toDto)
             .toList();
 
         return new PaginatedSbDashboardDto(
