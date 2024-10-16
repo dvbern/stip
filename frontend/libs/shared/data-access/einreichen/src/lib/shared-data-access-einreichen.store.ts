@@ -140,7 +140,7 @@ export class EinreichenStore extends signalStore(
         this.store.select(selectSharedDataAccessGesuchCache).pipe(
           map(({ gesuch }) => ({
             typ: gesuch?.gesuchTrancheToWorkWith.typ,
-            status: gesuch?.gesuchTrancheToWorkWith.status,
+            status: gesuch?.gesuchStatus,
           })),
         ),
       ),

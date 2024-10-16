@@ -208,6 +208,13 @@ public class GesuchTrancheService {
     }
 
     @Transactional
+    public void deleteAenderung(final UUID aenderungId) {
+        if(!gesuchTrancheRepository.deleteById(aenderungId)){
+            throw new NotFoundException();
+        }
+    }
+
+    @Transactional
     public GesuchTrancheDto aenderungManuellAnpassen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(

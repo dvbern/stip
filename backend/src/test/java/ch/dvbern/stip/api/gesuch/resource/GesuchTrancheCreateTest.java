@@ -1,21 +1,25 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
-import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
-import jdk.jfr.Description;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -33,12 +37,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-class GesuchTrancheResourceImplTest {
+class GesuchTrancheCreateTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    private final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
 
@@ -69,35 +74,63 @@ class GesuchTrancheResourceImplTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     @Order(4)
-    void createFirstAenderungsantrag() {
-        createAenderungsanstrag()
+    void prepareSachbearbeiter() {
+        benutzerApiSpec.prepareCurrentBenutzer()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
     }
 
-
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     @Order(5)
-    @Description("Only one (open: NOT in State ABGELEHNT|AKZEPTIIERT) Aenderungsantrag should be allowed")
-    void createSecondAenderungsantragFails() {
-        createAenderungsanstrag()
+    void createTrancheFail() {
+        gesuchTrancheApiSpec.createGesuchTrancheCopy()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+            .statusCode(Status.UNAUTHORIZED.getStatusCode());
     }
 
-    io.restassured.response.Response createAenderungsanstrag() {
-        return gesuchTrancheApiSpec.createAenderungsantrag()
+    @Test
+    @TestAsSachbearbeiter
+    @Order(6)
+    void setStatusInBearbeitungSb() {
+        gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchIdPath(gesuch.getId())
-            .body(new CreateAenderungsantragRequestDtoSpec().comment("aenderung1")
-                .start(gesuch.getGesuchTrancheToWorkWith().getGueltigAb())
-                .end(gesuch.getGesuchTrancheToWorkWith().getGueltigBis()))
-            .execute(TestUtil.PEEK_IF_ENV_SET);
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
     }
 
-    // todo KSTIP-KSTIP-1158: a Aenderung should be accepted/denied by an SB
+    @Test
+    @TestAsSachbearbeiter
+    @Order(7)
+    void createTrancheSuccess() {
+        final var createGesuchTrancheRequestDtoSpec = new CreateGesuchTrancheRequestDtoSpec();
+        createGesuchTrancheRequestDtoSpec.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb());
+        createGesuchTrancheRequestDtoSpec.setEnd(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(5));
+        createGesuchTrancheRequestDtoSpec.setComment("Bla");
+
+        gesuchTrancheApiSpec.createGesuchTrancheCopy()
+            .gesuchIdPath(gesuch.getId())
+            .body(createGesuchTrancheRequestDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(99)
+    @AlwaysRun
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
 }

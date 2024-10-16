@@ -147,6 +147,84 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToInBearbeitung
+  /gesuch/status/bereit-fuer-bearbeitung/{gesuchId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToBereitFuerBearbeitung
+  /gesuch/status/verfuegt/{gesuchId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToVerfuegt
+  /gesuch/status/versendet/{gesuchId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToVersendet
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -1789,6 +1867,22 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: aenderungAblehnen
+  '/gesuchtranche/{aenderungId}/aenderung/delete':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    delete:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: Geloescht
+        '400':
+          description: Tranche nicht gefunden
+        '404':
+          description: Tranche nicht gefunden
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteAenderung
   /bildungskategorie:
     get:
       tags:
@@ -1831,6 +1925,25 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getPlz
       summary: Gets all PLZs
+  /notifications:
+    get:
+      tags:
+        - Notification
+      responses:
+        '200':
+          description: Returns all Notifications for the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getNotificationsForCurrentUser
+      summary: Gets all notifications for the User
 components:
   schemas:
     WelcomeMail:
@@ -3480,6 +3593,26 @@ components:
         - AUSSTEHEND
         - ABGELEHNT
         - AKZEPTIERT
+    Notification:
+      description: Notification for a Gesuch
+      type: object
+      required:
+        - notificationType
+        - gesuchId
+        - timestamp
+        - userErstellt
+      properties:
+        notificationType:
+          $ref: '#/components/schemas/NotificationType'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        userErstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
+    NotificationType:
+      enum:
+        - GESUCH_EINGEREICHT
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:

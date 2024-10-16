@@ -421,6 +421,27 @@ public class GesuchService {
     }
 
     @Transactional
+    public GesuchDto gesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
+    }
+
+    @Transactional
+    public GesuchDto gesuchStatusToVerfuegt(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
+    }
+
+    @Transactional
+    public GesuchDto gesuchStatusToVersendet(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSENDET);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
+    }
+
+    @Transactional
     public void gesuchFehlendeDokumente(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);

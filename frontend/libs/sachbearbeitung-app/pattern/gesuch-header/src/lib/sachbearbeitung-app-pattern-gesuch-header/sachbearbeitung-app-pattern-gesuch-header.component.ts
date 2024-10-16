@@ -24,12 +24,14 @@ import {
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
+import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import {
   StatusUebergaengeMap,
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
+import { assertUnreachable } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
@@ -42,6 +44,7 @@ import {
     MatMenuModule,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
+    SharedUiIconBadgeComponent,
   ],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -119,6 +122,19 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     );
   }
 
+  availableTrancheInteractionSig = computed(() => {
+    const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
+
+    switch (gesuchStatus) {
+      case 'BEREIT_FUER_BEARBEITUNG':
+        return 'SET_TO_BEARBEITUNG';
+      case 'IN_BEARBEITUNG_SB':
+        return 'CREATE_TRANCHE';
+      default:
+        return null;
+    }
+  });
+
   canSetToBearbeitungSig = computed(() => {
     const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
     if (!gesuchStatus) {
@@ -152,13 +168,61 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'ZURUECKWEISEN':
         this.setStatusZurueckweisen();
         break;
+      case 'VERFUEGT':
+        this.setStatusVerfuegt();
+        break;
+      case 'BEREIT_FUER_BEARBEITUNG':
+        this.setStatusBereitFuerBearbeitung();
+        break;
+      case 'VERSENDET':
+        this.setGesuchVersendet();
+        break;
+      default:
+        assertUnreachable(nextStatus);
     }
+  }
+
+  setGesuchVersendet() {
+    this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchVersendet());
   }
 
   private setStatusBearbeitungAbschliessen() {
     this.store.dispatch(
       SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen(),
     );
+  }
+
+  private setStatusVerfuegt() {
+    this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchVerfuegt());
+  }
+
+  private setStatusBereitFuerBearbeitung() {
+    const gesuchId = this.currentGesuchSig()?.id;
+
+    if (gesuchId) {
+      SharedUiKommentarDialogComponent.open(this.dialog, {
+        entityId: gesuchId,
+        titleKey:
+          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.title',
+        messageKey:
+          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.message',
+        placeholderKey:
+          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.placeholder',
+        confirmKey:
+          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.confirm',
+      })
+        .afterClosed()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((result) => {
+          if (result) {
+            this.store.dispatch(
+              SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung({
+                kommentar: result.kommentar,
+              }),
+            );
+          }
+        });
+    }
   }
 
   private setStatusZurueckweisen() {

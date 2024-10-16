@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.dokument.service;
 import java.lang.annotation.Annotation;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
@@ -62,15 +63,15 @@ class RequiredDokumentServiceTest {
 
     static class MockDocumentProducer implements RequiredDocumentProducer {
         @Override
-        public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-            return ImmutablePair.of("mock", List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
+        public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+            return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
         }
     }
 
     static class MockEmptyDocumentProducer implements RequiredDocumentProducer {
         @Override
-        public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-            return ImmutablePair.of("", List.of());
+        public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+            return ImmutablePair.of("", Set.of());
         }
     }
 
