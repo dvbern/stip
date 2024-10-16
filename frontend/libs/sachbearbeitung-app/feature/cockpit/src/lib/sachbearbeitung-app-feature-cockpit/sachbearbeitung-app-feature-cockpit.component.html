@@ -54,6 +54,7 @@
                 matSortActive="fall"
                 matSortDirection="desc"
                 matSortStart="desc"
+                (matSortChange)="sortData($event)"
                 tabindex="0"
               >
                 <caption class="cdk-visually-hidden">
@@ -62,7 +63,7 @@
                   }}
                 </caption>
 
-                <ng-container matColumnDef="fall">
+                <ng-container matColumnDef="FALLNUMMER">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.fall' | translate }}
                     <div class="d-flex">
@@ -70,25 +71,25 @@
                         <input
                           matInput
                           class="w-100"
-                          formControlName="fall"
+                          formControlName="fallNummer"
                           data-testid="cockpit-filter-fall"
                           (click)="$event.stopPropagation()"
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="clear d-flex align-items-center position-absolute"
-                        (clear)="filterForm.controls.fall.reset()"
-                        [valueSig]="filterForm.controls.fall.value"
+                        (clear)="filterForm.controls.fallNummer.reset()"
+                        [valueSig]="filterForm.controls.fallNummer.value"
                       ></dv-shared-ui-clear-button>
                     </div>
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
-                    {{ gesuch.fall }}
+                    {{ gesuch.fallNummer }}
                   </td>
                 </ng-container>
 
                 <!-- typ -->
-                <ng-container matColumnDef="typ">
+                <ng-container matColumnDef="TYP">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.typ' | translate }}
                     <mat-form-field>
@@ -96,12 +97,10 @@
                         formControlName="typ"
                         (click)="$event.stopPropagation()"
                         class="fw-normal"
+                        [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | translate"
                         panelClass="table-select"
                       >
-                        <mat-option [value]="''">
-                          {{ 'sachbearbeitung-app.cockpit.no-status-filter' | translate }}
-                        </mat-option>
-                        @for (typ of availableStatus; track typ) {
+                        @for (typ of availableTypes; track typ) {
                           <mat-option [value]="typ">
                             {{ 'shared.gesuch.tranche.typ.' + typ | translate }}
                           </mat-option>
@@ -114,45 +113,50 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="nachname">
+                <ng-container matColumnDef="PIA_NACHNAME">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.nachname' | translate }}
                     <div class="d-flex">
                       <mat-form-field>
-                        <input class="w-100" matInput formControlName="nachname" (click)="$event.stopPropagation()" />
+                        <input
+                          class="w-100"
+                          matInput
+                          formControlName="piaNachname"
+                          (click)="$event.stopPropagation()"
+                        />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="clear d-flex align-items-center position-absolute"
-                        (clear)="filterForm.controls.nachname.reset()"
-                        [valueSig]="filterForm.controls.nachname.value"
+                        (clear)="filterForm.controls.piaNachname.reset()"
+                        [valueSig]="filterForm.controls.piaNachname.value"
                       ></dv-shared-ui-clear-button>
                     </div>
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
-                    {{ gesuch.nachname }}
+                    {{ gesuch.piaNachname }}
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="vorname">
+                <ng-container matColumnDef="PIA_VORNAME">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.vorname' | translate }}
                     <div class="d-flex">
                       <mat-form-field>
-                        <input class="w-100" matInput formControlName="vorname" (click)="$event.stopPropagation()" />
+                        <input class="w-100" matInput formControlName="piaVorname" (click)="$event.stopPropagation()" />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="clear d-flex align-items-center position-absolute"
-                        (clear)="filterForm.controls.vorname.reset()"
-                        [valueSig]="filterForm.controls.vorname.value"
+                        (clear)="filterForm.controls.piaVorname.reset()"
+                        [valueSig]="filterForm.controls.piaVorname.value"
                       ></dv-shared-ui-clear-button>
                     </div>
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
-                    {{ gesuch.vorname }}
+                    {{ gesuch.piaVorname }}
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="geburtsdatum">
+                <ng-container matColumnDef="PIA_GEBURTSDATUM">
                   <th
                     mat-header-cell
                     *matHeaderCellDef
@@ -167,7 +171,7 @@
                         <input
                           class="w-100"
                           matInput
-                          formControlName="geburtsdatum"
+                          formControlName="piaGeburtsdatum"
                           [matDatepicker]="geburtsdatumDatepicker"
                           (click)="$event.stopPropagation()"
                         />
@@ -176,7 +180,7 @@
                           type="button"
                           class="btn btn-link text-muted"
                           [attr.aria-label]="'shared.ui.open-date-picker'"
-                          (click)="geburtsdatumDatepicker.open()"
+                          (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
                         >
                           <dv-shared-ui-icon-chip class="fs-8">
                             <i class="icon material-symbols-rounded fs-5">event</i>
@@ -186,17 +190,17 @@
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="clear d-flex align-items-center position-absolute"
-                        (clear)="filterForm.controls.geburtsdatum.reset()"
-                        [valueSig]="filterForm.controls.geburtsdatum.value"
+                        (clear)="filterForm.controls.piaGeburtsdatum.reset()"
+                        [valueSig]="filterForm.controls.piaGeburtsdatum.value"
                       ></dv-shared-ui-clear-button>
                     </div>
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
-                    {{ gesuch.geburtsdatum | date: 'dd.MM.yyyy' }}
+                    {{ gesuch.piaGeburtsdatum | date: 'dd.MM.yyyy' }}
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="status">
+                <ng-container matColumnDef="STATUS">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.status' | translate }}
                     <mat-form-field>
@@ -204,11 +208,9 @@
                         formControlName="status"
                         (click)="$event.stopPropagation()"
                         class="fw-normal"
+                        [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | translate"
                         panelClass="table-select"
                       >
-                        <mat-option [value]="''">
-                          {{ 'sachbearbeitung-app.cockpit.no-status-filter' | translate }}
-                        </mat-option>
                         @for (status of availableStatusSig(); track status) {
                           <mat-option [value]="status">
                             {{ 'shared.gesuch.status.contract.' + status | translate }}
@@ -222,7 +224,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="bearbeiter">
+                <ng-container matColumnDef="BEARBEITER">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.bearbeiter' | translate }}
                     <div class="d-flex">
@@ -241,7 +243,7 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="letzteAktivitaet">
+                <ng-container matColumnDef="LETZTE_AKTIVITAET">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header [start]="'desc'" class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate }}
                     <div class="d-flex">
@@ -258,7 +260,7 @@
                           type="button"
                           class="btn btn-link text-muted"
                           [attr.aria-label]="'shared.ui.open-date-picker'"
-                          (click)="letzteAktivitaetRangePicker.open()"
+                          (click)="letzteAktivitaetRangePicker.open(); $event.stopPropagation()"
                         >
                           <dv-shared-ui-icon-chip class="fs-8">
                             <i class="icon material-symbols-rounded fs-5">event</i>
@@ -270,12 +272,12 @@
                           (click)="$event.stopPropagation()"
                         >
                           <input
-                            formControlName="letzteAktivitaetStart"
+                            [formControl]="filterStartEndForm.controls.letzteAktivitaetFrom"
                             matStartDate
                             [placeholder]="'shared.label.von' | translate"
                           />
                           <input
-                            formControlName="letzteAktivitaetEnd"
+                            [formControl]="filterStartEndForm.controls.letzteAktivitaetTo"
                             matEndDate
                             [placeholder]="'shared.label.bis' | translate"
                           />
@@ -285,12 +287,12 @@
                       <dv-shared-ui-clear-button
                         class="clear d-flex align-items-center position-absolute"
                         (clear)="
-                          filterForm.controls.letzteAktivitaetStart.reset();
-                          filterForm.controls.letzteAktivitaetEnd.reset()
+                          filterStartEndForm.controls.letzteAktivitaetFrom.reset();
+                          filterStartEndForm.controls.letzteAktivitaetTo.reset()
                         "
                         [valueSig]="[
-                          filterForm.controls.letzteAktivitaetStart.value,
-                          filterForm.controls.letzteAktivitaetEnd.value,
+                          filterStartEndForm.controls.letzteAktivitaetFrom.value,
+                          filterStartEndForm.controls.letzteAktivitaetTo.value,
                         ]"
                       ></dv-shared-ui-clear-button>
                     </div>

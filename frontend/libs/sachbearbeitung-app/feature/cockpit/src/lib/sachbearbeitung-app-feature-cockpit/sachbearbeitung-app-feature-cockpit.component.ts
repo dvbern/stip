@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  InputSignal,
   OnInit,
   QueryList,
   ViewChild,
@@ -26,7 +27,12 @@ import {
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import {
+  MatSort,
+  MatSortModule,
+  Sort,
+  SortDirection,
+} from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -36,19 +42,23 @@ import {
   differenceInCalendarYears,
   differenceInDays,
   format,
-  isSameDay,
-  isWithinInterval,
-  startOfDay,
+  isValid,
+  toDate,
 } from 'date-fns';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
 import {
   GesuchFilter,
+  GesuchServiceGetGesucheSbRequestParams,
   GesuchTrancheTyp,
   Gesuchstatus,
+  SbDashboardColumn,
+  SbDashboardGesuch,
   SharedModelGesuch,
+  SortOrder,
 } from '@dv/shared/model/gesuch';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
@@ -68,6 +78,16 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
+const INPUT_DELAY = 300;
+
+type AppendStartEnd<T extends string> = `${T}From` | `${T}To`;
+type CockpitValue = Omit<SbDashboardGesuch, 'id' | 'gesuchTrancheId'>;
+type CockpitKeys = keyof CockpitValue;
+
+type StartEndFields = keyof Pick<CockpitValue, 'letzteAktivitaet'>;
+type CockpitFormSimpleKeys = Exclude<CockpitKeys, StartEndFields>;
+type CockpitFormStartEndKeys = AppendStartEnd<StartEndFields>;
+type CockpitFormKeys = CockpitFormSimpleKeys | CockpitFormStartEndKeys;
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-cockpit',
@@ -110,41 +130,49 @@ const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
     { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },
   ],
 })
-export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
+export class SachbearbeitungAppFeatureCockpitComponent
+  implements OnInit, Record<CockpitFormKeys, InputSignal<string | undefined>>
+{
   private store = inject(Store);
   private router = inject(Router);
   private formBuilder = inject(NonNullableFormBuilder);
   showSig = input<GesuchFilter | undefined>(undefined, {
     alias: 'show',
   });
+  fallNummer = input<string | undefined>(undefined);
+  typ = input<string | undefined>(undefined);
+  piaNachname = input<string | undefined>(undefined);
+  piaVorname = input<string | undefined>(undefined);
+  piaGeburtsdatum = input<string | undefined>(undefined);
+  status = input<string | undefined>(undefined);
+  bearbeiter = input<string | undefined>(undefined);
+  letzteAktivitaetFrom = input<string | undefined>(undefined);
+  letzteAktivitaetTo = input<string | undefined>(undefined);
+  sortColumn = input<SbDashboardColumn | undefined>(undefined);
+  sortOrder = input<SortOrder | undefined>(undefined);
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
   @ViewChild('gesuchePaginator', { static: true }) paginator!: MatPaginator;
-  displayedColumns = [
-    'fall',
-    'typ',
-    'nachname',
-    'vorname',
-    'geburtsdatum',
-    'status',
-    'bearbeiter',
-    'letzteAktivitaet',
-  ];
+  displayedColumns = Object.keys(SbDashboardColumn);
 
   filterForm = this.formBuilder.group({
-    fall: [<string | undefined>undefined],
-    typ: [''],
-    nachname: [<string | undefined>undefined],
-    vorname: [<string | undefined>undefined],
-    geburtsdatum: [<Date | undefined>undefined],
-    status: [''],
+    fallNummer: [<string | undefined>undefined],
+    typ: [<GesuchTrancheTyp | undefined>undefined],
+    piaNachname: [<string | undefined>undefined],
+    piaVorname: [<string | undefined>undefined],
+    piaGeburtsdatum: [<Date | undefined>undefined],
+    status: [<Gesuchstatus | undefined>undefined],
     bearbeiter: [<string | undefined>undefined],
-    letzteAktivitaetStart: [<Date | undefined>undefined],
-    letzteAktivitaetEnd: [<Date | undefined>undefined],
-  });
+  } satisfies Record<CockpitFormSimpleKeys, unknown>);
+
+  filterStartEndForm = this.formBuilder.group({
+    letzteAktivitaetFrom: [<Date | undefined>undefined],
+    letzteAktivitaetTo: [<Date | undefined>undefined],
+  } satisfies Record<CockpitFormStartEndKeys, unknown>);
 
   versionSig = this.store.selectSignal(selectVersion);
+  sortSig = viewChild.required(MatSort);
   gesuchStore = inject(GesuchStore);
   quickFilterForm = this.formBuilder.group({
     query: [<GesuchFilter | undefined>undefined],
@@ -170,7 +198,6 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
     return show ?? DEFAULT_FILTER;
   });
 
-  private filterFormChangedSig = toSignal(this.filterForm.valueChanges);
   availableStatusSig = computed(() => {
     return this.gesuchStore
       ?.cockpitViewSig()
@@ -178,16 +205,16 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
         Gesuchstatus[]
       >((acc, entry) => (acc.includes(entry.status) ? acc : [...acc, entry.status]), []);
   });
-  availableStatus = Object.values(GesuchTrancheTyp);
-  private letzteAktivitaetStartChangedSig = toSignal(
-    this.filterForm.controls.letzteAktivitaetStart.valueChanges,
+  availableTypes = Object.values(GesuchTrancheTyp);
+  private letzteAktivitaetFromChangedSig = toSignal(
+    this.filterStartEndForm.controls.letzteAktivitaetFrom.valueChanges,
   );
-  private letzteAktivitaetEndChangedSig = toSignal(
-    this.filterForm.controls.letzteAktivitaetEnd.valueChanges,
+  private letzteAktivitaetToChangedSig = toSignal(
+    this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
   letzteAktivitaetRangeSig = computed(() => {
-    const start = this.letzteAktivitaetStartChangedSig();
-    const end = this.letzteAktivitaetEndChangedSig();
+    const start = this.letzteAktivitaetFromChangedSig();
+    const end = this.letzteAktivitaetToChangedSig();
 
     if (!start || !end) {
       return '';
@@ -205,71 +232,107 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
       : format(start, 'dd.MM.yyyy');
   });
 
+  filterFormChangedSig = toSignal(
+    this.filterForm.valueChanges.pipe(debounceTime(INPUT_DELAY)),
+  );
+  filterStartEndFormChangedSig = toSignal(
+    this.filterStartEndForm.valueChanges.pipe(
+      distinctUntilChanged(
+        (a, b) =>
+          isDefined(b.letzteAktivitaetFrom) ===
+            isDefined(b.letzteAktivitaetTo) && a === b,
+      ),
+      debounceTime(INPUT_DELAY),
+    ),
+  );
   gesucheDataSourceSig = computed(() => {
-    const sort = this.sortSig();
-    const gesuche = this.gesuchStore
-      ?.cockpitViewSig()
-      ?.gesuche?.entries?.map((entry) => ({
-        id: entry.id,
-        trancheId: entry.gesuchTrancheId,
-        fall: entry.fallNummer,
-        typ: entry.typ,
-        nachname: entry.piaNachname,
-        vorname: entry.piaVorname,
-        geburtsdatum: entry.piaGeburtsdatum,
-        status: entry.status,
-        bearbeiter: entry.bearbeiter,
-        letzteAktivitaet: entry.letzteAktivitaet,
-      }));
-    const filterForm = this.filterFormChangedSig();
-
+    const gesuche = this.gesuchStore?.cockpitViewSig()?.gesuche?.entries?.map(
+      (entry) =>
+        ({
+          id: entry.id,
+          trancheId: entry.gesuchTrancheId,
+          fallNummer: entry.fallNummer,
+          typ: entry.typ,
+          piaNachname: entry.piaNachname,
+          piaVorname: entry.piaVorname,
+          piaGeburtsdatum: entry.piaGeburtsdatum,
+          status: entry.status,
+          bearbeiter: entry.bearbeiter,
+          letzteAktivitaet: entry.letzteAktivitaet,
+        }) satisfies Record<CockpitKeys, unknown> & {
+          id: string;
+          trancheId: string;
+        },
+    );
     const dataSource = new MatTableDataSource(gesuche);
-
-    dataSource.paginator = this.paginator;
-    if (sort) {
-      dataSource.sort = sort;
-    }
-
-    if (hasFilterValues(filterForm)) {
-      dataSource.filterPredicate = (data) =>
-        [
-          checkFilter(data.fall, filterForm.fall),
-          checkFilter(data.typ, filterForm.typ),
-          checkFilter(data.nachname, filterForm.nachname),
-          checkFilter(data.vorname, filterForm.vorname),
-          checkFilter(data.geburtsdatum, filterForm.geburtsdatum),
-          checkFilter(data.status, filterForm.status),
-          checkFilter(data.bearbeiter, filterForm.bearbeiter),
-          checkFilter(data.letzteAktivitaet, [
-            filterForm.letzteAktivitaetStart,
-            filterForm.letzteAktivitaetEnd,
-          ]),
-        ].every((result) => result);
-      dataSource.filter = JSON.stringify(filterForm);
-    } else {
-      dataSource.filter = '';
-    }
 
     return dataSource;
   });
-  sortSig = viewChild(MatSort);
+
+  sortData(event: Sort) {
+    const query: Pick<
+      GesuchServiceGetGesucheSbRequestParams,
+      'sortColumn' | 'sortOrder'
+    > = {
+      sortColumn: event.active as SbDashboardColumn,
+      sortOrder: sortMap[event.direction],
+    };
+
+    this.router.navigate(['.'], {
+      queryParams: query,
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
 
   constructor() {
-    let isFirstChange = true;
     effect(
       () => {
-        // const query = this.showViewSig();
-        if (isFirstChange) {
-          isFirstChange = false;
-          return;
-        }
-        // this.store.dispatch(
-        //   SharedDataAccessGesuchEvents.loadAllDebounced({
-        //     query,
-        //   }),
-        // );
+        this.filterFormChangedSig();
+        const formValue = this.filterForm.getRawValue();
+        const query: Pick<
+          GesuchServiceGetGesucheSbRequestParams,
+          CockpitFormKeys
+        > = {
+          ...formValue,
+          piaGeburtsdatum: formValue.piaGeburtsdatum?.toISOString(),
+        };
+
+        this.router.navigate(['.'], {
+          queryParams: makeEmptyStringPropertiesNull(query),
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
       },
-      { allowSignalWrites: true },
+      {
+        allowSignalWrites: true,
+      },
+    );
+    effect(
+      () => {
+        this.filterStartEndFormChangedSig();
+        const formValue = this.filterStartEndForm.getRawValue();
+        const query: Pick<
+          GesuchServiceGetGesucheSbRequestParams,
+          CockpitFormKeys
+        > = {
+          letzteAktivitaetFrom:
+            formValue.letzteAktivitaetTo &&
+            formValue.letzteAktivitaetFrom?.toISOString(),
+          letzteAktivitaetTo:
+            formValue.letzteAktivitaetFrom &&
+            formValue.letzteAktivitaetTo?.toISOString(),
+        };
+
+        this.router.navigate(['.'], {
+          queryParams: makeEmptyStringPropertiesNull(query),
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      },
+      {
+        allowSignalWrites: true,
+      },
     );
 
     const quickFilterChanged = toSignal(
@@ -285,74 +348,83 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
           queryParams: {
             show: query === DEFAULT_FILTER ? undefined : query,
           },
+          queryParamsHandling: 'merge',
           replaceUrl: true,
+        });
+      },
+      { allowSignalWrites: true },
+    );
+
+    effect(
+      () => {
+        const { query, filter, startEndFilter, sortColumn, sortOrder } =
+          this.getInputs();
+
+        this.gesuchStore.loadGesuche$({
+          getGesucheSBQueryType: query,
+          ...filter,
+          ...startEndFilter,
+          sortColumn,
+          sortOrder,
+          page: 0,
+          pageSize: 50,
         });
       },
       { allowSignalWrites: true },
     );
   }
 
-  ngOnInit() {
+  getInputs() {
     const query = this.showViewSig();
-    this.quickFilterForm.reset({ query });
-    this.gesuchStore.loadGesuche$({
-      getGesucheSBQueryType: query,
-      page: 0,
-      pageSize: 50,
+    const filter = {
+      fallNummer: this.fallNummer(),
+      typ: parseTyp(this.typ()),
+      piaNachname: this.piaNachname(),
+      piaVorname: this.piaVorname(),
+      piaGeburtsdatum: this.piaGeburtsdatum(),
+      status: parseStatus(this.status()),
+      bearbeiter: this.bearbeiter(),
+    };
+    const startEndFilter = {
+      letzteAktivitaetFrom: this.letzteAktivitaetFrom(),
+      letzteAktivitaetTo: this.letzteAktivitaetTo(),
+    };
+    const sortColumn = this.sortColumn();
+    const sortOrder = this.sortOrder();
+
+    return {
+      query,
+      filter,
+      startEndFilter,
+      sortColumn,
+      sortOrder,
+    };
+  }
+
+  ngOnInit() {
+    const { query, filter, startEndFilter, sortColumn, sortOrder } =
+      this.getInputs();
+    this.filterForm.reset({
+      ...filter,
+      piaGeburtsdatum: parseDate(filter.piaGeburtsdatum ?? ''),
     });
+    this.filterStartEndForm.reset({
+      ...startEndFilter,
+      letzteAktivitaetFrom: parseDate(
+        startEndFilter.letzteAktivitaetFrom ?? '',
+      ),
+      letzteAktivitaetTo: parseDate(startEndFilter.letzteAktivitaetTo ?? ''),
+    });
+    this.quickFilterForm.reset({ query });
+    if (sortColumn && sortOrder) {
+      this.sortSig().sort({
+        id: sortColumn,
+        start: inverseSortMap[sortOrder],
+        disableClear: false,
+      });
+    }
   }
 }
-
-const hasFilterValues = <T extends Record<string, unknown>>(
-  values?: T,
-): values is NonNullable<T> => {
-  if (!values) {
-    return false;
-  }
-  return Object.values(values).some(
-    (value) => isDefined(value) && value !== '',
-  );
-};
-
-const checkFilter = <T>(
-  value: T,
-  filter:
-    | string
-    | number
-    | Date
-    | [Date | undefined, Date | undefined]
-    | undefined
-    | null,
-) => {
-  if (!isDefined(value) || !isDefined(filter)) {
-    return true;
-  }
-  if (typeof value === 'number' || typeof filter === 'number') {
-    return value.toString() === filter.toString();
-  }
-  if (typeof value === 'string') {
-    if (!value) {
-      return true;
-    }
-    if (filter instanceof Date) {
-      return isSameDay(new Date(value), filter);
-    }
-    if (Array.isArray(filter)) {
-      return isInterval(filter)
-        ? isWithinInterval(startOfDay(new Date(value)), {
-            start: startOfDay(filter[0]),
-            end: startOfDay(filter[1]),
-          })
-        : true;
-    }
-    return value.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
-  }
-  throw new Error('Unsupported type');
-};
-
-const isInterval = (value: unknown[]): value is [Date, Date] => {
-  return value.length === 2 && value.every((v) => v instanceof Date);
-};
 
 const getDiffFormat = (
   date: Date,
@@ -366,4 +438,45 @@ const getDiffFormat = (
     value += format(date, 'yy');
   }
   return value;
+};
+
+const sortMap = {
+  ['']: undefined,
+  asc: 'ASCENDING',
+  desc: 'DESCENDING',
+} satisfies Record<SortDirection, SortOrder | undefined>;
+const inverseSortMap = {
+  ASCENDING: 'asc',
+  DESCENDING: 'desc',
+} satisfies Record<SortOrder, SortDirection>;
+
+const makeEmptyStringPropertiesNull = <T extends object>(obj: T): T => {
+  return Object.entries(obj).reduce(
+    (acc, [key, value]) => ({
+      ...acc,
+      [key]: value === '' ? null : value,
+    }),
+    {} as T,
+  );
+};
+
+const parseTyp = (typ: string | undefined): GesuchTrancheTyp | undefined => {
+  if (!typ || Object.keys(GesuchTrancheTyp).includes(typ)) {
+    return undefined;
+  }
+  return typ as GesuchTrancheTyp;
+};
+
+const parseStatus = (status: string | undefined): Gesuchstatus | undefined => {
+  if (!status || Object.keys(Gesuchstatus).includes(status)) {
+    return undefined;
+  }
+  return status as Gesuchstatus;
+};
+
+const parseDate = (date: string | undefined): Date | undefined => {
+  if (!date || isValid(date)) {
+    return undefined;
+  }
+  return toDate(date);
 };
