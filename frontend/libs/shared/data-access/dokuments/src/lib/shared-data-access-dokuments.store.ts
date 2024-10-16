@@ -262,19 +262,22 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  getDokumenteAndRequired$(trancheId: string) {
-    this.getGesuchDokumente$(trancheId);
-    this.getRequiredDocumentTypes$(trancheId);
+  getDokumenteAndRequired$(gesuchTrancheId: string, ignoreCache?: boolean) {
+    this.getGesuchDokumente$({ gesuchTrancheId, ignoreCache });
+    this.getRequiredDocumentTypes$(gesuchTrancheId);
   }
 
-  private getGesuchDokumente$ = rxMethod<string>(
+  getGesuchDokumente$ = rxMethod<{
+    gesuchTrancheId: string;
+    ignoreCache?: boolean;
+  }>(
     pipe(
-      tap(() => {
+      tap(({ ignoreCache }) => {
         patchState(this, (state) => ({
-          dokuments: cachedPending(state.dokuments),
+          dokuments: ignoreCache ? pending() : cachedPending(state.dokuments),
         }));
       }),
-      switchMap((gesuchTrancheId) =>
+      switchMap(({ gesuchTrancheId }) =>
         this.trancheService.getGesuchDokumente$({ gesuchTrancheId }),
       ),
       handleApiResponse((dokuments) => patchState(this, { dokuments })),

@@ -192,7 +192,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     getLatestTrancheIdFromGesuch$(this.gesuchViewSig)
       .pipe(takeUntilDestroyed())
       .subscribe((trancheId) => {
-        this.dokumentsStore.getDokumenteAndRequired$(trancheId);
+        this.dokumentsStore.getDokumenteAndRequired$(trancheId, true);
       });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
