@@ -64,4 +64,8 @@ public interface LebenslaufItemMapper {
         }
         return lebenslaufItemSet;
     }
+
+    @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
+    @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
+	LebenslaufItemUpdateDto toUpdateDto(LebenslaufItem lebenslaufItem);
 }

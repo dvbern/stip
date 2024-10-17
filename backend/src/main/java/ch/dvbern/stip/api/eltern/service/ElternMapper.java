@@ -48,4 +48,6 @@ public interface ElternMapper {
         }
         return elternSet;
     }
+
+	ElternUpdateDto toUpdateDto(Eltern eltern);
 }

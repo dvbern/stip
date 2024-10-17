@@ -451,9 +451,15 @@ public class GesuchService {
     }
 
     public GesuchWithChangesDto getGsTrancheChanges(final UUID aenderungId) {
-        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+
+        if (aenderung.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
+            aenderung = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+        }
+
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
-        return gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision);
+        final var changesDto = gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision);
+        return changesDto;
     }
 
     public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
