@@ -108,7 +108,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
     ),
 
     on(
-      SharedDataAccessGesuchEvents.removeTriggered,
+      SharedDataAccessGesuchEvents.deleteGesuch,
       SharedDataAccessGesuchEvents.loadAll,
       SharedDataAccessGesuchEvents.loadAllDebounced,
       SharedEventGesuchFormPerson.saveTriggered,
@@ -190,7 +190,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
 
     on(
       SharedDataAccessGesuchEvents.gesuchUpdatedSuccess,
-      SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
+      SharedDataAccessGesuchEvents.deleteGesuchSuccess,
       (state): State => ({
         ...state,
         lastUpdate: new Date().toISOString(),
@@ -214,7 +214,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.gesuchCreatedFailure,
       SharedDataAccessGesuchEvents.gesuchUpdatedFailure,
       SharedDataAccessGesuchEvents.gesuchUpdatedSubformFailure,
-      SharedDataAccessGesuchEvents.gesuchRemovedFailure,
+      SharedDataAccessGesuchEvents.deleteGesuchFailure,
       // add other failure actions here (if handled the same way)
       (state, { error }): State => ({
         ...state,

@@ -85,7 +85,17 @@
                             *ngTemplateOutlet="einreichefrist; context: { periode: periode }"
                           ></ng-container>
                         </div>
-                        <div class="flex-grow-1"></div>
+                        <div class="flex-grow-1 mb-3"></div>
+                        @if (periode.gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
+                          <button
+                            type="button"
+                            class="btn btn-outline-primary mb-2 w-100"
+                            data-testid="gesuch-app.cockpit.gesuch.delete"
+                            (click)="deleteGesuch(periode.gesuch.id)"
+                          >
+                            <span>{{ 'gesuch-app.gesuch.delete' | translate }}</span>
+                          </button>
+                        }
                         @if (
                           periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' &&
                             periode.gesuch.missingDocuments?.trancheId;

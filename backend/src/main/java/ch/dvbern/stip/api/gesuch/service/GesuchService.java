@@ -213,7 +213,6 @@ public class GesuchService {
         final String tenantId
     ) throws ValidationsException {
         var gesuch = gesuchRepository.requireById(gesuchId);
-        preventUpdateVonGesuchIfReadOnly(gesuch);
         var trancheToUpdate = gesuch.getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
             .orElseThrow(NotFoundException::new);
         if (trancheToUpdate.getTyp() == GesuchTrancheTyp.TRANCHE) {

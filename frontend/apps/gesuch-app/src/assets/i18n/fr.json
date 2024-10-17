@@ -21,10 +21,13 @@
 
   "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "En attente",
 
+  "gesuch-app.gesuch.delete": "Supprimer la demande",
+  "gesuch-app.gesuch.delete.dialog.title": "Supprimer la demande",
+  "gesuch-app.gesuch.delete.dialog.message": "Voulez-vous vraiment supprimer la demande? Vous perdrez toutes les données.",
   "gesuch-app.aenderungs-entry.title": "Changements",
   "gesuch-app.aenderungs-entry.status.title": "Statut de l'application",
   "gesuch-app.aenderungs-entry.delete": "Supprimer le changement",
   "gesuch-app.aenderungs-entry.delete.dialog.title": "Supprimer le changement",
-  "gesuch-app.aenderungs-entry.delete.dialog.message": "Voulez-vous vraiment supprimer le changement?",
+  "gesuch-app.aenderungs-entry.delete.dialog.message": "Voulez-vous vraiment supprimer le changement? Vous perdrez toutes les données",
   "gesuch-app.cockpit.gesuch.aenderungs-entry": "Ouvrir le changement"
 }

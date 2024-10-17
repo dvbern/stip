@@ -48,6 +48,7 @@ class GesuchTrancheAenderungTest {
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+
     private  GesuchTrancheSlimDtoSpec[] gesuchtranchen;
     private GesuchDtoSpec gesuch;
 
@@ -124,6 +125,8 @@ class GesuchTrancheAenderungTest {
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
             .as(GesuchTrancheSlimDtoSpec[].class);
