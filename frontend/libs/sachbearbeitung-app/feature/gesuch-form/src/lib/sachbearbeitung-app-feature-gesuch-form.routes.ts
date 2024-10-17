@@ -11,7 +11,6 @@ import {
   GESCHWISTER,
   KINDER,
   LEBENSLAUF,
-  NOTIZEN,
   PARTNER,
   PERSON,
   TRANCHE,
@@ -159,17 +158,6 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-dokumente').then(
         (m) => m.sharedFeatureGesuchDokumenteRoutes,
-      ),
-  },
-  {
-    path: NOTIZEN.route,
-    resolve: {
-      step: () => NOTIZEN,
-    },
-    title: 'shared.notizen.title',
-    loadChildren: () =>
-      import('@dv/sachbearbeitung-app/feature/gesuch-form-notizen').then(
-        (m) => m.sachbearbeitungAppFeatureGesuchFormNotizenRoutes,
       ),
   },
   {

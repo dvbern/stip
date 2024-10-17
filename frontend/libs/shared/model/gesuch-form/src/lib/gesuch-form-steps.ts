@@ -118,13 +118,6 @@ export const PROTOKOLL: SharedModelGesuchFormStep = {
   iconSymbolName: 'history',
 } satisfies SharedModelGesuchFormStep;
 
-export const NOTIZEN: SharedModelGesuchFormStep = {
-  route: 'notizen',
-  translationKey: 'shared.notizen.title',
-  titleTranslationKey: 'shared.notizen.title',
-  iconSymbolName: 'history',
-} satisfies SharedModelGesuchFormStep;
-
 // Dynamic steps
 export const ELTERN_STEUERDATEN_ROUTE = 'eltern-steuerdaten';
 const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {

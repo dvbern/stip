@@ -1,8 +1,8 @@
 import { Route } from '@angular/router';
 
-import { SachbearbeitungAppFeatureGesuchFormNotizenComponent } from './sachbearbeitung-app-feature-gesuch-form-notizen/sachbearbeitung-app-feature-gesuch-form-notizen.component';
+import { SachbearbeitungAppFeatureInfosNotizenComponent } from './sachbearbeitung-app-feature-infos-notizen/sachbearbeitung-app-feature-infos-notizen.component';
 
-export const sachbearbeitungAppFeatureGesuchFormNotizenRoutes: Route[] = [
+export const sachbearbeitungAppFeatureInfosNotizenRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
@@ -11,10 +11,7 @@ export const sachbearbeitungAppFeatureGesuchFormNotizenRoutes: Route[] = [
       // always remove { providedIn: 'root' } from the feature specific services
     ],
     children: [
-      {
-        path: '',
-        component: SachbearbeitungAppFeatureGesuchFormNotizenComponent,
-      },
+      { path: '', component: SachbearbeitungAppFeatureInfosNotizenComponent },
       // add more routes here (siblings)
       // it is also possible to add nested routes as children
       // of this feature root component (or even lazy loaded sub features)
