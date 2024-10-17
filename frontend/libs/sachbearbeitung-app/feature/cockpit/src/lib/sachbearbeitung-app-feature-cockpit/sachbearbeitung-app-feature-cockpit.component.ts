@@ -6,7 +6,6 @@ import {
   InputSignal,
   OnInit,
   QueryList,
-  ViewChild,
   ViewChildren,
   computed,
   effect,
@@ -23,6 +22,7 @@ import {
   MatPaginator,
   MatPaginatorIntl,
   MatPaginatorModule,
+  PageEvent,
 } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
@@ -75,19 +75,27 @@ import {
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
+import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
+const PAGE_SIZES = [10, 20, 50];
+const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
 const INPUT_DELAY = 300;
 
 type AppendStartEnd<T extends string> = `${T}From` | `${T}To`;
-type CockpitValue = Omit<SbDashboardGesuch, 'id' | 'gesuchTrancheId'>;
-type CockpitKeys = keyof CockpitValue;
+type DashboardEntry = Omit<SbDashboardGesuch, 'id' | 'gesuchTrancheId'>;
+type DashboardEntryFields = keyof DashboardEntry;
 
-type StartEndFields = keyof Pick<CockpitValue, 'letzteAktivitaet'>;
-type CockpitFormSimpleKeys = Exclude<CockpitKeys, StartEndFields>;
-type CockpitFormStartEndKeys = AppendStartEnd<StartEndFields>;
-type CockpitFormKeys = CockpitFormSimpleKeys | CockpitFormStartEndKeys;
+/**
+ * Special date fields which are treated as start-end fields only during filtering
+ */
+type StartEndFields = keyof Pick<DashboardEntry, 'letzteAktivitaet'>;
+type DashboardFormSimpleFields = Exclude<DashboardEntryFields, StartEndFields>;
+type DashboardFormStartEndFields = AppendStartEnd<StartEndFields>;
+type DashboardFormFields =
+  | DashboardFormSimpleFields
+  | DashboardFormStartEndFields;
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-cockpit',
@@ -131,14 +139,15 @@ type CockpitFormKeys = CockpitFormSimpleKeys | CockpitFormStartEndKeys;
   ],
 })
 export class SachbearbeitungAppFeatureCockpitComponent
-  implements OnInit, Record<CockpitFormKeys, InputSignal<string | undefined>>
+  implements
+    OnInit,
+    Record<DashboardFormFields, InputSignal<string | undefined>>
 {
   private store = inject(Store);
   private router = inject(Router);
   private formBuilder = inject(NonNullableFormBuilder);
-  showSig = input<GesuchFilter | undefined>(undefined, {
-    alias: 'show',
-  });
+  // Due to lack of space, the following inputs are not suffixed with 'Sig'
+  show = input<GesuchFilter | undefined>(undefined);
   fallNummer = input<string | undefined>(undefined);
   typ = input<string | undefined>(undefined);
   piaNachname = input<string | undefined>(undefined);
@@ -150,10 +159,18 @@ export class SachbearbeitungAppFeatureCockpitComponent
   letzteAktivitaetTo = input<string | undefined>(undefined);
   sortColumn = input<SbDashboardColumn | undefined>(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
+  page = input(<number | undefined>undefined, {
+    transform: restrictNumberParam({ min: 0, max: 999 }),
+  });
+  pageSize = input(<number | undefined>undefined, {
+    transform: restrictNumberParam({
+      min: PAGE_SIZES[0],
+      max: PAGE_SIZES[PAGE_SIZES.length - 1],
+    }),
+  });
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  @ViewChild('gesuchePaginator', { static: true }) paginator!: MatPaginator;
   displayedColumns = Object.keys(SbDashboardColumn);
 
   filterForm = this.formBuilder.group({
@@ -164,19 +181,28 @@ export class SachbearbeitungAppFeatureCockpitComponent
     piaGeburtsdatum: [<Date | undefined>undefined],
     status: [<Gesuchstatus | undefined>undefined],
     bearbeiter: [<string | undefined>undefined],
-  } satisfies Record<CockpitFormSimpleKeys, unknown>);
+  } satisfies Record<DashboardFormSimpleFields, unknown>);
 
   filterStartEndForm = this.formBuilder.group({
     letzteAktivitaetFrom: [<Date | undefined>undefined],
     letzteAktivitaetTo: [<Date | undefined>undefined],
-  } satisfies Record<CockpitFormStartEndKeys, unknown>);
+  } satisfies Record<DashboardFormStartEndFields, unknown>);
 
-  versionSig = this.store.selectSignal(selectVersion);
-  sortSig = viewChild.required(MatSort);
-  gesuchStore = inject(GesuchStore);
   quickFilterForm = this.formBuilder.group({
     query: [<GesuchFilter | undefined>undefined],
   });
+
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
+  availableTypes = Object.values(GesuchTrancheTyp);
+  versionSig = this.store.selectSignal(selectVersion);
+  showViewSig = computed<GesuchFilter>(() => {
+    const show = this.show();
+    return show ?? DEFAULT_FILTER;
+  });
+  sortSig = viewChild.required(MatSort);
+  paginatorSig = viewChild.required(MatPaginator);
+  gesuchStore = inject(GesuchStore);
   dataSoruce = new MatTableDataSource<SharedModelGesuch>([]);
 
   quickFilters: { typ: GesuchFilter; icon: string }[] = [
@@ -193,19 +219,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       icon: 'all_inclusive',
     },
   ];
-  showViewSig = computed<GesuchFilter>(() => {
-    const show = this.showSig();
-    return show ?? DEFAULT_FILTER;
-  });
 
-  availableStatusSig = computed(() => {
-    return this.gesuchStore
-      ?.cockpitViewSig()
-      ?.gesuche?.entries?.reduce<
-        Gesuchstatus[]
-      >((acc, entry) => (acc.includes(entry.status) ? acc : [...acc, entry.status]), []);
-  });
-  availableTypes = Object.values(GesuchTrancheTyp);
   private letzteAktivitaetFromChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetFrom.valueChanges,
   );
@@ -232,6 +246,14 @@ export class SachbearbeitungAppFeatureCockpitComponent
       : format(start, 'dd.MM.yyyy');
   });
 
+  availableStatusSig = computed(() => {
+    return this.gesuchStore
+      ?.cockpitViewSig()
+      ?.gesuche?.entries?.reduce<
+        Gesuchstatus[]
+      >((acc, entry) => (acc.includes(entry.status) ? acc : [...acc, entry.status]), []);
+  });
+
   filterFormChangedSig = toSignal(
     this.filterForm.valueChanges.pipe(debounceTime(INPUT_DELAY)),
   );
@@ -239,12 +261,15 @@ export class SachbearbeitungAppFeatureCockpitComponent
     this.filterStartEndForm.valueChanges.pipe(
       distinctUntilChanged(
         (a, b) =>
+          // Only emit if both fields are defined or both are undefined
+          // otherwise the list will update on first range picker interaction
           isDefined(b.letzteAktivitaetFrom) ===
             isDefined(b.letzteAktivitaetTo) && a === b,
       ),
       debounceTime(INPUT_DELAY),
     ),
   );
+
   gesucheDataSourceSig = computed(() => {
     const gesuche = this.gesuchStore?.cockpitViewSig()?.gesuche?.entries?.map(
       (entry) =>
@@ -259,7 +284,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
           status: entry.status,
           bearbeiter: entry.bearbeiter,
           letzteAktivitaet: entry.letzteAktivitaet,
-        }) satisfies Record<CockpitKeys, unknown> & {
+        }) satisfies Record<DashboardEntryFields, unknown> & {
           id: string;
           trancheId: string;
         },
@@ -269,34 +294,43 @@ export class SachbearbeitungAppFeatureCockpitComponent
     return dataSource;
   });
 
-  sortData(event: Sort) {
-    const query: Pick<
-      GesuchServiceGetGesucheSbRequestParams,
-      'sortColumn' | 'sortOrder'
-    > = {
-      sortColumn: event.active as SbDashboardColumn,
-      sortOrder: sortMap[event.direction],
-    };
-
-    this.router.navigate(['.'], {
-      queryParams: query,
-      queryParamsHandling: 'merge',
-      replaceUrl: true,
-    });
-  }
-
   constructor() {
+    // Handle the case where the page is higher than the total number of pages
+    effect(
+      () => {
+        const { page, pageSize } = this.getInputs();
+        const totalEntries =
+          this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
+
+        if (
+          page &&
+          pageSize &&
+          totalEntries &&
+          page * pageSize > totalEntries
+        ) {
+          this.router.navigate(['.'], {
+            queryParams: {
+              page: Math.ceil(totalEntries / pageSize) - 1,
+            },
+            queryParamsHandling: 'merge',
+            replaceUrl: true,
+          });
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
+    // Handle normal filter form control changes
     effect(
       () => {
         this.filterFormChangedSig();
         const formValue = this.filterForm.getRawValue();
-        const query: Pick<
-          GesuchServiceGetGesucheSbRequestParams,
-          CockpitFormKeys
-        > = {
+        const query = createQuery({
           ...formValue,
-          piaGeburtsdatum: formValue.piaGeburtsdatum?.toISOString(),
-        };
+          piaGeburtsdatum: formValue.piaGeburtsdatum
+            ? toBackendLocalDate(formValue.piaGeburtsdatum)
+            : undefined,
+        });
 
         this.router.navigate(['.'], {
           queryParams: makeEmptyStringPropertiesNull(query),
@@ -308,21 +342,22 @@ export class SachbearbeitungAppFeatureCockpitComponent
         allowSignalWrites: true,
       },
     );
+
+    // Handle start-end filter form control changes seperately
     effect(
       () => {
         this.filterStartEndFormChangedSig();
         const formValue = this.filterStartEndForm.getRawValue();
-        const query: Pick<
-          GesuchServiceGetGesucheSbRequestParams,
-          CockpitFormKeys
-        > = {
+        const query = createQuery({
           letzteAktivitaetFrom:
-            formValue.letzteAktivitaetTo &&
-            formValue.letzteAktivitaetFrom?.toISOString(),
+            formValue.letzteAktivitaetTo && formValue.letzteAktivitaetFrom
+              ? toBackendLocalDate(formValue.letzteAktivitaetFrom)
+              : undefined,
           letzteAktivitaetTo:
-            formValue.letzteAktivitaetFrom &&
-            formValue.letzteAktivitaetTo?.toISOString(),
-        };
+            formValue.letzteAktivitaetFrom && formValue.letzteAktivitaetTo
+              ? toBackendLocalDate(formValue.letzteAktivitaetTo)
+              : undefined,
+        });
 
         this.router.navigate(['.'], {
           queryParams: makeEmptyStringPropertiesNull(query),
@@ -335,6 +370,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       },
     );
 
+    // Handle the quick filter form control changes (show / getGesucheSBQueryType)
     const quickFilterChanged = toSignal(
       this.quickFilterForm.controls.query.valueChanges,
     );
@@ -355,10 +391,18 @@ export class SachbearbeitungAppFeatureCockpitComponent
       { allowSignalWrites: true },
     );
 
+    // When the route param inputs change, load the gesuche
     effect(
       () => {
-        const { query, filter, startEndFilter, sortColumn, sortOrder } =
-          this.getInputs();
+        const {
+          query,
+          filter,
+          startEndFilter,
+          sortColumn,
+          sortOrder,
+          page,
+          pageSize,
+        } = this.getInputs();
 
         this.gesuchStore.loadGesuche$({
           getGesucheSBQueryType: query,
@@ -366,15 +410,18 @@ export class SachbearbeitungAppFeatureCockpitComponent
           ...startEndFilter,
           sortColumn,
           sortOrder,
-          page: 0,
-          pageSize: 50,
+          page: page ?? 0,
+          pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
         });
       },
       { allowSignalWrites: true },
     );
   }
 
-  getInputs() {
+  /**
+   * Bundle all route param inputs into an object
+   */
+  private getInputs() {
     const query = this.showViewSig();
     const filter = {
       fallNummer: this.fallNummer(),
@@ -391,6 +438,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
     };
     const sortColumn = this.sortColumn();
     const sortOrder = this.sortOrder();
+    const page = this.page();
+    const pageSize = this.pageSize();
 
     return {
       query,
@@ -398,12 +447,38 @@ export class SachbearbeitungAppFeatureCockpitComponent
       startEndFilter,
       sortColumn,
       sortOrder,
+      page,
+      pageSize,
     };
+  }
+
+  sortData(event: Sort) {
+    this.router.navigate(['.'], {
+      queryParams: createQuery({
+        // display column names are set to the enum values, so this is safe to cast
+        sortColumn: event.active as SbDashboardColumn,
+        sortOrder: sortMap[event.direction],
+      }),
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
+  paginate(event: PageEvent) {
+    this.router.navigate(['.'], {
+      queryParams: createQuery({
+        page: event.pageIndex,
+        pageSize: event.pageSize,
+      }),
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 
   ngOnInit() {
     const { query, filter, startEndFilter, sortColumn, sortOrder } =
       this.getInputs();
+
     this.filterForm.reset({
       ...filter,
       piaGeburtsdatum: parseDate(filter.piaGeburtsdatum ?? ''),
@@ -416,6 +491,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       letzteAktivitaetTo: parseDate(startEndFilter.letzteAktivitaetTo ?? ''),
     });
     this.quickFilterForm.reset({ query });
+
     if (sortColumn && sortOrder) {
       this.sortSig().sort({
         id: sortColumn,
@@ -480,3 +556,22 @@ const parseDate = (date: string | undefined): Date | undefined => {
   }
   return toDate(date);
 };
+
+const createQuery = <T extends Partial<GesuchServiceGetGesucheSbRequestParams>>(
+  value: T,
+) => {
+  return value;
+};
+
+const restrictNumberParam =
+  (restriction: { max: number; min: number }) =>
+  (value: number | undefined) => {
+    if (!isDefined(value)) {
+      return undefined;
+    }
+    return +value > restriction.max
+      ? restriction.max
+      : +value < restriction.min
+        ? restriction.min
+        : +value;
+  };

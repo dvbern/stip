@@ -51,9 +51,6 @@
                 data-testid="cockpit-table"
                 mat-table
                 matSort
-                matSortActive="fall"
-                matSortDirection="desc"
-                matSortStart="desc"
                 (matSortChange)="sortData($event)"
                 tabindex="0"
               >
@@ -66,7 +63,7 @@
                 <ng-container matColumnDef="FALLNUMMER">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.fall' | translate }}
-                    <div class="d-flex">
+                    <div class="d-flex position-relative">
                       <mat-form-field>
                         <input
                           matInput
@@ -116,7 +113,7 @@
                 <ng-container matColumnDef="PIA_NACHNAME">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.nachname' | translate }}
-                    <div class="d-flex">
+                    <div class="d-flex position-relative">
                       <mat-form-field>
                         <input
                           class="w-100"
@@ -140,7 +137,7 @@
                 <ng-container matColumnDef="PIA_VORNAME">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.vorname' | translate }}
-                    <div class="d-flex">
+                    <div class="d-flex position-relative">
                       <mat-form-field>
                         <input class="w-100" matInput formControlName="piaVorname" (click)="$event.stopPropagation()" />
                       </mat-form-field>
@@ -166,7 +163,7 @@
                     example="01.01.2000"
                   >
                     {{ 'sachbearbeitung-app.cockpit.table.geburtsdatum' | translate }}
-                    <div class="d-flex">
+                    <div class="d-flex position-relative">
                       <mat-form-field>
                         <input
                           class="w-100"
@@ -227,7 +224,7 @@
                 <ng-container matColumnDef="BEARBEITER">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.bearbeiter' | translate }}
-                    <div class="d-flex">
+                    <div class="d-flex position-relative">
                       <mat-form-field>
                         <input class="w-100" matInput formControlName="bearbeiter" (click)="$event.stopPropagation()" />
                       </mat-form-field>
@@ -246,7 +243,7 @@
                 <ng-container matColumnDef="LETZTE_AKTIVITAET">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header [start]="'desc'" class="filtered text-nowrap">
                     {{ 'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate }}
-                    <div class="d-flex">
+                    <div class="d-flex position-relative">
                       <mat-form-field>
                         <input
                           class="range"
@@ -317,7 +314,14 @@
                 ></tr>
               </table>
 
-              <mat-paginator #gesuchePaginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+              <mat-paginator
+                showFirstLastButtons
+                [pageSizeOptions]="pageSizes"
+                [pageSize]="pageSize() ?? defaultPageSize"
+                [pageIndex]="page() ?? 0"
+                [length]="gesuchStore.cockpitViewSig().gesuche?.totalEntries"
+                (page)="paginate($event)"
+              ></mat-paginator>
             </div>
             @if (gesuchStore.cockpitViewSig().loading) {
               <dv-shared-ui-loading
