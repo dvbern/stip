@@ -60,6 +60,7 @@ import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import ch.dvbern.stip.generated.dto.GsDashboardDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -69,6 +70,7 @@ import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -95,6 +97,7 @@ public class GesuchService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
     private final GesuchNummerService gesuchNummerService;
+    private final GsDashboardMapper gsDashboardMapper;
     private final ConfigService configService;
 
     @Transactional
@@ -318,6 +321,34 @@ public class GesuchService {
         return gesuchRepository.findForGs(benutzer.getId())
             .map(gesuchMapperUtil::mapWithNewestTranche)
             .toList();
+    }
+
+    public List<GsDashboardDto> findGsDashboard() {
+        List<GsDashboardDto> gsDashboardDtos = new ArrayList<>();
+        final var benutzer = benutzerService.getCurrentBenutzer();
+        final var gesuche = gesuchRepository.findForGs(benutzer.getId()).toList();
+
+        for (var gesuch : gesuche) {
+            final var gesuchTranchen = gesuchTrancheService.getAllTranchenForGesuch(gesuch.getId());
+
+            final var offeneAenderung = gesuchTranchen.stream()
+                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
+                    && tranche.getStatus().equals(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+                .findFirst().orElse(null);
+
+            final var missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()
+                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE))
+                .map(tranche -> ImmutablePair.of(
+                    tranche.getId(),
+                    gesuchTrancheService.getRequiredDokumentTypes(tranche.getId()).size()
+                ))
+                .filter(pair -> pair.getRight() > 0)
+                .findFirst();
+
+            gsDashboardDtos.add(gsDashboardMapper.toDto(gesuch, offeneAenderung, missingDocumentsTrancheIdAndCount));
+        }
+
+        return gsDashboardDtos;
     }
 
     @Transactional

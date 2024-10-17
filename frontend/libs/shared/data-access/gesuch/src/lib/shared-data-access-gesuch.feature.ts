@@ -12,6 +12,7 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
+  GsDashboard,
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SteuerdatenTyp,
@@ -31,6 +32,7 @@ export interface State {
   gesuchFormular: SharedModelGesuchFormular | null;
   isEditingTranche: boolean | null;
   gesuchs: SharedModelGesuch[];
+  gsDashboard: GsDashboard[];
   cache: {
     gesuch: SharedModelGesuch | null;
     gesuchId: string | null;
@@ -47,6 +49,7 @@ const initialState: State = {
   gesuchFormular: null,
   isEditingTranche: null,
   gesuchs: [],
+  gsDashboard: [],
   cache: {
     gesuch: null,
     gesuchId: null,
@@ -146,6 +149,16 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state, { gesuchs }): State => ({
         ...state,
         gesuchs,
+        loading: false,
+        error: undefined,
+      }),
+    ),
+
+    on(
+      SharedDataAccessGesuchEvents.gsDashboardLoadedSuccess,
+      (state, { gsDashboard }): State => ({
+        ...state,
+        gsDashboard,
         loading: false,
         error: undefined,
       }),

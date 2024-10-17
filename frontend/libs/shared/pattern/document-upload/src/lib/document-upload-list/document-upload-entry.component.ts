@@ -15,7 +15,7 @@ import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, filter, map, switchMap } from 'rxjs';
 
-import { DocumentView, UploadView } from '@dv/shared/model/dokument';
+import { DokumentView, UploadView } from '@dv/shared/model/dokument';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { FilesizePipe } from '@dv/shared/ui/filesize-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -37,7 +37,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 })
 export class SharedPatternDocumentUploadEntryComponent {
   uploadViewSig = input.required<UploadView>();
-  documentViewSig = input.required<DocumentView>();
+  documentViewSig = input.required<DokumentView>();
   loadingSig = input.required<boolean>();
   downloadLinkSig = computed(() => {
     const document = this.documentViewSig();

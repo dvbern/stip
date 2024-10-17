@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
+import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkiverse.antivirus.runtime.AntivirusScanResult;
 import io.smallrye.mutiny.Uni;
@@ -64,6 +65,7 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 @RequiredArgsConstructor
 public class GesuchDokumentService {
     private static final String GESUCH_DOKUMENT_PATH = "gesuch/";
+    private final GesuchDokumentMapper gesuchDokumentMapper;
     private final DokumentMapper dokumentMapper;
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
@@ -106,13 +108,11 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public List<DokumentDto> findGesuchDokumenteForTyp(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
-        GesuchDokument gesuchDokument =
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp).orElse(null);
-        if (gesuchDokument == null) {
-            return new ArrayList<>();
-        }
-        return gesuchDokument.getDokumente().stream().map(dokumentMapper::toDto).toList();
+    public NullableGesuchDokumentDto findGesuchDokumentForTyp(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+        final var gesuchDokument =
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp);
+        final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
+        return new NullableGesuchDokumentDto(dto);
     }
 
     @Transactional

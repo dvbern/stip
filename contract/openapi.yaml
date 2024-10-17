@@ -100,6 +100,27 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesucheGs
       summary: Returns gesuche filtered by gs
+  /gesuch/benutzer/me/gs-dashboard:
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GsDashboard'
+          description: Returns gesuche for dashboard filtered by gs
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGsDashboard
+      summary: Returns gesuche for dashboard filtered by gs
   /gesuch/status/in-bearbeitung/{gesuchId}:
     post:
       tags:
@@ -204,7 +225,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToVersendet
-  '/dokument/{gesuchTrancheId}/{dokumentTyp}':
+  '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
         - Dokument
@@ -224,9 +245,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Dokument'
+                $ref: '#/components/schemas/NullableGesuchDokument'
           description: Returns an Array of Dokumente for a given GesuchTrancheId and a DokumentTyp
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -236,7 +255,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getDokumenteForTyp
+      operationId: getGesuchDokumenteForTyp
       summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
     post:
       requestBody:
@@ -2103,6 +2122,11 @@ components:
           items:
             type: string
     GesuchDokument:
+      required:
+        - id
+        - dokumentTyp
+        - dokumente
+        - status
       type: object
       properties:
         id:
@@ -2428,6 +2452,31 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
+    GsDashboard:
+      required:
+        - id
+        - gesuchsperiode
+        - gesuchStatus
+      type: object
+      properties:
+        gesuchsperiode:
+          $ref: '#/components/schemas/Gesuchsperiode'
+        gesuchStatus:
+          $ref: '#/components/schemas/Gesuchstatus'
+        id:
+          $ref: '#/components/schemas/UUID'
+        offeneAenderung:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
+        missingDocuments:
+          required:
+            - trancheId
+            - count
+          type: object
+          properties:
+            trancheId:
+              $ref: '#/components/schemas/UUID'
+            count:
+              type: integer
     GesuchWithChanges:
       allOf:
         - $ref: '#/components/schemas/Gesuch'
@@ -3070,6 +3119,11 @@ components:
           $ref: '#/components/schemas/GueltigkeitStatus'
       allOf:
         - $ref: '#/components/schemas/GesuchsperiodeDaten'
+    NullableGesuchDokument:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/GesuchDokument'
     NullableGesuchsperiodeWithDaten:
       properties:
         value:

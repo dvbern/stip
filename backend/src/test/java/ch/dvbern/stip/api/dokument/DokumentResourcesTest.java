@@ -16,7 +16,9 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
@@ -119,18 +121,20 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(4)
     void test_list_and_read_dokument_for_gesuch() throws IOException {
-        var dokumentDtoList = dokumentApiSpec.getDokumenteForTyp()
+        var dokumentDtoList = dokumentApiSpec.getGesuchDokumenteForTyp()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
-            .as(DokumentDtoSpec[].class);
+            .as(NullableGesuchDokumentDtoSpec.class)
+            .getValue()
+            .getDokumente();
 
-        assertThat(dokumentDtoList.length, is(1));
+        assertThat(dokumentDtoList.size(), is(1));
 
-        dokumentId = dokumentDtoList[0].getId();
+        dokumentId = dokumentDtoList.get(0).getId();
 
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)

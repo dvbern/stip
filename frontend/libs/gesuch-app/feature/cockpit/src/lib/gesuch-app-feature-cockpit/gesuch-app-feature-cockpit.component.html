@@ -66,9 +66,21 @@
                           <span class="mt-4 fw-normal small">{{
                             'gesuch-app.cockpit.periode.status.titel' | translate
                           }}</span>
-                          <span class="fw-medium">{{
-                            'shared.gesuch.status.contract.' + periode.gesuch.gesuchStatus | translate
-                          }}</span>
+                          <span class="fw-medium">
+                            @if (
+                              periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' &&
+                                periode.gesuch.missingDocuments?.count;
+                              as count
+                            ) {
+                              @if (count > 1) {
+                                {{ 'gesuch-app.cockpit.periode.status.missingDocuments' | translate: { count } }}
+                              } @else {
+                                {{ 'gesuch-app.cockpit.periode.status.missingDocument' | translate }}
+                              }
+                            } @else {
+                              {{ 'shared.gesuch.status.contract.' + periode.gesuch.gesuchStatus | translate }}
+                            }
+                          </span>
                           <ng-container
                             *ngTemplateOutlet="einreichefrist; context: { periode: periode }"
                           ></ng-container>
@@ -84,46 +96,55 @@
                             <span>{{ 'gesuch-app.gesuch.delete' | translate }}</span>
                           </button>
                         }
-                        <a
-                          class="btn btn-primary w-100"
-                          data-testid="cockpit-gesuch-edit"
-                          [routerLink]="['/gesuch', periode.gesuch.id]"
-                        >
-                          {{ 'gesuch-app.cockpit.gesuch.edit' | translate }}
-                        </a>
+                        @if (
+                          periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' &&
+                            periode.gesuch.missingDocuments?.trancheId;
+                          as trancheId
+                        ) {
+                          <a
+                            class="btn btn-primary mt-3 w-100"
+                            data-testid="cockpit-gesuch-upload-missing-documents"
+                            [routerLink]="['/gesuch', 'dokumente', periode.gesuch.id, 'tranche', trancheId]"
+                          >
+                            {{ 'gesuch-app.cockpit.gesuch.uploadMissingDocuments' | translate }}
+                          </a>
+                        } @else {
+                          <a
+                            class="btn btn-primary mt-3 w-100"
+                            data-testid="cockpit-gesuch-edit"
+                            [routerLink]="['/gesuch', periode.gesuch.id]"
+                          >
+                            {{ 'gesuch-app.cockpit.gesuch.edit' | translate }}
+                          </a>
+                        }
                       }
                     </div>
                     @if (periode.gesuch) {
                       <div class="col-md d-flex">
                         @if (periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
-                          @let aenderung = gesuchAenderungStore.openAenderungViewSig();
-                          @if (aenderung) {
-                            @if (aenderung.loading) {
-                              <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
-                            } @else if (aenderung.openAenderung) {
-                              <div class="divider me-4"></div>
-                              <dv-gesuch-app-ui-aenderungs-entry
-                                class="d-flex flex-column gap-4 w-100"
-                                [tranche]="aenderung.openAenderung"
-                                [gesuchId]="periode.gesuch.id"
-                                (deleteAenderung)="deleteAenderung($event, periode.gesuch.id)"
-                              ></dv-gesuch-app-ui-aenderungs-entry>
-                            } @else {
-                              <button
-                                type="button"
-                                class="btn btn-outline-primary mt-3 w-100 align-self-end"
-                                data-testid="cockpit-gesuch-aenderung-create"
-                                (click)="
-                                  aenderungMelden(
-                                    periode.gesuch.id,
-                                    periode.gesuchsperiodeStart,
-                                    periode.gesuchsperiodeStopp
-                                  )
-                                "
-                              >
-                                {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
-                              </button>
-                            }
+                          @if (periode.gesuch.offeneAenderung; as aenderung) {
+                            <div class="divider me-4"></div>
+                            <dv-gesuch-app-ui-aenderungs-entry
+                              class="d-flex flex-column gap-4 w-100"
+                              [tranche]="aenderung"
+                              [gesuchId]="periode.gesuch.id"
+                              (deleteAenderung)="deleteAenderung($event)"
+                            ></dv-gesuch-app-ui-aenderungs-entry>
+                          } @else {
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary mt-3 w-100 align-self-end"
+                              data-testid="cockpit-gesuch-aenderung-create"
+                              (click)="
+                                aenderungMelden(
+                                  periode.gesuch.id,
+                                  periode.gesuchsperiodeStart,
+                                  periode.gesuchsperiodeStopp
+                                )
+                              "
+                            >
+                              {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
+                            </button>
                           }
                         } @else {
                           <!-- existing Gesuch (right pic) -->

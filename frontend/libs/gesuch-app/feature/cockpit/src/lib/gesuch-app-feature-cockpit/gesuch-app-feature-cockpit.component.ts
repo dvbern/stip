@@ -33,7 +33,6 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
-import { isSuccess } from '@dv/shared/util/remote-data';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
@@ -72,7 +71,6 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
-  getStatus = this.gesuchAenderungStore.createGesuchAenderung$;
   @Input({ required: true }) tranche?: GesuchTrancheSlim;
 
   constructor() {
@@ -85,22 +83,13 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
       },
       { allowSignalWrites: true },
     );
-    effect(
-      () => {
-        const aenderung = this.gesuchAenderungStore.cachedGesuchAenderung();
-        if (isSuccess(aenderung)) {
-          this.gesuchAenderungStore.resetCachedGesuchAenderung();
-        }
-      },
-      { allowSignalWrites: true },
-    );
   }
 
   ngOnInit() {
     this.fallStore.loadCurrentFall$();
     this.notificationStore.loadNotifications$();
     this.store.dispatch(GesuchAppEventCockpit.init());
-    this.store.dispatch(SharedDataAccessGesuchEvents.init());
+    this.store.dispatch(SharedDataAccessGesuchEvents.loadGsDashboard());
     this.store.dispatch(sharedDataAccessGesuchsperiodeEvents.init());
   }
 
@@ -165,7 +154,7 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
       });
   }
 
-  deleteAenderung(aenderungId: string, gesuchId: string) {
+  deleteAenderung(aenderungId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'gesuch-app.aenderungs-entry.delete.dialog.title',
       message: 'gesuch-app.aenderungs-entry.delete.dialog.message',
@@ -177,7 +166,6 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
         if (result) {
           this.gesuchAenderungStore.deleteGesuchAenderung$({
             aenderungId,
-            gesuchId,
           });
         }
       });

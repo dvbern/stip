@@ -9,16 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Dokumentstatus } from './dokumentstatus';
-import { DokumentTyp } from './dokumentTyp';
-import { Dokument } from './dokument';
+import { GesuchDokument } from './gesuchDokument';
 
-export interface GesuchDokument { 
-    id: string;
-    dokumentTyp: DokumentTyp;
-    dokumente: Array<Dokument>;
-    status: Dokumentstatus;
+export interface NullableGesuchDokument { 
+    value?: GesuchDokument;
 }
-
-
 
