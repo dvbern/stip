@@ -62,7 +62,7 @@ describe('prepareGesuchsperiode', () => {
   it.each([
     createHerbstData({
       currentDate: '2024-09-01',
-      einreichefristDays: 120,
+      einreichefristDays: 121,
       reduzierterBeitrag: false,
       einreichefristAbgelaufen: false,
       erfassbar: true,
