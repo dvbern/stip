@@ -17,7 +17,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { NgbOffcanvas, NgbOffcanvasModule } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -39,7 +38,6 @@ import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-select
     TranslateModule,
     RouterOutlet,
     RouterLink,
-    NgbOffcanvasModule,
     MatMenuModule,
     MatButtonModule,
     SharedUiLanguageSelectorComponent,
@@ -60,7 +58,7 @@ export class SharedPatternAppHeaderComponent implements OnChanges {
   protected readonly Breakpoints = Breakpoints;
   protected breakpointObserver = inject(BreakpointObserver);
   private oauthService = inject(OAuthService);
-  private offCanvasService = inject(NgbOffcanvas);
+  // private offCanvasService = inject(NgbOffcanvas);
   private store = inject(Store);
   private cd = inject(ChangeDetectorRef);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
@@ -86,12 +84,12 @@ export class SharedPatternAppHeaderComponent implements OnChanges {
   }
 
   openMenu() {
-    this.offCanvasService.open(this.menu, { position: 'end', scroll: true });
+    // this.offCanvasService.open(this.menu, { position: 'end', scroll: true });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['closeMenu']) {
-      this.offCanvasService.dismiss(changes['closeMenu'].currentValue);
+      // this.offCanvasService.dismiss(changes['closeMenu'].currentValue);
     }
   }
 

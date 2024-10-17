@@ -602,12 +602,12 @@
   } @else {
     <div class="row">
       <div class="col-12 col-xl-8 my-3">
-        <ngb-alert type="info" [dismissible]="false" data-testid="gesuch-form-einnahmenkosten-data-incomplete-warning"
+        <dv-shared-ui-info-container data-testid="gesuch-form-einnahmenkosten-data-incomplete-warning"
           >{{ 'shared.form.einnahmenkosten.top.incomplete' | translate }}
           @for (schritt of formStateSig().schritte; track trackByIndex($index); let last = $last; let first = $first) {
             <span>{{ (last && !first ? ' und ' : !first ? ', ' : '') + '"' + (schritt | translate) }}"</span>
           }
-        </ngb-alert>
+        </dv-shared-ui-info-container>
       </div>
     </div>
   }

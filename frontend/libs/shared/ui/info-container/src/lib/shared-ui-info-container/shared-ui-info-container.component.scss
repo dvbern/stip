@@ -1,0 +1,9 @@
+:host {
+  display: flex;
+
+  margin-bottom: 1rem;
+  padding: 1rem;
+  color: var(--dv-alert-color);
+  background-color: var(--dv-alert-bg);
+  border: var(--dv-border-width) solid var(--dv-alert-border-color);
+}

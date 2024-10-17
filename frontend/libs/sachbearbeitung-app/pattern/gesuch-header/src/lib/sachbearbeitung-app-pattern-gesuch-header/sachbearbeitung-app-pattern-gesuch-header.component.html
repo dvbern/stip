@@ -83,7 +83,8 @@
                   | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: $index + 1 }
               }}
               -
-              {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }}
+              {{ aenderung.status }}
+              <!-- {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }} -->
             </span>
           </a>
         }

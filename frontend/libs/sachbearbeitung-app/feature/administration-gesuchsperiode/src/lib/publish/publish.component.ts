@@ -7,12 +7,12 @@ import {
   input,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, filter, switchMap } from 'rxjs';
 
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
+import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { RemoteData } from '@dv/shared/util/remote-data';
@@ -23,7 +23,7 @@ import { RemoteData } from '@dv/shared/util/remote-data';
   standalone: true,
   imports: [
     TranslateModule,
-    NgbAlertModule,
+    SharedUiInfoContainerComponent,
     SharedUiIconChipComponent,
     SharedUiRdIsPendingPipe,
     SharedUiLoadingComponent,

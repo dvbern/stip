@@ -264,12 +264,12 @@
         <!-- Info Konkubinat -->
         @if (form.get('zivilstand')?.value === Zivilstand.LEDIG) {
           <div class="col-12 col-md-6 col-xl-4">
-            <ngb-alert type="info" [dismissible]="false">
+            <dv-shared-ui-info-container>
               <div class="d-flex gap-3">
                 <span class="material-symbols-rounded text-info"> info </span>
                 <span>{{ 'shared.form.person.marital-status.ledig.info' | translate }}</span>
               </div>
-            </ngb-alert>
+            </dv-shared-ui-info-container>
           </div>
         }
       </div>
@@ -389,12 +389,12 @@
 
           @if (showEinreiseDatumWarningSig()) {
             <div class="col-12 col-md-6 col-xl-4">
-              <ngb-alert type="warning" [dismissible]="false">
+              <dv-shared-ui-info-container [type]="'warning'">
                 <div class="d-flex gap-3">
                   <span class="material-symbols-rounded text-warning">warning</span>
                   <span>{{ 'shared.form.person.einreisedatum.info' | translate }}</span>
                 </div>
-              </ngb-alert>
+              </dv-shared-ui-info-container>
             </div>
           }
         </div>
