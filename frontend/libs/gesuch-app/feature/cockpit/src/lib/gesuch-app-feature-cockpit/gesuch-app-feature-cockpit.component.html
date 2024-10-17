@@ -155,33 +155,57 @@
 
               <ng-template #einreichefrist>
                 @if (periode.gesuch && periode.einreichefristDays !== null) {
-                  @if (periode.einreichefristDays > 1) {
-                    <span
-                      class="mt-4 fw-normal small"
-                      [innerHTML]="
-                        'gesuch-app.cockpit.periode.einreichfrist.remaining'
-                          | translate: { days: periode.einreichefristDays }
-                      "
-                    ></span>
-                  } @else if (periode.einreichefristDays === 1) {
-                    <span
-                      class="mt-4 fw-normal small"
-                      [innerHTML]="'gesuch-app.cockpit.periode.einreichfrist.1remaining' | translate"
-                    ></span>
+                  @if (!periode.einreichefristAbgelaufen) {
+                    @if (periode.reduzierterBeitrag) {
+                      <span class="mt-4 fw-medium">
+                        {{ 'gesuch-app.cockpit.periode.einreichfrist.reduziert' | translate }}
+                      </span>
+                    }
+                    @if (periode.einreichefristDays > 1) {
+                      <span
+                        class="mt-4 fw-normal small"
+                        [innerHTML]="
+                          'gesuch-app.cockpit.periode.einreichfrist.remaining' +
+                            (periode.reduzierterBeitrag ? '.reduziert' : '')
+                            | translate: { days: periode.einreichefristDays }
+                        "
+                      ></span>
+                    } @else if (periode.einreichefristDays === 1) {
+                      <span
+                        class="mt-4 fw-normal small"
+                        [innerHTML]="
+                          'gesuch-app.cockpit.periode.einreichfrist.1remaining' +
+                            (periode.reduzierterBeitrag ? '.reduziert' : '') | translate
+                        "
+                      ></span>
+                    } @else {
+                      <span
+                        class="mt-4 fw-normal small"
+                        [innerHTML]="
+                          'gesuch-app.cockpit.periode.einreichfrist.0remaining' +
+                            (periode.reduzierterBeitrag ? '.reduziert' : '') | translate
+                        "
+                      ></span>
+                    }
+                    <span class="mt-4 fw-normal small">{{
+                      'gesuch-app.cockpit.periode.einreichfrist.text' | translate
+                    }}</span>
+                    @if (!periode.einreichefristAbgelaufen) {
+                      <span class="fw-medium">
+                        {{
+                          (periode.reduzierterBeitrag ? periode.einreichefristReduziert : periode.einreichefristNormal)
+                            | date: 'dd.MM.yyyy'
+                        }}
+                      </span>
+                    }
                   } @else {
-                    <span
-                      class="mt-4 fw-normal small"
-                      [innerHTML]="'gesuch-app.cockpit.periode.einreichfrist.0remaining' | translate"
-                    ></span>
+                    <span class="mt-4 fw-medium">
+                      {{ 'gesuch-app.cockpit.periode.einreichfrist.abgelaufen.warning' | translate }}
+                    </span>
+                    <span class="mt-4">{{
+                      'gesuch-app.cockpit.periode.einreichfrist.abgelaufen.text' | translate
+                    }}</span>
                   }
-                }
-                <span class="mt-4 fw-normal small">{{
-                  'gesuch-app.cockpit.periode.einreichfrist.text' | translate
-                }}</span>
-                @if (periode.einreichefristReduziert) {
-                  <span class="fw-medium">
-                    {{ periode.einreichefristReduziert | date: 'dd.MM.yyyy' }}
-                  </span>
                 }
               </ng-template>
             }

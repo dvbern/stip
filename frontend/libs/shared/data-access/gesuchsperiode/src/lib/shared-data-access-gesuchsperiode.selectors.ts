@@ -1,6 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import {
   differenceInDays,
+  endOfDay,
   format,
   getMonth,
   isAfter,
@@ -35,13 +36,17 @@ type GesuchsperiodeDateProperties = Pick<
 export const prepareGesuchsperiode = <T extends GesuchsperiodeDateProperties>(
   periode: T,
 ) => {
-  const reduzierterBeitrag =
-    new Date() > new Date(periode.einreichefristNormal);
+  const reduzierterBeitrag = isAfter(
+    new Date(),
+    endOfDay(new Date(periode.einreichefristNormal)),
+  );
   const einreichefristDays = differenceInDays(
-    new Date(
-      reduzierterBeitrag
-        ? periode.einreichefristReduziert
-        : periode.einreichefristNormal,
+    endOfDay(
+      new Date(
+        reduzierterBeitrag
+          ? periode.einreichefristReduziert
+          : periode.einreichefristNormal,
+      ),
     ),
     new Date(),
   );
@@ -59,11 +64,11 @@ export const prepareGesuchsperiode = <T extends GesuchsperiodeDateProperties>(
     reduzierterBeitrag,
     einreichefristAbgelaufen: isAfter(
       new Date(),
-      new Date(periode.einreichefristReduziert),
+      endOfDay(new Date(periode.einreichefristReduziert)),
     ),
     erfassbar: isWithinInterval(new Date(), {
       start: new Date(periode.aufschaltterminStart),
-      end: new Date(periode.aufschaltterminStopp),
+      end: endOfDay(new Date(periode.aufschaltterminStopp)),
     }),
     einreichefristDays: einreichefristDays >= 0 ? einreichefristDays : null,
   };
