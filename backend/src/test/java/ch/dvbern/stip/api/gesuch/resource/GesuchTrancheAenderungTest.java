@@ -5,7 +5,6 @@ import java.util.Arrays;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
-import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -22,7 +21,6 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
@@ -50,10 +48,9 @@ class GesuchTrancheAenderungTest {
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+
     private  GesuchTrancheSlimDtoSpec[] gesuchtranchen;
     private GesuchDtoSpec gesuch;
-    @Inject
-    GesuchTrancheRepository gesuchTrancheRepository;
 
     @Test
     @TestAsGesuchsteller
@@ -128,6 +125,8 @@ class GesuchTrancheAenderungTest {
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
             .as(GesuchTrancheSlimDtoSpec[].class);

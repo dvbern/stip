@@ -1,0 +1,13 @@
+:host {
+  .notifications {
+    display: grid;
+    grid-template-columns: auto;
+  }
+  .subgrid {
+    display: grid;
+    grid-column: span 3;
+    grid-template-columns: subgrid;
+    align-items: center;
+    border-radius: 0;
+  }
+}
