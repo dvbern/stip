@@ -35,17 +35,12 @@ public class NotificationService {
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = pia.getAnrede();
         final var nachname = pia.getNachname();
-        String msg = Templates.gesuchEingereichtDE(getAnredeText(anrede),nachname).render();
+        String msg = Templates.gesuchEingereichtDE(NotificationTemplateUtils.getAnredeText(anrede),nachname).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
 
-    private String getAnredeText(Anrede anrede){
-        switch (anrede){
-            case FRAU : return "Sehr geehrte Frau".concat(" ");
-            default : return "Sehr geehrter Herr".concat(" ");
-        }
-    }
+
 
     @Transactional(TxType.REQUIRES_NEW)
     public void deleteNotificationsForGesuch(final UUID gesuchId) {
