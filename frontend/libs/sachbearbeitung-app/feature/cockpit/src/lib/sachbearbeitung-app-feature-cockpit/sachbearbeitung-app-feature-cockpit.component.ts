@@ -81,7 +81,7 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 const PAGE_SIZES = [10, 20, 50];
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
-const INPUT_DELAY = 300;
+const INPUT_DELAY = 600;
 
 type AppendStartEnd<T extends string> = `${T}From` | `${T}To`;
 type DashboardEntry = Omit<SbDashboardGesuch, 'id' | 'gesuchTrancheId'>;
@@ -499,6 +499,9 @@ export class SachbearbeitungAppFeatureCockpitComponent
         disableClear: false,
       });
     }
+
+    // Enable validation from the beginning
+    this.filterForm.markAllAsTouched();
   }
 }
 

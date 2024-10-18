@@ -62,10 +62,13 @@
 
                 <ng-container matColumnDef="FALLNUMMER">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
-                    {{ 'sachbearbeitung-app.cockpit.table.fall' | translate }}
+                    <label class="pe-none" for="fallNummer">{{
+                      'sachbearbeitung-app.cockpit.table.fall' | translate
+                    }}</label>
                     <div class="d-flex position-relative">
                       <mat-form-field>
                         <input
+                          id="fallNummer"
                           matInput
                           class="w-100"
                           formControlName="fallNummer"
@@ -91,6 +94,7 @@
                     {{ 'sachbearbeitung-app.cockpit.table.typ' | translate }}
                     <mat-form-field class="d-flex">
                       <mat-select
+                        [aria-label]="'sachbearbeitung-app.cockpit.table.typ' | translate"
                         formControlName="typ"
                         (click)="$event.stopPropagation()"
                         class="fw-normal"
@@ -111,10 +115,13 @@
 
                 <ng-container matColumnDef="PIA_NACHNAME">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
-                    {{ 'sachbearbeitung-app.cockpit.table.nachname' | translate }}
+                    <label class="pe-none" for="piaNachname">{{
+                      'sachbearbeitung-app.cockpit.table.nachname' | translate
+                    }}</label>
                     <div class="d-flex position-relative">
                       <mat-form-field>
                         <input
+                          id="piaNachname"
                           class="w-100"
                           matInput
                           formControlName="piaNachname"
@@ -135,10 +142,18 @@
 
                 <ng-container matColumnDef="PIA_VORNAME">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
-                    {{ 'sachbearbeitung-app.cockpit.table.vorname' | translate }}
+                    <label class="pe-none" for="piaVorname">{{
+                      'sachbearbeitung-app.cockpit.table.vorname' | translate
+                    }}</label>
                     <div class="d-flex position-relative">
                       <mat-form-field>
-                        <input class="w-100" matInput formControlName="piaVorname" (click)="$event.stopPropagation()" />
+                        <input
+                          id="piaVorname"
+                          class="w-100"
+                          matInput
+                          formControlName="piaVorname"
+                          (click)="$event.stopPropagation()"
+                        />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="clear d-flex align-items-center position-absolute"
@@ -161,10 +176,13 @@
                     class="filtered text-nowrap"
                     example="01.01.2000"
                   >
-                    {{ 'sachbearbeitung-app.cockpit.table.geburtsdatum' | translate }}
+                    <label class="pe-none" for="piaGeburtsdatum">{{
+                      'sachbearbeitung-app.cockpit.table.geburtsdatum' | translate
+                    }}</label>
                     <div class="d-flex position-relative">
                       <mat-form-field>
                         <input
+                          id="piaGeburtsdatum"
                           class="w-100"
                           matInput
                           formControlName="piaGeburtsdatum"
@@ -201,6 +219,7 @@
                     {{ 'sachbearbeitung-app.cockpit.table.status' | translate }}
                     <mat-form-field>
                       <mat-select
+                        [aria-label]="'sachbearbeitung-app.cockpit.table.status' | translate"
                         formControlName="status"
                         (click)="$event.stopPropagation()"
                         class="fw-normal"
@@ -222,10 +241,18 @@
 
                 <ng-container matColumnDef="BEARBEITER">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
-                    {{ 'sachbearbeitung-app.cockpit.table.bearbeiter' | translate }}
+                    <label class="pe-none" for="bearbeiter">{{
+                      'sachbearbeitung-app.cockpit.table.bearbeiter' | translate
+                    }}</label>
                     <div class="d-flex position-relative">
                       <mat-form-field>
-                        <input class="w-100" matInput formControlName="bearbeiter" (click)="$event.stopPropagation()" />
+                        <input
+                          id="bearbeiter"
+                          class="w-100"
+                          matInput
+                          formControlName="bearbeiter"
+                          (click)="$event.stopPropagation()"
+                        />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
                         class="clear d-flex align-items-center position-absolute"
@@ -241,10 +268,13 @@
 
                 <ng-container matColumnDef="LETZTE_AKTIVITAET">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header [start]="'desc'" class="filtered text-nowrap">
-                    {{ 'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate }}
+                    <label class="pe-none" for="letzteAktivitaet">{{
+                      'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate
+                    }}</label>
                     <div class="d-flex position-relative">
                       <mat-form-field>
                         <input
+                          id="letzteAktivitaet"
                           class="range"
                           matInput
                           [value]="letzteAktivitaetRangeSig()"
