@@ -18,6 +18,7 @@ describe('selectSharedDataAccessGesuchsperiodesView', () => {
 describe('prepareGesuchsperiode', () => {
   const createHerbstData = (options: {
     currentDate: string;
+    einreichefristDays: number | null;
     reduzierterBeitrag: boolean;
     einreichefristAbgelaufen: boolean;
     erfassbar: boolean;
@@ -34,6 +35,7 @@ describe('prepareGesuchsperiode', () => {
   });
   const createFruehlingData = (options: {
     currentDate: string;
+    einreichefristDays: number | null;
     reduzierterBeitrag: boolean;
     einreichefristAbgelaufen: boolean;
     erfassbar: boolean;
@@ -60,30 +62,35 @@ describe('prepareGesuchsperiode', () => {
   it.each([
     createHerbstData({
       currentDate: '2024-09-01',
+      einreichefristDays: 121,
       reduzierterBeitrag: false,
       einreichefristAbgelaufen: false,
       erfassbar: true,
     }),
     createFruehlingData({
       currentDate: '2024-03-01',
+      einreichefristDays: 91,
       reduzierterBeitrag: false,
       einreichefristAbgelaufen: false,
       erfassbar: true,
     }),
     createHerbstData({
       currentDate: '2025-01-01',
+      einreichefristDays: 58,
       reduzierterBeitrag: true,
       einreichefristAbgelaufen: false,
       erfassbar: true,
     }),
     createFruehlingData({
       currentDate: '2024-10-01',
+      einreichefristDays: null,
       reduzierterBeitrag: true,
       einreichefristAbgelaufen: true,
       erfassbar: true,
     }),
     createHerbstData({
       currentDate: '2025-08-01',
+      einreichefristDays: null,
       reduzierterBeitrag: true,
       einreichefristAbgelaufen: true,
       erfassbar: false,
