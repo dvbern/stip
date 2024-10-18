@@ -3602,6 +3602,8 @@ components:
         - timestamp
         - userErstellt
       properties:
+        notificationText:
+          type: string
         notificationType:
           $ref: '#/components/schemas/NotificationType'
         gesuchId:
