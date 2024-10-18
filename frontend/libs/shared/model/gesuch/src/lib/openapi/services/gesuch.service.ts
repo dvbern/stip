@@ -107,7 +107,7 @@ export interface GesuchServiceGetGesucheSbRequestParams {
     bearbeiter?: string;
     letzteAktivitaetFrom?: string;
     letzteAktivitaetTo?: string;
-    typ?: GesuchTrancheTyp;
+    typ: GesuchTrancheTyp;
     page: number;
     pageSize: number;
     sortColumn?: SbDashboardColumn;
@@ -1334,6 +1334,9 @@ export class GesuchService {
         const letzteAktivitaetFrom = requestParameters.letzteAktivitaetFrom;
         const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
         const typ = requestParameters.typ;
+        if (typ === null || typ === undefined) {
+            throw new Error('Required parameter typ was null or undefined when calling getGesucheSb$.');
+        }
         const page = requestParameters.page;
         if (page === null || page === undefined) {
             throw new Error('Required parameter page was null or undefined when calling getGesucheSb$.');

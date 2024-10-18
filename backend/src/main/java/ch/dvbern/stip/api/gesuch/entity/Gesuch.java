@@ -100,6 +100,22 @@ public class Gesuch extends AbstractMandantEntity {
     @NotAudited
     private GesuchTranche latestGesuchTranche;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinFormula(value = """
+        (
+            SELECT gesuch_tranche.id
+            FROM gesuch_tranche gesuch_tranche
+            WHERE gesuch_tranche.gesuch_id = id
+                AND gesuch_tranche.typ = 'AENDERUNG'
+                AND gesuch_tranche.status = 'UEBERPRUEFEN'
+            ORDER BY gesuch_tranche.gueltig_bis DESC
+            LIMIT 1
+        )
+    """)
+    @Setter(AccessLevel.NONE)
+    @NotAudited
+    private GesuchTranche aenderungZuUeberpruefen;
+
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
             .filter(t -> t.getId().equals(id))

@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.generated.dto.SbDashboardGesuchDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class SbDashboardGesuchMapper {
-    public SbDashboardGesuchDto toDto(final GesuchTranche gesuchTranche) {
-        return toDto(gesuchTranche.getGesuch(), gesuchTranche);
+    public SbDashboardGesuchDto toDto(final Gesuch gesuch, final GesuchTrancheTyp typ) {
+        return switch (typ) {
+            case TRANCHE -> toDto(gesuch, gesuch.getLatestGesuchTranche());
+            case AENDERUNG -> toDto(gesuch, gesuch.getAenderungZuUeberpruefen().get());
+        };
     }
 
     SbDashboardGesuchDto toDto(final Gesuch gesuch, final GesuchTranche gesuchTranche) {

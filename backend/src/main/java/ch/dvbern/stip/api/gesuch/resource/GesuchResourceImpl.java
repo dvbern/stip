@@ -130,6 +130,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getGesucheSb(
         GetGesucheSBQueryType getGesucheSBQueryType,
+        GesuchTrancheTyp typ,
         Integer page,
         Integer pageSize,
         String fallNummer,
@@ -140,7 +141,6 @@ public class GesuchResourceImpl implements GesuchResource {
         String bearbeiter,
         LocalDate letzteAktivitaetFrom,
         LocalDate letzteAktivitaetTo,
-        GesuchTrancheTyp typ,
         SbDashboardColumn sortColumn,
         SortOrder sortOrder
     ) {

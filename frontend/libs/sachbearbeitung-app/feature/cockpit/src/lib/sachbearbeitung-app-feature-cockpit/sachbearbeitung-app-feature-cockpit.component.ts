@@ -425,7 +425,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
     const query = this.showViewSig();
     const filter = {
       fallNummer: this.fallNummer(),
-      typ: parseTyp(this.typ()),
+      typ: parseTyp(this.typ()) ?? 'TRANCHE',
       piaNachname: this.piaNachname(),
       piaVorname: this.piaVorname(),
       piaGeburtsdatum: this.piaGeburtsdatum(),
@@ -537,10 +537,11 @@ const makeEmptyStringPropertiesNull = <T extends object>(obj: T): T => {
 };
 
 const parseTyp = (typ: string | undefined): GesuchTrancheTyp | undefined => {
-  if (!typ || Object.keys(GesuchTrancheTyp).includes(typ)) {
-    return undefined;
+  if (typ && Object.keys(GesuchTrancheTyp).includes(typ)) {
+    return typ as GesuchTrancheTyp;
   }
-  return typ as GesuchTrancheTyp;
+
+  return undefined;
 };
 
 const parseStatus = (status: string | undefined): Gesuchstatus | undefined => {

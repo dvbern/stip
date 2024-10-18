@@ -5,7 +5,6 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
@@ -36,20 +35,20 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return query.stream();
     }
 
-    public JPAQuery<GesuchTranche> getFindAlleMeineQuery(final UUID benutzerId) {
+    public JPAQuery<Gesuch> getFindAlleMeineQuery(final UUID benutzerId) {
         return addMeineFilter(benutzerId, getFindAlleQuery());
     }
 
-    public JPAQuery<GesuchTranche> getFindAlleMeineBearbeitbarQuery(final UUID benutzerId) {
+    public JPAQuery<Gesuch> getFindAlleMeineBearbeitbarQuery(final UUID benutzerId) {
         return addMeineFilter(benutzerId, getFindAlleBearbeitbarQuery());
     }
 
-    public JPAQuery<GesuchTranche> getFindAlleQuery() {
+    public JPAQuery<Gesuch> getFindAlleQuery() {
         // TODO KSTIP-1587/ 1590: Implement Status Filter?
-        return new JPAQueryFactory(entityManager).selectFrom(QGesuchTranche.gesuchTranche);
+        return new JPAQueryFactory(entityManager).selectFrom(QGesuch.gesuch);
     }
 
-    public JPAQuery<GesuchTranche> getFindAlleBearbeitbarQuery() {
+    public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
         // TODO KSTIP-1587/ 1590: Implement Status Filter?
         final var query = getFindAlleQuery();
         return addStatusFilter(
@@ -59,20 +58,20 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         );
     }
 
-    private JPAQuery<GesuchTranche> addStatusFilter(
-        final JPAQuery<GesuchTranche> query,
+    private JPAQuery<Gesuch> addStatusFilter(
+        final JPAQuery<Gesuch> query,
         final Gesuchstatus... toExclude
     ) {
-        final var tranche = QGesuchTranche.gesuchTranche;
-        query.where(tranche.gesuch.gesuchStatus.notIn(toExclude));
+        final var gesuch = QGesuch.gesuch;
+        query.where(gesuch.gesuchStatus.notIn(toExclude));
         return query;
     }
 
-    private JPAQuery<GesuchTranche> addMeineFilter(final UUID benutzerId, final JPAQuery<GesuchTranche> query) {
-        final var tranche = QGesuchTranche.gesuchTranche;
+    private JPAQuery<Gesuch> addMeineFilter(final UUID benutzerId, final JPAQuery<Gesuch> query) {
+        final var gesuch = QGesuch.gesuch;
         final var zuordnung = QZuordnung.zuordnung;
 
-        query.join(zuordnung).on(tranche.gesuch.fall.id.eq(zuordnung.fall.id))
+        query.join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
             .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
 
         return query;

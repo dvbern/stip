@@ -3988,6 +3988,7 @@ components:
     typ:
       in: query
       name: typ
+      required: true
       schema:
         $ref: '#/components/schemas/GesuchTrancheTyp'
     page:

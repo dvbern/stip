@@ -1233,6 +1233,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #getGesucheSBQueryTypePath  (required)
+     * @see #typQuery  (required)
      * @see #pageQuery  (required)
      * @see #pageSizeQuery  (required)
      * @see #fallNummerQuery  (optional)
@@ -1243,7 +1244,6 @@ public class GesuchApiSpec {
      * @see #bearbeiterQuery  (optional)
      * @see #letzteAktivitaetFromQuery  (optional)
      * @see #letzteAktivitaetToQuery  (optional)
-     * @see #typQuery  (optional)
      * @see #sortColumnQuery  (optional)
      * @see #sortOrderQuery  (optional)
      * return PaginatedSbDashboardDtoSpec
@@ -1385,7 +1385,7 @@ public class GesuchApiSpec {
         public static final String TYP_QUERY = "typ";
 
         /**
-         * @param typ (GesuchTrancheTypDtoSpec)  (optional)
+         * @param typ (GesuchTrancheTypDtoSpec)  (required)
          * @return operation
          */
         public GetGesucheSbOper typQuery(Object... typ) {

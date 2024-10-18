@@ -291,26 +291,26 @@ public class GesuchService {
 
     @Transactional
     public PaginatedSbDashboardDto findGesucheSB(
-        GetGesucheSBQueryType queryType,
-        String fallNummer,
-        String piaNachname,
-        String piaVorname,
-        LocalDate piaGeburtsdatum,
-        Gesuchstatus status,
-        String bearbeiter,
-        LocalDate letzteAktivitaetFrom,
-        LocalDate letzteAktivitaetTo,
-        GesuchTrancheTyp typ,
-        int page,
-        int pageSize,
-        SbDashboardColumn sortColumn,
-        SortOrder sortOrder
+        final GetGesucheSBQueryType queryType,
+        final String fallNummer,
+        final String piaNachname,
+        final String piaVorname,
+        final LocalDate piaGeburtsdatum,
+        final Gesuchstatus status,
+        final String bearbeiter,
+        final LocalDate letzteAktivitaetFrom,
+        final LocalDate letzteAktivitaetTo,
+        final GesuchTrancheTyp typ,
+        final int page,
+        final int pageSize,
+        final SbDashboardColumn sortColumn,
+        final SortOrder sortOrder
     ) {
         if (pageSize > configService.getMaxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var baseQuery = sbDashboardQueryBuilder.baseQuery(queryType);
+        final var baseQuery = sbDashboardQueryBuilder.baseQuery(queryType, typ);
 
         if (fallNummer != null) {
             sbDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
@@ -340,10 +340,6 @@ public class GesuchService {
             sbDashboardQueryBuilder.letzteAktivitaet(baseQuery, letzteAktivitaetFrom, letzteAktivitaetTo);
         }
 
-        if (typ != null) {
-            sbDashboardQueryBuilder.typ(baseQuery, typ);
-        }
-
         // Creating the count query must happen before ordering,
         // otherwise the ordered column must appear in a GROUP BY clause or be used in an aggregate function
         final var countQuery = sbDashboardQueryBuilder.getCountQuery(baseQuery);
@@ -356,7 +352,7 @@ public class GesuchService {
 
         sbDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
         final var results = baseQuery.stream()
-            .map(sbDashboardGesuchMapper::toDto)
+            .map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, typ))
             .toList();
 
         return new PaginatedSbDashboardDto(
