@@ -16,6 +16,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDtoSpec;
@@ -133,6 +134,7 @@ class GesuchGetGesucheTest {
             .getGesucheSBQueryTypePath(queryType)
             .pageQuery(0)
             .pageSizeQuery(configService.getMaxAllowedPageSize())
+            .typQuery(GesuchTrancheTypDtoSpec.TRANCHE)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
