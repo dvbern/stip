@@ -11,5 +11,6 @@ public interface StatusprotokollMapper {
     @Mapping(target = "timestamp", source = "timestampMutiert")
     @Mapping(target = "status", source = "gesuchStatus")
     @Mapping(target = "benutzer", source = "userMutiert")
+    @Mapping(target = "kommentar", source = "comment")
     StatusprotokollEntryDto toDto(Gesuch gesuch);
 }
