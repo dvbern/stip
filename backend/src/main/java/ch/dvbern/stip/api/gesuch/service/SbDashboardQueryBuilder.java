@@ -23,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class SbDashboardQueryBuilder {
-    private final QGesuchFormular formular = QGesuchFormular.gesuchFormular;
-    private final QGesuch gesuch = QGesuch.gesuch;
+    private static final QGesuchFormular formular = QGesuchFormular.gesuchFormular;
+    private static final QGesuch gesuch = QGesuch.gesuch;
     private QGesuchTranche tranche;
 
     private final GesuchRepository gesuchRepository;
@@ -40,7 +40,6 @@ public class SbDashboardQueryBuilder {
             case ALLE -> gesuchRepository.getFindAlleQuery();
         };
 
-        final var gesuch = QGesuch.gesuch;
         tranche = switch (trancheType) {
             case TRANCHE -> gesuch.latestGesuchTranche;
             case AENDERUNG -> gesuch.aenderungZuUeberpruefen;
