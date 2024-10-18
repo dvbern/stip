@@ -175,14 +175,14 @@
               </div>
 
               <ng-template #einreichefrist>
-                @if (periode.gesuch && periode.einreichefristDays !== null) {
+                @if (periode.gesuch) {
                   @if (!periode.einreichefristAbgelaufen) {
                     @if (periode.reduzierterBeitrag) {
                       <span class="mt-4 fw-medium">
                         {{ 'gesuch-app.cockpit.periode.einreichfrist.reduziert' | translate }}
                       </span>
                     }
-                    @if (periode.einreichefristDays > 1) {
+                    @if ((periode.einreichefristDays ?? 0) > 1) {
                       <span
                         class="mt-4 fw-normal small"
                         [innerHTML]="
