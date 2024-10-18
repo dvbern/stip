@@ -18,6 +18,7 @@ public class SbDashboardGesuchMapper {
     SbDashboardGesuchDto toDto(final Gesuch gesuch, final GesuchTranche gesuchTranche) {
         final var target = new SbDashboardGesuchDto();
         target.setId(gesuch.getId());
+        target.setGesuchTrancheId(gesuchTranche.getId());
         target.setFallNummer(gesuch.getFall().getFallNummer());
         target.setTyp(gesuchTranche.getTyp());
 

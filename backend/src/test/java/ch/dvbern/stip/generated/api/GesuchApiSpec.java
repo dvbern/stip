@@ -1246,7 +1246,7 @@ public class GesuchApiSpec {
      * @see #typQuery  (optional)
      * @see #sortColumnQuery  (optional)
      * @see #sortOrderQuery  (optional)
-     * return List&lt;PaginatedSbDashboardDtoSpec&gt;
+     * return PaginatedSbDashboardDtoSpec
      */
     public static class GetGesucheSbOper implements Oper {
 
@@ -1276,10 +1276,10 @@ public class GesuchApiSpec {
         /**
          * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryType}
          * @param handler handler
-         * @return List&lt;PaginatedSbDashboardDtoSpec&gt;
+         * @return PaginatedSbDashboardDtoSpec
          */
-        public List<PaginatedSbDashboardDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<PaginatedSbDashboardDtoSpec>> type = new TypeRef<List<PaginatedSbDashboardDtoSpec>>(){};
+        public PaginatedSbDashboardDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedSbDashboardDtoSpec> type = new TypeRef<PaginatedSbDashboardDtoSpec>(){};
             return execute(handler).as(type);
         }
 

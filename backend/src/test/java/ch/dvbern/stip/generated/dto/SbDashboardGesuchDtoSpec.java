@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_ID,
+  SbDashboardGesuchDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_TYP,
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_PIA_NACHNAME,
@@ -46,6 +47,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class SbDashboardGesuchDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
+
+  public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  private UUID gesuchTrancheId;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
   private String fallNummer;
@@ -84,9 +88,9 @@ public class SbDashboardGesuchDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -94,9 +98,35 @@ public class SbDashboardGesuchDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
+  }
+
+
+  public SbDashboardGesuchDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+    
+    this.gesuchTrancheId = gesuchTrancheId;
+    return this;
+  }
+
+   /**
+   * Get gesuchTrancheId
+   * @return gesuchTrancheId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
   }
 
 
@@ -110,9 +140,9 @@ public class SbDashboardGesuchDtoSpec {
    * Get fallNummer
    * @return fallNummer
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFallNummer() {
     return fallNummer;
@@ -120,7 +150,7 @@ public class SbDashboardGesuchDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
@@ -136,9 +166,9 @@ public class SbDashboardGesuchDtoSpec {
    * Get typ
    * @return typ
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchTrancheTypDtoSpec getTyp() {
     return typ;
@@ -146,7 +176,7 @@ public class SbDashboardGesuchDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTyp(GesuchTrancheTypDtoSpec typ) {
     this.typ = typ;
   }
@@ -162,9 +192,9 @@ public class SbDashboardGesuchDtoSpec {
    * Get piaNachname
    * @return piaNachname
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPiaNachname() {
     return piaNachname;
@@ -172,7 +202,7 @@ public class SbDashboardGesuchDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPiaNachname(String piaNachname) {
     this.piaNachname = piaNachname;
   }
@@ -188,9 +218,9 @@ public class SbDashboardGesuchDtoSpec {
    * Get piaVorname
    * @return piaVorname
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPiaVorname() {
     return piaVorname;
@@ -198,7 +228,7 @@ public class SbDashboardGesuchDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPiaVorname(String piaVorname) {
     this.piaVorname = piaVorname;
   }
@@ -214,9 +244,9 @@ public class SbDashboardGesuchDtoSpec {
    * Get piaGeburtsdatum
    * @return piaGeburtsdatum
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_PIA_GEBURTSDATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getPiaGeburtsdatum() {
     return piaGeburtsdatum;
@@ -224,7 +254,7 @@ public class SbDashboardGesuchDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_PIA_GEBURTSDATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPiaGeburtsdatum(LocalDate piaGeburtsdatum) {
     this.piaGeburtsdatum = piaGeburtsdatum;
   }
@@ -240,9 +270,9 @@ public class SbDashboardGesuchDtoSpec {
    * Get status
    * @return status
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchstatusDtoSpec getStatus() {
     return status;
@@ -250,7 +280,7 @@ public class SbDashboardGesuchDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setStatus(GesuchstatusDtoSpec status) {
     this.status = status;
   }
@@ -266,9 +296,9 @@ public class SbDashboardGesuchDtoSpec {
    * Get bearbeiter
    * @return bearbeiter
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_BEARBEITER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBearbeiter() {
     return bearbeiter;
@@ -276,7 +306,7 @@ public class SbDashboardGesuchDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_BEARBEITER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBearbeiter(String bearbeiter) {
     this.bearbeiter = bearbeiter;
   }
@@ -292,9 +322,9 @@ public class SbDashboardGesuchDtoSpec {
    * Get letzteAktivitaet
    * @return letzteAktivitaet
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getLetzteAktivitaet() {
     return letzteAktivitaet;
@@ -302,7 +332,7 @@ public class SbDashboardGesuchDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setLetzteAktivitaet(LocalDate letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
   }
@@ -317,6 +347,7 @@ public class SbDashboardGesuchDtoSpec {
     }
     SbDashboardGesuchDtoSpec sbDashboardGesuch = (SbDashboardGesuchDtoSpec) o;
     return Objects.equals(this.id, sbDashboardGesuch.id) &&
+        Objects.equals(this.gesuchTrancheId, sbDashboardGesuch.gesuchTrancheId) &&
         Objects.equals(this.fallNummer, sbDashboardGesuch.fallNummer) &&
         Objects.equals(this.typ, sbDashboardGesuch.typ) &&
         Objects.equals(this.piaNachname, sbDashboardGesuch.piaNachname) &&
@@ -329,7 +360,7 @@ public class SbDashboardGesuchDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, gesuchTrancheId, fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
   }
 
   @Override
@@ -337,6 +368,7 @@ public class SbDashboardGesuchDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class SbDashboardGesuchDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");

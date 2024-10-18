@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class SbDashboardGesuchDto  implements Serializable {
   private @Valid UUID id;
+  private @Valid UUID gesuchTrancheId;
   private @Valid String fallNummer;
   private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
   private @Valid String piaNachname;
@@ -40,6 +41,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   
   @JsonProperty("id")
+  @NotNull
   public UUID getId() {
     return id;
   }
@@ -51,6 +53,25 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   /**
    **/
+  public SbDashboardGesuchDto gesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchTrancheId")
+  @NotNull
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
+  }
+
+  @JsonProperty("gesuchTrancheId")
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+  }
+
+  /**
+   **/
   public SbDashboardGesuchDto fallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
     return this;
@@ -58,6 +79,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   
   @JsonProperty("fallNummer")
+  @NotNull
   public String getFallNummer() {
     return fallNummer;
   }
@@ -76,6 +98,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   
   @JsonProperty("typ")
+  @NotNull
   public ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp getTyp() {
     return typ;
   }
@@ -94,6 +117,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   
   @JsonProperty("piaNachname")
+  @NotNull
   public String getPiaNachname() {
     return piaNachname;
   }
@@ -112,6 +136,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   
   @JsonProperty("piaVorname")
+  @NotNull
   public String getPiaVorname() {
     return piaVorname;
   }
@@ -130,6 +155,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   
   @JsonProperty("piaGeburtsdatum")
+  @NotNull
   public LocalDate getPiaGeburtsdatum() {
     return piaGeburtsdatum;
   }
@@ -148,6 +174,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   
   @JsonProperty("status")
+  @NotNull
   public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getStatus() {
     return status;
   }
@@ -166,6 +193,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   
   @JsonProperty("bearbeiter")
+  @NotNull
   public String getBearbeiter() {
     return bearbeiter;
   }
@@ -184,6 +212,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   
   @JsonProperty("letzteAktivitaet")
+  @NotNull
   public LocalDate getLetzteAktivitaet() {
     return letzteAktivitaet;
   }
@@ -204,6 +233,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     }
     SbDashboardGesuchDto sbDashboardGesuch = (SbDashboardGesuchDto) o;
     return Objects.equals(this.id, sbDashboardGesuch.id) &&
+        Objects.equals(this.gesuchTrancheId, sbDashboardGesuch.gesuchTrancheId) &&
         Objects.equals(this.fallNummer, sbDashboardGesuch.fallNummer) &&
         Objects.equals(this.typ, sbDashboardGesuch.typ) &&
         Objects.equals(this.piaNachname, sbDashboardGesuch.piaNachname) &&
@@ -216,7 +246,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, gesuchTrancheId, fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
   }
 
   @Override
@@ -225,6 +255,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     sb.append("class SbDashboardGesuchDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");
