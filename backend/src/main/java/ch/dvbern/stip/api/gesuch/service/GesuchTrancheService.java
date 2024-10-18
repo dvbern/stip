@@ -57,6 +57,10 @@ public class GesuchTrancheService {
 
     public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        return getRequiredDokumentTypes(gesuchTranche);
+    }
+
+    public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche) {
         return requiredDokumentService.getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
     }
 

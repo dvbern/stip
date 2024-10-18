@@ -5,9 +5,12 @@
   "gesuch-app.cockpit.welcome.titel": "Bonjour {{name}}",
   "gesuch-app.cockpit.gesuch.new": "Créer une application",
   "gesuch-app.cockpit.gesuch.edit": "Modifier",
+  "gesuch-app.cockpit.gesuch.uploadMissingDocuments": "Télécharger des documents",
   "gesuch-app.cockpit.periode.einreichfrist.titel": "Délai de soumission",
   "gesuch-app.cockpit.periode.einreichfrist.spaetestens": "au plus tard",
   "gesuch-app.cockpit.periode.status.titel": "Statut de l'application",
+  "gesuch-app.cockpit.periode.status.missingDocument": "1 document manquants",
+  "gesuch-app.cockpit.periode.status.missingDocuments": "{{ count }} documents manquants",
   "gesuch-app.cockpit.periode.status.nicht_komplett": "Pas entièrement soumis",
   "gesuch-app.cockpit.gesuch.remove": "Supprimer",
   "gesuch-app.cockpit.gesuch.semester.herbst": "Automne",
@@ -18,14 +21,13 @@
 
   "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "En attente",
 
+  "gesuch-app.gesuch.delete": "Supprimer la demande",
+  "gesuch-app.gesuch.delete.dialog.title": "Supprimer la demande",
+  "gesuch-app.gesuch.delete.dialog.message": "Voulez-vous vraiment supprimer la demande? Vous perdrez toutes les données.",
   "gesuch-app.aenderungs-entry.title": "Changements",
   "gesuch-app.aenderungs-entry.status.title": "Statut de l'application",
   "gesuch-app.aenderungs-entry.delete": "Supprimer le changement",
   "gesuch-app.aenderungs-entry.delete.dialog.title": "Supprimer le changement",
-  "gesuch-app.aenderungs-entry.delete.dialog.message": "Voulez-vous vraiment supprimer le changement?",
-  "gesuch-app.cockpit.gesuch.aenderungs-entry": "Ouvrir le changement",
-  "gesuch-app.cockpit.gesuch.status.IN_BEARBEITUNG_GS": "En cours de traitement GS",
-  "gesuch-app.cockpit.gesuch.status.UEBERPRUEFEN": "Vérifier",
-  "gesuch-app.cockpit.gesuch.status.AKZEPTIERT": "Accepté",
-  "gesuch-app.cockpit.gesuch.status.ABGELEHNT": "Refusé"
+  "gesuch-app.aenderungs-entry.delete.dialog.message": "Voulez-vous vraiment supprimer le changement? Vous perdrez toutes les données",
+  "gesuch-app.cockpit.gesuch.aenderungs-entry": "Ouvrir le changement"
 }

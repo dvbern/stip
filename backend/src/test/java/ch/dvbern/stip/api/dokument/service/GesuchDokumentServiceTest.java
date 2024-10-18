@@ -183,9 +183,11 @@ class GesuchDokumentServiceTest {
 
     @Test
     void deleteAbgelehnteDokumenteForGesuchTest() {
+        final var dokumentMapper = new DokumentMapperImpl();
         // Arrange
         final var gsDokService = new GesuchDokumentServiceMock(
-            new DokumentMapperImpl(),
+            new GesuchDokumentMapperImpl(dokumentMapper),
+            dokumentMapper,
             dokumentRepository,
             gesuchDokumentRepository,
             null,
@@ -229,6 +231,7 @@ class GesuchDokumentServiceTest {
 
     private static class GesuchDokumentServiceMock extends GesuchDokumentService {
         public GesuchDokumentServiceMock(
+            GesuchDokumentMapper gesuchDokumentMapper,
             DokumentMapper dokumentMapper,
             DokumentRepository dokumentRepository,
             GesuchDokumentRepository gesuchDokumentRepository,
@@ -240,6 +243,7 @@ class GesuchDokumentServiceTest {
             Antivirus antivirus
         ) {
             super(
+                gesuchDokumentMapper,
                 dokumentMapper,
                 dokumentRepository,
                 gesuchDokumentRepository,

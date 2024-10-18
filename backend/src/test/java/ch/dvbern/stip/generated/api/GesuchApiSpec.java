@@ -21,6 +21,7 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
+import ch.dvbern.stip.generated.dto.GsDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDtoSpec;
@@ -87,6 +88,7 @@ public class GesuchApiSpec {
                 getGesucheForFall(),
                 getGesucheGs(),
                 getGesucheSb(),
+                getGsDashboard(),
                 getGsTrancheChanges(),
                 getSbTrancheChanges(),
                 getStatusProtokoll(),
@@ -157,6 +159,10 @@ public class GesuchApiSpec {
 
     public GetGesucheSbOper getGesucheSb() {
         return new GetGesucheSbOper(createReqSpec());
+    }
+
+    public GetGsDashboardOper getGsDashboard() {
+        return new GetGsDashboardOper(createReqSpec());
     }
 
     public GetGsTrancheChangesOper getGsTrancheChanges() {
@@ -1453,6 +1459,67 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetGesucheSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns gesuche for dashboard filtered by gs
+     * 
+     *
+     * return List&lt;GsDashboardDtoSpec&gt;
+     */
+    public static class GetGsDashboardOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/benutzer/me/gs-dashboard";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGsDashboardOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/benutzer/me/gs-dashboard
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/benutzer/me/gs-dashboard
+         * @param handler handler
+         * @return List&lt;GsDashboardDtoSpec&gt;
+         */
+        public List<GsDashboardDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GsDashboardDtoSpec>> type = new TypeRef<List<GsDashboardDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGsDashboardOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGsDashboardOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

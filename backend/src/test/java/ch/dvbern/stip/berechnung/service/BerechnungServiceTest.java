@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
@@ -106,7 +107,10 @@ class BerechnungServiceTest {
     void testMinimalGesuchBerechnung() {
         //Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
-        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+        final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
+        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+
+        gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)
@@ -171,7 +175,7 @@ class BerechnungServiceTest {
                             LocalDate.of(2023, 8, 1),
                             LocalDate.of(2024, 7, 31)
                         )
-                    )
+                    ).setTyp(GesuchTrancheTyp.TRANCHE)
             )
         );
 
@@ -266,7 +270,7 @@ class BerechnungServiceTest {
                             LocalDate.of(2023, 8, 1),
                             LocalDate.of(2024, 7, 31)
                         )
-                    )
+                    ).setTyp(GesuchTrancheTyp.TRANCHE)
             )
         );
 
@@ -374,7 +378,7 @@ class BerechnungServiceTest {
                             LocalDate.of(2023, 8, 1),
                             LocalDate.of(2024, 7, 31)
                         )
-                    )
+                    ).setTyp(GesuchTrancheTyp.TRANCHE)
             )
         );
 
@@ -535,7 +539,7 @@ class BerechnungServiceTest {
                             LocalDate.of(2023, 8, 1),
                             LocalDate.of(2024, 7, 31)
                         )
-                    )
+                    ).setTyp(GesuchTrancheTyp.TRANCHE)
             )
         );
 
@@ -670,7 +674,9 @@ class BerechnungServiceTest {
     void testFall5GesuchBerechnungKinder() {
         //Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
-        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+        final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
+        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+        gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
         gesuch.getGesuchsperiode()
             .setAnzahlWochenLehre(47)
@@ -807,7 +813,9 @@ class BerechnungServiceTest {
     void testFall6BerechnungEinKind() {
         //Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
-        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+        final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
+        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+        gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
         gesuch.getGesuchsperiode()
             .setAnzahlWochenLehre(47)

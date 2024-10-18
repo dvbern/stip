@@ -12,6 +12,7 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
+  GsDashboard,
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SteuerdatenTyp,
@@ -31,6 +32,7 @@ export interface State {
   gesuchFormular: SharedModelGesuchFormular | null;
   isEditingTranche: boolean | null;
   gesuchs: SharedModelGesuch[];
+  gsDashboard: GsDashboard[];
   cache: {
     gesuch: SharedModelGesuch | null;
     gesuchId: string | null;
@@ -47,6 +49,7 @@ const initialState: State = {
   gesuchFormular: null,
   isEditingTranche: null,
   gesuchs: [],
+  gsDashboard: [],
   cache: {
     gesuch: null,
     gesuchId: null,
@@ -105,7 +108,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
     ),
 
     on(
-      SharedDataAccessGesuchEvents.removeTriggered,
+      SharedDataAccessGesuchEvents.deleteGesuch,
       SharedDataAccessGesuchEvents.loadAll,
       SharedDataAccessGesuchEvents.loadAllDebounced,
       SharedEventGesuchFormPerson.saveTriggered,
@@ -152,6 +155,16 @@ export const sharedDataAccessGesuchsFeature = createFeature({
     ),
 
     on(
+      SharedDataAccessGesuchEvents.gsDashboardLoadedSuccess,
+      (state, { gsDashboard }): State => ({
+        ...state,
+        gsDashboard,
+        loading: false,
+        error: undefined,
+      }),
+    ),
+
+    on(
       SharedDataAccessGesuchEvents.gesuchLoadedSuccess,
       (state, { gesuch, trancheId }): State => {
         const gesuchFormular = getGesuchFormular(gesuch);
@@ -177,7 +190,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
 
     on(
       SharedDataAccessGesuchEvents.gesuchUpdatedSuccess,
-      SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
+      SharedDataAccessGesuchEvents.deleteGesuchSuccess,
       (state): State => ({
         ...state,
         lastUpdate: new Date().toISOString(),
@@ -201,7 +214,7 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.gesuchCreatedFailure,
       SharedDataAccessGesuchEvents.gesuchUpdatedFailure,
       SharedDataAccessGesuchEvents.gesuchUpdatedSubformFailure,
-      SharedDataAccessGesuchEvents.gesuchRemovedFailure,
+      SharedDataAccessGesuchEvents.deleteGesuchFailure,
       // add other failure actions here (if handled the same way)
       (state, { error }): State => ({
         ...state,

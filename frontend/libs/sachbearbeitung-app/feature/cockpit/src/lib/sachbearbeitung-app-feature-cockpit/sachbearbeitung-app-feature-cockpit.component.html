@@ -306,8 +306,8 @@
                   *dvMatRowDef="let gesuch; dataSource: gesucheDataSourceSig(); columns: displayedColumns"
                   [routerLink]="
                     gesuch.typ === 'AENDERUNG'
-                      ? ['/gesuch/person', gesuch.id, 'aenderung', gesuch.trancheId]
-                      : ['/gesuch/person', gesuch.id]
+                      ? ['/gesuch', 'info', gesuch.id, 'aenderung', gesuch.trancheId]
+                      : ['/gesuch', 'info', gesuch.id]
                   "
                   class="highlightable"
                 ></tr>

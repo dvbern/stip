@@ -4,6 +4,7 @@ import { SharedModelError } from '@dv/shared/model/error';
 import {
   GesuchCreate,
   GetGesucheSBQueryType,
+  GsDashboard,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
@@ -19,10 +20,9 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     loadAllDebounced: props<{
       query: GetGesucheSBQueryType;
     }>(),
-    newTriggered: props<{
+    createGesuch: props<{
       create: GesuchCreate;
     }>(),
-    removeTriggered: props<{ id: string }>(),
     gesuchLoadedSuccess: props<{
       gesuch: SharedModelGesuch;
       trancheId?: string;
@@ -41,10 +41,14 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
       origin: SharedModelGesuchFormStep;
     }>(),
     gesuchUpdatedSubformFailure: props<{ error: SharedModelError }>(),
-    gesuchRemovedSuccess: emptyProps(),
-    gesuchRemovedFailure: props<{ error: SharedModelError }>(),
+    deleteGesuch: props<{ gesuchId: string }>(),
+    deleteGesuchSuccess: emptyProps(),
+    deleteGesuchFailure: props<{ error: SharedModelError }>(),
     gesuchsLoadedSuccess: props<{ gesuchs: SharedModelGesuch[] }>(),
     gesuchsLoadedFailure: props<{ error: SharedModelError }>(),
+    loadGsDashboard: emptyProps(),
+    gsDashboardLoadedSuccess: props<{ gsDashboard: GsDashboard[] }>(),
+    gsDashboardLoadedFailure: props<{ error: SharedModelError }>(),
     setGesuchToBearbeitung: emptyProps(),
     setGesuchBearbeitungAbschliessen: emptyProps(),
     setGesuchZurueckweisen: props<{ kommentar: string }>(),

@@ -22,6 +22,7 @@ import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
+import { NotificationStore } from '@dv/shared/data-access/notification';
 import { GesuchTrancheSlim, Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
@@ -29,9 +30,9 @@ import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
-import { isSuccess } from '@dv/shared/util/remote-data';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
@@ -47,6 +48,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiIconChipComponent,
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
+    SharedUiNotificationsComponent,
     SharedUiRdIsPendingPipe,
     GesuchAppUiAenderungsEntryComponent,
   ],
@@ -62,13 +64,13 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
 
   fallStore = inject(FallStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  notificationStore = inject(NotificationStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
   // Do not initialize signals in computed directly, just usage
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
-  getStatus = this.gesuchAenderungStore.createGesuchAenderung$;
   @Input({ required: true }) tranche?: GesuchTrancheSlim;
 
   constructor() {
@@ -81,37 +83,25 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
       },
       { allowSignalWrites: true },
     );
-    effect(
-      () => {
-        const aenderung = this.gesuchAenderungStore.cachedGesuchAenderung();
-        if (isSuccess(aenderung)) {
-          this.gesuchAenderungStore.resetCachedGesuchAenderung();
-        }
-      },
-      { allowSignalWrites: true },
-    );
   }
 
   ngOnInit() {
     this.fallStore.loadCurrentFall$();
+    this.notificationStore.loadNotifications$();
     this.store.dispatch(GesuchAppEventCockpit.init());
-    this.store.dispatch(SharedDataAccessGesuchEvents.init());
+    this.store.dispatch(SharedDataAccessGesuchEvents.loadGsDashboard());
     this.store.dispatch(sharedDataAccessGesuchsperiodeEvents.init());
   }
 
   handleCreate(periode: Gesuchsperiode, fallId: string) {
     this.store.dispatch(
-      SharedDataAccessGesuchEvents.newTriggered({
+      SharedDataAccessGesuchEvents.createGesuch({
         create: {
           fallId,
           gesuchsperiodeId: periode.id,
         },
       }),
     );
-  }
-
-  handleRemove(id: string) {
-    this.store.dispatch(SharedDataAccessGesuchEvents.removeTriggered({ id }));
   }
 
   trackByPerioden(
@@ -147,7 +137,24 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
       });
   }
 
-  deleteAenderung(aenderungId: string, gesuchId: string) {
+  deleteGesuch(gesuchId: string) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'gesuch-app.gesuch.delete.dialog.title',
+      message: 'gesuch-app.gesuch.delete.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.delete',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.store.dispatch(
+            SharedDataAccessGesuchEvents.deleteGesuch({ gesuchId }),
+          );
+        }
+      });
+  }
+
+  deleteAenderung(aenderungId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'gesuch-app.aenderungs-entry.delete.dialog.title',
       message: 'gesuch-app.aenderungs-entry.delete.dialog.message',
@@ -159,7 +166,6 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
         if (result) {
           this.gesuchAenderungStore.deleteGesuchAenderung$({
             aenderungId,
-            gesuchId,
           });
         }
       });
