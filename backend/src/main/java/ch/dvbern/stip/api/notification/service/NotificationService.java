@@ -31,7 +31,7 @@ public class NotificationService {
             .setGesuch(gesuch);
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
-        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede());
+        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(),sprache);
         final var nachname = pia.getNachname();
         String msg = Templates.getGesuchEingereichtText(anrede,nachname,sprache).render();
         notification.setNotificationText(msg);
