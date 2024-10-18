@@ -123,6 +123,13 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryType)).build();
     }
 
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGsDashboard() {
+        gesuchAuthorizer.allowAllow();
+        return Response.ok(gesuchService.findGsDashboard()).build();
+    }
+
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
     @Override
     public Response getGesucheGs() {

@@ -41,12 +41,14 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 type EinreichenState = {
   validationResult: CachedRemoteData<ValidationReport>;
+  einreichenValidationResult: CachedRemoteData<ValidationReport>;
   einreichungsResult: RemoteData<unknown>;
   trancheEinreichenResult: RemoteData<unknown>;
 };
 
 const initialState: EinreichenState = {
   validationResult: initial(),
+  einreichenValidationResult: initial(),
   einreichungsResult: initial(),
   trancheEinreichenResult: initial(),
 };
@@ -101,7 +103,7 @@ export class EinreichenStore extends signalStore(
   });
 
   einreichenViewSig = computed(() => {
-    const validationReport = this.validationResult.data();
+    const validationReport = this.einreichenValidationResult.data();
     const { gesuch, isEditingTranche } = this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
 
@@ -145,10 +147,14 @@ export class EinreichenStore extends signalStore(
       switchMap(([{ gesuchTrancheId }, { typ, status }]) =>
         this.validate$(
           gesuchTrancheId,
-          // If it is a tranche > IN_BEARBEITUNG_GS or the tranche is an AENDERUNG validate all pages fully
-          typ === 'AENDERUNG' || status !== 'IN_BEARBEITUNG_GS',
+          typ !== 'AENDERUNG' || status === 'IN_BEARBEITUNG_GS',
         ),
       ),
+      handleApiResponse((validationResult) => {
+        patchState(this, {
+          validationResult,
+        });
+      }),
     ),
   );
 
@@ -162,6 +168,11 @@ export class EinreichenStore extends signalStore(
         }));
       }),
       switchMap(({ gesuchTrancheId }) => this.validate$(gesuchTrancheId)),
+      handleApiResponse((einreichenValidationResult) => {
+        patchState(this, {
+          einreichenValidationResult,
+        });
+      }),
     ),
   );
 
@@ -171,19 +182,13 @@ export class EinreichenStore extends signalStore(
   ) => {
     const service$ = (
       allowNullValidation
-        ? this.gesuchTrancheService.gesuchTrancheEinreichenValidieren$
-        : this.gesuchTrancheService.validateGesuchTranchePages$
+        ? this.gesuchTrancheService.validateGesuchTranchePages$
+        : this.gesuchTrancheService.gesuchTrancheEinreichenValidieren$
     ).bind(this.gesuchTrancheService);
 
     return service$({ gesuchTrancheId }, undefined, undefined, {
       context: shouldIgnoreErrorsIf(true),
-    }).pipe(
-      handleApiResponse((validationResult) => {
-        patchState(this, {
-          validationResult,
-        });
-      }),
-    );
+    });
   };
 
   gesuchEinreichen$ = rxMethod<{ gesuchId: string }>(

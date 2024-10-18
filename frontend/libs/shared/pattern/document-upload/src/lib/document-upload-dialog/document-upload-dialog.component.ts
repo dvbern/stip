@@ -11,7 +11,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, mergeMap } from 'rxjs';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { DocumentOptions, UploadView } from '@dv/shared/model/dokument';
+import { DokumentOptions, UploadView } from '@dv/shared/model/dokument';
+import { GesuchDokument } from '@dv/shared/model/gesuch';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUiIfGesuchstellerDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUtilDocumentMergerService } from '@dv/shared/util/document-merger';
@@ -37,9 +38,11 @@ import { UploadStore } from '../upload.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternDocumentUploadDialogComponent {
-  data = inject<{ options: DocumentOptions; store: UploadStore }>(
-    MAT_DIALOG_DATA,
-  );
+  data = inject<{
+    options: DokumentOptions;
+    gesuchDokument?: GesuchDokument;
+    store: UploadStore;
+  }>(MAT_DIALOG_DATA);
   translate = inject(TranslateService);
   dialogRef = inject(DialogRef);
   documentMerger = inject(SharedUtilDocumentMergerService);
@@ -49,15 +52,16 @@ export class SharedPatternDocumentUploadDialogComponent {
     trancheId: this.data.options.trancheId,
     type: this.data.options.dokumentTyp,
     readonly: this.data.options.readonly,
+    gesuchDokument: this.data.gesuchDokument,
     initialDocuments: this.data.options.initialDocuments,
     hasEntries: this.data.store.hasEntriesSig(),
     isSachbearbeitungApp: this.config.isSachbearbeitungApp,
   }));
 
   showUplaodSig = computed(() => {
-    const { options, store } = this.data;
+    const { options, gesuchDokument, store } = this.data;
 
-    if (options.readonly) {
+    if (options.readonly && gesuchDokument?.status === 'AKZEPTIERT') {
       return false;
     }
     if (!options.singleUpload) {

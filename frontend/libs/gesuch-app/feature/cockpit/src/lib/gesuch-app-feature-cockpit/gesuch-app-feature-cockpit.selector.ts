@@ -6,7 +6,7 @@ import { selectSharedDataAccessGesuchsperiodesView } from '@dv/shared/data-acces
 
 export const selectGesuchAppFeatureCockpitView = createSelector(
   selectSharedDataAccessGesuchsperiodesView,
-  sharedDataAccessGesuchsFeature.selectGesuchs,
+  sharedDataAccessGesuchsFeature.selectGsDashboard,
   sharedDataAccessGesuchsFeature.selectLoading,
   selectVersion,
   (gesuchsPerioden, gesuche, gesucheLoading, version) => {

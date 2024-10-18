@@ -16,7 +16,7 @@ import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
-import { DocumentOptions } from '@dv/shared/model/dokument';
+import { DokumentOptions } from '@dv/shared/model/dokument';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
@@ -47,18 +47,23 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
   private dokumentsStore = inject(DokumentsStore);
   private uploadStore = inject(UploadStore);
   private einreichStore = inject(EinreichenStore);
-  optionsSig = input.required<DocumentOptions>();
+  optionsSig = input.required<DokumentOptions>();
+
+  gesuchDokumentSig = computed(() => {
+    const { gesuchDokument } = this.uploadStore.dokumentListView();
+    return gesuchDokument;
+  });
 
   mainDocumentSig = computed(() => {
-    const documents = this.uploadStore.documentsView();
-    if (!documents.length) return;
+    const { dokuments } = this.uploadStore.dokumentListView();
+    if (!dokuments.length) return;
     return (
       // If there are any documents in error state, show the first one
-      documents.find((document) => document.state === 'error') ??
+      dokuments.find((document) => document.state === 'error') ??
       // else show the first document that is still uploading
-      documents.find((document) => document.state === 'uploading') ??
+      dokuments.find((document) => document.state === 'uploading') ??
       // else show the first document that is done
-      documents.find((document) => document.state === 'done')
+      dokuments.find((document) => document.state === 'done')
     );
   });
 
@@ -101,7 +106,12 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
     this.dialog.open<DialogType, DialogData>(
       SharedPatternDocumentUploadDialogComponent,
       {
-        data: { options: this.optionsSig(), store: this.uploadStore },
+        data: {
+          options: this.optionsSig(),
+          gesuchDokument:
+            this.gesuchDokumentSig() ?? this.optionsSig().gesuchDokument,
+          store: this.uploadStore,
+        },
       },
     );
   }

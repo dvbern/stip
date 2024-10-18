@@ -118,7 +118,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
   constructor() {
     getLatestGesuchIdFromGesuch$(this.viewSig)
-      .pipe(filter(isDefined), takeUntilDestroyed())
+      .pipe(takeUntilDestroyed())
       .subscribe((gesuchId) => {
         this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
       });

@@ -98,6 +98,34 @@ export const loadOwnGesuchs = createEffect(
   { functional: true },
 );
 
+export const loadGsDashboard = createEffect(
+  (
+    actions$ = inject(Actions),
+    gesuchService = inject(GesuchService),
+    storeUtil = inject(StoreUtilService),
+  ) => {
+    return actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.loadGsDashboard),
+      storeUtil.waitForBenutzerData$(),
+      concatMap(() =>
+        gesuchService.getGsDashboard$().pipe(
+          map((gsDashboard) =>
+            SharedDataAccessGesuchEvents.gsDashboardLoadedSuccess({
+              gsDashboard,
+            }),
+          ),
+          catchError((error) => [
+            SharedDataAccessGesuchEvents.gsDashboardLoadedFailure({
+              error: sharedUtilFnErrorTransformer(error),
+            }),
+          ]),
+        ),
+      ),
+    );
+  },
+  { functional: true },
+);
+
 export const loadAllGesuchs = createEffect(
   (
     actions$ = inject(Actions),
@@ -620,6 +648,7 @@ export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
   loadAllGesuchs,
   loadGesuch,
+  loadGsDashboard,
   createGesuch,
   updateGesuch,
   updateGesuchSubform,
