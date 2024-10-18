@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
+import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
@@ -24,8 +24,6 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
 
-    //private final Template gesuchEingereichtDE;
-
     @Transactional
     public void createNotification(final NotificationType notificationType, final Gesuch gesuch) {
         Notification notification = new Notification()
@@ -33,14 +31,12 @@ public class NotificationService {
             .setGesuch(gesuch);
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
-        final var anrede = pia.getAnrede();
+        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede());
         final var nachname = pia.getNachname();
-        String msg = Templates.gesuchEingereichtDE(NotificationTemplateUtils.getAnredeText(anrede),nachname).render();
+        String msg = Templates.getGesuchEingereichtText(anrede,nachname,sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
-
-
 
     @Transactional(TxType.REQUIRES_NEW)
     public void deleteNotificationsForGesuch(final UUID gesuchId) {
@@ -54,10 +50,16 @@ public class NotificationService {
         ).map(notificationMapper::toDto)
         .toList();
     }
+
     @CheckedTemplate
     public static class Templates {
+        public static TemplateInstance getGesuchEingereichtText(String anrede, String nachname, Sprache korrespondenzSprache) {
+            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
+                return gesuchEingereichtFR(anrede,nachname);
+            }
+            return gesuchEingereichtDE(anrede,nachname);
+        }
         public static native TemplateInstance gesuchEingereichtDE(String anrede,String nachname);
         public static native TemplateInstance gesuchEingereichtFR(String anrede,String nachname);
-
     }
 }

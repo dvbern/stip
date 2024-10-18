@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.notification.service;
 
 import java.util.List;
 
+import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -40,11 +41,12 @@ class NotificationServiceTest {
 
     NotificationRepository notificationRepositoryMock;
 
-    private final PersonInAusbildung personInAusbildung = (PersonInAusbildung) new PersonInAusbildung()
+    private final PersonInAusbildung personInAusbildung = ((PersonInAusbildung) new PersonInAusbildung()
         .setEmail("PiaEmail@test.ch")
         .setKorrespondenzSprache(Sprache.DEUTSCH)
         .setNachname("PiaNachnameTest")
-        .setVorname("PiaVornameTest");
+        .setVorname("PiaVornameTest"))
+        .setAnrede(Anrede.FRAU);
 
     @BeforeAll
     void setup() {
