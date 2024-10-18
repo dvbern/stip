@@ -158,6 +158,7 @@
   "shared.gesuch.status.ENTWURF": "Entwurf",
   "shared.gesuch.status.PUBLIZIERT": "Publik - Aktiv",
   "shared.gesuch.status.ARCHIVIERT": "Archiviert",
+  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "Manuell integrirte Änderung",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "In Erarbeitung",
   "shared.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
   "shared.gesuch.status.tranche.AKZEPTIERT": "Akzeptiert",

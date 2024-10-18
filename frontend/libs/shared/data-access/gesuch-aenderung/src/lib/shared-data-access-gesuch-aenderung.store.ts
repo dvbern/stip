@@ -9,7 +9,6 @@ import { GlobalNotificationStore } from '@dv/shared/data-access/global-notificat
 import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,
-  GesuchService,
   GesuchTranche,
   GesuchTrancheService,
   GesuchTrancheSlim,
@@ -40,25 +39,48 @@ export type AenderungChangeState = Extract<
   'MANUELLE_AENDERUNG' | 'AKZEPTIERT' | 'ABGELEHNT'
 >;
 
+type AenderungCompletionState = 'open' | 'completed';
+const aenderungStatusMap = {
+  IN_BEARBEITUNG_GS: null,
+  ABGELEHNT: null,
+  AKZEPTIERT: 'completed',
+  MANUELLE_AENDERUNG: 'completed',
+  UEBERPRUEFEN: 'open',
+} satisfies Record<GesuchTrancheStatus, AenderungCompletionState | null>;
+
 @Injectable({ providedIn: 'root' })
 export class GesuchAenderungStore extends signalStore(
   { protectedState: false },
   withState(initialState),
   withDevtools('GesuchAenderungStore'),
 ) {
-  private gesuchService = inject(GesuchService);
   private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private router = inject(Router);
 
   aenderungenViewSig = computed(() => {
     const tranchen = this.cachedTranchenSlim();
+    const aenderungen =
+      tranchen.data
+        ?.filter((t) => t.typ === 'AENDERUNG')
+        .map((t, index) => ({ ...t, index })) ?? [];
     return {
       loading: isPending(tranchen),
-      list:
-        tranchen.data?.filter(
-          (t) => t.typ === 'AENDERUNG' && t.status !== 'ABGELEHNT',
-        ) ?? [],
+      hasAenderungen: aenderungen.length > 0,
+      list: aenderungen,
+      byStatus: aenderungen.reduce(
+        (acc, tranche) => {
+          const key = aenderungStatusMap[tranche.status];
+          if (key) {
+            if (!acc[key]) {
+              acc[key] = [];
+            }
+            acc[key].push(tranche);
+          }
+          return acc;
+        },
+        {} as Record<AenderungCompletionState, typeof aenderungen>,
+      ),
     };
   });
 
