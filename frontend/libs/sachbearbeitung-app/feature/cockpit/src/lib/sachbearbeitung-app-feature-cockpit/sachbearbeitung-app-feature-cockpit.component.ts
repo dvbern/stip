@@ -570,9 +570,8 @@ const restrictNumberParam =
     if (!isDefined(value)) {
       return undefined;
     }
-    return +value > restriction.max
-      ? restriction.max
-      : +value < restriction.min
-        ? restriction.min
-        : +value;
+    if (+value > restriction.max) {
+      return restriction.max;
+    }
+    return +value < restriction.min ? restriction.min : +value;
   };
