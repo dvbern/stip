@@ -15,7 +15,7 @@ public class SbDashboardGesuchMapper {
     public SbDashboardGesuchDto toDto(final Gesuch gesuch, final GesuchTrancheTyp typ) {
         return switch (typ) {
             case TRANCHE -> toDto(gesuch, gesuch.getLatestGesuchTranche());
-            case AENDERUNG -> toDto(gesuch, gesuch.getAenderungZuUeberpruefen().get());
+            case AENDERUNG -> toDto(gesuch, gesuch.getAenderungZuUeberpruefen().orElseThrow());
         };
     }
 
