@@ -10,7 +10,8 @@ const { test } = initializeTest('GESUCHSTELLER');
 test.describe('Dokument upload', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   test('Person in Ausbildung', async ({ page, cockpit }) => {
-    await page.getByTestId('step-nav-person').click();
+    await expect(page.getByTestId('step-title')).toBeAttached();
+    await page.getByTestId('step-nav-person').first().click();
     const person = new PersonPO(page);
 
     await selectMatRadio(person.elems.sozialhilfeBeitraegeRadio, true);

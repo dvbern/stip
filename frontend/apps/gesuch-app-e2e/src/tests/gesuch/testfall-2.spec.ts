@@ -182,7 +182,8 @@ test.describe('Neues gesuch erstellen', () => {
     test.slow();
 
     // Step 1: Person ============================================================
-    await page.getByTestId('step-nav-person').click();
+    await expect(page.getByTestId('step-title')).toBeAttached();
+    await page.getByTestId('step-nav-person').first().click();
     await expectStepTitleToContainText('Person in Ausbildung', page);
     const personPO = new PersonPO(page);
     await expect(personPO.elems.loading).toBeHidden();
