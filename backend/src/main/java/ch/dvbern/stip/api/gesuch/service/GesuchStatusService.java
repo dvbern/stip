@@ -11,6 +11,7 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import jakarta.enterprise.context.RequestScoped;
@@ -25,6 +26,15 @@ public class GesuchStatusService {
 
     @Transactional
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
+        triggerStateMachineEventWithComment(gesuch, event, new KommentarDto());
+    }
+
+    @Transactional
+    public void triggerStateMachineEventWithComment(
+        final Gesuch gesuch,
+        final GesuchStatusChangeEvent event,
+        final KommentarDto kommentarDto
+    ) {
         StateMachineUtil.addExit(
             config,
             transition -> validationService.validateGesuchForStatus(gesuch, transition.getDestination()),
@@ -35,7 +45,8 @@ public class GesuchStatusService {
             gesuch.getGesuchStatus(),
             gesuch::getGesuchStatus,
             s -> gesuch.setGesuchStatus(s)
-                .setGesuchStatusAenderungDatum(LocalDateTime.now()),
+                .setGesuchStatusAenderungDatum(LocalDateTime.now())
+                .setComment(kommentarDto.getText()),
             config
         );
 
