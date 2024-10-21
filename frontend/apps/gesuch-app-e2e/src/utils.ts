@@ -21,14 +21,14 @@ export const initializeTest = (authType: E2eUser) => {
       const cockpit = new CockpitPO(page);
 
       // delete if existing gesuch
-      const fallPromise = page.waitForResponse(
-        '**/api/v1/gesuch/benutzer/me/gs',
+      const dashboardPromise = page.waitForResponse(
+        '**/api/v1/gesuch/benutzer/me/gs-dashboard',
       );
       await cockpit.goToDashBoard();
-      const fallresponse = await fallPromise;
+      const dashboardResponse = await dashboardPromise;
 
-      const fallbody = await fallresponse.json();
-      gesuchId = fallbody.length > 0 ? fallbody[0].id : undefined;
+      const dashboardBody = await dashboardResponse.json();
+      gesuchId = dashboardBody.length > 0 ? dashboardBody[0].id : undefined;
       if (gesuchId) {
         const response = await deleteGesuch(contexts.api, gesuchId);
         if (response.status() >= 400) {
