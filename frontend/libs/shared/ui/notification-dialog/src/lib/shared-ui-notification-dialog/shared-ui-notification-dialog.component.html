@@ -12,13 +12,22 @@
 
   @let notification = data.notification;
   <dl class="d-flex flex-column mt-4">
+    <div class="d-flex gap-4">
+      <div class="d-flex flex-column">
+        <dt>{{ 'shared.nachrichten.sender' | translate }}:</dt>
+        <dd>{{ notification.userErstellt }}</dd>
+      </div>
+
+      <div class="d-flex flex-column">
+        <dt>{{ 'shared.nachrichten.date' | translate }}:</dt>
+        <dd>{{ notification.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>
+      </div>
+    </div>
     <dt>{{ 'shared.nachrichten.subject' | translate }}:</dt>
     <dd>{{ 'shared.nachrichten.type.' + notification.notificationType | translate }}</dd>
-
-    <dt>{{ 'shared.nachrichten.sender' | translate }}:</dt>
-    <dd>{{ notification.userErstellt }}</dd>
-
-    <dt>{{ 'shared.nachrichten.date' | translate }}:</dt>
-    <dd>{{ notification.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>
+    @if (notification.notificationText) {
+      <dt>{{ 'shared.nachrichten.text' | translate }}:</dt>
+      <dd class="text-pre-wrap">{{ notification.notificationText }}</dd>
+    }
   </dl>
 </div>

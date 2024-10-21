@@ -8,7 +8,10 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
+import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.generated.dto.NotificationDto;
+import io.quarkus.qute.CheckedTemplate;
+import io.quarkus.qute.TemplateInstance;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -26,7 +29,12 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(notificationType)
             .setGesuch(gesuch);
-
+        final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
+        final var nachname = pia.getNachname();
+        String msg = Templates.getGesuchEingereichtText(anrede, nachname, sprache).render();
+        notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
 
@@ -41,5 +49,17 @@ public class NotificationService {
             benutzerService.getCurrentBenutzer().getId()
         ).map(notificationMapper::toDto)
         .toList();
+    }
+
+    @CheckedTemplate
+    public static class Templates {
+        public static TemplateInstance getGesuchEingereichtText(String anrede, String nachname, Sprache korrespondenzSprache) {
+            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
+                return gesuchEingereichtFR(anrede, nachname);
+            }
+            return gesuchEingereichtDE(anrede, nachname);
+        }
+        public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
+        public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
     }
 }

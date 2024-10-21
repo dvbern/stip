@@ -24,23 +24,8 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.api.DokumentApiSpec;
-import ch.dvbern.stip.generated.api.FallApiSpec;
-import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
-import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
-import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.KindUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
-import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
+import ch.dvbern.stip.generated.api.*;
+import ch.dvbern.stip.generated.dto.*;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -62,6 +47,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -77,12 +63,14 @@ class GesuchFillFormularTest {
     public final GesuchTrancheApiSpec gesuchTrancheApiSpec = GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    public final NotificationApiSpec notificationApiSpec = NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
     private UUID fallId;
     private UUID gesuchId;
     private UUID gesuchTrancheId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
-
+    private NotificationDtoSpec notification;
+    private NotificationDto notificationDto;
     @Test
     @TestAsGesuchsteller
     @Order(1)
@@ -392,8 +380,26 @@ class GesuchFillFormularTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsGesuchsteller
     @Order(21)
+    void gesuchNotificationTest() {
+        var notifications = notificationApiSpec.getNotificationsForCurrentUser()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NotificationDtoSpec[].class);
+        Arrays.stream(notifications).forEach(notification -> {
+            assertTrue(!notification.getNotificationText().isEmpty());
+        });
+    }
+
+
+    @Test
+    @TestAsAdmin
+    @Order(30)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
