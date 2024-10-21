@@ -43,6 +43,8 @@ kstip:
   dmn:
     current-major-version: 1
     current-minor-version: 0
+  pagination:
+    max-allowed-page-size: 50
 
 quarkus:
   antivirus:

@@ -26,6 +26,9 @@ export class DvDateAdapter extends DateFnsAdapter {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   override parse(value: any, parseFormat: string | string[]): Date | null {
+    if (value === '') {
+      return null;
+    }
     return parseDateForVariant(value, new Date(), 'date') ?? this.invalid();
   }
 }
