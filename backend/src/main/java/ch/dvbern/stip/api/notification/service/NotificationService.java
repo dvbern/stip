@@ -31,9 +31,9 @@ public class NotificationService {
             .setGesuch(gesuch);
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
-        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(),sprache);
+        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
-        String msg = Templates.getGesuchEingereichtText(anrede,nachname,sprache).render();
+        String msg = Templates.getGesuchEingereichtText(anrede, nachname, sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
@@ -55,11 +55,11 @@ public class NotificationService {
     public static class Templates {
         public static TemplateInstance getGesuchEingereichtText(String anrede, String nachname, Sprache korrespondenzSprache) {
             if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
-                return gesuchEingereichtFR(anrede,nachname);
+                return gesuchEingereichtFR(anrede, nachname);
             }
-            return gesuchEingereichtDE(anrede,nachname);
+            return gesuchEingereichtDE(anrede, nachname);
         }
-        public static native TemplateInstance gesuchEingereichtDE(String anrede,String nachname);
-        public static native TemplateInstance gesuchEingereichtFR(String anrede,String nachname);
+        public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
+        public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
     }
 }
