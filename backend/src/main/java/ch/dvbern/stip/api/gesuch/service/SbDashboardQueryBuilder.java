@@ -51,7 +51,8 @@ public class SbDashboardQueryBuilder {
     }
 
     public void fallNummer(final JPAQuery<Gesuch> query, final String fallNummer) {
-        query.where(tranche.gesuch.fall.fallNummer.containsIgnoreCase(fallNummer));
+        joinGesuch(query);
+        query.where(gesuch.fall.fallNummer.containsIgnoreCase(fallNummer));
     }
 
     public void piaNachname(final JPAQuery<Gesuch> query, final String nachname) {
@@ -67,6 +68,10 @@ public class SbDashboardQueryBuilder {
     void joinFormular(final JPAQuery<Gesuch> query) {
         // This join is required, because QueryDSL doesn't init the path to PiA
         query.join(formular).on(tranche.gesuchFormular.id.eq(formular.id));
+    }
+
+    void joinGesuch(final JPAQuery<Gesuch> query) {
+        query.join(gesuch).on(tranche.gesuch.id.eq(gesuch.id));
     }
 
     public void piaGeburtsdatum(final JPAQuery<Gesuch> query, final LocalDate geburtsdatum) {
