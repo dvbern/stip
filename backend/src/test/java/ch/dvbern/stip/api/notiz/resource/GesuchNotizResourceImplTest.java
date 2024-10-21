@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -91,18 +92,37 @@ class GesuchNotizResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+
+        gesuchNotizApiSpec.getNotiz()
+            .notizIdPath(UUID.randomUUID().toString())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
     // get all notizen as SB
     @Test
     @TestAsSachbearbeiter
     @Order(5)
     void getAll(){
-        gesuchNotizApiSpec.getNotizen()
+       final var notizen = gesuchNotizApiSpec.getNotizen()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchNotizDtoSpec[].class);
+       final var notiz = Arrays.stream(notizen).toList().get(0);
+
+        gesuchNotizApiSpec.getNotiz()
+            .notizIdPath(notiz.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+
     }
     // update notiz as GS
     @Test

@@ -34,6 +34,13 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     }
     @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
     @Override
+    public Response getNotiz(UUID notizId) {
+        authorizer.allowAllow();
+        return Response.ok().entity(service.getById(notizId)).build();
+    }
+
+    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @Override
     public Response getNotizen(UUID gesuchId) {
         authorizer.allowAllow();
         final var notizen = service.getAllByGesuchId(gesuchId);

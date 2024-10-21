@@ -22,6 +22,11 @@ public class GesuchNotizService {
         return repository.findAllByGesuchId(gesuchId).stream().map(mapper::toDto).toList();
     }
     @Transactional
+    public GesuchNotizDto getById(@Valid final UUID notizId) {
+        final var notiz = repository.requireById(notizId);
+        return mapper.toDto(notiz);
+    }
+    @Transactional
     public void delete(@Valid final UUID gesuchNotizId) {
         final var notiz = repository.requireById(gesuchNotizId);
         repository.delete(notiz);
