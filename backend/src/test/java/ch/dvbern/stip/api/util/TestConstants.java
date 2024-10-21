@@ -7,7 +7,7 @@ import ch.dvbern.stip.api.common.util.DateRange;
 
 public final class TestConstants {
 
-    public static final String  FREIGABESTELLE = "9477487f-3ac4-4d02-b57c-e0cefb292a88";
+    public static final String FREIGABESTELLE = "9477487f-3ac4-4d02-b57c-e0cefb292a88";
     public static final String SOZIALDIENST_ADMIN_ID = "9477487f-3ac4-4d02-b57c-e0cefb292a77";
     public static final String SOZIALDIENST_MITARBEITER_ID = "9477487f-3ac4-4d02-b57c-e0cefb292ae1";
     public static final String GESUCHSTELLER_TEST_ID = "9477487f-3ac4-4d02-b57c-e0cefb292ae5";
