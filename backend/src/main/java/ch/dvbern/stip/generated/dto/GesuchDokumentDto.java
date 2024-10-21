@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchDokumentDto  implements Serializable {
   private @Valid UUID id;
   private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
-  private @Valid List<DokumentDto> dokumente;
+  private @Valid List<DokumentDto> dokumente = new ArrayList<>();
   private @Valid ch.dvbern.stip.api.dokument.type.Dokumentstatus status;
 
   /**
@@ -38,6 +38,7 @@ public class GesuchDokumentDto  implements Serializable {
 
   
   @JsonProperty("id")
+  @NotNull
   public UUID getId() {
     return id;
   }
@@ -56,6 +57,7 @@ public class GesuchDokumentDto  implements Serializable {
 
   
   @JsonProperty("dokumentTyp")
+  @NotNull
   public ch.dvbern.stip.api.dokument.type.DokumentTyp getDokumentTyp() {
     return dokumentTyp;
   }
@@ -74,6 +76,7 @@ public class GesuchDokumentDto  implements Serializable {
 
   
   @JsonProperty("dokumente")
+  @NotNull
   public List<DokumentDto> getDokumente() {
     return dokumente;
   }
@@ -108,6 +111,7 @@ public class GesuchDokumentDto  implements Serializable {
 
   
   @JsonProperty("status")
+  @NotNull
   public ch.dvbern.stip.api.dokument.type.Dokumentstatus getStatus() {
     return status;
   }

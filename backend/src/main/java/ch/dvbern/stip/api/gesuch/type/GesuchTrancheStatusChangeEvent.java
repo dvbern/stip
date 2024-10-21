@@ -4,6 +4,6 @@ public enum GesuchTrancheStatusChangeEvent {
     IN_BEARBEITUNG_GS,
     UEBERPRUEFEN,
     MANUELLE_AENDERUNG,
-    AKZETPIERT,
+    AKZEPTIERT,
     ABLEHNEN
 }
