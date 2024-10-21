@@ -19,7 +19,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Fall } from '../model/fall';
-import { Gesuch } from '../model/gesuch';
+import { GesuchNotiz } from '../model/gesuchNotiz';
 import { GesuchNotizCreate } from '../model/gesuchNotizCreate';
 import { GesuchNotizUpdate } from '../model/gesuchNotizUpdate';
 import { ValidationReport } from '../model/validationReport';
@@ -269,9 +269,9 @@ export class GesuchNotizService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getNotizen$(requestParameters: GesuchNotizServiceGetNotizenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Gesuch>>;
-     public getNotizen$(requestParameters: GesuchNotizServiceGetNotizenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Gesuch>>>;
-     public getNotizen$(requestParameters: GesuchNotizServiceGetNotizenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Gesuch>>>;
+     public getNotizen$(requestParameters: GesuchNotizServiceGetNotizenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchNotiz>>;
+     public getNotizen$(requestParameters: GesuchNotizServiceGetNotizenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchNotiz>>>;
+     public getNotizen$(requestParameters: GesuchNotizServiceGetNotizenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchNotiz>>>;
      public getNotizen$(requestParameters: GesuchNotizServiceGetNotizenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchId = requestParameters.gesuchId;
         if (gesuchId === null || gesuchId === undefined) {
@@ -324,7 +324,7 @@ export class GesuchNotizService {
         }
 
         const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/notiz/all`;
-        return this.httpClient.request<Array<Gesuch>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<GesuchNotiz>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

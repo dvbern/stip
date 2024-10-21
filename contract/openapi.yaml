@@ -221,7 +221,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Gesuch'
+                  $ref: '#/components/schemas/GesuchNotiz'
           description: all notizen of a gesuch are returned
         '401':
           $ref: '#/components/responses/Unauthorized'
