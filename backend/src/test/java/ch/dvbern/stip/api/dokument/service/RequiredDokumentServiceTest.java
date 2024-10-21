@@ -3,9 +3,11 @@ package ch.dvbern.stip.api.dokument.service;
 import java.lang.annotation.Annotation;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -53,7 +55,7 @@ class RequiredDokumentServiceTest {
                 new Gesuch()
             ).setGesuchDokuments(
                 existingTypes.stream()
-                    .map(x -> new GesuchDokument().setDokumentTyp(x))
+                    .map(x -> new GesuchDokument().setDokumentTyp(x).setDokumente(List.of(new Dokument())))
                     .toList()
             )
         );
@@ -61,15 +63,15 @@ class RequiredDokumentServiceTest {
 
     static class MockDocumentProducer implements RequiredDocumentProducer {
         @Override
-        public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-            return ImmutablePair.of("mock", List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
+        public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+            return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
         }
     }
 
     static class MockEmptyDocumentProducer implements RequiredDocumentProducer {
         @Override
-        public Pair<String, List<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-            return ImmutablePair.of("", List.of());
+        public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+            return ImmutablePair.of("", Set.of());
         }
     }
 
@@ -116,7 +118,7 @@ class RequiredDokumentServiceTest {
         public void destroy(RequiredDocumentProducer instance) {
 
         }
-    
+
         @Override
         public Handle<RequiredDocumentProducer> getHandle() {
             return null;

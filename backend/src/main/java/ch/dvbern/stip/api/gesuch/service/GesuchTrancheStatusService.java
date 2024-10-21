@@ -45,7 +45,7 @@ public class GesuchTrancheStatusService {
             kommentarDto.getText()
         );
 
-        // TODO: KSTIP-1216 - Save kommentarDto.getText() in Nachricht and Protokoll
+        // TODO: KSTIP-XXXX - Save kommentarDto.getText() in Nachricht and Protokoll
     }
 
     public boolean benutzerCanEdit(final Benutzer benutzer, final GesuchTrancheStatus gesuchTrancheStatus) {

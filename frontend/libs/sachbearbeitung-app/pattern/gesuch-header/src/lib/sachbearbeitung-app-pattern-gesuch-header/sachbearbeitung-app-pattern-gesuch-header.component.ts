@@ -113,9 +113,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
         }
 
-        const trancheId = this.currentGesuchSig()?.gesuchTrancheToWorkWith.id;
-        if (trancheId) {
-          this.dokumentsStore.getDokumenteAndRequired$(trancheId);
+        const gesuchTrancheId =
+          this.currentGesuchSig()?.gesuchTrancheToWorkWith.id;
+        if (gesuchTrancheId) {
+          this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
         }
       },
       { allowSignalWrites: true },

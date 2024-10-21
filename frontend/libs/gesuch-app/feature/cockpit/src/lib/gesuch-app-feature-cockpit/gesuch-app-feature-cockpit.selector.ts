@@ -6,39 +6,27 @@ import { selectSharedDataAccessGesuchsperiodesView } from '@dv/shared/data-acces
 
 export const selectGesuchAppFeatureCockpitView = createSelector(
   selectSharedDataAccessGesuchsperiodesView,
-  sharedDataAccessGesuchsFeature.selectGesuchs,
+  sharedDataAccessGesuchsFeature.selectGsDashboard,
   sharedDataAccessGesuchsFeature.selectLoading,
   selectVersion,
   (gesuchsPerioden, gesuche, gesucheLoading, version) => {
-    const periodeErfassbarMitGesuch = gesuchsPerioden.gesuchsperiodes
+    const isPeriodeErfassbarMitGesuch = gesuchsPerioden.gesuchsperiodes
       .filter((p) => p.erfassbar)
-      .find((p) =>
-        gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id),
+      .some((p) =>
+        gesuche.some((gesuch) => p.id === gesuch.gesuchsperiode?.id),
       );
-
-    if (!periodeErfassbarMitGesuch) {
-      return {
-        ...gesuchsPerioden,
-        gesuchsperiodes: gesuchsPerioden.gesuchsperiodes.map((p) => ({
-          ...p,
-          gesuchLoading: gesucheLoading,
-          gesuch: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id),
-        })),
-        version,
-      };
-    }
+    const gesuchsperiodes = gesuchsPerioden.gesuchsperiodes.map((p) => ({
+      ...p,
+      gesuchLoading: gesucheLoading,
+      gesuch: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id),
+    }));
 
     return {
       ...gesuchsPerioden,
-      gesuchsperiodes: gesuchsPerioden.gesuchsperiodes
-        .map((p) => ({
-          ...p,
-          gesuchLoading: gesucheLoading,
-          gesuch: gesuche.find((gesuch) => p.id === gesuch.gesuchsperiode?.id),
-        }))
-        // this filter is the key difference. do not show the herbst / fruehling periode if there is a gesuch
-        // for either of them. Feel free to find a better solution to implement this logic.
-        .filter((p) => p.gesuch),
+      gesuchsperiodes: isPeriodeErfassbarMitGesuch
+        ? // Do not show the herbst / fruehling periode if there is a gesuch for either of them
+          gesuchsperiodes.filter((p) => p.gesuch)
+        : gesuchsperiodes,
       version,
     };
   },

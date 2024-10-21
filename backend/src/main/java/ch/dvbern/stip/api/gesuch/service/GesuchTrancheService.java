@@ -57,6 +57,10 @@ public class GesuchTrancheService {
 
     public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        return getRequiredDokumentTypes(gesuchTranche);
+    }
+
+    public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche) {
         return requiredDokumentService.getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
     }
 
@@ -185,7 +189,7 @@ public class GesuchTrancheService {
     @Transactional
     public GesuchTrancheDto aenderungAkzeptieren(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
-        gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.AKZETPIERT);
+        gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.AKZEPTIERT);
 
         final var newTranche = gesuchTrancheRepository.findMostRecentCreatedTranche(aenderung.getGesuch());
         return gesuchTrancheMapper.toDto(newTranche.orElseThrow(NotFoundException::new));
@@ -201,6 +205,13 @@ public class GesuchTrancheService {
         );
 
         return gesuchTrancheMapper.toDto(aenderung);
+    }
+
+    @Transactional
+    public void deleteAenderung(final UUID aenderungId) {
+        if(!gesuchTrancheRepository.deleteById(aenderungId)){
+            throw new NotFoundException();
+        }
     }
 
     @Transactional

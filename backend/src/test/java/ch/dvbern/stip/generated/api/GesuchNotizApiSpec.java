@@ -14,8 +14,8 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -233,7 +233,7 @@ public class GesuchNotizApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
-     * return List&lt;GesuchDtoSpec&gt;
+     * return List&lt;GesuchNotizDtoSpec&gt;
      */
     public static class GetNotizenOper implements Oper {
 
@@ -263,10 +263,10 @@ public class GesuchNotizApiSpec {
         /**
          * GET /gesuch/{gesuchId}/notiz/all
          * @param handler handler
-         * @return List&lt;GesuchDtoSpec&gt;
+         * @return List&lt;GesuchNotizDtoSpec&gt;
          */
-        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
+        public List<GesuchNotizDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<GesuchNotizDtoSpec>> type = new TypeRef<List<GesuchNotizDtoSpec>>(){};
             return execute(handler).as(type);
         }
 

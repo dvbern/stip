@@ -47,7 +47,7 @@ import {
   GesuchUpdate,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
-import { PERSON } from '@dv/shared/model/gesuch-form';
+import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import {
   handleNotFoundAndUnauthorized,
@@ -77,10 +77,7 @@ export const loadOwnGesuchs = createEffect(
     storeUtil = inject(StoreUtilService),
   ) => {
     return actions$.pipe(
-      ofType(
-        SharedDataAccessGesuchEvents.init,
-        SharedDataAccessGesuchEvents.gesuchRemovedSuccess,
-      ),
+      ofType(SharedDataAccessGesuchEvents.init),
       storeUtil.waitForBenutzerData$(),
       concatMap(() =>
         gesuchService.getGesucheGs$().pipe(
@@ -91,6 +88,34 @@ export const loadOwnGesuchs = createEffect(
           ),
           catchError((error) => [
             SharedDataAccessGesuchEvents.gesuchsLoadedFailure({
+              error: sharedUtilFnErrorTransformer(error),
+            }),
+          ]),
+        ),
+      ),
+    );
+  },
+  { functional: true },
+);
+
+export const loadGsDashboard = createEffect(
+  (
+    actions$ = inject(Actions),
+    gesuchService = inject(GesuchService),
+    storeUtil = inject(StoreUtilService),
+  ) => {
+    return actions$.pipe(
+      ofType(SharedDataAccessGesuchEvents.loadGsDashboard),
+      storeUtil.waitForBenutzerData$(),
+      concatMap(() =>
+        gesuchService.getGsDashboard$().pipe(
+          map((gsDashboard) =>
+            SharedDataAccessGesuchEvents.gsDashboardLoadedSuccess({
+              gsDashboard,
+            }),
+          ),
+          catchError((error) => [
+            SharedDataAccessGesuchEvents.gsDashboardLoadedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
           ]),
@@ -259,7 +284,7 @@ export const loadGesuch = createEffect(
 export const createGesuch = createEffect(
   (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
     return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.newTriggered),
+      ofType(SharedDataAccessGesuchEvents.createGesuch),
       exhaustMap(({ create }) =>
         gesuchService.createGesuch$({ gesuchCreate: create }).pipe(
           switchMap(() =>
@@ -365,12 +390,15 @@ export const updateGesuchSubform = createEffect(
 export const removeGesuch = createEffect(
   (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
     return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.removeTriggered),
-      concatMap(({ id }) =>
-        gesuchService.deleteGesuch$({ gesuchId: id }).pipe(
-          map(() => SharedDataAccessGesuchEvents.gesuchRemovedSuccess()),
+      ofType(SharedDataAccessGesuchEvents.deleteGesuch),
+      concatMap(({ gesuchId }) =>
+        gesuchService.deleteGesuch$({ gesuchId }).pipe(
+          switchMap(() => [
+            SharedDataAccessGesuchEvents.deleteGesuchSuccess(),
+            SharedDataAccessGesuchEvents.init(),
+          ]),
           catchError((error) => [
-            SharedDataAccessGesuchEvents.gesuchRemovedFailure({
+            SharedDataAccessGesuchEvents.deleteGesuchFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
           ]),
@@ -386,7 +414,7 @@ export const redirectToGesuchForm = createEffect(
     return actions$.pipe(
       ofType(SharedDataAccessGesuchEvents.gesuchCreatedSuccess),
       tap(({ id }) => {
-        router.navigate(['gesuch', PERSON.route, id]);
+        router.navigate(['gesuch', TRANCHE.route, id]);
       }),
     );
   },
@@ -620,6 +648,7 @@ export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
   loadAllGesuchs,
   loadGesuch,
+  loadGsDashboard,
   createGesuch,
   updateGesuch,
   updateGesuchSubform,

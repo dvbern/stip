@@ -8,6 +8,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("GesuchNotizCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -26,7 +31,7 @@ public class GesuchNotizCreateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchId")
   @NotNull
   public UUID getGesuchId() {
@@ -45,7 +50,7 @@ public class GesuchNotizCreateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("betreff")
   @NotNull
   public String getBetreff() {
@@ -64,7 +69,7 @@ public class GesuchNotizCreateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("text")
   @NotNull
   public String getText() {
@@ -100,7 +105,7 @@ public class GesuchNotizCreateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizCreateDto {\n");
-
+    
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");

@@ -1,10 +1,10 @@
 import { Signal, computed } from '@angular/core';
 
-import { DocumentOptions } from '@dv/shared/model/dokument';
-import { Dokument, DokumentTyp } from '@dv/shared/model/gesuch';
+import { DokumentOptions } from '@dv/shared/model/dokument';
+import { Dokument, DokumentTyp, GesuchDokument } from '@dv/shared/model/gesuch';
 
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
-  readonly [K in DokumentTyp]: DocumentOptions['titleKey'];
+  readonly [K in DokumentTyp]: DokumentOptions['titleKey'];
 } = {
   PERSON_NIEDERLASSUNGSSTATUS_B:
     'shared.form.person.file.AUFENTHALTSBEWILLIGUNG_B',
@@ -125,7 +125,7 @@ export function createUploadOptionsFactory<
     lazyDokumentTyp: (view: T) => DokumentTyp | null | undefined,
     options?: { singleUpload?: boolean; initialDocuments?: Dokument[] },
   ) => {
-    return computed<DocumentOptions | null>(() => {
+    return computed<DokumentOptions | null>(() => {
       const trancheId = view().trancheId;
       const allowTypes = view().allowTypes;
       const readonly = view().readonly;
@@ -149,14 +149,16 @@ export function createDocumentOptions(options: {
   trancheId: string;
   allowTypes: string;
   dokumentTyp: DokumentTyp;
+  gesuchDokument?: GesuchDokument;
   initialDocuments?: Dokument[];
   singleUpload?: boolean;
   readonly: boolean;
-}): DocumentOptions {
+}): DokumentOptions {
   const {
     trancheId,
     allowTypes,
     dokumentTyp,
+    gesuchDokument,
     initialDocuments,
     singleUpload,
     readonly,
@@ -167,6 +169,7 @@ export function createDocumentOptions(options: {
     dokumentTyp,
     singleUpload: singleUpload ?? false,
     trancheId,
+    gesuchDokument,
     initialDocuments,
     readonly,
   };

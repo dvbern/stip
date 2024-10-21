@@ -1,4 +1,4 @@
-@let tranche = viewSig().gesuchstranche;
+@let tranche = viewSig().tranche;
 
 <ng-template dvHeaderSuffix>
   <h2 class="fw-bold">
@@ -12,6 +12,42 @@
 
 <form [formGroup]="form">
   <div class="row g-4 mt-4">
+    <!-- Status -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>
+        @if (viewSig().isEditingTranche) {
+          {{ 'shared.form.tranche.status.label.' + viewSig().tranche?.typ | translate }}
+        } @else {
+          {{ 'shared.form.tranche.status.label.GESUCH' | translate }}
+        }
+      </mat-label>
+
+      <input readonly type="text" matInput formControlName="status" data-testid="form-tranche-status" />
+    </mat-form-field>
+
+    <!-- PiA -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.tranche.pia.label' | translate }} </mat-label>
+
+      <input readonly type="text" matInput formControlName="pia" data-testid="form-tranche-pia" />
+    </mat-form-field>
+  </div>
+  <div class="row g-4 mt-0">
+    <!-- Gesuchsnummer -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.tranche.gesuchsnummer.label' | translate }} </mat-label>
+
+      <input readonly type="text" matInput formControlName="gesuchsnummer" data-testid="form-tranche-gesuchsnummer" />
+    </mat-form-field>
+
+    <!-- Fallnummer -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-label>{{ 'shared.form.tranche.fallnummer.label' | translate }} </mat-label>
+
+      <input readonly type="text" matInput formControlName="fallnummer" data-testid="form-tranche-sachbearbeiter" />
+    </mat-form-field>
+  </div>
+  <div class="row g-4 mt-0">
     <!-- Von -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.tranche.von.label' | translate }} </mat-label>
@@ -46,6 +82,13 @@
         formControlName="bemerkung"
         data-testid="form-tranche-bemerkung"
       ></textarea>
+    </mat-form-field>
+  </div>
+  <div class="row g-4 mt-0">
+    <!-- Zuständiger Sachbearbeiter -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-12 col-xl-4">
+      <mat-label>{{ 'shared.form.tranche.sachbearbeiter.label' | translate }} </mat-label>
+      <input readonly type="text" matInput formControlName="sachbearbeiter" data-testid="form-tranche-sachbearbeiter" />
     </mat-form-field>
   </div>
 </form>

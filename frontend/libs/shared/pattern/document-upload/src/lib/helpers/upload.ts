@@ -1,7 +1,7 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Observable, combineLatest, interval, map, takeWhile } from 'rxjs';
 
-import { DocumentUpload, DocumentView } from '@dv/shared/model/dokument';
+import { DokumentUpload, DokumentView } from '@dv/shared/model/dokument';
 
 const PROGRESS_ANIMATION_TIME = 600;
 const FORMAT_ERROR = 'shared.file.invalidFormat';
@@ -20,7 +20,7 @@ export function createHttpEvent(event: HttpEvent<unknown>): HttpEvent<unknown> {
 }
 
 export function updateProgressFor(
-  dokumente: DocumentUpload[],
+  dokumente: DokumentUpload[],
   dokumentId: string,
   progress: number,
 ) {
@@ -52,8 +52,8 @@ export function toHumanReadableError(
 }
 
 export const UPLOAD_THEME_MAP: Record<
-  DocumentView['state'],
-  DocumentView['theme']
+  DokumentView['state'],
+  DokumentView['theme']
 > = {
   error: { icon: 'warning', type: 'warn', color: 'warn' },
   uploading: { icon: 'sync', type: 'info', color: 'info' },
@@ -61,8 +61,8 @@ export const UPLOAD_THEME_MAP: Record<
 };
 
 export const checkDocumentState = (
-  document: DocumentUpload,
-): DocumentView['state'] => {
+  document: DokumentUpload,
+): DokumentView['state'] => {
   if (document.error) {
     return 'error';
   }
@@ -73,7 +73,7 @@ export const checkDocumentState = (
   return 'uploading';
 };
 
-export const notCompletedOrError = (document: DocumentUpload) => {
+export const notCompletedOrError = (document: DokumentUpload) => {
   return document.progress !== 100 || document.error;
 };
 

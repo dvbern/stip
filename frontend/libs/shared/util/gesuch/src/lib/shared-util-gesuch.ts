@@ -1,7 +1,13 @@
 import { Signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Route } from '@angular/router';
-import { combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
+import {
+  combineLatest,
+  distinctUntilChanged,
+  filter,
+  map,
+  startWith,
+} from 'rxjs';
 
 import { Gesuchstatus } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
@@ -10,10 +16,11 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
  * Returns the latest gesuch id from the view
  */
 export function getLatestGesuchIdFromGesuch$(
-  viewSig: Signal<{ gesuch?: { id: string } | null }>,
+  viewSig: Signal<{ gesuch?: { id: string } | null; gesuchId?: string }>,
 ) {
   return toObservable(viewSig).pipe(
-    map((view) => view.gesuch?.id),
+    map((view) => view.gesuch?.id ?? view.gesuchId),
+    startWith(viewSig().gesuch?.id),
     filter(isDefined),
     distinctUntilChanged(),
   );

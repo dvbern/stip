@@ -170,6 +170,7 @@ async function sleep(msec: number) {
     'Gesuchsperiode',
     'GesuchTranche',
     'Mail',
+    'Notification',
     'Plz',
     'Stammdaten',
     'Tenant',

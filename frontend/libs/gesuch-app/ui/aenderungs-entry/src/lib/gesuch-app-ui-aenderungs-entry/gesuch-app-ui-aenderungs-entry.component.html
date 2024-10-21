@@ -31,11 +31,21 @@
     }
     <span class="mt-4 fw-normal small">{{ 'gesuch-app.aenderungs-entry.status.title' | translate }}</span>
     <span class="fw-medium">
-      {{ 'gesuch-app.cockpit.gesuch.status.' + tranche.status | translate }}
+      {{ 'shared.gesuch.status.tranche.' + tranche.status | translate }}
     </span>
-    <div class="flex-grow-1"></div>
+    <div class="flex-grow-1 mb-3"></div>
+    @if (tranche.status === 'IN_BEARBEITUNG_GS') {
+      <button
+        type="button"
+        class="btn btn-outline-primary mb-2 w-100"
+        data-testid="gesuch-app.cockpit.gesuch.aenderung-delete"
+        (click)="deleteAenderung.emit(tranche.id)"
+      >
+        <span>{{ 'gesuch-app.aenderungs-entry.delete' | translate }}</span>
+      </button>
+    }
     <a
-      class="btn btn-primary mt-3 w-100"
+      class="btn btn-primary w-100"
       data-testid="cockpit-gesuch-edit"
       [routerLink]="['/gesuch', gesuchId, 'aenderung', tranche.id]"
     >

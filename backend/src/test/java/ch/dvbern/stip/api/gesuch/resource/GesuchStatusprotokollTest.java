@@ -17,12 +17,14 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -47,6 +49,8 @@ class GesuchStatusprotokollTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
+
+    private static final String ZURUECKWEISEN_COMMENT = "Zurückgewiesen";
 
     @Test
     @TestAsGesuchsteller
@@ -115,8 +119,49 @@ class GesuchStatusprotokollTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiter
     @Order(6)
+    void gesuchZurueckweisen() {
+        gesuchApiSpec.gesuchZurueckweisen()
+            .gesuchIdPath(gesuch.getId())
+            .body(
+                new KommentarDtoSpec()
+                    .text(ZURUECKWEISEN_COMMENT)
+            )
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(7)
+    void testStatusprotokollZurueckgewiesenKommentar() {
+        final var statusprotokollEntrys = gesuchApiSpec.getStatusProtokoll()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(StatusprotokollEntryDtoSpec[].class);
+
+        final var statusprotokollEntryList = Arrays.stream(statusprotokollEntrys)
+            .sorted(Comparator.comparing(StatusprotokollEntryDtoSpec::getTimestamp))
+            .toList();
+
+        assertThat(statusprotokollEntryList.size(), is(4));
+        assertThat(
+            statusprotokollEntryList.get(3).getKommentar(),
+            Matchers.equalTo(ZURUECKWEISEN_COMMENT)
+        );
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(99)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());

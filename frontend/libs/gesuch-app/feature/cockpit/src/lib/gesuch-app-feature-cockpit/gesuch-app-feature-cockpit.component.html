@@ -66,53 +66,83 @@
                           <span class="mt-4 fw-normal small">{{
                             'gesuch-app.cockpit.periode.status.titel' | translate
                           }}</span>
-                          <span class="fw-medium">{{
-                            'gesuch-app.cockpit.periode.status.nicht_komplett' | translate
-                          }}</span>
-                          <ng-container
-                            *ngTemplateOutlet="einreichefrist; context: { periode: periode }"
-                          ></ng-container>
+                          <span class="fw-medium">
+                            @if (
+                              periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' &&
+                                periode.gesuch.missingDocuments?.count;
+                              as count
+                            ) {
+                              @if (count > 1) {
+                                {{ 'gesuch-app.cockpit.periode.status.missingDocuments' | translate: { count } }}
+                              } @else {
+                                {{ 'gesuch-app.cockpit.periode.status.missingDocument' | translate }}
+                              }
+                            } @else {
+                              {{ 'shared.gesuch.status.contract.' + periode.gesuch.gesuchStatus | translate }}
+                            }
+                          </span>
+                          <ng-container *ngTemplateOutlet="einreichefrist"></ng-container>
                         </div>
-                        <div class="flex-grow-1"></div>
-                        <a
-                          class="btn btn-primary mt-3 w-100"
-                          data-testid="cockpit-gesuch-edit"
-                          [routerLink]="['/gesuch', periode.gesuch.id]"
-                        >
-                          {{ 'gesuch-app.cockpit.gesuch.edit' | translate }}
-                        </a>
+                        <div class="flex-grow-1 mb-3"></div>
+                        @if (periode.gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
+                          <button
+                            type="button"
+                            class="btn btn-outline-primary mb-2 w-100"
+                            data-testid="gesuch-app.cockpit.gesuch.delete"
+                            (click)="deleteGesuch(periode.gesuch.id)"
+                          >
+                            <span>{{ 'gesuch-app.gesuch.delete' | translate }}</span>
+                          </button>
+                        }
+                        @if (
+                          periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' &&
+                            periode.gesuch.missingDocuments?.trancheId;
+                          as trancheId
+                        ) {
+                          <a
+                            class="btn btn-primary mt-3 w-100"
+                            data-testid="cockpit-gesuch-upload-missing-documents"
+                            [routerLink]="['/gesuch', 'dokumente', periode.gesuch.id, 'tranche', trancheId]"
+                          >
+                            {{ 'gesuch-app.cockpit.gesuch.uploadMissingDocuments' | translate }}
+                          </a>
+                        } @else {
+                          <a
+                            class="btn btn-primary mt-3 w-100"
+                            data-testid="cockpit-gesuch-edit"
+                            [routerLink]="['/gesuch', periode.gesuch.id]"
+                          >
+                            {{ 'gesuch-app.cockpit.gesuch.edit' | translate }}
+                          </a>
+                        }
                       }
                     </div>
                     @if (periode.gesuch) {
                       <div class="col-md d-flex">
                         @if (periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
-                          @let aenderung = gesuchAenderungStore.openAenderungViewSig();
-                          @if (aenderung) {
-                            @if (aenderung.loading) {
-                              <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
-                            } @else if (aenderung.openAenderung) {
-                              <div class="divider me-4"></div>
-                              <dv-gesuch-app-ui-aenderungs-entry
-                                class="d-flex flex-column gap-4 w-100"
-                                [tranche]="aenderung.openAenderung"
-                                [gesuchId]="periode.gesuch.id"
-                              ></dv-gesuch-app-ui-aenderungs-entry>
-                            } @else {
-                              <button
-                                type="button"
-                                class="btn btn-outline-primary mt-3 w-100 align-self-end"
-                                data-testid="cockpit-gesuch-aenderung-create"
-                                (click)="
-                                  aenderungMelden(
-                                    periode.gesuch.id,
-                                    periode.gesuchsperiodeStart,
-                                    periode.gesuchsperiodeStopp
-                                  )
-                                "
-                              >
-                                {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
-                              </button>
-                            }
+                          @if (periode.gesuch.offeneAenderung; as aenderung) {
+                            <div class="divider me-4"></div>
+                            <dv-gesuch-app-ui-aenderungs-entry
+                              class="d-flex flex-column gap-4 w-100"
+                              [tranche]="aenderung"
+                              [gesuchId]="periode.gesuch.id"
+                              (deleteAenderung)="deleteAenderung($event)"
+                            ></dv-gesuch-app-ui-aenderungs-entry>
+                          } @else {
+                            <button
+                              type="button"
+                              class="btn btn-outline-primary mt-3 w-100 align-self-end"
+                              data-testid="cockpit-gesuch-aenderung-create"
+                              (click)="
+                                aenderungMelden(
+                                  periode.gesuch.id,
+                                  periode.gesuchsperiodeStart,
+                                  periode.gesuchsperiodeStopp
+                                )
+                              "
+                            >
+                              {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
+                            </button>
                           }
                         } @else {
                           <!-- existing Gesuch (right pic) -->
@@ -129,7 +159,7 @@
                   <!-- no Gesuch yet -->
                   @if (!periode.gesuch && !periode.gesuchLoading) {
                     <div class="d-flex flex-column align-items-start">
-                      <ng-container *ngTemplateOutlet="einreichefrist; context: { periode: periode }"></ng-container>
+                      <ng-container *ngTemplateOutlet="einreichefrist"></ng-container>
                       <div class="mb-3"></div>
                       <button
                         data-testid="cockpit-gesuch-new"
@@ -145,14 +175,58 @@
               </div>
 
               <ng-template #einreichefrist>
-                <span class="mt-4 fw-normal small">{{
-                  'gesuch-app.cockpit.periode.einreichfrist.titel' | translate
-                }}</span>
-                @if (periode.einreichefristReduziert) {
-                  <span class="fw-medium">
-                    {{ 'gesuch-app.cockpit.periode.einreichfrist.spaetestens' | translate }}
-                    {{ periode.einreichefristReduziert | date: 'dd.MM.yyyy' }}
-                  </span>
+                @if (periode.gesuch) {
+                  @if (!periode.einreichefristAbgelaufen) {
+                    @if (periode.reduzierterBeitrag) {
+                      <span class="mt-4 fw-medium">
+                        {{ 'gesuch-app.cockpit.periode.einreichfrist.reduziert' | translate }}
+                      </span>
+                    }
+                    @if ((periode.einreichefristDays ?? 0) > 1) {
+                      <span
+                        class="mt-4 fw-normal small"
+                        [innerHTML]="
+                          'gesuch-app.cockpit.periode.einreichfrist.remaining' +
+                            (periode.reduzierterBeitrag ? '.reduziert' : '')
+                            | translate: { days: periode.einreichefristDays }
+                        "
+                      ></span>
+                    } @else if (periode.einreichefristDays === 1) {
+                      <span
+                        class="mt-4 fw-normal small"
+                        [innerHTML]="
+                          'gesuch-app.cockpit.periode.einreichfrist.1remaining' +
+                            (periode.reduzierterBeitrag ? '.reduziert' : '') | translate
+                        "
+                      ></span>
+                    } @else {
+                      <span
+                        class="mt-4 fw-normal small"
+                        [innerHTML]="
+                          'gesuch-app.cockpit.periode.einreichfrist.0remaining' +
+                            (periode.reduzierterBeitrag ? '.reduziert' : '') | translate
+                        "
+                      ></span>
+                    }
+                    <span class="mt-4 fw-normal small">{{
+                      'gesuch-app.cockpit.periode.einreichfrist.text' | translate
+                    }}</span>
+                    @if (!periode.einreichefristAbgelaufen) {
+                      <span class="fw-medium">
+                        {{
+                          (periode.reduzierterBeitrag ? periode.einreichefristReduziert : periode.einreichefristNormal)
+                            | date: 'dd.MM.yyyy'
+                        }}
+                      </span>
+                    }
+                  } @else {
+                    <span class="mt-4 fw-medium">
+                      {{ 'gesuch-app.cockpit.periode.einreichfrist.abgelaufen.warning' | translate }}
+                    </span>
+                    <span class="mt-4">{{
+                      'gesuch-app.cockpit.periode.einreichfrist.abgelaufen.text' | translate
+                    }}</span>
+                  }
                 }
               </ng-template>
             }
@@ -165,12 +239,9 @@
         <!-- NACHRICHTEN -->
         <div class="card mb-5 shadow-lg">
           <div class="card-body">
-            <h3 class="card-title d-flex align-items-center" data-testid="cockpit-nachrichten-title">
-              <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
-                <i class="material-symbols-rounded fs-5">mail</i>
-              </dv-shared-ui-icon-chip>
-              <span>Nachrichten</span>
-            </h3>
+            <dv-shared-ui-notifications
+              [notifications]="notificationStore.notificationListViewSig()"
+            ></dv-shared-ui-notifications>
           </div>
         </div>
 
