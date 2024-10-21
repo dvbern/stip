@@ -16,6 +16,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -88,8 +89,10 @@ public class SbDashboardQueryBuilder {
     }
 
     public void bearbeiter(final JPAQuery<Gesuch> query, final String bearbeiter) {
-        query.where(tranche.gesuch.fall.sachbearbeiterZuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
-            .or(tranche.gesuch.fall.sachbearbeiterZuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter)));
+        joinGesuch(query);
+        query.join(QZuordnung.zuordnung).on(gesuch.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
+        query.where(QZuordnung.zuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
+            .or(QZuordnung.zuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter)));
     }
 
     public void letzteAktivitaet(
