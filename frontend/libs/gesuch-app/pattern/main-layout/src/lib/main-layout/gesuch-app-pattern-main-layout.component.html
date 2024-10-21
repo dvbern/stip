@@ -1,12 +1,19 @@
-<dv-shared-pattern-app-header [closeMenu]="closeMenu">
-  <ng-content select="[dvHeaderMobileAddons]" ngProjectAs="[dvHeaderMobileAddons]"></ng-content>
-  <ng-content select="[dvHeaderDesktopLeft]" ngProjectAs="[dvHeaderDesktopLeft]"></ng-content>
-  <ng-content select="[dvHeaderDesktopRight]" ngProjectAs="[dvHeaderDesktopRight]"></ng-content>
-  <ng-content select="[dvMobileNavHeader]" ngProjectAs="[dvMobileNavHeader]"></ng-content>
-  <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
-</dv-shared-pattern-app-header>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="over" position="end">
+    <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
+      <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
+    </dv-shared-pattern-mobile-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content class="d-flex flex-column">
+    <dv-shared-pattern-app-header (closeSidenav)="sidenav.close()" (openSidenav)="sidenav.open()">
+      <ng-content select="[dvHeaderMobileAddons]" ngProjectAs="[dvHeaderMobileAddons]"></ng-content>
+      <ng-content select="[dvHeaderDesktopLeft]" ngProjectAs="[dvHeaderDesktopLeft]"></ng-content>
+      <ng-content select="[dvHeaderDesktopRight]" ngProjectAs="[dvHeaderDesktopRight]"></ng-content>
+    </dv-shared-pattern-app-header>
 
-<!-- MAIN CONTENT -->
-<main class="page-body">
-  <ng-content></ng-content>
-</main>
+    <!-- MAIN CONTENT -->
+    <main class="page-body">
+      <ng-content></ng-content>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

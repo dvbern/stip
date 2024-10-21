@@ -125,6 +125,7 @@
       "@dv/shared/pattern/i18n-title-strategy": ["libs/shared/pattern/i18n-title-strategy/src/index.ts"],
       "@dv/shared/pattern/interceptor-deployment-config": ["libs/shared/pattern/interceptor-deployment-config/src/index.ts"],
       "@dv/shared/pattern/jest-test-setup": ["libs/shared/pattern/jest-test-setup/src/index.ts"],
+      "@dv/shared/pattern/mobile-sidenav": ["libs/shared/pattern/mobile-sidenav/src/index.ts"],
       "@dv/shared/pattern/route-reuse-strategy-configurable": ["libs/shared/pattern/route-reuse-strategy-configurable/src/index.ts"],
       "@dv/shared/pattern/unsaved-guard": ["libs/shared/pattern/unsaved-guard/src/index.ts"],
       "@dv/shared/ui/aenderung-melden-dialog": ["libs/shared/ui/aenderung-melden-dialog/src/index.ts"],

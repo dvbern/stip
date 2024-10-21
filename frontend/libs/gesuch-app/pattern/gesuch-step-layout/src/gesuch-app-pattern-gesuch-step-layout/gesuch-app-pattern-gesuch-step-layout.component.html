@@ -55,7 +55,7 @@
   <div dvMobileNavContent>
     <dv-shared-pattern-gesuch-step-nav
       [stepsSig]="stepsSig()"
-      (navClicked)="navClicked.emit($event)"
+      (navClicked)="navClicked.emit({ value: true })"
     ></dv-shared-pattern-gesuch-step-nav>
   </div>
 

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -7,6 +8,7 @@ import {
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
+import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 
 @Component({
@@ -15,6 +17,8 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
   imports: [
     RouterLink,
     RouterLinkActive,
+    MatSidenavModule,
+    SharedPatternMobileSidenavComponent,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiSearchComponent,
@@ -26,5 +30,5 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppPatternOverviewLayoutComponent {
-  @Input() closeMenu: { value?: unknown } | null = null;
+  @Input() closeMenu: { value: boolean } | null = null;
 }

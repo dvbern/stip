@@ -5,10 +5,10 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
-  OnChanges,
-  SimpleChanges,
+  Output,
   ViewChild,
   computed,
   inject,
@@ -47,18 +47,18 @@ import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-select
   styleUrls: ['./shared-pattern-app-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedPatternAppHeaderComponent implements OnChanges {
+export class SharedPatternAppHeaderComponent {
   @Input() backLink?: { path: string; text: string };
-  @Input() closeMenu: { value?: unknown } | null = null;
   @Input() isScroll = false;
   @Input() breakpointCompactHeader = '(max-width: 992px)';
   @Input() compactHeader = false;
+  @Output() openSidenav = new EventEmitter<void>();
+  @Output() closeSidenav = new EventEmitter<void>();
   @ViewChild('menu') menu!: ElementRef;
 
   protected readonly Breakpoints = Breakpoints;
   protected breakpointObserver = inject(BreakpointObserver);
   private oauthService = inject(OAuthService);
-  // private offCanvasService = inject(NgbOffcanvas);
   private store = inject(Store);
   private cd = inject(ChangeDetectorRef);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
@@ -83,16 +83,6 @@ export class SharedPatternAppHeaderComponent implements OnChanges {
     this.isScroll = window.scrollY > 0;
   }
 
-  openMenu() {
-    // this.offCanvasService.open(this.menu, { position: 'end', scroll: true });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['closeMenu']) {
-      // this.offCanvasService.dismiss(changes['closeMenu'].currentValue);
-    }
-  }
-
   logout() {
     this.oauthService.revokeTokenAndLogout();
   }
@@ -100,12 +90,6 @@ export class SharedPatternAppHeaderComponent implements OnChanges {
   handleLanguageChangeHeader(language: Language) {
     this.store.dispatch(
       SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
-    );
-  }
-
-  handleLanguageChangeFooter(language: Language) {
-    this.store.dispatch(
-      SharedDataAccessLanguageEvents.footerSelectorChange({ language }),
     );
   }
 }

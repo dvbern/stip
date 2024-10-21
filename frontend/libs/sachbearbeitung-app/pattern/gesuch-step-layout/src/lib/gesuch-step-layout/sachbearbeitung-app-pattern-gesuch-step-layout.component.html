@@ -1,61 +1,70 @@
-<dv-sachbearbeitung-app-pattern-gesuch-header
-  [navClicked]="navClicked$ | async"
-  [currentGesuch]="cacheViewSig().cache.gesuch"
-  [isLoading]="viewSig().loading"
->
-  <dv-shared-pattern-gesuch-step-nav
-    dvMobileNavContent
-    [stepsSig]="stepsSig()"
-    (navClicked)="navClicked$.emit()"
-  ></dv-shared-pattern-gesuch-step-nav>
-</dv-sachbearbeitung-app-pattern-gesuch-header>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="over" position="end">
+    <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
+      <dv-shared-pattern-gesuch-step-nav
+        [stepsSig]="stepsSig()"
+        (navClicked)="navClicked$.emit()"
+      ></dv-shared-pattern-gesuch-step-nav>
+    </dv-shared-pattern-mobile-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content class="d-flex flex-column">
+    <dv-sachbearbeitung-app-pattern-gesuch-header
+      [currentGesuch]="cacheViewSig().cache.gesuch"
+      [isLoading]="viewSig().loading"
+      (openSidenav)="sidenav.open()"
+    >
+    </dv-sachbearbeitung-app-pattern-gesuch-header>
 
-<!-- MAIN CONTENT -->
-<main class="page-body">
-  <div class="d-flex h-100">
-    <!-- left step nav (Desktop) -->
-    <div class="d-none d-lg-block border-end bg-white">
-      <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [stepsSig]="stepsSig()" />
-    </div>
-    @if (currentStepSig(); as step) {
-      <div class="container mb-5 pt-lg-4 px-lg-4">
-        <!-- step header (mobile) -->
-        <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">
-          <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
-          <div class="text-end">
-            <h5 class="step-title">
-              {{ step.translationKey | translate }}
-            </h5>
-            @if (step.nextStep?.translationKey; as nextStepKey) {
-              <p class="fst-italic mb-0">
-                {{ 'shared.form.next' | translate }}:
-                {{ nextStepKey | translate }}
-              </p>
-            }
+    <!-- MAIN CONTENT -->
+    <main class="page-body">
+      <div class="d-flex h-100">
+        <!-- left step nav (Desktop) -->
+        <div class="d-none d-lg-block border-end bg-white">
+          <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [stepsSig]="stepsSig()" />
+        </div>
+        @if (currentStepSig(); as step) {
+          <div class="container mb-5 pt-lg-4 px-lg-4">
+            <!-- step header (mobile) -->
+            <div
+              class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none"
+            >
+              <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
+              <div class="text-end">
+                <h5 class="step-title">
+                  {{ step.translationKey | translate }}
+                </h5>
+                @if (step.nextStep?.translationKey; as nextStepKey) {
+                  <p class="fst-italic mb-0">
+                    {{ 'shared.form.next' | translate }}:
+                    {{ nextStepKey | translate }}
+                  </p>
+                }
+              </div>
+            </div>
+
+            <!-- title (desktop) -->
+            <div class="d-none d-lg-flex justify-content-start">
+              <dv-shared-ui-icon-chip class="step-icon me-3">
+                <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
+              </dv-shared-ui-icon-chip>
+
+              <h2 class="fw-bold" data-testid="step-title">
+                {{ step.titleTranslationKey | translate }}
+              </h2>
+              <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
+            </div>
+
+            <div>
+              <ng-content></ng-content>
+            </div>
           </div>
-        </div>
-
-        <!-- title (desktop) -->
-        <div class="d-none d-lg-flex justify-content-start">
-          <dv-shared-ui-icon-chip class="step-icon me-3">
-            <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
-          </dv-shared-ui-icon-chip>
-
-          <h2 class="fw-bold" data-testid="step-title">
-            {{ step.titleTranslationKey | translate }}
-          </h2>
-          <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
-        </div>
-
-        <div>
-          <ng-content></ng-content>
-        </div>
+        }
       </div>
-    }
-  </div>
 
-  <!-- notifications/errors -->
-  <div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <dv-global-notifications></dv-global-notifications>
-  </div>
-</main>
+      <!-- notifications/errors -->
+      <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <dv-global-notifications></dv-global-notifications>
+      </div>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
