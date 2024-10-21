@@ -1,0 +1,31 @@
+<div class="p-3 d-flex justify-content-between">
+  <div>
+    <dv-shared-ui-language-selector [language]="languageSig()" (languageChange)="handleLanguageChangeHeader($event)" />
+  </div>
+  <button
+    type="button"
+    class="btn-close"
+    [attr.aria-label]="'shared.close' | translate"
+    (click)="closeSidenav.emit()"
+  ></button>
+</div>
+
+<div class="p-3 d-flex flex-column">
+  <div class="d-flex flex-column align-items-start">
+    <ul class="nav flex-column w-100">
+      <li class="nav-item">
+        <span class="nav-link mb-4">{{ benutzerNameSig() }}</span>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link">Profil</a>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" (click)="logout()">Logout</button>
+      </li>
+    </ul>
+  </div>
+  <div class="mt-2">
+    <ng-content></ng-content>
+  </div>
+</div>

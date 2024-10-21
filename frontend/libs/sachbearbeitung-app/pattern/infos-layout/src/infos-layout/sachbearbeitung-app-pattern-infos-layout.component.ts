@@ -6,6 +6,7 @@ import {
   Input,
   inject,
 } from '@angular/core';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,6 +20,7 @@ import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeit
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
+import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({
@@ -29,6 +31,8 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
     TranslateModule,
     RouterLink,
     RouterLinkActive,
+    MatSidenavModule,
+    SharedPatternMobileSidenavComponent,
     SharedPatternAppHeaderComponent,
     GlobalNotificationsComponent,
     SharedUiIconChipComponent,

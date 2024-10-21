@@ -19,7 +19,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
-import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
@@ -87,7 +86,6 @@ const MEDIUM_AGE_ADULT = 30;
     MatInputModule,
     MatSelectModule,
     MaskitoDirective,
-    NgbInputDatepicker,
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
     MatCheckboxModule,

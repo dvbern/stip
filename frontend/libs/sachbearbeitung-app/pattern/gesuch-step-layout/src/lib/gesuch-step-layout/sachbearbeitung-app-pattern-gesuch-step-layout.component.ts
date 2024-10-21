@@ -8,6 +8,7 @@ import {
   input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -24,6 +25,7 @@ import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
+import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
@@ -40,6 +42,8 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
     RouterLink,
     TranslateModule,
     GlobalNotificationsComponent,
+    MatSidenavModule,
+    SharedPatternMobileSidenavComponent,
     SharedPatternGesuchStepNavComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,

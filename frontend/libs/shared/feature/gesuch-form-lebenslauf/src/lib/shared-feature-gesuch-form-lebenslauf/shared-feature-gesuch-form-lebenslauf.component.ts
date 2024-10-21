@@ -6,7 +6,6 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addYears, max, setMonth, startOfMonth, subMonths } from 'date-fns';
@@ -16,6 +15,7 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { LebenslaufItemUpdate } from '@dv/shared/model/gesuch';
 import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
+import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -36,9 +36,9 @@ const MIN_EDUCATION_AGE = 16; // August
   standalone: true,
   imports: [
     SharedFeatureGesuchFormLebenslaufEditorComponent,
-    NgbAlert,
     TranslateModule,
     TwoColumnTimelineComponent,
+    SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
   ],

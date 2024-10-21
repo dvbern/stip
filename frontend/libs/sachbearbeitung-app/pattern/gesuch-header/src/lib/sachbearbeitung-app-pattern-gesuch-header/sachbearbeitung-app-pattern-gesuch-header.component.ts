@@ -3,6 +3,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  EventEmitter,
+  Output,
   computed,
   effect,
   inject,
@@ -54,13 +56,14 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     alias: 'currentGesuch',
   });
   isLoadingSig = input.required<boolean>({ alias: 'isLoading' });
-  navClickedSig = input.required<{ value: unknown }>({ alias: 'navClicked' });
   store = inject(Store);
   router = inject(Router);
   destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   dokumentsStore = inject(DokumentsStore);
+
+  @Output() openSidenav = new EventEmitter<void>();
 
   private hasAcceptedAllDocumentsSig = computed(() => {
     const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;

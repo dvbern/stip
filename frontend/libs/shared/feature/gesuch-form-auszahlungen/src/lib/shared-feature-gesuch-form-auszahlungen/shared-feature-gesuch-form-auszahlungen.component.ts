@@ -22,7 +22,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { extractIBAN } from 'ibantools';
@@ -52,6 +51,7 @@ import {
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -79,8 +79,8 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     SharedUiProgressBarComponent,
     TranslateModule,
     MaskitoDirective,
+    SharedUiInfoContainerComponent,
     SharedUiFormAddressComponent,
-    NgbAlert,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedUiZuvorHintDirective,

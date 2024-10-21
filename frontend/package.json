@@ -62,7 +62,6 @@
     "@maskito/angular": "^3.0.3",
     "@maskito/core": "^3.0.3",
     "@maskito/kit": "^3.0.3",
-    "@ng-bootstrap/ng-bootstrap": "^17.0.1",
     "@ngrx/component-store": "18.0.2",
     "@ngrx/effects": "18.0.2",
     "@ngrx/entity": "18.0.2",

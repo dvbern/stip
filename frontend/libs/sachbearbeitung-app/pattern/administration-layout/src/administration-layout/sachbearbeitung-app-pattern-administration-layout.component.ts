@@ -4,8 +4,10 @@ import {
   Component,
   EventEmitter,
   Input,
+  Output,
   inject,
 } from '@angular/core';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -19,6 +21,7 @@ import {
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
+import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
@@ -30,6 +33,8 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     CommonModule,
     TranslateModule,
     RouterModule,
+    MatSidenavModule,
+    SharedPatternMobileSidenavComponent,
     SharedUiSearchComponent,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
@@ -46,7 +51,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
 })
 export class SachbearbeitungAppPatternAdministrationLayoutComponent {
   @Input() option?: AdminOption | ChildAdminOption;
-  navClicked = new EventEmitter();
+  @Output() navClicked = new EventEmitter<{ value: boolean }>();
 
   route = inject(Router);
   headerService = inject(SharedUtilHeaderService);
