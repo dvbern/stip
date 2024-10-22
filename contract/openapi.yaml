@@ -763,6 +763,126 @@ paths:
                 $ref: '#/components/schemas/GesuchsperiodeWithDaten'
       operationId: publishGesuchsperiode
       summary: Publishes a Gesuchsperiode with the given id
+  /sozialdienst/:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstCreate'
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns created Sozialdienst
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: createSozialdienst
+      summary: Create a new Sozialdienst
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstUpdate'
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns updated Sozialdienst
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienst
+      summary: Update a Sozialdienst
+    get:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sozialdienst'
+          description: Returns all Sozialdienste
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllSozialdienste
+      summary: Returns all Sozialdienste
+  /sozialdienst/{sozialdienstId}:
+    parameters:
+      - name: sozialdienstId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Deletes a Sozialdienst by id
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteSozialdienst
+      summary: Delete a Sozialdienst by Id
+      tags:
+        - Sozialdienst
+    get:
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns a Sozialdienst by id
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getSozialdienst
+      summary: Get a Sozialdienst by Id
+      tags:
+        - Sozialdienst
   /stammdaten/land:
     get:
       tags:
@@ -3557,6 +3677,38 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/SteuerdatenUpdate'
+    Sozialdienst:
+      title: root type for sozialdienst
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstUpdate'
+    SozialdienstCreate:
+      required:
+        - name
+        - iban
+        - adresse
+      properties:
+        name:
+          type: string
+        iban:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+    SozialdienstUpdate:
+      required:
+        - id
+        - name
+        - iban
+        - adresse
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        iban:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -4098,7 +4250,7 @@ components:
       required: true
       schema:
         type: integer
-    
+
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []
