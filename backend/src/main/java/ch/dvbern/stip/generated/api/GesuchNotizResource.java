@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import java.util.UUID;
+
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 

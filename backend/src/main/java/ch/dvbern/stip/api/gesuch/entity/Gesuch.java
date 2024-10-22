@@ -88,10 +88,9 @@ public class Gesuch extends AbstractMandantEntity {
     @Nullable
     @Column(name = "comment")
     private String comment;
-    
+
     @Nullable
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private @Valid List<GesuchNotiz> notizen = new ArrayList<>();
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {

@@ -10,8 +10,12 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public interface GesuchNotizMapper {
+
     GesuchNotizDto toDto(GesuchNotiz notiz);
+
     GesuchNotiz toEntity(GesuchNotizDto notizDto);
+
     GesuchNotiz toEntity(GesuchNotizCreateDto notizCreateDto);
+
     GesuchNotiz partialUpdate(GesuchNotizUpdateDto notizDto, @MappingTarget GesuchNotiz notiz);
 }

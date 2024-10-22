@@ -14,38 +14,43 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestScoped
 public class GesuchNotizService {
-    private final GesuchNotizRepository repository;
-    private final GesuchNotizMapper mapper;
+    private final GesuchNotizRepository gesuchNotizRepository;
+    private final GesuchNotizMapper gesuchNotizMapper;
 
     @Transactional
     public List<GesuchNotizDto> getAllByGesuchId(@Valid final UUID gesuchId) {
-        return repository.findAllByGesuchId(gesuchId).stream().map(mapper::toDto).toList();
+        return gesuchNotizRepository.findAllByGesuchId(gesuchId).stream().map(gesuchNotizMapper::toDto).toList();
     }
+
     @Transactional
     public GesuchNotizDto getById(@Valid final UUID notizId) {
-        final var notiz = repository.requireById(notizId);
-        return mapper.toDto(notiz);
+        final var notiz = gesuchNotizRepository.requireById(notizId);
+        return gesuchNotizMapper.toDto(notiz);
     }
+
     @Transactional
     public void delete(@Valid final UUID gesuchNotizId) {
-        final var notiz = repository.requireById(gesuchNotizId);
-        repository.delete(notiz);
+        final var notiz = gesuchNotizRepository.requireById(gesuchNotizId);
+        gesuchNotizRepository.delete(notiz);
     }
+
     @Transactional
     public void deleteAllByGesuchId(@Valid final UUID gesuchId) {
-        repository.findAllByGesuchId(gesuchId).forEach(repository::delete);
+        gesuchNotizRepository.findAllByGesuchId(gesuchId).forEach(gesuchNotizRepository::delete);
     }
+
     @Transactional
     public GesuchNotizDto create(@Valid final GesuchNotizCreateDto createDto) {
-        final var notiz = mapper.toEntity(createDto);
-        repository.persistAndFlush(notiz);
-        return mapper.toDto(notiz);
+        final var notiz = gesuchNotizMapper.toEntity(createDto);
+        gesuchNotizRepository.persistAndFlush(notiz);
+        return gesuchNotizMapper.toDto(notiz);
     }
+
     @Transactional
     public GesuchNotizDto update(@Valid final GesuchNotizUpdateDto gesuchNotizUpdateDto) {
-         var gesuchNotiz = repository.requireById(gesuchNotizUpdateDto.getId());
-         var update = mapper.partialUpdate(gesuchNotizUpdateDto,gesuchNotiz);
-         repository.persistAndFlush(update);
-         return mapper.toDto(gesuchNotiz);
+         var gesuchNotiz = gesuchNotizRepository.requireById(gesuchNotizUpdateDto.getId());
+         var update = gesuchNotizMapper.partialUpdate(gesuchNotizUpdateDto,gesuchNotiz);
+         gesuchNotizRepository.persistAndFlush(update);
+         return gesuchNotizMapper.toDto(gesuchNotiz);
     }
 }

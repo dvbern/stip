@@ -64,6 +64,7 @@ class GesuchNotizResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
+
     // create a notiz as SB
     @Test
     @TestAsSachbearbeiter
@@ -100,6 +101,7 @@ class GesuchNotizResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
+
     // get all notizen as SB
     @Test
     @TestAsSachbearbeiter
@@ -124,6 +126,7 @@ class GesuchNotizResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode());
 
     }
+
     // update notiz as GS
     @Test
     @TestAsGesuchsteller
@@ -146,6 +149,7 @@ class GesuchNotizResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
+
     // update notiz as SB
     @Test
     @TestAsSachbearbeiter
@@ -165,7 +169,6 @@ class GesuchNotizResourceImplTest {
             .body()
             .as(GesuchNotizDto.class);
 
-
         var gesuchUpdateDto = new GesuchNotizUpdateDtoSpec();
         gesuchUpdateDto.setId(notiz.getId());
         gesuchUpdateDto.setText("update");
@@ -184,7 +187,6 @@ class GesuchNotizResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
-
 
     // create a notiz as SB
     // delete gesuch as SB, check if all notizen are deleted too

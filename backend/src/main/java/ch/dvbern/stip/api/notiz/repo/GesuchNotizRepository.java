@@ -11,15 +11,20 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
+
 @RequiredArgsConstructor
 @ApplicationScoped
 public class GesuchNotizRepository implements BaseRepository<GesuchNotiz> {
+
     private final EntityManager entityManager;
+
     public List<GesuchNotiz> findAllByGesuchId(UUID gesuchId) {
         final var gesuchNotiz = QGesuchNotiz.gesuchNotiz;
+
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuchNotiz)
             .where(gesuchNotiz.gesuchId.eq(gesuchId))
-            .stream().toList();
+            .stream()
+            .toList();
     }
 }

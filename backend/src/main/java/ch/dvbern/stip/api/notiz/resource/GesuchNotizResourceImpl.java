@@ -12,6 +12,7 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
+
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchNotizResourceImpl implements GesuchNotizResource {
@@ -25,6 +26,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         final var notiz = service.create(gesuchNotizCreateDto);
         return Response.ok().entity(notiz).build();
     }
+
     @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
     @Override
     public Response deleteNotiz(UUID notizId) {
@@ -32,6 +34,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         service.delete(notizId);
         return Response.noContent().build();
     }
+
     @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
     @Override
     public Response getNotiz(UUID notizId) {
@@ -46,6 +49,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         final var notizen = service.getAllByGesuchId(gesuchId);
         return Response.ok().entity(notizen).build();
     }
+
     @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
     @Override
     public Response updateNotiz(GesuchNotizUpdateDto gesuchNotizUpdateDto) {
