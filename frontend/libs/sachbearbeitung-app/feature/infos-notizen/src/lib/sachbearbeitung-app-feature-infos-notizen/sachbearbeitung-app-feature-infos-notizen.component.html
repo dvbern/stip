@@ -1,14 +1,8 @@
-<!-- Table -->
-<div class="row g-4 mt-2">
-  <p>
-    {{ 'sachbearbeitung-app.gesuch-form.protokoll.text' | translate }}
-  </p>
-</div>
 <div class="shadow rounded-4 overflow-hidden mt-2">
   <table mat-table class="dv-crud-table large-spacing" [dataSource]="notizSig()" matSort>
     <caption class="cdk-visually-hidden">
       {{
-        'sachbearbeitung-app.gesuch-form.protokoll.description' | translate
+        'sachbearbeitung-app.infos.notizen.description' | translate
       }}
     </caption>
     <!-- add button -->
@@ -18,7 +12,7 @@
     <!-- Datum -->
     <ng-container matColumnDef="datum">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.gesuch-form.notiz.table.datum' | translate }}
+        {{ 'sachbearbeitung-app.infos.notizen.table.datum' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="text-nowrap">
         {{ notiz.datum | date: 'dd.MM.yyyy' }}
@@ -28,27 +22,40 @@
     <!-- Betreff -->
     <ng-container matColumnDef="typ">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.gesuch-form.notiz.table.typ' | translate }}
+        {{ 'sachbearbeitung-app.infos.notizen.table.typ' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="text-nowrap">
         {{ notiz.betreff | translate }}
       </td>
     </ng-container>
 
-    <!-- Textfeld -->
-    <ng-container matColumnDef="textfeld">
+    <!-- text -->
+    <ng-container matColumnDef="text">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.gesuch-form.notiz.table.textfeld' | translate }}
+        {{ 'sachbearbeitung-app.infos.notizen.table.text' | translate }}
       </th>
-      <td mat-cell *dvMatCellDef="let protokoll; dataSource: notizSig()" class="text-nowrap">
-        {{ protokoll.text }}
+      <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="text-nowrap">
+        {{ notiz.text }}
       </td>
     </ng-container>
 
     <!-- User -->
     <ng-container matColumnDef="user">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'sachbearbeitung-app.gesuch-form.notiz.table.user' | translate }}
+        {{ 'sachbearbeitung-app.infos.notizen.table.user' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100">
+        {{ notiz.user }}
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>
+        <a [routerLink]="['..', 'create']" class="btn btn-outline-dark d-inline-flex lh-1 align-items-center">
+          <i class="material-symbols-rounded fs-5 me-2">add</i>
+          {{ 'sachbearbeitung-app.infos.notiz.table.erstellen' | translate }}
+        </a>
       </th>
       <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100">
         {{ notiz.user }}
@@ -56,6 +63,13 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr
+      mat-row
+      dvSharedUiFocusableListItem
+      tabindex="-1"
+      class="highlightable"
+      [routerLink]="['..', 'detail', notiz.id]"
+      *matRowDef="let notiz; columns: displayedColumns"
+    ></tr>
   </table>
 </div>

@@ -44,13 +44,13 @@
             <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
           </dv-shared-ui-icon-chip>
 
-          <h2 class="fw-bold m-0" data-testid="step-title">
+          <h2 class="fw-bold m-0">
             {{ option.titleTranslationKey | translate }}
           </h2>
         </div>
       }
 
-      <div>
+      <div class="mt-4">
         <ng-content></ng-content>
       </div>
     </div>

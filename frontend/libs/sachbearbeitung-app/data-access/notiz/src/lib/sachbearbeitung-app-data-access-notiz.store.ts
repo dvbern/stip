@@ -15,10 +15,12 @@ import {
 
 type NotizState = {
   notizen: CachedRemoteData<GesuchNotiz[]>;
+  notiz: CachedRemoteData<GesuchNotiz>;
 };
 
 const initialState: NotizState = {
   notizen: initial(),
+  notiz: initial(),
 };
 
 @Injectable()
@@ -31,6 +33,10 @@ export class NotizStore extends signalStore(
 
   notizenListViewSig = computed(() => {
     return fromCachedDataSig(this.notizen);
+  });
+
+  notizViewSig = computed(() => {
+    return fromCachedDataSig(this.notiz);
   });
 
   loadNotizen$ = rxMethod<{ gesuchId: string }>(
@@ -47,6 +53,21 @@ export class NotizStore extends signalStore(
       ),
     ),
   );
+
+  // loadNotiz$ = rxMethod<{ notizId: string }>(
+  //   pipe(
+  //     tap(() => {
+  //       patchState(this, (state) => ({
+  //         notizen: cachedPending(state.notizen),
+  //       }));
+  //     }),
+  //     switchMap(({ gesuchId }) =>
+  //       this.notizService
+  //         .getNotizen$({ gesuchId })
+  //         .pipe(handleApiResponse((notizen) => patchState(this, { notizen }))),
+  //     ),
+  //   ),
+  // );
 
   // saveNotiz$ = rxMethod<{
   //   notizId: string;

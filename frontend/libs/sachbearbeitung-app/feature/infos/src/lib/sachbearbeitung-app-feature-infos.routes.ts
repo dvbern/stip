@@ -21,7 +21,7 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
           ),
       },
       {
-        path: NOTIZEN_ROUTE.route + '/:id',
+        path: NOTIZEN_ROUTE.route,
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/infos-notizen').then(
             (m) => m.sachbearbeitungAppFeatureInfosNotizenRoutes,

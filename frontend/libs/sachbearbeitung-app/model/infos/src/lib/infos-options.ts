@@ -21,6 +21,20 @@ export const NOTIZEN_ROUTE: InfosOptions = {
   iconSymbolName: 'description',
 };
 
+export const NOTIZEN_ROUTE_CREATE: InfosOptions = {
+  route: 'create',
+  translationKey: 'sachbearbeitung-app.infos.notizen.erstellen',
+  titleTranslationKey: 'sachbearbeitung-app.infos.notizen',
+  iconSymbolName: 'description',
+};
+
+export const NOTIZEN_ROUTE_DETAIL: InfosOptions = {
+  route: ':notizId',
+  translationKey: 'sachbearbeitung-app.infos.notizen.detail',
+  titleTranslationKey: 'sachbearbeitung-app.infos.notizen',
+  iconSymbolName: 'description',
+};
+
 export const BUCHHALTUNG_ROUTE: InfosOptions = {
   route: 'buchhaltung',
   translationKey: 'sachbearbeitung-app.infos.buchhaltung',

@@ -235,6 +235,21 @@
   "sachbearbeitung-app.infos.darlehen": "Darlehen",
   "sachbearbeitung-app.infos.beschwerden": "Beschwerden",
 
+  "sachbearbeitung-app.infos.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
+  "sachbearbeitung-app.infos.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
+  "sachbearbeitung-app.infos.protokoll.table.datum": "Datum",
+  "sachbearbeitung-app.infos.protokoll.table.status": "Status",
+  "sachbearbeitung-app.infos.protokoll.table.user": "User",
+  "sachbearbeitung-app.infos.protokoll.table.kommentar": "Kommentar",
+
+  "sachbearbeitung-app.infos.notizen.description": "Eine Übersicht aller Notizen",
+  "sachbearbeitung-app.infos.notizen.title": "Notizen",
+  "sachbearbeitung-app.infos.notizen.table.datum": "Datum",
+  "sachbearbeitung-app.infos.notizen.table.typ": "Typ",
+  "sachbearbeitung-app.infos.notizen.table.text": "Text",
+  "sachbearbeitung-app.infos.notizen.table.user": "Notiz",
+  "sachbearbeitung-app.infos.notiz.table.erstellen": "Erstellen",
+
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Persönliches Budget",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.title": "Einnahmen",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total": "Totaler Betrag der persönlichen Einnahmen",
@@ -316,18 +331,6 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Stipendium Betrag",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}{{ type }}",
-
-  "sachbearbeitung-app.gesuch-form.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
-  "sachbearbeitung-app.gesuch-form.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
-  "sachbearbeitung-app.gesuch-form.protokoll.table.datum": "Datum",
-  "sachbearbeitung-app.gesuch-form.protokoll.table.status": "Status",
-  "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
-  "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Kommentar",
-
-  "sachbearbeitung-app.gesuch-form.notizen.title": "Notizen",
-  "sachbearbeitung-app.gesuch-form.notizen.table.datum": "Datum",
-  "sachbearbeitung-app.gesuch-form.notizen.table.status": "Typ",
-  "sachbearbeitung-app.gesuch-form.notizen.table.user": "Notiz",
 
   "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Ausstehend",
 

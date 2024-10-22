@@ -9,24 +9,34 @@ import {
   viewChild,
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
-import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { SharedUiFocusableListDirective } from '@dv/shared/ui/focusable-list';
+import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
   standalone: true,
-  imports: [CommonModule, TranslateModule, MatTable],
+  imports: [
+    CommonModule,
+    RouterLink,
+    TranslateModule,
+    MatTableModule,
+    TypeSafeMatCellDefDirective,
+    SharedUiFocusableListDirective,
+  ],
   templateUrl: './sachbearbeitung-app-feature-infos-notizen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureInfosNotizenComponent {
-  displayedColumns = ['datum', 'typ', 'notiz'];
-  notizStore = inject(NotizStore);
   store = inject(Store);
+  displayedColumns = ['datum', 'typ', 'text', 'user', 'actions'];
+  notizStore = inject(NotizStore);
 
   gesuchIdSig = input.required<string>({ alias: 'id' });
 
@@ -40,7 +50,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
     effect(
       () => {
         const gesuchId = this.gesuchIdSig();
-        this.store.dispatch(SharedEventGesuchFormProtokoll.init());
+        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
         this.notizStore.loadNotizen$({
           gesuchId,
         });

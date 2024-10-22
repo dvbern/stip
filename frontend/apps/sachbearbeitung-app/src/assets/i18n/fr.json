@@ -235,6 +235,21 @@
   "sachbearbeitung-app.infos.darlehen": "Prêt",
   "sachbearbeitung-app.infos.beschwerden": "Plaintes",
 
+  "sachbearbeitung-app.infos.protokoll.description": "Un aperçu de toutes les modifications apportées à la demande",
+  "sachbearbeitung-app.infos.protokoll.text": "Voici un aperçu de toutes les actions de cette demande.",
+  "sachbearbeitung-app.infos.protokoll.table.datum": "Date",
+  "sachbearbeitung-app.infos.protokoll.table.status": "Statut",
+  "sachbearbeitung-app.infos.protokoll.table.user": "User",
+  "sachbearbeitung-app.infos.protokoll.table.kommentar": "Commentaire",
+
+  "sachbearbeitung-app.infos.notizen.description": "Un aperçu de toutes les notes",
+  "sachbearbeitung-app.infos.notizen.title": "Notes",
+  "sachbearbeitung-app.infos.notizen.table.datum": "Date",
+  "sachbearbeitung-app.infos.notizen.table.typ": "Type",
+  "sachbearbeitung-app.infos.notizen.table.text": "Texte",
+  "sachbearbeitung-app.infos.notizen.table.user": "Note",
+  "sachbearbeitung-app.infos.notiz.table.erstellen": "Créer",
+
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Budget personnel",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.title": "Revenu",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total": "Revenu personnel de l'apprenti(e)",
@@ -316,13 +331,6 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Montant total de la bourse",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total de calcul {{ index }}{{ type }} à la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}{{ type }}",
-
-  "sachbearbeitung-app.gesuch-form.protokoll.description": "Un aperçu de toutes les modifications apportées à la demande",
-  "sachbearbeitung-app.gesuch-form.protokoll.text": "Voici un aperçu de toutes les actions de cette demande.",
-  "sachbearbeitung-app.gesuch-form.protokoll.table.datum": "Date",
-  "sachbearbeitung-app.gesuch-form.protokoll.table.status": "Statut",
-  "sachbearbeitung-app.gesuch-form.protokoll.table.user": "User",
-  "sachbearbeitung-app.gesuch-form.protokoll.table.kommentar": "Commentaire",
 
   "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Manquant",
 

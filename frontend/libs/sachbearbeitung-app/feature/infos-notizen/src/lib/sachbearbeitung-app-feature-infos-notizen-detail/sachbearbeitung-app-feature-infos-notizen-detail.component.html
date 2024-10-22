@@ -1,0 +1,24 @@
+<div class="row d-flex g-4">
+  <form [formGroup]="form" (ngSubmit)="handleSave()" data-testid="form-notiz-form" class="col-12 col-xl-7">
+    <h3 class="mb-4">
+      {{ 'sachbearbeitung-app.infos.notizen.detail.title' | translate }}
+    </h3>
+
+    @if (notizStore.notiz() | rdIsPendingWithoutCache) {
+      <dv-shared-ui-loading></dv-shared-ui-loading>
+    } @else {
+      <div class="row g-4">
+        <!-- BEISPIEL Input (REPLACE ME) -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{ 'shared.form.notizen.BEISPIEL.label' | translate }}</mat-label>
+          <input formControlName="BEISPIEL" data-testid="form-gesuchsjahr-BEISPIEL" matInput type="text" />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <dv-shared-ui-form-save class="mt-4" [loading]="notizStore.notiz() | rdIsPending"></dv-shared-ui-form-save>
+    }
+  </form>
+</div>
