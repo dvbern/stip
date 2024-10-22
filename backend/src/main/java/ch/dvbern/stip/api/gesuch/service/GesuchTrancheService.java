@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
+import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
@@ -12,6 +14,7 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -29,6 +32,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -65,6 +69,8 @@ public class GesuchTrancheService {
     private final GesuchTrancheTruncateService gesuchTrancheTruncateService;
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
+    private final AdresseRepository adresseRepository;
+    private final AdresseMapper adresseMapper;
     private final PersonInAusbildungMapper personInAusbildungMapper;
     private final AusbildungMapper ausbildungMapper;
     private final FamiliensituationMapper familiensituationMapper;
@@ -90,7 +96,9 @@ public class GesuchTrancheService {
     public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
-        removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
+        }
         return getGesuchDokumenteForGesuchTranche(gesuchTrancheId);
     }
 
@@ -226,7 +234,8 @@ public class GesuchTrancheService {
             kommentarDto
         );
 
-        final var lastFreigegebenFormular = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId).getGesuchFormular();
+        final var lastFreigegebenTranche = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+        final var lastFreigegebenFormular = lastFreigegebenTranche.getGesuchFormular();
 
         var gesuchTrancheUpdateDto = new GesuchTrancheUpdateDto().id(
             aenderungId
@@ -238,30 +247,47 @@ public class GesuchTrancheService {
         gesuchFormularUpdateDto.setAusbildung(ausbildungMapper.toUpdateDto(lastFreigegebenFormular.getAusbildung())
             .ausbildungsgangId(lastFreigegebenFormular.getAusbildung().getAusbildungsgang().getId()));
         gesuchFormularUpdateDto.setFamiliensituation(familiensituationMapper.toUpdateDto(lastFreigegebenFormular.getFamiliensituation()));
+
         gesuchFormularUpdateDto.setPartner(partnerMapper.toUpdateDto(lastFreigegebenFormular.getPartner()));
+
         gesuchFormularUpdateDto.setElterns(new ArrayList<>(List.of()));
         for (final var eltern : lastFreigegebenFormular.getElterns()) {
             gesuchFormularUpdateDto.getElterns().add(elternMapper.toUpdateDto(eltern));
         }
         gesuchFormularUpdateDto.setAuszahlung(auszahlungMapper.toUpdateDto(lastFreigegebenFormular.getAuszahlung()));
         gesuchFormularUpdateDto.setEinnahmenKosten(einnahmenKostenMapper.toUpdateDto(lastFreigegebenFormular.getEinnahmenKosten()));
+
         gesuchFormularUpdateDto.setLebenslaufItems(new ArrayList<>(List.of()));
         for (final var lebenslaufItem : lastFreigegebenFormular.getLebenslaufItems()) {
-            gesuchFormularUpdateDto.getLebenslaufItems().add(lebenslaufItemMapper.toUpdateDto(lebenslaufItem));
+            gesuchFormularUpdateDto.getLebenslaufItems().add(lebenslaufItemMapper.toUpdateDto(lebenslaufItem).id(null));
         }
+
         gesuchFormularUpdateDto.setGeschwisters(new ArrayList<>(List.of()));
         for (final var geschwister : lastFreigegebenFormular.getGeschwisters()) {
-            gesuchFormularUpdateDto.getGeschwisters().add(geschwisterMapper.toUpdateDto(geschwister));
+            gesuchFormularUpdateDto.getGeschwisters().add(geschwisterMapper.toUpdateDto(geschwister).id(null));
         }
+
         gesuchFormularUpdateDto.setKinds(new ArrayList<>(List.of()));
         for (final var kind : lastFreigegebenFormular.getKinds()) {
             gesuchFormularUpdateDto.getKinds().add(kindMapper.toUpdateDto(kind).id(null));
         }
+
         gesuchFormularUpdateDto.setSteuerdaten(new ArrayList<>(List.of()));
         for (final var steuerdaten : lastFreigegebenFormular.getSteuerdaten()) {
-            gesuchFormularUpdateDto.getSteuerdaten().add(steuerdatenMapper.toUpdateDto(steuerdaten));
+            gesuchFormularUpdateDto.getSteuerdaten().add(steuerdatenMapper.toUpdateDto(steuerdaten).id(null));
         }
+
         gesuchTrancheMapper.partialUpdate(gesuchTrancheUpdateDto, aenderung);
+        if (aenderung.getGesuchFormular().getPartner() != null) {
+            aenderung.getGesuchFormular().getPartner().getAdresse().setId(null);
+        }
+
+        for (final var gesuchDokument : lastFreigegebenTranche.getGesuchDokuments()) {
+            final var existingDokument = gesuchDokumentRepository.findById(gesuchDokument.getId());
+            if (existingDokument == null) {
+                gesuchDokumentRepository.persist((GesuchDokument) gesuchDokument.setId(null));
+            }
+        }
 
         return gesuchTrancheMapper.toDto(aenderung);
     }

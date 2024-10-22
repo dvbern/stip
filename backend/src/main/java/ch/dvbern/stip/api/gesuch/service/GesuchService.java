@@ -236,10 +236,13 @@ public class GesuchService {
                     .getSteuerdaten(),
                 trancheToUpdate);
         }
+
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
-        gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
+        if (trancheToUpdate.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
+        }
 
         final var updatePia = gesuchUpdateDto
             .getGesuchTrancheToWorkWith()
