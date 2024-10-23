@@ -49,8 +49,7 @@ public class GesuchNotizService {
     @Transactional
     public GesuchNotizDto update(@Valid final GesuchNotizUpdateDto gesuchNotizUpdateDto) {
          var gesuchNotiz = gesuchNotizRepository.requireById(gesuchNotizUpdateDto.getId());
-         var update = gesuchNotizMapper.partialUpdate(gesuchNotizUpdateDto,gesuchNotiz);
-         gesuchNotizRepository.persistAndFlush(update);
+         gesuchNotizMapper.partialUpdate(gesuchNotizUpdateDto, gesuchNotiz);
          return gesuchNotizMapper.toDto(gesuchNotiz);
     }
 }

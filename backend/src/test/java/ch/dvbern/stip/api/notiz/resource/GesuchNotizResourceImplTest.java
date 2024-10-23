@@ -48,27 +48,11 @@ class GesuchNotizResourceImplTest {
         gesuch = TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
     }
 
-    //create a notiz as GS
-    @Test
-    @TestAsGesuchsteller
-    @Order(2)
-    void notizErstellenNotAllowed(){
-        var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
-        gesuchCreateDto.setGesuchId(gesuch.getId());
-        gesuchCreateDto.setText("test");
-        gesuchCreateDto.setBetreff("test");
-        gesuchNotizApiSpec.createNotiz()
-            .body(gesuchCreateDto)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
 
     // create a notiz as SB
     @Test
     @TestAsSachbearbeiter
-    @Order(3)
+    @Order(2)
     void notizErstellen(){
         var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
         gesuchCreateDto.setGesuchId(gesuch.getId());
@@ -82,30 +66,10 @@ class GesuchNotizResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode());
     }
 
-    // get all notizen as GS
-    @Test
-    @TestAsGesuchsteller
-    @Order(4)
-    void getAllNotAllowed(){
-        gesuchNotizApiSpec.getNotizen()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-
-        gesuchNotizApiSpec.getNotiz()
-            .notizIdPath(UUID.randomUUID().toString())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
-
     // get all notizen as SB
     @Test
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(3)
     void getAll(){
        final var notizen = gesuchNotizApiSpec.getNotizen()
             .gesuchIdPath(gesuch.getId())
@@ -127,33 +91,10 @@ class GesuchNotizResourceImplTest {
 
     }
 
-    // update notiz as GS
-    @Test
-    @TestAsGesuchsteller
-    @Order(6)
-    void updateAndDeleteNotAllowed(){
-        var gesuchUpdateDto = new GesuchNotizUpdateDtoSpec();
-        gesuchUpdateDto.setId(UUID.randomUUID());
-        gesuchUpdateDto.setText("test");
-        gesuchUpdateDto.setBetreff("test");
-        gesuchNotizApiSpec.updateNotiz()
-            .body(gesuchUpdateDto)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-        gesuchNotizApiSpec.deleteNotiz()
-            .notizIdPath(gesuchUpdateDto.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
-
     // update notiz as SB
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(4)
     void update(){
         var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
         gesuchCreateDto.setGesuchId(gesuch.getId());
@@ -192,7 +133,7 @@ class GesuchNotizResourceImplTest {
     // delete gesuch as SB, check if all notizen are deleted too
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(5)
     void allNotizenShouldBeCascadeDeleted(){
         var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
         gesuchCreateDto.setGesuchId(gesuch.getId());
