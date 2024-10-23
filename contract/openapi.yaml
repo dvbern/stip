@@ -126,7 +126,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GsDashboard'
+                  $ref: '#/components/schemas/FallDashboardItem'
           description: Returns gesuche for dashboard filtered by gs
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -294,32 +294,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAusbildung
       summary: Returniert die Ausbildung
-    patch:
-      tags:
-        - Ausbildung
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AusbildungUpdate'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ausbildung'
-          description: Returns the created Ausbildung
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: updateAusbildung
-      summary: Returniert die gepatchte Ausbildung
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -976,33 +950,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteAusbildungsstaette
       summary: Delete Ausbildungsstaette
-  '/gesuch/fall/{fallId}':
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Return alle Gesuche die gehoeren zu dieser Fall
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesucheForFall
-      summary: Return alle Gesuche die gehören zu dieser Fall
-    parameters:
-      - name: fallId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
   '/gesuch/{gesuchId}':
     parameters:
       - name: gesuchId
@@ -2547,16 +2494,27 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
-    GsDashboard:
-      allOf:
-        - $ref: '#/components/schemas/Ausbildung'
-      description: 'Ausbildung mit allen gesuchen'
+    FallDashboardItem:
+      type: object
       properties:
-        gsDashboardItems:
+        ausbildungDashboardItems:
           type: array
           items:
-            $ref: '#/components/schemas/GsDashboardItem'
-    GsDashboardItem:
+            $ref: '#/components/schemas/AusbildungDashboardItem'
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+    AusbildungDashboardItem:
+      type: object
+      properties:
+        gesuchs:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDashboardItem'
+      allOf:
+        - $ref: '#/components/schemas/AusbildungBase'
+    GesuchDashboardItem:
       required:
         - id
         - gesuchsperiode
@@ -2804,8 +2762,8 @@ components:
       required: []
       type: object
       properties:
-        # ausbildung:
-        #   $ref: '#/components/schemas/Ausbildung'
+        ausbildung:
+          $ref: '#/components/schemas/Ausbildung'
         personInAusbildung:
           $ref: '#/components/schemas/PersonInAusbildung'
         familiensituation:
