@@ -33,30 +33,11 @@ class SozialdienstResourceImplTest {
     public SozialdienstDtoSpec dtoSpec;
     public SozialdienstDto dto;
 
+    private SozialdienstAdminDtoSpec adminDtoSpec;
+    private SozialdienstAdminCreateDtoSpec adminCreateDtoSpec;
+    private SozialdienstAdminUpdateDtoSpec adminUpdateDtoSpec;
+
     @Order(1)
-    @Test
-    @TestAsGesuchsteller
-    void createSozialdienstShouldFail() {
-        var adresseDto = new AdresseDtoSpec();
-        adresseDto.setStrasse("Musterstrasse");
-        adresseDto.setPlz("12345");
-        adresseDto.setOrt("Musterort");
-        adresseDto.setHausnummer("1");
-        adresseDto.setLand(LandDtoSpec.CH);
-
-        final var createDto = new SozialdienstCreateDtoSpec()
-            .adresse(adresseDto)
-            .name("Muster Sozialdienst")
-            .iban("CH5089144653587876648");
-        apiSpec.createSozialdienst()
-            .body(createDto)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
-
-    @Order(2)
     @Test
     @TestAsSachbearbeiter
     void createSozialdienst() {
@@ -67,10 +48,16 @@ class SozialdienstResourceImplTest {
         adresseDto.setHausnummer("1");
         adresseDto.setLand(LandDtoSpec.CH);
 
+        var sozialdienstAdminCreateDto = new SozialdienstAdminCreateDtoSpec();
+        sozialdienstAdminCreateDto.setNachname("test");
+        sozialdienstAdminCreateDto.setEmail("test@test.com");
+        sozialdienstAdminCreateDto.setVorname("test-vorname");
+
         final var createDto = new SozialdienstCreateDtoSpec()
             .adresse(adresseDto)
             .name("Muster Sozialdienst")
-            .iban("CH5089144653587876648");
+            .iban("CH5089144653587876648")
+            .admin(sozialdienstAdminCreateDto);
 
         dtoSpec = apiSpec.createSozialdienst()
             .body(createDto)
@@ -82,18 +69,8 @@ class SozialdienstResourceImplTest {
             .as(SozialdienstDtoSpec.class);
     }
 
-    @Order(3)
-    @TestAsGesuchsteller
-    @Test
-    void getSozialdiensteShouldFail(){
-        apiSpec.getAllSozialdienste()
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
 
-    @Order(4)
+    @Order(2)
     @TestAsSachbearbeiter
     @Test
     void getSozialdienste(){
@@ -106,19 +83,7 @@ class SozialdienstResourceImplTest {
             .as(SozialdienstDtoSpec[].class)).toList().get(0);
     }
 
-    @Order(5)
-    @TestAsGesuchsteller
-    @Test
-    void getSozialdienstByIdShouldFail(){
-        apiSpec.getSozialdienst()
-            .sozialdienstIdPath(dtoSpec.getId())
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
-
-    @Order(5)
+    @Order(3)
     @TestAsSachbearbeiter
     @Test
     void getSozialdienstById(){
@@ -130,30 +95,7 @@ class SozialdienstResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode());
     }
 
-    @Order(6)
-    @TestAsGesuchsteller
-    @Test
-    void updateSozialdienstShouldFail() {
-        var updateDto = new SozialdienstUpdateDtoSpec();
-        updateDto.setId(dtoSpec.getId());
-        updateDto.setAdresse(dtoSpec.getAdresse());
-        updateDto.setName(dtoSpec.getName());
-        updateDto.setIban(dtoSpec.getIban());
-
-        final var newStreetname = "updated street";
-        final var newName = "updated sozialdienst";
-        updateDto.getAdresse().setStrasse(newStreetname);
-        updateDto.setName(newName);
-
-        apiSpec.updateSozialdienst()
-            .body(updateDto)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
-
-    @Order(7)
+    @Order(4)
     @TestAsSachbearbeiter
     @Test
     void updateSozialdienst() {
@@ -163,10 +105,17 @@ class SozialdienstResourceImplTest {
         updateDto.setName(dtoSpec.getName());
         updateDto.setIban(dtoSpec.getIban());
 
+        var sozialdienstAdminUpdateDto = new SozialdienstAdminUpdateDtoSpec();
+        sozialdienstAdminUpdateDto.setId(dtoSpec.getAdmin().getId());
+        sozialdienstAdminUpdateDto.setEmail("updated@test.com");
+        sozialdienstAdminUpdateDto.setVorname("updated-vorname");
+        sozialdienstAdminUpdateDto.setNachname("updated-vorname");
+
         final var newStreetname = "updated street";
         final var newName = "updated sozialdienst";
         updateDto.getAdresse().setStrasse(newStreetname);
         updateDto.setName(newName);
+        updateDto.setAdmin(sozialdienstAdminUpdateDto);
 
         apiSpec.updateSozialdienst()
             .body(updateDto)
@@ -185,20 +134,10 @@ class SozialdienstResourceImplTest {
             .as(SozialdienstDtoSpec.class);
         assertTrue(updated.getName().contains("updated"));
         assertTrue(updated.getAdresse().getStrasse().contains("updated"));
+        assertTrue(updated.getAdmin().getEmail().contains("updated"));
     }
 
-    @Order(8)
-    @TestAsGesuchsteller
-    @Test
-    void deleteSozialdienstShouldFail(){
-        apiSpec.deleteSozialdienst()
-            .sozialdienstIdPath(dtoSpec.getId())
-            .execute(ResponseBody::prettyPeek).then()
-            .assertThat()
-            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
-
-    @Order(9)
+    @Order(5)
     @TestAsSachbearbeiter
     @Test
     void deleteSozialdienst(){

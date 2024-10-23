@@ -17,6 +17,7 @@ public class SozialdienstCreateDto  implements Serializable {
   private @Valid String name;
   private @Valid String iban;
   private @Valid AdresseDto adresse;
+  private @Valid SozialdienstAdminCreateDto admin;
 
   /**
    **/
@@ -75,6 +76,25 @@ public class SozialdienstCreateDto  implements Serializable {
     this.adresse = adresse;
   }
 
+  /**
+   **/
+  public SozialdienstCreateDto admin(SozialdienstAdminCreateDto admin) {
+    this.admin = admin;
+    return this;
+  }
+
+
+  @JsonProperty("admin")
+  @NotNull
+  public SozialdienstAdminCreateDto getAdmin() {
+    return admin;
+  }
+
+  @JsonProperty("admin")
+  public void setAdmin(SozialdienstAdminCreateDto admin) {
+    this.admin = admin;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -87,12 +107,13 @@ public class SozialdienstCreateDto  implements Serializable {
     SozialdienstCreateDto sozialdienstCreate = (SozialdienstCreateDto) o;
     return Objects.equals(this.name, sozialdienstCreate.name) &&
         Objects.equals(this.iban, sozialdienstCreate.iban) &&
-        Objects.equals(this.adresse, sozialdienstCreate.adresse);
+        Objects.equals(this.adresse, sozialdienstCreate.adresse) &&
+        Objects.equals(this.admin, sozialdienstCreate.admin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, iban, adresse);
+    return Objects.hash(name, iban, adresse, admin);
   }
 
   @Override
@@ -103,6 +124,7 @@ public class SozialdienstCreateDto  implements Serializable {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
+    sb.append("    admin: ").append(toIndentedString(admin)).append("\n");
     sb.append("}");
     return sb.toString();
   }

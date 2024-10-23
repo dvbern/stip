@@ -15,6 +15,10 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Getter
 @Setter
 @Entity
+@Table(
+    name = "sozialdienst",
+    indexes = @Index(name = "IX_sozialdienst_mandant", columnList = "mandant")
+)
 public class Sozialdienst extends AbstractMandantEntity {
     @NotNull
     @Column(name = "name")
@@ -31,4 +35,8 @@ public class Sozialdienst extends AbstractMandantEntity {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_sozialdienst_adresse_id"))
     private Adresse adresse;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sozialdienst_admin_id", foreignKey = @ForeignKey(name = "FK_sozialdienst_sozialdienst_admin_id"))
+    private SozialdienstAdmin admin;
 }

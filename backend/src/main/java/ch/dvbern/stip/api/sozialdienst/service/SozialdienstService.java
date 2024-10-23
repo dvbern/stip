@@ -23,23 +23,26 @@ public class SozialdienstService {
         sozialdienstRepository.persistAndFlush(entity);
         return sozialdienstMapper.toDto(entity);
     }
-    @Transactional
 
+    @Transactional
     public SozialdienstDto getSozialdienstById(UUID id) {
         final var entity = sozialdienstRepository.requireById(id);
         return sozialdienstMapper.toDto(entity);
     }
+
     @Transactional
     public List<SozialdienstDto> getAllSozialdienst() {
         final var entities = sozialdienstRepository.findAll();
         return entities.stream().map(sozialdienstMapper::toDto).toList();
     }
+
     @Transactional
     public SozialdienstDto deleteSozialdienst(UUID id) {
         final var entity = sozialdienstRepository.requireById(id);
         sozialdienstRepository.delete(entity);
         return sozialdienstMapper.toDto(entity);
     }
+
     @Transactional
     public SozialdienstDto updateSozialdienst(SozialdienstUpdateDto dto) {
         var entity = sozialdienstRepository.requireById(dto.getId());

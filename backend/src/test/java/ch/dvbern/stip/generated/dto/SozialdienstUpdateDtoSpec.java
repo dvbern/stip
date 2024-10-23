@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -32,7 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SozialdienstUpdateDtoSpec.JSON_PROPERTY_ID,
   SozialdienstUpdateDtoSpec.JSON_PROPERTY_NAME,
   SozialdienstUpdateDtoSpec.JSON_PROPERTY_IBAN,
-  SozialdienstUpdateDtoSpec.JSON_PROPERTY_ADRESSE
+  SozialdienstUpdateDtoSpec.JSON_PROPERTY_ADRESSE,
+  SozialdienstUpdateDtoSpec.JSON_PROPERTY_ADMIN
 })
 @JsonTypeName("SozialdienstUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -48,6 +50,9 @@ public class SozialdienstUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
   private AdresseDtoSpec adresse;
+
+  public static final String JSON_PROPERTY_ADMIN = "admin";
+  private SozialdienstAdminUpdateDtoSpec admin;
 
   public SozialdienstUpdateDtoSpec() {
   }
@@ -155,6 +160,32 @@ public class SozialdienstUpdateDtoSpec {
     this.adresse = adresse;
   }
 
+
+  public SozialdienstUpdateDtoSpec admin(SozialdienstAdminUpdateDtoSpec admin) {
+    
+    this.admin = admin;
+    return this;
+  }
+
+   /**
+   * Get admin
+   * @return admin
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ADMIN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public SozialdienstAdminUpdateDtoSpec getAdmin() {
+    return admin;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ADMIN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAdmin(SozialdienstAdminUpdateDtoSpec admin) {
+    this.admin = admin;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -167,12 +198,13 @@ public class SozialdienstUpdateDtoSpec {
     return Objects.equals(this.id, sozialdienstUpdate.id) &&
         Objects.equals(this.name, sozialdienstUpdate.name) &&
         Objects.equals(this.iban, sozialdienstUpdate.iban) &&
-        Objects.equals(this.adresse, sozialdienstUpdate.adresse);
+        Objects.equals(this.adresse, sozialdienstUpdate.adresse) &&
+        Objects.equals(this.admin, sozialdienstUpdate.admin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, iban, adresse);
+    return Objects.hash(id, name, iban, adresse, admin);
   }
 
   @Override
@@ -183,6 +215,7 @@ public class SozialdienstUpdateDtoSpec {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
+    sb.append("    admin: ").append(toIndentedString(admin)).append("\n");
     sb.append("}");
     return sb.toString();
   }
