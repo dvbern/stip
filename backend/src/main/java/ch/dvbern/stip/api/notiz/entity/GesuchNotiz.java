@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.notiz.entity;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -14,8 +15,13 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name="gesuch_notizen")
 @Audited
+@Table(
+    name = "gesuch_notizen",
+    indexes = {
+        @Index(name = "IX_gesuch_notiz_mandant", columnList = "mandant")
+    }
+)
 public class GesuchNotiz extends AbstractMandantEntity {
     @NotNull
     @Column(name = "gesuchId")
