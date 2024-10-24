@@ -43,10 +43,6 @@ class GesuchNotizResourceImplTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final GesuchNotizApiSpec gesuchNotizApiSpec = GesuchNotizApiSpec.gesuchNotiz(RequestSpecUtil.quarkusSpec());
 
-    private GesuchNotizDtoSpec gesuchNotizDtoSpec;
-    private GesuchNotizCreateDtoSpec gesuchNotizCreateDtoSpec;
-    private GesuchNotizUpdateDtoSpec gesuchNotizUpdateDtoSpec;
-
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     //create a gesuch
     private GesuchDtoSpec gesuch;

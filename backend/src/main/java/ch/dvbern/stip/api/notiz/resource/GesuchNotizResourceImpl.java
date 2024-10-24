@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.notiz.resource;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.authorization.GesuchNotizAuthorizer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
@@ -10,8 +12,6 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     public Response createNotiz(GesuchNotizCreateDto gesuchNotizCreateDto) {
         authorizer.allowAllow();
         final var notiz = service.create(gesuchNotizCreateDto);
-        return Response.ok().entity(notiz).build();
+        return Response.ok(notiz).build();
     }
 
     @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
@@ -39,7 +39,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     @Override
     public Response getNotiz(UUID notizId) {
         authorizer.allowAllow();
-        return Response.ok().entity(service.getById(notizId)).build();
+        return Response.ok(service.getById(notizId)).build();
     }
 
     @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
@@ -47,7 +47,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     public Response getNotizen(UUID gesuchId) {
         authorizer.allowAllow();
         final var notizen = service.getAllByGesuchId(gesuchId);
-        return Response.ok().entity(notizen).build();
+        return Response.ok(notizen).build();
     }
 
     @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
@@ -55,6 +55,6 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     public Response updateNotiz(GesuchNotizUpdateDto gesuchNotizUpdateDto) {
         authorizer.allowAllow();
         final var notiz = service.update(gesuchNotizUpdateDto);
-        return Response.ok().entity(notiz).build();
+        return Response.ok(notiz).build();
     }
 }
