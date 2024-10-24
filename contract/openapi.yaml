@@ -763,7 +763,7 @@ paths:
                 $ref: '#/components/schemas/GesuchsperiodeWithDaten'
       operationId: publishGesuchsperiode
       summary: Publishes a Gesuchsperiode with the given id
-  /sozialdienst/:
+  /sozialdienst:
     post:
       requestBody:
         content:

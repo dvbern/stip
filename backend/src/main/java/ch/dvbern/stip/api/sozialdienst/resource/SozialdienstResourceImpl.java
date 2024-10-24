@@ -21,7 +21,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     private final SozialdienstAuthorizer sozialdienstAuthorizer;
 
-    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
+    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response createSozialdienst(SozialdienstCreateDto sozialdienstCreateDto) {
         sozialdienstAuthorizer.allowAllow();
@@ -29,7 +29,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return Response.ok(sozialdienst).build();
     }
 
-    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
+    @RolesAllowed({OidcConstants.ROLE_ADMIN })
     @Override
     public Response deleteSozialdienst(UUID sozialdienstId) {
         sozialdienstAuthorizer.allowAllow();
@@ -37,7 +37,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return Response.ok().entity(sozialdienst).build();
     }
 
-    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
+    @RolesAllowed({  OidcConstants.ROLE_ADMIN })
     @Override
     public Response getAllSozialdienste() {
         sozialdienstAuthorizer.allowAllow();
@@ -45,7 +45,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return Response.ok().entity(sozialdienste).build();
     }
 
-    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
+    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response getSozialdienst(UUID sozialdienstId) {
         sozialdienstAuthorizer.allowAllow();
@@ -53,7 +53,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return Response.ok().entity(sozialdienst).build();
     }
 
-    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
+    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response updateSozialdienst(SozialdienstUpdateDto sozialdienstUpdateDto) {
         sozialdienstAuthorizer.allowAllow();

@@ -107,7 +107,7 @@ public class SozialdienstApiSpec {
     public static class CreateSozialdienstOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/sozialdienst/";
+        public static final String REQ_URI = "/sozialdienst";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -120,7 +120,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * POST /sozialdienst/
+         * POST /sozialdienst
          * @param handler handler
          * @param <T> type
          * @return type
@@ -131,7 +131,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * POST /sozialdienst/
+         * POST /sozialdienst
          * @param handler handler
          * @return SozialdienstDtoSpec
          */
@@ -251,7 +251,7 @@ public class SozialdienstApiSpec {
     public static class GetAllSozialdiensteOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/sozialdienst/";
+        public static final String REQ_URI = "/sozialdienst";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -263,7 +263,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * GET /sozialdienst/
+         * GET /sozialdienst
          * @param handler handler
          * @param <T> type
          * @return type
@@ -274,7 +274,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * GET /sozialdienst/
+         * GET /sozialdienst
          * @param handler handler
          * @return List&lt;SozialdienstDtoSpec&gt;
          */
@@ -386,7 +386,7 @@ public class SozialdienstApiSpec {
     public static class UpdateSozialdienstOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/sozialdienst/";
+        public static final String REQ_URI = "/sozialdienst";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -399,7 +399,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * PATCH /sozialdienst/
+         * PATCH /sozialdienst
          * @param handler handler
          * @param <T> type
          * @return type
@@ -410,7 +410,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * PATCH /sozialdienst/
+         * PATCH /sozialdienst
          * @param handler handler
          * @return SozialdienstDtoSpec
          */

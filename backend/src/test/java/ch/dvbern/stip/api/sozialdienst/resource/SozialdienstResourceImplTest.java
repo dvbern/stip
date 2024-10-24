@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.sozialdienst.resource;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.stammdaten.type.Land;
@@ -39,7 +40,7 @@ class SozialdienstResourceImplTest {
 
     @Order(1)
     @Test
-    @TestAsSachbearbeiter
+    @TestAsAdmin
     void createSozialdienst() {
         var adresseDto = new AdresseDtoSpec();
         adresseDto.setStrasse("Musterstrasse");
@@ -71,7 +72,7 @@ class SozialdienstResourceImplTest {
 
 
     @Order(2)
-    @TestAsSachbearbeiter
+    @TestAsAdmin
     @Test
     void getSozialdienste(){
         dtoSpec = Arrays.stream(apiSpec.getAllSozialdienste()
@@ -84,7 +85,7 @@ class SozialdienstResourceImplTest {
     }
 
     @Order(3)
-    @TestAsSachbearbeiter
+    @TestAsAdmin
     @Test
     void getSozialdienstById(){
         apiSpec.getSozialdienst()
@@ -96,7 +97,7 @@ class SozialdienstResourceImplTest {
     }
 
     @Order(4)
-    @TestAsSachbearbeiter
+    @TestAsAdmin
     @Test
     void updateSozialdienst() {
         var updateDto = new SozialdienstUpdateDtoSpec();
@@ -138,7 +139,7 @@ class SozialdienstResourceImplTest {
     }
 
     @Order(5)
-    @TestAsSachbearbeiter
+    @TestAsAdmin
     @Test
     void deleteSozialdienst(){
         apiSpec.deleteSozialdienst()

@@ -16,7 +16,5 @@ public interface SozialdienstMapper {
 
     SozialdienstDto toDto(Sozialdienst entity);
 
-    Sozialdienst toEntity(SozialdienstUpdateDto dto);
-
     Sozialdienst partialUpdate(SozialdienstUpdateDto dto, @MappingTarget Sozialdienst entity);
 }
