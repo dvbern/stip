@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
@@ -37,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchWithChangesDtoSpec.JSON_PROPERTY_CHANGES,
-  GesuchWithChangesDtoSpec.JSON_PROPERTY_FALL,
+  GesuchWithChangesDtoSpec.JSON_PROPERTY_AUSBILDUNG_ID,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
@@ -52,8 +51,8 @@ public class GesuchWithChangesDtoSpec {
   public static final String JSON_PROPERTY_CHANGES = "changes";
   private List<GesuchTrancheDtoSpec> changes;
 
-  public static final String JSON_PROPERTY_FALL = "fall";
-  private FallDtoSpec fall;
+  public static final String JSON_PROPERTY_AUSBILDUNG_ID = "ausbildungId";
+  private UUID ausbildungId;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE = "gesuchsperiode";
   private GesuchsperiodeDtoSpec gesuchsperiode;
@@ -113,29 +112,29 @@ public class GesuchWithChangesDtoSpec {
   }
 
 
-  public GesuchWithChangesDtoSpec fall(FallDtoSpec fall) {
+  public GesuchWithChangesDtoSpec ausbildungId(UUID ausbildungId) {
     
-    this.fall = fall;
+    this.ausbildungId = ausbildungId;
     return this;
   }
 
    /**
-   * Get fall
-   * @return fall
+   * Get ausbildungId
+   * @return ausbildungId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL)
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public FallDtoSpec getFall() {
-    return fall;
+  public UUID getAusbildungId() {
+    return ausbildungId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL)
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFall(FallDtoSpec fall) {
-    this.fall = fall;
+  public void setAusbildungId(UUID ausbildungId) {
+    this.ausbildungId = ausbildungId;
   }
 
 
@@ -330,7 +329,7 @@ public class GesuchWithChangesDtoSpec {
     }
     GesuchWithChangesDtoSpec gesuchWithChanges = (GesuchWithChangesDtoSpec) o;
     return Objects.equals(this.changes, gesuchWithChanges.changes) &&
-        Objects.equals(this.fall, gesuchWithChanges.fall) &&
+        Objects.equals(this.ausbildungId, gesuchWithChanges.ausbildungId) &&
         Objects.equals(this.gesuchsperiode, gesuchWithChanges.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuchWithChanges.gesuchStatus) &&
         Objects.equals(this.gesuchNummer, gesuchWithChanges.gesuchNummer) &&
@@ -342,7 +341,7 @@ public class GesuchWithChangesDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(changes, fall, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith);
+    return Objects.hash(changes, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith);
   }
 
   @Override
@@ -350,7 +349,7 @@ public class GesuchWithChangesDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchWithChangesDtoSpec {\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
-    sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
+    sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");

@@ -142,7 +142,7 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model) -> {
             model.setPersonInAusbildung(PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec());
             model.getPersonInAusbildung().setZivilstand(ZivilstandDtoSpec.VERHEIRATET);
-            model.setAusbildung(AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec());
+//            model.setAusbildung(AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec());
             model.setLebenslaufItems(LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs());
             model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
             model.setElterns(ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2));

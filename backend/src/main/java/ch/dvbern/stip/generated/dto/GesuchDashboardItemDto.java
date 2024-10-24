@@ -1,8 +1,8 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.GesuchDashboardItemMissingDocumentsDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
-import ch.dvbern.stip.generated.dto.GsDashboardMissingDocumentsDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -17,21 +17,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("GsDashboard")
+@JsonTypeName("GesuchDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class GsDashboardDto  implements Serializable {
+public class GesuchDashboardItemDto  implements Serializable {
   private @Valid GesuchsperiodeDto gesuchsperiode;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
   private @Valid UUID id;
   private @Valid GesuchTrancheSlimDto offeneAenderung;
-  private @Valid GsDashboardMissingDocumentsDto missingDocuments;
+  private @Valid GesuchDashboardItemMissingDocumentsDto missingDocuments;
 
   /**
    **/
-  public GsDashboardDto gesuchsperiode(GesuchsperiodeDto gesuchsperiode) {
+  public GesuchDashboardItemDto gesuchsperiode(GesuchsperiodeDto gesuchsperiode) {
     this.gesuchsperiode = gesuchsperiode;
     return this;
   }
@@ -50,7 +50,7 @@ public class GsDashboardDto  implements Serializable {
 
   /**
    **/
-  public GsDashboardDto gesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+  public GesuchDashboardItemDto gesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
     return this;
   }
@@ -69,7 +69,7 @@ public class GsDashboardDto  implements Serializable {
 
   /**
    **/
-  public GsDashboardDto id(UUID id) {
+  public GesuchDashboardItemDto id(UUID id) {
     this.id = id;
     return this;
   }
@@ -88,7 +88,7 @@ public class GsDashboardDto  implements Serializable {
 
   /**
    **/
-  public GsDashboardDto offeneAenderung(GesuchTrancheSlimDto offeneAenderung) {
+  public GesuchDashboardItemDto offeneAenderung(GesuchTrancheSlimDto offeneAenderung) {
     this.offeneAenderung = offeneAenderung;
     return this;
   }
@@ -106,19 +106,19 @@ public class GsDashboardDto  implements Serializable {
 
   /**
    **/
-  public GsDashboardDto missingDocuments(GsDashboardMissingDocumentsDto missingDocuments) {
+  public GesuchDashboardItemDto missingDocuments(GesuchDashboardItemMissingDocumentsDto missingDocuments) {
     this.missingDocuments = missingDocuments;
     return this;
   }
 
   
   @JsonProperty("missingDocuments")
-  public GsDashboardMissingDocumentsDto getMissingDocuments() {
+  public GesuchDashboardItemMissingDocumentsDto getMissingDocuments() {
     return missingDocuments;
   }
 
   @JsonProperty("missingDocuments")
-  public void setMissingDocuments(GsDashboardMissingDocumentsDto missingDocuments) {
+  public void setMissingDocuments(GesuchDashboardItemMissingDocumentsDto missingDocuments) {
     this.missingDocuments = missingDocuments;
   }
 
@@ -131,12 +131,12 @@ public class GsDashboardDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GsDashboardDto gsDashboard = (GsDashboardDto) o;
-    return Objects.equals(this.gesuchsperiode, gsDashboard.gesuchsperiode) &&
-        Objects.equals(this.gesuchStatus, gsDashboard.gesuchStatus) &&
-        Objects.equals(this.id, gsDashboard.id) &&
-        Objects.equals(this.offeneAenderung, gsDashboard.offeneAenderung) &&
-        Objects.equals(this.missingDocuments, gsDashboard.missingDocuments);
+    GesuchDashboardItemDto gesuchDashboardItem = (GesuchDashboardItemDto) o;
+    return Objects.equals(this.gesuchsperiode, gesuchDashboardItem.gesuchsperiode) &&
+        Objects.equals(this.gesuchStatus, gesuchDashboardItem.gesuchStatus) &&
+        Objects.equals(this.id, gesuchDashboardItem.id) &&
+        Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
+        Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
   }
 
   @Override
@@ -147,7 +147,7 @@ public class GsDashboardDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GsDashboardDto {\n");
+    sb.append("class GesuchDashboardItemDto {\n");
     
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");

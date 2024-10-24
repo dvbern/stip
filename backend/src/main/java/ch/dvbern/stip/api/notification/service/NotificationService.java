@@ -45,10 +45,12 @@ public class NotificationService {
 
     @Transactional
     public List<NotificationDto> getNotificationsForCurrentUser() {
-        return notificationRepository.getAllForUser(
-            benutzerService.getCurrentBenutzer().getId()
-        ).map(notificationMapper::toDto)
-        .toList();
+        return getNotificationsForUser(benutzerService.getCurrentBenutzer().getId());
+    }
+
+    @Transactional
+    public List<NotificationDto> getNotificationsForUser(final UUID userId) {
+        return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
     }
 
     @CheckedTemplate

@@ -16,38 +16,41 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungsPensumDtoSpec;
-import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDashboardItemDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * AusbildungDtoSpec
+ * AusbildungDashboardItemDtoSpec
  */
 @JsonPropertyOrder({
-  AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNGSGANG,
-  AusbildungDtoSpec.JSON_PROPERTY_ID,
-  AusbildungDtoSpec.JSON_PROPERTY_FALL_ID,
-  AusbildungDtoSpec.JSON_PROPERTY_FACHRICHTUNG,
-  AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN,
-  AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNG_BEGIN,
-  AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNG_END,
-  AusbildungDtoSpec.JSON_PROPERTY_PENSUM,
-  AusbildungDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE,
-  AusbildungDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG,
-  AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT,
-  AusbildungDtoSpec.JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_GESUCHS,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ID,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FALL_ID,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FACHRICHTUNG,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_BEGIN,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_END,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_PENSUM,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND
 })
-@JsonTypeName("Ausbildung")
+@JsonTypeName("AusbildungDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class AusbildungDtoSpec {
-  public static final String JSON_PROPERTY_AUSBILDUNGSGANG = "ausbildungsgang";
-  private AusbildungsgangDtoSpec ausbildungsgang;
+public class AusbildungDashboardItemDtoSpec {
+  public static final String JSON_PROPERTY_GESUCHS = "gesuchs";
+  private List<GesuchDashboardItemDtoSpec> gesuchs;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -82,36 +85,44 @@ public class AusbildungDtoSpec {
   public static final String JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND = "isAusbildungAusland";
   private Boolean isAusbildungAusland;
 
-  public AusbildungDtoSpec() {
+  public AusbildungDashboardItemDtoSpec() {
   }
 
-  public AusbildungDtoSpec ausbildungsgang(AusbildungsgangDtoSpec ausbildungsgang) {
+  public AusbildungDashboardItemDtoSpec gesuchs(List<GesuchDashboardItemDtoSpec> gesuchs) {
     
-    this.ausbildungsgang = ausbildungsgang;
+    this.gesuchs = gesuchs;
+    return this;
+  }
+
+  public AusbildungDashboardItemDtoSpec addGesuchsItem(GesuchDashboardItemDtoSpec gesuchsItem) {
+    if (this.gesuchs == null) {
+      this.gesuchs = new ArrayList<>();
+    }
+    this.gesuchs.add(gesuchsItem);
     return this;
   }
 
    /**
-   * Get ausbildungsgang
-   * @return ausbildungsgang
+   * Get gesuchs
+   * @return gesuchs
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGANG)
+  @JsonProperty(JSON_PROPERTY_GESUCHS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public AusbildungsgangDtoSpec getAusbildungsgang() {
-    return ausbildungsgang;
+  public List<GesuchDashboardItemDtoSpec> getGesuchs() {
+    return gesuchs;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGANG)
+  @JsonProperty(JSON_PROPERTY_GESUCHS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungsgang(AusbildungsgangDtoSpec ausbildungsgang) {
-    this.ausbildungsgang = ausbildungsgang;
+  public void setGesuchs(List<GesuchDashboardItemDtoSpec> gesuchs) {
+    this.gesuchs = gesuchs;
   }
 
 
-  public AusbildungDtoSpec id(UUID id) {
+  public AusbildungDashboardItemDtoSpec id(UUID id) {
     
     this.id = id;
     return this;
@@ -137,7 +148,7 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec fallId(UUID fallId) {
+  public AusbildungDashboardItemDtoSpec fallId(UUID fallId) {
     
     this.fallId = fallId;
     return this;
@@ -163,7 +174,7 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec fachrichtung(String fachrichtung) {
+  public AusbildungDashboardItemDtoSpec fachrichtung(String fachrichtung) {
     
     this.fachrichtung = fachrichtung;
     return this;
@@ -189,7 +200,7 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
+  public AusbildungDashboardItemDtoSpec ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
     
     this.ausbildungNichtGefunden = ausbildungNichtGefunden;
     return this;
@@ -215,7 +226,7 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec ausbildungBegin(String ausbildungBegin) {
+  public AusbildungDashboardItemDtoSpec ausbildungBegin(String ausbildungBegin) {
     
     this.ausbildungBegin = ausbildungBegin;
     return this;
@@ -241,7 +252,7 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec ausbildungEnd(String ausbildungEnd) {
+  public AusbildungDashboardItemDtoSpec ausbildungEnd(String ausbildungEnd) {
     
     this.ausbildungEnd = ausbildungEnd;
     return this;
@@ -267,7 +278,7 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec pensum(AusbildungsPensumDtoSpec pensum) {
+  public AusbildungDashboardItemDtoSpec pensum(AusbildungsPensumDtoSpec pensum) {
     
     this.pensum = pensum;
     return this;
@@ -293,7 +304,7 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec alternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
+  public AusbildungDashboardItemDtoSpec alternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
     
     this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
     return this;
@@ -319,7 +330,7 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec alternativeAusbildungsgang(String alternativeAusbildungsgang) {
+  public AusbildungDashboardItemDtoSpec alternativeAusbildungsgang(String alternativeAusbildungsgang) {
     
     this.alternativeAusbildungsgang = alternativeAusbildungsgang;
     return this;
@@ -345,7 +356,7 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec ausbildungsort(String ausbildungsort) {
+  public AusbildungDashboardItemDtoSpec ausbildungsort(String ausbildungsort) {
     
     this.ausbildungsort = ausbildungsort;
     return this;
@@ -371,7 +382,7 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec isAusbildungAusland(Boolean isAusbildungAusland) {
+  public AusbildungDashboardItemDtoSpec isAusbildungAusland(Boolean isAusbildungAusland) {
     
     this.isAusbildungAusland = isAusbildungAusland;
     return this;
@@ -404,31 +415,31 @@ public class AusbildungDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AusbildungDtoSpec ausbildung = (AusbildungDtoSpec) o;
-    return Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang) &&
-        Objects.equals(this.id, ausbildung.id) &&
-        Objects.equals(this.fallId, ausbildung.fallId) &&
-        Objects.equals(this.fachrichtung, ausbildung.fachrichtung) &&
-        Objects.equals(this.ausbildungNichtGefunden, ausbildung.ausbildungNichtGefunden) &&
-        Objects.equals(this.ausbildungBegin, ausbildung.ausbildungBegin) &&
-        Objects.equals(this.ausbildungEnd, ausbildung.ausbildungEnd) &&
-        Objects.equals(this.pensum, ausbildung.pensum) &&
-        Objects.equals(this.alternativeAusbildungsstaette, ausbildung.alternativeAusbildungsstaette) &&
-        Objects.equals(this.alternativeAusbildungsgang, ausbildung.alternativeAusbildungsgang) &&
-        Objects.equals(this.ausbildungsort, ausbildung.ausbildungsort) &&
-        Objects.equals(this.isAusbildungAusland, ausbildung.isAusbildungAusland);
+    AusbildungDashboardItemDtoSpec ausbildungDashboardItem = (AusbildungDashboardItemDtoSpec) o;
+    return Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs) &&
+        Objects.equals(this.id, ausbildungDashboardItem.id) &&
+        Objects.equals(this.fallId, ausbildungDashboardItem.fallId) &&
+        Objects.equals(this.fachrichtung, ausbildungDashboardItem.fachrichtung) &&
+        Objects.equals(this.ausbildungNichtGefunden, ausbildungDashboardItem.ausbildungNichtGefunden) &&
+        Objects.equals(this.ausbildungBegin, ausbildungDashboardItem.ausbildungBegin) &&
+        Objects.equals(this.ausbildungEnd, ausbildungDashboardItem.ausbildungEnd) &&
+        Objects.equals(this.pensum, ausbildungDashboardItem.pensum) &&
+        Objects.equals(this.alternativeAusbildungsstaette, ausbildungDashboardItem.alternativeAusbildungsstaette) &&
+        Objects.equals(this.alternativeAusbildungsgang, ausbildungDashboardItem.alternativeAusbildungsgang) &&
+        Objects.equals(this.ausbildungsort, ausbildungDashboardItem.ausbildungsort) &&
+        Objects.equals(this.isAusbildungAusland, ausbildungDashboardItem.isAusbildungAusland);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildungsgang, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(gesuchs, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AusbildungDtoSpec {\n");
-    sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
+    sb.append("class AusbildungDashboardItemDtoSpec {\n");
+    sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");

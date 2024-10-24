@@ -43,6 +43,10 @@ paths:
         - Gesuch
       responses:
         '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UUID'
           description: New Gesuch is created
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -2513,7 +2517,7 @@ components:
           items:
             $ref: '#/components/schemas/GesuchDashboardItem'
       allOf:
-        - $ref: '#/components/schemas/AusbildungBase'
+        - $ref: '#/components/schemas/Ausbildung'
     GesuchDashboardItem:
       required:
         - id

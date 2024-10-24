@@ -23,18 +23,17 @@ public abstract class GesuchMapper {
     @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
     public abstract GesuchDto toDto(Gesuch gesuch);
 
-    @Mapping(source = "fallId", target = "fall.id")
-    @Mapping(source = "gesuchsperiodeId", target = "gesuchsperiode.id")
+    @Mapping(source = "ausbildungId", target = "ausbildung.id")
+//    @Mapping(source = "gesuchsperiodeId", target = "gesuchsperiode.id")
     public abstract Gesuch toNewEntity(GesuchCreateDto gesuchCreateDto);
 
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
     @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
     public abstract GesuchWithChangesDto toWithChangesDto(Gesuch gesuch);
 
-
     @Named("getFullNameOfSachbearbeiter")
     String getFullNameOfSachbearbeiter(Gesuch gesuch) {
-        final var zuordnung = gesuch.getFall().getSachbearbeiterZuordnung();
+        final var zuordnung = gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung();
         if (zuordnung == null) {
             return "";
         }

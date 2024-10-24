@@ -15,10 +15,10 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.GesuchDashboardItemMissingDocumentsDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
-import ch.dvbern.stip.generated.dto.GsDashboardMissingDocumentsDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -29,18 +29,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * GsDashboardDtoSpec
+ * GesuchDashboardItemDtoSpec
  */
 @JsonPropertyOrder({
-  GsDashboardDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
-  GsDashboardDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
-  GsDashboardDtoSpec.JSON_PROPERTY_ID,
-  GsDashboardDtoSpec.JSON_PROPERTY_OFFENE_AENDERUNG,
-  GsDashboardDtoSpec.JSON_PROPERTY_MISSING_DOCUMENTS
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_ID,
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_OFFENE_AENDERUNG,
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_MISSING_DOCUMENTS
 })
-@JsonTypeName("GsDashboard")
+@JsonTypeName("GesuchDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class GsDashboardDtoSpec {
+public class GesuchDashboardItemDtoSpec {
   public static final String JSON_PROPERTY_GESUCHSPERIODE = "gesuchsperiode";
   private GesuchsperiodeDtoSpec gesuchsperiode;
 
@@ -54,12 +54,12 @@ public class GsDashboardDtoSpec {
   private GesuchTrancheSlimDtoSpec offeneAenderung;
 
   public static final String JSON_PROPERTY_MISSING_DOCUMENTS = "missingDocuments";
-  private GsDashboardMissingDocumentsDtoSpec missingDocuments;
+  private GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments;
 
-  public GsDashboardDtoSpec() {
+  public GesuchDashboardItemDtoSpec() {
   }
 
-  public GsDashboardDtoSpec gesuchsperiode(GesuchsperiodeDtoSpec gesuchsperiode) {
+  public GesuchDashboardItemDtoSpec gesuchsperiode(GesuchsperiodeDtoSpec gesuchsperiode) {
     
     this.gesuchsperiode = gesuchsperiode;
     return this;
@@ -85,7 +85,7 @@ public class GsDashboardDtoSpec {
   }
 
 
-  public GsDashboardDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public GesuchDashboardItemDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
     
     this.gesuchStatus = gesuchStatus;
     return this;
@@ -111,7 +111,7 @@ public class GsDashboardDtoSpec {
   }
 
 
-  public GsDashboardDtoSpec id(UUID id) {
+  public GesuchDashboardItemDtoSpec id(UUID id) {
     
     this.id = id;
     return this;
@@ -137,7 +137,7 @@ public class GsDashboardDtoSpec {
   }
 
 
-  public GsDashboardDtoSpec offeneAenderung(GesuchTrancheSlimDtoSpec offeneAenderung) {
+  public GesuchDashboardItemDtoSpec offeneAenderung(GesuchTrancheSlimDtoSpec offeneAenderung) {
     
     this.offeneAenderung = offeneAenderung;
     return this;
@@ -163,7 +163,7 @@ public class GsDashboardDtoSpec {
   }
 
 
-  public GsDashboardDtoSpec missingDocuments(GsDashboardMissingDocumentsDtoSpec missingDocuments) {
+  public GesuchDashboardItemDtoSpec missingDocuments(GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments) {
     
     this.missingDocuments = missingDocuments;
     return this;
@@ -177,14 +177,14 @@ public class GsDashboardDtoSpec {
   @JsonProperty(JSON_PROPERTY_MISSING_DOCUMENTS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public GsDashboardMissingDocumentsDtoSpec getMissingDocuments() {
+  public GesuchDashboardItemMissingDocumentsDtoSpec getMissingDocuments() {
     return missingDocuments;
   }
 
 
   @JsonProperty(JSON_PROPERTY_MISSING_DOCUMENTS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMissingDocuments(GsDashboardMissingDocumentsDtoSpec missingDocuments) {
+  public void setMissingDocuments(GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments) {
     this.missingDocuments = missingDocuments;
   }
 
@@ -196,12 +196,12 @@ public class GsDashboardDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GsDashboardDtoSpec gsDashboard = (GsDashboardDtoSpec) o;
-    return Objects.equals(this.gesuchsperiode, gsDashboard.gesuchsperiode) &&
-        Objects.equals(this.gesuchStatus, gsDashboard.gesuchStatus) &&
-        Objects.equals(this.id, gsDashboard.id) &&
-        Objects.equals(this.offeneAenderung, gsDashboard.offeneAenderung) &&
-        Objects.equals(this.missingDocuments, gsDashboard.missingDocuments);
+    GesuchDashboardItemDtoSpec gesuchDashboardItem = (GesuchDashboardItemDtoSpec) o;
+    return Objects.equals(this.gesuchsperiode, gesuchDashboardItem.gesuchsperiode) &&
+        Objects.equals(this.gesuchStatus, gesuchDashboardItem.gesuchStatus) &&
+        Objects.equals(this.id, gesuchDashboardItem.id) &&
+        Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
+        Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
   }
 
   @Override
@@ -212,7 +212,7 @@ public class GsDashboardDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GsDashboardDtoSpec {\n");
+    sb.append("class GesuchDashboardItemDtoSpec {\n");
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");

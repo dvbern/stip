@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.repo;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
@@ -28,10 +29,13 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     public Stream<Gesuch> findForGs(final UUID gesuchstellerId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
+        final var ausbildung = QAusbildung.ausbildung;
 
         final var query = queryFactory
             .selectFrom(gesuch)
-            .where(gesuch.fall.gesuchsteller.id.eq(gesuchstellerId));
+            .join(ausbildung)
+            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .where(ausbildung.fall.gesuchsteller.id.eq(gesuchstellerId));
         return query.stream();
     }
 
@@ -69,9 +73,12 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     private JPAQuery<Gesuch> addMeineFilter(final UUID benutzerId, final JPAQuery<Gesuch> query) {
         final var gesuch = QGesuch.gesuch;
+        final var ausbildung = QAusbildung.ausbildung;
         final var zuordnung = QZuordnung.zuordnung;
 
-        query.join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
+        query.join(ausbildung)
+            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .join(zuordnung).on(ausbildung.fall.id.eq(zuordnung.fall.id))
             .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
 
         return query;
@@ -80,11 +87,13 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     public Stream<Gesuch> findAllForFall(UUID fallId) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuch = QGesuch.gesuch;
+        final var ausbildung = QAusbildung.ausbildung;
 
         var query = queryFactory
-            .select(gesuch)
-            .from(gesuch)
-            .where(gesuch.fall.id.eq(fallId));
+            .selectFrom(gesuch)
+            .join(ausbildung)
+            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .where(ausbildung.fall.id.eq(fallId));
         return query.stream();
     }
 

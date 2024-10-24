@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -57,13 +58,13 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
-import ch.dvbern.stip.generated.dto.GsDashboardDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
@@ -74,7 +75,6 @@ import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -101,7 +101,8 @@ public class GesuchService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
     private final GesuchNummerService gesuchNummerService;
-    private final GsDashboardMapper gsDashboardMapper;
+    private final FallRepository fallRepository;
+    private final FallDashboardItemMapper fallDashboardItemMapper;
     private final ConfigService configService;
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
@@ -359,10 +360,10 @@ public class GesuchService {
             .toList();
 
         return new PaginatedSbDashboardDto(
-            results,
             page,
             results.size(),
-            Math.toIntExact(countQuery.fetchFirst())
+            Math.toIntExact(countQuery.fetchFirst()),
+            results
         );
     }
 
@@ -374,32 +375,13 @@ public class GesuchService {
             .toList();
     }
 
-    public List<GsDashboardDto> findGsDashboard() {
-        List<GsDashboardDto> gsDashboardDtos = new ArrayList<>();
+    public List<FallDashboardItemDto> getFallDashboardItemDtos() {
+        List<FallDashboardItemDto> fallDashboardItemDtos = new ArrayList<>();
         final var benutzer = benutzerService.getCurrentBenutzer();
-        final var gesuche = gesuchRepository.findForGs(benutzer.getId()).toList();
+        final var fall = fallRepository.findFallForGsOptional(benutzer.getId()).orElseThrow(NotFoundException::new);
+        fallDashboardItemDtos.add(fallDashboardItemMapper.toDto(fall));
 
-        for (var gesuch : gesuche) {
-            final var gesuchTranchen = gesuchTrancheService.getAllTranchenForGesuch(gesuch.getId());
-
-            final var offeneAenderung = gesuchTranchen.stream()
-                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
-                    && tranche.getStatus().equals(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
-                .findFirst().orElse(null);
-
-            final var missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()
-                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE))
-                .map(tranche -> ImmutablePair.of(
-                    tranche.getId(),
-                    gesuchTrancheService.getRequiredDokumentTypes(tranche.getId()).size()
-                ))
-                .filter(pair -> pair.getRight() > 0)
-                .findFirst();
-
-            gsDashboardDtos.add(gsDashboardMapper.toDto(gesuch, offeneAenderung, missingDocumentsTrancheIdAndCount));
-        }
-
-        return gsDashboardDtos;
+        return fallDashboardItemDtos;
     }
 
     @Transactional

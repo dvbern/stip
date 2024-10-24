@@ -124,7 +124,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getGsDashboard() {
         gesuchAuthorizer.allowAllow();
-        return Response.ok(gesuchService.findGsDashboard()).build();
+        return Response.ok(gesuchService.getFallDashboardItemDtos()).build();
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
@@ -174,12 +174,12 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(dtos).build();
     }
 
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGesucheForFall(UUID fallId) {
-        fallAuthorizer.canRead(fallId);
-        return Response.ok(gesuchService.findAllForFall(fallId)).build();
-    }
+//    @RolesAllowed(GESUCH_READ)
+//    @Override
+//    public Response getGesucheForFall(UUID fallId) {
+//        fallAuthorizer.canRead(fallId);
+//        return Response.ok(gesuchService.findAllForFall(fallId)).build();
+//    }
 
     @RolesAllowed(GESUCH_READ)
     @Override

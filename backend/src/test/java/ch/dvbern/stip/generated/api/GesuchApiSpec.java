@@ -14,6 +14,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
@@ -21,7 +22,6 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
-import ch.dvbern.stip.generated.dto.GsDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDtoSpec;
@@ -85,7 +85,6 @@ public class GesuchApiSpec {
                 getBerechnungForGesuch(),
                 getCurrentGesuch(),
                 getGesuch(),
-                getGesucheForFall(),
                 getGesucheGs(),
                 getGesucheSb(),
                 getGsDashboard(),
@@ -147,10 +146,6 @@ public class GesuchApiSpec {
 
     public GetGesuchOper getGesuch() {
         return new GetGesuchOper(createReqSpec());
-    }
-
-    public GetGesucheForFallOper getGesucheForFall() {
-        return new GetGesucheForFallOper(createReqSpec());
     }
 
     public GetGesucheGsOper getGesucheGs() {
@@ -554,6 +549,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #body  (required)
+     * return UUID
      */
     public static class CreateGesuchOper implements Oper {
 
@@ -566,7 +562,7 @@ public class GesuchApiSpec {
         public CreateGesuchOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -579,6 +575,16 @@ public class GesuchApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch
+         * @param handler handler
+         * @return UUID
+         */
+        public UUID executeAs(Function<Response, Response> handler) {
+            TypeRef<UUID> type = new TypeRef<UUID>(){};
+            return execute(handler).as(type);
         }
 
          /**
@@ -1101,79 +1107,6 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Return alle Gesuche die gehören zu dieser Fall
-     * 
-     *
-     * @see #fallIdPath  (required)
-     * return List&lt;GesuchDtoSpec&gt;
-     */
-    public static class GetGesucheForFallOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/fall/{fallId}";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetGesucheForFallOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/fall/{fallId}
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/fall/{fallId}
-         * @param handler handler
-         * @return List&lt;GesuchDtoSpec&gt;
-         */
-        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String FALL_ID_PATH = "fallId";
-
-        /**
-         * @param fallId (UUID)  (required)
-         * @return operation
-         */
-        public GetGesucheForFallOper fallIdPath(Object fallId) {
-            reqSpec.addPathParam(FALL_ID_PATH, fallId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetGesucheForFallOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetGesucheForFallOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
      * Returns gesuche filtered by gs
      * 
      *
@@ -1467,7 +1400,7 @@ public class GesuchApiSpec {
      * Returns gesuche for dashboard filtered by gs
      * 
      *
-     * return List&lt;GsDashboardDtoSpec&gt;
+     * return List&lt;FallDashboardItemDtoSpec&gt;
      */
     public static class GetGsDashboardOper implements Oper {
 
@@ -1497,10 +1430,10 @@ public class GesuchApiSpec {
         /**
          * GET /gesuch/benutzer/me/gs-dashboard
          * @param handler handler
-         * @return List&lt;GsDashboardDtoSpec&gt;
+         * @return List&lt;FallDashboardItemDtoSpec&gt;
          */
-        public List<GsDashboardDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GsDashboardDtoSpec>> type = new TypeRef<List<GsDashboardDtoSpec>>(){};
+        public List<FallDashboardItemDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<FallDashboardItemDtoSpec>> type = new TypeRef<List<FallDashboardItemDtoSpec>>(){};
             return execute(handler).as(type);
         }
 

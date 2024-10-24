@@ -1,12 +1,17 @@
 package ch.dvbern.stip.api.generator.entities;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
@@ -81,8 +86,22 @@ public final class GesuchGenerator {
             gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
         }
 
-        var gesuch = new Gesuch()
+        var ausbildungDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
+
+        var ausbildung = new Ausbildung()
             .setFall(new Fall())
+            .setAusbildungsgang((Ausbildungsgang) new Ausbildungsgang().setId(ausbildungDtoSpec.getAusbildungsgangId()))
+            .setAlternativeAusbildungsgang(ausbildungDtoSpec.getAlternativeAusbildungsgang())
+            .setAlternativeAusbildungsstaette(ausbildungDtoSpec.getAlternativeAusbildungsstaette())
+            .setFachrichtung(ausbildungDtoSpec.getFachrichtung())
+            .setAusbildungNichtGefunden(ausbildungDtoSpec.getAusbildungNichtGefunden())
+            .setAusbildungBegin(LocalDate.parse(ausbildungDtoSpec.getAusbildungBegin()))
+            .setAusbildungEnd(LocalDate.parse(ausbildungDtoSpec.getAusbildungEnd()))
+            .setPensum(AusbildungsPensum.VOLLZEIT)
+            .setAusbildungsort(ausbildungDtoSpec.getAusbildungsort())
+            .setIsAusbildungAusland(ausbildungDtoSpec.getIsAusbildungAusland());
+        var gesuch = new Gesuch()
+            .setAusbildung(ausbildung)
             .setGesuchsperiode(
                 new Gesuchsperiode()
                     .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2023))

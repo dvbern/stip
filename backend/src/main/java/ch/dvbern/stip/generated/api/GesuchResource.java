@@ -1,11 +1,11 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
-import ch.dvbern.stip.generated.dto.GsDashboardDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
@@ -57,7 +57,7 @@ public interface GesuchResource {
 
     @POST
     @Consumes({ "application/json" })
-    @Produces({ "text/plain" })
+    @Produces({ "application/json", "text/plain" })
     Response createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
 
     @DELETE
@@ -95,11 +95,6 @@ public interface GesuchResource {
     @Path("/{gesuchId}/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     Response getGesuch(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @GET
-    @Path("/fall/{fallId}")
-    @Produces({ "application/json", "text/plain" })
-    Response getGesucheForFall(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/benutzer/me/gs")

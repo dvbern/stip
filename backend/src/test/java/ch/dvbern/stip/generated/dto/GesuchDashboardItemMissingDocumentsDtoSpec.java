@@ -25,25 +25,25 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * GsDashboardMissingDocumentsDtoSpec
+ * GesuchDashboardItemMissingDocumentsDtoSpec
  */
 @JsonPropertyOrder({
-  GsDashboardMissingDocumentsDtoSpec.JSON_PROPERTY_TRANCHE_ID,
-  GsDashboardMissingDocumentsDtoSpec.JSON_PROPERTY_COUNT
+  GesuchDashboardItemMissingDocumentsDtoSpec.JSON_PROPERTY_TRANCHE_ID,
+  GesuchDashboardItemMissingDocumentsDtoSpec.JSON_PROPERTY_COUNT
 })
-@JsonTypeName("GsDashboard_missingDocuments")
+@JsonTypeName("GesuchDashboardItem_missingDocuments")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class GsDashboardMissingDocumentsDtoSpec {
+public class GesuchDashboardItemMissingDocumentsDtoSpec {
   public static final String JSON_PROPERTY_TRANCHE_ID = "trancheId";
   private UUID trancheId;
 
   public static final String JSON_PROPERTY_COUNT = "count";
   private Integer count;
 
-  public GsDashboardMissingDocumentsDtoSpec() {
+  public GesuchDashboardItemMissingDocumentsDtoSpec() {
   }
 
-  public GsDashboardMissingDocumentsDtoSpec trancheId(UUID trancheId) {
+  public GesuchDashboardItemMissingDocumentsDtoSpec trancheId(UUID trancheId) {
     
     this.trancheId = trancheId;
     return this;
@@ -69,7 +69,7 @@ public class GsDashboardMissingDocumentsDtoSpec {
   }
 
 
-  public GsDashboardMissingDocumentsDtoSpec count(Integer count) {
+  public GesuchDashboardItemMissingDocumentsDtoSpec count(Integer count) {
     
     this.count = count;
     return this;
@@ -102,9 +102,9 @@ public class GsDashboardMissingDocumentsDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GsDashboardMissingDocumentsDtoSpec gsDashboardMissingDocuments = (GsDashboardMissingDocumentsDtoSpec) o;
-    return Objects.equals(this.trancheId, gsDashboardMissingDocuments.trancheId) &&
-        Objects.equals(this.count, gsDashboardMissingDocuments.count);
+    GesuchDashboardItemMissingDocumentsDtoSpec gesuchDashboardItemMissingDocuments = (GesuchDashboardItemMissingDocumentsDtoSpec) o;
+    return Objects.equals(this.trancheId, gesuchDashboardItemMissingDocuments.trancheId) &&
+        Objects.equals(this.count, gesuchDashboardItemMissingDocuments.count);
   }
 
   @Override
@@ -115,7 +115,7 @@ public class GsDashboardMissingDocumentsDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GsDashboardMissingDocumentsDtoSpec {\n");
+    sb.append("class GesuchDashboardItemMissingDocumentsDtoSpec {\n");
     sb.append("    trancheId: ").append(toIndentedString(trancheId)).append("\n");
     sb.append("    count: ").append(toIndentedString(count)).append("\n");
     sb.append("}");

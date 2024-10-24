@@ -23,7 +23,7 @@ public class SbDashboardGesuchMapper {
         final var target = new SbDashboardGesuchDto();
         target.setId(gesuch.getId());
         target.setGesuchTrancheId(gesuchTranche.getId());
-        target.setFallNummer(gesuch.getFall().getFallNummer());
+        target.setFallNummer(gesuch.getAusbildung().getFall().getFallNummer());
         target.setTyp(gesuchTranche.getTyp());
 
         final var pia = gesuchTranche.getGesuchFormular().getPersonInAusbildung();
@@ -36,7 +36,7 @@ public class SbDashboardGesuchMapper {
         }
 
         target.setStatus(gesuch.getGesuchStatus());
-        final var zuordnung = gesuch.getFall().getSachbearbeiterZuordnung();
+        final var zuordnung = gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung();
         if (zuordnung != null) {
             target.setBearbeiter(zuordnung.getSachbearbeiter().getFullName());
         }

@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
@@ -58,9 +58,9 @@ import org.hibernate.envers.NotAudited;
 @Setter
 public class Gesuch extends AbstractMandantEntity {
     @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "fall_id", foreignKey = @ForeignKey(name = "FK_gesuch_fall_id"))
-    private Fall fall;
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_ausbildung_id"))
+    private Ausbildung ausbildung;
 
     @NotNull
     @ManyToOne(optional = false)

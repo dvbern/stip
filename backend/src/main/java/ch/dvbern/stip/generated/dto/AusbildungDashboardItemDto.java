@@ -1,7 +1,12 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AusbildungsPensumDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.GesuchDashboardItemDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -15,12 +20,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("AusbildungUpdate")
+@JsonTypeName("AusbildungDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class AusbildungUpdateDto  implements Serializable {
+public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid UUID fallId;
   private @Valid String fachrichtung;
   private @Valid String ausbildungBegin;
@@ -32,11 +37,12 @@ public class AusbildungUpdateDto  implements Serializable {
   private @Valid String alternativeAusbildungsgang;
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
-  private @Valid UUID ausbildungsgangId;
+  private @Valid AusbildungsgangDto ausbildungsgang;
+  private @Valid List<GesuchDashboardItemDto> gesuchs;
 
   /**
    **/
-  public AusbildungUpdateDto fallId(UUID fallId) {
+  public AusbildungDashboardItemDto fallId(UUID fallId) {
     this.fallId = fallId;
     return this;
   }
@@ -55,7 +61,7 @@ public class AusbildungUpdateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungUpdateDto fachrichtung(String fachrichtung) {
+  public AusbildungDashboardItemDto fachrichtung(String fachrichtung) {
     this.fachrichtung = fachrichtung;
     return this;
   }
@@ -75,7 +81,7 @@ public class AusbildungUpdateDto  implements Serializable {
   /**
    * Datum im Format mm.YYYY
    **/
-  public AusbildungUpdateDto ausbildungBegin(String ausbildungBegin) {
+  public AusbildungDashboardItemDto ausbildungBegin(String ausbildungBegin) {
     this.ausbildungBegin = ausbildungBegin;
     return this;
   }
@@ -95,7 +101,7 @@ public class AusbildungUpdateDto  implements Serializable {
   /**
    * Datum im Format mm.YYYY
    **/
-  public AusbildungUpdateDto ausbildungEnd(String ausbildungEnd) {
+  public AusbildungDashboardItemDto ausbildungEnd(String ausbildungEnd) {
     this.ausbildungEnd = ausbildungEnd;
     return this;
   }
@@ -114,7 +120,7 @@ public class AusbildungUpdateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungUpdateDto pensum(AusbildungsPensumDto pensum) {
+  public AusbildungDashboardItemDto pensum(AusbildungsPensumDto pensum) {
     this.pensum = pensum;
     return this;
   }
@@ -133,7 +139,7 @@ public class AusbildungUpdateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungUpdateDto id(UUID id) {
+  public AusbildungDashboardItemDto id(UUID id) {
     this.id = id;
     return this;
   }
@@ -151,7 +157,7 @@ public class AusbildungUpdateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungUpdateDto ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
+  public AusbildungDashboardItemDto ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
     this.ausbildungNichtGefunden = ausbildungNichtGefunden;
     return this;
   }
@@ -170,7 +176,7 @@ public class AusbildungUpdateDto  implements Serializable {
   /**
    * Required wenn andere ausbildungNichtGefunden &#x3D; true
    **/
-  public AusbildungUpdateDto alternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
+  public AusbildungDashboardItemDto alternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
     this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
     return this;
   }
@@ -189,7 +195,7 @@ public class AusbildungUpdateDto  implements Serializable {
   /**
    * Required wenn andere ausbildungNichtGefunden &#x3D; true
    **/
-  public AusbildungUpdateDto alternativeAusbildungsgang(String alternativeAusbildungsgang) {
+  public AusbildungDashboardItemDto alternativeAusbildungsgang(String alternativeAusbildungsgang) {
     this.alternativeAusbildungsgang = alternativeAusbildungsgang;
     return this;
   }
@@ -208,7 +214,7 @@ public class AusbildungUpdateDto  implements Serializable {
   /**
    * Not required if isAusbildungAusland &#x3D; true
    **/
-  public AusbildungUpdateDto ausbildungsort(String ausbildungsort) {
+  public AusbildungDashboardItemDto ausbildungsort(String ausbildungsort) {
     this.ausbildungsort = ausbildungsort;
     return this;
   }
@@ -226,7 +232,7 @@ public class AusbildungUpdateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungUpdateDto isAusbildungAusland(Boolean isAusbildungAusland) {
+  public AusbildungDashboardItemDto isAusbildungAusland(Boolean isAusbildungAusland) {
     this.isAusbildungAusland = isAusbildungAusland;
     return this;
   }
@@ -244,22 +250,56 @@ public class AusbildungUpdateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungUpdateDto ausbildungsgangId(UUID ausbildungsgangId) {
-    this.ausbildungsgangId = ausbildungsgangId;
+  public AusbildungDashboardItemDto ausbildungsgang(AusbildungsgangDto ausbildungsgang) {
+    this.ausbildungsgang = ausbildungsgang;
     return this;
   }
 
   
-  @JsonProperty("ausbildungsgangId")
-  public UUID getAusbildungsgangId() {
-    return ausbildungsgangId;
+  @JsonProperty("ausbildungsgang")
+  public AusbildungsgangDto getAusbildungsgang() {
+    return ausbildungsgang;
   }
 
-  @JsonProperty("ausbildungsgangId")
-  public void setAusbildungsgangId(UUID ausbildungsgangId) {
-    this.ausbildungsgangId = ausbildungsgangId;
+  @JsonProperty("ausbildungsgang")
+  public void setAusbildungsgang(AusbildungsgangDto ausbildungsgang) {
+    this.ausbildungsgang = ausbildungsgang;
   }
 
+  /**
+   **/
+  public AusbildungDashboardItemDto gesuchs(List<GesuchDashboardItemDto> gesuchs) {
+    this.gesuchs = gesuchs;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchs")
+  public List<GesuchDashboardItemDto> getGesuchs() {
+    return gesuchs;
+  }
+
+  @JsonProperty("gesuchs")
+  public void setGesuchs(List<GesuchDashboardItemDto> gesuchs) {
+    this.gesuchs = gesuchs;
+  }
+
+  public AusbildungDashboardItemDto addGesuchsItem(GesuchDashboardItemDto gesuchsItem) {
+    if (this.gesuchs == null) {
+      this.gesuchs = new ArrayList<>();
+    }
+
+    this.gesuchs.add(gesuchsItem);
+    return this;
+  }
+
+  public AusbildungDashboardItemDto removeGesuchsItem(GesuchDashboardItemDto gesuchsItem) {
+    if (gesuchsItem != null && this.gesuchs != null) {
+      this.gesuchs.remove(gesuchsItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -269,30 +309,31 @@ public class AusbildungUpdateDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AusbildungUpdateDto ausbildungUpdate = (AusbildungUpdateDto) o;
-    return Objects.equals(this.fallId, ausbildungUpdate.fallId) &&
-        Objects.equals(this.fachrichtung, ausbildungUpdate.fachrichtung) &&
-        Objects.equals(this.ausbildungBegin, ausbildungUpdate.ausbildungBegin) &&
-        Objects.equals(this.ausbildungEnd, ausbildungUpdate.ausbildungEnd) &&
-        Objects.equals(this.pensum, ausbildungUpdate.pensum) &&
-        Objects.equals(this.id, ausbildungUpdate.id) &&
-        Objects.equals(this.ausbildungNichtGefunden, ausbildungUpdate.ausbildungNichtGefunden) &&
-        Objects.equals(this.alternativeAusbildungsstaette, ausbildungUpdate.alternativeAusbildungsstaette) &&
-        Objects.equals(this.alternativeAusbildungsgang, ausbildungUpdate.alternativeAusbildungsgang) &&
-        Objects.equals(this.ausbildungsort, ausbildungUpdate.ausbildungsort) &&
-        Objects.equals(this.isAusbildungAusland, ausbildungUpdate.isAusbildungAusland) &&
-        Objects.equals(this.ausbildungsgangId, ausbildungUpdate.ausbildungsgangId);
+    AusbildungDashboardItemDto ausbildungDashboardItem = (AusbildungDashboardItemDto) o;
+    return Objects.equals(this.fallId, ausbildungDashboardItem.fallId) &&
+        Objects.equals(this.fachrichtung, ausbildungDashboardItem.fachrichtung) &&
+        Objects.equals(this.ausbildungBegin, ausbildungDashboardItem.ausbildungBegin) &&
+        Objects.equals(this.ausbildungEnd, ausbildungDashboardItem.ausbildungEnd) &&
+        Objects.equals(this.pensum, ausbildungDashboardItem.pensum) &&
+        Objects.equals(this.id, ausbildungDashboardItem.id) &&
+        Objects.equals(this.ausbildungNichtGefunden, ausbildungDashboardItem.ausbildungNichtGefunden) &&
+        Objects.equals(this.alternativeAusbildungsstaette, ausbildungDashboardItem.alternativeAusbildungsstaette) &&
+        Objects.equals(this.alternativeAusbildungsgang, ausbildungDashboardItem.alternativeAusbildungsgang) &&
+        Objects.equals(this.ausbildungsort, ausbildungDashboardItem.ausbildungsort) &&
+        Objects.equals(this.isAusbildungAusland, ausbildungDashboardItem.isAusbildungAusland) &&
+        Objects.equals(this.ausbildungsgang, ausbildungDashboardItem.ausbildungsgang) &&
+        Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgangId);
+    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang, gesuchs);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AusbildungUpdateDto {\n");
+    sb.append("class AusbildungDashboardItemDto {\n");
     
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
@@ -305,7 +346,8 @@ public class AusbildungUpdateDto  implements Serializable {
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
-    sb.append("    ausbildungsgangId: ").append(toIndentedString(ausbildungsgangId)).append("\n");
+    sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
+    sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
     sb.append("}");
     return sb.toString();
   }

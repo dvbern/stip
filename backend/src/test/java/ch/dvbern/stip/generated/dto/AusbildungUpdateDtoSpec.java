@@ -30,6 +30,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   AusbildungUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNGSGANG_ID,
+  AusbildungUpdateDtoSpec.JSON_PROPERTY_ID,
+  AusbildungUpdateDtoSpec.JSON_PROPERTY_FALL_ID,
   AusbildungUpdateDtoSpec.JSON_PROPERTY_FACHRICHTUNG,
   AusbildungUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN,
   AusbildungUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNG_BEGIN,
@@ -45,6 +47,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungUpdateDtoSpec {
   public static final String JSON_PROPERTY_AUSBILDUNGSGANG_ID = "ausbildungsgangId";
   private UUID ausbildungsgangId;
+
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
+  public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  private UUID fallId;
 
   public static final String JSON_PROPERTY_FACHRICHTUNG = "fachrichtung";
   private String fachrichtung;
@@ -99,6 +107,58 @@ public class AusbildungUpdateDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAusbildungsgangId(UUID ausbildungsgangId) {
     this.ausbildungsgangId = ausbildungsgangId;
+  }
+
+
+  public AusbildungUpdateDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+
+  public AusbildungUpdateDtoSpec fallId(UUID fallId) {
+    
+    this.fallId = fallId;
+    return this;
+  }
+
+   /**
+   * Get fallId
+   * @return fallId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getFallId() {
+    return fallId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
   }
 
 
@@ -345,6 +405,8 @@ public class AusbildungUpdateDtoSpec {
     }
     AusbildungUpdateDtoSpec ausbildungUpdate = (AusbildungUpdateDtoSpec) o;
     return Objects.equals(this.ausbildungsgangId, ausbildungUpdate.ausbildungsgangId) &&
+        Objects.equals(this.id, ausbildungUpdate.id) &&
+        Objects.equals(this.fallId, ausbildungUpdate.fallId) &&
         Objects.equals(this.fachrichtung, ausbildungUpdate.fachrichtung) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildungUpdate.ausbildungNichtGefunden) &&
         Objects.equals(this.ausbildungBegin, ausbildungUpdate.ausbildungBegin) &&
@@ -358,7 +420,7 @@ public class AusbildungUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildungsgangId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(ausbildungsgangId, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -366,6 +428,8 @@ public class AusbildungUpdateDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungUpdateDtoSpec {\n");
     sb.append("    ausbildungsgangId: ").append(toIndentedString(ausbildungsgangId)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");

@@ -14,18 +14,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("GsDashboard_missingDocuments")
+@JsonTypeName("GesuchDashboardItem_missingDocuments")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class GsDashboardMissingDocumentsDto  implements Serializable {
+public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
   private @Valid UUID trancheId;
   private @Valid Integer count;
 
   /**
    **/
-  public GsDashboardMissingDocumentsDto trancheId(UUID trancheId) {
+  public GesuchDashboardItemMissingDocumentsDto trancheId(UUID trancheId) {
     this.trancheId = trancheId;
     return this;
   }
@@ -44,7 +44,7 @@ public class GsDashboardMissingDocumentsDto  implements Serializable {
 
   /**
    **/
-  public GsDashboardMissingDocumentsDto count(Integer count) {
+  public GesuchDashboardItemMissingDocumentsDto count(Integer count) {
     this.count = count;
     return this;
   }
@@ -70,9 +70,9 @@ public class GsDashboardMissingDocumentsDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GsDashboardMissingDocumentsDto gsDashboardMissingDocuments = (GsDashboardMissingDocumentsDto) o;
-    return Objects.equals(this.trancheId, gsDashboardMissingDocuments.trancheId) &&
-        Objects.equals(this.count, gsDashboardMissingDocuments.count);
+    GesuchDashboardItemMissingDocumentsDto gesuchDashboardItemMissingDocuments = (GesuchDashboardItemMissingDocumentsDto) o;
+    return Objects.equals(this.trancheId, gesuchDashboardItemMissingDocuments.trancheId) &&
+        Objects.equals(this.count, gesuchDashboardItemMissingDocuments.count);
   }
 
   @Override
@@ -83,7 +83,7 @@ public class GsDashboardMissingDocumentsDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GsDashboardMissingDocumentsDto {\n");
+    sb.append("class GesuchDashboardItemMissingDocumentsDto {\n");
     
     sb.append("    trancheId: ").append(toIndentedString(trancheId)).append("\n");
     sb.append("    count: ").append(toIndentedString(count)).append("\n");

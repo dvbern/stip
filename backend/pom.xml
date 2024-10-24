@@ -595,6 +595,9 @@
                   <goal>generate</goal>
                 </goals>
                 <configuration>
+                  <openapiNormalizer>
+                    REFACTOR_ALLOF_WITH_PROPERTIES_ONLY=true
+                  </openapiNormalizer>
                   <inputSpec>${contract.path}</inputSpec>
                   <generatorName>jaxrs-spec</generatorName>
                   <library>quarkus</library>

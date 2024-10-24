@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -121,7 +120,7 @@ public class TestcaseSeeding extends Seeder {
             tranche.setGueltigkeit(new DateRange(
                 gesuchperiodeToAttach.getGesuchsperiodeStart(),
                 gesuchperiodeToAttach.getGesuchsperiodeStopp()
-            ));
+             ));
 
             correctAuszahlungAdresse(tranche.getGesuchFormular());
 
@@ -136,16 +135,16 @@ public class TestcaseSeeding extends Seeder {
                 tranche
             );
 
-            gesuch.setFall(fall);
-            fall.setGesuch(Set.of(gesuch));
-            tranche.setGesuch(gesuch);
-
-            // Persist to database
-            fallRepository.persist(fall);
-            gesuchRepository.persist(gesuch);
-
-            uploadDocuments(tranche, json);
-
+//            gesuch.setFall(fall);
+//            fall.setGesuch(Set.of(gesuch));
+//            tranche.setGesuch(gesuch);
+//
+//            // Persist to database
+//            fallRepository.persist(fall);
+//            gesuchRepository.persist(gesuch);
+//
+//            uploadDocuments(tranche, json);
+//
             index++;
         }
     }
@@ -326,6 +325,11 @@ public class TestcaseSeeding extends Seeder {
             .setFallNummer(fallNummer)
             .setGesuchsteller(gesuchsteller);
     }
+
+//    Ausbildung createAusbildung(final UUID fallId) {
+//        return new Ausbildung()
+//            .setFall()
+//    }
 
     Gesuch createGesuch(final Gesuchsperiode gesuchsperiode, final String gesuchNummer, final GesuchTranche tranche) {
         return new Gesuch()
