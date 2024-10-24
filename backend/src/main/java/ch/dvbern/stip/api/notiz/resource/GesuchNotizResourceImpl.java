@@ -19,7 +19,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     private final GesuchNotizService service;
     private final GesuchNotizAuthorizer authorizer;
 
-    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response createNotiz(GesuchNotizCreateDto gesuchNotizCreateDto) {
         authorizer.allowAllow();
@@ -27,7 +27,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         return Response.ok(notiz).build();
     }
 
-    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response deleteNotiz(UUID notizId) {
         authorizer.allowAllow();
@@ -35,14 +35,14 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         return Response.noContent().build();
     }
 
-    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response getNotiz(UUID notizId) {
         authorizer.allowAllow();
         return Response.ok(service.getById(notizId)).build();
     }
 
-    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response getNotizen(UUID gesuchId) {
         authorizer.allowAllow();
@@ -50,7 +50,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         return Response.ok(notizen).build();
     }
 
-    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response updateNotiz(GesuchNotizUpdateDto gesuchNotizUpdateDto) {
         authorizer.allowAllow();
