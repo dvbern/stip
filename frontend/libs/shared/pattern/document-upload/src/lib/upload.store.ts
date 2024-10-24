@@ -16,9 +16,9 @@ import {
 } from 'rxjs/operators';
 
 import {
-  DocumentOptions,
-  DocumentState,
-  DocumentView,
+  DokumentListView,
+  DokumentOptions,
+  DokumentState,
 } from '@dv/shared/model/dokument';
 import { Dokument, DokumentService } from '@dv/shared/model/gesuch';
 import { noGlobalErrorsIf, shouldIgnoreErrorsIf } from '@dv/shared/util/http';
@@ -38,8 +38,9 @@ import {
 
 @Injectable()
 export class UploadStore {
-  readonly state = signalState<DocumentState>({
-    documents: [],
+  readonly state = signalState<DokumentState>({
+    gesuchDokument: undefined,
+    dokuments: [],
     errorKey: undefined,
   });
 
@@ -47,7 +48,7 @@ export class UploadStore {
    * True if there are any entries in the documents array
    */
   hasEntriesSig = computed(() => {
-    return this.state.documents().length > 0;
+    return this.state.dokuments().length > 0;
   });
 
   public documentChangedSig = signal({ hasChanged: false });
@@ -57,46 +58,50 @@ export class UploadStore {
    */
   isLoading = computed(() => {
     return this.state
-      .documents()
+      .dokuments()
       .some((d) => (!d.progress || d.progress < 100) && !d.error);
   });
 
   /**
    * The documents in the state, enriched with a state and a theme
    */
-  documentsView = computed<DocumentView[]>(() => {
-    return this.state.documents().map((document) => {
-      const state = checkDocumentState(document);
+  dokumentListView = computed<DokumentListView>(() => {
+    const { gesuchDokument, dokuments } = this.state();
+    return {
+      gesuchDokument,
+      dokuments: dokuments.map((document) => {
+        const state = checkDocumentState(document);
 
-      return {
-        ...document,
-        state,
-        theme: UPLOAD_THEME_MAP[state],
-      };
-    });
+        return {
+          ...document,
+          state,
+          theme: UPLOAD_THEME_MAP[state],
+        };
+      }),
+    };
   });
 
   private documentService = inject(DokumentService);
-  private loadDocuments$ = new Subject<DocumentOptions>();
+  private loadDocuments$ = new Subject<DokumentOptions>();
   private removeDocument$ = new Subject<
-    { dokumentId: string } & DocumentOptions
+    { dokumentId: string } & DokumentOptions
   >();
   private uploadDocument$ = new Subject<
     {
       fileUpload: File;
-    } & DocumentOptions
+    } & DokumentOptions
   >();
   private cancelDocumentUpload$ = new Subject<
     {
       dokumentId: string;
-    } & DocumentOptions
+    } & DokumentOptions
   >();
 
   constructor() {
     this.loadDocuments$
       .pipe(
         exhaustMap((options) =>
-          this.documentService.getDokumenteForTyp$({
+          this.documentService.getGesuchDokumenteForTyp$({
             ...options,
             gesuchTrancheId: options.trancheId,
           }),
@@ -107,11 +112,15 @@ export class UploadStore {
         error: () => {
           patchState(this.state, createGenericError());
         },
-        next: (documents) =>
+        next: ({ value }) =>
           patchState(this.state, {
-            documents: [
-              ...documents.map((file) => ({ file, progress: 100 })),
-              ...this.state.documents().filter(notCompletedOrError),
+            gesuchDokument: value,
+            dokuments: [
+              ...(value?.dokumente.map((file) => ({
+                file,
+                progress: 100,
+              })) ?? []),
+              ...this.state.dokuments().filter(notCompletedOrError),
             ],
           }),
       });
@@ -120,7 +129,7 @@ export class UploadStore {
       .pipe(
         mergeMap((action) => {
           const dokumentToDelete = this.state
-            .documents()
+            .dokuments()
             .find((d) => d.file.id === action.dokumentId);
           return dokumentToDelete?.isTemporary
             ? // If the document is temporary, just remove it from the state
@@ -148,8 +157,8 @@ export class UploadStore {
         },
         next: (action) => {
           patchState(this.state, {
-            documents: this.state
-              .documents()
+            dokuments: this.state
+              .dokuments()
               .filter(({ file }) => file.id !== action.dokumentId),
           });
         },
@@ -170,7 +179,7 @@ export class UploadStore {
             const parsedError = sharedUtilFnErrorTransformer(event.error);
             const status = parsedError.status;
             patchState(this.state, {
-              documents: state.documents.map((d) =>
+              dokuments: state.dokuments.map((d) =>
                 d.file.id === createTempId(action.fileUpload)
                   ? {
                       ...d,
@@ -189,8 +198,8 @@ export class UploadStore {
           switch (event.type) {
             case HttpEventType.Sent: {
               patchState(this.state, {
-                documents: [
-                  ...this.state.documents(),
+                dokuments: [
+                  ...this.state.dokuments(),
                   {
                     file: {
                       id: tempDokumentId,
@@ -209,8 +218,8 @@ export class UploadStore {
             }
             case HttpEventType.UploadProgress: {
               patchState(this.state, {
-                documents: updateProgressFor(
-                  this.state.documents(),
+                dokuments: updateProgressFor(
+                  this.state.dokuments(),
                   tempDokumentId,
                   (event.loaded / action.fileUpload.size) * 100,
                 ),
@@ -220,16 +229,16 @@ export class UploadStore {
             // On cancel (User event), remove the temporary document from the state
             case HttpEventType.User: {
               patchState(this.state, {
-                documents: this.state
-                  .documents()
+                dokuments: this.state
+                  .dokuments()
                   .filter((d) => d.file.id !== tempDokumentId),
               });
               break;
             }
             case HttpEventType.Response: {
               patchState(this.state, {
-                documents: updateProgressFor(
-                  this.state.documents(),
+                dokuments: updateProgressFor(
+                  this.state.dokuments(),
                   tempDokumentId,
                   100,
                 ),
@@ -244,35 +253,35 @@ export class UploadStore {
 
   setInitialDocuments(documents: Dokument[]) {
     patchState(this.state, {
-      documents: documents.map((file) => ({ file, progress: 100 })),
+      dokuments: documents.map((file) => ({ file, progress: 100 })),
     });
   }
 
   /**
    * Load the documents with the given options
    */
-  loadDocuments(options: DocumentOptions) {
+  loadDocuments(options: DokumentOptions) {
     this.loadDocuments$.next(options);
   }
 
   /**
    * Upload a document
    */
-  uploadDocument(fileUpload: File, options: DocumentOptions) {
+  uploadDocument(fileUpload: File, options: DokumentOptions) {
     this.uploadDocument$.next({ fileUpload, ...options });
   }
 
   /**
    * Cancel the upload of a document determined by the given options
    */
-  cancelDocumentUpload(dokumentId: string, options: DocumentOptions) {
+  cancelDocumentUpload(dokumentId: string, options: DokumentOptions) {
     this.cancelDocumentUpload$.next({ dokumentId, ...options });
   }
 
   /**
    * Remove a document by ID using the given options
    */
-  removeDocument(dokumentId: string, options: DocumentOptions) {
+  removeDocument(dokumentId: string, options: DokumentOptions) {
     this.removeDocument$.next({ dokumentId, ...options });
   }
 
@@ -280,7 +289,7 @@ export class UploadStore {
    * Upload a document and add a fake progress stream.
    * On error, the stream will continue with an event that contains the error.
    */
-  private handleUpload$(action: { fileUpload: File } & DocumentOptions) {
+  private handleUpload$(action: { fileUpload: File } & DokumentOptions) {
     const tempDokumentId = createTempId(action.fileUpload);
 
     // Prepare a cancel stream for this document upload

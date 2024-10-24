@@ -1,13 +1,27 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import ch.dvbern.stip.generated.dto.GsDashboardDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
+import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
+
+
+
+import java.io.InputStream;
+import java.util.Map;
+import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
@@ -95,7 +109,12 @@ public interface GesuchResource {
     @GET
     @Path("/benutzer/me/sb/{getGesucheSBQueryType}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType);
+    Response getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("typ") @NotNull   ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   ch.dvbern.stip.api.gesuch.type.Gesuchstatus status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.gesuch.type.SbDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+
+    @GET
+    @Path("/benutzer/me/gs-dashboard")
+    @Produces({ "application/json", "text/plain" })
+    Response getGsDashboard();
 
     @GET
     @Path("/{aenderungId}/aenderung/gs/changes")

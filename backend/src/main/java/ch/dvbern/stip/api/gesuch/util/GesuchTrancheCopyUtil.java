@@ -66,16 +66,17 @@ public class GesuchTrancheCopyUtil {
         final DateRange gueltigkeit,
         final String comment
     ) {
+        final var clamped = clampStartStop(
+            gesuchTranche.getGesuch().getGesuchsperiode(),
+            gueltigkeit
+        );
+
         final var newTranche = copyTranche(
             gesuchTranche,
-            gueltigkeit,
+            clamped,
             comment
         );
 
-        newTranche.setGueltigkeit(clampStartStop(
-            newTranche.getGesuch().getGesuchsperiode(),
-            newTranche.getGueltigkeit()
-        ));
         newTranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
         newTranche.setTyp(GesuchTrancheTyp.TRANCHE);
 

@@ -204,6 +204,8 @@ test.describe('Neues gesuch erstellen', () => {
     const seed = `${testInfo.title}-${testInfo.workerIndex}`;
     test.slow();
     // Step 1: Person ============================================================
+    await expect(page.getByTestId('step-title')).toBeAttached();
+    await page.getByTestId('step-nav-person').first().click();
     await expectStepTitleToContainText('Person in Ausbildung', page);
     const personPO = new PersonPO(page);
     await expect(personPO.elems.loading).toBeHidden();

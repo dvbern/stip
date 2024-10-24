@@ -5,7 +5,6 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -27,7 +26,6 @@ import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-
   standalone: true,
   imports: [
     TranslateModule,
-    NgbAlert,
     SharedFeatureGesuchFormKinderEditorComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiChangeIndicatorComponent,

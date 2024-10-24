@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.notification.service;
 
 import java.util.List;
 
+import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 
 @QuarkusTest
 @Slf4j
@@ -39,21 +41,22 @@ class NotificationServiceTest {
 
     NotificationRepository notificationRepositoryMock;
 
-    private final PersonInAusbildung personInAusbildung = (PersonInAusbildung) new PersonInAusbildung()
+    private final PersonInAusbildung personInAusbildung = ((PersonInAusbildung) new PersonInAusbildung()
         .setEmail("PiaEmail@test.ch")
         .setKorrespondenzSprache(Sprache.DEUTSCH)
         .setNachname("PiaNachnameTest")
-        .setVorname("PiaVornameTest");
+        .setVorname("PiaVornameTest"))
+        .setAnrede(Anrede.FRAU);
 
     @BeforeAll
     void setup() {
         GesuchValidatorService gesuchValidatorServiceMock = Mockito.mock(GesuchValidatorService.class);
-        Mockito.doNothing().when(gesuchValidatorServiceMock).validateGesuchForStatus(Mockito.any(Gesuch.class), Mockito.any(
+        Mockito.doNothing().when(gesuchValidatorServiceMock).validateGesuchForStatus(any(Gesuch.class), any(
             Gesuchstatus.class));
         QuarkusMock.installMockForType(gesuchValidatorServiceMock, GesuchValidatorService.class);
 
         notificationRepositoryMock = Mockito.mock(NotificationRepository.class);
-        Mockito.doNothing().when(notificationRepositoryMock).persistAndFlush(Mockito.any(Notification.class));
+        Mockito.doNothing().when(notificationRepositoryMock).persistAndFlush(any(Notification.class));
         QuarkusMock.installMockForType(notificationRepositoryMock, NotificationRepository.class);
     }
 
@@ -77,7 +80,7 @@ class NotificationServiceTest {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
 
         List<MailMessage> sent = mailbox.getMailMessagesSentTo(personInAusbildung.getEmail());
-        Mockito.verify(notificationRepositoryMock).persistAndFlush(Mockito.any(Notification.class));
+        Mockito.verify(notificationRepositoryMock).persistAndFlush(any(Notification.class));
 
         assertThat(sent).hasSize(1);
         assertThat(sent.get(0).getHtml()).contains("Guten Tag ", personInAusbildung.getVorname(), " ", personInAusbildung.getNachname());

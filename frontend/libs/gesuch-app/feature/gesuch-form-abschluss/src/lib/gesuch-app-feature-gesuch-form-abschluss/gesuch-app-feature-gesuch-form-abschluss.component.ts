@@ -17,6 +17,7 @@ import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
@@ -28,6 +29,7 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
     CommonModule,
     RouterLink,
     TranslateModule,
+    SharedUiInfoContainerComponent,
     SharedUiLoadingComponent,
   ],
   templateUrl: './gesuch-app-feature-gesuch-form-abschluss.component.html',

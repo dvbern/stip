@@ -3,8 +3,10 @@ import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { Store } from '@ngrx/store';
 import { map, pipe, switchMap, tap } from 'rxjs';
 
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
   CreateAenderungsantragRequest,
@@ -56,6 +58,7 @@ export class GesuchAenderungStore extends signalStore(
 ) {
   private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+  private store = inject(Store);
   private router = inject(Router);
 
   aenderungenViewSig = computed(() => {
@@ -84,20 +87,6 @@ export class GesuchAenderungStore extends signalStore(
     };
   });
 
-  openAenderungViewSig = computed(() => {
-    const tranchen = this.cachedTranchenSlim();
-    return {
-      loading: isPending(tranchen),
-      openAenderung: tranchen.data?.find(
-        (t) =>
-          t.typ === 'AENDERUNG' &&
-          (
-            ['IN_BEARBEITUNG_GS', 'UEBERPRUEFEN'] as GesuchTrancheStatus[]
-          ).includes(t.status),
-      ),
-    };
-  });
-
   tranchenViewSig = computed(() => {
     const tranchen = this.cachedTranchenSlim();
     return {
@@ -105,10 +94,6 @@ export class GesuchAenderungStore extends signalStore(
       list: tranchen.data?.filter((t) => t.typ === 'TRANCHE') ?? [],
     };
   });
-
-  resetCachedGesuchAenderung() {
-    patchState(this, { cachedGesuchAenderung: initial() });
-  }
 
   getAllTranchenForGesuch$ = rxMethod<{ gesuchId: string }>(
     pipe(
@@ -176,14 +161,14 @@ export class GesuchAenderungStore extends signalStore(
     ),
   );
 
-  deleteGesuchAenderung$ = rxMethod<{ aenderungId: string; gesuchId: string }>(
+  deleteGesuchAenderung$ = rxMethod<{ aenderungId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
         }));
       }),
-      switchMap(({ aenderungId, gesuchId }) =>
+      switchMap(({ aenderungId }) =>
         this.gesuchTrancheService.deleteAenderung$({ aenderungId }).pipe(
           handleApiResponse(
             () => {
@@ -196,7 +181,9 @@ export class GesuchAenderungStore extends signalStore(
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey: 'shared.dialog.gesuch-aenderung.delete.success',
                 });
-                this.getAllTranchenForGesuch$({ gesuchId });
+                this.store.dispatch(
+                  SharedDataAccessGesuchEvents.loadGsDashboard(),
+                );
               },
             },
           ),

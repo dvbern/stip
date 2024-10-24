@@ -60,7 +60,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   @Input()
   step?: SharedModelGesuchFormStep;
 
-  navClicked = new EventEmitter();
+  navClicked = new EventEmitter<{ value: boolean }>();
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);

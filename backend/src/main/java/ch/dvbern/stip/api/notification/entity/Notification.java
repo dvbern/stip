@@ -12,6 +12,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -31,6 +32,10 @@ public class Notification extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "notification_type")
     private NotificationType notificationType;
+
+    @NotNull
+    @Column(name = "notification_text")
+    private String notificationText;
 
     @ManyToOne(optional = false)
     @JoinColumn(

@@ -1,5 +1,7 @@
 const nxPreset = require('@nx/jest/preset').default;
 
+process.env.TZ = 'UTC';
+
 module.exports = {
   ...nxPreset,
   coverageReporters: ['lcov'],

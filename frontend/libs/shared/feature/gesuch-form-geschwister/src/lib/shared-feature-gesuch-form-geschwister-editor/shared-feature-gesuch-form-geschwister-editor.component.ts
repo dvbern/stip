@@ -21,7 +21,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
-import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
@@ -85,7 +84,6 @@ const MEDIUM_AGE = 20;
     SharedUiZuvorHintDirective,
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
-    NgbInputDatepicker,
     MaskitoDirective,
     SharedUiWohnsitzSplitterComponent,
     SharedUiStepFormButtonsComponent,

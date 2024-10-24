@@ -18,6 +18,7 @@ type NotificationDialogData = {
   standalone: true,
   imports: [CommonModule, TranslateModule],
   templateUrl: './shared-ui-notification-dialog.component.html',
+  styleUrl: './shared-ui-notification-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiNotificationDialogComponent {

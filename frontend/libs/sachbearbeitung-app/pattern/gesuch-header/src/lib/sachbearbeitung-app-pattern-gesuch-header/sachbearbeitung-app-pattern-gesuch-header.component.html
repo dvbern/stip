@@ -1,9 +1,9 @@
 <dv-shared-pattern-app-header
-  [closeMenu]="navClickedSig()"
   [backLink]="{
     path: '/',
     text: 'sachbearbeitung-app.header.back' | translate,
   }"
+  (openSidenav)="openSidenav.emit()"
 >
   <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
     <!-- Gesuch -->
@@ -106,7 +106,8 @@
                   | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: aenderung.index + 1 }
               }}
               -
-              {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }}
+              {{ aenderung.status }}
+              <!-- {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }} -->
             </span>
           </a>
         }
@@ -211,5 +212,4 @@
       </div>
     </mat-menu>
   </div>
-  <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
 </dv-shared-pattern-app-header>

@@ -94,6 +94,10 @@ public class ConfigService {
     @ConfigProperty(name = "kstip.dmn.current-minor-version")
     Integer currentDmnMinorVersion;
 
+    @Getter
+    @ConfigProperty(name = "kstip.pagination.max-allowed-page-size")
+    Integer maxAllowedPageSize;
+
     public DeploymentConfigDto getDeploymentConfiguration() {
         return new DeploymentConfigDto()
             .version(version)

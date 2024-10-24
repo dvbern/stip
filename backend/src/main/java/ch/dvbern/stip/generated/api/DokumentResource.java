@@ -1,9 +1,9 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.DokumentDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
+import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
@@ -24,7 +24,7 @@ import jakarta.validation.Valid;
 public interface DokumentResource {
 
     @POST
-    @Path("/dokument/{gesuchTrancheId}/{dokumentTyp}")
+    @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> createDokument(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
@@ -56,12 +56,12 @@ public interface DokumentResource {
     Response getDokumentDownloadToken(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("dokumentId") UUID dokumentId);
 
     @GET
-    @Path("/dokument/{gesuchTrancheId}/{dokumentTyp}")
-    @Produces({ "application/json", "text/plain" })
-    Response getDokumenteForTyp(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @GET
     @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare")
     @Produces({ "application/json", "text/plain" })
     Response getGesuchDokumentKommentare(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}")
+    @Produces({ "application/json", "text/plain" })
+    Response getGesuchDokumenteForTyp(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 }

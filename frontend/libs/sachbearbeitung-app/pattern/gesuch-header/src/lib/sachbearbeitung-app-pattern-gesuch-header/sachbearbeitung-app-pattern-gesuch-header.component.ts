@@ -3,6 +3,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  EventEmitter,
+  Output,
   computed,
   effect,
   inject,
@@ -54,13 +56,14 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     alias: 'currentGesuch',
   });
   isLoadingSig = input.required<boolean>({ alias: 'isLoading' });
-  navClickedSig = input.required<{ value: unknown }>({ alias: 'navClicked' });
   store = inject(Store);
   router = inject(Router);
   destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   dokumentsStore = inject(DokumentsStore);
+
+  @Output() openSidenav = new EventEmitter<void>();
 
   private hasAcceptedAllDocumentsSig = computed(() => {
     const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
@@ -113,9 +116,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
         }
 
-        const trancheId = this.currentGesuchSig()?.gesuchTrancheToWorkWith.id;
-        if (trancheId) {
-          this.dokumentsStore.getDokumenteAndRequired$(trancheId);
+        const gesuchTrancheId =
+          this.currentGesuchSig()?.gesuchTrancheToWorkWith.id;
+        if (gesuchTrancheId) {
+          this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
         }
       },
       { allowSignalWrites: true },

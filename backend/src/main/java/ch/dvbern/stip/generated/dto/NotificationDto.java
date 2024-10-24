@@ -9,9 +9,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Notification for a Gesuch
@@ -26,6 +23,7 @@ public class NotificationDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.notification.type.NotificationType notificationType;
   private @Valid UUID gesuchId;
   private @Valid String userErstellt;
+  private @Valid String notificationText;
   private @Valid LocalDate timestampErstellt;
 
   /**
@@ -35,7 +33,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("notificationType")
   @NotNull
   public ch.dvbern.stip.api.notification.type.NotificationType getNotificationType() {
@@ -54,7 +52,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchId")
   @NotNull
   public UUID getGesuchId() {
@@ -73,7 +71,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("userErstellt")
   @NotNull
   public String getUserErstellt() {
@@ -87,12 +85,30 @@ public class NotificationDto  implements Serializable {
 
   /**
    **/
+  public NotificationDto notificationText(String notificationText) {
+    this.notificationText = notificationText;
+    return this;
+  }
+
+
+  @JsonProperty("notificationText")
+  public String getNotificationText() {
+    return notificationText;
+  }
+
+  @JsonProperty("notificationText")
+  public void setNotificationText(String notificationText) {
+    this.notificationText = notificationText;
+  }
+
+  /**
+   **/
   public NotificationDto timestampErstellt(LocalDate timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-  
+
   @JsonProperty("timestampErstellt")
   public LocalDate getTimestampErstellt() {
     return timestampErstellt;
@@ -116,22 +132,24 @@ public class NotificationDto  implements Serializable {
     return Objects.equals(this.notificationType, notification.notificationType) &&
         Objects.equals(this.gesuchId, notification.gesuchId) &&
         Objects.equals(this.userErstellt, notification.userErstellt) &&
+        Objects.equals(this.notificationText, notification.notificationText) &&
         Objects.equals(this.timestampErstellt, notification.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationType, gesuchId, userErstellt, timestampErstellt);
+    return Objects.hash(notificationType, gesuchId, userErstellt, notificationText, timestampErstellt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NotificationDto {\n");
-    
+
     sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
+    sb.append("    notificationText: ").append(toIndentedString(notificationText)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();

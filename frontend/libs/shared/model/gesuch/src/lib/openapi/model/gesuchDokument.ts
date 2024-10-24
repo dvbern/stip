@@ -14,10 +14,10 @@ import { DokumentTyp } from './dokumentTyp';
 import { Dokument } from './dokument';
 
 export interface GesuchDokument { 
-    id?: string;
-    dokumentTyp?: DokumentTyp;
-    dokumente?: Array<Dokument>;
-    status?: Dokumentstatus;
+    id: string;
+    dokumentTyp: DokumentTyp;
+    dokumente: Array<Dokument>;
+    status: Dokumentstatus;
 }
 
 

@@ -5,7 +5,6 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -15,6 +14,7 @@ import { GeschwisterUpdate } from '@dv/shared/model/gesuch';
 import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { SharedUiFormZuvorHintListPipe } from '@dv/shared/ui/form';
+import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
@@ -27,8 +27,8 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
   standalone: true,
   imports: [
     TranslateModule,
-    NgbAlert,
     SharedFeatureGesuchFormGeschwisterEditorComponent,
+    SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiChangeIndicatorComponent,
     SharedUiFormZuvorHintListPipe,
