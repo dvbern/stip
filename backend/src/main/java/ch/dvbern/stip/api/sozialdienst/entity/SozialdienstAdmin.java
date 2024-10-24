@@ -21,7 +21,8 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Table(
     name = "sozialdienst_admin",
     indexes = @Index(name = "IX_sozialdienst_admin_mandant", columnList = "mandant")
-)public class SozialdienstAdmin extends AbstractMandantEntity {
+)
+public class SozialdienstAdmin extends AbstractMandantEntity {
     @NotNull
     @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE)
     @Size(max = DB_DEFAULT_MAX_LENGTH)
@@ -35,6 +36,4 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
     @NotNull
     @Column(name = "nachname",nullable = false)
     private String nachname;
-
-
 }

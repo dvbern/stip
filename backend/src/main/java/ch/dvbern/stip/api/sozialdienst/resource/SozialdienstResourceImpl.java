@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.sozialdienst.resource;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -11,7 +13,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
 @RequestScoped
 @RequiredArgsConstructor
 public class SozialdienstResourceImpl implements SozialdienstResource {
@@ -20,15 +21,15 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     private final SozialdienstAuthorizer sozialdienstAuthorizer;
 
-    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
     @Override
     public Response createSozialdienst(SozialdienstCreateDto sozialdienstCreateDto) {
         sozialdienstAuthorizer.allowAllow();
         final var sozialdienst = sozialdienstService.createSozialdienst(sozialdienstCreateDto);
-        return Response.ok().entity(sozialdienst).build();
+        return Response.ok(sozialdienst).build();
     }
 
-    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
     @Override
     public Response deleteSozialdienst(UUID sozialdienstId) {
         sozialdienstAuthorizer.allowAllow();
@@ -36,7 +37,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return Response.ok().entity(sozialdienst).build();
     }
 
-    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
     @Override
     public Response getAllSozialdienste() {
         sozialdienstAuthorizer.allowAllow();
@@ -44,7 +45,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return Response.ok().entity(sozialdienste).build();
     }
 
-    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
     @Override
     public Response getSozialdienst(UUID sozialdienstId) {
         sozialdienstAuthorizer.allowAllow();
@@ -52,7 +53,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return Response.ok().entity(sozialdienst).build();
     }
 
-    @RolesAllowed({OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN})
+    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_ADMIN })
     @Override
     public Response updateSozialdienst(SozialdienstUpdateDto sozialdienstUpdateDto) {
         sozialdienstAuthorizer.allowAllow();

@@ -9,11 +9,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class,
-uses = {SozialdienstAdminMapper.class})
-
+    uses = { SozialdienstAdminMapper.class }
+)
 public interface SozialdienstMapper {
     Sozialdienst toEntity(SozialdienstCreateDto dto);
+
     SozialdienstDto toDto(Sozialdienst entity);
+
     Sozialdienst toEntity(SozialdienstUpdateDto dto);
+
     Sozialdienst partialUpdate(SozialdienstUpdateDto dto, @MappingTarget Sozialdienst entity);
 }
