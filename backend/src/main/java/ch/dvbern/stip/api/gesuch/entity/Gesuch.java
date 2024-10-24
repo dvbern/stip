@@ -36,7 +36,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.envers.Audited;
 
 @DocumentsRequiredFehlendeDokumenteConstraint(groups = {
@@ -90,7 +89,7 @@ public class Gesuch extends AbstractMandantEntity {
     private String comment;
 
     @Nullable
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private @Valid List<GesuchNotiz> notizen = new ArrayList<>();
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {

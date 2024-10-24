@@ -1,5 +1,8 @@
 package ch.dvbern.stip.api.notiz.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
@@ -9,8 +12,6 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-import java.util.UUID;
 @RequiredArgsConstructor
 @RequestScoped
 public class GesuchNotizService {
@@ -48,8 +49,8 @@ public class GesuchNotizService {
 
     @Transactional
     public GesuchNotizDto update(@Valid final GesuchNotizUpdateDto gesuchNotizUpdateDto) {
-         var gesuchNotiz = gesuchNotizRepository.requireById(gesuchNotizUpdateDto.getId());
-         gesuchNotizMapper.partialUpdate(gesuchNotizUpdateDto, gesuchNotiz);
-         return gesuchNotizMapper.toDto(gesuchNotiz);
+        var gesuchNotiz = gesuchNotizRepository.requireById(gesuchNotizUpdateDto.getId());
+        gesuchNotizMapper.partialUpdate(gesuchNotizUpdateDto, gesuchNotiz);
+        return gesuchNotizMapper.toDto(gesuchNotiz);
     }
 }

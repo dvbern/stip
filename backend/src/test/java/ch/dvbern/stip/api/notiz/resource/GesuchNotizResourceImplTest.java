@@ -1,26 +1,36 @@
 package ch.dvbern.stip.api.notiz.resource;
 
+import java.util.Arrays;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import ch.dvbern.stip.api.notiz.service.GesuchNotizMapper;
-import ch.dvbern.stip.api.util.*;
-import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchNotizApiSpec;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchNotizCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchNotizDto;
+import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Arrays;
-import java.util.UUID;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
@@ -48,12 +58,11 @@ class GesuchNotizResourceImplTest {
         gesuch = TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
     }
 
-
     // create a notiz as SB
     @Test
     @TestAsSachbearbeiter
     @Order(2)
-    void notizErstellen(){
+    void notizErstellen() {
         var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
         gesuchCreateDto.setGesuchId(gesuch.getId());
         gesuchCreateDto.setText("test");
@@ -70,8 +79,8 @@ class GesuchNotizResourceImplTest {
     @Test
     @TestAsSachbearbeiter
     @Order(3)
-    void getAll(){
-       final var notizen = gesuchNotizApiSpec.getNotizen()
+    void getAll() {
+        final var notizen = gesuchNotizApiSpec.getNotizen()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -80,7 +89,7 @@ class GesuchNotizResourceImplTest {
             .extract()
             .body()
             .as(GesuchNotizDtoSpec[].class);
-       final var notiz = Arrays.stream(notizen).toList().get(0);
+        final var notiz = Arrays.stream(notizen).toList().get(0);
 
         gesuchNotizApiSpec.getNotiz()
             .notizIdPath(notiz.getId())
@@ -95,7 +104,7 @@ class GesuchNotizResourceImplTest {
     @Test
     @TestAsSachbearbeiter
     @Order(4)
-    void update(){
+    void update() {
         var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
         gesuchCreateDto.setGesuchId(gesuch.getId());
         gesuchCreateDto.setText("test");
@@ -134,7 +143,7 @@ class GesuchNotizResourceImplTest {
     @Test
     @TestAsSachbearbeiter
     @Order(5)
-    void allNotizenShouldBeCascadeDeleted(){
+    void allNotizenShouldBeCascadeDeleted() {
         var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
         gesuchCreateDto.setGesuchId(gesuch.getId());
         gesuchCreateDto.setText("test");
@@ -166,6 +175,6 @@ class GesuchNotizResourceImplTest {
             .extract()
             .body()
             .as(GesuchNotizDto[].class);
-        assertEquals(0,notizen.length);
+        assertEquals(0, notizen.length);
     }
 }
