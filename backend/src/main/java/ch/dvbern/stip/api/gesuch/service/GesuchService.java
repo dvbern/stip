@@ -461,8 +461,7 @@ public class GesuchService {
         }
 
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
-        final var changesDto = gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision);
-        return changesDto;
+        return gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision);
     }
 
     public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
