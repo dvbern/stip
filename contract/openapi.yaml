@@ -3677,29 +3677,6 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/SteuerdatenUpdate'
-    SozialdienstAdmin:
-      title: root type for sozialdienst admin
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/SozialdienstAdminUpdate'
-    SozialdienstAdminCreate:
-      required:
-        - nachname
-        - vorname
-        - email
-      properties:
-        nachname:
-          type: string
-        vorname:
-          type: string
-        email:
-          type: string
-    SozialdienstAdminUpdate:
-      required:
-        - id
-        - nachname
-        - vorname
-        - email
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -3728,7 +3705,7 @@ components:
         adresse:
           $ref: '#/components/schemas/Adresse'
         admin:
-          $ref: '#/components/schemas/SozialdienstAdminCreate'
+          $ref: '#/components/schemas/Benutzer'
     SozialdienstUpdate:
       required:
         - id
@@ -3746,7 +3723,7 @@ components:
         adresse:
           $ref: '#/components/schemas/Adresse'
         admin:
-          $ref: '#/components/schemas/SozialdienstAdminUpdate'
+          $ref: '#/components/schemas/BenutzerUpdate'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
