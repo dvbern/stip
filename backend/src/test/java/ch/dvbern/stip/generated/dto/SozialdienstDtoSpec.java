@@ -16,7 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -32,9 +32,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   SozialdienstDtoSpec.JSON_PROPERTY_ID,
   SozialdienstDtoSpec.JSON_PROPERTY_NAME,
-  SozialdienstDtoSpec.JSON_PROPERTY_IBAN,
   SozialdienstDtoSpec.JSON_PROPERTY_ADRESSE,
-  SozialdienstDtoSpec.JSON_PROPERTY_ADMIN
+  SozialdienstDtoSpec.JSON_PROPERTY_SOZIALDIENST_ADMIN
 })
 @JsonTypeName("Sozialdienst")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -45,14 +44,11 @@ public class SozialdienstDtoSpec {
   public static final String JSON_PROPERTY_NAME = "name";
   private String name;
 
-  public static final String JSON_PROPERTY_IBAN = "iban";
-  private String iban;
-
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
   private AdresseDtoSpec adresse;
 
-  public static final String JSON_PROPERTY_ADMIN = "admin";
-  private SozialdienstAdminUpdateDtoSpec admin;
+  public static final String JSON_PROPERTY_SOZIALDIENST_ADMIN = "sozialdienstAdmin";
+  private SozialdienstAdminDtoSpec sozialdienstAdmin;
 
   public SozialdienstDtoSpec() {
   }
@@ -109,32 +105,6 @@ public class SozialdienstDtoSpec {
   }
 
 
-  public SozialdienstDtoSpec iban(String iban) {
-    
-    this.iban = iban;
-    return this;
-  }
-
-   /**
-   * Get iban
-   * @return iban
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IBAN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getIban() {
-    return iban;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_IBAN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIban(String iban) {
-    this.iban = iban;
-  }
-
-
   public SozialdienstDtoSpec adresse(AdresseDtoSpec adresse) {
     
     this.adresse = adresse;
@@ -161,29 +131,29 @@ public class SozialdienstDtoSpec {
   }
 
 
-  public SozialdienstDtoSpec admin(SozialdienstAdminUpdateDtoSpec admin) {
+  public SozialdienstDtoSpec sozialdienstAdmin(SozialdienstAdminDtoSpec sozialdienstAdmin) {
     
-    this.admin = admin;
+    this.sozialdienstAdmin = sozialdienstAdmin;
     return this;
   }
 
    /**
-   * Get admin
-   * @return admin
+   * Get sozialdienstAdmin
+   * @return sozialdienstAdmin
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ADMIN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOZIALDIENST_ADMIN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public SozialdienstAdminUpdateDtoSpec getAdmin() {
-    return admin;
+  public SozialdienstAdminDtoSpec getSozialdienstAdmin() {
+    return sozialdienstAdmin;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ADMIN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAdmin(SozialdienstAdminUpdateDtoSpec admin) {
-    this.admin = admin;
+  @JsonProperty(JSON_PROPERTY_SOZIALDIENST_ADMIN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSozialdienstAdmin(SozialdienstAdminDtoSpec sozialdienstAdmin) {
+    this.sozialdienstAdmin = sozialdienstAdmin;
   }
 
   @Override
@@ -197,14 +167,13 @@ public class SozialdienstDtoSpec {
     SozialdienstDtoSpec sozialdienst = (SozialdienstDtoSpec) o;
     return Objects.equals(this.id, sozialdienst.id) &&
         Objects.equals(this.name, sozialdienst.name) &&
-        Objects.equals(this.iban, sozialdienst.iban) &&
         Objects.equals(this.adresse, sozialdienst.adresse) &&
-        Objects.equals(this.admin, sozialdienst.admin);
+        Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, iban, adresse, admin);
+    return Objects.hash(id, name, adresse, sozialdienstAdmin);
   }
 
   @Override
@@ -213,9 +182,8 @@ public class SozialdienstDtoSpec {
     sb.append("class SozialdienstDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
-    sb.append("    admin: ").append(toIndentedString(admin)).append("\n");
+    sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("}");
     return sb.toString();
   }

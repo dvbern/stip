@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -28,78 +27,48 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * SozialdienstAdminDtoSpec
  */
 @JsonPropertyOrder({
-  SozialdienstAdminDtoSpec.JSON_PROPERTY_ID,
-  SozialdienstAdminDtoSpec.JSON_PROPERTY_NACHNAME,
+  SozialdienstAdminDtoSpec.JSON_PROPERTY_KEYKLOAK_ID,
   SozialdienstAdminDtoSpec.JSON_PROPERTY_VORNAME,
-  SozialdienstAdminDtoSpec.JSON_PROPERTY_EMAIL
+  SozialdienstAdminDtoSpec.JSON_PROPERTY_NACHNAME
 })
 @JsonTypeName("SozialdienstAdmin")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class SozialdienstAdminDtoSpec {
-  public static final String JSON_PROPERTY_ID = "id";
-  private UUID id;
-
-  public static final String JSON_PROPERTY_NACHNAME = "nachname";
-  private String nachname;
+  public static final String JSON_PROPERTY_KEYKLOAK_ID = "keykloakId";
+  private String keykloakId;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
 
-  public static final String JSON_PROPERTY_EMAIL = "email";
-  private String email;
+  public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  private String nachname;
 
   public SozialdienstAdminDtoSpec() {
   }
 
-  public SozialdienstAdminDtoSpec id(UUID id) {
+  public SozialdienstAdminDtoSpec keykloakId(String keykloakId) {
     
-    this.id = id;
+    this.keykloakId = keykloakId;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Get keykloakId
+   * @return keykloakId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(JSON_PROPERTY_KEYKLOAK_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public UUID getId() {
-    return id;
+  public String getKeykloakId() {
+    return keykloakId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(JSON_PROPERTY_KEYKLOAK_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-
-  public SozialdienstAdminDtoSpec nachname(String nachname) {
-    
-    this.nachname = nachname;
-    return this;
-  }
-
-   /**
-   * Get nachname
-   * @return nachname
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getNachname() {
-    return nachname;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
-    this.nachname = nachname;
+  public void setKeykloakId(String keykloakId) {
+    this.keykloakId = keykloakId;
   }
 
 
@@ -129,29 +98,29 @@ public class SozialdienstAdminDtoSpec {
   }
 
 
-  public SozialdienstAdminDtoSpec email(String email) {
+  public SozialdienstAdminDtoSpec nachname(String nachname) {
     
-    this.email = email;
+    this.nachname = nachname;
     return this;
   }
 
    /**
-   * Get email
-   * @return email
+   * Get nachname
+   * @return nachname
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonProperty(JSON_PROPERTY_NACHNAME)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getEmail() {
-    return email;
+  public String getNachname() {
+    return nachname;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonProperty(JSON_PROPERTY_NACHNAME)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEmail(String email) {
-    this.email = email;
+  public void setNachname(String nachname) {
+    this.nachname = nachname;
   }
 
   @Override
@@ -163,25 +132,23 @@ public class SozialdienstAdminDtoSpec {
       return false;
     }
     SozialdienstAdminDtoSpec sozialdienstAdmin = (SozialdienstAdminDtoSpec) o;
-    return Objects.equals(this.id, sozialdienstAdmin.id) &&
-        Objects.equals(this.nachname, sozialdienstAdmin.nachname) &&
+    return Objects.equals(this.keykloakId, sozialdienstAdmin.keykloakId) &&
         Objects.equals(this.vorname, sozialdienstAdmin.vorname) &&
-        Objects.equals(this.email, sozialdienstAdmin.email);
+        Objects.equals(this.nachname, sozialdienstAdmin.nachname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nachname, vorname, email);
+    return Objects.hash(keykloakId, vorname, nachname);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstAdminDtoSpec {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    keykloakId: ").append(toIndentedString(keykloakId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -17,9 +17,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SozialdienstDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String name;
-  private @Valid String iban;
   private @Valid AdresseDto adresse;
-  private @Valid SozialdienstAdminUpdateDto admin;
+  private @Valid SozialdienstAdminDto sozialdienstAdmin;
 
   /**
    **/
@@ -61,25 +60,6 @@ public class SozialdienstDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstDto iban(String iban) {
-    this.iban = iban;
-    return this;
-  }
-
-
-  @JsonProperty("iban")
-  @NotNull
-  public String getIban() {
-    return iban;
-  }
-
-  @JsonProperty("iban")
-  public void setIban(String iban) {
-    this.iban = iban;
-  }
-
-  /**
-   **/
   public SozialdienstDto adresse(AdresseDto adresse) {
     this.adresse = adresse;
     return this;
@@ -99,21 +79,20 @@ public class SozialdienstDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstDto admin(SozialdienstAdminUpdateDto admin) {
-    this.admin = admin;
+  public SozialdienstDto sozialdienstAdmin(SozialdienstAdminDto sozialdienstAdmin) {
+    this.sozialdienstAdmin = sozialdienstAdmin;
     return this;
   }
 
 
-  @JsonProperty("admin")
-  @NotNull
-  public SozialdienstAdminUpdateDto getAdmin() {
-    return admin;
+  @JsonProperty("sozialdienstAdmin")
+  public SozialdienstAdminDto getSozialdienstAdmin() {
+    return sozialdienstAdmin;
   }
 
-  @JsonProperty("admin")
-  public void setAdmin(SozialdienstAdminUpdateDto admin) {
-    this.admin = admin;
+  @JsonProperty("sozialdienstAdmin")
+  public void setSozialdienstAdmin(SozialdienstAdminDto sozialdienstAdmin) {
+    this.sozialdienstAdmin = sozialdienstAdmin;
   }
 
 
@@ -128,14 +107,13 @@ public class SozialdienstDto  implements Serializable {
     SozialdienstDto sozialdienst = (SozialdienstDto) o;
     return Objects.equals(this.id, sozialdienst.id) &&
         Objects.equals(this.name, sozialdienst.name) &&
-        Objects.equals(this.iban, sozialdienst.iban) &&
         Objects.equals(this.adresse, sozialdienst.adresse) &&
-        Objects.equals(this.admin, sozialdienst.admin);
+        Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, iban, adresse, admin);
+    return Objects.hash(id, name, adresse, sozialdienstAdmin);
   }
 
   @Override
@@ -145,9 +123,8 @@ public class SozialdienstDto  implements Serializable {
 
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
-    sb.append("    admin: ").append(toIndentedString(admin)).append("\n");
+    sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("}");
     return sb.toString();
   }

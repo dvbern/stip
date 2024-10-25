@@ -30,6 +30,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   SteuerdatenDtoSpec.JSON_PROPERTY_ID,
+  SteuerdatenDtoSpec.JSON_PROPERTY_NACHNAME,
+  SteuerdatenDtoSpec.JSON_PROPERTY_VORNAME,
+  SteuerdatenDtoSpec.JSON_PROPERTY_EMAIL,
   SteuerdatenDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
   SteuerdatenDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE,
   SteuerdatenDtoSpec.JSON_PROPERTY_STEUERN_BUND,
@@ -52,6 +55,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class SteuerdatenDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
+
+  public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  private String nachname;
+
+  public static final String JSON_PROPERTY_VORNAME = "vorname";
+  private String vorname;
+
+  public static final String JSON_PROPERTY_EMAIL = "email";
+  private String email;
 
   public static final String JSON_PROPERTY_STEUERDATEN_TYP = "steuerdatenTyp";
   private SteuerdatenTypDtoSpec steuerdatenTyp;
@@ -127,6 +139,84 @@ public class SteuerdatenDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setId(UUID id) {
     this.id = id;
+  }
+
+
+  public SteuerdatenDtoSpec nachname(String nachname) {
+    
+    this.nachname = nachname;
+    return this;
+  }
+
+   /**
+   * Get nachname
+   * @return nachname
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getNachname() {
+    return nachname;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNachname(String nachname) {
+    this.nachname = nachname;
+  }
+
+
+  public SteuerdatenDtoSpec vorname(String vorname) {
+    
+    this.vorname = vorname;
+    return this;
+  }
+
+   /**
+   * Get vorname
+   * @return vorname
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getVorname() {
+    return vorname;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVorname(String vorname) {
+    this.vorname = vorname;
+  }
+
+
+  public SteuerdatenDtoSpec email(String email) {
+    
+    this.email = email;
+    return this;
+  }
+
+   /**
+   * Get email
+   * @return email
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getEmail() {
+    return email;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEmail(String email) {
+    this.email = email;
   }
 
 
@@ -555,6 +645,9 @@ public class SteuerdatenDtoSpec {
     }
     SteuerdatenDtoSpec steuerdaten = (SteuerdatenDtoSpec) o;
     return Objects.equals(this.id, steuerdaten.id) &&
+        Objects.equals(this.nachname, steuerdaten.nachname) &&
+        Objects.equals(this.vorname, steuerdaten.vorname) &&
+        Objects.equals(this.email, steuerdaten.email) &&
         Objects.equals(this.steuerdatenTyp, steuerdaten.steuerdatenTyp) &&
         Objects.equals(this.steuernKantonGemeinde, steuerdaten.steuernKantonGemeinde) &&
         Objects.equals(this.steuernBund, steuerdaten.steuernBund) &&
@@ -575,7 +668,7 @@ public class SteuerdatenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsCode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, vermoegen);
+    return Objects.hash(id, nachname, vorname, email, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsCode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, vermoegen);
   }
 
   @Override
@@ -583,6 +676,9 @@ public class SteuerdatenDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class SteuerdatenDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");

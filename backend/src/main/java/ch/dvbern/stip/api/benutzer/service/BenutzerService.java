@@ -14,6 +14,7 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstAdmin;
 import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
@@ -88,6 +89,19 @@ public class BenutzerService {
         newBenutzer.setVorname(jsonWebToken.getClaim(Claims.given_name));
         newBenutzer.setNachname(jsonWebToken.getClaim(Claims.family_name));
         newBenutzer.setSozialversicherungsnummer(jsonWebToken.getClaim(OidcConstants.CLAIM_AHV_NUMMER));
+        newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
+        newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
+
+        benutzerRepository.persistAndFlush(newBenutzer);
+        return newBenutzer;
+    }
+
+    @Transactional
+    public Benutzer createSozialdienstAdminBenutzer(SozialdienstAdmin sozialdienstAdmin) {
+        Benutzer newBenutzer = new Benutzer();
+        newBenutzer.setKeycloakId(sozialdienstAdmin.getKeykloakId());
+        newBenutzer.setVorname(sozialdienstAdmin.getVorname());
+        newBenutzer.setNachname(sozialdienstAdmin.getNachname());
         newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
         newBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
 

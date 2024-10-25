@@ -836,6 +836,68 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllSozialdienste
       summary: Returns all Sozialdienste
+  /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin:
+    parameters:
+      - name: sozialdienstId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstAdminUpdate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstAdmin'
+          description: Updates data of a Sozialdienst admin
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienstAdmin
+  /sozialdienst/{sozialdienstId}/replaceSozialdienstAdmin:
+    parameters:
+      - name: sozialdienstId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstAdminCreate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstAdmin'
+          description: Replaces a Sozialdienst admin by a new one
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: replaceSozialdienstAdmin
   /sozialdienst/{sozialdienstId}:
     parameters:
       - name: sozialdienstId
@@ -3686,20 +3748,37 @@ components:
           type: string
         email:
           type: string
-    Sozialdienst:
-      title: root type for sozialdienst
+    SozialdienstAdminCreate:
+      required:
+        - keykloakId
+        - vorname
+        - nachname
+      properties:
+        keykloakId:
+          type: string
+        vorname:
+          type: string
+        nachname:
+          type: string
+    SozialdienstAdmin:
       type: object
       allOf:
-        - $ref: '#/components/schemas/SozialdienstUpdate'
+        - $ref: '#/components/schemas/SozialdienstAdminCreate'
+    SozialdienstAdminUpdate:
+      required:
+        - vorname
+        - nachname
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
     SozialdienstCreate:
       required:
         - name
         - iban
         - adresse
-        - adminVorname
-        - adminNachname
-        - adminKeykloakId
-        - adminEmail
+        - sozialdienstAdmin
       properties:
         name:
           type: string
@@ -3707,23 +3786,14 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-        sozialdienstAdminKeykloakId:
-          type: string
-        sozialdienstAdminVorname:
-          type: string
-        sozialdienstAdminNachname:
-          type: string
-        sozialdienstAdminEmail:
-          type: string
+        sozialdienstAdmin:
+         $ref: '#/components/schemas/SozialdienstAdminCreate'
     SozialdienstUpdate:
       required:
         - id
         - name
         - iban
         - adresse
-        - adminVorname
-        - adminNachname
-        - adminEmail
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -3733,12 +3803,20 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-        sozialdienstAdminVorname:
+    Sozialdienst:
+      required:
+        - id
+        - name
+        - adresse
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
           type: string
-        sozialdienstAdminNachname:
-          type: string
-        sozialdienstAdminEmail:
-          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+        sozialdienstAdmin:
+          $ref: '#/components/schemas/SozialdienstAdmin'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object

@@ -6,6 +6,8 @@ import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -55,9 +57,24 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
+    public Response replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminCreateDto sozialdienstAdminCreateDto) {
+        sozialdienstAuthorizer.allowAllow();
+        final var updated = sozialdienstService.replaceSozialdienstAdmin(sozialdienstId, sozialdienstAdminCreateDto);
+        return Response.ok().entity(updated).build();    }
+
+    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
+    @Override
     public Response updateSozialdienst(SozialdienstUpdateDto sozialdienstUpdateDto) {
         sozialdienstAuthorizer.allowAllow();
         final var updated = sozialdienstService.updateSozialdienst(sozialdienstUpdateDto);
+        return Response.ok().entity(updated).build();
+    }
+
+    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
+    @Override
+    public Response updateSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto) {
+        sozialdienstAuthorizer.allowAllow();
+        final var updated = sozialdienstService.updateSozialdienstAdmin(sozialdienstId, sozialdienstAdminUpdateDto);
         return Response.ok().entity(updated).build();
     }
 }

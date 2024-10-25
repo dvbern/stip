@@ -8,9 +8,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class,
-    uses = { SozialdienstAdminMapper.class }
-)
+@Mapper(config = MappingConfig.class)
 public interface SozialdienstMapper {
     Sozialdienst toEntity(SozialdienstCreateDto dto);
 

@@ -1,9 +1,8 @@
 package ch.dvbern.stip.api.sozialdienst.service;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
-import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
-import ch.dvbern.stip.generated.dto.SozialdienstDto;
-import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
+import ch.dvbern.stip.generated.dto.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +15,18 @@ import java.util.UUID;
 public class SozialdienstService {
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
+    private final SozialdienstAdminMapper sozialdienstAdminMapper;
+
+    private final BenutzerService benutzerService;
 
     @Transactional
     public SozialdienstDto createSozialdienst(SozialdienstCreateDto dto) {
-        final var entity = sozialdienstMapper.toEntity(dto);
-        sozialdienstRepository.persistAndFlush(entity);
-        return sozialdienstMapper.toDto(entity);
+        var sozialdienst = sozialdienstMapper.toEntity(dto);
+        final var sozialdienstAdmin = sozialdienstAdminMapper.toSozialdienstAdmin(dto.getSozialdienstAdmin());
+        final var benutzer = benutzerService.createSozialdienstAdminBenutzer(sozialdienstAdmin);
+        sozialdienst.setAdmin(benutzer);
+        sozialdienstRepository.persistAndFlush(sozialdienst);
+        return sozialdienstMapper.toDto(sozialdienst);
     }
 
     @Transactional
@@ -45,9 +50,31 @@ public class SozialdienstService {
 
     @Transactional
     public SozialdienstDto updateSozialdienst(SozialdienstUpdateDto dto) {
-        var entity = sozialdienstRepository.requireById(dto.getId());
-        sozialdienstMapper.partialUpdate(dto, entity);
-        sozialdienstRepository.persistAndFlush(entity);
-        return sozialdienstMapper.toDto(entity);
+        var sozialdienst = sozialdienstRepository.requireById(dto.getId());
+        sozialdienstMapper.partialUpdate(dto, sozialdienst);
+        return sozialdienstMapper.toDto(sozialdienst);
+    }
+
+    @Transactional
+    public SozialdienstAdminDto updateSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminUpdateDto dto) {
+        var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
+        var sozialdienstAdmin = sozialdienstAdminMapper.toSozialdienstAdmin(dto);
+        sozialdienst.getAdmin().setVorname(sozialdienstAdmin.getVorname());
+        sozialdienst.getAdmin().setNachname(sozialdienstAdmin.getNachname());
+        return sozialdienstAdminMapper.toDto(sozialdienstAdmin);
+    }
+
+    @Transactional
+    public SozialdienstAdminDto replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminCreateDto dto) {
+        var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
+        final var benutzerToDelete = sozialdienst.getAdmin();
+        benutzerService.deleteBenutzer(benutzerToDelete.getKeycloakId());
+
+        final var benutzerToReplace = sozialdienstAdminMapper.toSozialdienstAdmin(dto);
+        final var benutzer = benutzerService.createSozialdienstAdminBenutzer(benutzerToReplace);
+        sozialdienst.setAdmin(benutzer);
+
+        var sozialdienstAdmin = sozialdienstAdminMapper.toSozialdienstAdmin(dto);
+        return sozialdienstAdminMapper.toDto(sozialdienstAdmin);
     }
 }

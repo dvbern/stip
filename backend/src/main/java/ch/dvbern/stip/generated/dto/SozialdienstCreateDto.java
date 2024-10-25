@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 @JsonTypeName("SozialdienstCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
@@ -18,7 +17,7 @@ public class SozialdienstCreateDto  implements Serializable {
   private @Valid String name;
   private @Valid String iban;
   private @Valid AdresseDto adresse;
-  private @Valid SozialdienstAdminCreateDto admin;
+  private @Valid SozialdienstAdminCreateDto sozialdienstAdmin;
 
   /**
    **/
@@ -79,21 +78,21 @@ public class SozialdienstCreateDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstCreateDto admin(SozialdienstAdminCreateDto admin) {
-    this.admin = admin;
+  public SozialdienstCreateDto sozialdienstAdmin(SozialdienstAdminCreateDto sozialdienstAdmin) {
+    this.sozialdienstAdmin = sozialdienstAdmin;
     return this;
   }
 
 
-  @JsonProperty("admin")
+  @JsonProperty("sozialdienstAdmin")
   @NotNull
-  public SozialdienstAdminCreateDto getAdmin() {
-    return admin;
+  public SozialdienstAdminCreateDto getSozialdienstAdmin() {
+    return sozialdienstAdmin;
   }
 
-  @JsonProperty("admin")
-  public void setAdmin(SozialdienstAdminCreateDto admin) {
-    this.admin = admin;
+  @JsonProperty("sozialdienstAdmin")
+  public void setSozialdienstAdmin(SozialdienstAdminCreateDto sozialdienstAdmin) {
+    this.sozialdienstAdmin = sozialdienstAdmin;
   }
 
 
@@ -109,12 +108,12 @@ public class SozialdienstCreateDto  implements Serializable {
     return Objects.equals(this.name, sozialdienstCreate.name) &&
         Objects.equals(this.iban, sozialdienstCreate.iban) &&
         Objects.equals(this.adresse, sozialdienstCreate.adresse) &&
-        Objects.equals(this.admin, sozialdienstCreate.admin);
+        Objects.equals(this.sozialdienstAdmin, sozialdienstCreate.sozialdienstAdmin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, iban, adresse, admin);
+    return Objects.hash(name, iban, adresse, sozialdienstAdmin);
   }
 
   @Override
@@ -125,7 +124,7 @@ public class SozialdienstCreateDto  implements Serializable {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
-    sb.append("    admin: ").append(toIndentedString(admin)).append("\n");
+    sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("}");
     return sb.toString();
   }

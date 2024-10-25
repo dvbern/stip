@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -9,53 +8,34 @@ import jakarta.validation.Valid;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 @JsonTypeName("SozialdienstAdmin")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class SozialdienstAdminDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String nachname;
+  private @Valid String keykloakId;
   private @Valid String vorname;
-  private @Valid String email;
+  private @Valid String nachname;
 
   /**
    **/
-  public SozialdienstAdminDto id(UUID id) {
-    this.id = id;
+  public SozialdienstAdminDto keykloakId(String keykloakId) {
+    this.keykloakId = keykloakId;
     return this;
   }
 
 
-  @JsonProperty("id")
+  @JsonProperty("keykloakId")
   @NotNull
-  public UUID getId() {
-    return id;
+  public String getKeykloakId() {
+    return keykloakId;
   }
 
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  public SozialdienstAdminDto nachname(String nachname) {
-    this.nachname = nachname;
-    return this;
-  }
-
-
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
-    return nachname;
-  }
-
-  @JsonProperty("nachname")
-  public void setNachname(String nachname) {
-    this.nachname = nachname;
+  @JsonProperty("keykloakId")
+  public void setKeykloakId(String keykloakId) {
+    this.keykloakId = keykloakId;
   }
 
   /**
@@ -79,21 +59,21 @@ public class SozialdienstAdminDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstAdminDto email(String email) {
-    this.email = email;
+  public SozialdienstAdminDto nachname(String nachname) {
+    this.nachname = nachname;
     return this;
   }
 
 
-  @JsonProperty("email")
+  @JsonProperty("nachname")
   @NotNull
-  public String getEmail() {
-    return email;
+  public String getNachname() {
+    return nachname;
   }
 
-  @JsonProperty("email")
-  public void setEmail(String email) {
-    this.email = email;
+  @JsonProperty("nachname")
+  public void setNachname(String nachname) {
+    this.nachname = nachname;
   }
 
 
@@ -106,15 +86,14 @@ public class SozialdienstAdminDto  implements Serializable {
       return false;
     }
     SozialdienstAdminDto sozialdienstAdmin = (SozialdienstAdminDto) o;
-    return Objects.equals(this.id, sozialdienstAdmin.id) &&
-        Objects.equals(this.nachname, sozialdienstAdmin.nachname) &&
+    return Objects.equals(this.keykloakId, sozialdienstAdmin.keykloakId) &&
         Objects.equals(this.vorname, sozialdienstAdmin.vorname) &&
-        Objects.equals(this.email, sozialdienstAdmin.email);
+        Objects.equals(this.nachname, sozialdienstAdmin.nachname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nachname, vorname, email);
+    return Objects.hash(keykloakId, vorname, nachname);
   }
 
   @Override
@@ -122,10 +101,9 @@ public class SozialdienstAdminDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstAdminDto {\n");
 
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    keykloakId: ").append(toIndentedString(keykloakId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("}");
     return sb.toString();
   }

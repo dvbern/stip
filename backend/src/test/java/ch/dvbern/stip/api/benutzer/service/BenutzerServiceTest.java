@@ -7,6 +7,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsDeleteUser;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstAdmin;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -51,5 +52,29 @@ class BenutzerServiceTest {
     void testDeleteBenutzer() {
         benutzerService.deleteBenutzer(benutzerToDeleteKeycloakId);
         assertThat(benutzerRepository.findByIdOptional(benutzerToDeleteId)).isNotPresent();
+    }
+
+    @Order(3)
+    @Test
+    @TestAsAdmin
+    void testCreateSozialdienstAdminBenutzer(){
+        String keykloakId = UUID.randomUUID().toString();
+        String email = "max@muster.com";
+        String vorname = "Max";
+        String nachname = "Muster";
+
+        SozialdienstAdmin sozialdienstAdmin = new SozialdienstAdmin();
+        sozialdienstAdmin.setEmail(email);
+        sozialdienstAdmin.setVorname(vorname);
+        sozialdienstAdmin.setNachname(nachname);
+        sozialdienstAdmin.setKeykloakId(keykloakId);
+
+        final var createdBenutzer = benutzerService.createSozialdienstAdminBenutzer(sozialdienstAdmin);
+        final var benutzerId = createdBenutzer.getId();
+
+        Optional<Benutzer> optionalBenutzer = benutzerRepository.findByIdOptional(benutzerId);
+        assertThat(optionalBenutzer).isPresent();
+        Benutzer benutzer = optionalBenutzer.get();
+        assertThat(benutzerId).isEqualTo(benutzer.getId());
     }
 }

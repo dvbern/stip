@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SozialdienstCreateDtoSpec.JSON_PROPERTY_NAME,
   SozialdienstCreateDtoSpec.JSON_PROPERTY_IBAN,
   SozialdienstCreateDtoSpec.JSON_PROPERTY_ADRESSE,
-  SozialdienstCreateDtoSpec.JSON_PROPERTY_ADMIN
+  SozialdienstCreateDtoSpec.JSON_PROPERTY_SOZIALDIENST_ADMIN
 })
 @JsonTypeName("SozialdienstCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -46,8 +46,8 @@ public class SozialdienstCreateDtoSpec {
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
   private AdresseDtoSpec adresse;
 
-  public static final String JSON_PROPERTY_ADMIN = "admin";
-  private SozialdienstAdminCreateDtoSpec admin;
+  public static final String JSON_PROPERTY_SOZIALDIENST_ADMIN = "sozialdienstAdmin";
+  private SozialdienstAdminCreateDtoSpec sozialdienstAdmin;
 
   public SozialdienstCreateDtoSpec() {
   }
@@ -130,29 +130,29 @@ public class SozialdienstCreateDtoSpec {
   }
 
 
-  public SozialdienstCreateDtoSpec admin(SozialdienstAdminCreateDtoSpec admin) {
+  public SozialdienstCreateDtoSpec sozialdienstAdmin(SozialdienstAdminCreateDtoSpec sozialdienstAdmin) {
     
-    this.admin = admin;
+    this.sozialdienstAdmin = sozialdienstAdmin;
     return this;
   }
 
    /**
-   * Get admin
-   * @return admin
+   * Get sozialdienstAdmin
+   * @return sozialdienstAdmin
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ADMIN)
+  @JsonProperty(JSON_PROPERTY_SOZIALDIENST_ADMIN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public SozialdienstAdminCreateDtoSpec getAdmin() {
-    return admin;
+  public SozialdienstAdminCreateDtoSpec getSozialdienstAdmin() {
+    return sozialdienstAdmin;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ADMIN)
+  @JsonProperty(JSON_PROPERTY_SOZIALDIENST_ADMIN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAdmin(SozialdienstAdminCreateDtoSpec admin) {
-    this.admin = admin;
+  public void setSozialdienstAdmin(SozialdienstAdminCreateDtoSpec sozialdienstAdmin) {
+    this.sozialdienstAdmin = sozialdienstAdmin;
   }
 
   @Override
@@ -167,12 +167,12 @@ public class SozialdienstCreateDtoSpec {
     return Objects.equals(this.name, sozialdienstCreate.name) &&
         Objects.equals(this.iban, sozialdienstCreate.iban) &&
         Objects.equals(this.adresse, sozialdienstCreate.adresse) &&
-        Objects.equals(this.admin, sozialdienstCreate.admin);
+        Objects.equals(this.sozialdienstAdmin, sozialdienstCreate.sozialdienstAdmin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, iban, adresse, admin);
+    return Objects.hash(name, iban, adresse, sozialdienstAdmin);
   }
 
   @Override
@@ -182,7 +182,7 @@ public class SozialdienstCreateDtoSpec {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
-    sb.append("    admin: ").append(toIndentedString(admin)).append("\n");
+    sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("}");
     return sb.toString();
   }

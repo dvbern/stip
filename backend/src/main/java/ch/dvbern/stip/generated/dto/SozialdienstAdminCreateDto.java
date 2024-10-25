@@ -8,33 +8,34 @@ import jakarta.validation.Valid;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 @JsonTypeName("SozialdienstAdminCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class SozialdienstAdminCreateDto  implements Serializable {
-  private @Valid String nachname;
+  private @Valid String keykloakId;
   private @Valid String vorname;
-  private @Valid String email;
+  private @Valid String nachname;
 
   /**
    **/
-  public SozialdienstAdminCreateDto nachname(String nachname) {
-    this.nachname = nachname;
+  public SozialdienstAdminCreateDto keykloakId(String keykloakId) {
+    this.keykloakId = keykloakId;
     return this;
   }
 
 
-  @JsonProperty("nachname")
+  @JsonProperty("keykloakId")
   @NotNull
-  public String getNachname() {
-    return nachname;
+  public String getKeykloakId() {
+    return keykloakId;
   }
 
-  @JsonProperty("nachname")
-  public void setNachname(String nachname) {
-    this.nachname = nachname;
+  @JsonProperty("keykloakId")
+  public void setKeykloakId(String keykloakId) {
+    this.keykloakId = keykloakId;
   }
 
   /**
@@ -58,21 +59,21 @@ public class SozialdienstAdminCreateDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstAdminCreateDto email(String email) {
-    this.email = email;
+  public SozialdienstAdminCreateDto nachname(String nachname) {
+    this.nachname = nachname;
     return this;
   }
 
 
-  @JsonProperty("email")
+  @JsonProperty("nachname")
   @NotNull
-  public String getEmail() {
-    return email;
+  public String getNachname() {
+    return nachname;
   }
 
-  @JsonProperty("email")
-  public void setEmail(String email) {
-    this.email = email;
+  @JsonProperty("nachname")
+  public void setNachname(String nachname) {
+    this.nachname = nachname;
   }
 
 
@@ -85,14 +86,14 @@ public class SozialdienstAdminCreateDto  implements Serializable {
       return false;
     }
     SozialdienstAdminCreateDto sozialdienstAdminCreate = (SozialdienstAdminCreateDto) o;
-    return Objects.equals(this.nachname, sozialdienstAdminCreate.nachname) &&
+    return Objects.equals(this.keykloakId, sozialdienstAdminCreate.keykloakId) &&
         Objects.equals(this.vorname, sozialdienstAdminCreate.vorname) &&
-        Objects.equals(this.email, sozialdienstAdminCreate.email);
+        Objects.equals(this.nachname, sozialdienstAdminCreate.nachname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nachname, vorname, email);
+    return Objects.hash(keykloakId, vorname, nachname);
   }
 
   @Override
@@ -100,9 +101,9 @@ public class SozialdienstAdminCreateDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstAdminCreateDto {\n");
 
-    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    keykloakId: ").append(toIndentedString(keykloakId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("}");
     return sb.toString();
   }
