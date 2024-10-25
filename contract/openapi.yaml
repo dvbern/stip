@@ -3696,7 +3696,10 @@ components:
         - name
         - iban
         - adresse
-        - admin
+        - adminVorname
+        - adminNachname
+        - adminKeykloakId
+        - adminEmail
       properties:
         name:
           type: string
@@ -3704,15 +3707,23 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-        admin:
-          $ref: '#/components/schemas/Benutzer'
+        sozialdienstAdminKeykloakId:
+          type: string
+        sozialdienstAdminVorname:
+          type: string
+        sozialdienstAdminNachname:
+          type: string
+        sozialdienstAdminEmail:
+          type: string
     SozialdienstUpdate:
       required:
         - id
         - name
         - iban
         - adresse
-        - admin
+        - adminVorname
+        - adminNachname
+        - adminEmail
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -3722,8 +3733,12 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
-        admin:
-          $ref: '#/components/schemas/BenutzerUpdate'
+        sozialdienstAdminVorname:
+          type: string
+        sozialdienstAdminNachname:
+          type: string
+        sozialdienstAdminEmail:
+          type: string
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
