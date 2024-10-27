@@ -36,6 +36,7 @@
   "sachbearbeitung-app.admin.option.buchstabenZuteilung": "Attribution des lettres",
   "sachbearbeitung-app.admin.option.gesuchsperioden": "Périodes de demande",
   "sachbearbeitung-app.admin.option.benutzerverwaltung": "Gestion des utilisateurs",
+  "sachbearbeitung-app.admin.option.sozialdienst": "Service social",
 
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Aperçu de la distribution des lettres",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Gestionnaire",
@@ -219,6 +220,20 @@
   "sachbearbeitung-app.admin.gesuchsperiode.confirmDelete.gesuchsjahr.text": "Voulez-vous vraiment supprimer l'année de formation \"{{ bezeichnungFr }}\" ?",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Il doit y avoir une année de formation publiée liée.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "L'année de formation liée n'est pas encore publiée.",
+
+  "sachbearbeitung-app.admin.sozialdienst.route.overview": "Service social",
+  "sachbearbeitung-app.admin.sozialdienst.name.label": "Nom du service social",
+  "sachbearbeitung-app.admin.sozialdienst.ort.label": "Lieu",
+  "sachbearbeitung-app.admin.sozialdienst.ort.iban": "IBAN",
+  "sachbearbeitung-app.admin.sozialdienst.erstellen": "Créer",
+  "sachbearbeitung-app.admin.sozialdienst.route.create": "Créer un service social",
+  "sachbearbeitung-app.admin.sozialdienst.route.edit": "Modifier le service social",
+  "sachbearbeitung-app.admin.sozialdienst.bearbeiten": "Modifier",
+  "sachbearbeitung-app.admin.sozialdienst.loeschen": "Supprimer",
+  "sachbearbeitung-app.admin.sozialdienst.sozialdienstAdmin": "Admin service social",
+  "sachbearbeitung-app.admin.sozialdienst.vorname.label": "Prénom",
+  "sachbearbeitung-app.admin.sozialdienst.nachname.label": "Nom",
+  "sachbearbeitung-app.admin.sozialdienst.email.label": "E-Mail",
 
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",
