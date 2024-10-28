@@ -1,0 +1,83 @@
+@if (store.sozialdienste() | rdIsPendingWithoutCache) {
+  <dv-shared-ui-loading></dv-shared-ui-loading>
+} @else {
+  @if (sozialDiensteListDataSourceSig(); as sozialdienstListSource) {
+    <div class="mt-4 shadow rounded-4" [class.opacity-50]="store.sozialdienste() | rdIsPending">
+      <table mat-table [dataSource]="sozialdienstListSource" matSort class="dv-crud-table">
+        <caption class="cdk-visually-hidden">
+          {{
+            'sachbearbeitung-app.admin.sozialdienst.route.overview' | translate
+          }}
+        </caption>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource" class="fw-bold">
+            {{ sozialdienst.name }}
+          </td>
+        </ng-container>
+
+        <!-- ort -->
+        <ng-container matColumnDef="ort">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.admin.sozialdienst.ort.label' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource">
+            {{ sozialdienst.adresse.ort }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th class="action-cell-content" mat-header-cell *matHeaderCellDef>
+            <a [routerLink]="['.', 'create']" class="btn btn-outline-dark d-inline-flex lh-1 align-items-center">
+              <i class="material-symbols-rounded fs-5 me-2">add</i>
+              {{ 'sachbearbeitung-app.admin.sozialdienst.erstellen' | translate }}
+            </a>
+          </th>
+          <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource">
+            <div class="d-flex justify-content-end gap-2">
+              <a
+                [routerLink]="['.', 'edit', sozialdienst.id]"
+                class="btn btn-link"
+                [attr.aria-label]="'sachbearbeitung-app.admin.sozialdienst.bearbeiten' | translate"
+              >
+                <i class="material-symbols-rounded fs-5">edit</i>
+              </a>
+              <button
+                type="button"
+                class="btn btn-link"
+                [attr.aria-label]="'sachbearbeitung-app.admin.sozialdienst.loeschen' | translate"
+                (click)="deleteSozialdienst(sozialdienst)"
+              >
+                <i class="material-symbols-rounded fs-5">delete</i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
+        <tr mat-row *matRowDef="let sozialdienst; columns: displayedColumns"></tr>
+        <tr class="mat-mdc-row" *matNoDataRow>
+          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+            {{ 'shared.table.noData' | translate }}
+          </td>
+        </tr>
+      </table>
+      <mat-paginator
+        [pageSizeOptions]="[10, 20, 50]"
+        pageSize="20"
+        [length]="sozialdienstListSource.data.length"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+      @if (store.sozialdienste() | rdIsPending) {
+        <dv-shared-ui-loading
+          class="position-absolute top-50 start-50 translate-middle"
+          [type]="'compact'"
+        ></dv-shared-ui-loading>
+      }
+    </div>
+  }
+}

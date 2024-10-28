@@ -1,0 +1,120 @@
+<form [formGroup]="form" data-testid="form-sozialdienst-form" novalidate class="mt-4" (ngSubmit)="handleSubmit()">
+  @if (store.sozialdienst() | rdIsPending) {
+    <dv-shared-ui-loading></dv-shared-ui-loading>
+  } @else {
+    <!-- Name -->
+    <div class="row g-4">
+      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | translate }}</mat-label>
+          <input formControlName="name" data-testid="form-sozialdienst-name" matInput type="text" />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- IBAN -->
+    <div class="row g-4 my-2">
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+        <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.ort.iban.label' | translate }}</mat-label>
+        <span matTextPrefix>CH</span>
+        <input
+          data-testid="form-auszahlung-iban"
+          matInput
+          type="text"
+          [formControlName]="'iban'"
+          [maskito]="MASK_IBAN"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'invalidIBAN'">
+          {{ 'shared.form.error.invalidIBAN' | translate }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'qrIBAN'">
+          {{ 'shared.form.error.invalidIBAN' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Adresse -->
+    <div class="row g-4 mt-1">
+      <dv-shared-ui-form-address
+        class="col-12 col-xl-8"
+        [group]="form.controls.adresse"
+        [changes]="undefined"
+        [laender]="laenderSig()"
+        [language]="languageSig()"
+      />
+    </div>
+
+    <fieldset formGroupName="sozialdienstAdmin">
+      <legend>{{ 'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdmin' | translate }}</legend>
+
+      <div class="row g-4 mt-1">
+        <!-- nachname -->
+        <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <mat-label>
+              {{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | translate }}
+            </mat-label>
+            <input formControlName="nachname" data-testid="form-sozialdienst-nachname" matInput type="text" />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- vorname -->
+        <div class="d-flex gap 2 align-content-center col-12 col-md-6 col-xl-4">
+          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <mat-label>
+              {{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | translate }}
+            </mat-label>
+            <input formControlName="vorname" data-testid="form-sozialdienst-vorname" matInput type="text" />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- E-Mail Adresse -->
+      <div class="row g-4 mt-1">
+        <div
+          class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4"
+          [class.readonly]="form.controls.sozialdienstAdmin.controls.email.disabled"
+        >
+          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <mat-label>
+              {{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | translate }}
+            </mat-label>
+            <input
+              data-testid="form-sozialdienst-email"
+              formControlName="email"
+              matInput
+              type="email"
+              (blur)="trimEmail()"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'pattern'">
+              {{ 'shared.form.error.email' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </fieldset>
+
+    @if (!form.disabled) {
+      <dv-shared-ui-form-save
+        class="mt-4"
+        [disabled]="form.invalid || form.pristine"
+        [loading]="store.sozialdienst() | rdIsPending"
+      ></dv-shared-ui-form-save>
+    }
+  }
+</form>

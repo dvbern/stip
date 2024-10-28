@@ -4,6 +4,15 @@ import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [
   {
+    path: 'sachbearbeitung-app-feature-administration-sozialdienst',
+    loadChildren: () =>
+      import(
+        '@dv/sachbearbeitung-app/feature/administration-sozialdienst'
+      ).then(
+        (m) => m.sachbearbeitungAppFeatureAdministrationSozialdienstRoutes,
+      ),
+  },
+  {
     path: 'sachbearbeitung-app-feature-infos-protokoll',
     loadChildren: () =>
       import('@dv/sachbearbeitung-app/feature/infos-protokoll').then(
