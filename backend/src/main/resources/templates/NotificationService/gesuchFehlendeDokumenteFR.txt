@@ -1,1 +1,3 @@
 Certains documents soumis sont incorrects et doivent être soumis à nouveau. Vous pouvez le faire directement via votre tableau de bord.
+Meilleures salutations
+{sbVorname} {sbNachname}
