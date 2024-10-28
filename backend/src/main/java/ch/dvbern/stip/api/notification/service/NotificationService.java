@@ -29,12 +29,13 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
             .setGesuch(gesuch);
+
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
 
-        String msg = Templates.getGesuchEingereichtText(anrede,nachname,sprache).render();
+        String msg = Templates.getGesuchEingereichtText(anrede, nachname, sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
@@ -59,8 +60,14 @@ public class NotificationService {
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         String msg = Templates.getGesuchFehlendeDokumenteText(sprache,
-            gesuch.getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getVorname()
-            ,gesuch.getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getNachname()
+            gesuch.getFall()
+                .getSachbearbeiterZuordnung()
+                .getSachbearbeiter()
+                .getVorname(),
+            gesuch.getFall()
+                .getSachbearbeiterZuordnung()
+                .getSachbearbeiter()
+                .getNachname()
         ).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
@@ -68,22 +75,27 @@ public class NotificationService {
 
     @CheckedTemplate
     public static class Templates {
+
         public static TemplateInstance getGesuchFehlendeDokumenteText(Sprache korrespondenzSprache, String sbVorname, String sbNachname) {
             if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
-                return gesuchFehlendeDokumenteFR(sbVorname,sbNachname);
+                return gesuchFehlendeDokumenteFR(sbVorname, sbNachname);
             }
-            return gesuchFehlendeDokumenteDE(sbVorname,sbNachname);
+            return gesuchFehlendeDokumenteDE(sbVorname, sbNachname);
         }
+
         public static TemplateInstance getGesuchEingereichtText(String anrede, String nachname, Sprache korrespondenzSprache) {
             if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
                 return gesuchEingereichtFR(anrede, nachname);
             }
             return gesuchEingereichtDE(anrede, nachname);
         }
-        public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
-        public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
-        public static native TemplateInstance gesuchFehlendeDokumenteDE(String sbVorname, String sbNachname);
-        public static native TemplateInstance gesuchFehlendeDokumenteFR(String sbVorname, String sbNachname);
 
+        public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
+
+        public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
+
+        public static native TemplateInstance gesuchFehlendeDokumenteDE(String sbVorname, String sbNachname);
+
+        public static native TemplateInstance gesuchFehlendeDokumenteFR(String sbVorname, String sbNachname);
     }
 }
