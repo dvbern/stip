@@ -1203,21 +1203,25 @@ class GesuchServiceTest {
     void documentsMissingSentMessagesTest(){
         // arrange
         Zuordnung zuordnung = new Zuordnung();
-        zuordnung.setSachbearbeiter(new Benutzer().setVorname("test").setNachname("test"));
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
         Fall fall = new Fall();
         fall.setSachbearbeiterZuordnung(zuordnung);
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuch.setFall(fall);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
-        Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(),any(),any(),any());
+        Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
 
         // act
         gesuchService.gesuchFehlendeDokumente(gesuch.getId());
 
         // assert
         Mockito.verify(notificationService).createMissingDocumentNotification(any());
-        Mockito.verify(mailService).sendStandardNotificationEmail(any(),any(),any(), any());
+        Mockito.verify(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
