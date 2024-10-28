@@ -31,10 +31,10 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS));
-        sendNotification(gesuch);
+        sendFehlendeDokumenteNotifications(gesuch);
     }
 
-    private void sendNotification(Gesuch gesuch) {
+    private void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
         notificationService.createMissingDocumentNotification(gesuch);
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService,gesuch);
     }
