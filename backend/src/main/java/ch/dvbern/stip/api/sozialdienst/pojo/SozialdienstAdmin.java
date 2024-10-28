@@ -1,4 +1,4 @@
-package ch.dvbern.stip.api.sozialdienst.service;
+package ch.dvbern.stip.api.sozialdienst.pojo;
 
 import lombok.Getter;
 import lombok.Setter;
