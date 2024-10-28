@@ -36,6 +36,6 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
 
     private void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
         notificationService.createMissingDocumentNotification(gesuch);
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService,gesuch);
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
     }
 }
