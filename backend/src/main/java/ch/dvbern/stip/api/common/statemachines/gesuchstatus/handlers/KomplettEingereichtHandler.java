@@ -30,7 +30,7 @@ public class KomplettEingereichtHandler implements GesuchStatusStateChangeHandle
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService,gesuch);
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
         notificationService.createGesuchEingereichtNotification(gesuch);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
         gesuch.getGesuchTranchen()
