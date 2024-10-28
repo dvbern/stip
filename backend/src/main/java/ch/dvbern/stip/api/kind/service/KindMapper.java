@@ -45,4 +45,6 @@ public interface KindMapper {
         }
         return kinder;
     }
+
+	KindUpdateDto toUpdateDto(Kind kind);
 }

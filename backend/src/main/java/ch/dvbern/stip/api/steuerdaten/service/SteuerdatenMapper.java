@@ -67,4 +67,6 @@ public abstract class SteuerdatenMapper extends EntityUpdateMapper<SteuerdatenUp
             }
         );
     }
+
+	public abstract SteuerdatenUpdateDto toUpdateDto(Steuerdaten steuerdaten);
 }

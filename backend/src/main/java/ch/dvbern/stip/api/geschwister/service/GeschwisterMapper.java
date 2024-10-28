@@ -50,4 +50,6 @@ public interface GeschwisterMapper {
         }
         return geschwisterSet;
     }
+
+	GeschwisterUpdateDto toUpdateDto(Geschwister geschwister);
 }
