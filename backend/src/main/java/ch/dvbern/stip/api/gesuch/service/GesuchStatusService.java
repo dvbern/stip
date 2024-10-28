@@ -6,11 +6,14 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
@@ -23,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class GesuchStatusService {
     private final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
     private final GesuchValidatorService validationService;
+    private final MailService mailService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
@@ -51,6 +56,19 @@ public class GesuchStatusService {
         );
 
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
+
+        if (!kommentarDto.getText().isBlank()) {
+            final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
+
+            mailService.sendStandardNotificationEmail(
+                pia.getNachname(),
+                pia.getVorname(),
+                pia.getEmail(),
+                AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
+            );
+
+            notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
+        }
     }
 
     public boolean benutzerCanEdit(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {

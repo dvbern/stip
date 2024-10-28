@@ -39,7 +39,7 @@ public class KomplettEingereichtHandler implements GesuchStatusStateChangeHandle
             AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
         );
 
-        notificationService.createNotification(NotificationType.GESUCH_EINGEREICHT, gesuch);
+        notificationService.createGesuchEingereichtNotification(NotificationType.GESUCH_EINGEREICHT, gesuch);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
         gesuch.getGesuchTranchen()
             .stream()

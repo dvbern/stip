@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
@@ -25,7 +26,7 @@ public class NotificationService {
     private final NotificationMapper notificationMapper;
 
     @Transactional
-    public void createNotification(final NotificationType notificationType, final Gesuch gesuch) {
+    public void createGesuchEingereichtNotification(final NotificationType notificationType, final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(notificationType)
             .setGesuch(gesuch);
@@ -34,6 +35,21 @@ public class NotificationService {
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
         String msg = Templates.getGesuchEingereichtText(anrede, nachname, sprache).render();
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
+
+    @Transactional
+    public void createGesuchStatusChangeWithCommentNotification(final Gesuch gesuch, final KommentarDto kommentar) {
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.GESUCH_STATUS_CHANGE_WITH_COMMENT)
+            .setGesuch(gesuch);
+
+        final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
+        final var nachname = pia.getNachname();
+        String msg = Templates.getGesuchStatusChangeWithCommentText(anrede, nachname, kommentar.getText(), sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
@@ -61,5 +77,14 @@ public class NotificationService {
         }
         public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
         public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
+
+        public static TemplateInstance getGesuchStatusChangeWithCommentText(String anrede, String nachname, String kommentar, Sprache korrespondenzSprache) {
+            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
+                return gesuchStatusChangeWithCommentFR(anrede, nachname, kommentar);
+            }
+            return gesuchStatusChangeWithCommentDE(anrede, nachname, kommentar);
+        }
+        public static native TemplateInstance gesuchStatusChangeWithCommentDE(String anrede, String nachname, String kommentar);
+        public static native TemplateInstance gesuchStatusChangeWithCommentFR(String anrede, String nachname, String kommentar);
     }
 }
