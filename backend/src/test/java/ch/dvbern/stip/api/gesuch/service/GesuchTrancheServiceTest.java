@@ -8,23 +8,27 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
 class GesuchTrancheServiceTest {
+    @InjectMock
+    GesuchRepository gesuchRepository;
     private Gesuch gesuch;
 
     @InjectMock
@@ -32,6 +36,8 @@ class GesuchTrancheServiceTest {
 
     @Inject
     GesuchTrancheService gesuchTrancheService;
+    @InjectMock
+    GesuchTrancheStatusService gesuchTrancheStatusService;
 
     @BeforeEach
     void setUp() {
@@ -111,5 +117,30 @@ class GesuchTrancheServiceTest {
         gesuch.getGesuchTranchen().get(0).setId(UUID.randomUUID());
         //assert
         assertDoesNotThrow(() -> gesuchTrancheService.deleteAenderung(gesuch.getGesuchTranchen().get(0).getId()));
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    @Description("Aenderung einreichen should only be possible when Gesuchstatus is Stipendienberechtigt or Nicht_Stipendienberechtigt")
+    void aenderungEinreichenAllowedStatesTest(){
+        // arrange
+        gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
+        gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
+        gesuch.getGesuchTranchen().get(0).setId(UUID.randomUUID());
+        gesuch.setGesuchStatus(Gesuchstatus.EINGEREICHT);
+        gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheRepository.requireAenderungById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        assertThrows(IllegalStateException.class, () -> gesuchTrancheService.aenderungEinreichen(gesuch.getGesuchTranchen().get(0).getId()));
+        Mockito.doNothing().when(gesuchTrancheStatusService).triggerStateMachineEvent(any(), any());
+
+        gesuch.setGesuchStatus(Gesuchstatus.STIPENDIENANSPRUCH);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        assertDoesNotThrow(() -> gesuchTrancheService.aenderungEinreichen(gesuch.getGesuchTranchen().get(0).getId()));
+
+        gesuch.setGesuchStatus(Gesuchstatus.KEIN_STIPENDIENANSPRUCH);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        assertDoesNotThrow(() -> gesuchTrancheService.aenderungEinreichen(gesuch.getGesuchTranchen().get(0).getId()));
     }
 }

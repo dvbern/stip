@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -217,6 +218,10 @@ public class GesuchTrancheService {
     @Transactional
     public void aenderungEinreichen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        final var gesuch = aenderung.getGesuch();
+        if(!(gesuch.getGesuchStatus() == Gesuchstatus.STIPENDIENANSPRUCH
+        || gesuch.getGesuchStatus() == Gesuchstatus.KEIN_STIPENDIENANSPRUCH))
+            throw new IllegalStateException();
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
 
