@@ -33,6 +33,7 @@ class SozialdienstResourceImplTest {
 
     private final static String VALID_IBAN_1 = "CH5089144653587876648";
     private final static String VALID_IBAN_2 = "CH5089144653587876648";
+
     @Order(1)
     @Test
     @TestAsAdmin
@@ -65,7 +66,6 @@ class SozialdienstResourceImplTest {
             .extract()
             .as(SozialdienstDtoSpec.class);
     }
-
 
     @Order(2)
     @TestAsAdmin
@@ -146,6 +146,7 @@ class SozialdienstResourceImplTest {
         assertTrue(updated.getNachname().contains("updated"));
         assertTrue(updated.getVorname().contains("updated"));
     }
+
     @Order(5)
     @TestAsAdmin
     @Test
