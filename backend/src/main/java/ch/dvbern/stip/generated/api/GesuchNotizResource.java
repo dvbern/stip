@@ -28,7 +28,7 @@ public interface GesuchNotizResource {
 
     @GET
     @Path("/notiz/{notizId}")
-    @Produces({ "text/plain" })
+    @Produces({ "application/json", "text/plain" })
     Response getNotiz(@PathParam("notizId") UUID notizId);
 
     @GET

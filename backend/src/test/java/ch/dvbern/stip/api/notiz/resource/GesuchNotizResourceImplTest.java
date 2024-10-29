@@ -87,13 +87,15 @@ class GesuchNotizResourceImplTest {
             .as(GesuchNotizDtoSpec[].class);
         final var notiz = Arrays.stream(notizen).toList().get(0);
 
-        gesuchNotizApiSpec.getNotiz()
+        final var notizById = gesuchNotizApiSpec.getNotiz()
             .notizIdPath(notiz.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchNotizDtoSpec.class);
     }
 
     // update notiz as SB

@@ -267,7 +267,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Fall'
+                $ref: '#/components/schemas/GesuchNotiz'
           description: new notiz is created
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -313,7 +313,11 @@ paths:
       tags:
         - GesuchNotiz
       responses:
-        '204':
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchNotiz'
           description: |
             get a single notiz
         '401':

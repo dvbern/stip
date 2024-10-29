@@ -13,7 +13,6 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
@@ -104,7 +103,7 @@ public class GesuchNotizApiSpec {
      * 
      *
      * @see #body  (required)
-     * return FallDtoSpec
+     * return GesuchNotizDtoSpec
      */
     public static class CreateNotizOper implements Oper {
 
@@ -135,10 +134,10 @@ public class GesuchNotizApiSpec {
         /**
          * POST /gesuch/notiz/create
          * @param handler handler
-         * @return FallDtoSpec
+         * @return GesuchNotizDtoSpec
          */
-        public FallDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<FallDtoSpec> type = new TypeRef<FallDtoSpec>(){};
+        public GesuchNotizDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchNotizDtoSpec> type = new TypeRef<GesuchNotizDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -238,6 +237,7 @@ public class GesuchNotizApiSpec {
      * 
      *
      * @see #notizIdPath  (required)
+     * return GesuchNotizDtoSpec
      */
     public static class GetNotizOper implements Oper {
 
@@ -249,7 +249,7 @@ public class GesuchNotizApiSpec {
 
         public GetNotizOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -262,6 +262,16 @@ public class GesuchNotizApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/notiz/{notizId}
+         * @param handler handler
+         * @return GesuchNotizDtoSpec
+         */
+        public GesuchNotizDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchNotizDtoSpec> type = new TypeRef<GesuchNotizDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
         public static final String NOTIZ_ID_PATH = "notizId";
