@@ -4,10 +4,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.SozialdienstAdmin;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsDeleteUser;
-import ch.dvbern.stip.api.sozialdienst.pojo.SozialdienstAdmin;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -59,15 +59,13 @@ class BenutzerServiceTest {
     @TestAsAdmin
     void testCreateSozialdienstAdminBenutzer(){
         String keykloakId = UUID.randomUUID().toString();
-        String email = "max@muster.com";
         String vorname = "Max";
         String nachname = "Muster";
 
         SozialdienstAdmin sozialdienstAdmin = new SozialdienstAdmin();
-        sozialdienstAdmin.setEmail(email);
         sozialdienstAdmin.setVorname(vorname);
         sozialdienstAdmin.setNachname(nachname);
-        sozialdienstAdmin.setKeykloakId(keykloakId);
+        sozialdienstAdmin.setKeycloakId(keykloakId);
 
         final var createdBenutzer = benutzerService.createSozialdienstAdminBenutzer(sozialdienstAdmin);
         final var benutzerId = createdBenutzer.getId();

@@ -27,15 +27,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * SozialdienstAdminDtoSpec
  */
 @JsonPropertyOrder({
-  SozialdienstAdminDtoSpec.JSON_PROPERTY_KEYKLOAK_ID,
+  SozialdienstAdminDtoSpec.JSON_PROPERTY_KEYCLOAK_ID,
   SozialdienstAdminDtoSpec.JSON_PROPERTY_VORNAME,
-  SozialdienstAdminDtoSpec.JSON_PROPERTY_NACHNAME
+  SozialdienstAdminDtoSpec.JSON_PROPERTY_NACHNAME,
+  SozialdienstAdminDtoSpec.JSON_PROPERTY_E_MAIL
 })
 @JsonTypeName("SozialdienstAdmin")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class SozialdienstAdminDtoSpec {
-  public static final String JSON_PROPERTY_KEYKLOAK_ID = "keykloakId";
-  private String keykloakId;
+  public static final String JSON_PROPERTY_KEYCLOAK_ID = "keycloakId";
+  private String keycloakId;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
@@ -43,32 +44,35 @@ public class SozialdienstAdminDtoSpec {
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
 
+  public static final String JSON_PROPERTY_E_MAIL = "eMail";
+  private String eMail;
+
   public SozialdienstAdminDtoSpec() {
   }
 
-  public SozialdienstAdminDtoSpec keykloakId(String keykloakId) {
+  public SozialdienstAdminDtoSpec keycloakId(String keycloakId) {
     
-    this.keykloakId = keykloakId;
+    this.keycloakId = keycloakId;
     return this;
   }
 
    /**
-   * Get keykloakId
-   * @return keykloakId
+   * Get keycloakId
+   * @return keycloakId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KEYKLOAK_ID)
+  @JsonProperty(JSON_PROPERTY_KEYCLOAK_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getKeykloakId() {
-    return keykloakId;
+  public String getKeycloakId() {
+    return keycloakId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KEYKLOAK_ID)
+  @JsonProperty(JSON_PROPERTY_KEYCLOAK_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKeykloakId(String keykloakId) {
-    this.keykloakId = keykloakId;
+  public void setKeycloakId(String keycloakId) {
+    this.keycloakId = keycloakId;
   }
 
 
@@ -123,6 +127,32 @@ public class SozialdienstAdminDtoSpec {
     this.nachname = nachname;
   }
 
+
+  public SozialdienstAdminDtoSpec eMail(String eMail) {
+    
+    this.eMail = eMail;
+    return this;
+  }
+
+   /**
+   * Get eMail
+   * @return eMail
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_E_MAIL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String geteMail() {
+    return eMail;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_E_MAIL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void seteMail(String eMail) {
+    this.eMail = eMail;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -132,23 +162,25 @@ public class SozialdienstAdminDtoSpec {
       return false;
     }
     SozialdienstAdminDtoSpec sozialdienstAdmin = (SozialdienstAdminDtoSpec) o;
-    return Objects.equals(this.keykloakId, sozialdienstAdmin.keykloakId) &&
+    return Objects.equals(this.keycloakId, sozialdienstAdmin.keycloakId) &&
         Objects.equals(this.vorname, sozialdienstAdmin.vorname) &&
-        Objects.equals(this.nachname, sozialdienstAdmin.nachname);
+        Objects.equals(this.nachname, sozialdienstAdmin.nachname) &&
+        Objects.equals(this.eMail, sozialdienstAdmin.eMail);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(keykloakId, vorname, nachname);
+    return Objects.hash(keycloakId, vorname, nachname, eMail);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstAdminDtoSpec {\n");
-    sb.append("    keykloakId: ").append(toIndentedString(keykloakId)).append("\n");
+    sb.append("    keycloakId: ").append(toIndentedString(keycloakId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    eMail: ").append(toIndentedString(eMail)).append("\n");
     sb.append("}");
     return sb.toString();
   }

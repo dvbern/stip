@@ -45,9 +45,10 @@ class SozialdienstResourceImplTest {
         adresseDto.setLand(LandDtoSpec.CH);
 
         final var sozialdienstAdminCreateDto = new SozialdienstAdminCreateDtoSpec();
-        sozialdienstAdminCreateDto.setKeykloakId(UUID.randomUUID().toString());
+        sozialdienstAdminCreateDto.setKeycloakId(UUID.randomUUID().toString());
         sozialdienstAdminCreateDto.setNachname("Muster");
         sozialdienstAdminCreateDto.setVorname("Max");
+        sozialdienstAdminCreateDto.seteMail("test@test.com");
 
         final var createDto = new SozialdienstCreateDtoSpec()
             .adresse(adresseDto)
@@ -132,6 +133,7 @@ class SozialdienstResourceImplTest {
         final var updateSozialdienstDto = new SozialdienstAdminUpdateDtoSpec();
         updateSozialdienstDto.setVorname("updated");
         updateSozialdienstDto.setNachname("updated");
+        updateSozialdienstDto.seteMail("test@test.com");
         final var updated = apiSpec.updateSozialdienstAdmin()
             .sozialdienstIdPath(dtoSpec.getId())
             .body(updateSozialdienstDto)
@@ -152,7 +154,8 @@ class SozialdienstResourceImplTest {
         final var createSozialdienstDto = new SozialdienstAdminCreateDtoSpec();
         createSozialdienstDto.setVorname("replaced");
         createSozialdienstDto.setNachname("replaced");
-        createSozialdienstDto.setKeykloakId(keykloakId);
+        createSozialdienstDto.seteMail("test@test.com");
+        createSozialdienstDto.setKeycloakId(keykloakId);
         final var replaced = apiSpec.replaceSozialdienstAdmin()
             .sozialdienstIdPath(dtoSpec.getId())
             .body(createSozialdienstDto)
@@ -164,7 +167,7 @@ class SozialdienstResourceImplTest {
             .as(SozialdienstAdminDtoSpec.class);;
         assertTrue(replaced.getNachname().contains("replaced"));
         assertTrue(replaced.getVorname().contains("replaced"));
-        assertTrue(replaced.getKeykloakId().equals(keykloakId));
+        assertTrue(replaced.getKeycloakId().equals(keykloakId));
     }
 
     @Order(7)

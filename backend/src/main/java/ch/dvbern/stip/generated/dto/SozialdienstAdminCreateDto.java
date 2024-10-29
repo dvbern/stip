@@ -8,34 +8,34 @@ import jakarta.validation.Valid;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 @JsonTypeName("SozialdienstAdminCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class SozialdienstAdminCreateDto  implements Serializable {
-  private @Valid String keykloakId;
+  private @Valid String keycloakId;
   private @Valid String vorname;
   private @Valid String nachname;
+  private @Valid String eMail;
 
   /**
    **/
-  public SozialdienstAdminCreateDto keykloakId(String keykloakId) {
-    this.keykloakId = keykloakId;
+  public SozialdienstAdminCreateDto keycloakId(String keycloakId) {
+    this.keycloakId = keycloakId;
     return this;
   }
 
 
-  @JsonProperty("keykloakId")
+  @JsonProperty("keycloakId")
   @NotNull
-  public String getKeykloakId() {
-    return keykloakId;
+  public String getKeycloakId() {
+    return keycloakId;
   }
 
-  @JsonProperty("keykloakId")
-  public void setKeykloakId(String keykloakId) {
-    this.keykloakId = keykloakId;
+  @JsonProperty("keycloakId")
+  public void setKeycloakId(String keycloakId) {
+    this.keycloakId = keycloakId;
   }
 
   /**
@@ -76,6 +76,25 @@ public class SozialdienstAdminCreateDto  implements Serializable {
     this.nachname = nachname;
   }
 
+  /**
+   **/
+  public SozialdienstAdminCreateDto eMail(String eMail) {
+    this.eMail = eMail;
+    return this;
+  }
+
+
+  @JsonProperty("eMail")
+  @NotNull
+  public String geteMail() {
+    return eMail;
+  }
+
+  @JsonProperty("eMail")
+  public void seteMail(String eMail) {
+    this.eMail = eMail;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -86,14 +105,15 @@ public class SozialdienstAdminCreateDto  implements Serializable {
       return false;
     }
     SozialdienstAdminCreateDto sozialdienstAdminCreate = (SozialdienstAdminCreateDto) o;
-    return Objects.equals(this.keykloakId, sozialdienstAdminCreate.keykloakId) &&
+    return Objects.equals(this.keycloakId, sozialdienstAdminCreate.keycloakId) &&
         Objects.equals(this.vorname, sozialdienstAdminCreate.vorname) &&
-        Objects.equals(this.nachname, sozialdienstAdminCreate.nachname);
+        Objects.equals(this.nachname, sozialdienstAdminCreate.nachname) &&
+        Objects.equals(this.eMail, sozialdienstAdminCreate.eMail);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(keykloakId, vorname, nachname);
+    return Objects.hash(keycloakId, vorname, nachname, eMail);
   }
 
   @Override
@@ -101,9 +121,10 @@ public class SozialdienstAdminCreateDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstAdminCreateDto {\n");
 
-    sb.append("    keykloakId: ").append(toIndentedString(keykloakId)).append("\n");
+    sb.append("    keycloakId: ").append(toIndentedString(keycloakId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    eMail: ").append(toIndentedString(eMail)).append("\n");
     sb.append("}");
     return sb.toString();
   }
