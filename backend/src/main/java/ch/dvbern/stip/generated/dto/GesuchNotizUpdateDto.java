@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -8,11 +9,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-
 
 @JsonTypeName("GesuchNotizUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -22,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchNotizUpdateDto  implements Serializable {
   private @Valid String betreff;
   private @Valid String text;
+  private @Valid String userMutiert;
+  private @Valid LocalDate timestampMutiert;
   private @Valid UUID id;
-  private @Valid String user;
-  private @Valid String datum;
 
   /**
    **/
@@ -33,7 +29,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("betreff")
   @NotNull
   public String getBetreff() {
@@ -52,7 +48,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("text")
   @NotNull
   public String getText() {
@@ -66,12 +62,50 @@ public class GesuchNotizUpdateDto  implements Serializable {
 
   /**
    **/
+  public GesuchNotizUpdateDto userMutiert(String userMutiert) {
+    this.userMutiert = userMutiert;
+    return this;
+  }
+
+
+  @JsonProperty("userMutiert")
+  @NotNull
+  public String getUserMutiert() {
+    return userMutiert;
+  }
+
+  @JsonProperty("userMutiert")
+  public void setUserMutiert(String userMutiert) {
+    this.userMutiert = userMutiert;
+  }
+
+  /**
+   **/
+  public GesuchNotizUpdateDto timestampMutiert(LocalDate timestampMutiert) {
+    this.timestampMutiert = timestampMutiert;
+    return this;
+  }
+
+
+  @JsonProperty("timestampMutiert")
+  @NotNull
+  public LocalDate getTimestampMutiert() {
+    return timestampMutiert;
+  }
+
+  @JsonProperty("timestampMutiert")
+  public void setTimestampMutiert(LocalDate timestampMutiert) {
+    this.timestampMutiert = timestampMutiert;
+  }
+
+  /**
+   **/
   public GesuchNotizUpdateDto id(UUID id) {
     this.id = id;
     return this;
   }
 
-  
+
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -80,42 +114,6 @@ public class GesuchNotizUpdateDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   **/
-  public GesuchNotizUpdateDto user(String user) {
-    this.user = user;
-    return this;
-  }
-
-  
-  @JsonProperty("user")
-  public String getUser() {
-    return user;
-  }
-
-  @JsonProperty("user")
-  public void setUser(String user) {
-    this.user = user;
-  }
-
-  /**
-   **/
-  public GesuchNotizUpdateDto datum(String datum) {
-    this.datum = datum;
-    return this;
-  }
-
-  
-  @JsonProperty("datum")
-  public String getDatum() {
-    return datum;
-  }
-
-  @JsonProperty("datum")
-  public void setDatum(String datum) {
-    this.datum = datum;
   }
 
 
@@ -130,26 +128,26 @@ public class GesuchNotizUpdateDto  implements Serializable {
     GesuchNotizUpdateDto gesuchNotizUpdate = (GesuchNotizUpdateDto) o;
     return Objects.equals(this.betreff, gesuchNotizUpdate.betreff) &&
         Objects.equals(this.text, gesuchNotizUpdate.text) &&
-        Objects.equals(this.id, gesuchNotizUpdate.id) &&
-        Objects.equals(this.user, gesuchNotizUpdate.user) &&
-        Objects.equals(this.datum, gesuchNotizUpdate.datum);
+        Objects.equals(this.userMutiert, gesuchNotizUpdate.userMutiert) &&
+        Objects.equals(this.timestampMutiert, gesuchNotizUpdate.timestampMutiert) &&
+        Objects.equals(this.id, gesuchNotizUpdate.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(betreff, text, id, user, datum);
+    return Objects.hash(betreff, text, userMutiert, timestampMutiert, id);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizUpdateDto {\n");
-    
+
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
+    sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    user: ").append(toIndentedString(user)).append("\n");
-    sb.append("    datum: ").append(toIndentedString(datum)).append("\n");
     sb.append("}");
     return sb.toString();
   }

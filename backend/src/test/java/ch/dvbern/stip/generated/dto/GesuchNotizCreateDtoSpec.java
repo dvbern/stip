@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -30,7 +31,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchNotizCreateDtoSpec.JSON_PROPERTY_GESUCH_ID,
   GesuchNotizCreateDtoSpec.JSON_PROPERTY_BETREFF,
-  GesuchNotizCreateDtoSpec.JSON_PROPERTY_TEXT
+  GesuchNotizCreateDtoSpec.JSON_PROPERTY_TEXT,
+  GesuchNotizCreateDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
+  GesuchNotizCreateDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
 })
 @JsonTypeName("GesuchNotizCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,6 +46,12 @@ public class GesuchNotizCreateDtoSpec {
 
   public static final String JSON_PROPERTY_TEXT = "text";
   private String text;
+
+  public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
+  private String userErstellt;
+
+  public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  private LocalDate timestampErstellt;
 
   public GesuchNotizCreateDtoSpec() {
   }
@@ -124,6 +133,58 @@ public class GesuchNotizCreateDtoSpec {
     this.text = text;
   }
 
+
+  public GesuchNotizCreateDtoSpec userErstellt(String userErstellt) {
+    
+    this.userErstellt = userErstellt;
+    return this;
+  }
+
+   /**
+   * Get userErstellt
+   * @return userErstellt
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getUserErstellt() {
+    return userErstellt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUserErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
+  }
+
+
+  public GesuchNotizCreateDtoSpec timestampErstellt(LocalDate timestampErstellt) {
+    
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+   /**
+   * Get timestampErstellt
+   * @return timestampErstellt
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTimestampErstellt(LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -135,12 +196,14 @@ public class GesuchNotizCreateDtoSpec {
     GesuchNotizCreateDtoSpec gesuchNotizCreate = (GesuchNotizCreateDtoSpec) o;
     return Objects.equals(this.gesuchId, gesuchNotizCreate.gesuchId) &&
         Objects.equals(this.betreff, gesuchNotizCreate.betreff) &&
-        Objects.equals(this.text, gesuchNotizCreate.text);
+        Objects.equals(this.text, gesuchNotizCreate.text) &&
+        Objects.equals(this.userErstellt, gesuchNotizCreate.userErstellt) &&
+        Objects.equals(this.timestampErstellt, gesuchNotizCreate.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, betreff, text);
+    return Objects.hash(gesuchId, betreff, text, userErstellt, timestampErstellt);
   }
 
   @Override
@@ -150,6 +213,8 @@ public class GesuchNotizCreateDtoSpec {
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -31,8 +32,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchNotizUpdateDtoSpec.JSON_PROPERTY_ID,
   GesuchNotizUpdateDtoSpec.JSON_PROPERTY_BETREFF,
   GesuchNotizUpdateDtoSpec.JSON_PROPERTY_TEXT,
-  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_USER,
-  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_DATUM
+  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_USER_MUTIERT,
+  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_TIMESTAMP_MUTIERT
 })
 @JsonTypeName("GesuchNotizUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -46,11 +47,11 @@ public class GesuchNotizUpdateDtoSpec {
   public static final String JSON_PROPERTY_TEXT = "text";
   private String text;
 
-  public static final String JSON_PROPERTY_USER = "user";
-  private String user;
+  public static final String JSON_PROPERTY_USER_MUTIERT = "userMutiert";
+  private String userMutiert;
 
-  public static final String JSON_PROPERTY_DATUM = "datum";
-  private String datum;
+  public static final String JSON_PROPERTY_TIMESTAMP_MUTIERT = "timestampMutiert";
+  private LocalDate timestampMutiert;
 
   public GesuchNotizUpdateDtoSpec() {
   }
@@ -133,55 +134,55 @@ public class GesuchNotizUpdateDtoSpec {
   }
 
 
-  public GesuchNotizUpdateDtoSpec user(String user) {
+  public GesuchNotizUpdateDtoSpec userMutiert(String userMutiert) {
     
-    this.user = user;
+    this.userMutiert = userMutiert;
     return this;
   }
 
    /**
-   * Get user
-   * @return user
+   * Get userMutiert
+   * @return userMutiert
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_USER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getUser() {
-    return user;
+  public String getUserMutiert() {
+    return userMutiert;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_USER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUser(String user) {
-    this.user = user;
+  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUserMutiert(String userMutiert) {
+    this.userMutiert = userMutiert;
   }
 
 
-  public GesuchNotizUpdateDtoSpec datum(String datum) {
+  public GesuchNotizUpdateDtoSpec timestampMutiert(LocalDate timestampMutiert) {
     
-    this.datum = datum;
+    this.timestampMutiert = timestampMutiert;
     return this;
   }
 
    /**
-   * Get datum
-   * @return datum
+   * Get timestampMutiert
+   * @return timestampMutiert
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getDatum() {
-    return datum;
+  public LocalDate getTimestampMutiert() {
+    return timestampMutiert;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDatum(String datum) {
-    this.datum = datum;
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTimestampMutiert(LocalDate timestampMutiert) {
+    this.timestampMutiert = timestampMutiert;
   }
 
   @Override
@@ -196,13 +197,13 @@ public class GesuchNotizUpdateDtoSpec {
     return Objects.equals(this.id, gesuchNotizUpdate.id) &&
         Objects.equals(this.betreff, gesuchNotizUpdate.betreff) &&
         Objects.equals(this.text, gesuchNotizUpdate.text) &&
-        Objects.equals(this.user, gesuchNotizUpdate.user) &&
-        Objects.equals(this.datum, gesuchNotizUpdate.datum);
+        Objects.equals(this.userMutiert, gesuchNotizUpdate.userMutiert) &&
+        Objects.equals(this.timestampMutiert, gesuchNotizUpdate.timestampMutiert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, betreff, text, user, datum);
+    return Objects.hash(id, betreff, text, userMutiert, timestampMutiert);
   }
 
   @Override
@@ -212,8 +213,8 @@ public class GesuchNotizUpdateDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
-    sb.append("    user: ").append(toIndentedString(user)).append("\n");
-    sb.append("    datum: ").append(toIndentedString(datum)).append("\n");
+    sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
+    sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("}");
     return sb.toString();
   }
