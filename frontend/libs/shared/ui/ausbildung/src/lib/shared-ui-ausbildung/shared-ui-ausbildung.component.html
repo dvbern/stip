@@ -1,0 +1,250 @@
+<form [formGroup]="form" data-testid="form-education-form" novalidate class="mt-4" (ngSubmit)="handleSave()">
+  <h3 class="mt-4">
+    {{ 'shared.form.education.place.title' | translate }}
+  </h3>
+
+  <div class="row">
+    @if (!form.value['ausbildungNichtGefunden']) {
+      <!-- STAETTE -->
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+        <mat-label>
+          {{ 'shared.form.education.ausbildungsstaette.label' | translate }}
+        </mat-label>
+
+        <input
+          id="typeahead-focus"
+          type="text"
+          formControlName="ausbildungsstaette"
+          data-testid="form-education-ausbildungsstaette"
+          matInput
+          [matAutocomplete]="staetten"
+          [placeholder]="'shared.form.select.empty' | translate"
+        />
+        <mat-hint
+          *dvZuvorHint="previousAusbildungsstaetteSig() | translatedProp: 'name' : translate.currentLang"
+        ></mat-hint>
+        @if (form.controls.ausbildungsstaette.value) {
+          <button
+            type="button"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="form.controls.ausbildungsstaette.reset()"
+            data-testid="button-form-education-ausbildungsstaette-clear"
+          >
+            <span class="material-symbols-rounded align-middle">clear</span>
+          </button>
+        }
+        <mat-autocomplete #staetten="matAutocomplete">
+          @for (staette of ausbildungsstaettOptionsSig(); track $index) {
+            <mat-option [value]="staette.translatedName" [attr.data-testid]="staette.nameDe">
+              {{ staette.translatedName }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+    } @else {
+      <!-- Alternative STAETTE -->
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+        <mat-label>
+          {{ 'shared.form.education.ausbildungsstaette.label' | translate }}
+        </mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="alternativeAusbildungsstaette"
+          data-testid="form-education-alternativeAusbildungsstaette"
+        />
+        <mat-hint *dvZuvorHint="view.formChanges?.alternativeAusbildungsstaette"></mat-hint>
+      </mat-form-field>
+    }
+  </div>
+
+  <!-- GANG -->
+  <div class="row">
+    @if (!form.value['ausbildungNichtGefunden']) {
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+        <mat-label>
+          {{ 'shared.form.education.ausbildungsgang.label' | translate }}
+        </mat-label>
+
+        <!-- AUsbildungsgang Select -->
+        <mat-select
+          formControlName="ausbildungsgang"
+          data-testid="form-education-ausbildungsgang"
+          (valueChange)="handleGangChangedByUser()"
+          [placeholder]="'shared.form.select.empty' | translate"
+        >
+          @for (l of ausbildungsgangOptionsSig(); track $index) {
+            <mat-option [value]="l.id" [attr.data-testid]="l.bezeichnungDe">
+              {{ l.translatedName }}
+            </mat-option>
+          }
+        </mat-select>
+        <mat-hint
+          *dvZuvorHint="view.formChanges?.ausbildungsgang | translatedProp: 'bezeichnung' : translate.currentLang"
+        ></mat-hint>
+      </mat-form-field>
+    }
+    @if (form.value['ausbildungNichtGefunden']) {
+      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+        <mat-label>
+          {{ 'shared.form.education.ausbildungsgang.label' | translate }}
+        </mat-label>
+
+        <!-- alternativer Ausbildungsgang -->
+        @if (form.value['ausbildungNichtGefunden']) {
+          <input
+            type="text"
+            matInput
+            formControlName="alternativeAusbildungsgang"
+            data-testid="form-education-alternativeAusbildungsgang"
+          />
+          <mat-hint *dvZuvorHint="view.formChanges?.alternativeAusbildungsgang"></mat-hint>
+        }
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+    }
+    <!-- FACHRICHTUNG -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+      <mat-label>
+        {{ 'shared.form.education.fachrichtung.label' | translate }}
+      </mat-label>
+      <input type="text" matInput formControlName="fachrichtung" data-testid="form-education-fachrichtung" />
+      <mat-hint *dvZuvorHint="view.formChanges?.fachrichtung"></mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row align-items-center">
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+      <mat-label>
+        {{ 'shared.form.education.ausbildungsort.label' | translate }}
+      </mat-label>
+      <input type="text" matInput formControlName="ausbildungsort" data-testid="form-education-ausbildungsort" />
+      <mat-hint *dvZuvorHint="view.formChanges?.ausbildungsort"></mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- isAusbildungAusland -->
+    <div class="col-12 col-md-6 col-xl-4">
+      <mat-checkbox formControlName="isAusbildungAusland" data-testid="form-education-isAusbildungAusland">{{
+        'shared.form.education.isAusbildungAusland.label' | translate
+      }}</mat-checkbox>
+    </div>
+  </div>
+
+  <!-- MANUELL -->
+  <div class="row g-4">
+    <div class="col-12">
+      <mat-checkbox
+        formControlName="ausbildungNichtGefunden"
+        data-testid="form-education-ausbildungNichtGefunden"
+        (change)="handleManuellChangedByUser()"
+        >{{ 'shared.form.education.manuell.label' | translate }}</mat-checkbox
+      >
+    </div>
+  </div>
+
+  <h3 class="mt-4">
+    {{ 'shared.form.education.duration.title' | translate }}
+  </h3>
+
+  <div class="row">
+    <!-- START -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+      <mat-label>{{ 'shared.form.education.start.label' | translate }}</mat-label>
+
+      <input
+        matInput
+        data-testid="form-education-beginn-der-ausbildung"
+        formControlName="ausbildungBegin"
+        placeholder="MM.yyyy"
+        (blur)="onDateBlur(form.controls.ausbildungBegin)"
+      />
+      <mat-hint *dvZuvorHint="view.formChanges?.ausbildungBegin"></mat-hint>
+
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+        {{ 'shared.form.error.dateFormat' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
+        {{ 'shared.form.education.form.error.monthYearAfterStart' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'minDateLebenslauf'">
+        {{ 'shared.form.education.form.error.lebenslaufConflict' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'maxDate'">
+        {{ 'shared.form.error.maxDateFuture' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- ENDE -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+      <mat-label>{{ 'shared.form.education.ende.label' | translate }}</mat-label>
+
+      <input
+        matInput
+        data-testid="form-education-ende-der-ausbildung"
+        formControlName="ausbildungEnd"
+        placeholder="MM.yyyy"
+        (blur)="onDateBlur(form.controls.ausbildungEnd)"
+      />
+      <mat-hint *dvZuvorHint="view.formChanges?.ausbildungEnd"></mat-hint>
+
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+        {{ 'shared.form.error.dateFormat' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'minDate'">
+        {{ 'shared.form.education.form.error.monthYearAfter' | translate: { date: view.minEndDatumFormatted } }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
+        {{ 'shared.form.education.form.error.monthYearAfterStart' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'maxDate'">
+        {{ 'shared.form.error.maxDateFuture' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <!-- PENSUM -->
+    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+      <mat-label>
+        {{ 'shared.form.education.pensum.label' | translate }}
+      </mat-label>
+
+      <mat-select formControlName="pensum" data-testid="form-education-pensum">
+        <mat-option [value]="null" disabled selected>
+          {{ 'shared.form.select.empty' | translate }}
+        </mat-option>
+        @for (l of ausbildungspensumValues; track $index) {
+          <mat-option [value]="l" [attr.data-testid]="l">
+            {{ 'shared.form.education.pensum.' + l | translate }}
+          </mat-option>
+        }
+      </mat-select>
+      <mat-hint
+        *dvZuvorHint="view.formChanges?.pensum | translateChange: 'shared.form.education.pensum.$VALUE'"
+      ></mat-hint>
+
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <button type="submit" class="btn btn-primary" data-testid="button-save">
+    {{ 'shared.form.save' | translate }}
+  </button>
+</form>

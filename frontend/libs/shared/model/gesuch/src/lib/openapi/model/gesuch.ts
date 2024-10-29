@@ -16,6 +16,7 @@ import { Gesuchsperiode } from './gesuchsperiode';
 
 export interface Gesuch { 
     fall: Fall;
+    ausbildungId: string;
     gesuchsperiode: Gesuchsperiode;
     gesuchStatus: Gesuchstatus;
     gesuchNummer: string;

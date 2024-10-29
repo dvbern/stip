@@ -3,263 +3,69 @@
     <div class="gray-bg"></div>
   </div>
 
-  <div class="container mt-5 mb-5">
-    <h1 class="text-white mb-4">
-      {{ 'gesuch-app.cockpit.welcome.titel' | translate: { name: benutzerNameSig() } }}
+  <div class="container tw-my-12">
+    <h1 class="tw-text-white tw-mb-8">
+      {{ 'gesuch-app.dashboard.welcome.titel' | translate: { name: benutzerNameSig() } }}
     </h1>
 
-    <div class="row">
-      <!-- main column -->
-      <div class="col-lg-8 mb-lg-5">
-        <!-- progress -->
-        @if (cockpitViewSig().loading) {
-          <div class="my-4">
+    @for (dashboard of dashboardItems; track dashboard.fall.id) {
+      @let fall = dashboard.fall;
+      <div class="tw-grid tw-grid-cols-[2fr,1fr] tw-gap-16">
+        <!-- main column -->
+        <div class="tw-flex tw-flex-col tw-gap-8">
+          @if (cockpitViewSig().loading) {
+            <!-- progress -->
             <dv-shared-ui-loading data-testid="cockpit-loadig" class="text-white"></dv-shared-ui-loading>
-          </div>
-        }
-
-        <!-- period 1-2 -->
-        @if (fallStore.currentFallViewSig(); as fall) {
-          <div>
-            @for (periode of cockpitViewSig().gesuchsperiodes; track trackByPerioden($index, periode)) {
-              <div class="card mb-5 shadow-lg" [class.col-md-6]="!periode.gesuch" [class.col-md-12]="periode.gesuch">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-md d-flex flex-column">
-                      <!-- Periode titel -->
-                      <div class="card-title d-flex">
-                        @if (periode.semester === 'HERBST') {
-                          <dv-shared-ui-icon-chip style="background-color: #feefea; color: #fe7e55" class="me-2">
-                            <i class="material-symbols-rounded fs-5">eco</i>
-                          </dv-shared-ui-icon-chip>
-                        } @else if (periode.semester === 'FRUEHLING') {
-                          <dv-shared-ui-icon-chip style="background-color: #eff7e0; color: #81be06" class="me-2">
-                            <i class="material-symbols-rounded fs-5">deceased</i>
-                          </dv-shared-ui-icon-chip>
-                        }
-                        <div>
-                          <div class="mt-1">
-                            <h3 data-testid="cockpit-periode-title">
-                              <span>{{
-                                'gesuch-app.cockpit.gesuch.semester.' + periode.semester.toLowerCase() | translate
-                              }}</span>
-                              <span>&nbsp;</span>
-                              <span>{{ periode.yearsLabel }}</span>
-                            </h3>
-                          </div>
-                          <h6 class="card-subtitle fw-medium mt-2 mb-2 small">
-                            <span>{{ periode.gesuchsperiodeStart | date: 'dd.MM.yyyy' }}</span>
-                            <span> - </span>
-                            <span>{{ periode.gesuchsperiodeStopp | date: 'dd.MM.yyyy' }}</span>
-                          </h6>
-                        </div>
-                      </div>
-                      <!-- loading Gesuch -->
-                      @if (periode.gesuchLoading) {
-                        <div class="spinner-border text-primary my-4" role="status">
-                          <span class="visually-hidden">Loading...</span>
-                        </div>
-                      }
-                      <!-- existing Gesuch (left) -->
-                      @if (periode.gesuch) {
-                        <div class="d-flex flex-column align-items-start">
-                          <span class="mt-4 fw-normal small">{{
-                            'gesuch-app.cockpit.periode.status.titel' | translate
-                          }}</span>
-                          <span class="fw-medium">
-                            @if (
-                              periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' &&
-                                periode.gesuch.missingDocuments?.count;
-                              as count
-                            ) {
-                              @if (count > 1) {
-                                {{ 'gesuch-app.cockpit.periode.status.missingDocuments' | translate: { count } }}
-                              } @else {
-                                {{ 'gesuch-app.cockpit.periode.status.missingDocument' | translate }}
-                              }
-                            } @else {
-                              {{ 'shared.gesuch.status.contract.' + periode.gesuch.gesuchStatus | translate }}
-                            }
-                          </span>
-                          <ng-container *ngTemplateOutlet="einreichefrist"></ng-container>
-                        </div>
-                        <div class="flex-grow-1 mb-3"></div>
-                        @if (periode.gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
-                          <button
-                            type="button"
-                            class="btn btn-outline-primary mb-2 w-100"
-                            data-testid="gesuch-app.cockpit.gesuch.delete"
-                            (click)="deleteGesuch(periode.gesuch.id)"
-                          >
-                            <span>{{ 'gesuch-app.gesuch.delete' | translate }}</span>
-                          </button>
-                        }
-                        @if (
-                          periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' &&
-                            periode.gesuch.missingDocuments?.trancheId;
-                          as trancheId
-                        ) {
-                          <a
-                            class="btn btn-primary mt-3 w-100"
-                            data-testid="cockpit-gesuch-upload-missing-documents"
-                            [routerLink]="['/gesuch', 'dokumente', periode.gesuch.id, 'tranche', trancheId]"
-                          >
-                            {{ 'gesuch-app.cockpit.gesuch.uploadMissingDocuments' | translate }}
-                          </a>
-                        } @else {
-                          <a
-                            class="btn btn-primary mt-3 w-100"
-                            data-testid="cockpit-gesuch-edit"
-                            [routerLink]="['/gesuch', periode.gesuch.id]"
-                          >
-                            {{ 'gesuch-app.cockpit.gesuch.edit' | translate }}
-                          </a>
-                        }
-                      }
-                    </div>
-                    @if (periode.gesuch) {
-                      <div class="col-md d-flex">
-                        @if (periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
-                          @if (periode.gesuch.offeneAenderung; as aenderung) {
-                            <div class="divider me-4"></div>
-                            <dv-gesuch-app-ui-aenderungs-entry
-                              class="d-flex flex-column gap-4 w-100"
-                              [tranche]="aenderung"
-                              [gesuchId]="periode.gesuch.id"
-                              (deleteAenderung)="deleteAenderung($event)"
-                            ></dv-gesuch-app-ui-aenderungs-entry>
-                          } @else {
-                            <button
-                              type="button"
-                              class="btn btn-outline-primary mt-3 w-100 align-self-end"
-                              data-testid="cockpit-gesuch-aenderung-create"
-                              (click)="
-                                aenderungMelden(
-                                  periode.gesuch.id,
-                                  periode.gesuchsperiodeStart,
-                                  periode.gesuchsperiodeStopp
-                                )
-                              "
-                            >
-                              {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
-                            </button>
-                          }
-                        } @else {
-                          <!-- existing Gesuch (right pic) -->
-                          <img
-                            src="/assets/images/undraw_exams_re_4ios.svg"
-                            [alt]="'gesuch-app.cockpit.gesuch.img.alt' | translate"
-                            class="w-100"
-                            style="max-width: 300px"
-                          />
-                        }
-                      </div>
-                    }
-                  </div>
-                  <!-- no Gesuch yet -->
-                  @if (!periode.gesuch && !periode.gesuchLoading) {
-                    <div class="d-flex flex-column align-items-start">
-                      <ng-container *ngTemplateOutlet="einreichefrist"></ng-container>
-                      <div class="mb-3"></div>
-                      <button
-                        data-testid="cockpit-gesuch-new"
-                        type="button"
-                        class="btn btn-primary mt-4 w-100"
-                        (click)="handleCreate(periode, fall.id)"
-                      >
-                        {{ 'gesuch-app.cockpit.gesuch.new' | translate }}
-                      </button>
-                    </div>
-                  }
-                </div>
-              </div>
-
-              <ng-template #einreichefrist>
-                @if (periode.gesuch) {
-                  @if (!periode.einreichefristAbgelaufen) {
-                    @if (periode.reduzierterBeitrag) {
-                      <span class="mt-4 fw-medium">
-                        {{ 'gesuch-app.cockpit.periode.einreichfrist.reduziert' | translate }}
-                      </span>
-                    }
-                    @if ((periode.einreichefristDays ?? 0) > 1) {
-                      <span
-                        class="mt-4 fw-normal small"
-                        [innerHTML]="
-                          'gesuch-app.cockpit.periode.einreichfrist.remaining' +
-                            (periode.reduzierterBeitrag ? '.reduziert' : '')
-                            | translate: { days: periode.einreichefristDays }
-                        "
-                      ></span>
-                    } @else if (periode.einreichefristDays === 1) {
-                      <span
-                        class="mt-4 fw-normal small"
-                        [innerHTML]="
-                          'gesuch-app.cockpit.periode.einreichfrist.1remaining' +
-                            (periode.reduzierterBeitrag ? '.reduziert' : '') | translate
-                        "
-                      ></span>
-                    } @else {
-                      <span
-                        class="mt-4 fw-normal small"
-                        [innerHTML]="
-                          'gesuch-app.cockpit.periode.einreichfrist.0remaining' +
-                            (periode.reduzierterBeitrag ? '.reduziert' : '') | translate
-                        "
-                      ></span>
-                    }
-                    <span class="mt-4 fw-normal small">{{
-                      'gesuch-app.cockpit.periode.einreichfrist.text' | translate
-                    }}</span>
-                    @if (!periode.einreichefristAbgelaufen) {
-                      <span class="fw-medium">
-                        {{
-                          (periode.reduzierterBeitrag ? periode.einreichefristReduziert : periode.einreichefristNormal)
-                            | date: 'dd.MM.yyyy'
-                        }}
-                      </span>
-                    }
-                  } @else {
-                    <span class="mt-4 fw-medium">
-                      {{ 'gesuch-app.cockpit.periode.einreichfrist.abgelaufen.warning' | translate }}
-                    </span>
-                    <span class="mt-4">{{
-                      'gesuch-app.cockpit.periode.einreichfrist.abgelaufen.text' | translate
-                    }}</span>
-                  }
-                }
-              </ng-template>
+          } @else if (dashboard.activeAusbildungen.length > 0) {
+            @for (ausbildung of dashboard.activeAusbildungen; track ausbildung.id) {
+              <dv-gesuch-app-ui-dashboard-ausbildung
+                [ausbildungSig]="ausbildung"
+              ></dv-gesuch-app-ui-dashboard-ausbildung>
             }
-          </div>
-        }
-      </div>
-
-      <!-- side column -->
-      <div class="col-lg-4 mb-lg-5">
-        <!-- NACHRICHTEN -->
-        <div class="card mb-5 shadow-lg">
-          <div class="card-body">
-            <dv-shared-ui-notifications
-              [notifications]="notificationStore.notificationListViewSig()"
-            ></dv-shared-ui-notifications>
-          </div>
+          } @else {
+            <button
+              type="button"
+              (click)="createAusbildung(fall.id)"
+              class="btn btn-danger d-flex align-items-center tw-w-max"
+            >
+              <dv-shared-ui-icon-chip>
+                <i class="material-symbols-rounded title-icon">add</i>
+              </dv-shared-ui-icon-chip>
+              {{ 'gesuch-app.dashboard.ausbildung.create' | translate }}
+            </button>
+          }
+          @for (ausbildung of dashboard.inactiveAusbildungen; track ausbildung.id) {
+            <dv-gesuch-app-ui-dashboard-compact-ausbildung
+              [ausbildungSig]="ausbildung"
+            ></dv-gesuch-app-ui-dashboard-compact-ausbildung>
+          }
         </div>
 
-        <!-- INFOS -->
-        <div class="card mb-5 shadow-lg">
-          <div class="card-body">
-            <h3 class="card-title mb-4">Allgemeine Informationen</h3>
-            <p class="card-text">
-              Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis
-              Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der
-              Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein Stipendium oder Darlehen zu erfüllen
-              sind und weitere nützliche Grundlagen.
-            </p>
-            <a class="btn btn-outline-primary mt-3 w-100"> Stipendien und Darlehen </a>
+        <!-- side column -->
+        <div class="mb-lg-5">
+          <!-- NACHRICHTEN -->
+          <div class="card mb-5 shadow-lg">
+            <div class="card-body">
+              <dv-shared-ui-notifications [notifications]="dashboard.notifications"></dv-shared-ui-notifications>
+            </div>
+          </div>
+
+          <!-- INFOS -->
+          <div class="card mb-5 shadow-lg">
+            <div class="card-body">
+              <h3 class="card-title mb-4">Allgemeine Informationen</h3>
+              <p class="card-text">
+                Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis
+                Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der
+                Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein Stipendium oder Darlehen zu erfüllen
+                sind und weitere nützliche Grundlagen.
+              </p>
+              <a class="btn btn-outline-primary mt-3 w-100"> Stipendien und Darlehen </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    }
   </div>
 
   <!-- MOBILE NAV -->

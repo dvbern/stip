@@ -14,12 +14,9 @@ import { Gesuchstatus } from './gesuchstatus';
 import { Fall } from './fall';
 import { Gesuchsperiode } from './gesuchsperiode';
 
-/**
- * 1 or 2 Aenderungstranche in relation to another Tranche
- */
 export interface GesuchWithChanges { 
-    changes?: Array<GesuchTranche>;
     fall: Fall;
+    ausbildungId: string;
     gesuchsperiode: Gesuchsperiode;
     gesuchStatus: Gesuchstatus;
     gesuchNummer: string;
@@ -30,6 +27,7 @@ export interface GesuchWithChanges {
      */
     bearbeiter?: string;
     gesuchTrancheToWorkWith: GesuchTranche;
+    changes?: Array<GesuchTranche>;
 }
 
 

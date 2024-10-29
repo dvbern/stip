@@ -119,6 +119,7 @@ async function generateOpenApi(directory: string, apis: string[]) {
     ' -g typescript-angular' +
     ' --template-dir scripts/conf/openapi-templates' +
     ` --global-property models,apis=${apisString},supportingFiles` +
+    ' --openapi-normalizer REFACTOR_ALLOF_WITH_PROPERTIES_ONLY=true' +
     ` -p ngVersion=${ngVersion}` +
     ' -p basePath=/api/v1' +
     ' -p supportsES6=true' +

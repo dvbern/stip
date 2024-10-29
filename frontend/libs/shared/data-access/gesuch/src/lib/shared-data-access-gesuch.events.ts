@@ -2,9 +2,9 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { SharedModelError } from '@dv/shared/model/error';
 import {
+  FallDashboardItem,
   GesuchCreate,
   GetGesucheSBQueryType,
-  GsDashboard,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
@@ -47,7 +47,7 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     gesuchsLoadedSuccess: props<{ gesuchs: SharedModelGesuch[] }>(),
     gesuchsLoadedFailure: props<{ error: SharedModelError }>(),
     loadGsDashboard: emptyProps(),
-    gsDashboardLoadedSuccess: props<{ gsDashboard: GsDashboard[] }>(),
+    gsDashboardLoadedSuccess: props<{ gsDashboard: FallDashboardItem[] }>(),
     gsDashboardLoadedFailure: props<{ error: SharedModelError }>(),
     setGesuchToBearbeitung: emptyProps(),
     setGesuchBearbeitungAbschliessen: emptyProps(),

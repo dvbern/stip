@@ -2467,6 +2467,7 @@ components:
           $ref: '#/components/schemas/Kontoinhaber'
     Gesuch:
       required:
+        - fall
         - ausbildungId
         - gesuchsperiode
         - gesuchStatus
@@ -2476,6 +2477,8 @@ components:
         - gesuchTrancheToWorkWith
       type: object
       properties:
+        fall:
+          $ref: '#/components/schemas/Fall'
         ausbildungId:
           $ref: '#/components/schemas/UUID'
         gesuchsperiode:
@@ -2495,8 +2498,14 @@ components:
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
     FallDashboardItem:
+      required:
+        - fall
+        - ausbildungDashboardItems
+        - notifications
       type: object
       properties:
+        fall:
+          $ref: '#/components/schemas/Fall'
         ausbildungDashboardItems:
           type: array
           items:
@@ -2507,13 +2516,13 @@ components:
             $ref: '#/components/schemas/Notification'
     AusbildungDashboardItem:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/Ausbildung'
       properties:
         gesuchs:
           type: array
           items:
             $ref: '#/components/schemas/GesuchDashboardItem'
-      allOf:
-        - $ref: '#/components/schemas/AusbildungBase'
     GesuchDashboardItem:
       required:
         - id
@@ -3076,7 +3085,6 @@ components:
         - $ref: '#/components/schemas/EinnahmenKostenUpdate'
     AusbildungBase:
       required:
-        - fallId
         - fachrichtung
         - ausbildungBegin
         - ausbildungEnd
@@ -3084,8 +3092,6 @@ components:
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/UUID'
-        fallId:
           $ref: '#/components/schemas/UUID'
         fachrichtung:
           type: string
@@ -3111,14 +3117,14 @@ components:
         isAusbildungAusland:
           type: boolean
     Ausbildung:
+      required:
+        - fallId
       type: object
       properties:
         ausbildungsgang:
           $ref: '#/components/schemas/Ausbildungsgang'
-        # gesuche:
-        #   type: array
-        #   items:
-        #     $ref: '#/components/schemas/Gesuch'
+        fallId:
+          $ref: '#/components/schemas/UUID'
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     AusbildungUpdate:

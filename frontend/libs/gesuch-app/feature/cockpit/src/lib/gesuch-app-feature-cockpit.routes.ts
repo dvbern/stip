@@ -23,7 +23,7 @@ export const gesuchAppFeatureCockpitRoutes: Route[] = [
       {
         path: '',
         component: GesuchAppFeatureCockpitComponent,
-        title: 'gesuch-app.cockpit.title',
+        title: 'gesuch-app.dashboard.title',
       },
       // add more routes here (siblings)
       // it is also possible to add nested routes as children
