@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
@@ -106,6 +107,7 @@ public class GesuchService {
     private final ConfigService configService;
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
+    private final AusbildungRepository ausbildungRepository;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithOldestTranche(UUID id) {
@@ -271,6 +273,11 @@ public class GesuchService {
     @Transactional
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
+        gesuch.setAusbildung(ausbildungRepository.requireById(gesuch.getAusbildung().getId()));
+        gesuch.setGesuchsperiode(gesuchsperiodeService.getGesuchsperiodeForAusbildung(
+                gesuch.getAusbildung()
+            )
+        );
         createInitialGesuchTranche(gesuch);
         gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
         gesuchRepository.persistAndFlush(gesuch);
@@ -289,6 +296,8 @@ public class GesuchService {
             .setGesuch(gesuch)
             .setGesuchFormular(new GesuchFormular())
             .setTyp(GesuchTrancheTyp.TRANCHE);
+
+        tranche.getGesuchFormular().setTranche(tranche);
 
         gesuch.getGesuchTranchen().add(tranche);
     }

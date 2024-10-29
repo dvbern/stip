@@ -49,7 +49,6 @@ import org.hibernate.envers.NotAudited;
 @Table(
     name = "gesuch",
     indexes = {
-        @Index(name = "IX_gesuch_fall_id", columnList = "fall_id"),
         @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
         @Index(name = "IX_gesuch_mandant", columnList = "mandant")
     }

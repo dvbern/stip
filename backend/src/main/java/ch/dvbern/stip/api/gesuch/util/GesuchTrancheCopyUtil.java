@@ -2,7 +2,6 @@ package ch.dvbern.stip.api.gesuch.util;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
-import ch.dvbern.stip.api.ausbildung.util.AusbildungCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -150,8 +149,8 @@ public class GesuchTrancheCopyUtil {
         final var piaAdresseCopy = AdresseCopyUtil.createCopy(other.getPersonInAusbildung().getAdresse());
         copy.getPersonInAusbildung().setAdresse(piaAdresseCopy);
 
-        // Ausbildung
-        copy.setAusbildung(AusbildungCopyUtil.createCopyIncludingStammdatenReferences(other.getAusbildung()));
+//        // Ausbildung
+//        copy.setAusbildung(AusbildungCopyUtil.createCopyIncludingStammdatenReferences(other.getAusbildung()));
 
         // Familiensituation
         copy.setFamiliensituation(FamiliensituationCopyUtil.createCopy(other.getFamiliensituation()));

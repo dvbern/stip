@@ -143,6 +143,7 @@ class GesuchUpdateDefaultValuesTest {
     private GesuchTranche prepareGesuchTrancheWithIds(GesuchTrancheUpdateDto trancheUpdate) {
         GesuchTranche tranche = initGesuchTranche();
         GesuchFormular gesuchFormular = new GesuchFormular();
+        gesuchFormular.setTranche(tranche);
 
         trancheUpdate.getGesuchFormular().getElterns().forEach(elternUpdateDto -> {
             elternUpdateDto.setId(UUID.randomUUID());

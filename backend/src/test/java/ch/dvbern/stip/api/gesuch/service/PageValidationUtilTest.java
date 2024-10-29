@@ -2,7 +2,6 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.HashSet;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -32,7 +31,6 @@ class PageValidationUtilTest {
         assertThat(groups, is(empty()));
 
         gesuchFormular.setPersonInAusbildung(new PersonInAusbildung());
-        gesuchFormular.setAusbildung(new Ausbildung());
         gesuchFormular.setFamiliensituation(new Familiensituation());
         gesuchFormular.setPartner(new Partner());
         gesuchFormular.setAuszahlung(new Auszahlung());
@@ -43,6 +41,6 @@ class PageValidationUtilTest {
         gesuchFormular.setKinds(new HashSet<>() {{ add(new Kind()); }});
 
         groups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
-        assertThat(groups.size(), is(10));
+        assertThat(groups.size(), is(9));
     }
 }

@@ -1,7 +1,9 @@
 package ch.dvbern.stip.api.gesuch.util;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
@@ -15,16 +17,15 @@ import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import lombok.experimental.UtilityClass;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
 @UtilityClass
 public class GesuchTestUtil {
     public Gesuch setupValidGesuch(){
         Gesuch gesuch = GesuchGenerator.initGesuch();
         gesuch.setId(UUID.randomUUID());
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-        gesuch.getNewestGesuchTranche().get().setGesuchFormular(new GesuchFormular());
+        GesuchFormular gesuchFormular = new GesuchFormular();
+        gesuchFormular.setTranche(gesuch.getNewestGesuchTranche().get());
+        gesuch.getNewestGesuchTranche().get().setGesuchFormular(gesuchFormular);
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setId(UUID.randomUUID());
         gesuch.setGesuchNummer(UUID.randomUUID().toString());
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setPersonInAusbildung(setupValidPersonInAusbildung());

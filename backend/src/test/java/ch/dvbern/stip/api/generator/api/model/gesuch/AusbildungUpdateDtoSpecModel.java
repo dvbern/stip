@@ -6,7 +6,6 @@ import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsPensumDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 
 import static ch.dvbern.stip.api.util.TestUtil.DATE_TIME_FORMATTER;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
@@ -26,10 +25,10 @@ public final class AusbildungUpdateDtoSpecModel {
         });
     }
 
-    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAusbildung() {
-        return TestUtil.createUpdateDtoSpec(
-            GesuchFormularUpdateDtoSpec::new,
-            (model) -> model.setAusbildung(ausbildungUpdateDtoSpec())
-        );
-    }
+//    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecAusbildung() {
+//        return TestUtil.createUpdateDtoSpec(
+//            GesuchFormularUpdateDtoSpec::new,
+//            (model) -> model.setAusbildung(ausbildungUpdateDtoSpec())
+//        );
+//    }
 }

@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
@@ -35,9 +36,11 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
@@ -122,11 +125,32 @@ public class TestUtil {
         return fall;
     }
 
-    public static GesuchDtoSpec createGesuchAndFall(final FallApiSpec fallApiSpec, final GesuchApiSpec gesuchApiSpec) {
+    public static AusbildungDtoSpec createAusbildung(final AusbildungApiSpec ausbildungApiSpec, final UUID fallId) {
+        var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
+        ausbildungUpdateDtoSpec.setFallId(fallId);
+
+        return ausbildungApiSpec.createAusbildung()
+            .body(ausbildungUpdateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(AusbildungDtoSpec.class);
+    }
+
+    public static GesuchDtoSpec createGesuchAusbildungFall(
+        final FallApiSpec fallApiSpec,
+        final AusbildungApiSpec ausbildungApiSpec,
+        final GesuchApiSpec gesuchApiSpec
+    ) {
         final var fall = getOrCreateFall(fallApiSpec);
+        final var ausbildung = createAusbildung(ausbildungApiSpec, fall.getId());
         final var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setFallId(fall.getId());
-        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
+        gesuchDTO.setAusbildungId(ausbildung.getId());
+//        gesuchDTO.setFallId(fall.getId());
+//        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
         final var gesuchResponse = gesuchApiSpec.createGesuch()
             .body(gesuchDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -172,13 +196,6 @@ public class TestUtil {
         steuerdaten.setVermoegen(0);
         steuerdaten.setSteuerjahr(0);
         return steuerdaten;
-    }
-
-    public static GesuchCreateDtoSpec initGesuchCreateDto() {
-        var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
-        return gesuchDTO;
     }
 
     public static <T> T createUpdateDtoSpec(Supplier<T> supplier, Consumer<T> consumer) {
@@ -297,6 +314,17 @@ public class TestUtil {
 
     public static Gesuch getGesuchForBerechnung(final UUID trancheUuid) {
         final var baseGesuch = getBaseGesuchForBerechnung(trancheUuid);
+        baseGesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(10)
+                        )
+                )
+        );
+
         final var gesuchFormular = baseGesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)
@@ -358,16 +386,6 @@ public class TestUtil {
             )
         );
 
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(10)
-                        )
-                )
-        );
 
         gesuchFormular.setElterns(
             Set.of(

@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.HashSet;
+import java.util.List;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -33,6 +34,7 @@ class EinnahmenKostenValidatorTest {
         final var kindSet = new HashSet<Kind>();
         kindSet.add(kind);
         gesuchFormular.setKinds(kindSet);
+        gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(new Ausbildung())));
         return gesuchFormular;
     }
 
@@ -80,11 +82,16 @@ class EinnahmenKostenValidatorTest {
     void testAusbildungskostenStufeRequiredConstraintValidator() {
         AusbildungskostenStufeRequiredConstraintValidator ausbildungskostenStufeRequiredConstraintValidator =
             new AusbildungskostenStufeRequiredConstraintValidator();
+        Gesuch gesuch = new Gesuch();
+        gesuch.setAusbildung(new Ausbildung());
+        gesuch.getAusbildung().setAusbildungsgang(new Ausbildungsgang());
+        gesuch.getAusbildung().getAusbildungsgang().setBildungskategorie(new Bildungskategorie().setBfs(1));
+        GesuchTranche gesuchTranche = new GesuchTranche();
+        gesuchTranche.setGesuch(gesuch);
+        gesuch.setGesuchTranchen(List.of(gesuchTranche));
         GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
-        Ausbildung ausbildung = new Ausbildung();
-        ausbildung.setAusbildungsgang(new Ausbildungsgang());
-        ausbildung.getAusbildungsgang().setBildungskategorie(new Bildungskategorie().setBfs(1));
-        gesuchFormular.setAusbildung(ausbildung);
+        gesuchTranche.setGesuchFormular(gesuchFormular);
+        gesuchFormular.setTranche(gesuchTranche);
         assertThat(ausbildungskostenStufeRequiredConstraintValidator.isValid(gesuchFormular, null))
             .isFalse();
         gesuchFormular.getEinnahmenKosten().setAusbildungskostenSekundarstufeZwei(1);
@@ -151,15 +158,18 @@ class EinnahmenKostenValidatorTest {
         final var factory = Validation.buildDefaultValidatorFactory();
         final var validator = factory.getValidator();
         final String propertyName = "steuerjahr";
-        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        GesuchTranche tranche = GesuchGenerator.initGesuchTranche();
+        GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
+
+        gesuchFormular.setTranche(tranche);
         boolean isValid = false;
 
-        gesuch.setEinnahmenKosten(new EinnahmenKosten().setSteuerjahr(null));
-        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten().setSteuerjahr(null));
+        isValid = validateGesuchFormularProperty(validator, gesuchFormular, propertyName);
         assertThat(isValid).isFalse();
 
-        gesuch.getEinnahmenKosten().setSteuerjahr(0);
-        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(0);
+        isValid = validateGesuchFormularProperty(validator, gesuchFormular, propertyName);
         assertThat(isValid).isTrue();
     }
 

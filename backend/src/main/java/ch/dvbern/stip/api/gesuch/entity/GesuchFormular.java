@@ -151,7 +151,6 @@ import org.hibernate.envers.Audited;
     name = "gesuch_formular",
     indexes = {
         @Index(name = "IX_gesuch_formular_person_in_ausbildung_id", columnList = "person_in_ausbildung_id"),
-        @Index(name = "IX_gesuch_formular_ausbildung_id", columnList = "ausbildung_id"),
         @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
         @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
         @Index(name = "FK_gesuch_formular_auszahlung_id", columnList = "auszahlung_id"),
@@ -175,13 +174,13 @@ public class GesuchFormular extends AbstractMandantEntity {
 //        foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"))
 //    @HasPageValidation(AusbildungPageValidation.class)
 //    private @Valid Ausbildung ausbildung;
-    @Transient
-    private @Valid Ausbildung ausbildung = this.tranche.getGesuch().getAusbildung();
-
 //    @Transient
-//    Ausbildung getAusbildung() {
-//        return this.tranche.getGesuch().getAusbildung()
-//    }
+//    private @Valid Ausbildung ausbildung = this.tranche.getGesuch().getAusbildung();
+
+    @Transient
+    public Ausbildung getAusbildung() {
+        return tranche.getGesuch().getAusbildung();
+    }
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

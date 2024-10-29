@@ -8,7 +8,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
-import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
@@ -24,8 +23,27 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.api.*;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.generated.api.FallApiSpec;
+import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.api.NotificationApiSpec;
+import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.KindUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.NotificationDto;
+import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
+import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -59,11 +77,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Slf4j
     // TODO KSTIP-1303: Test Aenderungsantrag once proper generation is done
 class GesuchFillFormularTest {
-    public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-    public final GesuchTrancheApiSpec gesuchTrancheApiSpec = GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
-    public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-    public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
-    public final NotificationApiSpec notificationApiSpec = NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
+    private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
+    private final GesuchTrancheApiSpec gesuchTrancheApiSpec = GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
+    private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
+    private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    private final NotificationApiSpec notificationApiSpec = NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
     private UUID fallId;
     private UUID gesuchId;
     private UUID gesuchTrancheId;
@@ -71,20 +90,26 @@ class GesuchFillFormularTest {
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
     private NotificationDtoSpec notification;
     private NotificationDto notificationDto;
+
     @Test
     @TestAsGesuchsteller
     @Order(1)
-    void createFall() {
+    void createFallAndAusbildung() {
+
         fallId = TestUtil.getOrCreateFall(fallApiSpec).getId();
+
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(2)
     void testCreateEndpoint() {
+        final var ausbildung = TestUtil.createAusbildung(ausbildungApiSpec, fallId);
+
         var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setFallId(fallId);
-        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
+        gesuchDTO.setAusbildungId(ausbildung.getId());
+//        gesuchDTO.setFallId(fallId);
+//        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
         var response = gesuchApiSpec.createGesuch()
             .body(gesuchDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -126,7 +151,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(4)
     void updateWithNotExistingGesuchTranche() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung();
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuchId)
@@ -165,15 +190,15 @@ class GesuchFillFormularTest {
             );
     }
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(6)
-    void addAusbildung() {
-        final var ausbildung = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
-        currentFormular.setAusbildung(ausbildung);
-        // Don't validate for now, as the LebenslaufItem validator is broken
-        patchGesuch();
-    }
+//    @Test
+//    @TestAsGesuchsteller
+//    @Order(6)
+//    void addAusbildung() {
+//        final var ausbildung = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
+//        currentFormular.setAusbildung(ausbildung);
+//        // Don't validate for now, as the LebenslaufItem validator is broken
+//        patchGesuch();
+//    }
 
     @Test
     @TestAsGesuchsteller

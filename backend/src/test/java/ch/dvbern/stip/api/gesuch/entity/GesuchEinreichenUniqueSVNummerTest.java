@@ -6,11 +6,14 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -38,6 +41,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
     public static final String VALID_IBAN = "CH5604835012345678009";
     private static final String UNIQUE_GUELTIGE_AHV_NUMMER = "756.2222.2222.24";
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    public final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
 
     UUID gesuchTrancheId;
@@ -84,8 +88,12 @@ public class GesuchEinreichenUniqueSVNummerTest {
     }
 
     private UUID createFullGesuch() {
+        final var ausbildung = TestUtil.createAusbildung(ausbildungApiSpec, UUID.fromString(TestConstants.FALL_TEST_ID));
+        var gesuchDTO = new GesuchCreateDtoSpec();
+        gesuchDTO.setAusbildungId(ausbildung.getId());
+
         var response = gesuchApiSpec.createGesuch()
-            .body(TestUtil.initGesuchCreateDto())
+            .body(gesuchDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET).then();
 
         response.assertThat()

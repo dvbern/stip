@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -14,6 +15,7 @@ import org.mapstruct.Named;
 @Mapper(config = MappingConfig.class,
     uses =
         {
+            AusbildungMapper.class,
             FallMapper.class,
             GesuchsperiodeMapper.class
         }

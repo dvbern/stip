@@ -2,24 +2,34 @@ package ch.dvbern.stip.api.ausbildung.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.service.AusbildungService;
+import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.generated.api.AusbildungResource;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
+
 @RequestScoped
 @RequiredArgsConstructor
 public class AusbildungResourceImpl implements AusbildungResource {
-    //    private final AusbildungService ausbildungService;
+    private final AusbildungService ausbildungService;
 
     @Override
+    @RolesAllowed(GESUCH_UPDATE)
+    @AllowAll
     public Response createAusbildung(AusbildungUpdateDto ausbildungUpdateDto) {
-        return null;
+        return Response.ok(ausbildungService.createAusbildung(ausbildungUpdateDto)).build();
     }
 
     @Override
+    @RolesAllowed(GESUCH_READ)
+    @AllowAll
     public Response getAusbildung(UUID ausbildungId) {
-        return null;
+        return Response.ok(ausbildungService.getAusbildungById(ausbildungId)).build();
     }
 }

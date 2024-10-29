@@ -11,6 +11,7 @@ import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -44,6 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 class GesuchTrancheAenderungTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
@@ -56,7 +58,7 @@ class GesuchTrancheAenderungTest {
     @TestAsGesuchsteller
     @Order(1)
     void gesuchErstellen() {
-        gesuch = TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
+        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
     }
 
     @Test

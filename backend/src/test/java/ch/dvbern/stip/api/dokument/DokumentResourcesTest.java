@@ -12,11 +12,10 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -51,6 +50,7 @@ import static org.hamcrest.Matchers.is;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DokumentResourcesTest {
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
+    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private UUID gesuchId;
     private UUID gesuchTrancheId;
@@ -60,9 +60,12 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(1)
     void test_prepare_gesuch_for_dokument() {
+        final var ausbildung = TestUtil.createAusbildung(ausbildungApiSpec, UUID.fromString(TestConstants.FALL_TEST_ID));
+
         var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
+        gesuchDTO.setAusbildungId(ausbildung.getId());
+//        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
+//        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
 
         var response = gesuchApiSpec.createGesuch()
             .body(gesuchDTO)

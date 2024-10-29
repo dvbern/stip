@@ -186,7 +186,7 @@ class LebenslaufLuckenlosConstraintValidatorTest {
         gesuchFormular.setPersonInAusbildung(personInAusbildung);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.of(2024, 01, 01));
-        gesuchFormular.setAusbildung(ausbildung);
+        gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(ausbildung)));
         return gesuchFormular;
     }
 }

@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DateRange;
-
 public final class TestConstants {
+
 
     public static final String FREIGABESTELLE = "9477487f-3ac4-4d02-b57c-e0cefb292a88";
     public static final String SOZIALDIENST_ADMIN_ID = "9477487f-3ac4-4d02-b57c-e0cefb292a77";

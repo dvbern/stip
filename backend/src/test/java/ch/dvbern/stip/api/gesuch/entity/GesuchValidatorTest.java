@@ -9,7 +9,7 @@ import java.util.Set;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -42,7 +42,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE;
@@ -99,21 +98,26 @@ class GesuchValidatorTest {
         Gesuch gesuch = prepareDummyGesuch();
         GesuchTranche gesuchTranche = gesuch.getGesuchTranchen().get(0);
         gesuchTranche.getGesuchFormular().setPersonInAusbildung(personInAusbildung);
+        gesuchTranche.getGesuchFormular().setTranche(gesuchTranche);
         assertAllMessagesPresent(constraintMessages, gesuch);
 
         // Die Anteil muessen wenn gegeben einen 100% Pensum im Total entsprechend, groessere oder kleiner Angaben
         // sind rejektiert
         gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilMutter(new BigDecimal("40.00"));
         gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal("50.00"));
-        Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(true));
+
+        assertOneMessage(
+            VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE,
+            gesuch,
+            true
+        );
+
         gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal("60.00"));
-        violations = validator.validate(gesuch);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(false));
+        assertOneMessage(
+            VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE,
+            gesuch,
+            false
+        );
     }
 
     @Test
@@ -139,45 +143,41 @@ class GesuchValidatorTest {
 
     @Test
     void testNullFieldValidationErrorForAusbildung() {
-        Ausbildung ausbildung = new Ausbildung();
-        ausbildung.setAusbildungBegin(LocalDate.now().with(firstDayOfMonth()));
-        ausbildung.setAusbildungEnd(LocalDate.now().plusMonths(1).with(lastDayOfMonth()));
         Gesuch gesuch = prepareDummyGesuch();
+
+        gesuch.getAusbildung().setAusbildungBegin(LocalDate.now().with(firstDayOfMonth()));
+        gesuch.getAusbildung().setAusbildungEnd(LocalDate.now().plusMonths(1).with(lastDayOfMonth()));
+
         GesuchTranche gesuchTranche = gesuch.getGesuchTranchen().get(0);
-        gesuchTranche.getGesuchFormular().setAusbildung(ausbildung);
+        Set<ConstraintViolation<Ausbildung>> violations = validator.validate(gesuch.getAusbildung());
+
         // Die Ausbildungsgang und Staette muessen bei keine alternative Ausbildung gegeben werden
-        assertAllMessagesPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
-        assertAllMessagesNotPresent(new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
+        assertOneMessage(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE, gesuch.getAusbildung(), true);
+        assertOneMessage(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE, gesuch.getAusbildung(), false);
         // Die alternative Ausbildungsgang und Staette muessen bei alternative Ausbildung gegeben werden
         gesuchTranche.getGesuchFormular().getAusbildung().setAusbildungNichtGefunden(true);
-        assertAllMessagesPresent(new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
-        assertAllMessagesNotPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE }, gesuch);
+        assertOneMessage(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE, gesuch.getAusbildung(), false);
+        assertOneMessage(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE, gesuch.getAusbildung(), true);
     }
 
     @Test
     void testFieldValidationErrorForAusbildung() {
-        Ausbildung ausbildung = new Ausbildung();
-        ausbildung.setAlternativeAusbildungsgang("ausbildungsgang alt");
-        ausbildung.setAusbildungBegin(LocalDate.now().with(firstDayOfMonth()));
-        ausbildung.setAusbildungEnd(LocalDate.now().plusMonths(1).with(lastDayOfMonth()));
         Gesuch gesuch = prepareDummyGesuch();
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setAusbildung(ausbildung);
+        gesuch.getAusbildung().setAusbildungNichtGefunden(false);
+        gesuch.getAusbildung().setAlternativeAusbildungsgang("ausbildungsgang alt");
+        gesuch.getAusbildung().setAusbildungBegin(LocalDate.now().with(firstDayOfMonth()));
+        gesuch.getAusbildung().setAusbildungEnd(LocalDate.now().plusMonths(1).with(lastDayOfMonth()));
         // Die alternative Ausbildungsgang und Staette muessen bei keine alternative Ausbildung null sein
-        assertAllMessagesPresent(
-            new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE },
-            gesuch
-        );
-        assertAllMessagesNotPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
+        assertOneMessage(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), true);
+        assertOneMessage(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), false);
+
         // Die Ausbildungsgang und Staette muessen bei alternative Ausbildung null sein
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setAusbildungNichtGefunden(true);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang());
-        assertAllMessagesPresent(new String[] { VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE }, gesuch);
-        assertAllMessagesNotPresent(
-            new String[] { VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE },
-            gesuch
-        );
+        assertOneMessage(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), true);
+        assertOneMessage(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), false);
     }
 
     @Test
@@ -265,6 +265,7 @@ class GesuchValidatorTest {
         geschwisterSet.add(geschwister);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setGeschwisters(geschwisterSet);
+
         assertAllMessagesPresent(new String[] { VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE }, gesuch);
 
         // Test die Wohnsitzanteil Berechnung:
@@ -361,10 +362,13 @@ class GesuchValidatorTest {
         Set<Eltern> elternSet = new HashSet<>();
         elternSet.add(eltern);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setElterns(elternSet);
-        violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE)), is(false));
+
+        assertOneMessage(
+            VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE,
+            gesuch,
+            false,
+            GesuchEinreichenValidationGroup.class
+        );
     }
 
     @Test
@@ -382,16 +386,14 @@ class GesuchValidatorTest {
         personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
-        Ausbildung ausbildung = new Ausbildung();
-        ausbildung.setAusbildungBegin(LocalDate.of(2024, 01, 01));
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setAusbildung(ausbildung);
-        Set<ConstraintViolation<Gesuch>> violations = validator.validate(
+        gesuch.getAusbildung().setAusbildungBegin(LocalDate.of(2024, 01, 01));
+
+        assertOneMessage(
+            VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE,
             gesuch,
+            true,
             GesuchEinreichenValidationGroup.class
         );
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE)), is(true));
     }
 
     @Test
@@ -402,13 +404,16 @@ class GesuchValidatorTest {
         familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
         familiensituation.setMutterWiederverheiratet(false);
         Gesuch gesuch = prepareDummyGesuch();
+        gesuch.setAusbildung(null);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
-        Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE)), is(true));
+        assertOneMessage(
+            VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE,
+            gesuch,
+            true,
+            GesuchEinreichenValidationGroup.class
+        );
     }
 
     @Test
@@ -423,28 +428,35 @@ class GesuchValidatorTest {
         kindSet.add(kind);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
+        gesuch.setGesuchsperiode(null);
+        gesuch.setAusbildung(null);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
-        Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE)), is(true));
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE)), is(true));
+        assertOneMessage(
+            VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE,
+            gesuch,
+            true,
+            GesuchEinreichenValidationGroup.class
+        );
+        assertOneMessage(
+            VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE,
+            gesuch,
+            true,
+            GesuchEinreichenValidationGroup.class
+        );
     }
 
-    void testGesuchEinreichenValidationEinnahmenKostenAusbildung() {
-        Ausbildung ausbildung = new Ausbildung();
-        ausbildung.setAusbildungsgang(new Ausbildungsgang());
-        ausbildung.getAusbildungsgang().setBildungskategorie(new Bildungskategorie());
-        Gesuch gesuch = prepareDummyGesuch();
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setAusbildung(ausbildung);
-        EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
-        Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        assertThat(violations.stream()
+    private void assertOneMessage(String message, AbstractEntity entity, boolean present, Class<?> groups) {
+        var violations = validator.validate(entity, groups);
+        assertThat(message, violations.stream()
             .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE)), is(true));
+                .equals(message)), is(present));
+    }
+
+    private void assertOneMessage(String message, AbstractEntity entity, boolean present) {
+        var violations = validator.validate(entity);
+        assertThat(message, violations.stream()
+            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                .equals(message)), is(present));
     }
 
     private void assertAllMessagesPresent(String[] messages, Gesuch gesuch) {
@@ -478,10 +490,12 @@ class GesuchValidatorTest {
 
     private Gesuch prepareDummyGesuch() {
         Gesuch gesuch = new Gesuch();
-        gesuch.getGesuchTranchen()
-            .add(new GesuchTranche().setGesuchFormular(new GesuchFormular()));
-        gesuch.setFall(new Fall());
+        GesuchTranche gesuchTranche = new GesuchTranche().setGesuchFormular(new GesuchFormular());
+        gesuch.getGesuchTranchen().add(gesuchTranche);
+        gesuch.setAusbildung(new Ausbildung().setFall(new Fall()));
         gesuch.setGesuchsperiode(new Gesuchsperiode());
+        gesuchTranche.setGesuch(gesuch);
+        gesuchTranche.getGesuchFormular().setTranche(gesuchTranche);
         return gesuch;
     }
 

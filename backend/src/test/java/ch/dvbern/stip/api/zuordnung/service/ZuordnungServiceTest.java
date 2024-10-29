@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
@@ -85,6 +86,9 @@ class ZuordnungServiceTest {
             .setNachname("Alfred");
 
         fall = (Fall) new Fall().setId(fallId);
+
+        final var ausbildung = new Ausbildung().setFall(fall);
+
         final var gesuch = new Gesuch().setGesuchTranchen(
             List.of(
                 new GesuchTranche().setGesuchFormular(
@@ -93,8 +97,10 @@ class ZuordnungServiceTest {
             )
         );
 
-        gesuch.setFall(fall);
-        fall.setGesuch(Set.of(gesuch));
+        gesuch.setAusbildung(ausbildung);
+
+        fall.setAusbildungs(Set.of(ausbildung));
+        ausbildung.setGesuchs(List.of(gesuch));
 
         final var gesuchsRepo = Mockito.mock(GesuchRepository.class);
         Mockito.when(gesuchsRepo.findAllNewestWithPia()).thenReturn(Stream.of(gesuch));

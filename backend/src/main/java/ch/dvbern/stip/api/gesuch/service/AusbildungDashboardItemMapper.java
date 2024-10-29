@@ -13,11 +13,12 @@ import jakarta.inject.Inject;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(config = MappingConfig.class)
 public abstract class AusbildungDashboardItemMapper {
-    GesuchDashboardItemMapper gesuchDashboardItemMapper = Mappers.getMapper(GesuchDashboardItemMapper.class);
+    @Inject
+    GesuchDashboardItemMapper gesuchDashboardItemMapper;
+//    GesuchDashboardItemMapper gesuchDashboardItemMapper = Mappers.getMapper(GesuchDashboardItemMapper.class);
 
     @Inject
     GesuchTrancheService gesuchTrancheService;

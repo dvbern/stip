@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -57,9 +58,16 @@ class NoOverlapInAusbildungenConstraintValidatorTest {
         final var ausbildung = new Ausbildung()
             .setAusbildungBegin(LocalDate.of(2024, 1, 1))
             .setAusbildungEnd(LocalDate.of(2024, 4, 1).with(lastDayOfMonth()));
+        final var gesuch = new Gesuch();
+        final var gesuchTranche = new GesuchTranche();
+        gesuchTranche.setGesuch(gesuch);
+        gesuch.setGesuchTranchen(List.of(gesuchTranche));
+        gesuch.setAusbildung(ausbildung);
+
         final var gesuchFormular = new GesuchFormular()
-            .setAusbildung(ausbildung)
             .setPersonInAusbildung(pia);
+        gesuchTranche.setGesuchFormular(gesuchFormular);
+        gesuchFormular.setTranche(gesuchTranche);
 
         // Create LebenslaufItem with overlap
         var lebenslaufItems = new HashSet<LebenslaufItem>();

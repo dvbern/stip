@@ -39,6 +39,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Table(
     name = "ausbildung",
     indexes = {
+        @Index(name = "IX_ausbildung_fall_id", columnList = "fall_id"),
         @Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),
         @Index(name = "IX_ausbildung_mandant", columnList = "mandant")
     }

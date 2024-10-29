@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -291,7 +290,6 @@ class GesuchTrancheServiceTruncateTest {
     private GesuchFormular getDummyFormular() {
         return new GesuchFormular()
             .setPersonInAusbildung(new PersonInAusbildung().setAdresse(new Adresse()))
-            .setAusbildung(new Ausbildung())
             .setFamiliensituation(new Familiensituation())
             .setPartner(null)
             .setAuszahlung(new Auszahlung().setKontoinhaber(Kontoinhaber.GESUCHSTELLER))

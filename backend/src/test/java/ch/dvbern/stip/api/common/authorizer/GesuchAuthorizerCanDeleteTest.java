@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.common.authorizer;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -60,8 +61,10 @@ class GesuchAuthorizerCanDeleteTest {
         final var gesuchStatusService = Mockito.mock(GesuchStatusService.class);
 
         gesuch = new Gesuch()
-            .setFall(new Fall()
-                .setGesuchsteller(currentBenutzer)
+            .setAusbildung(new Ausbildung()
+                .setFall(new Fall()
+                    .setGesuchsteller(currentBenutzer)
+                )
             );
         final var fall = new Fall().setGesuchsteller(currentBenutzer);
         authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository, gesuchTrancheRepository, gesuchStatusService, fallRepository);

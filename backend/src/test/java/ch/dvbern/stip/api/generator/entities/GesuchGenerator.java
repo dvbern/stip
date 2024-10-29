@@ -1,6 +1,9 @@
 package ch.dvbern.stip.api.generator.entities;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -88,6 +91,17 @@ public final class GesuchGenerator {
 
         var ausbildungDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
 
+        DateTimeFormatter fmtStart = new DateTimeFormatterBuilder()
+            .appendPattern("MM.yyyy")
+            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+            .toFormatter();
+
+        DateTimeFormatter fmtEnd = new DateTimeFormatterBuilder()
+            .appendPattern("MM.yyyy")
+            .parseDefaulting(ChronoField.DAY_OF_MONTH, 31)
+            .toFormatter();
+
+
         var ausbildung = new Ausbildung()
             .setFall(new Fall())
             .setAusbildungsgang((Ausbildungsgang) new Ausbildungsgang().setId(ausbildungDtoSpec.getAusbildungsgangId()))
@@ -95,8 +109,8 @@ public final class GesuchGenerator {
             .setAlternativeAusbildungsstaette(ausbildungDtoSpec.getAlternativeAusbildungsstaette())
             .setFachrichtung(ausbildungDtoSpec.getFachrichtung())
             .setAusbildungNichtGefunden(ausbildungDtoSpec.getAusbildungNichtGefunden())
-            .setAusbildungBegin(LocalDate.parse(ausbildungDtoSpec.getAusbildungBegin()))
-            .setAusbildungEnd(LocalDate.parse(ausbildungDtoSpec.getAusbildungEnd()))
+            .setAusbildungBegin(LocalDate.parse(ausbildungDtoSpec.getAusbildungBegin(), fmtStart))
+            .setAusbildungEnd(LocalDate.parse(ausbildungDtoSpec.getAusbildungEnd(), fmtEnd))
             .setPensum(AusbildungsPensum.VOLLZEIT)
             .setAusbildungsort(ausbildungDtoSpec.getAusbildungsort())
             .setIsAusbildungAusland(ausbildungDtoSpec.getIsAusbildungAusland());

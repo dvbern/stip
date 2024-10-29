@@ -9,6 +9,7 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -36,10 +37,11 @@ import static org.junit.Assert.assertNull;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GesuchResourceEinnahmeKostenTest {
-    public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-    public final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
-    public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
+class GesuchResourceEinnahmenKostenTest {
+    private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
+    private final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
+    private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
@@ -48,9 +50,12 @@ class GesuchResourceEinnahmeKostenTest {
     private UUID partnerAdresseId;
 
     void createGesuch() {
+        final var ausbildung = TestUtil.createAusbildung(ausbildungApiSpec, UUID.fromString(TestConstants.FALL_TEST_ID));
+
         var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
+        gesuchDTO.setAusbildungId(ausbildung.getId());
+//        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
+//        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
         var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
             .then();
 

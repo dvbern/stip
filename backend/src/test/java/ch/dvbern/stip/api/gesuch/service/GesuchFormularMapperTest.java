@@ -9,11 +9,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
-import ch.dvbern.stip.api.common.service.EntityReferenceMapperImpl;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -301,6 +300,7 @@ class GesuchFormularMapperTest {
         GesuchFormular gesuchFormular =
             new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(0))
                 .setPartner(new Partner().setJahreseinkommen(0));
+        gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(new Ausbildung())));
         GesuchFormularMapper mapper = createMapper();
         GesuchFormularDto gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
@@ -308,22 +308,26 @@ class GesuchFormularMapperTest {
         // total einkommen >= 20 000 : steuern = 10%
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(20000))
             .setPartner(new Partner().setJahreseinkommen(0));
+        gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(new Ausbildung())));
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is((int) ((20000) * 0.1)));
 
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(20000))
             .setPartner(new Partner().setJahreseinkommen(1));
+        gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(new Ausbildung())));
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is((int) ((20000 + 1) * 0.1)));
         // sonst: steuern = 0
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(19999))
             .setPartner(new Partner().setJahreseinkommen(0));
+        gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(new Ausbildung())));
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
 
         //handle null inputs
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(null))
             .setPartner(new Partner().setJahreseinkommen(null));
+        gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(new Ausbildung())));
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
     }
@@ -664,7 +668,7 @@ class GesuchFormularMapperTest {
         final var mapper = (GesuchFormularMapper) new GesuchFormularMapperImpl(
             new PersonInAusbildungMapperImpl(),
             new FamiliensituationMapperImpl(),
-            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
+//            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
             new LebenslaufItemMapperImpl(new DateMapperImpl()),
             new PartnerMapperImpl(),
             new AuszahlungMapperImpl(),

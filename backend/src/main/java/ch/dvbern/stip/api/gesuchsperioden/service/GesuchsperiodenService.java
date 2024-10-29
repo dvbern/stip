@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungService;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -15,6 +17,7 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -24,6 +27,7 @@ public class GesuchsperiodenService {
     private final GesuchsperiodeMapper gesuchsperiodeMapper;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
+    private final AusbildungService ausbildungService;
 
     @Transactional
     public GesuchsperiodeWithDatenDto createGesuchsperiode(final GesuchsperiodeCreateDto createDto) {
@@ -62,6 +66,15 @@ public class GesuchsperiodenService {
             .findAllActiveForDate(LocalDate.now())
             .map(gesuchsperiodeMapper::toDto)
             .toList();
+    }
+
+    public Gesuchsperiode getGesuchsperiodeForAusbildung(final Ausbildung ausbildung) {
+        var ausbildungsBeginLatest = ausbildung.getAusbildungBegin().withYear(LocalDate.now().getYear() + 1);
+        if (ausbildungsBeginLatest.isAfter(LocalDate.now().plusYears(1))) {
+            ausbildungsBeginLatest = ausbildung.getAusbildungBegin().withYear(LocalDate.now().getYear());
+        }
+        final var eligibleGesuchsperioden = gesuchsperiodeRepository.findAllStartBefore(ausbildungsBeginLatest);
+        return eligibleGesuchsperioden.findFirst().orElseThrow(NotFoundException::new);
     }
 
     @Transactional

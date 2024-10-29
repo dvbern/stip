@@ -273,7 +273,6 @@ public class TestcaseSeeding extends Seeder {
 
         nullId.accept(formular.getPersonInAusbildung());
         formular.getPersonInAusbildung().getAdresse().setId(null);
-        nullId.accept(formular.getAusbildung());
         nullId.accept(formular.getFamiliensituation());
         nullId.accept(formular.getPartner());
 
