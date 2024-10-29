@@ -234,6 +234,7 @@
   "sachbearbeitung-app.admin.sozialdienst.vorname.label": "Vorname",
   "sachbearbeitung-app.admin.sozialdienst.nachname.label": "Name",
   "sachbearbeitung-app.admin.sozialdienst.email.label": "E-Mail",
+  "sachbearbeitung-app.admin.sozialdienst.sozialdienstErstellt": "Sozialdienst wurde erfolgreich erstellt",
 
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",

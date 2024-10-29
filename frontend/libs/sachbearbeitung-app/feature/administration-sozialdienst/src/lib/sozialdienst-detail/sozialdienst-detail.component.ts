@@ -33,6 +33,7 @@ import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
 } from '@dv/shared/ui/remote-data-pipe';
+import { convertTempFormToRealValues } from '@dv/shared/util/form';
 import { ibanValidator } from '@dv/shared/util/validator-iban';
 
 @Component({
@@ -100,16 +101,45 @@ export class SozialdienstDetailComponent implements OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   update() {}
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  create() {}
+  create() {
+    if (this.form.invalid) return;
+
+    const values = convertTempFormToRealValues(this.form);
+
+    const adresse = SharedUiFormAddressComponent.getRealValues(
+      this.form.controls.adresse,
+    );
+
+    const sozialdienstAdmin = convertTempFormToRealValues(
+      this.form.controls.sozialdienstAdmin,
+    );
+
+    const createRequest = {
+      ...values,
+      iban: 'CH' + values.iban,
+      adresse,
+      sozialdienstAdmin: {
+        ...sozialdienstAdmin,
+      },
+    };
+
+    this.store.createSozialdienst$({
+      sozialdienstCreate: createRequest,
+      onAfterSave: (sozialdienstId) => {
+        this.router.navigate(['..', 'edit', sozialdienstId], {
+          relativeTo: this.route,
+          replaceUrl: true,
+        });
+      },
+    });
+  }
 
   trimEmail() {
     const email = this.form.controls.sozialdienstAdmin.controls.email;
     email.setValue(email.value?.trim() ?? null);
   }
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnDestroy() {
-    // bla
+    this.store.resetSozialdienst();
   }
 }

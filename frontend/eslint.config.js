@@ -81,6 +81,7 @@ module.exports = [
                 'type:util',
                 'type:util-fn',
                 'type:model',
+                'type:global',
               ],
             },
             {
@@ -92,6 +93,7 @@ module.exports = [
                 'type:util-data-access',
                 'type:util-fn',
                 'type:model',
+                'type:global',
               ],
             },
             {
@@ -115,6 +117,7 @@ module.exports = [
                 'type:util',
                 'type:util-fn',
                 'type:model',
+                'type:global',
               ],
               bannedExternalImports: [
                 '@ngrx/component-store',
