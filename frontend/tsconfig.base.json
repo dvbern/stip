@@ -56,6 +56,7 @@
       "@dv/sachbearbeitung-app/pattern/overview-layout": ["libs/sachbearbeitung-app/pattern/overview-layout/src/index.ts"],
       "@dv/sachbearbeitung-app/pattern/verfuegung-layout": ["libs/sachbearbeitung-app/pattern/verfuegung-layout/src/index.ts"],
       "@dv/sachbearbeitung-app/util-fn/sachbearbeiter-helper": ["libs/sachbearbeitung-app/util-fn/sachbearbeiter-helper/src/index.ts"],
+      "@dv/sachbearbeitung-app/util/keykloak-http": ["libs/sachbearbeitung-app/util/keykloak-http/src/index.ts"],
       "@dv/shared/data-access/ausbildungsstaette": ["libs/shared/data-access/ausbildungsstaette/src/index.ts"],
       "@dv/shared/data-access/benutzer": ["libs/shared/data-access/benutzer/src/index.ts"],
       "@dv/shared/data-access/berechnung": ["libs/shared/data-access/berechnung/src/index.ts"],

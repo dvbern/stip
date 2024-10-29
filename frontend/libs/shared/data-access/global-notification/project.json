@@ -4,7 +4,7 @@
   "sourceRoot": "libs/shared/data-access/global-notification/src",
   "prefix": "dv",
   "projectType": "library",
-  "tags": ["type:data-access", "scope:shared"],
+  "tags": ["type:global", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",

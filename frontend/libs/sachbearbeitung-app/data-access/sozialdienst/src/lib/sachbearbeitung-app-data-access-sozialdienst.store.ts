@@ -2,10 +2,28 @@ import { Injectable, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import {
+  EMPTY,
+  catchError,
+  combineLatestWith,
+  exhaustMap,
+  filter,
+  map,
+  pipe,
+  switchMap,
+  tap,
+  throwIfEmpty,
+} from 'rxjs';
 
 import {
+  KeykloakHttpService,
+  hasLocationHeader,
+} from '@dv/sachbearbeitung-app/util/keykloak-http';
+import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { bySozialdienstAdminRole } from '@dv/shared/model/benutzer';
+import {
   Sozialdienst,
+  SozialdienstAdminCreate,
   SozialdienstCreate,
   SozialdienstService,
   SozialdienstUpdate,
@@ -14,9 +32,11 @@ import {
   CachedRemoteData,
   RemoteData,
   cachedPending,
+  failure,
   handleApiResponse,
   initial,
   pending,
+  success,
 } from '@dv/shared/util/remote-data';
 
 type SozialdienstState = {
@@ -36,6 +56,8 @@ export class SozialdienstStore extends signalStore(
   withDevtools('SozialdienstStore'),
 ) {
   private sozialdienstService = inject(SozialdienstService);
+  private keykloak = inject(KeykloakHttpService);
+  private globalNotificationStore = inject(GlobalNotificationStore);
 
   // sozialdiensteListViewSig = computed(() => {
   //   return fromCachedDataSig(this.sozialdienste);
@@ -83,54 +105,94 @@ export class SozialdienstStore extends signalStore(
     ),
   );
 
-  // saveSozialdienst$ = rxMethod<{
-  //   sozialdienstId: string;
-  //   values: unknown;
-  // }>(
-  //   pipe(
-  //     tap(() => {
-  //       patchState(this, (state) => ({
-  //         sozialdienste: cachedPending(state.sozialdienste),
-  //       }));
-  //     }),
-  //     switchMap(({ sozialdienstId, values }) =>
-  //       this.sozialdienstService
-  //         .updateSozialdienst$({
-  //           sozialdienstId,
-  //           payload: values,
-  //         })
-  //         .pipe(
-  //           handleApiResponse(
-  //             (sozialdienst) => {
-  //               patchState(this, { sozialdienst });
-  //             },
-  //             {
-  //               onSuccess: (sozialdienst) => {
-  //                 // Do something after save, like showing a notification
-  //               },
-  //             },
-  //           ),
-  //         ),
-  //     ),
-  //   ),
-  // );
-
-  createSozialdienst$ = rxMethod<{ sozialdienstCreate: SozialdienstCreate }>(
+  createSozialdienst$ = rxMethod<{
+    sozialdienstCreate: Omit<SozialdienstCreate, 'sozialdienstAdmin'> & {
+      sozialdienstAdmin: Omit<SozialdienstAdminCreate, 'keykloakId'> & {
+        email: string;
+      };
+    };
+    onAfterSave?: (sozialdienstId: string) => void;
+  }>(
     pipe(
       tap(() => {
-        patchState(this, (state) => ({
-          sozialdienste: cachedPending(state.sozialdienste),
-        }));
+        patchState(this, {
+          sozialdienst: pending(),
+        });
       }),
-      switchMap(({ sozialdienstCreate }) =>
-        this.sozialdienstService
-          .createSozialdienst$({ sozialdienstCreate })
-          .pipe(
-            handleApiResponse((sozialdienst) =>
-              patchState(this, { sozialdienst }),
+      exhaustMap(({ sozialdienstCreate, onAfterSave }) => {
+        const newUser = {
+          ...sozialdienstCreate.sozialdienstAdmin,
+        };
+
+        return this.keykloak.createUser$(newUser).pipe(
+          filter(hasLocationHeader),
+          throwIfEmpty(() => new Error('User creation failed')),
+          switchMap((response) =>
+            this.keykloak.loadUserByUrl$(response.headers.get('Location')),
+          ),
+          combineLatestWith(this.keykloak.getRoles$(bySozialdienstAdminRole)),
+          switchMap(([user, roles]) => {
+            const adminRole = roles.find(
+              (role) => role.name === 'Sozialdienst-Admin',
+            );
+
+            if (!adminRole) {
+              throw new Error('Admin Role not found');
+            }
+
+            return this.keykloak.assignRoles$(user, [
+              { id: adminRole.id, name: 'Sozialdienst-Admin' },
+            ]);
+          }),
+          switchMap((user) => {
+            const newDienst: SozialdienstCreate = {
+              ...sozialdienstCreate,
+              sozialdienstAdmin: {
+                nachname: user.lastName,
+                vorname: user.firstName,
+                keykloakId: user.id,
+              },
+            };
+
+            return this.sozialdienstService
+              .createSozialdienst$({
+                sozialdienstCreate: newDienst,
+              })
+              .pipe(
+                map((sozialdienst) => ({
+                  user,
+                  sozialdienst,
+                })),
+              );
+
+            // Todo: delete user if sozialdienst creation fails!
+          }),
+          switchMap(({ sozialdienst, user }) =>
+            this.keykloak.notifyUser$(user).pipe(
+              handleApiResponse(
+                () => {
+                  patchState(this, { sozialdienst: success(sozialdienst) });
+                },
+                {
+                  onSuccess: (wasSuccessfull) => {
+                    if (wasSuccessfull) {
+                      this.globalNotificationStore.createSuccessNotification({
+                        messageKey:
+                          'sachbearbeitung-app.admin.sozialdienst.sozialdienstErstellt',
+                      });
+                      onAfterSave?.(sozialdienst.id);
+                    }
+                  },
+                },
+              ),
             ),
           ),
-      ),
+          catchError((error) => {
+            patchState(this, { sozialdienst: failure(error) });
+            return EMPTY;
+          }),
+        );
+      }),
     ),
   );
 
@@ -171,6 +233,10 @@ export class SozialdienstStore extends signalStore(
       ),
     ),
   );
+
+  resetSozialdienst() {
+    patchState(this, { sozialdienst: initial() });
+  }
 
   // updateSozialdienstAdmin$ = rxMethod<{ sozialdienstId: string; values: unknown }>(
   //   pipe(

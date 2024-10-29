@@ -234,6 +234,7 @@
   "sachbearbeitung-app.admin.sozialdienst.vorname.label": "Prénom",
   "sachbearbeitung-app.admin.sozialdienst.nachname.label": "Nom",
   "sachbearbeitung-app.admin.sozialdienst.email.label": "E-Mail",
+  "sachbearbeitung-app.admin.sozialdienst.sozialdienstErstellt": "Le service social a été créé avec succès.",
 
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",

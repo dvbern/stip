@@ -1,15 +1,10 @@
-import { DOCUMENT } from '@angular/common';
-import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { OAuthService } from 'angular-oauth2-oidc';
 import {
   EMPTY,
-  Observable,
   catchError,
-  combineLatestWith,
   exhaustMap,
   filter,
   forkJoin,
@@ -21,22 +16,23 @@ import {
   throwIfEmpty,
 } from 'rxjs';
 
+import {
+  KeykloakHttpService,
+  hasLocationHeader,
+} from '@dv/sachbearbeitung-app/util/keykloak-http';
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
-  SACHBEARBEITER_APP_ROLES,
+  BENUTZER_VERWALTUNG_ROLES,
+  BenutzerVerwaltungRole,
   SharedModelBenutzer,
   SharedModelBenutzerApi,
-  SharedModelBenutzerList,
   SharedModelBenutzerRole,
   SharedModelBenutzerWithRoles,
-  SharedModelModelMappingsRepresentation,
-  SharedModelRole,
   SharedModelRoleList,
-  SharedModelUserAdminError,
-  UsableRole,
+  byBenutzertVerwaltungRoles,
 } from '@dv/shared/model/benutzer';
 import { SharedModelError } from '@dv/shared/model/error';
-import { BenutzerService, MailService } from '@dv/shared/model/gesuch';
+import { BenutzerService } from '@dv/shared/model/gesuch';
 import { SharedModelState } from '@dv/shared/model/state-colors';
 import {
   noGlobalErrorsIf,
@@ -53,9 +49,6 @@ import {
   success,
 } from '@dv/shared/util/remote-data';
 
-type HttpResponseWithLocation = HttpResponse<unknown> & {
-  headers: { get: (header: 'Location') => string };
-};
 type BenutzerverwaltungState = {
   benutzers: CachedRemoteData<SharedModelBenutzer[]>;
   benutzer: RemoteData<SharedModelBenutzerWithRoles>;
@@ -74,31 +67,10 @@ export class BenutzerverwaltungStore extends signalStore(
   withState(initialState),
   withDevtools('BenutzerverwaltungStore'),
 ) {
-  private http = inject(HttpClient);
-  private document = inject(DOCUMENT);
-  private authService = inject(OAuthService);
   private benutzerService = inject(BenutzerService);
-  private mailService = inject(MailService);
+  private keykloak = inject(KeykloakHttpService);
+
   private globalNotificationStore = inject(GlobalNotificationStore);
-
-  private _oauthParams?: { url: string; realm: string };
-  private get oauthParams() {
-    if (this._oauthParams) return this._oauthParams;
-
-    if (!this.authService.issuer) throw new Error('No OAuth issuer found');
-
-    const url = new URL(this.authService.issuer);
-    const realm = /\/realms\/([^/]+)/.exec(url.pathname)?.[1];
-
-    if (!realm) throw new Error('No realm found in OAuth issuer');
-
-    this._oauthParams = {
-      url: url.origin,
-      realm,
-    };
-
-    return this._oauthParams;
-  }
 
   loadAllSbAppBenutzers$ = rxMethod<void>(
     pipe(
@@ -112,8 +84,8 @@ export class BenutzerverwaltungStore extends signalStore(
         // sadly Keycloak does not support loading all users and their roles in one request
         // so we load the user list for every known role and merge them afterwards
         forkJoin(
-          SACHBEARBEITER_APP_ROLES.map((role) => {
-            return this.loadBenutzersWithRole$(role);
+          Object.values(BENUTZER_VERWALTUNG_ROLES).map((role) => {
+            return this.keykloak.loadBenutzersWithRole$(role);
           }),
         ),
       ),
@@ -139,7 +111,7 @@ export class BenutzerverwaltungStore extends signalStore(
           benutzer: pending(),
         }));
       }),
-      switchMap((userId) => this.getUserWithRoleMappings$(userId)),
+      switchMap((userId) => this.keykloak.getUserWithRoleMappings$(userId)),
       handleApiResponse((benutzer) => patchState(this, { benutzer })),
     ),
   );
@@ -162,37 +134,34 @@ export class BenutzerverwaltungStore extends signalStore(
         });
       }),
       exhaustMap(({ user, roles, rolesToRemove }) =>
-        this.http
-          .put(
-            `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}`,
-            user,
-            {
-              context: noGlobalErrorsIf(true),
-            },
-          )
-          .pipe(
-            switchMap(() => this.assignRoles$(user, roles)), // interceptError is handled in assignRoles$
-            switchMap(() => {
-              if (!rolesToRemove || rolesToRemove.length === 0) {
-                return of(user);
-              }
+        this.keykloak.updateUser$(user).pipe(
+          switchMap(() => this.keykloak.assignRoles$(user, roles)), // interceptError is handled in assignRoles$
+          switchMap(() => {
+            if (!rolesToRemove || rolesToRemove.length === 0) {
+              return of(user);
+            }
 
-              return this.removeRoles$(user, rolesToRemove); // interceptError is handled in removeRoles$
-            }),
-            switchMap(() => this.getUserWithRoleMappings$(user.id)),
-            handleApiResponse(() => undefined, {
-              onSuccess: (benutzer) => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet',
-                });
-                patchState(this, { benutzer: success(benutzer) });
-              },
-              onFailure: () => {
-                this.loadBenutzerWithRoles$(user.id);
-              },
-            }),
+            return this.keykloak.removeRoles$(user, rolesToRemove); // interceptError is handled in removeRoles$
+          }),
+          switchMap(() =>
+            this.keykloak.getUserWithRoleMappings$(
+              user.id,
+              byBenutzertVerwaltungRoles,
+            ),
           ),
+          handleApiResponse(() => undefined, {
+            onSuccess: (benutzer) => {
+              this.globalNotificationStore.createSuccessNotification({
+                messageKey:
+                  'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet',
+              });
+              patchState(this, { benutzer: success(benutzer) });
+            },
+            onFailure: () => {
+              this.loadBenutzerWithRoles$(user.id);
+            },
+          }),
+        ),
       ),
     ),
   );
@@ -240,14 +209,9 @@ export class BenutzerverwaltungStore extends signalStore(
         }));
       }),
       switchMap(() =>
-        this.http
-          .get<SharedModelRoleList>(
-            `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/roles`,
-          )
+        this.keykloak
+          .getRoles$(byBenutzertVerwaltungRoles)
           .pipe(
-            map((roles) =>
-              SharedModelRoleList.parse(roles).filter(byUsableRoles),
-            ),
             handleApiResponse((availableRoles) =>
               patchState(this, { availableRoles }),
             ),
@@ -270,15 +234,15 @@ export class BenutzerverwaltungStore extends signalStore(
         });
       }),
       exhaustMap(({ name, vorname, email, roles, onAfterSave }) =>
-        this.createUser$(vorname, name, email).pipe(
+        this.keykloak.createUser$({ vorname, nachname: name, email }).pipe(
           filter(hasLocationHeader),
           throwIfEmpty(() => new Error('User creation failed')),
           switchMap((response) =>
-            this.loadUserByUrl$(response.headers.get('Location')),
+            this.keykloak.loadUserByUrl$(response.headers.get('Location')),
           ),
-          switchMap((user) => this.assignRoles$(user, roles)),
+          switchMap((user) => this.keykloak.assignRoles$(user, roles)),
           switchMap((user) =>
-            this.notifyUser$(user).pipe(
+            this.keykloak.notifyUser$(user).pipe(
               handleApiResponse(
                 () => {
                   // roles are set optimistically on the user object
@@ -307,194 +271,18 @@ export class BenutzerverwaltungStore extends signalStore(
     ),
   );
 
-  private loadBenutzersWithRole$(role: UsableRole) {
-    return this.http
-      .get<SharedModelBenutzerList>(
-        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/roles/${role}/users`,
-      )
-      .pipe(
-        map((benutzers) => ({
-          benutzers: SharedModelBenutzerList.parse(benutzers),
-          role,
-        })),
-      );
-  }
-
-  private createUser$(vorname: string, name: string, email: string) {
-    return this.http
-      .post(
-        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users`,
-        {
-          enabled: true,
-          firstName: vorname,
-          lastName: name,
-          username: email,
-          email,
-          emailVerified: true,
-        },
-        {
-          observe: 'response',
-          context: noGlobalErrorsIf(true),
-        },
-      )
-      .pipe(this.interceptError('erstellen'));
-  }
-
   private deleteBenutzerFromBothApis$(benutzerId: string) {
     return this.benutzerService
       .deleteBenutzer$({ benutzerId }, undefined, undefined, {
         context: noGlobalErrorsIf(true, shouldIgnoreNotFoundErrorsIf(true)),
       })
-      .pipe(
-        switchMap(() =>
-          this.http.delete(
-            `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${benutzerId}`,
-            {
-              context: noGlobalErrorsIf(true),
-            },
-          ),
-        ),
-        this.interceptError('loeschen'),
-      );
-  }
-
-  private loadUserByUrl$(url: string) {
-    return this.http
-      .get<SharedModelBenutzerApi>(url, {
-        context: noGlobalErrorsIf(true),
-      })
-      .pipe(
-        map((user) => SharedModelBenutzerApi.parse(user)),
-        this.interceptError('laden'),
-      );
-  }
-
-  private loadUser$(userId: string) {
-    return this.loadUserByUrl$(
-      `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${userId}`,
-    );
-  }
-
-  private getUserWithRoleMappings$(userId: string) {
-    return this.loadUser$(userId).pipe(
-      combineLatestWith(this.getRoleMappings$(userId)),
-      map(([user, rm]) => {
-        return {
-          ...user,
-          roles: rm ?? [],
-        };
-      }),
-    );
-  }
-
-  private getRoleMappings$(userId: string) {
-    return this.http
-      .get<SharedModelModelMappingsRepresentation>(
-        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${userId}/role-mappings`,
-        {
-          context: noGlobalErrorsIf(true),
-        },
-      )
-      .pipe(
-        map((rm) => {
-          return SharedModelModelMappingsRepresentation.parse(
-            rm,
-          ).realmMappings?.filter(byUsableRoles);
-        }),
-        this.interceptError('roleMapping'),
-      );
-  }
-
-  private assignRoles$(
-    user: SharedModelBenutzerApi,
-    roles: { id: string; name: string }[],
-  ) {
-    return this.http
-      .post(
-        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/role-mappings/realm`,
-        roles,
-        {
-          context: noGlobalErrorsIf(true),
-        },
-      )
-      .pipe(
-        map(() => user),
-        this.interceptError('roleMapping'),
-      );
-  }
-
-  private removeRoles$(user: SharedModelBenutzerApi, roles: SharedModelRole[]) {
-    return this.http
-      .delete(
-        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users/${user.id}/role-mappings/realm`,
-        {
-          context: noGlobalErrorsIf(true),
-          body: roles,
-        },
-      )
-      .pipe(
-        map(() => user),
-        this.interceptError('roleMapping'),
-      );
-  }
-
-  private notifyUser$(user: SharedModelBenutzerApi) {
-    if (!user.email) return of(false);
-    return this.mailService
-      .sendWelcomeEmail$({
-        welcomeMail: {
-          vorname: user.firstName,
-          name: user.lastName,
-          email: user.email,
-          redirectUri: getCurrentUrl(this.document),
-        },
-      })
-      .pipe(
-        this.interceptError('benachrichtigen'),
-        map(() => true),
-        catchError(() => [false]),
-      );
-  }
-
-  private interceptError(fallbackErrorType: string) {
-    return <T>(source: Observable<T>) => {
-      return source.pipe(
-        catchError((error) => {
-          const parsedErrorType = toKnownUserErrorType(
-            error,
-            fallbackErrorType,
-          );
-          this.globalNotificationStore.createNotification({
-            type: 'ERROR',
-            messageKey: `sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.${parsedErrorType}`,
-          });
-          throw error;
-        }),
-      );
-    };
+      .pipe(switchMap(() => this.keykloak.deleteUser$(benutzerId)));
   }
 }
 
-export const getCurrentUrl = (document: Document) => {
-  return document.location.origin;
-};
-
-export const hasLocationHeader = (
-  response: HttpResponse<unknown>,
-): response is HttpResponseWithLocation => {
-  return response.headers.has('Location');
-};
-
-export const byUsableRoles = (role: SharedModelRole) => {
-  return SACHBEARBEITER_APP_ROLES.some((r) => r === role.name);
-};
-
-export const toKnownUserErrorType = (error: unknown, fallbackType: string) => {
-  const parsed = SharedModelUserAdminError.parse(error);
-  return parsed.type ?? fallbackType;
-};
-
-export const roleToStateColor = (role: UsableRole): SharedModelState => {
+export const roleToStateColor = (
+  role: BenutzerVerwaltungRole,
+): SharedModelState => {
   switch (role) {
     case 'Sachbearbeiter':
       return 'info';
