@@ -2499,8 +2499,12 @@ components:
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
     FallDashboardItem:
+      required:
+        - fall
       type: object
       properties:
+        fall:
+          $ref: '#/components/schemas/Fall'
         ausbildungDashboardItems:
           type: array
           items:
