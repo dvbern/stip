@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-  <changeSet author="anna-lea.fuhrer (generated)" id="1729690557728-1">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730196198933-1">
     <createTable tableName="sozialdienst">
       <column name="id" type="UUID">
         <constraints nullable="false" primaryKey="true" primaryKeyName="sozialdienstPK"/>
@@ -31,58 +31,21 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1729690557728-2">
-    <createTable tableName="sozialdienst_admin">
-      <column name="id" type="UUID">
-        <constraints nullable="false" primaryKey="true" primaryKeyName="sozialdienst_adminPK"/>
-      </column>
-      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
-        <constraints nullable="false"/>
-      </column>
-      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
-        <constraints nullable="false"/>
-      </column>
-      <column name="user_erstellt" type="VARCHAR(255)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="user_mutiert" type="VARCHAR(255)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="version" type="BIGINT"/>
-      <column name="mandant" type="VARCHAR(255)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="email" type="VARCHAR(255)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="nachname" type="VARCHAR(255)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="vorname" type="VARCHAR(255)">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-  </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1729690557728-3">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730196198933-2">
     <addUniqueConstraint columnNames="adresse_id" constraintName="UC_SOZIALDIENSTADRESSE_ID_COL" tableName="sozialdienst"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1729690557728-4">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730196198933-3">
     <addUniqueConstraint columnNames="sozialdienst_admin_id" constraintName="UC_SOZIALDIENSTSOZIALDIENST_ADMIN_ID_COL" tableName="sozialdienst"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1729690557728-5">
-    <createIndex indexName="IX_sozialdienst_admin_mandant" tableName="sozialdienst_admin">
-      <column name="mandant"/>
-    </createIndex>
-  </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1729690557728-6">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730196198933-4">
     <createIndex indexName="IX_sozialdienst_mandant" tableName="sozialdienst">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1729690557728-7">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730196198933-5">
     <addForeignKeyConstraint baseColumnNames="adresse_id" baseTableName="sozialdienst" constraintName="FK_sozialdienst_adresse_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="adresse" validate="true"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1729690557728-8">
-    <addForeignKeyConstraint baseColumnNames="sozialdienst_admin_id" baseTableName="sozialdienst" constraintName="FK_sozialdienst_sozialdienst_admin_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sozialdienst_admin" validate="true"/>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730196198933-6">
+    <addForeignKeyConstraint baseColumnNames="sozialdienst_admin_id" baseTableName="sozialdienst" constraintName="FK_sozialdienst_sozialdienst_admin_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="benutzer" validate="true"/>
   </changeSet>
 </databaseChangeLog>
