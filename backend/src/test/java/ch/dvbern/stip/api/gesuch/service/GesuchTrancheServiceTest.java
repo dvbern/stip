@@ -121,7 +121,7 @@ class GesuchTrancheServiceTest {
 
     @TestAsGesuchsteller
     @Test
-    @Description("Aenderung einreichen should only be possible when Gesuchstatus is Stipendienberechtigt or Nicht_Stipendienberechtigt")
+    @Description("Aenderung einreichen should only be possible when Gesuchstatus is IN_FREIGABE or VERFUEGT")
     void aenderungEinreichenAllowedStatesTest(){
         // arrange
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
@@ -135,11 +135,11 @@ class GesuchTrancheServiceTest {
         assertThrows(IllegalStateException.class, () -> gesuchTrancheService.aenderungEinreichen(gesuch.getGesuchTranchen().get(0).getId()));
         Mockito.doNothing().when(gesuchTrancheStatusService).triggerStateMachineEvent(any(), any());
 
-        gesuch.setGesuchStatus(Gesuchstatus.STIPENDIENANSPRUCH);
+        gesuch.setGesuchStatus(Gesuchstatus.IN_FREIGABE);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         assertDoesNotThrow(() -> gesuchTrancheService.aenderungEinreichen(gesuch.getGesuchTranchen().get(0).getId()));
 
-        gesuch.setGesuchStatus(Gesuchstatus.KEIN_STIPENDIENANSPRUCH);
+        gesuch.setGesuchStatus(Gesuchstatus.VERFUEGT);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         assertDoesNotThrow(() -> gesuchTrancheService.aenderungEinreichen(gesuch.getGesuchTranchen().get(0).getId()));
     }

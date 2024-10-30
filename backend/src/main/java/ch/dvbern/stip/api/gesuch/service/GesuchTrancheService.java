@@ -219,8 +219,8 @@ public class GesuchTrancheService {
     public void aenderungEinreichen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         final var gesuch = aenderung.getGesuch();
-        if(!(gesuch.getGesuchStatus() == Gesuchstatus.STIPENDIENANSPRUCH
-        || gesuch.getGesuchStatus() == Gesuchstatus.KEIN_STIPENDIENANSPRUCH))
+        if(!(gesuch.getGesuchStatus() == Gesuchstatus.IN_FREIGABE
+        || gesuch.getGesuchStatus() == Gesuchstatus.VERFUEGT))
             throw new IllegalStateException();
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
