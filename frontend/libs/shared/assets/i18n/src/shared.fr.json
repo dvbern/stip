@@ -159,6 +159,7 @@
   "shared.gesuch.status.ENTWURF": "Brouillon",
   "shared.gesuch.status.PUBLIZIERT": "Publié - Actif",
   "shared.gesuch.status.ARCHIVIERT": "Archivé",
+  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "Changement intégré manuellement",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Traitement par le requérant",
   "shared.gesuch.status.tranche.UEBERPRUEFEN": "En cours de vérification",
   "shared.gesuch.status.tranche.AKZEPTIERT": "Accepté",
