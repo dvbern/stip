@@ -501,7 +501,7 @@
             <cleanthat />
             
             <eclipse>
-              <version>4.26</version>
+              <version>4.29</version>
               <file>${project.basedir}/stip-codestyle.xml</file>
             </eclipse>
             
