@@ -12,7 +12,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Audited
 @Getter
 @Setter
-public class SozialdienstAdmin extends Benutzer{
+public class SozialdienstAdmin extends Benutzer {
     @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
     @Column(name = "eMail", nullable = true)

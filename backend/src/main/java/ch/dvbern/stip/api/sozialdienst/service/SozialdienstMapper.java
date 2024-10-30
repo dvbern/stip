@@ -11,8 +11,6 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MappingConfig.class)
 public interface SozialdienstMapper {
     Sozialdienst toEntity(SozialdienstCreateDto dto);
-
     SozialdienstDto toDto(Sozialdienst entity);
-
     Sozialdienst partialUpdate(SozialdienstUpdateDto dto, @MappingTarget Sozialdienst entity);
 }

@@ -31,7 +31,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return Response.ok(sozialdienst).build();
     }
 
-    @RolesAllowed({OidcConstants.ROLE_ADMIN })
+    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response deleteSozialdienst(UUID sozialdienstId) {
         sozialdienstAuthorizer.allowAllow();
@@ -39,7 +39,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return Response.ok().entity(sozialdienst).build();
     }
 
-    @RolesAllowed({  OidcConstants.ROLE_ADMIN })
+    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response getAllSozialdienste() {
         sozialdienstAuthorizer.allowAllow();
@@ -57,10 +57,14 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public Response replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminCreateDto sozialdienstAdminCreateDto) {
+    public Response replaceSozialdienstAdmin(
+        UUID sozialdienstId,
+        SozialdienstAdminCreateDto sozialdienstAdminCreateDto
+    ) {
         sozialdienstAuthorizer.allowAllow();
         final var updated = sozialdienstService.replaceSozialdienstAdmin(sozialdienstId, sozialdienstAdminCreateDto);
-        return Response.ok().entity(updated).build();    }
+        return Response.ok().entity(updated).build();
+    }
 
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
@@ -72,7 +76,9 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public Response updateSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto) {
+    public Response updateSozialdienstAdmin(
+        UUID sozialdienstId,
+        SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto) {
         sozialdienstAuthorizer.allowAllow();
         final var updated = sozialdienstService.updateSozialdienstAdmin(sozialdienstId, sozialdienstAdminUpdateDto);
         return Response.ok().entity(updated).build();
