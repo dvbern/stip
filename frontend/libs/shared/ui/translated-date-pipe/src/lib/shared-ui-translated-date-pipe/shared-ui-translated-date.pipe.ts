@@ -24,11 +24,7 @@ export class SharedUiTranslatedDatePipe implements PipeTransform {
     if (!date || !isValid(date)) {
       return of(null);
     }
-    console.log('SharedUiTranslatedDatePipe.transform', {
-      value,
-      formatStr,
-      date,
-    });
+
     return this.translate.onLangChange.pipe(
       startWith({ lang: this.translate.currentLang }),
       map(({ lang }) =>

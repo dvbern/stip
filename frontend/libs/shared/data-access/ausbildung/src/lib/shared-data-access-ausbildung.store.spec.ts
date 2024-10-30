@@ -1,6 +1,9 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+
 import { AusbildungStore } from './shared-data-access-ausbildung.store';
 
 describe('AusbildungStore', () => {
@@ -8,7 +11,11 @@ describe('AusbildungStore', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AusbildungStore, provideHttpClient()],
+      providers: [
+        AusbildungStore,
+        provideHttpClient(),
+        provideSharedPatternJestTestSetup(),
+      ],
     });
     store = TestBed.inject(AusbildungStore);
   });

@@ -30,6 +30,7 @@ import {
   GesuchAenderungStore,
 } from '@dv/shared/data-access/gesuch-aenderung';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -42,7 +43,6 @@ import {
   getLatestTrancheIdFromGesuchOnUpdate$,
 } from '@dv/shared/util/gesuch';
 import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 

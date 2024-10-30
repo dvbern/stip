@@ -14,6 +14,7 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addDays, format } from 'date-fns';
 
+import { GesuchAppDialogCreateAusbildungComponent } from '@dv/gesuch-app/dialog/create-ausbildung';
 import { GesuchAppEventCockpit } from '@dv/gesuch-app/event/cockpit';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import { GesuchAppUiAenderungsEntryComponent } from '@dv/gesuch-app/ui/aenderungs-entry';
@@ -229,7 +230,12 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
   }
 
   createAusbildung(fallId: string) {
-    console.log('createAusbildung', fallId);
+    GesuchAppDialogCreateAusbildungComponent.open(
+      this.dialog,
+      fallId,
+    ).subscribe((data) => {
+      console.log('data', data);
+    });
   }
 
   trackByPerioden(

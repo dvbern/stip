@@ -43,6 +43,10 @@ paths:
         - Gesuch
       responses:
         '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UUID'
           description: New Gesuch is created
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -251,7 +255,7 @@ paths:
               $ref: '#/components/schemas/AusbildungUpdate'
         required: true
       responses:
-        '201':
+        '200':
           content:
             application/json:
               schema:
@@ -2467,7 +2471,8 @@ components:
           $ref: '#/components/schemas/Kontoinhaber'
     Gesuch:
       required:
-        - fall
+        - fallId
+        - fallNummer
         - ausbildungId
         - gesuchsperiode
         - gesuchStatus
@@ -2477,8 +2482,10 @@ components:
         - gesuchTrancheToWorkWith
       type: object
       properties:
-        fall:
-          $ref: '#/components/schemas/Fall'
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
         ausbildungId:
           $ref: '#/components/schemas/UUID'
         gesuchsperiode:
@@ -2500,8 +2507,6 @@ components:
     FallDashboardItem:
       required:
         - fall
-        - ausbildungDashboardItems
-        - notifications
       type: object
       properties:
         fall:
@@ -2516,13 +2521,13 @@ components:
             $ref: '#/components/schemas/Notification'
     AusbildungDashboardItem:
       type: object
-      allOf:
-        - $ref: '#/components/schemas/Ausbildung'
       properties:
         gesuchs:
           type: array
           items:
             $ref: '#/components/schemas/GesuchDashboardItem'
+      allOf:
+        - $ref: '#/components/schemas/Ausbildung'
     GesuchDashboardItem:
       required:
         - id
@@ -2768,7 +2773,8 @@ components:
         - ANDERE
       type: string
     GesuchFormular:
-      required: []
+      required:
+        - ausbildung
       type: object
       properties:
         ausbildung:
@@ -3085,6 +3091,7 @@ components:
         - $ref: '#/components/schemas/EinnahmenKostenUpdate'
     AusbildungBase:
       required:
+        - fallId
         - fachrichtung
         - ausbildungBegin
         - ausbildungEnd
@@ -3092,6 +3099,8 @@ components:
       type: object
       properties:
         id:
+          $ref: '#/components/schemas/UUID'
+        fallId:
           $ref: '#/components/schemas/UUID'
         fachrichtung:
           type: string
@@ -3117,14 +3126,14 @@ components:
         isAusbildungAusland:
           type: boolean
     Ausbildung:
-      required:
-        - fallId
       type: object
       properties:
         ausbildungsgang:
           $ref: '#/components/schemas/Ausbildungsgang'
-        fallId:
-          $ref: '#/components/schemas/UUID'
+        # gesuche:
+        #   type: array
+        #   items:
+        #     $ref: '#/components/schemas/Gesuch'
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     AusbildungUpdate:

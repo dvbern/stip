@@ -2,28 +2,36 @@ import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { endOfDay, format } from 'date-fns';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { AusbildungService } from '@dv/shared/model/gesuch';
+import { AppType, SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import {
+  Ausbildung,
+  AusbildungService,
+  AusbildungUpdate,
+  Gesuchstatus,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
-  RemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
-  pending,
 } from '@dv/shared/util/remote-data';
 
 type AusbildungState = {
-  cachedAusbildung: CachedRemoteData<unknown>;
-  ausbildung: RemoteData<unknown>;
+  ausbildung: CachedRemoteData<Ausbildung>;
 };
 
 const initialState: AusbildungState = {
-  cachedAusbildung: initial(),
   ausbildung: initial(),
 };
+
+const readonlyMap = {
+  'gesuch-app': 'IN_BEARBEITUNG_GS',
+  'sachbearbeitung-app': 'IN_BEARBEITUNG_SB',
+} satisfies Record<AppType, Gesuchstatus>;
 
 @Injectable()
 export class AusbildungStore extends signalStore(
@@ -31,45 +39,31 @@ export class AusbildungStore extends signalStore(
   withState(initialState),
   withDevtools('AusbildungStore'),
 ) {
+  private config = inject(SharedModelCompileTimeConfig);
   private ausbildungService = inject(AusbildungService);
 
-  cachedAusbildungListViewSig = computed(() => {
-    return fromCachedDataSig(this.cachedAusbildung);
-  });
-
   ausbildungViewSig = computed(() => {
-    return this.ausbildung.data();
+    const ausbildung = fromCachedDataSig(this.ausbildung);
+    const minEndDatum = endOfDay(new Date());
+
+    return {
+      ausbildung,
+      minEndDatum,
+      minEndDatumFormatted: format(minEndDatum, 'MM.yyyy'),
+      writeableWhen: readonlyMap[this.config.appType],
+    };
   });
 
-  loadCachedAusbildung$ = rxMethod<void>(
+  loadAusbildung$ = rxMethod<{ ausbildungId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          cachedAusbildung: cachedPending(state.cachedAusbildung),
+          ausbildung: cachedPending(state.ausbildung),
         }));
       }),
-      switchMap(() =>
+      switchMap(({ ausbildungId }) =>
         this.ausbildungService
-          .getAusbildung$()
-          .pipe(
-            handleApiResponse((cachedAusbildung) =>
-              patchState(this, { cachedAusbildung }),
-            ),
-          ),
-      ),
-    ),
-  );
-
-  loadAusbildung$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, () => ({
-          ausbildung: pending(),
-        }));
-      }),
-      switchMap(() =>
-        this.ausbildungService
-          .getAusbildung$()
+          .getAusbildung$({ ausbildungId })
           .pipe(
             handleApiResponse((ausbildung) => patchState(this, { ausbildung })),
           ),
@@ -77,35 +71,52 @@ export class AusbildungStore extends signalStore(
     ),
   );
 
-  saveAusbildung$ = rxMethod<{
-    ausbildungId: string;
-    values: unknown;
-  }>(
+  createAusbildung$ = rxMethod<AusbildungUpdate>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          cachedAusbildung: cachedPending(state.cachedAusbildung),
+          ausbildung: cachedPending(state.ausbildung),
         }));
       }),
-      switchMap(({ ausbildungId, values }) =>
+      switchMap((ausbildungUpdate) =>
         this.ausbildungService
-          .updateAusbildung$({
-            ausbildungId,
-            payload: values,
-          })
+          .createAusbildung$({ ausbildungUpdate })
           .pipe(
-            handleApiResponse(
-              (ausbildung) => {
-                patchState(this, { ausbildung });
-              },
-              {
-                onSuccess: (ausbildung) => {
-                  // Do something after save, like showing a notification
-                },
-              },
-            ),
+            handleApiResponse((ausbildung) => patchState(this, { ausbildung })),
           ),
       ),
     ),
   );
+
+  // saveAusbildung$ = rxMethod<{
+  //   ausbildungId: string;
+  //   values: unknown;
+  // }>(
+  //   pipe(
+  //     tap(() => {
+  //       patchState(this, (state) => ({
+  //         ausbildung: cachedPending(state.ausbildung),
+  //       }));
+  //     }),
+  //     switchMap(({ ausbildungId, values }) =>
+  //       this.ausbildungService
+  //         .updateAusbildung$({
+  //           ausbildungId,
+  //           payload: values,
+  //         })
+  //         .pipe(
+  //           handleApiResponse(
+  //             (ausbildung) => {
+  //               patchState(this, { ausbildung });
+  //             },
+  //             {
+  //               onSuccess: (ausbildung) => {
+  //                 // Do something after save, like showing a notification
+  //               },
+  //             },
+  //           ),
+  //         ),
+  //     ),
+  //   ),
+  // );
 }

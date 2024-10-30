@@ -2,12 +2,12 @@ import { createSelector } from '@ngrx/store';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { selectSharedDataAccessStammdatensView } from '@dv/shared/data-access/stammdaten';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   calculateElternSituationGesuch,
   getChangesForList,
   selectChangeForView,
 } from '@dv/shared/util-fn/gesuch-util';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 export const selectSharedFeatureGesuchFormElternView = createSelector(
   selectSharedDataAccessGesuchsView,

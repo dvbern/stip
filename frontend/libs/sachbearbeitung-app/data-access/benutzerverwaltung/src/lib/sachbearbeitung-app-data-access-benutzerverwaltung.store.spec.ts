@@ -7,7 +7,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { SharedModelBenutzerApi, UsableRole } from '@dv/shared/model/benutzer';
-import { type } from '@dv/shared/util-fn/type-guards';
+import { type } from '@dv/shared/model/type-util';
 
 import {
   BenutzerverwaltungStore,

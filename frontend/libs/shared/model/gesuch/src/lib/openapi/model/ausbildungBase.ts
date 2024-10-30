@@ -13,6 +13,7 @@ import { AusbildungsPensum } from './ausbildungsPensum';
 
 export interface AusbildungBase { 
     id?: string;
+    fallId: string;
     fachrichtung: string;
     ausbildungNichtGefunden?: boolean;
     /**

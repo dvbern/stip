@@ -15,6 +15,7 @@ import { GesuchDashboardItem } from './gesuchDashboardItem';
 
 export interface AusbildungDashboardItem { 
     id?: string;
+    fallId: string;
     fachrichtung: string;
     ausbildungNichtGefunden?: boolean;
     /**
@@ -40,7 +41,6 @@ export interface AusbildungDashboardItem {
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
     ausbildungsgang?: Ausbildungsgang;
-    fallId: string;
     gesuchs?: Array<GesuchDashboardItem>;
 }
 

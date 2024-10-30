@@ -1,6 +1,6 @@
 @let view = viewSig();
 <!-- loading -->
-@if (viewSig().loading) {
+@if (viewSig().loading || (ausbildungsstatteStore.ausbildungsstaetten() | rdIsPending)) {
   <dv-shared-ui-loading data-testid="form-ausbildung-loading"></dv-shared-ui-loading>
 } @else {
   <!-- form -->
@@ -10,17 +10,17 @@
     (gotReenabledSig)="gotReenabled$.next({})"
     data-testid="form-education-form"
     novalidate
-    class="mt-4"
+    class="tw-mt-6"
     (ngSubmit)="handleSave()"
   >
     <h3 class="mt-4">
       {{ 'shared.form.education.place.title' | translate }}
     </h3>
 
-    <div class="row">
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2">
       @if (!form.value['ausbildungNichtGefunden']) {
         <!-- STAETTE -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+        <mat-form-field dvSharedUiFormField>
           <mat-label>
             {{ 'shared.form.education.ausbildungsstaette.label' | translate }}
           </mat-label>
@@ -60,7 +60,7 @@
         </mat-form-field>
       } @else {
         <!-- Alternative STAETTE -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+        <mat-form-field dvSharedUiFormField>
           <mat-label>
             {{ 'shared.form.education.ausbildungsstaette.label' | translate }}
           </mat-label>
@@ -79,7 +79,7 @@
     <!-- GANG -->
     <div class="row">
       @if (!form.value['ausbildungNichtGefunden']) {
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+        <mat-form-field dvSharedUiFormField>
           <mat-label>
             {{ 'shared.form.education.ausbildungsgang.label' | translate }}
           </mat-label>
@@ -103,7 +103,7 @@
         </mat-form-field>
       }
       @if (form.value['ausbildungNichtGefunden']) {
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+        <mat-form-field dvSharedUiFormField>
           <mat-label>
             {{ 'shared.form.education.ausbildungsgang.label' | translate }}
           </mat-label>
@@ -125,7 +125,7 @@
         </mat-form-field>
       }
       <!-- FACHRICHTUNG -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+      <mat-form-field dvSharedUiFormField>
         <mat-label>
           {{ 'shared.form.education.fachrichtung.label' | translate }}
         </mat-label>
@@ -144,7 +144,7 @@
     </div>
 
     <div class="row align-items-center">
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+      <mat-form-field dvSharedUiFormField>
         <mat-label>
           {{ 'shared.form.education.ausbildungsort.label' | translate }}
         </mat-label>
@@ -193,7 +193,7 @@
 
     <div class="row">
       <!-- START -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+      <mat-form-field dvSharedUiFormField>
         <mat-label>{{ 'shared.form.education.start.label' | translate }}</mat-label>
 
         <input
@@ -223,7 +223,7 @@
       </mat-form-field>
 
       <!-- ENDE -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+      <mat-form-field dvSharedUiFormField>
         <mat-label>{{ 'shared.form.education.ende.label' | translate }}</mat-label>
 
         <input
@@ -255,7 +255,7 @@
 
     <div class="row">
       <!-- PENSUM -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 mt-3">
+      <mat-form-field dvSharedUiFormField>
         <mat-label>
           {{ 'shared.form.education.pensum.label' | translate }}
         </mat-label>

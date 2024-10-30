@@ -26,6 +26,7 @@ import {
 } from '@dv/shared/data-access/language';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
+import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -34,7 +35,6 @@ import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-gesuch-app-pattern-gesuch-step-layout',

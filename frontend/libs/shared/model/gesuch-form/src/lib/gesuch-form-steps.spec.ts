@@ -3,8 +3,7 @@ import {
   GesuchFormularUpdate,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { type } from '@dv/shared/util-fn/type-guards';
+import { type } from '@dv/shared/model/type-util';
 
 import {
   AUSBILDUNG,

@@ -46,7 +46,7 @@
           <!-- NACHRICHTEN -->
           <div class="card mb-5 shadow-lg">
             <div class="card-body">
-              <dv-shared-ui-notifications [notifications]="dashboard.notifications"></dv-shared-ui-notifications>
+              <dv-shared-ui-notifications [notifications]="dashboard.notifications ?? []"></dv-shared-ui-notifications>
             </div>
           </div>
 

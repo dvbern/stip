@@ -160,6 +160,7 @@ async function sleep(msec: number) {
   // Keep in mind: there is one file generated per OpenAPI-@Tag,
   // Names are CamelCase versions from OpenAPIConst Tags
   const generatedApis = [
+    'Ausbildung',
     'Ausbildungsgang',
     'Ausbildungsstaette',
     'Benutzer',

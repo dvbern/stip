@@ -14,6 +14,7 @@ import { AusbildungsPensum } from './ausbildungsPensum';
 
 export interface Ausbildung { 
     id?: string;
+    fallId: string;
     fachrichtung: string;
     ausbildungNichtGefunden?: boolean;
     /**
@@ -39,7 +40,6 @@ export interface Ausbildung {
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
     ausbildungsgang?: Ausbildungsgang;
-    fallId: string;
 }
 
 

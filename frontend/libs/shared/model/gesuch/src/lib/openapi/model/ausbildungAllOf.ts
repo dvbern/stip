@@ -13,6 +13,5 @@ import { Ausbildungsgang } from './ausbildungsgang';
 
 export interface AusbildungAllOf { 
     ausbildungsgang?: Ausbildungsgang;
-    fallId: string;
 }
 
