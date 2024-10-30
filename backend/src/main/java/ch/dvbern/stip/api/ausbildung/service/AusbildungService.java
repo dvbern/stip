@@ -5,9 +5,12 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -18,7 +21,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AusbildungService {
     private final AusbildungRepository ausbildungRepository;
+    private final AusbildungsgangRepository ausbildungsgangRepository;
     private final AusbildungMapper ausbildungMapper;
+    private final GesuchService gesuchService;
     private final Validator validator;
 
     @Transactional
@@ -28,12 +33,32 @@ public class AusbildungService {
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);
         }
-        ausbildungRepository.persistAndFlush(ausbildung);
+        ausbildungRepository.persist(ausbildung);
+        final var gesuchCreateDto = new GesuchCreateDto();
+        gesuchCreateDto.setAusbildungId(ausbildung.getId());
+        gesuchService.createGesuch(gesuchCreateDto);
+
+        ausbildung.setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
+
+
         return ausbildungMapper.toDto(ausbildung);
     }
 
     @Transactional
     public AusbildungDto getAusbildungById(final UUID ausbildungId) {
         return ausbildungMapper.toDto(ausbildungRepository.requireById(ausbildungId));
+    }
+
+    @Transactional
+    public AusbildungDto patchAusbildung(final UUID ausbildungId, final AusbildungUpdateDto ausbildungUpdateDto) {
+        var ausbildung = ausbildungRepository.requireById(ausbildungId);
+        ausbildung = ausbildungMapper.partialUpdate(ausbildungUpdateDto, ausbildung);
+        Set<ConstraintViolation<Ausbildung>> violations = validator.validate(ausbildung);
+        if (!violations.isEmpty()) {
+            throw new ValidationsException("Die Entität ist nicht valid", violations);
+        }
+        ausbildungRepository.persistAndFlush(ausbildung);
+        ausbildung.setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
+        return ausbildungMapper.toDto(ausbildung);
     }
 }

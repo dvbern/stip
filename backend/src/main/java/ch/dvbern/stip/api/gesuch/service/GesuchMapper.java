@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.gesuch.service;
 
-import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -15,7 +14,6 @@ import org.mapstruct.Named;
 @Mapper(config = MappingConfig.class,
     uses =
         {
-            AusbildungMapper.class,
             FallMapper.class,
             GesuchsperiodeMapper.class
         }
@@ -23,6 +21,8 @@ import org.mapstruct.Named;
 public abstract class GesuchMapper {
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
     @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
+    @Mapping(target = "fallId", source = "ausbildung.fall.id")
+    @Mapping(target = "fallNummer", source = "ausbildung.fall.fallNummer")
     public abstract GesuchDto toDto(Gesuch gesuch);
 
     @Mapping(source = "ausbildungId", target = "ausbildung.id")

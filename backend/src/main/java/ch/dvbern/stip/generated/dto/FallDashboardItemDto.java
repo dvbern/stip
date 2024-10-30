@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AusbildungDashboardItemDto;
+import ch.dvbern.stip.generated.dto.FallDto;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
@@ -24,8 +25,28 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class FallDashboardItemDto  implements Serializable {
+  private @Valid FallDto fall;
   private @Valid List<AusbildungDashboardItemDto> ausbildungDashboardItems;
   private @Valid List<NotificationDto> notifications;
+
+  /**
+   **/
+  public FallDashboardItemDto fall(FallDto fall) {
+    this.fall = fall;
+    return this;
+  }
+
+  
+  @JsonProperty("fall")
+  @NotNull
+  public FallDto getFall() {
+    return fall;
+  }
+
+  @JsonProperty("fall")
+  public void setFall(FallDto fall) {
+    this.fall = fall;
+  }
 
   /**
    **/
@@ -105,13 +126,14 @@ public class FallDashboardItemDto  implements Serializable {
       return false;
     }
     FallDashboardItemDto fallDashboardItem = (FallDashboardItemDto) o;
-    return Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
+    return Objects.equals(this.fall, fallDashboardItem.fall) &&
+        Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
         Objects.equals(this.notifications, fallDashboardItem.notifications);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildungDashboardItems, notifications);
+    return Objects.hash(fall, ausbildungDashboardItems, notifications);
   }
 
   @Override
@@ -119,6 +141,7 @@ public class FallDashboardItemDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class FallDashboardItemDto {\n");
     
+    sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
     sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");
     sb.append("}");

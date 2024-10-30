@@ -135,7 +135,8 @@ public class GesuchTrancheService {
             throw new ForbiddenException();
         }
 
-        final var trancheToCopy = gesuch.getCurrentGesuchTranche();
+        final var trancheToCopy = gesuch.getTrancheValidOnDate(aenderungsantragCreateDto.getStart())
+            .orElseThrow(NotFoundException::new);
 
         final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
         gesuch.getGesuchTranchen().add(newTranche);

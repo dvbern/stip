@@ -2,6 +2,7 @@ package ch.dvbern.stip.api.ausbildung.service;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.util.AusbildungDiffUtil;
+import ch.dvbern.stip.api.bildungskategorie.service.BildungskategorieMapper;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
@@ -16,7 +17,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class, uses = { FallMapper.class, AusbildungsgangMapper.class })
+@Mapper(config = MappingConfig.class, uses = { FallMapper.class, AusbildungsgangMapper.class, BildungskategorieMapper.class })
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
 //    @Mapping(source = "ausbildungsgang.id", target = "ausbildungsgang.id")
 //    @Mapping(
@@ -31,7 +32,6 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
 //    )
 //    public abstract Ausbildung toEntity(AusbildungDto ausbildungDto);
 
-    @Mapping(source = "ausbildungsgang.id", target = "ausbildungsgang.id")
     @Mapping(
         source = "ausbildungBegin",
         target = "ausbildungBegin",
@@ -58,26 +58,25 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
     @Mapping(source = "fallId", target = "fall.id")
     public abstract Ausbildung toNewEntity(AusbildungUpdateDto ausbildungDto);
 
-//    @Mapping(source = "ausbildungsgangId",
-//        target = "ausbildungsgang",
-//        qualifiedBy = { EntityReferenceMapper.class, EntityIdReference.class })
-//    @Mapping(
-//        source = "ausbildungBegin",
-//        target = "ausbildungBegin",
-//        qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class }
-//    )
-//    @Mapping(
-//        source = "ausbildungEnd",
-//        target = "ausbildungEnd",
-//        qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class }
-//    )
-//    public abstract Ausbildung partialUpdate(AusbildungUpdateDto ausbildungDto, @MappingTarget Ausbildung ausbildung);
+    @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang.id")
+    @Mapping(
+        source = "ausbildungBegin",
+        target = "ausbildungBegin",
+        qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class }
+    )
+    @Mapping(
+        source = "ausbildungEnd",
+        target = "ausbildungEnd",
+        qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class }
+    )
+    @Mapping(source = "fallId", target = "fall.id")
+    public abstract Ausbildung partialUpdate(AusbildungUpdateDto ausbildungDto, @MappingTarget Ausbildung ausbildung);
 
     @Override
     @BeforeMapping
     protected void resetDependentDataBeforeUpdate(
         final AusbildungUpdateDto newFormular,
-        final @MappingTarget Ausbildung targetFormular
+        @MappingTarget final Ausbildung targetFormular
     ) {
         resetFieldIf(
             () -> AusbildungDiffUtil.hasIsAusbildungAuslandChanged(targetFormular, newFormular),

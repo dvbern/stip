@@ -23,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GesuchDto  implements Serializable {
+  private @Valid UUID fallId;
+  private @Valid String fallNummer;
   private @Valid UUID ausbildungId;
   private @Valid GesuchsperiodeDto gesuchsperiode;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
@@ -31,6 +33,44 @@ public class GesuchDto  implements Serializable {
   private @Valid LocalDate aenderungsdatum;
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
   private @Valid String bearbeiter;
+
+  /**
+   **/
+  public GesuchDto fallId(UUID fallId) {
+    this.fallId = fallId;
+    return this;
+  }
+
+  
+  @JsonProperty("fallId")
+  @NotNull
+  public UUID getFallId() {
+    return fallId;
+  }
+
+  @JsonProperty("fallId")
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
+  }
+
+  /**
+   **/
+  public GesuchDto fallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
+    return this;
+  }
+
+  
+  @JsonProperty("fallNummer")
+  @NotNull
+  public String getFallNummer() {
+    return fallNummer;
+  }
+
+  @JsonProperty("fallNummer")
+  public void setFallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
+  }
 
   /**
    **/
@@ -194,7 +234,9 @@ public class GesuchDto  implements Serializable {
       return false;
     }
     GesuchDto gesuch = (GesuchDto) o;
-    return Objects.equals(this.ausbildungId, gesuch.ausbildungId) &&
+    return Objects.equals(this.fallId, gesuch.fallId) &&
+        Objects.equals(this.fallNummer, gesuch.fallNummer) &&
+        Objects.equals(this.ausbildungId, gesuch.ausbildungId) &&
         Objects.equals(this.gesuchsperiode, gesuch.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuch.gesuchStatus) &&
         Objects.equals(this.gesuchNummer, gesuch.gesuchNummer) &&
@@ -206,7 +248,7 @@ public class GesuchDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter);
   }
 
   @Override
@@ -214,6 +256,8 @@ public class GesuchDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDto {\n");
     
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");

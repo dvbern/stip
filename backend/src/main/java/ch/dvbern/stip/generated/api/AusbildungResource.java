@@ -30,4 +30,10 @@ public interface AusbildungResource {
     @Path("/{ausbildungId}")
     @Produces({ "application/json", "text/plain" })
     Response getAusbildung(@PathParam("ausbildungId") UUID ausbildungId);
+
+    @PATCH
+    @Path("/{ausbildungId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    Response updateAusbildung(@PathParam("ausbildungId") UUID ausbildungId,@Valid @NotNull AusbildungUpdateDto ausbildungUpdateDto);
 }

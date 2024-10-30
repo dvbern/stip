@@ -29,8 +29,10 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -76,6 +78,8 @@ import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -274,10 +278,20 @@ public class GesuchService {
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
         gesuch.setAusbildung(ausbildungRepository.requireById(gesuch.getAusbildung().getId()));
-        gesuch.setGesuchsperiode(gesuchsperiodeService.getGesuchsperiodeForAusbildung(
-                gesuch.getAusbildung()
-            )
+        final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
+            gesuch.getAusbildung()
         );
+        if (gesuchsperiode == null) {
+            throw new CustomValidationsException(
+                "No valid gesuchsperiode found for the ausbildungsbegin provided",
+                new CustomConstraintViolation(
+                    VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE,
+                    "Gesuch"
+                )
+            );
+        }
+
+        gesuch.setGesuchsperiode(gesuchsperiode);
         createInitialGesuchTranche(gesuch);
         gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
         gesuchRepository.persistAndFlush(gesuch);
@@ -291,8 +305,14 @@ public class GesuchService {
             .getGesuchsperiode(gesuch.getGesuchsperiode().getId())
             .orElseThrow(NotFoundException::new);
 
+        var ausbildungsstart = gesuch.getAusbildung().getAusbildungBegin();
+        ausbildungsstart.withYear(periode.getGesuchsperiodeStart().getYear());
+        if (ausbildungsstart.isAfter(periode.getGesuchsperiodeStopp())) {
+            ausbildungsstart = ausbildungsstart.minusYears(1);
+        }
+
         var tranche = new GesuchTranche()
-            .setGueltigkeit(new DateRange(periode.getGesuchsperiodeStart(), periode.getGesuchsperiodeStopp()))
+            .setGueltigkeit(new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1)))
             .setGesuch(gesuch)
             .setGesuchFormular(new GesuchFormular())
             .setTyp(GesuchTrancheTyp.TRANCHE);

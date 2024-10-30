@@ -32,6 +32,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchDtoSpec
  */
 @JsonPropertyOrder({
+  GesuchDtoSpec.JSON_PROPERTY_FALL_ID,
+  GesuchDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   GesuchDtoSpec.JSON_PROPERTY_AUSBILDUNG_ID,
   GesuchDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
   GesuchDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
@@ -44,6 +46,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("Gesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchDtoSpec {
+  public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  private UUID fallId;
+
+  public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
+  private String fallNummer;
+
   public static final String JSON_PROPERTY_AUSBILDUNG_ID = "ausbildungId";
   private UUID ausbildungId;
 
@@ -70,6 +78,58 @@ public class GesuchDtoSpec {
 
   public GesuchDtoSpec() {
   }
+
+  public GesuchDtoSpec fallId(UUID fallId) {
+    
+    this.fallId = fallId;
+    return this;
+  }
+
+   /**
+   * Get fallId
+   * @return fallId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getFallId() {
+    return fallId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
+  }
+
+
+  public GesuchDtoSpec fallNummer(String fallNummer) {
+    
+    this.fallNummer = fallNummer;
+    return this;
+  }
+
+   /**
+   * Get fallNummer
+   * @return fallNummer
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getFallNummer() {
+    return fallNummer;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
+  }
+
 
   public GesuchDtoSpec ausbildungId(UUID ausbildungId) {
     
@@ -287,7 +347,9 @@ public class GesuchDtoSpec {
       return false;
     }
     GesuchDtoSpec gesuch = (GesuchDtoSpec) o;
-    return Objects.equals(this.ausbildungId, gesuch.ausbildungId) &&
+    return Objects.equals(this.fallId, gesuch.fallId) &&
+        Objects.equals(this.fallNummer, gesuch.fallNummer) &&
+        Objects.equals(this.ausbildungId, gesuch.ausbildungId) &&
         Objects.equals(this.gesuchsperiode, gesuch.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuch.gesuchStatus) &&
         Objects.equals(this.gesuchNummer, gesuch.gesuchNummer) &&
@@ -299,13 +361,15 @@ public class GesuchDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDtoSpec {\n");
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");

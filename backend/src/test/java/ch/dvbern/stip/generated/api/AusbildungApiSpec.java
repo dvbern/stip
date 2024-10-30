@@ -59,7 +59,8 @@ public class AusbildungApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createAusbildung(),
-                getAusbildung()
+                getAusbildung(),
+                updateAusbildung()
         );
     }
 
@@ -69,6 +70,10 @@ public class AusbildungApiSpec {
 
     public GetAusbildungOper getAusbildung() {
         return new GetAusbildungOper(createReqSpec());
+    }
+
+    public UpdateAusbildungOper updateAusbildung() {
+        return new UpdateAusbildungOper(createReqSpec());
     }
 
     /**
@@ -222,6 +227,90 @@ public class AusbildungApiSpec {
          * @return operation
          */
         public GetAusbildungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returniert die Ausbildung
+     * 
+     *
+     * @see #ausbildungIdPath  (required)
+     * @see #body  (required)
+     * return AusbildungDtoSpec
+     */
+    public static class UpdateAusbildungOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/ausbildung/{ausbildungId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UpdateAusbildungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /ausbildung/{ausbildungId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /ausbildung/{ausbildungId}
+         * @param handler handler
+         * @return AusbildungDtoSpec
+         */
+        public AusbildungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungDtoSpec> type = new TypeRef<AusbildungDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param ausbildungUpdateDtoSpec (AusbildungUpdateDtoSpec)  (required)
+         * @return operation
+         */
+        public UpdateAusbildungOper body(AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec) {
+            reqSpec.setBody(ausbildungUpdateDtoSpec);
+            return this;
+        }
+
+        public static final String AUSBILDUNG_ID_PATH = "ausbildungId";
+
+        /**
+         * @param ausbildungId (UUID)  (required)
+         * @return operation
+         */
+        public UpdateAusbildungOper ausbildungIdPath(Object ausbildungId) {
+            reqSpec.addPathParam(AUSBILDUNG_ID_PATH, ausbildungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UpdateAusbildungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UpdateAusbildungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

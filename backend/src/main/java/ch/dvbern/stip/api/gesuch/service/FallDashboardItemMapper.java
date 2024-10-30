@@ -16,6 +16,7 @@ public abstract class FallDashboardItemMapper {
     NotificationService notificationService;
 
     @Mapping(source = "ausbildungs", target = "ausbildungDashboardItems")
+    @Mapping(source = ".", target = "fall")
     public abstract FallDashboardItemDto toDto(final Fall fall);
 
     @AfterMapping

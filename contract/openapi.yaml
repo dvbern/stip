@@ -298,6 +298,32 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAusbildung
       summary: Returniert die Ausbildung
+    patch:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AusbildungUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ausbildung'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateAusbildung
+      summary: Returniert die Ausbildung
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -2471,6 +2497,8 @@ components:
           $ref: '#/components/schemas/Kontoinhaber'
     Gesuch:
       required:
+        - fallId
+        - fallNummer
         - ausbildungId
         - gesuchsperiode
         - gesuchStatus
@@ -2480,6 +2508,10 @@ components:
         - gesuchTrancheToWorkWith
       type: object
       properties:
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
         ausbildungId:
           $ref: '#/components/schemas/UUID'
         gesuchsperiode:

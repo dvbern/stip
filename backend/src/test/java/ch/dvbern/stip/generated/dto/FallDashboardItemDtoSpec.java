@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungDashboardItemDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,12 +33,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * FallDashboardItemDtoSpec
  */
 @JsonPropertyOrder({
+  FallDashboardItemDtoSpec.JSON_PROPERTY_FALL,
   FallDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS,
   FallDashboardItemDtoSpec.JSON_PROPERTY_NOTIFICATIONS
 })
 @JsonTypeName("FallDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class FallDashboardItemDtoSpec {
+  public static final String JSON_PROPERTY_FALL = "fall";
+  private FallDtoSpec fall;
+
   public static final String JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS = "ausbildungDashboardItems";
   private List<AusbildungDashboardItemDtoSpec> ausbildungDashboardItems;
 
@@ -46,6 +51,32 @@ public class FallDashboardItemDtoSpec {
 
   public FallDashboardItemDtoSpec() {
   }
+
+  public FallDashboardItemDtoSpec fall(FallDtoSpec fall) {
+    
+    this.fall = fall;
+    return this;
+  }
+
+   /**
+   * Get fall
+   * @return fall
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FALL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public FallDtoSpec getFall() {
+    return fall;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FALL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFall(FallDtoSpec fall) {
+    this.fall = fall;
+  }
+
 
   public FallDashboardItemDtoSpec ausbildungDashboardItems(List<AusbildungDashboardItemDtoSpec> ausbildungDashboardItems) {
     
@@ -123,19 +154,21 @@ public class FallDashboardItemDtoSpec {
       return false;
     }
     FallDashboardItemDtoSpec fallDashboardItem = (FallDashboardItemDtoSpec) o;
-    return Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
+    return Objects.equals(this.fall, fallDashboardItem.fall) &&
+        Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
         Objects.equals(this.notifications, fallDashboardItem.notifications);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildungDashboardItems, notifications);
+    return Objects.hash(fall, ausbildungDashboardItems, notifications);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class FallDashboardItemDtoSpec {\n");
+    sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
     sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");
     sb.append("}");
