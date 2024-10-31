@@ -3814,6 +3814,7 @@ components:
         - id
         - name
         - adresse
+        - iban
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -3821,6 +3822,8 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
+        iban:
+          type: string
         sozialdienstAdmin:
           $ref: '#/components/schemas/SozialdienstAdmin'
     StatusprotokollEntry:
