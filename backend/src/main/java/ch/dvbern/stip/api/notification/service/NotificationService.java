@@ -26,10 +26,11 @@ public class NotificationService {
     private final NotificationMapper notificationMapper;
 
     @Transactional
-    public void createNotification(final NotificationType notificationType, final Gesuch gesuch) {
+    public void createGesuchEingereichtNotification(final Gesuch gesuch) {
         Notification notification = new Notification()
-            .setNotificationType(notificationType)
+            .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
             .setGesuch(gesuch);
+
         final var pia = gesuch.getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
@@ -37,6 +38,7 @@ public class NotificationService {
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
+
         String msg = Templates.getGesuchEingereichtText(anrede, nachname, sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
@@ -57,15 +59,51 @@ public class NotificationService {
         return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
     }
 
+    public void createMissingDocumentNotification(final Gesuch gesuch) {
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE)
+            .setGesuch(gesuch);
+        final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+        String msg = Templates.getGesuchFehlendeDokumenteText(sprache,
+            gesuch.getAusbildung()
+                .getFall()
+                .getSachbearbeiterZuordnung()
+                .getSachbearbeiter()
+                .getVorname(),
+            gesuch.getAusbildung()
+                .getFall()
+                .getSachbearbeiterZuordnung()
+                .getSachbearbeiter()
+                .getNachname()
+        ).render();
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
+
     @CheckedTemplate
     public static class Templates {
+
+        public static TemplateInstance getGesuchFehlendeDokumenteText(Sprache korrespondenzSprache, String sbVorname, String sbNachname) {
+            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
+                return gesuchFehlendeDokumenteFR(sbVorname, sbNachname);
+            }
+            return gesuchFehlendeDokumenteDE(sbVorname, sbNachname);
+        }
+
         public static TemplateInstance getGesuchEingereichtText(String anrede, String nachname, Sprache korrespondenzSprache) {
             if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
                 return gesuchEingereichtFR(anrede, nachname);
             }
             return gesuchEingereichtDE(anrede, nachname);
         }
+
         public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
+
         public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
+
+        public static native TemplateInstance gesuchFehlendeDokumenteDE(String sbVorname, String sbNachname);
+
+        public static native TemplateInstance gesuchFehlendeDokumenteFR(String sbVorname, String sbNachname);
     }
 }

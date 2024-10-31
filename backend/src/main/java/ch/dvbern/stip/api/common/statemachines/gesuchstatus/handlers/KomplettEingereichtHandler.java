@@ -1,14 +1,13 @@
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
-import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import ch.dvbern.stip.api.notification.type.NotificationType;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -31,15 +30,8 @@ public class KomplettEingereichtHandler implements GesuchStatusStateChangeHandle
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
-        mailService.sendStandardNotificationEmail(
-            pia.getNachname(),
-            pia.getVorname(),
-            pia.getEmail(),
-            AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
-        );
-
-        notificationService.createNotification(NotificationType.GESUCH_EINGEREICHT, gesuch);
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        notificationService.createGesuchEingereichtNotification(gesuch);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
         gesuch.getGesuchTranchen()
             .stream()

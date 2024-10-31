@@ -65,10 +65,11 @@
         <!-- Anrede -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.person.salutation.label' | translate }}</mat-label>
-          <mat-select formControlName="anrede" data-testid="form-person-anrede">
-            <mat-option [value]="null" disabled selected>
-              {{ 'shared.form.select.empty' | translate }}
-            </mat-option>
+          <mat-select
+            formControlName="anrede"
+            data-testid="form-person-anrede"
+            [placeholder]="'shared.form.select.empty' | translate"
+          >
             @for (a of anredeValues; track $index) {
               <mat-option [attr.data-testid]="a" [value]="a">
                 {{ 'shared.form.select.salutation.' + (a | lowercase) | translate }}
@@ -238,10 +239,11 @@
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
             <mat-label>{{ 'shared.form.person.marital-status.label' | translate }}</mat-label>
-            <mat-select formControlName="zivilstand" data-testid="form-person-zivilstand">
-              <mat-option [value]="null" disabled selected>
-                {{ 'shared.form.select.empty' | translate }}
-              </mat-option>
+            <mat-select
+              formControlName="zivilstand"
+              data-testid="form-person-zivilstand"
+              [placeholder]="'shared.form.select.empty' | translate"
+            >
               @for (z of zivilstandValues; track $index) {
                 <mat-option [value]="z" [attr.data-testid]="z">
                   {{ 'shared.form.person.zivilstand.' + z | translate }}
@@ -279,10 +281,11 @@
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
           <mat-form-field class="flex-grow-1" dvSharedUiFormField>
             <mat-label>{{ 'shared.form.person.nationality.label' | translate }}</mat-label>
-            <mat-select formControlName="nationalitaet" data-testid="form-person-nationalitaet">
-              <mat-option [value]="null" disabled selected>
-                {{ 'shared.form.select.empty' | translate }}
-              </mat-option>
+            <mat-select
+              formControlName="nationalitaet"
+              data-testid="form-person-nationalitaet"
+              [placeholder]="'shared.form.select.empty' | translate"
+            >
               @for (l of translatedLaender$ | async; track $index) {
                 <mat-option [value]="l.code" [attr.data-testid]="l.code">
                   {{ l.text }}
@@ -304,10 +307,11 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ 'shared.form.person.niederlassungsstatus.label' | translate }}</mat-label>
 
-              <mat-select formControlName="niederlassungsstatus" data-testid="form-person-niederlassungsstatus">
-                <mat-option [value]="null" disabled selected>
-                  {{ 'shared.form.select.empty' | translate }}
-                </mat-option>
+              <mat-select
+                formControlName="niederlassungsstatus"
+                data-testid="form-person-niederlassungsstatus"
+                [placeholder]="'shared.form.select.empty' | translate"
+              >
                 @for (n of niederlassungsStatusValues; track $index) {
                   <mat-option [value]="n" [attr.data-testid]="n">
                     {{ 'shared.form.person.niederlassungsstatus.' + n | translate }}
@@ -405,10 +409,11 @@
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
             <mat-label>{{ 'shared.form.shared.wohnsitz.label' | translate }}</mat-label>
-            <mat-select formControlName="wohnsitz" data-testid="form-person-wohnsitz">
-              <mat-option [value]="null" disabled selected>
-                {{ 'shared.form.select.empty' | translate }}
-              </mat-option>
+            <mat-select
+              formControlName="wohnsitz"
+              data-testid="form-person-wohnsitz"
+              [placeholder]="'shared.form.select.empty' | translate"
+            >
               @for (z of wohnsitzHelper.wohnsitzValuesSig(); track $index) {
                 <mat-option [value]="z" [attr.data-testid]="z">
                   {{ 'shared.form.shared.wohnsitz.' + z | translate }}

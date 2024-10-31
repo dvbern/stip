@@ -88,4 +88,16 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
             }
         );
     }
+
+    @Mapping(
+        source = "ausbildungBegin",
+        target = "ausbildungBegin",
+        qualifiedBy = { DateMapper.class, DateToMonthYear.class }
+    )
+    @Mapping(
+        source = "ausbildungEnd",
+        target = "ausbildungEnd",
+        qualifiedBy = { DateMapper.class, DateToMonthYear.class }
+    )
+	public abstract AusbildungUpdateDto toUpdateDto(Ausbildung ausbildung);
 }

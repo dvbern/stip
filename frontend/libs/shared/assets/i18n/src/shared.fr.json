@@ -148,6 +148,7 @@
   "shared.nachrichten.sender": "Expéditeur",
   "shared.nachrichten.date": "Date",
   "shared.nachrichten.type.GESUCH_EINGEREICHT": "Demande soumise",
+  "shared.nachrichten.type.FEHLENDE_DOKUMENTE": "Documents manquants",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
@@ -159,6 +160,7 @@
   "shared.gesuch.status.ENTWURF": "Brouillon",
   "shared.gesuch.status.PUBLIZIERT": "Publié - Actif",
   "shared.gesuch.status.ARCHIVIERT": "Archivé",
+  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "Changement intégré manuellement",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Traitement par le requérant",
   "shared.gesuch.status.tranche.UEBERPRUEFEN": "En cours de vérification",
   "shared.gesuch.status.tranche.AKZEPTIERT": "Accepté",
