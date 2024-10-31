@@ -19,19 +19,6 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class, uses = { FallMapper.class, AusbildungsgangMapper.class, BildungskategorieMapper.class })
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
-//    @Mapping(source = "ausbildungsgang.id", target = "ausbildungsgang.id")
-//    @Mapping(
-//        source = "ausbildungBegin",
-//        target = "ausbildungBegin",
-//        qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class }
-//    )
-//    @Mapping(
-//        source = "ausbildungEnd",
-//        target = "ausbildungEnd",
-//        qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class }
-//    )
-//    public abstract Ausbildung toEntity(AusbildungDto ausbildungDto);
-
     @Mapping(
         source = "ausbildungBegin",
         target = "ausbildungBegin",

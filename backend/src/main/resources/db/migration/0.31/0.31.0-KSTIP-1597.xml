@@ -1,59 +1,71 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="jafa (generated)" id="1730213811819-8">
-        <dropForeignKeyConstraint baseTableName="gesuch" constraintName="FK_gesuch_fall_id"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-9">
-        <dropForeignKeyConstraint baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_ausbildung_id"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-1">
-        <addColumn tableName="gesuch">
-            <column name="ausbildung_id" type="uuid">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-2">
-        <addColumn tableName="gesuch_aud">
-            <column name="ausbildung_id" type="uuid"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-3">
-        <addColumn tableName="ausbildung">
-            <column name="fall_id" type="uuid">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-4">
-        <addColumn tableName="ausbildung_aud">
-            <column name="fall_id" type="uuid"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-5">
-        <createIndex indexName="IX_ausbildung_fall_id" tableName="ausbildung">
-            <column name="fall_id"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-6">
-        <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="ausbildung" constraintName="FK_ausbildung_fall_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fall" validate="true"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-7">
-        <addForeignKeyConstraint baseColumnNames="ausbildung_id" baseTableName="gesuch" constraintName="FK_gesuch_ausbildung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ausbildung" validate="true"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-10">
-        <dropUniqueConstraint constraintName="uc_gesuch_formularausbildung_id_col" tableName="gesuch_formular"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-11">
-        <dropColumn columnName="ausbildung_id" tableName="gesuch_formular"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-12">
-        <dropColumn columnName="ausbildung_id" tableName="gesuch_formular_aud"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-13">
-        <dropColumn columnName="fall_id" tableName="gesuch"/>
-    </changeSet>
-    <changeSet author="jafa (generated)" id="1730213811819-14">
-        <dropColumn columnName="fall_id" tableName="gesuch_aud"/>
-    </changeSet>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="jafa (generated)" id="1730364389786-10">
+    <dropForeignKeyConstraint baseTableName="gesuch" constraintName="FK_gesuch_fall_id"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-11">
+    <dropForeignKeyConstraint baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_ausbildung_id"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-1">
+    <addColumn tableName="gesuch">
+      <column name="ausbildung_id" type="uuid">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-2">
+    <addColumn tableName="gesuch_aud">
+      <column name="ausbildung_id" type="uuid"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-3">
+    <addColumn tableName="ausbildung">
+      <column name="status" type="smallint">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-4">
+    <addColumn tableName="ausbildung_aud">
+      <column name="status" type="smallint"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-5">
+    <addColumn tableName="ausbildung">
+      <column name="fall_id" type="uuid">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-6">
+    <addColumn tableName="ausbildung_aud">
+      <column name="fall_id" type="uuid"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-7">
+    <createIndex indexName="IX_ausbildung_fall_id" tableName="ausbildung">
+      <column name="fall_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-8">
+    <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="ausbildung" constraintName="FK_ausbildung_fall_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fall" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-9">
+    <addForeignKeyConstraint baseColumnNames="ausbildung_id" baseTableName="gesuch" constraintName="FK_gesuch_ausbildung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ausbildung" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-12">
+    <dropUniqueConstraint constraintName="uc_gesuch_formularausbildung_id_col" tableName="gesuch_formular"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-13">
+    <dropColumn columnName="ausbildung_id" tableName="gesuch_formular"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-14">
+    <dropColumn columnName="ausbildung_id" tableName="gesuch_formular_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-15">
+    <dropColumn columnName="fall_id" tableName="gesuch"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1730364389786-16">
+    <dropColumn columnName="fall_id" tableName="gesuch_aud"/>
+  </changeSet>
 </databaseChangeLog>

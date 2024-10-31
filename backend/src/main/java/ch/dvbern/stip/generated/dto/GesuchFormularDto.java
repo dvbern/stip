@@ -55,6 +55,7 @@ public class GesuchFormularDto  implements Serializable {
 
   
   @JsonProperty("ausbildung")
+  @NotNull
   public AusbildungDto getAusbildung() {
     return ausbildung;
   }

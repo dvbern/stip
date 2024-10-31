@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -99,4 +100,8 @@ public class Ausbildung extends AbstractMandantEntity {
     @NotNull
     @Column(name = "is_ausbildung_ausland")
     private Boolean isAusbildungAusland = false;
+
+    @NotNull
+    @Column(name = "status", nullable = false)
+    private AusbildungsStatus status = AusbildungsStatus.AKTIV;
 }

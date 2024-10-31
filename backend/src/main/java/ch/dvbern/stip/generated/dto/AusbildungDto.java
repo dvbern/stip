@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AusbildungsPensumDto;
+import ch.dvbern.stip.generated.dto.AusbildungsStatusDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class AusbildungDto  implements Serializable {
   private @Valid String ausbildungBegin;
   private @Valid String ausbildungEnd;
   private @Valid AusbildungsPensumDto pensum;
+  private @Valid AusbildungsStatusDto status;
   private @Valid UUID id;
   private @Valid Boolean ausbildungNichtGefunden;
   private @Valid String alternativeAusbildungsstaette;
@@ -130,6 +132,25 @@ public class AusbildungDto  implements Serializable {
   @JsonProperty("pensum")
   public void setPensum(AusbildungsPensumDto pensum) {
     this.pensum = pensum;
+  }
+
+  /**
+   **/
+  public AusbildungDto status(AusbildungsStatusDto status) {
+    this.status = status;
+    return this;
+  }
+
+  
+  @JsonProperty("status")
+  @NotNull
+  public AusbildungsStatusDto getStatus() {
+    return status;
+  }
+
+  @JsonProperty("status")
+  public void setStatus(AusbildungsStatusDto status) {
+    this.status = status;
   }
 
   /**
@@ -276,6 +297,7 @@ public class AusbildungDto  implements Serializable {
         Objects.equals(this.ausbildungBegin, ausbildung.ausbildungBegin) &&
         Objects.equals(this.ausbildungEnd, ausbildung.ausbildungEnd) &&
         Objects.equals(this.pensum, ausbildung.pensum) &&
+        Objects.equals(this.status, ausbildung.status) &&
         Objects.equals(this.id, ausbildung.id) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildung.ausbildungNichtGefunden) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildung.alternativeAusbildungsstaette) &&
@@ -287,7 +309,7 @@ public class AusbildungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang);
+    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang);
   }
 
   @Override
@@ -300,6 +322,7 @@ public class AusbildungDto  implements Serializable {
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
