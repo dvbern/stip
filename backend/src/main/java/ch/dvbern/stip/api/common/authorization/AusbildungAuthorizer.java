@@ -12,7 +12,6 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -32,9 +31,6 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canCreate() {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-
-        final var fall = fallRepository.findFallForGsOptional(currentBenutzer.getId()).orElseThrow(NotFoundException::new);
         // TODO: Check state of ausbildung - only one may be active
     }
 

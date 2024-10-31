@@ -94,7 +94,7 @@ class GesuchFillFormularTest {
     @Test
     @TestAsGesuchsteller
     @Order(1)
-    void createFallAndAusbildung() {
+    void createFall() {
         fallId = TestUtil.getOrCreateFall(fallApiSpec).getId();
     }
 
