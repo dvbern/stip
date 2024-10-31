@@ -35,7 +35,7 @@ public class NotificationService {
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
 
-        String msg = Templates.getGesuchEingereichtText(anrede,nachname,sprache).render();
+        String msg = Templates.getGesuchEingereichtText(anrede, nachname, sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
@@ -83,11 +83,12 @@ public class NotificationService {
     @CheckedTemplate
     public static class Templates {
         public static TemplateInstance getGesuchFehlendeDokumenteText(Sprache korrespondenzSprache) {
-            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
                 return gesuchFehlendeDokumenteFR();
             }
             return gesuchFehlendeDokumenteDE();
         }
+
         public static TemplateInstance getGesuchEingereichtText(
             final String anrede,
             final String nachname,
@@ -97,28 +98,34 @@ public class NotificationService {
             }
             return gesuchEingereichtDE(anrede, nachname);
         }
+
         public static TemplateInstance getAenderungAbgelehnt(
             final String anrede,
             final String nachname,
-            final String msg,
+            final String kommentar,
             final Sprache korrespondenzSprache) {
             if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
-                return aenderungAbgelehntFR(anrede, nachname, msg);
+                return aenderungAbgelehntFR(anrede, nachname, kommentar);
             }
-            return aenderungAbgelehntDE(anrede, nachname, msg);
+            return aenderungAbgelehntDE(anrede, nachname, kommentar);
         }
+
         public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
+
         public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
+
         public static native TemplateInstance gesuchFehlendeDokumenteDE();
+
         public static native TemplateInstance gesuchFehlendeDokumenteFR();
+
         public static native TemplateInstance aenderungAbgelehntDE(
             final String anrede,
             final String nachname,
-            final String msg);
+            final String kommentar);
 
         public static native TemplateInstance aenderungAbgelehntFR(
             final String anrede,
             final String nachname,
-            final String msg);
+            final String kommentar);
     }
 }

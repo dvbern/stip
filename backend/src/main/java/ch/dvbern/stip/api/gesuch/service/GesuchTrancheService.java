@@ -13,9 +13,9 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
-import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -298,13 +298,7 @@ public class GesuchTrancheService {
             }
         }
 
-        final var pia = aenderung.getGesuch().getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
-        mailService.sendStandardNotificationEmail(
-            pia.getNachname(),
-            pia.getVorname(),
-            pia.getEmail(),
-            AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
-        );
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
 
         notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), kommentarDto);
 
