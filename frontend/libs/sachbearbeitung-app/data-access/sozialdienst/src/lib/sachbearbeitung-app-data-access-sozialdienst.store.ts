@@ -12,6 +12,7 @@ import {
   pipe,
   switchMap,
   tap,
+  throwError,
   throwIfEmpty,
 } from 'rxjs';
 
@@ -120,76 +121,94 @@ export class SozialdienstStore extends signalStore(
           ...sozialdienstCreate.sozialdienstAdmin,
         };
 
-        return this.keycloak.createUser$(newUser).pipe(
-          filter(hasLocationHeader),
-          throwIfEmpty(() => new Error('User creation failed')),
-          switchMap((response) =>
-            this.keycloak.loadUserByUrl$(response.headers.get('Location')),
-          ),
-          combineLatestWith(this.keycloak.getRoles$(bySozialdienstAdminRole)),
-          switchMap(([user, roles]) => {
-            const adminRole = roles.find(
-              (role) => role.name === 'Sozialdienst-Admin',
-            );
-
-            if (!adminRole) {
-              throw new Error('Admin Role not found');
-            }
-
-            return this.keycloak.assignRoles$(user, [
-              { id: adminRole.id, name: 'Sozialdienst-Admin' },
-            ]);
-          }),
-          switchMap((user) => {
-            const newDienst: SozialdienstCreate = {
-              ...sozialdienstCreate,
-              sozialdienstAdmin: {
-                nachname: user.lastName,
-                vorname: user.firstName,
-                keycloakId: user.id,
-                // todo: make email on our user optional?
-                eMail: user.email ?? '',
-              },
-            };
-
-            return this.sozialdienstService
-              .createSozialdienst$({
-                sozialdienstCreate: newDienst,
-              })
-              .pipe(
-                map((sozialdienst) => ({
-                  user,
-                  sozialdienst,
-                })),
+        return this.keycloak
+          .createUser$({
+            email: newUser.eMail,
+            name: newUser.nachname,
+            vorname: newUser.vorname,
+          })
+          .pipe(
+            filter(hasLocationHeader),
+            throwIfEmpty(() => new Error('User creation failed')),
+            switchMap((response) =>
+              this.keycloak.loadUserByUrl$(response.headers.get('Location')),
+            ),
+            combineLatestWith(this.keycloak.getRoles$(bySozialdienstAdminRole)),
+            switchMap(([user, roles]) => {
+              const adminRole = roles.find(
+                (role) => role.name === 'Sozialdienst-Admin',
               );
 
-            // Todo: delete user if sozialdienst creation fails!
-          }),
-          switchMap(({ sozialdienst, user }) =>
-            this.keycloak.notifyUser$(user).pipe(
-              handleApiResponse(
-                () => {
-                  patchState(this, { sozialdienst: success(sozialdienst) });
+              if (!adminRole) {
+                throw new Error('Admin Role not found');
+              }
+
+              return this.keycloak.assignRoles$(user, [
+                { id: adminRole.id, name: 'Sozialdienst-Admin' },
+              ]);
+            }),
+            switchMap((user) => {
+              const newDienst: SozialdienstCreate = {
+                ...sozialdienstCreate,
+                sozialdienstAdmin: {
+                  nachname: user.lastName,
+                  vorname: user.firstName,
+                  keycloakId: user.id,
+                  // todo: make email on our user optional?
+                  eMail: user.email ?? '',
                 },
-                {
-                  onSuccess: (wasSuccessfull) => {
-                    if (wasSuccessfull) {
-                      this.globalNotificationStore.createSuccessNotification({
-                        messageKey:
-                          'sachbearbeitung-app.admin.sozialdienst.sozialdienstErstellt',
-                      });
-                      onAfterSave?.(sozialdienst.id);
-                    }
-                  },
-                },
-              ),
+              };
+
+              return this.sozialdienstService
+                .createSozialdienst$({
+                  sozialdienstCreate: newDienst,
+                })
+                .pipe(
+                  map((sozialdienst) => ({
+                    user,
+                    sozialdienst,
+                  })),
+                  catchError((error) => {
+                    // todo: test if this works
+                    this.keycloak.deleteUser$(user.id);
+
+                    return throwError(() => error);
+                  }),
+                );
+            }),
+            switchMap(({ sozialdienst, user }) =>
+              this.keycloak
+                .notifyUser$({
+                  name: user.lastName,
+                  vorname: user.firstName,
+                  email: user.email,
+                })
+                .pipe(
+                  handleApiResponse(
+                    () => {
+                      patchState(this, { sozialdienst: success(sozialdienst) });
+                    },
+                    {
+                      onSuccess: (wasSuccessfull) => {
+                        if (wasSuccessfull) {
+                          this.globalNotificationStore.createSuccessNotification(
+                            {
+                              messageKey:
+                                'sachbearbeitung-app.admin.sozialdienst.sozialdienstErstellt',
+                            },
+                          );
+                          onAfterSave?.(sozialdienst.id);
+                        }
+                      },
+                    },
+                  ),
+                ),
             ),
-          ),
-          catchError((error) => {
-            patchState(this, { sozialdienst: failure(error) });
-            return EMPTY;
-          }),
-        );
+            catchError((error) => {
+              patchState(this, { sozialdienst: failure(error) });
+              return EMPTY;
+            }),
+          );
       }),
     ),
   );
@@ -255,22 +274,132 @@ export class SozialdienstStore extends signalStore(
   //   ),
   // );
 
-  // replaceSozialdienstAdmin$ = rxMethod<{ sozialdienstId: string; values: unknown }>(
-  //   pipe(
-  //     tap(() => {
-  //       patchState(this, (state) => ({
-  //         sozialdienste: cachedPending(state.sozialdienste),
-  //       }));
-  //     }),
-  //     switchMap(({ sozialdienstId, values }) =>
-  //       this.sozialdienstService
-  //         .replaceSozialdienstAdmin$({ sozialdienstId, payload: values })
-  //         .pipe(
-  //           handleApiResponse((sozialdienst) =>
-  //             patchState(this, { sozialdienst }),
-  //           ),
-  //         ),
-  //     ),
-  //   ),
-  // );
+  replaceSozialdienstAdmin$ = rxMethod<{
+    sozialdienstId: string;
+    existingSozialdienstAdminKeycloakId: string;
+    newAdmin: Omit<SozialdienstAdminCreate, 'keycloakId'>;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, {
+          sozialdienst: pending(),
+        });
+      }),
+      exhaustMap(
+        ({ sozialdienstId, existingSozialdienstAdminKeycloakId, newAdmin }) => {
+          return this.keycloak
+            .createUser$({
+              name: newAdmin.nachname,
+              vorname: newAdmin.nachname,
+              email: newAdmin.eMail,
+            })
+            .pipe(
+              filter(hasLocationHeader),
+              throwIfEmpty(() => new Error('User creation failed')),
+              switchMap((response) =>
+                this.keycloak.loadUserByUrl$(response.headers.get('Location')),
+              ),
+              combineLatestWith(
+                this.keycloak.getRoles$(bySozialdienstAdminRole),
+              ),
+              switchMap(([user, roles]) => {
+                const adminRole = roles.find(
+                  (role) => role.name === 'Sozialdienst-Admin',
+                );
+
+                if (!adminRole) {
+                  throw new Error('Admin Role not found');
+                }
+
+                return this.keycloak.assignRoles$(user, [
+                  { id: adminRole.id, name: 'Sozialdienst-Admin' },
+                ]);
+              }),
+              switchMap((user) =>
+                this.sozialdienstService.replaceSozialdienstAdmin$({
+                  sozialdienstId,
+                  sozialdienstAdminCreate: {
+                    nachname: user.lastName,
+                    vorname: user.firstName,
+                    eMail: user.email ?? '',
+                    keycloakId: user.id,
+                  },
+                }),
+              ),
+              switchMap((sozialdienstAdmin) =>
+                this.keycloak
+                  .deleteUser$(existingSozialdienstAdminKeycloakId)
+                  .pipe(map(() => sozialdienstAdmin)),
+              ),
+              switchMap((sozialdienstAdmin) =>
+                this.keycloak
+                  .notifyUser$({
+                    vorname: sozialdienstAdmin.vorname,
+                    name: sozialdienstAdmin.nachname,
+                    email: sozialdienstAdmin.eMail,
+                  })
+                  .pipe(
+                    handleApiResponse(
+                      () => {
+                        patchState(this, (state) => {
+                          const dienst = state.sozialdienst.data;
+                          if (!dienst || !sozialdienstAdmin) {
+                            return state;
+                          }
+                          return {
+                            sozialdienst: success({
+                              ...dienst,
+                              sozialdienstAdmin: {
+                                ...sozialdienstAdmin,
+                              },
+                            }),
+                          };
+                        });
+                      },
+                      {
+                        onSuccess: (wasSuccessfull) => {
+                          if (wasSuccessfull) {
+                            this.globalNotificationStore.createSuccessNotification(
+                              {
+                                messageKey:
+                                  'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt',
+                              },
+                            );
+                          }
+                        },
+                      },
+                    ),
+                  ),
+              ),
+            );
+        },
+      ),
+    ),
+  );
 }
+
+// switchMap((user) =>
+//   this.sozialdienstService
+//     .replaceSozialdienstAdmin$({
+//       sozialdienstId,
+//       sozialdienstAdminCreate,
+//     })
+//     .pipe(
+//       handleApiResponse((sozialdienstAdmin) =>
+//         patchState(this, (state) => {
+//           const dienst = state.sozialdienst.data;
+//           if (!dienst || !sozialdienstAdmin.data) {
+//             return state;
+//           }
+//           return {
+//             sozialdienst: success({
+//               ...dienst,
+//               sozialdienstAdmin: {
+//                 ...sozialdienstAdmin.data,
+//               },
+//             }),
+//           };
+//         }),
+//       ),
+//     ),
+// ),

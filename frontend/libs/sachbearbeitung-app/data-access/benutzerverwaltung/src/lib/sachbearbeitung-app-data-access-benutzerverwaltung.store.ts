@@ -232,17 +232,21 @@ export class BenutzerverwaltungStore extends signalStore(
         });
       }),
       exhaustMap(({ name, vorname, email, roles, onAfterSave }) =>
-        this.keycloak
-          .createUser$({ vorname, nachname: name, eMail: email })
-          .pipe(
-            filter(hasLocationHeader),
-            throwIfEmpty(() => new Error('User creation failed')),
-            switchMap((response) =>
-              this.keycloak.loadUserByUrl$(response.headers.get('Location')),
-            ),
-            switchMap((user) => this.keycloak.assignRoles$(user, roles)),
-            switchMap((user) =>
-              this.keycloak.notifyUser$(user).pipe(
+        this.keycloak.createUser$({ vorname, name, email }).pipe(
+          filter(hasLocationHeader),
+          throwIfEmpty(() => new Error('User creation failed')),
+          switchMap((response) =>
+            this.keycloak.loadUserByUrl$(response.headers.get('Location')),
+          ),
+          switchMap((user) => this.keycloak.assignRoles$(user, roles)),
+          switchMap((user) =>
+            this.keycloak
+              .notifyUser$({
+                name: user.lastName,
+                vorname: user.firstName,
+                email: user.email,
+              })
+              .pipe(
                 handleApiResponse(
                   () => {
                     // roles are set optimistically on the user object
@@ -261,12 +265,12 @@ export class BenutzerverwaltungStore extends signalStore(
                   },
                 ),
               ),
-            ),
-            catchError((error) => {
-              patchState(this, { benutzer: failure(error) });
-              return EMPTY;
-            }),
           ),
+          catchError((error) => {
+            patchState(this, { benutzer: failure(error) });
+            return EMPTY;
+          }),
+        ),
       ),
     ),
   );

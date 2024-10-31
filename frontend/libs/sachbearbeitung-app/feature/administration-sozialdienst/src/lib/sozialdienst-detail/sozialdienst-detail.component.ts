@@ -2,16 +2,20 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   OnDestroy,
+  effect,
   inject,
   input,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -35,6 +39,8 @@ import {
 } from '@dv/shared/ui/remote-data-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 import { ibanValidator } from '@dv/shared/util/validator-iban';
+
+import { ReplaceSozialdienstAdminDialogComponent } from '../replace-sozialdienst-admin-dialog/replace-sozialdienst-admin-dialog.component';
 
 @Component({
   standalone: true,
@@ -62,6 +68,8 @@ export class SozialdienstDetailComponent implements OnDestroy {
   idSig = input.required<string | undefined>({ alias: 'id' });
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   store = inject(SozialdienstStore);
   globalStore = inject(Store);
@@ -89,6 +97,49 @@ export class SozialdienstDetailComponent implements OnDestroy {
       ],
     }),
   });
+
+  constructor() {
+    effect(
+      () => {
+        const id = this.idSig();
+
+        if (id) {
+          this.store.loadSozialdienst$({ sozialdienstId: id });
+
+          // disable email field
+          this.form.controls.sozialdienstAdmin.controls.eMail.disable({
+            emitEvent: false,
+          });
+        }
+        this.form.controls.adresse.controls.land.setValue('CH', {
+          emitEvent: false,
+        });
+        this.form.controls.adresse.controls.land.disable({ emitEvent: false });
+      },
+      { allowSignalWrites: true },
+    );
+
+    // effect(
+    //   () => {
+    //     const sozialdienst = this.store.sozialdienst().data;
+    //     if (sozialdienst) {
+    //       this.form.patchValue({
+    //         name: sozialdienst.name,
+    //         iban: sozialdienst.iban?.substring(2),
+    //         adresse: {
+    //           ...sozialdienst.adresse,
+    //         },
+    //         sozialdienstAdmin: {
+    //           vorname: sozialdienst.sozialdienstAdmin.vorname,
+    //           nachname: sozialdienst.sozialdienstAdmin.nachname,
+    //           eMail: sozialdienst.sozialdienstAdmin.eMail,
+    //         },
+    //       });
+    //     }
+    //   },
+    //   { allowSignalWrites: true },
+    // );
+  }
 
   handleSubmit() {
     if (this.idSig()) {
@@ -132,6 +183,24 @@ export class SozialdienstDetailComponent implements OnDestroy {
         });
       },
     });
+  }
+
+  replaceSozialdienstAdmin() {
+    const sozialdienstAdminId =
+      this.store.sozialdienst().data?.sozialdienstAdmin?.keycloakId ?? 'test';
+
+    if (!sozialdienstAdminId) return;
+
+    ReplaceSozialdienstAdminDialogComponent.open(this.dialog, {
+      sozialdienstAdminId,
+    })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          // this.store.replaceSozialdienstAdmin$({
+        }
+      });
   }
 
   trimEmail() {

@@ -10,8 +10,8 @@ import {
 } from '@dv/sachbearbeitung-app/util-fn/keycloak-helper';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
-  BenutzerCreateKeycloak,
   BenutzerVerwaltungRole,
+  KeycloakUserCreate,
   SharedModelBenutzerApi,
   SharedModelBenutzerList,
   SharedModelModelMappingsRepresentation,
@@ -113,13 +113,12 @@ export class KeycloakHttpService {
       );
   }
 
-  notifyUser$(user: SharedModelBenutzerApi) {
+  notifyUser$(user: { name: string; vorname: string; email?: string }) {
     if (!user.email) return of(false);
     return this.mailService
       .sendWelcomeEmail$({
         welcomeMail: {
-          vorname: user.firstName,
-          name: user.lastName,
+          ...user,
           email: user.email,
           redirectUri: getCurrentUrl(this.document),
         },
@@ -146,16 +145,16 @@ export class KeycloakHttpService {
       );
   }
 
-  createUser$(newUser: BenutzerCreateKeycloak) {
+  createUser$(newUser: KeycloakUserCreate) {
     return this.http
       .post(
         `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users`,
         {
           enabled: true,
           firstName: newUser.vorname,
-          lastName: newUser.nachname,
-          username: newUser.eMail,
-          email: newUser.eMail,
+          lastName: newUser.name,
+          username: newUser.email,
+          email: newUser.email,
           emailVerified: true,
         },
         {
@@ -165,6 +164,40 @@ export class KeycloakHttpService {
       )
       .pipe(this.interceptError('erstellen'));
   }
+
+  // getRoleByName$(roleName: string) {
+  //   return this.getRoles$((role) => role.name === roleName).pipe(
+  //     map((roles) => roles[0]),
+  //   );
+  // }
+
+  getRoles$(roleFilter?: (role: SharedModelRole) => boolean) {
+    return this.http
+      .get<SharedModelRoleList>(
+        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/roles`,
+      )
+      .pipe(
+        map((roles) => {
+          // @scph: should we also zod parse the roles here?
+          if (roleFilter) {
+            return roles.filter(roleFilter);
+          }
+
+          return roles;
+        }),
+      );
+  }
+
+  // todo: use everywhere if it works!
+  // createUserWithRole$(newUser: KeycloakUserCreate, roles: SharedModelRole[]) {
+  //   return this.createUser$(newUser).pipe(
+  //     filter(hasLocationHeader),
+  //     throwIfEmpty(() => new Error('User creation failed')),
+  //     map((response) => response.headers.get('Location')),
+  //     switchMap((location) => this.loadUserByUrl$(location)),
+  //     switchMap((user) => this.assignRoles$(user, roles)),
+  //   );
+  // }
 
   updateUser$(user: SharedModelBenutzerApi) {
     return this.http.put(
@@ -197,23 +230,6 @@ export class KeycloakHttpService {
           benutzers: SharedModelBenutzerList.parse(benutzers),
           role,
         })),
-      );
-  }
-
-  getRoles$(roleFilter?: (role: SharedModelRole) => boolean) {
-    return this.http
-      .get<SharedModelRoleList>(
-        `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/roles`,
-      )
-      .pipe(
-        map((roles) => {
-          // @scph: should we also zod parse the roles here?
-          if (roleFilter) {
-            return roles.filter(roleFilter);
-          }
-
-          return roles;
-        }),
       );
   }
 

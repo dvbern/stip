@@ -235,6 +235,9 @@
   "sachbearbeitung-app.admin.sozialdienst.nachname.label": "Name",
   "sachbearbeitung-app.admin.sozialdienst.email.label": "E-Mail",
   "sachbearbeitung-app.admin.sozialdienst.sozialdienstErstellt": "Sozialdienst wurde erfolgreich erstellt",
+  "sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel": "Neuen Sozialdienst Admin erstellen",
+  "sachbearbeitung-app.admin.sozialdienst.admin-dialog.message": "Erstellen sie einen neuen Admin, so wird der exisistierende Admin ersetzt.",
+  "sachbearbeitung-app.admin.sozialdienst.admin-dialog.confirm": "Admin erstellen",
 
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",

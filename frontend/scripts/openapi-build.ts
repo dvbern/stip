@@ -176,6 +176,7 @@ async function sleep(msec: number) {
     'Stammdaten',
     'Tenant',
     'Sozialdienst',
+    'SozialdienstAdmin',
   ];
 
   await generateOpenApi(generatorPath, generatedApis);

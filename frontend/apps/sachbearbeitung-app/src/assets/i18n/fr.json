@@ -235,6 +235,9 @@
   "sachbearbeitung-app.admin.sozialdienst.nachname.label": "Nom",
   "sachbearbeitung-app.admin.sozialdienst.email.label": "E-Mail",
   "sachbearbeitung-app.admin.sozialdienst.sozialdienstErstellt": "Le service social a été créé avec succès.",
+  "sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel": "Créer un nouvel administrateur de service social",
+  "sachbearbeitung-app.admin.sozialdienst.admin-dialog.message": "Si vous créez un nouvel administrateur, l'administrateur existant sera remplacé.",
+  "sachbearbeitung-app.admin.sozialdienst.admin-dialog.confirm": "Créer un administrateur",
 
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",

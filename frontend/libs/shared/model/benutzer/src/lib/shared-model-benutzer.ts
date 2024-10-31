@@ -27,10 +27,10 @@ export const SharedModelBenutzerApi = z.object({
 });
 export type SharedModelBenutzerApi = z.infer<typeof SharedModelBenutzerApi>;
 
-export interface BenutzerCreateKeycloak {
+export interface KeycloakUserCreate {
   vorname: string;
-  nachname: string;
-  eMail: string;
+  name: string;
+  email: string;
 }
 
 export const byBenutzertVerwaltungRoles = (role: SharedModelRole) => {
