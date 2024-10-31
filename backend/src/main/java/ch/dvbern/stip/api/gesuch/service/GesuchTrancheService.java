@@ -166,9 +166,9 @@ public class GesuchTrancheService {
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        if(!(gesuch.getGesuchStatus() == Gesuchstatus.IN_FREIGABE
-            || gesuch.getGesuchStatus() == Gesuchstatus.VERFUEGT))
+        //TODO KSTIP-1631: change to state STIPENDIENANSPRUCH or KEIN_STIPENDIENANSPRUCH
+        final var allowedStates = Set.of(Gesuchstatus.IN_FREIGABE,Gesuchstatus.VERFUEGT);
+        if(!allowedStates.contains(gesuch.getGesuchStatus()))
             throw new IllegalStateException("Create aenderung not allowed in current gesuch status");
 
         if (openAenderungAlreadyExists(gesuch)) {
