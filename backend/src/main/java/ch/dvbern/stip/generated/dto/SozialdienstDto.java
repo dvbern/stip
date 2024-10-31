@@ -106,6 +106,7 @@ public class SozialdienstDto  implements Serializable {
 
 
   @JsonProperty("sozialdienstAdmin")
+  @NotNull
   public SozialdienstAdminDto getSozialdienstAdmin() {
     return sozialdienstAdmin;
   }

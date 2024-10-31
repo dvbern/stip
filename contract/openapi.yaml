@@ -3815,6 +3815,7 @@ components:
         - name
         - adresse
         - iban
+        - sozialdienstAdmin
       properties:
         id:
           $ref: '#/components/schemas/UUID'

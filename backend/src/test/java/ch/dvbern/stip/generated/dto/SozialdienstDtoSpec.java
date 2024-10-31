@@ -171,9 +171,9 @@ public class SozialdienstDtoSpec {
    * Get sozialdienstAdmin
    * @return sozialdienstAdmin
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_SOZIALDIENST_ADMIN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SozialdienstAdminDtoSpec getSozialdienstAdmin() {
     return sozialdienstAdmin;
@@ -181,7 +181,7 @@ public class SozialdienstDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_SOZIALDIENST_ADMIN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSozialdienstAdmin(SozialdienstAdminDtoSpec sozialdienstAdmin) {
     this.sozialdienstAdmin = sozialdienstAdmin;
   }
