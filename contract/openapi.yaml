@@ -3152,8 +3152,12 @@ components:
         isAusbildungAusland:
           type: boolean
     Ausbildung:
+      required:
+        - status
       type: object
       properties:
+        status:
+          $ref: '#/components/schemas/AusbildungsStatus'
         ausbildungsgang:
           $ref: '#/components/schemas/Ausbildungsgang'
         # gesuche:
@@ -3494,6 +3498,11 @@ components:
           $ref: '#/components/schemas/Bildungskategorie'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
+    AusbildungsStatus:
+      enum:
+        - AKTIV
+        - ABGEBROCHEN
+        - ABGESCHLOSSEN
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS
