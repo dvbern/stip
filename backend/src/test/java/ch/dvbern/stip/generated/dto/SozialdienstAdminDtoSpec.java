@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SozialdienstAdminDtoSpec.JSON_PROPERTY_KEYCLOAK_ID,
   SozialdienstAdminDtoSpec.JSON_PROPERTY_VORNAME,
   SozialdienstAdminDtoSpec.JSON_PROPERTY_NACHNAME,
-  SozialdienstAdminDtoSpec.JSON_PROPERTY_E_MAIL
+  SozialdienstAdminDtoSpec.JSON_PROPERTY_EMAIL
 })
 @JsonTypeName("SozialdienstAdmin")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -44,8 +44,8 @@ public class SozialdienstAdminDtoSpec {
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
 
-  public static final String JSON_PROPERTY_E_MAIL = "eMail";
-  private String eMail;
+  public static final String JSON_PROPERTY_EMAIL = "email";
+  private String email;
 
   public SozialdienstAdminDtoSpec() {
   }
@@ -128,29 +128,29 @@ public class SozialdienstAdminDtoSpec {
   }
 
 
-  public SozialdienstAdminDtoSpec eMail(String eMail) {
+  public SozialdienstAdminDtoSpec email(String email) {
     
-    this.eMail = eMail;
+    this.email = email;
     return this;
   }
 
    /**
-   * Get eMail
-   * @return eMail
+   * Get email
+   * @return email
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_E_MAIL)
+  @JsonProperty(JSON_PROPERTY_EMAIL)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String geteMail() {
-    return eMail;
+  public String getEmail() {
+    return email;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_E_MAIL)
+  @JsonProperty(JSON_PROPERTY_EMAIL)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void seteMail(String eMail) {
-    this.eMail = eMail;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   @Override
@@ -165,12 +165,12 @@ public class SozialdienstAdminDtoSpec {
     return Objects.equals(this.keycloakId, sozialdienstAdmin.keycloakId) &&
         Objects.equals(this.vorname, sozialdienstAdmin.vorname) &&
         Objects.equals(this.nachname, sozialdienstAdmin.nachname) &&
-        Objects.equals(this.eMail, sozialdienstAdmin.eMail);
+        Objects.equals(this.email, sozialdienstAdmin.email);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(keycloakId, vorname, nachname, eMail);
+    return Objects.hash(keycloakId, vorname, nachname, email);
   }
 
   @Override
@@ -180,7 +180,7 @@ public class SozialdienstAdminDtoSpec {
     sb.append("    keycloakId: ").append(toIndentedString(keycloakId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    eMail: ").append(toIndentedString(eMail)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("}");
     return sb.toString();
   }

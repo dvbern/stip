@@ -3753,7 +3753,7 @@ components:
         - keycloakId
         - vorname
         - nachname
-        - eMail
+        - email
       properties:
         keycloakId:
           type: string
@@ -3761,7 +3761,7 @@ components:
           type: string
         nachname:
           type: string
-        eMail:
+        email:
           type: string
     SozialdienstAdmin:
       type: object
@@ -3771,13 +3771,13 @@ components:
       required:
         - vorname
         - nachname
-        - eMail
+        - email
       properties:
         vorname:
           type: string
         nachname:
           type: string
-        eMail:
+        email:
           type: string
     SozialdienstCreate:
       required:
@@ -3814,6 +3814,8 @@ components:
         - id
         - name
         - adresse
+        - iban
+        - sozialdienstAdmin
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -3821,6 +3823,8 @@ components:
           type: string
         adresse:
           $ref: '#/components/schemas/Adresse'
+        iban:
+          type: string
         sozialdienstAdmin:
           $ref: '#/components/schemas/SozialdienstAdmin'
     StatusprotokollEntry:

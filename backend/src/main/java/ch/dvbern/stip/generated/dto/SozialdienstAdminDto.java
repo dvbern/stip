@@ -17,7 +17,7 @@ public class SozialdienstAdminDto  implements Serializable {
   private @Valid String keycloakId;
   private @Valid String vorname;
   private @Valid String nachname;
-  private @Valid String eMail;
+  private @Valid String email;
 
   /**
    **/
@@ -78,21 +78,21 @@ public class SozialdienstAdminDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstAdminDto eMail(String eMail) {
-    this.eMail = eMail;
+  public SozialdienstAdminDto email(String email) {
+    this.email = email;
     return this;
   }
 
 
-  @JsonProperty("eMail")
+  @JsonProperty("email")
   @NotNull
-  public String geteMail() {
-    return eMail;
+  public String getEmail() {
+    return email;
   }
 
-  @JsonProperty("eMail")
-  public void seteMail(String eMail) {
-    this.eMail = eMail;
+  @JsonProperty("email")
+  public void setEmail(String email) {
+    this.email = email;
   }
 
 
@@ -108,12 +108,12 @@ public class SozialdienstAdminDto  implements Serializable {
     return Objects.equals(this.keycloakId, sozialdienstAdmin.keycloakId) &&
         Objects.equals(this.vorname, sozialdienstAdmin.vorname) &&
         Objects.equals(this.nachname, sozialdienstAdmin.nachname) &&
-        Objects.equals(this.eMail, sozialdienstAdmin.eMail);
+        Objects.equals(this.email, sozialdienstAdmin.email);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(keycloakId, vorname, nachname, eMail);
+    return Objects.hash(keycloakId, vorname, nachname, email);
   }
 
   @Override
@@ -124,7 +124,7 @@ public class SozialdienstAdminDto  implements Serializable {
     sb.append("    keycloakId: ").append(toIndentedString(keycloakId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    eMail: ").append(toIndentedString(eMail)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("}");
     return sb.toString();
   }

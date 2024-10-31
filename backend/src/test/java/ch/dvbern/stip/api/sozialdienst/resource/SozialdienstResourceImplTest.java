@@ -49,7 +49,7 @@ class SozialdienstResourceImplTest {
         sozialdienstAdminCreateDto.setKeycloakId(UUID.randomUUID().toString());
         sozialdienstAdminCreateDto.setNachname("Muster");
         sozialdienstAdminCreateDto.setVorname("Max");
-        sozialdienstAdminCreateDto.seteMail("test@test.com");
+        sozialdienstAdminCreateDto.setEmail("test@test.com");
 
         final var createDto = new SozialdienstCreateDtoSpec()
             .adresse(adresseDto)
@@ -133,7 +133,7 @@ class SozialdienstResourceImplTest {
         final var updateSozialdienstDto = new SozialdienstAdminUpdateDtoSpec();
         updateSozialdienstDto.setVorname("updated");
         updateSozialdienstDto.setNachname("updated");
-        updateSozialdienstDto.seteMail("test@test.com");
+        updateSozialdienstDto.setEmail("test@test.com");
         final var updated = apiSpec.updateSozialdienstAdmin()
             .sozialdienstIdPath(dtoSpec.getId())
             .body(updateSozialdienstDto)
@@ -155,7 +155,7 @@ class SozialdienstResourceImplTest {
         final var createSozialdienstDto = new SozialdienstAdminCreateDtoSpec();
         createSozialdienstDto.setVorname("replaced");
         createSozialdienstDto.setNachname("replaced");
-        createSozialdienstDto.seteMail("test@test.com");
+        createSozialdienstDto.setEmail("test@test.com");
         createSozialdienstDto.setKeycloakId(keykloakId);
         final var replaced = apiSpec.replaceSozialdienstAdmin()
             .sozialdienstIdPath(dtoSpec.getId())

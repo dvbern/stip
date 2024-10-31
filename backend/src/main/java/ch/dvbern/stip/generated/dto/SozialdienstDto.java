@@ -18,6 +18,7 @@ public class SozialdienstDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String name;
   private @Valid AdresseDto adresse;
+  private @Valid String iban;
   private @Valid SozialdienstAdminDto sozialdienstAdmin;
 
   /**
@@ -79,6 +80,25 @@ public class SozialdienstDto  implements Serializable {
 
   /**
    **/
+  public SozialdienstDto iban(String iban) {
+    this.iban = iban;
+    return this;
+  }
+
+
+  @JsonProperty("iban")
+  @NotNull
+  public String getIban() {
+    return iban;
+  }
+
+  @JsonProperty("iban")
+  public void setIban(String iban) {
+    this.iban = iban;
+  }
+
+  /**
+   **/
   public SozialdienstDto sozialdienstAdmin(SozialdienstAdminDto sozialdienstAdmin) {
     this.sozialdienstAdmin = sozialdienstAdmin;
     return this;
@@ -86,6 +106,7 @@ public class SozialdienstDto  implements Serializable {
 
 
   @JsonProperty("sozialdienstAdmin")
+  @NotNull
   public SozialdienstAdminDto getSozialdienstAdmin() {
     return sozialdienstAdmin;
   }
@@ -108,12 +129,13 @@ public class SozialdienstDto  implements Serializable {
     return Objects.equals(this.id, sozialdienst.id) &&
         Objects.equals(this.name, sozialdienst.name) &&
         Objects.equals(this.adresse, sozialdienst.adresse) &&
+        Objects.equals(this.iban, sozialdienst.iban) &&
         Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, adresse, sozialdienstAdmin);
+    return Objects.hash(id, name, adresse, iban, sozialdienstAdmin);
   }
 
   @Override
@@ -124,6 +146,7 @@ public class SozialdienstDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
+    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("}");
     return sb.toString();
