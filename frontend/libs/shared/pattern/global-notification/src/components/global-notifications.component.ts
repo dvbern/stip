@@ -8,10 +8,10 @@ import {
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Event, NavigationEnd, Router } from '@angular/router';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { TranslateModule } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { StatusColor } from '@dv/shared/model/gesuch';
 import { NotificationType } from '@dv/shared/model/global-notification';
 

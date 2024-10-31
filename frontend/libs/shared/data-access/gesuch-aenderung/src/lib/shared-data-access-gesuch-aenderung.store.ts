@@ -1,13 +1,13 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { map, pipe, switchMap, tap } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,

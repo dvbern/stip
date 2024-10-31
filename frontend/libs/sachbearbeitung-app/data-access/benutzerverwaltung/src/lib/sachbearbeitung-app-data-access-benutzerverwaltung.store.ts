@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
@@ -16,24 +17,21 @@ import {
   throwIfEmpty,
 } from 'rxjs';
 
+import { KeykloakHttpService } from '@dv/sachbearbeitung-app/util/keykloak-http';
 import {
-  KeykloakHttpService,
+  createBenutzerListFromRoleLookup,
   hasLocationHeader,
-} from '@dv/sachbearbeitung-app/util/keykloak-http';
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+} from '@dv/sachbearbeitung-app/util-fn/keykloak-helper';
 import {
   BENUTZER_VERWALTUNG_ROLES,
-  BenutzerVerwaltungRole,
   SharedModelBenutzer,
   SharedModelBenutzerApi,
-  SharedModelBenutzerRole,
   SharedModelBenutzerWithRoles,
   SharedModelRoleList,
   byBenutzertVerwaltungRoles,
 } from '@dv/shared/model/benutzer';
 import { SharedModelError } from '@dv/shared/model/error';
 import { BenutzerService } from '@dv/shared/model/gesuch';
-import { SharedModelState } from '@dv/shared/model/state-colors';
 import {
   noGlobalErrorsIf,
   shouldIgnoreNotFoundErrorsIf,
@@ -279,65 +277,3 @@ export class BenutzerverwaltungStore extends signalStore(
       .pipe(switchMap(() => this.keykloak.deleteUser$(benutzerId)));
   }
 }
-
-export const roleToStateColor = (
-  role: BenutzerVerwaltungRole,
-): SharedModelState => {
-  switch (role) {
-    case 'Sachbearbeiter':
-      return 'info';
-    case 'Admin':
-      return 'success';
-    case 'Jurist':
-      return 'warning';
-    default:
-      return 'danger';
-  }
-};
-
-/**
- * Joins the user lists from different roles into one list and adds the roles as a property to the Benutzer object.
- */
-export const createBenutzerListFromRoleLookup = (
-  benutzersByRole: {
-    benutzers: SharedModelBenutzerApi[];
-    role: 'Sachbearbeiter' | 'Admin' | 'Jurist';
-  }[],
-): SharedModelBenutzer[] => {
-  return Object.values(
-    benutzersByRole.reduce<
-      Record<
-        string,
-        SharedModelBenutzerApi & {
-          name: string;
-          roles: SharedModelBenutzerRole[];
-        }
-      >
-    >(
-      (allById, { role, benutzers }) =>
-        benutzers.reduce(
-          (all, benutzer) => ({
-            ...all,
-            [benutzer.id]: {
-              ...benutzer,
-              name: `${benutzer.firstName} ${benutzer.lastName}`,
-              roles: [
-                ...(all[benutzer.id]?.roles ?? []),
-                { name: role, color: roleToStateColor(role) },
-              ],
-            },
-          }),
-          allById,
-        ),
-      {},
-    ),
-  ).map((benutzer) => ({
-    ...benutzer,
-    roles: {
-      extraAmount:
-        benutzer.roles.length > 2 ? benutzer.roles.length - 2 : undefined,
-      compact: benutzer.roles.slice(0, 2),
-      full: benutzer.roles,
-    },
-  }));
-};

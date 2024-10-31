@@ -2,11 +2,11 @@ import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 /* eslint-disable */
 export default {
-  displayName: 'shared-data-access-global-notification',
+  displayName: 'shared-global-notification',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/shared/data-access/global-notification',
+    '../../../../coverage/libs/shared/global/global-notification',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

@@ -1,10 +1,14 @@
 import { DOCUMENT } from '@angular/common';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Observable, catchError, combineLatestWith, map, of } from 'rxjs';
 
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import {
+  getCurrentUrl,
+  toKnownUserErrorType,
+} from '@dv/sachbearbeitung-app/util-fn/keykloak-helper';
 import {
   BenutzerCreateKeykloak,
   BenutzerVerwaltungRole,
@@ -13,29 +17,9 @@ import {
   SharedModelModelMappingsRepresentation,
   SharedModelRole,
   SharedModelRoleList,
-  SharedModelUserAdminError,
 } from '@dv/shared/model/benutzer';
 import { MailService } from '@dv/shared/model/gesuch';
 import { noGlobalErrorsIf } from '@dv/shared/util/http';
-
-export const toKnownUserErrorType = (error: unknown, fallbackType: string) => {
-  const parsed = SharedModelUserAdminError.parse(error);
-  return parsed.type ?? fallbackType;
-};
-
-export const getCurrentUrl = (document: Document) => {
-  return document.location.origin;
-};
-
-type HttpResponseWithLocation = HttpResponse<unknown> & {
-  headers: { get: (header: 'Location') => string };
-};
-
-export const hasLocationHeader = (
-  response: HttpResponse<unknown>,
-): response is HttpResponseWithLocation => {
-  return response.headers.has('Location');
-};
 
 @Injectable({
   providedIn: 'root',

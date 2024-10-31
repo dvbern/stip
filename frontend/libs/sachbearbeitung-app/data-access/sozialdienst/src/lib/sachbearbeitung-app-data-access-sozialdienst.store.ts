@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
@@ -15,11 +16,8 @@ import {
   throwIfEmpty,
 } from 'rxjs';
 
-import {
-  KeykloakHttpService,
-  hasLocationHeader,
-} from '@dv/sachbearbeitung-app/util/keykloak-http';
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { KeykloakHttpService } from '@dv/sachbearbeitung-app/util/keykloak-http';
+import { hasLocationHeader } from '@dv/sachbearbeitung-app/util-fn/keykloak-helper';
 import { bySozialdienstAdminRole } from '@dv/shared/model/benutzer';
 import {
   Sozialdienst,

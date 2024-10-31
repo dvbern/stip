@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ActionCreator, Creator, Store } from '@ngrx/store';
@@ -17,7 +18,6 @@ import {
 } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';

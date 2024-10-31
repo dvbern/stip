@@ -1,5 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { SozialdienstStore } from './sachbearbeitung-app-data-access-sozialdienst.store';
 
@@ -8,7 +9,7 @@ describe('SozialdienstStore', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SozialdienstStore, provideHttpClient()],
+      providers: [SozialdienstStore, provideHttpClient(), provideOAuthClient()],
     });
     store = TestBed.inject(SozialdienstStore);
   });

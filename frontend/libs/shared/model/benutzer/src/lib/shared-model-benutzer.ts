@@ -8,7 +8,7 @@ export const BENUTZER_VERWALTUNG_ROLES = [
   'Jurist',
 ] as const;
 
-export const SOZIALDIENST_ADMIN_ROLE = 'Sozialdienst-Admin' as const;
+export const SOZIALDIENST_ADMIN_ROLE = 'Sozialdienst-Admin';
 
 export type BenutzerVerwaltungRole = (typeof BENUTZER_VERWALTUNG_ROLES)[number];
 

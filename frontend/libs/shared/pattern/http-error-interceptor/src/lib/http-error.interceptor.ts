@@ -1,10 +1,10 @@
 import { HttpHandlerFn, HttpRequest, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { EMPTY, Observable, catchError, of, throwError } from 'rxjs';
 
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
   HANDLE_NOT_FOUND,
@@ -38,7 +38,7 @@ export function withDvGlobalHttpErrorInterceptorFn({
     return [];
   } else {
     // explicit function name is displayed in stack traces, arrow functions are anonymous
-    // eslint-disable-next-line no-inner-declarations
+
     function HttpErrorInterceptor(
       req: HttpRequest<unknown>,
       next: HttpHandlerFn,
