@@ -65,6 +65,7 @@ module.exports = [
                 'type:pattern',
                 'type:data-access',
                 'type:event',
+                'type:dialog',
                 'type:ui',
                 'type:util',
                 'type:util-fn',
@@ -101,6 +102,18 @@ module.exports = [
             {
               sourceTag: 'type:ui',
               onlyDependOnLibsWithTags: [
+                'type:ui',
+                'type:util',
+                'type:util-data-access',
+                'type:util-fn',
+                'type:model',
+              ],
+              bannedExternalImports: ['@ngrx/*'],
+            },
+            {
+              sourceTag: 'type:dialog',
+              onlyDependOnLibsWithTags: [
+                'type:feature',
                 'type:ui',
                 'type:util',
                 'type:util-data-access',

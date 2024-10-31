@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addYears, max, setMonth, startOfMonth, subMonths } from 'date-fns';
 
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { LebenslaufItemUpdate } from '@dv/shared/model/gesuch';
@@ -17,6 +18,7 @@ import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   dateFromMonthYearString,
@@ -38,6 +40,7 @@ const MIN_EDUCATION_AGE = 16; // August
     SharedFeatureGesuchFormLebenslaufEditorComponent,
     TranslateModule,
     TwoColumnTimelineComponent,
+    SharedUiRdIsPendingPipe,
     SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
@@ -48,6 +51,7 @@ const MIN_EDUCATION_AGE = 16; // August
 })
 export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   private store = inject(Store);
+  ausbildungsstatteStore = inject(AusbildungsstaetteStore);
   languageSig = this.store.selectSignal(selectLanguage);
   hasUnsavedChanges = false;
 

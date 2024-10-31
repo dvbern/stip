@@ -12,8 +12,6 @@
 import { GueltigkeitStatus } from './gueltigkeitStatus';
 
 export interface GesuchsperiodeWithDaten { 
-    id: string;
-    gueltigkeitStatus: GueltigkeitStatus;
     bezeichnungDe: string;
     bezeichnungFr: string;
     einreichfrist?: string;
@@ -83,6 +81,8 @@ export interface GesuchsperiodeWithDaten {
     limiteAlterAntragsstellerHalbierungElternbeitrag: number;
     zweiterAuszahlungsterminMonat: number;
     zweiterAuszahlungsterminTag: number;
+    id: string;
+    gueltigkeitStatus: GueltigkeitStatus;
 }
 
 

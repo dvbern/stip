@@ -2799,7 +2799,8 @@ components:
         - ANDERE
       type: string
     GesuchFormular:
-      required: []
+      required:
+        - ausbildung
       type: object
       properties:
         ausbildung:

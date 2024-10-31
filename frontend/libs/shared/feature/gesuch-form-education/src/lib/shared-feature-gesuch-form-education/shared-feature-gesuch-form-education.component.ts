@@ -29,6 +29,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
 import { Subject, startWith } from 'rxjs';
 
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import {
@@ -45,6 +46,7 @@ import {
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
@@ -78,6 +80,7 @@ import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-ges
     MatCheckboxModule,
     MatAutocompleteModule,
     MaskitoDirective,
+    SharedUiRdIsPendingPipe,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedUiFormReadonlyDirective,
@@ -98,6 +101,7 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
   readonly ausbildungspensumValues = Object.values(AusbildungsPensum);
 
   translate = inject(TranslateService);
+  ausbildungsstatteStore = inject(AusbildungsstaetteStore);
   languageSig = this.store.selectSignal(selectLanguage);
 
   form = this.formBuilder.group({
@@ -126,13 +130,16 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     (Ausbildungsstaette & { translatedName?: string })[]
   > = computed(() => {
     const currentAusbildungsstaette = this.ausbildungsstaetteSig();
+    const ausbildungsstaettes =
+      this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
     const toReturn = currentAusbildungsstaette
-      ? this.viewSig().ausbildungsstaettes.filter((ausbildungsstaette) => {
+      ? ausbildungsstaettes.filter((ausbildungsstaette) => {
           return this.getTranslatedAusbildungstaetteName(ausbildungsstaette)
             ?.toLowerCase()
             .includes(currentAusbildungsstaette.toLowerCase());
         })
-      : this.viewSig().ausbildungsstaettes;
+      : ausbildungsstaettes;
+
     return toReturn.map((ausbildungsstaette) => {
       return {
         ...ausbildungsstaette,
@@ -148,9 +155,12 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
   endChangedSig = toSignal(this.form.controls.ausbildungEnd.valueChanges);
 
   ausbildungsgangOptionsSig = computed(() => {
+    const ausbildungsstaettes =
+      this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
+
     return (
-      this.viewSig()
-        .ausbildungsstaettes.find(
+      ausbildungsstaettes
+        .find(
           (ausbildungsstaette) =>
             this.getTranslatedAusbildungstaetteName(ausbildungsstaette) ===
             this.ausbildungsstaetteSig(),
@@ -165,8 +175,11 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     );
   });
   previousAusbildungsstaetteSig = computed(() => {
-    const { formChanges, ausbildungsstaettes } = this.viewSig();
+    const { formChanges } = this.viewSig();
+    const ausbildungsstaettes =
+      this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
     const changedAusbildungsgang = formChanges?.ausbildungsgang;
+
     if (changedAusbildungsgang && ausbildungsstaettes) {
       return ausbildungsstaettes.find((ausbildungsstaette) =>
         ausbildungsstaette.ausbildungsgaenge?.find(
@@ -268,7 +281,10 @@ export class SharedFeatureGesuchFormEducationComponent implements OnInit {
     // fill form
     effect(
       () => {
-        const { ausbildung, ausbildungsstaettes } = this.viewSig();
+        const { ausbildung } = this.viewSig();
+        const ausbildungsstaettes =
+          this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
+
         if (ausbildung && ausbildungsstaettes) {
           this.form.patchValue({
             ...ausbildung,

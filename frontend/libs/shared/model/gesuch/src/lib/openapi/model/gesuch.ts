@@ -11,11 +11,12 @@
  */
 import { GesuchTranche } from './gesuchTranche';
 import { Gesuchstatus } from './gesuchstatus';
-import { Fall } from './fall';
 import { Gesuchsperiode } from './gesuchsperiode';
 
 export interface Gesuch { 
-    fall: Fall;
+    fallId: string;
+    fallNummer: string;
+    ausbildungId: string;
     gesuchsperiode: Gesuchsperiode;
     gesuchStatus: Gesuchstatus;
     gesuchNummer: string;

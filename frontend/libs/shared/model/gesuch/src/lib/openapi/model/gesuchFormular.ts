@@ -23,7 +23,7 @@ import { Partner } from './partner';
 import { LebenslaufItem } from './lebenslaufItem';
 
 export interface GesuchFormular { 
-    ausbildung?: Ausbildung;
+    ausbildung: Ausbildung;
     personInAusbildung?: PersonInAusbildung;
     familiensituation?: Familiensituation;
     partner?: Partner;

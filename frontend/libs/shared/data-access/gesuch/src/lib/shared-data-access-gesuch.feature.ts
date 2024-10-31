@@ -12,7 +12,7 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
-  GsDashboard,
+  FallDashboardItem,
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SteuerdatenTyp,
@@ -32,7 +32,7 @@ export interface State {
   gesuchFormular: SharedModelGesuchFormular | null;
   isEditingTranche: boolean | null;
   gesuchs: SharedModelGesuch[];
-  gsDashboard: GsDashboard[];
+  gsDashboard: FallDashboardItem[];
   cache: {
     gesuch: SharedModelGesuch | null;
     gesuchId: string | null;

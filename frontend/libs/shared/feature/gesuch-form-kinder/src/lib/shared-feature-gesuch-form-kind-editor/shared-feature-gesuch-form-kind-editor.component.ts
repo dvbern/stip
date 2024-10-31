@@ -37,6 +37,7 @@ import {
   KindUpdate,
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -71,7 +72,6 @@ import {
   parseStringAndPrintForBackendLocalDate,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 const MAX_AGE_ADULT = 130;
 const MIN_AGE_CHILD = 0;

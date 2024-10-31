@@ -21,6 +21,7 @@ import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
@@ -33,7 +34,6 @@ import {
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
-import { assertUnreachable } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',

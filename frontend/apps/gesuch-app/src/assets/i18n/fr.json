@@ -27,6 +27,9 @@
   "gesuch-app.cockpit.aenderung.create": "Signaler un changement",
   "gesuch-app.cockpit.aenderung.edit": "Modifier le changement",
 
+  "gesuch-app.cockpit.ausbildung.title": "Formation \"{{ bezeichnungFr }}\"",
+  "gesuch-app.cockpit.ausbildung.description": "Début de la formation: {{ start }}, fin de la formation prévue {{ end }}",
+
   "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "En attente",
 
   "gesuch-app.gesuch.delete": "Supprimer la demande",

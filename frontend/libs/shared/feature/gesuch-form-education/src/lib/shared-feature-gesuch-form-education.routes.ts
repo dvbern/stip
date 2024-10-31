@@ -1,11 +1,6 @@
 import { Route } from '@angular/router';
-import { provideEffects } from '@ngrx/effects';
-import { provideState } from '@ngrx/store';
 
-import {
-  gesuchAppDataAccessAusbildungsstaetteEffects,
-  gesuchAppDataAccessAusbildungsstaettesFeature,
-} from '@dv/shared/data-access/ausbildungsstaette';
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
@@ -15,12 +10,7 @@ export const gesuchAppFeatureGesuchFormEducationRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
-    providers: [
-      // feature specific services and other providers
-      // always remove { providedIn: 'root' } from the feature specific services
-      provideState(gesuchAppDataAccessAusbildungsstaettesFeature),
-      provideEffects(gesuchAppDataAccessAusbildungsstaetteEffects),
-    ],
+    providers: [AusbildungsstaetteStore],
     children: [
       ...idAndTrancheIdRoutes(
         routeWithUnsavedChangesGuard({
