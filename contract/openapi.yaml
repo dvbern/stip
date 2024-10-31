@@ -3160,10 +3160,6 @@ components:
           $ref: '#/components/schemas/AusbildungsStatus'
         ausbildungsgang:
           $ref: '#/components/schemas/Ausbildungsgang'
-        # gesuche:
-        #   type: array
-        #   items:
-        #     $ref: '#/components/schemas/Gesuch'
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     AusbildungUpdate:
