@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
-import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
@@ -16,8 +15,9 @@ import {
   throwIfEmpty,
 } from 'rxjs';
 
-import { KeykloakHttpService } from '@dv/sachbearbeitung-app/util/keykloak-http';
-import { hasLocationHeader } from '@dv/sachbearbeitung-app/util-fn/keykloak-helper';
+import { KeycloakHttpService } from '@dv/sachbearbeitung-app/util/keycloak-http';
+import { hasLocationHeader } from '@dv/sachbearbeitung-app/util-fn/keycloak-helper';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { bySozialdienstAdminRole } from '@dv/shared/model/benutzer';
 import {
   Sozialdienst,
@@ -54,7 +54,7 @@ export class SozialdienstStore extends signalStore(
   withDevtools('SozialdienstStore'),
 ) {
   private sozialdienstService = inject(SozialdienstService);
-  private keykloak = inject(KeykloakHttpService);
+  private keycloak = inject(KeycloakHttpService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   // sozialdiensteListViewSig = computed(() => {
@@ -105,9 +105,7 @@ export class SozialdienstStore extends signalStore(
 
   createSozialdienst$ = rxMethod<{
     sozialdienstCreate: Omit<SozialdienstCreate, 'sozialdienstAdmin'> & {
-      sozialdienstAdmin: Omit<SozialdienstAdminCreate, 'keykloakId'> & {
-        email: string;
-      };
+      sozialdienstAdmin: Omit<SozialdienstAdminCreate, 'keycloakId'>;
     };
     onAfterSave?: (sozialdienstId: string) => void;
   }>(
@@ -122,13 +120,13 @@ export class SozialdienstStore extends signalStore(
           ...sozialdienstCreate.sozialdienstAdmin,
         };
 
-        return this.keykloak.createUser$(newUser).pipe(
+        return this.keycloak.createUser$(newUser).pipe(
           filter(hasLocationHeader),
           throwIfEmpty(() => new Error('User creation failed')),
           switchMap((response) =>
-            this.keykloak.loadUserByUrl$(response.headers.get('Location')),
+            this.keycloak.loadUserByUrl$(response.headers.get('Location')),
           ),
-          combineLatestWith(this.keykloak.getRoles$(bySozialdienstAdminRole)),
+          combineLatestWith(this.keycloak.getRoles$(bySozialdienstAdminRole)),
           switchMap(([user, roles]) => {
             const adminRole = roles.find(
               (role) => role.name === 'Sozialdienst-Admin',
@@ -138,7 +136,7 @@ export class SozialdienstStore extends signalStore(
               throw new Error('Admin Role not found');
             }
 
-            return this.keykloak.assignRoles$(user, [
+            return this.keycloak.assignRoles$(user, [
               { id: adminRole.id, name: 'Sozialdienst-Admin' },
             ]);
           }),
@@ -148,7 +146,9 @@ export class SozialdienstStore extends signalStore(
               sozialdienstAdmin: {
                 nachname: user.lastName,
                 vorname: user.firstName,
-                keykloakId: user.id,
+                keycloakId: user.id,
+                // todo: make email on our user optional?
+                eMail: user.email ?? '',
               },
             };
 
@@ -166,7 +166,7 @@ export class SozialdienstStore extends signalStore(
             // Todo: delete user if sozialdienst creation fails!
           }),
           switchMap(({ sozialdienst, user }) =>
-            this.keykloak.notifyUser$(user).pipe(
+            this.keycloak.notifyUser$(user).pipe(
               handleApiResponse(
                 () => {
                   patchState(this, { sozialdienst: success(sozialdienst) });

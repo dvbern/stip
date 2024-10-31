@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
-import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
@@ -17,11 +16,12 @@ import {
   throwIfEmpty,
 } from 'rxjs';
 
-import { KeykloakHttpService } from '@dv/sachbearbeitung-app/util/keykloak-http';
+import { KeycloakHttpService } from '@dv/sachbearbeitung-app/util/keycloak-http';
 import {
   createBenutzerListFromRoleLookup,
   hasLocationHeader,
-} from '@dv/sachbearbeitung-app/util-fn/keykloak-helper';
+} from '@dv/sachbearbeitung-app/util-fn/keycloak-helper';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   BENUTZER_VERWALTUNG_ROLES,
   SharedModelBenutzer,
@@ -66,7 +66,7 @@ export class BenutzerverwaltungStore extends signalStore(
   withDevtools('BenutzerverwaltungStore'),
 ) {
   private benutzerService = inject(BenutzerService);
-  private keykloak = inject(KeykloakHttpService);
+  private keycloak = inject(KeycloakHttpService);
 
   private globalNotificationStore = inject(GlobalNotificationStore);
 
@@ -83,7 +83,7 @@ export class BenutzerverwaltungStore extends signalStore(
         // so we load the user list for every known role and merge them afterwards
         forkJoin(
           Object.values(BENUTZER_VERWALTUNG_ROLES).map((role) => {
-            return this.keykloak.loadBenutzersWithRole$(role);
+            return this.keycloak.loadBenutzersWithRole$(role);
           }),
         ),
       ),
@@ -109,7 +109,7 @@ export class BenutzerverwaltungStore extends signalStore(
           benutzer: pending(),
         }));
       }),
-      switchMap((userId) => this.keykloak.getUserWithRoleMappings$(userId)),
+      switchMap((userId) => this.keycloak.getUserWithRoleMappings$(userId)),
       handleApiResponse((benutzer) => patchState(this, { benutzer })),
     ),
   );
@@ -132,17 +132,17 @@ export class BenutzerverwaltungStore extends signalStore(
         });
       }),
       exhaustMap(({ user, roles, rolesToRemove }) =>
-        this.keykloak.updateUser$(user).pipe(
-          switchMap(() => this.keykloak.assignRoles$(user, roles)), // interceptError is handled in assignRoles$
+        this.keycloak.updateUser$(user).pipe(
+          switchMap(() => this.keycloak.assignRoles$(user, roles)), // interceptError is handled in assignRoles$
           switchMap(() => {
             if (!rolesToRemove || rolesToRemove.length === 0) {
               return of(user);
             }
 
-            return this.keykloak.removeRoles$(user, rolesToRemove); // interceptError is handled in removeRoles$
+            return this.keycloak.removeRoles$(user, rolesToRemove); // interceptError is handled in removeRoles$
           }),
           switchMap(() =>
-            this.keykloak.getUserWithRoleMappings$(
+            this.keycloak.getUserWithRoleMappings$(
               user.id,
               byBenutzertVerwaltungRoles,
             ),
@@ -207,7 +207,7 @@ export class BenutzerverwaltungStore extends signalStore(
         }));
       }),
       switchMap(() =>
-        this.keykloak
+        this.keycloak
           .getRoles$(byBenutzertVerwaltungRoles)
           .pipe(
             handleApiResponse((availableRoles) =>
@@ -232,39 +232,41 @@ export class BenutzerverwaltungStore extends signalStore(
         });
       }),
       exhaustMap(({ name, vorname, email, roles, onAfterSave }) =>
-        this.keykloak.createUser$({ vorname, nachname: name, email }).pipe(
-          filter(hasLocationHeader),
-          throwIfEmpty(() => new Error('User creation failed')),
-          switchMap((response) =>
-            this.keykloak.loadUserByUrl$(response.headers.get('Location')),
-          ),
-          switchMap((user) => this.keykloak.assignRoles$(user, roles)),
-          switchMap((user) =>
-            this.keykloak.notifyUser$(user).pipe(
-              handleApiResponse(
-                () => {
-                  // roles are set optimistically on the user object
-                  patchState(this, { benutzer: success({ ...user, roles }) });
-                },
-                {
-                  onSuccess: (wasSuccessfull) => {
-                    if (wasSuccessfull) {
-                      this.globalNotificationStore.createSuccessNotification({
-                        messageKey:
-                          'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
-                      });
-                      onAfterSave?.(user.id);
-                    }
+        this.keycloak
+          .createUser$({ vorname, nachname: name, eMail: email })
+          .pipe(
+            filter(hasLocationHeader),
+            throwIfEmpty(() => new Error('User creation failed')),
+            switchMap((response) =>
+              this.keycloak.loadUserByUrl$(response.headers.get('Location')),
+            ),
+            switchMap((user) => this.keycloak.assignRoles$(user, roles)),
+            switchMap((user) =>
+              this.keycloak.notifyUser$(user).pipe(
+                handleApiResponse(
+                  () => {
+                    // roles are set optimistically on the user object
+                    patchState(this, { benutzer: success({ ...user, roles }) });
                   },
-                },
+                  {
+                    onSuccess: (wasSuccessfull) => {
+                      if (wasSuccessfull) {
+                        this.globalNotificationStore.createSuccessNotification({
+                          messageKey:
+                            'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
+                        });
+                        onAfterSave?.(user.id);
+                      }
+                    },
+                  },
+                ),
               ),
             ),
+            catchError((error) => {
+              patchState(this, { benutzer: failure(error) });
+              return EMPTY;
+            }),
           ),
-          catchError((error) => {
-            patchState(this, { benutzer: failure(error) });
-            return EMPTY;
-          }),
-        ),
       ),
     ),
   );
@@ -274,6 +276,6 @@ export class BenutzerverwaltungStore extends signalStore(
       .deleteBenutzer$({ benutzerId }, undefined, undefined, {
         context: noGlobalErrorsIf(true, shouldIgnoreNotFoundErrorsIf(true)),
       })
-      .pipe(switchMap(() => this.keykloak.deleteUser$(benutzerId)));
+      .pipe(switchMap(() => this.keycloak.deleteUser$(benutzerId)));
   }
 }

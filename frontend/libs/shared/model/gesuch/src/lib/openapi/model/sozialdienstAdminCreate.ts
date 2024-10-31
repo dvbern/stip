@@ -11,8 +11,9 @@
  */
 
 export interface SozialdienstAdminCreate { 
-    keykloakId: string;
+    keycloakId: string;
     vorname: string;
     nachname: string;
+    eMail: string;
 }
 

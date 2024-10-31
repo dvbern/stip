@@ -11,7 +11,7 @@
  */
 import { Adresse } from './adresse';
 
-export interface SozialdienstUpdate {
+export interface SozialdienstUpdate { 
     id: string;
     name: string;
     iban: string;

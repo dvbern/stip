@@ -1,11 +1,11 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 export default {
-  displayName: 'sachbearbeitung-app-util-keykloak-http',
+  displayName: 'sachbearbeitung-app-util-keycloak-http',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/util/keykloak-http',
+    '../../../../coverage/libs/sachbearbeitung-app/util/keycloak-http',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

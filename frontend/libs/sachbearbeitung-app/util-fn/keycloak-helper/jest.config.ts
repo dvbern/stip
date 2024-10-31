@@ -1,7 +1,7 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 export default {
-  displayName: 'sachbearbeitung-app-util-fn-keykloak-helper',
+  displayName: 'sachbearbeitung-app-util-fn-keycloak-helper',
   preset: '../../../../jest.preset.js',
   transform: {
     '^.+\\.[tj]s$': swcAngularJestTransformer(),
@@ -9,5 +9,5 @@ export default {
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/util-fn/keykloak-helper',
+    '../../../../coverage/libs/sachbearbeitung-app/util-fn/keycloak-helper',
 };

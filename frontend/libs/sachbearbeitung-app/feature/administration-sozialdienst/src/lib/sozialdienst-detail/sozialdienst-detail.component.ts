@@ -83,7 +83,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
     sozialdienstAdmin: this.formBuilder.group({
       vorname: [<string | null>null, [Validators.required]],
       nachname: [<string | null>null, [Validators.required]],
-      email: [
+      eMail: [
         <string | null>null,
         [Validators.required, Validators.pattern(PATTERN_EMAIL)],
       ],
@@ -135,7 +135,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
   }
 
   trimEmail() {
-    const email = this.form.controls.sozialdienstAdmin.controls.email;
+    const email = this.form.controls.sozialdienstAdmin.controls.eMail;
     email.setValue(email.value?.trim() ?? null);
   }
 

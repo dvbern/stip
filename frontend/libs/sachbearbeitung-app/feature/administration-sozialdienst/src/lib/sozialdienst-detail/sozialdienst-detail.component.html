@@ -85,7 +85,7 @@
       <div class="row g-4 mt-1">
         <div
           class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4"
-          [class.readonly]="form.controls.sozialdienstAdmin.controls.email.disabled"
+          [class.readonly]="form.controls.sozialdienstAdmin.controls.eMail.disabled"
         >
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
             <mat-label>
@@ -93,7 +93,7 @@
             </mat-label>
             <input
               data-testid="form-sozialdienst-email"
-              formControlName="email"
+              formControlName="eMail"
               matInput
               type="email"
               (blur)="trimEmail()"

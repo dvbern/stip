@@ -1,16 +1,16 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Observable, catchError, combineLatestWith, map, of } from 'rxjs';
 
 import {
   getCurrentUrl,
   toKnownUserErrorType,
-} from '@dv/sachbearbeitung-app/util-fn/keykloak-helper';
+} from '@dv/sachbearbeitung-app/util-fn/keycloak-helper';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
-  BenutzerCreateKeykloak,
+  BenutzerCreateKeycloak,
   BenutzerVerwaltungRole,
   SharedModelBenutzerApi,
   SharedModelBenutzerList,
@@ -24,7 +24,7 @@ import { noGlobalErrorsIf } from '@dv/shared/util/http';
 @Injectable({
   providedIn: 'root',
 })
-export class KeykloakHttpService {
+export class KeycloakHttpService {
   private http = inject(HttpClient);
   private authService = inject(OAuthService);
   private globalNotificationStore = inject(GlobalNotificationStore);
@@ -146,7 +146,7 @@ export class KeykloakHttpService {
       );
   }
 
-  createUser$(newUser: BenutzerCreateKeykloak) {
+  createUser$(newUser: BenutzerCreateKeycloak) {
     return this.http
       .post(
         `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/users`,
@@ -154,8 +154,8 @@ export class KeykloakHttpService {
           enabled: true,
           firstName: newUser.vorname,
           lastName: newUser.nachname,
-          username: newUser.email,
-          email: newUser.email,
+          username: newUser.eMail,
+          email: newUser.eMail,
           emailVerified: true,
         },
         {

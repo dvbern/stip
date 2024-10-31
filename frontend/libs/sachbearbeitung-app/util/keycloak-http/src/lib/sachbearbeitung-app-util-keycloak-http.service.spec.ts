@@ -2,16 +2,16 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
-import { KeykloakHttpService } from './sachbearbeitung-app-util-keykloak-http.service';
+import { KeycloakHttpService } from './sachbearbeitung-app-util-keycloak-http.service';
 
-describe('SachbearbeitungAppUtilKeykloakHttpService', () => {
-  let service: KeykloakHttpService;
+describe('SachbearbeitungAppUtilKeycloakHttpService', () => {
+  let service: KeycloakHttpService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideOAuthClient()],
     });
-    service = TestBed.inject(KeykloakHttpService);
+    service = TestBed.inject(KeycloakHttpService);
   });
 
   it('should be created', () => {
