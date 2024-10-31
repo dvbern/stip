@@ -6,6 +6,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -16,6 +17,7 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
@@ -36,6 +38,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -116,8 +120,40 @@ class GesuchGetGesucheTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsGesuchsteller
     @Order(8)
+    void getGsDashboardTest() {
+        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+
+        assertThat(fallDashboardItems.length, is(1));
+
+        final var fallDashboardItem = fallDashboardItems[0];
+        final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
+
+        assertThat(fallDashboardItem.getNotifications().size(), greaterThanOrEqualTo(1));
+
+        assertThat(ausbildungDashboardItems.size(), greaterThanOrEqualTo(1));
+
+        final var ausbildungDashboardItem = ausbildungDashboardItems.get(0);
+        final var gesuchDashboardItems = ausbildungDashboardItem.getGesuchs();
+
+        assertThat(gesuchDashboardItems.size(), greaterThanOrEqualTo(1));
+
+        final var gesuchDashboardItem = gesuchDashboardItems.get(0);
+
+        assertThat(gesuchDashboardItem.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(99)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
