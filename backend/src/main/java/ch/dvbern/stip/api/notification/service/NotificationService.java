@@ -26,15 +26,16 @@ public class NotificationService {
     private final NotificationMapper notificationMapper;
 
     @Transactional
-    public void createNotification(final NotificationType notificationType, final Gesuch gesuch) {
+    public void createGesuchEingereichtNotification(final Gesuch gesuch) {
         Notification notification = new Notification()
-            .setNotificationType(notificationType)
+            .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
             .setGesuch(gesuch);
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
-        String msg = Templates.getGesuchEingereichtText(anrede, nachname, sprache).render();
+
+        String msg = Templates.getGesuchEingereichtText(anrede,nachname,sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
@@ -67,8 +68,26 @@ public class NotificationService {
             .toList();
     }
 
+    public void createMissingDocumentNotification(final Gesuch gesuch) {
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE)
+            .setGesuch(gesuch);
+        final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+
+        String msg = Templates.getGesuchFehlendeDokumenteText(sprache).render();
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
+
     @CheckedTemplate
     public static class Templates {
+        public static TemplateInstance getGesuchFehlendeDokumenteText(Sprache korrespondenzSprache) {
+            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
+                return gesuchFehlendeDokumenteFR();
+            }
+            return gesuchFehlendeDokumenteDE();
+        }
         public static TemplateInstance getGesuchEingereichtText(
             final String anrede,
             final String nachname,
@@ -78,7 +97,6 @@ public class NotificationService {
             }
             return gesuchEingereichtDE(anrede, nachname);
         }
-
         public static TemplateInstance getAenderungAbgelehnt(
             final String anrede,
             final String nachname,
@@ -89,11 +107,10 @@ public class NotificationService {
             }
             return aenderungAbgelehntDE(anrede, nachname, msg);
         }
-
-        public static native TemplateInstance gesuchEingereichtDE(final String anrede, final String nachname);
-
-        public static native TemplateInstance gesuchEingereichtFR(final String anrede, final String nachname);
-
+        public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
+        public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
+        public static native TemplateInstance gesuchFehlendeDokumenteDE();
+        public static native TemplateInstance gesuchFehlendeDokumenteFR();
         public static native TemplateInstance aenderungAbgelehntDE(
             final String anrede,
             final String nachname,
