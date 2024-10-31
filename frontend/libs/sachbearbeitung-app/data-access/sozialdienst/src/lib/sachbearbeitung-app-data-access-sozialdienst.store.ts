@@ -58,13 +58,9 @@ export class SozialdienstStore extends signalStore(
   private keycloak = inject(KeycloakHttpService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
-  // sozialdiensteListViewSig = computed(() => {
-  //   return fromCachedDataSig(this.sozialdienste);
-  // });
-
-  // sozialdienstViewSig = computed(() => {
-  //   return this.sozialdienst.data();
-  // });
+  resetSozialdienst() {
+    patchState(this, { sozialdienst: initial() });
+  }
 
   loadAllSozialdienste$ = rxMethod<void>(
     pipe(
@@ -123,7 +119,7 @@ export class SozialdienstStore extends signalStore(
 
         return this.keycloak
           .createUser$({
-            email: newUser.eMail,
+            email: newUser.email,
             name: newUser.nachname,
             vorname: newUser.vorname,
           })
@@ -148,14 +144,17 @@ export class SozialdienstStore extends signalStore(
               ]);
             }),
             switchMap((user) => {
+              if (!user.email) {
+                throw new Error('User email not defined');
+              }
+
               const newDienst: SozialdienstCreate = {
                 ...sozialdienstCreate,
                 sozialdienstAdmin: {
                   nachname: user.lastName,
                   vorname: user.firstName,
                   keycloakId: user.id,
-                  // todo: make email on our user optional?
-                  eMail: user.email ?? '',
+                  email: user.email,
                 },
               };
 
@@ -168,11 +167,11 @@ export class SozialdienstStore extends signalStore(
                     user,
                     sozialdienst,
                   })),
+                  // delete the user if the creation of the sozialdienst fails
                   catchError((error) => {
-                    // todo: test if this works
-                    this.keycloak.deleteUser$(user.id);
-
-                    return throwError(() => error);
+                    return this.keycloak
+                      .deleteUser$(user.id)
+                      .pipe(switchMap(() => throwError(() => error)));
                   }),
                 );
             }),
@@ -213,25 +212,6 @@ export class SozialdienstStore extends signalStore(
     ),
   );
 
-  deleteSozialdienst$ = rxMethod<{ sozialdienstId: string }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          sozialdienste: cachedPending(state.sozialdienste),
-        }));
-      }),
-      switchMap(({ sozialdienstId }) =>
-        this.sozialdienstService.deleteSozialdienst$({ sozialdienstId }).pipe(
-          handleApiResponse(() => {
-            patchState(this, (state) => ({
-              sozialdienste: cachedPending(state.sozialdienste),
-            }));
-          }),
-        ),
-      ),
-    ),
-  );
-
   updateSozialdienst$ = rxMethod<{ sozialdienstUpdate: SozialdienstUpdate }>(
     pipe(
       tap(() => {
@@ -251,29 +231,6 @@ export class SozialdienstStore extends signalStore(
     ),
   );
 
-  resetSozialdienst() {
-    patchState(this, { sozialdienst: initial() });
-  }
-
-  // updateSozialdienstAdmin$ = rxMethod<{ sozialdienstId: string; values: unknown }>(
-  //   pipe(
-  //     tap(() => {
-  //       patchState(this, (state) => ({
-  //         sozialdienste: cachedPending(state.sozialdienste),
-  //       }));
-  //     }),
-  //     switchMap(({ sozialdienstId, values }) =>
-  //       this.sozialdienstService
-  //         .updateSozialdienstAdmin$({ sozialdienstId, payload: values })
-  //         .pipe(
-  //           handleApiResponse((sozialdienst) =>
-  //             patchState(this, { sozialdienst }),
-  //           ),
-  //         ),
-  //     ),
-  //   ),
-  // );
-
   replaceSozialdienstAdmin$ = rxMethod<{
     sozialdienstId: string;
     existingSozialdienstAdminKeycloakId: string;
@@ -291,7 +248,7 @@ export class SozialdienstStore extends signalStore(
             .createUser$({
               name: newAdmin.nachname,
               vorname: newAdmin.nachname,
-              email: newAdmin.eMail,
+              email: newAdmin.email,
             })
             .pipe(
               filter(hasLocationHeader),
@@ -321,7 +278,7 @@ export class SozialdienstStore extends signalStore(
                   sozialdienstAdminCreate: {
                     nachname: user.lastName,
                     vorname: user.firstName,
-                    eMail: user.email ?? '',
+                    email: user.email ?? '',
                     keycloakId: user.id,
                   },
                 }),
@@ -336,7 +293,7 @@ export class SozialdienstStore extends signalStore(
                   .notifyUser$({
                     vorname: sozialdienstAdmin.vorname,
                     name: sozialdienstAdmin.nachname,
-                    email: sozialdienstAdmin.eMail,
+                    email: sozialdienstAdmin.email,
                   })
                   .pipe(
                     handleApiResponse(
@@ -376,30 +333,50 @@ export class SozialdienstStore extends signalStore(
       ),
     ),
   );
-}
 
-// switchMap((user) =>
-//   this.sozialdienstService
-//     .replaceSozialdienstAdmin$({
-//       sozialdienstId,
-//       sozialdienstAdminCreate,
-//     })
-//     .pipe(
-//       handleApiResponse((sozialdienstAdmin) =>
-//         patchState(this, (state) => {
-//           const dienst = state.sozialdienst.data;
-//           if (!dienst || !sozialdienstAdmin.data) {
-//             return state;
-//           }
-//           return {
-//             sozialdienst: success({
-//               ...dienst,
-//               sozialdienstAdmin: {
-//                 ...sozialdienstAdmin.data,
-//               },
-//             }),
-//           };
-//         }),
-//       ),
-//     ),
-// ),
+  deleteSozialdienst$ = rxMethod<Sozialdienst>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienste: cachedPending(state.sozialdienste),
+        }));
+      }),
+      // delete the sozialdienst admin first
+      // todo: should there be rollback logic?
+      exhaustMap((sozialdienst) =>
+        this.keycloak
+          .deleteUser$(sozialdienst.sozialdienstAdmin.keycloakId)
+          .pipe(
+            switchMap(() =>
+              this.sozialdienstService
+                .deleteSozialdienst$({ sozialdienstId: sozialdienst.id })
+                .pipe(
+                  handleApiResponse(
+                    () => {
+                      patchState(this, {
+                        sozialdienst: initial(),
+                      });
+                    },
+                    {
+                      onSuccess: () => {
+                        this.globalNotificationStore.createSuccessNotification({
+                          messageKey:
+                            'sachbearbeitung-app.admin.sozialdienst.sozialdienstGeloescht',
+                        });
+                      },
+                      onFailure: () => {
+                        this.loadAllSozialdienste$();
+                      },
+                    },
+                  ),
+                ),
+            ),
+          ),
+      ),
+      catchError((error) => {
+        this.loadAllSozialdienste$();
+        return throwError(() => error);
+      }),
+    ),
+  );
+}

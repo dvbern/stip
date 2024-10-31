@@ -91,9 +91,7 @@ export class SozialdienstOverviewComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.store.deleteSozialdienst$({
-            sozialdienstId: sozialdienst.id,
-          });
+          this.store.deleteSozialdienst$(sozialdienst);
         }
       });
   }

@@ -91,7 +91,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
     sozialdienstAdmin: this.formBuilder.group({
       vorname: [<string | null>null, [Validators.required]],
       nachname: [<string | null>null, [Validators.required]],
-      eMail: [
+      email: [
         <string | null>null,
         [Validators.required, Validators.pattern(PATTERN_EMAIL)],
       ],
@@ -105,40 +105,40 @@ export class SozialdienstDetailComponent implements OnDestroy {
 
         if (id) {
           this.store.loadSozialdienst$({ sozialdienstId: id });
-
           // disable email field
-          this.form.controls.sozialdienstAdmin.controls.eMail.disable({
+          this.form.controls.sozialdienstAdmin.controls.email.disable({
+            emitEvent: false,
+          });
+          // set country to CH, since all sozialdienst are in CH
+          this.form.controls.adresse.controls.land.setValue('CH', {
             emitEvent: false,
           });
         }
-        this.form.controls.adresse.controls.land.setValue('CH', {
-          emitEvent: false,
-        });
         this.form.controls.adresse.controls.land.disable({ emitEvent: false });
       },
       { allowSignalWrites: true },
     );
 
-    // effect(
-    //   () => {
-    //     const sozialdienst = this.store.sozialdienst().data;
-    //     if (sozialdienst) {
-    //       this.form.patchValue({
-    //         name: sozialdienst.name,
-    //         iban: sozialdienst.iban?.substring(2),
-    //         adresse: {
-    //           ...sozialdienst.adresse,
-    //         },
-    //         sozialdienstAdmin: {
-    //           vorname: sozialdienst.sozialdienstAdmin.vorname,
-    //           nachname: sozialdienst.sozialdienstAdmin.nachname,
-    //           eMail: sozialdienst.sozialdienstAdmin.eMail,
-    //         },
-    //       });
-    //     }
-    //   },
-    //   { allowSignalWrites: true },
-    // );
+    effect(
+      () => {
+        const sozialdienst = this.store.sozialdienst().data;
+        if (sozialdienst) {
+          this.form.patchValue({
+            name: sozialdienst.name,
+            iban: sozialdienst.iban?.substring(2),
+            adresse: {
+              ...sozialdienst.adresse,
+            },
+            sozialdienstAdmin: {
+              vorname: sozialdienst.sozialdienstAdmin.vorname,
+              nachname: sozialdienst.sozialdienstAdmin.nachname,
+              email: sozialdienst.sozialdienstAdmin.email,
+            },
+          });
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   handleSubmit() {
@@ -204,7 +204,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
   }
 
   trimEmail() {
-    const email = this.form.controls.sozialdienstAdmin.controls.eMail;
+    const email = this.form.controls.sozialdienstAdmin.controls.email;
     email.setValue(email.value?.trim() ?? null);
   }
 

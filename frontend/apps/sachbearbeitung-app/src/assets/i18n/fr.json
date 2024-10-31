@@ -238,6 +238,9 @@
   "sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel": "Créer un nouvel administrateur de service social",
   "sachbearbeitung-app.admin.sozialdienst.admin-dialog.message": "Si vous créez un nouvel administrateur, l'administrateur existant sera remplacé.",
   "sachbearbeitung-app.admin.sozialdienst.admin-dialog.confirm": "Créer un administrateur",
+  "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.title": "Sozialdienst löschen",
+  "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.text": "Wollen Sie den Sozialdienst \"{{ name }}\" wirklich löschen?",
+  "sachbearbeitung-app.admin.sozialdienst.sozialdienstGeloescht": "Sozialdienst wurde erfolgreich gelöscht",
 
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",

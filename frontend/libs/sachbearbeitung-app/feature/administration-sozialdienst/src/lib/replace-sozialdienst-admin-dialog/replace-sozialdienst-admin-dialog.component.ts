@@ -27,7 +27,7 @@ export interface ReplaceSozialdienstAdminDialogData {
 export interface ReplaceSozialdienstAdminDialogResult {
   nachname: string;
   vorname: string;
-  eMail: string;
+  email: string;
 }
 
 @Component({
@@ -60,7 +60,7 @@ export class ReplaceSozialdienstAdminDialogComponent {
   form = this.formBuilder.group({
     nachname: [<string | null>null, [Validators.required]],
     vorname: [<string | null>null, [Validators.required]],
-    eMail: [
+    email: [
       <string | null>null,
       [Validators.required, Validators.pattern(PATTERN_EMAIL)],
     ],
@@ -76,11 +76,11 @@ export class ReplaceSozialdienstAdminDialogComponent {
 
   confirm() {
     this.form.markAllAsTouched();
-    const { nachname, vorname, eMail } = this.form.value;
-    if (!nachname || !vorname || !eMail) {
+    const { nachname, vorname, email } = this.form.value;
+    if (!nachname || !vorname || !email) {
       return;
     }
-    this.dialogRef.close({ nachname, vorname, eMail });
+    this.dialogRef.close({ nachname, vorname, email });
   }
 
   cancel() {

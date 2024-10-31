@@ -13,6 +13,6 @@
 export interface SozialdienstAdminUpdate { 
     vorname: string;
     nachname: string;
-    eMail: string;
+    email: string;
 }
 

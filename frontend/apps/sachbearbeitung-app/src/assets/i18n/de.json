@@ -238,6 +238,9 @@
   "sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel": "Neuen Sozialdienst Admin erstellen",
   "sachbearbeitung-app.admin.sozialdienst.admin-dialog.message": "Erstellen sie einen neuen Admin, so wird der exisistierende Admin ersetzt.",
   "sachbearbeitung-app.admin.sozialdienst.admin-dialog.confirm": "Admin erstellen",
+  "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.title": "Sozialdienst löschen",
+  "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.text": "Wollen Sie den Sozialdienst \"{{ name }}\" wirklich löschen?",
+  "sachbearbeitung-app.admin.sozialdienst.sozialdienstGeloescht": "Sozialdienst wurde erfolgreich gelöscht",
 
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",

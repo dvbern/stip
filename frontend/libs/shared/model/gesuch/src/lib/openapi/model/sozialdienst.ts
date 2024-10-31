@@ -16,6 +16,7 @@ export interface Sozialdienst {
     id: string;
     name: string;
     adresse: Adresse;
-    sozialdienstAdmin?: SozialdienstAdmin;
+    iban: string;
+    sozialdienstAdmin: SozialdienstAdmin;
 }
 
