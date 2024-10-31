@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { FormularChangeTypes } from '@dv/shared/model/gesuch-form';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/model/type-util';
 
 const PLACEHOLDER = '$VALUE';
 type Placeholder = typeof PLACEHOLDER;

@@ -8,8 +8,6 @@ import {
   catchError,
   combineLatestWith,
   concatMap,
-  exhaustMap,
-  filter,
   map,
   switchMap,
   tap,
@@ -35,7 +33,6 @@ import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-pro
 import { AppType } from '@dv/shared/model/config';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
-  AusbildungUpdate,
   Gesuch,
   GesuchFormularUpdate,
   GesuchService,
@@ -51,7 +48,6 @@ import {
 } from '@dv/shared/util/http';
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import {
@@ -244,41 +240,6 @@ export const loadGesuch = createEffect(
           ]),
         );
       }),
-    );
-  },
-  { functional: true },
-);
-
-export const createGesuch = createEffect(
-  (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.createGesuch),
-      exhaustMap(({ create }) =>
-        gesuchService.createGesuch$({ gesuchCreate: create }).pipe(
-          switchMap(() =>
-            gesuchService.getGesucheForFall$({
-              fallId: create.fallId,
-            }),
-          ),
-          map(
-            (gesuche) =>
-              gesuche.find(
-                ({ gesuchsperiode: { id } }) => id === create.gesuchsperiodeId,
-              )?.id,
-          ),
-          filter(isDefined),
-          map((id) =>
-            SharedDataAccessGesuchEvents.gesuchCreatedSuccess({
-              id,
-            }),
-          ),
-          catchError((error) => [
-            SharedDataAccessGesuchEvents.gesuchCreatedFailure({
-              error: sharedUtilFnErrorTransformer(error),
-            }),
-          ]),
-        ),
-      ),
     );
   },
   { functional: true },
@@ -616,7 +577,6 @@ export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
   loadGesuch,
   loadGsDashboard,
-  createGesuch,
   updateGesuch,
   updateGesuchSubform,
   removeGesuch,
@@ -631,19 +591,15 @@ export const sharedDataAccessGesuchEffects = {
   setGesuchVersendet,
 };
 
-const viewOnlyFields = ['steuerdatenTabs'] as const satisfies [
-  keyof SharedModelGesuchFormular,
-];
-/**
- * Formular fields that are only used while viewing data but should be removed on update
- */
-type ViewOnlyFields = (typeof viewOnlyFields)[number];
+const viewOnlyFields = [
+  'steuerdatenTabs',
+] as const satisfies (keyof SharedModelGesuchFormular)[];
 
 const prepareFormularData = (
   id: string,
   gesuchFormular: GesuchFormularUpdate | Partial<SharedModelGesuchFormular>,
 ): GesuchUpdate => {
-  const { ausbildung, ...formular } = gesuchFormular;
+  const { ...formular } = gesuchFormular;
   viewOnlyFields.forEach((field) => {
     if (field in formular) {
       delete formular[field];
@@ -654,55 +610,7 @@ const prepareFormularData = (
       id,
       gesuchFormular: {
         ...formular,
-        ausbildung: toAusbildung(ausbildung),
       },
     },
-  };
-};
-
-/**
- * Get the given Formular property Data as View or Update Data
- *
- * * **View Type**: SharedModelGesuchFormular[K]
- *   > represents the type that is being returned from the API (GET)
- * * **Update Type**: GesuchFormularUpdate[K]
- *   > the values that can be sent to the API for an update (PUT)
- *
- * The distinciton is necessary because the API returns more data than is necessary for an update
- * for example the API returns the full Ausbildungsgang object, but for an update only the ID is necessary
- */
-type ViewOrUpdateData<
-  K extends Exclude<keyof SharedModelGesuchFormular, ViewOnlyFields>,
-> = GesuchFormularUpdate[K] | Partial<SharedModelGesuchFormular>[K];
-
-/**
- * Check if Type T represent the Edit type of R
- */
-const isEditData = <T, R extends T>(
-  value: T,
-  keyExists: keyof R,
-): value is R => {
-  return typeof value === 'object' && value && keyExists in value;
-};
-
-/**
- * Convert the given Ausbildung to an AusbildungUpdate if necessary
- */
-const toAusbildung = (ausbildung: ViewOrUpdateData<'ausbildung'>) => {
-  if (!ausbildung) {
-    return undefined;
-  }
-  if (
-    isEditData<ViewOrUpdateData<'ausbildung'>, AusbildungUpdate>(
-      ausbildung,
-      'ausbildungsgangId',
-    )
-  ) {
-    return ausbildung;
-  }
-  return {
-    ...ausbildung,
-    ausbildungsgang: undefined,
-    ausbildungsgangId: ausbildung.ausbildungsgang?.id,
   };
 };

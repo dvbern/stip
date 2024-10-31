@@ -13,6 +13,7 @@ export type LibType =
   | 'util'
   | 'util-data-access'
   | 'util-fn'
+  | 'dialog'
   | 'model';
 
 export type LibScope = 'shared' | 'customer-app';

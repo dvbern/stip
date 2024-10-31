@@ -51,7 +51,6 @@ body {
 .btn.btn-nav {
   --dv-white-rgb: #7f7f8b;
   --dv-btn-color: #7f7f8b;
-  --dv-btn-bg: transparent;
   --dv-btn-border-color: none;
   --dv-btn-hover-color: #fff;
   --dv-btn-hover-bg: var(--dv-red);
@@ -64,6 +63,10 @@ body {
   --dv-btn-disabled-color: #a6a6b2;
   --dv-btn-disabled-bg: transparent;
   --dv-btn-disabled-border-color: none;
+}
+
+.btn-outline-primary {
+  --dv-btn-bg: white;
 }
 
 .btn-group {
@@ -94,6 +97,9 @@ body {
   border: none;
 }
 
+.bg-tertiary {
+  background-color: var(--dv-tertiary-bg);
+}
 .card {
   --dv-card-bg: white;
 }

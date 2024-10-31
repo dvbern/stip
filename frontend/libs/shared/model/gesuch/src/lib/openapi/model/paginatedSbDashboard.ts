@@ -12,9 +12,9 @@
 import { SbDashboardGesuch } from './sbDashboardGesuch';
 
 export interface PaginatedSbDashboard { 
-    entries?: Array<SbDashboardGesuch>;
     page?: number;
     pageSize?: number;
     totalEntries?: number;
+    entries?: Array<SbDashboardGesuch>;
 }
 

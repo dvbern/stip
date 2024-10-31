@@ -38,7 +38,7 @@
       <button
         type="button"
         class="btn btn-outline-primary mb-2 w-100"
-        data-testid="gesuch-app.cockpit.gesuch.aenderung-delete"
+        data-testid="gesuch-app.dashboard.aenderung.delete"
         (click)="deleteAenderung.emit(tranche.id)"
       >
         <span>{{ 'gesuch-app.aenderungs-entry.delete' | translate }}</span>
@@ -49,7 +49,7 @@
       data-testid="cockpit-gesuch-edit"
       [routerLink]="['/gesuch', gesuchId, 'aenderung', tranche.id]"
     >
-      {{ 'gesuch-app.cockpit.gesuch.aenderungs-entry' | translate }}
+      {{ 'gesuch-app.dashboard.aenderung.edit' | translate }}
     </a>
   </div>
 </div>
