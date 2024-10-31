@@ -42,7 +42,7 @@
     <kie.version>8.41.0.Final</kie.version>
     <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
     <spotless.version>2.43.0</spotless.version>
-    <spotless.palantir.version>2.50.0</spotless.palantir.version>
+    <spotless.eclipse.version>4.29</spotless.eclipse.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -505,7 +505,7 @@
             <cleanthat />
             
             <eclipse>
-              <version>4.29</version>
+              <version>${spotless.eclipse.version}</version>
               <file>${project.basedir}/stip-codestyle.xml</file>
             </eclipse>
             
