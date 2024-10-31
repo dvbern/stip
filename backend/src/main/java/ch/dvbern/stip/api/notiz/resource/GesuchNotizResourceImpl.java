@@ -40,7 +40,6 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response getNotiz(UUID notizId) {
-        authorizer.allowAllow();
         return Response.ok(service.getById(notizId)).build();
     }
 
