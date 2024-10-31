@@ -33,6 +33,7 @@ class SozialdienstResourceImplTest {
 
     private final static String VALID_IBAN_1 = "CH5089144653587876648";
     private final static String VALID_IBAN_2 = "CH5089144653587876648";
+
     @Order(1)
     @Test
     @TestAsAdmin
@@ -45,9 +46,10 @@ class SozialdienstResourceImplTest {
         adresseDto.setLand(LandDtoSpec.CH);
 
         final var sozialdienstAdminCreateDto = new SozialdienstAdminCreateDtoSpec();
-        sozialdienstAdminCreateDto.setKeykloakId(UUID.randomUUID().toString());
+        sozialdienstAdminCreateDto.setKeycloakId(UUID.randomUUID().toString());
         sozialdienstAdminCreateDto.setNachname("Muster");
         sozialdienstAdminCreateDto.setVorname("Max");
+        sozialdienstAdminCreateDto.seteMail("test@test.com");
 
         final var createDto = new SozialdienstCreateDtoSpec()
             .adresse(adresseDto)
@@ -64,7 +66,6 @@ class SozialdienstResourceImplTest {
             .extract()
             .as(SozialdienstDtoSpec.class);
     }
-
 
     @Order(2)
     @TestAsAdmin
@@ -132,6 +133,7 @@ class SozialdienstResourceImplTest {
         final var updateSozialdienstDto = new SozialdienstAdminUpdateDtoSpec();
         updateSozialdienstDto.setVorname("updated");
         updateSozialdienstDto.setNachname("updated");
+        updateSozialdienstDto.seteMail("test@test.com");
         final var updated = apiSpec.updateSozialdienstAdmin()
             .sozialdienstIdPath(dtoSpec.getId())
             .body(updateSozialdienstDto)
@@ -144,6 +146,7 @@ class SozialdienstResourceImplTest {
         assertTrue(updated.getNachname().contains("updated"));
         assertTrue(updated.getVorname().contains("updated"));
     }
+
     @Order(5)
     @TestAsAdmin
     @Test
@@ -152,7 +155,8 @@ class SozialdienstResourceImplTest {
         final var createSozialdienstDto = new SozialdienstAdminCreateDtoSpec();
         createSozialdienstDto.setVorname("replaced");
         createSozialdienstDto.setNachname("replaced");
-        createSozialdienstDto.setKeykloakId(keykloakId);
+        createSozialdienstDto.seteMail("test@test.com");
+        createSozialdienstDto.setKeycloakId(keykloakId);
         final var replaced = apiSpec.replaceSozialdienstAdmin()
             .sozialdienstIdPath(dtoSpec.getId())
             .body(createSozialdienstDto)
@@ -164,7 +168,7 @@ class SozialdienstResourceImplTest {
             .as(SozialdienstAdminDtoSpec.class);;
         assertTrue(replaced.getNachname().contains("replaced"));
         assertTrue(replaced.getVorname().contains("replaced"));
-        assertTrue(replaced.getKeykloakId().equals(keykloakId));
+        assertTrue(replaced.getKeycloakId().equals(keykloakId));
     }
 
     @Order(7)

@@ -3750,15 +3750,18 @@ components:
           type: string
     SozialdienstAdminCreate:
       required:
-        - keykloakId
+        - keycloakId
         - vorname
         - nachname
+        - eMail
       properties:
-        keykloakId:
+        keycloakId:
           type: string
         vorname:
           type: string
         nachname:
+          type: string
+        eMail:
           type: string
     SozialdienstAdmin:
       type: object
@@ -3768,10 +3771,13 @@ components:
       required:
         - vorname
         - nachname
+        - eMail
       properties:
         vorname:
           type: string
         nachname:
+          type: string
+        eMail:
           type: string
     SozialdienstCreate:
       required:

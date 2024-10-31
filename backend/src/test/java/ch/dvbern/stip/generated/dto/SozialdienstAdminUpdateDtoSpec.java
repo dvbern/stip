@@ -28,7 +28,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   SozialdienstAdminUpdateDtoSpec.JSON_PROPERTY_VORNAME,
-  SozialdienstAdminUpdateDtoSpec.JSON_PROPERTY_NACHNAME
+  SozialdienstAdminUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
+  SozialdienstAdminUpdateDtoSpec.JSON_PROPERTY_E_MAIL
 })
 @JsonTypeName("SozialdienstAdminUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -38,6 +39,9 @@ public class SozialdienstAdminUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
+
+  public static final String JSON_PROPERTY_E_MAIL = "eMail";
+  private String eMail;
 
   public SozialdienstAdminUpdateDtoSpec() {
   }
@@ -93,6 +97,32 @@ public class SozialdienstAdminUpdateDtoSpec {
     this.nachname = nachname;
   }
 
+
+  public SozialdienstAdminUpdateDtoSpec eMail(String eMail) {
+    
+    this.eMail = eMail;
+    return this;
+  }
+
+   /**
+   * Get eMail
+   * @return eMail
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_E_MAIL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String geteMail() {
+    return eMail;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_E_MAIL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void seteMail(String eMail) {
+    this.eMail = eMail;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -103,12 +133,13 @@ public class SozialdienstAdminUpdateDtoSpec {
     }
     SozialdienstAdminUpdateDtoSpec sozialdienstAdminUpdate = (SozialdienstAdminUpdateDtoSpec) o;
     return Objects.equals(this.vorname, sozialdienstAdminUpdate.vorname) &&
-        Objects.equals(this.nachname, sozialdienstAdminUpdate.nachname);
+        Objects.equals(this.nachname, sozialdienstAdminUpdate.nachname) &&
+        Objects.equals(this.eMail, sozialdienstAdminUpdate.eMail);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname);
+    return Objects.hash(vorname, nachname, eMail);
   }
 
   @Override
@@ -117,6 +148,7 @@ public class SozialdienstAdminUpdateDtoSpec {
     sb.append("class SozialdienstAdminUpdateDtoSpec {\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    eMail: ").append(toIndentedString(eMail)).append("\n");
     sb.append("}");
     return sb.toString();
   }

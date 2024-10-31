@@ -14,7 +14,7 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
-import ch.dvbern.stip.api.sozialdienst.pojo.SozialdienstAdmin;
+import ch.dvbern.stip.api.benutzer.entity.SozialdienstAdmin;
 import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
@@ -99,7 +99,7 @@ public class BenutzerService {
     @Transactional
     public Benutzer createSozialdienstAdminBenutzer(SozialdienstAdmin sozialdienstAdmin) {
         Benutzer newBenutzer = new Benutzer();
-        newBenutzer.setKeycloakId(sozialdienstAdmin.getKeykloakId());
+        newBenutzer.setKeycloakId(sozialdienstAdmin.getKeycloakId());
         newBenutzer.setVorname(sozialdienstAdmin.getVorname());
         newBenutzer.setNachname(sozialdienstAdmin.getNachname());
         newBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);

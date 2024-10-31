@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.sozialdienst.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.sozialdienst.pojo.SozialdienstAdmin;
+import ch.dvbern.stip.api.benutzer.entity.SozialdienstAdmin;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;

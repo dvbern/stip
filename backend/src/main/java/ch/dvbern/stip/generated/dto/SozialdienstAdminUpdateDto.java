@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SozialdienstAdminUpdateDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
+  private @Valid String eMail;
 
   /**
    **/
@@ -55,6 +56,25 @@ public class SozialdienstAdminUpdateDto  implements Serializable {
     this.nachname = nachname;
   }
 
+  /**
+   **/
+  public SozialdienstAdminUpdateDto eMail(String eMail) {
+    this.eMail = eMail;
+    return this;
+  }
+
+
+  @JsonProperty("eMail")
+  @NotNull
+  public String geteMail() {
+    return eMail;
+  }
+
+  @JsonProperty("eMail")
+  public void seteMail(String eMail) {
+    this.eMail = eMail;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -66,12 +86,13 @@ public class SozialdienstAdminUpdateDto  implements Serializable {
     }
     SozialdienstAdminUpdateDto sozialdienstAdminUpdate = (SozialdienstAdminUpdateDto) o;
     return Objects.equals(this.vorname, sozialdienstAdminUpdate.vorname) &&
-        Objects.equals(this.nachname, sozialdienstAdminUpdate.nachname);
+        Objects.equals(this.nachname, sozialdienstAdminUpdate.nachname) &&
+        Objects.equals(this.eMail, sozialdienstAdminUpdate.eMail);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname);
+    return Objects.hash(vorname, nachname, eMail);
   }
 
   @Override
@@ -81,6 +102,7 @@ public class SozialdienstAdminUpdateDto  implements Serializable {
 
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    eMail: ").append(toIndentedString(eMail)).append("\n");
     sb.append("}");
     return sb.toString();
   }
