@@ -430,7 +430,12 @@ public class GesuchService {
         gesuch.getGesuchTranchen().forEach(
             gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
         );
+        final var ausbildung = gesuch.getAusbildung();
         gesuchRepository.delete(gesuch);
+        ausbildung.getGesuchs().remove(gesuch);
+        if (ausbildung.getGesuchs().size() == 0) {
+            ausbildungRepository.delete(ausbildung);
+        }
     }
 
     @Transactional
