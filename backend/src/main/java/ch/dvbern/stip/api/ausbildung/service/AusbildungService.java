@@ -7,7 +7,9 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -24,6 +26,7 @@ public class AusbildungService {
     private final AusbildungsgangRepository ausbildungsgangRepository;
     private final AusbildungMapper ausbildungMapper;
     private final GesuchService gesuchService;
+    private final GesuchsperiodenService gesuchsperiodeService;
     private final Validator validator;
 
     @Transactional
@@ -57,6 +60,21 @@ public class AusbildungService {
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);
         }
+
+        final var gesuch = ausbildung.getGesuchs().get(0);
+        final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
+            ausbildung
+        );
+        gesuch.setGesuchsperiode(gesuchsperiode);
+        var ausbildungsstart = ausbildung.getAusbildungBegin();
+        ausbildungsstart.withYear(gesuchsperiode.getGesuchsperiodeStart().getYear());
+        if (ausbildungsstart.isAfter(gesuchsperiode.getGesuchsperiodeStopp())) {
+            ausbildungsstart = ausbildungsstart.minusYears(1);
+        }
+
+        gesuch.getNewestGesuchTranche().get().setGueltigkeit(
+            new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1))
+        );
         ausbildungRepository.persistAndFlush(ausbildung);
         ausbildung.setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
         return ausbildungMapper.toDto(ausbildung);

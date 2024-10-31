@@ -61,6 +61,10 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
             throw new UnauthorizedException();
         }
 
+        if (ausbildung.getGesuchs().get(0).getGesuchTranchen().size() > 1) {
+            throw new UnauthorizedException();
+        }
+
         final var gesuch = ausbildung.getGesuchs().get(0);
         if (isAdminOrSb(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
             return;

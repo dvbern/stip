@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
-import ch.dvbern.stip.api.adresse.service.AdresseMapper;
-import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
@@ -69,10 +66,7 @@ public class GesuchTrancheService {
     private final GesuchTrancheTruncateService gesuchTrancheTruncateService;
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
-    private final AdresseRepository adresseRepository;
-    private final AdresseMapper adresseMapper;
     private final PersonInAusbildungMapper personInAusbildungMapper;
-    private final AusbildungMapper ausbildungMapper;
     private final FamiliensituationMapper familiensituationMapper;
     private final PartnerMapper partnerMapper;
     private final ElternMapper elternMapper;
@@ -249,8 +243,7 @@ public class GesuchTrancheService {
         gesuchTrancheUpdateDto.setGesuchFormular(gesuchFormularUpdateDto);
 
         gesuchFormularUpdateDto.setPersonInAusbildung(personInAusbildungMapper.toUpdateDto(lastFreigegebenFormular.getPersonInAusbildung()));
-        gesuchFormularUpdateDto.setAusbildung(ausbildungMapper.toUpdateDto(lastFreigegebenFormular.getAusbildung())
-            .ausbildungsgangId(lastFreigegebenFormular.getAusbildung().getAusbildungsgang().getId()));
+
         gesuchFormularUpdateDto.setFamiliensituation(familiensituationMapper.toUpdateDto(lastFreigegebenFormular.getFamiliensituation()));
 
         gesuchFormularUpdateDto.setPartner(partnerMapper.toUpdateDto(lastFreigegebenFormular.getPartner()));

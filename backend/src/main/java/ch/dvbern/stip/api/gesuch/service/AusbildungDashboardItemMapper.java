@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.util.Set;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
@@ -35,9 +37,10 @@ public abstract class AusbildungDashboardItemMapper {
 
     GesuchDashboardItemDto map(final Gesuch gesuch) {
         final var gesuchTranchen = gesuchTrancheService.getAllTranchenForGesuch(gesuch.getId());
+
         final var offeneAenderung = gesuchTranchen.stream()
             .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
-                && tranche.getStatus().equals(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+                && Set.of(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN).contains(tranche.getStatus()))
             .findFirst().orElse(null);
 
         final var missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()

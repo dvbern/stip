@@ -68,6 +68,7 @@ class AusbildungResourceTest {
             .extract()
             .body()
             .as(AusbildungDto.class);
+
     }
 
     @Test
