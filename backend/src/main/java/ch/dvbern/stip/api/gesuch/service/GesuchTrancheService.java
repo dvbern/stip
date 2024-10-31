@@ -166,6 +166,11 @@ public class GesuchTrancheService {
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        if(!(gesuch.getGesuchStatus() == Gesuchstatus.IN_FREIGABE
+            || gesuch.getGesuchStatus() == Gesuchstatus.VERFUEGT))
+            throw new IllegalStateException("Create aenderung not allowed in current gesuch status");
+
         if (openAenderungAlreadyExists(gesuch)) {
             throw new ForbiddenException();
         }
@@ -218,10 +223,6 @@ public class GesuchTrancheService {
     @Transactional
     public void aenderungEinreichen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
-        final var gesuch = aenderung.getGesuch();
-        if(!(gesuch.getGesuchStatus() == Gesuchstatus.IN_FREIGABE
-        || gesuch.getGesuchStatus() == Gesuchstatus.VERFUEGT))
-            throw new IllegalStateException();
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
     }
 

@@ -13,6 +13,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -124,7 +125,7 @@ class GesuchTrancheServiceTest {
 
     @TestAsGesuchsteller
     @Test
-    @Description("Aenderung einreichen should only be possible when Gesuchstatus is IN_FREIGABE or VERFUEGT")
+    @Description("Aenderung create should only be possible when Gesuchstatus is IN_FREIGABE or VERFUEGT")
     void aenderungEinreichenAllowedStatesTest(){
         // arrange
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
@@ -135,7 +136,11 @@ class GesuchTrancheServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.requireAenderungById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        assertThrows(IllegalStateException.class, () -> gesuchTrancheService.aenderungEinreichen(gesuch.getGesuchTranchen().get(0).getId()));
+
+        CreateAenderungsantragRequestDto requestDto = new CreateAenderungsantragRequestDto();
+
+
+        assertThrows(IllegalStateException.class, () -> gesuchTrancheService.createAenderungsantrag(gesuch.getId(), requestDto));
         Mockito.doNothing().when(gesuchTrancheStatusService).triggerStateMachineEvent(any(), any());
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_FREIGABE);

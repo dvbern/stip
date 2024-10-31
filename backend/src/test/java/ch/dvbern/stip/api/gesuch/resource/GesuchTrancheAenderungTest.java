@@ -5,6 +5,7 @@ import java.util.Arrays;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -81,6 +82,32 @@ class GesuchTrancheAenderungTest {
     @Test
     @TestAsGesuchsteller
     @Order(4)
+    void createFirstAenderungsantragFails() {
+        createAenderungsanstrag()
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+    }
+
+    @TestAsSachbearbeiter
+    @Order(5)
+    @Test
+    void todo(){
+        gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat().statusCode(Response.Status.OK.getStatusCode());
+        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat().statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(6)
     void createFirstAenderungsantrag() {
         createAenderungsanstrag()
             .then()
@@ -90,7 +117,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(5)
+    @Order(7)
     @Description("Only one (open: NOT in State ABGELEHNT|AKZEPTIIERT) Aenderungsantrag should be allowed")
     void createSecondAenderungsantragFails() {
         createAenderungsanstrag()
@@ -118,7 +145,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(6)
+    @Order(8)
     @Description("Test setup for: The another GS must not be able do delete a Aenderung'")
     void setupnextTest(){
         gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
@@ -134,7 +161,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller2
-    @Order(7)
+    @Order(9)
     @Description("The another GS must not be able do delete a Aenderung'")
     void deleteAenderungByOtherUserTest() {
         final var aenderung = Arrays.stream(gesuchtranchen).filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG).findFirst().get();
@@ -149,7 +176,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(8)
+    @Order(10)
     @Description("The GS should be able do delete a Aenderung, if it is in State 'In Bearbeitung GS'")
     void deleteAenderungTest() {
         GesuchTrancheSlimDtoSpec[] gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
@@ -183,7 +210,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(9)
+    @Order(11)
     @Description("It should not be possible to delete a Tranche when a Aenderung should be deleted")
     void deleteAenderungShouldFailTest() {
         GesuchTrancheSlimDtoSpec[] gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
