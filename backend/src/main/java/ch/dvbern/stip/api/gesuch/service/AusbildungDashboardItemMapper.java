@@ -18,7 +18,6 @@ import org.mapstruct.Mapping;
 public abstract class AusbildungDashboardItemMapper {
     @Inject
     GesuchDashboardItemMapper gesuchDashboardItemMapper;
-//    GesuchDashboardItemMapper gesuchDashboardItemMapper = Mappers.getMapper(GesuchDashboardItemMapper.class);
 
     @Inject
     GesuchTrancheService gesuchTrancheService;

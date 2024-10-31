@@ -95,9 +95,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(1)
     void createFallAndAusbildung() {
-
         fallId = TestUtil.getOrCreateFall(fallApiSpec).getId();
-
     }
 
     @Test
@@ -108,8 +106,6 @@ class GesuchFillFormularTest {
 
         var gesuchDTO = new GesuchCreateDtoSpec();
         gesuchDTO.setAusbildungId(ausbildung.getId());
-//        gesuchDTO.setFallId(fallId);
-//        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
         var response = gesuchApiSpec.createGesuch()
             .body(gesuchDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -189,16 +185,6 @@ class GesuchFillFormularTest {
                 .getId()
             );
     }
-
-//    @Test
-//    @TestAsGesuchsteller
-//    @Order(6)
-//    void addAusbildung() {
-//        final var ausbildung = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
-//        currentFormular.setAusbildung(ausbildung);
-//        // Don't validate for now, as the LebenslaufItem validator is broken
-//        patchGesuch();
-//    }
 
     @Test
     @TestAsGesuchsteller

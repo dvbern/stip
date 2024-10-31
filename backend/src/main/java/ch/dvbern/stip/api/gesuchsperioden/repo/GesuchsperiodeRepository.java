@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> {
     private final EntityManager entityManager;
 
-    final QGesuchsperiode gesuchsperiode = QGesuchsperiode.gesuchsperiode;
+    static final QGesuchsperiode gesuchsperiode = QGesuchsperiode.gesuchsperiode;
 
     public Stream<Gesuchsperiode> findAllActiveForDate(LocalDate date) {
         var queryFactory = new JPAQueryFactory(entityManager);

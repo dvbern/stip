@@ -47,35 +47,5 @@ public class NotificationRepository implements BaseRepository<Notification> {
             .where(fall.gesuchsteller.id.eq(userId))
             .orderBy(notification.timestampErstellt.desc())
             .stream();
-//
-//        return queryFactory
-//            .select(notification)
-//            .from(notification)
-//            .where(
-//                notification.gesuch.id.in(
-//                    queryFactory
-//                        .select(gesuch.id)
-//                        .from(gesuch)
-//                        .where(
-//                            gesuch.ausbildung.id.in(
-//                                queryFactory
-//                                    .select(ausbildung.id)
-//                                    .from(ausbildung)
-//                                    .where(
-//                                        ausbildung.fall.id.in(
-//                                            queryFactory
-//                                                .select(fall.id)
-//                                                .from(fall)
-//                                                .where(
-//                                                    fall.gesuchsteller.id.eq(userId)
-//                                                )
-//                                        )
-//                                    )
-//                            )
-//                        )
-//                )
-//            )
-//            .orderBy(notification.timestampErstellt.desc())
-//            .stream();
     }
 }

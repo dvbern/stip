@@ -39,6 +39,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
     @RolesAllowed(GESUCH_UPDATE)
     public Response updateAusbildung(UUID ausbildungId, AusbildungUpdateDto ausbildungUpdateDto) {
         ausbildungAuthorizer.canUpdate(ausbildungId);
+        // TODO: change tranche dates on patch
         return Response.ok(ausbildungService.patchAusbildung(ausbildungId, ausbildungUpdateDto)).build();
     }
 }

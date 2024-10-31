@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.is;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AusbildungResourceTest {
+class AusbildungResourceTest {
     private final AusbildungApiSpec ausbildungApiSpec =
         AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
@@ -38,7 +38,6 @@ public class AusbildungResourceTest {
 
     private AusbildungDto ausbildung;
 
-
     @Test
     @TestAsGesuchsteller
     @Order(1)
@@ -46,6 +45,8 @@ public class AusbildungResourceTest {
         fall = fallApiSpec.getFallForGs()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
             .as(FallDto.class);

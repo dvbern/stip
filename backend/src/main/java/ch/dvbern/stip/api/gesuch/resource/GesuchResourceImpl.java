@@ -174,13 +174,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(dtos).build();
     }
 
-//    @RolesAllowed(GESUCH_READ)
-//    @Override
-//    public Response getGesucheForFall(UUID fallId) {
-//        fallAuthorizer.canRead(fallId);
-//        return Response.ok(gesuchService.findAllForFall(fallId)).build();
-//    }
-
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getStatusProtokoll(UUID gesuchId) {

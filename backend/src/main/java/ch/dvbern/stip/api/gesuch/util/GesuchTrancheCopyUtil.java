@@ -149,9 +149,6 @@ public class GesuchTrancheCopyUtil {
         final var piaAdresseCopy = AdresseCopyUtil.createCopy(other.getPersonInAusbildung().getAdresse());
         copy.getPersonInAusbildung().setAdresse(piaAdresseCopy);
 
-//        // Ausbildung
-//        copy.setAusbildung(AusbildungCopyUtil.createCopyIncludingStammdatenReferences(other.getAusbildung()));
-
         // Familiensituation
         copy.setFamiliensituation(FamiliensituationCopyUtil.createCopy(other.getFamiliensituation()));
 

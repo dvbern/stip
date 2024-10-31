@@ -8,7 +8,6 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +22,6 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final AusbildungRepository ausbildungRepository;
     private final FallRepository fallRepository;
-    private final GesuchRepository gesuchRepository;
 
     private boolean isGesuchstellerOfAusbildung(final Benutzer currentBenutzer, final Ausbildung ausbildung) {
         return Objects.equals(
@@ -37,7 +35,6 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         final var fall = fallRepository.findFallForGsOptional(currentBenutzer.getId()).orElseThrow(NotFoundException::new);
-        final var ausbildungs = fall.getAusbildungs();
         // TODO: Check state of ausbildung - only one may be active
     }
 

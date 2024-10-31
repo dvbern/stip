@@ -82,10 +82,11 @@ public class GesuchsperiodenService {
         final var eligibleGesuchsperioden = gesuchsperiodeRepository.findAllStartBefore(ausbildungsBeginAssumed);
         Gesuchsperiode gesuchsperiode = null;
         for (final var eligibleGesuchsperiode : eligibleGesuchsperioden.toList()) {
-            if (gesuchsperiode != null) {
-                if (eligibleGesuchsperiode.getGesuchsperiodeStart().isAfter(ausbildungsBeginAssumed)) {
-                    break;
-                }
+            if (
+                (gesuchsperiode != null) &&
+                eligibleGesuchsperiode.getGesuchsperiodeStart().isAfter(ausbildungsBeginAssumed)
+            ) {
+                break;
             }
             gesuchsperiode = eligibleGesuchsperiode;
         }

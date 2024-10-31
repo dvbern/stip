@@ -31,6 +31,19 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
     )
     public abstract AusbildungDto toDto(Ausbildung ausbildung);
 
+    @Mapping(
+        source = "ausbildungBegin",
+        target = "ausbildungBegin",
+        qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class }
+    )
+    @Mapping(
+        source = "ausbildungEnd",
+        target = "ausbildungEnd",
+        qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class }
+    )
+    @Mapping(source = "fallId", target = "fall.id")
+    public abstract Ausbildung toEntity(AusbildungDto ausbildungDto);
+
     @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang.id")
     @Mapping(
         source = "ausbildungBegin",

@@ -168,15 +168,6 @@ public class GesuchFormular extends AbstractMandantEntity {
     @HasPageValidation(PersonInAusbildungPageValidation.class)
     private @Valid PersonInAusbildung personInAusbildung;
 
-//    @NotNull(groups = GesuchEinreichenValidationGroup.class)
-//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    @JoinColumn(name = "ausbildung_id",
-//        foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"))
-//    @HasPageValidation(AusbildungPageValidation.class)
-//    private @Valid Ausbildung ausbildung;
-//    @Transient
-//    private @Valid Ausbildung ausbildung = this.tranche.getGesuch().getAusbildung();
-
     @Transient
     public Ausbildung getAusbildung() {
         return tranche.getGesuch().getAusbildung();
