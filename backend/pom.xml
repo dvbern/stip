@@ -490,6 +490,10 @@
         <configuration>
           <ratchetFrom>origin/main</ratchetFrom>
           <java>
+            <excludes>
+              <include>src/**/generated/**/*.*</include>
+            </excludes>
+            
             <!-- It is currently not possible to replace star imports with non-start, so the only thing we can ndo is remove them -->
             <replaceRegex>
               <name>Remove wildcard imports</name>
