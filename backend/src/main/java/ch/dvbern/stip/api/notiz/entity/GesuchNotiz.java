@@ -24,7 +24,7 @@ import java.util.UUID;
 )
 public class GesuchNotiz extends AbstractMandantEntity {
     @NotNull
-    @Column(name = "gesuchId")
+    @Column(name = "gesuch_id")
     private UUID gesuchId;
 
     @Column(name = "betreff", length = 100)
