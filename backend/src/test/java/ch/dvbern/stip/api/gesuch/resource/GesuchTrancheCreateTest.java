@@ -53,6 +53,7 @@ class GesuchTrancheCreateTest {
     @TestAsGesuchsteller
     @Order(1)
     void gesuchErstellen() {
+//        TestUtil.deleteGesucheOfSb(gesuchApiSpec);
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
     }
 

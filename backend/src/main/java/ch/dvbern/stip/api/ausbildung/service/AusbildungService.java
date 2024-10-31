@@ -43,7 +43,6 @@ public class AusbildungService {
 
         ausbildung.setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
 
-
         return ausbildungMapper.toDto(ausbildung);
     }
 

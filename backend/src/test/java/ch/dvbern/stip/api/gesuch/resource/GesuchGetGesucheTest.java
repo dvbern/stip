@@ -153,10 +153,31 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsAdmin
-    @Order(99)
+    @Order(9)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(10)
+    void getGsDashboardTestNoAusbildung() {
+        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+
+        assertThat(fallDashboardItems.length, is(1));
+
+        final var fallDashboardItem = fallDashboardItems[0];
+        final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
+
+        assertThat(ausbildungDashboardItems.size(), is(0));
     }
 
     private void allAreNotInWrongStatus(final List<SbDashboardGesuchDtoSpec> gesuche, final GesuchstatusDtoSpec... wrongStatus) {

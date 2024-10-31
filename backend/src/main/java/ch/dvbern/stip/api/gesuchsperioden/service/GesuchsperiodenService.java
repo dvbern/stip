@@ -16,6 +16,7 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -67,30 +68,24 @@ public class GesuchsperiodenService {
 
     public Gesuchsperiode getGesuchsperiodeForAusbildung(final Ausbildung ausbildung) {
         final var ausbildungBegin = ausbildung.getAusbildungBegin();
-//        var ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear() - 1);
-//        if (ausbildungsBeginAssumed.isBefore(LocalDate.now().minusMonths(7))) {
-//            ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear());
-//            if (ausbildungsBeginAssumed.isBefore(LocalDate.now().minusMonths(7))) {
-//                ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear() + 1);
-//            }
-//        }
-        var ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear() + 1);
-        if (ausbildungsBeginAssumed.isAfter(LocalDate.now().plusYears(1))) {
-            ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear());
-        }
 
-        final var eligibleGesuchsperioden = gesuchsperiodeRepository.findAllStartBefore(ausbildungsBeginAssumed);
-        Gesuchsperiode gesuchsperiode = null;
-        for (final var eligibleGesuchsperiode : eligibleGesuchsperioden.toList()) {
-            if (
-                (gesuchsperiode != null) &&
-                eligibleGesuchsperiode.getGesuchsperiodeStart().isAfter(ausbildungsBeginAssumed)
-            ) {
-                break;
+        int yearOffset = -1;
+        while (true) {
+            var ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear() + yearOffset);
+            final var eligibleGesuchsperioden = gesuchsperiodeRepository.findAllStartBefore(ausbildungsBeginAssumed).toList();
+            if (eligibleGesuchsperioden.size() == 0) {
+                if (yearOffset == 2) {
+                    throw new NotFoundException();
+                }
+                yearOffset += 1;
+                continue;
             }
-            gesuchsperiode = eligibleGesuchsperiode;
+            if (eligibleGesuchsperioden.get(0).getEinreichefristReduziert().isBefore(LocalDate.now())){
+                continue;
+            }
+
+            return eligibleGesuchsperioden.get(0);
         }
-        return gesuchsperiode;
     }
 
     @Transactional

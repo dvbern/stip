@@ -43,7 +43,6 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.HttpHeaders;
@@ -76,6 +75,20 @@ public class TestUtil {
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    public static void deleteGesucheOfSb(final GesuchApiSpec gesuchApiSpec) {
+        final var gesuche = gesuchApiSpec.getGesucheGs()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec[].class);
+        for (final var gesuch : gesuche) {
+            deleteGesuch(gesuchApiSpec, gesuch.getId());
+        }
     }
 
     public static void fillGesuch(
@@ -147,27 +160,37 @@ public class TestUtil {
     ) {
         final var fall = getOrCreateFall(fallApiSpec);
         final var ausbildung = createAusbildung(ausbildungApiSpec, fall.getId());
-        final var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setAusbildungId(ausbildung.getId());
+//        final var gesuchDTO = new GesuchCreateDtoSpec();
+//        gesuchDTO.setAusbildungId(ausbildung.getId());
 //        gesuchDTO.setFallId(fall.getId());
 //        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
-        final var gesuchResponse = gesuchApiSpec.createGesuch()
-            .body(gesuchDTO)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.CREATED.getStatusCode());
-
-        final var gesuchId = TestUtil.extractIdFromResponse(gesuchResponse);
-        return gesuchApiSpec.getCurrentGesuch()
-            .gesuchIdPath(gesuchId)
+        final var gesuche = gesuchApiSpec.getGesucheGs()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchDtoSpec[].class);
+
+//        final var gesuchResponse = gesuchApiSpec.createGesuch()
+        //            .body(gesuchDTO)
+        //            .execute(TestUtil.PEEK_IF_ENV_SET)
+        //            .then()
+        //            .assertThat()
+        //            .statusCode(Response.Status.CREATED.getStatusCode());
+        return gesuche[0];
+//        final var gesuchId = TestUtil.extractIdFromResponse(gesuchResponse);
+//
+//        return gesuchApiSpec.getCurrentGesuch()
+//            .gesuchIdPath(gesuchId)
+//            .execute(TestUtil.PEEK_IF_ENV_SET)
+//            .then()
+//            .assertThat()
+//            .statusCode(Status.OK.getStatusCode())
+//            .extract()
+//            .body()
+//            .as(GesuchDtoSpec.class);
     }
 
     public static UUID extractIdFromResponse(ValidatableResponse response) {
