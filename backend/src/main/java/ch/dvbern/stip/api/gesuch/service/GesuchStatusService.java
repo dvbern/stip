@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
-import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
@@ -57,15 +57,8 @@ public class GesuchStatusService {
 
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
-        if (!kommentarDto.getText().isBlank()) {
-            final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
-
-            mailService.sendStandardNotificationEmail(
-                pia.getNachname(),
-                pia.getVorname(),
-                pia.getEmail(),
-                AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
-            );
+        if (!(kommentarDto.getText() == null)) {
+            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
 
             notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
         }
