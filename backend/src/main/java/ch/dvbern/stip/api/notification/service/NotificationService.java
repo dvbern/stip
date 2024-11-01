@@ -48,7 +48,6 @@ public class NotificationService {
         final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
-        ;
         final var nachname = pia.getNachname();
         final String msg = Templates.getAenderungAbgelehnt(anrede, nachname, kommentarDto.getText(), sprache).render();
         notification.setNotificationText(msg);
