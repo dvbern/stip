@@ -148,6 +148,7 @@
   "shared.nachrichten.sender": "Expéditeur",
   "shared.nachrichten.date": "Date",
   "shared.nachrichten.type.GESUCH_EINGEREICHT": "Demande soumise",
+  "shared.nachrichten.type.FEHLENDE_DOKUMENTE": "Documents manquants",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
