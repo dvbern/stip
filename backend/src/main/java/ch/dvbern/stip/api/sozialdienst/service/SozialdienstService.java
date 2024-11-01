@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.sozialdienst.service;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.service.SozialdienstAdminService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.generated.dto.*;
 import jakarta.enterprise.context.RequestScoped;
@@ -16,15 +16,14 @@ public class SozialdienstService {
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstAdminMapper sozialdienstAdminMapper;
-
-    private final BenutzerService benutzerService;
+    private final SozialdienstAdminService sozialdienstAdminService;
 
     @Transactional
     public SozialdienstDto createSozialdienst(SozialdienstCreateDto dto) {
         var sozialdienst = sozialdienstMapper.toEntity(dto);
         final var sozialdienstAdmin = sozialdienstAdminMapper.toSozialdienstAdmin(dto.getSozialdienstAdmin());
-        final var benutzer = benutzerService.createSozialdienstAdminBenutzer(sozialdienstAdmin);
-        sozialdienst.setAdmin(benutzer);
+        final var admin = sozialdienstAdminService.createSozialdienstAdminBenutzer(sozialdienstAdmin);
+        sozialdienst.setAdmin(admin);
         sozialdienstRepository.persistAndFlush(sozialdienst);
         return sozialdienstMapper.toDto(sozialdienst);
     }
@@ -68,10 +67,10 @@ public class SozialdienstService {
     public SozialdienstAdminDto replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminCreateDto dto) {
         var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
         final var benutzerToDelete = sozialdienst.getAdmin();
-        benutzerService.deleteBenutzer(benutzerToDelete.getKeycloakId());
+        sozialdienstAdminService.deleteSozialdienstAdminBenutzer(benutzerToDelete.getKeycloakId());
 
         final var benutzerToReplace = sozialdienstAdminMapper.toSozialdienstAdmin(dto);
-        final var benutzer = benutzerService.createSozialdienstAdminBenutzer(benutzerToReplace);
+        final var benutzer = sozialdienstAdminService.createSozialdienstAdminBenutzer(benutzerToReplace);
         sozialdienst.setAdmin(benutzer);
 
         var sozialdienstAdmin = sozialdienstAdminMapper.toSozialdienstAdmin(dto);
