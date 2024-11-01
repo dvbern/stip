@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 @JsonTypeName("SozialdienstAdminUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
@@ -17,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SozialdienstAdminUpdateDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
-  private @Valid String email;
 
   /**
    **/
@@ -57,25 +55,6 @@ public class SozialdienstAdminUpdateDto  implements Serializable {
     this.nachname = nachname;
   }
 
-  /**
-   **/
-  public SozialdienstAdminUpdateDto email(String email) {
-    this.email = email;
-    return this;
-  }
-
-
-  @JsonProperty("email")
-  @NotNull
-  public String getEmail() {
-    return email;
-  }
-
-  @JsonProperty("email")
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -87,13 +66,12 @@ public class SozialdienstAdminUpdateDto  implements Serializable {
     }
     SozialdienstAdminUpdateDto sozialdienstAdminUpdate = (SozialdienstAdminUpdateDto) o;
     return Objects.equals(this.vorname, sozialdienstAdminUpdate.vorname) &&
-        Objects.equals(this.nachname, sozialdienstAdminUpdate.nachname) &&
-        Objects.equals(this.email, sozialdienstAdminUpdate.email);
+        Objects.equals(this.nachname, sozialdienstAdminUpdate.nachname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, email);
+    return Objects.hash(vorname, nachname);
   }
 
   @Override
@@ -103,7 +81,6 @@ public class SozialdienstAdminUpdateDto  implements Serializable {
 
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("}");
     return sb.toString();
   }

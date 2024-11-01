@@ -3771,13 +3771,10 @@ components:
       required:
         - vorname
         - nachname
-        - email
       properties:
         vorname:
           type: string
         nachname:
-          type: string
-        email:
           type: string
     SozialdienstCreate:
       required:
