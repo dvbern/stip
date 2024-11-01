@@ -104,7 +104,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     const hasAbgelehnteDokuments =
       this.dokumentsStore.hasAbgelehnteDokumentsSig();
     const isInCorrectState =
-      this.gesuchViewSig().gesuch?.gesuchStatus !== 'FEHLENDE_DOKUMENTE';
+      this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
 
     return hasAbgelehnteDokuments && isInCorrectState;
   });
