@@ -19,10 +19,14 @@ import {
 import { KeycloakHttpService } from '@dv/sachbearbeitung-app/util/keycloak-http';
 import { hasLocationHeader } from '@dv/sachbearbeitung-app/util-fn/keycloak-helper';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { bySozialdienstAdminRole } from '@dv/shared/model/benutzer';
+import {
+  SharedModelBenutzerApi,
+  bySozialdienstAdminRole,
+} from '@dv/shared/model/benutzer';
 import {
   Sozialdienst,
   SozialdienstAdminCreate,
+  SozialdienstAdminUpdate,
   SozialdienstCreate,
   SozialdienstService,
   SozialdienstUpdate,
@@ -204,7 +208,7 @@ export class SozialdienstStore extends signalStore(
                 ),
             ),
             catchError((error) => {
-              patchState(this, { sozialdienst: failure(error) });
+              patchState(this, { sozialdienst: error });
               return EMPTY;
             }),
           );
@@ -212,22 +216,78 @@ export class SozialdienstStore extends signalStore(
     ),
   );
 
-  updateSozialdienst$ = rxMethod<{ sozialdienstUpdate: SozialdienstUpdate }>(
+  updateSozialdienst$ = rxMethod<{ sozialdienst: Sozialdienst }>(
     pipe(
       tap(() => {
-        patchState(this, (state) => ({
-          sozialdienste: cachedPending(state.sozialdienste),
-        }));
+        patchState(this, {
+          sozialdienst: pending(),
+        });
       }),
-      switchMap(({ sozialdienstUpdate }) =>
-        this.sozialdienstService
-          .updateSozialdienst$({ sozialdienstUpdate })
-          .pipe(
-            handleApiResponse((sozialdienst) =>
-              patchState(this, { sozialdienst }),
-            ),
+      exhaustMap(({ sozialdienst }) => {
+        const userUpdate: SharedModelBenutzerApi = {
+          id: sozialdienst.sozialdienstAdmin.keycloakId,
+          email: sozialdienst.sozialdienstAdmin.email,
+          firstName: sozialdienst.sozialdienstAdmin.nachname,
+          lastName: sozialdienst.sozialdienstAdmin.vorname,
+        };
+
+        const sozialdienstUpdate: SozialdienstUpdate = {
+          adresse: sozialdienst.adresse,
+          iban: sozialdienst.iban,
+          id: sozialdienst.id,
+          name: sozialdienst.name,
+        };
+
+        const sozialdienstAdminUpdate: SozialdienstAdminUpdate = {
+          email: sozialdienst.sozialdienstAdmin.email,
+          nachname: sozialdienst.sozialdienstAdmin.nachname,
+          vorname: sozialdienst.sozialdienstAdmin.vorname,
+        };
+
+        return this.keycloak.updateUser$(userUpdate).pipe(
+          switchMap(() => {
+            return this.sozialdienstService.updateSozialdienstAdmin$({
+              sozialdienstId: sozialdienst.id,
+              sozialdienstAdminUpdate,
+            });
+          }),
+          switchMap(() =>
+            this.sozialdienstService
+              .updateSozialdienst$({
+                sozialdienstUpdate,
+              })
+              .pipe(
+                handleApiResponse(
+                  (sozialdienst) => {
+                    patchState(this, { sozialdienst });
+                  },
+                  {
+                    onSuccess: () => {
+                      this.globalNotificationStore.createSuccessNotification({
+                        messageKey:
+                          'sachbearbeitung-app.admin.sozialdienst.sozialdienstAktualisiert',
+                      });
+                    },
+                    onFailure: () => {
+                      this.loadSozialdienst$({
+                        sozialdienstId: sozialdienst.id,
+                      });
+                    },
+                  },
+                ),
+              ),
           ),
-      ),
+          catchError(() => {
+            // patchState(this, { sozialdienst: failure(error) });
+            // return EMPTY;
+            this.loadSozialdienst$({
+              sozialdienstId: sozialdienst.id,
+            });
+
+            return EMPTY;
+          }),
+        );
+      }),
     ),
   );
 
@@ -328,6 +388,10 @@ export class SozialdienstStore extends signalStore(
                     ),
                   ),
               ),
+              catchError((error) => {
+                patchState(this, { sozialdienst: failure(error) });
+                return EMPTY;
+              }),
             );
         },
       ),
@@ -341,8 +405,6 @@ export class SozialdienstStore extends signalStore(
           sozialdienste: cachedPending(state.sozialdienste),
         }));
       }),
-      // delete the sozialdienst admin first
-      // todo: should there be rollback logic?
       exhaustMap((sozialdienst) =>
         this.keycloak
           .deleteUser$(sozialdienst.sozialdienstAdmin.keycloakId)

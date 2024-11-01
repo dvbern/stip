@@ -109,6 +109,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
           this.form.controls.sozialdienstAdmin.controls.email.disable({
             emitEvent: false,
           });
+        } else {
           // set country to CH, since all sozialdienst are in CH
           this.form.controls.adresse.controls.land.setValue('CH', {
             emitEvent: false,
@@ -149,8 +150,38 @@ export class SozialdienstDetailComponent implements OnDestroy {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  update() {}
+  update() {
+    const sozialdienstId = this.idSig();
+    const keycloakId =
+      this.store.sozialdienst().data?.sozialdienstAdmin.keycloakId;
+
+    if (this.form.invalid || !sozialdienstId || !keycloakId) return;
+
+    const values = convertTempFormToRealValues(this.form);
+
+    const adresse = SharedUiFormAddressComponent.getRealValues(
+      this.form.controls.adresse,
+    );
+
+    const sozialdienstAdmin = convertTempFormToRealValues(
+      this.form.controls.sozialdienstAdmin,
+    );
+
+    const updateRequest = {
+      ...values,
+      id: sozialdienstId,
+      iban: 'CH' + values.iban,
+      adresse,
+      sozialdienstAdmin: {
+        keycloakId,
+        ...sozialdienstAdmin,
+      },
+    };
+
+    this.store.updateSozialdienst$({
+      sozialdienst: updateRequest,
+    });
+  }
 
   create() {
     if (this.form.invalid) return;
