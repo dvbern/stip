@@ -16,15 +16,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Getter
 @Setter
 @Entity
-@DiscriminatorValue("1")
-@Table(
-    name = "sozialdienst_id",
-    indexes = {
-        @Index(name = "IX_benutzer_keycloak_id", columnList = "keycloak_id", unique = true),
-        @Index(name = "IX_benuter_mandant", columnList = "mandant"),
-        @Index(name = "IX_benutzer_benutzereinstellungen_id", columnList = "benutzereinstellungen_id"),
-    }
-)
 public class SozialdienstAdmin extends Benutzer {
     @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)

@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+
 /**
  * Notification for a Gesuch
  **/

@@ -31,8 +31,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Getter
 @Setter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="benutzer_type",
-    discriminatorType = DiscriminatorType.INTEGER)
 public class Benutzer extends AbstractMandantEntity {
     @Nullable
     @Size(max = DB_DEFAULT_MAX_LENGTH)
