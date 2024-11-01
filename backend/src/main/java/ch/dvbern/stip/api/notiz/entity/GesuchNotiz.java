@@ -1,17 +1,13 @@
 package ch.dvbern.stip.api.notiz.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
@@ -26,9 +22,10 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
     }
 )
 public class GesuchNotiz extends AbstractMandantEntity {
-    @NotNull
-    @Column(name = "gesuch_id")
-    private UUID gesuchId;
+    @ManyToOne
+    @JoinColumn(name = "gesuch_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_notiz_gesuch_id"))
+    private Gesuch gesuch;
 
     @Column(name = "betreff")
     @Size(max = DB_DEFAULT_MAX_LENGTH)

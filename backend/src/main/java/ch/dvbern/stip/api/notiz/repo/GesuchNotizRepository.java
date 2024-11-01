@@ -23,7 +23,7 @@ public class GesuchNotizRepository implements BaseRepository<GesuchNotiz> {
 
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuchNotiz)
-            .where(gesuchNotiz.gesuchId.eq(gesuchId))
+            .where(gesuchNotiz.gesuch.id.eq(gesuchId))
             .stream()
             .toList();
     }

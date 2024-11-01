@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.notiz.service;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class GesuchNotizService {
     private final GesuchNotizRepository gesuchNotizRepository;
     private final GesuchNotizMapper gesuchNotizMapper;
+    private final GesuchRepository gesuchRepository;
 
     @Transactional
     public List<GesuchNotizDto> getAllByGesuchId(final UUID gesuchId) {
@@ -41,7 +43,9 @@ public class GesuchNotizService {
 
     @Transactional
     public GesuchNotizDto create(final GesuchNotizCreateDto createDto) {
+        final var gesuch = gesuchRepository.requireById(createDto.getGesuchId());
         final var notiz = gesuchNotizMapper.toEntity(createDto);
+        notiz.setGesuch(gesuch);
         gesuchNotizRepository.persistAndFlush(notiz);
         return gesuchNotizMapper.toDto(notiz);
     }
