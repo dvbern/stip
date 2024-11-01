@@ -21,23 +21,36 @@ public class SozialdienstService {
     @Transactional
     public SozialdienstDto createSozialdienst(SozialdienstCreateDto dto) {
         var sozialdienst = sozialdienstMapper.toEntity(dto);
+
         final var sozialdienstAdmin = sozialdienstAdminMapper.toSozialdienstAdmin(dto.getSozialdienstAdmin());
         final var admin = sozialdienstAdminService.createSozialdienstAdminBenutzer(sozialdienstAdmin);
         sozialdienst.setAdmin(admin);
         sozialdienstRepository.persistAndFlush(sozialdienst);
-        return sozialdienstMapper.toDto(sozialdienst);
+
+
+        var result = sozialdienstMapper.toDto(sozialdienst);
+        var adminDto = sozialdienstAdminMapper.toDto(admin);
+        result.setSozialdienstAdmin(adminDto);
+        return result;
     }
 
     @Transactional
     public SozialdienstDto getSozialdienstById(UUID id) {
-        final var entity = sozialdienstRepository.requireById(id);
-        return sozialdienstMapper.toDto(entity);
+        var entity = sozialdienstRepository.requireById(id);
+        var result = sozialdienstMapper.toDto(entity);
+        result.setSozialdienstAdmin(sozialdienstAdminMapper.toDto(entity.getAdmin()));
+        return result;
     }
 
     @Transactional
     public List<SozialdienstDto> getAllSozialdienst() {
         final var entities = sozialdienstRepository.findAll();
-        return entities.stream().map(sozialdienstMapper::toDto).toList();
+        return entities.stream().map(x -> {
+            var sozialdienstDto = sozialdienstMapper.toDto(x);
+            var adminDto = sozialdienstAdminMapper.toDto(x.getAdmin());
+            sozialdienstDto.setSozialdienstAdmin(adminDto);
+            return sozialdienstDto;
+        }).toList();
     }
 
     @Transactional

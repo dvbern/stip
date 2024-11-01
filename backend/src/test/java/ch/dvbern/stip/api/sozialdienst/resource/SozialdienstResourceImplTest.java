@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
 class SozialdienstResourceImplTest {
+    private final static String ADMIN_EMAIL = "test@test.com";
     public final SozialdienstApiSpec apiSpec = SozialdienstApiSpec.sozialdienst(RequestSpecUtil.quarkusSpec());
     public SozialdienstDtoSpec dtoSpec;
     public SozialdienstDto dto;
@@ -49,7 +50,7 @@ class SozialdienstResourceImplTest {
         sozialdienstAdminCreateDto.setKeycloakId(UUID.randomUUID().toString());
         sozialdienstAdminCreateDto.setNachname("Muster");
         sozialdienstAdminCreateDto.setVorname("Max");
-        sozialdienstAdminCreateDto.setEmail("test@test.com");
+        sozialdienstAdminCreateDto.setEmail(ADMIN_EMAIL);
 
         final var createDto = new SozialdienstCreateDtoSpec()
             .adresse(adresseDto)
@@ -65,9 +66,26 @@ class SozialdienstResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .as(SozialdienstDtoSpec.class);
+        assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
+
     }
 
     @Order(2)
+    @TestAsAdmin
+    @Test
+    void getSozialdienstById(){
+       dtoSpec =  apiSpec.getSozialdienst()
+            .sozialdienstIdPath(dtoSpec.getId())
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+           .extract().as(SozialdienstDtoSpec.class);
+        assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
+
+    }
+
+    @Order(3)
     @TestAsAdmin
     @Test
     void getSozialdienste(){
@@ -78,19 +96,11 @@ class SozialdienstResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .as(SozialdienstDtoSpec[].class)).toList().get(0);
+        assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
+
     }
 
-    @Order(3)
-    @TestAsAdmin
-    @Test
-    void getSozialdienstById(){
-        apiSpec.getSozialdienst()
-            .sozialdienstIdPath(dtoSpec.getId())
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-    }
+
 
     @Order(4)
     @TestAsAdmin

@@ -15,17 +15,12 @@ import lombok.RequiredArgsConstructor;
 public class SozialdienstAdminService {
     private final SozialdienstAdminRepository sozialdienstAdminRepository;
 
-    @Transactional
+    //@Transactional
     public SozialdienstAdmin createSozialdienstAdminBenutzer(SozialdienstAdmin sozialdienstAdmin) {
-        SozialdienstAdmin newSozialdienstAdmin = new SozialdienstAdmin();
-        newSozialdienstAdmin.setKeycloakId(sozialdienstAdmin.getKeycloakId());
-        newSozialdienstAdmin.setVorname(sozialdienstAdmin.getVorname());
-        newSozialdienstAdmin.setNachname(sozialdienstAdmin.getNachname());
-        newSozialdienstAdmin.setBenutzerStatus(BenutzerStatus.AKTIV);
-        newSozialdienstAdmin.setBenutzereinstellungen(new Benutzereinstellungen());
-
-        sozialdienstAdminRepository.persistAndFlush(newSozialdienstAdmin);
-        return newSozialdienstAdmin;
+        sozialdienstAdmin.setBenutzereinstellungen(new Benutzereinstellungen());
+        sozialdienstAdmin.setBenutzerStatus(BenutzerStatus.AKTIV);
+        sozialdienstAdminRepository.persistAndFlush(sozialdienstAdmin);
+        return sozialdienstAdmin;
     }
 
     @Transactional
