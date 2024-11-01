@@ -60,11 +60,13 @@
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <th class="action-cell-content" mat-header-cell *matHeaderCellDef>
-            <a [routerLink]="['.', 'create']" class="btn btn-outline-dark d-inline-flex lh-1 align-items-center">
-              <i class="material-symbols-rounded fs-5 me-2">add</i>
-              {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate }}
-            </a>
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="action-cell-content">
+              <a [routerLink]="['.', 'create']" class="btn btn-outline-dark d-inline-flex lh-1 align-items-center">
+                <i class="material-symbols-rounded fs-5 me-2">add</i>
+                {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate }}
+              </a>
+            </div>
           </th>
           <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource">
             <div class="d-flex justify-content-end gap-2">

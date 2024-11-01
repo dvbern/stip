@@ -5,10 +5,13 @@ import {
   DestroyRef,
   computed,
   inject,
+  signal,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import {
   MatPaginator,
   MatPaginatorIntl,
@@ -21,6 +24,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { SozialdienstStore } from '@dv/sachbearbeitung-app/data-access/sozialdienst';
 import { Sozialdienst } from '@dv/shared/model/gesuch';
+import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
@@ -43,6 +47,9 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
+    SharedUiClearButtonComponent,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   templateUrl: './sozialdienst-overview.component.html',
   styleUrl: './sozialdienst-overview.component.scss',
@@ -60,17 +67,27 @@ export class SozialdienstOverviewComponent {
 
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
+  filterSig = signal<string | null>(null);
+
   sozialDiensteListDataSourceSig = computed(() => {
     const benutzers = this.store.sozialdienste();
     const datasource = new MatTableDataSource(benutzers.data);
     const sort = this.sortSig();
     const paginator = this.paginatorSig();
+    const filter = this.filterSig();
+
+    datasource.filterPredicate = (data, filter) => {
+      return data.name.toLocaleLowerCase().includes(filter);
+    };
 
     if (sort) {
       datasource.sort = sort;
     }
     if (paginator) {
       datasource.paginator = paginator;
+    }
+    if (filter) {
+      datasource.filter = filter.trim().toLocaleLowerCase();
     }
     return datasource;
   });
