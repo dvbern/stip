@@ -245,9 +245,9 @@
   "sachbearbeitung-app.infos.notizen.description": "Un aperçu de toutes les notes",
   "sachbearbeitung-app.infos.notizen.title": "Notes",
   "sachbearbeitung-app.infos.notizen.table.datum": "Date",
-  "sachbearbeitung-app.infos.notizen.table.typ": "Type",
-  "sachbearbeitung-app.infos.notizen.table.text": "Texte",
-  "sachbearbeitung-app.infos.notizen.table.user": "Note",
+  "sachbearbeitung-app.infos.notizen.table.betreff": "Sujet",
+  "sachbearbeitung-app.infos.notizen.table.notiz": "Note",
+  "sachbearbeitung-app.infos.notizen.table.user": "Utilisateur",
   "sachbearbeitung-app.infos.notiz.table.erstellen": "Créer",
 
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Budget personnel",

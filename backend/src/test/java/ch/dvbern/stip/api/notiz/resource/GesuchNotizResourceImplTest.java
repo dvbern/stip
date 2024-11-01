@@ -64,8 +64,6 @@ class GesuchNotizResourceImplTest {
         gesuchCreateDto.setGesuchId(gesuch.getId());
         gesuchCreateDto.setText("test");
         gesuchCreateDto.setBetreff("test");
-        gesuchCreateDto.setUserErstellt("test");
-        gesuchCreateDto.setTimestampErstellt(LocalDate.now());
         gesuchNotizApiSpec.createNotiz()
             .body(gesuchCreateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -110,8 +108,6 @@ class GesuchNotizResourceImplTest {
         gesuchCreateDto.setGesuchId(gesuch.getId());
         gesuchCreateDto.setText("test");
         gesuchCreateDto.setBetreff("test");
-        gesuchCreateDto.setUserErstellt("test");
-        gesuchCreateDto.setTimestampErstellt(LocalDate.now());
         final var notiz = gesuchNotizApiSpec.createNotiz()
             .body(gesuchCreateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -126,8 +122,6 @@ class GesuchNotizResourceImplTest {
         gesuchUpdateDto.setId(notiz.getId());
         gesuchUpdateDto.setText("update");
         gesuchUpdateDto.setBetreff("update");
-        gesuchUpdateDto.setUserMutiert("test");
-        gesuchUpdateDto.setTimestampMutiert(LocalDate.now());
         gesuchNotizApiSpec.updateNotiz()
             .body(gesuchUpdateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -153,8 +147,6 @@ class GesuchNotizResourceImplTest {
         gesuchCreateDto.setGesuchId(gesuch.getId());
         gesuchCreateDto.setText("test");
         gesuchCreateDto.setBetreff("test");
-        gesuchCreateDto.setUserErstellt("test");
-        gesuchCreateDto.setTimestampErstellt(LocalDate.now());
         final var notiz = gesuchNotizApiSpec.createNotiz()
             .body(gesuchCreateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)

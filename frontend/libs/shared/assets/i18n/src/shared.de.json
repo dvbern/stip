@@ -528,6 +528,10 @@
   "shared.protokoll.title": "Protokoll",
 
   "shared.notizen.title": "Notizen",
+  "shared.form.notizen.datum.label": "Datum",
+  "shared.form.notizen.betreff.label": "Betreff",
+  "shared.form.notizen.text.label": "Text",
+  "shared.form.notizen.user.label": "User",
 
   "shared.role.Admin": "Admin",
   "shared.role.Jurist": "Jurist",

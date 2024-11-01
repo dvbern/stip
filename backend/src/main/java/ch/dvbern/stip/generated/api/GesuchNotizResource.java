@@ -1,12 +1,20 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
+
+
+
+import java.io.InputStream;
+import java.util.Map;
+import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 

@@ -4,7 +4,12 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { GesuchNotiz, GesuchNotizService } from '@dv/shared/model/gesuch';
+import {
+  GesuchNotiz,
+  GesuchNotizCreate,
+  GesuchNotizService,
+  GesuchNotizUpdate,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
@@ -54,50 +59,49 @@ export class NotizStore extends signalStore(
     ),
   );
 
-  // loadNotiz$ = rxMethod<{ notizId: string }>(
-  //   pipe(
-  //     tap(() => {
-  //       patchState(this, (state) => ({
-  //         notizen: cachedPending(state.notizen),
-  //       }));
-  //     }),
-  //     switchMap(({ gesuchId }) =>
-  //       this.notizService
-  //         .getNotizen$({ gesuchId })
-  //         .pipe(handleApiResponse((notizen) => patchState(this, { notizen }))),
-  //     ),
-  //   ),
-  // );
+  loadNotiz$ = rxMethod<{ notizId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          notiz: cachedPending(state.notiz),
+        }));
+      }),
+      switchMap(({ notizId }) =>
+        this.notizService
+          .getNotiz$({ notizId })
+          .pipe(handleApiResponse((notiz) => patchState(this, { notiz }))),
+      ),
+    ),
+  );
 
-  // saveNotiz$ = rxMethod<{
-  //   notizId: string;
-  //   values: unknown;
-  // }>(
-  //   pipe(
-  //     tap(() => {
-  //       patchState(this, (state) => ({
-  //         cachedNotiz: cachedPending(state.cachedNotiz),
-  //       }));
-  //     }),
-  //     switchMap(({ notizId, values }) =>
-  //       this.notizService
-  //         .updateNotiz$({
-  //           notizId,
-  //           payload: values,
-  //         })
-  //         .pipe(
-  //           handleApiResponse(
-  //             (notiz) => {
-  //               patchState(this, { notiz });
-  //             },
-  //             {
-  //               onSuccess: (notiz) => {
-  //                 // Do something after save, like showing a notification
-  //               },
-  //             },
-  //           ),
-  //         ),
-  //     ),
-  //   ),
-  // );
+  saveNotiz$ = rxMethod<{
+    notizDaten: GesuchNotizUpdate;
+    // Was muss hier noch alles reinkommen?
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          notiz: cachedPending(state.notiz),
+        }));
+      }),
+      switchMap(({ notizDaten }) =>
+        this.notizService
+          .updateNotiz$({
+            gesuchNotizUpdate: notizDaten,
+          })
+          .pipe(
+            handleApiResponse(
+              (notiz) => {
+                patchState(this, { notiz });
+              },
+              {
+                onSuccess: () => {
+                  // Do something after save, like showing a notification
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
 }

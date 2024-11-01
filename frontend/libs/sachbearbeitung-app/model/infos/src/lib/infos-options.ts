@@ -22,14 +22,14 @@ export const NOTIZEN_ROUTE: InfosOptions = {
 };
 
 export const NOTIZEN_ROUTE_CREATE: InfosOptions = {
-  route: 'create',
+  route: 'notiz/create',
   translationKey: 'sachbearbeitung-app.infos.notizen.erstellen',
   titleTranslationKey: 'sachbearbeitung-app.infos.notizen',
   iconSymbolName: 'description',
 };
 
 export const NOTIZEN_ROUTE_DETAIL: InfosOptions = {
-  route: ':notizId',
+  route: 'notiz/:notizId',
   translationKey: 'sachbearbeitung-app.infos.notizen.detail',
   titleTranslationKey: 'sachbearbeitung-app.infos.notizen',
   iconSymbolName: 'description',

@@ -18,7 +18,6 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { Fall } from '../model/fall';
 import { GesuchNotiz } from '../model/gesuchNotiz';
 import { GesuchNotizCreate } from '../model/gesuchNotizCreate';
 import { GesuchNotizUpdate } from '../model/gesuchNotizUpdate';
@@ -33,6 +32,10 @@ export interface GesuchNotizServiceCreateNotizRequestParams {
 }
 
 export interface GesuchNotizServiceDeleteNotizRequestParams {
+    notizId: string;
+}
+
+export interface GesuchNotizServiceGetNotizRequestParams {
     notizId: string;
 }
 
@@ -114,9 +117,9 @@ export class GesuchNotizService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public createNotiz$(requestParameters: GesuchNotizServiceCreateNotizRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Fall>;
-     public createNotiz$(requestParameters: GesuchNotizServiceCreateNotizRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Fall>>;
-     public createNotiz$(requestParameters: GesuchNotizServiceCreateNotizRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Fall>>;
+     public createNotiz$(requestParameters: GesuchNotizServiceCreateNotizRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchNotiz>;
+     public createNotiz$(requestParameters: GesuchNotizServiceCreateNotizRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchNotiz>>;
+     public createNotiz$(requestParameters: GesuchNotizServiceCreateNotizRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchNotiz>>;
      public createNotiz$(requestParameters: GesuchNotizServiceCreateNotizRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchNotizCreate = requestParameters.gesuchNotizCreate;
         if (gesuchNotizCreate === null || gesuchNotizCreate === undefined) {
@@ -178,7 +181,7 @@ export class GesuchNotizService {
         }
 
         const localVarPath = `/gesuch/notiz/create`;
-        return this.httpClient.request<Fall>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchNotiz>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: gesuchNotizCreate,
@@ -252,6 +255,79 @@ export class GesuchNotizService {
 
         const localVarPath = `/gesuch/notiz/${this.configuration.encodeParam({name: "notizId", value: notizId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * get a single Notiz of a Gesuch with the given Notiz-Id
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getNotiz$(requestParameters: GesuchNotizServiceGetNotizRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchNotiz>;
+     public getNotiz$(requestParameters: GesuchNotizServiceGetNotizRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchNotiz>>;
+     public getNotiz$(requestParameters: GesuchNotizServiceGetNotizRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchNotiz>>;
+     public getNotiz$(requestParameters: GesuchNotizServiceGetNotizRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const notizId = requestParameters.notizId;
+        if (notizId === null || notizId === undefined) {
+            throw new Error('Required parameter notizId was null or undefined when calling getNotiz$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuch/notiz/${this.configuration.encodeParam({name: "notizId", value: notizId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<GesuchNotiz>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

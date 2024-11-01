@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -31,9 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchNotizUpdateDtoSpec.JSON_PROPERTY_ID,
   GesuchNotizUpdateDtoSpec.JSON_PROPERTY_BETREFF,
-  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_TEXT,
-  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_USER_MUTIERT,
-  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_TIMESTAMP_MUTIERT
+  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_TEXT
 })
 @JsonTypeName("GesuchNotizUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -46,12 +43,6 @@ public class GesuchNotizUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_TEXT = "text";
   private String text;
-
-  public static final String JSON_PROPERTY_USER_MUTIERT = "userMutiert";
-  private String userMutiert;
-
-  public static final String JSON_PROPERTY_TIMESTAMP_MUTIERT = "timestampMutiert";
-  private LocalDate timestampMutiert;
 
   public GesuchNotizUpdateDtoSpec() {
   }
@@ -133,58 +124,6 @@ public class GesuchNotizUpdateDtoSpec {
     this.text = text;
   }
 
-
-  public GesuchNotizUpdateDtoSpec userMutiert(String userMutiert) {
-    
-    this.userMutiert = userMutiert;
-    return this;
-  }
-
-   /**
-   * Get userMutiert
-   * @return userMutiert
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getUserMutiert() {
-    return userMutiert;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUserMutiert(String userMutiert) {
-    this.userMutiert = userMutiert;
-  }
-
-
-  public GesuchNotizUpdateDtoSpec timestampMutiert(LocalDate timestampMutiert) {
-    
-    this.timestampMutiert = timestampMutiert;
-    return this;
-  }
-
-   /**
-   * Get timestampMutiert
-   * @return timestampMutiert
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getTimestampMutiert() {
-    return timestampMutiert;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampMutiert(LocalDate timestampMutiert) {
-    this.timestampMutiert = timestampMutiert;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -196,14 +135,12 @@ public class GesuchNotizUpdateDtoSpec {
     GesuchNotizUpdateDtoSpec gesuchNotizUpdate = (GesuchNotizUpdateDtoSpec) o;
     return Objects.equals(this.id, gesuchNotizUpdate.id) &&
         Objects.equals(this.betreff, gesuchNotizUpdate.betreff) &&
-        Objects.equals(this.text, gesuchNotizUpdate.text) &&
-        Objects.equals(this.userMutiert, gesuchNotizUpdate.userMutiert) &&
-        Objects.equals(this.timestampMutiert, gesuchNotizUpdate.timestampMutiert);
+        Objects.equals(this.text, gesuchNotizUpdate.text);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, betreff, text, userMutiert, timestampMutiert);
+    return Objects.hash(id, betreff, text);
   }
 
   @Override
@@ -213,8 +150,6 @@ public class GesuchNotizUpdateDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
-    sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
-    sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("}");
     return sb.toString();
   }

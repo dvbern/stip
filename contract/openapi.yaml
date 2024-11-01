@@ -4029,8 +4029,6 @@ components:
         - gesuchId
         - betreff
         - text
-        - userErstellt
-        - timestampErstellt
       properties:
         gesuchId:
           $ref: '#/components/schemas/UUID'
@@ -4039,17 +4037,11 @@ components:
           type: string
         text:
           type: string
-        userErstellt:
-          type: string
-        timestampErstellt:
-          $ref: '#/components/schemas/LocalDate'
     GesuchNotizUpdate:
       type: object
       required:
         - betreff
         - text
-        - userMutiert
-        - timestampMutiert
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -4058,12 +4050,16 @@ components:
           type: string
         text:
           type: string
-        userMutiert:
-          type: string
-        timestampMutiert:
-          $ref: '#/components/schemas/LocalDate'
     GesuchNotiz:
+      required:
+        - userErstellt
+        - timestampErstellt
       type: object
+      properties:
+        userErstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
       allOf:
         - type: object
         - $ref: '#/components/schemas/GesuchNotizUpdate'
