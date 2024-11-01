@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.sozialdienst.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.SozialdienstAdmin;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.IbanConstraint;
 import jakarta.persistence.*;
@@ -39,5 +39,5 @@ public class Sozialdienst extends AbstractMandantEntity {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "sozialdienst_admin_id", foreignKey = @ForeignKey(name = "FK_sozialdienst_sozialdienst_admin_id"))
-    private Benutzer admin;
+    private SozialdienstAdmin admin;
 }
