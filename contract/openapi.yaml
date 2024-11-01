@@ -2533,6 +2533,8 @@ components:
     FallDashboardItem:
       required:
         - fall
+        - ausbildungDashboardItems
+        - notifications
       type: object
       properties:
         fall:

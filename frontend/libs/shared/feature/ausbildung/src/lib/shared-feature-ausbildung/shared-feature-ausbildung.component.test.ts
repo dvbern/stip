@@ -131,7 +131,7 @@ describe(SharedFeatureAusbildungComponent.name, () => {
       expect(getByTestId('form-education-form')).toHaveClass('ng-invalid');
       expect(
         getByTestId('form-education-form').querySelector('mat-error'),
-      ).toHaveTextContent('shared.form.education.form.error.monthYearAfter');
+      ).toHaveTextContent('shared.form.ausbildung.form.error.monthYearAfter');
     });
 
     (

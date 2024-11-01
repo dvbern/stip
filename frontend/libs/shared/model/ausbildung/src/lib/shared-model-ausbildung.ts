@@ -1,5 +1,6 @@
 import {
   AusbildungDashboardItem,
+  AusbildungsStatus,
   FallDashboardItem,
 } from '@dv/shared/model/gesuch';
 import { Modify, ModifyList } from '@dv/shared/model/type-util';
@@ -17,7 +18,9 @@ export type SharedModelGsGesuchView = Modify<
 export type SharedModelGsAusbildungView = Modify<
   AusbildungDashboardItem,
   {
-    status: 'active' | 'inactive';
+    ausbildungBegin: Date | null;
+    ausbildungEnd: Date | null;
+    status: AusbildungsStatus;
     gesuchs: ModifyList<
       AusbildungDashboardItem['gesuchs'],
       {

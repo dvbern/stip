@@ -12,6 +12,8 @@
 import { Ausbildungsgang } from './ausbildungsgang';
 import { AusbildungsPensum } from './ausbildungsPensum';
 import { GesuchDashboardItem } from './gesuchDashboardItem';
+import { Gesuchsperiode } from './gesuchsperiode';
+import { AusbildungsStatus } from './ausbildungsStatus';
 
 export interface AusbildungDashboardItem { 
     id?: string;
@@ -40,7 +42,9 @@ export interface AusbildungDashboardItem {
      */
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
+    status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
+    periode: Gesuchsperiode;
     gesuchs?: Array<GesuchDashboardItem>;
 }
 

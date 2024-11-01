@@ -19,7 +19,6 @@ import { GlobalNotificationStore } from '@dv/shared/data-access/global-notificat
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
-import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
@@ -131,7 +130,6 @@ export const loadGesuch = createEffect(
         SharedDataAccessGesuchEvents.loadGesuch,
         SharedEventGesuchFormPartner.init,
         SharedEventGesuchFormPerson.init,
-        SharedEventGesuchFormEducation.init,
         SharedEventGesuchFormEltern.init,
         SharedEventGesuchFormElternSteuerdaten.init,
         SharedEventGesuchFormFamiliensituation.init,
@@ -251,7 +249,6 @@ export const updateGesuch = createEffect(
       ofType(
         SharedEventGesuchFormPartner.nextStepTriggered,
         SharedEventGesuchFormPerson.saveTriggered,
-        SharedEventGesuchFormEducation.saveTriggered,
         SharedEventGesuchFormElternSteuerdaten.saveTriggered,
         SharedEventGesuchFormFamiliensituation.saveTriggered,
         SharedEventGesuchFormAuszahlung.saveTriggered,
@@ -366,7 +363,6 @@ export const redirectToGesuchFormNextStep = createEffect(
         SharedEventGesuchFormLebenslauf.nextTriggered,
         SharedEventGesuchFormPartner.nextTriggered,
         SharedEventGesuchFormPerson.nextTriggered,
-        SharedEventGesuchFormEducation.nextTriggered,
         SharedEventGesuchFormElternSteuerdaten.nextTriggered,
         SharedEventGesuchFormFamiliensituation.nextTriggered,
         SharedEventGesuchFormAuszahlung.nextTriggered,
@@ -600,6 +596,9 @@ const prepareFormularData = (
   gesuchFormular: GesuchFormularUpdate | Partial<SharedModelGesuchFormular>,
 ): GesuchUpdate => {
   const { ...formular } = gesuchFormular;
+  if ('ausbildung' in formular) {
+    delete formular.ausbildung;
+  }
   viewOnlyFields.forEach((field) => {
     if (field in formular) {
       delete formular[field];

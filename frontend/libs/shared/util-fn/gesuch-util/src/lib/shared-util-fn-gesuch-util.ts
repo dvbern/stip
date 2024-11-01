@@ -124,9 +124,11 @@ export const selectChangeForView = <K extends SharedModelGesuchFormularProps>(
 
   const current = currentFormular;
 
-  const previous = sachbearbeiterHasChangesOnView
-    ? changes?.sb?.tranche?.gesuchFormular?.[key]
-    : changes?.gs?.tranche?.gesuchFormular?.[key];
+  const previous = (
+    sachbearbeiterHasChangesOnView
+      ? changes?.sb?.tranche?.gesuchFormular?.[key]
+      : changes?.gs?.tranche?.gesuchFormular?.[key]
+  )!;
 
   return { current, previous };
 };

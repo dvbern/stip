@@ -11,6 +11,7 @@
  */
 import { Ausbildungsgang } from './ausbildungsgang';
 import { AusbildungsPensum } from './ausbildungsPensum';
+import { AusbildungsStatus } from './ausbildungsStatus';
 
 export interface Ausbildung { 
     id?: string;
@@ -39,6 +40,7 @@ export interface Ausbildung {
      */
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
+    status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
 }
 

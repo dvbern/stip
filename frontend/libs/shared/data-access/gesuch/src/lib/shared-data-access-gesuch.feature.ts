@@ -1,7 +1,6 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
-import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
@@ -89,7 +88,6 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung,
       SharedDataAccessGesuchEvents.setGesuchVersendet,
       SharedEventGesuchFormPerson.init,
-      SharedEventGesuchFormEducation.init,
       SharedEventGesuchFormFamiliensituation.init,
       SharedEventGesuchFormEltern.init,
       SharedEventGesuchFormElternSteuerdaten.init,
@@ -112,7 +110,6 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.loadAll,
       SharedDataAccessGesuchEvents.loadAllDebounced,
       SharedEventGesuchFormPerson.saveTriggered,
-      SharedEventGesuchFormEducation.saveTriggered,
       SharedEventGesuchFormFamiliensituation.saveTriggered,
       SharedEventGesuchFormEltern.saveTriggered,
       SharedEventGesuchFormEltern.saveSubformTriggered,

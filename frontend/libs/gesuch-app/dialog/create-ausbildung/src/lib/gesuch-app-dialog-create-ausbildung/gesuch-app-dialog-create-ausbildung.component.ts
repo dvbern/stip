@@ -25,7 +25,11 @@ export class GesuchAppDialogCreateAusbildungComponent {
   dialogData = inject<CreateAusbildungData>(MAT_DIALOG_DATA);
 
   cancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
+  }
+
+  savedSuccess() {
+    this.dialogRef.close(true);
   }
 
   static open(matDialog: MatDialog, fallId: string) {

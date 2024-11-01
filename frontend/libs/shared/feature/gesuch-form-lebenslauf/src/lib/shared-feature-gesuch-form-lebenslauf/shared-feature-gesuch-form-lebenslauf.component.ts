@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,10 +21,7 @@ import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import {
-  dateFromMonthYearString,
-  printDateAsMonthYear,
-} from '@dv/shared/util/validator-date';
+import { printDateAsMonthYear } from '@dv/shared/util/validator-date';
 
 import { selectSharedFeatureGesuchFormLebenslaufVew } from './shared-feature-gesuch-form-lebenslauf.selector';
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from '../shared-feature-gesuch-form-lebenslauf-editor/shared-feature-gesuch-form-lebenslauf-editor.component';
@@ -37,6 +35,7 @@ const MIN_EDUCATION_AGE = 16; // August
   selector: 'dv-shared-feature-gesuch-form-lebenslauf',
   standalone: true,
   imports: [
+    CommonModule,
     SharedFeatureGesuchFormLebenslaufEditorComponent,
     TranslateModule,
     TwoColumnTimelineComponent,
@@ -87,7 +86,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
     const ausbildungStart =
       this.viewSig().gesuchFormular?.ausbildung?.ausbildungBegin;
     if (ausbildungStart) {
-      const start = dateFromMonthYearString(ausbildungStart);
+      const start = Date.parse(ausbildungStart);
       return start ? subMonths(start, 1) : null;
     }
     return null;

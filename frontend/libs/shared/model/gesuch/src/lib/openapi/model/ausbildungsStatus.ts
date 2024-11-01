@@ -9,11 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchDashboardItem } from './gesuchDashboardItem';
-import { Gesuchsperiode } from './gesuchsperiode';
 
-export interface AusbildungDashboardItemAllOf { 
-    periode: Gesuchsperiode;
-    gesuchs?: Array<GesuchDashboardItem>;
-}
+export type AusbildungsStatus = 'AKTIV' | 'ABGEBROCHEN' | 'ABGESCHLOSSEN';
+
+export const AusbildungsStatus = {
+    AKTIV: 'AKTIV' as AusbildungsStatus,
+    ABGEBROCHEN: 'ABGEBROCHEN' as AusbildungsStatus,
+    ABGESCHLOSSEN: 'ABGESCHLOSSEN' as AusbildungsStatus
+};
 

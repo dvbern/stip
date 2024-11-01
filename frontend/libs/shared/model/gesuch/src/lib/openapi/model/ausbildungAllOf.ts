@@ -10,8 +10,12 @@
  * Do not edit the class manually.
  */
 import { Ausbildungsgang } from './ausbildungsgang';
+import { AusbildungsStatus } from './ausbildungsStatus';
 
 export interface AusbildungAllOf { 
+    status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
 }
+
+
 

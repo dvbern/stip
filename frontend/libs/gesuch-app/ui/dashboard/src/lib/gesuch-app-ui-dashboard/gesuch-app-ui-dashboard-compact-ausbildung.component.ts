@@ -11,6 +11,7 @@ import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
+import { AenderungMelden } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiTranslatedDatePipe } from '@dv/shared/ui/translated-date-pipe';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
@@ -36,6 +37,8 @@ import { GesuchAppUiDashboardGesuchComponent } from './gesuch-app-ui-dashboard-g
 export class GesuchAppUiDashboardCompactAusbildungComponent {
   ausbildungSig = input.required<SharedModelGsAusbildungView>();
   deleteGesuch = output<string>();
+  deleteAenderung = output<string>();
+  aenderungMelden = output<AenderungMelden>();
 
   @HostBinding('class') defaultClasses = 'tw-block';
 }

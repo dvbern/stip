@@ -8,6 +8,7 @@ export * from './ausbildungDashboardItemAllOf';
 export * from './ausbildungUpdate';
 export * from './ausbildungUpdateAllOf';
 export * from './ausbildungsPensum';
+export * from './ausbildungsStatus';
 export * from './ausbildungsgang';
 export * from './ausbildungsgangCreate';
 export * from './ausbildungsgangUpdate';

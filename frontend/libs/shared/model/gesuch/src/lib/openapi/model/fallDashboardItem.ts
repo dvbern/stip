@@ -15,7 +15,7 @@ import { Notification } from './notification';
 
 export interface FallDashboardItem { 
     fall: Fall;
-    ausbildungDashboardItems?: Array<AusbildungDashboardItem>;
-    notifications?: Array<Notification>;
+    ausbildungDashboardItems: Array<AusbildungDashboardItem>;
+    notifications: Array<Notification>;
 }
 

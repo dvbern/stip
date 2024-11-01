@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   Signal,
   computed,
   effect,
   inject,
   input,
+  output,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -16,18 +18,23 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { addYears } from 'date-fns';
+import { addYears, format } from 'date-fns';
 import { startWith } from 'rxjs';
 
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
-import { selectSharedDataAccessGesuchCacheView } from '@dv/shared/data-access/gesuch';
+import {
+  SharedDataAccessGesuchEvents,
+  selectSharedDataAccessGesuchCacheView,
+} from '@dv/shared/data-access/gesuch';
+import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { AusbildungsPensum, Ausbildungsstaette } from '@dv/shared/model/gesuch';
 import { getTranslatableProp, isDefined } from '@dv/shared/model/type-util';
@@ -57,6 +64,7 @@ import { capitalized } from '@dv/shared/util-fn/string-helper';
     ReactiveFormsModule,
     TranslateModule,
     MatFormFieldModule,
+    MatButtonModule,
     MatInputModule,
     MatCheckboxModule,
     MatAutocompleteModule,
@@ -69,14 +77,16 @@ import { capitalized } from '@dv/shared/util-fn/string-helper';
   providers: [AusbildungStore, AusbildungsstaetteStore],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureAusbildungComponent {
+export class SharedFeatureAusbildungComponent implements OnInit {
   private store = inject(Store);
   private ausbildungsstatteStore = inject(AusbildungsstaetteStore);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private globalNotificationStore = inject(GlobalNotificationStore);
   readonly ausbildungspensumValues = Object.values(AusbildungsPensum);
 
   fallIdSig = input.required<string>();
+  ausbildungSaved = output<void>();
   ausbildungStore = inject(AusbildungStore);
   form = this.formBuilder.group({
     ausbildungsort: [<string | undefined>undefined, [Validators.required]],
@@ -244,11 +254,24 @@ export class SharedFeatureAusbildungComponent {
     // fill form
     effect(
       () => {
-        const { ausbildung } = this.ausbildungStore.ausbildungViewSig();
+        const ausbildung = {
+          ...this.gesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
+            .gesuchFormular?.ausbildung,
+        };
         const ausbildungstaetten =
           this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
 
         if (ausbildung && ausbildungstaetten) {
+          if (ausbildung.ausbildungBegin && ausbildung.ausbildungEnd) {
+            ausbildung.ausbildungBegin = format(
+              new Date(ausbildung.ausbildungBegin),
+              'MM.yyyy',
+            );
+            ausbildung.ausbildungEnd = format(
+              new Date(ausbildung.ausbildungEnd),
+              'MM.yyyy',
+            );
+          }
           this.form.patchValue({
             ...ausbildung,
             ausbildungsgang: undefined,
@@ -357,6 +380,12 @@ export class SharedFeatureAusbildungComponent {
     );
   }
 
+  ngOnInit() {
+    if (!this.fallIdSig()) {
+      this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+    }
+  }
+
   handleGangChangedByUser() {
     this.form.controls.fachrichtung.reset();
     this.form.controls.ausbildungsort.reset();
@@ -371,6 +400,16 @@ export class SharedFeatureAusbildungComponent {
     this.form.controls.ausbildungsort.reset();
   }
 
+  markDatesAsTouched() {
+    [
+      this.form.controls.ausbildungBegin,
+      this.form.controls.ausbildungEnd,
+    ].forEach((ctrl) => {
+      ctrl.markAsTouched();
+      ctrl.updateValueAndValidity();
+    });
+  }
+
   onDateBlur(ctrl: FormControl) {
     return onMonthYearInputBlur(ctrl, new Date(), this.languageSig());
   }
@@ -382,14 +421,46 @@ export class SharedFeatureAusbildungComponent {
       return;
     }
 
-    const formValues = convertTempFormToRealValues(this.form, [
-      'fachrichtung',
-      'pensum',
-    ]);
+    this.onDateBlur(this.form.controls.ausbildungBegin);
+    this.onDateBlur(this.form.controls.ausbildungEnd);
 
-    this.ausbildungStore.createAusbildung$({
-      fallId: this.fallIdSig(),
-      ...formValues,
-    });
+    const { ausbildungsgang: ausbildungsgangId, ...formValues } =
+      convertTempFormToRealValues(this.form, ['fachrichtung', 'pensum']);
+    delete formValues.ausbildungsstaette;
+
+    const ausbildungId =
+      this.gesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith.gesuchFormular
+        ?.ausbildung.id;
+    const fallId = this.fallIdSig();
+    const gesuchFallId = this.gesuchViewSig().cache.gesuch?.fallId;
+    if (fallId) {
+      this.ausbildungStore.createAusbildung$({
+        ausbildung: {
+          fallId,
+          ...formValues,
+          ausbildungsgangId,
+        },
+        onSuccess: () => {
+          this.ausbildungSaved.emit();
+        },
+      });
+    } else if (ausbildungId && gesuchFallId) {
+      this.ausbildungStore.saveAusbildung$({
+        ausbildungId,
+        ausbildungUpdate: {
+          ...formValues,
+          id: ausbildungId,
+          ausbildungsgangId,
+          fallId: gesuchFallId,
+        },
+        onSuccess: () => {
+          this.globalNotificationStore.createSuccessNotification({
+            messageKey: 'shared.ausbildung.saved.success',
+          });
+        },
+      });
+    }
+
+    this.form.markAsPristine();
   }
 }

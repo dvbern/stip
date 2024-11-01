@@ -71,52 +71,59 @@ export class AusbildungStore extends signalStore(
     ),
   );
 
-  createAusbildung$ = rxMethod<AusbildungUpdate>(
+  createAusbildung$ = rxMethod<{
+    ausbildung: AusbildungUpdate;
+    onSuccess: () => void;
+  }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           ausbildung: cachedPending(state.ausbildung),
         }));
       }),
-      switchMap((ausbildungUpdate) =>
-        this.ausbildungService
-          .createAusbildung$({ ausbildungUpdate })
-          .pipe(
-            handleApiResponse((ausbildung) => patchState(this, { ausbildung })),
+      switchMap(({ ausbildung: ausbildungUpdate, onSuccess }) =>
+        this.ausbildungService.createAusbildung$({ ausbildungUpdate }).pipe(
+          handleApiResponse(
+            (ausbildung) => {
+              patchState(this, { ausbildung });
+            },
+            {
+              onSuccess,
+            },
           ),
+        ),
       ),
     ),
   );
 
-  // saveAusbildung$ = rxMethod<{
-  //   ausbildungId: string;
-  //   values: unknown;
-  // }>(
-  //   pipe(
-  //     tap(() => {
-  //       patchState(this, (state) => ({
-  //         ausbildung: cachedPending(state.ausbildung),
-  //       }));
-  //     }),
-  //     switchMap(({ ausbildungId, values }) =>
-  //       this.ausbildungService
-  //         .updateAusbildung$({
-  //           ausbildungId,
-  //           payload: values,
-  //         })
-  //         .pipe(
-  //           handleApiResponse(
-  //             (ausbildung) => {
-  //               patchState(this, { ausbildung });
-  //             },
-  //             {
-  //               onSuccess: (ausbildung) => {
-  //                 // Do something after save, like showing a notification
-  //               },
-  //             },
-  //           ),
-  //         ),
-  //     ),
-  //   ),
-  // );
+  saveAusbildung$ = rxMethod<{
+    ausbildungId: string;
+    ausbildungUpdate: AusbildungUpdate;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          ausbildung: cachedPending(state.ausbildung),
+        }));
+      }),
+      switchMap(({ ausbildungId, ausbildungUpdate, onSuccess }) =>
+        this.ausbildungService
+          .updateAusbildung$({
+            ausbildungId,
+            ausbildungUpdate,
+          })
+          .pipe(
+            handleApiResponse(
+              (ausbildung) => {
+                patchState(this, { ausbildung });
+              },
+              {
+                onSuccess,
+              },
+            ),
+          ),
+      ),
+    ),
+  );
 }

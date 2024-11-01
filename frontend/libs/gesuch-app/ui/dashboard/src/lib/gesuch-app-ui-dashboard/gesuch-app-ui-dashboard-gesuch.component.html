@@ -1,93 +1,125 @@
 @let gesuch = gesuchSig();
 @let periode = gesuch.gesuchsperiode;
-<dl class="tw-flex tw-flex-col tw-mb-10">
-  <dt class="tw-font-bold">
-    {{ 'gesuch-app.dashboard.gesuch.title' | translate: { yearRange: gesuch.yearRange } }}
-  </dt>
-  <dd class="tw-mb-6">
-    {{ periode.gesuchsperiodeStart | date: 'MM.yyyy' }} - {{ periode.gesuchsperiodeStopp | date: 'MM.yyyy' }}
-  </dd>
+<div class="tw-grid" [class.tw-grid-cols-2]="gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS'">
+  <div class="tw-flex tw-flex-col">
+    <dl class="tw-flex tw-flex-col tw-mb-10">
+      <dt class="tw-font-bold">
+        {{ 'gesuch-app.dashboard.gesuch.title' | translate: { yearRange: gesuch.yearRange } }}
+      </dt>
+      <dd class="tw-mb-6">
+        {{ periode.gesuchsperiodeStart | date: 'MM.yyyy' }} - {{ periode.gesuchsperiodeStopp | date: 'MM.yyyy' }}
+      </dd>
 
-  <dt class="tw-font-bold">{{ 'gesuch-app.dashboard.gesuch.status.title' | translate }}</dt>
-  <dd class="tw-mb-6">
-    @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.count; as count) {
-      @if (count > 1) {
-        {{ 'gesuch-app.dashboard.periode.status.missingDocuments' | translate: { count } }}
+      <dt class="tw-font-bold">{{ 'gesuch-app.dashboard.gesuch.status.title' | translate }}</dt>
+      <dd class="tw-mb-6">
+        @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.count; as count) {
+          @if (count > 1) {
+            {{ 'gesuch-app.dashboard.periode.status.missingDocuments' | translate: { count } }}
+          } @else {
+            {{ 'gesuch-app.dashboard.periode.status.missingDocument' | translate }}
+          }
+        } @else {
+          {{ 'shared.gesuch.status.contract.' + gesuch.gesuchStatus | translate }}
+        }
+      </dd>
+
+      @if (!gesuch.einreichefristAbgelaufen) {
+        @if (gesuch.reduzierterBeitrag) {
+          <span class="tw-font-bold">
+            {{ 'gesuch-app.dashboard.periode.einreichefrist.reduziert' | translate }}
+          </span>
+        }
+        @if ((gesuch.einreichefristDays ?? 0) > 1) {
+          <span
+            [innerHTML]="
+              'gesuch-app.dashboard.periode.einreichefrist.remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
+                | translate: { days: gesuch.einreichefristDays }
+            "
+          ></span>
+        } @else if (gesuch.einreichefristDays === 1) {
+          <span
+            [innerHTML]="
+              'gesuch-app.dashboard.periode.einreichefrist.1remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
+                | translate
+            "
+          ></span>
+        } @else {
+          <span
+            [innerHTML]="
+              'gesuch-app.dashboard.periode.einreichefrist.0remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
+                | translate
+            "
+          ></span>
+        }
+        <dt class="tw-font-bold tw-mt-6">
+          {{ 'gesuch-app.dashboard.periode.einreichefrist.text' | translate }}
+        </dt>
+        <dd>
+          {{
+            (gesuch.reduzierterBeitrag ? periode.einreichefristReduziert : periode.einreichefristNormal)
+              | date: 'dd.MM.yyyy'
+          }}
+        </dd>
       } @else {
-        {{ 'gesuch-app.dashboard.periode.status.missingDocument' | translate }}
+        <span class="tw-font-bold">
+          {{ 'gesuch-app.dashboard.periode.einreichefrist.abgelaufen.warning' | translate }}
+        </span>
+        <span class="tw-mt-6">{{ 'gesuch-app.dashboard.periode.einreichefrist.abgelaufen.text' | translate }}</span>
       }
-    } @else {
-      {{ 'shared.gesuch.status.contract.' + gesuch.gesuchStatus | translate }}
-    }
-  </dd>
-
-  @if (!gesuch.einreichefristAbgelaufen) {
-    @if (gesuch.reduzierterBeitrag) {
-      <span class="tw-font-bold">
-        {{ 'gesuch-app.dashboard.periode.einreichefrist.reduziert' | translate }}
-      </span>
-    }
-    @if ((gesuch.einreichefristDays ?? 0) > 1) {
-      <span
-        [innerHTML]="
-          'gesuch-app.dashboard.periode.einreichefrist.remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
-            | translate: { days: gesuch.einreichefristDays }
-        "
-      ></span>
-    } @else if (gesuch.einreichefristDays === 1) {
-      <span
-        [innerHTML]="
-          'gesuch-app.dashboard.periode.einreichefrist.1remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
-            | translate
-        "
-      ></span>
-    } @else {
-      <span
-        [innerHTML]="
-          'gesuch-app.dashboard.periode.einreichefrist.0remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
-            | translate
-        "
-      ></span>
-    }
-    <dt class="tw-font-bold tw-mt-6">
-      {{ 'gesuch-app.dashboard.periode.einreichefrist.text' | translate }}
-    </dt>
-    <dd>
-      {{
-        (gesuch.reduzierterBeitrag ? periode.einreichefristReduziert : periode.einreichefristNormal)
-          | date: 'dd.MM.yyyy'
-      }}
-    </dd>
-  } @else {
-    <span class="tw-font-bold">
-      {{ 'gesuch-app.dashboard.periode.einreichefrist.abgelaufen.warning' | translate }}
-    </span>
-    <span class="tw-mt-6">{{ 'gesuch-app.dashboard.periode.einreichefrist.abgelaufen.text' | translate }}</span>
-  }
-</dl>
-<div class="tw-flex-grow"></div>
-<div class="tw-grid tw-grid-cols-3 tw-gap-3">
-  @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.trancheId; as trancheId) {
-    <a
-      class="btn btn-primary"
-      data-testid="cockpit-gesuch-upload-missing-documents"
-      [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', trancheId]"
-    >
-      {{ 'gesuch-app.dashboard.gesuch.uploadMissingDocuments' | translate }}
-    </a>
-  } @else {
-    <a class="btn btn-primary" data-testid="cockpit-gesuch-edit" [routerLink]="['/gesuch', gesuch.id]">
-      {{ 'gesuch-app.dashboard.gesuch.edit' | translate }}
-    </a>
-  }
-  @if (gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
-    <button
-      type="button"
-      class="btn btn-outline-primary"
-      data-testid="gesuch-app.dashboard.gesuch.delete"
-      (click)="deleteGesuch.emit(gesuch.id)"
-    >
-      <span>{{ 'gesuch-app.dashboard.gesuch.delete' | translate }}</span>
-    </button>
+    </dl>
+    <div class="tw-flex-grow"></div>
+    <div class="tw-grid tw-grid-cols-3 tw-gap-3" [class.tw-grid-cols-2]="gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS'">
+      @if (ausbildungsStatus() === 'AKTIV') {
+        @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.trancheId; as trancheId) {
+          <a
+            class="btn btn-primary"
+            data-testid="cockpit-gesuch-upload-missing-documents"
+            [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', trancheId]"
+          >
+            {{ 'gesuch-app.dashboard.gesuch.uploadMissingDocuments' | translate }}
+          </a>
+        } @else {
+          <a class="btn btn-primary" data-testid="cockpit-gesuch-edit" [routerLink]="['/gesuch', gesuch.id]">
+            {{ 'gesuch-app.dashboard.gesuch.edit' | translate }}
+          </a>
+        }
+        @if (gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            data-testid="gesuch-app.dashboard.gesuch.delete"
+            (click)="deleteGesuch.emit(gesuch.id)"
+          >
+            <span>{{ 'gesuch-app.dashboard.gesuch.delete' | translate }}</span>
+          </button>
+        }
+      } @else {
+        <a class="btn btn-primary" data-testid="cockpit-gesuch-edit" [routerLink]="['/gesuch', gesuch.id]">
+          {{ 'gesuch-app.dashboard.gesuch.open' | translate }}
+        </a>
+      }
+    </div>
+  </div>
+  @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
+    <div class="tw-flex tw-flex-col">
+      @if (gesuch.offeneAenderung; as aenderung) {
+        <div class="divider me-4"></div>
+        <dv-gesuch-app-ui-aenderungs-entry
+          class="d-flex flex-column gap-4 w-100"
+          [tranche]="aenderung"
+          [gesuchId]="gesuch.id"
+          (deleteAenderung)="deleteAenderung.emit($event)"
+        ></dv-gesuch-app-ui-aenderungs-entry>
+      } @else {
+        <button
+          type="button"
+          class="btn btn-outline-primary mt-3 w-100 align-self-end"
+          data-testid="cockpit-gesuch-aenderung-create"
+          (click)="aenderungMelden.emit()"
+        >
+          {{ 'gesuch-app.cockpit.aenderung.create' | translate }}
+        </button>
+      }
+    </div>
   }
 </div>

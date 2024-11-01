@@ -41,8 +41,8 @@ import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feat
 
 const baseSteps = [
   TRANCHE,
-  PERSON,
   AUSBILDUNG,
+  PERSON,
   LEBENSLAUF,
   FAMILIENSITUATION,
   ELTERN,

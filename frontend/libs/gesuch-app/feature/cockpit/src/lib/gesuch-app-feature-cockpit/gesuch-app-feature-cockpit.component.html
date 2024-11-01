@@ -8,18 +8,17 @@
       {{ 'gesuch-app.dashboard.welcome.titel' | translate: { name: benutzerNameSig() } }}
     </h1>
 
-    @for (dashboard of dashboardItems; track dashboard.fall.id) {
+    @for (dashboard of dashboardStore.dashboardViewSig(); track dashboard.fall.id) {
       @let fall = dashboard.fall;
       <div class="tw-grid tw-grid-cols-[2fr,1fr] tw-gap-16">
         <!-- main column -->
         <div class="tw-flex tw-flex-col tw-gap-8">
-          @if (cockpitViewSig().loading) {
-            <!-- progress -->
-            <dv-shared-ui-loading data-testid="cockpit-loadig" class="text-white"></dv-shared-ui-loading>
-          } @else if (dashboard.activeAusbildungen.length > 0) {
+          @if (dashboard.activeAusbildungen.length > 0) {
             @for (ausbildung of dashboard.activeAusbildungen; track ausbildung.id) {
               <dv-gesuch-app-ui-dashboard-ausbildung
                 [ausbildungSig]="ausbildung"
+                (deleteGesuch)="deleteGesuch($event)"
+                (aenderungMelden)="aenderungMelden($event)"
               ></dv-gesuch-app-ui-dashboard-ausbildung>
             }
           } @else {
@@ -46,7 +45,7 @@
           <!-- NACHRICHTEN -->
           <div class="card mb-5 shadow-lg">
             <div class="card-body">
-              <dv-shared-ui-notifications [notifications]="dashboard.notifications ?? []"></dv-shared-ui-notifications>
+              <dv-shared-ui-notifications [notifications]="dashboard.notifications"></dv-shared-ui-notifications>
             </div>
           </div>
 

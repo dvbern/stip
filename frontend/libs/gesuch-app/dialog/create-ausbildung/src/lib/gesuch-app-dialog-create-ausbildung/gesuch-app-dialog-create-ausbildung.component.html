@@ -1,4 +1,4 @@
-<section class="tw-flex tw-flex-col tw-relative tw-p-6 tw-rounded-lg">
+<section class="tw-flex tw-flex-col tw-relative tw-p-8 tw-rounded-lg">
   <button
     type="button"
     (click)="cancel()"
@@ -12,5 +12,8 @@
     {{ 'gesuch-app.ausbildung.dialog.title' | translate }}
   </h1>
 
-  <dv-shared-feature-ausbildung [fallIdSig]="dialogData.fallId"></dv-shared-feature-ausbildung>
+  <dv-shared-feature-ausbildung
+    [fallIdSig]="dialogData.fallId"
+    (ausbildungSaved)="savedSuccess()"
+  ></dv-shared-feature-ausbildung>
 </section>

@@ -1,12 +1,11 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
-  displayName: 'gesuch-app-feature-gesuch-form-education',
+  displayName: 'gesuch-app-data-access-dashboard',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/shared/feature/gesuch-form-education',
+    '../../../../coverage/libs/gesuch-app/data-access/dashboard',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [
