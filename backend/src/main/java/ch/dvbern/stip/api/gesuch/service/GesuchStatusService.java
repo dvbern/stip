@@ -57,9 +57,8 @@ public class GesuchStatusService {
 
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
-        if (!(kommentarDto.getText() == null)) {
+        if (kommentarDto.getText() != null) {
             MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
-
             notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
         }
     }
