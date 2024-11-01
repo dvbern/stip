@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
