@@ -92,7 +92,8 @@ class GesuchTrancheAenderungTest {
     @TestAsSachbearbeiter
     @Order(5)
     @Test
-    void todo(){
+    void makeGesuchVerfuegt() {
+        // TODO KSTIP-1631: Make Gesuch the correct state
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
