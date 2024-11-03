@@ -4,8 +4,10 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import {
   GesuchNotiz,
+  GesuchNotizCreate,
   GesuchNotizService,
   GesuchNotizUpdate,
 } from '@dv/shared/model/gesuch';
@@ -34,6 +36,7 @@ export class NotizStore extends signalStore(
   withDevtools('NotizStore'),
 ) {
   private notizService = inject(GesuchNotizService);
+  private notificationStore = inject(GlobalNotificationStore);
 
   notizenListViewSig = computed(() => {
     return fromCachedDataSig(this.notizen);
@@ -73,9 +76,9 @@ export class NotizStore extends signalStore(
     ),
   );
 
-  saveNotiz$ = rxMethod<{
+  editNotiz = rxMethod<{
+    gesuchId: string;
     notizDaten: GesuchNotizUpdate;
-    // Was muss hier noch alles reinkommen?
   }>(
     pipe(
       tap(() => {
@@ -83,7 +86,7 @@ export class NotizStore extends signalStore(
           notiz: cachedPending(state.notiz),
         }));
       }),
-      switchMap(({ notizDaten }) =>
+      switchMap(({ gesuchId, notizDaten }) =>
         this.notizService
           .updateNotiz$({
             gesuchNotizUpdate: notizDaten,
@@ -95,7 +98,80 @@ export class NotizStore extends signalStore(
               },
               {
                 onSuccess: () => {
-                  // Do something after save, like showing a notification
+                  this.notificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.infos.notiz.bearbeiten.success',
+                  });
+                  this.loadNotizen$({ gesuchId });
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  createNotiz = rxMethod<{
+    notizDaten: GesuchNotizCreate;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          notiz: cachedPending(state.notiz),
+        }));
+      }),
+      switchMap(({ notizDaten }) =>
+        this.notizService
+          .createNotiz$({
+            gesuchNotizCreate: notizDaten,
+          })
+          .pipe(
+            handleApiResponse(
+              (notiz) => {
+                patchState(this, { notiz });
+              },
+              {
+                onSuccess: () => {
+                  this.notificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.infos.notiz.erstellen.success',
+                  });
+                  this.loadNotizen$({ gesuchId: notizDaten.gesuchId });
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  deleteNotiz = rxMethod<{
+    gesuchId: string;
+    notizId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          notiz: cachedPending(state.notiz),
+        }));
+      }),
+      switchMap(({ gesuchId, notizId }) =>
+        this.notizService
+          .deleteNotiz$({
+            notizId,
+          })
+          .pipe(
+            handleApiResponse(
+              (notiz) => {
+                patchState(this, { notiz });
+              },
+              {
+                onSuccess: () => {
+                  this.notificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.infos.notiz.delete.success',
+                  });
+                  this.loadNotizen$({ gesuchId });
                 },
               },
             ),

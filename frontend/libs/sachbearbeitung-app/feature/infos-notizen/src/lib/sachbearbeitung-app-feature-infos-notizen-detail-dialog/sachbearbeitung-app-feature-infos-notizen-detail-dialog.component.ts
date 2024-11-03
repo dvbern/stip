@@ -2,27 +2,34 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
+  HostBinding,
   inject,
   input,
-  viewChild,
 } from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSort } from '@angular/material/sort';
 import { MatCell } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import {
+  GesuchNotiz,
+  GesuchNotizCreate,
+  GesuchNotizUpdate,
+} from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -36,7 +43,6 @@ import {
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
@@ -58,17 +64,25 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
     TypeSafeMatCellDefDirective,
   ],
   templateUrl:
-    './sachbearbeitung-app-feature-infos-notizen-detail.component.html',
+    './sachbearbeitung-app-feature-infos-notizen-detail-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureInfosNotizenDetailComponent {
+export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
+  private dialogRef =
+    inject<
+      MatDialogRef<
+        SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent,
+        GesuchNotizUpdate | GesuchNotizCreate
+      >
+    >(MatDialogRef);
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
-  notizStore = inject(NotizStore);
 
+  @HostBinding('class') defaultClasses = 'd-flex flex-column gap-2 p-5';
+  dialogData = inject<GesuchNotiz | undefined>(MAT_DIALOG_DATA);
   form = this.formBuilder.group({
-    datum: [<string | undefined>undefined, [Validators.required]],
-    user: [<string | null>null, [Validators.required]],
+    datum: [<string | undefined>undefined],
+    user: [<string | null>null],
     betreff: [<string | null>null, [Validators.required]],
     text: [<string | null>null, [Validators.required]],
   });
@@ -78,38 +92,31 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailComponent {
   constructor() {
     this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
 
-    effect(() => {
-      const notiz = this.notizStore.notizViewSig();
-
-      if (!isDefined(notiz)) {
-        return;
-      }
-
-      this.form.patchValue({
-        datum: parseBackendLocalDateAndPrint(
-          notiz.timestampErstellt,
-          this.languageSig(),
-        ),
-        betreff: notiz.betreff,
-        text: notiz.text,
-        user: notiz.userErstellt,
-      });
+    this.form.patchValue({
+      datum: parseBackendLocalDateAndPrint(
+        this.dialogData?.timestampErstellt,
+        this.languageSig(),
+      ),
+      betreff: this.dialogData?.betreff,
+      text: this.dialogData?.text,
+      user: this.dialogData?.userErstellt,
     });
+  }
 
-    effect(
-      () => {
-        const notizId = this.notizIdSig();
+  static open(dialog: MatDialog, data?: GesuchNotiz) {
+    return dialog
+      .open<
+        SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent,
+        GesuchNotiz,
+        GesuchNotizUpdate | GesuchNotizCreate
+      >(SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent, {
+        data,
+      })
+      .afterClosed();
+  }
 
-        if (notizId === 'create') {
-          return;
-        }
-
-        this.notizStore.loadNotiz$({
-          notizId,
-        });
-      },
-      { allowSignalWrites: true },
-    );
+  cancel() {
+    this.dialogRef.close();
   }
 
   handleSave() {
@@ -119,14 +126,10 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailComponent {
 
     const notizDaten = convertTempFormToRealValues(this.form);
 
-    this.notizStore.saveNotiz$({
-      notizDaten: {
-        id: this.notizIdSig(),
-        text: notizDaten.text,
-        betreff: notizDaten.betreff,
-      },
+    this.dialogRef.close({
+      id: this.dialogData?.id,
+      text: notizDaten.text,
+      betreff: notizDaten.betreff,
     });
   }
-
-  sortSig = viewChild(MatSort);
 }

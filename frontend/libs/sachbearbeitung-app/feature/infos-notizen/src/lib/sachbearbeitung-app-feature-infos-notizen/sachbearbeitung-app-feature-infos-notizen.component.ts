@@ -9,6 +9,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSort } from '@angular/material/sort';
@@ -19,6 +20,8 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { GesuchNotiz } from '@dv/shared/model/gesuch';
+import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiFocusableListDirective } from '@dv/shared/ui/focusable-list';
 import { SharedUiFormSaveComponent } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -27,6 +30,8 @@ import {
   SharedUiRdIsPendingWithoutCachePipe,
 } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+
+import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../sachbearbeitung-app-feature-infos-notizen-detail-dialog/sachbearbeitung-app-feature-infos-notizen-detail-dialog.component';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
@@ -51,10 +56,12 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 })
 export class SachbearbeitungAppFeatureInfosNotizenComponent {
   private store = inject(Store);
+  private dialog = inject(MatDialog);
   displayedColumns = ['datum', 'user', 'betreff', 'notiz', 'actions'];
   notizStore = inject(NotizStore);
 
   gesuchIdSig = input.required<string>({ alias: 'id' });
+  sortSig = viewChild(MatSort);
 
   notizSig = computed(() => {
     const notiz = this.notizStore.notizenListViewSig();
@@ -78,5 +85,42 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
     );
   }
 
-  sortSig = viewChild(MatSort);
+  createNotiz() {
+    SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent.open(
+      this.dialog,
+    ).subscribe((notizDaten) => {
+      const gesuchId = this.gesuchIdSig();
+      if (notizDaten) {
+        this.notizStore.createNotiz({
+          notizDaten: { ...notizDaten, gesuchId },
+        });
+      }
+    });
+  }
+
+  editNotiz(notiz: GesuchNotiz) {
+    SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent.open(
+      this.dialog,
+      notiz,
+    ).subscribe((notizDaten) => {
+      const gesuchId = this.gesuchIdSig();
+      if (notizDaten) {
+        this.notizStore.editNotiz({ gesuchId, notizDaten });
+      }
+    });
+  }
+
+  deleteNotiz(notizId: string) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'sachbearbeitung-app.infos.notiz.delete.title',
+      message: 'sachbearbeitung-app.infos.notiz.delete.text',
+    })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        const gesuchId = this.gesuchIdSig();
+        if (confirmed) {
+          this.notizStore.deleteNotiz({ gesuchId, notizId });
+        }
+      });
+  }
 }

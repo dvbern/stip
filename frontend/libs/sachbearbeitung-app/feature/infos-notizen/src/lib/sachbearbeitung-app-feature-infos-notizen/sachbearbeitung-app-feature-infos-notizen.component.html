@@ -48,22 +48,40 @@
     <!-- Actions -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>
-        <a [routerLink]="['notiz', 'create']" class="btn btn-outline-dark d-inline-flex lh-1 align-items-center">
-          <i class="material-symbols-rounded fs-5 me-2">add</i>
-          {{ 'sachbearbeitung-app.infos.notiz.table.erstellen' | translate }}
-        </a>
+        <button
+          type="button"
+          (click)="createNotiz()"
+          class="btn btn-outline-dark d-inline-flex lh-1 align-items-center"
+          [attr.aria-label]="'sachbearbeitung-app.infos.notiz.erstellen' | translate"
+        >
+          <i class="material-symbols-rounded fs-5">add</i>
+        </button>
       </th>
-      <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100"></td>
+      <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100">
+        <div class="d-flex gap-1">
+          <button
+            type="button"
+            (click)="editNotiz(notiz)"
+            class="btn btn-link btn-sm"
+            [attr.aria-label]="'sachbearbeitung-app.infos.notiz.bearbeiten' | translate"
+          >
+            <i class="material-symbols-rounded fs-5">edit</i>
+          </button>
+          @if (notiz.id) {
+            <button
+              type="button"
+              (click)="deleteNotiz(notiz.id)"
+              class="btn btn-link btn-sm"
+              [attr.aria-label]="'sachbearbeitung-app.infos.notiz.delete' | translate"
+            >
+              <i class="material-symbols-rounded fs-5">delete</i>
+            </button>
+          }
+        </div>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr
-      mat-row
-      dvSharedUiFocusableListItem
-      tabindex="-1"
-      class="highlightable"
-      [routerLink]="['notiz', notiz.id]"
-      *matRowDef="let notiz; columns: displayedColumns"
-    ></tr>
+    <tr mat-row *matRowDef="let notiz; columns: displayedColumns"></tr>
   </table>
 </div>
