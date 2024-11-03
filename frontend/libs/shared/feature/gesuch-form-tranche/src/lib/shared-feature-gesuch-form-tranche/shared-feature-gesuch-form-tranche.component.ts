@@ -192,6 +192,10 @@ export class SharedFeatureGesuchFormTrancheComponent {
           }).afterClosed(),
         )
       )?.kommentar;
+
+      if (!comment) {
+        return;
+      }
     }
 
     this.gesuchAenderungStore.changeAenderungState$({

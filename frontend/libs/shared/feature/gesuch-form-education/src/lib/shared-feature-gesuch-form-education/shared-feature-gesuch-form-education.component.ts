@@ -24,7 +24,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
-import { NgbInputDatepicker, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
@@ -70,8 +69,6 @@ import { selectSharedFeatureGesuchFormEducationView } from './shared-feature-ges
     DatePipe,
     TranslateModule,
     ReactiveFormsModule,
-    NgbInputDatepicker,
-    NgbTypeahead,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     MatFormFieldModule,

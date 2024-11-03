@@ -1,9 +1,9 @@
 <dv-shared-pattern-app-header
-  [closeMenu]="navClickedSig()"
   [backLink]="{
     path: '/',
     text: 'sachbearbeitung-app.header.back' | translate,
   }"
+  (openSidenav)="openSidenav.emit()"
 >
   <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
     <!-- Gesuch -->
@@ -60,7 +60,7 @@
       class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-aenderungen"
       [class.active]="isAenderungRouteSig()"
-      [disabled]="!aenderungen.list.length"
+      [disabled]="!aenderungen.hasAenderungen"
       [matMenuTriggerFor]="aenderungenMenu"
     >
       <i class="material-symbols-rounded text-white me-2">update</i>
@@ -69,7 +69,7 @@
     </button>
     <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel mt-2 rounded col-12">
       <div class="d-flex flex-column gap-2">
-        @for (aenderung of aenderungen.list; track $index) {
+        @for (aenderung of aenderungen.byStatus.open; track $index) {
           <a
             [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'aenderung', aenderung.id]"
             class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
@@ -80,7 +80,30 @@
             <span>
               {{
                 'sachbearbeitung-app.header.aenderung.item'
-                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: $index + 1 }
+                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: aenderung.index + 1 }
+              }}
+              -
+              {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }}
+            </span>
+          </a>
+        }
+        <div class="d-flex gap-2 align-items-center text-muted small">
+          <hr class="flex-grow-1" />
+          {{ 'sachbearbeitung-app.header.aenderungen.akzeptierte' | translate }}
+          <hr class="flex-grow-1" />
+        </div>
+        @for (aenderung of aenderungen.byStatus.completed; track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'aenderung', aenderung.id]"
+            class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+            data-testid="gesuch-step-nav-overview"
+            mat-menu-item
+            [class.active]="currentGesuchSig()?.gesuchTrancheToWorkWith?.id === aenderung.id"
+          >
+            <span>
+              {{
+                'sachbearbeitung-app.header.aenderung.item'
+                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: aenderung.index + 1 }
               }}
               -
               {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }}
@@ -188,5 +211,4 @@
       </div>
     </mat-menu>
   </div>
-  <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
 </dv-shared-pattern-app-header>

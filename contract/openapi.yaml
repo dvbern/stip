@@ -62,14 +62,29 @@ paths:
             $ref: '#/components/schemas/GetGesucheSBQueryType'
           in: path
           required: true
+        - $ref: '#/components/parameters/fallNummer'
+        - $ref: '#/components/parameters/piaNachname'
+        - $ref: '#/components/parameters/piaVorname'
+        - $ref: '#/components/parameters/piaGeburtsdatum'
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/bearbeiter'
+        - $ref: '#/components/parameters/letzteAktivitaetFrom'
+        - $ref: '#/components/parameters/letzteAktivitaetTo'
+        - $ref: '#/components/parameters/typ'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/SbDashboardColumn'
+          in: query
+          required: false
+        - $ref: '#/components/parameters/sortOrder'
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/PaginatedSbDashboard'
           description: Returns gesuche filtered by status and sb
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -3724,6 +3739,8 @@ components:
         - timestamp
         - userErstellt
       properties:
+        notificationText:
+          type: string
         notificationType:
           $ref: '#/components/schemas/NotificationType'
         gesuchId:
@@ -4063,6 +4080,73 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/GesuchNotizUpdate'
+    PaginatedResult:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalEntries:
+          type: integer
+    PaginatedSbDashboard:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/SbDashboardGesuch'
+    SbDashboardGesuch:
+      type: object
+      required:
+        - id
+        - gesuchTrancheId
+        - fallNummer
+        - typ
+        - piaNachname
+        - piaVorname
+        - piaGeburtsdatum
+        - status
+        - bearbeiter
+        - letzteAktivitaet
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
+        typ:
+          $ref: '#/components/schemas/GesuchTrancheTyp'
+        piaNachname:
+          type: string
+        piaVorname:
+          type: string
+        piaGeburtsdatum:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/Gesuchstatus'
+        bearbeiter:
+          type: string
+        letzteAktivitaet:
+          type: string
+          format: date
+    SbDashboardColumn:
+      enum:
+        - FALLNUMMER
+        - TYP
+        - PIA_NACHNAME
+        - PIA_VORNAME
+        - PIA_GEBURTSDATUM
+        - STATUS
+        - BEARBEITER
+        - LETZTE_AKTIVITAET
+    SortOrder:
+      enum:
+        - ASCENDING
+        - DESCENDING
   responses:
     Unauthorized:
       content:
@@ -4110,6 +4194,73 @@ components:
       description: Die ID vom Gesuch
       schema:
         $ref: '#/components/schemas/UUID'
+    sortOrder:
+      in: query
+      name: sortOrder
+      schema:
+        $ref: '#/components/schemas/SortOrder'
+    fallNummer:
+      in: query
+      name: fallNummer
+      schema:
+        type: string
+    piaNachname:
+      in: query
+      name: piaNachname
+      schema:
+        type: string
+    piaVorname:
+      in: query
+      name: piaVorname
+      schema:
+        type: string
+    piaGeburtsdatum:
+      in: query
+      name: piaGeburtsdatum
+      schema:
+        type: string
+        format: date
+    status:
+      in: query
+      name: status
+      schema:
+        $ref: '#/components/schemas/Gesuchstatus'
+    bearbeiter:
+      in: query
+      name: bearbeiter
+      schema:
+        type: string
+    letzteAktivitaetFrom:
+      in: query
+      name: letzteAktivitaetFrom
+      schema:
+        type: string
+        format: date
+    letzteAktivitaetTo:
+      in: query
+      name: letzteAktivitaetTo
+      schema:
+        type: string
+        format: date
+    typ:
+      in: query
+      name: typ
+      required: true
+      schema:
+        $ref: '#/components/schemas/GesuchTrancheTyp'
+    page:
+      in: query
+      name: page
+      required: true
+      schema:
+        type: integer
+    pageSize:
+      in: query
+      name: pageSize
+      required: true
+      schema:
+        type: integer
+    
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []

@@ -35,29 +35,21 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return query.stream();
     }
 
-    public Stream<Gesuch> findAlle() {
-        return getFindAlleQuery().stream();
+    public JPAQuery<Gesuch> getFindAlleMeineQuery(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getFindAlleQuery());
     }
 
-    public Stream<Gesuch> findAlleBearbeitbar() {
-        return getFindAlleBearbeitbarQuery().stream();
+    public JPAQuery<Gesuch> getFindAlleMeineBearbeitbarQuery(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getFindAlleBearbeitbarQuery());
     }
 
-    public Stream<Gesuch> findAlleMeine(final UUID benutzerId) {
-        return addMeineFilter(benutzerId, getFindAlleQuery()).stream();
+    public JPAQuery<Gesuch> getFindAlleQuery() {
+        // TODO KSTIP-1587/ 1590: Implement Status Filter?
+        return new JPAQueryFactory(entityManager).selectFrom(QGesuch.gesuch);
     }
 
-    public Stream<Gesuch> findAlleMeineBearbeitbar(final UUID benutzerId) {
-        return addMeineFilter(benutzerId, getFindAlleBearbeitbarQuery()).stream();
-    }
-
-    private JPAQuery<Gesuch> getFindAlleQuery() {
-        final var queryFactory = new JPAQueryFactory(entityManager);
-        final var gesuch = QGesuch.gesuch;
-        return queryFactory.selectFrom(gesuch);
-    }
-
-    private JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
+    public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
+        // TODO KSTIP-1587/ 1590: Implement Status Filter?
         final var query = getFindAlleQuery();
         return addStatusFilter(
             query,

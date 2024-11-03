@@ -230,6 +230,7 @@
                               formControlName="bildungskategorieId"
                               panelClass="table-select"
                               (click)="$event.stopPropagation()"
+                              [placeholder]="'shared.form.select.empty' | translate"
                             >
                               @for (bildungskategorie of store.sortedBildungskategorien(); track $index) {
                                 <mat-option

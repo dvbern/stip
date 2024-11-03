@@ -16,11 +16,17 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.GsDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
+import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDtoSpec;
+import ch.dvbern.stip.generated.dto.SbDashboardColumnDtoSpec;
+import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -1233,7 +1239,20 @@ public class GesuchApiSpec {
      * 
      *
      * @see #getGesucheSBQueryTypePath  (required)
-     * return List&lt;GesuchDtoSpec&gt;
+     * @see #typQuery  (required)
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
+     * @see #fallNummerQuery  (optional)
+     * @see #piaNachnameQuery  (optional)
+     * @see #piaVornameQuery  (optional)
+     * @see #piaGeburtsdatumQuery  (optional)
+     * @see #statusQuery  (optional)
+     * @see #bearbeiterQuery  (optional)
+     * @see #letzteAktivitaetFromQuery  (optional)
+     * @see #letzteAktivitaetToQuery  (optional)
+     * @see #sortColumnQuery  (optional)
+     * @see #sortOrderQuery  (optional)
+     * return PaginatedSbDashboardDtoSpec
      */
     public static class GetGesucheSbOper implements Oper {
 
@@ -1263,10 +1282,10 @@ public class GesuchApiSpec {
         /**
          * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryType}
          * @param handler handler
-         * @return List&lt;GesuchDtoSpec&gt;
+         * @return PaginatedSbDashboardDtoSpec
          */
-        public List<GesuchDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDtoSpec>> type = new TypeRef<List<GesuchDtoSpec>>(){};
+        public PaginatedSbDashboardDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedSbDashboardDtoSpec> type = new TypeRef<PaginatedSbDashboardDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -1278,6 +1297,149 @@ public class GesuchApiSpec {
          */
         public GetGesucheSbOper getGesucheSBQueryTypePath(Object getGesucheSBQueryType) {
             reqSpec.addPathParam(GET_GESUCHE_S_B_QUERY_TYPE_PATH, getGesucheSBQueryType);
+            return this;
+        }
+
+        public static final String FALL_NUMMER_QUERY = "fallNummer";
+
+        /**
+         * @param fallNummer (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper fallNummerQuery(Object... fallNummer) {
+            reqSpec.addQueryParam(FALL_NUMMER_QUERY, fallNummer);
+            return this;
+        }
+
+        public static final String PIA_NACHNAME_QUERY = "piaNachname";
+
+        /**
+         * @param piaNachname (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper piaNachnameQuery(Object... piaNachname) {
+            reqSpec.addQueryParam(PIA_NACHNAME_QUERY, piaNachname);
+            return this;
+        }
+
+        public static final String PIA_VORNAME_QUERY = "piaVorname";
+
+        /**
+         * @param piaVorname (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper piaVornameQuery(Object... piaVorname) {
+            reqSpec.addQueryParam(PIA_VORNAME_QUERY, piaVorname);
+            return this;
+        }
+
+        public static final String PIA_GEBURTSDATUM_QUERY = "piaGeburtsdatum";
+
+        /**
+         * @param piaGeburtsdatum (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper piaGeburtsdatumQuery(Object... piaGeburtsdatum) {
+            reqSpec.addQueryParam(PIA_GEBURTSDATUM_QUERY, piaGeburtsdatum);
+            return this;
+        }
+
+        public static final String STATUS_QUERY = "status";
+
+        /**
+         * @param status (GesuchstatusDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper statusQuery(Object... status) {
+            reqSpec.addQueryParam(STATUS_QUERY, status);
+            return this;
+        }
+
+        public static final String BEARBEITER_QUERY = "bearbeiter";
+
+        /**
+         * @param bearbeiter (String)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper bearbeiterQuery(Object... bearbeiter) {
+            reqSpec.addQueryParam(BEARBEITER_QUERY, bearbeiter);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_FROM_QUERY = "letzteAktivitaetFrom";
+
+        /**
+         * @param letzteAktivitaetFrom (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_FROM_QUERY, letzteAktivitaetFrom);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_TO_QUERY = "letzteAktivitaetTo";
+
+        /**
+         * @param letzteAktivitaetTo (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
+            return this;
+        }
+
+        public static final String TYP_QUERY = "typ";
+
+        /**
+         * @param typ (GesuchTrancheTypDtoSpec)  (required)
+         * @return operation
+         */
+        public GetGesucheSbOper typQuery(Object... typ) {
+            reqSpec.addQueryParam(TYP_QUERY, typ);
+            return this;
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetGesucheSbOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetGesucheSbOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
+            return this;
+        }
+
+        public static final String SORT_COLUMN_QUERY = "sortColumn";
+
+        /**
+         * @param sortColumn (SbDashboardColumnDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper sortColumnQuery(Object... sortColumn) {
+            reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
+            return this;
+        }
+
+        public static final String SORT_ORDER_QUERY = "sortOrder";
+
+        /**
+         * @param sortOrder (SortOrderDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper sortOrderQuery(Object... sortOrder) {
+            reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
             return this;
         }
 

@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  InputSignal,
   OnInit,
   QueryList,
-  ViewChild,
   ViewChildren,
   computed,
   effect,
@@ -22,11 +22,17 @@ import {
   MatPaginator,
   MatPaginatorIntl,
   MatPaginatorModule,
+  PageEvent,
 } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import {
+  MatSort,
+  MatSortModule,
+  Sort,
+  SortDirection,
+} from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -36,18 +42,23 @@ import {
   differenceInCalendarYears,
   differenceInDays,
   format,
-  isSameDay,
-  isWithinInterval,
-  startOfDay,
+  isValid,
+  toDate,
 } from 'date-fns';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
+import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { selectVersion } from '@dv/shared/data-access/config';
 import {
   GesuchFilter,
+  GesuchServiceGetGesucheSbRequestParams,
   GesuchTrancheTyp,
   Gesuchstatus,
+  SbDashboardColumn,
+  SbDashboardGesuch,
   SharedModelGesuch,
+  SortOrder,
 } from '@dv/shared/model/gesuch';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
@@ -64,11 +75,27 @@ import {
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
+import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 import { isDefined } from '@dv/shared/util-fn/type-guards';
 
-import { selectSachbearbeitungAppFeatureCockpitView } from './sachbearbeitung-app-feature-cockpit.selector';
-
+const PAGE_SIZES = [10, 20, 50];
+const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
+const INPUT_DELAY = 600;
+
+type AppendStartEnd<T extends string> = `${T}From` | `${T}To`;
+type DashboardEntry = Omit<SbDashboardGesuch, 'id' | 'gesuchTrancheId'>;
+type DashboardEntryFields = keyof DashboardEntry;
+
+/**
+ * Special date fields which are treated as start-end fields only during filtering
+ */
+type StartEndFields = keyof Pick<DashboardEntry, 'letzteAktivitaet'>;
+type DashboardFormSimpleFields = Exclude<DashboardEntryFields, StartEndFields>;
+type DashboardFormStartEndFields = AppendStartEnd<StartEndFields>;
+type DashboardFormFields =
+  | DashboardFormSimpleFields
+  | DashboardFormStartEndFields;
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-cockpit',
@@ -111,48 +138,73 @@ const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
     { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },
   ],
 })
-export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
+export class SachbearbeitungAppFeatureCockpitComponent
+  implements
+    OnInit,
+    Record<DashboardFormFields, InputSignal<string | undefined>>
+{
   private store = inject(Store);
   private router = inject(Router);
   private formBuilder = inject(NonNullableFormBuilder);
-  showSig = input<GesuchFilter | undefined>(undefined, {
-    alias: 'show',
+  // Due to lack of space, the following inputs are not suffixed with 'Sig'
+  show = input<GesuchFilter | undefined>(undefined);
+  fallNummer = input<string | undefined>(undefined);
+  typ = input<string | undefined>(undefined);
+  piaNachname = input<string | undefined>(undefined);
+  piaVorname = input<string | undefined>(undefined);
+  piaGeburtsdatum = input<string | undefined>(undefined);
+  status = input<string | undefined>(undefined);
+  bearbeiter = input<string | undefined>(undefined);
+  letzteAktivitaetFrom = input<string | undefined>(undefined);
+  letzteAktivitaetTo = input<string | undefined>(undefined);
+  sortColumn = input<SbDashboardColumn | undefined>(undefined);
+  sortOrder = input<SortOrder | undefined>(undefined);
+  page = input(<number | undefined>undefined, {
+    transform: restrictNumberParam({ min: 0, max: 999 }),
+  });
+  pageSize = input(<number | undefined>undefined, {
+    transform: restrictNumberParam({
+      min: PAGE_SIZES[0],
+      max: PAGE_SIZES[PAGE_SIZES.length - 1],
+    }),
   });
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  @ViewChild('gesuchePaginator', { static: true }) paginator!: MatPaginator;
-  displayedColumns = [
-    'fall',
-    'typ',
-    'nachname',
-    'vorname',
-    'geburtsdatum',
-    'status',
-    'bearbeiter',
-    'letzteAktivitaet',
-  ];
+  displayedColumns = Object.keys(SbDashboardColumn);
 
   filterForm = this.formBuilder.group({
-    fall: [<string | undefined>undefined],
-    typ: [''],
-    nachname: [<string | undefined>undefined],
-    vorname: [<string | undefined>undefined],
-    geburtsdatum: [<Date | undefined>undefined],
-    status: [''],
+    fallNummer: [<string | undefined>undefined],
+    typ: [<GesuchTrancheTyp | undefined>undefined],
+    piaNachname: [<string | undefined>undefined],
+    piaVorname: [<string | undefined>undefined],
+    piaGeburtsdatum: [<Date | undefined>undefined],
+    status: [<Gesuchstatus | undefined>undefined],
     bearbeiter: [<string | undefined>undefined],
-    letzteAktivitaetStart: [<Date | undefined>undefined],
-    letzteAktivitaetEnd: [<Date | undefined>undefined],
-  });
+  } satisfies Record<DashboardFormSimpleFields, unknown>);
+
+  filterStartEndForm = this.formBuilder.group({
+    letzteAktivitaetFrom: [<Date | undefined>undefined],
+    letzteAktivitaetTo: [<Date | undefined>undefined],
+  } satisfies Record<DashboardFormStartEndFields, unknown>);
 
   quickFilterForm = this.formBuilder.group({
     query: [<GesuchFilter | undefined>undefined],
   });
+
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
+  availableTypes = Object.values(GesuchTrancheTyp);
+  versionSig = this.store.selectSignal(selectVersion);
+  showViewSig = computed<GesuchFilter>(() => {
+    const show = this.show();
+    return show ?? DEFAULT_FILTER;
+  });
+  sortSig = viewChild.required(MatSort);
+  paginatorSig = viewChild.required(MatPaginator);
+  gesuchStore = inject(GesuchStore);
   dataSoruce = new MatTableDataSource<SharedModelGesuch>([]);
 
-  cockpitViewSig = this.store.selectSignal(
-    selectSachbearbeitungAppFeatureCockpitView,
-  );
   quickFilters: { typ: GesuchFilter; icon: string }[] = [
     {
       typ: 'ALLE_BEARBEITBAR_MEINE',
@@ -167,29 +219,16 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
       icon: 'all_inclusive',
     },
   ];
-  showViewSig = computed<GesuchFilter>(() => {
-    const show = this.showSig();
-    return show ?? DEFAULT_FILTER;
-  });
 
-  private filterFormChangedSig = toSignal(this.filterForm.valueChanges);
-  availableStatusSig = computed(() => {
-    return this.cockpitViewSig().gesuche.reduce<Gesuchstatus[]>(
-      (acc, gesuch) =>
-        acc.includes(gesuch.gesuchStatus) ? acc : [...acc, gesuch.gesuchStatus],
-      [],
-    );
-  });
-  availableStatus = Object.values(GesuchTrancheTyp);
-  private letzteAktivitaetStartChangedSig = toSignal(
-    this.filterForm.controls.letzteAktivitaetStart.valueChanges,
+  private letzteAktivitaetFromChangedSig = toSignal(
+    this.filterStartEndForm.controls.letzteAktivitaetFrom.valueChanges,
   );
-  private letzteAktivitaetEndChangedSig = toSignal(
-    this.filterForm.controls.letzteAktivitaetEnd.valueChanges,
+  private letzteAktivitaetToChangedSig = toSignal(
+    this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
   letzteAktivitaetRangeSig = computed(() => {
-    const start = this.letzteAktivitaetStartChangedSig();
-    const end = this.letzteAktivitaetEndChangedSig();
+    const start = this.letzteAktivitaetFromChangedSig();
+    const end = this.letzteAktivitaetToChangedSig();
 
     if (!start || !end) {
       return '';
@@ -207,77 +246,131 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
       : format(start, 'dd.MM.yyyy');
   });
 
+  availableStatusSig = computed(() => {
+    return this.gesuchStore
+      ?.cockpitViewSig()
+      ?.gesuche?.entries?.reduce<
+        Gesuchstatus[]
+      >((acc, entry) => (acc.includes(entry.status) ? acc : [...acc, entry.status]), []);
+  });
+
+  filterFormChangedSig = toSignal(
+    this.filterForm.valueChanges.pipe(debounceTime(INPUT_DELAY)),
+  );
+  filterStartEndFormChangedSig = toSignal(
+    this.filterStartEndForm.valueChanges.pipe(
+      distinctUntilChanged(
+        (a, b) =>
+          // Only emit if both fields are defined or both are undefined
+          // otherwise the list will update on first range picker interaction
+          isDefined(b.letzteAktivitaetFrom) ===
+            isDefined(b.letzteAktivitaetTo) && a === b,
+      ),
+      debounceTime(INPUT_DELAY),
+    ),
+  );
+
   gesucheDataSourceSig = computed(() => {
-    const sort = this.sortSig();
-    const gesuche = this.cockpitViewSig().gesuche.map((gesuch) => ({
-      id: gesuch.id,
-      trancheId: gesuch.gesuchTrancheToWorkWith?.id,
-      fall: gesuch.fall.fallNummer,
-      typ: gesuch.gesuchTrancheToWorkWith?.typ,
-      nachname:
-        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
-          ?.nachname,
-      vorname:
-        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
-          ?.vorname,
-      geburtsdatum:
-        gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.personInAusbildung
-          ?.geburtsdatum,
-      status: gesuch.gesuchStatus,
-      bearbeiter: gesuch.bearbeiter,
-      letzteAktivitaet: gesuch.aenderungsdatum,
-    }));
-    const filterForm = this.filterFormChangedSig();
-
+    const gesuche = this.gesuchStore?.cockpitViewSig()?.gesuche?.entries?.map(
+      (entry) =>
+        ({
+          id: entry.id,
+          trancheId: entry.gesuchTrancheId,
+          fallNummer: entry.fallNummer,
+          typ: entry.typ,
+          piaNachname: entry.piaNachname,
+          piaVorname: entry.piaVorname,
+          piaGeburtsdatum: entry.piaGeburtsdatum,
+          status: entry.status,
+          bearbeiter: entry.bearbeiter,
+          letzteAktivitaet: entry.letzteAktivitaet,
+        }) satisfies Record<DashboardEntryFields, unknown> & {
+          id: string;
+          trancheId: string;
+        },
+    );
     const dataSource = new MatTableDataSource(gesuche);
-
-    dataSource.paginator = this.paginator;
-    if (sort) {
-      dataSource.sort = sort;
-    }
-
-    if (hasFilterValues(filterForm)) {
-      dataSource.filterPredicate = (data) =>
-        [
-          checkFilter(data.fall, filterForm.fall),
-          checkFilter(data.typ, filterForm.typ),
-          checkFilter(data.nachname, filterForm.nachname),
-          checkFilter(data.vorname, filterForm.vorname),
-          checkFilter(data.geburtsdatum, filterForm.geburtsdatum),
-          checkFilter(data.status, filterForm.status),
-          checkFilter(data.bearbeiter, filterForm.bearbeiter),
-          checkFilter(data.letzteAktivitaet, [
-            filterForm.letzteAktivitaetStart,
-            filterForm.letzteAktivitaetEnd,
-          ]),
-        ].every((result) => result);
-      dataSource.filter = JSON.stringify(filterForm);
-    } else {
-      dataSource.filter = '';
-    }
 
     return dataSource;
   });
-  sortSig = viewChild(MatSort);
 
   constructor() {
-    let isFirstChange = true;
+    // Handle the case where the page is higher than the total number of pages
     effect(
       () => {
-        const query = this.showViewSig();
-        if (isFirstChange) {
-          isFirstChange = false;
-          return;
+        const { page, pageSize } = this.getInputs();
+        const totalEntries =
+          this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
+
+        if (
+          page &&
+          pageSize &&
+          totalEntries &&
+          page * pageSize > totalEntries
+        ) {
+          this.router.navigate(['.'], {
+            queryParams: {
+              page: Math.ceil(totalEntries / pageSize) - 1,
+            },
+            queryParamsHandling: 'merge',
+            replaceUrl: true,
+          });
         }
-        this.store.dispatch(
-          SharedDataAccessGesuchEvents.loadAllDebounced({
-            query,
-          }),
-        );
       },
       { allowSignalWrites: true },
     );
 
+    // Handle normal filter form control changes
+    effect(
+      () => {
+        this.filterFormChangedSig();
+        const formValue = this.filterForm.getRawValue();
+        const query = createQuery({
+          ...formValue,
+          piaGeburtsdatum: formValue.piaGeburtsdatum
+            ? toBackendLocalDate(formValue.piaGeburtsdatum)
+            : undefined,
+        });
+
+        this.router.navigate(['.'], {
+          queryParams: makeEmptyStringPropertiesNull(query),
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      },
+      {
+        allowSignalWrites: true,
+      },
+    );
+
+    // Handle start-end filter form control changes seperately
+    effect(
+      () => {
+        this.filterStartEndFormChangedSig();
+        const formValue = this.filterStartEndForm.getRawValue();
+        const query = createQuery({
+          letzteAktivitaetFrom:
+            formValue.letzteAktivitaetTo && formValue.letzteAktivitaetFrom
+              ? toBackendLocalDate(formValue.letzteAktivitaetFrom)
+              : undefined,
+          letzteAktivitaetTo:
+            formValue.letzteAktivitaetFrom && formValue.letzteAktivitaetTo
+              ? toBackendLocalDate(formValue.letzteAktivitaetTo)
+              : undefined,
+        });
+
+        this.router.navigate(['.'], {
+          queryParams: makeEmptyStringPropertiesNull(query),
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      },
+      {
+        allowSignalWrites: true,
+      },
+    );
+
+    // Handle the quick filter form control changes (show / getGesucheSBQueryType)
     const quickFilterChanged = toSignal(
       this.quickFilterForm.controls.query.valueChanges,
     );
@@ -291,74 +384,126 @@ export class SachbearbeitungAppFeatureCockpitComponent implements OnInit {
           queryParams: {
             show: query === DEFAULT_FILTER ? undefined : query,
           },
+          queryParamsHandling: 'merge',
           replaceUrl: true,
+        });
+      },
+      { allowSignalWrites: true },
+    );
+
+    // When the route param inputs change, load the gesuche
+    effect(
+      () => {
+        const {
+          query,
+          filter,
+          startEndFilter,
+          sortColumn,
+          sortOrder,
+          page,
+          pageSize,
+        } = this.getInputs();
+
+        this.gesuchStore.loadGesuche$({
+          getGesucheSBQueryType: query,
+          ...filter,
+          ...startEndFilter,
+          sortColumn,
+          sortOrder,
+          page: page ?? 0,
+          pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
         });
       },
       { allowSignalWrites: true },
     );
   }
 
-  ngOnInit() {
+  /**
+   * Bundle all route param inputs into an object
+   */
+  private getInputs() {
     const query = this.showViewSig();
-    this.quickFilterForm.reset({ query });
-    this.store.dispatch(
-      SharedDataAccessGesuchEvents.loadAll({
-        query,
+    const filter = {
+      fallNummer: this.fallNummer(),
+      typ: parseTyp(this.typ()) ?? 'TRANCHE',
+      piaNachname: this.piaNachname(),
+      piaVorname: this.piaVorname(),
+      piaGeburtsdatum: this.piaGeburtsdatum(),
+      status: parseStatus(this.status()),
+      bearbeiter: this.bearbeiter(),
+    };
+    const startEndFilter = {
+      letzteAktivitaetFrom: this.letzteAktivitaetFrom(),
+      letzteAktivitaetTo: this.letzteAktivitaetTo(),
+    };
+    const sortColumn = this.sortColumn();
+    const sortOrder = this.sortOrder();
+    const page = this.page();
+    const pageSize = this.pageSize();
+
+    return {
+      query,
+      filter,
+      startEndFilter,
+      sortColumn,
+      sortOrder,
+      page,
+      pageSize,
+    };
+  }
+
+  sortData(event: Sort) {
+    this.router.navigate(['.'], {
+      queryParams: createQuery({
+        // display column names are set to the enum values, so this is safe to cast
+        sortColumn: event.active as SbDashboardColumn,
+        sortOrder: sortMap[event.direction],
       }),
-    );
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
+  paginate(event: PageEvent) {
+    this.router.navigate(['.'], {
+      queryParams: createQuery({
+        page: event.pageIndex,
+        pageSize: event.pageSize,
+      }),
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
+  ngOnInit() {
+    const { query, filter, startEndFilter, sortColumn, sortOrder } =
+      this.getInputs();
+
+    this.filterForm.reset({
+      ...filter,
+      piaGeburtsdatum: parseDate(filter.piaGeburtsdatum ?? ''),
+    });
+    this.filterStartEndForm.reset({
+      ...startEndFilter,
+      letzteAktivitaetFrom: parseDate(
+        startEndFilter.letzteAktivitaetFrom ?? '',
+      ),
+      letzteAktivitaetTo: parseDate(startEndFilter.letzteAktivitaetTo ?? ''),
+    });
+    this.quickFilterForm.reset({ query });
+
+    if (sortColumn && sortOrder) {
+      this.sortSig().sort({
+        id: sortColumn,
+        start: inverseSortMap[sortOrder],
+        disableClear: false,
+      });
+    }
+
+    // Enable validation from the beginning
+    this.filterForm.markAllAsTouched();
   }
 }
-
-const hasFilterValues = <T extends Record<string, unknown>>(
-  values?: T,
-): values is NonNullable<T> => {
-  if (!values) {
-    return false;
-  }
-  return Object.values(values).some(
-    (value) => isDefined(value) && value !== '',
-  );
-};
-
-const checkFilter = <T>(
-  value: T,
-  filter:
-    | string
-    | number
-    | Date
-    | [Date | undefined, Date | undefined]
-    | undefined
-    | null,
-) => {
-  if (!isDefined(value) || !isDefined(filter)) {
-    return true;
-  }
-  if (typeof value === 'number' || typeof filter === 'number') {
-    return value.toString() === filter.toString();
-  }
-  if (typeof value === 'string') {
-    if (!value) {
-      return true;
-    }
-    if (filter instanceof Date) {
-      return isSameDay(new Date(value), filter);
-    }
-    if (Array.isArray(filter)) {
-      return isInterval(filter)
-        ? isWithinInterval(startOfDay(new Date(value)), {
-            start: startOfDay(filter[0]),
-            end: startOfDay(filter[1]),
-          })
-        : true;
-    }
-    return value.toLocaleLowerCase().includes(filter.toLocaleLowerCase());
-  }
-  throw new Error('Unsupported type');
-};
-
-const isInterval = (value: unknown[]): value is [Date, Date] => {
-  return value.length === 2 && value.every((v) => v instanceof Date);
-};
 
 const getDiffFormat = (
   date: Date,
@@ -373,3 +518,63 @@ const getDiffFormat = (
   }
   return value;
 };
+
+const sortMap = {
+  ['']: undefined,
+  asc: 'ASCENDING',
+  desc: 'DESCENDING',
+} satisfies Record<SortDirection, SortOrder | undefined>;
+const inverseSortMap = {
+  ASCENDING: 'asc',
+  DESCENDING: 'desc',
+} satisfies Record<SortOrder, SortDirection>;
+
+const makeEmptyStringPropertiesNull = <T extends object>(obj: T): T => {
+  return Object.entries(obj).reduce(
+    (acc, [key, value]) => ({
+      ...acc,
+      [key]: value === '' ? null : value,
+    }),
+    {} as T,
+  );
+};
+
+const parseTyp = (typ: string | undefined): GesuchTrancheTyp | undefined => {
+  if (typ && Object.keys(GesuchTrancheTyp).includes(typ)) {
+    return typ as GesuchTrancheTyp;
+  }
+
+  return undefined;
+};
+
+const parseStatus = (status: string | undefined): Gesuchstatus | undefined => {
+  if (!status || Object.keys(Gesuchstatus).includes(status)) {
+    return undefined;
+  }
+  return status as Gesuchstatus;
+};
+
+const parseDate = (date: string | undefined): Date | undefined => {
+  if (!date || isValid(date)) {
+    return undefined;
+  }
+  return toDate(date);
+};
+
+const createQuery = <T extends Partial<GesuchServiceGetGesucheSbRequestParams>>(
+  value: T,
+) => {
+  return value;
+};
+
+const restrictNumberParam =
+  (restriction: { max: number; min: number }) =>
+  (value: number | undefined) => {
+    if (!isDefined(value)) {
+      return undefined;
+    }
+    if (+value > restriction.max) {
+      return restriction.max;
+    }
+    return +value < restriction.min ? restriction.min : +value;
+  };

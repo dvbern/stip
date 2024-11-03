@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Notification for a Gesuch
  */
 @JsonPropertyOrder({
+  NotificationDtoSpec.JSON_PROPERTY_NOTIFICATION_TEXT,
   NotificationDtoSpec.JSON_PROPERTY_NOTIFICATION_TYPE,
   NotificationDtoSpec.JSON_PROPERTY_GESUCH_ID,
   NotificationDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
@@ -38,6 +39,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("Notification")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class NotificationDtoSpec {
+  public static final String JSON_PROPERTY_NOTIFICATION_TEXT = "notificationText";
+  private String notificationText;
+
   public static final String JSON_PROPERTY_NOTIFICATION_TYPE = "notificationType";
   private NotificationTypeDtoSpec notificationType;
 
@@ -52,6 +56,32 @@ public class NotificationDtoSpec {
 
   public NotificationDtoSpec() {
   }
+
+  public NotificationDtoSpec notificationText(String notificationText) {
+    
+    this.notificationText = notificationText;
+    return this;
+  }
+
+   /**
+   * Get notificationText
+   * @return notificationText
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NOTIFICATION_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getNotificationText() {
+    return notificationText;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NOTIFICATION_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNotificationText(String notificationText) {
+    this.notificationText = notificationText;
+  }
+
 
   public NotificationDtoSpec notificationType(NotificationTypeDtoSpec notificationType) {
     
@@ -165,7 +195,8 @@ public class NotificationDtoSpec {
       return false;
     }
     NotificationDtoSpec notification = (NotificationDtoSpec) o;
-    return Objects.equals(this.notificationType, notification.notificationType) &&
+    return Objects.equals(this.notificationText, notification.notificationText) &&
+        Objects.equals(this.notificationType, notification.notificationType) &&
         Objects.equals(this.gesuchId, notification.gesuchId) &&
         Objects.equals(this.userErstellt, notification.userErstellt) &&
         Objects.equals(this.timestampErstellt, notification.timestampErstellt);
@@ -173,13 +204,14 @@ public class NotificationDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationType, gesuchId, userErstellt, timestampErstellt);
+    return Objects.hash(notificationText, notificationType, gesuchId, userErstellt, timestampErstellt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NotificationDtoSpec {\n");
+    sb.append("    notificationText: ").append(toIndentedString(notificationText)).append("\n");
     sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");

@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.resource;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
@@ -9,7 +10,11 @@ import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
+import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -116,15 +121,6 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuch).build();
     }
 
-    // TODO KSTIP-1247: Update which roles can do this
-    @AllowAll
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGesucheSb(GetGesucheSBQueryType getGesucheSBQueryType) {
-        return Response.ok(gesuchService.findGesucheSB(getGesucheSBQueryType)).build();
-    }
-
-    @AllowAll
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGsDashboard() {
@@ -136,6 +132,46 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getGesucheGs() {
         return Response.ok(gesuchService.findGesucheGs()).build();
+    }
+
+    // TODO KSTIP-1247: Update which roles can do this
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getGesucheSb(
+        GetGesucheSBQueryType getGesucheSBQueryType,
+        GesuchTrancheTyp typ,
+        Integer page,
+        Integer pageSize,
+        String fallNummer,
+        String piaNachname,
+        String piaVorname,
+        LocalDate piaGeburtsdatum,
+        Gesuchstatus status,
+        String bearbeiter,
+        LocalDate letzteAktivitaetFrom,
+        LocalDate letzteAktivitaetTo,
+        SbDashboardColumn sortColumn,
+        SortOrder sortOrder
+    ) {
+        gesuchAuthorizer.allowAllow();
+
+        final var dtos = gesuchService.findGesucheSB(
+            getGesucheSBQueryType,
+            fallNummer,
+            piaNachname,
+            piaVorname,
+            piaGeburtsdatum,
+            status,
+            bearbeiter,
+            letzteAktivitaetFrom,
+            letzteAktivitaetTo,
+            typ,
+            page,
+            pageSize,
+            sortColumn,
+            sortOrder
+        );
+        return Response.ok(dtos).build();
     }
 
     @RolesAllowed(GESUCH_READ)

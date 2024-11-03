@@ -180,7 +180,10 @@ test.describe('Neues gesuch erstellen', () => {
   test('Gesuch Testfall-2', async ({ page, cockpit: _ }, testInfo) => {
     const seed = `${testInfo.title}-${testInfo.workerIndex}`;
     test.slow();
+
     // Step 1: Person ============================================================
+    await expect(page.getByTestId('step-title')).toBeAttached();
+    await page.getByTestId('step-nav-person').first().click();
     await expectStepTitleToContainText('Person in Ausbildung', page);
     const personPO = new PersonPO(page);
     await expect(personPO.elems.loading).toBeHidden();
@@ -288,7 +291,7 @@ test.describe('Neues gesuch erstellen', () => {
     for (const upload of uploads) {
       const uploadCall = page.waitForResponse(
         (response) =>
-          response.url().includes('/api/v1/dokument') &&
+          response.url().includes('/api/v1/gesuchDokument') &&
           response.request().method() === 'POST',
       );
       await upload.click();

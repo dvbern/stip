@@ -15,6 +15,7 @@ import { NotificationType } from './notificationType';
  * Notification for a Gesuch
  */
 export interface Notification { 
+    notificationText?: string;
     notificationType: NotificationType;
     gesuchId: string;
     userErstellt: string;

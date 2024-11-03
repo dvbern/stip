@@ -8,9 +8,9 @@
   @if (!view.loading && !view.hasNecessaryPreSteps) {
     <div class="row">
       <div class="col-12 col-xl-8 my-3">
-        <ngb-alert type="info" [dismissible]="false">{{
+        <dv-shared-ui-info-container>{{
           'shared.form.auszahlung.top.missing-eltern' | translate
-        }}</ngb-alert>
+        }}</dv-shared-ui-info-container>
       </div>
     </div>
   }
@@ -33,10 +33,8 @@
               [formControlName]="'kontoinhaber'"
               data-testid="form-auszahlung-kontoinhaber"
               (change)="handleKontoinhaberinChangedByUser()"
+              [placeholder]="'shared.form.select.empty' | translate"
             >
-              <mat-option [value]="null" disabled selected>
-                {{ 'shared.form.select.empty' | translate }}
-              </mat-option>
               @for (each of view.kontoinhaberValues; track trackByIndex($index)) {
                 <mat-option [value]="each" [attr.data-testid]="each">
                   {{ 'shared.form.auszahlung.kontoinhaber.' + each | translate }}

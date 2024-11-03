@@ -8,13 +8,9 @@ import {
   catchError,
   combineLatestWith,
   concatMap,
-  debounceTime,
-  distinctUntilChanged,
   exhaustMap,
   filter,
   map,
-  merge,
-  skip,
   switchMap,
   tap,
   withLatestFrom,
@@ -116,34 +112,6 @@ export const loadGsDashboard = createEffect(
           ),
           catchError((error) => [
             SharedDataAccessGesuchEvents.gsDashboardLoadedFailure({
-              error: sharedUtilFnErrorTransformer(error),
-            }),
-          ]),
-        ),
-      ),
-    );
-  },
-  { functional: true },
-);
-
-export const loadAllGesuchs = createEffect(
-  (
-    actions$ = inject(Actions),
-    gesuchService = inject(GesuchService),
-    storeUtil = inject(StoreUtilService),
-  ) => {
-    return combineLoadAllActions$(actions$).pipe(
-      filter(isDefined),
-      storeUtil.waitForBenutzerData$(),
-      switchMap(({ query }) =>
-        gesuchService.getGesucheSb$({ getGesucheSBQueryType: query }).pipe(
-          map((gesuchs) =>
-            SharedDataAccessGesuchEvents.gesuchsLoadedSuccess({
-              gesuchs,
-            }),
-          ),
-          catchError((error) => [
-            SharedDataAccessGesuchEvents.gesuchsLoadedFailure({
               error: sharedUtilFnErrorTransformer(error),
             }),
           ]),
@@ -646,7 +614,6 @@ const handleStatusChange$ = <AC extends ActionCreator<string, Creator>>(
 // add effects here
 export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
-  loadAllGesuchs,
   loadGesuch,
   loadGsDashboard,
   createGesuch,
@@ -691,28 +658,6 @@ const prepareFormularData = (
       },
     },
   };
-};
-
-const combineLoadAllActions$ = (actions$: Actions) => {
-  /** Used to initially load all gesuche */
-  const loadAll$ = actions$.pipe(ofType(SharedDataAccessGesuchEvents.loadAll));
-  /** Used to reload the gesuche after a filter change */
-  const loadAllDebounced$ = merge(
-    // Merge the initial load to compare the new values with the initial in distinctUntilChanged
-    loadAll$,
-    actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.loadAllDebounced),
-      debounceTime(LOAD_ALL_DEBOUNCE_TIME),
-    ),
-  );
-  return merge(
-    loadAll$,
-    loadAllDebounced$.pipe(
-      distinctUntilChanged(),
-      // skip the first value, because it's the same as the initial load
-      skip(1),
-    ),
-  );
 };
 
 /**
