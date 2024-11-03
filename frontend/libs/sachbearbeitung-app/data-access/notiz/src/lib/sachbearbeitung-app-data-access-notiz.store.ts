@@ -6,7 +6,6 @@ import { pipe, switchMap, tap } from 'rxjs';
 
 import {
   GesuchNotiz,
-  GesuchNotizCreate,
   GesuchNotizService,
   GesuchNotizUpdate,
 } from '@dv/shared/model/gesuch';
