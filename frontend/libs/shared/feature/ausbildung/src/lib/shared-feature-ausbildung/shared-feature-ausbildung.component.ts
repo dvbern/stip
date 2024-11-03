@@ -85,7 +85,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private globalNotificationStore = inject(GlobalNotificationStore);
   readonly ausbildungspensumValues = Object.values(AusbildungsPensum);
 
-  fallIdSig = input.required<string>();
+  fallIdSig = input.required<string | null>();
   ausbildungSaved = output<void>();
   ausbildungStore = inject(AusbildungStore);
   form = this.formBuilder.group({

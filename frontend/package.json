@@ -74,6 +74,7 @@
     "@ngx-translate/http-loader": "^8.0.0",
     "@openapitools/openapi-generator-cli": "^2.14.0",
     "@popperjs/core": "^2.11.8",
+    "@tailwindcss/container-queries": "^0.1.1",
     "angular-oauth2-oidc": "^17.0.2",
     "bootstrap": "^5.3.3",
     "date-fns": "^3.6.0",

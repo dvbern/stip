@@ -69,14 +69,14 @@
             <div class="col-12 col-xl-8 my-3">
               <dv-shared-feature-gesuch-form-lebenslauf-visual
                 [startDate]="minDatesSig()?.required ?? null"
+                [language]="languageSig()"
                 [lebenslaufItems]="items"
                 [ausbildung]="ausbildung"
+                [ausbildungsstaettes]="ausbildungsstatteStore.ausbildungsstaetteViewSig()"
                 (addAusbildungTriggered)="handleAddAusbildung($event)"
                 (addTaetigkeitTriggered)="handleAddTaetigkeit($event)"
                 (editItemTriggered)="handleEditItemId($event, items)"
                 (deleteItemTriggered)="handleDeleteItem($event)"
-                [ausbildungsstaettes]="ausbildungsstatteStore.ausbildungsstaetteViewSig()"
-                [language]="languageSig()"
               />
             </div>
           }

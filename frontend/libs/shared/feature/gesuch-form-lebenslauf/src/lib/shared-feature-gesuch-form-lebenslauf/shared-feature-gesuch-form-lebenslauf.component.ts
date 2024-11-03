@@ -28,8 +28,8 @@ import { SharedFeatureGesuchFormLebenslaufEditorComponent } from '../shared-feat
 import { TimelineAddCommand } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline';
 import { TwoColumnTimelineComponent } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline.component';
 
-const AUSBILDUNGS_MONTH = 8; // August
-const MIN_EDUCATION_AGE = 16; // August
+const AUSBILDUNGS_MONTH = 8;
+const MIN_EDUCATION_AGE = 16;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf',
@@ -100,6 +100,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormLebenslauf.init());
+    this.ausbildungsstatteStore.loadAusbildungsstaetten$();
   }
 
   public handleAddAusbildung(addCommand: TimelineAddCommand | undefined): void {

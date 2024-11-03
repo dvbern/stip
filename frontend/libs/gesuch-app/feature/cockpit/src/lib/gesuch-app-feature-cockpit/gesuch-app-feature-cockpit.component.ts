@@ -22,7 +22,10 @@ import {
 } from '@dv/gesuch-app/ui/dashboard';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { FallStore } from '@dv/shared/data-access/fall';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import {
+  SharedDataAccessGesuchEvents,
+  selectLastUpdate,
+} from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import {
@@ -83,6 +86,7 @@ export class GesuchAppFeatureCockpitComponent {
   private gotNewFallSig = computed(() => {
     return this.fallStore.currentFallViewSig()?.id;
   });
+  private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
 
   constructor() {
     this.fallStore.loadCurrentFall$();
@@ -92,6 +96,15 @@ export class GesuchAppFeatureCockpitComponent {
         const fallId = this.gotNewFallSig();
 
         if (fallId) {
+          this.dashboardStore.loadDashboard$();
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
+    effect(
+      () => {
+        if (this.gesuchUpdatedSig()) {
           this.dashboardStore.loadDashboard$();
         }
       },
@@ -173,6 +186,9 @@ export class GesuchAppFeatureCockpitComponent {
         if (result) {
           this.gesuchAenderungStore.deleteGesuchAenderung$({
             aenderungId,
+            onSuccess: () => {
+              this.dashboardStore.loadDashboard$();
+            },
           });
         }
       });

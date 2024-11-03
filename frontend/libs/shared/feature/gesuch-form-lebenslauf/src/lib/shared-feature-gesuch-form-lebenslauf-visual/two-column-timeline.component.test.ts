@@ -26,8 +26,8 @@ async function setup(props: Partial<TwoColumnTimelineComponent> = {}) {
     componentProperties: {
       lebenslaufItems: [],
       ausbildung: {
-        ausbildungBegin: '01.2022',
-        ausbildungEnd: '02.2022',
+        ausbildungBegin: '2022-01-01',
+        ausbildungEnd: '2022-02-28',
       } as Ausbildung,
       startDate: new Date(),
       ausbildungsstaettes: [],

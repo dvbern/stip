@@ -22,6 +22,9 @@ import { SharedFeatureAusbildungComponent } from './shared-feature-ausbildung.co
 
 async function setup() {
   return await render(SharedFeatureAusbildungComponent, {
+    inputs: {
+      fallIdSig: null,
+    },
     imports: [
       TranslateTestingModule.withTranslations({}),
       NoopAnimationsModule,

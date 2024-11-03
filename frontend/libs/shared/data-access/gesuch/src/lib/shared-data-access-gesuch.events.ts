@@ -46,7 +46,6 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     deleteGesuchFailure: props<{ error: SharedModelError }>(),
     gesuchsLoadedSuccess: props<{ gesuchs: SharedModelGesuch[] }>(),
     gesuchsLoadedFailure: props<{ error: SharedModelError }>(),
-    loadGsDashboard: emptyProps(),
     gsDashboardLoadedSuccess: props<{ gsDashboard: FallDashboardItem[] }>(),
     gsDashboardLoadedFailure: props<{ error: SharedModelError }>(),
     setGesuchToBearbeitung: emptyProps(),

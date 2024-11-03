@@ -10,7 +10,7 @@
 
     @for (dashboard of dashboardStore.dashboardViewSig(); track dashboard.fall.id) {
       @let fall = dashboard.fall;
-      <div class="tw-grid tw-grid-cols-[2fr,1fr] tw-gap-16">
+      <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-[2fr,1fr] tw-gap-16">
         <!-- main column -->
         <div class="tw-flex tw-flex-col tw-gap-8">
           @if (dashboard.activeAusbildungen.length > 0) {
@@ -19,6 +19,7 @@
                 [ausbildungSig]="ausbildung"
                 (deleteGesuch)="deleteGesuch($event)"
                 (aenderungMelden)="aenderungMelden($event)"
+                (deleteAenderung)="deleteAenderung($event)"
               ></dv-gesuch-app-ui-dashboard-ausbildung>
             }
           } @else {
