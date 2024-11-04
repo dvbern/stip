@@ -249,6 +249,7 @@
   "sachbearbeitung-app.infos.notizen.table.betreff": "Betreff",
   "sachbearbeitung-app.infos.notizen.table.notiz": "Notiz",
   "sachbearbeitung-app.infos.notizen.table.user": "Benutzer",
+  "sachbearbeitung-app.infos.notizen.noData": "Noch keine Notizen vorhanden",
   "sachbearbeitung-app.infos.notiz.erstellen": "Notiz Erstellen",
   "sachbearbeitung-app.infos.notiz.erstellen.success": "Notiz wurde erfolgreich erstellt",
   "sachbearbeitung-app.infos.notiz.bearbeiten": "Notiz Bearbeiten",

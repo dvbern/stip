@@ -20,7 +20,7 @@
       <th mat-header-cell *matHeaderCellDef>
         {{ 'sachbearbeitung-app.infos.notizen.table.user' | translate }}
       </th>
-      <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()">
+      <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="text-nowrap">
         {{ notiz.userErstellt }}
       </td>
     </ng-container>
@@ -40,7 +40,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         {{ 'sachbearbeitung-app.infos.notizen.table.notiz' | translate }}
       </th>
-      <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="text-nowrap w-100">
+      <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100">
         {{ notiz.text }}
       </td>
     </ng-container>
@@ -51,10 +51,10 @@
         <button
           type="button"
           (click)="createNotiz()"
-          class="btn btn-outline-dark d-inline-flex lh-1 align-items-center"
+          class="btn btn-outline-dark btn-sm p-2 d-inline-flex lh-1 align-items-center"
           [matTooltip]="'sachbearbeitung-app.infos.notiz.erstellen' | translate"
         >
-          <i class="material-symbols-rounded fs-5">add</i>
+          <i class="material-symbols-rounded fs-4">add</i>
         </button>
       </th>
       <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100">
@@ -65,7 +65,7 @@
             class="btn btn-link btn-sm"
             [matTooltip]="'sachbearbeitung-app.infos.notiz.bearbeiten' | translate"
           >
-            <i class="material-symbols-rounded fs-5">edit</i>
+            <i class="material-symbols-rounded fs-4">edit</i>
           </button>
           @if (notiz.id) {
             <button
@@ -74,7 +74,7 @@
               class="btn btn-link btn-sm"
               [matTooltip]="'sachbearbeitung-app.infos.notiz.delete' | translate"
             >
-              <i class="material-symbols-rounded fs-5">delete</i>
+              <i class="material-symbols-rounded fs-4">delete</i>
             </button>
           }
         </div>
@@ -83,5 +83,10 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let notiz; columns: displayedColumns"></tr>
+    <tr class="mat-mdc-row" *matNoDataRow>
+      <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+        {{ 'sachbearbeitung-app.infos.notizen.noData' | translate }}
+      </td>
+    </tr>
   </table>
 </div>
