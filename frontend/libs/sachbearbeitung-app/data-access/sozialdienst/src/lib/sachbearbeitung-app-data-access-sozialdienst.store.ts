@@ -35,7 +35,6 @@ import {
   CachedRemoteData,
   RemoteData,
   cachedPending,
-  failure,
   handleApiResponse,
   initial,
   pending,
@@ -180,6 +179,7 @@ export class SozialdienstStore extends signalStore(
                 );
             }),
             switchMap(({ sozialdienst, user }) =>
+              // todo: does backend already do this?
               this.keycloak
                 .notifyUser$({
                   name: user.lastName,
@@ -239,7 +239,6 @@ export class SozialdienstStore extends signalStore(
         };
 
         const sozialdienstAdminUpdate: SozialdienstAdminUpdate = {
-          email: sozialdienst.sozialdienstAdmin.email,
           nachname: sozialdienst.sozialdienstAdmin.nachname,
           vorname: sozialdienst.sozialdienstAdmin.vorname,
         };
@@ -278,8 +277,6 @@ export class SozialdienstStore extends signalStore(
               ),
           ),
           catchError(() => {
-            // patchState(this, { sozialdienst: failure(error) });
-            // return EMPTY;
             this.loadSozialdienst$({
               sozialdienstId: sozialdienst.id,
             });
@@ -332,17 +329,21 @@ export class SozialdienstStore extends signalStore(
                   { id: adminRole.id, name: 'Sozialdienst-Admin' },
                 ]);
               }),
-              switchMap((user) =>
-                this.sozialdienstService.replaceSozialdienstAdmin$({
+              switchMap((user) => {
+                if (!user.email) {
+                  throw new Error('User email not defined');
+                }
+
+                return this.sozialdienstService.replaceSozialdienstAdmin$({
                   sozialdienstId,
                   sozialdienstAdminCreate: {
                     nachname: user.lastName,
                     vorname: user.firstName,
-                    email: user.email ?? '',
+                    email: user.email,
                     keycloakId: user.id,
                   },
-                }),
-              ),
+                });
+              }),
               switchMap((sozialdienstAdmin) =>
                 this.keycloak
                   .deleteUser$(existingSozialdienstAdminKeycloakId)
@@ -388,8 +389,9 @@ export class SozialdienstStore extends signalStore(
                     ),
                   ),
               ),
-              catchError((error) => {
-                patchState(this, { sozialdienst: failure(error) });
+              catchError(() => {
+                this.loadSozialdienst$({ sozialdienstId });
+
                 return EMPTY;
               }),
             );

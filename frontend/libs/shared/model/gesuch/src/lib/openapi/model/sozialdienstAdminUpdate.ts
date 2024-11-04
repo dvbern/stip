@@ -13,6 +13,5 @@
 export interface SozialdienstAdminUpdate { 
     vorname: string;
     nachname: string;
-    email: string;
 }
 

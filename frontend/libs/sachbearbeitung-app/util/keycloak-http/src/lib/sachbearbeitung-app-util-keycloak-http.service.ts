@@ -2,10 +2,20 @@ import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { Observable, catchError, combineLatestWith, map, of } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  combineLatestWith,
+  filter,
+  map,
+  of,
+  switchMap,
+  throwIfEmpty,
+} from 'rxjs';
 
 import {
   getCurrentUrl,
+  hasLocationHeader,
   toKnownUserErrorType,
 } from '@dv/sachbearbeitung-app/util-fn/keycloak-helper';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -17,6 +27,7 @@ import {
   SharedModelModelMappingsRepresentation,
   SharedModelRole,
   SharedModelRoleList,
+  bySozialdienstAdminRole,
 } from '@dv/shared/model/benutzer';
 import { MailService } from '@dv/shared/model/gesuch';
 import { noGlobalErrorsIf } from '@dv/shared/util/http';
@@ -165,12 +176,6 @@ export class KeycloakHttpService {
       .pipe(this.interceptError('erstellen'));
   }
 
-  // getRoleByName$(roleName: string) {
-  //   return this.getRoles$((role) => role.name === roleName).pipe(
-  //     map((roles) => roles[0]),
-  //   );
-  // }
-
   getRoles$(roleFilter?: (role: SharedModelRole) => boolean) {
     return this.http
       .get<SharedModelRoleList>(
@@ -188,16 +193,29 @@ export class KeycloakHttpService {
       );
   }
 
-  // todo: use everywhere if it works!
-  // createUserWithRole$(newUser: KeycloakUserCreate, roles: SharedModelRole[]) {
-  //   return this.createUser$(newUser).pipe(
-  //     filter(hasLocationHeader),
-  //     throwIfEmpty(() => new Error('User creation failed')),
-  //     map((response) => response.headers.get('Location')),
-  //     switchMap((location) => this.loadUserByUrl$(location)),
-  //     switchMap((user) => this.assignRoles$(user, roles)),
-  //   );
-  // }
+  createUserWithSozialDienstAdminRole$(newUser: KeycloakUserCreate) {
+    return this.createUser$(newUser).pipe(
+      filter(hasLocationHeader),
+      throwIfEmpty(() => new Error('User creation failed')),
+      switchMap((response) =>
+        this.loadUserByUrl$(response.headers.get('Location')),
+      ),
+      combineLatestWith(this.getRoles$(bySozialdienstAdminRole)),
+      switchMap(([user, roles]) => {
+        const adminRole = roles.find(
+          (role) => role.name === 'Sozialdienst-Admin',
+        );
+
+        if (!adminRole) {
+          throw new Error('Admin Role not found');
+        }
+
+        return this.assignRoles$(user, [
+          { id: adminRole.id, name: 'Sozialdienst-Admin' },
+        ]);
+      }),
+    );
+  }
 
   updateUser$(user: SharedModelBenutzerApi) {
     return this.http.put(
