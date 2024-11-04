@@ -1,0 +1,9 @@
+{anrede} {nachname}
+
+Nous devons les informer que leur modification a été refusée pour la raison suivante:
+
+{kommentar}
+
+Salutations amicales
+
+Département des subsides de formation

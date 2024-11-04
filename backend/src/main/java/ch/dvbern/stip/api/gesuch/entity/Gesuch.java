@@ -17,6 +17,7 @@ import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -89,6 +90,10 @@ public class Gesuch extends AbstractMandantEntity {
     @Nullable
     @Column(name = "comment")
     private String comment;
+
+    @Nullable
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private @Valid List<GesuchNotiz> notizen = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinFormula(value = """

@@ -14,4 +14,6 @@ public interface PartnerMapper {
     PartnerDto toDto(Partner partner);
 
     Partner partialUpdate(PartnerUpdateDto partnerUpdateDto, @MappingTarget Partner partner);
+
+    PartnerUpdateDto toUpdateDto(Partner partner);
 }

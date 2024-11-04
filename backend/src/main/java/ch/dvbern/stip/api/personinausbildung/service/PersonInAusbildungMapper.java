@@ -19,6 +19,8 @@ public abstract class PersonInAusbildungMapper extends EntityUpdateMapper<Person
         PersonInAusbildungUpdateDto personInAusbildungUpdateDto,
         @MappingTarget PersonInAusbildung personInAusbildung);
 
+    public abstract PersonInAusbildungUpdateDto toUpdateDto(PersonInAusbildung personInAusbildung);
+
     @Override
     @BeforeMapping
     protected void resetDependentDataBeforeUpdate(

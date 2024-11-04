@@ -148,6 +148,8 @@
   "shared.nachrichten.sender": "Absender",
   "shared.nachrichten.date": "Datum",
   "shared.nachrichten.type.GESUCH_EINGEREICHT": "Gesuch eingereicht",
+  "shared.nachrichten.type.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
+  "shared.nachrichten.type.AENDERUNG_ABGELEHNT": "Änderung abgelehnt",
   "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
 
   "shared.gesuch.validation.generic": "Bitte überprüfen Sie Ihre Eingaben im Formular und füllen Sie die benötigten Felder aus.",
@@ -159,6 +161,7 @@
   "shared.gesuch.status.ENTWURF": "Entwurf",
   "shared.gesuch.status.PUBLIZIERT": "Publik - Aktiv",
   "shared.gesuch.status.ARCHIVIERT": "Archiviert",
+  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "Manuell integrirte Änderung",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
   "shared.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
   "shared.gesuch.status.tranche.AKZEPTIERT": "Akzeptiert",
@@ -170,6 +173,7 @@
   "shared.gesuch.status.contract.IN_FREIGABE": "In Freigabe",
   "shared.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
   "shared.gesuch.status.contract.VERSANDBEREIT": "Versandbereit",
+  "shared.gesuch.status.contract.VERFUEGT": "Verfügt",
 
   "shared.gesuch.tranche.typ.AENDERUNG": "Änderung",
   "shared.gesuch.tranche.typ.TRANCHE": "Gesuch",
@@ -527,6 +531,12 @@
   "shared.form.tranche-abschluss.notReady": "Es fehlen noch Angaben. Bitte füllen Sie alle Pflichtfelder aus.",
 
   "shared.protokoll.title": "Protokoll",
+
+  "shared.notizen.title": "Notizen",
+  "shared.form.notizen.datum.label": "Datum",
+  "shared.form.notizen.betreff.label": "Betreff",
+  "shared.form.notizen.text.label": "Text",
+  "shared.form.notizen.user.label": "User",
 
   "shared.role.Admin": "Admin",
   "shared.role.Jurist": "Jurist",

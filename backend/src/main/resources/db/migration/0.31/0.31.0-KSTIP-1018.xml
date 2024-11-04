@@ -1,0 +1,106 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-1">
+    <createTable tableName="gesuch_gesuch_notizen">
+      <column name="gesuch_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="notizen_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-2">
+    <createTable tableName="gesuch_gesuch_notizen_aud">
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="gesuch_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="notizen_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-3">
+    <createTable tableName="gesuch_notizen">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="gesuch_notizenPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="betreff" type="VARCHAR(255)"/>
+      <column name="text" type="VARCHAR(255)"/>
+      <column name="gesuch_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-4">
+    <createTable tableName="gesuch_notizen_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="betreff" type="VARCHAR(255)"/>
+      <column name="text" type="VARCHAR(255)"/>
+      <column name="gesuch_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-5">
+    <addPrimaryKey columnNames="gesuch_id, rev, notizen_id" constraintName="gesuch_gesuch_notizen_audPK" tableName="gesuch_gesuch_notizen_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-6">
+    <addPrimaryKey columnNames="rev, id" constraintName="gesuch_notizen_audPK" tableName="gesuch_notizen_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-7">
+    <addUniqueConstraint columnNames="notizen_id" constraintName="UC_GESUCH_GESUCH_NOTIZENNOTIZEN_ID_COL" tableName="gesuch_gesuch_notizen"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-8">
+    <createIndex indexName="IX_gesuch_notiz_mandant" tableName="gesuch_notizen">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-9">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="gesuch_gesuch_notizen" constraintName="FK3cgrhqcra9ditv91kc8867de3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-10">
+    <addForeignKeyConstraint baseColumnNames="notizen_id" baseTableName="gesuch_gesuch_notizen" constraintName="FK75ma8d1ei5ioyl0mnnecyngum" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_notizen" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-11">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_notizen_aud" constraintName="FK7rkupd7iqqnplc4cpfevj7an1" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-12">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="gesuch_notizen" constraintName="FK_gesuch_notiz_gesuch_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-13">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_gesuch_notizen_aud" constraintName="FKgj4rhaduqsusyvcdyf5d5qbie" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="fabrice.jakob (generated)" id="1730458311639-14">
+    <createIndex indexName="IX_gesuch_notiz_gesuch_id" tableName="gesuch_notizen">
+      <column name="gesuch_id"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

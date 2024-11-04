@@ -30,12 +30,28 @@ public class NotificationService {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
             .setGesuch(gesuch);
+
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
 
-        String msg = Templates.getGesuchEingereichtText(anrede,nachname,sprache).render();
+        String msg = Templates.getGesuchEingereichtText(anrede, nachname, sprache).render();
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
+
+    @Transactional
+    public void createAenderungAbgelehntNotification(final Gesuch gesuch, final KommentarDto kommentarDto) {
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.AENDERUNG_ABGELEHNT)
+            .setGesuch(gesuch);
+        final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
+        final var nachname = pia.getNachname();
+
+        final String msg = Templates.getAenderungAbgelehnt(anrede, nachname, kommentarDto.getText(), sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
@@ -63,9 +79,9 @@ public class NotificationService {
     @Transactional
     public List<NotificationDto> getNotificationsForCurrentUser() {
         return notificationRepository.getAllForUser(
-            benutzerService.getCurrentBenutzer().getId()
-        ).map(notificationMapper::toDto)
-        .toList();
+                benutzerService.getCurrentBenutzer().getId()
+            ).map(notificationMapper::toDto)
+            .toList();
     }
 
     public void createMissingDocumentNotification(final Gesuch gesuch) {
@@ -74,38 +90,75 @@ public class NotificationService {
             .setGesuch(gesuch);
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
-
-        String msg = Templates.getGesuchFehlendeDokumenteText(sprache).render();
+        String msg = Templates.getGesuchFehlendeDokumenteText(sprache,
+            gesuch.getFall()
+                .getSachbearbeiterZuordnung()
+                .getSachbearbeiter()
+                .getVorname(),
+            gesuch.getFall()
+                .getSachbearbeiterZuordnung()
+                .getSachbearbeiter()
+                .getNachname()
+        ).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
 
     @CheckedTemplate
     public static class Templates {
-        public static TemplateInstance getGesuchFehlendeDokumenteText(Sprache korrespondenzSprache) {
-            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
-                return gesuchFehlendeDokumenteFR();
+        public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
+        public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
+        public static native TemplateInstance gesuchStatusChangeWithKommentarDE(String anrede, String nachname, String kommentar);
+        public static native TemplateInstance gesuchStatusChangeWithKommentarFR(String anrede, String nachname, String kommentar);
+        public static native TemplateInstance gesuchFehlendeDokumenteDE(String sbVorname, String sbNachname);
+        public static native TemplateInstance gesuchFehlendeDokumenteFR(String sbVorname, String sbNachname);
+
+        public static TemplateInstance getGesuchFehlendeDokumenteText(Sprache korrespondenzSprache, String sbVorname, String sbNachname) {
+            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return gesuchFehlendeDokumenteFR(sbVorname, sbNachname);
             }
-            return gesuchFehlendeDokumenteDE();
+            return gesuchFehlendeDokumenteDE(sbVorname, sbNachname);
         }
-        public static TemplateInstance getGesuchEingereichtText(String anrede, String nachname, Sprache korrespondenzSprache) {
-            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
+
+        public static TemplateInstance getGesuchEingereichtText(
+            final String anrede,
+            final String nachname,
+            final Sprache korrespondenzSprache) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+
                 return gesuchEingereichtFR(anrede, nachname);
             }
             return gesuchEingereichtDE(anrede, nachname);
         }
+
         public static TemplateInstance getGesuchStatusChangeWithKommentarText(String anrede, String nachname, String kommentar, Sprache korrespondenzSprache) {
             if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
                 return gesuchStatusChangeWithKommentarFR(anrede, nachname, kommentar);
             }
             return gesuchStatusChangeWithKommentarDE(anrede, nachname, kommentar);
         }
-        public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
-        public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
-        public static native TemplateInstance gesuchStatusChangeWithKommentarDE(String anrede, String nachname, String kommentar);
-        public static native TemplateInstance gesuchStatusChangeWithKommentarFR(String anrede, String nachname, String kommentar);
-        public static native TemplateInstance gesuchFehlendeDokumenteDE();
-        public static native TemplateInstance gesuchFehlendeDokumenteFR();
 
+        public static TemplateInstance getAenderungAbgelehnt(
+            final String anrede,
+            final String nachname,
+            final String kommentar,
+            final Sprache korrespondenzSprache) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return aenderungAbgelehntFR(anrede, nachname, kommentar);
+            }
+            return aenderungAbgelehntDE(anrede, nachname, kommentar);
+        }
+
+        public static native TemplateInstance aenderungAbgelehntDE(
+            final String anrede,
+            final String nachname,
+            final String kommentar
+        );
+
+        public static native TemplateInstance aenderungAbgelehntFR(
+            final String anrede,
+            final String nachname,
+            final String kommentar
+        );
     }
 }

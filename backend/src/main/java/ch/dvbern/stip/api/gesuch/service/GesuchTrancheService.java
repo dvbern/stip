@@ -5,29 +5,51 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
+import ch.dvbern.stip.api.adresse.service.AdresseMapper;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
+import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
+import ch.dvbern.stip.api.eltern.service.ElternMapper;
+import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
+import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
+import ch.dvbern.stip.api.kind.service.KindMapper;
+import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
+import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.partner.service.PartnerMapper;
+import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -47,9 +69,25 @@ public class GesuchTrancheService {
     private final RequiredDokumentService requiredDokumentService;
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchTrancheTruncateService gesuchTrancheTruncateService;
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
+    private final AdresseRepository adresseRepository;
+    private final AdresseMapper adresseMapper;
+    private final PersonInAusbildungMapper personInAusbildungMapper;
+    private final AusbildungMapper ausbildungMapper;
+    private final FamiliensituationMapper familiensituationMapper;
+    private final PartnerMapper partnerMapper;
+    private final ElternMapper elternMapper;
+    private final AuszahlungMapper auszahlungMapper;
+    private final EinnahmenKostenMapper einnahmenKostenMapper;
+    private final LebenslaufItemMapper lebenslaufItemMapper;
+    private final GeschwisterMapper geschwisterMapper;
+    private final KindMapper kindMapper;
+    private final SteuerdatenMapper steuerdatenMapper;
+    private final MailService mailService;
+    private final NotificationService notificationService;
 
     public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(final UUID gesuchId) {
         return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
@@ -68,7 +106,9 @@ public class GesuchTrancheService {
     public List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
-        removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
+        }
         return getGesuchDokumenteForGesuchTranche(gesuchTrancheId);
     }
 
@@ -131,6 +171,12 @@ public class GesuchTrancheService {
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        //TODO KSTIP-1631: change to state STIPENDIENANSPRUCH or KEIN_STIPENDIENANSPRUCH
+        final var allowedStates = Set.of(Gesuchstatus.IN_FREIGABE, Gesuchstatus.VERFUEGT);
+        if(!allowedStates.contains(gesuch.getGesuchStatus())) {
+            throw new IllegalStateException("Create aenderung not allowed in current gesuch status");
+        }
+
         if (openAenderungAlreadyExists(gesuch)) {
             throw new ForbiddenException();
         }
@@ -204,12 +250,71 @@ public class GesuchTrancheService {
             kommentarDto
         );
 
+        final var lastFreigegebenTranche = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+        final var lastFreigegebenFormular = lastFreigegebenTranche.getGesuchFormular();
+
+        var gesuchTrancheUpdateDto = new GesuchTrancheUpdateDto().id(
+            aenderungId
+        );
+        var gesuchFormularUpdateDto = new GesuchFormularUpdateDto();
+        gesuchTrancheUpdateDto.setGesuchFormular(gesuchFormularUpdateDto);
+
+        gesuchFormularUpdateDto.setPersonInAusbildung(personInAusbildungMapper.toUpdateDto(lastFreigegebenFormular.getPersonInAusbildung()));
+        gesuchFormularUpdateDto.setAusbildung(ausbildungMapper.toUpdateDto(lastFreigegebenFormular.getAusbildung())
+            .ausbildungsgangId(lastFreigegebenFormular.getAusbildung().getAusbildungsgang().getId()));
+        gesuchFormularUpdateDto.setFamiliensituation(familiensituationMapper.toUpdateDto(lastFreigegebenFormular.getFamiliensituation()));
+
+        gesuchFormularUpdateDto.setPartner(partnerMapper.toUpdateDto(lastFreigegebenFormular.getPartner()));
+
+        gesuchFormularUpdateDto.setElterns(new ArrayList<>(List.of()));
+        for (final var eltern : lastFreigegebenFormular.getElterns()) {
+            gesuchFormularUpdateDto.getElterns().add(elternMapper.toUpdateDto(eltern));
+        }
+        gesuchFormularUpdateDto.setAuszahlung(auszahlungMapper.toUpdateDto(lastFreigegebenFormular.getAuszahlung()));
+        gesuchFormularUpdateDto.setEinnahmenKosten(einnahmenKostenMapper.toUpdateDto(lastFreigegebenFormular.getEinnahmenKosten()));
+
+        gesuchFormularUpdateDto.setLebenslaufItems(new ArrayList<>(List.of()));
+        for (final var lebenslaufItem : lastFreigegebenFormular.getLebenslaufItems()) {
+            gesuchFormularUpdateDto.getLebenslaufItems().add(lebenslaufItemMapper.toUpdateDto(lebenslaufItem).id(null));
+        }
+
+        gesuchFormularUpdateDto.setGeschwisters(new ArrayList<>(List.of()));
+        for (final var geschwister : lastFreigegebenFormular.getGeschwisters()) {
+            gesuchFormularUpdateDto.getGeschwisters().add(geschwisterMapper.toUpdateDto(geschwister).id(null));
+        }
+
+        gesuchFormularUpdateDto.setKinds(new ArrayList<>(List.of()));
+        for (final var kind : lastFreigegebenFormular.getKinds()) {
+            gesuchFormularUpdateDto.getKinds().add(kindMapper.toUpdateDto(kind).id(null));
+        }
+
+        gesuchFormularUpdateDto.setSteuerdaten(new ArrayList<>(List.of()));
+        for (final var steuerdaten : lastFreigegebenFormular.getSteuerdaten()) {
+            gesuchFormularUpdateDto.getSteuerdaten().add(steuerdatenMapper.toUpdateDto(steuerdaten).id(null));
+        }
+
+        gesuchTrancheMapper.partialUpdate(gesuchTrancheUpdateDto, aenderung);
+        if (aenderung.getGesuchFormular().getPartner() != null) {
+            aenderung.getGesuchFormular().getPartner().getAdresse().setId(null);
+        }
+
+        for (final var gesuchDokument : lastFreigegebenTranche.getGesuchDokuments()) {
+            final var existingDokument = gesuchDokumentRepository.findById(gesuchDokument.getId());
+            if (existingDokument == null) {
+                gesuchDokumentRepository.persist((GesuchDokument) gesuchDokument.setId(null));
+            }
+        }
+
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
+
+        notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), kommentarDto);
+
         return gesuchTrancheMapper.toDto(aenderung);
     }
 
     @Transactional
     public void deleteAenderung(final UUID aenderungId) {
-        if(!gesuchTrancheRepository.deleteById(aenderungId)){
+        if (!gesuchTrancheRepository.deleteById(aenderungId)) {
             throw new NotFoundException();
         }
     }

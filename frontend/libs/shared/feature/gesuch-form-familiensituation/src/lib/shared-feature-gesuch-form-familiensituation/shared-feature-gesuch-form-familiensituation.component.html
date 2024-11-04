@@ -100,10 +100,11 @@
             <div class="row g-4 mt-3">
               <mat-form-field dvSharedUiFormField>
                 <mat-label>{{ 'shared.form.familiensituation.wer-zahlt-alimente.label' | translate }}</mat-label>
-                <mat-select formControlName="werZahltAlimente" data-testid="form-family-werZahltAlimente">
-                  <mat-option [value]="null" disabled selected>
-                    {{ 'shared.form.select.empty' | translate }}
-                  </mat-option>
+                <mat-select
+                  formControlName="werZahltAlimente"
+                  data-testid="form-family-werZahltAlimente"
+                  [placeholder]="'shared.form.select.empty' | translate"
+                >
                   <mat-option [value]="ELTERNSCHAFTSTEILUNG.VATER" [attr.data-testid]="ELTERNSCHAFTSTEILUNG.VATER">
                     {{ 'shared.form.familiensituation.vater' | translate }}
                   </mat-option>
@@ -367,10 +368,11 @@
           <div class="row g-4 mt-3 col-xl-8">
             <mat-form-field dvSharedUiFormField>
               <mat-label>{{ 'shared.form.familiensituation.sorgerecht.label' | translate }}</mat-label>
-              <mat-select formControlName="sorgerecht" data-testid="form-family-sorgerecht">
-                <mat-option [value]="null" disabled selected>
-                  {{ 'shared.form.select.empty' | translate }}
-                </mat-option>
+              <mat-select
+                formControlName="sorgerecht"
+                data-testid="form-family-sorgerecht"
+                [placeholder]="'shared.form.select.empty' | translate"
+              >
                 <mat-option [value]="ELTERNSCHAFTSTEILUNG.VATER" [attr.data-testid]="ELTERNSCHAFTSTEILUNG.VATER">
                   {{ 'shared.form.familiensituation.vater' | translate }}
                 </mat-option>
@@ -394,10 +396,11 @@
           <div class="row g-4 mt-3 col-xl-8">
             <mat-form-field dvSharedUiFormField>
               <mat-label>{{ 'shared.form.familiensituation.obhut.label' | translate }}</mat-label>
-              <mat-select formControlName="obhut" data-testid="form-family-obhut">
-                <mat-option [value]="null" disabled selected>
-                  {{ 'shared.form.select.empty' | translate }}
-                </mat-option>
+              <mat-select
+                formControlName="obhut"
+                data-testid="form-family-obhut"
+                [placeholder]="'shared.form.select.empty' | translate"
+              >
                 <mat-option [value]="ELTERNSCHAFTSTEILUNG.VATER" [attr.data-testid]="ELTERNSCHAFTSTEILUNG.VATER">
                   {{ 'shared.form.familiensituation.vater' | translate }}
                 </mat-option>
