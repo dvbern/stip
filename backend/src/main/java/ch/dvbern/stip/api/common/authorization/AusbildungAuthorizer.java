@@ -74,6 +74,10 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
 
         final var ausbildung = ausbildungRepository.requireById(ausbildungId);
 
+        if (!isAdminOrSb(currentBenutzer)) {
+            throw new UnauthorizedException();
+        }
+
         if (ausbildung.getGesuchs().size() > 1) {
             throw new UnauthorizedException();
         }
@@ -84,14 +88,6 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
 
         final var gesuch = ausbildung.getGesuchs().get(0);
         if (isAdminOrSb(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
-            return;
-        }
-
-        if (
-            isGesuchsteller(currentBenutzer) &&
-            isGesuchstellerOfAusbildung(currentBenutzer, ausbildung) &&
-            gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
-        ) {
             return;
         }
 

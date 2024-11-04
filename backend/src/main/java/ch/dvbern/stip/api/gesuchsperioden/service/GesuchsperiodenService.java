@@ -98,6 +98,10 @@ public class GesuchsperiodenService {
                 yearOffset += 1;
                 continue;
             }
+            if (eligibleGesuchsperioden.size() == 1) {
+                return eligibleGesuchsperioden.get(0);
+            }
+
             if (eligibleGesuchsperioden.get(0).getEinreichefristReduziert().isBefore(LocalDate.now())) {
                 continue;
             }
