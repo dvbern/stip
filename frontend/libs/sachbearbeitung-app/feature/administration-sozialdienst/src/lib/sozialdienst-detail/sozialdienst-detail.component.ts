@@ -127,15 +127,16 @@ export class SozialdienstDetailComponent implements OnDestroy {
           this.form.patchValue({
             name: sozialdienst.name,
             iban: sozialdienst.iban?.substring(2),
-            adresse: {
-              ...sozialdienst.adresse,
-            },
             sozialdienstAdmin: {
               vorname: sozialdienst.sozialdienstAdmin.vorname,
               nachname: sozialdienst.sozialdienstAdmin.nachname,
               email: sozialdienst.sozialdienstAdmin.email,
             },
           });
+          SharedUiFormAddressComponent.patchForm(
+            this.form.controls.adresse,
+            sozialdienst.adresse,
+          );
         }
       },
       { allowSignalWrites: true },
