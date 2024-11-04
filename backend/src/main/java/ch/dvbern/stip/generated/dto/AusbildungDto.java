@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AusbildungsPensumDto;
-import ch.dvbern.stip.generated.dto.AusbildungsStatusDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
@@ -28,7 +27,7 @@ public class AusbildungDto  implements Serializable {
   private @Valid String ausbildungBegin;
   private @Valid String ausbildungEnd;
   private @Valid AusbildungsPensumDto pensum;
-  private @Valid AusbildungsStatusDto status;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status;
   private @Valid UUID id;
   private @Valid Boolean ausbildungNichtGefunden;
   private @Valid String alternativeAusbildungsstaette;
@@ -136,7 +135,7 @@ public class AusbildungDto  implements Serializable {
 
   /**
    **/
-  public AusbildungDto status(AusbildungsStatusDto status) {
+  public AusbildungDto status(ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status) {
     this.status = status;
     return this;
   }
@@ -144,12 +143,12 @@ public class AusbildungDto  implements Serializable {
   
   @JsonProperty("status")
   @NotNull
-  public AusbildungsStatusDto getStatus() {
+  public ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus getStatus() {
     return status;
   }
 
   @JsonProperty("status")
-  public void setStatus(AusbildungsStatusDto status) {
+  public void setStatus(ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status) {
     this.status = status;
   }
 

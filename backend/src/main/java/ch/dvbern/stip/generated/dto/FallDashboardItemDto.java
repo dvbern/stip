@@ -26,8 +26,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class FallDashboardItemDto  implements Serializable {
   private @Valid FallDto fall;
-  private @Valid List<AusbildungDashboardItemDto> ausbildungDashboardItems;
-  private @Valid List<NotificationDto> notifications;
+  private @Valid List<AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
+  private @Valid List<NotificationDto> notifications = new ArrayList<>();
 
   /**
    **/
@@ -57,6 +57,7 @@ public class FallDashboardItemDto  implements Serializable {
 
   
   @JsonProperty("ausbildungDashboardItems")
+  @NotNull
   public List<AusbildungDashboardItemDto> getAusbildungDashboardItems() {
     return ausbildungDashboardItems;
   }
@@ -91,6 +92,7 @@ public class FallDashboardItemDto  implements Serializable {
 
   
   @JsonProperty("notifications")
+  @NotNull
   public List<NotificationDto> getNotifications() {
     return notifications;
   }

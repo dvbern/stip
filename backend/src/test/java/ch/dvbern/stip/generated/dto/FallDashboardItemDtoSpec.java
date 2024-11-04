@@ -96,9 +96,9 @@ public class FallDashboardItemDtoSpec {
    * Get ausbildungDashboardItems
    * @return ausbildungDashboardItems
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<AusbildungDashboardItemDtoSpec> getAusbildungDashboardItems() {
     return ausbildungDashboardItems;
@@ -106,7 +106,7 @@ public class FallDashboardItemDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAusbildungDashboardItems(List<AusbildungDashboardItemDtoSpec> ausbildungDashboardItems) {
     this.ausbildungDashboardItems = ausbildungDashboardItems;
   }
@@ -130,9 +130,9 @@ public class FallDashboardItemDtoSpec {
    * Get notifications
    * @return notifications
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_NOTIFICATIONS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<NotificationDtoSpec> getNotifications() {
     return notifications;
@@ -140,7 +140,7 @@ public class FallDashboardItemDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_NOTIFICATIONS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setNotifications(List<NotificationDtoSpec> notifications) {
     this.notifications = notifications;
   }
