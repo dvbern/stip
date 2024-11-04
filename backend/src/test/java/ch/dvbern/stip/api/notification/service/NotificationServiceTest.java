@@ -20,10 +20,8 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.ext.mail.MailMessage;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +29,6 @@ import static org.mockito.ArgumentMatchers.any;
 
 @QuarkusTest
 @Slf4j
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NotificationServiceTest {
     @Inject
     MockMailbox mailbox;
@@ -48,7 +45,7 @@ class NotificationServiceTest {
         .setVorname("PiaVornameTest"))
         .setAnrede(Anrede.FRAU);
 
-    @BeforeAll
+    @BeforeEach
     void setup() {
         GesuchValidatorService gesuchValidatorServiceMock = Mockito.mock(GesuchValidatorService.class);
         Mockito.doNothing().when(gesuchValidatorServiceMock).validateGesuchForStatus(any(Gesuch.class), any(

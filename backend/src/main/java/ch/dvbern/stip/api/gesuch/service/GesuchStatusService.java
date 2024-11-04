@@ -8,7 +8,6 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
-import ch.dvbern.stip.api.common.util.StringUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -32,7 +31,7 @@ public class GesuchStatusService {
 
     @Transactional
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
-        triggerStateMachineEventWithComment(gesuch, event, new KommentarDto());
+        triggerStateMachineEventWithComment(gesuch, event, null);
     }
 
     @Transactional
@@ -52,13 +51,13 @@ public class GesuchStatusService {
             gesuch::getGesuchStatus,
             s -> gesuch.setGesuchStatus(s)
                 .setGesuchStatusAenderungDatum(LocalDateTime.now())
-                .setComment(kommentarDto.getText()),
+                .setComment(kommentarDto == null ? "" : kommentarDto.getText()),
             config
         );
 
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
-        if (StringUtil.isNullOrEmpty(kommentarDto.getText())) {
+        if (kommentarDto != null) {
             MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
             notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
         }
