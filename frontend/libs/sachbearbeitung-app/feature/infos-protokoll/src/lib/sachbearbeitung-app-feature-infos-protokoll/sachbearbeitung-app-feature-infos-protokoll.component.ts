@@ -47,6 +47,7 @@ export class SachbearbeitungAppFeatureInfosProtokollComponent {
     return datasource;
   });
   constructor() {
+    console.log('test');
     effect(
       () => {
         const gesuchId = this.gesuchIdSig();

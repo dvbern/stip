@@ -7,7 +7,6 @@ import {
   NOTIZEN_ROUTE,
   PROTOKOLL_ROUTE,
 } from '@dv/sachbearbeitung-app/model/infos';
-import { PERSON } from '@dv/shared/model/gesuch-form';
 import { SharedUiCommingSoonComponent } from '@dv/shared/ui/comming-soon';
 
 export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
@@ -22,8 +21,11 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
           ),
       },
       {
-        path: NOTIZEN_ROUTE.route + '/:id',
-        component: SharedUiCommingSoonComponent,
+        path: NOTIZEN_ROUTE.route,
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/infos-notizen').then(
+            (m) => m.sachbearbeitungAppFeatureInfosNotizenRoutes,
+          ),
       },
       {
         path: BUCHHALTUNG_ROUTE.route + '/:id',
@@ -44,7 +46,7 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
       },
       {
         path: ':id/tranche/:trancheId',
-        redirectTo: PERSON.route + '/:id/tranche/:trancheId',
+        redirectTo: PROTOKOLL_ROUTE.route + '/:id/tranche/:trancheId',
       },
     ],
   },

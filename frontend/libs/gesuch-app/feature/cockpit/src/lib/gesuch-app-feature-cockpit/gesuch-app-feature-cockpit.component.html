@@ -119,7 +119,9 @@
                     </div>
                     @if (periode.gesuch) {
                       <div class="col-md d-flex">
-                        @if (periode.gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
+                        @if (
+                          periode.gesuch.gesuchStatus === 'IN_FREIGABE' || periode.gesuch.gesuchStatus === 'VERFUEGT'
+                        ) {
                           @if (periode.gesuch.offeneAenderung; as aenderung) {
                             <div class="divider me-4"></div>
                             <dv-gesuch-app-ui-aenderungs-entry

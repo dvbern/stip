@@ -3,6 +3,7 @@ package ch.dvbern.stip.api.gesuch.resource;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.FallAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
@@ -97,9 +98,9 @@ public class GesuchResourceImpl implements GesuchResource {
 
     // TODO KSTIP-1247: Update which roles can do this
     @RolesAllowed(GESUCH_UPDATE)
+    @AllowAll
     @Override
     public Response gesuchFehlendeDokumenteUebermitteln(UUID gesuchId) {
-        gesuchAuthorizer.allowAllow();
         gesuchService.gesuchFehlendeDokumente(gesuchId);
         return Response.ok().build();
     }
@@ -120,17 +121,17 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuch).build();
     }
 
+    @AllowAll
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGsDashboard() {
-        gesuchAuthorizer.allowAllow();
         return Response.ok(gesuchService.findGsDashboard()).build();
     }
 
+    @AllowAll
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
     @Override
     public Response getGesucheGs() {
-        gesuchAuthorizer.allowAllow();
         return Response.ok(gesuchService.findGesucheGs()).build();
     }
 
@@ -213,10 +214,10 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     // TODO KSTIP-1247: Update which roles can do this
+    @AllowAll
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getSbTrancheChanges(UUID aenderungId) {
-        gesuchAuthorizer.allowAllow();
         final var changes = gesuchService.getSbTrancheChanges(aenderungId);
         return Response.ok(changes).build();
     }
