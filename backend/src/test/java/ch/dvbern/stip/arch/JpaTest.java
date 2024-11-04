@@ -2,7 +2,7 @@ package ch.dvbern.stip.arch;
 
 import java.util.Arrays;
 
-import ch.dvbern.stip.api.benutzer.entity.SozialdienstAdmin;
+import ch.dvbern.stip.api.sozialdienstadmin.entity.SozialdienstAdmin;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;

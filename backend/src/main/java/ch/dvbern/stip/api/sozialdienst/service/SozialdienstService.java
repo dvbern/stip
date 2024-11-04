@@ -1,6 +1,6 @@
 package ch.dvbern.stip.api.sozialdienst.service;
 
-import ch.dvbern.stip.api.benutzer.service.SozialdienstAdminService;
+import ch.dvbern.stip.api.sozialdienstadmin.service.SozialdienstAdminService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.generated.dto.*;
 import jakarta.enterprise.context.RequestScoped;

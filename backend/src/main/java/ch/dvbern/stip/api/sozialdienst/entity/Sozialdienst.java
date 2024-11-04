@@ -1,7 +1,7 @@
 package ch.dvbern.stip.api.sozialdienst.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.benutzer.entity.SozialdienstAdmin;
+import ch.dvbern.stip.api.sozialdienstadmin.entity.SozialdienstAdmin;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.IbanConstraint;
 import jakarta.persistence.*;

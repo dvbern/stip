@@ -4,9 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
-import ch.dvbern.stip.api.benutzer.entity.SozialdienstAdmin;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
-import ch.dvbern.stip.api.benutzer.repo.SozialdienstAdminRepository;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsDeleteUser;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;

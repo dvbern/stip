@@ -1,11 +1,10 @@
-package ch.dvbern.stip.api.benutzer.service;
+package ch.dvbern.stip.api.sozialdienstadmin.service;
 
-import ch.dvbern.stip.api.benutzer.entity.SozialdienstAdmin;
-import ch.dvbern.stip.api.benutzer.repo.SozialdienstAdminRepository;
+import ch.dvbern.stip.api.sozialdienstadmin.entity.SozialdienstAdmin;
+import ch.dvbern.stip.api.sozialdienstadmin.repo.SozialdienstAdminRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 
-import ch.dvbern.stip.api.sozialdienst.service.SozialdienstAdminMapper;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;

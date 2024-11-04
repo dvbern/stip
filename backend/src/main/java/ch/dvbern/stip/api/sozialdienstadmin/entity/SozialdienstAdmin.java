@@ -1,5 +1,6 @@
-package ch.dvbern.stip.api.benutzer.entity;
+package ch.dvbern.stip.api.sozialdienstadmin.entity;
 
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;

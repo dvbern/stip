@@ -1,7 +1,7 @@
-package ch.dvbern.stip.api.benutzer.repo;
+package ch.dvbern.stip.api.sozialdienstadmin.repo;
 
-import ch.dvbern.stip.api.benutzer.entity.QSozialdienstAdmin;
-import ch.dvbern.stip.api.benutzer.entity.SozialdienstAdmin;
+import ch.dvbern.stip.api.sozialdienstadmin.entity.QSozialdienstAdmin;
+import ch.dvbern.stip.api.sozialdienstadmin.entity.SozialdienstAdmin;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
