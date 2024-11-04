@@ -42,4 +42,6 @@ public abstract class AuszahlungMapper extends EntityUpdateMapper<AuszahlungUpda
             }
         );
     }
+
+	public abstract AuszahlungUpdateDto toUpdateDto(Auszahlung auszahlung);
 }

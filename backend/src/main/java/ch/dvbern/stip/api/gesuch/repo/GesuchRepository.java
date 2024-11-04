@@ -53,19 +53,32 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         final var query = getFindAlleQuery();
         return addStatusFilter(
             query,
-            Gesuchstatus.IN_BEARBEITUNG_GS,
-            Gesuchstatus.EINGEREICHT
+            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            Gesuchstatus.IN_BEARBEITUNG_SB,
+            Gesuchstatus.FEHLENDE_DOKUMENTE,
+            Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+            Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
+            Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
+            Gesuchstatus.JURISTISCHE_ABKLAERUNG,
+            Gesuchstatus.IN_FREIGABE,
+            Gesuchstatus.VERFUEGT,
+            Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            Gesuchstatus.VERSANDBEREIT,
+            Gesuchstatus.VERSENDET,
+            Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
+            Gesuchstatus.STIPENDIENANSPRUCH
         );
     }
 
     private JPAQuery<Gesuch> addStatusFilter(
         final JPAQuery<Gesuch> query,
-        final Gesuchstatus... toExclude
+        final Gesuchstatus... toInclude
     ) {
         final var gesuch = QGesuch.gesuch;
-        query.where(gesuch.gesuchStatus.notIn(toExclude));
+        query.where(gesuch.gesuchStatus.in(toInclude));
         return query;
     }
+
 
     private JPAQuery<Gesuch> addMeineFilter(final UUID benutzerId, final JPAQuery<Gesuch> query) {
         final var gesuch = QGesuch.gesuch;

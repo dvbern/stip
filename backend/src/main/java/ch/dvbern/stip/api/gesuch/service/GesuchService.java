@@ -245,10 +245,13 @@ public class GesuchService {
                     .getSteuerdaten(),
                 trancheToUpdate);
         }
+
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
-        gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
+        if (trancheToUpdate.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
+        }
 
         final var updatePia = gesuchUpdateDto
             .getGesuchTrancheToWorkWith()
@@ -384,7 +387,7 @@ public class GesuchService {
 
             final var offeneAenderung = gesuchTranchen.stream()
                 .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
-                    && tranche.getStatus().equals(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+                    && Set.of(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN).contains(tranche.getStatus()))
                 .findFirst().orElse(null);
 
             final var missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()
@@ -533,7 +536,12 @@ public class GesuchService {
     }
 
     public GesuchWithChangesDto getGsTrancheChanges(final UUID aenderungId) {
-        final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+        var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+
+        if (aenderung.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
+            aenderung = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+        }
+
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
         return gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision);
     }

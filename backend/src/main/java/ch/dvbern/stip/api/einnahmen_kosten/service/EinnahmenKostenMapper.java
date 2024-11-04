@@ -24,4 +24,6 @@ public abstract class EinnahmenKostenMapper {
     public abstract EinnahmenKosten partialUpdate(
         EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
         @MappingTarget EinnahmenKosten einnahmenKosten);
+
+	public abstract EinnahmenKostenUpdateDto toUpdateDto(EinnahmenKosten einnahmenKosten);
 }

@@ -12,10 +12,13 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
@@ -23,6 +26,7 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
@@ -38,6 +42,9 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
+import ch.dvbern.stip.api.notification.entity.Notification;
+import ch.dvbern.stip.api.notification.repo.NotificationRepository;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
@@ -45,6 +52,8 @@ import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
+import ch.dvbern.stip.generated.api.NotificationResource;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -53,6 +62,7 @@ import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectSpy;
 import jakarta.inject.Inject;
 import jdk.jfr.Description;
 import lombok.extern.slf4j.Slf4j;
@@ -118,7 +128,16 @@ class GesuchServiceTest {
     @Inject
     ConfigService configService;
 
+    @InjectSpy
+    MailService mailService;
+    @InjectSpy
+    NotificationService notificationService;
+    @InjectMock
+    NotificationRepository notificationRepository;
+
     static final String TENANT_ID = "bern";
+    @Inject
+    NotificationResource notificationResource;
 
     @BeforeAll
     void setup() {
@@ -1176,6 +1195,33 @@ class GesuchServiceTest {
             Gesuchstatus.VERSENDET,
             gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Description("GS should receive an email and a notifcation if documents are missing")
+    void documentsMissingSentMessagesTest(){
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.setFall(fall);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
+        Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
+
+        // act
+        gesuchService.gesuchFehlendeDokumente(gesuch.getId());
+
+        // assert
+        Mockito.verify(notificationService).createMissingDocumentNotification(any());
+        Mockito.verify(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {

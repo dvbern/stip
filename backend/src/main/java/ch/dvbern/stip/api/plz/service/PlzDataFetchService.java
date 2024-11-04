@@ -1,6 +1,5 @@
 package ch.dvbern.stip.api.plz.service;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
@@ -12,8 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 
 import ch.dvbern.stip.api.plz.entity.GeoCollectionItem;
 import ch.dvbern.stip.api.plz.entity.Plz;
@@ -31,7 +29,6 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @RequiredArgsConstructor
@@ -133,28 +130,26 @@ public class PlzDataFetchService {
     }
 
     private String loadCsvFileData(final URI uri) throws IOException {
-        final var geoCollectionDowloadService = RestClientBuilder.newBuilder()
-            .baseUri(uri)
-            .build(GeoCollectionDowloadService.class);
-        final byte[] file = geoCollectionDowloadService.getGeoCollectionDowload();
+        final var resource = this.getClass().getClassLoader().getResource("ortschaftenverzeichnis_plz_2056.csv.zip");
+        if (resource == null) {
+            return "";
+        }
 
-        try(
-            final ZipInputStream zin = new ZipInputStream(new ByteArrayInputStream(file));
+        try (
+            final var zipFile = new ZipFile(resource.getFile());
         ) {
-            final ZipEntry ze = zin.getNextEntry();
-            String csvFileData = "";
-            if (ze != null) {
-                if (ze.getName().endsWith(".csv")) {
-                    final int fileLen = (int) ze.getSize();
+            for (final var zipEntry : zipFile.stream().toList()) {
+                if (zipEntry.getName().endsWith(".csv")) {
+                    final int fileLen = (int) zipEntry.getSize();
                     final byte[] bytes = new byte[fileLen];
+                    final var zin = zipFile.getInputStream(zipEntry);
 
                     int bytesRead = 0;
                     while (bytesRead < fileLen) {
                         bytesRead += zin.read(bytes, bytesRead, fileLen - bytesRead);
                     }
 
-                    csvFileData = new String(bytes, StandardCharsets.UTF_8);
-                    return csvFileData;
+                    return new String(bytes, StandardCharsets.UTF_8);
                 }
             }
         }
