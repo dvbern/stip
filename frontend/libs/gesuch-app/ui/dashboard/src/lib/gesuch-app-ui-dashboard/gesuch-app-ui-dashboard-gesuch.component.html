@@ -81,7 +81,7 @@
       >
         @if (ausbildungsStatus() === 'AKTIV') {
           @let trancheId = gesuch.missingDocuments?.trancheId;
-          @if (gesuch.gesuchStatus === 'IN_FREIGABE' || gesuch.gesuchStatus === 'VERFUEGT') {
+          @if (gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
             <a class="btn btn-primary" data-testid="cockpit-gesuch-edit" [routerLink]="['/gesuch', gesuch.id]">
               {{ 'gesuch-app.dashboard.gesuch.edit' | translate }}
             </a>
@@ -108,7 +108,9 @@
             {{ 'gesuch-app.dashboard.gesuch.open' | translate }}
           </a>
 
-          @if (!gesuch.offeneAenderung) {
+          @if (
+            (gesuch.gesuchStatus === 'IN_FREIGABE' || gesuch.gesuchStatus === 'VERFUEGT') && !gesuch.offeneAenderung
+          ) {
             <button
               type="button"
               class="btn btn-outline-primary"
