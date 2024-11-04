@@ -28,7 +28,6 @@ public final class TestConstants {
 
     public static final String AHV_NUMMER_VALID = "756.9217.0769.85";
     public static final String AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG = "756.1111.1113.11";
-    public static final String AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG_2 = "756.1234.5678.97";
     public static final String AHV_NUMMER_VALID_MUTTER = "756.1111.1111.13";
     public static final String AHV_NUMMER_VALID_VATTER = "756.1111.1114.10";
     public static final String AHV_NUMMER_VALID_PARTNER = "756.1111.1112.12";
