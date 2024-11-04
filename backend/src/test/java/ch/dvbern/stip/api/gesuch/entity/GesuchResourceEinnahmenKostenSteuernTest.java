@@ -39,8 +39,8 @@ class GesuchResourceEinnahmenKostenSteuernTest {
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    private UUID gesuchId;
-    private GesuchDtoSpec gesuch;
+    private static UUID gesuchId;
+    private static GesuchDtoSpec gesuch;
 
     @Test
     @TestAsGesuchsteller

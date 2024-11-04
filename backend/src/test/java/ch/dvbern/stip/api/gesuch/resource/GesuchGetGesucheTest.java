@@ -59,7 +59,7 @@ class GesuchGetGesucheTest {
     @Inject
     ConfigService configService;
 
-    private GesuchDtoSpec gesuch;
+    private static GesuchDtoSpec gesuch;
 
     @Test
     @TestAsGesuchsteller

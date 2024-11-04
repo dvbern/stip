@@ -1,5 +1,6 @@
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -13,8 +14,10 @@ import ch.dvbern.stip.generated.dto.AusbildungDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDashboardItemDto;
 import jakarta.inject.Inject;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public abstract class AusbildungDashboardItemMapper {
@@ -34,6 +37,15 @@ public abstract class AusbildungDashboardItemMapper {
     )
     @Mapping(source = "fall.id", target = "fallId")
     public abstract AusbildungDashboardItemDto toDto(final Ausbildung ausbildung);
+
+    @AfterMapping
+    protected void setGesuchDashboardItemsIfNull(
+        @MappingTarget final AusbildungDashboardItemDto dto
+    ) {
+        if (dto.getGesuchs() == null) {
+            dto.setGesuchs(new ArrayList<>());
+        }
+    }
 
     GesuchDashboardItemDto map(final Gesuch gesuch) {
         final var gesuchTranchen = gesuchTrancheService.getAllTranchenForGesuch(gesuch.getId());

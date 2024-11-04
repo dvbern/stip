@@ -15,10 +15,14 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -40,7 +44,8 @@ public class GesuchEinreichenUniqueSVNummerTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    UUID gesuchTrancheId;
+    private static UUID gesuchTrancheId;
+    private static UUID ausbildungId;
     private static final List<UUID> gesucheToDelete = new ArrayList<>();
 
     @Test
@@ -65,7 +70,25 @@ public class GesuchEinreichenUniqueSVNummerTest {
     @Order(2)
     @TestAsGesuchsteller
     void gesuchEinreichenWithNonUniqueSvNummerError() {
-        UUID gesuchId = createFullGesuch(); //neues Gesuch mit selber AHV-Nummer wird erstellt
+        final var gesuchCreateDtoSpec = new GesuchCreateDtoSpec();
+        gesuchCreateDtoSpec.setAusbildungId(ausbildungId);
+        UUID gesuchId = TestUtil.extractIdFromResponse(gesuchApiSpec.createGesuch() //neues Gesuch mit selber AHV-Nummer wird erstellt
+            .body(gesuchCreateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.CREATED.getStatusCode()));
+
+        gesucheToDelete.add(gesuchId);
+        final var gesuch = gesuchApiSpec.getCurrentGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
 
         var response = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -79,13 +102,21 @@ public class GesuchEinreichenUniqueSVNummerTest {
             response.getValidationErrors().get(0).getMessageTemplate(),
             is(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE)
         );
-
     }
 
     @Test
     @Order(3)
     @TestAsAdmin
     void deleteGesuch() {
+        final var gesuche = gesuchApiSpec.getGesucheGs()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDto[].class);
+
         for (final var gesuchToDelete : gesucheToDelete) {
             TestUtil.deleteGesuch(gesuchApiSpec, gesuchToDelete);
         }
@@ -93,6 +124,7 @@ public class GesuchEinreichenUniqueSVNummerTest {
 
     private UUID createFullGesuch() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        ausbildungId = gesuch.getAusbildungId();
         gesucheToDelete.add(gesuch.getId());
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);

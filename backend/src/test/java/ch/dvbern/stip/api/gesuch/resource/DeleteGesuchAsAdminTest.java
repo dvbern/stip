@@ -39,7 +39,7 @@ class DeleteGesuchAsAdminTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    private GesuchDtoSpec gesuch;
+    private static GesuchDtoSpec gesuch;
 
     @Test
     @TestAsGesuchsteller

@@ -23,6 +23,7 @@ public abstract class GesuchMapper {
     @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
     @Mapping(target = "fallId", source = "ausbildung.fall.id")
     @Mapping(target = "fallNummer", source = "ausbildung.fall.fallNummer")
+    @Mapping(target = "ausbildungId", source = "ausbildung.id")
     public abstract GesuchDto toDto(Gesuch gesuch);
 
     @Mapping(source = "ausbildungId", target = "ausbildung.id")
