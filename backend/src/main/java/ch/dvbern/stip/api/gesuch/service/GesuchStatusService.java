@@ -8,6 +8,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.util.StringUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -57,7 +58,7 @@ public class GesuchStatusService {
 
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
-        if (kommentarDto.getText() != null) {
+        if (StringUtil.isNullOrEmpty(kommentarDto.getText())) {
             MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
             notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
         }
