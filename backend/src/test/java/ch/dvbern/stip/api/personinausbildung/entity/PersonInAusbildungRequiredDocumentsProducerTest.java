@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.personinausbildung.entity;
 
 import java.util.HashSet;
@@ -16,6 +33,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 @QuarkusTest
 class PersonInAusbildungRequiredDocumentsProducerTest {
     private PersonInAusbildungRequiredDocumentsProducer producer;
@@ -35,15 +53,18 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         formular.setPersonInAusbildung(createWithNiederlassungsstatus(Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B));
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),
-            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B);
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B
+        );
     }
 
     @Test
     void requiresIfNiederlassungsstatusC() {
-        formular.setPersonInAusbildung(createWithNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C));
+        formular
+            .setPersonInAusbildung(createWithNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C));
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),
-            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C);
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C
+        );
     }
 
     @Test
@@ -51,7 +72,8 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         formular.setPersonInAusbildung(createWithNiederlassungsstatus(Niederlassungsstatus.FLUECHTLING));
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),
-            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_COMPLETE);
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_COMPLETE
+        );
     }
 
     @Test
@@ -133,21 +155,24 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     @Test
     void requiresIfInBernAndParentsAbroad() {
         formular.setPersonInAusbildung(
-                new PersonInAusbildung()
-                    .setSozialhilfebeitraege(false)
-                    .setAdresse(
-                        new Adresse()
-                            .setPlz("3011")
-                    )
-            )
-            .setElterns(new HashSet<>() {{
-                add(new Eltern().setAdresse(new Adresse().setLand(Land.DE)));
-            }});
+            new PersonInAusbildung()
+                .setSozialhilfebeitraege(false)
+                .setAdresse(
+                    new Adresse()
+                        .setPlz("3011")
+                )
+        )
+            .setElterns(new HashSet<>() {
+                {
+                    add(new Eltern().setAdresse(new Adresse().setLand(Land.DE)));
+                }
+            });
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.PERSON_AUSWEIS);
     }
 
     private PersonInAusbildung createWithNiederlassungsstatus(Niederlassungsstatus status) {
         return new PersonInAusbildung()
-            .setSozialhilfebeitraege(false).setNiederlassungsstatus(status);
+            .setSozialhilfebeitraege(false)
+            .setNiederlassungsstatus(status);
     }
 }

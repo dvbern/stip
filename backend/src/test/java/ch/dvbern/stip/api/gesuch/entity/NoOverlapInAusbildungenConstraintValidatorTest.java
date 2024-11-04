@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.entity;
 
 import java.time.LocalDate;
@@ -23,10 +40,11 @@ class NoOverlapInAusbildungenConstraintValidatorTest {
             .setAusbildungEnd(LocalDate.now().plusMonths(2).with(lastDayOfMonth()));
 
         final var lebenslaufItems = new ArrayList<LebenslaufItem>();
-        lebenslaufItems.add(new LebenslaufItem()
-            .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
-            .setVon(LocalDate.now().minusMonths(1).with(firstDayOfMonth()))
-            .setBis(LocalDate.now().plusMonths(1).with(lastDayOfMonth()))
+        lebenslaufItems.add(
+            new LebenslaufItem()
+                .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
+                .setVon(LocalDate.now().minusMonths(1).with(firstDayOfMonth()))
+                .setBis(LocalDate.now().plusMonths(1).with(lastDayOfMonth()))
         );
 
         final var validator = new NoOverlapInAusbildungenConstraintValidator();
@@ -40,10 +58,11 @@ class NoOverlapInAusbildungenConstraintValidatorTest {
             .setAusbildungEnd(LocalDate.now().plusMonths(4).with(lastDayOfMonth()));
 
         final var lebenslaufItems = new ArrayList<LebenslaufItem>();
-        lebenslaufItems.add(new LebenslaufItem()
-            .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
-            .setVon(LocalDate.now().minusMonths(1).with(firstDayOfMonth()))
-            .setBis(LocalDate.now().plusMonths(1).with(lastDayOfMonth()))
+        lebenslaufItems.add(
+            new LebenslaufItem()
+                .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
+                .setVon(LocalDate.now().minusMonths(1).with(firstDayOfMonth()))
+                .setBis(LocalDate.now().plusMonths(1).with(lastDayOfMonth()))
         );
 
         final var validator = new NoOverlapInAusbildungenConstraintValidator();
@@ -63,10 +82,11 @@ class NoOverlapInAusbildungenConstraintValidatorTest {
 
         // Create LebenslaufItem with overlap
         var lebenslaufItems = new HashSet<LebenslaufItem>();
-        lebenslaufItems.add(new LebenslaufItem()
-            .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
-            .setVon(LocalDate.of(2024, 2, 1))
-            .setBis(LocalDate.of(2024, 3, 1).with(lastDayOfMonth()))
+        lebenslaufItems.add(
+            new LebenslaufItem()
+                .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
+                .setVon(LocalDate.of(2024, 2, 1))
+                .setBis(LocalDate.of(2024, 3, 1).with(lastDayOfMonth()))
         );
 
         gesuchFormular.setLebenslaufItems(lebenslaufItems);
@@ -76,10 +96,11 @@ class NoOverlapInAusbildungenConstraintValidatorTest {
 
         // Create LebenslaufItem without overlap
         lebenslaufItems = new HashSet<>();
-        lebenslaufItems.add(new LebenslaufItem()
-            .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
-            .setVon(LocalDate.of(2023, 2, 1))
-            .setBis(LocalDate.of(2023, 3, 1).with(lastDayOfMonth()))
+        lebenslaufItems.add(
+            new LebenslaufItem()
+                .setBildungsart(LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE)
+                .setVon(LocalDate.of(2023, 2, 1))
+                .setBis(LocalDate.of(2023, 3, 1).with(lastDayOfMonth()))
         );
 
         gesuchFormular.setLebenslaufItems(lebenslaufItems);

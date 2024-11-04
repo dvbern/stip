@@ -1,1 +1,231 @@
-{"fall":{"id":"6cc689de-c3b1-4004-8d60-8bcc2d157bb7","fallNummer":"BE.F.415409","mandant":"bern"},"gesuchsperiode":{"id":"04aea35c-3051-4ac9-b853-20fb5bec0a50","bezeichnungDe":"Herbst 2024","bezeichnungFr":"Automne 2024","gueltigkeitStatus":"PUBLIZIERT","gesuchsperiodeStart":"2024-07-01","gesuchsperiodeStopp":"2025-06-30","aufschaltterminStart":"2024-07-01","aufschaltterminStopp":"2025-06-30","einreichefristNormal":"2024-11-30","einreichefristReduziert":"2025-02-28","gesuchsjahr":{"id":"b2e84aaf-fb5c-4ed5-b597-a615827eedf5","bezeichnungDe":"Gesuchsjahr 24","bezeichnungFr":"Année de la demande 24","technischesJahr":2024,"gueltigkeitStatus":"PUBLIZIERT"},"ausbKosten_SekII":2000,"ausbKosten_Tertiaer":3000},"gesuchStatus":"IN_BEARBEITUNG_SB","gesuchNummer":"2024.BE.G.59961","id":"a62c583d-933d-4d63-8c4e-0dd75b3c0a6a","aenderungsdatum":"2024-10-29","gesuchTrancheToWorkWith":{"id":"3fcec333-14a5-4a72-a541-b0775fe08408","gueltigAb":"2024-07-01","gueltigBis":"2025-06-30","status":"UEBERPRUEFEN","typ":"TRANCHE","comment":null,"gesuchFormular":{"ausbildung":{"fachrichtung":"Egal","ausbildungBegin":"8.2024","ausbildungEnd":"7.2026","pensum":"VOLLZEIT","ausbildungsgang":{"id":"8aab936d-1556-402f-a402-0b12f42e6539","bildungskategorie":{"bezeichnungDe":"Berufslehren und Anlehren","bezeichnungFr":"Apprentissages et form. professionelles pratiques","bildungsstufe":"SEKUNDAR_2","bfs":5,"id":"da3383d0-0f52-4ff1-984b-d88642782184"},"bezeichnungDe":"Lehre EFZ","bezeichnungFr":"Apprentissage CFC","ausbildungsstaetteId":null},"ausbildungNichtGefunden":false,"alternativeAusbildungsstaette":null,"alternativeAusbildungsgang":null,"ausbildungsort":"Bern","isAusbildungAusland":false},"personInAusbildung":{"adresse":{"land":"CH","strasse":"Burgweg","plz":"3076","ort":"Worb","id":"b6e9609b-8d32-44ab-b433-08a05c226c9e","coAdresse":null,"hausnummer":"1"},"sozialversicherungsnummer":"756.2229.1645.96","vorname":"Flor","anrede":"FRAU","identischerZivilrechtlicherWohnsitz":true,"email":"egal@gmail.com","telefonnummer":"079 000 00 00","geburtsdatum":"1995-04-01","nationalitaet":"ER","wohnsitz":"EIGENER_HAUSHALT","sozialhilfebeitraege":true,"nachname":"Tewe","korrespondenzSprache":"DEUTSCH","heimatort":null,"niederlassungsstatus":"FLUECHTLING","einreisedatum":null,"zivilstand":"LEDIG","wohnsitzAnteilMutter":null,"wohnsitzAnteilVater":null,"vormundschaft":false,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null},"familiensituation":{"elternVerheiratetZusammen":false,"elternteilUnbekanntVerstorben":true,"gerichtlicheAlimentenregelung":false,"mutterUnbekanntVerstorben":"UNBEKANNT","mutterUnbekanntGrund":"UNBEKANNTER_AUFENTHALTSORT","mutterWiederverheiratet":null,"vaterUnbekanntVerstorben":"UNBEKANNT","vaterUnbekanntGrund":"UNBEKANNTER_AUFENTHALTSORT","vaterWiederverheiratet":null,"sorgerecht":null,"obhut":null,"obhutMutter":null,"obhutVater":null,"werZahltAlimente":null},"partner":null,"auszahlung":{"vorname":"Worb","adresse":{"land":"CH","strasse":"Egal","plz":"3076","ort":"Worb","id":"77291a9a-8476-4980-8b17-da4003958e30","coAdresse":"Sozialdienst","hausnummer":"1"},"iban":"CH43 0900 0000 3067 3849 5","nachname":"Gemeinde","kontoinhaber":"SOZIALDIENST_INSTITUTION"},"elterns":null,"geschwisters":null,"lebenslaufItems":[{"von":"8.2011","bis":"7.2015","wohnsitz":"AUSLAND","id":"2bd693d9-bc2c-4194-a371-f28bd4bf9404","bildungsart":null,"ausbildungAbgeschlossen":false,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":"ANDERE_TAETIGKEIT","taetigkeitsBeschreibung":"Flucht"},{"von":"8.2015","bis":"7.2016","wohnsitz":"BE","id":"3a27b9c0-5465-462c-acc5-fb2a5314c13e","bildungsart":"BERUFSVORBEREITENDES_SCHULJAHR","ausbildungAbgeschlossen":false,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":null,"taetigkeitsBeschreibung":null},{"von":"8.2016","bis":"10.2020","wohnsitz":"BE","id":"4ce3bc47-f066-47f5-93a9-9742b40fd38e","bildungsart":null,"ausbildungAbgeschlossen":false,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":"ANDERE_TAETIGKEIT","taetigkeitsBeschreibung":"Berufliche Integration"},{"von":"10.2020","bis":"7.2024","wohnsitz":"BE","id":"f8647f72-a54d-4181-afb3-c1ce70fbde34","bildungsart":null,"ausbildungAbgeschlossen":false,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":"ERWERBSTAETIGKEIT","taetigkeitsBeschreibung":"Egal"}],"kinds":[{"vorname":"First","geburtsdatum":"2017-08-19","ausbildungssituation":"VORSCHULPFLICHTIG","wohnsitzAnteilPia":100,"nachname":"Tewe","id":"0bc8648d-ea5a-4cc0-a8f5-a719bffaf3c7","erhalteneAlimentebeitraege":1560},{"vorname":"Second","geburtsdatum":"2019-06-18","ausbildungssituation":"VORSCHULPFLICHTIG","wohnsitzAnteilPia":100,"nachname":"Tewe","id":"7954432b-743c-4ef6-8630-a92830b3d315","erhalteneAlimentebeitraege":1560}],"einnahmenKosten":{"nettoerwerbseinkommen":31760,"fahrkosten":837,"verdienstRealisiert":false,"alimente":null,"zulagen":5800,"renten":0,"eoLeistungen":0,"ergaenzungsleistungen":0,"beitraege":0,"ausbildungskostenSekundarstufeZwei":149,"ausbildungskostenTertiaerstufe":null,"wohnkosten":15000,"wgWohnend":false,"willDarlehen":false,"auswaertigeMittagessenProWoche":null,"betreuungskostenKinder":8409,"veranlagungsCode":0,"steuerjahr":2023,"vermoegen":1008,"steuernKantonGemeinde":3176},"steuerdaten":null,"steuerdatenTabs":[]}},"bearbeiter":"Manuela Geissler"}
+{
+  "fall": {
+    "id": "6cc689de-c3b1-4004-8d60-8bcc2d157bb7",
+    "fallNummer": "BE.F.415409",
+    "mandant": "bern"
+  },
+  "gesuchsperiode": {
+    "id": "04aea35c-3051-4ac9-b853-20fb5bec0a50",
+    "bezeichnungDe": "Herbst 2024",
+    "bezeichnungFr": "Automne 2024",
+    "gueltigkeitStatus": "PUBLIZIERT",
+    "gesuchsperiodeStart": "2024-07-01",
+    "gesuchsperiodeStopp": "2025-06-30",
+    "aufschaltterminStart": "2024-07-01",
+    "aufschaltterminStopp": "2025-06-30",
+    "einreichefristNormal": "2024-11-30",
+    "einreichefristReduziert": "2025-02-28",
+    "gesuchsjahr": {
+      "id": "b2e84aaf-fb5c-4ed5-b597-a615827eedf5",
+      "bezeichnungDe": "Gesuchsjahr 24",
+      "bezeichnungFr": "Année de la demande 24",
+      "technischesJahr": 2024,
+      "gueltigkeitStatus": "PUBLIZIERT"
+    },
+    "ausbKosten_SekII": 2000,
+    "ausbKosten_Tertiaer": 3000
+  },
+  "gesuchStatus": "IN_BEARBEITUNG_SB",
+  "gesuchNummer": "2024.BE.G.59961",
+  "id": "a62c583d-933d-4d63-8c4e-0dd75b3c0a6a",
+  "aenderungsdatum": "2024-10-29",
+  "gesuchTrancheToWorkWith": {
+    "id": "3fcec333-14a5-4a72-a541-b0775fe08408",
+    "gueltigAb": "2024-07-01",
+    "gueltigBis": "2025-06-30",
+    "status": "UEBERPRUEFEN",
+    "typ": "TRANCHE",
+    "comment": null,
+    "gesuchFormular": {
+      "ausbildung": {
+        "fachrichtung": "Egal",
+        "ausbildungBegin": "8.2024",
+        "ausbildungEnd": "7.2026",
+        "pensum": "VOLLZEIT",
+        "ausbildungsgang": {
+          "id": "8aab936d-1556-402f-a402-0b12f42e6539",
+          "bildungskategorie": {
+            "bezeichnungDe": "Berufslehren und Anlehren",
+            "bezeichnungFr": "Apprentissages et form. professionelles pratiques",
+            "bildungsstufe": "SEKUNDAR_2",
+            "bfs": 5,
+            "id": "da3383d0-0f52-4ff1-984b-d88642782184"
+          },
+          "bezeichnungDe": "Lehre EFZ",
+          "bezeichnungFr": "Apprentissage CFC",
+          "ausbildungsstaetteId": null
+        },
+        "ausbildungNichtGefunden": false,
+        "alternativeAusbildungsstaette": null,
+        "alternativeAusbildungsgang": null,
+        "ausbildungsort": "Bern",
+        "isAusbildungAusland": false
+      },
+      "personInAusbildung": {
+        "adresse": {
+          "land": "CH",
+          "strasse": "Burgweg",
+          "plz": "3076",
+          "ort": "Worb",
+          "id": "b6e9609b-8d32-44ab-b433-08a05c226c9e",
+          "coAdresse": null,
+          "hausnummer": "1"
+        },
+        "sozialversicherungsnummer": "756.2229.1645.96",
+        "vorname": "Flor",
+        "anrede": "FRAU",
+        "identischerZivilrechtlicherWohnsitz": true,
+        "email": "egal@gmail.com",
+        "telefonnummer": "079 000 00 00",
+        "geburtsdatum": "1995-04-01",
+        "nationalitaet": "ER",
+        "wohnsitz": "EIGENER_HAUSHALT",
+        "sozialhilfebeitraege": true,
+        "nachname": "Tewe",
+        "korrespondenzSprache": "DEUTSCH",
+        "heimatort": null,
+        "niederlassungsstatus": "FLUECHTLING",
+        "einreisedatum": null,
+        "zivilstand": "LEDIG",
+        "wohnsitzAnteilMutter": null,
+        "wohnsitzAnteilVater": null,
+        "vormundschaft": false,
+        "identischerZivilrechtlicherWohnsitzOrt": null,
+        "identischerZivilrechtlicherWohnsitzPLZ": null
+      },
+      "familiensituation": {
+        "elternVerheiratetZusammen": false,
+        "elternteilUnbekanntVerstorben": true,
+        "gerichtlicheAlimentenregelung": false,
+        "mutterUnbekanntVerstorben": "UNBEKANNT",
+        "mutterUnbekanntGrund": "UNBEKANNTER_AUFENTHALTSORT",
+        "mutterWiederverheiratet": null,
+        "vaterUnbekanntVerstorben": "UNBEKANNT",
+        "vaterUnbekanntGrund": "UNBEKANNTER_AUFENTHALTSORT",
+        "vaterWiederverheiratet": null,
+        "sorgerecht": null,
+        "obhut": null,
+        "obhutMutter": null,
+        "obhutVater": null,
+        "werZahltAlimente": null
+      },
+      "partner": null,
+      "auszahlung": {
+        "vorname": "Worb",
+        "adresse": {
+          "land": "CH",
+          "strasse": "Egal",
+          "plz": "3076",
+          "ort": "Worb",
+          "id": "77291a9a-8476-4980-8b17-da4003958e30",
+          "coAdresse": "Sozialdienst",
+          "hausnummer": "1"
+        },
+        "iban": "CH43 0900 0000 3067 3849 5",
+        "nachname": "Gemeinde",
+        "kontoinhaber": "SOZIALDIENST_INSTITUTION"
+      },
+      "elterns": null,
+      "geschwisters": null,
+      "lebenslaufItems": [
+        {
+          "von": "8.2011",
+          "bis": "7.2015",
+          "wohnsitz": "AUSLAND",
+          "id": "2bd693d9-bc2c-4194-a371-f28bd4bf9404",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ANDERE_TAETIGKEIT",
+          "taetigkeitsBeschreibung": "Flucht"
+        },
+        {
+          "von": "8.2015",
+          "bis": "7.2016",
+          "wohnsitz": "BE",
+          "id": "3a27b9c0-5465-462c-acc5-fb2a5314c13e",
+          "bildungsart": "BERUFSVORBEREITENDES_SCHULJAHR",
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2016",
+          "bis": "10.2020",
+          "wohnsitz": "BE",
+          "id": "4ce3bc47-f066-47f5-93a9-9742b40fd38e",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ANDERE_TAETIGKEIT",
+          "taetigkeitsBeschreibung": "Berufliche Integration"
+        },
+        {
+          "von": "10.2020",
+          "bis": "7.2024",
+          "wohnsitz": "BE",
+          "id": "f8647f72-a54d-4181-afb3-c1ce70fbde34",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ERWERBSTAETIGKEIT",
+          "taetigkeitsBeschreibung": "Egal"
+        }
+      ],
+      "kinds": [
+        {
+          "vorname": "First",
+          "geburtsdatum": "2017-08-19",
+          "ausbildungssituation": "VORSCHULPFLICHTIG",
+          "wohnsitzAnteilPia": 100,
+          "nachname": "Tewe",
+          "id": "0bc8648d-ea5a-4cc0-a8f5-a719bffaf3c7",
+          "erhalteneAlimentebeitraege": 1560
+        },
+        {
+          "vorname": "Second",
+          "geburtsdatum": "2019-06-18",
+          "ausbildungssituation": "VORSCHULPFLICHTIG",
+          "wohnsitzAnteilPia": 100,
+          "nachname": "Tewe",
+          "id": "7954432b-743c-4ef6-8630-a92830b3d315",
+          "erhalteneAlimentebeitraege": 1560
+        }
+      ],
+      "einnahmenKosten": {
+        "nettoerwerbseinkommen": 31760,
+        "fahrkosten": 837,
+        "verdienstRealisiert": false,
+        "alimente": null,
+        "zulagen": 5800,
+        "renten": 0,
+        "eoLeistungen": 0,
+        "ergaenzungsleistungen": 0,
+        "beitraege": 0,
+        "ausbildungskostenSekundarstufeZwei": 149,
+        "ausbildungskostenTertiaerstufe": null,
+        "wohnkosten": 15000,
+        "wgWohnend": false,
+        "willDarlehen": false,
+        "auswaertigeMittagessenProWoche": null,
+        "betreuungskostenKinder": 8409,
+        "veranlagungsCode": 0,
+        "steuerjahr": 2023,
+        "vermoegen": 1008,
+        "steuernKantonGemeinde": 3176
+      },
+      "steuerdaten": null,
+      "steuerdatenTabs": []
+    }
+  },
+  "bearbeiter": "Manuela Geissler"
+}

@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.ausbildung.resource;
 
 import java.util.UUID;
@@ -114,7 +131,8 @@ class AusbildungsgangResourceTest {
         var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec();
         ausbildunggang.setAusbildungsstaetteId(ausbildungsstaetteId);
 
-        ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(UUID.randomUUID())
+        ausbildungsgangApi.updateAusbildungsgang()
+            .ausbildungsgangIdPath(UUID.randomUUID())
             .body(ausbildunggang)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -128,7 +146,8 @@ class AusbildungsgangResourceTest {
     void updateAusbildungsgangAsGesuchstellerForbidden() {
         var ausbildunggang = AusbildungsgangUpdateDtoSpecModel.ausbildungsgangUpdateDtoSpec();
 
-        ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
+        ausbildungsgangApi.updateAusbildungsgang()
+            .ausbildungsgangIdPath(ausbildungsgangId)
             .body(ausbildunggang)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -147,7 +166,8 @@ class AusbildungsgangResourceTest {
         ausbildunggang.setBezeichnungDe(updateBezeichnung);
         ausbildunggang.setAusbildungsstaetteId(ausbildungsstaettes[0].getId());
 
-        ausbildungsgangApi.updateAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
+        ausbildungsgangApi.updateAusbildungsgang()
+            .ausbildungsgangIdPath(ausbildungsgangId)
             .body(ausbildunggang)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -163,7 +183,8 @@ class AusbildungsgangResourceTest {
     @TestAsGesuchsteller
     @Order(8)
     void deleteAusbildungsgangAsGesuchstellerForbidden() {
-        ausbildungsgangApi.deleteAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
+        ausbildungsgangApi.deleteAusbildungsgang()
+            .ausbildungsgangIdPath(ausbildungsgangId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -174,7 +195,8 @@ class AusbildungsgangResourceTest {
     @TestAsJurist
     @Order(9)
     void deleteAusbildungsgangNotFound() {
-        ausbildungsgangApi.deleteAusbildungsgang().ausbildungsgangIdPath(UUID.randomUUID())
+        ausbildungsgangApi.deleteAusbildungsgang()
+            .ausbildungsgangIdPath(UUID.randomUUID())
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -187,13 +209,15 @@ class AusbildungsgangResourceTest {
     void deleteAusbildungsgang() {
         var numAusbildungsstaettenBevoreDelete = getAusbildungsstaettenFromApi().length;
 
-        ausbildungsgangApi.deleteAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
+        ausbildungsgangApi.deleteAusbildungsgang()
+            .ausbildungsgangIdPath(ausbildungsgangId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        ausbildungsgangApi.getAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
+        ausbildungsgangApi.getAusbildungsgang()
+            .ausbildungsgangIdPath(ausbildungsgangId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -209,7 +233,8 @@ class AusbildungsgangResourceTest {
     }
 
     private AusbildungsstaetteDtoSpec getAusbildungsstaetteFromApi(UUID id) {
-        return ausbildungsstaetteApiSpec.getAusbildungsstaette().ausbildungsstaetteIdPath(id)
+        return ausbildungsstaetteApiSpec.getAusbildungsstaette()
+            .ausbildungsstaetteIdPath(id)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
@@ -217,7 +242,8 @@ class AusbildungsgangResourceTest {
     }
 
     private AusbildungsgangDtoSpec getAusbildungsgangeFromAPI(UUID id) {
-        return ausbildungsgangApi.getAusbildungsgang().ausbildungsgangIdPath(ausbildungsgangId)
+        return ausbildungsgangApi.getAusbildungsgang()
+            .ausbildungsgangIdPath(ausbildungsgangId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()

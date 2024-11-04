@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.List;
@@ -23,7 +40,7 @@ public class AusbildungTestSeeding extends Seeder {
 
     @Override
     protected void doSeed() {
-		createBildungskategorie();
+        createBildungskategorie();
         seedUni();
         seedFh();
     }
@@ -44,11 +61,11 @@ public class AusbildungTestSeeding extends Seeder {
         final var bildungskategorieSekundaer = new Bildungskategorie()
             .setBezeichnungDe("Test Beschreibung")
             .setBezeichnungFr("Test Description")
-			.setBfs(1);
+            .setBfs(1);
 
         bildungskategorieRepository.persistAndFlush(bildungskategorieSekundaer);
         bildungskategorie = bildungskategorieSekundaer;
-		TestConstants.TEST_BILDUNGSKATEGORIE_ID = bildungskategorieSekundaer.getId();
+        TestConstants.TEST_BILDUNGSKATEGORIE_ID = bildungskategorieSekundaer.getId();
     }
 
     private void seedUni() {
@@ -68,7 +85,7 @@ public class AusbildungTestSeeding extends Seeder {
         final var uniBeGang2 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Biologie")
             .setBezeichnungFr("Bsc. Biologie")
-			.setBildungskategorie(bildungskategorie)
+            .setBildungskategorie(bildungskategorie)
             .setAusbildungsstaette(uniBern);
 
         ausbildungsgangRepository.persist(List.of(uniBeGang1, uniBeGang2));
@@ -85,13 +102,13 @@ public class AusbildungTestSeeding extends Seeder {
         final var bfhGang1 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Informatik")
             .setBezeichnungFr("Bsc. Informatique")
-			.setBildungskategorie(bildungskategorie)
+            .setBildungskategorie(bildungskategorie)
             .setAusbildungsstaette(bfh);
 
         final var bfhGang2 = new Ausbildungsgang()
             .setBezeichnungDe("Bsc. Biologie")
             .setBezeichnungFr("Bsc. Biologie")
-			.setBildungskategorie(bildungskategorie)
+            .setBildungskategorie(bildungskategorie)
             .setAusbildungsstaette(bfh);
 
         ausbildungsgangRepository.persist(List.of(bfhGang1, bfhGang2));

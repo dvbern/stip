@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.util.ArrayList;
@@ -74,8 +91,10 @@ public class BerechnungRequestV1 implements DmnRequest {
     ) {
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         final var personenImHaushaltRequest = personenImHaushaltService.getPersonenImHaushaltRequest(
-            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(DmnModelVersion.class).major(),
-            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(DmnModelVersion.class).minor(),
+            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(DmnModelVersion.class)
+                .major(),
+            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(DmnModelVersion.class)
+                .minor(),
             gesuchFormular,
             elternTyp
         );
@@ -93,15 +112,21 @@ public class BerechnungRequestV1 implements DmnRequest {
         );
 
         final List<Eltern> elternteile = gesuchFormular.getElterns().stream().toList();
-        ListIterator<Steuerdaten> steuerdatenListIterator = gesuchFormular.getSteuerdaten().stream().sorted(
-            Comparator.comparing(Steuerdaten::getSteuerdatenTyp)
-        ).toList().listIterator();
+        ListIterator<Steuerdaten> steuerdatenListIterator = gesuchFormular.getSteuerdaten()
+            .stream()
+            .sorted(
+                Comparator.comparing(Steuerdaten::getSteuerdatenTyp)
+            )
+            .toList()
+            .listIterator();
 
         List<AbstractFamilieEntity> kinderDerElternInHaushalten = new ArrayList<>(
-            gesuchFormular.getGeschwisters().stream()
+            gesuchFormular.getGeschwisters()
+                .stream()
                 .filter(
                     geschwister -> geschwister.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT
-                ).map(AbstractFamilieEntity.class::cast)
+                )
+                .map(AbstractFamilieEntity.class::cast)
                 .toList()
         );
         final var personInAusbildung = gesuchFormular.getPersonInAusbildung();
@@ -131,9 +156,12 @@ public class BerechnungRequestV1 implements DmnRequest {
                     steuerdatenListIterator.next(),
                     personenImHaushaltList.get(currentIdx),
                     kinderDerElternInHaushalten,
-                    (int) gesuchFormular.getGeschwisters().stream().filter(
-                        geschwister -> geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE
-                    ).count(),
+                    (int) gesuchFormular.getGeschwisters()
+                        .stream()
+                        .filter(
+                            geschwister -> geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE
+                        )
+                        .count(),
                     elternTyp,
                     gesuchFormular.getFamiliensituation()
                 )
@@ -163,8 +191,8 @@ public class BerechnungRequestV1 implements DmnRequest {
             case 5 -> gesuchsperiode.getPersonen5();
             case 6 -> gesuchsperiode.getPersonen6();
             case 7 -> gesuchsperiode.getPersonen7();
-            default ->
-                gesuchsperiode.getPersonen7() + (anzahlPersonenImHaushalt - 7) * gesuchsperiode.getProWeiterePerson();
+            default -> gesuchsperiode.getPersonen7()
+            + (anzahlPersonenImHaushalt - 7) * gesuchsperiode.getProWeiterePerson();
         };
 
         if (wohntInWG) {

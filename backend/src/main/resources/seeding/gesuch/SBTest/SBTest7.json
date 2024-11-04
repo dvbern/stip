@@ -1,1 +1,285 @@
-{"fall":{"id":"7c9ba140-fe8f-418e-99cb-35e0bbcee781","fallNummer":"BE.F.415406","mandant":"bern"},"gesuchsperiode":{"id":"04aea35c-3051-4ac9-b853-20fb5bec0a50","bezeichnungDe":"Herbst 2024","bezeichnungFr":"Automne 2024","gueltigkeitStatus":"PUBLIZIERT","gesuchsperiodeStart":"2024-07-01","gesuchsperiodeStopp":"2025-06-30","aufschaltterminStart":"2024-07-01","aufschaltterminStopp":"2025-06-30","einreichefristNormal":"2024-11-30","einreichefristReduziert":"2025-02-28","gesuchsjahr":{"id":"b2e84aaf-fb5c-4ed5-b597-a615827eedf5","bezeichnungDe":"Gesuchsjahr 24","bezeichnungFr":"Année de la demande 24","technischesJahr":2024,"gueltigkeitStatus":"PUBLIZIERT"},"ausbKosten_SekII":2000,"ausbKosten_Tertiaer":3000},"gesuchStatus":"IN_BEARBEITUNG_SB","gesuchNummer":"2024.BE.G.59998","id":"30c6a418-d0f9-4559-80c0-5af332b95830","aenderungsdatum":"2024-10-30","gesuchTrancheToWorkWith":{"id":"35135113-3ea4-4337-83cc-3b1e1f4ff07d","gueltigAb":"2024-07-01","gueltigBis":"2024-07-31","status":"UEBERPRUEFEN","typ":"TRANCHE","comment":null,"gesuchFormular":{"ausbildung":{"fachrichtung":"Wirtschaftsinformatiker","ausbildungBegin":"9.2021","ausbildungEnd":"2.2025","pensum":"VOLLZEIT","ausbildungsgang":{"id":"9c161f37-2ff4-4f34-a851-7ec4a8c8fe2c","bildungskategorie":{"bezeichnungDe":"Fachhochschulen","bezeichnungFr":"Hautes écoles spécialisées","bildungsstufe":"TERTIAER","bfs":8,"id":"38daf92f-1c4c-4688-8a1b-173f3890ada6"},"bezeichnungDe":"Bachelor","bezeichnungFr":"Bachelor","ausbildungsstaetteId":null},"ausbildungNichtGefunden":false,"alternativeAusbildungsstaette":null,"alternativeAusbildungsgang":null,"ausbildungsort":"Bern","isAusbildungAusland":false},"personInAusbildung":{"adresse":{"land":"CH","strasse":"Schwanengasse","plz":"3001","ort":"Bern","id":"2d5b4f69-a3e3-4143-a6f7-f41faa0f70e5","coAdresse":null,"hausnummer":"100"},"sozialversicherungsnummer":"756.5565.7362.36","vorname":"Betunjo","anrede":"HERR","identischerZivilrechtlicherWohnsitz":true,"email":"alain.bumann@be.ch","telefonnummer":"031 633 85 12","geburtsdatum":"1997-06-05","nationalitaet":"CH","wohnsitz":"FAMILIE","sozialhilfebeitraege":false,"nachname":"Florales","korrespondenzSprache":"DEUTSCH","heimatort":"Thun","niederlassungsstatus":null,"einreisedatum":null,"zivilstand":"LEDIG","wohnsitzAnteilMutter":null,"wohnsitzAnteilVater":null,"vormundschaft":false,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null},"familiensituation":{"elternVerheiratetZusammen":true,"elternteilUnbekanntVerstorben":null,"gerichtlicheAlimentenregelung":null,"mutterUnbekanntVerstorben":null,"mutterUnbekanntGrund":null,"mutterWiederverheiratet":null,"vaterUnbekanntVerstorben":null,"vaterUnbekanntGrund":null,"vaterWiederverheiratet":null,"sorgerecht":null,"obhut":null,"obhutMutter":null,"obhutVater":null,"werZahltAlimente":null},"partner":null,"auszahlung":{"vorname":"Betunjo","adresse":{"land":"CH","strasse":"Schwanengasse","plz":"3001","ort":"Bern","id":"2d5b4f69-a3e3-4143-a6f7-f41faa0f70e5","coAdresse":null,"hausnummer":"100"},"iban":"CH33 0900 0000 3000 0823 3","nachname":"Florales","kontoinhaber":"GESUCHSTELLER"},"elterns":[{"vorname":"Tulpo","adresse":{"land":"CH","strasse":"Schwanengasse","plz":"3001","ort":"Bern","id":"8269fd4c-e249-4877-b930-1831d884715a","coAdresse":null,"hausnummer":"100"},"identischerZivilrechtlicherWohnsitz":true,"telefonnummer":"031 111 22 33","geburtsdatum":"1964-10-22","ausweisbFluechtling":false,"elternTyp":"VATER","nachname":"Florales","ergaenzungsleistungen":0,"sozialhilfebeitraege":0,"wohnkosten":9873,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null,"sozialversicherungsnummer":"756.5857.7814.25","id":"2831382c-3f16-42b1-b1ef-7d9cbff8310d"},{"vorname":"Rose","adresse":{"land":"CH","strasse":"Schwanengasse","plz":"3001","ort":"Bern","id":"f3b298e5-1fda-4a08-8496-7ba65cef4ead","coAdresse":null,"hausnummer":"100"},"identischerZivilrechtlicherWohnsitz":true,"telefonnummer":"031 111 22 33","geburtsdatum":"1966-05-01","ausweisbFluechtling":false,"elternTyp":"MUTTER","nachname":"Florales","ergaenzungsleistungen":0,"sozialhilfebeitraege":0,"wohnkosten":9873,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null,"sozialversicherungsnummer":"756.0340.4185.12","id":"b43efa79-7be9-436a-b1b0-832f16728d70"}],"geschwisters":null,"lebenslaufItems":[{"von":"8.2012","bis":"7.2013","wohnsitz":"BE","id":"ebad96ef-500e-41c7-a163-610dfef36e76","bildungsart":"BERUFSVORBEREITENDES_SCHULJAHR","ausbildungAbgeschlossen":true,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":null,"taetigkeitsBeschreibung":null},{"von":"8.2013","bis":"7.2015","wohnsitz":"BE","id":"20bcde53-449d-4b5e-9394-481f2f57767b","bildungsart":"FACHMATURITAET","ausbildungAbgeschlossen":true,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":null,"taetigkeitsBeschreibung":null},{"von":"8.2015","bis":"7.2019","wohnsitz":"BE","id":"5d40d33c-edc3-4a93-b53c-7a5190decf36","bildungsart":"EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS","ausbildungAbgeschlossen":true,"berufsbezeichnung":"Elektroniker","fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":null,"taetigkeitsBeschreibung":null},{"von":"8.2019","bis":"8.2021","wohnsitz":"BE","id":"8f03eaec-71c8-40b6-8e13-67ace17db929","bildungsart":null,"ausbildungAbgeschlossen":false,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":"ANDERE_TAETIGKEIT","taetigkeitsBeschreibung":"Auszeit, Militär, Jobsuche, etc."}],"kinds":null,"einnahmenKosten":{"nettoerwerbseinkommen":0,"fahrkosten":809,"verdienstRealisiert":false,"alimente":null,"zulagen":null,"renten":0,"eoLeistungen":null,"ergaenzungsleistungen":null,"beitraege":null,"ausbildungskostenSekundarstufeZwei":null,"ausbildungskostenTertiaerstufe":2755,"wohnkosten":null,"wgWohnend":null,"willDarlehen":false,"auswaertigeMittagessenProWoche":5,"betreuungskostenKinder":null,"veranlagungsCode":0,"steuerjahr":2023,"vermoegen":430,"steuernKantonGemeinde":0},"steuerdaten":[{"steuerdatenTyp":"FAMILIE","steuernKantonGemeinde":0,"steuernBund":0,"fahrkosten":6700,"verpflegung":2850,"totalEinkuenfte":42648,"eigenmietwert":0,"isArbeitsverhaeltnisSelbstaendig":false,"kinderalimente":0,"vermoegen":0,"id":"f47be408-b9f0-4df2-90b4-2c9935fdfdd6","fahrkostenPartner":900,"verpflegungPartner":225,"steuerjahr":2023,"veranlagungsCode":0,"saeule3a":null,"saeule2":null}],"steuerdatenTabs":["FAMILIE"]}},"bearbeiter":"bkd19 bkd19"}
+{
+  "fall": {
+    "id": "7c9ba140-fe8f-418e-99cb-35e0bbcee781",
+    "fallNummer": "BE.F.415406",
+    "mandant": "bern"
+  },
+  "gesuchsperiode": {
+    "id": "04aea35c-3051-4ac9-b853-20fb5bec0a50",
+    "bezeichnungDe": "Herbst 2024",
+    "bezeichnungFr": "Automne 2024",
+    "gueltigkeitStatus": "PUBLIZIERT",
+    "gesuchsperiodeStart": "2024-07-01",
+    "gesuchsperiodeStopp": "2025-06-30",
+    "aufschaltterminStart": "2024-07-01",
+    "aufschaltterminStopp": "2025-06-30",
+    "einreichefristNormal": "2024-11-30",
+    "einreichefristReduziert": "2025-02-28",
+    "gesuchsjahr": {
+      "id": "b2e84aaf-fb5c-4ed5-b597-a615827eedf5",
+      "bezeichnungDe": "Gesuchsjahr 24",
+      "bezeichnungFr": "Année de la demande 24",
+      "technischesJahr": 2024,
+      "gueltigkeitStatus": "PUBLIZIERT"
+    },
+    "ausbKosten_SekII": 2000,
+    "ausbKosten_Tertiaer": 3000
+  },
+  "gesuchStatus": "IN_BEARBEITUNG_SB",
+  "gesuchNummer": "2024.BE.G.59998",
+  "id": "30c6a418-d0f9-4559-80c0-5af332b95830",
+  "aenderungsdatum": "2024-10-30",
+  "gesuchTrancheToWorkWith": {
+    "id": "35135113-3ea4-4337-83cc-3b1e1f4ff07d",
+    "gueltigAb": "2024-07-01",
+    "gueltigBis": "2024-07-31",
+    "status": "UEBERPRUEFEN",
+    "typ": "TRANCHE",
+    "comment": null,
+    "gesuchFormular": {
+      "ausbildung": {
+        "fachrichtung": "Wirtschaftsinformatiker",
+        "ausbildungBegin": "9.2021",
+        "ausbildungEnd": "2.2025",
+        "pensum": "VOLLZEIT",
+        "ausbildungsgang": {
+          "id": "9c161f37-2ff4-4f34-a851-7ec4a8c8fe2c",
+          "bildungskategorie": {
+            "bezeichnungDe": "Fachhochschulen",
+            "bezeichnungFr": "Hautes écoles spécialisées",
+            "bildungsstufe": "TERTIAER",
+            "bfs": 8,
+            "id": "38daf92f-1c4c-4688-8a1b-173f3890ada6"
+          },
+          "bezeichnungDe": "Bachelor",
+          "bezeichnungFr": "Bachelor",
+          "ausbildungsstaetteId": null
+        },
+        "ausbildungNichtGefunden": false,
+        "alternativeAusbildungsstaette": null,
+        "alternativeAusbildungsgang": null,
+        "ausbildungsort": "Bern",
+        "isAusbildungAusland": false
+      },
+      "personInAusbildung": {
+        "adresse": {
+          "land": "CH",
+          "strasse": "Schwanengasse",
+          "plz": "3001",
+          "ort": "Bern",
+          "id": "2d5b4f69-a3e3-4143-a6f7-f41faa0f70e5",
+          "coAdresse": null,
+          "hausnummer": "100"
+        },
+        "sozialversicherungsnummer": "756.5565.7362.36",
+        "vorname": "Betunjo",
+        "anrede": "HERR",
+        "identischerZivilrechtlicherWohnsitz": true,
+        "email": "alain.bumann@be.ch",
+        "telefonnummer": "031 633 85 12",
+        "geburtsdatum": "1997-06-05",
+        "nationalitaet": "CH",
+        "wohnsitz": "FAMILIE",
+        "sozialhilfebeitraege": false,
+        "nachname": "Florales",
+        "korrespondenzSprache": "DEUTSCH",
+        "heimatort": "Thun",
+        "niederlassungsstatus": null,
+        "einreisedatum": null,
+        "zivilstand": "LEDIG",
+        "wohnsitzAnteilMutter": null,
+        "wohnsitzAnteilVater": null,
+        "vormundschaft": false,
+        "identischerZivilrechtlicherWohnsitzOrt": null,
+        "identischerZivilrechtlicherWohnsitzPLZ": null
+      },
+      "familiensituation": {
+        "elternVerheiratetZusammen": true,
+        "elternteilUnbekanntVerstorben": null,
+        "gerichtlicheAlimentenregelung": null,
+        "mutterUnbekanntVerstorben": null,
+        "mutterUnbekanntGrund": null,
+        "mutterWiederverheiratet": null,
+        "vaterUnbekanntVerstorben": null,
+        "vaterUnbekanntGrund": null,
+        "vaterWiederverheiratet": null,
+        "sorgerecht": null,
+        "obhut": null,
+        "obhutMutter": null,
+        "obhutVater": null,
+        "werZahltAlimente": null
+      },
+      "partner": null,
+      "auszahlung": {
+        "vorname": "Betunjo",
+        "adresse": {
+          "land": "CH",
+          "strasse": "Schwanengasse",
+          "plz": "3001",
+          "ort": "Bern",
+          "id": "2d5b4f69-a3e3-4143-a6f7-f41faa0f70e5",
+          "coAdresse": null,
+          "hausnummer": "100"
+        },
+        "iban": "CH33 0900 0000 3000 0823 3",
+        "nachname": "Florales",
+        "kontoinhaber": "GESUCHSTELLER"
+      },
+      "elterns": [
+        {
+          "vorname": "Tulpo",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Schwanengasse",
+            "plz": "3001",
+            "ort": "Bern",
+            "id": "8269fd4c-e249-4877-b930-1831d884715a",
+            "coAdresse": null,
+            "hausnummer": "100"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "031 111 22 33",
+          "geburtsdatum": "1964-10-22",
+          "ausweisbFluechtling": false,
+          "elternTyp": "VATER",
+          "nachname": "Florales",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 9873,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.5857.7814.25",
+          "id": "2831382c-3f16-42b1-b1ef-7d9cbff8310d"
+        },
+        {
+          "vorname": "Rose",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Schwanengasse",
+            "plz": "3001",
+            "ort": "Bern",
+            "id": "f3b298e5-1fda-4a08-8496-7ba65cef4ead",
+            "coAdresse": null,
+            "hausnummer": "100"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "031 111 22 33",
+          "geburtsdatum": "1966-05-01",
+          "ausweisbFluechtling": false,
+          "elternTyp": "MUTTER",
+          "nachname": "Florales",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 9873,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.0340.4185.12",
+          "id": "b43efa79-7be9-436a-b1b0-832f16728d70"
+        }
+      ],
+      "geschwisters": null,
+      "lebenslaufItems": [
+        {
+          "von": "8.2012",
+          "bis": "7.2013",
+          "wohnsitz": "BE",
+          "id": "ebad96ef-500e-41c7-a163-610dfef36e76",
+          "bildungsart": "BERUFSVORBEREITENDES_SCHULJAHR",
+          "ausbildungAbgeschlossen": true,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2013",
+          "bis": "7.2015",
+          "wohnsitz": "BE",
+          "id": "20bcde53-449d-4b5e-9394-481f2f57767b",
+          "bildungsart": "FACHMATURITAET",
+          "ausbildungAbgeschlossen": true,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2015",
+          "bis": "7.2019",
+          "wohnsitz": "BE",
+          "id": "5d40d33c-edc3-4a93-b53c-7a5190decf36",
+          "bildungsart": "EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS",
+          "ausbildungAbgeschlossen": true,
+          "berufsbezeichnung": "Elektroniker",
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2019",
+          "bis": "8.2021",
+          "wohnsitz": "BE",
+          "id": "8f03eaec-71c8-40b6-8e13-67ace17db929",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ANDERE_TAETIGKEIT",
+          "taetigkeitsBeschreibung": "Auszeit, Militär, Jobsuche, etc."
+        }
+      ],
+      "kinds": null,
+      "einnahmenKosten": {
+        "nettoerwerbseinkommen": 0,
+        "fahrkosten": 809,
+        "verdienstRealisiert": false,
+        "alimente": null,
+        "zulagen": null,
+        "renten": 0,
+        "eoLeistungen": null,
+        "ergaenzungsleistungen": null,
+        "beitraege": null,
+        "ausbildungskostenSekundarstufeZwei": null,
+        "ausbildungskostenTertiaerstufe": 2755,
+        "wohnkosten": null,
+        "wgWohnend": null,
+        "willDarlehen": false,
+        "auswaertigeMittagessenProWoche": 5,
+        "betreuungskostenKinder": null,
+        "veranlagungsCode": 0,
+        "steuerjahr": 2023,
+        "vermoegen": 430,
+        "steuernKantonGemeinde": 0
+      },
+      "steuerdaten": [
+        {
+          "steuerdatenTyp": "FAMILIE",
+          "steuernKantonGemeinde": 0,
+          "steuernBund": 0,
+          "fahrkosten": 6700,
+          "verpflegung": 2850,
+          "totalEinkuenfte": 42648,
+          "eigenmietwert": 0,
+          "isArbeitsverhaeltnisSelbstaendig": false,
+          "kinderalimente": 0,
+          "vermoegen": 0,
+          "id": "f47be408-b9f0-4df2-90b4-2c9935fdfdd6",
+          "fahrkostenPartner": 900,
+          "verpflegungPartner": 225,
+          "steuerjahr": 2023,
+          "veranlagungsCode": 0,
+          "saeule3a": null,
+          "saeule2": null
+        }
+      ],
+      "steuerdatenTabs": [
+        "FAMILIE"
+      ]
+    }
+  },
+  "bearbeiter": "bkd19 bkd19"
+}

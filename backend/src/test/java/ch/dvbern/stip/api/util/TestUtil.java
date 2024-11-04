@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.util;
 
 import java.io.File;
@@ -153,7 +170,8 @@ public class TestUtil {
     }
 
     public static ConstraintValidatorContextImpl initValidatorContext() {
-        return new ConstraintValidatorContextImpl(null, PathImpl.createRootPath(), null, null,
+        return new ConstraintValidatorContextImpl(
+            null, PathImpl.createRootPath(), null, null,
             ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT
         );
     }
@@ -195,7 +213,8 @@ public class TestUtil {
     }
 
     public static LocalDate getRandomLocalDateBetween(final LocalDate begin, final LocalDate end) {
-        return LocalDate.ofEpochDay(ThreadLocalRandom.current().nextLong(begin.toEpochDay(), end.toEpochDay()));}
+        return LocalDate.ofEpochDay(ThreadLocalRandom.current().nextLong(begin.toEpochDay(), end.toEpochDay()));
+    }
 
     public static int getRandomInt() {
         return ThreadLocalRandom.current().nextInt();
@@ -229,7 +248,8 @@ public class TestUtil {
         DokumentApiSpec dokumentApiSpec,
         UUID gesuchTrancheId,
         DokumentTypDtoSpec dokTyp,
-        File file) {
+        File file
+    ) {
         dokumentApiSpec.createDokument()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentTypPath(dokTyp)
@@ -279,17 +299,19 @@ public class TestUtil {
                 .setErwachsene2699(5400)
                 .setJugendlicheErwachsene1925(4600)
                 .setKinder0018(1400)
-        ).setGesuchTranchen(
-            List.of(
-                (GesuchTranche) new GesuchTranche()
-                    .setGesuchFormular(
-                        new GesuchFormular()
-                            .setPersonInAusbildung(
-                                new PersonInAusbildung()
-                            )
-                    ).setId(trancheUuid)
-            )
-        );
+        )
+            .setGesuchTranchen(
+                List.of(
+                    (GesuchTranche) new GesuchTranche()
+                        .setGesuchFormular(
+                            new GesuchFormular()
+                                .setPersonInAusbildung(
+                                    new PersonInAusbildung()
+                                )
+                        )
+                        .setId(trancheUuid)
+                )
+            );
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setTranche(gesuch.getNewestGesuchTranche().get());
         gesuch.getNewestGesuchTranche().get().setGesuch(gesuch);
         return gesuch;

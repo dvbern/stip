@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
@@ -47,8 +64,10 @@ public class SbDashboardQueryBuilder {
         };
 
         joinFormular(query);
-        return query.where(formular.personInAusbildung.vorname.isNotNull()
-            .and(formular.personInAusbildung.nachname.isNotNull()));
+        return query.where(
+            formular.personInAusbildung.vorname.isNotNull()
+                .and(formular.personInAusbildung.nachname.isNotNull())
+        );
     }
 
     public void fallNummer(final JPAQuery<Gesuch> query, final String fallNummer) {
@@ -91,8 +110,10 @@ public class SbDashboardQueryBuilder {
     public void bearbeiter(final JPAQuery<Gesuch> query, final String bearbeiter) {
         joinGesuch(query);
         query.join(QZuordnung.zuordnung).on(gesuch.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
-        query.where(QZuordnung.zuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
-            .or(QZuordnung.zuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter)));
+        query.where(
+            QZuordnung.zuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
+                .or(QZuordnung.zuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter))
+        );
     }
 
     public void letzteAktivitaet(

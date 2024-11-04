@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.io.BufferedReader;
@@ -118,10 +135,12 @@ public class TestcaseSeeding extends Seeder {
             tranche.setTyp(GesuchTrancheTyp.TRANCHE);
             tranche.setStatus(GesuchTrancheStatus.AKZEPTIERT);
             tranche.setGesuchDokuments(new ArrayList<>());
-            tranche.setGueltigkeit(new DateRange(
-                gesuchperiodeToAttach.getGesuchsperiodeStart(),
-                gesuchperiodeToAttach.getGesuchsperiodeStopp()
-            ));
+            tranche.setGueltigkeit(
+                new DateRange(
+                    gesuchperiodeToAttach.getGesuchsperiodeStart(),
+                    gesuchperiodeToAttach.getGesuchsperiodeStopp()
+                )
+            );
 
             correctAuszahlungAdresse(tranche.getGesuchFormular());
 
@@ -152,7 +171,7 @@ public class TestcaseSeeding extends Seeder {
 
     @Override
     protected List<String> getProfiles() {
-        return configService.getSeedTestcasesOnProfile();
+        return List.of("dev");
     }
 
     UUID getOrCreateAusbildungsgaenge(
@@ -160,9 +179,12 @@ public class TestcaseSeeding extends Seeder {
         final AusbildungsgangDto dto
     ) {
         return possibleAusbildungsgaenge.stream()
-            .filter(possibleAusbildungsgang ->
-                possibleAusbildungsgang.getBildungskategorie().getBfs() == dto.getBildungskategorie().getBfs() &&
-                    possibleAusbildungsgang.getBezeichnungDe().equals(dto.getBezeichnungDe()))
+            .filter(
+                possibleAusbildungsgang -> possibleAusbildungsgang.getBildungskategorie()
+                    .getBfs() == dto.getBildungskategorie().getBfs()
+                &&
+                possibleAusbildungsgang.getBezeichnungDe().equals(dto.getBezeichnungDe())
+            )
             .findFirst()
             .orElseGet(() -> {
                 final var bildungskategorieToCreate = new Bildungskategorie()
@@ -173,10 +195,11 @@ public class TestcaseSeeding extends Seeder {
                 bildungskategorieRepository.persist(bildungskategorieToCreate);
 
                 final var toCreate = new Ausbildungsgang()
-                    .setAusbildungsstaette(((Ausbildungsstaette) new Ausbildungsstaette()
-                        .setNameDe(dto.getBildungskategorie().getBezeichnungDe())
-                        .setNameFr(dto.getBildungskategorie().getBezeichnungFr())
-                        .setId(dto.getAusbildungsstaetteId()))
+                    .setAusbildungsstaette(
+                        ((Ausbildungsstaette) new Ausbildungsstaette()
+                            .setNameDe(dto.getBildungskategorie().getBezeichnungDe())
+                            .setNameFr(dto.getBildungskategorie().getBezeichnungFr())
+                            .setId(dto.getAusbildungsstaetteId()))
                     )
                     .setBezeichnungFr(dto.getBezeichnungFr())
                     .setBezeichnungDe(dto.getBezeichnungDe())

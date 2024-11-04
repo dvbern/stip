@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.dokument.repo;
 
 import java.util.Optional;
@@ -28,8 +45,10 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         var query = queryFactory
             .select(gesuchDokument)
             .from(gesuchDokument)
-            .where(gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
-                .and(gesuchDokument.dokumentTyp.eq(dokumentTyp)));
+            .where(
+                gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
+                    .and(gesuchDokument.dokumentTyp.eq(dokumentTyp))
+            );
         return query.stream().findFirst();
     }
 
@@ -58,9 +77,11 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
 
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuchDokument)
-            .where(gesuchDokument.gesuchTranche.id.in(
-                gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList()
-            ).and(gesuchDokument.status.eq(dokumentstatus)))
+            .where(
+                gesuchDokument.gesuchTranche.id.in(
+                    gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList()
+                ).and(gesuchDokument.status.eq(dokumentstatus))
+            )
             .stream();
     }
 }

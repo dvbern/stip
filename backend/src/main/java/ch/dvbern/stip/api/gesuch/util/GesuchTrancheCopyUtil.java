@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.util;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -95,7 +112,8 @@ public class GesuchTrancheCopyUtil {
         newTranche.setGueltigkeit(createDateRange);
         newTranche.setComment(comment);
         newTranche.setGesuchFormular(copy(original.getGesuchFormular()));
-        newTranche.setGesuchDokuments(GesuchDokumentCopyUtil.copyGesuchDokumenteWithDokumentReferences(
+        newTranche.setGesuchDokuments(
+            GesuchDokumentCopyUtil.copyGesuchDokumenteWithDokumentReferences(
                 newTranche,
                 original.getGesuchDokuments()
             )
@@ -146,7 +164,9 @@ public class GesuchTrancheCopyUtil {
         final var copy = new GesuchFormular();
 
         // PiA und PiA Adresse
-        copy.setPersonInAusbildung(PersonInAusbildungCopyUtil.createCopyIgnoreReferences(other.getPersonInAusbildung()));
+        copy.setPersonInAusbildung(
+            PersonInAusbildungCopyUtil.createCopyIgnoreReferences(other.getPersonInAusbildung())
+        );
         final var piaAdresseCopy = AdresseCopyUtil.createCopy(other.getPersonInAusbildung().getAdresse());
         copy.getPersonInAusbildung().setAdresse(piaAdresseCopy);
 

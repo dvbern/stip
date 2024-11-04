@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.ausbildung.entity;
 
 import jakarta.validation.ConstraintValidator;
@@ -6,22 +23,24 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
 
 public class AusbildungNichtGefundenRequiredNullFieldsConstraintValidator
-    implements ConstraintValidator<AusbildungNichtGefundenRequiredNullFieldsConstraint, Ausbildung> {
+implements ConstraintValidator<AusbildungNichtGefundenRequiredNullFieldsConstraint, Ausbildung> {
 
     @Override
     public boolean isValid(
         Ausbildung ausbildung,
-        ConstraintValidatorContext constraintValidatorContext) {
+        ConstraintValidatorContext constraintValidatorContext
+    ) {
         if (ausbildung.isAusbildungNichtGefunden()) {
             return ausbildung.getAusbildungsgang() == null;
         }
 
         constraintValidatorContext.disableDefaultConstraintViolation();
         constraintValidatorContext.buildConstraintViolationWithTemplate(
-                VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE)
+            VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE
+        )
             .addConstraintViolation();
         return ausbildung.getAlternativeAusbildungsstaette() == null
-            && ausbildung.getAlternativeAusbildungsgang() == null;
+        && ausbildung.getAlternativeAusbildungsgang() == null;
 
     }
 }

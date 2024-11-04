@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.util;
 
 import java.util.Objects;
@@ -20,10 +37,13 @@ public final class GesuchFormularDiffUtil {
      */
     public static boolean hasGeburtsdatumOfPersonInAusbildungChanged(
         GesuchFormular toUpdate,
-        GesuchFormularUpdateDto update) {
-        if (toUpdate.getPersonInAusbildung() == null
+        GesuchFormularUpdateDto update
+    ) {
+        if (
+            toUpdate.getPersonInAusbildung() == null
             || toUpdate.getPersonInAusbildung().getGeburtsdatum() == null
-            || update.getPersonInAusbildung() == null) {
+            || update.getPersonInAusbildung() == null
+        ) {
             return false;
         }
 
@@ -40,15 +60,17 @@ public final class GesuchFormularDiffUtil {
      * @return true if the Zivilstand has changed to one person, false otherwise
      */
     public static boolean hasZivilstandChangedToOnePerson(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-        if (toUpdate.getPersonInAusbildung() == null
+        if (
+            toUpdate.getPersonInAusbildung() == null
             || toUpdate.getPersonInAusbildung().getZivilstand() == null
             || update.getPersonInAusbildung() == null
-            || update.getPersonInAusbildung().getZivilstand() == null) {
+            || update.getPersonInAusbildung().getZivilstand() == null
+        ) {
             return false;
         }
 
         return toUpdate.getPersonInAusbildung().getZivilstand().hasPartnerschaft() &&
-            !update.getPersonInAusbildung().getZivilstand().hasPartnerschaft();
+        !update.getPersonInAusbildung().getZivilstand().hasPartnerschaft();
     }
 
     /**
@@ -87,7 +109,8 @@ public final class GesuchFormularDiffUtil {
             return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
         }
 
-        return !toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung()
+        return !toUpdate.getFamiliensituation()
+            .getGerichtlicheAlimentenregelung()
             .equals(update.getFamiliensituation().getGerichtlicheAlimentenregelung());
     }
 
@@ -112,21 +135,26 @@ public final class GesuchFormularDiffUtil {
             return true;
         }
 
-        if (newFormular.getFamiliensituation() == null ||
-            toUpdate.getFamiliensituation() == null) {
+        if (
+            newFormular.getFamiliensituation() == null ||
+            toUpdate.getFamiliensituation() == null
+        ) {
             return false;
         }
 
         // Boxed !=
         return !Objects.equals(
             newFormular.getFamiliensituation().getElternteilUnbekanntVerstorben(),
-            toUpdate.getFamiliensituation().getElternteilUnbekanntVerstorben()) ||
-            !Objects.equals(
-                newFormular.getFamiliensituation().getMutterUnbekanntVerstorben(),
-                toUpdate.getFamiliensituation().getMutterUnbekanntVerstorben()) ||
-            !Objects.equals(
-                newFormular.getFamiliensituation().getVaterUnbekanntVerstorben(),
-                toUpdate.getFamiliensituation().getVaterUnbekanntVerstorben());
+            toUpdate.getFamiliensituation().getElternteilUnbekanntVerstorben()
+        ) ||
+        !Objects.equals(
+            newFormular.getFamiliensituation().getMutterUnbekanntVerstorben(),
+            toUpdate.getFamiliensituation().getMutterUnbekanntVerstorben()
+        ) ||
+        !Objects.equals(
+            newFormular.getFamiliensituation().getVaterUnbekanntVerstorben(),
+            toUpdate.getFamiliensituation().getVaterUnbekanntVerstorben()
+        );
     }
 
     public boolean hasWohnsitzChanged(
@@ -137,8 +165,10 @@ public final class GesuchFormularDiffUtil {
             return true;
         }
 
-        if (newFormular.getPersonInAusbildung() == null ||
-            toUpdate.getPersonInAusbildung() == null) {
+        if (
+            newFormular.getPersonInAusbildung() == null ||
+            toUpdate.getPersonInAusbildung() == null
+        ) {
             return false;
         }
 
@@ -164,7 +194,8 @@ public final class GesuchFormularDiffUtil {
             return false;
         }
 
-        return !newFormular.getFamiliensituation().getElternVerheiratetZusammen()
+        return !newFormular.getFamiliensituation()
+            .getElternVerheiratetZusammen()
             .equals(toUpdate.getFamiliensituation().getElternVerheiratetZusammen());
     }
 }

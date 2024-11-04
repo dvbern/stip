@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.Objects;
@@ -47,7 +64,8 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canUpdate(final UUID gesuchId, final GesuchUpdateDto gesuchUpdateDto) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId());
+        final var gesuchTranche =
+            gesuchTrancheRepository.requireById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId());
         canUpdate(gesuchId, gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
     }
 
@@ -65,7 +83,8 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
+        if (
+            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
             (gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung)
         ) {
             return;
@@ -84,7 +103,8 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         // TODO KSTIP-1057: Check if Gesuchsteller can delete their Gesuch
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (isGesuchstellerAndNotAdmin(currentBenutzer) &&
+        if (
+            isGesuchstellerAndNotAdmin(currentBenutzer) &&
             AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
             gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
         ) {

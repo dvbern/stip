@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.communication.mail.service;
 
 import java.io.File;
@@ -39,7 +56,6 @@ class MailServiceTest {
     private static final String TEST_STANDARD_EMAIL_DE_STRING = "neue Nachricht";
     private static final String TEST_STANDARD_EMAIL_FR_STRING = "nouveax message";
 
-
     @Inject
     MockMailbox mailbox;
 
@@ -55,11 +71,14 @@ class MailServiceTest {
     void testMailAsync() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         // Call the asynchronous method with a subscription otherwise the async call is never made
-        mailService.sendEmail(TO, SUBJECT, HTML_CONTENT).subscribe().with(
-            (item) -> latch.countDown()
-            , failure -> {
-                LOG.error("Email couldn't be sent to: " + TO);
-            });
+        mailService.sendEmail(TO, SUBJECT, HTML_CONTENT)
+            .subscribe()
+            .with(
+                (item) -> latch.countDown(),
+                failure -> {
+                    LOG.error("Email couldn't be sent to: " + TO);
+                }
+            );
 
         // Wait for the asynchronous operation to complete
         boolean completed = latch.await(2, TimeUnit.SECONDS);
@@ -80,11 +99,14 @@ class MailServiceTest {
         files.add(file);
         CountDownLatch latch = new CountDownLatch(1);
         // Call the asynchronous method with a subscription otherwise the async call is never made
-        mailService.sendEmailWithAttachment(TO, SUBJECT, HTML_CONTENT, files).subscribe().with(
-            (item) -> latch.countDown()
-            , failure -> {
-                LOG.error("Email couldn't be sent to: " + TO);
-            });
+        mailService.sendEmailWithAttachment(TO, SUBJECT, HTML_CONTENT, files)
+            .subscribe()
+            .with(
+                (item) -> latch.countDown(),
+                failure -> {
+                    LOG.error("Email couldn't be sent to: " + TO);
+                }
+            );
 
         // Wait for the asynchronous operation to complete
         boolean completed = latch.await(2, TimeUnit.SECONDS);
@@ -156,9 +178,11 @@ class MailServiceTest {
         MailMessage actual = sent.get(0);
         actual.getSubject();
         assertThat(actual.getSubject()).isNotBlank();
-        assertThat(actual.getSubject()).isEqualTo(TLProducer.defaultBundle()
-            .forAppLanguage(AppLanguages.DE)
-            .translate("stip.standard.notification"));
+        assertThat(actual.getSubject()).isEqualTo(
+            TLProducer.defaultBundle()
+                .forAppLanguage(AppLanguages.DE)
+                .translate("stip.standard.notification")
+        );
         assertThat(actual.getHtml()).contains(TEST_STANDARD_EMAIL_DE_STRING);
 
         mailService.sendStandardNotificationEmail("", "", TEST_EMAIL, AppLanguages.fromLocale(Locale.FRENCH));
@@ -167,9 +191,11 @@ class MailServiceTest {
         actual = sent.get(1);
         actual.getSubject();
         assertThat(actual.getSubject()).isNotBlank();
-        assertThat(actual.getSubject()).isEqualTo(TLProducer.defaultBundle()
-            .forAppLanguage(AppLanguages.FR)
-            .translate("stip.standard.notification"));
+        assertThat(actual.getSubject()).isEqualTo(
+            TLProducer.defaultBundle()
+                .forAppLanguage(AppLanguages.FR)
+                .translate("stip.standard.notification")
+        );
         assertThat(actual.getHtml()).doesNotContain(TEST_STANDARD_EMAIL_FR_STRING);
     }
 }
