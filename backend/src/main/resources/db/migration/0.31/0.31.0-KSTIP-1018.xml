@@ -1,5 +1,5 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
   <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-1">
     <createTable tableName="gesuch_gesuch_notizen">
       <column name="gesuch_id" type="UUID">
@@ -97,5 +97,10 @@
   </changeSet>
   <changeSet author="anna-lea.fuhrer (generated)" id="1730458311639-13">
     <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_gesuch_notizen_aud" constraintName="FKgj4rhaduqsusyvcdyf5d5qbie" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="fabrice.jakob (generated)" id="1730458311639-14">
+    <createIndex indexName="IX_gesuch_notiz_gesuch_id" tableName="gesuch_notizen">
+      <column name="gesuch_id"/>
+    </createIndex>
   </changeSet>
 </databaseChangeLog>
