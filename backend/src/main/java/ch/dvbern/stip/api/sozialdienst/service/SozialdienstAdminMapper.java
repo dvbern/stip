@@ -6,10 +6,12 @@ import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config= MappingConfig.class)
 public interface SozialdienstAdminMapper {
     SozialdienstAdmin toSozialdienstAdmin(SozialdienstAdminCreateDto createDto);
     SozialdienstAdmin toSozialdienstAdmin(SozialdienstAdminUpdateDto updateDto);
     SozialdienstAdminDto toDto(SozialdienstAdmin sozialdienstAdmin);
+    SozialdienstAdminDto partialUpdate(SozialdienstAdminUpdateDto updateDto, @MappingTarget SozialdienstAdmin entity);
 }

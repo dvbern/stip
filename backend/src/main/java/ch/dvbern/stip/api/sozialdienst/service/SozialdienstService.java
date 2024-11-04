@@ -26,8 +26,6 @@ public class SozialdienstService {
         final var admin = sozialdienstAdminService.createSozialdienstAdminBenutzer(sozialdienstAdmin);
         sozialdienst.setAdmin(admin);
         sozialdienstRepository.persistAndFlush(sozialdienst);
-
-
         var result = sozialdienstMapper.toDto(sozialdienst);
         var adminDto = sozialdienstAdminMapper.toDto(admin);
         result.setSozialdienstAdmin(adminDto);
@@ -68,11 +66,9 @@ public class SozialdienstService {
     }
 
     @Transactional
-    public SozialdienstAdminDto updateSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminUpdateDto dto) {
-        var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
+    public SozialdienstAdminDto updateSozialdienstAdmin(SozialdienstAdminUpdateDto dto) {
         var sozialdienstAdmin = sozialdienstAdminMapper.toSozialdienstAdmin(dto);
-        sozialdienst.getAdmin().setVorname(sozialdienstAdmin.getVorname());
-        sozialdienst.getAdmin().setNachname(sozialdienstAdmin.getNachname());
+        sozialdienstAdminMapper.partialUpdate(dto, sozialdienstAdmin);
         return sozialdienstAdminMapper.toDto(sozialdienstAdmin);
     }
 
