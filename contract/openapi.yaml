@@ -4019,6 +4019,9 @@ components:
     NotificationType:
       enum:
         - GESUCH_EINGEREICHT
+        - GESUCH_STATUS_CHANGE_WITH_COMMENT
+        - FEHLENDE_DOKUMENTE
+        - AENDERUNG_ABGELEHNT
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:

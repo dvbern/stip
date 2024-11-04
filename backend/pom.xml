@@ -41,6 +41,8 @@
     <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
     <kie.version>8.41.0.Final</kie.version>
     <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
+    <spotless.version>2.43.0</spotless.version>
+    <spotless.eclipse.version>4.29</spotless.eclipse.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -470,6 +472,55 @@
             <version>${quarkus.platform.version}</version>
           </dependency>
         </dependencies>
+      </plugin>
+      <!-- </editor-fold> -->
+
+      <!-- <editor-fold desc="spotless-maven-plugin" defaultstate="collapsed">-->
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>${spotless.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <ratchetFrom>origin/main</ratchetFrom>
+          <java>
+            <excludes>
+              <include>src/**/generated/**/*.*</include>
+            </excludes>
+            
+            <!-- It is currently not possible to replace star imports with non-start, so the only thing we can ndo is remove them -->
+            <replaceRegex>
+              <name>Remove wildcard imports</name>
+              <searchRegex>import\s+(?:static\s+)?[^\*\s]+\*;(\r\n|\r|\n)</searchRegex>
+              <replacement>$1</replacement>
+            </replaceRegex>
+            
+            <!-- Apply Cleanthat before formatting as it may break existing formatting -->
+            <cleanthat />
+            
+            <eclipse>
+              <version>${spotless.eclipse.version}</version>
+              <file>${project.basedir}/stip-codestyle.xml</file>
+            </eclipse>
+            
+            <trimTrailingWhitespace />
+            
+            <importOrder>
+              <order>java,,\#</order>
+            </importOrder>
+            <removeUnusedImports />
+
+            <licenseHeader>
+              <file>${project.basedir}/LICENSE_HEADER.txt</file>
+            </licenseHeader>
+          </java>
+        </configuration>
       </plugin>
       <!-- </editor-fold> -->
     </plugins>
