@@ -8,6 +8,7 @@ import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
+import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.FallDto;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -33,6 +34,7 @@ class AusbildungResourceTest {
     private final AusbildungApiSpec ausbildungApiSpec =
         AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
 
     private FallDto fall;
 
@@ -68,7 +70,6 @@ class AusbildungResourceTest {
             .extract()
             .body()
             .as(AusbildungDto.class);
-
     }
 
     @Test
@@ -105,5 +106,12 @@ class AusbildungResourceTest {
             .as(AusbildungDto.class);
 
         assertThat(updatedAusbildung.getAusbildungsort(), is(ausbildungsOrtToSet));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(5)
+    void deleteAusbildung() {
+        TestUtil.deleteAusbildung(gesuchApiSpec, ausbildung.getId());
     }
 }

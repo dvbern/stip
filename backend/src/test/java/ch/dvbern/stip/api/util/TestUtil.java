@@ -42,6 +42,7 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import io.restassured.response.ValidatableResponse;
@@ -75,6 +76,34 @@ public class TestUtil {
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    public static void deleteAusbildung(final GesuchApiSpec gesuchApiSpec, final UUID ausbildungId) {
+        final var dashboard = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+
+        for (final var fallDashboard : dashboard) {
+            for (final var ausbildungDashboards : fallDashboard.getAusbildungDashboardItems()
+                .stream()
+                .filter(ausbildungDashboard -> ausbildungDashboard.getId().equals(ausbildungId))
+                .toList()
+            ) {
+                for (final var gesuch : ausbildungDashboards.getGesuchs()) {
+                    gesuchApiSpec.deleteGesuch()
+                        .gesuchIdPath(gesuch.getId())
+                        .execute(TestUtil.PEEK_IF_ENV_SET)
+                        .then()
+                        .assertThat()
+                        .statusCode(Status.NO_CONTENT.getStatusCode());
+                }
+            }
+        }
     }
 
     public static void deleteGesucheOfSb(final GesuchApiSpec gesuchApiSpec) {
@@ -160,10 +189,6 @@ public class TestUtil {
     ) {
         final var fall = getOrCreateFall(fallApiSpec);
         final var ausbildung = createAusbildung(ausbildungApiSpec, fall.getId());
-//        final var gesuchDTO = new GesuchCreateDtoSpec();
-//        gesuchDTO.setAusbildungId(ausbildung.getId());
-//        gesuchDTO.setFallId(fall.getId());
-//        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
         final var gesuche = gesuchApiSpec.getGesucheGs()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -173,24 +198,7 @@ public class TestUtil {
             .body()
             .as(GesuchDtoSpec[].class);
 
-//        final var gesuchResponse = gesuchApiSpec.createGesuch()
-        //            .body(gesuchDTO)
-        //            .execute(TestUtil.PEEK_IF_ENV_SET)
-        //            .then()
-        //            .assertThat()
-        //            .statusCode(Response.Status.CREATED.getStatusCode());
         return gesuche[0];
-//        final var gesuchId = TestUtil.extractIdFromResponse(gesuchResponse);
-//
-//        return gesuchApiSpec.getCurrentGesuch()
-//            .gesuchIdPath(gesuchId)
-//            .execute(TestUtil.PEEK_IF_ENV_SET)
-//            .then()
-//            .assertThat()
-//            .statusCode(Status.OK.getStatusCode())
-//            .extract()
-//            .body()
-//            .as(GesuchDtoSpec.class);
     }
 
     public static UUID extractIdFromResponse(ValidatableResponse response) {
@@ -235,7 +243,8 @@ public class TestUtil {
     }
 
     public static LocalDate getRandomLocalDateBetween(final LocalDate begin, final LocalDate end) {
-        return LocalDate.ofEpochDay(ThreadLocalRandom.current().nextLong(begin.toEpochDay(), end.toEpochDay()));}
+        return LocalDate.ofEpochDay(ThreadLocalRandom.current().nextLong(begin.toEpochDay(), end.toEpochDay()));
+    }
 
     public static int getRandomInt() {
         return ThreadLocalRandom.current().nextInt();
@@ -408,7 +417,6 @@ public class TestUtil {
                     .setVorname("a")
             )
         );
-
 
         gesuchFormular.setElterns(
             Set.of(

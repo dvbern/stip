@@ -6,14 +6,11 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
-import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
-import ch.dvbern.stip.generated.api.BenutzerApiSpec;
-import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -21,6 +18,7 @@ import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -40,29 +38,14 @@ import static org.junit.Assert.assertNull;
 class GesuchResourceEinnahmenKostenTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
-    private final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
-    private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-    private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
+    private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
 
-    private UUID adresseId;
-    private UUID partnerAdresseId;
-
     void createGesuch() {
-        final var ausbildung = TestUtil.createAusbildung(ausbildungApiSpec, UUID.fromString(TestConstants.FALL_TEST_ID));
-
-        var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setAusbildungId(ausbildung.getId());
-//        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-//        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
-        var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
-            .then();
-
-        response.assertThat()
-            .statusCode(Status.CREATED.getStatusCode());
-
-        gesuchId = TestUtil.extractIdFromResponse(response);
+        final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        gesuchId = gesuch.getId();
     }
 
 
@@ -80,6 +63,7 @@ class GesuchResourceEinnahmenKostenTest {
 
     @Test
     @TestAsGesuchsteller
+    @Order(1)
     void testUpdateGesuchEmptyEinnahmenKosten() {
         createGesuch();
         createTranche();
@@ -105,8 +89,13 @@ class GesuchResourceEinnahmenKostenTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-        adresseId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().getId();
-        partnerAdresseId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().getAdresse().getId();
         assertNull(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(2)
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
 }

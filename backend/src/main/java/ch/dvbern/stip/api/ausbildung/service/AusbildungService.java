@@ -8,6 +8,7 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
@@ -27,10 +28,16 @@ public class AusbildungService {
     private final AusbildungMapper ausbildungMapper;
     private final GesuchService gesuchService;
     private final GesuchsperiodenService gesuchsperiodeService;
+    private final FallRepository fallRepository;
     private final Validator validator;
 
     @Transactional
     public AusbildungDto createAusbildung(final AusbildungUpdateDto ausbildungUpdateDto) {
+        final var fall = fallRepository.requireById(ausbildungUpdateDto.getFallId());
+        if (!fall.getAusbildungs().isEmpty()) {
+            throw new RuntimeException("Error!");
+        }
+
         final var ausbildung = ausbildungMapper.toNewEntity(ausbildungUpdateDto);
         Set<ConstraintViolation<Ausbildung>> violations = validator.validate(ausbildung);
         if (!violations.isEmpty()) {

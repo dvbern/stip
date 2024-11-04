@@ -148,7 +148,7 @@ class GesuchGetGesucheTest {
 
         final var gesuchDashboardItem = gesuchDashboardItems.get(0);
 
-        assertThat(gesuchDashboardItem.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
+        assertThat(gesuchDashboardItem.getGesuchStatus(), is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
     }
 
     @Test

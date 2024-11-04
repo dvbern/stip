@@ -433,7 +433,8 @@ public class GesuchService {
         final var ausbildung = gesuch.getAusbildung();
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
-        if (ausbildung.getGesuchs().size() == 0) {
+
+        if (ausbildung.getGesuchs().isEmpty()) {
             ausbildungRepository.delete(ausbildung);
         }
     }
