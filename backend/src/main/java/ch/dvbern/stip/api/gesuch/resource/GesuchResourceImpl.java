@@ -121,10 +121,10 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuch).build();
     }
 
+    @AllowAll
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGsDashboard() {
-        gesuchAuthorizer.canGsRead();
         return Response.ok(gesuchService.findGsDashboard()).build();
     }
 

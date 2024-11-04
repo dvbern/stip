@@ -28,22 +28,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final FallRepository fallRepository;
 
     @Transactional
-    public void canGsRead() {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        final var gesuch = gesuchRepository.findForGs(currentBenutzer.getId()).findFirst();
-
-        if (gesuch.isEmpty()) {
-            throw new UnauthorizedException();
-        }
-
-        if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch.get())) {
-            return;
-        }
-
-        throw new UnauthorizedException();
-    }
-
-    @Transactional
     public void canRead(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
