@@ -13,7 +13,7 @@ import {
   toKnownUserErrorType,
 } from './sachbearbeitung-app-util-fn-keycloak-helper';
 
-describe.skip('Keycloak-Helper Functions', () => {
+describe('Keycloak-Helper Functions', () => {
   it('hasLocationHeader - checks correctly for location header in a HttpResponse', () => {
     const httpResponse = new HttpResponse({
       headers: new HttpHeaders({

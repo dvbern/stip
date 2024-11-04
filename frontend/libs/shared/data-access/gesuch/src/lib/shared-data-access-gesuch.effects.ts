@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ActionCreator, Creator, Store } from '@ngrx/store';
@@ -32,6 +31,7 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { AppType } from '@dv/shared/model/config';
 import { SharedModelError } from '@dv/shared/model/error';
 import {

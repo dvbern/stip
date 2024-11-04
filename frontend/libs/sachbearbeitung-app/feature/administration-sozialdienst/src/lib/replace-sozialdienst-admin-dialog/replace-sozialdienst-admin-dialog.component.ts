@@ -31,7 +31,6 @@ export interface ReplaceSozialdienstAdminDialogResult {
 }
 
 @Component({
-  selector: 'dv-replace-sozialdienst-admin-dialog',
   standalone: true,
   imports: [
     CommonModule,

@@ -234,7 +234,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
           this.store.replaceSozialdienstAdmin$({
             sozialdienstId,
             existingSozialdienstAdminKeycloakId: sozialdienstAdminId,
-            newAdmin: result,
+            newUser: result,
           });
         }
       });

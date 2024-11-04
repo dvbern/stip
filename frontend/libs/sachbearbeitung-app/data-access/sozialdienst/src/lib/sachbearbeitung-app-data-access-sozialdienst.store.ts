@@ -5,24 +5,17 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
   EMPTY,
   catchError,
-  combineLatestWith,
   exhaustMap,
-  filter,
   map,
   pipe,
   switchMap,
   tap,
   throwError,
-  throwIfEmpty,
 } from 'rxjs';
 
 import { KeycloakHttpService } from '@dv/sachbearbeitung-app/util/keycloak-http';
-import { hasLocationHeader } from '@dv/sachbearbeitung-app/util-fn/keycloak-helper';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import {
-  SharedModelBenutzerApi,
-  bySozialdienstAdminRole,
-} from '@dv/shared/model/benutzer';
+import { SharedModelBenutzerApi } from '@dv/shared/model/benutzer';
 import {
   Sozialdienst,
   SozialdienstAdminCreate,
@@ -121,31 +114,12 @@ export class SozialdienstStore extends signalStore(
         };
 
         return this.keycloak
-          .createUser$({
-            email: newUser.email,
+          .createUserWithSozialDienstAdminRole$({
             name: newUser.nachname,
-            vorname: newUser.vorname,
+            vorname: newUser.nachname,
+            email: newUser.email,
           })
           .pipe(
-            filter(hasLocationHeader),
-            throwIfEmpty(() => new Error('User creation failed')),
-            switchMap((response) =>
-              this.keycloak.loadUserByUrl$(response.headers.get('Location')),
-            ),
-            combineLatestWith(this.keycloak.getRoles$(bySozialdienstAdminRole)),
-            switchMap(([user, roles]) => {
-              const adminRole = roles.find(
-                (role) => role.name === 'Sozialdienst-Admin',
-              );
-
-              if (!adminRole) {
-                throw new Error('Admin Role not found');
-              }
-
-              return this.keycloak.assignRoles$(user, [
-                { id: adminRole.id, name: 'Sozialdienst-Admin' },
-              ]);
-            }),
             switchMap((user) => {
               if (!user.email) {
                 throw new Error('User email not defined');
@@ -179,7 +153,6 @@ export class SozialdienstStore extends signalStore(
                 );
             }),
             switchMap(({ sozialdienst, user }) =>
-              // todo: does backend already do this?
               this.keycloak
                 .notifyUser$({
                   name: user.lastName,
@@ -291,7 +264,7 @@ export class SozialdienstStore extends signalStore(
   replaceSozialdienstAdmin$ = rxMethod<{
     sozialdienstId: string;
     existingSozialdienstAdminKeycloakId: string;
-    newAdmin: Omit<SozialdienstAdminCreate, 'keycloakId'>;
+    newUser: Omit<SozialdienstAdminCreate, 'keycloakId'>;
   }>(
     pipe(
       tap(() => {
@@ -300,35 +273,18 @@ export class SozialdienstStore extends signalStore(
         });
       }),
       exhaustMap(
-        ({ sozialdienstId, existingSozialdienstAdminKeycloakId, newAdmin }) => {
+        ({
+          sozialdienstId,
+          existingSozialdienstAdminKeycloakId,
+          newUser: newUser,
+        }) => {
           return this.keycloak
-            .createUser$({
-              name: newAdmin.nachname,
-              vorname: newAdmin.nachname,
-              email: newAdmin.email,
+            .createUserWithSozialDienstAdminRole$({
+              name: newUser.nachname,
+              vorname: newUser.nachname,
+              email: newUser.email,
             })
             .pipe(
-              filter(hasLocationHeader),
-              throwIfEmpty(() => new Error('User creation failed')),
-              switchMap((response) =>
-                this.keycloak.loadUserByUrl$(response.headers.get('Location')),
-              ),
-              combineLatestWith(
-                this.keycloak.getRoles$(bySozialdienstAdminRole),
-              ),
-              switchMap(([user, roles]) => {
-                const adminRole = roles.find(
-                  (role) => role.name === 'Sozialdienst-Admin',
-                );
-
-                if (!adminRole) {
-                  throw new Error('Admin Role not found');
-                }
-
-                return this.keycloak.assignRoles$(user, [
-                  { id: adminRole.id, name: 'Sozialdienst-Admin' },
-                ]);
-              }),
               switchMap((user) => {
                 if (!user.email) {
                   throw new Error('User email not defined');
