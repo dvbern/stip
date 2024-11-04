@@ -1,4 +1,6 @@
-anrede} {nachname}
+{anrede} {nachname}
+
+Nous devons les informer que leur modification a été refusée pour la raison suivante:
 
 {kommentar}
 

@@ -1,5 +1,7 @@
 {anrede} {nachname}
 
+Wir müssen sie darüber informieren, dass ihre Änderung aus folgendem Grund abgelehnt wurde:
+
 {kommentar}
 
 Freundliche Grüsse
