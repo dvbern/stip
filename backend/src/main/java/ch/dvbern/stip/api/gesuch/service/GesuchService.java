@@ -53,6 +53,7 @@ import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
@@ -103,6 +104,7 @@ public class GesuchService {
     private final GesuchNummerService gesuchNummerService;
     private final GsDashboardMapper gsDashboardMapper;
     private final ConfigService configService;
+    private final GesuchNotizService gesuchNotizService;
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
 
@@ -419,6 +421,7 @@ public class GesuchService {
         gesuch.getGesuchTranchen().forEach(
             gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
         );
+        gesuchNotizService.deleteAllByGesuchId(gesuchId);
         gesuchRepository.delete(gesuch);
     }
 
@@ -455,7 +458,7 @@ public class GesuchService {
 
     @Transactional
     public void gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
-        // TODO KSTIP-1130: Juristische Notiz erstellen anhand Kommentar
+        // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto);
     }

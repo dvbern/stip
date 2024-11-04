@@ -240,6 +240,128 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToVersendet
+  '/gesuch/{gesuchId}/notiz/all':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchNotiz
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GesuchNotiz'
+          description: all notizen of a gesuch are returned
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getNotizen
+      summary: Get all notizen of a gesuch
+  '/gesuch/notiz/create':
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchNotizCreate'
+        required: true
+      tags:
+        - GesuchNotiz
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchNotiz'
+          description: new notiz is created
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createNotiz
+      summary: Creates a new Notiz for an existing gesuch
+  '/gesuch/notiz':
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchNotizUpdate'
+        required: true
+      tags:
+        - GesuchNotiz
+      responses:
+        '202':
+          description: Notiz updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateNotiz
+      summary: Updates the Notiz of a Gesuch with the given Notiz-Id
+  '/gesuch/notiz/{notizId}':
+    parameters:
+      - name: notizId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchNotiz
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchNotiz'
+          description: |
+            get a single notiz
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getNotiz
+      summary: get a single Notiz of a Gesuch with the given Notiz-Id
+    delete:
+      tags:
+        - GesuchNotiz
+      responses:
+        '204':
+          description: |
+            Notiz deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteNotiz
+      summary: delete a Notiz of a Gesuch with the given Notiz-Id
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -3918,6 +4040,46 @@ components:
       properties:
         text:
           type: string
+    GesuchNotizCreate:
+      type: object
+      required:
+        - gesuchId
+        - betreff
+        - text
+      properties:
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        betreff:
+          maximum: 100
+          type: string
+        text:
+          type: string
+    GesuchNotizUpdate:
+      type: object
+      required:
+        - betreff
+        - text
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        betreff:
+          maximum: 100
+          type: string
+        text:
+          type: string
+    GesuchNotiz:
+      required:
+        - userErstellt
+        - timestampErstellt
+      type: object
+      properties:
+        userErstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
+      allOf:
+        - type: object
+        - $ref: '#/components/schemas/GesuchNotizUpdate'
     PaginatedResult:
       type: object
       properties:
