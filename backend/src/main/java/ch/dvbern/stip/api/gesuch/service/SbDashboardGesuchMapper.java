@@ -14,12 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 public class SbDashboardGesuchMapper {
     public SbDashboardGesuchDto toDto(final Gesuch gesuch, final GesuchTrancheTyp typ) {
         return switch (typ) {
-            case TRANCHE -> toDto(gesuch, gesuch.getLatestGesuchTranche());
-            case AENDERUNG -> toDto(gesuch, gesuch.getAenderungZuUeberpruefen().orElseThrow());
+            case TRANCHE -> toDto(gesuch, gesuch.getLatestGesuchTranche(), typ);
+            case AENDERUNG -> toDto(gesuch, gesuch.getAenderungZuUeberpruefen().orElseThrow(), typ);
         };
     }
 
-    SbDashboardGesuchDto toDto(final Gesuch gesuch, final GesuchTranche gesuchTranche) {
+    SbDashboardGesuchDto toDto(final Gesuch gesuch, final GesuchTranche gesuchTranche, final GesuchTrancheTyp typ) {
         final var target = new SbDashboardGesuchDto();
         target.setId(gesuch.getId());
         target.setGesuchTrancheId(gesuchTranche.getId());
@@ -35,7 +35,9 @@ public class SbDashboardGesuchMapper {
             LOG.warn("Gesuch was loaded to SB Dashboard that had no PiA");
         }
 
-        target.setStatus(gesuch.getGesuchStatus());
+        target.setGesuchStatus(gesuch.getGesuchStatus());
+        target.setTrancheStatus(gesuchTranche.getStatus());
+
         final var zuordnung = gesuch.getFall().getSachbearbeiterZuordnung();
         if (zuordnung != null) {
             target.setBearbeiter(zuordnung.getSachbearbeiter().getFullName());

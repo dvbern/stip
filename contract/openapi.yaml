@@ -4107,7 +4107,8 @@ components:
         - piaNachname
         - piaVorname
         - piaGeburtsdatum
-        - status
+        - trancheStatus
+        - gesuchStatus
         - bearbeiter
         - letzteAktivitaet
       properties:
@@ -4126,8 +4127,10 @@ components:
         piaGeburtsdatum:
           type: string
           format: date
-        status:
+        gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
+        trancheStatus:
+          $ref: '#/components/schemas/GesuchTrancheStatus'
         bearbeiter:
           type: string
         letzteAktivitaet:

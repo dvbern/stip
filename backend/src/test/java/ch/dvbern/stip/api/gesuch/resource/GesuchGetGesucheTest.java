@@ -124,7 +124,7 @@ class GesuchGetGesucheTest {
     private void allAreNotInWrongStatus(final List<SbDashboardGesuchDtoSpec> gesuche, final GesuchstatusDtoSpec... wrongStatus) {
         for (final var gesuch : gesuche) {
             for (final var status : wrongStatus) {
-                assertThat(gesuch.getStatus(), not(status));
+                assertThat(gesuch.getGesuchStatus(), not(status));
             }
         }
     }
