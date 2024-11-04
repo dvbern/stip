@@ -10,10 +10,8 @@
  * Do not edit the class manually.
  */
 import { GesuchDashboardItem } from './gesuchDashboardItem';
-import { Gesuchsperiode } from './gesuchsperiode';
 
 export interface AusbildungDashboardItemAllOf { 
-    periode: Gesuchsperiode;
     gesuchs?: Array<GesuchDashboardItem>;
 }
 

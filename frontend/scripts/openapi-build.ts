@@ -169,6 +169,7 @@ async function sleep(msec: number) {
     'Dokument',
     'Fall',
     'Gesuch',
+    'GesuchNotiz',
     'Gesuchsjahr',
     'Gesuchsperiode',
     'GesuchTranche',

@@ -111,6 +111,13 @@ export const RETURN_TO_HOME: SharedModelGesuchFormStep = {
   iconSymbolName: '',
 } satisfies SharedModelGesuchFormStep;
 
+export const PROTOKOLL: SharedModelGesuchFormStep = {
+  route: 'protokoll',
+  translationKey: 'shared.protokoll.title',
+  titleTranslationKey: 'shared.protokoll.title',
+  iconSymbolName: 'history',
+} satisfies SharedModelGesuchFormStep;
+
 // Dynamic steps
 export const ELTERN_STEUERDATEN_ROUTE = 'eltern-steuerdaten';
 const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {

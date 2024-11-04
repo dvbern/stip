@@ -63,6 +63,9 @@ public class ApiClient {
     public GesuchApiSpec gesuch() {
         return GesuchApiSpec.gesuch(config.reqSpecSupplier);
     }
+    public GesuchNotizApiSpec gesuchNotiz() {
+        return GesuchNotizApiSpec.gesuchNotiz(config.reqSpecSupplier);
+    }
     public GesuchTrancheApiSpec gesuchTranche() {
         return GesuchTrancheApiSpec.gesuchTranche(config.reqSpecSupplier);
     }

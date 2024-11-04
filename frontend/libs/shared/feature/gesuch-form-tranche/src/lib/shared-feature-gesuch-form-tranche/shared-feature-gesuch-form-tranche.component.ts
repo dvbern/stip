@@ -11,7 +11,6 @@ import {
   FormsModule,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
@@ -86,14 +85,14 @@ export class SharedFeatureGesuchFormTrancheComponent {
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
 
   form = this.formBuilder.group({
-    status: ['', [Validators.required]],
-    pia: ['', [Validators.required]],
-    gesuchsnummer: ['', [Validators.required]],
-    fallnummer: ['', [Validators.required]],
-    sachbearbeiter: ['', [Validators.required]],
-    von: ['', [Validators.required]],
-    bis: ['', [Validators.required]],
-    bemerkung: ['', [Validators.required]],
+    status: [''],
+    pia: [''],
+    gesuchsnummer: [''],
+    fallnummer: [''],
+    sachbearbeiter: [''],
+    von: [''],
+    bis: [''],
+    bemerkung: [''],
   });
 
   currentTrancheIndexSig = computed(() => {
