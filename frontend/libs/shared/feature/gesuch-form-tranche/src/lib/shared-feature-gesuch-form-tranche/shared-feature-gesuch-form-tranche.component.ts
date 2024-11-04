@@ -95,11 +95,11 @@ export class SharedFeatureGesuchFormTrancheComponent {
     bemerkung: [''],
   });
 
-  currentTrancheIndexSig = computed(() => {
+  currentTrancheNumberSig = computed(() => {
     const currentTranche = this.viewSig().tranche;
 
     if (!currentTranche) {
-      return 0;
+      return '…';
     }
 
     const tranchen = this.gesuchAenderungStore.tranchenViewSig();
@@ -112,7 +112,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
       (aenderung) => aenderung.id === currentTranche.id,
     );
 
-    return index ?? 0;
+    return index >= 0 ? index + 1 : '…';
   });
 
   constructor() {

@@ -3,9 +3,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
   computed,
   inject,
+  input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -57,8 +57,9 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   providers: [SharedUtilHeaderService],
 })
 export class GesuchAppPatternGesuchStepLayoutComponent {
-  @Input()
-  step?: SharedModelGesuchFormStep;
+  stepSig = input<SharedModelGesuchFormStep | undefined>(undefined, {
+    alias: 'step',
+  });
 
   navClicked = new EventEmitter<{ value: boolean }>();
 
@@ -86,11 +87,11 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   });
   currentStepProgressSig = computed(() => {
     const stepsFlow = this.stepsViewSig().stepsFlow;
-    return this.stepManager.getStepProgress(stepsFlow, this.step);
+    return this.stepManager.getStepProgress(stepsFlow, this.stepSig());
   });
   currentStepSig = computed(() => {
     const steps = this.stepsSig();
-    return steps.find((step) => step.route === this.step?.route);
+    return steps.find((step) => step.route === this.stepSig()?.route);
   });
 
   constructor() {

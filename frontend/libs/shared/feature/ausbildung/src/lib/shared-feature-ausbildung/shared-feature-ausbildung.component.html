@@ -1,227 +1,234 @@
-<form
-  [formGroup]="form"
-  data-testid="form-education-form"
-  novalidate
-  class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-mt-6 tw-pt-4 tw-gap-y-4 tw-gap-x-6"
-  [class.lg:tw-grid-cols-3]="!fallIdSig()"
-  (ngSubmit)="handleSave()"
->
-  <h3 class="md:tw-col-span-2 lg:tw-col-span-3">
-    {{ 'shared.form.ausbildung.place.title' | translate }}
-  </h3>
+@if (
+  (ausbildungStore.ausbildung() | rdIsPendingWithoutCache) ||
+  (ausbildungsstatteStore.ausbildungsstaetten() | rdIsPendingWithoutCache)
+) {
+  <dv-shared-ui-loading></dv-shared-ui-loading>
+} @else {
+  <form
+    [formGroup]="form"
+    data-testid="form-education-form"
+    novalidate
+    class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-mt-6 tw-pt-4 tw-gap-y-4 tw-gap-x-6"
+    [class.lg:tw-grid-cols-3]="!fallIdSig()"
+    (ngSubmit)="handleSave()"
+  >
+    <h3 class="md:tw-col-span-2 lg:tw-col-span-3">
+      {{ 'shared.form.ausbildung.place.title' | translate }}
+    </h3>
 
-  @if (!form.value['ausbildungNichtGefunden']) {
-    <!-- STAETTE -->
-    <mat-form-field dvSharedUiFormField>
-      <mat-label>
-        {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
-      </mat-label>
-
-      <input
-        id="typeahead-focus"
-        type="text"
-        formControlName="ausbildungsstaette"
-        data-testid="form-education-ausbildungsstaette"
-        matInput
-        [matAutocomplete]="staetten"
-        [placeholder]="'shared.form.select.empty' | translate"
-      />
-      @if (form.controls.ausbildungsstaette.value) {
-        <button
-          type="button"
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="form.controls.ausbildungsstaette.reset()"
-          data-testid="button-form-education-ausbildungsstaette-clear"
-        >
-          <span class="material-symbols-rounded align-middle">clear</span>
-        </button>
-      }
-      <mat-autocomplete #staetten="matAutocomplete">
-        @for (staette of ausbildungsstaettOptionsSig(); track $index) {
-          <mat-option [value]="staette.translatedName" [attr.data-testid]="staette.nameDe">
-            {{ staette.translatedName }}
-          </mat-option>
-        }
-      </mat-autocomplete>
-    </mat-form-field>
-  } @else {
-    <!-- Alternative STAETTE -->
-    <mat-form-field dvSharedUiFormField>
-      <mat-label>
-        {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
-      </mat-label>
-      <input
-        matInput
-        type="text"
-        formControlName="alternativeAusbildungsstaette"
-        data-testid="form-education-alternativeAusbildungsstaette"
-      />
-    </mat-form-field>
-  }
-
-  <!-- GANG -->
-  <mat-form-field dvSharedUiFormField class="tw-col-start-1">
-    <mat-label>
-      {{ 'shared.form.ausbildung.ausbildungsgang.label' | translate }}
-    </mat-label>
     @if (!form.value['ausbildungNichtGefunden']) {
-      <!-- Ausbildungsgang Select -->
-      <mat-select
-        formControlName="ausbildungsgang"
-        data-testid="form-education-ausbildungsgang"
-        (valueChange)="handleGangChangedByUser()"
-        [placeholder]="'shared.form.select.empty' | translate"
-      >
-        @for (l of ausbildungsgangOptionsSig(); track $index) {
-          <mat-option [value]="l.id" [attr.data-testid]="l.bezeichnungDe">
-            {{ l.translatedName }}
-          </mat-option>
+      <!-- STAETTE -->
+      <mat-form-field dvSharedUiFormField>
+        <mat-label>
+          {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
+        </mat-label>
+
+        <input
+          id="typeahead-focus"
+          type="text"
+          formControlName="ausbildungsstaette"
+          data-testid="form-education-ausbildungsstaette"
+          matInput
+          [matAutocomplete]="staetten"
+          [placeholder]="'shared.form.select.empty' | translate"
+        />
+        @if (form.controls.ausbildungsstaette.value) {
+          <button
+            type="button"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="form.controls.ausbildungsstaette.reset()"
+            data-testid="button-form-education-ausbildungsstaette-clear"
+          >
+            <span class="material-symbols-rounded align-middle">clear</span>
+          </button>
         }
-      </mat-select>
+        <mat-autocomplete #staetten="matAutocomplete">
+          @for (staette of ausbildungsstaettOptionsSig(); track $index) {
+            <mat-option [value]="staette.translatedName" [attr.data-testid]="staette.nameDe">
+              {{ staette.translatedName }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
     } @else {
-      <!-- alternativer Ausbildungsgang -->
-      <input
-        type="text"
-        matInput
-        formControlName="alternativeAusbildungsgang"
-        data-testid="form-education-alternativeAusbildungsgang"
-      />
+      <!-- Alternative STAETTE -->
+      <mat-form-field dvSharedUiFormField>
+        <mat-label>
+          {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
+        </mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="alternativeAusbildungsstaette"
+          data-testid="form-education-alternativeAusbildungsstaette"
+        />
+      </mat-form-field>
+    }
+
+    <!-- GANG -->
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+      <mat-label>
+        {{ 'shared.form.ausbildung.ausbildungsgang.label' | translate }}
+      </mat-label>
+      @if (!form.value['ausbildungNichtGefunden']) {
+        <!-- Ausbildungsgang Select -->
+        <mat-select
+          formControlName="ausbildungsgang"
+          data-testid="form-education-ausbildungsgang"
+          (valueChange)="handleGangChangedByUser()"
+          [placeholder]="'shared.form.select.empty' | translate"
+        >
+          @for (l of ausbildungsgangOptionsSig(); track $index) {
+            <mat-option [value]="l.id" [attr.data-testid]="l.bezeichnungDe">
+              {{ l.translatedName }}
+            </mat-option>
+          }
+        </mat-select>
+      } @else {
+        <!-- alternativer Ausbildungsgang -->
+        <input
+          type="text"
+          matInput
+          formControlName="alternativeAusbildungsgang"
+          data-testid="form-education-alternativeAusbildungsgang"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- FACHRICHTUNG -->
+    <mat-form-field dvSharedUiFormField>
+      <mat-label>
+        {{ 'shared.form.ausbildung.fachrichtung.label' | translate }}
+      </mat-label>
+      <input type="text" matInput formControlName="fachrichtung" data-testid="form-education-fachrichtung" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
-    }
-  </mat-form-field>
+    </mat-form-field>
 
-  <!-- FACHRICHTUNG -->
-  <mat-form-field dvSharedUiFormField>
-    <mat-label>
-      {{ 'shared.form.ausbildung.fachrichtung.label' | translate }}
-    </mat-label>
-    <input type="text" matInput formControlName="fachrichtung" data-testid="form-education-fachrichtung" />
-    <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | translate }}
-    </mat-error>
-  </mat-form-field>
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+      <mat-label>
+        {{ 'shared.form.ausbildung.ausbildungsort.label' | translate }}
+      </mat-label>
+      <input type="text" matInput formControlName="ausbildungsort" data-testid="form-education-ausbildungsort" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
 
-  <mat-form-field dvSharedUiFormField class="tw-col-start-1">
-    <mat-label>
-      {{ 'shared.form.ausbildung.ausbildungsort.label' | translate }}
-    </mat-label>
-    <input type="text" matInput formControlName="ausbildungsort" data-testid="form-education-ausbildungsort" />
-    <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | translate }}
-    </mat-error>
-  </mat-form-field>
+    <!-- isAusbildungAusland -->
+    <mat-checkbox formControlName="isAusbildungAusland" data-testid="form-education-isAusbildungAusland">{{
+      'shared.form.ausbildung.isAusbildungAusland.label' | translate
+    }}</mat-checkbox>
 
-  <!-- isAusbildungAusland -->
-  <mat-checkbox formControlName="isAusbildungAusland" data-testid="form-education-isAusbildungAusland">{{
-    'shared.form.ausbildung.isAusbildungAusland.label' | translate
-  }}</mat-checkbox>
-
-  <!-- MANUELL -->
-  <mat-checkbox
-    formControlName="ausbildungNichtGefunden"
-    data-testid="form-education-ausbildungNichtGefunden"
-    (change)="handleManuellChangedByUser()"
-    class="tw-col-start-1"
-    >{{ 'shared.form.ausbildung.manuell.label' | translate }}</mat-checkbox
-  >
-
-  <h3 class="tw-mt-6 md:tw-col-span-2 lg:tw-col-span-3">
-    {{ 'shared.form.ausbildung.duration.title' | translate }}
-  </h3>
-
-  <!-- START -->
-  <mat-form-field dvSharedUiFormField>
-    <mat-label>{{ 'shared.form.ausbildung.start.label' | translate }}</mat-label>
-
-    <input
-      matInput
-      data-testid="form-education-beginn-der-ausbildung"
-      formControlName="ausbildungBegin"
-      placeholder="MM.yyyy"
-      (change)="markDatesAsTouched()"
-      (blur)="onDateBlur(form.controls.ausbildungBegin)"
-    />
-
-    <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | translate }}
-    </mat-error>
-    <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-      {{ 'shared.form.error.dateFormat' | translate }}
-    </mat-error>
-    <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
-      {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | translate }}
-    </mat-error>
-    <mat-error *dvSharedUiFormMessageError="'minDateLebenslauf'">
-      {{ 'shared.form.ausbildung.form.error.lebenslaufConflict' | translate }}
-    </mat-error>
-    <mat-error *dvSharedUiFormMessageError="'maxDate'">
-      {{ 'shared.form.error.maxDateFuture' | translate }}
-    </mat-error>
-  </mat-form-field>
-
-  <!-- ENDE -->
-  <mat-form-field dvSharedUiFormField>
-    <mat-label>{{ 'shared.form.ausbildung.ende.label' | translate }}</mat-label>
-
-    <input
-      matInput
-      data-testid="form-education-ende-der-ausbildung"
-      formControlName="ausbildungEnd"
-      placeholder="MM.yyyy"
-      (change)="markDatesAsTouched()"
-      (blur)="onDateBlur(form.controls.ausbildungEnd)"
-    />
-
-    <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | translate }}
-    </mat-error>
-    <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-      {{ 'shared.form.error.dateFormat' | translate }}
-    </mat-error>
-    <mat-error *dvSharedUiFormMessageError="'minDate'">
-      {{
-        'shared.form.ausbildung.form.error.monthYearAfter'
-          | translate: { date: ausbildungStore.ausbildungViewSig().minEndDatumFormatted }
-      }}
-    </mat-error>
-    <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
-      {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | translate }}
-    </mat-error>
-    <mat-error *dvSharedUiFormMessageError="'maxDate'">
-      {{ 'shared.form.error.maxDateFuture' | translate }}
-    </mat-error>
-  </mat-form-field>
-
-  <!-- PENSUM -->
-  <mat-form-field dvSharedUiFormField class="tw-col-start-1">
-    <mat-label>
-      {{ 'shared.form.ausbildung.pensum.label' | translate }}
-    </mat-label>
-
-    <mat-select
-      formControlName="pensum"
-      data-testid="form-education-pensum"
-      [placeholder]="'shared.form.select.empty' | translate"
+    <!-- MANUELL -->
+    <mat-checkbox
+      formControlName="ausbildungNichtGefunden"
+      data-testid="form-education-ausbildungNichtGefunden"
+      (change)="handleManuellChangedByUser()"
+      class="tw-col-start-1"
+      >{{ 'shared.form.ausbildung.manuell.label' | translate }}</mat-checkbox
     >
-      @for (l of ausbildungspensumValues; track $index) {
-        <mat-option [value]="l" [attr.data-testid]="l">
-          {{ 'shared.form.ausbildung.pensum.' + l | translate }}
-        </mat-option>
-      }
-    </mat-select>
 
-    <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | translate }}
-    </mat-error>
-  </mat-form-field>
+    <h3 class="tw-mt-6 md:tw-col-span-2 lg:tw-col-span-3">
+      {{ 'shared.form.ausbildung.duration.title' | translate }}
+    </h3>
 
-  <div class="md:tw-col-span-2 lg:tw-col-span-3">
-    <button type="submit" class="btn btn-primary" data-testid="button-save" [disabled]="form.invalid">
-      {{ 'shared.form.save' | translate }}
-    </button>
-  </div>
-</form>
+    <!-- START -->
+    <mat-form-field dvSharedUiFormField>
+      <mat-label>{{ 'shared.form.ausbildung.start.label' | translate }}</mat-label>
+
+      <input
+        matInput
+        data-testid="form-education-beginn-der-ausbildung"
+        formControlName="ausbildungBegin"
+        placeholder="MM.yyyy"
+        (change)="markDatesAsTouched()"
+        (blur)="onDateBlur(form.controls.ausbildungBegin)"
+      />
+
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+        {{ 'shared.form.error.dateFormat' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
+        {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'minDateLebenslauf'">
+        {{ 'shared.form.ausbildung.form.error.lebenslaufConflict' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'maxDate'">
+        {{ 'shared.form.error.maxDateFuture' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- ENDE -->
+    <mat-form-field dvSharedUiFormField>
+      <mat-label>{{ 'shared.form.ausbildung.ende.label' | translate }}</mat-label>
+
+      <input
+        matInput
+        data-testid="form-education-ende-der-ausbildung"
+        formControlName="ausbildungEnd"
+        placeholder="MM.yyyy"
+        (change)="markDatesAsTouched()"
+        (blur)="onDateBlur(form.controls.ausbildungEnd)"
+      />
+
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+        {{ 'shared.form.error.dateFormat' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'minDate'">
+        {{
+          'shared.form.ausbildung.form.error.monthYearAfter'
+            | translate: { date: ausbildungStore.ausbildungViewSig().minEndDatumFormatted }
+        }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
+        {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'maxDate'">
+        {{ 'shared.form.error.maxDateFuture' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- PENSUM -->
+    <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+      <mat-label>
+        {{ 'shared.form.ausbildung.pensum.label' | translate }}
+      </mat-label>
+
+      <mat-select
+        formControlName="pensum"
+        data-testid="form-education-pensum"
+        [placeholder]="'shared.form.select.empty' | translate"
+      >
+        @for (l of ausbildungspensumValues; track $index) {
+          <mat-option [value]="l" [attr.data-testid]="l">
+            {{ 'shared.form.ausbildung.pensum.' + l | translate }}
+          </mat-option>
+        }
+      </mat-select>
+
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="md:tw-col-span-2 lg:tw-col-span-3">
+      <button type="submit" class="btn btn-primary" data-testid="button-save" [disabled]="form.invalid">
+        {{ 'shared.form.save' | translate }}
+      </button>
+    </div>
+  </form>
+}

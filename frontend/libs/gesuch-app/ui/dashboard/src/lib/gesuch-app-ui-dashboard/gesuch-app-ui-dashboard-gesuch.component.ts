@@ -32,7 +32,7 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppUiDashboardGesuchComponent {
-  ausbildungsStatus = input.required<AusbildungsStatus>();
+  ausbildungsStatusSig = input.required<AusbildungsStatus>();
   gesuchSig = input.required<SharedModelGsGesuchView>();
   deleteGesuch = output<string>();
   deleteAenderung = output<string>();

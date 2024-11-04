@@ -42,6 +42,8 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import {
   SharedUtilFormService,
@@ -70,6 +72,8 @@ import { capitalized } from '@dv/shared/util-fn/string-helper';
     MatAutocompleteModule,
     MatSelectModule,
     TranslatedPropertyPipe,
+    SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiLoadingComponent,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
   ],
@@ -79,7 +83,6 @@ import { capitalized } from '@dv/shared/util-fn/string-helper';
 })
 export class SharedFeatureAusbildungComponent implements OnInit {
   private store = inject(Store);
-  private ausbildungsstatteStore = inject(AusbildungsstaetteStore);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private globalNotificationStore = inject(GlobalNotificationStore);
@@ -88,6 +91,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   fallIdSig = input.required<string | null>();
   ausbildungSaved = output<void>();
   ausbildungStore = inject(AusbildungStore);
+  ausbildungsstatteStore = inject(AusbildungsstaetteStore);
   form = this.formBuilder.group({
     ausbildungsort: [<string | undefined>undefined, [Validators.required]],
     isAusbildungAusland: [false, []],

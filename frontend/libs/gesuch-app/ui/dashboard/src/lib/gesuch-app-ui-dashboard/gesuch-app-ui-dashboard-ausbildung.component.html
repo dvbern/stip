@@ -19,7 +19,7 @@
 <div class="tw-flex tw-gap-2">
   @for (gesuch of ausbildung.gesuchs; track gesuch) {
     <dv-gesuch-app-ui-dashboard-gesuch
-      [ausbildungsStatus]="ausbildung.status"
+      [ausbildungsStatusSig]="ausbildung.status"
       [gesuchSig]="gesuch"
       [class.bg-tertiary]="ausbildung.status !== 'AKTIV'"
       [class.bg-success-subtle]="ausbildung.status === 'AKTIV'"
