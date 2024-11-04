@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.generator.api;
 
 import java.util.UUID;
@@ -32,9 +49,10 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-                PersonInAusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPersonInAusbildung()
-            );
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    PersonInAusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPersonInAusbildung()
+                );
         });
     }
 
@@ -42,9 +60,10 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-                FamiliensituationUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecFamiliensituation()
-            );
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    FamiliensituationUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecFamiliensituation()
+                );
         });
     }
 
@@ -52,29 +71,31 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-                PartnerUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPartner()
-            );
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    PartnerUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecPartner()
+                );
         });
     }
 
-//    public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAusbildung() {
-//        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
-//            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-//            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-//            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-//                AusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAusbildung()
-//            );
-//        });
-//    }
+    // public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAusbildung() {
+    // return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
+    // model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+    // model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
+    // model.getGesuchTrancheToWorkWith().setGesuchFormular(
+    // AusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAusbildung()
+    // );
+    // });
+    // }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAuszahlung() {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-                AuszahlungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAuszahlung()
-            );
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    AuszahlungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAuszahlung()
+                );
         });
     }
 
@@ -82,9 +103,10 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-                GeschwisterUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecGeschwisters()
-            );
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    GeschwisterUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecGeschwisters()
+                );
         });
     }
 
@@ -92,9 +114,10 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-                LebenslaufItemUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecLebenslauf()
-            );
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    LebenslaufItemUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecLebenslauf()
+                );
         });
     }
 
@@ -102,9 +125,10 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-                ElternUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecElterns()
-            );
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    ElternUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecElterns()
+                );
         });
     }
 
@@ -112,9 +136,10 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-                SteuerdatenUpdateTabsDtoSpecModel.gesuchFormularUpdateDtoSpecSteuerdaten()
-            );
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    SteuerdatenUpdateTabsDtoSpecModel.gesuchFormularUpdateDtoSpecSteuerdaten()
+                );
         });
     }
 
@@ -122,9 +147,10 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-                EinnahmenKostenUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecEinnahmenKosten()
-            );
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    EinnahmenKostenUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecEinnahmenKosten()
+                );
         });
     }
 
@@ -132,9 +158,10 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith().setGesuchFormular(
-                KindUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecKinder()
-            );
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    KindUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecKinder()
+                );
         });
     }
 
@@ -142,7 +169,7 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model) -> {
             model.setPersonInAusbildung(PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec());
             model.getPersonInAusbildung().setZivilstand(ZivilstandDtoSpec.VERHEIRATET);
-//            model.setAusbildung(AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec());
+            // model.setAusbildung(AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec());
             model.setLebenslaufItems(LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs());
             model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
             model.setElterns(ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2));

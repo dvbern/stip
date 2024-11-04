@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.ausbildung.service;
 
 import java.util.Set;
@@ -71,9 +88,11 @@ public class AusbildungService {
             ausbildungsstart = ausbildungsstart.minusYears(1);
         }
 
-        gesuch.getNewestGesuchTranche().get().setGueltigkeit(
-            new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1))
-        );
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .setGueltigkeit(
+                new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1))
+            );
         ausbildungRepository.persistAndFlush(ausbildung);
         ausbildung.setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
         return ausbildungMapper.toDto(ausbildung);

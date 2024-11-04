@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
@@ -37,20 +54,22 @@ public class SbDashboardQueryBuilder {
         final var meId = benutzerService.getCurrentBenutzer().getId();
 
         final var query = switch (queryType) {
-            case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery();
-            case ALLE_BEARBEITBAR_MEINE -> gesuchRepository.getFindAlleMeineBearbeitbarQuery(meId);
-            case ALLE_MEINE -> gesuchRepository.getFindAlleMeineQuery(meId);
-            case ALLE -> gesuchRepository.getFindAlleQuery();
+        case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery();
+        case ALLE_BEARBEITBAR_MEINE -> gesuchRepository.getFindAlleMeineBearbeitbarQuery(meId);
+        case ALLE_MEINE -> gesuchRepository.getFindAlleMeineQuery(meId);
+        case ALLE -> gesuchRepository.getFindAlleQuery();
         };
 
         tranche = switch (trancheType) {
-            case TRANCHE -> gesuch.latestGesuchTranche;
-            case AENDERUNG -> gesuch.aenderungZuUeberpruefen;
+        case TRANCHE -> gesuch.latestGesuchTranche;
+        case AENDERUNG -> gesuch.aenderungZuUeberpruefen;
         };
 
         joinFormular(query);
-        return query.where(formular.personInAusbildung.vorname.isNotNull()
-            .and(formular.personInAusbildung.nachname.isNotNull()));
+        return query.where(
+            formular.personInAusbildung.vorname.isNotNull()
+                .and(formular.personInAusbildung.nachname.isNotNull())
+        );
     }
 
     public void fallNummer(final JPAQuery<Gesuch> query, final String fallNummer) {
@@ -95,8 +114,10 @@ public class SbDashboardQueryBuilder {
         joinGesuch(query);
         query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
         query.join(QZuordnung.zuordnung).on(ausbildung.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
-        query.where(QZuordnung.zuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
-            .or(QZuordnung.zuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter)));
+        query.where(
+            QZuordnung.zuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
+                .or(QZuordnung.zuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter))
+        );
     }
 
     public void letzteAktivitaet(
@@ -109,33 +130,33 @@ public class SbDashboardQueryBuilder {
 
     public void orderBy(final JPAQuery<Gesuch> query, final SbDashboardColumn column, final SortOrder sortOrder) {
         final var fieldSpecified = switch (column) {
-            case FALLNUMMER -> ausbildung.fall.fallNummer;
-            case TYP -> tranche.typ;
-            case PIA_NACHNAME -> {
-                joinFormular(query);
-                yield formular.personInAusbildung.nachname;
-            }
-            case PIA_VORNAME -> {
-                joinFormular(query);
-                yield formular.personInAusbildung.vorname;
-            }
-            case PIA_GEBURTSDATUM -> {
-                joinFormular(query);
-                yield formular.personInAusbildung.geburtsdatum;
-            }
-            case STATUS -> gesuch.gesuchStatus;
-            case BEARBEITER -> {
-                final var fall = QFall.fall;
-                query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
-                query.join(fall).on(ausbildung.id.eq(fall.id));
-                yield fall.sachbearbeiterZuordnung.sachbearbeiter.nachname;
-            }
-            case LETZTE_AKTIVITAET -> gesuch.timestampMutiert;
+        case FALLNUMMER -> ausbildung.fall.fallNummer;
+        case TYP -> tranche.typ;
+        case PIA_NACHNAME -> {
+            joinFormular(query);
+            yield formular.personInAusbildung.nachname;
+        }
+        case PIA_VORNAME -> {
+            joinFormular(query);
+            yield formular.personInAusbildung.vorname;
+        }
+        case PIA_GEBURTSDATUM -> {
+            joinFormular(query);
+            yield formular.personInAusbildung.geburtsdatum;
+        }
+        case STATUS -> gesuch.gesuchStatus;
+        case BEARBEITER -> {
+            final var fall = QFall.fall;
+            query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
+            query.join(fall).on(ausbildung.id.eq(fall.id));
+            yield fall.sachbearbeiterZuordnung.sachbearbeiter.nachname;
+        }
+        case LETZTE_AKTIVITAET -> gesuch.timestampMutiert;
         };
 
         final var orderSpecifier = switch (sortOrder) {
-            case ASCENDING -> fieldSpecified.asc();
-            case DESCENDING -> fieldSpecified.desc();
+        case ASCENDING -> fieldSpecified.asc();
+        case DESCENDING -> fieldSpecified.desc();
         };
 
         query.orderBy(orderSpecifier);

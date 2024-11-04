@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.resource;
 
 import java.util.Arrays;
@@ -52,7 +69,7 @@ class GesuchTrancheAenderungTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    private  GesuchTrancheSlimDtoSpec[] gesuchtranchen;
+    private GesuchTrancheSlimDtoSpec[] gesuchtranchen;
     private GesuchDtoSpec gesuch;
 
     @Test
@@ -100,12 +117,14 @@ class GesuchTrancheAenderungTest {
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
-            .assertThat().statusCode(Response.Status.OK.getStatusCode());
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
-            .assertThat().statusCode(Response.Status.OK.getStatusCode());
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
     }
 
     @Test
@@ -140,9 +159,11 @@ class GesuchTrancheAenderungTest {
     io.restassured.response.Response createAenderungsanstrag() {
         return gesuchTrancheApiSpec.createAenderungsantrag()
             .gesuchIdPath(gesuch.getId())
-            .body(new CreateAenderungsantragRequestDtoSpec().comment("aenderung1")
-                .start(gesuch.getGesuchTrancheToWorkWith().getGueltigAb())
-                .end(gesuch.getGesuchTrancheToWorkWith().getGueltigBis()))
+            .body(
+                new CreateAenderungsantragRequestDtoSpec().comment("aenderung1")
+                    .start(gesuch.getGesuchTrancheToWorkWith().getGueltigAb())
+                    .end(gesuch.getGesuchTrancheToWorkWith().getGueltigBis())
+            )
             .execute(TestUtil.PEEK_IF_ENV_SET);
     }
 
@@ -150,7 +171,7 @@ class GesuchTrancheAenderungTest {
     @TestAsGesuchsteller
     @Order(8)
     @Description("Test setup for: The another GS must not be able do delete a Aenderung'")
-    void setupnextTest(){
+    void setupnextTest() {
         gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -167,13 +188,17 @@ class GesuchTrancheAenderungTest {
     @Order(9)
     @Description("The another GS must not be able do delete a Aenderung'")
     void deleteAenderungByOtherUserTest() {
-        final var aenderung = Arrays.stream(gesuchtranchen).filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG).findFirst().get();
-        //delete aenderung
+        final var aenderung = Arrays.stream(gesuchtranchen)
+            .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
+            .findFirst()
+            .get();
+        // delete aenderung
         gesuchTrancheApiSpec
             .deleteAenderung()
             .aenderungIdPath(aenderung.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then().assertThat()
+            .then()
+            .assertThat()
             .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
 
@@ -191,8 +216,10 @@ class GesuchTrancheAenderungTest {
             .as(GesuchTrancheSlimDtoSpec[].class);
         int count = gesuchtranchen.length;
         final var aenderung = Arrays.stream(gesuchtranchen)
-            .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG).findFirst().get();
-        //delete aenderung
+            .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
+            .findFirst()
+            .get();
+        // delete aenderung
         gesuchTrancheApiSpec.deleteAenderung()
             .aenderungIdPath(aenderung.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -223,9 +250,12 @@ class GesuchTrancheAenderungTest {
             .extract()
             .body()
             .as(GesuchTrancheSlimDtoSpec[].class);
-        final var tranche = Arrays.stream(gesuchtranchen).filter(t -> t.getTyp() == GesuchTrancheTypDtoSpec.TRANCHE)
-            .findFirst().get();
-        gesuchTrancheApiSpec.deleteAenderung().aenderungIdPath(tranche.getId())
+        final var tranche = Arrays.stream(gesuchtranchen)
+            .filter(t -> t.getTyp() == GesuchTrancheTypDtoSpec.TRANCHE)
+            .findFirst()
+            .get();
+        gesuchTrancheApiSpec.deleteAenderung()
+            .aenderungIdPath(tranche.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

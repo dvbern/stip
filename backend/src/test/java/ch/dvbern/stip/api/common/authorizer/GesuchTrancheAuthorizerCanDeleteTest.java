@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.authorizer;
 
 import java.util.Set;
@@ -38,7 +55,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
     private GesuchRepository gesuchRepository;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         benutzerService = Mockito.mock(BenutzerService.class);
         currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
@@ -78,7 +95,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
     }
 
     @Test
-    void gsCanotDeleteOwnAenderungInWrongStateTest(){
+    void gsCanotDeleteOwnAenderungInWrongStateTest() {
         // arrange
         final var gesuchTranche_wrongState = new GesuchTranche()
             .setGesuch(gesuch)
@@ -92,24 +109,27 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         // assert
         assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
+
     @Test
-    void gsCanNotDeleteTrancheTest(){
+    void gsCanNotDeleteTrancheTest() {
         // arrange
         gesuchTranche_inBearbeitungGS.setTyp(GesuchTrancheTyp.TRANCHE);
         final var uuid = UUID.randomUUID();
         // assert
         assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
+
     @Test
-    void gsCanDeleteAenderungOnlyOwnAenderungTest(){
+    void gsCanDeleteAenderungOnlyOwnAenderungTest() {
         // arrange
         gesuchTranche_inBearbeitungGS.setTyp(GesuchTrancheTyp.AENDERUNG);
         final var uuid = UUID.randomUUID();
         // assert
         assertDoesNotThrow(() -> authorizer.canDeleteAenderung(uuid));
     }
+
     @Test
-    void gsCannotDeleteWithoutRoleTest(){
+    void gsCannotDeleteWithoutRoleTest() {
         // arrange
         currentBenutzer.setRollen(Set.of());
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
@@ -117,31 +137,41 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         // assert
         assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
+
     @Test
-    void gsCannotDeleteOtherAenderungTest(){
+    void gsCannotDeleteOtherAenderungTest() {
         // arrange
         currentBenutzer.setRollen(Set.of());
         final var uuid = UUID.randomUUID();
         // assert
         assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
+
     @Test
-    void adminCanNotDeleteAenderungAenderungTest(){
+    void adminCanNotDeleteAenderungAenderungTest() {
         // arrange
-        currentBenutzer.setRollen(Set.of(new Rolle()
-            .setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)));
+        currentBenutzer.setRollen(
+            Set.of(
+                new Rolle()
+                    .setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)
+            )
+        );
         final var uuid = UUID.randomUUID();
-        //assert
+        // assert
         assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
 
     @Test
-    void sbCanNotDeleteAenderungAenderungTest(){
+    void sbCanNotDeleteAenderungAenderungTest() {
         // arrange
-        currentBenutzer.setRollen(Set.of(new Rolle()
-            .setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER)));
+        currentBenutzer.setRollen(
+            Set.of(
+                new Rolle()
+                    .setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER)
+            )
+        );
         final var uuid = UUID.randomUUID();
-        //assert
+        // assert
         assertThrows(UnauthorizedException.class, () -> authorizer.canDeleteAenderung(uuid));
     }
 }

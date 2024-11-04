@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.notification.service;
 
 import java.util.List;
@@ -70,7 +87,8 @@ public class NotificationService {
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
-        String msg = Templates.getGesuchStatusChangeWithKommentarText(anrede, nachname, kommentar.getText(), sprache).render();
+        String msg =
+            Templates.getGesuchStatusChangeWithKommentarText(anrede, nachname, kommentar.getText(), sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
     }
@@ -96,7 +114,8 @@ public class NotificationService {
             .setGesuch(gesuch);
         final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
-        String msg = Templates.getGesuchFehlendeDokumenteText(sprache,
+        String msg = Templates.getGesuchFehlendeDokumenteText(
+            sprache,
             gesuch.getAusbildung()
                 .getFall()
                 .getSachbearbeiterZuordnung()
@@ -115,14 +134,31 @@ public class NotificationService {
     @CheckedTemplate
     public static class Templates {
         public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
+
         public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
-        public static native TemplateInstance gesuchStatusChangeWithKommentarDE(String anrede, String nachname, String kommentar);
-        public static native TemplateInstance gesuchStatusChangeWithKommentarFR(String anrede, String nachname, String kommentar);
+
+        public static native TemplateInstance gesuchStatusChangeWithKommentarDE(
+            String anrede,
+            String nachname,
+            String kommentar
+        );
+
+        public static native TemplateInstance gesuchStatusChangeWithKommentarFR(
+            String anrede,
+            String nachname,
+            String kommentar
+        );
+
         public static native TemplateInstance gesuchFehlendeDokumenteDE(String sbVorname, String sbNachname);
+
         public static native TemplateInstance gesuchFehlendeDokumenteFR(String sbVorname, String sbNachname);
 
-        public static TemplateInstance getGesuchFehlendeDokumenteText(Sprache korrespondenzSprache, String sbVorname, String sbNachname) {
-            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+        public static TemplateInstance getGesuchFehlendeDokumenteText(
+            Sprache korrespondenzSprache,
+            String sbVorname,
+            String sbNachname
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
                 return gesuchFehlendeDokumenteFR(sbVorname, sbNachname);
             }
             return gesuchFehlendeDokumenteDE(sbVorname, sbNachname);
@@ -131,7 +167,8 @@ public class NotificationService {
         public static TemplateInstance getGesuchEingereichtText(
             final String anrede,
             final String nachname,
-            final Sprache korrespondenzSprache) {
+            final Sprache korrespondenzSprache
+        ) {
             if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
 
                 return gesuchEingereichtFR(anrede, nachname);
@@ -139,8 +176,13 @@ public class NotificationService {
             return gesuchEingereichtDE(anrede, nachname);
         }
 
-        public static TemplateInstance getGesuchStatusChangeWithKommentarText(String anrede, String nachname, String kommentar, Sprache korrespondenzSprache) {
-            if(korrespondenzSprache.equals(Sprache.FRANZOESISCH)){
+        public static TemplateInstance getGesuchStatusChangeWithKommentarText(
+            String anrede,
+            String nachname,
+            String kommentar,
+            Sprache korrespondenzSprache
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
                 return gesuchStatusChangeWithKommentarFR(anrede, nachname, kommentar);
             }
             return gesuchStatusChangeWithKommentarDE(anrede, nachname, kommentar);
@@ -150,7 +192,8 @@ public class NotificationService {
             final String anrede,
             final String nachname,
             final String kommentar,
-            final Sprache korrespondenzSprache) {
+            final Sprache korrespondenzSprache
+        ) {
             if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
                 return aenderungAbgelehntFR(anrede, nachname, kommentar);
             }

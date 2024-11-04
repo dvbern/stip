@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.entity;
 
 import java.util.ArrayList;
@@ -59,7 +76,8 @@ public class GesuchEinreichenUniqueSVNummerTest {
             TestUtil.uploadFile(dokumentApiSpec, gesuchTrancheId, dokType, file);
         }
 
-        gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
+        gesuchApiSpec.gesuchEinreichen()
+            .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -72,12 +90,14 @@ public class GesuchEinreichenUniqueSVNummerTest {
     void gesuchEinreichenWithNonUniqueSvNummerError() {
         final var gesuchCreateDtoSpec = new GesuchCreateDtoSpec();
         gesuchCreateDtoSpec.setAusbildungId(ausbildungId);
-        UUID gesuchId = TestUtil.extractIdFromResponse(gesuchApiSpec.createGesuch() //neues Gesuch mit selber AHV-Nummer wird erstellt
-            .body(gesuchCreateDtoSpec)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.CREATED.getStatusCode()));
+        UUID gesuchId = TestUtil.extractIdFromResponse(
+            gesuchApiSpec.createGesuch() // neues Gesuch mit selber AHV-Nummer wird erstellt
+                .body(gesuchCreateDtoSpec)
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.CREATED.getStatusCode())
+        );
 
         gesucheToDelete.add(gesuchId);
         final var gesuch = gesuchApiSpec.getCurrentGesuch()
@@ -90,7 +110,8 @@ public class GesuchEinreichenUniqueSVNummerTest {
             .as(GesuchDtoSpec.class);
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
 
-        var response = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
+        var response = gesuchApiSpec.gesuchEinreichen()
+            .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

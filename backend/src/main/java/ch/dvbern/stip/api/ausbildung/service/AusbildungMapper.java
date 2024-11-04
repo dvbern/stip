@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.ausbildung.service;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -17,7 +34,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class, uses = { FallMapper.class, AusbildungsgangMapper.class, BildungskategorieMapper.class })
+@Mapper(
+    config = MappingConfig.class,
+    uses = { FallMapper.class, AusbildungsgangMapper.class, BildungskategorieMapper.class }
+)
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
     @Mapping(
         source = "ausbildungBegin",
@@ -99,5 +119,5 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         target = "ausbildungEnd",
         qualifiedBy = { DateMapper.class, DateToMonthYear.class }
     )
-	public abstract AusbildungUpdateDto toUpdateDto(Ausbildung ausbildung);
+    public abstract AusbildungUpdateDto toUpdateDto(Ausbildung ausbildung);
 }

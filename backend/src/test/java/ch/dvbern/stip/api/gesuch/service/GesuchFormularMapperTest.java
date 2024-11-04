@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
@@ -189,9 +206,11 @@ class GesuchFormularMapperTest {
     void resetEinnahmenKostenClearsBetreuungskostenKinderTest() {
         // Arrange
         final var target = new GesuchFormular()
-            .setKinds(new HashSet<>() {{
-                add(new Kind());
-            }});
+            .setKinds(new HashSet<>() {
+                {
+                    add(new Kind());
+                }
+            });
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
         updateEinnahmenKosten.setBetreuungskostenKinder(1);
@@ -324,7 +343,7 @@ class GesuchFormularMapperTest {
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
 
-        //handle null inputs
+        // handle null inputs
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(null))
             .setPartner(new Partner().setJahreseinkommen(null));
         gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(new Ausbildung())));
@@ -433,9 +452,11 @@ class GesuchFormularMapperTest {
         // This needs to be this verbose as List.of creates an immutable list
         // This also needs to be a mutable list since List.removeAll(...)
         // will throw an exception even if no items are to be removed
-        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {{
-            add(updateTab);
-        }};
+        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {
+            {
+                add(updateTab);
+            }
+        };
 
         final var updateFormular = new GesuchFormularUpdateDto();
         updateFormular.setFamiliensituation(updateFamsit);
@@ -467,9 +488,11 @@ class GesuchFormularMapperTest {
         final var updateTab = new SteuerdatenUpdateDto();
         updateTab.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
         // This needs to be this verbose as List.of creates an immutable list
-        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {{
-            add(updateTab);
-        }};
+        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {
+            {
+                add(updateTab);
+            }
+        };
 
         final var updateFormular = new GesuchFormularUpdateDto();
         updateFormular.setFamiliensituation(updateFamsit);
@@ -500,12 +523,14 @@ class GesuchFormularMapperTest {
     void resetSteuerdatenAfterUpdateClearsSaeuleValues() {
         // Arrange
         final var formular = new GesuchFormular()
-            .setSteuerdaten(Set.of(
-                new Steuerdaten()
-                    .setIsArbeitsverhaeltnisSelbstaendig(true)
-                    .setSaeule2(1000)
-                    .setSaeule3a(1000)
-            ));
+            .setSteuerdaten(
+                Set.of(
+                    new Steuerdaten()
+                        .setIsArbeitsverhaeltnisSelbstaendig(true)
+                        .setSaeule2(1000)
+                        .setSaeule3a(1000)
+                )
+            );
 
         final var mapper = createMapper();
 
@@ -586,10 +611,12 @@ class GesuchFormularMapperTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
-        "MUTTER",
-        "VATER"
-    })
+    @CsvSource(
+        {
+            "MUTTER",
+            "VATER"
+        }
+    )
     void setAuszahlungElternteilAdresseOnUpdateTest(final ElternTyp toTestFor) {
         // Arrange
         final var elternAdresse = new AdresseDto();
@@ -668,7 +695,7 @@ class GesuchFormularMapperTest {
         final var mapper = (GesuchFormularMapper) new GesuchFormularMapperImpl(
             new PersonInAusbildungMapperImpl(),
             new FamiliensituationMapperImpl(),
-//            new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
+            // new AusbildungMapperImpl(new EntityReferenceMapperImpl(), new DateMapperImpl()),
             new LebenslaufItemMapperImpl(new DateMapperImpl()),
             new PartnerMapperImpl(),
             new AuszahlungMapperImpl(),

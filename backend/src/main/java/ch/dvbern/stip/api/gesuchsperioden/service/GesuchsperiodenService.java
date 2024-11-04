@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
 import java.time.LocalDate;
@@ -72,7 +89,8 @@ public class GesuchsperiodenService {
         int yearOffset = -1;
         while (true) {
             var ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear() + yearOffset);
-            final var eligibleGesuchsperioden = gesuchsperiodeRepository.findAllStartBefore(ausbildungsBeginAssumed).toList();
+            final var eligibleGesuchsperioden =
+                gesuchsperiodeRepository.findAllStartBefore(ausbildungsBeginAssumed).toList();
             if (eligibleGesuchsperioden.size() == 0) {
                 if (yearOffset == 2) {
                     throw new NotFoundException();
@@ -80,7 +98,7 @@ public class GesuchsperiodenService {
                 yearOffset += 1;
                 continue;
             }
-            if (eligibleGesuchsperioden.get(0).getEinreichefristReduziert().isBefore(LocalDate.now())){
+            if (eligibleGesuchsperioden.get(0).getEinreichefristReduziert().isBefore(LocalDate.now())) {
                 continue;
             }
 
