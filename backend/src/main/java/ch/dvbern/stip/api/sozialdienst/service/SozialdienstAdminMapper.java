@@ -13,5 +13,5 @@ public interface SozialdienstAdminMapper {
     SozialdienstAdmin toSozialdienstAdmin(SozialdienstAdminCreateDto createDto);
     SozialdienstAdmin toSozialdienstAdmin(SozialdienstAdminUpdateDto updateDto);
     SozialdienstAdminDto toDto(SozialdienstAdmin sozialdienstAdmin);
-    SozialdienstAdminDto partialUpdate(SozialdienstAdminUpdateDto updateDto, @MappingTarget SozialdienstAdmin entity);
+    SozialdienstAdmin partialUpdate(SozialdienstAdminUpdateDto updateDto, @MappingTarget SozialdienstAdmin entity);
 }

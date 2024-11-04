@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class SozialdienstAdminService {
     private final SozialdienstAdminRepository sozialdienstAdminRepository;
 
-    //@Transactional
+    @Transactional
     public SozialdienstAdmin createSozialdienstAdminBenutzer(SozialdienstAdmin sozialdienstAdmin) {
         sozialdienstAdmin.setBenutzereinstellungen(new Benutzereinstellungen());
         sozialdienstAdmin.setBenutzerStatus(BenutzerStatus.AKTIV);
