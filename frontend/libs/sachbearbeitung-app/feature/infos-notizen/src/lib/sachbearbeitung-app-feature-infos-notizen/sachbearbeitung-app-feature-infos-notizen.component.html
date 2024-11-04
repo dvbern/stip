@@ -52,7 +52,7 @@
           type="button"
           (click)="createNotiz()"
           class="btn btn-outline-dark d-inline-flex lh-1 align-items-center"
-          [attr.aria-label]="'sachbearbeitung-app.infos.notiz.erstellen' | translate"
+          [matTooltip]="'sachbearbeitung-app.infos.notiz.erstellen' | translate"
         >
           <i class="material-symbols-rounded fs-5">add</i>
         </button>
@@ -63,7 +63,7 @@
             type="button"
             (click)="editNotiz(notiz)"
             class="btn btn-link btn-sm"
-            [attr.aria-label]="'sachbearbeitung-app.infos.notiz.bearbeiten' | translate"
+            [matTooltip]="'sachbearbeitung-app.infos.notiz.bearbeiten' | translate"
           >
             <i class="material-symbols-rounded fs-5">edit</i>
           </button>
@@ -72,7 +72,7 @@
               type="button"
               (click)="deleteNotiz(notiz.id)"
               class="btn btn-link btn-sm"
-              [attr.aria-label]="'sachbearbeitung-app.infos.notiz.delete' | translate"
+              [matTooltip]="'sachbearbeitung-app.infos.notiz.delete' | translate"
             >
               <i class="material-symbols-rounded fs-5">delete</i>
             </button>

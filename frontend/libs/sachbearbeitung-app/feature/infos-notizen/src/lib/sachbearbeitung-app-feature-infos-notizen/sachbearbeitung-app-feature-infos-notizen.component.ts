@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -43,6 +44,7 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
     MatFormFieldModule,
     MatTableModule,
     TypeSafeMatCellDefDirective,
+    MatTooltipModule,
     SharedUiFocusableListDirective,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
