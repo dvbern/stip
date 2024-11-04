@@ -124,6 +124,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGsDashboard() {
+        gesuchAuthorizer.canGsRead();
         return Response.ok(gesuchService.findGsDashboard()).build();
     }
 
