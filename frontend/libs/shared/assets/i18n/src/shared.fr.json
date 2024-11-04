@@ -172,6 +172,7 @@
   "shared.gesuch.status.contract.IN_FREIGABE": "En attente de validation",
   "shared.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Documents manquants",
   "shared.gesuch.status.contract.VERSANDBEREIT": "Prêt à être envoyé",
+  "shared.gesuch.status.contract.VERFUEGT": "Verfügt",
 
   "shared.gesuch.tranche.typ.AENDERUNG": "Changement",
   "shared.gesuch.tranche.typ.TRANCHE": "Demande",
