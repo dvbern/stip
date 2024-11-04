@@ -74,17 +74,19 @@ export const prepareWohnsitzForm = (payload: {
     const familiensituation = formular?.familiensituation;
     const mutterMissing = isVerstorbenUnbekannt('MUTTER', familiensituation);
     const vaterMissing = isVerstorbenUnbekannt('VATER', familiensituation);
-    const getAnteil = (elternTyp: ElternTyp, missing: boolean) =>
-      familiensituation?.elternteilUnbekanntVerstorben
-        ? missing
-          ? // If the current eltenteil is unknown or dead, we set the Anteil to 0%.
-            '0%'
-          : // Otherwise we set the anteil to 100% as the other parent is unknown or dead.
-            '100%'
+    const getAnteil = (elternTyp: ElternTyp, missing: boolean) => {
+      const missingPercentage = missing
+        ? // If the current eltenteil is unknown or dead, we set the Anteil to 0%.
+          '0%'
+        : // Otherwise we set the anteil to 100% as the other parent is unknown or dead.
+          '100%';
+      return familiensituation?.elternteilUnbekanntVerstorben
+        ? missingPercentage
         : // If no elternteil is unknown or dead, we set the anteil to the value.
           numberToPercentString(
             projector(formular)?.[`wohnsitzAnteil${capitalized(elternTyp)}`],
           );
+    };
     return mutterMissing && vaterMissing
       ? {
           wohnsitzAnteilMutter: undefined,
