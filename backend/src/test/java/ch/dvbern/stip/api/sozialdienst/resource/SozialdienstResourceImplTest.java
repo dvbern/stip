@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -66,8 +66,10 @@ class SozialdienstResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .as(SozialdienstDtoSpec.class);
-        assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
 
+        assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
+        checkSozialdienstResponse(dtoSpec);
+        checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
     }
 
     @Order(2)
@@ -82,6 +84,8 @@ class SozialdienstResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
            .extract().as(SozialdienstDtoSpec.class);
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
+        checkSozialdienstResponse(dtoSpec);
+        checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
 
     }
 
@@ -97,7 +101,8 @@ class SozialdienstResourceImplTest {
             .extract()
             .as(SozialdienstDtoSpec[].class)).toList().get(0);
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
-
+        checkSozialdienstResponse(dtoSpec);
+        checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
     }
 
 
@@ -134,6 +139,8 @@ class SozialdienstResourceImplTest {
             .as(SozialdienstDtoSpec.class);
         assertTrue(updated.getName().contains("updated"));
         assertTrue(updated.getAdresse().getStrasse().contains("updated"));
+        checkSozialdienstResponse(updated);
+        checkSozialdienstAdminResponse(updated.getSozialdienstAdmin());
     }
 
     @Order(5)
@@ -154,6 +161,7 @@ class SozialdienstResourceImplTest {
             .as(SozialdienstAdminDtoSpec.class);
         assertTrue(updated.getNachname().contains("updated"));
         assertTrue(updated.getVorname().contains("updated"));
+        checkSozialdienstAdminResponse(updated);
     }
 
     @Order(5)
@@ -178,7 +186,9 @@ class SozialdienstResourceImplTest {
         assertTrue(replaced.getNachname().contains("replaced"));
         assertTrue(replaced.getVorname().contains("replaced"));
         assertTrue(replaced.getEmail().contains("replaced"));
-        assertTrue(replaced.getKeycloakId().equals(keykloakId));
+        assertEquals(replaced.getKeycloakId(), keykloakId);
+        checkSozialdienstAdminResponse(replaced);
+
     }
 
     @Order(7)
@@ -197,5 +207,19 @@ class SozialdienstResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+    }
+
+    private void checkSozialdienstResponse(SozialdienstDtoSpec dtoSpec){
+        assertNotNull(dtoSpec.getId());
+        assertNotNull(dtoSpec.getAdresse());
+        assertNotNull(dtoSpec.getName());
+        assertNotNull(dtoSpec.getIban());
+    }
+
+    private void checkSozialdienstAdminResponse(SozialdienstAdminDtoSpec dtoSpec){
+        assertNotNull(dtoSpec.getKeycloakId());
+        assertNotNull(dtoSpec.getVorname());
+        assertNotNull(dtoSpec.getNachname());
+        assertNotNull(dtoSpec.getEmail());
     }
 }

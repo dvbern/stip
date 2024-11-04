@@ -10,8 +10,8 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config= MappingConfig.class)
 public interface SozialdienstAdminMapper {
-    SozialdienstAdmin toSozialdienstAdmin(SozialdienstAdminCreateDto createDto);
-    SozialdienstAdmin toSozialdienstAdmin(SozialdienstAdminUpdateDto updateDto);
+    SozialdienstAdmin toEntity(SozialdienstAdminCreateDto createDto);
+    SozialdienstAdmin toEntity(SozialdienstAdminUpdateDto updateDto);
     SozialdienstAdminDto toDto(SozialdienstAdmin sozialdienstAdmin);
     SozialdienstAdmin partialUpdate(SozialdienstAdminUpdateDto updateDto, @MappingTarget SozialdienstAdmin entity);
 }

@@ -80,7 +80,8 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         UUID sozialdienstId,
         SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto) {
         sozialdienstAuthorizer.allowAllow();
-        final var updated = sozialdienstService.updateSozialdienstAdmin(sozialdienstAdminUpdateDto);
+        final var sozialdienst = sozialdienstService.getSozialdienstById(sozialdienstId);
+        final var updated = sozialdienstService.updateSozialdienstAdmin(sozialdienstAdminUpdateDto, sozialdienst);
         return Response.ok().entity(updated).build();
     }
 }
