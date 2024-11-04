@@ -149,6 +149,7 @@
   "shared.nachrichten.date": "Datum",
   "shared.nachrichten.type.GESUCH_EINGEREICHT": "Gesuch eingereicht",
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
+  "shared.nachrichten.type.AENDERUNG_ABGELEHNT": "Änderung abgelehnt",
   "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
 
   "shared.gesuch.validation.generic": "Bitte überprüfen Sie Ihre Eingaben im Formular und füllen Sie die benötigten Felder aus.",

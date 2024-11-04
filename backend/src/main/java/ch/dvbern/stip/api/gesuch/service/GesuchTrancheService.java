@@ -14,6 +14,8 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -37,6 +39,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.util.GesuchTrancheCopyUtil;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
@@ -83,6 +86,8 @@ public class GesuchTrancheService {
     private final GeschwisterMapper geschwisterMapper;
     private final KindMapper kindMapper;
     private final SteuerdatenMapper steuerdatenMapper;
+    private final MailService mailService;
+    private final NotificationService notificationService;
 
     public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(final UUID gesuchId) {
         return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
@@ -300,12 +305,16 @@ public class GesuchTrancheService {
             }
         }
 
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
+
+        notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), kommentarDto);
+
         return gesuchTrancheMapper.toDto(aenderung);
     }
 
     @Transactional
     public void deleteAenderung(final UUID aenderungId) {
-        if(!gesuchTrancheRepository.deleteById(aenderungId)){
+        if (!gesuchTrancheRepository.deleteById(aenderungId)) {
             throw new NotFoundException();
         }
     }
