@@ -1,0 +1,7 @@
+{anrede} {nachname}
+
+{kommentar}
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge
