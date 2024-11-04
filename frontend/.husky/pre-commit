@@ -1,10 +1,24 @@
+#!/bin/sh
+backend="$(git rev-parse --show-toplevel)/backend"
 frontend="$(git rev-parse --show-toplevel)/frontend"
 
-if ! git diff --quiet --stat HEAD -- $frontend -ne 0; then
+hasChanges() {
+    ! git diff --quiet --stat HEAD -- $1
+}
+
+if hasChanges $frontend; then
+    echo "[hooks] frontend has unstaged changes, linting, validating and running tests"
     cd $frontend
 
     npx lint-staged
     npm run validate
     npm run lint
     npm run test
+fi
+
+if hasChanges $backend; then
+    echo "[hooks] backend has unstaged changes, running spotless:check"
+    cd $backend
+
+    ./mvnw spotless:check
 fi
