@@ -3864,12 +3864,6 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        nachname:
-          type: string
-        vorname:
-          type: string
-        email:
-          type: string
     SozialdienstAdminCreate:
       required:
         - keycloakId

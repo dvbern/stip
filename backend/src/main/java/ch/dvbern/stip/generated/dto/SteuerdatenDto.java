@@ -1,13 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
-import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 @JsonTypeName("Steuerdaten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -26,9 +26,6 @@ public class SteuerdatenDto  implements Serializable {
   private @Valid Integer kinderalimente;
   private @Valid Integer vermoegen;
   private @Valid UUID id;
-  private @Valid String nachname;
-  private @Valid String vorname;
-  private @Valid String email;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
   private @Valid Integer steuerjahr;
@@ -246,60 +243,6 @@ public class SteuerdatenDto  implements Serializable {
 
   /**
    **/
-  public SteuerdatenDto nachname(String nachname) {
-    this.nachname = nachname;
-    return this;
-  }
-
-
-  @JsonProperty("nachname")
-  public String getNachname() {
-    return nachname;
-  }
-
-  @JsonProperty("nachname")
-  public void setNachname(String nachname) {
-    this.nachname = nachname;
-  }
-
-  /**
-   **/
-  public SteuerdatenDto vorname(String vorname) {
-    this.vorname = vorname;
-    return this;
-  }
-
-
-  @JsonProperty("vorname")
-  public String getVorname() {
-    return vorname;
-  }
-
-  @JsonProperty("vorname")
-  public void setVorname(String vorname) {
-    this.vorname = vorname;
-  }
-
-  /**
-   **/
-  public SteuerdatenDto email(String email) {
-    this.email = email;
-    return this;
-  }
-
-
-  @JsonProperty("email")
-  public String getEmail() {
-    return email;
-  }
-
-  @JsonProperty("email")
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  /**
-   **/
   public SteuerdatenDto fahrkostenPartner(Integer fahrkostenPartner) {
     this.fahrkostenPartner = fahrkostenPartner;
     return this;
@@ -427,9 +370,6 @@ public class SteuerdatenDto  implements Serializable {
         Objects.equals(this.kinderalimente, steuerdaten.kinderalimente) &&
         Objects.equals(this.vermoegen, steuerdaten.vermoegen) &&
         Objects.equals(this.id, steuerdaten.id) &&
-        Objects.equals(this.nachname, steuerdaten.nachname) &&
-        Objects.equals(this.vorname, steuerdaten.vorname) &&
-        Objects.equals(this.email, steuerdaten.email) &&
         Objects.equals(this.fahrkostenPartner, steuerdaten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, steuerdaten.verpflegungPartner) &&
         Objects.equals(this.steuerjahr, steuerdaten.steuerjahr) &&
@@ -440,7 +380,7 @@ public class SteuerdatenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, kinderalimente, vermoegen, id, nachname, vorname, email, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungsCode, saeule3a, saeule2);
+    return Objects.hash(steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, kinderalimente, vermoegen, id, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungsCode, saeule3a, saeule2);
   }
 
   @Override
@@ -459,9 +399,6 @@ public class SteuerdatenDto  implements Serializable {
     sb.append("    kinderalimente: ").append(toIndentedString(kinderalimente)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
