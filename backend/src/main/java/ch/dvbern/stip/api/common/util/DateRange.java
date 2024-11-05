@@ -8,11 +8,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package ch.dvbern.stip.api.common.util;
@@ -76,7 +76,7 @@ public class DateRange implements Serializable, Comparable<DateRange> {
     @Override
     public String toString() {
         return "gueltigAb: " + gueltigAb.toString() +
-            "gueltigBis: " + gueltigBis.toString();
+        "gueltigBis: " + gueltigBis.toString();
     }
 
     @Override

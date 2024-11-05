@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.entity;
 
 import java.time.LocalDate;
@@ -34,8 +51,7 @@ class LebenslaufLuckenlosConstraintValidatorTest {
         Set<LebenslaufItem> lebenslaufItemSet = new HashSet<>();
         lebenslaufItemSet.add(lebenslaufItem);
         gesuchFormular.setLebenslaufItems(lebenslaufItemSet);
-        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null)
-            , is(true));
+        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
         final var lebenslaufItemZweiStart = LocalDate.of(2022, 11, 30);
         lebenslaufItem.setBis(lebenslaufItemZweiStart);
         LebenslaufItem lebenslaufItemZwei = createLebenslaufItem(
@@ -121,7 +137,8 @@ class LebenslaufLuckenlosConstraintValidatorTest {
     @Test
     void lebenslaufLuckenlosYoungerThan16OkTest() {
         GesuchFormular gesuchFormular = initFormular();
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(gesuchFormular.getAusbildung().getAusbildungBegin().minusYears(15));
+        gesuchFormular.getPersonInAusbildung()
+            .setGeburtsdatum(gesuchFormular.getAusbildung().getAusbildungBegin().minusYears(15));
         assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
     }
 
@@ -129,20 +146,23 @@ class LebenslaufLuckenlosConstraintValidatorTest {
     void lebenslaufLuckenlosStartsBarelyEarlyEnoughOkTest() {
         // Arrange
         GesuchFormular gesuchFormular = initFormular();
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(
-            LocalDate.of(2000, 1, 16)
-        );
-        gesuchFormular.getAusbildung().setAusbildungBegin(
-            LocalDate.of(2016, 7, 31)
-        );
+        gesuchFormular.getPersonInAusbildung()
+            .setGeburtsdatum(
+                LocalDate.of(2000, 1, 16)
+            );
+        gesuchFormular.getAusbildung()
+            .setAusbildungBegin(
+                LocalDate.of(2016, 7, 31)
+            );
 
         // Act/Assert
         assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
 
         // Arrange
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(
-            LocalDate.of(2000, 12, 16)
-        );
+        gesuchFormular.getPersonInAusbildung()
+            .setGeburtsdatum(
+                LocalDate.of(2000, 12, 16)
+            );
 
         // Act/Assert
         assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
@@ -152,20 +172,23 @@ class LebenslaufLuckenlosConstraintValidatorTest {
     void lebenslaufLuckenlosStartsBarelyTooLateFailTest() {
         // Arrange
         GesuchFormular gesuchFormular = initFormular();
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(
-            LocalDate.of(2000, 1, 16)
-        );
-        gesuchFormular.getAusbildung().setAusbildungBegin(
-            LocalDate.of(2016, 8, 1)
-        );
+        gesuchFormular.getPersonInAusbildung()
+            .setGeburtsdatum(
+                LocalDate.of(2000, 1, 16)
+            );
+        gesuchFormular.getAusbildung()
+            .setAusbildungBegin(
+                LocalDate.of(2016, 8, 1)
+            );
 
         // Act/Assert
         assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
 
         // Arrange
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(
-            LocalDate.of(2000, 12, 16)
-        );
+        gesuchFormular.getPersonInAusbildung()
+            .setGeburtsdatum(
+                LocalDate.of(2000, 12, 16)
+            );
 
         // Act/Assert
         assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));

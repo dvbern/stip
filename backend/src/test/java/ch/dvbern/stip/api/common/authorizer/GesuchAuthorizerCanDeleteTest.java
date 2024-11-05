@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.authorizer;
 
 import java.util.Set;
@@ -60,11 +77,14 @@ class GesuchAuthorizerCanDeleteTest {
         final var gesuchStatusService = Mockito.mock(GesuchStatusService.class);
 
         gesuch = new Gesuch()
-            .setFall(new Fall()
-                .setGesuchsteller(currentBenutzer)
+            .setFall(
+                new Fall()
+                    .setGesuchsteller(currentBenutzer)
             );
         final var fall = new Fall().setGesuchsteller(currentBenutzer);
-        authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository, gesuchTrancheRepository, gesuchStatusService, fallRepository);
+        authorizer = new GesuchAuthorizer(
+            benutzerService, gesuchRepository, gesuchTrancheRepository, gesuchStatusService, fallRepository
+        );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche_inBearbeitungGS);
@@ -85,8 +105,10 @@ class GesuchAuthorizerCanDeleteTest {
     @Test
     void canDeleteOwnTest() {
         // arrange
-        authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository, gesuchTrancheRepository,
-            null,null );
+        authorizer = new GesuchAuthorizer(
+            benutzerService, gesuchRepository, gesuchTrancheRepository,
+            null, null
+        );
         final var uuid = UUID.randomUUID();
         // assert
         assertDoesNotThrow(() -> authorizer.canDelete(uuid));
@@ -96,8 +118,10 @@ class GesuchAuthorizerCanDeleteTest {
     void cannotDeleteAnotherTest() {
         // arrange
         currentBenutzer.setRollen(Set.of());
-        final var authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository, gesuchTrancheRepository,
-            null,null );
+        final var authorizer = new GesuchAuthorizer(
+            benutzerService, gesuchRepository, gesuchTrancheRepository,
+            null, null
+        );
         final var uuid = UUID.randomUUID();
         // assert
         assertThrows(UnauthorizedException.class, () -> {
@@ -108,8 +132,10 @@ class GesuchAuthorizerCanDeleteTest {
     @Test
     void adminCanDeleteTest() {
         // arrange
-        final var authorizer = new GesuchAuthorizer(benutzerService, gesuchRepository, gesuchTrancheRepository,
-            null,null );
+        final var authorizer = new GesuchAuthorizer(
+            benutzerService, gesuchRepository, gesuchTrancheRepository,
+            null, null
+        );
         final var uuid = UUID.randomUUID();
         // assert
         assertDoesNotThrow(() -> authorizer.canDelete(uuid));

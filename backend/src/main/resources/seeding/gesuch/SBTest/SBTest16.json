@@ -1,1 +1,207 @@
-{"fall":{"id":"743b4f21-a537-4332-9564-d53505241b16","fallNummer":"BE.F.415487","mandant":"bern"},"gesuchsperiode":{"id":"04aea35c-3051-4ac9-b853-20fb5bec0a50","bezeichnungDe":"Herbst 2024","bezeichnungFr":"Automne 2024","gueltigkeitStatus":"PUBLIZIERT","gesuchsperiodeStart":"2024-07-01","gesuchsperiodeStopp":"2025-06-30","aufschaltterminStart":"2024-07-01","aufschaltterminStopp":"2025-06-30","einreichefristNormal":"2024-11-30","einreichefristReduziert":"2025-02-28","gesuchsjahr":{"id":"b2e84aaf-fb5c-4ed5-b597-a615827eedf5","bezeichnungDe":"Gesuchsjahr 24","bezeichnungFr":"Année de la demande 24","technischesJahr":2024,"gueltigkeitStatus":"PUBLIZIERT"},"ausbKosten_SekII":2000,"ausbKosten_Tertiaer":3000},"gesuchStatus":"BEREIT_FUER_BEARBEITUNG","gesuchNummer":"2024.BE.G.59962","id":"664d0953-d2d4-42f9-8d87-7dea9254861b","aenderungsdatum":"2024-10-28","gesuchTrancheToWorkWith":{"id":"09e4735b-6720-41cc-8ab3-280b11269809","gueltigAb":"2024-07-01","gueltigBis":"2025-06-30","status":"UEBERPRUEFEN","typ":"TRANCHE","comment":null,"gesuchFormular":{"ausbildung":{"fachrichtung":"Matura","ausbildungBegin":"8.2020","ausbildungEnd":"7.2025","pensum":"VOLLZEIT","ausbildungsgang":{"id":"87268966-138d-4209-9e04-fe76eb870040","bildungskategorie":{"bezeichnungDe":"Gymnasiale Maturitätsschulen","bezeichnungFr":"Ecoles de maturité gymnasiale","bildungsstufe":"SEKUNDAR_2","bfs":2,"id":"ceaa6f24-d465-4412-85f6-4124676e132e"},"bezeichnungDe":"Maturität","bezeichnungFr":"Maturité","ausbildungsstaetteId":null},"ausbildungNichtGefunden":false,"alternativeAusbildungsstaette":null,"alternativeAusbildungsgang":null,"ausbildungsort":"Biel","isAusbildungAusland":false},"personInAusbildung":{"adresse":{"land":"CH","strasse":"Horst","plz":"2502","ort":"Biel","id":"96b2a453-bec8-46e3-b419-4e47328e097b","coAdresse":null,"hausnummer":"1"},"sozialversicherungsnummer":"756.5564.1254.99","vorname":"Lina","anrede":"FRAU","identischerZivilrechtlicherWohnsitz":true,"email":"egal@gmail.com","telefonnummer":"079 000 00 00","geburtsdatum":"2005-07-07","nationalitaet":"CH","wohnsitz":"MUTTER_VATER","sozialhilfebeitraege":false,"nachname":"Adler","korrespondenzSprache":"DEUTSCH","heimatort":"Eschholzmatt","niederlassungsstatus":null,"einreisedatum":null,"zivilstand":"LEDIG","wohnsitzAnteilMutter":100.00,"wohnsitzAnteilVater":0.00,"vormundschaft":false,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null},"familiensituation":{"elternVerheiratetZusammen":false,"elternteilUnbekanntVerstorben":null,"gerichtlicheAlimentenregelung":true,"mutterUnbekanntVerstorben":null,"mutterUnbekanntGrund":null,"mutterWiederverheiratet":false,"vaterUnbekanntVerstorben":null,"vaterUnbekanntGrund":null,"vaterWiederverheiratet":null,"sorgerecht":null,"obhut":null,"obhutMutter":null,"obhutVater":null,"werZahltAlimente":"VATER"},"partner":null,"auszahlung":{"vorname":"Marianne","adresse":{"land":"CH","strasse":"Horst","plz":"2502","ort":"Biel","id":"d9ebe2e8-6170-4d26-812e-a69627b1d3c2","coAdresse":null,"hausnummer":"1"},"iban":"CH25 0900 0000 5006 2950 0","nachname":"Adler","kontoinhaber":"MUTTER"},"elterns":[{"vorname":"Marianne","adresse":{"land":"CH","strasse":"Horst","plz":"2502","ort":"Biel","id":"d9ebe2e8-6170-4d26-812e-a69627b1d3c2","coAdresse":null,"hausnummer":"1"},"identischerZivilrechtlicherWohnsitz":true,"telefonnummer":"077 000 00 01","geburtsdatum":"1962-08-22","ausweisbFluechtling":false,"elternTyp":"MUTTER","nachname":"Adler","ergaenzungsleistungen":0,"sozialhilfebeitraege":0,"wohnkosten":15840,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null,"sozialversicherungsnummer":"756.7222.6596.74","id":"29dd9f9e-d1bb-4474-9e17-67e80cfd61fb"}],"geschwisters":null,"lebenslaufItems":null,"kinds":null,"einnahmenKosten":{"nettoerwerbseinkommen":0,"fahrkosten":531,"verdienstRealisiert":false,"alimente":11472,"zulagen":null,"renten":0,"eoLeistungen":0,"ergaenzungsleistungen":0,"beitraege":0,"ausbildungskostenSekundarstufeZwei":1500,"ausbildungskostenTertiaerstufe":null,"wohnkosten":null,"wgWohnend":null,"willDarlehen":false,"auswaertigeMittagessenProWoche":5,"betreuungskostenKinder":null,"veranlagungsCode":0,"steuerjahr":2023,"vermoegen":0,"steuernKantonGemeinde":0},"steuerdaten":[{"steuerdatenTyp":"MUTTER","steuernKantonGemeinde":0,"steuernBund":0,"fahrkosten":766,"verpflegung":0,"totalEinkuenfte":25613,"eigenmietwert":0,"isArbeitsverhaeltnisSelbstaendig":false,"kinderalimente":5033,"vermoegen":40344,"id":"be7c435b-d2c7-4cfb-9055-1f799715773d","fahrkostenPartner":0,"verpflegungPartner":0,"steuerjahr":2023,"veranlagungsCode":0,"saeule3a":null,"saeule2":null}],"steuerdatenTabs":["MUTTER"]}},"bearbeiter":"Daniel Margreth"}
+{
+  "fall": {
+    "id": "743b4f21-a537-4332-9564-d53505241b16",
+    "fallNummer": "BE.F.415487",
+    "mandant": "bern"
+  },
+  "gesuchsperiode": {
+    "id": "04aea35c-3051-4ac9-b853-20fb5bec0a50",
+    "bezeichnungDe": "Herbst 2024",
+    "bezeichnungFr": "Automne 2024",
+    "gueltigkeitStatus": "PUBLIZIERT",
+    "gesuchsperiodeStart": "2024-07-01",
+    "gesuchsperiodeStopp": "2025-06-30",
+    "aufschaltterminStart": "2024-07-01",
+    "aufschaltterminStopp": "2025-06-30",
+    "einreichefristNormal": "2024-11-30",
+    "einreichefristReduziert": "2025-02-28",
+    "gesuchsjahr": {
+      "id": "b2e84aaf-fb5c-4ed5-b597-a615827eedf5",
+      "bezeichnungDe": "Gesuchsjahr 24",
+      "bezeichnungFr": "Année de la demande 24",
+      "technischesJahr": 2024,
+      "gueltigkeitStatus": "PUBLIZIERT"
+    },
+    "ausbKosten_SekII": 2000,
+    "ausbKosten_Tertiaer": 3000
+  },
+  "gesuchStatus": "BEREIT_FUER_BEARBEITUNG",
+  "gesuchNummer": "2024.BE.G.59962",
+  "id": "664d0953-d2d4-42f9-8d87-7dea9254861b",
+  "aenderungsdatum": "2024-10-28",
+  "gesuchTrancheToWorkWith": {
+    "id": "09e4735b-6720-41cc-8ab3-280b11269809",
+    "gueltigAb": "2024-07-01",
+    "gueltigBis": "2025-06-30",
+    "status": "UEBERPRUEFEN",
+    "typ": "TRANCHE",
+    "comment": null,
+    "gesuchFormular": {
+      "ausbildung": {
+        "fachrichtung": "Matura",
+        "ausbildungBegin": "8.2020",
+        "ausbildungEnd": "7.2025",
+        "pensum": "VOLLZEIT",
+        "ausbildungsgang": {
+          "id": "87268966-138d-4209-9e04-fe76eb870040",
+          "bildungskategorie": {
+            "bezeichnungDe": "Gymnasiale Maturitätsschulen",
+            "bezeichnungFr": "Ecoles de maturité gymnasiale",
+            "bildungsstufe": "SEKUNDAR_2",
+            "bfs": 2,
+            "id": "ceaa6f24-d465-4412-85f6-4124676e132e"
+          },
+          "bezeichnungDe": "Maturität",
+          "bezeichnungFr": "Maturité",
+          "ausbildungsstaetteId": null
+        },
+        "ausbildungNichtGefunden": false,
+        "alternativeAusbildungsstaette": null,
+        "alternativeAusbildungsgang": null,
+        "ausbildungsort": "Biel",
+        "isAusbildungAusland": false
+      },
+      "personInAusbildung": {
+        "adresse": {
+          "land": "CH",
+          "strasse": "Horst",
+          "plz": "2502",
+          "ort": "Biel",
+          "id": "96b2a453-bec8-46e3-b419-4e47328e097b",
+          "coAdresse": null,
+          "hausnummer": "1"
+        },
+        "sozialversicherungsnummer": "756.5564.1254.99",
+        "vorname": "Lina",
+        "anrede": "FRAU",
+        "identischerZivilrechtlicherWohnsitz": true,
+        "email": "egal@gmail.com",
+        "telefonnummer": "079 000 00 00",
+        "geburtsdatum": "2005-07-07",
+        "nationalitaet": "CH",
+        "wohnsitz": "MUTTER_VATER",
+        "sozialhilfebeitraege": false,
+        "nachname": "Adler",
+        "korrespondenzSprache": "DEUTSCH",
+        "heimatort": "Eschholzmatt",
+        "niederlassungsstatus": null,
+        "einreisedatum": null,
+        "zivilstand": "LEDIG",
+        "wohnsitzAnteilMutter": 100.00,
+        "wohnsitzAnteilVater": 0.00,
+        "vormundschaft": false,
+        "identischerZivilrechtlicherWohnsitzOrt": null,
+        "identischerZivilrechtlicherWohnsitzPLZ": null
+      },
+      "familiensituation": {
+        "elternVerheiratetZusammen": false,
+        "elternteilUnbekanntVerstorben": null,
+        "gerichtlicheAlimentenregelung": true,
+        "mutterUnbekanntVerstorben": null,
+        "mutterUnbekanntGrund": null,
+        "mutterWiederverheiratet": false,
+        "vaterUnbekanntVerstorben": null,
+        "vaterUnbekanntGrund": null,
+        "vaterWiederverheiratet": null,
+        "sorgerecht": null,
+        "obhut": null,
+        "obhutMutter": null,
+        "obhutVater": null,
+        "werZahltAlimente": "VATER"
+      },
+      "partner": null,
+      "auszahlung": {
+        "vorname": "Marianne",
+        "adresse": {
+          "land": "CH",
+          "strasse": "Horst",
+          "plz": "2502",
+          "ort": "Biel",
+          "id": "d9ebe2e8-6170-4d26-812e-a69627b1d3c2",
+          "coAdresse": null,
+          "hausnummer": "1"
+        },
+        "iban": "CH25 0900 0000 5006 2950 0",
+        "nachname": "Adler",
+        "kontoinhaber": "MUTTER"
+      },
+      "elterns": [
+        {
+          "vorname": "Marianne",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Horst",
+            "plz": "2502",
+            "ort": "Biel",
+            "id": "d9ebe2e8-6170-4d26-812e-a69627b1d3c2",
+            "coAdresse": null,
+            "hausnummer": "1"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "077 000 00 01",
+          "geburtsdatum": "1962-08-22",
+          "ausweisbFluechtling": false,
+          "elternTyp": "MUTTER",
+          "nachname": "Adler",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 15840,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.7222.6596.74",
+          "id": "29dd9f9e-d1bb-4474-9e17-67e80cfd61fb"
+        }
+      ],
+      "geschwisters": null,
+      "lebenslaufItems": null,
+      "kinds": null,
+      "einnahmenKosten": {
+        "nettoerwerbseinkommen": 0,
+        "fahrkosten": 531,
+        "verdienstRealisiert": false,
+        "alimente": 11472,
+        "zulagen": null,
+        "renten": 0,
+        "eoLeistungen": 0,
+        "ergaenzungsleistungen": 0,
+        "beitraege": 0,
+        "ausbildungskostenSekundarstufeZwei": 1500,
+        "ausbildungskostenTertiaerstufe": null,
+        "wohnkosten": null,
+        "wgWohnend": null,
+        "willDarlehen": false,
+        "auswaertigeMittagessenProWoche": 5,
+        "betreuungskostenKinder": null,
+        "veranlagungsCode": 0,
+        "steuerjahr": 2023,
+        "vermoegen": 0,
+        "steuernKantonGemeinde": 0
+      },
+      "steuerdaten": [
+        {
+          "steuerdatenTyp": "MUTTER",
+          "steuernKantonGemeinde": 0,
+          "steuernBund": 0,
+          "fahrkosten": 766,
+          "verpflegung": 0,
+          "totalEinkuenfte": 25613,
+          "eigenmietwert": 0,
+          "isArbeitsverhaeltnisSelbstaendig": false,
+          "kinderalimente": 5033,
+          "vermoegen": 40344,
+          "id": "be7c435b-d2c7-4cfb-9055-1f799715773d",
+          "fahrkostenPartner": 0,
+          "verpflegungPartner": 0,
+          "steuerjahr": 2023,
+          "veranlagungsCode": 0,
+          "saeule3a": null,
+          "saeule2": null
+        }
+      ],
+      "steuerdatenTabs": [
+        "MUTTER"
+      ]
+    }
+  },
+  "bearbeiter": "Daniel Margreth"
+}

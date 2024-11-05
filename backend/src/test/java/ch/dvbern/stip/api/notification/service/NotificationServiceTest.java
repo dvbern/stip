@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.notification.service;
 
 import java.util.List;
@@ -43,13 +60,19 @@ class NotificationServiceTest {
         .setKorrespondenzSprache(Sprache.DEUTSCH)
         .setNachname("PiaNachnameTest")
         .setVorname("PiaVornameTest"))
-        .setAnrede(Anrede.FRAU);
+            .setAnrede(Anrede.FRAU);
 
     @BeforeEach
     void setup() {
         GesuchValidatorService gesuchValidatorServiceMock = Mockito.mock(GesuchValidatorService.class);
-        Mockito.doNothing().when(gesuchValidatorServiceMock).validateGesuchForStatus(any(Gesuch.class), any(
-            Gesuchstatus.class));
+        Mockito.doNothing()
+            .when(gesuchValidatorServiceMock)
+            .validateGesuchForStatus(
+                any(Gesuch.class),
+                any(
+                    Gesuchstatus.class
+                )
+            );
         QuarkusMock.installMockForType(gesuchValidatorServiceMock, GesuchValidatorService.class);
 
         notificationRepositoryMock = Mockito.mock(NotificationRepository.class);
@@ -80,6 +103,7 @@ class NotificationServiceTest {
         Mockito.verify(notificationRepositoryMock).persistAndFlush(any(Notification.class));
 
         assertThat(sent).hasSize(1);
-        assertThat(sent.get(0).getHtml()).contains("Guten Tag ", personInAusbildung.getVorname(), " ", personInAusbildung.getNachname());
+        assertThat(sent.get(0).getHtml())
+            .contains("Guten Tag ", personInAusbildung.getVorname(), " ", personInAusbildung.getNachname());
     }
 }

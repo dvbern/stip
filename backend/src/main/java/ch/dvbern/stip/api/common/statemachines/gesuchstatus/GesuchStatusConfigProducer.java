@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus;
 
 import java.util.Optional;
@@ -30,7 +47,10 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.EINGEREICHT)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG, Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
+            .permit(
+                GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+                Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
+            )
             .permit(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN, Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
             .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT);
 
@@ -61,8 +81,9 @@ public class GesuchStatusConfigProducer {
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.BEREIT_FUER_BEARBEITUNG); // TODO: KSTIP-1583 - Remove/Add proper state change
-
+            .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.BEREIT_FUER_BEARBEITUNG); // TODO: KSTIP-1583 -
+                                                                                                // Remove/Add proper
+                                                                                                // state change
 
         config.configure(Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
@@ -108,8 +129,12 @@ public class GesuchStatusConfigProducer {
     private void logTransition(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Object[] args) {
         Gesuch gesuch = extractGesuchFromStateMachineArgs(args);
 
-        LOG.info("KSTIP: Gesuch mit id {} wurde von Status {} nach Status {} durch event {} geandert", gesuch.getId(),
-            transition.getSource(), transition.getDestination(), transition.getTrigger()
+        LOG.info(
+            "KSTIP: Gesuch mit id {} wurde von Status {} nach Status {} durch event {} geandert",
+            gesuch.getId(),
+            transition.getSource(),
+            transition.getDestination(),
+            transition.getTrigger()
         );
     }
 
@@ -117,7 +142,8 @@ public class GesuchStatusConfigProducer {
         if (args.length == 0 || !(args[0] instanceof Gesuch)) {
             throw new AppErrorException(
                 "State Transition args sollte einen Gesuch Objekt enthalten, es gibt einen Problem in die "
-                    + "Statemachine args");
+                + "Statemachine args"
+            );
         }
         return (Gesuch) args[0];
     }

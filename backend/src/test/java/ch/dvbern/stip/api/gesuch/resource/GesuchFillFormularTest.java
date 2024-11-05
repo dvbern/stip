@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.resource;
 
 import java.util.Arrays;
@@ -24,8 +41,25 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.api.*;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.generated.api.FallApiSpec;
+import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.api.NotificationApiSpec;
+import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.KindUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
+import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -57,20 +91,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-    // TODO KSTIP-1303: Test Aenderungsantrag once proper generation is done
+// TODO KSTIP-1303: Test Aenderungsantrag once proper generation is done
 class GesuchFillFormularTest {
     public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-    public final GesuchTrancheApiSpec gesuchTrancheApiSpec = GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
+    public final GesuchTrancheApiSpec gesuchTrancheApiSpec =
+        GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
-    public final NotificationApiSpec notificationApiSpec = NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
+    public final NotificationApiSpec notificationApiSpec =
+        NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
     private UUID fallId;
     private UUID gesuchId;
     private UUID gesuchTrancheId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
-    private NotificationDtoSpec notification;
-    private NotificationDto notificationDto;
+
     @Test
     @TestAsGesuchsteller
     @Order(1)
@@ -95,10 +130,13 @@ class GesuchFillFormularTest {
         gesuchId = TestUtil.extractIdFromResponse(response);
         gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
-            .execute(ResponseBody::prettyPeek).then().extract()
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
             .body()
             .as(GesuchDtoSpec.class)
-            .getGesuchTrancheToWorkWith().getId();
+            .getGesuchTrancheToWorkWith()
+            .getId();
     }
 
     @Test
@@ -157,11 +195,12 @@ class GesuchFillFormularTest {
         // Set the Adresse ID from the returned Gesuch, so follow-up calls won't want to change it
         currentFormular.getPersonInAusbildung()
             .getAdresse()
-            .setId(returnedGesuch.getGesuchTrancheToWorkWith()
-                .getGesuchFormular()
-                .getPersonInAusbildung()
-                .getAdresse()
-                .getId()
+            .setId(
+                returnedGesuch.getGesuchTrancheToWorkWith()
+                    .getGesuchFormular()
+                    .getPersonInAusbildung()
+                    .getAdresse()
+                    .getId()
             );
     }
 
@@ -345,7 +384,6 @@ class GesuchFillFormularTest {
         );
     }
 
-
     @Test
     @TestAsGesuchsteller
     @Order(19)
@@ -395,7 +433,6 @@ class GesuchFillFormularTest {
             assertTrue(!notification.getNotificationText().isEmpty());
         });
     }
-
 
     @Test
     @TestAsAdmin

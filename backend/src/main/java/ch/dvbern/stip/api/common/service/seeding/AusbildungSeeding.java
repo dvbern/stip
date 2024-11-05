@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.List;
@@ -56,11 +73,27 @@ public class AusbildungSeeding extends Seeder {
             createBildungskategorie("Gymnasiale Maturitätsschulen", "Ecoles de maturité gymnasiale", 2),
             createBildungskategorie("Schulen für Allgemeinbildung (Andere)", "Autres formations générales", 3),
             createBildungskategorie("Vollzeitberufsschulen", "Ecoles prof. à plein temps", 4),
-            createBildungskategorie("Berufslehren und Anlehren", "Apprentissages et form. professionelles pratiques", 5),
-            createBildungskategorie("Nach Berufslehre erworbene Berufsmaturitäten", "Maturités professionnelles accomplies après l'app.", 6),
-            createBildungskategorie("Höhere (nicht universitäre) Berufsbildung", "Formations professionelles supérieures", 7),
+            createBildungskategorie(
+                "Berufslehren und Anlehren",
+                "Apprentissages et form. professionelles pratiques",
+                5
+            ),
+            createBildungskategorie(
+                "Nach Berufslehre erworbene Berufsmaturitäten",
+                "Maturités professionnelles accomplies après l'app.",
+                6
+            ),
+            createBildungskategorie(
+                "Höhere (nicht universitäre) Berufsbildung",
+                "Formations professionelles supérieures",
+                7
+            ),
             createBildungskategorie("Fachhochschulen", "Hautes écoles spécialisées", 8),
-            createBildungskategorie("Universitäten und Eidg. Technische Hochschulen", "Universités et Ecoles polytechniques fédérales", 9)
+            createBildungskategorie(
+                "Universitäten und Eidg. Technische Hochschulen",
+                "Universités et Ecoles polytechniques fédérales",
+                9
+            )
         );
     }
 
@@ -101,11 +134,31 @@ public class AusbildungSeeding extends Seeder {
             createAusbildungsgang("Bachelor", "Bachelor", ausbildungsstaetten.get(0), bildungskategorien.get(6)),
             createAusbildungsgang("Bachelor", "Bachelor", ausbildungsstaetten.get(1), bildungskategorien.get(7)),
             createAusbildungsgang("Master", "Master", ausbildungsstaetten.get(1), bildungskategorien.get(7)),
-            createAusbildungsgang("Lehre EBA", "Apprentissage AFP", ausbildungsstaetten.get(2), bildungskategorien.get(3)),
-            createAusbildungsgang("Vorlehre", "Préapprentissage", ausbildungsstaetten.get(2), bildungskategorien.get(3)),
+            createAusbildungsgang(
+                "Lehre EBA",
+                "Apprentissage AFP",
+                ausbildungsstaetten.get(2),
+                bildungskategorien.get(3)
+            ),
+            createAusbildungsgang(
+                "Vorlehre",
+                "Préapprentissage",
+                ausbildungsstaetten.get(2),
+                bildungskategorien.get(3)
+            ),
             createAusbildungsgang("Maturität", "Maturité", ausbildungsstaetten.get(3), bildungskategorien.get(0)),
-            createAusbildungsgang("Lehre EFZ", "Apprentissage CFC", ausbildungsstaetten.get(2), bildungskategorien.get(3)),
-            createAusbildungsgang("Berufsvorbereitendes Schuljahr", "Année scolaire de préparation professionnelle", ausbildungsstaetten.get(4), bildungskategorien.get(2))
+            createAusbildungsgang(
+                "Lehre EFZ",
+                "Apprentissage CFC",
+                ausbildungsstaetten.get(2),
+                bildungskategorien.get(3)
+            ),
+            createAusbildungsgang(
+                "Berufsvorbereitendes Schuljahr",
+                "Année scolaire de préparation professionnelle",
+                ausbildungsstaetten.get(4),
+                bildungskategorien.get(2)
+            )
         );
     }
 

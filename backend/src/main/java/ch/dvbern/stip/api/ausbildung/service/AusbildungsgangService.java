@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.ausbildung.service;
 
 import java.util.UUID;
@@ -34,7 +51,10 @@ public class AusbildungsgangService {
     }
 
     @Transactional
-    public AusbildungsgangDto updateAusbildungsgang(UUID ausbildungsgangId, AusbildungsgangUpdateDto ausbildungsgangUpdateDto) {
+    public AusbildungsgangDto updateAusbildungsgang(
+        UUID ausbildungsgangId,
+        AusbildungsgangUpdateDto ausbildungsgangUpdateDto
+    ) {
         var ausbildungsgangToUpdate = ausbildungsgangRepository.requireById(ausbildungsgangId);
         persistsAusbildungsgang(ausbildungsgangUpdateDto, ausbildungsgangToUpdate);
         return ausbildungsgangMapper.toDto(ausbildungsgangToUpdate);
@@ -48,7 +68,8 @@ public class AusbildungsgangService {
 
     private void persistsAusbildungsgang(
         AusbildungsgangUpdateDto ausbildungsgangUpdate,
-        Ausbildungsgang ausbildungsgangToUpdate) {
+        Ausbildungsgang ausbildungsgangToUpdate
+    ) {
         ausbildungsgangMapper.partialUpdate(ausbildungsgangUpdate, ausbildungsgangToUpdate);
         ausbildungsgangToUpdate
             .setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangUpdate.getAusbildungsstaetteId()));
@@ -57,7 +78,8 @@ public class AusbildungsgangService {
     }
 
     private Ausbildungsgang persistsAusbildungsgang(
-        AusbildungsgangCreateDto ausbildungsgangCreateDto) {
+        AusbildungsgangCreateDto ausbildungsgangCreateDto
+    ) {
         Ausbildungsgang ausbildungsgang = ausbildungsgangMapper.toEntity(ausbildungsgangCreateDto);
         ausbildungsgang
             .setAusbildungsstaette(loadAusbildungsstaetteIfExists(ausbildungsgangCreateDto.getAusbildungsstaetteId()));
@@ -67,9 +89,8 @@ public class AusbildungsgangService {
     }
 
     private Ausbildungsstaette loadAusbildungsstaetteIfExists(UUID ausbildungsstaetteId) {
-        return ausbildungsstaetteId != null ?
-            ausbildungsstaetteRepository.requireById(ausbildungsstaetteId) :
-            new Ausbildungsstaette();
+        return ausbildungsstaetteId != null ? ausbildungsstaetteRepository.requireById(ausbildungsstaetteId)
+            : new Ausbildungsstaette();
     }
 
     private Bildungskategorie loadBildungsart(UUID bildungsartId) {

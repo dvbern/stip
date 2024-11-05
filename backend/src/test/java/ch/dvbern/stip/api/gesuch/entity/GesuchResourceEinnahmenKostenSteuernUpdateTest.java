@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.entity;
 
 import java.util.UUID;
@@ -51,7 +68,9 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
         var gesuchDTO = new GesuchCreateDtoSpec();
         gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
         gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
-        var response = gesuchApiSpec.createGesuch().body(gesuchDTO).execute(ResponseBody::prettyPeek)
+        var response = gesuchApiSpec.createGesuch()
+            .body(gesuchDTO)
+            .execute(ResponseBody::prettyPeek)
             .then();
 
         response.assertThat()
@@ -60,9 +79,10 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
         gesuchId = TestUtil.extractIdFromResponse(response);
     }
 
-
     void createTranche() {
-        gesuch = gesuchApiSpec.getCurrentGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+        gesuch = gesuchApiSpec.getCurrentGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
@@ -73,48 +93,59 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigBis(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis()));
     }
 
-
     @Test
     @TestAsGesuchsteller
     @Order(7)
-    void testUpdateGesuchEinnahmenKostenSteuern(){
+    void testUpdateGesuchEinnahmenKostenSteuern() {
         createGesuch();
         createTranche();
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
-            .setPersonInAusbildung(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung()
-                .getGesuchTrancheToWorkWith()
-                .getGesuchFormular()
-                .getPersonInAusbildung()
+            .setPersonInAusbildung(
+                GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung()
+                    .getGesuchTrancheToWorkWith()
+                    .getGesuchFormular()
+                    .getPersonInAusbildung()
             );
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
-            .setPartner(GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner()
-                .getGesuchTrancheToWorkWith()
-                .getGesuchFormular()
-                .getPartner()
+            .setPartner(
+                GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner()
+                    .getGesuchTrancheToWorkWith()
+                    .getGesuchFormular()
+                    .getPartner()
             );
 
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setNettoerwerbseinkommen(20001);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setNettoerwerbseinkommen(20001);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().setJahreseinkommen(0);
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 
-        //total income is above 20 000
+        // total income is above 20 000
 
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(ResponseBody::prettyPeek)
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuchId)
+            .body(gesuchUpdateDTO)
+            .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Status.ACCEPTED.getStatusCode());
-        gesuch = gesuchApiSpec.getCurrentGesuch().gesuchIdPath(gesuchId).execute(ResponseBody::prettyPeek)
+        gesuch = gesuchApiSpec.getCurrentGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
         Integer value = (int) (20001 * 0.1);
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuernKantonGemeinde(), is(value));
+        assertThat(
+            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuernKantonGemeinde(),
+            is(value)
+        );
     }
-
 
 }

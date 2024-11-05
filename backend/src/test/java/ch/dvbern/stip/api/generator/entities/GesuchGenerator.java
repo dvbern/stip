@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.generator.entities;
 
 import java.util.ArrayList;
@@ -39,8 +56,7 @@ import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 
 public final class GesuchGenerator {
-    private GesuchGenerator() {
-    }
+    private GesuchGenerator() {}
 
     public static GesuchUpdateDto createFullGesuch() {
         GesuchUpdateDtoSpec gesuchFormular = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
@@ -89,10 +105,13 @@ public final class GesuchGenerator {
                     .setGesuchsperiodeStart(gueltigkeitsRange.getGueltigAb())
                     .setGesuchsperiodeStopp(gueltigkeitsRange.getGueltigBis())
             );
-        gesuch.getGesuchTranchen().add((GesuchTranche) new GesuchTranche()
-            .setGueltigkeit(gueltigkeitsRange)
-            .setGesuch(gesuch)
-            .setId(UUID.randomUUID()));
+        gesuch.getGesuchTranchen()
+            .add(
+                (GesuchTranche) new GesuchTranche()
+                    .setGueltigkeit(gueltigkeitsRange)
+                    .setGesuch(gesuch)
+                    .setId(UUID.randomUUID())
+            );
         return gesuch;
     }
 

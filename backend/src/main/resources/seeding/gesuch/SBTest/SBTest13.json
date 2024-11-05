@@ -1,1 +1,256 @@
-{"fall":{"id":"9393cd59-dd35-46ae-9404-1cea86df6a04","fallNummer":"BE.F.415471","mandant":"bern"},"gesuchsperiode":{"id":"04aea35c-3051-4ac9-b853-20fb5bec0a50","bezeichnungDe":"Herbst 2024","bezeichnungFr":"Automne 2024","gueltigkeitStatus":"PUBLIZIERT","gesuchsperiodeStart":"2024-07-01","gesuchsperiodeStopp":"2025-06-30","aufschaltterminStart":"2024-07-01","aufschaltterminStopp":"2025-06-30","einreichefristNormal":"2024-11-30","einreichefristReduziert":"2025-02-28","gesuchsjahr":{"id":"b2e84aaf-fb5c-4ed5-b597-a615827eedf5","bezeichnungDe":"Gesuchsjahr 24","bezeichnungFr":"Année de la demande 24","technischesJahr":2024,"gueltigkeitStatus":"PUBLIZIERT"},"ausbKosten_SekII":2000,"ausbKosten_Tertiaer":3000},"gesuchStatus":"VERFUEGT","gesuchNummer":"2024.BE.G.59954","id":"954fb027-4132-41fe-88bc-ad78a888eed7","aenderungsdatum":"2024-10-29","gesuchTrancheToWorkWith":{"id":"12bd5c4c-3c02-4b86-bea0-584149c7376c","gueltigAb":"2024-07-01","gueltigBis":"2024-11-30","status":"UEBERPRUEFEN","typ":"TRANCHE","comment":null,"gesuchFormular":{"ausbildung":{"fachrichtung":"BWL","ausbildungBegin":"8.2024","ausbildungEnd":"7.2027","pensum":"VOLLZEIT","ausbildungsgang":{"id":"859d7998-2c64-47cb-9d46-fff667227e28","bildungskategorie":{"bezeichnungDe":"Universitäten und Eidg. Technische Hochschulen","bezeichnungFr":"Universités et Ecoles polytechniques fédérales","bildungsstufe":"TERTIAER","bfs":9,"id":"e620530f-513c-4043-bb84-5882101d3e5f"},"bezeichnungDe":"Bachelor","bezeichnungFr":"Bachelor","ausbildungsstaetteId":null},"ausbildungNichtGefunden":false,"alternativeAusbildungsstaette":null,"alternativeAusbildungsgang":null,"ausbildungsort":"Bern","isAusbildungAusland":false},"personInAusbildung":{"adresse":{"land":"CH","strasse":"Sulgeneckstrasse","plz":"3005","ort":"Bern","id":"1e753d07-cd73-4954-900c-6f2b013a0f58","coAdresse":null,"hausnummer":"70"},"sozialversicherungsnummer":"756.3333.3333.35","vorname":"Sven","anrede":"HERR","identischerZivilrechtlicherWohnsitz":true,"email":"sven.burger@be.ch","telefonnummer":"0316338325","geburtsdatum":"2000-01-01","nationalitaet":"CH","wohnsitz":"EIGENER_HAUSHALT","sozialhilfebeitraege":false,"nachname":"Testfall","korrespondenzSprache":"DEUTSCH","heimatort":"Bern","niederlassungsstatus":null,"einreisedatum":null,"zivilstand":"LEDIG","wohnsitzAnteilMutter":null,"wohnsitzAnteilVater":null,"vormundschaft":false,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null},"familiensituation":{"elternVerheiratetZusammen":true,"elternteilUnbekanntVerstorben":null,"gerichtlicheAlimentenregelung":null,"mutterUnbekanntVerstorben":null,"mutterUnbekanntGrund":null,"mutterWiederverheiratet":null,"vaterUnbekanntVerstorben":null,"vaterUnbekanntGrund":null,"vaterWiederverheiratet":null,"sorgerecht":null,"obhut":null,"obhutMutter":null,"obhutVater":null,"werZahltAlimente":null},"partner":null,"auszahlung":{"vorname":"Sven","adresse":{"land":"CH","strasse":"Sulgeneckstrasse","plz":"3005","ort":"Bern","id":"1e753d07-cd73-4954-900c-6f2b013a0f58","coAdresse":null,"hausnummer":"70"},"iban":"CH56 0483 5012 3456 7800 9","nachname":"Testfall","kontoinhaber":"GESUCHSTELLER"},"elterns":[{"vorname":"Vater","adresse":{"land":"CH","strasse":"Sulgeneckstrasse","plz":"3005","ort":"Bern","id":"e4f0309a-50fe-46b3-aab3-a2ec87a6f067","coAdresse":null,"hausnummer":"60"},"identischerZivilrechtlicherWohnsitz":true,"telefonnummer":"0316338555","geburtsdatum":"1960-01-01","ausweisbFluechtling":false,"elternTyp":"VATER","nachname":"Testfall","ergaenzungsleistungen":0,"sozialhilfebeitraege":0,"wohnkosten":1,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null,"sozialversicherungsnummer":"756.1111.1111.13","id":"3d724938-93fe-4179-8ad4-90d679055395"},{"vorname":"Mutter","adresse":{"land":"CH","strasse":"Sulgeneckstrasse","plz":"3005","ort":"Bern","id":"75986c57-7127-4f77-addf-0c6165e58067","coAdresse":null,"hausnummer":"80"},"identischerZivilrechtlicherWohnsitz":true,"telefonnummer":"0316338555","geburtsdatum":"1961-01-01","ausweisbFluechtling":false,"elternTyp":"MUTTER","nachname":"Testfall","ergaenzungsleistungen":0,"sozialhilfebeitraege":0,"wohnkosten":1,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null,"sozialversicherungsnummer":"756.5555.5555.57","id":"069bbc98-f851-4cc5-966f-77b996eda12d"}],"geschwisters":null,"lebenslaufItems":[{"von":"8.2016","bis":"7.2024","wohnsitz":"BE","id":"fb3c36fd-2635-4ea0-90a2-e4def0db98a5","bildungsart":null,"ausbildungAbgeschlossen":false,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":"BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT","taetigkeitsBeschreibung":"Betreuung Mutter"}],"kinds":[{"vorname":"Kind","geburtsdatum":"2020-01-01","ausbildungssituation":"SCHULPFLICHTIG","wohnsitzAnteilPia":100,"nachname":"Testfall-Sven","id":"891c126f-061d-4897-b6ce-0ca49bfa51c6","erhalteneAlimentebeitraege":500}],"einnahmenKosten":{"nettoerwerbseinkommen":0,"fahrkosten":500,"verdienstRealisiert":true,"alimente":null,"zulagen":0,"renten":0,"eoLeistungen":0,"ergaenzungsleistungen":0,"beitraege":0,"ausbildungskostenSekundarstufeZwei":null,"ausbildungskostenTertiaerstufe":3500,"wohnkosten":1000,"wgWohnend":false,"willDarlehen":true,"auswaertigeMittagessenProWoche":null,"betreuungskostenKinder":0,"veranlagungsCode":0,"steuerjahr":2023,"vermoegen":10000,"steuernKantonGemeinde":0},"steuerdaten":[{"steuerdatenTyp":"FAMILIE","steuernKantonGemeinde":5000,"steuernBund":0,"fahrkosten":500,"verpflegung":500,"totalEinkuenfte":10000,"eigenmietwert":0,"isArbeitsverhaeltnisSelbstaendig":false,"kinderalimente":0,"vermoegen":10000,"id":"b00e90b3-1433-4363-b0b3-b97ad024f8a5","fahrkostenPartner":500,"verpflegungPartner":500,"steuerjahr":2023,"veranlagungsCode":0,"saeule3a":null,"saeule2":null}],"steuerdatenTabs":["FAMILIE"]}},"bearbeiter":"Manuela Geissler"}
+{
+  "fall": {
+    "id": "9393cd59-dd35-46ae-9404-1cea86df6a04",
+    "fallNummer": "BE.F.415471",
+    "mandant": "bern"
+  },
+  "gesuchsperiode": {
+    "id": "04aea35c-3051-4ac9-b853-20fb5bec0a50",
+    "bezeichnungDe": "Herbst 2024",
+    "bezeichnungFr": "Automne 2024",
+    "gueltigkeitStatus": "PUBLIZIERT",
+    "gesuchsperiodeStart": "2024-07-01",
+    "gesuchsperiodeStopp": "2025-06-30",
+    "aufschaltterminStart": "2024-07-01",
+    "aufschaltterminStopp": "2025-06-30",
+    "einreichefristNormal": "2024-11-30",
+    "einreichefristReduziert": "2025-02-28",
+    "gesuchsjahr": {
+      "id": "b2e84aaf-fb5c-4ed5-b597-a615827eedf5",
+      "bezeichnungDe": "Gesuchsjahr 24",
+      "bezeichnungFr": "Année de la demande 24",
+      "technischesJahr": 2024,
+      "gueltigkeitStatus": "PUBLIZIERT"
+    },
+    "ausbKosten_SekII": 2000,
+    "ausbKosten_Tertiaer": 3000
+  },
+  "gesuchStatus": "VERFUEGT",
+  "gesuchNummer": "2024.BE.G.59954",
+  "id": "954fb027-4132-41fe-88bc-ad78a888eed7",
+  "aenderungsdatum": "2024-10-29",
+  "gesuchTrancheToWorkWith": {
+    "id": "12bd5c4c-3c02-4b86-bea0-584149c7376c",
+    "gueltigAb": "2024-07-01",
+    "gueltigBis": "2024-11-30",
+    "status": "UEBERPRUEFEN",
+    "typ": "TRANCHE",
+    "comment": null,
+    "gesuchFormular": {
+      "ausbildung": {
+        "fachrichtung": "BWL",
+        "ausbildungBegin": "8.2024",
+        "ausbildungEnd": "7.2027",
+        "pensum": "VOLLZEIT",
+        "ausbildungsgang": {
+          "id": "859d7998-2c64-47cb-9d46-fff667227e28",
+          "bildungskategorie": {
+            "bezeichnungDe": "Universitäten und Eidg. Technische Hochschulen",
+            "bezeichnungFr": "Universités et Ecoles polytechniques fédérales",
+            "bildungsstufe": "TERTIAER",
+            "bfs": 9,
+            "id": "e620530f-513c-4043-bb84-5882101d3e5f"
+          },
+          "bezeichnungDe": "Bachelor",
+          "bezeichnungFr": "Bachelor",
+          "ausbildungsstaetteId": null
+        },
+        "ausbildungNichtGefunden": false,
+        "alternativeAusbildungsstaette": null,
+        "alternativeAusbildungsgang": null,
+        "ausbildungsort": "Bern",
+        "isAusbildungAusland": false
+      },
+      "personInAusbildung": {
+        "adresse": {
+          "land": "CH",
+          "strasse": "Sulgeneckstrasse",
+          "plz": "3005",
+          "ort": "Bern",
+          "id": "1e753d07-cd73-4954-900c-6f2b013a0f58",
+          "coAdresse": null,
+          "hausnummer": "70"
+        },
+        "sozialversicherungsnummer": "756.3333.3333.35",
+        "vorname": "Sven",
+        "anrede": "HERR",
+        "identischerZivilrechtlicherWohnsitz": true,
+        "email": "sven.burger@be.ch",
+        "telefonnummer": "0316338325",
+        "geburtsdatum": "2000-01-01",
+        "nationalitaet": "CH",
+        "wohnsitz": "EIGENER_HAUSHALT",
+        "sozialhilfebeitraege": false,
+        "nachname": "Testfall",
+        "korrespondenzSprache": "DEUTSCH",
+        "heimatort": "Bern",
+        "niederlassungsstatus": null,
+        "einreisedatum": null,
+        "zivilstand": "LEDIG",
+        "wohnsitzAnteilMutter": null,
+        "wohnsitzAnteilVater": null,
+        "vormundschaft": false,
+        "identischerZivilrechtlicherWohnsitzOrt": null,
+        "identischerZivilrechtlicherWohnsitzPLZ": null
+      },
+      "familiensituation": {
+        "elternVerheiratetZusammen": true,
+        "elternteilUnbekanntVerstorben": null,
+        "gerichtlicheAlimentenregelung": null,
+        "mutterUnbekanntVerstorben": null,
+        "mutterUnbekanntGrund": null,
+        "mutterWiederverheiratet": null,
+        "vaterUnbekanntVerstorben": null,
+        "vaterUnbekanntGrund": null,
+        "vaterWiederverheiratet": null,
+        "sorgerecht": null,
+        "obhut": null,
+        "obhutMutter": null,
+        "obhutVater": null,
+        "werZahltAlimente": null
+      },
+      "partner": null,
+      "auszahlung": {
+        "vorname": "Sven",
+        "adresse": {
+          "land": "CH",
+          "strasse": "Sulgeneckstrasse",
+          "plz": "3005",
+          "ort": "Bern",
+          "id": "1e753d07-cd73-4954-900c-6f2b013a0f58",
+          "coAdresse": null,
+          "hausnummer": "70"
+        },
+        "iban": "CH56 0483 5012 3456 7800 9",
+        "nachname": "Testfall",
+        "kontoinhaber": "GESUCHSTELLER"
+      },
+      "elterns": [
+        {
+          "vorname": "Vater",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Sulgeneckstrasse",
+            "plz": "3005",
+            "ort": "Bern",
+            "id": "e4f0309a-50fe-46b3-aab3-a2ec87a6f067",
+            "coAdresse": null,
+            "hausnummer": "60"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "0316338555",
+          "geburtsdatum": "1960-01-01",
+          "ausweisbFluechtling": false,
+          "elternTyp": "VATER",
+          "nachname": "Testfall",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 1,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.1111.1111.13",
+          "id": "3d724938-93fe-4179-8ad4-90d679055395"
+        },
+        {
+          "vorname": "Mutter",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Sulgeneckstrasse",
+            "plz": "3005",
+            "ort": "Bern",
+            "id": "75986c57-7127-4f77-addf-0c6165e58067",
+            "coAdresse": null,
+            "hausnummer": "80"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "0316338555",
+          "geburtsdatum": "1961-01-01",
+          "ausweisbFluechtling": false,
+          "elternTyp": "MUTTER",
+          "nachname": "Testfall",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 1,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.5555.5555.57",
+          "id": "069bbc98-f851-4cc5-966f-77b996eda12d"
+        }
+      ],
+      "geschwisters": null,
+      "lebenslaufItems": [
+        {
+          "von": "8.2016",
+          "bis": "7.2024",
+          "wohnsitz": "BE",
+          "id": "fb3c36fd-2635-4ea0-90a2-e4def0db98a5",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT",
+          "taetigkeitsBeschreibung": "Betreuung Mutter"
+        }
+      ],
+      "kinds": [
+        {
+          "vorname": "Kind",
+          "geburtsdatum": "2020-01-01",
+          "ausbildungssituation": "SCHULPFLICHTIG",
+          "wohnsitzAnteilPia": 100,
+          "nachname": "Testfall-Sven",
+          "id": "891c126f-061d-4897-b6ce-0ca49bfa51c6",
+          "erhalteneAlimentebeitraege": 500
+        }
+      ],
+      "einnahmenKosten": {
+        "nettoerwerbseinkommen": 0,
+        "fahrkosten": 500,
+        "verdienstRealisiert": true,
+        "alimente": null,
+        "zulagen": 0,
+        "renten": 0,
+        "eoLeistungen": 0,
+        "ergaenzungsleistungen": 0,
+        "beitraege": 0,
+        "ausbildungskostenSekundarstufeZwei": null,
+        "ausbildungskostenTertiaerstufe": 3500,
+        "wohnkosten": 1000,
+        "wgWohnend": false,
+        "willDarlehen": true,
+        "auswaertigeMittagessenProWoche": null,
+        "betreuungskostenKinder": 0,
+        "veranlagungsCode": 0,
+        "steuerjahr": 2023,
+        "vermoegen": 10000,
+        "steuernKantonGemeinde": 0
+      },
+      "steuerdaten": [
+        {
+          "steuerdatenTyp": "FAMILIE",
+          "steuernKantonGemeinde": 5000,
+          "steuernBund": 0,
+          "fahrkosten": 500,
+          "verpflegung": 500,
+          "totalEinkuenfte": 10000,
+          "eigenmietwert": 0,
+          "isArbeitsverhaeltnisSelbstaendig": false,
+          "kinderalimente": 0,
+          "vermoegen": 10000,
+          "id": "b00e90b3-1433-4363-b0b3-b97ad024f8a5",
+          "fahrkostenPartner": 500,
+          "verpflegungPartner": 500,
+          "steuerjahr": 2023,
+          "veranlagungsCode": 0,
+          "saeule3a": null,
+          "saeule2": null
+        }
+      ],
+      "steuerdatenTabs": [
+        "FAMILIE"
+      ]
+    }
+  },
+  "bearbeiter": "Manuela Geissler"
+}

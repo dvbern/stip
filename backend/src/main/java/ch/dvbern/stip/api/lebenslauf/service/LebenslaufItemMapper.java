@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.lebenslauf.service;
 
 import java.util.Iterator;
@@ -32,19 +49,25 @@ public interface LebenslaufItemMapper {
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
     LebenslaufItem partialUpdate(
         LebenslaufItemUpdateDto lebenslaufItemUpdateDto,
-        @MappingTarget LebenslaufItem lebenslaufItem);
+        @MappingTarget LebenslaufItem lebenslaufItem
+    );
 
     default Set<LebenslaufItem> map(
         List<LebenslaufItemUpdateDto> lebenslaufItemUpdateDtos,
-        @MappingTarget Set<LebenslaufItem> lebenslaufItemSet) {
+        @MappingTarget Set<LebenslaufItem> lebenslaufItemSet
+    ) {
         if (lebenslaufItemUpdateDtos.isEmpty()) {
             lebenslaufItemSet.clear();
         }
         Iterator<LebenslaufItem> iterator = lebenslaufItemSet.iterator();
         while (iterator.hasNext()) {
             LebenslaufItem lebenslaufItem = iterator.next();
-            if (lebenslaufItemUpdateDtos.stream()
-                .noneMatch(lebenslaufItemUpdateDto -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId()))) {
+            if (
+                lebenslaufItemUpdateDtos.stream()
+                    .noneMatch(
+                        lebenslaufItemUpdateDto -> lebenslaufItem.getId().equals(lebenslaufItemUpdateDto.getId())
+                    )
+            ) {
                 iterator.remove();
             }
         }
@@ -67,5 +90,5 @@ public interface LebenslaufItemMapper {
 
     @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
-	LebenslaufItemUpdateDto toUpdateDto(LebenslaufItem lebenslaufItem);
+    LebenslaufItemUpdateDto toUpdateDto(LebenslaufItem lebenslaufItem);
 }

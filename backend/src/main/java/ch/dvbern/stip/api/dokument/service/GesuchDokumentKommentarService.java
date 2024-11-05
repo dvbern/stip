@@ -1,4 +1,24 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.dokument.service;
+
+import java.util.List;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
@@ -9,9 +29,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-import java.util.UUID;
-
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchDokumentKommentarService {
@@ -19,21 +36,29 @@ public class GesuchDokumentKommentarService {
     private final GesuchDokumentKommentarMapper gesuchDokumentKommentarMapper;
 
     @Transactional
-    public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchTrancheIdAndDokumentTyp(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
-        final var gesuchDokumentKommentars = gesuchDokumentKommentarRepository.getByTypAndGesuchTrancheId(dokumentTyp, gesuchTrancheId);
-        if(gesuchDokumentKommentars != null){
+    public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchTrancheIdAndDokumentTyp(
+        final UUID gesuchTrancheId,
+        final DokumentTyp dokumentTyp
+    ) {
+        final var gesuchDokumentKommentars =
+            gesuchDokumentKommentarRepository.getByTypAndGesuchTrancheId(dokumentTyp, gesuchTrancheId);
+        if (gesuchDokumentKommentars != null) {
             return gesuchDokumentKommentars.stream()
-                .map(gesuchDokumentKommentarMapper::toDto).toList();
+                .map(gesuchDokumentKommentarMapper::toDto)
+                .toList();
         }
         return List.of();
     }
 
     @Transactional
-    public void createKommentarForGesuchDokument(final GesuchDokument gesuchDokument,final GesuchDokumentKommentarDto gesuchDokumentKommentarDto) {
+    public void createKommentarForGesuchDokument(
+        final GesuchDokument gesuchDokument,
+        final GesuchDokumentKommentarDto gesuchDokumentKommentarDto
+    ) {
         final var kommentar = gesuchDokumentKommentarMapper.toEntity(gesuchDokumentKommentarDto);
-        if(gesuchDokumentKommentarDto == null){
+        if (gesuchDokumentKommentarDto == null) {
             createEmptyKommentarForGesuchDokument(gesuchDokument);
-        }else{
+        } else {
             kommentar.setGesuchTranche(gesuchDokument.getGesuchTranche());
             kommentar.setDokumentstatus(gesuchDokument.getStatus());
             gesuchDokumentKommentarRepository.persistAndFlush(kommentar);

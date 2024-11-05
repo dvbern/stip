@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.entity;
 
 import java.math.BigDecimal;
@@ -106,14 +123,24 @@ class GesuchValidatorTest {
         gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilMutter(new BigDecimal("40.00"));
         gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal("50.00"));
         Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(true));
+        assertThat(
+            violations.stream()
+                .anyMatch(
+                    gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                        .equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)
+                ),
+            is(true)
+        );
         gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal("60.00"));
         violations = validator.validate(gesuch);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)), is(false));
+        assertThat(
+            violations.stream()
+                .anyMatch(
+                    gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                        .equals(VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE)
+                ),
+            is(false)
+        );
     }
 
     @Test
@@ -353,18 +380,28 @@ class GesuchValidatorTest {
             gesuch,
             GesuchEinreichenValidationGroup.class
         );
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE)), is(true));
+        assertThat(
+            violations.stream()
+                .anyMatch(
+                    gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                        .equals(VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE)
+                ),
+            is(true)
+        );
         Eltern eltern = new Eltern();
         eltern.setElternTyp(ElternTyp.MUTTER);
         Set<Eltern> elternSet = new HashSet<>();
         elternSet.add(eltern);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setElterns(elternSet);
         violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE)), is(false));
+        assertThat(
+            violations.stream()
+                .anyMatch(
+                    gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                        .equals(VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE)
+                ),
+            is(false)
+        );
     }
 
     @Test
@@ -389,9 +426,14 @@ class GesuchValidatorTest {
             gesuch,
             GesuchEinreichenValidationGroup.class
         );
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE)), is(true));
+        assertThat(
+            violations.stream()
+                .anyMatch(
+                    gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                        .equals(VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE)
+                ),
+            is(true)
+        );
     }
 
     @Test
@@ -406,9 +448,14 @@ class GesuchValidatorTest {
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE)), is(true));
+        assertThat(
+            violations.stream()
+                .anyMatch(
+                    gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                        .equals(VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE)
+                ),
+            is(true)
+        );
     }
 
     @Test
@@ -425,12 +472,22 @@ class GesuchValidatorTest {
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE)), is(true));
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE)), is(true));
+        assertThat(
+            violations.stream()
+                .anyMatch(
+                    gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                        .equals(VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE)
+                ),
+            is(true)
+        );
+        assertThat(
+            violations.stream()
+                .anyMatch(
+                    gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                        .equals(VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE)
+                ),
+            is(true)
+        );
     }
 
     void testGesuchEinreichenValidationEinnahmenKostenAusbildung() {
@@ -442,9 +499,14 @@ class GesuchValidatorTest {
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         Set<ConstraintViolation<Gesuch>> violations = validator.validate(gesuch, GesuchEinreichenValidationGroup.class);
-        assertThat(violations.stream()
-            .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                .equals(VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE)), is(true));
+        assertThat(
+            violations.stream()
+                .anyMatch(
+                    gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                        .equals(VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE)
+                ),
+            is(true)
+        );
     }
 
     private void assertAllMessagesPresent(String[] messages, Gesuch gesuch) {
@@ -470,9 +532,15 @@ class GesuchValidatorTest {
             );
         }
         for (String message : messages) {
-            assertThat(message, violations.stream()
-                .anyMatch(gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
-                    .equals(message)), is(expected));
+            assertThat(
+                message,
+                violations.stream()
+                    .anyMatch(
+                        gesuchConstraintViolation -> gesuchConstraintViolation.getMessageTemplate()
+                            .equals(message)
+                    ),
+                is(expected)
+            );
         }
     }
 

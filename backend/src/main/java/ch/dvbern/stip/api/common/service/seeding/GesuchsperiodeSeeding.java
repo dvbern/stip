@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.time.LocalDate;
@@ -18,8 +35,7 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 @Singleton
 @RequiredArgsConstructor
 @Slf4j
-public class
-GesuchsperiodeSeeding extends Seeder {
+public class GesuchsperiodeSeeding extends Seeder {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
     private final ConfigService configService;
@@ -67,7 +83,7 @@ GesuchsperiodeSeeding extends Seeder {
     Gesuchsjahr getJahrForSeeding() {
         int currentYear = LocalDate.now().getYear();
         String yearAsString = String.valueOf(currentYear);
-        String yearSuffix = yearAsString.substring(yearAsString.length() -2 , yearAsString.length());
+        String yearSuffix = yearAsString.substring(yearAsString.length() - 2, yearAsString.length());
         return new Gesuchsjahr()
             .setBezeichnungDe("Gesuchsjahr " + yearSuffix)
             .setBezeichnungFr("Année de la demande " + yearSuffix)

@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.dokument.service;
 
 import java.time.LocalDate;
@@ -49,6 +66,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -86,9 +104,10 @@ class GesuchDokumentServiceTest {
         }).when(gesuchDokumentKommentarRepository).persistAndFlush((GesuchDokumentKommentar) Mockito.any());
 
         Mockito.when(gesuchDokumentRepository.getAllForGesuchInStatus(Mockito.any(), Mockito.any()))
-            .thenAnswer(invocation -> gesuchDokumente.values()
-                .stream()
-                .filter(x -> x.getStatus() == invocation.getArgument(1))
+            .thenAnswer(
+                invocation -> gesuchDokumente.values()
+                    .stream()
+                    .filter(x -> x.getStatus() == invocation.getArgument(1))
             );
 
         Mockito.doNothing().when(dokumentRepository).delete(Mockito.any());
@@ -120,7 +139,9 @@ class GesuchDokumentServiceTest {
         mockedDokument.setGesuchTranche(tranche);
 
         // Act & Assert
-        assertThrows(ForbiddenException.class, ()->{gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), ablehnenRequest);});
+        assertThrows(ForbiddenException.class, () -> {
+            gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), ablehnenRequest);
+        });
     }
 
     @TestAsSachbearbeiter
@@ -177,7 +198,7 @@ class GesuchDokumentServiceTest {
         gesuchDokumentService.gesuchDokumentAkzeptieren(mockedDokument.getId());
 
         // Assert
-        assertEquals(null,comment.getKommentar());
+        assertEquals(null, comment.getKommentar());
         assertThat(comment.getDokumentstatus(), is(Dokumentstatus.AKZEPTIERT));
     }
 
@@ -196,7 +217,9 @@ class GesuchDokumentServiceTest {
             null,
             new DokumentstatusService(
                 new DokumentstatusConfigProducer().createStateMachineConfig(),
-                new GesuchDokumentKommentarService(gesuchDokumentKommentarRepository,new GesuchDokumentKommentarMapperImpl())
+                new GesuchDokumentKommentarService(
+                    gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl()
+                )
             ),
             null
         );
@@ -231,16 +254,16 @@ class GesuchDokumentServiceTest {
 
     private static class GesuchDokumentServiceMock extends GesuchDokumentService {
         public GesuchDokumentServiceMock(
-            GesuchDokumentMapper gesuchDokumentMapper,
-            DokumentMapper dokumentMapper,
-            DokumentRepository dokumentRepository,
-            GesuchDokumentRepository gesuchDokumentRepository,
-            GesuchRepository gesuchRepository,
-            GesuchTrancheRepository gesuchTrancheRepository,
-            S3AsyncClient s3,
-            ConfigService configService,
-            DokumentstatusService dokumentstatusService,
-            Antivirus antivirus
+        GesuchDokumentMapper gesuchDokumentMapper,
+        DokumentMapper dokumentMapper,
+        DokumentRepository dokumentRepository,
+        GesuchDokumentRepository gesuchDokumentRepository,
+        GesuchRepository gesuchRepository,
+        GesuchTrancheRepository gesuchTrancheRepository,
+        S3AsyncClient s3,
+        ConfigService configService,
+        DokumentstatusService dokumentstatusService,
+        Antivirus antivirus
         ) {
             super(
                 gesuchDokumentMapper,
@@ -257,7 +280,6 @@ class GesuchDokumentServiceTest {
         }
 
         @Override
-        public void executeDeleteDokumentsFromS3(List<String> objectIds) {
-        }
+        public void executeDeleteDokumentsFromS3(List<String> objectIds) {}
     }
 }

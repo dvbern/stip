@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
@@ -43,22 +60,23 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(config = MappingConfig.class,
-    uses =
-        {
-            AdresseMapper.class,
-            PersonInAusbildungMapper.class,
-            FamiliensituationMapper.class,
-            AusbildungMapper.class,
-            LebenslaufItemMapper.class,
-            PartnerMapper.class,
-            AuszahlungMapper.class,
-            GeschwisterMapper.class,
-            ElternMapper.class,
-            KindMapper.class,
-            EinnahmenKostenMapper.class,
-            SteuerdatenMapper.class
-        })
+@Mapper(
+    config = MappingConfig.class,
+    uses = {
+        AdresseMapper.class,
+        PersonInAusbildungMapper.class,
+        FamiliensituationMapper.class,
+        AusbildungMapper.class,
+        LebenslaufItemMapper.class,
+        PartnerMapper.class,
+        AuszahlungMapper.class,
+        GeschwisterMapper.class,
+        ElternMapper.class,
+        KindMapper.class,
+        EinnahmenKostenMapper.class,
+        SteuerdatenMapper.class
+    }
+)
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
     @Inject
     SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
@@ -103,7 +121,8 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract GesuchFormular partialUpdate(
         GesuchFormularUpdateDto gesuchFormularUpdateDto,
-        @MappingTarget GesuchFormular gesuchFormular);
+        @MappingTarget GesuchFormular gesuchFormular
+    );
 
     @BeforeMapping
     protected void setAuszahlungAdresseBeforeUpdate(
@@ -115,15 +134,18 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         }
 
         switch (newFormular.getAuszahlung().getKontoinhaber()) {
-        case GESUCHSTELLER -> setPiaAdresse(newFormular);
-        case VATER, MUTTER -> setForEltern(newFormular);
-        case SOZIALDIENST_INSTITUTION, ANDERE -> {/* Nur gesuchsteller und eltern haben verlinkte adressen */}
+            case GESUCHSTELLER -> setPiaAdresse(newFormular);
+            case VATER, MUTTER -> setForEltern(newFormular);
+            case SOZIALDIENST_INSTITUTION, ANDERE -> {
+                /* Nur gesuchsteller und eltern haben verlinkte adressen */}
         }
     }
 
     void setPiaAdresse(final GesuchFormularUpdateDto newFormular) {
-        if (newFormular.getPersonInAusbildung() == null ||
-            newFormular.getPersonInAusbildung().getAdresse().getId() == null) {
+        if (
+            newFormular.getPersonInAusbildung() == null ||
+            newFormular.getPersonInAusbildung().getAdresse().getId() == null
+        ) {
             return;
         }
 
@@ -153,9 +175,10 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         };
 
         switch (newFormular.getAuszahlung().getKontoinhaber()) {
-        case VATER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.VATER));
-        case MUTTER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.MUTTER));
-        case GESUCHSTELLER, ANDERE, SOZIALDIENST_INSTITUTION -> {/* Wir setzen hier nur adressen für eltern */}
+            case VATER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.VATER));
+            case MUTTER -> setAdresseOfElternteil.accept(getElternteilOfTyp.apply(ElternTyp.MUTTER));
+            case GESUCHSTELLER, ANDERE, SOZIALDIENST_INSTITUTION -> {
+                /* Wir setzen hier nur adressen für eltern */}
         }
     }
 
@@ -164,7 +187,8 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final GesuchFormularUpdateDto newFormular,
         final @MappingTarget GesuchFormular targetFormular
     ) {
-        if (newFormular.getFamiliensituation() == null ||
+        if (
+            newFormular.getFamiliensituation() == null ||
             !newFormular.getFamiliensituation().getElternVerheiratetZusammen() ||
             newFormular.getElterns() == null ||
             newFormular.getElterns().isEmpty()
@@ -183,7 +207,8 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
             // Compare to DB Entities and set changed if wohnkosten changed
             for (final var eltern : targetFormular.getElterns()) {
-                if (elternDto.getId().equals(eltern.getId()) &&
+                if (
+                    elternDto.getId().equals(eltern.getId()) &&
                     ElternDiffUtil.hasWohnkostenChanged(elternDto, eltern)
                 ) {
                     changed = elternDto;
@@ -269,8 +294,10 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                     return;
                 }
 
-                if (newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT &&
-                    newFormular.getEinnahmenKosten() != null) {
+                if (
+                    newFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT &&
+                    newFormular.getEinnahmenKosten() != null
+                ) {
                     newFormular.getEinnahmenKosten().setWohnkosten(null);
                     newFormular.getEinnahmenKosten().setWgWohnend(null);
                 }
@@ -308,12 +335,12 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 }
 
                 switch (werZahlt) {
-                case VATER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
-                case MUTTER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
-                case GEMEINSAM -> {
-                    removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
-                    removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
-                }
+                    case VATER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
+                    case MUTTER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
+                    case GEMEINSAM -> {
+                        removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
+                        removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
+                    }
                 }
             }
         );
@@ -326,15 +353,19 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                     return;
                 }
 
-                if (newFormular.getFamiliensituation().getMutterUnbekanntVerstorben() != null &&
-                    newFormular.getFamiliensituation().getMutterUnbekanntVerstorben()
-                        != ElternAbwesenheitsGrund.WEDER_NOCH) {
+                if (
+                    newFormular.getFamiliensituation().getMutterUnbekanntVerstorben() != null &&
+                    newFormular.getFamiliensituation()
+                        .getMutterUnbekanntVerstorben() != ElternAbwesenheitsGrund.WEDER_NOCH
+                ) {
                     removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
                 }
 
-                if (newFormular.getFamiliensituation().getVaterUnbekanntVerstorben() != null &&
-                    newFormular.getFamiliensituation().getVaterUnbekanntVerstorben()
-                        != ElternAbwesenheitsGrund.WEDER_NOCH) {
+                if (
+                    newFormular.getFamiliensituation().getVaterUnbekanntVerstorben() != null &&
+                    newFormular.getFamiliensituation()
+                        .getVaterUnbekanntVerstorben() != ElternAbwesenheitsGrund.WEDER_NOCH
+                ) {
                     removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
                 }
             }
@@ -415,12 +446,13 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 steuerdatenTabBerechnungsService.calculateTabs(targetFamsit)
             );
 
-            newFormular.getSteuerdaten().removeAll(
-                newFormular.getSteuerdaten()
-                    .stream()
-                    .filter(newTab -> !requiredTabs.contains(newTab.getSteuerdatenTyp()))
-                    .toList()
-            );
+            newFormular.getSteuerdaten()
+                .removeAll(
+                    newFormular.getSteuerdaten()
+                        .stream()
+                        .filter(newTab -> !requiredTabs.contains(newTab.getSteuerdatenTyp()))
+                        .toList()
+                );
         }
     }
 

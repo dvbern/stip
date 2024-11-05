@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.quarkus.exception;
 
 import java.util.ArrayList;
@@ -37,29 +54,35 @@ class ConstraintViolationParser {
 
         if (!iterator.hasNext()) {
             throw new NotImplementedException(
-                String.format("Not yet implemented: violations without path %s, %s",
-                    propertyPath, constraintViolation
-                ));
+                String.format(
+                    "Not yet implemented: violations without path %s, %s",
+                    propertyPath,
+                    constraintViolation
+                )
+            );
         }
 
         Node first = iterator.next();
         switch (first.getKind()) {
-        case BEAN:
-            if (!iterator.hasNext()) {
-                return constraintViolation.getLeafBean().getClass().getSimpleName();
-            }
-            throw new NotImplementedException("BEAN");
-        case PROPERTY:
-            return buildNodePath(asList(propertyPath));
-        case PARAMETER, METHOD:
-            List<Node> nodes = asList(propertyPath);
-            List<Node> justParam = nodes.subList(2, nodes.size());
-            return buildNodePath(justParam);
-        default:
-            throw new NotImplementedException(String.format(
-                "Not yet implemented validation exception for type %s, %s",
-                first.getKind(), constraintViolation
-            ));
+            case BEAN:
+                if (!iterator.hasNext()) {
+                    return constraintViolation.getLeafBean().getClass().getSimpleName();
+                }
+                throw new NotImplementedException("BEAN");
+            case PROPERTY:
+                return buildNodePath(asList(propertyPath));
+            case PARAMETER, METHOD:
+                List<Node> nodes = asList(propertyPath);
+                List<Node> justParam = nodes.subList(2, nodes.size());
+                return buildNodePath(justParam);
+            default:
+                throw new NotImplementedException(
+                    String.format(
+                        "Not yet implemented validation exception for type %s, %s",
+                        first.getKind(),
+                        constraintViolation
+                    )
+                );
         }
     }
 
@@ -68,9 +91,9 @@ class ConstraintViolationParser {
         // example:
         // parent.child[1].property
         // => entries:
-        //    parent (isInIterable=false,index=null)
-        //    child  (isInIterable=false,index=null)
-        //    property (isInIterable=true,index=1);
+        // parent (isInIterable=false,index=null)
+        // child (isInIterable=false,index=null)
+        // property (isInIterable=true,index=1);
 
         var pathEntries = new ArrayList<String>();
         for (int i = 0; i < path.size(); i++) {

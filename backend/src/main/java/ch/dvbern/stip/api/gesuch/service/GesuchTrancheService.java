@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
@@ -171,9 +188,9 @@ public class GesuchTrancheService {
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        //TODO KSTIP-1631: change to state STIPENDIENANSPRUCH or KEIN_STIPENDIENANSPRUCH
+        // TODO KSTIP-1631: change to state STIPENDIENANSPRUCH or KEIN_STIPENDIENANSPRUCH
         final var allowedStates = Set.of(Gesuchstatus.IN_FREIGABE, Gesuchstatus.VERFUEGT);
-        if(!allowedStates.contains(gesuch.getGesuchStatus())) {
+        if (!allowedStates.contains(gesuch.getGesuchStatus())) {
             throw new IllegalStateException("Create aenderung not allowed in current gesuch status");
         }
 
@@ -259,10 +276,15 @@ public class GesuchTrancheService {
         var gesuchFormularUpdateDto = new GesuchFormularUpdateDto();
         gesuchTrancheUpdateDto.setGesuchFormular(gesuchFormularUpdateDto);
 
-        gesuchFormularUpdateDto.setPersonInAusbildung(personInAusbildungMapper.toUpdateDto(lastFreigegebenFormular.getPersonInAusbildung()));
-        gesuchFormularUpdateDto.setAusbildung(ausbildungMapper.toUpdateDto(lastFreigegebenFormular.getAusbildung())
-            .ausbildungsgangId(lastFreigegebenFormular.getAusbildung().getAusbildungsgang().getId()));
-        gesuchFormularUpdateDto.setFamiliensituation(familiensituationMapper.toUpdateDto(lastFreigegebenFormular.getFamiliensituation()));
+        gesuchFormularUpdateDto.setPersonInAusbildung(
+            personInAusbildungMapper.toUpdateDto(lastFreigegebenFormular.getPersonInAusbildung())
+        );
+        gesuchFormularUpdateDto.setAusbildung(
+            ausbildungMapper.toUpdateDto(lastFreigegebenFormular.getAusbildung())
+                .ausbildungsgangId(lastFreigegebenFormular.getAusbildung().getAusbildungsgang().getId())
+        );
+        gesuchFormularUpdateDto
+            .setFamiliensituation(familiensituationMapper.toUpdateDto(lastFreigegebenFormular.getFamiliensituation()));
 
         gesuchFormularUpdateDto.setPartner(partnerMapper.toUpdateDto(lastFreigegebenFormular.getPartner()));
 
@@ -271,7 +293,8 @@ public class GesuchTrancheService {
             gesuchFormularUpdateDto.getElterns().add(elternMapper.toUpdateDto(eltern));
         }
         gesuchFormularUpdateDto.setAuszahlung(auszahlungMapper.toUpdateDto(lastFreigegebenFormular.getAuszahlung()));
-        gesuchFormularUpdateDto.setEinnahmenKosten(einnahmenKostenMapper.toUpdateDto(lastFreigegebenFormular.getEinnahmenKosten()));
+        gesuchFormularUpdateDto
+            .setEinnahmenKosten(einnahmenKostenMapper.toUpdateDto(lastFreigegebenFormular.getEinnahmenKosten()));
 
         gesuchFormularUpdateDto.setLebenslaufItems(new ArrayList<>(List.of()));
         for (final var lebenslaufItem : lastFreigegebenFormular.getLebenslaufItems()) {

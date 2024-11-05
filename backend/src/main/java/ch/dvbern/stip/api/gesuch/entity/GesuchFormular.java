@@ -8,11 +8,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package ch.dvbern.stip.api.gesuch.entity;
@@ -66,83 +66,123 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @Audited
-@FamiliensituationElternEntityRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    ElternPageValidation.class
-}, property = "elterns")
-@FamiliensituationPersonInAusbildungWohnsitzConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    PersonInAusbildungPageValidation.class
-}, property = "personInAusbildung")
-@FamiliensituationGeschwisterWohnsitzConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    GeschwisterPageValidation.class
-}, property = "geschwisters")
-@LebenslaufLuckenlosConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    LebenslaufItemPageValidation.class
-}, property = "lebenslaufItems")
-@EinnahmenKostenAlimenteRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
-@EinnahmenKostenZulagenRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
-@EinnahmenKostenDarlehenRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
-@EinnahmenKostenWohnkostenRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
-@EinnahmenKostenBetreuungskostenRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
-@EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(groups = {
-    Default.class,
-    EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
-@SteuerdatenSteuerjahrInPastOrCurrentConstraint(groups = {
-    Default.class,
-    SteuerdatenPageValidation.class
-}, property = "steuerdaten")
-@AusbildungskostenStufeRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
-@EinnahmenKostenVermoegenRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
-@LebenslaufAusbildungUeberschneidenConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    LebenslaufItemPageValidation.class
-}, property = "lebenslaufItems")
-@PartnerNullRequiredWhenAlleinstehendConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    PartnerPageValidation.class
-}, property = "partner")
-@AlimenteRequiredWhenAlimenteregelungConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    EinnahmenKostenPageValidation.class
-}, property = "einnahmenKosten")
-@DocumentsRequiredConstraint(groups = {
-    DocumentsRequiredValidationGroup.class
-}, payload = Severity.Warning.class)
-@DocumentsRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class
-})
-@SteuerdatenTabsRequiredConstraint(groups = {
-    GesuchEinreichenValidationGroup.class,
-    SteuerdatenPageValidation.class
-}, property = "steuerdatenTabs")
-@DocumentsAcceptedConstraint(groups = {
-    GesuchDokumentsAcceptedValidationGroup.class
-})
+@FamiliensituationElternEntityRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        ElternPageValidation.class
+    }, property = "elterns"
+)
+@FamiliensituationPersonInAusbildungWohnsitzConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        PersonInAusbildungPageValidation.class
+    }, property = "personInAusbildung"
+)
+@FamiliensituationGeschwisterWohnsitzConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        GeschwisterPageValidation.class
+    }, property = "geschwisters"
+)
+@LebenslaufLuckenlosConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        LebenslaufItemPageValidation.class
+    }, property = "lebenslaufItems"
+)
+@EinnahmenKostenAlimenteRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
+@EinnahmenKostenZulagenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
+@EinnahmenKostenDarlehenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
+@EinnahmenKostenWohnkostenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
+@EinnahmenKostenBetreuungskostenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
+@EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(
+    groups = {
+        Default.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
+@SteuerdatenSteuerjahrInPastOrCurrentConstraint(
+    groups = {
+        Default.class,
+        SteuerdatenPageValidation.class
+    }, property = "steuerdaten"
+)
+@AusbildungskostenStufeRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
+@EinnahmenKostenVermoegenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
+@LebenslaufAusbildungUeberschneidenConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        LebenslaufItemPageValidation.class
+    }, property = "lebenslaufItems"
+)
+@PartnerNullRequiredWhenAlleinstehendConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        PartnerPageValidation.class
+    }, property = "partner"
+)
+@AlimenteRequiredWhenAlimenteregelungConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
+)
+@DocumentsRequiredConstraint(
+    groups = {
+        DocumentsRequiredValidationGroup.class
+    }, payload = Severity.Warning.class
+)
+@DocumentsRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class
+    }
+)
+@SteuerdatenTabsRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        SteuerdatenPageValidation.class
+    }, property = "steuerdatenTabs"
+)
+@DocumentsAcceptedConstraint(
+    groups = {
+        GesuchDokumentsAcceptedValidationGroup.class
+    }
+)
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @UniqueSvNumberConstraint
 @Entity
@@ -163,22 +203,28 @@ import org.hibernate.envers.Audited;
 public class GesuchFormular extends AbstractMandantEntity {
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "person_in_ausbildung_id",
-        foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id"))
+    @JoinColumn(
+        name = "person_in_ausbildung_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_person_in_ausbildung_id")
+    )
     @HasPageValidation(PersonInAusbildungPageValidation.class)
     private @Valid PersonInAusbildung personInAusbildung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "ausbildung_id",
-        foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id"))
+    @JoinColumn(
+        name = "ausbildung_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_ausbildung_id")
+    )
     @HasPageValidation(AusbildungPageValidation.class)
     private @Valid Ausbildung ausbildung;
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "familiensituation_id",
-        foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id"))
+    @JoinColumn(
+        name = "familiensituation_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_familiensituation_id")
+    )
     @HasPageValidation(FamiliensituationPageValidation.class)
     private @Valid Familiensituation familiensituation;
 
@@ -195,8 +241,10 @@ public class GesuchFormular extends AbstractMandantEntity {
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "einnahmen_kosten_id",
-        foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id"))
+    @JoinColumn(
+        name = "einnahmen_kosten_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_id")
+    )
     @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
 

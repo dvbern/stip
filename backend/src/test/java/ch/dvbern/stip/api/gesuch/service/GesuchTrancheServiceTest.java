@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
@@ -22,10 +39,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -45,8 +62,11 @@ class GesuchTrancheServiceTest {
 
     @BeforeEach
     void setUp() {
-        gesuch = new Gesuch().setGesuchTranchen(List.of(new GesuchTranche()
-            .setGueltigkeit(new DateRange(LocalDate.MIN, LocalDate.MAX)))
+        gesuch = new Gesuch().setGesuchTranchen(
+            List.of(
+                new GesuchTranche()
+                    .setGueltigkeit(new DateRange(LocalDate.MIN, LocalDate.MAX))
+            )
         );
     }
 
@@ -126,7 +146,7 @@ class GesuchTrancheServiceTest {
     @TestAsGesuchsteller
     @Test
     @Description("Aenderung create should only be possible when Gesuchstatus is IN_FREIGABE or VERFUEGT")
-    void aenderungEinreichenAllowedStatesTest(){
+    void aenderungEinreichenAllowedStatesTest() {
         // arrange
         gesuch.getCurrentGesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
@@ -139,8 +159,10 @@ class GesuchTrancheServiceTest {
 
         CreateAenderungsantragRequestDto requestDto = new CreateAenderungsantragRequestDto();
 
-
-        assertThrows(IllegalStateException.class, () -> gesuchTrancheService.createAenderungsantrag(gesuch.getId(), requestDto));
+        assertThrows(
+            IllegalStateException.class,
+            () -> gesuchTrancheService.createAenderungsantrag(gesuch.getId(), requestDto)
+        );
         Mockito.doNothing().when(gesuchTrancheStatusService).triggerStateMachineEvent(any(), any());
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_FREIGABE);

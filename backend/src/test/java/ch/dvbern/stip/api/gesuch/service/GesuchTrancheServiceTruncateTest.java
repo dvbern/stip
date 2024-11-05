@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
@@ -30,17 +47,21 @@ class GesuchTrancheServiceTruncateTest {
     @Test
     void oneExistingTruncated() {
         // Arrange
-        final var existingTranche = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 1, 1),
-            LocalDate.of(2024, 12, 31)
-        ));
+        final var existingTranche = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 12, 31)
+            )
+        );
         final var gesuch = new Gesuch();
         gesuch.getGesuchTranchen().add(existingTranche);
 
-        final var newTranche = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 6, 1),
-            LocalDate.of(2024, 12, 31)
-        ));
+        final var newTranche = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 6, 1),
+                LocalDate.of(2024, 12, 31)
+            )
+        );
 
         final var service = getDummyTrancheService();
 
@@ -56,24 +77,29 @@ class GesuchTrancheServiceTruncateTest {
     @Test
     void oneExistingSplitInsert() {
         // Arrange
-        final var existingTranche = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 1, 1),
-            LocalDate.of(2024, 12, 31)
-        ));
+        final var existingTranche = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 12, 31)
+            )
+        );
 
         final var gesuch = new Gesuch();
         gesuch.getGesuchTranchen().add(existingTranche);
-        gesuch.setGesuchsperiode(new Gesuchsperiode()
-            .setGesuchsperiodeStart(LocalDate.of(2024, 1, 1))
-            .setGesuchsperiodeStopp(LocalDate.of(2024, 12, 31))
+        gesuch.setGesuchsperiode(
+            new Gesuchsperiode()
+                .setGesuchsperiodeStart(LocalDate.of(2024, 1, 1))
+                .setGesuchsperiodeStopp(LocalDate.of(2024, 12, 31))
         );
 
         existingTranche.setGesuch(gesuch);
 
-        final var newTranche = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 4, 1),
-            LocalDate.of(2024, 5, 31)
-        ));
+        final var newTranche = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 4, 1),
+                LocalDate.of(2024, 5, 31)
+            )
+        );
 
         final var service = getDummyTrancheService();
 
@@ -88,23 +114,29 @@ class GesuchTrancheServiceTruncateTest {
     @Test
     void twoExistingBothTruncated() {
         // Arrange
-        final var existingTranche1 = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 1, 1),
-            LocalDate.of(2024, 3, 31)
-        ));
+        final var existingTranche1 = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 3, 31)
+            )
+        );
 
-        final var existingTranche2 = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 4, 1),
-            LocalDate.of(2024, 12, 31)
-        ));
+        final var existingTranche2 = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 4, 1),
+                LocalDate.of(2024, 12, 31)
+            )
+        );
 
         final var gesuch = new Gesuch();
         gesuch.getGesuchTranchen().addAll(List.of(existingTranche1, existingTranche2));
 
-        final var newTranche = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 3, 1),
-            LocalDate.of(2024, 5, 31)
-        ));
+        final var newTranche = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 5, 31)
+            )
+        );
 
         final var service = getDummyTrancheService();
 
@@ -128,24 +160,30 @@ class GesuchTrancheServiceTruncateTest {
     void twoExistingOneTruncated() {
         // Arrange
         final var oneId = UUID.fromString("12154079-9622-4869-b752-435604368cde");
-        final var existingTranche1 = (GesuchTranche) getDummyTranche(new DateRange(
-            LocalDate.of(2024, 1, 1),
-            LocalDate.of(2024, 3, 31)
-        ))
+        final var existingTranche1 = (GesuchTranche) getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 3, 31)
+            )
+        )
             .setId(oneId);
 
-        final var existingTranche2 = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 4, 1),
-            LocalDate.of(2024, 12, 31)
-        ));
+        final var existingTranche2 = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 4, 1),
+                LocalDate.of(2024, 12, 31)
+            )
+        );
 
         final var gesuch = new Gesuch();
         gesuch.getGesuchTranchen().addAll(List.of(existingTranche1, existingTranche2));
 
-        final var newTranche = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 5, 1),
-            LocalDate.of(2024, 12, 31)
-        ));
+        final var newTranche = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 5, 1),
+                LocalDate.of(2024, 12, 31)
+            )
+        );
 
         final var service = getDummyTrancheService();
 
@@ -172,23 +210,29 @@ class GesuchTrancheServiceTruncateTest {
     @Test
     void twoExistingOneTruncatedOneDeleted() {
         // Arrange
-        final var existingTranche1 = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 1, 1),
-            LocalDate.of(2024, 3, 31)
-        ));
+        final var existingTranche1 = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 3, 31)
+            )
+        );
 
-        final var existingTranche2 = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 4, 1),
-            LocalDate.of(2024, 12, 31)
-        ));
+        final var existingTranche2 = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 4, 1),
+                LocalDate.of(2024, 12, 31)
+            )
+        );
 
         final var gesuch = new Gesuch();
         gesuch.getGesuchTranchen().addAll(List.of(existingTranche1, existingTranche2));
 
-        final var newTranche = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 3, 1),
-            LocalDate.of(2024, 12, 31)
-        ));
+        final var newTranche = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 12, 31)
+            )
+        );
 
         final var service = getDummyTrancheService();
 
@@ -211,28 +255,36 @@ class GesuchTrancheServiceTruncateTest {
     @Test
     void threeExistingTwoTruncated() {
         // Arrange
-        final var existingTranche1 = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 9, 1),
-            LocalDate.of(2024, 11, 1).with(lastDayOfMonth())
-        ));
+        final var existingTranche1 = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 9, 1),
+                LocalDate.of(2024, 11, 1).with(lastDayOfMonth())
+            )
+        );
 
-        final var existingTranche2 = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 12, 1),
-            LocalDate.of(2025, 2, 1).with(lastDayOfMonth())
-        ));
+        final var existingTranche2 = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 12, 1),
+                LocalDate.of(2025, 2, 1).with(lastDayOfMonth())
+            )
+        );
 
-        final var existingTranche3 = getDummyTranche(new DateRange(
-            LocalDate.of(2025, 3, 1),
-            LocalDate.of(2025, 12, 1).with(lastDayOfMonth())
-        ));
+        final var existingTranche3 = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2025, 3, 1),
+                LocalDate.of(2025, 12, 1).with(lastDayOfMonth())
+            )
+        );
 
         final var gesuch = new Gesuch();
         gesuch.getGesuchTranchen().addAll(List.of(existingTranche1, existingTranche2, existingTranche3));
 
-        final var newTranche = getDummyTranche(new DateRange(
-            LocalDate.of(2024, 11, 1),
-            LocalDate.of(2024, 11, 1).with(lastDayOfMonth())
-        ));
+        final var newTranche = getDummyTranche(
+            new DateRange(
+                LocalDate.of(2024, 11, 1),
+                LocalDate.of(2024, 11, 1).with(lastDayOfMonth())
+            )
+        );
 
         final var service = getDummyTrancheService();
 
