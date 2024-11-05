@@ -18,16 +18,20 @@
 package ch.dvbern.stip.api.ausbildung.resource;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
-import ch.dvbern.stip.generated.dto.FallDto;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -52,41 +56,39 @@ class AusbildungResourceTest {
         AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
 
-    private FallDto fall;
-
-    private AusbildungDto ausbildung;
+    private GesuchDtoSpec gesuch;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void prepare() {
-        fall = fallApiSpec.getFallForGs()
+        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        gesuchApiSpec.gesuchEinreichen()
+            .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(FallDto.class);
+            .statusCode(Status.ACCEPTED.getStatusCode());
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     @Order(2)
-    void createAusbildung() {
-        final var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
-        ausbildungUpdateDtoSpec.setFallId(fall.getId());
-
-        ausbildung = ausbildungApiSpec.createAusbildung()
-            .body(ausbildungUpdateDtoSpec)
+    void gesuchStatusChangeToInBearbeitungSB() {
+        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+            .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(AusbildungDto.class);
+            .as(GesuchDtoSpec.class);
+
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
 
     @Test
@@ -94,7 +96,7 @@ class AusbildungResourceTest {
     @Order(3)
     void getAusbildung() {
         ausbildungApiSpec.getAusbildung()
-            .ausbildungIdPath(ausbildung.getId())
+            .ausbildungIdPath(gesuch.getAusbildungId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -102,17 +104,17 @@ class AusbildungResourceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     @Order(4)
     void updateAusbildung() {
         final var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
-        ausbildungUpdateDtoSpec.setId(ausbildung.getId());
-        ausbildungUpdateDtoSpec.setFallId(fall.getId());
+        ausbildungUpdateDtoSpec.setId(gesuch.getAusbildungId());
+        ausbildungUpdateDtoSpec.setFallId(gesuch.getFallId());
         final String ausbildungsOrtToSet = "Bielefeld";
 
         ausbildungUpdateDtoSpec.setAusbildungsort(ausbildungsOrtToSet);
         final var updatedAusbildung = ausbildungApiSpec.updateAusbildung()
-            .ausbildungIdPath(ausbildung.getId())
+            .ausbildungIdPath(gesuch.getAusbildungId())
             .body(ausbildungUpdateDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -123,12 +125,22 @@ class AusbildungResourceTest {
             .as(AusbildungDto.class);
 
         assertThat(updatedAusbildung.getAusbildungsort(), is(ausbildungsOrtToSet));
+        gesuchApiSpec.gesuchZurueckweisen()
+            .gesuchIdPath(gesuch.getId())
+            .body(
+                new KommentarDtoSpec()
+                    .text("ZURUECKWEISEN_COMMENT")
+            )
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(5)
     void deleteAusbildung() {
-        TestUtil.deleteAusbildung(gesuchApiSpec, ausbildung.getId());
+        TestUtil.deleteAusbildung(gesuchApiSpec, gesuch.getAusbildungId());
     }
 }
