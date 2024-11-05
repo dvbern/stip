@@ -13,9 +13,6 @@ import { SteuerdatenTyp } from './steuerdatenTyp';
 
 export interface Steuerdaten { 
     id?: string;
-    nachname?: string;
-    vorname?: string;
-    email?: string;
     steuerdatenTyp: SteuerdatenTyp;
     steuernKantonGemeinde: number;
     steuernBund: number;

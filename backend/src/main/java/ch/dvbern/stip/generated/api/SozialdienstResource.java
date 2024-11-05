@@ -1,14 +1,23 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
+
+
+
+import java.io.InputStream;
+import java.util.Map;
+import java.util.List;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 

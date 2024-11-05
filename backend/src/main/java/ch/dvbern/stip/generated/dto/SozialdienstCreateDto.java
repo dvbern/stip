@@ -1,5 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.AdresseDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -7,6 +9,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("SozialdienstCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -26,7 +33,7 @@ public class SozialdienstCreateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("name")
   @NotNull
   public String getName() {
@@ -45,7 +52,7 @@ public class SozialdienstCreateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("iban")
   @NotNull
   public String getIban() {
@@ -64,7 +71,7 @@ public class SozialdienstCreateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("adresse")
   @NotNull
   public AdresseDto getAdresse() {
@@ -83,7 +90,7 @@ public class SozialdienstCreateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("sozialdienstAdmin")
   @NotNull
   public SozialdienstAdminCreateDto getSozialdienstAdmin() {
@@ -120,7 +127,7 @@ public class SozialdienstCreateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstCreateDto {\n");
-
+    
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");

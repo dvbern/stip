@@ -7,6 +7,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("SozialdienstAdminUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -24,7 +29,7 @@ public class SozialdienstAdminUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vorname")
   @NotNull
   public String getVorname() {
@@ -43,7 +48,7 @@ public class SozialdienstAdminUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("nachname")
   @NotNull
   public String getNachname() {
@@ -78,7 +83,7 @@ public class SozialdienstAdminUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstAdminUpdateDto {\n");
-
+    
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("}");

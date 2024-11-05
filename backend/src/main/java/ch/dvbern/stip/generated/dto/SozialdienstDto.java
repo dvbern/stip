@@ -1,5 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.AdresseDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -8,6 +10,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("Sozialdienst")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -28,7 +35,7 @@ public class SozialdienstDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -47,7 +54,7 @@ public class SozialdienstDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("name")
   @NotNull
   public String getName() {
@@ -66,7 +73,7 @@ public class SozialdienstDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("adresse")
   @NotNull
   public AdresseDto getAdresse() {
@@ -85,7 +92,7 @@ public class SozialdienstDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("iban")
   @NotNull
   public String getIban() {
@@ -104,7 +111,7 @@ public class SozialdienstDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("sozialdienstAdmin")
   @NotNull
   public SozialdienstAdminDto getSozialdienstAdmin() {
@@ -142,7 +149,7 @@ public class SozialdienstDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstDto {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
