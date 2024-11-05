@@ -1,22 +1,56 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.sozialdienst.resource;
 
+import java.util.Arrays;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
-import ch.dvbern.stip.api.util.*;
+import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
-import ch.dvbern.stip.generated.dto.*;
+import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
+import ch.dvbern.stip.generated.dto.LandDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstDto;
+import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstUpdateDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Arrays;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -27,13 +61,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
 class SozialdienstResourceImplTest {
-    private final static String ADMIN_EMAIL = "test@test.com";
+    private static final String ADMIN_EMAIL = "test@test.com";
     public final SozialdienstApiSpec apiSpec = SozialdienstApiSpec.sozialdienst(RequestSpecUtil.quarkusSpec());
     public SozialdienstDtoSpec dtoSpec;
     public SozialdienstDto dto;
 
-    private final static String VALID_IBAN_1 = "CH5089144653587876648";
-    private final static String VALID_IBAN_2 = "CH5089144653587876648";
+    private static final String VALID_IBAN_1 = "CH5089144653587876648";
+    private static final String VALID_IBAN_2 = "CH5089144653587876648";
 
     @Order(1)
     @Test
@@ -75,14 +109,15 @@ class SozialdienstResourceImplTest {
     @Order(2)
     @TestAsAdmin
     @Test
-    void getSozialdienstById(){
-       dtoSpec =  apiSpec.getSozialdienst()
+    void getSozialdienstById() {
+        dtoSpec = apiSpec.getSozialdienst()
             .sozialdienstIdPath(dtoSpec.getId())
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
-           .extract().as(SozialdienstDtoSpec.class);
+            .extract()
+            .as(SozialdienstDtoSpec.class);
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
         checkSozialdienstResponse(dtoSpec);
         checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
@@ -92,20 +127,20 @@ class SozialdienstResourceImplTest {
     @Order(3)
     @TestAsAdmin
     @Test
-    void getSozialdienste(){
-        dtoSpec = Arrays.stream(apiSpec.getAllSozialdienste()
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .as(SozialdienstDtoSpec[].class)).toList().get(0);
+    void getSozialdienste() {
+        dtoSpec = Arrays.stream(
+            apiSpec.getAllSozialdienste()
+                .execute(ResponseBody::prettyPeek)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract()
+                .as(SozialdienstDtoSpec[].class)
+        ).toList().get(0);
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
         checkSozialdienstResponse(dtoSpec);
         checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
     }
-
-
 
     @Order(4)
     @TestAsAdmin
@@ -146,7 +181,7 @@ class SozialdienstResourceImplTest {
     @Order(5)
     @TestAsAdmin
     @Test
-    void updateSozizialdienstAdminTest(){
+    void updateSozizialdienstAdminTest() {
         final var updateSozialdienstDto = new SozialdienstAdminUpdateDtoSpec();
         updateSozialdienstDto.setVorname("updated");
         updateSozialdienstDto.setNachname("updated");
@@ -167,7 +202,7 @@ class SozialdienstResourceImplTest {
     @Order(5)
     @TestAsAdmin
     @Test
-    void replaceSozizialdienstAdminTest(){
+    void replaceSozizialdienstAdminTest() {
         final var keykloakId = UUID.randomUUID().toString();
         final var createSozialdienstDto = new SozialdienstAdminCreateDtoSpec();
         createSozialdienstDto.setVorname("replaced");
@@ -194,10 +229,11 @@ class SozialdienstResourceImplTest {
     @Order(7)
     @TestAsAdmin
     @Test
-    void deleteSozialdienst(){
+    void deleteSozialdienst() {
         apiSpec.deleteSozialdienst()
             .sozialdienstIdPath(dtoSpec.getId())
-            .execute(ResponseBody::prettyPeek).then()
+            .execute(ResponseBody::prettyPeek)
+            .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
@@ -209,14 +245,14 @@ class SozialdienstResourceImplTest {
             .statusCode(Response.Status.NOT_FOUND.getStatusCode());
     }
 
-    private void checkSozialdienstResponse(SozialdienstDtoSpec dtoSpec){
+    private void checkSozialdienstResponse(SozialdienstDtoSpec dtoSpec) {
         assertNotNull(dtoSpec.getId());
         assertNotNull(dtoSpec.getAdresse());
         assertNotNull(dtoSpec.getName());
         assertNotNull(dtoSpec.getIban());
     }
 
-    private void checkSozialdienstAdminResponse(SozialdienstAdminDtoSpec dtoSpec){
+    private void checkSozialdienstAdminResponse(SozialdienstAdminDtoSpec dtoSpec) {
         assertNotNull(dtoSpec.getKeycloakId());
         assertNotNull(dtoSpec.getVorname());
         assertNotNull(dtoSpec.getNachname());

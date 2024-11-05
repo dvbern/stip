@@ -1,7 +1,25 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.sozialdienst.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -23,63 +41,64 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     private final SozialdienstAuthorizer sozialdienstAuthorizer;
 
+    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response createSozialdienst(SozialdienstCreateDto sozialdienstCreateDto) {
-        sozialdienstAuthorizer.allowAllow();
         final var sozialdienst = sozialdienstService.createSozialdienst(sozialdienstCreateDto);
         return Response.ok(sozialdienst).build();
     }
 
+    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response deleteSozialdienst(UUID sozialdienstId) {
-        sozialdienstAuthorizer.allowAllow();
         final var sozialdienst = sozialdienstService.deleteSozialdienst(sozialdienstId);
         return Response.ok().entity(sozialdienst).build();
     }
 
+    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response getAllSozialdienste() {
-        sozialdienstAuthorizer.allowAllow();
         final var sozialdienste = sozialdienstService.getAllSozialdienst();
         return Response.ok().entity(sozialdienste).build();
     }
 
+    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response getSozialdienst(UUID sozialdienstId) {
-        sozialdienstAuthorizer.allowAllow();
         final var sozialdienst = sozialdienstService.getSozialdienstById(sozialdienstId);
         return Response.ok().entity(sozialdienst).build();
     }
 
+    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response replaceSozialdienstAdmin(
         UUID sozialdienstId,
         SozialdienstAdminCreateDto sozialdienstAdminCreateDto
     ) {
-        sozialdienstAuthorizer.allowAllow();
         final var updated = sozialdienstService.replaceSozialdienstAdmin(sozialdienstId, sozialdienstAdminCreateDto);
         return Response.ok().entity(updated).build();
     }
 
+    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response updateSozialdienst(SozialdienstUpdateDto sozialdienstUpdateDto) {
-        sozialdienstAuthorizer.allowAllow();
         final var updated = sozialdienstService.updateSozialdienst(sozialdienstUpdateDto);
         return Response.ok().entity(updated).build();
     }
 
+    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public Response updateSozialdienstAdmin(
         UUID sozialdienstId,
-        SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto) {
-        sozialdienstAuthorizer.allowAllow();
+        SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto
+    ) {
         final var sozialdienst = sozialdienstService.getSozialdienstById(sozialdienstId);
         final var updated = sozialdienstService.updateSozialdienstAdmin(sozialdienstAdminUpdateDto, sozialdienst);
         return Response.ok().entity(updated).build();

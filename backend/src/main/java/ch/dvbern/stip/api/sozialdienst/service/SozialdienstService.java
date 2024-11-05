@@ -1,14 +1,36 @@
-package ch.dvbern.stip.api.sozialdienst.service;
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
 
-import ch.dvbern.stip.api.sozialdienstadmin.service.SozialdienstAdminService;
-import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
-import ch.dvbern.stip.generated.dto.*;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+package ch.dvbern.stip.api.sozialdienst.service;
 
 import java.util.List;
 import java.util.UUID;
+
+import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienstadmin.service.SozialdienstAdminService;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstDto;
+import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RequestScoped
@@ -62,11 +84,14 @@ public class SozialdienstService {
     }
 
     @Transactional
-    public SozialdienstAdminDto updateSozialdienstAdmin(SozialdienstAdminUpdateDto dto, SozialdienstDto sozialdienstDto) {
+    public SozialdienstAdminDto updateSozialdienstAdmin(
+        SozialdienstAdminUpdateDto dto,
+        SozialdienstDto sozialdienstDto
+    ) {
         final var sozialdienst = sozialdienstRepository.requireById(sozialdienstDto.getId());
         final var adminKeykloakId = sozialdienst.getAdmin().getKeycloakId();
         var sozialdienstAdmin = sozialdienstAdminService.getSozialdienstAdminById(sozialdienst.getAdmin().getId());
-        var responseDto = sozialdienstAdminService.updateSozialdienstAdminBenutzer(sozialdienstAdmin.getId(),dto);
+        var responseDto = sozialdienstAdminService.updateSozialdienstAdminBenutzer(sozialdienstAdmin.getId(), dto);
         responseDto.setKeycloakId(adminKeykloakId);
         return responseDto;
     }
