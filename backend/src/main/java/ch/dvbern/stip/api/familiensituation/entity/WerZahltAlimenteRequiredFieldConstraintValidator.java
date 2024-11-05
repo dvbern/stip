@@ -23,7 +23,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE;
 
 public class WerZahltAlimenteRequiredFieldConstraintValidator
-implements ConstraintValidator<WerZahltAlimenteRequiredFieldConstraint, Familiensituation> {
+    implements ConstraintValidator<WerZahltAlimenteRequiredFieldConstraint, Familiensituation> {
 
     @Override
     public boolean isValid(

@@ -26,7 +26,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class UniqueSvNumberConstraintValidator
-implements ConstraintValidator<UniqueSvNumberConstraint, GesuchFormular> {
+    implements ConstraintValidator<UniqueSvNumberConstraint, GesuchFormular> {
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
         List<String> svNumbers = new ArrayList<>();

@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class EinnahmenKostenDarlehenRequiredConstraintValidator
-implements ConstraintValidator<EinnahmenKostenDarlehenRequiredConstraint, GesuchFormular> {
+    implements ConstraintValidator<EinnahmenKostenDarlehenRequiredConstraint, GesuchFormular> {
     private String property = "";
 
     @Override

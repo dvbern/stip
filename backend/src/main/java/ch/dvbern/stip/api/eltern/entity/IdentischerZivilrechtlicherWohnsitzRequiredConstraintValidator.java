@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE;
 
 public class IdentischerZivilrechtlicherWohnsitzRequiredConstraintValidator
-implements ConstraintValidator<IdentischerZivilrechtlicherWohnsitzRequiredConstraint, Eltern> {
+    implements ConstraintValidator<IdentischerZivilrechtlicherWohnsitzRequiredConstraint, Eltern> {
 
     @Override
     public boolean isValid(

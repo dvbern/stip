@@ -26,7 +26,7 @@ import static ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe.TERTIAER;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE3_REQUIRED_MESSAGE;
 
 public class AusbildungskostenStufeRequiredConstraintValidator
-implements ConstraintValidator<AusbildungskostenStufeRequiredConstraint, GesuchFormular> {
+    implements ConstraintValidator<AusbildungskostenStufeRequiredConstraint, GesuchFormular> {
     private String property = "";
 
     @Override

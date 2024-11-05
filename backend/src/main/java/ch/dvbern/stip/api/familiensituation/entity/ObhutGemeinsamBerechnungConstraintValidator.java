@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class ObhutGemeinsamBerechnungConstraintValidator
-implements ConstraintValidator<ObhutGemeinsamBerechnungConstraint, Familiensituation> {
+    implements ConstraintValidator<ObhutGemeinsamBerechnungConstraint, Familiensituation> {
 
     @Override
     public boolean isValid(

@@ -23,5 +23,5 @@ import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatusChangeEvent;
 
 public interface GesuchTrancheStatusStateChangeHandler
-extends StateChangeHandler<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent, GesuchTranche> {
+    extends StateChangeHandler<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent, GesuchTranche> {
 }

@@ -22,7 +22,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class DocumentsAcceptedConstraintValidator
-implements ConstraintValidator<DocumentsAcceptedConstraint, GesuchFormular> {
+    implements ConstraintValidator<DocumentsAcceptedConstraint, GesuchFormular> {
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
         return formular.getTranche()

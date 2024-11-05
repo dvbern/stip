@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE;
 
 public class ObhutGemeinsamRequiredFieldsConstraintValidator
-implements ConstraintValidator<ObhutGemeinsamRequiredFieldsConstraint, Familiensituation> {
+    implements ConstraintValidator<ObhutGemeinsamRequiredFieldsConstraint, Familiensituation> {
 
     @Override
     public boolean isValid(

@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class FamiliensituationGeschwisterWohnsitzConstraintValidator
-implements ConstraintValidator<FamiliensituationGeschwisterWohnsitzConstraint, GesuchFormular> {
+    implements ConstraintValidator<FamiliensituationGeschwisterWohnsitzConstraint, GesuchFormular> {
     private String property = "";
 
     @Inject

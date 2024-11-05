@@ -25,7 +25,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class NoOverlapInAusbildungenConstraintValidator
-implements ConstraintValidator<NoOverlapInAusbildungenConstraint, GesuchFormular> {
+    implements ConstraintValidator<NoOverlapInAusbildungenConstraint, GesuchFormular> {
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
         if (gesuchFormular.getAusbildung() == null) {

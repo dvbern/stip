@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE;
 
 public class NiederlassungsstatusConstraintValidator
-implements ConstraintValidator<NiederlassungsstatusRequiredConstraint, PersonInAusbildung> {
+    implements ConstraintValidator<NiederlassungsstatusRequiredConstraint, PersonInAusbildung> {
 
     @Override
     public boolean isValid(

@@ -25,7 +25,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class LebenslaufAusbildungUeberschneidenConstraintValidator
-implements ConstraintValidator<LebenslaufAusbildungUeberschneidenConstraint, GesuchFormular> {
+    implements ConstraintValidator<LebenslaufAusbildungUeberschneidenConstraint, GesuchFormular> {
     private String property = "";
 
     @Override

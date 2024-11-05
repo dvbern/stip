@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class WohnsitzAnteilBerechnungConstraintValidator
-implements ConstraintValidator<WohnsitzAnteilBerechnungConstraint, AbstractFamilieEntity> {
+    implements ConstraintValidator<WohnsitzAnteilBerechnungConstraint, AbstractFamilieEntity> {
 
     @Override
     public boolean isValid(

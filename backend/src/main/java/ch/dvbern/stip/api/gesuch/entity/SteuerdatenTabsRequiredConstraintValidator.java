@@ -28,7 +28,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class SteuerdatenTabsRequiredConstraintValidator
-implements ConstraintValidator<SteuerdatenTabsRequiredConstraint, GesuchFormular> {
+    implements ConstraintValidator<SteuerdatenTabsRequiredConstraint, GesuchFormular> {
     private String property;
 
     @Inject

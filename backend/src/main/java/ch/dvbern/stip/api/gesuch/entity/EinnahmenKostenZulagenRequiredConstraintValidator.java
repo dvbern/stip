@@ -22,7 +22,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class EinnahmenKostenZulagenRequiredConstraintValidator
-implements ConstraintValidator<EinnahmenKostenZulagenRequiredConstraint, GesuchFormular> {
+    implements ConstraintValidator<EinnahmenKostenZulagenRequiredConstraint, GesuchFormular> {
     private String property = "";
 
     @Override
