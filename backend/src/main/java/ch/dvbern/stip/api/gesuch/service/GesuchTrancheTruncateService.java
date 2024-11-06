@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
@@ -28,7 +45,8 @@ public class GesuchTrancheTruncateService {
         final var added = new ArrayList<GesuchTranche>();
         final var tranchenToTruncate = gesuch.getGesuchTranchen()
             .stream()
-            .filter(tranche -> tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS &&
+            .filter(
+                tranche -> tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS &&
                 tranche.getTyp() == GesuchTrancheTyp.TRANCHE
             )
             .toList();
@@ -77,10 +95,11 @@ public class GesuchTrancheTruncateService {
      */
     void handleLeft(final GesuchTranche existingTranche, final GesuchTranche newTranche) {
         existingTranche.getGueltigkeit()
-            .setGueltigBis(newTranche.getGueltigkeit()
-                .getGueltigAb()
-                .minusMonths(1)
-                .with(lastDayOfMonth())
+            .setGueltigBis(
+                newTranche.getGueltigkeit()
+                    .getGueltigAb()
+                    .minusMonths(1)
+                    .with(lastDayOfMonth())
             );
     }
 
@@ -89,10 +108,11 @@ public class GesuchTrancheTruncateService {
      */
     void handleRight(final GesuchTranche existingTranche, final GesuchTranche newTranche) {
         existingTranche.getGueltigkeit()
-            .setGueltigAb(newTranche.getGueltigkeit()
-                .getGueltigBis()
-                .plusMonths(1)
-                .with(firstDayOfMonth())
+            .setGueltigAb(
+                newTranche.getGueltigkeit()
+                    .getGueltigBis()
+                    .plusMonths(1)
+                    .with(firstDayOfMonth())
             );
     }
 
@@ -105,19 +125,23 @@ public class GesuchTrancheTruncateService {
             existingTranche.getGueltigkeit().getGueltigBis()
         );
 
-        // Truncate existing
-        existingTranche.getGueltigkeit().setGueltigBis(newTranche
-            .getGueltigkeit()
-            .getGueltigAb()
-            .minusMonths(1)
-            .with(lastDayOfMonth())
-        );
-
-        return GesuchTrancheCopyUtil.createNewTranche(
+        final var newNewTranche = GesuchTrancheCopyUtil.createNewTranche(
             existingTranche,
             copyGueltigkeit,
             existingTranche.getComment()
         );
+
+        // Truncate existing
+        existingTranche.getGueltigkeit()
+            .setGueltigBis(
+                newTranche
+                    .getGueltigkeit()
+                    .getGueltigAb()
+                    .minusMonths(1)
+                    .with(lastDayOfMonth())
+            );
+
+        return newNewTranche;
     }
 
     enum OverlapType {

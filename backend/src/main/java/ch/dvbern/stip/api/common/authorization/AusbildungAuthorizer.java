@@ -69,29 +69,43 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public final void canUpdate(final UUID ausbildungId) {
+    public boolean canUpdateCheck(final UUID ausbildungId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         final var ausbildung = ausbildungRepository.requireById(ausbildungId);
 
         if (!isAdminOrSb(currentBenutzer)) {
-            throw new UnauthorizedException();
+            return false;
         }
 
         if (ausbildung.getGesuchs().size() > 1) {
-            throw new UnauthorizedException();
+            return false;
         }
 
-        if (ausbildung.getGesuchs().get(0).getGesuchTranchen().size() > 1) {
-            throw new UnauthorizedException();
+        if (ausbildung.getGesuchs().isEmpty()) {
+            return true;
         }
 
         final var gesuch = ausbildung.getGesuchs().get(0);
-        if (isAdminOrSb(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
-            return;
+
+        if (gesuch.getGesuchTranchen().isEmpty()) {
+            return true;
         }
 
-        throw new UnauthorizedException();
+        if (gesuch.getGesuchTranchen().size() > 1) {
+            return false;
+        }
+
+        if (gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+            return true;
+        }
+
+        return false;
     }
 
+    public void canUpdate(final UUID ausbildungId) {
+        if (!canUpdateCheck(ausbildungId)) {
+            throw new UnauthorizedException();
+        }
+    }
 }

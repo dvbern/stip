@@ -82,8 +82,8 @@ public class AusbildungService {
             ausbildung
         );
         gesuch.setGesuchsperiode(gesuchsperiode);
-        var ausbildungsstart = ausbildung.getAusbildungBegin();
-        ausbildungsstart.withYear(gesuchsperiode.getGesuchsperiodeStart().getYear());
+        var ausbildungsstart =
+            ausbildung.getAusbildungBegin().withYear(gesuchsperiode.getGesuchsperiodeStart().getYear());
         if (ausbildungsstart.isAfter(gesuchsperiode.getGesuchsperiodeStopp())) {
             ausbildungsstart = ausbildungsstart.minusYears(1);
         }

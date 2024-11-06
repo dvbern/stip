@@ -81,20 +81,42 @@ class GesuchGetGesucheTest {
     @Test
     @TestAsGesuchsteller
     @Order(1)
+    void getGsDashboardNoAusbildungTest() {
+        final var fall = TestUtil.getOrCreateFall(fallApiSpec);
+        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+
+        assertThat(fallDashboardItems.length, is(1));
+
+        final var fallDashboardItem = fallDashboardItems[0];
+        final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
+
+        assertThat(fallDashboardItem.getNotifications().isEmpty(), is(true));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(2)
     void gesuchErstellen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(2)
+    @Order(3)
     void fillGesuch() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(3)
+    @Order(4)
     void getMeineBearbeitbarenNoneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -102,7 +124,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(4)
+    @Order(5)
     void getAlleBearbeitbarenNoneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -110,7 +132,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(5)
+    @Order(6)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchIdPath(gesuch.getId())
@@ -122,7 +144,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void getMeineBearbeitbarenOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -130,7 +152,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void getAlleBearbeitbarenOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -138,7 +160,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(8)
+    @Order(9)
     void getGsDashboardTest() {
         final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -170,7 +192,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsAdmin
-    @Order(9)
+    @Order(10)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
@@ -178,7 +200,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(10)
+    @Order(11)
     void getGsDashboardTestNoAusbildung() {
         final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)

@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.util.ArrayList;
-
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -37,15 +35,6 @@ public abstract class FallDashboardItemMapper {
     @Mapping(source = "ausbildungs", target = "ausbildungDashboardItems")
     @Mapping(source = ".", target = "fall")
     public abstract FallDashboardItemDto toDto(final Fall fall);
-
-    @AfterMapping
-    protected void setAusbildungDashboardItemsIfNull(
-        @MappingTarget final FallDashboardItemDto dto
-    ) {
-        if (dto.getAusbildungDashboardItems() == null) {
-            dto.setAusbildungDashboardItems(new ArrayList<>());
-        }
-    }
 
     @AfterMapping
     protected void setNotifications(

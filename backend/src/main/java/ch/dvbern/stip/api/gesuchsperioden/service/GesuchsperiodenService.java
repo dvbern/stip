@@ -91,7 +91,7 @@ public class GesuchsperiodenService {
             var ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear() + yearOffset);
             final var eligibleGesuchsperioden =
                 gesuchsperiodeRepository.findAllStartBefore(ausbildungsBeginAssumed).toList();
-            if (eligibleGesuchsperioden.size() == 0) {
+            if (eligibleGesuchsperioden.isEmpty()) {
                 if (yearOffset == 2) {
                     throw new NotFoundException();
                 }

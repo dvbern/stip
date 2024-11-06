@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -65,7 +66,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         AdresseMapper.class,
         PersonInAusbildungMapper.class,
         FamiliensituationMapper.class,
-        // AusbildungMapper.class,
+        AusbildungMapper.class,
         LebenslaufItemMapper.class,
         PartnerMapper.class,
         AuszahlungMapper.class,

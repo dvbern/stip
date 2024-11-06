@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.gesuch.util;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.auszahlung.util.AuszahlungCopyUtil;
@@ -33,13 +35,13 @@ import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.kind.util.KindCopyUtil;
 import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
 import ch.dvbern.stip.api.partner.util.PartnerCopyUtil;
 import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
+import jakarta.ws.rs.NotFoundException;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -82,8 +84,35 @@ public class GesuchTrancheCopyUtil {
         final DateRange gueltigkeit,
         final String comment
     ) {
+        final var gesuchTranchen = gesuchTranche.getGesuch()
+            .getGesuchTranchen();
+        final var clampDateStart = gesuchTranchen
+            .stream()
+            .filter(gesuchTranche1 -> gesuchTranche1.getTyp() == GesuchTrancheTyp.TRANCHE)
+            .min(
+                (gesuchTranche1, gesuchTranche2) -> gesuchTranche1.getGueltigkeit()
+                    .getGueltigAb()
+                    .isBefore(gesuchTranche2.getGueltigkeit().getGueltigAb()) ? 1 : -1
+            )
+            .orElseThrow(NotFoundException::new)
+            .getGueltigkeit()
+            .getGueltigAb();
+
+        final var clampDateStop = gesuchTranchen
+            .stream()
+            .filter(gesuchTranche1 -> gesuchTranche1.getTyp() == GesuchTrancheTyp.TRANCHE)
+            .min(
+                (gesuchTranche1, gesuchTranche2) -> gesuchTranche1.getGueltigkeit()
+                    .getGueltigBis()
+                    .isAfter(gesuchTranche2.getGueltigkeit().getGueltigBis()) ? 1 : -1
+            )
+            .orElseThrow(NotFoundException::new)
+            .getGueltigkeit()
+            .getGueltigBis();
+
         final var clamped = clampStartStop(
-            gesuchTranche.getGesuch().getGesuchsperiode(),
+            clampDateStart,
+            clampDateStop,
             gueltigkeit
         );
 
@@ -122,14 +151,16 @@ public class GesuchTrancheCopyUtil {
         return newTranche;
     }
 
-    DateRange clampStartStop(final Gesuchsperiode gesuchsperiode, final DateRange createDateRange) {
-        final var gesuchsperiodeStart = gesuchsperiode.getGesuchsperiodeStart();
-        final var gesuchsperiodeStopp = gesuchsperiode.getGesuchsperiodeStopp();
+    DateRange clampStartStop(
+        final LocalDate startDateBoundary,
+        final LocalDate endDateBoundary,
+        final DateRange createDateRange
+    ) {
         final var startDate = DateUtil.roundToStartOrEnd(
             DateUtil.clamp(
                 createDateRange.getGueltigAb(),
-                gesuchsperiodeStart,
-                gesuchsperiodeStopp
+                startDateBoundary,
+                endDateBoundary
             ),
             15,
             false,
@@ -138,14 +169,14 @@ public class GesuchTrancheCopyUtil {
 
         var endDate = createDateRange.getGueltigBis();
         if (endDate == null) {
-            endDate = gesuchsperiodeStopp;
+            endDate = endDateBoundary;
         }
 
         final var roundedEndDate = DateUtil.roundToStartOrEnd(
             DateUtil.clamp(
                 endDate,
-                gesuchsperiodeStart,
-                gesuchsperiodeStopp
+                startDateBoundary,
+                endDateBoundary
             ),
             14,
             true,

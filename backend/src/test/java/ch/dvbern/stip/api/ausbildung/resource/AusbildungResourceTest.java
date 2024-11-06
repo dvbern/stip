@@ -17,8 +17,11 @@
 
 package ch.dvbern.stip.api.ausbildung.resource;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
@@ -63,7 +66,24 @@ class AusbildungResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(1)
-    void prepare() {
+    void createAusbildungFail() {
+        final var fall = TestUtil.getOrCreateFall(fallApiSpec);
+        var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
+        ausbildungUpdateDtoSpec.setFallId(fall.getId());
+        ausbildungUpdateDtoSpec.setAusbildungEnd(DateMapperImpl.dateToMonthYear(LocalDate.now().minusYears(1)));
+
+        ausbildungApiSpec.createAusbildung()
+            .body(ausbildungUpdateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(2)
+    void createAusbildung() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
         gesuchApiSpec.gesuchEinreichen()
@@ -76,7 +96,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(2)
+    @Order(3)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchIdPath(gesuch.getId())
@@ -93,7 +113,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(3)
+    @Order(4)
     void getAusbildung() {
         ausbildungApiSpec.getAusbildung()
             .ausbildungIdPath(gesuch.getAusbildungId())
@@ -105,7 +125,25 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(4)
+    @Order(5)
+    void updateAusbildungFail() {
+        final var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
+        ausbildungUpdateDtoSpec.setId(gesuch.getAusbildungId());
+        ausbildungUpdateDtoSpec.setFallId(gesuch.getFallId());
+        ausbildungUpdateDtoSpec.setAusbildungEnd(DateMapperImpl.dateToMonthYear(LocalDate.now().minusYears(1)));
+
+        ausbildungApiSpec.updateAusbildung()
+            .ausbildungIdPath(gesuch.getAusbildungId())
+            .body(ausbildungUpdateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(6)
     void updateAusbildung() {
         final var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
         ausbildungUpdateDtoSpec.setId(gesuch.getAusbildungId());
@@ -129,7 +167,7 @@ class AusbildungResourceTest {
             .gesuchIdPath(gesuch.getId())
             .body(
                 new KommentarDtoSpec()
-                    .text("ZURUECKWEISEN_COMMENT")
+                    .text("DONT_CARE")
             )
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -139,7 +177,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(5)
+    @Order(99)
     void deleteAusbildung() {
         TestUtil.deleteAusbildung(gesuchApiSpec, gesuch.getAusbildungId());
     }

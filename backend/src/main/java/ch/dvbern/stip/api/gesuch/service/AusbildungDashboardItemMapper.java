@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -44,6 +45,9 @@ public abstract class AusbildungDashboardItemMapper {
     @Inject
     GesuchTrancheService gesuchTrancheService;
 
+    @Inject
+    AusbildungAuthorizer ausbildungAuthorizer;
+
     @Mapping(
         target = "ausbildungBegin",
         qualifiedBy = { DateMapper.class, DateToMonthYear.class }
@@ -62,6 +66,13 @@ public abstract class AusbildungDashboardItemMapper {
         if (dto.getGesuchs() == null) {
             dto.setGesuchs(new ArrayList<>());
         }
+    }
+
+    @AfterMapping
+    protected void setAusbildungEditable(
+        @MappingTarget final AusbildungDashboardItemDto dto
+    ) {
+        dto.setEditable(ausbildungAuthorizer.canUpdateCheck(dto.getId()));
     }
 
     GesuchDashboardItemDto map(final Gesuch gesuch) {
