@@ -1,17 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Notification for a Gesuch
@@ -36,7 +33,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("notificationType")
   @NotNull
   public ch.dvbern.stip.api.notification.type.NotificationType getNotificationType() {
@@ -55,7 +52,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchId")
   @NotNull
   public UUID getGesuchId() {
@@ -74,7 +71,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("userErstellt")
   @NotNull
   public String getUserErstellt() {
@@ -93,7 +90,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("notificationText")
   public String getNotificationText() {
     return notificationText;
@@ -111,7 +108,7 @@ public class NotificationDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("timestampErstellt")
   public LocalDate getTimestampErstellt() {
     return timestampErstellt;
@@ -148,7 +145,7 @@ public class NotificationDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NotificationDto {\n");
-    
+
     sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");

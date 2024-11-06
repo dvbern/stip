@@ -1,22 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AusbildungsPensumDto;
-import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
-import ch.dvbern.stip.generated.dto.GesuchDashboardItemDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -49,7 +42,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fallId")
   @NotNull
   public UUID getFallId() {
@@ -68,7 +61,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fachrichtung")
   @NotNull
   public String getFachrichtung() {
@@ -88,7 +81,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungBegin")
   @NotNull
   public String getAusbildungBegin() {
@@ -108,7 +101,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungEnd")
   @NotNull
   public String getAusbildungEnd() {
@@ -127,7 +120,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("pensum")
   @NotNull
   public AusbildungsPensumDto getPensum() {
@@ -146,7 +139,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("status")
   @NotNull
   public ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus getStatus() {
@@ -165,7 +158,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("editable")
   @NotNull
   public Boolean getEditable() {
@@ -184,7 +177,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -202,7 +195,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungNichtGefunden")
   public Boolean getAusbildungNichtGefunden() {
     return ausbildungNichtGefunden;
@@ -221,7 +214,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("alternativeAusbildungsstaette")
   public String getAlternativeAusbildungsstaette() {
     return alternativeAusbildungsstaette;
@@ -240,7 +233,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("alternativeAusbildungsgang")
   public String getAlternativeAusbildungsgang() {
     return alternativeAusbildungsgang;
@@ -259,7 +252,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungsort")
   public String getAusbildungsort() {
     return ausbildungsort;
@@ -277,7 +270,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("isAusbildungAusland")
   public Boolean getIsAusbildungAusland() {
     return isAusbildungAusland;
@@ -295,7 +288,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungsgang")
   public AusbildungsgangDto getAusbildungsgang() {
     return ausbildungsgang;
@@ -313,7 +306,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchs")
   public List<GesuchDashboardItemDto> getGesuchs() {
     return gesuchs;
@@ -376,7 +369,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungDashboardItemDto {\n");
-    
+
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");

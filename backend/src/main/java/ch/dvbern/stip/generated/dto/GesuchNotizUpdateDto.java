@@ -1,16 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -31,7 +28,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("betreff")
   @NotNull
   public String getBetreff() {
@@ -50,7 +47,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("text")
   @NotNull
   public String getText() {
@@ -69,7 +66,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -104,7 +101,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizUpdateDto {\n");
-    
+
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");

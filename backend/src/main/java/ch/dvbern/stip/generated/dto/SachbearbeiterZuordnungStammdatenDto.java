@@ -1,15 +1,11 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
 
 
 
@@ -29,7 +25,7 @@ public class SachbearbeiterZuordnungStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("buchstabenDe")
   public String getBuchstabenDe() {
     return buchstabenDe;
@@ -47,7 +43,7 @@ public class SachbearbeiterZuordnungStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("buchstabenFr")
   public String getBuchstabenFr() {
     return buchstabenFr;
@@ -81,7 +77,7 @@ public class SachbearbeiterZuordnungStammdatenDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SachbearbeiterZuordnungStammdatenDto {\n");
-    
+
     sb.append("    buchstabenDe: ").append(toIndentedString(buchstabenDe)).append("\n");
     sb.append("    buchstabenFr: ").append(toIndentedString(buchstabenFr)).append("\n");
     sb.append("}");

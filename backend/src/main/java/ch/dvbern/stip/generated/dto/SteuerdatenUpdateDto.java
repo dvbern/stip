@@ -1,16 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -45,7 +42,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("steuerdatenTyp")
   @NotNull
   public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getSteuerdatenTyp() {
@@ -64,7 +61,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("steuernKantonGemeinde")
   @NotNull
   public Integer getSteuernKantonGemeinde() {
@@ -83,7 +80,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("steuernBund")
   @NotNull
   public Integer getSteuernBund() {
@@ -102,7 +99,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fahrkosten")
   @NotNull
   public Integer getFahrkosten() {
@@ -121,7 +118,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("verpflegung")
   @NotNull
   public Integer getVerpflegung() {
@@ -140,7 +137,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("totalEinkuenfte")
   @NotNull
   public Integer getTotalEinkuenfte() {
@@ -159,7 +156,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("eigenmietwert")
   @NotNull
   public Integer getEigenmietwert() {
@@ -178,7 +175,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("isArbeitsverhaeltnisSelbstaendig")
   @NotNull
   public Boolean getIsArbeitsverhaeltnisSelbstaendig() {
@@ -197,7 +194,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("kinderalimente")
   @NotNull
   public Integer getKinderalimente() {
@@ -216,7 +213,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("vermoegen")
   @NotNull
   public Integer getVermoegen() {
@@ -235,7 +232,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -253,7 +250,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fahrkostenPartner")
   public Integer getFahrkostenPartner() {
     return fahrkostenPartner;
@@ -271,7 +268,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("verpflegungPartner")
   public Integer getVerpflegungPartner() {
     return verpflegungPartner;
@@ -289,7 +286,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("steuerjahr")
   public Integer getSteuerjahr() {
     return steuerjahr;
@@ -307,7 +304,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("veranlagungsCode")
   public Integer getVeranlagungsCode() {
     return veranlagungsCode;
@@ -325,7 +322,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("saeule3a")
   public Integer getSaeule3a() {
     return saeule3a;
@@ -343,7 +340,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("saeule2")
   public Integer getSaeule2() {
     return saeule2;
@@ -392,7 +389,7 @@ public class SteuerdatenUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SteuerdatenUpdateDto {\n");
-    
+
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");

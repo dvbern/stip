@@ -31,9 +31,9 @@ import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenReposit
 import ch.dvbern.stip.api.benutzer.util.TestRollen;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;

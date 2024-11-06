@@ -1,15 +1,11 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
 
 /**
  * Eintrag von dem Statusprotokoll
@@ -34,7 +30,7 @@ public class StatusprotokollEntryDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("timestamp")
   public java.time.LocalDateTime getTimestamp() {
     return timestamp;
@@ -52,7 +48,7 @@ public class StatusprotokollEntryDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("status")
   public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getStatus() {
     return status;
@@ -71,7 +67,7 @@ public class StatusprotokollEntryDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("benutzer")
   public String getBenutzer() {
     return benutzer;
@@ -90,7 +86,7 @@ public class StatusprotokollEntryDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("kommentar")
   public String getKommentar() {
     return kommentar;
@@ -126,7 +122,7 @@ public class StatusprotokollEntryDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class StatusprotokollEntryDto {\n");
-    
+
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");

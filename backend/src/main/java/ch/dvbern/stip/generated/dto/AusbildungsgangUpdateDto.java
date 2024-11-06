@@ -1,16 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -32,7 +29,7 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bezeichnungDe")
   @NotNull
   public String getBezeichnungDe() {
@@ -51,7 +48,7 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bezeichnungFr")
   @NotNull
   public String getBezeichnungFr() {
@@ -70,7 +67,7 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bildungskategorieId")
   @NotNull
   public UUID getBildungskategorieId() {
@@ -89,7 +86,7 @@ public class AusbildungsgangUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungsstaetteId")
   @NotNull
   public UUID getAusbildungsstaetteId() {
@@ -126,7 +123,7 @@ public class AusbildungsgangUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungsgangUpdateDto {\n");
-    
+
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    bildungskategorieId: ").append(toIndentedString(bildungskategorieId)).append("\n");

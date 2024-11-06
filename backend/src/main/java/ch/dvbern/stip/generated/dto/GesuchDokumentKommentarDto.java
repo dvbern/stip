@@ -1,17 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Kommentar zu einem (abgelehnten) GesuchDokument
@@ -37,7 +34,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchTrancheId")
   @NotNull
   public UUID getGesuchTrancheId() {
@@ -56,7 +53,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("dokumentTyp")
   @NotNull
   public ch.dvbern.stip.api.dokument.type.DokumentTyp getDokumentTyp() {
@@ -75,7 +72,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("dokumentStatus")
   public ch.dvbern.stip.api.dokument.type.Dokumentstatus getDokumentStatus() {
     return dokumentStatus;
@@ -93,7 +90,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("kommentar")
   public String getKommentar() {
     return kommentar;
@@ -111,7 +108,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("user_erstellt")
   public String getUserErstellt() {
     return userErstellt;
@@ -129,7 +126,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("timestampErstellt")
   public LocalDate getTimestampErstellt() {
     return timestampErstellt;
@@ -167,7 +164,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentKommentarDto {\n");
-    
+
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");

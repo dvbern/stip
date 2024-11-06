@@ -1,19 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GesuchDashboardItemMissingDocumentsDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
-import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -36,7 +30,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchsperiode")
   @NotNull
   public GesuchsperiodeDto getGesuchsperiode() {
@@ -55,7 +49,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchStatus")
   @NotNull
   public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getGesuchStatus() {
@@ -74,7 +68,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -93,7 +87,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("offeneAenderung")
   public GesuchTrancheSlimDto getOffeneAenderung() {
     return offeneAenderung;
@@ -111,7 +105,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("missingDocuments")
   public GesuchDashboardItemMissingDocumentsDto getMissingDocuments() {
     return missingDocuments;
@@ -148,7 +142,7 @@ public class GesuchDashboardItemDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDashboardItemDto {\n");
-    
+
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");

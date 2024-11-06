@@ -1,15 +1,12 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -29,7 +26,7 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("nameDe")
   @NotNull
   public String getNameDe() {
@@ -48,7 +45,7 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("nameFr")
   @NotNull
   public String getNameFr() {
@@ -83,7 +80,7 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungsstaetteCreateDto {\n");
-    
+
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
     sb.append("}");

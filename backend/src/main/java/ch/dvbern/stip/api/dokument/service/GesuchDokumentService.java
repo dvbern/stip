@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.dokument.service;
 
 import java.io.ByteArrayInputStream;
@@ -22,10 +39,10 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
@@ -78,7 +95,9 @@ public class GesuchDokumentService {
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(
-        UUID gesuchDokumentId, DokumentTyp dokumentTyp) {
+        UUID gesuchDokumentId,
+        DokumentTyp dokumentTyp
+    ) {
         return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchDokumentId, dokumentTyp);
     }
 
@@ -92,9 +111,10 @@ public class GesuchDokumentService {
         GesuchTranche gesuchTranche =
             gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
         GesuchDokument gesuchDokument =
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTranche.getId(), dokumentTyp).orElseGet(
-                () -> createGesuchDokument(gesuchTranche, dokumentTyp)
-            );
+            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTranche.getId(), dokumentTyp)
+                .orElseGet(
+                    () -> createGesuchDokument(gesuchTranche, dokumentTyp)
+                );
         Dokument dokument = new Dokument();
         dokument.getGesuchDokumente().add(gesuchDokument);
         gesuchDokument.getDokumente().add(dokument);
@@ -108,7 +128,10 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public NullableGesuchDokumentDto findGesuchDokumentForTyp(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+    public NullableGesuchDokumentDto findGesuchDokumentForTyp(
+        final UUID gesuchTrancheId,
+        final DokumentTyp dokumentTyp
+    ) {
         final var gesuchDokument =
             gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp);
         final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
@@ -123,16 +146,19 @@ public class GesuchDokumentService {
     }
 
     public void removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
-        gesuchRepository.requireById(gesuchId).getGesuchTranchen().forEach(
-            gesuchTranche -> removeAllDokumentsForGesuchTranche(gesuchTranche.getId())
-        );
+        gesuchRepository.requireById(gesuchId)
+            .getGesuchTranchen()
+            .forEach(
+                gesuchTranche -> removeAllDokumentsForGesuchTranche(gesuchTranche.getId())
+            );
     }
 
     @Transactional(TxType.REQUIRES_NEW)
     public void removeAllDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
-        gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId).forEach(
-            gesuchDokument -> removeGesuchDokument(gesuchDokument.getId())
-        );
+        gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
+            .forEach(
+                gesuchDokument -> removeGesuchDokument(gesuchDokument.getId())
+            );
     }
 
     private static void gesuchstatusIsNotOrElseThrow(final Gesuch gesuch, final Gesuchstatus statusToVerify) {
@@ -175,9 +201,11 @@ public class GesuchDokumentService {
     }
 
     private DeleteObjectsRequest buildDeleteObjectsRequest(final String bucketName, final List<String> objectIds) {
-        final var objectIdentifiers = objectIds.stream().map(
-            objectKey -> ObjectIdentifier.builder().key(GESUCH_DOKUMENT_PATH + objectKey).build()
-        ).toList();
+        final var objectIdentifiers = objectIds.stream()
+            .map(
+                objectKey -> ObjectIdentifier.builder().key(GESUCH_DOKUMENT_PATH + objectKey).build()
+            )
+            .toList();
         return DeleteObjectsRequest.builder()
             .bucket(bucketName)
             .delete(deleteObjectContainer -> deleteObjectContainer.objects(objectIdentifiers))
@@ -232,7 +260,7 @@ public class GesuchDokumentService {
 
         List<String> dokumentObjectIds = new ArrayList<>();
         // Using Iterator to be able to remove while looping
-        for (Iterator<Dokument> iterator = dokuments.iterator(); iterator.hasNext(); ) {
+        for (Iterator<Dokument> iterator = dokuments.iterator(); iterator.hasNext();) {
             final var dokument = iterator.next();
             iterator.remove();
             if (dokument.getGesuchDokumente().isEmpty()) {
@@ -262,7 +290,8 @@ public class GesuchDokumentService {
                 gesuchDokument
                     .getDokumente()
                     .stream()
-                    .map(Dokument::getObjectId).toList()
+                    .map(Dokument::getObjectId)
+                    .toList()
             );
 
             gesuchDokument.getDokumente().clear();
@@ -273,14 +302,20 @@ public class GesuchDokumentService {
     }
 
     public void scanDokument(final FileUpload fileUpload) {
-        try (final ByteArrayInputStream inputStream = new ByteArrayInputStream(
-            IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile())).readAllBytes())) {
+        try (
+        final ByteArrayInputStream inputStream = new ByteArrayInputStream(
+            IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile())).readAllBytes()
+        )
+        ) {
             // scan the file and check the results
             List<AntivirusScanResult> results = antivirus.scan(fileUpload.fileName(), inputStream);
             for (AntivirusScanResult result : results) {
                 if (result.getStatus() != Response.Status.OK.getStatusCode()) {
                     LOG.warn(
-                        "bad signature detected in file={} message={}", fileUpload.fileName(), result.getMessage());
+                        "bad signature detected in file={} message={}",
+                        fileUpload.fileName(),
+                        result.getMessage()
+                    );
                     throw AppValidationMessage.badSignatureDetectedInUpload().create();
                 }
             }

@@ -1,20 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DokumentDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -36,7 +31,7 @@ public class GesuchDokumentDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -55,7 +50,7 @@ public class GesuchDokumentDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("dokumentTyp")
   @NotNull
   public ch.dvbern.stip.api.dokument.type.DokumentTyp getDokumentTyp() {
@@ -74,7 +69,7 @@ public class GesuchDokumentDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("dokumente")
   @NotNull
   public List<DokumentDto> getDokumente() {
@@ -109,7 +104,7 @@ public class GesuchDokumentDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("status")
   @NotNull
   public ch.dvbern.stip.api.dokument.type.Dokumentstatus getStatus() {
@@ -146,7 +141,7 @@ public class GesuchDokumentDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentDto {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");

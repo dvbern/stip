@@ -1,18 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.BenutzereinstellungenUpdateDto;
-import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -36,7 +31,7 @@ public class BenutzerDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("sozialversicherungsnummer")
   @NotNull
   public String getSozialversicherungsnummer() {
@@ -55,7 +50,7 @@ public class BenutzerDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("vorname")
   @NotNull
   public String getVorname() {
@@ -74,7 +69,7 @@ public class BenutzerDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("nachname")
   @NotNull
   public String getNachname() {
@@ -93,7 +88,7 @@ public class BenutzerDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -112,7 +107,7 @@ public class BenutzerDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("benutzereinstellungen")
   public BenutzereinstellungenUpdateDto getBenutzereinstellungen() {
     return benutzereinstellungen;
@@ -130,7 +125,7 @@ public class BenutzerDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("sachbearbeiterZuordnungStammdaten")
   public SachbearbeiterZuordnungStammdatenDto getSachbearbeiterZuordnungStammdaten() {
     return sachbearbeiterZuordnungStammdaten;
@@ -168,7 +163,7 @@ public class BenutzerDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BenutzerDto {\n");
-    
+
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");

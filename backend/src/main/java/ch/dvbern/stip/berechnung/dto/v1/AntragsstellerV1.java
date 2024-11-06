@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.time.LocalDate;
@@ -10,7 +27,7 @@ import ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
@@ -70,8 +87,9 @@ public class AntragsstellerV1 {
         final AntragsstellerV1Builder builder = new AntragsstellerV1Builder();
         builder
             .piaWohntInElternHaushalt(piaWohntInElternHaushalt)
-            .tertiaerstufe(ausbildung.getAusbildungsgang().getBildungskategorie().getBildungsstufe()
-                == Bildungsstufe.TERTIAER)
+            .tertiaerstufe(
+                ausbildung.getAusbildungsgang().getBildungskategorie().getBildungsstufe() == Bildungsstufe.TERTIAER
+            )
             .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
             .vermoegen(Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0))
             .alimente(Objects.requireNonNullElse(einnahmenKosten.getAlimente(), 0))
@@ -100,7 +118,8 @@ public class AntragsstellerV1 {
                 if (kind.getWohnsitzAnteilPia() > 0) {
                     anzahlPersonenImHaushalt += 1;
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()), gesuchsperiode
+                        (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
+                        gesuchsperiode
                     );
                 }
             }
@@ -123,7 +142,8 @@ public class AntragsstellerV1 {
                 getEffektiveWohnkosten(
                     einnahmenKosten.getWohnkosten(),
                     gesuchsperiode,
-                    anzahlPersonenImHaushalt)
+                    anzahlPersonenImHaushalt
+                )
             );
         }
 
@@ -147,11 +167,13 @@ public class AntragsstellerV1 {
         // TODO: builder.lehre(Objects.requireNonNullElse());
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
-        builder.halbierungElternbeitrag(getHalbierungElternbeitrag(alter, gesuchFormular.getLebenslaufItems(), gesuchsperiode));
+        builder.halbierungElternbeitrag(
+            getHalbierungElternbeitrag(alter, gesuchFormular.getLebenslaufItems(), gesuchsperiode)
+        );
 
         if (partner != null) {
             builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
-            //TODO: builder.steuernKonkubinatspartner();
+            // TODO: builder.steuernKonkubinatspartner();
             builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
             builder.verpflegungPartner(Objects.requireNonNullElse(partner.getVerpflegungskosten(), 0));
         }
@@ -169,14 +191,14 @@ public class AntragsstellerV1 {
         final Bildungsstufe bildungsstufe
     ) {
         return switch (bildungsstufe) {
-            case SEKUNDAR_2 -> Integer.min(
-                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenSekundarstufeZwei(), 0),
-                gesuchsperiode.getAusbKostenSekII()
-            );
-            case TERTIAER -> Integer.min(
-                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenTertiaerstufe(), 0),
-                gesuchsperiode.getAusbKostenTertiaer()
-            );
+        case SEKUNDAR_2 -> Integer.min(
+            Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenSekundarstufeZwei(), 0),
+            gesuchsperiode.getAusbKostenSekII()
+        );
+        case TERTIAER -> Integer.min(
+            Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenTertiaerstufe(), 0),
+            gesuchsperiode.getAusbKostenTertiaer()
+        );
         };
     }
 
@@ -188,24 +210,29 @@ public class AntragsstellerV1 {
         final boolean abgeschlosseneErstausbildung = lebenslaufItemSet.stream()
             .filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null)
             .anyMatch(
-                lebenslaufItem ->
-                    lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
-                        && lebenslaufItem.isAusbildungAbgeschlossen()
+                lebenslaufItem -> lebenslaufItem.getBildungsart().isBerufsbefaehigenderAbschluss()
+                && lebenslaufItem.isAusbildungAbgeschlossen()
             );
         final boolean halbierungAbgeschlosseneErstausbildung =
-            abgeschlosseneErstausbildung && (alter >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
+            abgeschlosseneErstausbildung
+            && (alter >= gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag());
         final var beruftaetigkeiten = Set.of(
             Taetigkeitsart.ERWERBSTAETIGKEIT,
             Taetigkeitsart.BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
         );
         final var berufstaetigeItems = lebenslaufItemSet.stream()
             .filter(
-                lebenslaufItem -> lebenslaufItem.getTaetigkeitsart() != null)
-            .filter(
-                lebenslaufItem -> beruftaetigkeiten.contains(lebenslaufItem.getTaetigkeitsart()
+                lebenslaufItem -> lebenslaufItem.getTaetigkeitsart() != null
             )
-        );
-        final int monthsBerufstaetig = berufstaetigeItems.mapToInt(lebenslaufItem -> (int) ChronoUnit.DAYS.between(lebenslaufItem.getVon(), lebenslaufItem.getBis())).sum() / 30;
+            .filter(
+                lebenslaufItem -> beruftaetigkeiten.contains(
+                    lebenslaufItem.getTaetigkeitsart()
+                )
+            );
+        final int monthsBerufstaetig = berufstaetigeItems
+            .mapToInt(lebenslaufItem -> (int) ChronoUnit.DAYS.between(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
+            .sum()
+        / 30;
         final boolean halbierungBerufstaetig = monthsBerufstaetig >= 72;
 
         return halbierungAbgeschlosseneErstausbildung || halbierungBerufstaetig;
@@ -217,12 +244,12 @@ public class AntragsstellerV1 {
         int anzahlPersonenImHaushalt
     ) {
         int maxWohnkosten = switch (anzahlPersonenImHaushalt) {
-            case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
-            case 1 -> gesuchsperiode.getWohnkostenPersoenlich1pers();
-            case 2 -> gesuchsperiode.getWohnkostenPersoenlich2pers();
-            case 3 -> gesuchsperiode.getWohnkostenPersoenlich3pers();
-            case 4 -> gesuchsperiode.getWohnkostenPersoenlich4pers();
-            default -> gesuchsperiode.getWohnkostenPersoenlich5pluspers();
+        case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
+        case 1 -> gesuchsperiode.getWohnkostenPersoenlich1pers();
+        case 2 -> gesuchsperiode.getWohnkostenPersoenlich2pers();
+        case 3 -> gesuchsperiode.getWohnkostenPersoenlich3pers();
+        case 4 -> gesuchsperiode.getWohnkostenPersoenlich4pers();
+        default -> gesuchsperiode.getWohnkostenPersoenlich5pluspers();
         };
         return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }

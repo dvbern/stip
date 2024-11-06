@@ -18,8 +18,8 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.generated.dto.SbDashboardGesuchDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;

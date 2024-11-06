@@ -1,21 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AusbildungDashboardItemDto;
-import ch.dvbern.stip.generated.dto.FallDto;
-import ch.dvbern.stip.generated.dto.NotificationDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -36,7 +29,7 @@ public class FallDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fall")
   @NotNull
   public FallDto getFall() {
@@ -55,7 +48,7 @@ public class FallDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungDashboardItems")
   @NotNull
   public List<AusbildungDashboardItemDto> getAusbildungDashboardItems() {
@@ -90,7 +83,7 @@ public class FallDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("notifications")
   @NotNull
   public List<NotificationDto> getNotifications() {
@@ -142,7 +135,7 @@ public class FallDashboardItemDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class FallDashboardItemDto {\n");
-    
+
     sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
     sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");

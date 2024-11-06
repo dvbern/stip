@@ -42,9 +42,9 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDto
 import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapper;
 import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;

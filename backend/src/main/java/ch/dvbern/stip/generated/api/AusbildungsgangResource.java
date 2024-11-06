@@ -1,21 +1,20 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
-import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
-import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
 import java.util.UUID;
 
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Response;
-
-
-
-
-import java.io.InputStream;
-import java.util.Map;
-import java.util.List;
-import jakarta.validation.constraints.*;
+import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangUpdateDto;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Response;
 
 
 @Path("/ausbildungsgang")

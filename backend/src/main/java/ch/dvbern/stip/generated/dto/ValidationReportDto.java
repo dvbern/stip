@@ -1,20 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.ValidationErrorDto;
-import ch.dvbern.stip.generated.dto.ValidationWarningDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -35,7 +29,7 @@ public class ValidationReportDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("validationErrors")
   @NotNull
   public List<ValidationErrorDto> getValidationErrors() {
@@ -70,7 +64,7 @@ public class ValidationReportDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("validationWarnings")
   @NotNull
   public List<ValidationWarningDto> getValidationWarnings() {
@@ -106,7 +100,7 @@ public class ValidationReportDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("hasDocuments")
   public Boolean getHasDocuments() {
     return hasDocuments;
@@ -141,7 +135,7 @@ public class ValidationReportDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ValidationReportDto {\n");
-    
+
     sb.append("    validationErrors: ").append(toIndentedString(validationErrors)).append("\n");
     sb.append("    validationWarnings: ").append(toIndentedString(validationWarnings)).append("\n");
     sb.append("    hasDocuments: ").append(toIndentedString(hasDocuments)).append("\n");

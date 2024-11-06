@@ -1,19 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GesuchsjahrDto;
-import ch.dvbern.stip.generated.dto.GueltigkeitStatusDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -44,7 +39,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -63,7 +58,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bezeichnungDe")
   @NotNull
   public String getBezeichnungDe() {
@@ -82,7 +77,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bezeichnungFr")
   @NotNull
   public String getBezeichnungFr() {
@@ -101,7 +96,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gueltigkeitStatus")
   @NotNull
   public GueltigkeitStatusDto getGueltigkeitStatus() {
@@ -120,7 +115,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchsperiodeStart")
   @NotNull
   public LocalDate getGesuchsperiodeStart() {
@@ -139,7 +134,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchsperiodeStopp")
   @NotNull
   public LocalDate getGesuchsperiodeStopp() {
@@ -158,7 +153,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("aufschaltterminStart")
   @NotNull
   public LocalDate getAufschaltterminStart() {
@@ -177,7 +172,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("aufschaltterminStopp")
   @NotNull
   public LocalDate getAufschaltterminStopp() {
@@ -196,7 +191,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("einreichefristNormal")
   @NotNull
   public LocalDate getEinreichefristNormal() {
@@ -215,7 +210,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("einreichefristReduziert")
   @NotNull
   public LocalDate getEinreichefristReduziert() {
@@ -234,7 +229,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchsjahr")
   @NotNull
   public GesuchsjahrDto getGesuchsjahr() {
@@ -253,7 +248,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbKosten_SekII")
   @NotNull
   public Integer getAusbKostenSekII() {
@@ -272,7 +267,7 @@ public class GesuchsperiodeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbKosten_Tertiaer")
   @NotNull
   public Integer getAusbKostenTertiaer() {
@@ -318,7 +313,7 @@ public class GesuchsperiodeDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchsperiodeDto {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");

@@ -38,7 +38,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;

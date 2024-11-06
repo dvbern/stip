@@ -1,28 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
-import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
-import ch.dvbern.stip.generated.dto.ElternUpdateDto;
-import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
-import ch.dvbern.stip.generated.dto.GeschwisterUpdateDto;
-import ch.dvbern.stip.generated.dto.KindUpdateDto;
-import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
-import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
-import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
 
 
 
@@ -50,7 +35,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("personInAusbildung")
   public PersonInAusbildungUpdateDto getPersonInAusbildung() {
     return personInAusbildung;
@@ -68,7 +53,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("familiensituation")
   public FamiliensituationUpdateDto getFamiliensituation() {
     return familiensituation;
@@ -86,7 +71,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("partner")
   public PartnerUpdateDto getPartner() {
     return partner;
@@ -104,7 +89,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("auszahlung")
   public AuszahlungUpdateDto getAuszahlung() {
     return auszahlung;
@@ -122,7 +107,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("elterns")
   public List<ElternUpdateDto> getElterns() {
     return elterns;
@@ -156,7 +141,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("geschwisters")
   public List<GeschwisterUpdateDto> getGeschwisters() {
     return geschwisters;
@@ -190,7 +175,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("lebenslaufItems")
   public List<LebenslaufItemUpdateDto> getLebenslaufItems() {
     return lebenslaufItems;
@@ -224,7 +209,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("kinds")
   public List<KindUpdateDto> getKinds() {
     return kinds;
@@ -258,7 +243,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("einnahmenKosten")
   public EinnahmenKostenUpdateDto getEinnahmenKosten() {
     return einnahmenKosten;
@@ -276,7 +261,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("steuerdaten")
   public List<SteuerdatenUpdateDto> getSteuerdaten() {
     return steuerdaten;
@@ -334,7 +319,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchFormularUpdateDto {\n");
-    
+
     sb.append("    personInAusbildung: ").append(toIndentedString(personInAusbildung)).append("\n");
     sb.append("    familiensituation: ").append(toIndentedString(familiensituation)).append("\n");
     sb.append("    partner: ").append(toIndentedString(partner)).append("\n");

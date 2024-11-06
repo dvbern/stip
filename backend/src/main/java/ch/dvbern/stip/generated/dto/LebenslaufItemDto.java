@@ -1,16 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -40,7 +37,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("von")
   @NotNull
   public String getVon() {
@@ -60,7 +57,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bis")
   @NotNull
   public String getBis() {
@@ -79,7 +76,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("wohnsitz")
   @NotNull
   public ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton getWohnsitz() {
@@ -98,7 +95,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -116,7 +113,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bildungsart")
   public ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt getBildungsart() {
     return bildungsart;
@@ -134,7 +131,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungAbgeschlossen")
   public Boolean getAusbildungAbgeschlossen() {
     return ausbildungAbgeschlossen;
@@ -153,7 +150,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("berufsbezeichnung")
   public String getBerufsbezeichnung() {
     return berufsbezeichnung;
@@ -172,7 +169,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fachrichtung")
   public String getFachrichtung() {
     return fachrichtung;
@@ -191,7 +188,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("titelDesAbschlusses")
   public String getTitelDesAbschlusses() {
     return titelDesAbschlusses;
@@ -209,7 +206,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("taetigkeitsart")
   public ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart getTaetigkeitsart() {
     return taetigkeitsart;
@@ -228,7 +225,7 @@ public class LebenslaufItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("taetigkeitsBeschreibung")
   public String getTaetigkeitsBeschreibung() {
     return taetigkeitsBeschreibung;
@@ -271,7 +268,7 @@ public class LebenslaufItemDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class LebenslaufItemDto {\n");
-    
+
     sb.append("    von: ").append(toIndentedString(von)).append("\n");
     sb.append("    bis: ").append(toIndentedString(bis)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");

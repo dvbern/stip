@@ -1,15 +1,11 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
 
 
 
@@ -30,7 +26,7 @@ public class GesuchsjahrUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bezeichnungDe")
   public String getBezeichnungDe() {
     return bezeichnungDe;
@@ -48,7 +44,7 @@ public class GesuchsjahrUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bezeichnungFr")
   public String getBezeichnungFr() {
     return bezeichnungFr;
@@ -66,7 +62,7 @@ public class GesuchsjahrUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("technischesJahr")
   public Integer getTechnischesJahr() {
     return technischesJahr;
@@ -101,7 +97,7 @@ public class GesuchsjahrUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchsjahrUpdateDto {\n");
-    
+
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    technischesJahr: ").append(toIndentedString(technischesJahr)).append("\n");

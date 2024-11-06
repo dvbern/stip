@@ -1,19 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
 
 
 
@@ -32,7 +26,7 @@ public class AusbildungsstaetteAnyOfDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungsgaenge")
   public List<AusbildungsgangDto> getAusbildungsgaenge() {
     return ausbildungsgaenge;
@@ -81,7 +75,7 @@ public class AusbildungsstaetteAnyOfDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungsstaetteAnyOfDto {\n");
-    
+
     sb.append("    ausbildungsgaenge: ").append(toIndentedString(ausbildungsgaenge)).append("\n");
     sb.append("}");
     return sb.toString();

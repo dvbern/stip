@@ -1,17 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.BildungskategorieDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -34,7 +30,7 @@ public class AusbildungsgangDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -53,7 +49,7 @@ public class AusbildungsgangDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bildungskategorie")
   @NotNull
   public BildungskategorieDto getBildungskategorie() {
@@ -72,7 +68,7 @@ public class AusbildungsgangDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bezeichnungDe")
   public String getBezeichnungDe() {
     return bezeichnungDe;
@@ -90,7 +86,7 @@ public class AusbildungsgangDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bezeichnungFr")
   public String getBezeichnungFr() {
     return bezeichnungFr;
@@ -108,7 +104,7 @@ public class AusbildungsgangDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungsstaetteId")
   public UUID getAusbildungsstaetteId() {
     return ausbildungsstaetteId;
@@ -145,7 +141,7 @@ public class AusbildungsgangDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungsgangDto {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");

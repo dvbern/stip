@@ -1,15 +1,12 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Stammdaten used for the calculation of the stipendium
@@ -39,7 +36,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("maxSaeule3a")
   @NotNull
   public Integer getMaxSaeule3a() {
@@ -58,7 +55,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("einkommensfreibetrag")
   @NotNull
   public Integer getEinkommensfreibetrag() {
@@ -77,7 +74,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("freibetragErwerbseinkommen")
   @NotNull
   public Integer getFreibetragErwerbseinkommen() {
@@ -96,7 +93,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("freibetragVermoegen")
   @NotNull
   public Integer getFreibetragVermoegen() {
@@ -115,7 +112,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("vermoegensanteilInProzent")
   @NotNull
   public Integer getVermoegensanteilInProzent() {
@@ -134,7 +131,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("anzahlWochenLehre")
   @NotNull
   public Integer getAnzahlWochenLehre() {
@@ -153,7 +150,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("anzahlWochenSchule")
   @NotNull
   public Integer getAnzahlWochenSchule() {
@@ -172,7 +169,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("preisProMahlzeit")
   @NotNull
   public Integer getPreisProMahlzeit() {
@@ -191,7 +188,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("stipLimiteMinimalstipendium")
   @NotNull
   public Integer getStipLimiteMinimalstipendium() {
@@ -210,7 +207,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("limiteAlterAntragsstellerHalbierungElternbeitrag")
   @NotNull
   public Integer getLimiteAlterAntragsstellerHalbierungElternbeitrag() {
@@ -253,7 +250,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BerechnungsStammdatenDto {\n");
-    
+
     sb.append("    maxSaeule3a: ").append(toIndentedString(maxSaeule3a)).append("\n");
     sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
     sb.append("    freibetragErwerbseinkommen: ").append(toIndentedString(freibetragErwerbseinkommen)).append("\n");

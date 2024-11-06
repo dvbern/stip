@@ -1,22 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteAnyOfDto;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteUpdateDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -38,7 +31,7 @@ public class AusbildungsstaetteDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("nameDe")
   @NotNull
   public String getNameDe() {
@@ -57,7 +50,7 @@ public class AusbildungsstaetteDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("nameFr")
   @NotNull
   public String getNameFr() {
@@ -76,7 +69,7 @@ public class AusbildungsstaetteDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungsgaenge")
   public List<AusbildungsgangDto> getAusbildungsgaenge() {
     return ausbildungsgaenge;
@@ -110,7 +103,7 @@ public class AusbildungsstaetteDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -146,7 +139,7 @@ public class AusbildungsstaetteDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungsstaetteDto {\n");
-    
+
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
     sb.append("    ausbildungsgaenge: ").append(toIndentedString(ausbildungsgaenge)).append("\n");

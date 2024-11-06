@@ -1,16 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.time.LocalDate;
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -31,7 +28,7 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("start")
   @NotNull
   public LocalDate getStart() {
@@ -50,7 +47,7 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("comment")
   @NotNull
   public String getComment() {
@@ -69,7 +66,7 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("end")
   public LocalDate getEnd() {
     return end;
@@ -104,7 +101,7 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CreateGesuchTrancheRequestDto {\n");
-    
+
     sb.append("    start: ").append(toIndentedString(start)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    end: ").append(toIndentedString(end)).append("\n");

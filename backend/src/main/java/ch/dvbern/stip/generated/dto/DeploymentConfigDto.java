@@ -1,18 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
 
 
 
@@ -33,7 +28,7 @@ public class DeploymentConfigDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("environment")
   public String getEnvironment() {
     return environment;
@@ -51,7 +46,7 @@ public class DeploymentConfigDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("version")
   public String getVersion() {
     return version;
@@ -69,7 +64,7 @@ public class DeploymentConfigDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("allowedMimeTypes")
   public List<String> getAllowedMimeTypes() {
     return allowedMimeTypes;
@@ -120,7 +115,7 @@ public class DeploymentConfigDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DeploymentConfigDto {\n");
-    
+
     sb.append("    environment: ").append(toIndentedString(environment)).append("\n");
     sb.append("    version: ").append(toIndentedString(version)).append("\n");
     sb.append("    allowedMimeTypes: ").append(toIndentedString(allowedMimeTypes)).append("\n");

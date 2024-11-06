@@ -1,20 +1,16 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GesuchFormularDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
-
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @JsonTypeName("GesuchTranche")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -25,8 +21,8 @@ public class GesuchTrancheDto  implements Serializable {
   private @Valid UUID id;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
-  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status;
-  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
+  private @Valid GesuchTrancheStatus status;
+  private @Valid GesuchTrancheTyp typ;
   private @Valid String comment;
   private @Valid GesuchFormularDto gesuchFormular;
 
@@ -37,7 +33,7 @@ public class GesuchTrancheDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -56,7 +52,7 @@ public class GesuchTrancheDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gueltigAb")
   @NotNull
   public LocalDate getGueltigAb() {
@@ -75,7 +71,7 @@ public class GesuchTrancheDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gueltigBis")
   @NotNull
   public LocalDate getGueltigBis() {
@@ -89,39 +85,39 @@ public class GesuchTrancheDto  implements Serializable {
 
   /**
    **/
-  public GesuchTrancheDto status(ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status) {
+  public GesuchTrancheDto status(GesuchTrancheStatus status) {
     this.status = status;
     return this;
   }
 
-  
+
   @JsonProperty("status")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus getStatus() {
+  public GesuchTrancheStatus getStatus() {
     return status;
   }
 
   @JsonProperty("status")
-  public void setStatus(ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status) {
+  public void setStatus(GesuchTrancheStatus status) {
     this.status = status;
   }
 
   /**
    **/
-  public GesuchTrancheDto typ(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+  public GesuchTrancheDto typ(GesuchTrancheTyp typ) {
     this.typ = typ;
     return this;
   }
 
-  
+
   @JsonProperty("typ")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp getTyp() {
+  public GesuchTrancheTyp getTyp() {
     return typ;
   }
 
   @JsonProperty("typ")
-  public void setTyp(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+  public void setTyp(GesuchTrancheTyp typ) {
     this.typ = typ;
   }
 
@@ -132,7 +128,7 @@ public class GesuchTrancheDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("comment")
   public String getComment() {
     return comment;
@@ -150,7 +146,7 @@ public class GesuchTrancheDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchFormular")
   public GesuchFormularDto getGesuchFormular() {
     return gesuchFormular;
@@ -189,7 +185,7 @@ public class GesuchTrancheDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchTrancheDto {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");

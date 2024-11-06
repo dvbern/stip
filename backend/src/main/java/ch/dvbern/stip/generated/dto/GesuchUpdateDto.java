@@ -1,16 +1,12 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -29,7 +25,7 @@ public class GesuchUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchTrancheToWorkWith")
   @NotNull
   public GesuchTrancheUpdateDto getGesuchTrancheToWorkWith() {
@@ -63,7 +59,7 @@ public class GesuchUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchUpdateDto {\n");
-    
+
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
     sb.append("}");
     return sb.toString();

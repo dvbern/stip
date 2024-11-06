@@ -1,17 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -31,7 +27,7 @@ public class GesuchTrancheUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchFormular")
   @NotNull
   public GesuchFormularUpdateDto getGesuchFormular() {
@@ -50,7 +46,7 @@ public class GesuchTrancheUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -85,7 +81,7 @@ public class GesuchTrancheUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchTrancheUpdateDto {\n");
-    
+
     sb.append("    gesuchFormular: ").append(toIndentedString(gesuchFormular)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
