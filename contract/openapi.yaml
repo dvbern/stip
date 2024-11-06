@@ -317,6 +317,88 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateNotiz
       summary: Updates the Notiz of a Gesuch with the given Notiz-Id
+  '/gesuch/notiz/juristischeAbklaerung/{notizId}':
+    parameters:
+      - name: notizId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JuristischeAbklaerungNotizAntwort'
+        required: true
+      tags:
+        - GesuchNotiz
+      responses:
+        '202':
+          description: Juristische Abklaerung Notiz Antwort posted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: answerJuristischeAbklaerungNotiz
+      summary: Sets the Answer of a Juristische Abklaerung Notiz Antwort
+    get:
+      tags:
+        - GesuchNotiz
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JuristischeAbklaerungNotiz'
+          description: |
+            get a single juristische abklaerung notiz
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getJuristischeAbklaerungNotiz
+      summary: get a single Juristische Abklaerung Notiz of a Gesuch with the given Notiz-Id
+  '/gesuch/notiz/juristischeAbklaerung/{gesuchId}':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchNotiz
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JuristischeAbklaerungNotiz'
+          description: |
+            get all juristische abklaerung notizen of a gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getJuristischeAbklaerungNotizen
+      summary: get all juristische abklaerung notizen of a gesuch
   '/gesuch/notiz/{notizId}':
     parameters:
       - name: notizId
@@ -3749,6 +3831,10 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+    GesuchNotizTyp:
+      enum:
+        - GESUCH_NOTIZ
+        - JURISTISCHE_NOTIZ
     NotificationType:
       enum:
         - GESUCH_EINGEREICHT
@@ -4043,12 +4129,41 @@ components:
       properties:
         text:
           type: string
+    JuristischeAbklaerungNotizAntwort:
+      type: object
+      required:
+        - antwort
+      properties:
+        antwort:
+          type: string
+        userMutiert:
+          type: string
+        timestampMutiert:
+          $ref: '#/components/schemas/LocalDate'
+    JuristischeAbklaerungNotiz:
+      allOf:
+        - $ref: '#/components/schemas/GesuchNotizCreate'
+      type: object
+      required:
+        - antwort
+      properties:
+        antwort:
+          type: string
+        userErstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
+        userMutiert:
+          type: string
+        timestampMutiert:
+          $ref: '#/components/schemas/LocalDate'
     GesuchNotizCreate:
       type: object
       required:
         - gesuchId
         - betreff
         - text
+        - notizTyp
       properties:
         gesuchId:
           $ref: '#/components/schemas/UUID'
@@ -4057,6 +4172,8 @@ components:
           type: string
         text:
           type: string
+        notizTyp:
+          $ref: '#/components/schemas/GesuchNotizTyp'
     GesuchNotizUpdate:
       type: object
       required:
@@ -4263,7 +4380,7 @@ components:
       required: true
       schema:
         type: integer
-    
+
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []
