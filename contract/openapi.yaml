@@ -2191,6 +2191,7 @@ components:
       enum:
         - ALLE_BEARBEITBAR
         - ALLE_BEARBEITBAR_MEINE
+        - ALLE_JUR_ABKLAERUNG_MEINE
         - ALLE_MEINE
         - ALLE
       type: string
@@ -4263,7 +4264,7 @@ components:
       required: true
       schema:
         type: integer
-    
+
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []
