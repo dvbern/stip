@@ -1,15 +1,22 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.AusbildungsPensumDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.GesuchDashboardItemDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -25,7 +32,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid String ausbildungEnd;
   private @Valid AusbildungsPensumDto pensum;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status;
-  private @Valid Boolean editable;
   private @Valid UUID id;
   private @Valid Boolean ausbildungNichtGefunden;
   private @Valid String alternativeAusbildungsstaette;
@@ -33,6 +39,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
   private @Valid AusbildungsgangDto ausbildungsgang;
+  private @Valid Boolean editable;
   private @Valid List<GesuchDashboardItemDto> gesuchs;
 
   /**
@@ -42,7 +49,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("fallId")
   @NotNull
   public UUID getFallId() {
@@ -61,7 +68,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("fachrichtung")
   @NotNull
   public String getFachrichtung() {
@@ -81,7 +88,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungBegin")
   @NotNull
   public String getAusbildungBegin() {
@@ -101,7 +108,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungEnd")
   @NotNull
   public String getAusbildungEnd() {
@@ -120,7 +127,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("pensum")
   @NotNull
   public AusbildungsPensumDto getPensum() {
@@ -139,7 +146,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("status")
   @NotNull
   public ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus getStatus() {
@@ -153,31 +160,12 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
   /**
    **/
-  public AusbildungDashboardItemDto editable(Boolean editable) {
-    this.editable = editable;
-    return this;
-  }
-
-
-  @JsonProperty("editable")
-  @NotNull
-  public Boolean getEditable() {
-    return editable;
-  }
-
-  @JsonProperty("editable")
-  public void setEditable(Boolean editable) {
-    this.editable = editable;
-  }
-
-  /**
-   **/
   public AusbildungDashboardItemDto id(UUID id) {
     this.id = id;
     return this;
   }
 
-
+  
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -195,7 +183,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungNichtGefunden")
   public Boolean getAusbildungNichtGefunden() {
     return ausbildungNichtGefunden;
@@ -214,7 +202,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("alternativeAusbildungsstaette")
   public String getAlternativeAusbildungsstaette() {
     return alternativeAusbildungsstaette;
@@ -233,7 +221,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("alternativeAusbildungsgang")
   public String getAlternativeAusbildungsgang() {
     return alternativeAusbildungsgang;
@@ -252,7 +240,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungsort")
   public String getAusbildungsort() {
     return ausbildungsort;
@@ -270,7 +258,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("isAusbildungAusland")
   public Boolean getIsAusbildungAusland() {
     return isAusbildungAusland;
@@ -288,7 +276,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungsgang")
   public AusbildungsgangDto getAusbildungsgang() {
     return ausbildungsgang;
@@ -301,12 +289,30 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
   /**
    **/
+  public AusbildungDashboardItemDto editable(Boolean editable) {
+    this.editable = editable;
+    return this;
+  }
+
+  
+  @JsonProperty("editable")
+  public Boolean getEditable() {
+    return editable;
+  }
+
+  @JsonProperty("editable")
+  public void setEditable(Boolean editable) {
+    this.editable = editable;
+  }
+
+  /**
+   **/
   public AusbildungDashboardItemDto gesuchs(List<GesuchDashboardItemDto> gesuchs) {
     this.gesuchs = gesuchs;
     return this;
   }
 
-
+  
   @JsonProperty("gesuchs")
   public List<GesuchDashboardItemDto> getGesuchs() {
     return gesuchs;
@@ -349,7 +355,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
         Objects.equals(this.ausbildungEnd, ausbildungDashboardItem.ausbildungEnd) &&
         Objects.equals(this.pensum, ausbildungDashboardItem.pensum) &&
         Objects.equals(this.status, ausbildungDashboardItem.status) &&
-        Objects.equals(this.editable, ausbildungDashboardItem.editable) &&
         Objects.equals(this.id, ausbildungDashboardItem.id) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildungDashboardItem.ausbildungNichtGefunden) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildungDashboardItem.alternativeAusbildungsstaette) &&
@@ -357,26 +362,26 @@ public class AusbildungDashboardItemDto  implements Serializable {
         Objects.equals(this.ausbildungsort, ausbildungDashboardItem.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildungDashboardItem.isAusbildungAusland) &&
         Objects.equals(this.ausbildungsgang, ausbildungDashboardItem.ausbildungsgang) &&
+        Objects.equals(this.editable, ausbildungDashboardItem.editable) &&
         Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang, gesuchs);
+    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang, editable, gesuchs);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungDashboardItemDto {\n");
-
+    
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
@@ -384,6 +389,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
+    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
     sb.append("}");
     return sb.toString();

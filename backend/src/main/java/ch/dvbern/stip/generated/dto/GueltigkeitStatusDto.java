@@ -1,5 +1,9 @@
 package ch.dvbern.stip.generated.dto;
 
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -7,11 +11,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Gets or Sets GueltigkeitStatus
  */
 public enum GueltigkeitStatusDto {
-
+  
   ENTWURF("ENTWURF"),
-
+  
   PUBLIZIERT("PUBLIZIERT"),
-
+  
   ARCHIVIERT("ARCHIVIERT");
 
   private String value;
@@ -34,7 +38,7 @@ public enum GueltigkeitStatusDto {
       }
       throw new IllegalArgumentException("Unexpected string value '" + s + "'");
 	}
-
+	
   @Override
   @JsonValue
   public String toString() {

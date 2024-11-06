@@ -1,13 +1,16 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.math.BigDecimal;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -39,7 +42,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("elternVerheiratetZusammen")
   @NotNull
   public Boolean getElternVerheiratetZusammen() {
@@ -58,7 +61,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("elternteilUnbekanntVerstorben")
   public Boolean getElternteilUnbekanntVerstorben() {
     return elternteilUnbekanntVerstorben;
@@ -76,7 +79,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gerichtlicheAlimentenregelung")
   public Boolean getGerichtlicheAlimentenregelung() {
     return gerichtlicheAlimentenregelung;
@@ -94,7 +97,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("mutterUnbekanntVerstorben")
   public ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund getMutterUnbekanntVerstorben() {
     return mutterUnbekanntVerstorben;
@@ -112,7 +115,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("mutterUnbekanntGrund")
   public ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund getMutterUnbekanntGrund() {
     return mutterUnbekanntGrund;
@@ -130,7 +133,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("mutterWiederverheiratet")
   public Boolean getMutterWiederverheiratet() {
     return mutterWiederverheiratet;
@@ -148,7 +151,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vaterUnbekanntVerstorben")
   public ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund getVaterUnbekanntVerstorben() {
     return vaterUnbekanntVerstorben;
@@ -166,7 +169,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vaterUnbekanntGrund")
   public ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund getVaterUnbekanntGrund() {
     return vaterUnbekanntGrund;
@@ -184,7 +187,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vaterWiederverheiratet")
   public Boolean getVaterWiederverheiratet() {
     return vaterWiederverheiratet;
@@ -202,7 +205,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("sorgerecht")
   public ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung getSorgerecht() {
     return sorgerecht;
@@ -220,7 +223,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("obhut")
   public ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung getObhut() {
     return obhut;
@@ -239,7 +242,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("obhutMutter")
   public BigDecimal getObhutMutter() {
     return obhutMutter;
@@ -258,7 +261,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("obhutVater")
   public BigDecimal getObhutVater() {
     return obhutVater;
@@ -276,7 +279,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("werZahltAlimente")
   public ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung getWerZahltAlimente() {
     return werZahltAlimente;
@@ -322,7 +325,7 @@ public class FamiliensituationUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class FamiliensituationUpdateDto {\n");
-
+    
     sb.append("    elternVerheiratetZusammen: ").append(toIndentedString(elternVerheiratetZusammen)).append("\n");
     sb.append("    elternteilUnbekanntVerstorben: ").append(toIndentedString(elternteilUnbekanntVerstorben)).append("\n");
     sb.append("    gerichtlicheAlimentenregelung: ").append(toIndentedString(gerichtlicheAlimentenregelung)).append("\n");

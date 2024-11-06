@@ -1,12 +1,17 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -26,7 +31,7 @@ public class SachbearbeiterZuordnungStammdatenListDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("sachbearbeiter")
   public UUID getSachbearbeiter() {
     return sachbearbeiter;
@@ -44,7 +49,7 @@ public class SachbearbeiterZuordnungStammdatenListDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("zuordnung")
   public SachbearbeiterZuordnungStammdatenDto getZuordnung() {
     return zuordnung;
@@ -78,7 +83,7 @@ public class SachbearbeiterZuordnungStammdatenListDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SachbearbeiterZuordnungStammdatenListDto {\n");
-
+    
     sb.append("    sachbearbeiter: ").append(toIndentedString(sachbearbeiter)).append("\n");
     sb.append("    zuordnung: ").append(toIndentedString(zuordnung)).append("\n");
     sb.append("}");

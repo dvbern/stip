@@ -1,14 +1,19 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Resultat der Berechnung (gesamtes Gesuch)
@@ -31,7 +36,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("berechnung")
   @NotNull
   public Integer getBerechnung() {
@@ -51,7 +56,7 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("tranchenBerechnungsresultate")
   @NotNull
   public List<TranchenBerechnungsresultatDto> getTranchenBerechnungsresultate() {
@@ -102,7 +107,7 @@ public class BerechnungsresultatDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BerechnungsresultatDto {\n");
-
+    
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("}");

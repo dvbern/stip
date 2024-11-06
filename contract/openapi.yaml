@@ -2678,8 +2678,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchDashboardItem'
-        editable:
-          type: boolean
       allOf:
         - $ref: '#/components/schemas/Ausbildung'
     GesuchDashboardItem:
@@ -3288,6 +3286,8 @@ components:
           $ref: '#/components/schemas/AusbildungsStatus'
         ausbildungsgang:
           $ref: '#/components/schemas/Ausbildungsgang'
+        editable:
+          type: boolean
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     AusbildungUpdate:

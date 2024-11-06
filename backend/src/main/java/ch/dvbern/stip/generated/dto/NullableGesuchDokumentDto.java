@@ -1,11 +1,16 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -24,7 +29,7 @@ public class NullableGesuchDokumentDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("value")
   public GesuchDokumentDto getValue() {
     return value;
@@ -57,7 +62,7 @@ public class NullableGesuchDokumentDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NullableGesuchDokumentDto {\n");
-
+    
     sb.append("    value: ").append(toIndentedString(value)).append("\n");
     sb.append("}");
     return sb.toString();

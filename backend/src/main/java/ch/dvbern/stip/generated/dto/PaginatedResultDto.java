@@ -1,11 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -26,7 +30,7 @@ public class PaginatedResultDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("page")
   public Integer getPage() {
     return page;
@@ -44,7 +48,7 @@ public class PaginatedResultDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("pageSize")
   public Integer getPageSize() {
     return pageSize;
@@ -62,7 +66,7 @@ public class PaginatedResultDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("totalEntries")
   public Integer getTotalEntries() {
     return totalEntries;
@@ -97,7 +101,7 @@ public class PaginatedResultDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PaginatedResultDto {\n");
-
+    
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    totalEntries: ").append(toIndentedString(totalEntries)).append("\n");

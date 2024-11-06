@@ -1,14 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -46,7 +47,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("nettoerwerbseinkommen")
   @NotNull
   public Integer getNettoerwerbseinkommen() {
@@ -65,7 +66,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("fahrkosten")
   @NotNull
   public Integer getFahrkosten() {
@@ -84,7 +85,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("verdienstRealisiert")
   @NotNull
   public Boolean getVerdienstRealisiert() {
@@ -104,7 +105,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("alimente")
   public Integer getAlimente() {
     return alimente;
@@ -123,7 +124,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("zulagen")
   public Integer getZulagen() {
     return zulagen;
@@ -142,7 +143,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("renten")
   public Integer getRenten() {
     return renten;
@@ -160,7 +161,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("eoLeistungen")
   public Integer getEoLeistungen() {
     return eoLeistungen;
@@ -178,7 +179,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ergaenzungsleistungen")
   public Integer getErgaenzungsleistungen() {
     return ergaenzungsleistungen;
@@ -196,7 +197,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("beitraege")
   public Integer getBeitraege() {
     return beitraege;
@@ -215,7 +216,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungskostenSekundarstufeZwei")
   public Integer getAusbildungskostenSekundarstufeZwei() {
     return ausbildungskostenSekundarstufeZwei;
@@ -234,7 +235,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungskostenTertiaerstufe")
   public Integer getAusbildungskostenTertiaerstufe() {
     return ausbildungskostenTertiaerstufe;
@@ -252,7 +253,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten")
   public Integer getWohnkosten() {
     return wohnkosten;
@@ -271,7 +272,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wgWohnend")
   public Boolean getWgWohnend() {
     return wgWohnend;
@@ -290,7 +291,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("willDarlehen")
   public Boolean getWillDarlehen() {
     return willDarlehen;
@@ -309,7 +310,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("auswaertigeMittagessenProWoche")
   public Integer getAuswaertigeMittagessenProWoche() {
     return auswaertigeMittagessenProWoche;
@@ -328,7 +329,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("betreuungskostenKinder")
   public Integer getBetreuungskostenKinder() {
     return betreuungskostenKinder;
@@ -349,7 +350,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("veranlagungsCode")
  @Min(0) @Max(99)  public Integer getVeranlagungsCode() {
     return veranlagungsCode;
@@ -370,7 +371,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("steuerjahr")
  @Min(0) @Max(99999)  public Integer getSteuerjahr() {
     return steuerjahr;
@@ -391,7 +392,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vermoegen")
  @Min(0) @Max(2147483647)  public Integer getVermoegen() {
     return vermoegen;
@@ -412,7 +413,7 @@ public class EinnahmenKostenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("steuernKantonGemeinde")
  @Min(0) @Max(2147483647)  public Integer getSteuernKantonGemeinde() {
     return steuernKantonGemeinde;
@@ -464,7 +465,7 @@ public class EinnahmenKostenDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class EinnahmenKostenDto {\n");
-
+    
     sb.append("    nettoerwerbseinkommen: ").append(toIndentedString(nettoerwerbseinkommen)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    verdienstRealisiert: ").append(toIndentedString(verdienstRealisiert)).append("\n");

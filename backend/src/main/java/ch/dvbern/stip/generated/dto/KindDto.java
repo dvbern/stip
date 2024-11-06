@@ -1,14 +1,17 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
+import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -33,7 +36,7 @@ public class KindDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vorname")
   @NotNull
   public String getVorname() {
@@ -53,7 +56,7 @@ public class KindDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("geburtsdatum")
   @NotNull
   public LocalDate getGeburtsdatum() {
@@ -72,7 +75,7 @@ public class KindDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungssituation")
   @NotNull
   public ch.dvbern.stip.api.common.type.Ausbildungssituation getAusbildungssituation() {
@@ -91,7 +94,7 @@ public class KindDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnsitzAnteilPia")
   @NotNull
   public Integer getWohnsitzAnteilPia() {
@@ -110,7 +113,7 @@ public class KindDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("nachname")
   @NotNull
   public String getNachname() {
@@ -129,7 +132,7 @@ public class KindDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -147,7 +150,7 @@ public class KindDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("erhalteneAlimentebeitraege")
   public Integer getErhalteneAlimentebeitraege() {
     return erhalteneAlimentebeitraege;
@@ -186,7 +189,7 @@ public class KindDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class KindDto {\n");
-
+    
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");

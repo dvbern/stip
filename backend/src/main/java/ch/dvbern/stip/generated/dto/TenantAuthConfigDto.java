@@ -1,12 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -26,7 +29,7 @@ public class TenantAuthConfigDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("authServerUrl")
   @NotNull
   public String getAuthServerUrl() {
@@ -45,7 +48,7 @@ public class TenantAuthConfigDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("realm")
   @NotNull
   public String getRealm() {
@@ -80,7 +83,7 @@ public class TenantAuthConfigDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TenantAuthConfigDto {\n");
-
+    
     sb.append("    authServerUrl: ").append(toIndentedString(authServerUrl)).append("\n");
     sb.append("    realm: ").append(toIndentedString(realm)).append("\n");
     sb.append("}");

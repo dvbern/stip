@@ -1,13 +1,16 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -32,7 +35,7 @@ public class AdresseDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("land")
   @NotNull
   public ch.dvbern.stip.api.stammdaten.type.Land getLand() {
@@ -51,7 +54,7 @@ public class AdresseDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("strasse")
   @NotNull
   public String getStrasse() {
@@ -70,7 +73,7 @@ public class AdresseDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("plz")
   @NotNull
   public String getPlz() {
@@ -89,7 +92,7 @@ public class AdresseDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ort")
   @NotNull
   public String getOrt() {
@@ -108,7 +111,7 @@ public class AdresseDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -126,7 +129,7 @@ public class AdresseDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("coAdresse")
   public String getCoAdresse() {
     return coAdresse;
@@ -144,7 +147,7 @@ public class AdresseDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("hausnummer")
   public String getHausnummer() {
     return hausnummer;
@@ -183,7 +186,7 @@ public class AdresseDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AdresseDto {\n");
-
+    
     sb.append("    land: ").append(toIndentedString(land)).append("\n");
     sb.append("    strasse: ").append(toIndentedString(strasse)).append("\n");
     sb.append("    plz: ").append(toIndentedString(plz)).append("\n");

@@ -1,14 +1,18 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.AdresseDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
+import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -41,7 +45,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vorname")
   @NotNull
   public String getVorname() {
@@ -60,7 +64,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("adresse")
   @NotNull
   public AdresseDto getAdresse() {
@@ -79,7 +83,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("identischerZivilrechtlicherWohnsitz")
   @NotNull
   public Boolean getIdentischerZivilrechtlicherWohnsitz() {
@@ -98,7 +102,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("telefonnummer")
   @NotNull
   public String getTelefonnummer() {
@@ -118,7 +122,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("geburtsdatum")
   @NotNull
   public LocalDate getGeburtsdatum() {
@@ -137,7 +141,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausweisbFluechtling")
   @NotNull
   public Boolean getAusweisbFluechtling() {
@@ -156,7 +160,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("elternTyp")
   @NotNull
   public ch.dvbern.stip.api.eltern.type.ElternTyp getElternTyp() {
@@ -175,7 +179,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("nachname")
   @NotNull
   public String getNachname() {
@@ -188,14 +192,14 @@ public class ElternUpdateDto  implements Serializable {
   }
 
   /**
-   * &#39;Falls steuerdatenTyp &#x3D; Familie: Ergaenzungsleistungen Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Ergaenzungsleistungen steuerdatenTyp&#39;
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Ergaenzungsleistungen Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Ergaenzungsleistungen steuerdatenTyp&#39; 
    **/
   public ElternUpdateDto ergaenzungsleistungen(Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
     return this;
   }
 
-
+  
   @JsonProperty("ergaenzungsleistungen")
   @NotNull
   public Integer getErgaenzungsleistungen() {
@@ -208,14 +212,14 @@ public class ElternUpdateDto  implements Serializable {
   }
 
   /**
-   * &#39;Falls steuerdatenTyp &#x3D; Familie: Sozialhilfebeitraege Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Sozialhilfebeitraege steuerdatenTyp&#39;
+   * &#39;Falls steuerdatenTyp &#x3D; Familie: Sozialhilfebeitraege Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Sozialhilfebeitraege steuerdatenTyp&#39; 
    **/
   public ElternUpdateDto sozialhilfebeitraege(Integer sozialhilfebeitraege) {
     this.sozialhilfebeitraege = sozialhilfebeitraege;
     return this;
   }
 
-
+  
   @JsonProperty("sozialhilfebeitraege")
   @NotNull
   public Integer getSozialhilfebeitraege() {
@@ -235,7 +239,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("wohnkosten")
   @NotNull
   public Integer getWohnkosten() {
@@ -255,7 +259,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("identischerZivilrechtlicherWohnsitzOrt")
   public String getIdentischerZivilrechtlicherWohnsitzOrt() {
     return identischerZivilrechtlicherWohnsitzOrt;
@@ -274,7 +278,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("identischerZivilrechtlicherWohnsitzPLZ")
   public String getIdentischerZivilrechtlicherWohnsitzPLZ() {
     return identischerZivilrechtlicherWohnsitzPLZ;
@@ -292,7 +296,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("sozialversicherungsnummer")
   public String getSozialversicherungsnummer() {
     return sozialversicherungsnummer;
@@ -310,7 +314,7 @@ public class ElternUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -357,7 +361,7 @@ public class ElternUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ElternUpdateDto {\n");
-
+    
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitz: ").append(toIndentedString(identischerZivilrechtlicherWohnsitz)).append("\n");

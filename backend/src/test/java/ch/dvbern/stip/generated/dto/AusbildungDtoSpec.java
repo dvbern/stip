@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   AusbildungDtoSpec.JSON_PROPERTY_STATUS,
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNGSGANG,
+  AusbildungDtoSpec.JSON_PROPERTY_EDITABLE,
   AusbildungDtoSpec.JSON_PROPERTY_ID,
   AusbildungDtoSpec.JSON_PROPERTY_FALL_ID,
   AusbildungDtoSpec.JSON_PROPERTY_FACHRICHTUNG,
@@ -53,6 +54,9 @@ public class AusbildungDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNGSGANG = "ausbildungsgang";
   private AusbildungsgangDtoSpec ausbildungsgang;
+
+  public static final String JSON_PROPERTY_EDITABLE = "editable";
+  private Boolean editable;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -139,6 +143,32 @@ public class AusbildungDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAusbildungsgang(AusbildungsgangDtoSpec ausbildungsgang) {
     this.ausbildungsgang = ausbildungsgang;
+  }
+
+
+  public AusbildungDtoSpec editable(Boolean editable) {
+    
+    this.editable = editable;
+    return this;
+  }
+
+   /**
+   * Get editable
+   * @return editable
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EDITABLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getEditable() {
+    return editable;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EDITABLE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEditable(Boolean editable) {
+    this.editable = editable;
   }
 
 
@@ -438,6 +468,7 @@ public class AusbildungDtoSpec {
     AusbildungDtoSpec ausbildung = (AusbildungDtoSpec) o;
     return Objects.equals(this.status, ausbildung.status) &&
         Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang) &&
+        Objects.equals(this.editable, ausbildung.editable) &&
         Objects.equals(this.id, ausbildung.id) &&
         Objects.equals(this.fallId, ausbildung.fallId) &&
         Objects.equals(this.fachrichtung, ausbildung.fachrichtung) &&
@@ -453,7 +484,7 @@ public class AusbildungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, ausbildungsgang, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(status, ausbildungsgang, editable, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -462,6 +493,7 @@ public class AusbildungDtoSpec {
     sb.append("class AusbildungDtoSpec {\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
+    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");

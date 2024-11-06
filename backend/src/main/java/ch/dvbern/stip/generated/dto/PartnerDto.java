@@ -1,13 +1,17 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.AdresseDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -34,7 +38,7 @@ public class PartnerDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("adresse")
   @NotNull
   public AdresseDto getAdresse() {
@@ -53,7 +57,7 @@ public class PartnerDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vorname")
   @NotNull
   public String getVorname() {
@@ -72,7 +76,7 @@ public class PartnerDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("geburtsdatum")
   @NotNull
   public LocalDate getGeburtsdatum() {
@@ -91,7 +95,7 @@ public class PartnerDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("sozialversicherungsnummer")
   @NotNull
   public String getSozialversicherungsnummer() {
@@ -110,7 +114,7 @@ public class PartnerDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("nachname")
   @NotNull
   public String getNachname() {
@@ -129,7 +133,7 @@ public class PartnerDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungMitEinkommenOderErwerbstaetig")
   public Boolean getAusbildungMitEinkommenOderErwerbstaetig() {
     return ausbildungMitEinkommenOderErwerbstaetig;
@@ -148,7 +152,7 @@ public class PartnerDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("jahreseinkommen")
   public Integer getJahreseinkommen() {
     return jahreseinkommen;
@@ -167,7 +171,7 @@ public class PartnerDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("fahrkosten")
   public Integer getFahrkosten() {
     return fahrkosten;
@@ -186,7 +190,7 @@ public class PartnerDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("verpflegungskosten")
   public Integer getVerpflegungskosten() {
     return verpflegungskosten;
@@ -227,7 +231,7 @@ public class PartnerDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PartnerDto {\n");
-
+    
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");

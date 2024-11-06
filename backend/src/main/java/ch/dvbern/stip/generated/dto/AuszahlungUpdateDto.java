@@ -1,12 +1,16 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.AdresseDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -29,7 +33,7 @@ public class AuszahlungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("vorname")
   @NotNull
   public String getVorname() {
@@ -48,7 +52,7 @@ public class AuszahlungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("adresse")
   @NotNull
   public AdresseDto getAdresse() {
@@ -67,7 +71,7 @@ public class AuszahlungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("iban")
   @NotNull
   public String getIban() {
@@ -86,7 +90,7 @@ public class AuszahlungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("nachname")
   @NotNull
   public String getNachname() {
@@ -105,7 +109,7 @@ public class AuszahlungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("kontoinhaber")
   @NotNull
   public ch.dvbern.stip.api.auszahlung.type.Kontoinhaber getKontoinhaber() {
@@ -143,7 +147,7 @@ public class AuszahlungUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AuszahlungUpdateDto {\n");
-
+    
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");

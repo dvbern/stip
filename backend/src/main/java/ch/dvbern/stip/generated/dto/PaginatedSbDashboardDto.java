@@ -1,13 +1,19 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.SbDashboardGesuchDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -29,7 +35,7 @@ public class PaginatedSbDashboardDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("page")
   public Integer getPage() {
     return page;
@@ -47,7 +53,7 @@ public class PaginatedSbDashboardDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("pageSize")
   public Integer getPageSize() {
     return pageSize;
@@ -65,7 +71,7 @@ public class PaginatedSbDashboardDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("totalEntries")
   public Integer getTotalEntries() {
     return totalEntries;
@@ -83,7 +89,7 @@ public class PaginatedSbDashboardDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("entries")
   public List<SbDashboardGesuchDto> getEntries() {
     return entries;
@@ -135,7 +141,7 @@ public class PaginatedSbDashboardDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PaginatedSbDashboardDto {\n");
-
+    
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    totalEntries: ").append(toIndentedString(totalEntries)).append("\n");

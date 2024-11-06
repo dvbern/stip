@@ -1,12 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * PLZ und ort für Type ahead funktionalitaet
@@ -29,7 +32,7 @@ public class PlzDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("plz")
   @NotNull
   public String getPlz() {
@@ -48,7 +51,7 @@ public class PlzDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ort")
   @NotNull
   public String getOrt() {
@@ -67,7 +70,7 @@ public class PlzDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("kantonskuerzel")
   @NotNull
   public String getKantonskuerzel() {
@@ -103,7 +106,7 @@ public class PlzDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PlzDto {\n");
-
+    
     sb.append("    plz: ").append(toIndentedString(plz)).append("\n");
     sb.append("    ort: ").append(toIndentedString(ort)).append("\n");
     sb.append("    kantonskuerzel: ").append(toIndentedString(kantonskuerzel)).append("\n");

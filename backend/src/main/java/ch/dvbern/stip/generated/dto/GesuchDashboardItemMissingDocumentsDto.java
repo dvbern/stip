@@ -1,13 +1,16 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -27,7 +30,7 @@ public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("trancheId")
   @NotNull
   public UUID getTrancheId() {
@@ -46,7 +49,7 @@ public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("count")
   @NotNull
   public Integer getCount() {
@@ -81,7 +84,7 @@ public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDashboardItemMissingDocumentsDto {\n");
-
+    
     sb.append("    trancheId: ").append(toIndentedString(trancheId)).append("\n");
     sb.append("    count: ").append(toIndentedString(count)).append("\n");
     sb.append("}");

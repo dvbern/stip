@@ -35,6 +35,7 @@ public class AusbildungDto  implements Serializable {
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
   private @Valid AusbildungsgangDto ausbildungsgang;
+  private @Valid Boolean editable;
 
   /**
    **/
@@ -281,6 +282,24 @@ public class AusbildungDto  implements Serializable {
     this.ausbildungsgang = ausbildungsgang;
   }
 
+  /**
+   **/
+  public AusbildungDto editable(Boolean editable) {
+    this.editable = editable;
+    return this;
+  }
+
+  
+  @JsonProperty("editable")
+  public Boolean getEditable() {
+    return editable;
+  }
+
+  @JsonProperty("editable")
+  public void setEditable(Boolean editable) {
+    this.editable = editable;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -303,12 +322,13 @@ public class AusbildungDto  implements Serializable {
         Objects.equals(this.alternativeAusbildungsgang, ausbildung.alternativeAusbildungsgang) &&
         Objects.equals(this.ausbildungsort, ausbildung.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildung.isAusbildungAusland) &&
-        Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang);
+        Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang) &&
+        Objects.equals(this.editable, ausbildung.editable);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang);
+    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang, editable);
   }
 
   @Override
@@ -329,6 +349,7 @@ public class AusbildungDto  implements Serializable {
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
+    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("}");
     return sb.toString();
   }

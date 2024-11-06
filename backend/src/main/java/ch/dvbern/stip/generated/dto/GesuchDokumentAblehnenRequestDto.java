@@ -1,11 +1,16 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Meta information um ein GesuchDokument abzulehnen
@@ -26,7 +31,7 @@ public class GesuchDokumentAblehnenRequestDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("kommentar")
   public GesuchDokumentKommentarDto getKommentar() {
     return kommentar;
@@ -59,7 +64,7 @@ public class GesuchDokumentAblehnenRequestDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentAblehnenRequestDto {\n");
-
+    
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("}");
     return sb.toString();

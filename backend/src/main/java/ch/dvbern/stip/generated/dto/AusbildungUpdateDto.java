@@ -1,13 +1,17 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ch.dvbern.stip.generated.dto.AusbildungsPensumDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -37,7 +41,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("fallId")
   @NotNull
   public UUID getFallId() {
@@ -56,7 +60,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("fachrichtung")
   @NotNull
   public String getFachrichtung() {
@@ -76,7 +80,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungBegin")
   @NotNull
   public String getAusbildungBegin() {
@@ -96,7 +100,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungEnd")
   @NotNull
   public String getAusbildungEnd() {
@@ -115,7 +119,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("pensum")
   @NotNull
   public AusbildungsPensumDto getPensum() {
@@ -134,7 +138,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -152,7 +156,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungNichtGefunden")
   public Boolean getAusbildungNichtGefunden() {
     return ausbildungNichtGefunden;
@@ -171,7 +175,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("alternativeAusbildungsstaette")
   public String getAlternativeAusbildungsstaette() {
     return alternativeAusbildungsstaette;
@@ -190,7 +194,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("alternativeAusbildungsgang")
   public String getAlternativeAusbildungsgang() {
     return alternativeAusbildungsgang;
@@ -209,7 +213,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungsort")
   public String getAusbildungsort() {
     return ausbildungsort;
@@ -227,7 +231,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("isAusbildungAusland")
   public Boolean getIsAusbildungAusland() {
     return isAusbildungAusland;
@@ -245,7 +249,7 @@ public class AusbildungUpdateDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildungsgangId")
   public UUID getAusbildungsgangId() {
     return ausbildungsgangId;
@@ -289,7 +293,7 @@ public class AusbildungUpdateDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungUpdateDto {\n");
-
+    
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");

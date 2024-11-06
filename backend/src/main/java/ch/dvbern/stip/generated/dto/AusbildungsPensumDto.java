@@ -1,5 +1,9 @@
 package ch.dvbern.stip.generated.dto;
 
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -7,9 +11,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Gets or Sets AusbildungsPensum
  */
 public enum AusbildungsPensumDto {
-
+  
   VOLLZEIT("VOLLZEIT"),
-
+  
   TEILZEIT("TEILZEIT");
 
   private String value;
@@ -32,7 +36,7 @@ public enum AusbildungsPensumDto {
       }
       throw new IllegalArgumentException("Unexpected string value '" + s + "'");
 	}
-
+	
   @Override
   @JsonValue
   public String toString() {

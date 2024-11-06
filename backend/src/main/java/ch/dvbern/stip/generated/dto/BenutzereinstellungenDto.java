@@ -1,12 +1,16 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -26,7 +30,7 @@ public class BenutzereinstellungenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -44,7 +48,7 @@ public class BenutzereinstellungenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("digitaleKommunikation")
   public Boolean getDigitaleKommunikation() {
     return digitaleKommunikation;
@@ -78,7 +82,7 @@ public class BenutzereinstellungenDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BenutzereinstellungenDto {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    digitaleKommunikation: ").append(toIndentedString(digitaleKommunikation)).append("\n");
     sb.append("}");

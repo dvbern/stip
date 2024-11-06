@@ -1,12 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -27,7 +30,7 @@ public class ValidationWarningDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("messageTemplate")
   @NotNull
   public String getMessageTemplate() {
@@ -46,7 +49,7 @@ public class ValidationWarningDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("message")
   @NotNull
   public String getMessage() {
@@ -65,7 +68,7 @@ public class ValidationWarningDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("propertyPath")
   public String getPropertyPath() {
     return propertyPath;
@@ -100,7 +103,7 @@ public class ValidationWarningDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ValidationWarningDto {\n");
-
+    
     sb.append("    messageTemplate: ").append(toIndentedString(messageTemplate)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    propertyPath: ").append(toIndentedString(propertyPath)).append("\n");

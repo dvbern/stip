@@ -1,13 +1,16 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -30,7 +33,7 @@ public class BildungskategorieDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("bezeichnungDe")
   @NotNull
   public String getBezeichnungDe() {
@@ -49,7 +52,7 @@ public class BildungskategorieDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("bezeichnungFr")
   @NotNull
   public String getBezeichnungFr() {
@@ -68,7 +71,7 @@ public class BildungskategorieDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("bildungsstufe")
   @NotNull
   public ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe getBildungsstufe() {
@@ -87,7 +90,7 @@ public class BildungskategorieDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("bfs")
   @NotNull
   public Integer getBfs() {
@@ -106,7 +109,7 @@ public class BildungskategorieDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -144,7 +147,7 @@ public class BildungskategorieDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BildungskategorieDto {\n");
-
+    
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    bildungsstufe: ").append(toIndentedString(bildungsstufe)).append("\n");

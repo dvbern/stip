@@ -34,7 +34,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_GESUCHS,
-  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_EDITABLE,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FALL_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FACHRICHTUNG,
@@ -52,9 +51,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungDashboardItemDtoSpec {
   public static final String JSON_PROPERTY_GESUCHS = "gesuchs";
   private List<GesuchDashboardItemDtoSpec> gesuchs;
-
-  public static final String JSON_PROPERTY_EDITABLE = "editable";
-  private Boolean editable;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -123,32 +119,6 @@ public class AusbildungDashboardItemDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setGesuchs(List<GesuchDashboardItemDtoSpec> gesuchs) {
     this.gesuchs = gesuchs;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec editable(Boolean editable) {
-    
-    this.editable = editable;
-    return this;
-  }
-
-   /**
-   * Get editable
-   * @return editable
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EDITABLE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getEditable() {
-    return editable;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_EDITABLE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEditable(Boolean editable) {
-    this.editable = editable;
   }
 
 
@@ -447,7 +417,6 @@ public class AusbildungDashboardItemDtoSpec {
     }
     AusbildungDashboardItemDtoSpec ausbildungDashboardItem = (AusbildungDashboardItemDtoSpec) o;
     return Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs) &&
-        Objects.equals(this.editable, ausbildungDashboardItem.editable) &&
         Objects.equals(this.id, ausbildungDashboardItem.id) &&
         Objects.equals(this.fallId, ausbildungDashboardItem.fallId) &&
         Objects.equals(this.fachrichtung, ausbildungDashboardItem.fachrichtung) &&
@@ -463,7 +432,7 @@ public class AusbildungDashboardItemDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchs, editable, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(gesuchs, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -471,7 +440,6 @@ public class AusbildungDashboardItemDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungDashboardItemDtoSpec {\n");
     sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
-    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");

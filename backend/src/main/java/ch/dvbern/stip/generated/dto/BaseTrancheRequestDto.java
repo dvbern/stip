@@ -1,12 +1,16 @@
 package ch.dvbern.stip.generated.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
@@ -27,7 +31,7 @@ public class BaseTrancheRequestDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("start")
   public LocalDate getStart() {
     return start;
@@ -45,7 +49,7 @@ public class BaseTrancheRequestDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("end")
   public LocalDate getEnd() {
     return end;
@@ -63,7 +67,7 @@ public class BaseTrancheRequestDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("comment")
   public String getComment() {
     return comment;
@@ -98,7 +102,7 @@ public class BaseTrancheRequestDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BaseTrancheRequestDto {\n");
-
+    
     sb.append("    start: ").append(toIndentedString(start)).append("\n");
     sb.append("    end: ").append(toIndentedString(end)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
