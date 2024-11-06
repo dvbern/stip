@@ -5,19 +5,21 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { endOfDay, format } from 'date-fns';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { AppType, SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   Ausbildung,
   AusbildungService,
   AusbildungUpdate,
-  Gesuchstatus,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
+  cachedResult,
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  success,
+  transformErrorSig,
 } from '@dv/shared/util/remote-data';
 
 type AusbildungState = {
@@ -27,11 +29,6 @@ type AusbildungState = {
 const initialState: AusbildungState = {
   ausbildung: initial(),
 };
-
-const readonlyMap = {
-  'gesuch-app': 'IN_BEARBEITUNG_GS',
-  'sachbearbeitung-app': 'IN_BEARBEITUNG_SB',
-} satisfies Record<AppType, Gesuchstatus>;
 
 @Injectable()
 export class AusbildungStore extends signalStore(
@@ -50,8 +47,14 @@ export class AusbildungStore extends signalStore(
       ausbildung,
       minEndDatum,
       minEndDatumFormatted: format(minEndDatum, 'MM.yyyy'),
-      writeableWhen: readonlyMap[this.config.appType],
+      isEditable: true && this.config.isSachbearbeitungApp,
     };
+  });
+
+  ausbildungFailureViewSig = computed(() => {
+    const ausbildung = transformErrorSig(this.ausbildung());
+
+    return ausbildung;
   });
 
   loadAusbildung$ = rxMethod<{ ausbildungId: string }>(
@@ -76,16 +79,21 @@ export class AusbildungStore extends signalStore(
     onSuccess: () => void;
   }>(
     pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          ausbildung: cachedPending(state.ausbildung),
+      tap(({ ausbildung }) => {
+        patchState(this, () => ({
+          ausbildung: cachedPending(success(ausbildung as Ausbildung)),
         }));
       }),
       switchMap(({ ausbildung: ausbildungUpdate, onSuccess }) =>
         this.ausbildungService.createAusbildung$({ ausbildungUpdate }).pipe(
           handleApiResponse(
             (ausbildung) => {
-              patchState(this, { ausbildung });
+              patchState(this, () => ({
+                ausbildung: cachedResult(
+                  success(ausbildungUpdate as Ausbildung),
+                  ausbildung,
+                ),
+              }));
             },
             {
               onSuccess,

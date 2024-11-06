@@ -34,6 +34,7 @@ import { GesuchAppUiDashboardGesuchComponent } from './gesuch-app-ui-dashboard-g
 })
 export class GesuchAppUiDashboardAusbildungComponent {
   ausbildungSig = input.required<SharedModelGsAusbildungView>();
+  deleteAusbildung = output<SharedModelGsAusbildungView>();
   deleteGesuch = output<string>();
   deleteAenderung = output<string>();
   aenderungMelden = output<AenderungMelden>();

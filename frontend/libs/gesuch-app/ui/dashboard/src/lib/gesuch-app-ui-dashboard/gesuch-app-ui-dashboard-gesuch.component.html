@@ -81,18 +81,21 @@
       >
         @if (ausbildungsStatusSig() === 'AKTIV') {
           @let trancheId = gesuch.missingDocuments?.trancheId;
-          @if (gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
+          @if (gesuch.canEdit) {
             <a class="btn btn-primary" data-testid="cockpit-gesuch-edit" [routerLink]="['/gesuch', gesuch.id]">
               {{ 'gesuch-app.dashboard.gesuch.edit' | translate }}
             </a>
-            <button
-              type="button"
-              class="btn btn-outline-primary"
-              data-testid="gesuch-app.dashboard.gesuch.delete"
-              (click)="deleteGesuch.emit(gesuch.id)"
-            >
-              <span>{{ 'gesuch-app.dashboard.gesuch.delete' | translate }}</span>
-            </button>
+
+            @if (gesuch.canDelete) {
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                data-testid="gesuch-app.dashboard.gesuch.delete"
+                (click)="deleteGesuch.emit(gesuch.id)"
+              >
+                <span>{{ 'gesuch-app.dashboard.gesuch.delete' | translate }}</span>
+              </button>
+            }
           } @else if (trancheId) {
             <a
               class="btn btn-primary"

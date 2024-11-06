@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   OnInit,
   Signal,
   computed,
@@ -25,7 +26,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { addYears, format } from 'date-fns';
+import { addYears } from 'date-fns';
 import { startWith } from 'rxjs';
 
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
@@ -41,6 +42,7 @@ import { getTranslatableProp, isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
@@ -58,6 +60,11 @@ import {
 } from '@dv/shared/util/validator-date';
 import { capitalized } from '@dv/shared/util-fn/string-helper';
 
+const AusbildungRangeControls = ['ausbildungBegin', 'ausbildungEnd'] as const;
+type AusbildungRangeControls = (typeof AusbildungRangeControls)[number];
+const KnowErrorKeys = ['periodeNotFound'] as const;
+type KnowErrors = { [K in (typeof KnowErrorKeys)[number]]?: true };
+
 @Component({
   selector: 'dv-shared-feature-ausbildung',
   standalone: true,
@@ -72,6 +79,7 @@ import { capitalized } from '@dv/shared/util-fn/string-helper';
     MatAutocompleteModule,
     MatSelectModule,
     TranslatedPropertyPipe,
+    SharedUiFormReadonlyDirective,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
     SharedUiFormFieldDirective,
@@ -85,11 +93,13 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private elementRef = inject(ElementRef);
   private globalNotificationStore = inject(GlobalNotificationStore);
   readonly ausbildungspensumValues = Object.values(AusbildungsPensum);
 
   fallIdSig = input.required<string | null>();
   ausbildungSaved = output<void>();
+
   ausbildungStore = inject(AusbildungStore);
   ausbildungsstatteStore = inject(AusbildungsstaetteStore);
   form = this.formBuilder.group({
@@ -108,6 +118,14 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     }),
   });
 
+  private usageTypeSig = computed(() => {
+    const fallId = this.fallIdSig();
+    const gesuchFallId = this.gesuchViewSig().cache.gesuch?.fallId;
+
+    return fallId
+      ? { type: 'dialog' as const, fallId }
+      : { type: 'gesuch-form' as const, fallId: gesuchFallId };
+  });
   private ausbildungsstaetteSig = toSignal(
     this.form.controls.ausbildungsstaette.valueChanges,
   );
@@ -120,14 +138,12 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private endChangedSig = toSignal(
     this.form.controls.ausbildungEnd.valueChanges,
   );
-  private isWritableSig = computed(() => {
+  isEditableSig = computed(() => {
     const {
       cache: { gesuch },
     } = this.gesuchViewSig();
     return (
-      !isDefined(gesuch) ||
-      this.ausbildungStore.ausbildungViewSig().writeableWhen ===
-        gesuch.gesuchStatus
+      !isDefined(gesuch) || this.ausbildungStore.ausbildungViewSig().isEditable
     );
   });
 
@@ -135,6 +151,27 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   gesuchViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchCacheView,
   );
+
+  ausbildungSaveErrorSig = computed<KnowErrors>(() => {
+    const error = this.ausbildungStore.ausbildungFailureViewSig();
+
+    switch (error?.messageKey) {
+      case '{jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message}':
+        this.withAusbildungRange((ctrl) => {
+          const errors = { ...(ctrl.errors ?? {}) };
+          KnowErrorKeys.forEach((key) => {
+            delete errors[key];
+          });
+          ctrl.setErrors({ periodeNotFound: true } satisfies KnowErrors);
+        });
+        this.formUtils.focusFirstInvalid(this.elementRef);
+        return {
+          periodeNotFound: true,
+        };
+    }
+
+    return {};
+  });
 
   ausbildungsgangOptionsSig = computed(() => {
     const ausbildungsstaettes =
@@ -266,16 +303,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
           this.ausbildungsstatteStore.ausbildungsstaetteViewSig();
 
         if (ausbildung && ausbildungstaetten) {
-          if (ausbildung.ausbildungBegin && ausbildung.ausbildungEnd) {
-            ausbildung.ausbildungBegin = format(
-              new Date(ausbildung.ausbildungBegin),
-              'MM.yyyy',
-            );
-            ausbildung.ausbildungEnd = format(
-              new Date(ausbildung.ausbildungEnd),
-              'MM.yyyy',
-            );
-          }
           this.form.patchValue({
             ...ausbildung,
             ausbildungsgang: undefined,
@@ -325,7 +352,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsort,
-          !this.isWritableSig() || isAusbildungAusland,
+          !this.isEditableSig() || isAusbildungAusland,
           false,
         );
       },
@@ -340,7 +367,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
     effect(
       () => {
-        const isWritable = this.isWritableSig();
+        const isWritable = this.isEditableSig();
         const staette = staetteSig();
         this.formUtils.setDisabledState(
           this.form.controls.ausbildungsgang,
@@ -372,7 +399,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
     effect(
       () => {
-        const isWritable = this.isWritableSig();
+        const isWritable = this.isEditableSig();
         this.formUtils.setDisabledState(
           this.form.controls.fachrichtung,
           !isWritable ||
@@ -405,10 +432,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   }
 
   markDatesAsTouched() {
-    [
-      this.form.controls.ausbildungBegin,
-      this.form.controls.ausbildungEnd,
-    ].forEach((ctrl) => {
+    this.withAusbildungRange((ctrl) => {
       ctrl.markAsTouched();
       ctrl.updateValueAndValidity();
     });
@@ -425,8 +449,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       return;
     }
 
-    this.onDateBlur(this.form.controls.ausbildungBegin);
-    this.onDateBlur(this.form.controls.ausbildungEnd);
+    this.withAusbildungRange((ctrl) => this.onDateBlur(ctrl));
 
     const { ausbildungsgang: ausbildungsgangId, ...formValues } =
       convertTempFormToRealValues(this.form, ['fachrichtung', 'pensum']);
@@ -435,36 +458,52 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     const ausbildungId =
       this.gesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith.gesuchFormular
         ?.ausbildung.id;
-    const fallId = this.fallIdSig();
-    const gesuchFallId = this.gesuchViewSig().cache.gesuch?.fallId;
-    if (fallId) {
-      this.ausbildungStore.createAusbildung$({
-        ausbildung: {
-          fallId,
-          ...formValues,
-          ausbildungsgangId,
-        },
-        onSuccess: () => {
-          this.ausbildungSaved.emit();
-        },
-      });
-    } else if (ausbildungId && gesuchFallId) {
-      this.ausbildungStore.saveAusbildung$({
-        ausbildungId,
-        ausbildungUpdate: {
-          ...formValues,
-          id: ausbildungId,
-          ausbildungsgangId,
-          fallId: gesuchFallId,
-        },
-        onSuccess: () => {
-          this.globalNotificationStore.createSuccessNotification({
-            messageKey: 'shared.ausbildung.saved.success',
-          });
-        },
-      });
+    const { type, fallId } = this.usageTypeSig();
+
+    switch (type) {
+      case 'dialog': {
+        this.ausbildungStore.createAusbildung$({
+          ausbildung: {
+            fallId: fallId,
+            ...formValues,
+            ausbildungsgangId,
+          },
+          onSuccess: () => {
+            this.ausbildungSaved.emit();
+          },
+        });
+        break;
+      }
+      case 'gesuch-form': {
+        if (!ausbildungId || !fallId) {
+          return;
+        }
+        this.ausbildungStore.saveAusbildung$({
+          ausbildungId,
+          ausbildungUpdate: {
+            ...formValues,
+            id: ausbildungId,
+            ausbildungsgangId,
+            fallId: fallId,
+          },
+          onSuccess: () => {
+            this.globalNotificationStore.createSuccessNotification({
+              messageKey: 'shared.ausbildung.saved.success',
+            });
+          },
+        });
+        break;
+      }
     }
 
     this.form.markAsPristine();
   }
+
+  private withAusbildungRange = (
+    fn: (control: FormControl, type: AusbildungRangeControls) => void,
+  ) => {
+    AusbildungRangeControls.forEach((type) => {
+      fn(this.form.controls[type], type);
+    });
+  };
 }

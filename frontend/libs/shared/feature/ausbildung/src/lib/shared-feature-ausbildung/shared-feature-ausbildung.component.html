@@ -6,6 +6,7 @@
 } @else {
   <form
     [formGroup]="form"
+    [dvSharedUiFormReadonly]="!isEditableSig()"
     data-testid="form-education-form"
     novalidate
     class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-mt-6 tw-pt-4 tw-gap-y-4 tw-gap-x-6"
@@ -32,7 +33,7 @@
           [matAutocomplete]="staetten"
           [placeholder]="'shared.form.select.empty' | translate"
         />
-        @if (form.controls.ausbildungsstaette.value) {
+        @if (form.controls.ausbildungsstaette.value && isEditableSig()) {
           <button
             type="button"
             matSuffix
@@ -158,14 +159,17 @@
       <mat-error *dvSharedUiFormMessageError="'dateFormat'">
         {{ 'shared.form.error.dateFormat' | translate }}
       </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'maxDate'">
+        {{ 'shared.form.error.maxDateFuture' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'periodeNotFound'">
+        {{ 'shared.form.ausbildung.form.error.periodeNotFound' | translate }}
+      </mat-error>
       <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
         {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | translate }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'minDateLebenslauf'">
         {{ 'shared.form.ausbildung.form.error.lebenslaufConflict' | translate }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'maxDate'">
-        {{ 'shared.form.error.maxDateFuture' | translate }}
       </mat-error>
     </mat-form-field>
 
@@ -225,10 +229,12 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="md:tw-col-span-2 lg:tw-col-span-3">
-      <button type="submit" class="btn btn-primary" data-testid="button-save" [disabled]="form.invalid">
-        {{ 'shared.form.save' | translate }}
-      </button>
-    </div>
+    @if (isEditableSig()) {
+      <div class="md:tw-col-span-2 lg:tw-col-span-3">
+        <button type="submit" class="btn btn-primary" data-testid="button-save" [disabled]="form.invalid">
+          {{ 'shared.form.save' | translate }}
+        </button>
+      </div>
+    }
   </form>
 }

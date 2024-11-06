@@ -40,6 +40,7 @@ export class DashboardStore extends signalStore(
     const inactiveAusbildungen: SharedModelGsAusbildungView[] = [];
     fallDashboardItems?.forEach((item) =>
       item.ausbildungDashboardItems?.forEach((ausbildung) => {
+        const hasMoreThanOneGesuche = (ausbildung.gesuchs?.length ?? 0) > 1;
         const gesuchs =
           ausbildung.gesuchs?.map((gesuch) => {
             const einreichefristAbgelaufen = isAfter(
@@ -70,9 +71,12 @@ export class DashboardStore extends signalStore(
                 'yy',
               ),
             ].join('/');
+            const canEdit = gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS';
 
             return {
               ...gesuch,
+              canEdit,
+              canDelete: canEdit && hasMoreThanOneGesuche,
               einreichefristAbgelaufen,
               reduzierterBeitrag,
               einreichefristDays,
@@ -85,6 +89,9 @@ export class DashboardStore extends signalStore(
           : activeAusbildungen
         ).push({
           ...ausbildung,
+          canDelete:
+            !hasMoreThanOneGesuche &&
+            ausbildung.gesuchs?.[0].gesuchStatus === 'IN_BEARBEITUNG_GS',
           ausbildungBegin: dateFromMonthYearString(ausbildung.ausbildungBegin),
           ausbildungEnd: dateFromMonthYearString(ausbildung.ausbildungEnd),
           gesuchs,
