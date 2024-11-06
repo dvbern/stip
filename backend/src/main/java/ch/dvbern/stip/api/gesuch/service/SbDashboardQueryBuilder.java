@@ -80,12 +80,11 @@ public class SbDashboardQueryBuilder {
         query.where(formular.personInAusbildung.geburtsdatum.eq(geburtsdatum));
     }
 
-    public void status(final JPAQuery<Gesuch> query, final Gesuchstatus status) {
-        if (status == Gesuchstatus.IN_BEARBEITUNG_SB) {
-            query.where(tranche.status.eq(GesuchTrancheStatus.UEBERPRUEFEN));
+    public void status(final JPAQuery<Gesuch> query, final GesuchTrancheTyp typ, final String status) {
+        switch (typ) {
+            case TRANCHE -> query.where(tranche.gesuch.gesuchStatus.eq(Gesuchstatus.valueOf(status)));
+            case AENDERUNG -> query.where(tranche.status.eq(GesuchTrancheStatus.valueOf(status)));
         }
-
-        query.where(tranche.gesuch.gesuchStatus.eq(status));
     }
 
     public void bearbeiter(final JPAQuery<Gesuch> query, final String bearbeiter) {

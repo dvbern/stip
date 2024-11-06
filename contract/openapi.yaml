@@ -4227,7 +4227,7 @@ components:
       in: query
       name: status
       schema:
-        $ref: '#/components/schemas/Gesuchstatus'
+        type: string
     bearbeiter:
       in: query
       name: bearbeiter

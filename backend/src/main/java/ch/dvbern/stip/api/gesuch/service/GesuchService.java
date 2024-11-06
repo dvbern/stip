@@ -44,7 +44,6 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -304,7 +303,7 @@ public class GesuchService {
         final String piaNachname,
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
-        final Gesuchstatus status,
+        final String status,
         final String bearbeiter,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
@@ -337,7 +336,7 @@ public class GesuchService {
         }
 
         if (status != null) {
-            sbDashboardQueryBuilder.status(baseQuery, status);
+            sbDashboardQueryBuilder.status(baseQuery, typ, status);
         }
 
         if (bearbeiter != null) {
