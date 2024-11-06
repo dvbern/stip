@@ -39,7 +39,8 @@ import static ch.dvbern.stip.api.util.TestConstants.JURIST_ID;
         "AUSBILDUNG_CREATE",
         "AUSBILDUNG_READ",
         "AUSBILDUNG_UPDATE",
-        "AUSBILDUNG_DELETE"
+        "AUSBILDUNG_DELETE",
+        "GESUCH_READ"
     }
 )
 @OidcSecurity(

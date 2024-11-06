@@ -21,6 +21,7 @@ import java.util.List;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -53,6 +54,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -135,6 +137,62 @@ class GesuchGetGesucheTest {
     @Order(8)
     @AlwaysRun
     void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(9)
+    void prepareForJuristischAbklaeren() {
+        gesuch = TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
+        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        gesuchApiSpec.gesuchEinreichen()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.ACCEPTED.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(10)
+    void juristischAbklaeren() {
+        gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+
+        gesuchApiSpec.juristischAbklaeren()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsJurist
+    @Order(11)
+    void getAlleJurisitischeAbklaerungOneFound() {
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_JUR_ABKLAERUNG_MEINE);
+        allAreNotInWrongStatus(
+            found,
+            GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
+            GesuchstatusDtoSpec.EINGEREICHT,
+            GesuchstatusDtoSpec.IN_BEARBEITUNG_SB,
+            GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG
+        );
+        assertEquals(1, found.size());
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(12)
+    @AlwaysRun
+    void deleteOtherGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 

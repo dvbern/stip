@@ -153,6 +153,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     // TODO KSTIP-1247: Update which roles can do this
+    @AllowAll
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response getGesucheSb(
@@ -171,8 +172,6 @@ public class GesuchResourceImpl implements GesuchResource {
         SbDashboardColumn sortColumn,
         SortOrder sortOrder
     ) {
-        gesuchAuthorizer.allowAllow();
-
         final var dtos = gesuchService.findGesucheSB(
             getGesucheSBQueryType,
             fallNummer,
