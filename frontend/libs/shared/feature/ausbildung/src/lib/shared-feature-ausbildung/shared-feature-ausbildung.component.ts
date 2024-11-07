@@ -503,11 +503,13 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       error$.pipe(
         filter(isDefined),
         map((error) => {
-          switch (error?.messageKey) {
-            case 'jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message':
-              return {
-                periodeNotFound: true,
-              } satisfies KnowErrors as ValidationErrors;
+          if (
+            error?.messageKey ===
+            'jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message'
+          ) {
+            return {
+              periodeNotFound: true,
+            } satisfies KnowErrors as ValidationErrors;
           }
           return null;
         }),
