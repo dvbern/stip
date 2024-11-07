@@ -140,12 +140,12 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.form.controls.ausbildungEnd.valueChanges,
   );
   isEditableSig = computed(() => {
+    const { type } = this.usageTypeSig();
     const {
-      cache: { gesuch },
+      cache: { gesuchFormular },
     } = this.gesuchViewSig();
-    return (
-      !isDefined(gesuch) || this.ausbildungStore.ausbildungViewSig().isEditable
-    );
+
+    return type === 'dialog' || gesuchFormular?.ausbildung?.editable;
   });
 
   languageSig = this.store.selectSignal(selectLanguage);

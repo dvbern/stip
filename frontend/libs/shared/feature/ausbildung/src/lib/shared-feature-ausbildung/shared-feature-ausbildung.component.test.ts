@@ -40,11 +40,19 @@ async function setup() {
         initialState: {
           gesuchs: {
             gesuch: null,
-            gesuchFormular: {},
+            gesuchFormular: {
+              ausbildung: {
+                editable: true,
+              },
+            },
             cache: {
               gesuch: null,
               gesuchId: null,
-              gesuchFormular: null,
+              gesuchFormular: {
+                ausbildung: {
+                  editable: true,
+                },
+              },
             },
           },
           language: { language: 'de' },
@@ -52,7 +60,10 @@ async function setup() {
         },
       }),
       provideMaterialDefaultOptions(),
-      provideSharedPatternJestTestSetup(),
+      provideSharedPatternJestTestSetup({
+        appType: 'sachbearbeitung-app',
+        authClientId: 'stip-sachbearbeitung-app',
+      }),
       provideSharedPatternJestTestAusbildungstaetten(),
       AusbildungsstaetteStore,
       AusbildungStore,
