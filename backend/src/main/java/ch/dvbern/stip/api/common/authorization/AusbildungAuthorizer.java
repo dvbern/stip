@@ -75,16 +75,19 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
 
         final var ausbildung = ausbildungRepository.requireById(ausbildungId);
 
-        if (!isAdminOrSb(currentBenutzer)) {
-            return false;
-        }
+        // Only an Sb can edit a ausbildung, and only if it has at most one gesuch, at most one tranche ant the
+        // gesuch is in the state IN_BEARBEITUNG_SB
 
-        if (ausbildung.getGesuchs().size() > 1) {
+        if (!isAdminOrSb(currentBenutzer)) {
             return false;
         }
 
         if (ausbildung.getGesuchs().isEmpty()) {
             return true;
+        }
+
+        if (ausbildung.getGesuchs().size() > 1) {
+            return false;
         }
 
         final var gesuch = ausbildung.getGesuchs().get(0);

@@ -34,6 +34,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -89,7 +90,7 @@ public class AusbildungService {
         }
 
         gesuch.getNewestGesuchTranche()
-            .get()
+            .orElseThrow(NotFoundException::new)
             .setGueltigkeit(
                 new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1))
             );
