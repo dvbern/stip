@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.plz.service;
 
 import java.io.IOException;
@@ -105,15 +122,20 @@ public class PlzDataFetchService {
     private void loadNewData(final URI uri) throws IOException, CsvException {
         final String csvFileData = loadCsvFileData(uri);
         final Set<List<String>> plzHashSet = new HashSet<>();
-        try (final CSVReader csvReader = new CSVReaderBuilder(new StringReader(csvFileData))
+        try (
+        final CSVReader csvReader = new CSVReaderBuilder(new StringReader(csvFileData))
             .withSkipLines(1)
-            .withCSVParser(new CSVParserBuilder()
-                .withSeparator(';')
-                .build()
-            ).build()) {
-            csvReader.readAll().forEach(plzLine ->
-                plzHashSet.add(Arrays.asList(plzLine[0], plzLine[1], plzLine[5]))
-            );
+            .withCSVParser(
+                new CSVParserBuilder()
+                    .withSeparator(';')
+                    .build()
+            )
+            .build()
+        ) {
+            csvReader.readAll()
+                .forEach(
+                    plzLine -> plzHashSet.add(Arrays.asList(plzLine[0], plzLine[1], plzLine[5]))
+                );
         }
 
         final List<Plz> plzList = new ArrayList<>(plzHashSet.size());
@@ -136,7 +158,7 @@ public class PlzDataFetchService {
         }
 
         try (
-            final var zipFile = new ZipFile(resource.getFile());
+        final var zipFile = new ZipFile(resource.getFile());
         ) {
             for (final var zipEntry : zipFile.stream().toList()) {
                 if (zipEntry.getName().endsWith(".csv")) {
