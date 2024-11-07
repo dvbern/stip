@@ -47,7 +47,8 @@ export class AusbildungStore extends signalStore(
       ausbildung,
       minEndDatum,
       minEndDatumFormatted: format(minEndDatum, 'MM.yyyy'),
-      isEditable: true && this.config.isSachbearbeitungApp,
+      isEditable:
+        (ausbildung?.editable ?? true) && this.config.isSachbearbeitungApp,
     };
   });
 
