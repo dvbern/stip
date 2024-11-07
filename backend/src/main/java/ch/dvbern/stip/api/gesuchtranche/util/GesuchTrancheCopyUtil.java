@@ -56,7 +56,7 @@ public class GesuchTrancheCopyUtil {
     ) {
         var endDate = createDto.getEnd();
         if (endDate == null) {
-            endDate = original.getGesuch().getGesuchsperiode().getGesuchsperiodeStopp();
+            endDate = original.getGueltigkeit().getGueltigBis();
         }
 
         final var copy = copyTranche(
