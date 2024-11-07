@@ -369,7 +369,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getJuristischeAbklaerungNotiz
       summary: get a single Juristische Abklaerung Notiz of a Gesuch with the given Notiz-Id
-  '/gesuch/notiz/juristischeAbklaerung/{gesuchId}':
+  '/gesuch/notiz/juristischeAbklaerung/all/{gesuchId}':
     parameters:
       - name: gesuchId
         schema:
