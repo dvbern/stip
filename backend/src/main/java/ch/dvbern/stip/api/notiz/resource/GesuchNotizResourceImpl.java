@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.generated.api.GesuchNotizResource;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
@@ -36,6 +37,16 @@ import lombok.RequiredArgsConstructor;
 public class GesuchNotizResourceImpl implements GesuchNotizResource {
     private final GesuchNotizService service;
     private final GesuchNotizAuthorizer authorizer;
+
+    @AllowAll
+    @RolesAllowed({ OidcConstants.ROLE_JURIST })
+    @Override
+    public Response answerJuristischeAbklaerungNotiz(
+        UUID notizId,
+        JuristischeAbklaerungNotizAntwortDto juristischeAbklaerungNotizAntwortDto
+    ) {
+        return null;
+    }
 
     @AllowAll
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
@@ -51,6 +62,20 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     public Response deleteNotiz(UUID notizId) {
         service.delete(notizId);
         return Response.noContent().build();
+    }
+
+    @AllowAll
+    @RolesAllowed({ OidcConstants.ROLE_JURIST, OidcConstants.ROLE_SACHBEARBEITER })
+    @Override
+    public Response getJuristischeAbklaerungNotiz(UUID notizId) {
+        return null;
+    }
+
+    @RolesAllowed({ OidcConstants.ROLE_JURIST, OidcConstants.ROLE_SACHBEARBEITER })
+    @AllowAll
+    @Override
+    public Response getJuristischeAbklaerungNotizen(UUID gesuchId) {
+        return null;
     }
 
     @AllowAll
