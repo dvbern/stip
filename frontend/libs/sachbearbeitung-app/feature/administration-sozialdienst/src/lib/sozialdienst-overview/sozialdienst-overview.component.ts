@@ -34,6 +34,11 @@ import {
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
+type Filter = {
+  column: string;
+  value: string | null;
+};
+
 @Component({
   standalone: true,
   imports: [
@@ -67,17 +72,47 @@ export class SozialdienstOverviewComponent {
 
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
-  filterSig = signal<string | null>(null);
+
+  nameFilterSig = signal<string | null>(null);
+  ortFilterSig = signal<string | null>(null);
+  filtersSig = computed<string>(() => {
+    const filters: Filter[] = [
+      { column: 'name', value: this.nameFilterSig() },
+      { column: 'ort', value: this.ortFilterSig() },
+    ];
+    return JSON.stringify(filters);
+  });
 
   sozialDiensteListDataSourceSig = computed(() => {
-    const benutzers = this.store.sozialdienste();
-    const datasource = new MatTableDataSource(benutzers.data);
+    const dienste = this.store.sozialdienste().data?.map((sozialdienst) => ({
+      ...sozialdienst,
+      ort: sozialdienst.adresse.ort,
+    }));
+    const datasource = new MatTableDataSource(dienste);
     const sort = this.sortSig();
     const paginator = this.paginatorSig();
-    const filter = this.filterSig();
+    const filters = this.filtersSig();
 
-    datasource.filterPredicate = (data, filter) => {
-      return data.name.toLocaleLowerCase().includes(filter);
+    datasource.filterPredicate = (data, filters) => {
+      const filterList: Filter[] = JSON.parse(filters);
+
+      return filterList.every((filter) => {
+        if (!filter.value) {
+          return true;
+        }
+
+        if (filter.column === 'name') {
+          return data.name.toLowerCase().includes(filter.value.toLowerCase());
+        }
+
+        if (filter.column === 'ort') {
+          return data.adresse.ort
+            .toLowerCase()
+            .includes(filter.value.toLowerCase());
+        }
+
+        return true;
+      });
     };
 
     if (sort) {
@@ -86,9 +121,10 @@ export class SozialdienstOverviewComponent {
     if (paginator) {
       datasource.paginator = paginator;
     }
-    if (filter) {
-      datasource.filter = filter.trim().toLocaleLowerCase();
+    if (filters) {
+      datasource.filter = filters;
     }
+
     return datasource;
   });
 

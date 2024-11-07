@@ -80,7 +80,11 @@ public class SozialdienstService {
     public SozialdienstDto updateSozialdienst(SozialdienstUpdateDto dto) {
         var sozialdienst = sozialdienstRepository.requireById(dto.getId());
         sozialdienstMapper.partialUpdate(dto, sozialdienst);
-        return sozialdienstMapper.toDto(sozialdienst);
+        var result = sozialdienstMapper.toDto(sozialdienst);
+        result.setSozialdienstAdmin(
+            sozialdienstAdminService.getSozialdienstAdminDtoById(sozialdienst.getAdmin().getId())
+        );
+        return result;
     }
 
     @Transactional

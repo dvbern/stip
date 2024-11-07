@@ -65,15 +65,14 @@ import { ReplaceSozialdienstAdminDialogComponent } from '../replace-sozialdienst
 })
 export class SozialdienstDetailComponent implements OnDestroy {
   private formBuilder = inject(NonNullableFormBuilder);
-  idSig = input.required<string | undefined>({ alias: 'id' });
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
+  private globalStore = inject(Store);
 
+  idSig = input.required<string | undefined>({ alias: 'id' });
   store = inject(SozialdienstStore);
-  globalStore = inject(Store);
-
   laenderSig = signal<Land[]>(['CH']);
   languageSig = this.globalStore.selectSignal(selectLanguage);
 
@@ -152,30 +151,31 @@ export class SozialdienstDetailComponent implements OnDestroy {
   }
 
   update() {
-    const sozialdienstId = this.idSig();
-    const keycloakId =
-      this.store.sozialdienst().data?.sozialdienstAdmin.keycloakId;
+    const sozialdienst = this.store.sozialdienst().data;
 
-    if (this.form.invalid || !sozialdienstId || !keycloakId) return;
+    if (this.form.invalid || !sozialdienst) return;
 
     const values = convertTempFormToRealValues(this.form);
 
-    const adresse = SharedUiFormAddressComponent.getRealValues(
+    const addressFormValues = SharedUiFormAddressComponent.getRealValues(
       this.form.controls.adresse,
     );
 
-    const sozialdienstAdmin = convertTempFormToRealValues(
+    const sozialdienstAdminFormValues = convertTempFormToRealValues(
       this.form.controls.sozialdienstAdmin,
     );
 
     const updateRequest = {
       ...values,
-      id: sozialdienstId,
+      id: sozialdienst.id,
       iban: 'CH' + values.iban,
-      adresse,
+      adresse: {
+        ...sozialdienst.adresse,
+        ...addressFormValues,
+      },
       sozialdienstAdmin: {
-        keycloakId,
-        ...sozialdienstAdmin,
+        keycloakId: sozialdienst.sozialdienstAdmin.keycloakId,
+        ...sozialdienstAdminFormValues,
       },
     };
 

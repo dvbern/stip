@@ -183,12 +183,17 @@ export class KeycloakHttpService {
       )
       .pipe(
         map((roles) => {
-          // @scph: should we also zod parse the roles here?
-          if (roleFilter) {
-            return roles.filter(roleFilter);
+          const parsed = SharedModelRoleList.safeParse(roles);
+
+          if (!parsed.success) {
+            throw new Error('Failed to parse roles');
           }
 
-          return roles;
+          if (roleFilter) {
+            return parsed.data.filter(roleFilter);
+          }
+
+          return parsed.data;
         }),
       );
   }

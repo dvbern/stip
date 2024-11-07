@@ -23,7 +23,8 @@
                   type="text"
                   data-testid="sozialdienst-filter-name"
                   placeholder="{{ 'sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder' | translate }}"
-                  (keyup)="filterSig.set(nameFilter.value)"
+                  (keyup)="nameFilterSig.set(nameFilter.value)"
+                  (click)="$event.stopPropagation()"
                 />
               </mat-form-field>
               @if (nameFilter.value) {
@@ -31,7 +32,7 @@
                   type="button"
                   class="btn btn-link position-absolute p-0 btn-sm"
                   aria-label="Clear"
-                  (click)="filterSig.set(null); nameFilter.value = ''"
+                  (click)="nameFilterSig.set(null); nameFilter.value = ''"
                 >
                   <span class="material-symbols-rounded align-middle">clear</span>
                 </button>
@@ -45,11 +46,36 @@
 
         <!-- ort -->
         <ng-container matColumnDef="ort">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.sozialdienst.ort.label' | translate }}
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
+            <label for="ortFilter">
+              {{ 'sachbearbeitung-app.admin.sozialdienst.ort.label' | translate }}
+            </label>
+            <div class="d-flex position-relative align-items-center justify-content-end">
+              <mat-form-field class="filter-form-field">
+                <input
+                  matInput
+                  #ortFilter
+                  type="text"
+                  data-testid="sozialdienst-filter-ort"
+                  placeholder="{{ 'sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder' | translate }}"
+                  (keyup)="ortFilterSig.set(ortFilter.value)"
+                  (click)="$event.stopPropagation()"
+                />
+              </mat-form-field>
+              @if (ortFilter.value) {
+                <button
+                  type="button"
+                  class="btn btn-link position-absolute p-0 btn-sm"
+                  aria-label="Clear"
+                  (click)="ortFilterSig.set(null); ortFilter.value = ''"
+                >
+                  <span class="material-symbols-rounded align-middle">clear</span>
+                </button>
+              }
+            </div>
           </th>
           <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource">
-            {{ sozialdienst.adresse.ort }}
+            {{ sozialdienst.ort }}
           </td>
         </ng-container>
 

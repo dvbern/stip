@@ -243,6 +243,7 @@
   "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.text": "Wollen Sie den Sozialdienst \"{{ name }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.sozialdienst.sozialdienstGeloescht": "Sozialdienst wurde erfolgreich gelöscht",
   "sachbearbeitung-app.admin.sozialdienst.sozialdienstAktualisiert": "Sozialdienst wurde erfolgreich aktualisiert",
+  "sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt": "Sozialdienst Admin wurde erfolgreich ersetzt",
   "sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder": "Filtern...",
 
   "sachbearbeitung-app.verfuegung.title": "Verfügung",

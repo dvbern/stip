@@ -28,6 +28,7 @@ import {
   CachedRemoteData,
   RemoteData,
   cachedPending,
+  failure,
   handleApiResponse,
   initial,
   pending,
@@ -116,7 +117,7 @@ export class SozialdienstStore extends signalStore(
         return this.keycloak
           .createUserWithSozialDienstAdminRole$({
             name: newUser.nachname,
-            vorname: newUser.nachname,
+            vorname: newUser.vorname,
             email: newUser.email,
           })
           .pipe(
@@ -181,7 +182,7 @@ export class SozialdienstStore extends signalStore(
                 ),
             ),
             catchError((error) => {
-              patchState(this, { sozialdienst: error });
+              patchState(this, { sozialdienst: failure(error) });
               return EMPTY;
             }),
           );
@@ -273,15 +274,11 @@ export class SozialdienstStore extends signalStore(
         });
       }),
       exhaustMap(
-        ({
-          sozialdienstId,
-          existingSozialdienstAdminKeycloakId,
-          newUser: newUser,
-        }) => {
+        ({ sozialdienstId, existingSozialdienstAdminKeycloakId, newUser }) => {
           return this.keycloak
             .createUserWithSozialDienstAdminRole$({
               name: newUser.nachname,
-              vorname: newUser.nachname,
+              vorname: newUser.vorname,
               email: newUser.email,
             })
             .pipe(
@@ -313,36 +310,19 @@ export class SozialdienstStore extends signalStore(
                     email: sozialdienstAdmin.email,
                   })
                   .pipe(
-                    handleApiResponse(
-                      () => {
-                        patchState(this, (state) => {
-                          const dienst = state.sozialdienst.data;
-                          if (!dienst || !sozialdienstAdmin) {
-                            return state;
-                          }
-                          return {
-                            sozialdienst: success({
-                              ...dienst,
-                              sozialdienstAdmin: {
-                                ...sozialdienstAdmin,
-                              },
-                            }),
-                          };
-                        });
+                    handleApiResponse(() => undefined, {
+                      onSuccess: (wasSuccessfull) => {
+                        this.loadSozialdienst$({ sozialdienstId });
+                        if (wasSuccessfull) {
+                          this.globalNotificationStore.createSuccessNotification(
+                            {
+                              messageKey:
+                                'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt',
+                            },
+                          );
+                        }
                       },
-                      {
-                        onSuccess: (wasSuccessfull) => {
-                          if (wasSuccessfull) {
-                            this.globalNotificationStore.createSuccessNotification(
-                              {
-                                messageKey:
-                                  'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt',
-                              },
-                            );
-                          }
-                        },
-                      },
-                    ),
+                    }),
                   ),
               ),
               catchError(() => {
@@ -379,6 +359,7 @@ export class SozialdienstStore extends signalStore(
                     },
                     {
                       onSuccess: () => {
+                        this.loadAllSozialdienste$();
                         this.globalNotificationStore.createSuccessNotification({
                           messageKey:
                             'sachbearbeitung-app.admin.sozialdienst.sozialdienstGeloescht',

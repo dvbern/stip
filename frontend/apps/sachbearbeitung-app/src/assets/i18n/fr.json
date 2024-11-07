@@ -243,6 +243,7 @@
   "sachbearbeitung-app.admin.sozialdienst.confirmDelete.sozialdienst.text": "Voulez-vous vraiment supprimer le service social \"{{ name }}\" ?",
   "sachbearbeitung-app.admin.sozialdienst.sozialdienstGeloescht": "Le service social a été supprimé avec succès",
   "sachbearbeitung-app.admin.sozialdienst.sozialdienstAktualisiert": "Le service social a été mis à jour avec succès",
+  "sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt": "L'administrateur du service social a été remplacé avec succès",
   "sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder": "Filtrer...",
 
   "sachbearbeitung-app.verfuegung.title": "Décision",
