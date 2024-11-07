@@ -3,11 +3,13 @@ import {
   AusbildungsStatus,
   FallDashboardItem,
 } from '@dv/shared/model/gesuch';
-import { Modify, ModifyList } from '@dv/shared/model/type-util';
+import { Modify } from '@dv/shared/model/type-util';
 
 export type SharedModelGsGesuchView = Modify<
   Exclude<AusbildungDashboardItem['gesuchs'], undefined>[number],
   {
+    canEdit: boolean;
+    canDelete: boolean;
     einreichefristAbgelaufen: boolean;
     reduzierterBeitrag: boolean;
     einreichefristDays: number | null;
@@ -21,15 +23,8 @@ export type SharedModelGsAusbildungView = Modify<
     ausbildungBegin: Date | null;
     ausbildungEnd: Date | null;
     status: AusbildungsStatus;
-    gesuchs: ModifyList<
-      AusbildungDashboardItem['gesuchs'],
-      {
-        einreichefristAbgelaufen: boolean;
-        reduzierterBeitrag: boolean;
-        einreichefristDays: number | null;
-        yearRange: string;
-      }
-    >;
+    canDelete: boolean;
+    gesuchs: SharedModelGsGesuchView[];
   }
 >;
 export type SharedModelGsDashboardView = Omit<

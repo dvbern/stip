@@ -44,6 +44,7 @@ export interface AusbildungDashboardItem {
     status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
     gesuchs?: Array<GesuchDashboardItem>;
+    editable: boolean;
 }
 
 

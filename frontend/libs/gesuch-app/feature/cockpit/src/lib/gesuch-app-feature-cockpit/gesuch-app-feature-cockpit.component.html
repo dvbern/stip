@@ -17,6 +17,7 @@
             @for (ausbildung of dashboard.activeAusbildungen; track ausbildung.id) {
               <dv-gesuch-app-ui-dashboard-ausbildung
                 [ausbildungSig]="ausbildung"
+                (deleteAusbildung)="deleteAusbildung($event)"
                 (deleteGesuch)="deleteGesuch($event)"
                 (aenderungMelden)="aenderungMelden($event)"
                 (deleteAenderung)="deleteAenderung($event)"

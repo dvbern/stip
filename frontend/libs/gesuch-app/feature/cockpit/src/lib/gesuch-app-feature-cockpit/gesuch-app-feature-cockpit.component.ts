@@ -28,6 +28,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
+import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import {
   AenderungMelden,
   GesuchTrancheSlim,
@@ -153,6 +154,25 @@ export class GesuchAppFeatureCockpitComponent {
             gesuchId: id,
             createAenderungsantragRequest: result,
           });
+        }
+      });
+  }
+
+  deleteAusbildung(ausbildung: SharedModelGsAusbildungView) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'gesuch-app.dashboard.ausbildung.delete.dialog.title',
+      message: 'gesuch-app.dashboard.ausbildung.delete.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.delete',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.store.dispatch(
+            SharedDataAccessGesuchEvents.deleteGesuch({
+              gesuchId: ausbildung.gesuchs[0].id,
+            }),
+          );
         }
       });
   }

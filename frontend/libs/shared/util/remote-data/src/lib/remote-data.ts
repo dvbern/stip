@@ -2,6 +2,9 @@ import { Signal } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import { Observable, catchError, of, pipe } from 'rxjs';
 
+import { SharedModelError } from '@dv/shared/model/error';
+import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
+
 type Initial = {
   type: 'initial';
   data: undefined;
@@ -36,6 +39,12 @@ type Failure = {
   error: unknown;
 };
 
+type CachedFailure<T = unknown> = {
+  type: 'failure';
+  data: T | undefined;
+  error: unknown;
+};
+
 /**
  * Represents the failure state of a remote data object.
  *
@@ -55,7 +64,7 @@ export const failure = (error: unknown): Failure => ({
  * store.values().map(filter(isFailure))
  */
 export const isFailure = (
-  response: RemoteData<unknown>,
+  response: RemoteData<unknown> | CachedRemoteData<unknown>,
 ): response is Failure => {
   return response.type === 'failure';
 };
@@ -78,6 +87,12 @@ type Pending = {
   error: undefined;
 };
 
+type CachedPending<T = unknown> = {
+  type: 'pending';
+  data: T | undefined;
+  error: undefined;
+};
+
 /**
  * Represents the pending state of a remote data object.
  *
@@ -89,12 +104,6 @@ export const pending = (): Pending => ({
   data: undefined,
   error: undefined,
 });
-
-type CachedPending<T = unknown> = {
-  type: 'pending';
-  data: T | undefined;
-  error: undefined;
-};
 
 /**
  * Usable for cached remote data objects, the previous data is preserved in the `data` field.
@@ -168,6 +177,34 @@ export const isSuccess = <T>(
 };
 
 /**
+ * Create a Failure RemoteData object with cached data from a previous Success RemoteData object if possible.
+ *
+ * @example
+ * this.someService
+ *   .updateSomething$({
+ *     id,
+ *   })
+ *   .pipe(
+ *     handleApiResponse((something) => {
+ *       patchState(this, (state) => ({
+ *         something: cachedResult(state.something, something),
+ *       }));
+ *     })
+ *   );
+ */
+export const cachedResult = <T>(
+  previousRd: CachedRemoteData<T>,
+  currentRd: CachedRemoteData<T>,
+): CachedRemoteData<T> =>
+  currentRd.type === 'failure' && previousRd.type === 'success'
+    ? {
+        type: 'failure',
+        data: previousRd.data,
+        error: currentRd.error,
+      }
+    : currentRd;
+
+/**
  * Represents a remote data object that can be in one of the following states:
  * - initial
  * - failure
@@ -197,7 +234,7 @@ export type RemoteData<T> = Initial | Failure | Pending | Success<T>;
  */
 export type CachedRemoteData<T> =
   | Initial
-  | Failure
+  | CachedFailure<T>
   | CachedPending<T>
   | Success<T>;
 
@@ -217,6 +254,18 @@ export function fromCachedDataSig<T>(cachedRd: {
   data: Signal<T>;
 }): T | undefined {
   return cachedRd.data();
+}
+
+/**
+ * Transforms a cached remote data object to a shared model error object if it is in the failure state.
+ */
+export function transformErrorSig(
+  cachedRd: CachedRemoteData<unknown>,
+): SharedModelError | undefined {
+  if (isFailure(cachedRd)) {
+    return sharedUtilFnErrorTransformer(cachedRd.error);
+  }
+  return undefined;
 }
 
 /**

@@ -11,7 +11,6 @@ import {
   inject,
 } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { parse } from 'date-fns';
 
 import {
   Ausbildung,
@@ -111,12 +110,8 @@ export class TwoColumnTimelineComponent implements OnChanges {
     timelineRawItems.push({
       id: 'planned-ausbildung',
       col: 'LEFT',
-      von: plannedAusbildung?.ausbildungBegin
-        ? parse(plannedAusbildung.ausbildungBegin, 'yyyy-MM-dd', new Date())
-        : null,
-      bis: plannedAusbildung?.ausbildungEnd
-        ? parse(plannedAusbildung.ausbildungEnd, 'yyyy-MM-dd', new Date())
-        : null,
+      von: dateFromMonthYearString(plannedAusbildung?.ausbildungBegin),
+      bis: dateFromMonthYearString(plannedAusbildung?.ausbildungEnd),
       label: {
         title:
           (this.getTranslatedAusbildungstaetteName(ausbildungsstaette) ??

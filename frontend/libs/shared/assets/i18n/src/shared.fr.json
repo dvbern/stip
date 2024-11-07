@@ -276,6 +276,7 @@
   "shared.form.person.validation.wohnsitz": "Les informations de résidence ne correspondent pas aux informations de la situation familiale.",
 
   "shared.ausbildung.title": "Formation",
+  "shared.ausbildung.saved.success": "Formation enregistrée avec succès",
   "shared.form.ausbildung.place.title": "Informations sur la formation",
   "shared.form.ausbildung.isAusbildungAusland.label": "Formation à l'étranger",
   "shared.form.ausbildung.ausbildungsort.label": "Lieu de formation",
@@ -293,6 +294,7 @@
   "shared.form.ausbildung.form.error.monthYearAfter": "La date de fin doit être postérieure à la date de début",
   "shared.form.ausbildung.form.error.monthYearAfterStart": "La date de fin doit être postérieure à la date de début",
   "shared.form.ausbildung.form.error.lebenslaufConflict": "La période chevauche d'autres formations indiquées",
+  "shared.form.ausbildung.form.error.periodeNotFound": "Aucune période de bourse disponible n'a été trouvée pour la période spécifiée",
 
   "shared.familiensituation.title": "Situation familiale",
   "shared.form.familiensituation.mutter": "Mère",
@@ -337,9 +339,9 @@
   "shared.form.eltern.ergaenzungsleistungen.label": "Ergänzungsleistung",
   "shared.form.eltern.sozialhilfebeitraege.label": "Sozialhilfebeträge",
 
-  "shared.elternteil-steuer.title.FAMILIE": "Données fiscales pour la famille",
-  "shared.elternteil-steuer.title.MUTTER": "Données fiscales pour la mère",
-  "shared.elternteil-steuer.title.VATER": "Données fiscales pour le père",
+  "shared.eltern-steuer.title.FAMILIE": "Données fiscales pour la famille",
+  "shared.eltern-steuer.title.MUTTER": "Données fiscales pour la mère",
+  "shared.eltern-steuer.title.VATER": "Données fiscales pour le père",
   "shared.form.shared.section.einnahmen": "Revenus",
   "shared.form.eltern-steuerdaten.totalEinkuenfte.label": "Total des revenus",
   "shared.form.eltern-steuerdaten.eigenmietwert.label": "Valeur locative",
@@ -532,6 +534,12 @@
   "shared.form.tranche-abschluss.notReady": "Il manque encore des informations. Veuillez remplir tous les champs obligatoires.",
 
   "shared.protokoll.title": "Protocole",
+
+  "shared.notizen.title": "Notes",
+  "shared.form.notizen.datum.label": "Date",
+  "shared.form.notizen.betreff.label": "Sujet",
+  "shared.form.notizen.text.label": "Texte",
+  "shared.form.notizen.user.label": "Utilisateur",
 
   "shared.role.Admin": "Admin",
   "shared.role.Jurist": "Juriste",

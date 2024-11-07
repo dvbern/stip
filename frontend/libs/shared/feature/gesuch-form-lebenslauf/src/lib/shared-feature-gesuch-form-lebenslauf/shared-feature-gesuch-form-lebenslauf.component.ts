@@ -21,7 +21,10 @@ import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { printDateAsMonthYear } from '@dv/shared/util/validator-date';
+import {
+  dateFromMonthYearString,
+  printDateAsMonthYear,
+} from '@dv/shared/util/validator-date';
 
 import { selectSharedFeatureGesuchFormLebenslaufVew } from './shared-feature-gesuch-form-lebenslauf.selector';
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from '../shared-feature-gesuch-form-lebenslauf-editor/shared-feature-gesuch-form-lebenslauf-editor.component';
@@ -86,7 +89,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
     const ausbildungStart =
       this.viewSig().gesuchFormular?.ausbildung?.ausbildungBegin;
     if (ausbildungStart) {
-      const start = Date.parse(ausbildungStart);
+      const start = dateFromMonthYearString(ausbildungStart);
       return start ? subMonths(start, 1) : null;
     }
     return null;
