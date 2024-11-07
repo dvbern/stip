@@ -32,6 +32,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid String ausbildungEnd;
   private @Valid AusbildungsPensumDto pensum;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status;
+  private @Valid Boolean editable;
   private @Valid UUID id;
   private @Valid Boolean ausbildungNichtGefunden;
   private @Valid String alternativeAusbildungsstaette;
@@ -39,7 +40,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
   private @Valid AusbildungsgangDto ausbildungsgang;
-  private @Valid Boolean editable;
   private @Valid List<GesuchDashboardItemDto> gesuchs;
 
   /**
@@ -156,6 +156,25 @@ public class AusbildungDashboardItemDto  implements Serializable {
   @JsonProperty("status")
   public void setStatus(ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status) {
     this.status = status;
+  }
+
+  /**
+   **/
+  public AusbildungDashboardItemDto editable(Boolean editable) {
+    this.editable = editable;
+    return this;
+  }
+
+  
+  @JsonProperty("editable")
+  @NotNull
+  public Boolean getEditable() {
+    return editable;
+  }
+
+  @JsonProperty("editable")
+  public void setEditable(Boolean editable) {
+    this.editable = editable;
   }
 
   /**
@@ -289,24 +308,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
   /**
    **/
-  public AusbildungDashboardItemDto editable(Boolean editable) {
-    this.editable = editable;
-    return this;
-  }
-
-  
-  @JsonProperty("editable")
-  public Boolean getEditable() {
-    return editable;
-  }
-
-  @JsonProperty("editable")
-  public void setEditable(Boolean editable) {
-    this.editable = editable;
-  }
-
-  /**
-   **/
   public AusbildungDashboardItemDto gesuchs(List<GesuchDashboardItemDto> gesuchs) {
     this.gesuchs = gesuchs;
     return this;
@@ -355,6 +356,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
         Objects.equals(this.ausbildungEnd, ausbildungDashboardItem.ausbildungEnd) &&
         Objects.equals(this.pensum, ausbildungDashboardItem.pensum) &&
         Objects.equals(this.status, ausbildungDashboardItem.status) &&
+        Objects.equals(this.editable, ausbildungDashboardItem.editable) &&
         Objects.equals(this.id, ausbildungDashboardItem.id) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildungDashboardItem.ausbildungNichtGefunden) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildungDashboardItem.alternativeAusbildungsstaette) &&
@@ -362,13 +364,12 @@ public class AusbildungDashboardItemDto  implements Serializable {
         Objects.equals(this.ausbildungsort, ausbildungDashboardItem.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildungDashboardItem.isAusbildungAusland) &&
         Objects.equals(this.ausbildungsgang, ausbildungDashboardItem.ausbildungsgang) &&
-        Objects.equals(this.editable, ausbildungDashboardItem.editable) &&
         Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang, editable, gesuchs);
+    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang, gesuchs);
   }
 
   @Override
@@ -382,6 +383,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
@@ -389,7 +391,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
-    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
     sb.append("}");
     return sb.toString();

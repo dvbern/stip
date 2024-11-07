@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.ausbildung.service;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.util.AusbildungDiffUtil;
 import ch.dvbern.stip.api.bildungskategorie.service.BildungskategorieMapper;
+import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
@@ -29,6 +30,8 @@ import ch.dvbern.stip.api.common.service.MonthYearToEndOfMonth;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
+import jakarta.inject.Inject;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -39,6 +42,9 @@ import org.mapstruct.MappingTarget;
     uses = { FallMapper.class, AusbildungsgangMapper.class, BildungskategorieMapper.class }
 )
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
+    @Inject
+    AusbildungAuthorizer ausbildungAuthorizer;
+
     @Mapping(
         source = "ausbildungBegin",
         target = "ausbildungBegin",
@@ -50,6 +56,13 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         qualifiedBy = { DateMapper.class, DateToMonthYear.class }
     )
     public abstract AusbildungDto toDto(Ausbildung ausbildung);
+
+    @AfterMapping
+    protected void setAusbildungEditable(
+        @MappingTarget final AusbildungDto dto
+    ) {
+        dto.setEditable(ausbildungAuthorizer.canUpdateCheck(dto.getId()));
+    }
 
     @Mapping(
         source = "ausbildungBegin",

@@ -28,6 +28,7 @@ public class AusbildungDto  implements Serializable {
   private @Valid String ausbildungEnd;
   private @Valid AusbildungsPensumDto pensum;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status;
+  private @Valid Boolean editable;
   private @Valid UUID id;
   private @Valid Boolean ausbildungNichtGefunden;
   private @Valid String alternativeAusbildungsstaette;
@@ -35,7 +36,6 @@ public class AusbildungDto  implements Serializable {
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
   private @Valid AusbildungsgangDto ausbildungsgang;
-  private @Valid Boolean editable;
 
   /**
    **/
@@ -151,6 +151,25 @@ public class AusbildungDto  implements Serializable {
   @JsonProperty("status")
   public void setStatus(ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status) {
     this.status = status;
+  }
+
+  /**
+   **/
+  public AusbildungDto editable(Boolean editable) {
+    this.editable = editable;
+    return this;
+  }
+
+  
+  @JsonProperty("editable")
+  @NotNull
+  public Boolean getEditable() {
+    return editable;
+  }
+
+  @JsonProperty("editable")
+  public void setEditable(Boolean editable) {
+    this.editable = editable;
   }
 
   /**
@@ -282,24 +301,6 @@ public class AusbildungDto  implements Serializable {
     this.ausbildungsgang = ausbildungsgang;
   }
 
-  /**
-   **/
-  public AusbildungDto editable(Boolean editable) {
-    this.editable = editable;
-    return this;
-  }
-
-  
-  @JsonProperty("editable")
-  public Boolean getEditable() {
-    return editable;
-  }
-
-  @JsonProperty("editable")
-  public void setEditable(Boolean editable) {
-    this.editable = editable;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -316,19 +317,19 @@ public class AusbildungDto  implements Serializable {
         Objects.equals(this.ausbildungEnd, ausbildung.ausbildungEnd) &&
         Objects.equals(this.pensum, ausbildung.pensum) &&
         Objects.equals(this.status, ausbildung.status) &&
+        Objects.equals(this.editable, ausbildung.editable) &&
         Objects.equals(this.id, ausbildung.id) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildung.ausbildungNichtGefunden) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildung.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildung.alternativeAusbildungsgang) &&
         Objects.equals(this.ausbildungsort, ausbildung.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildung.isAusbildungAusland) &&
-        Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang) &&
-        Objects.equals(this.editable, ausbildung.editable);
+        Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang, editable);
+    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang);
   }
 
   @Override
@@ -342,6 +343,7 @@ public class AusbildungDto  implements Serializable {
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
@@ -349,7 +351,6 @@ public class AusbildungDto  implements Serializable {
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
-    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("}");
     return sb.toString();
   }

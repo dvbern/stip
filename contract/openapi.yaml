@@ -2670,8 +2670,6 @@ components:
           items:
             $ref: '#/components/schemas/Notification'
     AusbildungDashboardItem:
-      required:
-        - editable
       type: object
       properties:
         gesuchs:
@@ -3280,6 +3278,7 @@ components:
     Ausbildung:
       required:
         - status
+        - editable
       type: object
       properties:
         status:

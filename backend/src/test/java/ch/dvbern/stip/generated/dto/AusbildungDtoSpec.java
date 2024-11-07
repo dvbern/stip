@@ -156,9 +156,9 @@ public class AusbildungDtoSpec {
    * Get editable
    * @return editable
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EDITABLE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getEditable() {
     return editable;
@@ -166,7 +166,7 @@ public class AusbildungDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EDITABLE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEditable(Boolean editable) {
     this.editable = editable;
   }
