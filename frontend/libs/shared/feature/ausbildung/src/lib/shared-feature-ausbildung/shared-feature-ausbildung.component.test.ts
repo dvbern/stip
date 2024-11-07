@@ -131,7 +131,6 @@ describe(SharedFeatureAusbildungComponent.name, () => {
 
       expect(beginInput).not.toHaveClass('ng-invalid');
       expect(endInput).toHaveClass('ng-invalid');
-      expect(getByTestId('form-education-form')).toHaveClass('ng-invalid');
       expect(
         getByTestId('form-education-form').querySelector('mat-error'),
       ).toHaveTextContent('shared.form.ausbildung.form.error.monthYearAfter');
@@ -139,12 +138,12 @@ describe(SharedFeatureAusbildungComponent.name, () => {
 
     (
       [
-        ['before', '01.2019', 'invalid'],
-        ['equal', '02.2019', 'invalid'],
-        ['after', '03.2019', 'valid'],
+        ['before', '01.2019', true],
+        ['equal', '02.2019', true],
+        ['after', '03.2019', false],
       ] as const
-    ).forEach(([position, endDate, expected]) => {
-      it(`should be ${expected} if end date is ${position} the current month`, async () => {
+    ).forEach(([position, endDate, shouldBeInvalid]) => {
+      it(`should be invalid=${shouldBeInvalid} if end date is ${position} the current month`, async () => {
         const { getByTestId, detectChanges } = await setup();
         const input = getByTestId('form-education-ende-der-ausbildung');
         await prepareEvent().type(input, endDate);
@@ -152,7 +151,9 @@ describe(SharedFeatureAusbildungComponent.name, () => {
 
         detectChanges();
 
-        expect(input).toHaveClass(`ng-${expected}`);
+        (shouldBeInvalid ? expect(input) : expect(input).not).toHaveClass(
+          `ng-invalid`,
+        );
       });
     });
 

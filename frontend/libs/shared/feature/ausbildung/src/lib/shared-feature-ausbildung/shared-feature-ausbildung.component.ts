@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   OnInit,
   Signal,
   computed,
@@ -11,11 +10,13 @@ import {
   input,
   output,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
+  AsyncValidatorFn,
   FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -27,7 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
-import { startWith } from 'rxjs';
+import { Observable, filter, map, startWith, take } from 'rxjs';
 
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
@@ -37,6 +38,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedModelError } from '@dv/shared/model/error';
 import { AusbildungsPensum, Ausbildungsstaette } from '@dv/shared/model/gesuch';
 import { getTranslatableProp, isDefined } from '@dv/shared/model/type-util';
 import {
@@ -62,8 +64,7 @@ import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 const AusbildungRangeControls = ['ausbildungBegin', 'ausbildungEnd'] as const;
 type AusbildungRangeControls = (typeof AusbildungRangeControls)[number];
-const KnowErrorKeys = ['periodeNotFound'] as const;
-type KnowErrors = { [K in (typeof KnowErrorKeys)[number]]?: true };
+type KnowErrors = Record<'periodeNotFound', true | null>;
 
 @Component({
   selector: 'dv-shared-feature-ausbildung',
@@ -93,7 +94,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
-  private elementRef = inject(ElementRef);
   private globalNotificationStore = inject(GlobalNotificationStore);
   readonly ausbildungspensumValues = Object.values(AusbildungsPensum);
 
@@ -102,6 +102,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
   ausbildungStore = inject(AusbildungStore);
   ausbildungsstatteStore = inject(AusbildungsstaetteStore);
+
   form = this.formBuilder.group({
     ausbildungsort: [<string | undefined>undefined, [Validators.required]],
     isAusbildungAusland: [false, []],
@@ -151,27 +152,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   gesuchViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchCacheView,
   );
-
-  ausbildungSaveErrorSig = computed<KnowErrors>(() => {
-    const error = this.ausbildungStore.ausbildungFailureViewSig();
-
-    switch (error?.messageKey) {
-      case '{jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message}':
-        this.withAusbildungRange((ctrl) => {
-          const errors = { ...(ctrl.errors ?? {}) };
-          KnowErrorKeys.forEach((key) => {
-            delete errors[key];
-          });
-          ctrl.setErrors({ periodeNotFound: true } satisfies KnowErrors);
-        });
-        this.formUtils.focusFirstInvalid(this.elementRef);
-        return {
-          periodeNotFound: true,
-        };
-    }
-
-    return {};
-  });
 
   ausbildungsgangOptionsSig = computed(() => {
     const ausbildungsstaettes =
@@ -228,6 +208,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.formUtils.registerFormForUnsavedCheck(this);
     const controls = this.form.controls;
 
+    const validateBeginEndFn = this.validateBeginEnd(
+      toObservable(this.ausbildungStore.ausbildungFailureViewSig),
+    );
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(
       () => {
@@ -269,6 +252,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     ].forEach(({ control, getAdditionalValidators }) =>
       effect(() => {
         control.clearValidators();
+        control.addAsyncValidators([validateBeginEndFn]);
         control.addValidators([
           Validators.required,
           parseableDateValidatorForLocale(this.languageSig(), 'monthYear'),
@@ -290,6 +274,19 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         },
         { allowSignalWrites: true },
       ),
+    );
+
+    effect(
+      () => {
+        this.beginChangedSig();
+
+        this.ausbildungStore.resetAusbildungErrors();
+
+        setTimeout(() => {
+          this.withAusbildungRange((ctrl) => ctrl.updateValueAndValidity());
+        });
+      },
+      { allowSignalWrites: true },
     );
 
     // fill form
@@ -439,7 +436,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   }
 
   onDateBlur(ctrl: FormControl) {
-    return onMonthYearInputBlur(ctrl, new Date(), this.languageSig());
+    onMonthYearInputBlur(ctrl, new Date(), this.languageSig());
   }
 
   handleSave() {
@@ -499,11 +496,30 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.form.markAsPristine();
   }
 
+  private validateBeginEnd(
+    error$: Observable<SharedModelError | undefined>,
+  ): AsyncValidatorFn {
+    return () =>
+      error$.pipe(
+        filter(isDefined),
+        map((error) => {
+          switch (error?.messageKey) {
+            case 'jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message':
+              return {
+                periodeNotFound: true,
+              } satisfies KnowErrors as ValidationErrors;
+          }
+          return null;
+        }),
+        take(1),
+      );
+  }
+
   private withAusbildungRange = (
     fn: (control: FormControl, type: AusbildungRangeControls) => void,
   ) => {
-    AusbildungRangeControls.forEach((type) => {
-      fn(this.form.controls[type], type);
-    });
+    AusbildungRangeControls.forEach((type) =>
+      fn(this.form.controls[type], type),
+    );
   };
 }

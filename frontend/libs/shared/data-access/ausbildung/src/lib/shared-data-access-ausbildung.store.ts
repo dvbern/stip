@@ -12,6 +12,10 @@ import {
   AusbildungUpdate,
 } from '@dv/shared/model/gesuch';
 import {
+  noGlobalErrorsIf,
+  shouldIgnoreBadRequestErrorsIf,
+} from '@dv/shared/util/http';
+import {
   CachedRemoteData,
   cachedPending,
   cachedResult,
@@ -47,15 +51,20 @@ export class AusbildungStore extends signalStore(
       ausbildung,
       minEndDatum,
       minEndDatumFormatted: format(minEndDatum, 'MM.yyyy'),
-      isEditable: true && this.config.isSachbearbeitungApp,
+      isEditable:
+        (ausbildung?.editable ?? true) && this.config.isSachbearbeitungApp,
     };
   });
 
   ausbildungFailureViewSig = computed(() => {
-    const ausbildung = transformErrorSig(this.ausbildung());
-
-    return ausbildung;
+    return transformErrorSig(this.ausbildung());
   });
+
+  resetAusbildungErrors = () => {
+    patchState(this, (state) => ({
+      ausbildung: { ...state.ausbildung, error: undefined },
+    }));
+  };
 
   loadAusbildung$ = rxMethod<{ ausbildungId: string }>(
     pipe(
@@ -85,21 +94,28 @@ export class AusbildungStore extends signalStore(
         }));
       }),
       switchMap(({ ausbildung: ausbildungUpdate, onSuccess }) =>
-        this.ausbildungService.createAusbildung$({ ausbildungUpdate }).pipe(
-          handleApiResponse(
-            (ausbildung) => {
-              patchState(this, () => ({
-                ausbildung: cachedResult(
-                  success(ausbildungUpdate as Ausbildung),
-                  ausbildung,
-                ),
-              }));
-            },
-            {
-              onSuccess,
-            },
+        this.ausbildungService
+          .createAusbildung$({ ausbildungUpdate }, undefined, undefined, {
+            context: shouldIgnoreBadRequestErrorsIf(
+              true,
+              noGlobalErrorsIf(true),
+            ),
+          })
+          .pipe(
+            handleApiResponse(
+              (ausbildung) => {
+                patchState(this, () => ({
+                  ausbildung: cachedResult(
+                    success(ausbildungUpdate as Ausbildung),
+                    ausbildung,
+                  ),
+                }));
+              },
+              {
+                onSuccess,
+              },
+            ),
           ),
-        ),
       ),
     ),
   );

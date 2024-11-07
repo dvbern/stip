@@ -262,7 +262,7 @@ export function fromCachedDataSig<T>(cachedRd: {
 export function transformErrorSig(
   cachedRd: CachedRemoteData<unknown>,
 ): SharedModelError | undefined {
-  if (isFailure(cachedRd)) {
+  if (isFailure(cachedRd) && cachedRd.error) {
     return sharedUtilFnErrorTransformer(cachedRd.error);
   }
   return undefined;
