@@ -25,6 +25,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -47,6 +49,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
         @Index(name = "IX_gesuch_notiz_gesuch_id", columnList = "gesuch_id")
     }
 )
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class GesuchNotiz extends AbstractMandantEntity {
     @ManyToOne
     @JoinColumn(

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.notiz.resource;
 import java.util.Arrays;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
@@ -35,6 +36,7 @@ import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDto;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
@@ -197,4 +199,138 @@ class GesuchNotizResourceImplTest {
         assertEquals(0, notizen.length);
     }
 
+    // Test Resources for Juristische Notiz
+    // create a notiz as SB
+    @Test
+    @TestAsGesuchsteller
+    @Order(6)
+    void neuesGesuchErstellen() {
+        gesuch = TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(7)
+    void juristischeNotizErstellen() {
+        var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
+        gesuchCreateDto.setGesuchId(gesuch.getId());
+        gesuchCreateDto.setText("test");
+        gesuchCreateDto.setBetreff("test");
+        gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.JURISTISCHE_NOTIZ);
+        final var juristsicheNotiz = gesuchNotizApiSpec.createNotiz()
+            .body(gesuchCreateDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(JuristischeAbklaerungNotizDto.class);
+    }
+
+    // get all notizen as SB
+    @Test
+    @TestAsJurist
+    @Order(8)
+    void getAllJuristischeNotizen() {
+        final var notizen = gesuchNotizApiSpec.getJuristischeAbklaerungNotizen()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(JuristischeAbklaerungNotizDto[].class);
+        final var notiz = Arrays.stream(notizen).toList().get(0);
+
+        final var notizById = gesuchNotizApiSpec.getJuristischeAbklaerungNotiz()
+            .notizIdPath(notiz.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(JuristischeAbklaerungNotizDto.class);
+    }
+
+    // update notiz as SB
+    @Test
+    @TestAsSachbearbeiter
+    @Order(9)
+    void updateJuristischeNotiz() {
+        var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
+        gesuchCreateDto.setGesuchId(gesuch.getId());
+        gesuchCreateDto.setText("test");
+        gesuchCreateDto.setBetreff("test");
+        gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
+        final var notiz = gesuchNotizApiSpec.createNotiz()
+            .body(gesuchCreateDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchNotizDto.class);
+
+        var gesuchUpdateDto = new GesuchNotizUpdateDtoSpec();
+        gesuchUpdateDto.setId(notiz.getId());
+        gesuchUpdateDto.setText("update");
+        gesuchUpdateDto.setBetreff("update");
+        gesuchNotizApiSpec.updateNotiz()
+            .body(gesuchUpdateDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+
+        gesuchNotizApiSpec.deleteNotiz()
+            .notizIdPath(gesuchUpdateDto.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
+
+    // create a notiz as SB
+    // delete gesuch as SB, check if all notizen are deleted too
+    @Test
+    @TestAsSachbearbeiter
+    @Order(10)
+    void allJuristischeNotizenShouldBeCascadeDeleted() {
+        var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
+        gesuchCreateDto.setGesuchId(gesuch.getId());
+        gesuchCreateDto.setText("test");
+        gesuchCreateDto.setBetreff("test");
+        gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
+        final var notiz = gesuchNotizApiSpec.createNotiz()
+            .body(gesuchCreateDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchNotizDto.class);
+
+        // delete gesuch
+        gesuchApiSpec.deleteGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+
+        final var notizen = gesuchNotizApiSpec.getNotizen()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchNotizDto[].class);
+        assertEquals(0, notizen.length);
+    }
 }

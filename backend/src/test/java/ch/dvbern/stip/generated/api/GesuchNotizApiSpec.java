@@ -405,7 +405,7 @@ public class GesuchNotizApiSpec {
     public static class GetJuristischeAbklaerungNotizenOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/notiz/juristischeAbklaerung/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/notiz/juristischeAbklaerung/all/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -417,7 +417,7 @@ public class GesuchNotizApiSpec {
         }
 
         /**
-         * GET /gesuch/notiz/juristischeAbklaerung/{gesuchId}
+         * GET /gesuch/notiz/juristischeAbklaerung/all/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -428,7 +428,7 @@ public class GesuchNotizApiSpec {
         }
 
         /**
-         * GET /gesuch/notiz/juristischeAbklaerung/{gesuchId}
+         * GET /gesuch/notiz/juristischeAbklaerung/all/{gesuchId}
          * @param handler handler
          * @return List&lt;JuristischeAbklaerungNotizDtoSpec&gt;
          */

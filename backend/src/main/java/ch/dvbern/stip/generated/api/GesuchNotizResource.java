@@ -39,7 +39,7 @@ public interface GesuchNotizResource {
     Response getJuristischeAbklaerungNotiz(@PathParam("notizId") UUID notizId);
 
     @GET
-    @Path("/notiz/juristischeAbklaerung/{gesuchId}")
+    @Path("/notiz/juristischeAbklaerung/all/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     Response getJuristischeAbklaerungNotizen(@PathParam("gesuchId") UUID gesuchId);
 
