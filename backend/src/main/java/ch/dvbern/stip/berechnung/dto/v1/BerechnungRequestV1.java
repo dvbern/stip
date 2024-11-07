@@ -184,15 +184,15 @@ public class BerechnungRequestV1 implements DmnRequest {
         final boolean wohntInWG
     ) {
         int grundbedarf = switch (anzahlPersonenImHaushalt) {
-        case 1 -> gesuchsperiode.getPerson1();
-        case 2 -> gesuchsperiode.getPersonen2();
-        case 3 -> gesuchsperiode.getPersonen3();
-        case 4 -> gesuchsperiode.getPersonen4();
-        case 5 -> gesuchsperiode.getPersonen5();
-        case 6 -> gesuchsperiode.getPersonen6();
-        case 7 -> gesuchsperiode.getPersonen7();
-        default -> gesuchsperiode.getPersonen7()
-        + (anzahlPersonenImHaushalt - 7) * gesuchsperiode.getProWeiterePerson();
+            case 1 -> gesuchsperiode.getPerson1();
+            case 2 -> gesuchsperiode.getPersonen2();
+            case 3 -> gesuchsperiode.getPersonen3();
+            case 4 -> gesuchsperiode.getPersonen4();
+            case 5 -> gesuchsperiode.getPersonen5();
+            case 6 -> gesuchsperiode.getPersonen6();
+            case 7 -> gesuchsperiode.getPersonen7();
+            default -> gesuchsperiode.getPersonen7()
+            + (anzahlPersonenImHaushalt - 7) * gesuchsperiode.getProWeiterePerson();
         };
 
         if (wohntInWG) {
@@ -208,12 +208,12 @@ public class BerechnungRequestV1 implements DmnRequest {
         int anzahlPersonenImHaushalt
     ) {
         int maxWohnkosten = switch (anzahlPersonenImHaushalt) {
-        case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
-        case 1 -> gesuchsperiode.getWohnkostenFam1pers();
-        case 2 -> gesuchsperiode.getWohnkostenFam2pers();
-        case 3 -> gesuchsperiode.getWohnkostenFam3pers();
-        case 4 -> gesuchsperiode.getWohnkostenFam4pers();
-        default -> gesuchsperiode.getWohnkostenFam5pluspers();
+            case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
+            case 1 -> gesuchsperiode.getWohnkostenFam1pers();
+            case 2 -> gesuchsperiode.getWohnkostenFam2pers();
+            case 3 -> gesuchsperiode.getWohnkostenFam3pers();
+            case 4 -> gesuchsperiode.getWohnkostenFam4pers();
+            default -> gesuchsperiode.getWohnkostenFam5pluspers();
         };
         return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }

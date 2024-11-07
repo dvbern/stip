@@ -25,8 +25,8 @@ import jakarta.inject.Inject;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @QuarkusTest
 class StammdatenResourceImplTest {
@@ -37,7 +37,6 @@ class StammdatenResourceImplTest {
     @Test
     void getLaenderasGS() {
         assertEquals(HttpStatus.SC_OK, stammdatenResource.getLaender().getStatus());
-
     }
 
     @TestAsSachbearbeiter

@@ -1,1 +1,323 @@
-{"fall":{"id":"e44ad3e2-132b-4b21-af7b-183fbaf58369","fallNummer":"BE.F.415485","mandant":"bern"},"gesuchsperiode":{"id":"04aea35c-3051-4ac9-b853-20fb5bec0a50","bezeichnungDe":"Herbst 2024","bezeichnungFr":"Automne 2024","gueltigkeitStatus":"PUBLIZIERT","gesuchsperiodeStart":"2024-07-01","gesuchsperiodeStopp":"2025-06-30","aufschaltterminStart":"2024-07-01","aufschaltterminStopp":"2025-06-30","einreichefristNormal":"2024-11-30","einreichefristReduziert":"2025-02-28","gesuchsjahr":{"id":"b2e84aaf-fb5c-4ed5-b597-a615827eedf5","bezeichnungDe":"Gesuchsjahr 24","bezeichnungFr":"Année de la demande 24","technischesJahr":2024,"gueltigkeitStatus":"PUBLIZIERT"},"ausbKosten_SekII":2000,"ausbKosten_Tertiaer":3000},"gesuchStatus":"IN_BEARBEITUNG_SB","gesuchNummer":"2024.BE.G.59907","id":"e13f0f18-37f5-4a0f-9a05-ce9a8a09414c","aenderungsdatum":"2024-10-29","gesuchTrancheToWorkWith":{"id":"b716270e-727f-456e-ba9a-e75346defd1b","gueltigAb":"2024-07-01","gueltigBis":"2024-08-31","status":"UEBERPRUEFEN","typ":"TRANCHE","comment":null,"gesuchFormular":{"ausbildung":{"fachrichtung":"Erd- und Klimawissenschaften","ausbildungBegin":"9.2024","ausbildungEnd":"8.2027","pensum":"VOLLZEIT","ausbildungsgang":{"id":"859d7998-2c64-47cb-9d46-fff667227e28","bildungskategorie":{"bezeichnungDe":"Universitäten und Eidg. Technische Hochschulen","bezeichnungFr":"Universités et Ecoles polytechniques fédérales","bildungsstufe":"TERTIAER","bfs":9,"id":"e620530f-513c-4043-bb84-5882101d3e5f"},"bezeichnungDe":"Bachelor","bezeichnungFr":"Bachelor","ausbildungsstaetteId":null},"ausbildungNichtGefunden":false,"alternativeAusbildungsstaette":null,"alternativeAusbildungsgang":null,"ausbildungsort":"Bern","isAusbildungAusland":false},"personInAusbildung":{"adresse":{"land":"CH","strasse":"Schaufelweg","plz":"3415","ort":"Hasle b. Burgdorf","id":"bd662c3c-c7e2-408a-868b-39ce61621bde","coAdresse":null,"hausnummer":"10"},"sozialversicherungsnummer":"756.5229.7956.16","vorname":"Nicole","anrede":"FRAU","identischerZivilrechtlicherWohnsitz":true,"email":"rahel.sahli@be.ch","telefonnummer":"0313214585","geburtsdatum":"1999-08-12","nationalitaet":"CH","wohnsitz":"EIGENER_HAUSHALT","sozialhilfebeitraege":false,"nachname":"Nox","korrespondenzSprache":"DEUTSCH","heimatort":"Bern","niederlassungsstatus":null,"einreisedatum":null,"zivilstand":"VERHEIRATET","wohnsitzAnteilMutter":null,"wohnsitzAnteilVater":null,"vormundschaft":false,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null},"familiensituation":{"elternVerheiratetZusammen":false,"elternteilUnbekanntVerstorben":false,"gerichtlicheAlimentenregelung":false,"mutterUnbekanntVerstorben":null,"mutterUnbekanntGrund":null,"mutterWiederverheiratet":false,"vaterUnbekanntVerstorben":null,"vaterUnbekanntGrund":null,"vaterWiederverheiratet":false,"sorgerecht":"GEMEINSAM","obhut":"GEMEINSAM","obhutMutter":50.00,"obhutVater":50.00,"werZahltAlimente":null},"partner":{"adresse":{"land":"CH","strasse":"Schaufelweg","plz":"3415","ort":"Hasle b. Burgdorf","id":"b7168cd8-e116-4454-b0d0-a296391673da","coAdresse":null,"hausnummer":"10"},"vorname":"Lewis","geburtsdatum":"1999-05-16","sozialversicherungsnummer":"756.3348.2417.31","nachname":"Nox","ausbildungMitEinkommenOderErwerbstaetig":true,"jahreseinkommen":35000,"fahrkosten":2160,"verpflegungskosten":1920},"auszahlung":{"vorname":"Nicole","adresse":{"land":"CH","strasse":"Schaufelweg","plz":"3415","ort":"Hasle b. Burgdorf","id":"bd662c3c-c7e2-408a-868b-39ce61621bde","coAdresse":null,"hausnummer":"10"},"iban":"CH63 8080 8009 0614 9831 3","nachname":"Nox","kontoinhaber":"GESUCHSTELLER"},"elterns":[{"vorname":"Christian","adresse":{"land":"CH","strasse":"Hofweg","plz":"3417","ort":"Rüegsau","id":"8922a17c-eb74-4564-b239-9e91dfad00ea","coAdresse":null,"hausnummer":"1"},"identischerZivilrechtlicherWohnsitz":true,"telefonnummer":"0312589744","geburtsdatum":"1968-07-10","ausweisbFluechtling":false,"elternTyp":"VATER","nachname":"Nox","ergaenzungsleistungen":0,"sozialhilfebeitraege":0,"wohnkosten":13800,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null,"sozialversicherungsnummer":"756.1837.2116.54","id":"9ef89993-9949-48ae-898b-2be35a471e81"},{"vorname":"Beatrice","adresse":{"land":"CH","strasse":"Standstrasse","plz":"3472","ort":"Wynigen","id":"9b937e45-d71b-45e2-ac44-21e2666f3673","coAdresse":null,"hausnummer":"12"},"identischerZivilrechtlicherWohnsitz":true,"telefonnummer":"0784152428","geburtsdatum":"1964-09-12","ausweisbFluechtling":false,"elternTyp":"MUTTER","nachname":"Nox","ergaenzungsleistungen":0,"sozialhilfebeitraege":0,"wohnkosten":16800,"identischerZivilrechtlicherWohnsitzOrt":null,"identischerZivilrechtlicherWohnsitzPLZ":null,"sozialversicherungsnummer":"756.4245.8458.62","id":"6b6a6b9a-c83f-4272-8667-bcab979491ef"}],"geschwisters":null,"lebenslaufItems":[{"von":"8.2015","bis":"7.2018","wohnsitz":"BE","id":"1b8000dd-83f8-47ad-880a-49d48d80689e","bildungsart":"EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS","ausbildungAbgeschlossen":true,"berufsbezeichnung":"Fachfrau Gesundheit EFZ","fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":null,"taetigkeitsBeschreibung":null},{"von":"8.2018","bis":"1.2021","wohnsitz":"BE","id":"6bfdd1de-ad28-427e-90e3-a625424eabe9","bildungsart":null,"ausbildungAbgeschlossen":false,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":"ERWERBSTAETIGKEIT","taetigkeitsBeschreibung":"Fachfrau Gesundheit EFZ"},{"von":"2.2021","bis":"7.2024","wohnsitz":"BE","id":"70fff7b1-ef96-40e9-8185-8ed8f6218763","bildungsart":"GYMNASIALE_MATURITAETSSCHULEN","ausbildungAbgeschlossen":true,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":null,"taetigkeitsBeschreibung":null},{"von":"8.2024","bis":"8.2024","wohnsitz":"BE","id":"f68b1dbd-1238-42d8-b41e-efdc1c4591d4","bildungsart":null,"ausbildungAbgeschlossen":false,"berufsbezeichnung":null,"fachrichtung":null,"titelDesAbschlusses":null,"taetigkeitsart":"ERWERBSTAETIGKEIT","taetigkeitsBeschreibung":"Fachfrau Gesundheit EFZ"}],"kinds":null,"einnahmenKosten":{"nettoerwerbseinkommen":13500,"fahrkosten":2780,"verdienstRealisiert":false,"alimente":null,"zulagen":0,"renten":0,"eoLeistungen":0,"ergaenzungsleistungen":0,"beitraege":0,"ausbildungskostenSekundarstufeZwei":null,"ausbildungskostenTertiaerstufe":2200,"wohnkosten":12240,"wgWohnend":false,"willDarlehen":false,"auswaertigeMittagessenProWoche":null,"betreuungskostenKinder":null,"veranlagungsCode":0,"steuerjahr":2023,"vermoegen":0,"steuernKantonGemeinde":4850},"steuerdaten":[{"steuerdatenTyp":"MUTTER","steuernKantonGemeinde":9878,"steuernBund":594,"fahrkosten":588,"verpflegung":1600,"totalEinkuenfte":62748,"eigenmietwert":0,"isArbeitsverhaeltnisSelbstaendig":false,"kinderalimente":0,"vermoegen":195000,"id":"fd45c200-759c-4e9a-96c7-ace5c480a0fe","fahrkostenPartner":0,"verpflegungPartner":0,"steuerjahr":2023,"veranlagungsCode":0,"saeule3a":null,"saeule2":null},{"steuerdatenTyp":"VATER","steuernKantonGemeinde":8837,"steuernBund":575,"fahrkosten":700,"verpflegung":3200,"totalEinkuenfte":64363,"eigenmietwert":0,"isArbeitsverhaeltnisSelbstaendig":false,"kinderalimente":0,"vermoegen":7505,"id":"4dc8fd0e-68ad-46e8-9ad0-ab29dff816f2","fahrkostenPartner":0,"verpflegungPartner":0,"steuerjahr":2023,"veranlagungsCode":0,"saeule3a":null,"saeule2":null}],"steuerdatenTabs":["MUTTER","VATER"]}},"bearbeiter":"Manuela Geissler"}
+{
+  "fall": {
+    "id": "e44ad3e2-132b-4b21-af7b-183fbaf58369",
+    "fallNummer": "BE.F.415485",
+    "mandant": "bern"
+  },
+  "gesuchsperiode": {
+    "id": "04aea35c-3051-4ac9-b853-20fb5bec0a50",
+    "bezeichnungDe": "Herbst 2024",
+    "bezeichnungFr": "Automne 2024",
+    "gueltigkeitStatus": "PUBLIZIERT",
+    "gesuchsperiodeStart": "2024-07-01",
+    "gesuchsperiodeStopp": "2025-06-30",
+    "aufschaltterminStart": "2024-07-01",
+    "aufschaltterminStopp": "2025-06-30",
+    "einreichefristNormal": "2024-11-30",
+    "einreichefristReduziert": "2025-02-28",
+    "gesuchsjahr": {
+      "id": "b2e84aaf-fb5c-4ed5-b597-a615827eedf5",
+      "bezeichnungDe": "Gesuchsjahr 24",
+      "bezeichnungFr": "Année de la demande 24",
+      "technischesJahr": 2024,
+      "gueltigkeitStatus": "PUBLIZIERT"
+    },
+    "ausbKosten_SekII": 2000,
+    "ausbKosten_Tertiaer": 3000
+  },
+  "gesuchStatus": "IN_BEARBEITUNG_SB",
+  "gesuchNummer": "2024.BE.G.59907",
+  "id": "e13f0f18-37f5-4a0f-9a05-ce9a8a09414c",
+  "aenderungsdatum": "2024-10-29",
+  "gesuchTrancheToWorkWith": {
+    "id": "b716270e-727f-456e-ba9a-e75346defd1b",
+    "gueltigAb": "2024-07-01",
+    "gueltigBis": "2024-08-31",
+    "status": "UEBERPRUEFEN",
+    "typ": "TRANCHE",
+    "comment": null,
+    "gesuchFormular": {
+      "ausbildung": {
+        "fachrichtung": "Erd- und Klimawissenschaften",
+        "ausbildungBegin": "9.2024",
+        "ausbildungEnd": "8.2027",
+        "pensum": "VOLLZEIT",
+        "ausbildungsgang": {
+          "id": "859d7998-2c64-47cb-9d46-fff667227e28",
+          "bildungskategorie": {
+            "bezeichnungDe": "Universitäten und Eidg. Technische Hochschulen",
+            "bezeichnungFr": "Universités et Ecoles polytechniques fédérales",
+            "bildungsstufe": "TERTIAER",
+            "bfs": 9,
+            "id": "e620530f-513c-4043-bb84-5882101d3e5f"
+          },
+          "bezeichnungDe": "Bachelor",
+          "bezeichnungFr": "Bachelor",
+          "ausbildungsstaetteId": null
+        },
+        "ausbildungNichtGefunden": false,
+        "alternativeAusbildungsstaette": null,
+        "alternativeAusbildungsgang": null,
+        "ausbildungsort": "Bern",
+        "isAusbildungAusland": false
+      },
+      "personInAusbildung": {
+        "adresse": {
+          "land": "CH",
+          "strasse": "Schaufelweg",
+          "plz": "3415",
+          "ort": "Hasle b. Burgdorf",
+          "id": "bd662c3c-c7e2-408a-868b-39ce61621bde",
+          "coAdresse": null,
+          "hausnummer": "10"
+        },
+        "sozialversicherungsnummer": "756.5229.7956.16",
+        "vorname": "Nicole",
+        "anrede": "FRAU",
+        "identischerZivilrechtlicherWohnsitz": true,
+        "email": "rahel.sahli@be.ch",
+        "telefonnummer": "0313214585",
+        "geburtsdatum": "1999-08-12",
+        "nationalitaet": "CH",
+        "wohnsitz": "EIGENER_HAUSHALT",
+        "sozialhilfebeitraege": false,
+        "nachname": "Nox",
+        "korrespondenzSprache": "DEUTSCH",
+        "heimatort": "Bern",
+        "niederlassungsstatus": null,
+        "einreisedatum": null,
+        "zivilstand": "VERHEIRATET",
+        "wohnsitzAnteilMutter": null,
+        "wohnsitzAnteilVater": null,
+        "vormundschaft": false,
+        "identischerZivilrechtlicherWohnsitzOrt": null,
+        "identischerZivilrechtlicherWohnsitzPLZ": null
+      },
+      "familiensituation": {
+        "elternVerheiratetZusammen": false,
+        "elternteilUnbekanntVerstorben": false,
+        "gerichtlicheAlimentenregelung": false,
+        "mutterUnbekanntVerstorben": null,
+        "mutterUnbekanntGrund": null,
+        "mutterWiederverheiratet": false,
+        "vaterUnbekanntVerstorben": null,
+        "vaterUnbekanntGrund": null,
+        "vaterWiederverheiratet": false,
+        "sorgerecht": "GEMEINSAM",
+        "obhut": "GEMEINSAM",
+        "obhutMutter": 50.00,
+        "obhutVater": 50.00,
+        "werZahltAlimente": null
+      },
+      "partner": {
+        "adresse": {
+          "land": "CH",
+          "strasse": "Schaufelweg",
+          "plz": "3415",
+          "ort": "Hasle b. Burgdorf",
+          "id": "b7168cd8-e116-4454-b0d0-a296391673da",
+          "coAdresse": null,
+          "hausnummer": "10"
+        },
+        "vorname": "Lewis",
+        "geburtsdatum": "1999-05-16",
+        "sozialversicherungsnummer": "756.3348.2417.31",
+        "nachname": "Nox",
+        "ausbildungMitEinkommenOderErwerbstaetig": true,
+        "jahreseinkommen": 35000,
+        "fahrkosten": 2160,
+        "verpflegungskosten": 1920
+      },
+      "auszahlung": {
+        "vorname": "Nicole",
+        "adresse": {
+          "land": "CH",
+          "strasse": "Schaufelweg",
+          "plz": "3415",
+          "ort": "Hasle b. Burgdorf",
+          "id": "bd662c3c-c7e2-408a-868b-39ce61621bde",
+          "coAdresse": null,
+          "hausnummer": "10"
+        },
+        "iban": "CH63 8080 8009 0614 9831 3",
+        "nachname": "Nox",
+        "kontoinhaber": "GESUCHSTELLER"
+      },
+      "elterns": [
+        {
+          "vorname": "Christian",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Hofweg",
+            "plz": "3417",
+            "ort": "Rüegsau",
+            "id": "8922a17c-eb74-4564-b239-9e91dfad00ea",
+            "coAdresse": null,
+            "hausnummer": "1"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "0312589744",
+          "geburtsdatum": "1968-07-10",
+          "ausweisbFluechtling": false,
+          "elternTyp": "VATER",
+          "nachname": "Nox",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 13800,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.1837.2116.54",
+          "id": "9ef89993-9949-48ae-898b-2be35a471e81"
+        },
+        {
+          "vorname": "Beatrice",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Standstrasse",
+            "plz": "3472",
+            "ort": "Wynigen",
+            "id": "9b937e45-d71b-45e2-ac44-21e2666f3673",
+            "coAdresse": null,
+            "hausnummer": "12"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "0784152428",
+          "geburtsdatum": "1964-09-12",
+          "ausweisbFluechtling": false,
+          "elternTyp": "MUTTER",
+          "nachname": "Nox",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 16800,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.4245.8458.62",
+          "id": "6b6a6b9a-c83f-4272-8667-bcab979491ef"
+        }
+      ],
+      "geschwisters": null,
+      "lebenslaufItems": [
+        {
+          "von": "8.2015",
+          "bis": "7.2018",
+          "wohnsitz": "BE",
+          "id": "1b8000dd-83f8-47ad-880a-49d48d80689e",
+          "bildungsart": "EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS",
+          "ausbildungAbgeschlossen": true,
+          "berufsbezeichnung": "Fachfrau Gesundheit EFZ",
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2018",
+          "bis": "1.2021",
+          "wohnsitz": "BE",
+          "id": "6bfdd1de-ad28-427e-90e3-a625424eabe9",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ERWERBSTAETIGKEIT",
+          "taetigkeitsBeschreibung": "Fachfrau Gesundheit EFZ"
+        },
+        {
+          "von": "2.2021",
+          "bis": "7.2024",
+          "wohnsitz": "BE",
+          "id": "70fff7b1-ef96-40e9-8185-8ed8f6218763",
+          "bildungsart": "GYMNASIALE_MATURITAETSSCHULEN",
+          "ausbildungAbgeschlossen": true,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2024",
+          "bis": "8.2024",
+          "wohnsitz": "BE",
+          "id": "f68b1dbd-1238-42d8-b41e-efdc1c4591d4",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ERWERBSTAETIGKEIT",
+          "taetigkeitsBeschreibung": "Fachfrau Gesundheit EFZ"
+        }
+      ],
+      "kinds": null,
+      "einnahmenKosten": {
+        "nettoerwerbseinkommen": 13500,
+        "fahrkosten": 2780,
+        "verdienstRealisiert": false,
+        "alimente": null,
+        "zulagen": 0,
+        "renten": 0,
+        "eoLeistungen": 0,
+        "ergaenzungsleistungen": 0,
+        "beitraege": 0,
+        "ausbildungskostenSekundarstufeZwei": null,
+        "ausbildungskostenTertiaerstufe": 2200,
+        "wohnkosten": 12240,
+        "wgWohnend": false,
+        "willDarlehen": false,
+        "auswaertigeMittagessenProWoche": null,
+        "betreuungskostenKinder": null,
+        "veranlagungsCode": 0,
+        "steuerjahr": 2023,
+        "vermoegen": 0,
+        "steuernKantonGemeinde": 4850
+      },
+      "steuerdaten": [
+        {
+          "steuerdatenTyp": "MUTTER",
+          "steuernKantonGemeinde": 9878,
+          "steuernBund": 594,
+          "fahrkosten": 588,
+          "verpflegung": 1600,
+          "totalEinkuenfte": 62748,
+          "eigenmietwert": 0,
+          "isArbeitsverhaeltnisSelbstaendig": false,
+          "kinderalimente": 0,
+          "vermoegen": 195000,
+          "id": "fd45c200-759c-4e9a-96c7-ace5c480a0fe",
+          "fahrkostenPartner": 0,
+          "verpflegungPartner": 0,
+          "steuerjahr": 2023,
+          "veranlagungsCode": 0,
+          "saeule3a": null,
+          "saeule2": null
+        },
+        {
+          "steuerdatenTyp": "VATER",
+          "steuernKantonGemeinde": 8837,
+          "steuernBund": 575,
+          "fahrkosten": 700,
+          "verpflegung": 3200,
+          "totalEinkuenfte": 64363,
+          "eigenmietwert": 0,
+          "isArbeitsverhaeltnisSelbstaendig": false,
+          "kinderalimente": 0,
+          "vermoegen": 7505,
+          "id": "4dc8fd0e-68ad-46e8-9ad0-ab29dff816f2",
+          "fahrkostenPartner": 0,
+          "verpflegungPartner": 0,
+          "steuerjahr": 2023,
+          "veranlagungsCode": 0,
+          "saeule3a": null,
+          "saeule2": null
+        }
+      ],
+      "steuerdatenTabs": [
+        "MUTTER",
+        "VATER"
+      ]
+    }
+  },
+  "bearbeiter": "Manuela Geissler"
+}

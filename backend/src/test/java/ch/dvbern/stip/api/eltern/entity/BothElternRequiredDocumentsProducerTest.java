@@ -30,7 +30,7 @@ import jakarta.inject.Inject;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 class BothElternRequiredDocumentsProducerTest {

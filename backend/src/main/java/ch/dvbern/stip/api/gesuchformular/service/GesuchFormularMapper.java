@@ -335,12 +335,12 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 }
 
                 switch (werZahlt) {
-                case VATER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
-                case MUTTER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
-                case GEMEINSAM -> {
-                    removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
-                    removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
-                }
+                    case VATER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
+                    case MUTTER -> removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
+                    case GEMEINSAM -> {
+                        removeElternOfTyp(newFormular.getElterns(), ElternTyp.MUTTER);
+                        removeElternOfTyp(newFormular.getElterns(), ElternTyp.VATER);
+                    }
                 }
             }
         );

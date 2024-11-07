@@ -106,8 +106,6 @@ class GesuchFillFormularTest {
     private UUID gesuchTrancheId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
-    private NotificationDtoSpec notification;
-    private NotificationDto notificationDto;
 
     @Test
     @TestAsGesuchsteller
@@ -121,6 +119,7 @@ class GesuchFillFormularTest {
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
+
             .extract()
             .body()
             .as(GesuchDtoSpec.class)

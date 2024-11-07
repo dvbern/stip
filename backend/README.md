@@ -19,7 +19,7 @@ The backend uses [Spotless](https://github.com/diffplug/spotless) in conjunction
 
 There is also a git pre-commit hook ([here](../frontend/.husky/pre-commit)), installed automatically by the frontend, that runs `./mvnw spotless:check` and aborts the commit if any violations were found.
 
-When using IntelliJ for development you can install the [Spotless Applier](https://plugins.jetbrains.com/plugin/22455-spotless-applier) plugin. Enabling format on save is also simple, under `Settings` > `Tools` > `Actions on Save` activate `Run spotless`, it is recommended to only run it for Java files (using the dropdown in the same row). It is also recommended to enable `Optimize imports before applying` and `Prohibit imports with asteriskj '*'` under `Settings` > `Tools` > `Spotless Applier` to automatically remove wildcard imports as Spotless currently cannot do it by itself. 
+When using IntelliJ for development you can install the [Spotless Applier](https://plugins.jetbrains.com/plugin/22455-spotless-applier) plugin. Enabling format on save is also simple, under `Settings` > `Tools` > `Actions on Save` activate `Run spotless`, it is recommended to only run it for Java files (using the dropdown in the same row). It is also recommended to enable `Optimize imports before applying` and `Prohibit imports with asterisk '*'` under `Settings` > `Tools` > `Spotless Applier` to automatically remove wildcard imports as Spotless currently cannot do it by itself. 
 
 ### Generate stubs from contract
 

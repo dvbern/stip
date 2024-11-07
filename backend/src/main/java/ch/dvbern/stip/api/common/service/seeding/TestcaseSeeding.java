@@ -182,7 +182,7 @@ public class TestcaseSeeding extends Seeder {
 
     @Override
     protected List<String> getProfiles() {
-        return configService.getSeedTestcasesOnProfile();
+        return List.of("dev");
     }
 
     UUID getOrCreateAusbildungsgaenge(

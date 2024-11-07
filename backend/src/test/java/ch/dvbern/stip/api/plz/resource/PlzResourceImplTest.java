@@ -44,6 +44,5 @@ class PlzResourceImplTest {
     @Test
     void getPlzAsSB() {
         assertThrows(ForbiddenException.class, () -> plzResource.getPlz());
-
     }
 }

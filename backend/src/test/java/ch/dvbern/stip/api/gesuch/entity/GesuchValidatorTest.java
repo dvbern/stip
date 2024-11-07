@@ -130,7 +130,6 @@ class GesuchValidatorTest {
             gesuch,
             true
         );
-
         gesuchTranche.getGesuchFormular().getPersonInAusbildung().setWohnsitzAnteilVater(new BigDecimal("60.00"));
         assertOneMessage(
             VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE,
