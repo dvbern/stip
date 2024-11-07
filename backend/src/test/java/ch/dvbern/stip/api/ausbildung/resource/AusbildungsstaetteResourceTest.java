@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.ausbildung.resource;
 
 import java.util.UUID;
@@ -38,21 +55,21 @@ import static org.hamcrest.Matchers.is;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AusbildungsstaetteResourceTest {
 
-	private final AusbildungsstaetteApiSpec api =
-			AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
+    private final AusbildungsstaetteApiSpec api =
+        AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
 
-	private UUID ausbildungsstaetteId;
+    private UUID ausbildungsstaetteId;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void createAusbildungsstaetteAsGesuchstellerForbidden() {
         api.createAusbildungsstaette()
-                .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Status.FORBIDDEN.getStatusCode());
+            .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -60,40 +77,42 @@ class AusbildungsstaetteResourceTest {
     @Order(2)
     void createAusbildungsstaetteAsJurist() {
         var response = api.createAusbildungsstaette()
-                .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
-                .execute(ResponseBody::prettyPeek)
-                .then();
+            .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
+            .execute(ResponseBody::prettyPeek)
+            .then();
 
         response.assertThat()
-                .statusCode(Status.OK.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
 
         ausbildungsstaetteId = extractFromBody(response).getId();
     }
 
-	@Test
-	@TestAsGesuchsteller
+    @Test
+    @TestAsGesuchsteller
     @Order(3)
-	void getAusbildungsstaetten() {
-		var res = api.getAusbildungsstaetten().execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Response.Status.OK.getStatusCode())
-				.extract()
-				.as(AusbildungsstaetteDtoSpec[].class);
+    void getAusbildungsstaetten() {
+        var res = api.getAusbildungsstaetten()
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(AusbildungsstaetteDtoSpec[].class);
 
-		assertThat(res.length, greaterThanOrEqualTo(1));
-	}
+        assertThat(res.length, greaterThanOrEqualTo(1));
+    }
 
-	@Test
-	@TestAsGesuchsteller
+    @Test
+    @TestAsGesuchsteller
     @Order(4)
-	void getAusbildungsstaette() {
-		api.getAusbildungsstaette().ausbildungsstaetteIdPath(TestConstants.TEST_AUSBILDUNGSSTAETTE_ID)
-				.execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Response.Status.OK.getStatusCode());
-	}
+    void getAusbildungsstaette() {
+        api.getAusbildungsstaette()
+            .ausbildungsstaetteIdPath(TestConstants.TEST_AUSBILDUNGSSTAETTE_ID)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+    }
 
     @Test
     @TestAsJurist
@@ -101,12 +120,13 @@ class AusbildungsstaetteResourceTest {
     void updateAusbildungsstaetteNotFound() {
         var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec();
 
-        api.updateAusbildungsstaette().ausbildungsstaetteIdPath(UUID.randomUUID())
-			.body(ausbildungsstaette)
-			.execute(ResponseBody::prettyPeek)
-			.then()
-			.assertThat()
-			.statusCode(Status.NOT_FOUND.getStatusCode());
+        api.updateAusbildungsstaette()
+            .ausbildungsstaetteIdPath(UUID.randomUUID())
+            .body(ausbildungsstaette)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -115,12 +135,13 @@ class AusbildungsstaetteResourceTest {
     void updateAusbildungsstaetteAsGesuchstellerForbidden() {
         var ausbildungsstaette = AusbildungsstaetteUpdateDtoSpecModel.ausbildungsstaetteUpdateDtoSpec();
 
-        api.updateAusbildungsstaette().ausbildungsstaetteIdPath(ausbildungsstaetteId)
-                .body(ausbildungsstaette)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Status.FORBIDDEN.getStatusCode());
+        api.updateAusbildungsstaette()
+            .ausbildungsstaetteIdPath(ausbildungsstaetteId)
+            .body(ausbildungsstaette)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
@@ -133,69 +154,75 @@ class AusbildungsstaetteResourceTest {
         ausbildungsstaette.setNameDe(uniAarau);
         ausbildungsstaette.setNameFr(uniAarau);
 
-        api.updateAusbildungsstaette().ausbildungsstaetteIdPath(ausbildungsstaetteId)
-                .body(ausbildungsstaette)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode());
+        api.updateAusbildungsstaette()
+            .ausbildungsstaetteIdPath(ausbildungsstaetteId)
+            .body(ausbildungsstaette)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
 
         var updatedAusbildungsstaette = getAusbildungsstaetteFromApi(ausbildungsstaetteId);
         assertThat(updatedAusbildungsstaette.getNameDe(), is(uniAarau));
-    	assertThat(updatedAusbildungsstaette.getNameFr(), is(uniAarau));
+        assertThat(updatedAusbildungsstaette.getNameFr(), is(uniAarau));
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(8)
     void deleteAusbildungsstaetteAsGesuchstellerForbidden() {
-        api.deleteAusbildungsstaette().ausbildungsstaetteIdPath(ausbildungsstaetteId)
-    			.execute(ResponseBody::prettyPeek)
-    			.then()
-    			.assertThat()
-    			.statusCode(Status.FORBIDDEN.getStatusCode());
+        api.deleteAusbildungsstaette()
+            .ausbildungsstaetteIdPath(ausbildungsstaetteId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
     @TestAsJurist
     @Order(9)
     void deleteAusbildungsstaetteNotFound() {
-        api.deleteAusbildungsstaette().ausbildungsstaetteIdPath(UUID.randomUUID())
-    			.execute(ResponseBody::prettyPeek)
-    			.then()
-    			.assertThat()
-    			.statusCode(Status.NOT_FOUND.getStatusCode());
+        api.deleteAusbildungsstaette()
+            .ausbildungsstaetteIdPath(UUID.randomUUID())
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
     @TestAsJurist
     @Order(10)
     void deleteAusbildungsstaette() {
-        api.deleteAusbildungsstaette().ausbildungsstaetteIdPath(ausbildungsstaetteId)
-    			.execute(ResponseBody::prettyPeek)
-    			.then()
-    			.assertThat()
-    			.statusCode(Status.NO_CONTENT.getStatusCode());
+        api.deleteAusbildungsstaette()
+            .ausbildungsstaetteIdPath(ausbildungsstaetteId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
 
-		api.getAusbildungsstaette().ausbildungsstaetteIdPath(ausbildungsstaetteId)
-				.execute(ResponseBody::prettyPeek)
-				.then()
-				.assertThat()
-				.statusCode(Status.NOT_FOUND.getStatusCode());
+        api.getAusbildungsstaette()
+            .ausbildungsstaetteIdPath(ausbildungsstaetteId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.NOT_FOUND.getStatusCode());
     }
 
     private AusbildungsstaetteDtoSpec getAusbildungsstaetteFromApi(UUID id) {
-        return api.getAusbildungsstaette().ausbildungsstaetteIdPath(id)
-                .execute(ResponseBody::prettyPeek)
-                .then()
-                .extract()
-                .as(AusbildungsstaetteDtoSpec.class);
+        return api.getAusbildungsstaette()
+            .ausbildungsstaetteIdPath(id)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .as(AusbildungsstaetteDtoSpec.class);
     }
 
-	private AusbildungsstaetteDto extractFromBody(ValidatableResponse response) {
-		return response
-				.extract()
-				.body()
-				.as(AusbildungsstaetteDto.class);
-	}
+    private AusbildungsstaetteDto extractFromBody(ValidatableResponse response) {
+        return response
+            .extract()
+            .body()
+            .as(AusbildungsstaetteDto.class);
+    }
 }

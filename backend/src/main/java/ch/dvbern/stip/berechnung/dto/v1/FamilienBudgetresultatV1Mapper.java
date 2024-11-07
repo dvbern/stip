@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.math.BigDecimal;
@@ -26,21 +43,22 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
         final BerechnungRequestV1 berechnungsRequest = (BerechnungRequestV1) request;
         InputFamilienbudgetV1 inputFamilienbudget = null;
         switch (budgetToUse) {
-            case 0 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget1();
-            case 1 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget2();
-            default -> throw new IllegalArgumentException("Budget " + budgetToUse + " is not a possible choice");
+        case 0 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget1();
+        case 1 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget2();
+        default -> throw new IllegalArgumentException("Budget " + budgetToUse + " is not a possible choice");
         }
         final var elternteil = inputFamilienbudget.elternteil;
 
         int anrechenbaresVermoegen = elternteil.getSteuerbaresVermoegen();
         if (elternteil.isSelbststaendigErwerbend()) {
             anrechenbaresVermoegen = Integer.max(
-                anrechenbaresVermoegen - berechnungsRequest.getStammdaten().getFreibetragVermoegen(), 0
+                anrechenbaresVermoegen - berechnungsRequest.getStammdaten().getFreibetragVermoegen(),
+                0
             );
         }
         anrechenbaresVermoegen = BigDecimal.valueOf(
-                anrechenbaresVermoegen * berechnungsRequest.getStammdaten().getVermoegensanteilInProzent() / 100.0
-            ).setScale(0, RoundingMode.HALF_UP).intValue();
+            anrechenbaresVermoegen * berechnungsRequest.getStammdaten().getVermoegensanteilInProzent() / 100.0
+        ).setScale(0, RoundingMode.HALF_UP).intValue();
 
         return new FamilienBudgetresultatDto()
             .familienBudgetTyp(steuerdatenTyp)

@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.benutzer.util;
 
 import java.util.Arrays;
@@ -115,10 +132,10 @@ public final class TestRollen {
 
     public static Set<Rolle> getComposite(final String composite) {
         return switch (composite) {
-            case ADMIN -> createRollen(ADMIN_COMPOSITE);
-            case SACHBEARBEITER -> createRollen(SACHBEARBEITER_COMPOSITE);
-            case GESUCHSTELLER -> createRollen(GESUCHSTELLER_COMPOSITE);
-            default -> Set.of();
+        case ADMIN -> createRollen(ADMIN_COMPOSITE);
+        case SACHBEARBEITER -> createRollen(SACHBEARBEITER_COMPOSITE);
+        case GESUCHSTELLER -> createRollen(GESUCHSTELLER_COMPOSITE);
+        default -> Set.of();
         };
     }
 

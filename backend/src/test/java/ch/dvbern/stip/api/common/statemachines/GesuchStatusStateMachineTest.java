@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.statemachines;
 
 import java.lang.annotation.Annotation;
@@ -30,12 +47,13 @@ class GesuchStatusStateMachineTest {
     @Test
     void failsWithoutGesuchAsParameter() {
         final var gesuch = new Gesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-        final var config = new GesuchStatusConfigProducer(new InstanceMock(new ArrayList<>())).createStateMachineConfig();
+        final var config =
+            new GesuchStatusConfigProducer(new InstanceMock(new ArrayList<>())).createStateMachineConfig();
         final var sm = new StateMachine<>(
             gesuch.getGesuchStatus(),
             gesuch::getGesuchStatus,
             s -> gesuch.setGesuchStatus(s)
-                    .setGesuchStatusAenderungDatum(LocalDateTime.now()),
+                .setGesuchStatusAenderungDatum(LocalDateTime.now()),
             config
         );
 
@@ -48,10 +66,12 @@ class GesuchStatusStateMachineTest {
     void transitionCallsCorrectHandler() {
         final var doesHandle = new StateChangeHandlerMock();
         final var doesNotHandle = new StateChangeDoesNotHandleMock();
-        final var instance = new InstanceMock(new ArrayList<>() {{
-            add(doesHandle);
-            add(doesNotHandle);
-        }});
+        final var instance = new InstanceMock(new ArrayList<>() {
+            {
+                add(doesHandle);
+                add(doesNotHandle);
+            }
+        });
 
         final var gesuch = new Gesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         final var config = new GesuchStatusConfigProducer(instance).createStateMachineConfig();
@@ -59,30 +79,32 @@ class GesuchStatusStateMachineTest {
             gesuch.getGesuchStatus(),
             gesuch::getGesuchStatus,
             s -> gesuch.setGesuchStatus(s)
-                    .setGesuchStatusAenderungDatum(LocalDateTime.now()),
+                .setGesuchStatusAenderungDatum(LocalDateTime.now()),
             config
         );
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT), gesuch);
 
         assertThat(
-                "The state machine did not find a handler to call",
-                doesHandle.isHandled(),
-                is(true)
+            "The state machine did not find a handler to call",
+            doesHandle.isHandled(),
+            is(true)
         );
 
         assertThat(
-                "The state machine called the wrong handler",
-                doesNotHandle.isHandled(),
-                is(false)
+            "The state machine called the wrong handler",
+            doesNotHandle.isHandled(),
+            is(false)
         );
     }
 
     @Test
     void transitionCallsHandler() {
         final var handler = new StateChangeHandlerMock();
-        final var instance = new InstanceMock(new ArrayList<>() {{
-			add(handler);
-		}});
+        final var instance = new InstanceMock(new ArrayList<>() {
+            {
+                add(handler);
+            }
+        });
 
         final var gesuch = new Gesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         final var config = new GesuchStatusConfigProducer(instance).createStateMachineConfig();
@@ -118,7 +140,7 @@ class GesuchStatusStateMachineTest {
     }
 
     @Getter
-	static class StateChangeHandlerMock implements GesuchStatusStateChangeHandler {
+    static class StateChangeHandlerMock implements GesuchStatusStateChangeHandler {
         private boolean handled = false;
 
         @Override
@@ -150,12 +172,18 @@ class GesuchStatusStateMachineTest {
         }
 
         @Override
-        public <U extends GesuchStatusStateChangeHandler> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
+        public <U extends GesuchStatusStateChangeHandler> Instance<U> select(
+            Class<U> subtype,
+            Annotation... qualifiers
+        ) {
             return null;
         }
 
         @Override
-        public <U extends GesuchStatusStateChangeHandler> Instance<U> select(TypeLiteral<U> subtype, Annotation... qualifiers) {
+        public <U extends GesuchStatusStateChangeHandler> Instance<U> select(
+            TypeLiteral<U> subtype,
+            Annotation... qualifiers
+        ) {
             return null;
         }
 

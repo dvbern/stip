@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.kind.service;
 
 import java.util.Iterator;
@@ -34,9 +51,12 @@ public interface KindMapper {
         for (KindUpdateDto kindUpdateDto : kindUpdateDtos) {
             if (kindUpdateDto.getId() != null) {
                 Kind found =
-                    kinder.stream().filter(kind -> kind.getId().equals(kindUpdateDto.getId())).findFirst().orElseThrow(
-                        () -> new NotFoundException("Kind Not FOUND")
-                    );
+                    kinder.stream()
+                        .filter(kind -> kind.getId().equals(kindUpdateDto.getId()))
+                        .findFirst()
+                        .orElseThrow(
+                            () -> new NotFoundException("Kind Not FOUND")
+                        );
                 kinder.remove(found);
                 kinder.add(partialUpdate(kindUpdateDto, found));
             } else {
@@ -46,5 +66,5 @@ public interface KindMapper {
         return kinder;
     }
 
-	KindUpdateDto toUpdateDto(Kind kind);
+    KindUpdateDto toUpdateDto(Kind kind);
 }

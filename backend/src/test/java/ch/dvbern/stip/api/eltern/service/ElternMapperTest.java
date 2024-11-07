@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.eltern.service;
 
 import java.time.LocalDate;
@@ -35,12 +52,12 @@ class ElternMapperTest {
         neuElternSet.stream().forEach(eltern -> eltern.setId(elternUpdateDto.getId()));
         neuElternSet = elternMapper.map(elternUpdateDtos, neuElternSet);
         Assertions.assertEquals(elternUpdateDto.getId(), neuElternSet.stream().findFirst().get().getId());
-        //DELETE ONE ADD A NEW ONE
+        // DELETE ONE ADD A NEW ONE
         elternUpdateDtos.clear();
         elternUpdateDtos.add(prepareData());
         neuElternSet = elternMapper.map(elternUpdateDtos, neuElternSet);
         Assertions.assertEquals(1, neuElternSet.size());
-        //DELETE ALL
+        // DELETE ALL
         elternUpdateDtos.clear();
         neuElternSet = elternMapper.map(elternUpdateDtos, neuElternSet);
         Assertions.assertEquals(0, neuElternSet.size());

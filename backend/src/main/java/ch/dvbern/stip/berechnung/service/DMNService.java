@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.berechnung.service;
 
 import java.util.List;
@@ -45,13 +62,19 @@ public class DMNService {
         return runtime.evaluateAll(model, dynamicContext);
     }
 
-    public List<Resource> loadModelsForTenantAndVersionByName(final String tenantId, final String version, final String modelName) {
+    public List<Resource> loadModelsForTenantAndVersionByName(
+        final String tenantId,
+        final String version,
+        final String modelName
+    ) {
         // String concatenation with "/" is the correct way, since the Java Resource API requires "/" as separator
         final var modelsDirectoryPath = DMN_BASE_DIR + "/" + tenantId + "/" + version;
         final var modelFilePath = modelsDirectoryPath + "/" + modelName + DMN_EXTENSION;
-        // When the app is packaged in a jar file the dirs/files are no longer dirs/files so we have to read them as a stream and listing files gets complicated.
+        // When the app is packaged in a jar file the dirs/files are no longer dirs/files so we have to read them as a
+        // stream and listing files gets complicated.
         // Since we depend on a specific model being present we just statically construct the path and load it that way.
-        final var modelFileStream = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(modelFilePath));
+        final var modelFileStream =
+            Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(modelFilePath));
 
         final var modelResource = ResourceFactory.newInputStreamResource(modelFileStream);
         return List.of(modelResource);

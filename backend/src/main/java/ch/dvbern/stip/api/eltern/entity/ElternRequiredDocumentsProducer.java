@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.eltern.entity;
 
 import java.util.HashSet;
@@ -16,18 +33,24 @@ import lombok.RequiredArgsConstructor;
 public class ElternRequiredDocumentsProducer {
 
     private static final Map<ElternTyp, DokumentTyp> ERGAENZUNGSLEISTUNGEN_MAP = Map.of(
-        ElternTyp.MUTTER, DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER,
-        ElternTyp.VATER, DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
+        ElternTyp.MUTTER,
+        DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER,
+        ElternTyp.VATER,
+        DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
     );
 
     private static final Map<ElternTyp, DokumentTyp> SOZIALHILFEBUDGET_MAP = Map.of(
-        ElternTyp.MUTTER, DokumentTyp.ELTERN_SOZIALHILFEBUDGET_MUTTER,
-        ElternTyp.VATER, DokumentTyp.ELTERN_SOZIALHILFEBUDGET_VATER
+        ElternTyp.MUTTER,
+        DokumentTyp.ELTERN_SOZIALHILFEBUDGET_MUTTER,
+        ElternTyp.VATER,
+        DokumentTyp.ELTERN_SOZIALHILFEBUDGET_VATER
     );
 
     private static final Map<ElternTyp, DokumentTyp> WOHNKOSTEN_MAP = Map.of(
-        ElternTyp.MUTTER, DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
-        ElternTyp.VATER, DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+        ElternTyp.MUTTER,
+        DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER,
+        ElternTyp.VATER,
+        DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
     );
 
     public Set<DokumentTyp> getForElternteil(final Eltern elternteil, final Familiensituation familiensituation) {
@@ -37,11 +60,11 @@ public class ElternRequiredDocumentsProducer {
 
         final var requiredDocs = new HashSet<DokumentTyp>();
 
-        if(RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getErgaenzungsleistungen())){
+        if (RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getErgaenzungsleistungen())) {
             requiredDocs.add(ERGAENZUNGSLEISTUNGEN_MAP.get(elternteil.getElternTyp()));
         }
 
-        if(RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getSozialhilfebeitraege())){
+        if (RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getSozialhilfebeitraege())) {
             requiredDocs.add(SOZIALHILFEBUDGET_MAP.get(elternteil.getElternTyp()));
         }
 
@@ -53,8 +76,6 @@ public class ElternRequiredDocumentsProducer {
             }
         }
 
-
         return requiredDocs;
     }
 }
-

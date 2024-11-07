@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.ausbildung.service;
 
 import java.util.Collection;
@@ -39,7 +56,10 @@ public class AusbildungsstaetteService {
     }
 
     @Transactional
-    public AusbildungsstaetteDto updateAusbildungsstaette(UUID ausbildungsstaetteId, AusbildungsstaetteUpdateDto ausbildungsstaetteUpdateDto) {
+    public AusbildungsstaetteDto updateAusbildungsstaette(
+        UUID ausbildungsstaetteId,
+        AusbildungsstaetteUpdateDto ausbildungsstaetteUpdateDto
+    ) {
         Ausbildungsstaette ausbildungsstaetteToUpdate = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
         persistAusbildungsstaette(ausbildungsstaetteUpdateDto, ausbildungsstaetteToUpdate);
         return ausbildungsstaetteMapper.toDto(ausbildungsstaetteToUpdate);
@@ -53,13 +73,15 @@ public class AusbildungsstaetteService {
 
     private void persistAusbildungsstaette(
         AusbildungsstaetteUpdateDto ausbildungsstaetteUpdate,
-        Ausbildungsstaette ausbildungsstaetteToUpdate) {
+        Ausbildungsstaette ausbildungsstaetteToUpdate
+    ) {
         ausbildungsstaetteMapper.partialUpdate(ausbildungsstaetteUpdate, ausbildungsstaetteToUpdate);
         ausbildungsstaetteRepository.persist(ausbildungsstaetteToUpdate);
     }
 
     private Ausbildungsstaette persistAusbildungsstaette(
-        AusbildungsstaetteCreateDto ausbildungsstaetteCreate) {
+        AusbildungsstaetteCreateDto ausbildungsstaetteCreate
+    ) {
         Ausbildungsstaette ausbildungsstaette = ausbildungsstaetteMapper.toEntity(ausbildungsstaetteCreate);
         ausbildungsstaetteRepository.persist(ausbildungsstaette);
         return ausbildungsstaette;

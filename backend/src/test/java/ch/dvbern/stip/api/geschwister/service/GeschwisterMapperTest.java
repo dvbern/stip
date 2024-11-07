@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.geschwister.service;
 
 import java.math.BigDecimal;
@@ -34,12 +51,12 @@ class GeschwisterMapperTest {
         neuGeschwisterSet.stream().forEach(geschwister -> geschwister.setId(geschwisterUpdateDto.getId()));
         neuGeschwisterSet = geschwisterMapper.map(geschwisterUpdateDtos, neuGeschwisterSet);
         Assertions.assertEquals(geschwisterUpdateDto.getId(), neuGeschwisterSet.stream().findFirst().get().getId());
-        //DELETE ONE ADD A NEW ONE
+        // DELETE ONE ADD A NEW ONE
         geschwisterUpdateDtos.clear();
         geschwisterUpdateDtos.add(prepareData());
         neuGeschwisterSet = geschwisterMapper.map(geschwisterUpdateDtos, neuGeschwisterSet);
         Assertions.assertEquals(1, neuGeschwisterSet.size());
-        //DELETE ALL
+        // DELETE ALL
         geschwisterUpdateDtos.clear();
         neuGeschwisterSet = geschwisterMapper.map(geschwisterUpdateDtos, neuGeschwisterSet);
         Assertions.assertEquals(0, neuGeschwisterSet.size());
