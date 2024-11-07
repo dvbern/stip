@@ -51,17 +51,17 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
         return query.stream();
     }
 
-    public Stream<Gesuchsperiode> findAllStartBefore(LocalDate date) {
+    public Gesuchsperiode findAllStartBeforeOrAt(LocalDate date) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var query = queryFactory
             .selectFrom(gesuchsperiode)
             .where(gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.PUBLIZIERT))
             .where(
                 gesuchsperiode.gesuchsperiodeStart.before(date)
-                    .or(gesuchsperiode.aufschaltterminStart.eq(date))
+                    .or(gesuchsperiode.gesuchsperiodeStart.eq(date))
             )
             .orderBy(gesuchsperiode.aufschaltterminStart.desc());
-        return query.stream();
+        return query.fetchFirst();
     }
 
     public Optional<Gesuchsperiode> getLatest() {

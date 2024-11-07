@@ -23,7 +23,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
@@ -33,8 +35,9 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -86,28 +89,37 @@ public class GesuchsperiodenService {
     public Gesuchsperiode getGesuchsperiodeForAusbildung(final Ausbildung ausbildung) {
         final var ausbildungBegin = ausbildung.getAusbildungBegin();
 
-        int yearOffset = -1;
-        while (true) {
+        for (int yearOffset = 1; yearOffset >= -1; yearOffset--) {
             var ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear() + yearOffset);
-            final var eligibleGesuchsperioden =
-                gesuchsperiodeRepository.findAllStartBefore(ausbildungsBeginAssumed).toList();
-            if (eligibleGesuchsperioden.isEmpty()) {
-                if (yearOffset == 2) {
-                    throw new NotFoundException();
-                }
-                yearOffset += 1;
-                continue;
-            }
-            if (eligibleGesuchsperioden.size() == 1) {
-                return eligibleGesuchsperioden.get(0);
+
+            if (ausbildungsBeginAssumed.isBefore(ausbildungBegin)) {
+                break;
             }
 
-            if (eligibleGesuchsperioden.get(0).getEinreichefristReduziert().isBefore(LocalDate.now())) {
+            var eligibleGesuchsperiode =
+                gesuchsperiodeRepository.findAllStartBeforeOrAt(ausbildungsBeginAssumed);
+
+            if (eligibleGesuchsperiode == null) {
                 continue;
             }
 
-            return eligibleGesuchsperioden.get(0);
+            if (
+                eligibleGesuchsperiode
+                    .getGesuchsperiodeStart()
+                    .plusMonths(6)
+                    .isAfter(ausbildungsBeginAssumed)
+            ) {
+                return eligibleGesuchsperiode;
+            }
         }
+
+        throw new CustomValidationsException(
+            "No valid gesuchsperiode found for the ausbildungsbegin provided",
+            new CustomConstraintViolation(
+                VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE,
+                "gesuchsperiode"
+            )
+        );
     }
 
     @Transactional

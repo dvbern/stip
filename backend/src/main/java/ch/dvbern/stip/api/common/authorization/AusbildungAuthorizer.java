@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -105,7 +106,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
 
     public void canUpdate(final UUID ausbildungId) {
         if (!canUpdateCheck(ausbildungId)) {
-            throw new UnauthorizedException();
+            throw new ForbiddenException();
         }
     }
 }

@@ -169,7 +169,7 @@ public final class ValidationsConstant {
     public static final String VALIDATION_DOCUMENTS_STATUS_ACCEPTED_MESSAGE =
         "{jakarta.validation.constraints.gesuchFormular.documents.mustBe.accepted.message}";
     public static final String VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE =
-        "{jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message}";
+        "jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

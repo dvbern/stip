@@ -29,10 +29,8 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
-import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -83,8 +81,6 @@ import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -317,15 +313,6 @@ public class GesuchService {
         final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
             gesuch.getAusbildung()
         );
-        if (gesuchsperiode == null) {
-            throw new CustomValidationsException(
-                "No valid gesuchsperiode found for the ausbildungsbegin provided",
-                new CustomConstraintViolation(
-                    VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE,
-                    "Gesuch"
-                )
-            );
-        }
 
         gesuch.setGesuchsperiode(gesuchsperiode);
         createInitialGesuchTranche(gesuch);
