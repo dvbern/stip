@@ -66,7 +66,7 @@ class AusbildungResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(1)
-    void createAusbildungFail() {
+    void createAusbildungFailEnddateInPast() {
         final var fall = TestUtil.getOrCreateFall(fallApiSpec);
         var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
         ausbildungUpdateDtoSpec.setFallId(fall.getId());
@@ -83,6 +83,24 @@ class AusbildungResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(2)
+    void createAusbildungFailStartdateInFuture() {
+        final var fall = TestUtil.getOrCreateFall(fallApiSpec);
+        var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
+        ausbildungUpdateDtoSpec.setFallId(fall.getId());
+        ausbildungUpdateDtoSpec.setAusbildungBegin(DateMapperImpl.dateToMonthYear(LocalDate.now().plusYears(2)));
+        ausbildungUpdateDtoSpec.setAusbildungEnd(DateMapperImpl.dateToMonthYear(LocalDate.now().plusYears(4)));
+
+        ausbildungApiSpec.createAusbildung()
+            .body(ausbildungUpdateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(3)
     void createAusbildung() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
@@ -96,7 +114,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(3)
+    @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchIdPath(gesuch.getId())
@@ -113,7 +131,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(4)
+    @Order(5)
     void getAusbildung() {
         ausbildungApiSpec.getAusbildung()
             .ausbildungIdPath(gesuch.getAusbildungId())
@@ -125,7 +143,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(6)
     void updateAusbildungFail() {
         final var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
         ausbildungUpdateDtoSpec.setId(gesuch.getAusbildungId());
@@ -143,7 +161,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void updateAusbildung() {
         final var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
         ausbildungUpdateDtoSpec.setId(gesuch.getAusbildungId());
