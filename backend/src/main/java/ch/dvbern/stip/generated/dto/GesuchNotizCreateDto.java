@@ -8,10 +8,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
 
 
 @JsonTypeName("GesuchNotizCreate")
@@ -23,6 +19,7 @@ public class GesuchNotizCreateDto  implements Serializable {
   private @Valid UUID gesuchId;
   private @Valid String betreff;
   private @Valid String text;
+  private @Valid GesuchNotizTypDto notizTyp;
 
   /**
    **/
@@ -31,7 +28,7 @@ public class GesuchNotizCreateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchId")
   @NotNull
   public UUID getGesuchId() {
@@ -50,7 +47,7 @@ public class GesuchNotizCreateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("betreff")
   @NotNull
   public String getBetreff() {
@@ -69,7 +66,7 @@ public class GesuchNotizCreateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("text")
   @NotNull
   public String getText() {
@@ -79,6 +76,25 @@ public class GesuchNotizCreateDto  implements Serializable {
   @JsonProperty("text")
   public void setText(String text) {
     this.text = text;
+  }
+
+  /**
+   **/
+  public GesuchNotizCreateDto notizTyp(GesuchNotizTypDto notizTyp) {
+    this.notizTyp = notizTyp;
+    return this;
+  }
+
+
+  @JsonProperty("notizTyp")
+  @NotNull
+  public GesuchNotizTypDto getNotizTyp() {
+    return notizTyp;
+  }
+
+  @JsonProperty("notizTyp")
+  public void setNotizTyp(GesuchNotizTypDto notizTyp) {
+    this.notizTyp = notizTyp;
   }
 
 
@@ -93,22 +109,24 @@ public class GesuchNotizCreateDto  implements Serializable {
     GesuchNotizCreateDto gesuchNotizCreate = (GesuchNotizCreateDto) o;
     return Objects.equals(this.gesuchId, gesuchNotizCreate.gesuchId) &&
         Objects.equals(this.betreff, gesuchNotizCreate.betreff) &&
-        Objects.equals(this.text, gesuchNotizCreate.text);
+        Objects.equals(this.text, gesuchNotizCreate.text) &&
+        Objects.equals(this.notizTyp, gesuchNotizCreate.notizTyp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, betreff, text);
+    return Objects.hash(gesuchId, betreff, text, notizTyp);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizCreateDto {\n");
-    
+
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("}");
     return sb.toString();
   }
