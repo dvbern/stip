@@ -4145,8 +4145,11 @@ components:
         - $ref: '#/components/schemas/GesuchNotizCreate'
       type: object
       required:
+        - id
         - antwort
       properties:
+        id:
+          $ref: '#/components/schemas/UUID'
         antwort:
           type: string
         userErstellt:

@@ -1,14 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @JsonTypeName("JuristischeAbklaerungNotiz")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -16,6 +17,7 @@ import java.util.UUID;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class JuristischeAbklaerungNotizDto  implements Serializable {
+  private @Valid UUID id;
   private @Valid String antwort;
   private @Valid UUID gesuchId;
   private @Valid String betreff;
@@ -25,6 +27,25 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
   private @Valid LocalDate timestampErstellt;
   private @Valid String userMutiert;
   private @Valid LocalDate timestampMutiert;
+
+  /**
+   **/
+  public JuristischeAbklaerungNotizDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+
+  @JsonProperty("id")
+  @NotNull
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   /**
    **/
@@ -203,7 +224,8 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
       return false;
     }
     JuristischeAbklaerungNotizDto juristischeAbklaerungNotiz = (JuristischeAbklaerungNotizDto) o;
-    return Objects.equals(this.antwort, juristischeAbklaerungNotiz.antwort) &&
+    return Objects.equals(this.id, juristischeAbklaerungNotiz.id) &&
+        Objects.equals(this.antwort, juristischeAbklaerungNotiz.antwort) &&
         Objects.equals(this.gesuchId, juristischeAbklaerungNotiz.gesuchId) &&
         Objects.equals(this.betreff, juristischeAbklaerungNotiz.betreff) &&
         Objects.equals(this.text, juristischeAbklaerungNotiz.text) &&
@@ -216,7 +238,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(antwort, gesuchId, betreff, text, notizTyp, userErstellt, timestampErstellt, userMutiert, timestampMutiert);
+    return Objects.hash(id, antwort, gesuchId, betreff, text, notizTyp, userErstellt, timestampErstellt, userMutiert, timestampMutiert);
   }
 
   @Override
@@ -224,6 +246,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class JuristischeAbklaerungNotizDto {\n");
 
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");

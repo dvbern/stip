@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * JuristischeAbklaerungNotizDtoSpec
  */
 @JsonPropertyOrder({
+  JuristischeAbklaerungNotizDtoSpec.JSON_PROPERTY_ID,
   JuristischeAbklaerungNotizDtoSpec.JSON_PROPERTY_ANTWORT,
   JuristischeAbklaerungNotizDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   JuristischeAbklaerungNotizDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
@@ -43,6 +44,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("JuristischeAbklaerungNotiz")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class JuristischeAbklaerungNotizDtoSpec {
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
   public static final String JSON_PROPERTY_ANTWORT = "antwort";
   private String antwort;
 
@@ -72,6 +76,32 @@ public class JuristischeAbklaerungNotizDtoSpec {
 
   public JuristischeAbklaerungNotizDtoSpec() {
   }
+
+  public JuristischeAbklaerungNotizDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
 
   public JuristischeAbklaerungNotizDtoSpec antwort(String antwort) {
     
@@ -315,7 +345,8 @@ public class JuristischeAbklaerungNotizDtoSpec {
       return false;
     }
     JuristischeAbklaerungNotizDtoSpec juristischeAbklaerungNotiz = (JuristischeAbklaerungNotizDtoSpec) o;
-    return Objects.equals(this.antwort, juristischeAbklaerungNotiz.antwort) &&
+    return Objects.equals(this.id, juristischeAbklaerungNotiz.id) &&
+        Objects.equals(this.antwort, juristischeAbklaerungNotiz.antwort) &&
         Objects.equals(this.userErstellt, juristischeAbklaerungNotiz.userErstellt) &&
         Objects.equals(this.timestampErstellt, juristischeAbklaerungNotiz.timestampErstellt) &&
         Objects.equals(this.userMutiert, juristischeAbklaerungNotiz.userMutiert) &&
@@ -328,13 +359,14 @@ public class JuristischeAbklaerungNotizDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(antwort, userErstellt, timestampErstellt, userMutiert, timestampMutiert, gesuchId, betreff, text, notizTyp);
+    return Objects.hash(id, antwort, userErstellt, timestampErstellt, userMutiert, timestampMutiert, gesuchId, betreff, text, notizTyp);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class JuristischeAbklaerungNotizDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
