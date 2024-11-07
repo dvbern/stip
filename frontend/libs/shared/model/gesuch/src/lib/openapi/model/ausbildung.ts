@@ -40,9 +40,9 @@ export interface Ausbildung {
      */
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
-    editable: boolean;
     status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
+    editable?: boolean;
 }
 
 

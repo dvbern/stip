@@ -43,8 +43,8 @@ export interface AusbildungDashboardItem {
     isAusbildungAusland?: boolean;
     status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
+    editable?: boolean;
     gesuchs?: Array<GesuchDashboardItem>;
-    editable: boolean;
 }
 
 

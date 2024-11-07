@@ -13,6 +13,5 @@ import { GesuchDashboardItem } from './gesuchDashboardItem';
 
 export interface AusbildungDashboardItemAllOf { 
     gesuchs?: Array<GesuchDashboardItem>;
-    editable: boolean;
 }
 
