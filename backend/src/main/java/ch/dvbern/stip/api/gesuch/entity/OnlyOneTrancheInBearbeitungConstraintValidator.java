@@ -22,7 +22,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class OnlyOneTrancheInBearbeitungConstraintValidator
-implements ConstraintValidator<OnlyOneTrancheInBearbeitungConstraint, Gesuch> {
+    implements ConstraintValidator<OnlyOneTrancheInBearbeitungConstraint, Gesuch> {
     @Override
     public boolean isValid(Gesuch gesuch, ConstraintValidatorContext context) {
         if (gesuch.getGesuchTranchen().size() <= 1) {

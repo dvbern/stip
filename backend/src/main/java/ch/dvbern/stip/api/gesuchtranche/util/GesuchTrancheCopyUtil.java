@@ -227,10 +227,10 @@ public class GesuchTrancheCopyUtil {
         // Auszahlung
         copy.setAuszahlung(AuszahlungCopyUtil.createCopyIgnoreReferences(other.getAuszahlung()));
         final var auszahlungAdresseCopy = switch (copy.getAuszahlung().getKontoinhaber()) {
-        case GESUCHSTELLER -> piaAdresseCopy;
-        case MUTTER -> mutterAdresseCopy;
-        case VATER -> vaterAdresseCopy;
-        default -> AdresseCopyUtil.createCopy(other.getAuszahlung().getAdresse());
+            case GESUCHSTELLER -> piaAdresseCopy;
+            case MUTTER -> mutterAdresseCopy;
+            case VATER -> vaterAdresseCopy;
+            default -> AdresseCopyUtil.createCopy(other.getAuszahlung().getAdresse());
         };
         copy.getAuszahlung().setAdresse(auszahlungAdresseCopy);
 

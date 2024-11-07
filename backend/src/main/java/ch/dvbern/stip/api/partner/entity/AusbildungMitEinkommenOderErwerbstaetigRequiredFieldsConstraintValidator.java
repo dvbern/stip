@@ -21,7 +21,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraintValidator
-implements ConstraintValidator<AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint, Partner> {
+    implements ConstraintValidator<AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint, Partner> {
     @Override
     public boolean isValid(Partner partner, ConstraintValidatorContext constraintValidatorContext) {
         if (partner.isAusbildungMitEinkommenOderErwerbstaetig()) {

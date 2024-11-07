@@ -21,7 +21,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class AusbildungEndDateMustBeAfterStartConstraintValidator
-implements ConstraintValidator<AusbildungEndDateMustBeAfterStartConstraint, Ausbildung> {
+    implements ConstraintValidator<AusbildungEndDateMustBeAfterStartConstraint, Ausbildung> {
 
     @Override
     public boolean isValid(Ausbildung value, ConstraintValidatorContext context) {

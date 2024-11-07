@@ -36,7 +36,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 @Slf4j
 public class DocumentsRequiredConstraintValidator
-implements ConstraintValidator<DocumentsRequiredConstraint, GesuchFormular> {
+    implements ConstraintValidator<DocumentsRequiredConstraint, GesuchFormular> {
     @Inject
     Instance<RequiredDocumentProducer> producers;
 

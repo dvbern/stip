@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALIMENTE_NULL_WHEN_NO_ALIMENTEREGELUNG;
 
 public class AlimenteRequiredWhenAlimenteRegelungConstraintValidator
-implements ConstraintValidator<AlimenteRequiredWhenAlimenteregelungConstraint, GesuchFormular> {
+    implements ConstraintValidator<AlimenteRequiredWhenAlimenteregelungConstraint, GesuchFormular> {
     private String property = "";
 
     @Override

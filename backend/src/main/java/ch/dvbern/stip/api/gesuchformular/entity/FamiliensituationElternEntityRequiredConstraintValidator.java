@@ -29,7 +29,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class FamiliensituationElternEntityRequiredConstraintValidator
-implements ConstraintValidator<FamiliensituationElternEntityRequiredConstraint, GesuchFormular> {
+    implements ConstraintValidator<FamiliensituationElternEntityRequiredConstraint, GesuchFormular> {
     private String property = "";
 
     @Override

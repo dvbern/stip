@@ -21,7 +21,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class AusbildungsortRequiredIfSwissConstraintValidator
-implements ConstraintValidator<AusbildungsortRequiredIfSwissConstraint, Ausbildung> {
+    implements ConstraintValidator<AusbildungsortRequiredIfSwissConstraint, Ausbildung> {
     @Override
     public boolean isValid(Ausbildung ausbildung, ConstraintValidatorContext context) {
         if (Boolean.TRUE.equals(ausbildung.getIsAusbildungAusland())) {

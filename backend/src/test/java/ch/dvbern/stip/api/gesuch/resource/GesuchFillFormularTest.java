@@ -54,7 +54,6 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.KindUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.NotificationDto;
 import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;

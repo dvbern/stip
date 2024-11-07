@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_AUSBILDUNG_FACHRICHTUNG_NULL_MESSAGE;
 
 public class LebenslaufItemAusbildungFachrichtungConstraintValidator
-implements ConstraintValidator<LebenslaufItemAusbildungFachrichtungConstraint, LebenslaufItem> {
+    implements ConstraintValidator<LebenslaufItemAusbildungFachrichtungConstraint, LebenslaufItem> {
     @Override
     public boolean isValid(LebenslaufItem lebenslaufItem, ConstraintValidatorContext constraintValidatorContext) {
         if (

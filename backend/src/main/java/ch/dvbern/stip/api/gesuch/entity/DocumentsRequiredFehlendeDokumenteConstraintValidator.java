@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class DocumentsRequiredFehlendeDokumenteConstraintValidator
-implements ConstraintValidator<DocumentsRequiredFehlendeDokumenteConstraint, Gesuch> {
+    implements ConstraintValidator<DocumentsRequiredFehlendeDokumenteConstraint, Gesuch> {
 
     @Inject
     GesuchService gesuchService;

@@ -65,16 +65,16 @@ public class FamiliensituationUtil {
 
         if (Boolean.TRUE.equals(gerichtlicheAlimentenregelung)) {
             return switch (werZahltAlimente) {
-            case VATER -> ofTyp == ElternTyp.MUTTER;
-            case MUTTER -> ofTyp == ElternTyp.VATER;
-            case GEMEINSAM -> false;
+                case VATER -> ofTyp == ElternTyp.MUTTER;
+                case MUTTER -> ofTyp == ElternTyp.VATER;
+                case GEMEINSAM -> false;
             };
         }
 
         if (Boolean.TRUE.equals(elternteilUnbekanntVerstorben)) {
             return switch (ofTyp) {
-            case VATER -> vaterUnbekanntVerstorben == ElternAbwesenheitsGrund.WEDER_NOCH;
-            case MUTTER -> mutterUnbekanntVerstorben == ElternAbwesenheitsGrund.WEDER_NOCH;
+                case VATER -> vaterUnbekanntVerstorben == ElternAbwesenheitsGrund.WEDER_NOCH;
+                case MUTTER -> mutterUnbekanntVerstorben == ElternAbwesenheitsGrund.WEDER_NOCH;
             };
         }
 

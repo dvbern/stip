@@ -23,7 +23,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
 
 public class AusbildungNichtGefundenRequiredNullFieldsConstraintValidator
-implements ConstraintValidator<AusbildungNichtGefundenRequiredNullFieldsConstraint, Ausbildung> {
+    implements ConstraintValidator<AusbildungNichtGefundenRequiredNullFieldsConstraint, Ausbildung> {
 
     @Override
     public boolean isValid(

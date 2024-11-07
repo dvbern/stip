@@ -59,8 +59,8 @@ public abstract class AbstractFamilieEntity extends AbstractPerson {
 
     public BigDecimal getWohnsitzAnteil(ElternTyp elternTyp) {
         return switch (elternTyp) {
-        case VATER -> this.getWohnsitzAnteilVater();
-        case MUTTER -> this.getWohnsitzAnteilMutter();
+            case VATER -> this.getWohnsitzAnteilVater();
+            case MUTTER -> this.getWohnsitzAnteilMutter();
         };
     }
 }

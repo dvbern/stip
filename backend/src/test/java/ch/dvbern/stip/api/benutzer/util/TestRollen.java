@@ -132,10 +132,10 @@ public final class TestRollen {
 
     public static Set<Rolle> getComposite(final String composite) {
         return switch (composite) {
-        case ADMIN -> createRollen(ADMIN_COMPOSITE);
-        case SACHBEARBEITER -> createRollen(SACHBEARBEITER_COMPOSITE);
-        case GESUCHSTELLER -> createRollen(GESUCHSTELLER_COMPOSITE);
-        default -> Set.of();
+            case ADMIN -> createRollen(ADMIN_COMPOSITE);
+            case SACHBEARBEITER -> createRollen(SACHBEARBEITER_COMPOSITE);
+            case GESUCHSTELLER -> createRollen(GESUCHSTELLER_COMPOSITE);
+            default -> Set.of();
         };
     }
 

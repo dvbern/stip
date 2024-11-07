@@ -143,8 +143,8 @@ public class MailService {
 
         public static MailTemplateInstance getStandardNotification(String name, String vorname, AppLanguages language) {
             return switch (language) {
-            case FR -> standardNotificationFr(name, vorname);
-            case DE -> standardNotificationDe(name, vorname);
+                case FR -> standardNotificationFr(name, vorname);
+                case DE -> standardNotificationDe(name, vorname);
             };
         }
 

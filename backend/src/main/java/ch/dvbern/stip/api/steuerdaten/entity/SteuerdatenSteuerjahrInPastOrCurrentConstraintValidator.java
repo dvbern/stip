@@ -27,7 +27,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_STEUERJAHR_INVALID_MESSAGE;
 
 public class SteuerdatenSteuerjahrInPastOrCurrentConstraintValidator
-implements ConstraintValidator<SteuerdatenSteuerjahrInPastOrCurrentConstraint, GesuchFormular> {
+    implements ConstraintValidator<SteuerdatenSteuerjahrInPastOrCurrentConstraint, GesuchFormular> {
     private String property;
 
     @Override
@@ -64,9 +64,9 @@ implements ConstraintValidator<SteuerdatenSteuerjahrInPastOrCurrentConstraint, G
 
         for (final var invalid : invalidSteuerdaten) {
             final var pagePostfix = switch (invalid.getSteuerdatenTyp()) {
-            case FAMILIE -> "";
-            case VATER -> "Vater";
-            case MUTTER -> "Mutter";
+                case FAMILIE -> "";
+                case VATER -> "Vater";
+                case MUTTER -> "Mutter";
             };
 
             GesuchValidatorUtil.addProperty(

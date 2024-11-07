@@ -40,10 +40,10 @@ public class NotificationTemplateUtils {
 
     public String getAnredeText(Anrede anrede, Sprache korrespondenzSprache) {
         switch (anrede) {
-        case FRAU:
-            return ANREDE_FRAU_MAP.get(korrespondenzSprache);
-        default:
-            return ANREDE_HERR_MAP.get(korrespondenzSprache);
+            case FRAU:
+                return ANREDE_FRAU_MAP.get(korrespondenzSprache);
+            default:
+                return ANREDE_HERR_MAP.get(korrespondenzSprache);
         }
     }
 }

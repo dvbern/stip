@@ -147,50 +147,52 @@ public class ElternteilV1 {
 
         int wohnkosten = 0;
         switch (steuerdaten.getSteuerdatenTyp()) {
-        case VATER -> {
-            final var elternteilToUse = eltern.stream()
-                .filter(
-                    elternteil -> elternteil.getElternTyp() == ElternTyp.VATER
-                )
-                .toList()
-                .get(0);
-            wohnkosten += elternteilToUse.getWohnkosten();
-            medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
-                gesuchsperiode
-            );
-            if (Boolean.TRUE.equals(familiensituation.getVaterWiederverheiratet())) {
+            case VATER -> {
+                final var elternteilToUse = eltern.stream()
+                    .filter(
+                        elternteil -> elternteil.getElternTyp() == ElternTyp.VATER
+                    )
+                    .toList()
+                    .get(0);
+                wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    29,
-                    gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29// für
-                                   // margin
+                    (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
+                    gesuchsperiode
                 );
+                if (Boolean.TRUE.equals(familiensituation.getVaterWiederverheiratet())) {
+                    medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
+                        29,
+                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29//
+                                       // für
+                                       // margin
+                    );
+                }
             }
-        }
-        case MUTTER -> {
-            final var elternteilToUse = eltern.stream()
-                .filter(
-                    elternteil -> elternteil.getElternTyp() == ElternTyp.MUTTER
-                )
-                .toList()
-                .get(0);
-            wohnkosten += elternteilToUse.getWohnkosten();
-            medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
-                gesuchsperiode
-            );
-            if (Boolean.TRUE.equals(familiensituation.getMutterWiederverheiratet())) {
+            case MUTTER -> {
+                final var elternteilToUse = eltern.stream()
+                    .filter(
+                        elternteil -> elternteil.getElternTyp() == ElternTyp.MUTTER
+                    )
+                    .toList()
+                    .get(0);
+                wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    29,
-                    gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29// für
-                                   // margin
+                    (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
+                    gesuchsperiode
                 );
+                if (Boolean.TRUE.equals(familiensituation.getMutterWiederverheiratet())) {
+                    medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
+                        29,
+                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29//
+                                       // für
+                                       // margin
+                    );
+                }
             }
-        }
-        case FAMILIE -> {
-            final var elternteilToUse = eltern.stream().findFirst().get();
-            wohnkosten += elternteilToUse.getWohnkosten();
-        }
+            case FAMILIE -> {
+                final var elternteilToUse = eltern.stream().findFirst().get();
+                wohnkosten += elternteilToUse.getWohnkosten();
+            }
         }
 
         builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
@@ -251,12 +253,12 @@ public class ElternteilV1 {
         int anzahlPersonenImHaushalt
     ) {
         int maxWohnkosten = switch (anzahlPersonenImHaushalt) {
-        case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
-        case 1 -> gesuchsperiode.getWohnkostenFam1pers();
-        case 2 -> gesuchsperiode.getWohnkostenFam2pers();
-        case 3 -> gesuchsperiode.getWohnkostenFam3pers();
-        case 4 -> gesuchsperiode.getWohnkostenFam4pers();
-        default -> gesuchsperiode.getWohnkostenFam5pluspers();
+            case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
+            case 1 -> gesuchsperiode.getWohnkostenFam1pers();
+            case 2 -> gesuchsperiode.getWohnkostenFam2pers();
+            case 3 -> gesuchsperiode.getWohnkostenFam3pers();
+            case 4 -> gesuchsperiode.getWohnkostenFam4pers();
+            default -> gesuchsperiode.getWohnkostenFam5pluspers();
         };
         return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }

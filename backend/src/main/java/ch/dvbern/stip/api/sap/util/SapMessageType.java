@@ -29,9 +29,9 @@ public enum SapMessageType {
 
     public static SapMessageType parse(final String raw) {
         return switch (raw) {
-        case "S" -> SapMessageType.SUCCESS;
-        case "E" -> SapMessageType.ERROR;
-        default -> throw new IllegalStateException("Unexpected value: " + raw);
+            case "S" -> SapMessageType.SUCCESS;
+            case "E" -> SapMessageType.ERROR;
+            default -> throw new IllegalStateException("Unexpected value: " + raw);
         };
     }
 

@@ -19,8 +19,6 @@ package ch.dvbern.stip.api.gesuchformular.entity;
 
 import java.math.BigDecimal;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.common.entity.FamilieEntityWohnsitzValidator;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;

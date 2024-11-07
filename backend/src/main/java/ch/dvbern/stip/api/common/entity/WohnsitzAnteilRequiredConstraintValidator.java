@@ -24,7 +24,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE;
 
 public class WohnsitzAnteilRequiredConstraintValidator
-implements ConstraintValidator<WohnsitzAnteilRequiredConstraint, AbstractFamilieEntity> {
+    implements ConstraintValidator<WohnsitzAnteilRequiredConstraint, AbstractFamilieEntity> {
 
     @Override
     public boolean isValid(

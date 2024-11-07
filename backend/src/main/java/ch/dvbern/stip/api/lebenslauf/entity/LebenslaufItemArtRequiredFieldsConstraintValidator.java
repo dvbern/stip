@@ -23,7 +23,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE;
 
 public class LebenslaufItemArtRequiredFieldsConstraintValidator
-implements ConstraintValidator<LebenslaufItemArtRequiredFieldsConstraint, LebenslaufItem> {
+    implements ConstraintValidator<LebenslaufItemArtRequiredFieldsConstraint, LebenslaufItem> {
 
     @Override
     public boolean isValid(

@@ -43,9 +43,9 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
         final BerechnungRequestV1 berechnungsRequest = (BerechnungRequestV1) request;
         InputFamilienbudgetV1 inputFamilienbudget = null;
         switch (budgetToUse) {
-        case 0 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget1();
-        case 1 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget2();
-        default -> throw new IllegalArgumentException("Budget " + budgetToUse + " is not a possible choice");
+            case 0 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget1();
+            case 1 -> inputFamilienbudget = berechnungsRequest.getInputFamilienbudget2();
+            default -> throw new IllegalArgumentException("Budget " + budgetToUse + " is not a possible choice");
         }
         final var elternteil = inputFamilienbudget.elternteil;
 

@@ -191,14 +191,14 @@ public class AntragsstellerV1 {
         final Bildungsstufe bildungsstufe
     ) {
         return switch (bildungsstufe) {
-        case SEKUNDAR_2 -> Integer.min(
-            Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenSekundarstufeZwei(), 0),
-            gesuchsperiode.getAusbKostenSekII()
-        );
-        case TERTIAER -> Integer.min(
-            Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenTertiaerstufe(), 0),
-            gesuchsperiode.getAusbKostenTertiaer()
-        );
+            case SEKUNDAR_2 -> Integer.min(
+                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenSekundarstufeZwei(), 0),
+                gesuchsperiode.getAusbKostenSekII()
+            );
+            case TERTIAER -> Integer.min(
+                Objects.requireNonNullElse(einnahmenKosten.getAusbildungskostenTertiaerstufe(), 0),
+                gesuchsperiode.getAusbKostenTertiaer()
+            );
         };
     }
 
@@ -244,12 +244,12 @@ public class AntragsstellerV1 {
         int anzahlPersonenImHaushalt
     ) {
         int maxWohnkosten = switch (anzahlPersonenImHaushalt) {
-        case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
-        case 1 -> gesuchsperiode.getWohnkostenPersoenlich1pers();
-        case 2 -> gesuchsperiode.getWohnkostenPersoenlich2pers();
-        case 3 -> gesuchsperiode.getWohnkostenPersoenlich3pers();
-        case 4 -> gesuchsperiode.getWohnkostenPersoenlich4pers();
-        default -> gesuchsperiode.getWohnkostenPersoenlich5pluspers();
+            case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
+            case 1 -> gesuchsperiode.getWohnkostenPersoenlich1pers();
+            case 2 -> gesuchsperiode.getWohnkostenPersoenlich2pers();
+            case 3 -> gesuchsperiode.getWohnkostenPersoenlich3pers();
+            case 4 -> gesuchsperiode.getWohnkostenPersoenlich4pers();
+            default -> gesuchsperiode.getWohnkostenPersoenlich5pluspers();
         };
         return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }

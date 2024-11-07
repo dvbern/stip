@@ -64,25 +64,25 @@ class ConstraintViolationParser {
 
         Node first = iterator.next();
         switch (first.getKind()) {
-        case BEAN:
-            if (!iterator.hasNext()) {
-                return constraintViolation.getLeafBean().getClass().getSimpleName();
-            }
-            throw new NotImplementedException("BEAN");
-        case PROPERTY:
-            return buildNodePath(asList(propertyPath));
-        case PARAMETER, METHOD:
-            List<Node> nodes = asList(propertyPath);
-            List<Node> justParam = nodes.subList(2, nodes.size());
-            return buildNodePath(justParam);
-        default:
-            throw new NotImplementedException(
-                String.format(
-                    "Not yet implemented validation exception for type %s, %s",
-                    first.getKind(),
-                    constraintViolation
-                )
-            );
+            case BEAN:
+                if (!iterator.hasNext()) {
+                    return constraintViolation.getLeafBean().getClass().getSimpleName();
+                }
+                throw new NotImplementedException("BEAN");
+            case PROPERTY:
+                return buildNodePath(asList(propertyPath));
+            case PARAMETER, METHOD:
+                List<Node> nodes = asList(propertyPath);
+                List<Node> justParam = nodes.subList(2, nodes.size());
+                return buildNodePath(justParam);
+            default:
+                throw new NotImplementedException(
+                    String.format(
+                        "Not yet implemented validation exception for type %s, %s",
+                        first.getKind(),
+                        constraintViolation
+                    )
+                );
         }
     }
 
