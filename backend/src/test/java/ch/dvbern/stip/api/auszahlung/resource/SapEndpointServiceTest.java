@@ -22,10 +22,12 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.generator.entities.service.AuszahlungGenerator;
 import ch.dvbern.stip.api.sap.generated.businesspartner.create.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.sap.generated.importstatus.ImportStatusReadResponse;
+import ch.dvbern.stip.api.sap.service.SapEndpointService;
 import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerChangeClient;
 import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerCreateClient;
 import ch.dvbern.stip.api.sap.service.endpoints.clients.ImportStatusReadClient;
@@ -42,6 +44,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 

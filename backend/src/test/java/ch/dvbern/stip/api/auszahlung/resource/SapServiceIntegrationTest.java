@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.sap.service.SapAuszahlungService;
 import ch.dvbern.stip.api.sap.service.SapEndpointService;
 import ch.dvbern.stip.api.sap.util.SAPUtils;
@@ -27,6 +28,10 @@ import jakarta.ws.rs.WebApplicationException;
 import org.apache.http.HttpStatus;
 
 import static ch.dvbern.stip.api.generator.entities.service.AuszahlungGenerator.initAuszahlung;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 
 @QuarkusTest
 class SapServiceIntegrationTest {

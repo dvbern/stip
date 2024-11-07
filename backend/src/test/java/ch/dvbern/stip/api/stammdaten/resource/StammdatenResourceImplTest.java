@@ -25,6 +25,9 @@ import jakarta.inject.Inject;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+
 @QuarkusTest
 class StammdatenResourceImplTest {
     @Inject

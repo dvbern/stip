@@ -22,6 +22,13 @@ import java.math.BigDecimal;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.sap.generated.importstatus.ImportStatusReadResponse;
+import ch.dvbern.stip.api.sap.service.SapAuszahlungService;
+import ch.dvbern.stip.api.sap.service.SapEndpointService;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerChangeClient;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerCreateClient;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.BusinessPartnerReadClient;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.ImportStatusReadClient;
+import ch.dvbern.stip.api.sap.service.endpoints.clients.VendorPostingCreateClient;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -33,6 +40,11 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
 import static ch.dvbern.stip.api.generator.entities.service.AuszahlungGenerator.initAuszahlung;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 

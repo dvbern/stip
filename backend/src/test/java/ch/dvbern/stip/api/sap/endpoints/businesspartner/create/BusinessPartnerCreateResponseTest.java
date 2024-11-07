@@ -27,6 +27,10 @@ import jakarta.xml.soap.SOAPException;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 class BusinessPartnerCreateResponseTest {
     @Test
     void parseBusinessPartnerCreateResponseTest() throws IOException, JAXBException, SOAPException {
