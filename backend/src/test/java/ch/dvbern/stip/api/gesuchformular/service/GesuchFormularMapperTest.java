@@ -27,11 +27,11 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
-import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangMapperImpl;
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
-import ch.dvbern.stip.api.common.service.EntityReferenceMapperImpl;
+import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -83,6 +83,7 @@ import static io.smallrye.common.constraint.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
 
 class GesuchFormularMapperTest {
     @Test
@@ -682,7 +683,7 @@ class GesuchFormularMapperTest {
             }
 
             return null;
-        }).when(mockedService).removeGesuchDokument(Mockito.any(GesuchDokument.class));
+        }).when(mockedService).removeGesuchDokument(any(GesuchDokument.class));
 
         final var mapper = createMapper();
         mapper.partialUpdate(updateDto, target);
@@ -698,12 +699,23 @@ class GesuchFormularMapperTest {
     }
 
     GesuchFormularMapper createMapper() {
+        final var ausbildungMapperImplMock = Mockito.mock(AusbildungMapperImpl.class);
+
+        final var ausbildungAuthorizerMock = Mockito.mock(AusbildungAuthorizer.class);
+        Mockito.doReturn(true).when(ausbildungAuthorizerMock).canUpdateCheck(any());
+
+        try {
+            var ausbildungAuthorizerField = AusbildungMapper.class.getDeclaredField("ausbildungAuthorizer");
+            ausbildungAuthorizerField.setAccessible(true);
+            ausbildungAuthorizerField.set(ausbildungMapperImplMock, ausbildungAuthorizerMock);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
         final var mapper = (GesuchFormularMapper) new GesuchFormularMapperImpl(
             new PersonInAusbildungMapperImpl(),
             new FamiliensituationMapperImpl(),
-            new AusbildungMapperImpl(
-                new AusbildungsgangMapperImpl(new EntityReferenceMapperImpl())
-            ),
+            ausbildungMapperImplMock,
             new LebenslaufItemMapperImpl(),
             new PartnerMapperImpl(),
             new AuszahlungMapperImpl(),

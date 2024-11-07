@@ -133,12 +133,17 @@ class AusbildungResourceTest {
     @TestAsGesuchsteller
     @Order(5)
     void getAusbildung() {
-        ausbildungApiSpec.getAusbildung()
+        final var ausbildung = ausbildungApiSpec.getAusbildung()
             .ausbildungIdPath(gesuch.getAusbildungId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(AusbildungDto.class);
+
+        assertThat(ausbildung.getEditable(), is(false));
     }
 
     @Test

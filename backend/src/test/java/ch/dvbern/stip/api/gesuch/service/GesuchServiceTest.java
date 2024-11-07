@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
+import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -161,6 +162,10 @@ class GesuchServiceTest {
         Mockito.when(requiredDokumentServiceMock.getSuperfluousDokumentsForGesuch(any())).thenReturn(List.of());
         Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         QuarkusMock.installMockForType(requiredDokumentServiceMock, RequiredDokumentService.class);
+
+        final var ausbildungAuthorizerMock = Mockito.mock(AusbildungAuthorizer.class);
+        Mockito.when(ausbildungAuthorizerMock.canUpdateCheck(any())).thenReturn(false);
+        QuarkusMock.installMockForType(ausbildungAuthorizerMock, AusbildungAuthorizer.class);
     }
 
     @Test
