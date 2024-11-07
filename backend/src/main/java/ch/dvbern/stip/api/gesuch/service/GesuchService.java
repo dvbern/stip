@@ -329,8 +329,9 @@ public class GesuchService {
             .getGesuchsperiode(gesuch.getGesuchsperiode().getId())
             .orElseThrow(NotFoundException::new);
 
-        var ausbildungsstart = gesuch.getAusbildung().getAusbildungBegin();
-        ausbildungsstart.withYear(periode.getGesuchsperiodeStart().getYear());
+        var ausbildungsstart = gesuch.getAusbildung()
+            .getAusbildungBegin()
+            .withYear(periode.getGesuchsperiodeStart().getYear());
         if (ausbildungsstart.isAfter(periode.getGesuchsperiodeStopp())) {
             ausbildungsstart = ausbildungsstart.minusYears(1);
         }

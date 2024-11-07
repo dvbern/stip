@@ -118,7 +118,7 @@ class GesuchResourceEinnahmenKostenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(2)
+    @Order(99)
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }

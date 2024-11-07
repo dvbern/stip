@@ -119,6 +119,8 @@ class GesuchFillFormularTest {
             .gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)
             .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
             .as(GesuchDtoSpec.class)

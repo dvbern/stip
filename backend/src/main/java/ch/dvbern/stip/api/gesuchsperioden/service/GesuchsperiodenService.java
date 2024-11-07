@@ -99,11 +99,8 @@ public class GesuchsperiodenService {
             var eligibleGesuchsperiode =
                 gesuchsperiodeRepository.findAllStartBeforeOrAt(ausbildungsBeginAssumed);
 
-            if (eligibleGesuchsperiode == null) {
-                continue;
-            }
-
             if (
+                (eligibleGesuchsperiode != null) &&
                 eligibleGesuchsperiode
                     .getGesuchsperiodeStart()
                     .plusMonths(6)
