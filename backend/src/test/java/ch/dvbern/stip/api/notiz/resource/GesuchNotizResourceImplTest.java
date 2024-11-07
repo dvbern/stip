@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -80,6 +81,7 @@ class GesuchNotizResourceImplTest {
         gesuchCreateDto.setGesuchId(gesuch.getId());
         gesuchCreateDto.setText("test");
         gesuchCreateDto.setBetreff("test");
+        gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
         gesuchNotizApiSpec.createNotiz()
             .body(gesuchCreateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -124,6 +126,7 @@ class GesuchNotizResourceImplTest {
         gesuchCreateDto.setGesuchId(gesuch.getId());
         gesuchCreateDto.setText("test");
         gesuchCreateDto.setBetreff("test");
+        gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
         final var notiz = gesuchNotizApiSpec.createNotiz()
             .body(gesuchCreateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -163,6 +166,7 @@ class GesuchNotizResourceImplTest {
         gesuchCreateDto.setGesuchId(gesuch.getId());
         gesuchCreateDto.setText("test");
         gesuchCreateDto.setBetreff("test");
+        gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
         final var notiz = gesuchNotizApiSpec.createNotiz()
             .body(gesuchCreateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -192,4 +196,5 @@ class GesuchNotizResourceImplTest {
             .as(GesuchNotizDto[].class);
         assertEquals(0, notizen.length);
     }
+
 }
