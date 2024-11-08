@@ -52,6 +52,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -248,6 +249,7 @@ class GesuchNotizResourceImplTest {
             .body()
             .as(JuristischeAbklaerungNotizDto[].class);
         final var notiz = Arrays.stream(notizen).toList().get(0);
+        assertNotNull(notiz.getNotizTyp());
 
         juristischeAbklaerungNotizDto = gesuchNotizApiSpec.getJuristischeAbklaerungNotiz()
             .notizIdPath(notiz.getId())

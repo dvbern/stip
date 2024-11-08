@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchNotizDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   GesuchNotizDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
+  GesuchNotizDtoSpec.JSON_PROPERTY_NOTIZ_TYP,
   GesuchNotizDtoSpec.JSON_PROPERTY_ID,
   GesuchNotizDtoSpec.JSON_PROPERTY_BETREFF,
   GesuchNotizDtoSpec.JSON_PROPERTY_TEXT
@@ -43,6 +45,9 @@ public class GesuchNotizDtoSpec {
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private LocalDate timestampErstellt;
+
+  public static final String JSON_PROPERTY_NOTIZ_TYP = "notizTyp";
+  private GesuchNotizTypDtoSpec notizTyp;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -105,6 +110,32 @@ public class GesuchNotizDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTimestampErstellt(LocalDate timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
+  }
+
+
+  public GesuchNotizDtoSpec notizTyp(GesuchNotizTypDtoSpec notizTyp) {
+    
+    this.notizTyp = notizTyp;
+    return this;
+  }
+
+   /**
+   * Get notizTyp
+   * @return notizTyp
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public GesuchNotizTypDtoSpec getNotizTyp() {
+    return notizTyp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNotizTyp(GesuchNotizTypDtoSpec notizTyp) {
+    this.notizTyp = notizTyp;
   }
 
 
@@ -196,6 +227,7 @@ public class GesuchNotizDtoSpec {
     GesuchNotizDtoSpec gesuchNotiz = (GesuchNotizDtoSpec) o;
     return Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
         Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
+        Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
         Objects.equals(this.id, gesuchNotiz.id) &&
         Objects.equals(this.betreff, gesuchNotiz.betreff) &&
         Objects.equals(this.text, gesuchNotiz.text);
@@ -203,7 +235,7 @@ public class GesuchNotizDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, id, betreff, text);
+    return Objects.hash(userErstellt, timestampErstellt, notizTyp, id, betreff, text);
   }
 
   @Override
@@ -212,6 +244,7 @@ public class GesuchNotizDtoSpec {
     sb.append("class GesuchNotizDtoSpec {\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
