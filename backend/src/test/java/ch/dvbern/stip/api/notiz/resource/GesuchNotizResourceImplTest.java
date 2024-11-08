@@ -282,7 +282,14 @@ class GesuchNotizResourceImplTest {
             .extract()
             .body()
             .as(JuristischeAbklaerungNotizDto.class);
-        // todo: berechtigungen testen
+
+        gesuchNotizApiSpec.answerJuristischeAbklaerungNotiz()
+            .notizIdPath(juristischeAbklaerungNotizDto.getId())
+            .body(antwort)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
         assertEquals(juristischeAbklaerungNotizDto.getAntwort(), antwort.getAntwort());
     }
 

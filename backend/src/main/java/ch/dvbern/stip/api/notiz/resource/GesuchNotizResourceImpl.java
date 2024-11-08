@@ -45,7 +45,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         UUID notizId,
         JuristischeAbklaerungNotizAntwortDto juristischeAbklaerungNotizAntwortDto
     ) {
-
+        authorizer.canUpdate(notizId);
         return Response.ok(
             service.answerJuristischeNotiz(juristischeAbklaerungNotizAntwortDto, notizId)
         ).build();
