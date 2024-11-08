@@ -43,7 +43,7 @@ public class SozialdienstService {
     public SozialdienstDto createSozialdienst(SozialdienstCreateDto dto) {
         var sozialdienst = sozialdienstMapper.toEntity(dto);
         final var adminDto = sozialdienstAdminService.createSozialdienstAdminBenutzer(dto.getSozialdienstAdmin());
-        sozialdienst.setAdmin(sozialdienstAdminService.getSozialdienstAdminById(adminDto.getId()));
+        sozialdienst.setSozialdienstAdmin(sozialdienstAdminService.getSozialdienstAdminById(adminDto.getId()));
         sozialdienstRepository.persistAndFlush(sozialdienst);
         var result = sozialdienstMapper.toDto(sozialdienst);
         result.setSozialdienstAdmin(sozialdienstAdminService.getSozialdienstAdminDtoById(adminDto.getId()));
@@ -54,7 +54,9 @@ public class SozialdienstService {
     public SozialdienstDto getSozialdienstById(UUID id) {
         var entity = sozialdienstRepository.requireById(id);
         var result = sozialdienstMapper.toDto(entity);
-        result.setSozialdienstAdmin(sozialdienstAdminService.getSozialdienstAdminDtoById(entity.getAdmin().getId()));
+        result.setSozialdienstAdmin(
+            sozialdienstAdminService.getSozialdienstAdminDtoById(entity.getSozialdienstAdmin().getId())
+        );
         return result;
     }
 
@@ -63,7 +65,7 @@ public class SozialdienstService {
         final var entities = sozialdienstRepository.findAll();
         return entities.stream().map(entity -> {
             var sozialdienstDto = sozialdienstMapper.toDto(entity);
-            var adminDto = sozialdienstAdminService.getSozialdienstAdminDtoById(entity.getAdmin().getId());
+            var adminDto = sozialdienstAdminService.getSozialdienstAdminDtoById(entity.getSozialdienstAdmin().getId());
             sozialdienstDto.setSozialdienstAdmin(adminDto);
             return sozialdienstDto;
         }).toList();
@@ -82,7 +84,7 @@ public class SozialdienstService {
         sozialdienstMapper.partialUpdate(dto, sozialdienst);
         var result = sozialdienstMapper.toDto(sozialdienst);
         result.setSozialdienstAdmin(
-            sozialdienstAdminService.getSozialdienstAdminDtoById(sozialdienst.getAdmin().getId())
+            sozialdienstAdminService.getSozialdienstAdminDtoById(sozialdienst.getSozialdienstAdmin().getId())
         );
         return result;
     }
@@ -93,8 +95,9 @@ public class SozialdienstService {
         SozialdienstDto sozialdienstDto
     ) {
         final var sozialdienst = sozialdienstRepository.requireById(sozialdienstDto.getId());
-        final var adminKeykloakId = sozialdienst.getAdmin().getKeycloakId();
-        var sozialdienstAdmin = sozialdienstAdminService.getSozialdienstAdminById(sozialdienst.getAdmin().getId());
+        final var adminKeykloakId = sozialdienst.getSozialdienstAdmin().getKeycloakId();
+        var sozialdienstAdmin =
+            sozialdienstAdminService.getSozialdienstAdminById(sozialdienst.getSozialdienstAdmin().getId());
         var responseDto = sozialdienstAdminService.updateSozialdienstAdminBenutzer(sozialdienstAdmin.getId(), dto);
         responseDto.setKeycloakId(adminKeykloakId);
         return responseDto;
@@ -103,11 +106,11 @@ public class SozialdienstService {
     @Transactional
     public SozialdienstAdminDto replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminCreateDto dto) {
         var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
-        final var benutzerToDelete = sozialdienst.getAdmin();
+        final var benutzerToDelete = sozialdienst.getSozialdienstAdmin();
         sozialdienstAdminService.deleteSozialdienstAdminBenutzer(benutzerToDelete.getKeycloakId());
 
         final var newSozialdienstAdmin = sozialdienstAdminService.createSozialdienstAdminBenutzer(dto);
-        sozialdienst.setAdmin(newSozialdienstAdmin);
+        sozialdienst.setSozialdienstAdmin(newSozialdienstAdmin);
         return sozialdienstAdminService.getSozialdienstAdminDtoById(newSozialdienstAdmin.getId());
     }
 }

@@ -101,6 +101,7 @@ class SozialdienstResourceImplTest {
             .extract()
             .as(SozialdienstDtoSpec.class);
 
+        assertNotNull(dtoSpec.getSozialdienstAdmin());
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
         checkSozialdienstResponse(dtoSpec);
         checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
@@ -118,6 +119,7 @@ class SozialdienstResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .as(SozialdienstDtoSpec.class);
+        assertNotNull(dtoSpec.getSozialdienstAdmin());
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
         checkSozialdienstResponse(dtoSpec);
         checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
@@ -137,6 +139,7 @@ class SozialdienstResourceImplTest {
                 .extract()
                 .as(SozialdienstDtoSpec[].class)
         ).toList().get(0);
+        assertNotNull(dtoSpec.getSozialdienstAdmin());
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
         checkSozialdienstResponse(dtoSpec);
         checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
@@ -172,6 +175,7 @@ class SozialdienstResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .as(SozialdienstDtoSpec.class);
+        assertNotNull(updated.getSozialdienstAdmin());
         assertTrue(updated.getName().contains("updated"));
         assertTrue(updated.getAdresse().getStrasse().contains("updated"));
         checkSozialdienstResponse(updated);

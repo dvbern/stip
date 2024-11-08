@@ -66,5 +66,5 @@ public class Sozialdienst extends AbstractMandantEntity {
     @JoinColumn(
         name = "sozialdienst_admin_id", foreignKey = @ForeignKey(name = "FK_sozialdienst_sozialdienst_admin_id")
     )
-    private SozialdienstAdmin admin;
+    private SozialdienstAdmin sozialdienstAdmin;
 }
