@@ -12,7 +12,5 @@
 
 export interface JuristischeAbklaerungNotizAntwort { 
     antwort: string;
-    userMutiert?: string;
-    timestampMutiert?: string;
 }
 

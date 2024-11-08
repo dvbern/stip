@@ -3878,12 +3878,12 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gesuchTrancheId:
           description: 'ID der tranche für welche die Berechnung ausgeführt wurde.
-                        Mehrere resultate mit der gleichen ID sind die berechnungen für
-                        getrennte eltern mit Kindern die eine Obhutsteilung haben'
+            Mehrere resultate mit der gleichen ID sind die berechnungen für
+            getrennte eltern mit Kindern die eine Obhutsteilung haben'
           $ref: '#/components/schemas/UUID'
         berechnungsanteilKinder:
           description: 'Anteil dieser Berechnung am Berechnungstotal.
-                        Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
+            Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
           type: number
         berechnungsStammdaten:
           description: 'Stammdaten für die Stipendienberechnung'
@@ -4190,6 +4190,8 @@ components:
       required:
         - userErstellt
         - timestampErstellt
+        - notizTyp
+        - id
       type: object
       properties:
         userErstellt:

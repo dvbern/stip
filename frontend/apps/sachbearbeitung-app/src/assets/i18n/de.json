@@ -245,7 +245,7 @@
 
   "sachbearbeitung-app.infos.notizen.description": "Eine Übersicht aller Notizen",
   "sachbearbeitung-app.infos.notizen.title": "Notizen",
-  "sachbearbeitung-app.infos.notizen.table.datumErstellt": "Datum",
+  "sachbearbeitung-app.infos.notizen.table.datum": "Datum",
   "sachbearbeitung-app.infos.notizen.table.betreff": "Betreff",
   "sachbearbeitung-app.infos.notizen.table.notiz": "Notiz",
   "sachbearbeitung-app.infos.notizen.table.user": "Benutzer",

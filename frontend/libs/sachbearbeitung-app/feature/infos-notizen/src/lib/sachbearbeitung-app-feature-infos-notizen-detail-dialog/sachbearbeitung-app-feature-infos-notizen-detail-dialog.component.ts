@@ -105,7 +105,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     text: [<string | null>null, [Validators.required]],
     antwort: [<string | null>null],
   });
-  notizIdSig = input.required<string>({ alias: 'notizId' });
+  // notizIdSig = input.required<string>({ alias: 'notizId' });
   languageSig = this.store.selectSignal(selectLanguage);
 
   constructor() {
