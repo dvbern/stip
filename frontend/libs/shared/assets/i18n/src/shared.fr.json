@@ -533,6 +533,17 @@
 
   "shared.protokoll.title": "Protocole",
 
+  "shared.notizen.title": "Notes",
+  "shared.form.notizen.datumErstellt.label": "Date Created",
+  "shared.form.notizen.datumMutiert.label": "Date Modified",
+  "shared.form.notizen.betreff.label": "Subject",
+  "shared.form.notizen.text.label": "Text",
+  "shared.form.notizen.userErstellt.label": "Gestionnaire de dossier",
+  "shared.form.notizen.userMutiert.label": "Juriste",
+  "shared.form.notizen.antwort.label": "Réponse",
+  "shared.form.notizen.notizTyp.GESUCH_NOTIZ": "Note",
+  "shared.form.notizen.notizTyp.JURISTISCHE_NOTIZ": "Legal Note",
+
   "shared.role.Admin": "Admin",
   "shared.role.Jurist": "Juriste",
   "shared.role.Sachbearbeiter": "Gestionnaire de dossier",

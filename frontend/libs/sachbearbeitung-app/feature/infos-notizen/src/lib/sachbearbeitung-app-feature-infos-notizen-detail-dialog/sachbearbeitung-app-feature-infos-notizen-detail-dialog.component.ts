@@ -23,7 +23,6 @@ import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   GesuchNotiz,
@@ -41,13 +40,6 @@ import {
 } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
-import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
-
-export type NotizDialogResult = {
-  id: string | undefined;
-  text: string;
-  betreff: string;
-};
 
 type SBNotiz = {
   typ: 'GESUCH_NOTIZ';
@@ -60,6 +52,13 @@ type JurNotiz = {
 };
 
 export type NotizDialogData = SBNotiz | JurNotiz;
+
+export type NotizDialogResult = {
+  id: string | null | undefined;
+  betreff: string;
+  text: string;
+  antwort?: string;
+};
 
 export const isJurNotiz = (notiz: NotizDialogData): notiz is JurNotiz => {
   return notiz.typ === 'JURISTISCHE_NOTIZ';
@@ -102,28 +101,22 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
   @HostBinding('class') defaultClasses = 'd-flex flex-column gap-2 p-5';
   dialogData = inject<NotizDialogData>(MAT_DIALOG_DATA);
   form = this.formBuilder.group({
-    datum: [<string | undefined>undefined],
-    user: [<string | null>null],
     betreff: [<string | null>null, [Validators.required]],
     text: [<string | null>null, [Validators.required]],
+    antwort: [<string | null>null],
   });
   notizIdSig = input.required<string>({ alias: 'notizId' });
   languageSig = this.store.selectSignal(selectLanguage);
 
   constructor() {
-    this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+    // this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
 
     if (isJurNotiz(this.dialogData)) {
       // to be implemented
     } else {
       this.form.patchValue({
-        datum: parseBackendLocalDateAndPrint(
-          this.dialogData.notiz?.timestampErstellt,
-          this.languageSig(),
-        ),
         betreff: this.dialogData.notiz?.betreff,
         text: this.dialogData.notiz?.text,
-        user: this.dialogData.notiz?.userErstellt,
       });
     }
   }

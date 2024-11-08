@@ -99,13 +99,13 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
       {
         typ,
       },
-    ).subscribe((notizDaten) => {
+    ).subscribe((result) => {
       const gesuchId = this.gesuchIdSig();
 
-      if (notizDaten) {
+      if (result) {
         const gesuchNotizCreate: GesuchNotizCreate = {
-          betreff: notizDaten.betreff,
-          text: notizDaten.text,
+          betreff: result.betreff,
+          text: result.text,
           notizTyp: 'GESUCH_NOTIZ',
           gesuchId,
         };
@@ -124,11 +124,11 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
         typ: 'GESUCH_NOTIZ',
         notiz,
       },
-    ).subscribe((notizDaten) => {
-      const gesuchId = this.gesuchIdSig();
-      if (notizDaten) {
-        this.notizStore.editNotiz({ gesuchId, notizDaten });
-      }
+    ).subscribe(() => {
+      // const gesuchId = this.gesuchIdSig();
+      // if (notizDaten) {
+      //   this.notizStore.editNotiz({ gesuchId, notizDaten });
+      // }
     });
   }
 
