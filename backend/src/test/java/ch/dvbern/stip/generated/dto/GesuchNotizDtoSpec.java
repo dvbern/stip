@@ -123,9 +123,9 @@ public class GesuchNotizDtoSpec {
    * Get notizTyp
    * @return notizTyp
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchNotizTypDtoSpec getNotizTyp() {
     return notizTyp;
@@ -133,7 +133,7 @@ public class GesuchNotizDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setNotizTyp(GesuchNotizTypDtoSpec notizTyp) {
     this.notizTyp = notizTyp;
   }
@@ -149,9 +149,9 @@ public class GesuchNotizDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -159,7 +159,7 @@ public class GesuchNotizDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
   }
