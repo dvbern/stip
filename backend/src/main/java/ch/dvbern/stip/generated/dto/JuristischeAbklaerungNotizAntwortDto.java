@@ -1,18 +1,12 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-
 
 @JsonTypeName("JuristischeAbklaerungNotizAntwort")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -21,8 +15,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
   private @Valid String antwort;
-  private @Valid String userMutiert;
-  private @Valid LocalDate timestampMutiert;
 
   /**
    **/
@@ -31,7 +23,7 @@ public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("antwort")
   @NotNull
   public String getAntwort() {
@@ -41,42 +33,6 @@ public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
   @JsonProperty("antwort")
   public void setAntwort(String antwort) {
     this.antwort = antwort;
-  }
-
-  /**
-   **/
-  public JuristischeAbklaerungNotizAntwortDto userMutiert(String userMutiert) {
-    this.userMutiert = userMutiert;
-    return this;
-  }
-
-  
-  @JsonProperty("userMutiert")
-  public String getUserMutiert() {
-    return userMutiert;
-  }
-
-  @JsonProperty("userMutiert")
-  public void setUserMutiert(String userMutiert) {
-    this.userMutiert = userMutiert;
-  }
-
-  /**
-   **/
-  public JuristischeAbklaerungNotizAntwortDto timestampMutiert(LocalDate timestampMutiert) {
-    this.timestampMutiert = timestampMutiert;
-    return this;
-  }
-
-  
-  @JsonProperty("timestampMutiert")
-  public LocalDate getTimestampMutiert() {
-    return timestampMutiert;
-  }
-
-  @JsonProperty("timestampMutiert")
-  public void setTimestampMutiert(LocalDate timestampMutiert) {
-    this.timestampMutiert = timestampMutiert;
   }
 
 
@@ -89,24 +45,20 @@ public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
       return false;
     }
     JuristischeAbklaerungNotizAntwortDto juristischeAbklaerungNotizAntwort = (JuristischeAbklaerungNotizAntwortDto) o;
-    return Objects.equals(this.antwort, juristischeAbklaerungNotizAntwort.antwort) &&
-        Objects.equals(this.userMutiert, juristischeAbklaerungNotizAntwort.userMutiert) &&
-        Objects.equals(this.timestampMutiert, juristischeAbklaerungNotizAntwort.timestampMutiert);
+    return Objects.equals(this.antwort, juristischeAbklaerungNotizAntwort.antwort);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(antwort, userMutiert, timestampMutiert);
+    return Objects.hash(antwort);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class JuristischeAbklaerungNotizAntwortDto {\n");
-    
+
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
-    sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
-    sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -28,21 +27,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * JuristischeAbklaerungNotizAntwortDtoSpec
  */
 @JsonPropertyOrder({
-  JuristischeAbklaerungNotizAntwortDtoSpec.JSON_PROPERTY_ANTWORT,
-  JuristischeAbklaerungNotizAntwortDtoSpec.JSON_PROPERTY_USER_MUTIERT,
-  JuristischeAbklaerungNotizAntwortDtoSpec.JSON_PROPERTY_TIMESTAMP_MUTIERT
+  JuristischeAbklaerungNotizAntwortDtoSpec.JSON_PROPERTY_ANTWORT
 })
 @JsonTypeName("JuristischeAbklaerungNotizAntwort")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class JuristischeAbklaerungNotizAntwortDtoSpec {
   public static final String JSON_PROPERTY_ANTWORT = "antwort";
   private String antwort;
-
-  public static final String JSON_PROPERTY_USER_MUTIERT = "userMutiert";
-  private String userMutiert;
-
-  public static final String JSON_PROPERTY_TIMESTAMP_MUTIERT = "timestampMutiert";
-  private LocalDate timestampMutiert;
 
   public JuristischeAbklaerungNotizAntwortDtoSpec() {
   }
@@ -72,58 +63,6 @@ public class JuristischeAbklaerungNotizAntwortDtoSpec {
     this.antwort = antwort;
   }
 
-
-  public JuristischeAbklaerungNotizAntwortDtoSpec userMutiert(String userMutiert) {
-    
-    this.userMutiert = userMutiert;
-    return this;
-  }
-
-   /**
-   * Get userMutiert
-   * @return userMutiert
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getUserMutiert() {
-    return userMutiert;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUserMutiert(String userMutiert) {
-    this.userMutiert = userMutiert;
-  }
-
-
-  public JuristischeAbklaerungNotizAntwortDtoSpec timestampMutiert(LocalDate timestampMutiert) {
-    
-    this.timestampMutiert = timestampMutiert;
-    return this;
-  }
-
-   /**
-   * Get timestampMutiert
-   * @return timestampMutiert
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public LocalDate getTimestampMutiert() {
-    return timestampMutiert;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTimestampMutiert(LocalDate timestampMutiert) {
-    this.timestampMutiert = timestampMutiert;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -133,14 +72,12 @@ public class JuristischeAbklaerungNotizAntwortDtoSpec {
       return false;
     }
     JuristischeAbklaerungNotizAntwortDtoSpec juristischeAbklaerungNotizAntwort = (JuristischeAbklaerungNotizAntwortDtoSpec) o;
-    return Objects.equals(this.antwort, juristischeAbklaerungNotizAntwort.antwort) &&
-        Objects.equals(this.userMutiert, juristischeAbklaerungNotizAntwort.userMutiert) &&
-        Objects.equals(this.timestampMutiert, juristischeAbklaerungNotizAntwort.timestampMutiert);
+    return Objects.equals(this.antwort, juristischeAbklaerungNotizAntwort.antwort);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(antwort, userMutiert, timestampMutiert);
+    return Objects.hash(antwort);
   }
 
   @Override
@@ -148,8 +85,6 @@ public class JuristischeAbklaerungNotizAntwortDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class JuristischeAbklaerungNotizAntwortDtoSpec {\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
-    sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
-    sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("}");
     return sb.toString();
   }

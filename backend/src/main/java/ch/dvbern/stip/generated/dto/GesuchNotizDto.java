@@ -1,19 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
-import java.util.UUID;
-import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
-
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.UUID;
 
 @JsonTypeName("GesuchNotiz")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -25,6 +20,7 @@ public class GesuchNotizDto  implements Serializable {
   private @Valid LocalDate timestampErstellt;
   private @Valid String betreff;
   private @Valid String text;
+  private @Valid GesuchNotizTypDto notizTyp;
   private @Valid UUID id;
 
   /**
@@ -34,7 +30,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("userErstellt")
   @NotNull
   public String getUserErstellt() {
@@ -53,7 +49,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("timestampErstellt")
   @NotNull
   public LocalDate getTimestampErstellt() {
@@ -72,7 +68,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("betreff")
   @NotNull
   public String getBetreff() {
@@ -91,7 +87,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("text")
   @NotNull
   public String getText() {
@@ -105,12 +101,30 @@ public class GesuchNotizDto  implements Serializable {
 
   /**
    **/
+  public GesuchNotizDto notizTyp(GesuchNotizTypDto notizTyp) {
+    this.notizTyp = notizTyp;
+    return this;
+  }
+
+
+  @JsonProperty("notizTyp")
+  public GesuchNotizTypDto getNotizTyp() {
+    return notizTyp;
+  }
+
+  @JsonProperty("notizTyp")
+  public void setNotizTyp(GesuchNotizTypDto notizTyp) {
+    this.notizTyp = notizTyp;
+  }
+
+  /**
+   **/
   public GesuchNotizDto id(UUID id) {
     this.id = id;
     return this;
   }
 
-  
+
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -135,23 +149,25 @@ public class GesuchNotizDto  implements Serializable {
         Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
         Objects.equals(this.betreff, gesuchNotiz.betreff) &&
         Objects.equals(this.text, gesuchNotiz.text) &&
+        Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
         Objects.equals(this.id, gesuchNotiz.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, betreff, text, id);
+    return Objects.hash(userErstellt, timestampErstellt, betreff, text, notizTyp, id);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizDto {\n");
-    
+
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();

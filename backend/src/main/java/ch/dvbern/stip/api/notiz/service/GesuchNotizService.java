@@ -30,6 +30,7 @@ import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizTypDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -93,6 +94,16 @@ public class GesuchNotizService {
         var gesuchNotiz = gesuchNotizRepository.requireById(gesuchNotizUpdateDto.getId());
         gesuchNotizMapper.partialUpdate(gesuchNotizUpdateDto, gesuchNotiz);
         return gesuchNotizMapper.toDto(gesuchNotiz);
+    }
+
+    @Transactional
+    public JuristischeAbklaerungNotizDto answerJuristischeNotiz(
+        final JuristischeAbklaerungNotizAntwortDto dto,
+        final UUID notizId
+    ) {
+        final var juristischeNotiz = juristischeNotizRepository.requireById(notizId);
+        final var entity = juristischeNotizMapper.partialUpdate(dto, juristischeNotiz);
+        return juristischeNotizMapper.toDto(entity);
     }
 
     @Transactional

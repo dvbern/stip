@@ -1,20 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GesuchNotizTypDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
-import java.util.UUID;
-import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
-
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.UUID;
 
 @JsonTypeName("JuristischeAbklaerungNotiz")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -40,7 +34,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -59,7 +53,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("antwort")
   @NotNull
   public String getAntwort() {
@@ -78,7 +72,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchId")
   @NotNull
   public UUID getGesuchId() {
@@ -97,7 +91,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("betreff")
   @NotNull
   public String getBetreff() {
@@ -116,7 +110,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("text")
   @NotNull
   public String getText() {
@@ -135,7 +129,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("notizTyp")
   @NotNull
   public GesuchNotizTypDto getNotizTyp() {
@@ -154,7 +148,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("userErstellt")
   public String getUserErstellt() {
     return userErstellt;
@@ -172,7 +166,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("timestampErstellt")
   public LocalDate getTimestampErstellt() {
     return timestampErstellt;
@@ -190,7 +184,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("userMutiert")
   public String getUserMutiert() {
     return userMutiert;
@@ -208,7 +202,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("timestampMutiert")
   public LocalDate getTimestampMutiert() {
     return timestampMutiert;
@@ -250,7 +244,7 @@ public class JuristischeAbklaerungNotizDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class JuristischeAbklaerungNotizDto {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
