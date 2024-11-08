@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -21,7 +22,11 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { GesuchNotiz } from '@dv/shared/model/gesuch';
+import {
+  GesuchNotiz,
+  GesuchNotizCreate,
+  GesuchNotizTyp,
+} from '@dv/shared/model/gesuch';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiFocusableListDirective } from '@dv/shared/ui/focusable-list';
 import { SharedUiFormSaveComponent } from '@dv/shared/ui/form';
@@ -52,6 +57,7 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
     SharedUiFormSaveComponent,
     MatInput,
     ReactiveFormsModule,
+    MatMenuModule,
   ],
   templateUrl: './sachbearbeitung-app-feature-infos-notizen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -87,14 +93,25 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
     );
   }
 
-  createNotiz() {
+  createNotiz(typ: GesuchNotizTyp) {
     SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent.open(
       this.dialog,
+      {
+        typ,
+      },
     ).subscribe((notizDaten) => {
       const gesuchId = this.gesuchIdSig();
+
       if (notizDaten) {
+        const gesuchNotizCreate: GesuchNotizCreate = {
+          betreff: notizDaten.betreff,
+          text: notizDaten.text,
+          notizTyp: 'GESUCH_NOTIZ',
+          gesuchId,
+        };
+
         this.notizStore.createNotiz({
-          notizDaten: { ...notizDaten, gesuchId },
+          gesuchNotizCreate,
         });
       }
     });
@@ -103,7 +120,10 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   editNotiz(notiz: GesuchNotiz) {
     SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent.open(
       this.dialog,
-      notiz,
+      {
+        typ: 'GESUCH_NOTIZ',
+        notiz,
+      },
     ).subscribe((notizDaten) => {
       const gesuchId = this.gesuchIdSig();
       if (notizDaten) {

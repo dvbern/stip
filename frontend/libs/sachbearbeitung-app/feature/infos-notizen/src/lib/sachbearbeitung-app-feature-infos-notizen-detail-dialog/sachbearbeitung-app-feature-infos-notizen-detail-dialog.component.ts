@@ -27,8 +27,7 @@ import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   GesuchNotiz,
-  GesuchNotizCreate,
-  GesuchNotizUpdate,
+  JuristischeAbklaerungNotiz,
 } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
@@ -43,6 +42,28 @@ import {
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
+
+export type NotizDialogResult = {
+  id: string | undefined;
+  text: string;
+  betreff: string;
+};
+
+type SBNotiz = {
+  typ: 'GESUCH_NOTIZ';
+  notiz?: GesuchNotiz;
+};
+
+type JurNotiz = {
+  typ: 'JURISTISCHE_NOTIZ';
+  notiz?: JuristischeAbklaerungNotiz;
+};
+
+export type NotizDialogData = SBNotiz | JurNotiz;
+
+export const isJurNotiz = (notiz: NotizDialogData): notiz is JurNotiz => {
+  return notiz.typ === 'JURISTISCHE_NOTIZ';
+};
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
@@ -72,14 +93,14 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     inject<
       MatDialogRef<
         SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent,
-        GesuchNotizUpdate | GesuchNotizCreate
+        NotizDialogResult
       >
     >(MatDialogRef);
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
 
   @HostBinding('class') defaultClasses = 'd-flex flex-column gap-2 p-5';
-  dialogData = inject<GesuchNotiz | undefined>(MAT_DIALOG_DATA);
+  dialogData = inject<NotizDialogData>(MAT_DIALOG_DATA);
   form = this.formBuilder.group({
     datum: [<string | undefined>undefined],
     user: [<string | null>null],
@@ -92,23 +113,27 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
   constructor() {
     this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
 
-    this.form.patchValue({
-      datum: parseBackendLocalDateAndPrint(
-        this.dialogData?.timestampErstellt,
-        this.languageSig(),
-      ),
-      betreff: this.dialogData?.betreff,
-      text: this.dialogData?.text,
-      user: this.dialogData?.userErstellt,
-    });
+    if (isJurNotiz(this.dialogData)) {
+      // to be implemented
+    } else {
+      this.form.patchValue({
+        datum: parseBackendLocalDateAndPrint(
+          this.dialogData.notiz?.timestampErstellt,
+          this.languageSig(),
+        ),
+        betreff: this.dialogData.notiz?.betreff,
+        text: this.dialogData.notiz?.text,
+        user: this.dialogData.notiz?.userErstellt,
+      });
+    }
   }
 
-  static open(dialog: MatDialog, data?: GesuchNotiz) {
+  static open(dialog: MatDialog, data: NotizDialogData) {
     return dialog
       .open<
         SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent,
-        GesuchNotiz,
-        GesuchNotizUpdate | GesuchNotizCreate
+        NotizDialogData,
+        NotizDialogResult
       >(SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent, {
         data,
       })
@@ -127,7 +152,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     const notizDaten = convertTempFormToRealValues(this.form);
 
     this.dialogRef.close({
-      id: this.dialogData?.id,
+      id: this.dialogData.notiz?.id,
       text: notizDaten.text,
       betreff: notizDaten.betreff,
     });

@@ -21,11 +21,18 @@ import { Observable }                                        from 'rxjs';
 import { GesuchNotiz } from '../model/gesuchNotiz';
 import { GesuchNotizCreate } from '../model/gesuchNotizCreate';
 import { GesuchNotizUpdate } from '../model/gesuchNotizUpdate';
+import { JuristischeAbklaerungNotiz } from '../model/juristischeAbklaerungNotiz';
+import { JuristischeAbklaerungNotizAntwort } from '../model/juristischeAbklaerungNotizAntwort';
 import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
+
+export interface GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams {
+    notizId: string;
+    juristischeAbklaerungNotizAntwort: JuristischeAbklaerungNotizAntwort;
+}
 
 export interface GesuchNotizServiceCreateNotizRequestParams {
     gesuchNotizCreate: GesuchNotizCreate;
@@ -33,6 +40,14 @@ export interface GesuchNotizServiceCreateNotizRequestParams {
 
 export interface GesuchNotizServiceDeleteNotizRequestParams {
     notizId: string;
+}
+
+export interface GesuchNotizServiceGetJuristischeAbklaerungNotizRequestParams {
+    notizId: string;
+}
+
+export interface GesuchNotizServiceGetJuristischeAbklaerungNotizenRequestParams {
+    gesuchId: string;
 }
 
 export interface GesuchNotizServiceGetNotizRequestParams {
@@ -109,6 +124,93 @@ export class GesuchNotizService {
             throw Error("key may not be null if value is not object or array");
         }
         return httpParams;
+    }
+
+    /**
+     * Sets the Answer of a Juristische Abklaerung Notiz Antwort
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any>;
+     public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const notizId = requestParameters.notizId;
+        if (notizId === null || notizId === undefined) {
+            throw new Error('Required parameter notizId was null or undefined when calling answerJuristischeAbklaerungNotiz$.');
+        }
+        const juristischeAbklaerungNotizAntwort = requestParameters.juristischeAbklaerungNotizAntwort;
+        if (juristischeAbklaerungNotizAntwort === null || juristischeAbklaerungNotizAntwort === undefined) {
+            throw new Error('Required parameter juristischeAbklaerungNotizAntwort was null or undefined when calling answerJuristischeAbklaerungNotiz$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuch/notiz/juristischeAbklaerung/${this.configuration.encodeParam({name: "notizId", value: notizId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: juristischeAbklaerungNotizAntwort,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -255,6 +357,152 @@ export class GesuchNotizService {
 
         const localVarPath = `/gesuch/notiz/${this.configuration.encodeParam({name: "notizId", value: notizId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * get a single Juristische Abklaerung Notiz of a Gesuch with the given Notiz-Id
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceGetJuristischeAbklaerungNotizRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<JuristischeAbklaerungNotiz>;
+     public getJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceGetJuristischeAbklaerungNotizRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<JuristischeAbklaerungNotiz>>;
+     public getJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceGetJuristischeAbklaerungNotizRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<JuristischeAbklaerungNotiz>>;
+     public getJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceGetJuristischeAbklaerungNotizRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const notizId = requestParameters.notizId;
+        if (notizId === null || notizId === undefined) {
+            throw new Error('Required parameter notizId was null or undefined when calling getJuristischeAbklaerungNotiz$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuch/notiz/juristischeAbklaerung/${this.configuration.encodeParam({name: "notizId", value: notizId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<JuristischeAbklaerungNotiz>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * get all juristische abklaerung notizen of a gesuch
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getJuristischeAbklaerungNotizen$(requestParameters: GesuchNotizServiceGetJuristischeAbklaerungNotizenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<JuristischeAbklaerungNotiz>>;
+     public getJuristischeAbklaerungNotizen$(requestParameters: GesuchNotizServiceGetJuristischeAbklaerungNotizenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<JuristischeAbklaerungNotiz>>>;
+     public getJuristischeAbklaerungNotizen$(requestParameters: GesuchNotizServiceGetJuristischeAbklaerungNotizenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<JuristischeAbklaerungNotiz>>>;
+     public getJuristischeAbklaerungNotizen$(requestParameters: GesuchNotizServiceGetJuristischeAbklaerungNotizenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getJuristischeAbklaerungNotizen$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuch/notiz/juristischeAbklaerung/all/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<Array<JuristischeAbklaerungNotiz>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
