@@ -1,5 +1,5 @@
 <h1 class="h3 mb-4">
-  @if (dialogData?.id) {
+  @if (dialogData.notiz?.id) {
     {{ 'sachbearbeitung-app.infos.notiz.bearbeiten' | translate }}
   } @else {
     {{ 'sachbearbeitung-app.infos.notiz.erstellen' | translate }}
@@ -7,7 +7,7 @@
 </h1>
 
 <form [formGroup]="form" (ngSubmit)="handleSave()" data-testid="form-notiz-form" class="w-100">
-  @if (dialogData?.id) {
+  @if (dialogData.notiz?.id) {
     <div class="row g-4 mb-4">
       <!-- Datum -->
       <mat-form-field dvSharedUiFormField class="col-12">

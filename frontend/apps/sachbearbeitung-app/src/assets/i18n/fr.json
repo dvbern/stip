@@ -251,6 +251,7 @@
   "sachbearbeitung-app.infos.notizen.table.user": "Utilisateur",
   "sachbearbeitung-app.infos.notizen.noData": "Aucune note n'a encore été créée",
   "sachbearbeitung-app.infos.notiz.erstellen": "Créer une note",
+  "sachbearbeitung-app.infos.juristischeNotiz.erstellen": "Créer une note juridique",
   "sachbearbeitung-app.infos.notiz.erstellen.success": "La note a été créée avec succès",
   "sachbearbeitung-app.infos.notiz.bearbeiten": "Modifier la note",
   "sachbearbeitung-app.infos.notiz.bearbeiten.success": "La note a été modifiée avec succès",
