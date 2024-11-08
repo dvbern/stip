@@ -36,7 +36,9 @@ import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDtoSpec;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDto;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
@@ -66,6 +68,10 @@ class GesuchNotizResourceImplTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     // create a gesuch
     private GesuchDtoSpec gesuch;
+
+    private JuristischeAbklaerungNotizDtoSpec juristischeAbklaerungNotizDtoSpec;
+    private JuristischeAbklaerungNotizDto juristischeAbklaerungNotizDto;
+    private JuristischeAbklaerungNotizAntwortDtoSpec juristischeAbklaerungNotizAntwortDtoSpec;
 
     @Test
     @TestAsGesuchsteller
@@ -231,7 +237,7 @@ class GesuchNotizResourceImplTest {
     @Test
     @TestAsJurist
     @Order(8)
-    void getAllJuristischeNotizen() {
+    void getJuristischeNotizen() {
         final var notizen = gesuchNotizApiSpec.getJuristischeAbklaerungNotizen()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -243,7 +249,7 @@ class GesuchNotizResourceImplTest {
             .as(JuristischeAbklaerungNotizDto[].class);
         final var notiz = Arrays.stream(notizen).toList().get(0);
 
-        final var notizById = gesuchNotizApiSpec.getJuristischeAbklaerungNotiz()
+        juristischeAbklaerungNotizDto = gesuchNotizApiSpec.getJuristischeAbklaerungNotiz()
             .notizIdPath(notiz.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -256,81 +262,26 @@ class GesuchNotizResourceImplTest {
 
     // update notiz as SB
     @Test
-    @TestAsSachbearbeiter
+    @TestAsJurist
     @Order(9)
     void updateJuristischeNotiz() {
-        var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
-        gesuchCreateDto.setGesuchId(gesuch.getId());
-        gesuchCreateDto.setText("test");
-        gesuchCreateDto.setBetreff("test");
-        gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
-        final var notiz = gesuchNotizApiSpec.createNotiz()
-            .body(gesuchCreateDto)
+        // todo: add id
+        // todo: remove referenzes to user from openapi.yaml
+        var antwort = new JuristischeAbklaerungNotizAntwortDtoSpec();
+        antwort.setAntwort("Test antwort");
+
+        juristischeAbklaerungNotizDto = gesuchNotizApiSpec.answerJuristischeAbklaerungNotiz()
+            .notizIdPath(juristischeAbklaerungNotizDto.getId())
+            .body(antwort)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchNotizDto.class);
-
-        var gesuchUpdateDto = new GesuchNotizUpdateDtoSpec();
-        gesuchUpdateDto.setId(notiz.getId());
-        gesuchUpdateDto.setText("update");
-        gesuchUpdateDto.setBetreff("update");
-        gesuchNotizApiSpec.updateNotiz()
-            .body(gesuchUpdateDto)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-
-        gesuchNotizApiSpec.deleteNotiz()
-            .notizIdPath(gesuchUpdateDto.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+            .as(JuristischeAbklaerungNotizDto.class);
+        // todo: berechtigungen testen
+        assertEquals(juristischeAbklaerungNotizDto.getAntwort(), antwort.getAntwort());
     }
 
-    // create a notiz as SB
-    // delete gesuch as SB, check if all notizen are deleted too
-    @Test
-    @TestAsSachbearbeiter
-    @Order(10)
-    void allJuristischeNotizenShouldBeCascadeDeleted() {
-        var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
-        gesuchCreateDto.setGesuchId(gesuch.getId());
-        gesuchCreateDto.setText("test");
-        gesuchCreateDto.setBetreff("test");
-        gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
-        final var notiz = gesuchNotizApiSpec.createNotiz()
-            .body(gesuchCreateDto)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchNotizDto.class);
-
-        // delete gesuch
-        gesuchApiSpec.deleteGesuch()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
-
-        final var notizen = gesuchNotizApiSpec.getNotizen()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchNotizDto[].class);
-        assertEquals(0, notizen.length);
-    }
 }

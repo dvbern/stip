@@ -45,7 +45,10 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         UUID notizId,
         JuristischeAbklaerungNotizAntwortDto juristischeAbklaerungNotizAntwortDto
     ) {
-        return null;
+
+        return Response.ok(
+            service.answerJuristischeNotiz(juristischeAbklaerungNotizAntwortDto, notizId)
+        ).build();
     }
 
     @AllowAll
