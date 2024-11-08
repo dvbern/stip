@@ -4136,10 +4136,6 @@ components:
       properties:
         antwort:
           type: string
-        userMutiert:
-          type: string
-        timestampMutiert:
-          $ref: '#/components/schemas/LocalDate'
     JuristischeAbklaerungNotiz:
       allOf:
         - $ref: '#/components/schemas/GesuchNotizCreate'
@@ -4200,6 +4196,8 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+        notizTyp:
+          $ref: '#/components/schemas/GesuchNotizTyp'
       allOf:
         - type: object
         - $ref: '#/components/schemas/GesuchNotizUpdate'
