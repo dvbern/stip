@@ -11,10 +11,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { GesuchAppUiAenderungsEntryComponent } from '@dv/gesuch-app/ui/aenderungs-entry';
 import { SharedModelGsGesuchView } from '@dv/shared/model/ausbildung';
-import { AusbildungsStatus } from '@dv/shared/model/gesuch';
-import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-import { SharedUiTranslatedDatePipe } from '@dv/shared/ui/translated-date-pipe';
-import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 
 @Component({
   selector: 'dv-gesuch-app-ui-dashboard-gesuch',
@@ -23,16 +19,12 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
     CommonModule,
     RouterLink,
     TranslateModule,
-    TranslatedPropertyPipe,
     GesuchAppUiAenderungsEntryComponent,
-    SharedUiIconChipComponent,
-    SharedUiTranslatedDatePipe,
   ],
   templateUrl: './gesuch-app-ui-dashboard-gesuch.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppUiDashboardGesuchComponent {
-  ausbildungsStatusSig = input.required<AusbildungsStatus>();
   gesuchSig = input.required<SharedModelGsGesuchView>();
   deleteGesuch = output<string>();
   deleteAenderung = output<string>();

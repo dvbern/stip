@@ -4,9 +4,12 @@
     <mat-panel-title class="tw-flex tw-flex-col tw-py-8 tw-pl-8">
       <h2 class="tw-flex tw-w-full tw-text-2xl tw-gap-4 tw-mb-3 tw-items-center">
         <dv-shared-ui-icon-chip class="tw-text-gray-400 tw-bg-gray-100">
-          <i class="material-symbols-rounded tw-text-lg">school</i>
+          <i class="material-symbols-rounded tw-text-2xl">school</i>
         </dv-shared-ui-icon-chip>
         {{ 'gesuch-app.dashboard.ausbildung.title' | translate: ausbildung.ausbildungsgang }}
+        <div class="tw-grow tw-text-end tw-text-base">
+          {{ 'gesuch-app.dashboard.ausbildung.status.' + ausbildung.status | translate: { status: ausbildung.status } }}
+        </div>
       </h2>
 
       <p class="tw-my-0 tw-w-full">
@@ -22,10 +25,9 @@
     </mat-panel-title>
   </mat-expansion-panel-header>
 
-  <div class="tw-flex tw-gap-2">
+  <div class="tw-flex tw-gap-6 tw-flex-col">
     @for (gesuch of ausbildung.gesuchs; track gesuch) {
       <dv-gesuch-app-ui-dashboard-gesuch
-        [ausbildungsStatusSig]="ausbildung.status"
         [gesuchSig]="gesuch"
         [class.bg-tertiary]="ausbildung.status !== 'AKTIV'"
         [class.bg-success-subtle]="ausbildung.status === 'AKTIV'"

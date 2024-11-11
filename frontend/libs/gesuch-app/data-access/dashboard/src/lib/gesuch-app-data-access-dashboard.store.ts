@@ -8,6 +8,7 @@ import { pipe, switchMap, tap } from 'rxjs';
 import {
   SharedModelGsAusbildungView,
   SharedModelGsDashboardView,
+  SharedModelGsGesuchView,
 } from '@dv/shared/model/ausbildung';
 import { FallDashboardItem, GesuchService } from '@dv/shared/model/gesuch';
 import {
@@ -39,50 +40,57 @@ export class DashboardStore extends signalStore(
     const activeAusbildungen: SharedModelGsAusbildungView[] = [];
     const inactiveAusbildungen: SharedModelGsAusbildungView[] = [];
     fallDashboardItems?.forEach((item) =>
-      item.ausbildungDashboardItems?.forEach((ausbildung) => {
-        const hasMoreThanOneGesuche = (ausbildung.gesuchs?.length ?? 0) > 1;
-        const gesuchs =
-          ausbildung.gesuchs?.map((gesuch) => {
-            const einreichefristAbgelaufen = isAfter(
-              new Date(),
-              endOfDay(new Date(gesuch.gesuchsperiode.einreichefristReduziert)),
-            );
-            const reduzierterBeitrag = isAfter(
-              new Date(),
-              endOfDay(new Date(gesuch.gesuchsperiode.einreichefristNormal)),
-            );
-            const einreichefristDays = differenceInDays(
-              endOfDay(
-                new Date(
-                  reduzierterBeitrag
-                    ? gesuch.gesuchsperiode.einreichefristReduziert
-                    : gesuch.gesuchsperiode.einreichefristNormal,
+      item.ausbildungDashboardItems?.forEach(({ gesuchs, ...ausbildung }) => {
+        const hasMoreThanOneGesuche = (gesuchs?.length ?? 0) > 1;
+        const filteredGesuchs = !gesuchs
+          ? []
+          : (gesuchs.map((gesuch, index) => {
+              const isErstgesuch = index === gesuchs.length - 1;
+              const isLastGesuch = index === 0;
+              const einreichefristAbgelaufen = isAfter(
+                new Date(),
+                endOfDay(
+                  new Date(gesuch.gesuchsperiode.einreichefristReduziert),
                 ),
-              ),
-              new Date(),
-            );
-            const yearRange = [
-              format(
-                Date.parse(gesuch.gesuchsperiode.gesuchsperiodeStart),
-                'yy',
-              ),
-              format(
-                Date.parse(gesuch.gesuchsperiode.gesuchsperiodeStopp),
-                'yy',
-              ),
-            ].join('/');
-            const canEdit = gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS';
+              );
+              const reduzierterBeitrag = isAfter(
+                new Date(),
+                endOfDay(new Date(gesuch.gesuchsperiode.einreichefristNormal)),
+              );
+              const einreichefristDays = differenceInDays(
+                endOfDay(
+                  new Date(
+                    reduzierterBeitrag
+                      ? gesuch.gesuchsperiode.einreichefristReduziert
+                      : gesuch.gesuchsperiode.einreichefristNormal,
+                  ),
+                ),
+                new Date(),
+              );
+              const yearRange = [
+                format(
+                  Date.parse(gesuch.gesuchsperiode.gesuchsperiodeStart),
+                  'yy',
+                ),
+                format(
+                  Date.parse(gesuch.gesuchsperiode.gesuchsperiodeStopp),
+                  'yy',
+                ),
+              ].join('/');
+              const canEdit = gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS';
 
-            return {
-              ...gesuch,
-              canEdit,
-              canDelete: canEdit && hasMoreThanOneGesuche,
-              einreichefristAbgelaufen,
-              reduzierterBeitrag,
-              einreichefristDays,
-              yearRange,
-            };
-          }) ?? [];
+              return {
+                ...gesuch,
+                isActive: ausbildung.status === 'AKTIV' && isLastGesuch,
+                isErstgesuch,
+                canEdit,
+                canDelete: canEdit && hasMoreThanOneGesuche,
+                einreichefristAbgelaufen,
+                reduzierterBeitrag,
+                einreichefristDays,
+                yearRange,
+              } satisfies SharedModelGsGesuchView;
+            }) ?? []);
 
         (ausbildung.status !== 'AKTIV'
           ? inactiveAusbildungen
@@ -91,10 +99,10 @@ export class DashboardStore extends signalStore(
           ...ausbildung,
           canDelete:
             !hasMoreThanOneGesuche &&
-            ausbildung.gesuchs?.[0].gesuchStatus === 'IN_BEARBEITUNG_GS',
+            filteredGesuchs[0]?.gesuchStatus === 'IN_BEARBEITUNG_GS',
           ausbildungBegin: dateFromMonthYearString(ausbildung.ausbildungBegin),
           ausbildungEnd: dateFromMonthYearString(ausbildung.ausbildungEnd),
-          gesuchs,
+          gesuchs: filteredGesuchs,
         });
       }),
     );

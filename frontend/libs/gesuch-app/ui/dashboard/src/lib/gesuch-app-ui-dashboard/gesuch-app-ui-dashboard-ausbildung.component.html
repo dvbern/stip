@@ -3,7 +3,7 @@
   <div>
     <h2 class="tw-flex tw-text-2xl tw-gap-4 tw-mb-3 tw-items-center">
       <dv-shared-ui-icon-chip style="background-color: var(--dv-success-bg-subtle); color: #81be06e0">
-        <i class="material-symbols-rounded tw-text-lg">school</i>
+        <i class="material-symbols-rounded tw-text-2xl">school</i>
       </dv-shared-ui-icon-chip>
       {{ 'gesuch-app.dashboard.ausbildung.title' | translate: ausbildung.ausbildungsgang }}
     </h2>
@@ -25,13 +25,12 @@
   }
 </div>
 
-<div class="tw-flex tw-gap-2">
+<div class="tw-flex tw-gap-6 tw-flex-col">
   @for (gesuch of ausbildung.gesuchs; track gesuch) {
     <dv-gesuch-app-ui-dashboard-gesuch
-      [ausbildungsStatusSig]="ausbildung.status"
       [gesuchSig]="gesuch"
-      [class.bg-tertiary]="ausbildung.status !== 'AKTIV'"
-      [class.bg-success-subtle]="ausbildung.status === 'AKTIV'"
+      [class.bg-tertiary]="!gesuch.isActive"
+      [class.bg-success-subtle]="gesuch.isActive"
       (deleteGesuch)="deleteGesuch.emit($event)"
       (aenderungMelden)="aenderungMelden.emit({ gesuch })"
       (deleteAenderung)="deleteAenderung.emit($event)"
