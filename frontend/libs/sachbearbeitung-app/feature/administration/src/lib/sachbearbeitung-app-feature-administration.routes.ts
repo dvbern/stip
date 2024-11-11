@@ -4,9 +4,19 @@ import {
   OPTION_AUSBILDUNGSSTAETTE,
   OPTION_BUCHSTABEN_ZUTEILUNG,
   OPTION_GESUCHSPERIODEN,
+  OPTION_SOZIALDIENST,
 } from '@dv/sachbearbeitung-app/model/administration';
 
 export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
+  {
+    path: OPTION_SOZIALDIENST.route,
+    loadChildren: () =>
+      import(
+        '@dv/sachbearbeitung-app/feature/administration-sozialdienst'
+      ).then(
+        (m) => m.sachbearbeitungAppFeatureAdministrationSozialdienstRoutes,
+      ),
+  },
   {
     path: OPTION_AUSBILDUNGSSTAETTE.route,
     loadChildren: () =>

@@ -1,22 +1,22 @@
 {
-  "name": "shared-data-access-global-notification",
+  "name": "shared-global-notification",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/data-access/global-notification/src",
+  "sourceRoot": "libs/shared/global/global-notification/src",
   "prefix": "dv",
   "projectType": "library",
-  "tags": ["type:data-access", "scope:shared"],
+  "tags": ["type:global", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/shared/data-access/global-notification/tsconfig.lib.json"
+        "tsConfig": "libs/shared/global/global-notification/tsconfig.lib.json"
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/data-access/global-notification/jest.config.ts"
+        "jestConfig": "libs/shared/global/global-notification/jest.config.ts"
       }
     },
     "lint": {

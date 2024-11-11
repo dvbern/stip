@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { computed, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -33,7 +33,7 @@ export interface AdminAusbildungsstaetteState {
   bildungskategorien: RemoteData<Bildungskategorie[]>;
   response: RemoteData<Ausbildungsstaette[]>;
 }
-
+@Injectable()
 export class AdminAusbildungsstaetteStore extends signalStore(
   { protectedState: false },
   withState(() => {

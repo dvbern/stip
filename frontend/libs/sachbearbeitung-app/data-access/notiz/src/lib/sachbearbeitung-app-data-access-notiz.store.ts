@@ -5,7 +5,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   GesuchNotiz,
   GesuchNotizCreate,

@@ -43,7 +43,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID;
+import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_2_TEST_AHV_NUMMER;
+import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_TEST_AHV_NUMMER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -78,7 +79,7 @@ class BenutzerResourceTest {
 
         assertThat(benutzerDto.getVorname()).isEqualTo("Frédéric");
         assertThat(benutzerDto.getNachname()).isEqualTo("Nell");
-        assertThat(benutzerDto.getSozialversicherungsnummer()).isEqualTo(AHV_NUMMER_VALID);
+        assertThat(benutzerDto.getSozialversicherungsnummer()).isEqualTo(GESUCHSTELLER_TEST_AHV_NUMMER);
     }
 
     @Test
@@ -95,7 +96,7 @@ class BenutzerResourceTest {
 
         assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
         assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller 2");
-        assertThat(benutzerDto.getSozialversicherungsnummer()).isEqualTo(AHV_NUMMER_VALID);
+        assertThat(benutzerDto.getSozialversicherungsnummer()).isEqualTo(GESUCHSTELLER_2_TEST_AHV_NUMMER);
     }
 
     @Test

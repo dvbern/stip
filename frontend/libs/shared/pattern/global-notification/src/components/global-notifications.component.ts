@@ -11,7 +11,7 @@ import { Event, NavigationEnd, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { StatusColor } from '@dv/shared/model/gesuch';
 import { NotificationType } from '@dv/shared/model/global-notification';
 
