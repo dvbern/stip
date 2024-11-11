@@ -92,7 +92,7 @@ public class GesuchTrancheCopyUtil {
             .min(
                 (gesuchTranche1, gesuchTranche2) -> gesuchTranche1.getGueltigkeit()
                     .getGueltigAb()
-                    .isBefore(gesuchTranche2.getGueltigkeit().getGueltigAb()) ? 1 : -1
+                    .isAfter(gesuchTranche2.getGueltigkeit().getGueltigAb()) ? 1 : -1
             )
             .orElseThrow(NotFoundException::new)
             .getGueltigkeit()
@@ -104,7 +104,7 @@ public class GesuchTrancheCopyUtil {
             .min(
                 (gesuchTranche1, gesuchTranche2) -> gesuchTranche1.getGueltigkeit()
                     .getGueltigBis()
-                    .isAfter(gesuchTranche2.getGueltigkeit().getGueltigBis()) ? 1 : -1
+                    .isBefore(gesuchTranche2.getGueltigkeit().getGueltigBis()) ? 1 : -1
             )
             .orElseThrow(NotFoundException::new)
             .getGueltigkeit()
