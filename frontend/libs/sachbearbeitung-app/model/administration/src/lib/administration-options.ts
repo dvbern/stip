@@ -33,6 +33,14 @@ export const OPTION_GESUCHSPERIODEN: AdminOption = {
   iconSymbolName: 'format_indent_increase',
 };
 
+export const OPTION_EU_EFTA_LAENDER: AdminOption = {
+  type: 'PARENT',
+  route: 'eu-efta-laender',
+  translationKey: 'sachbearbeitung-app.admin.option.euEftaLaender',
+  titleTranslationKey: 'sachbearbeitung-app.admin.euEftaLaender.route.overview',
+  iconSymbolName: 'public',
+};
+
 export const OPTION_BENUTZERVERWALTUNG: AdminOption = {
   type: 'PARENT',
   route: 'benutzerverwaltung',
@@ -46,6 +54,7 @@ export const AdminOptions = [
   OPTION_AUSBILDUNGSSTAETTE,
   OPTION_BUCHSTABEN_ZUTEILUNG,
   OPTION_GESUCHSPERIODEN,
+  OPTION_EU_EFTA_LAENDER,
   OPTION_BENUTZERVERWALTUNG,
 ];
 

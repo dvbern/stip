@@ -36,6 +36,7 @@
   "sachbearbeitung-app.admin.option.ausbildungsstaette": "Centre de formation",
   "sachbearbeitung-app.admin.option.buchstabenZuteilung": "Attribution des lettres",
   "sachbearbeitung-app.admin.option.gesuchsperioden": "Périodes de demande",
+  "sachbearbeitung-app.admin.option.euEftaLaender": "Pays de l'UE/AELE",
   "sachbearbeitung-app.admin.option.benutzerverwaltung": "Gestion des utilisateurs",
 
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Aperçu de la distribution des lettres",
@@ -60,6 +61,9 @@
   "sachbearbeitung-app.admin.gesuchsperiode.route.overview": "Périodes de demande et années de demande Aperçu",
   "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Créer une période de demande",
   "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Période de requête Vue détaillée",
+
+  "sachbearbeitung-app.admin.euEftaLaender.description": "La liste de sélection suivante vous permet de gérer les pays de l'UE/AELE.",
+  "sachbearbeitung-app.admin.euEftaLaender.route.overview": "Aperçu des pays de l'UE/AELE",
 
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.title": "Publier l'année de demande",
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.description": "Les modifications ne sont plus possibles après la publication.",

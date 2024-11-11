@@ -1,0 +1,28 @@
+<div class="container mt-3">
+  <p>{{ 'sachbearbeitung-app.admin.euEftaLaender.description' | translate }}</p>
+
+  <div class="row mt-5">
+    <h2 class="h3 col-12 col-md-4 col-xl-3 align-self-end">
+      {{ 'shared.form.shared.address.country.label' | translate }}
+    </h2>
+    <mat-form-field class="col-12 col-md-4 col-xl-3">
+      <mat-label>{{ 'shared.search' | translate }}</mat-label>
+      <input matInput [formControl]="countryFilter" />
+      <i class="material-symbols-rounded me-2" matSuffix>search</i>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-selection-list
+      class="col-12 col-md-8 col-xl-6"
+      [compareWith]="compareFn"
+      [formControl]="countryList"
+      [disableRipple]="true"
+    >
+      @for (l of laenderStore.euEftaLaenderListViewSig(); track l.land) {
+        <mat-list-option [value]="l" [class.d-none]="hiddenCountriesSig()?.[l.land]">{{
+          'shared.country.' + l.land | translate
+        }}</mat-list-option>
+      }
+    </mat-selection-list>
+  </div>
+</div>
