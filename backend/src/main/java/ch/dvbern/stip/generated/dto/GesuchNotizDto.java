@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.GesuchNotizTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -9,6 +10,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("GesuchNotiz")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -31,7 +37,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("userErstellt")
   @NotNull
   public String getUserErstellt() {
@@ -50,7 +56,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("timestampErstellt")
   @NotNull
   public LocalDate getTimestampErstellt() {
@@ -69,7 +75,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("notizTyp")
   @NotNull
   public GesuchNotizTypDto getNotizTyp() {
@@ -88,7 +94,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -107,7 +113,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("betreff")
   @NotNull
   public String getBetreff() {
@@ -126,7 +132,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("text")
   @NotNull
   public String getText() {
@@ -145,7 +151,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("antwort")
   public String getAntwort() {
     return antwort;
@@ -184,7 +190,7 @@ public class GesuchNotizDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizDto {\n");
-
+    
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");

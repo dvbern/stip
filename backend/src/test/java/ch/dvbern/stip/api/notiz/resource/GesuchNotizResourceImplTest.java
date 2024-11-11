@@ -37,8 +37,6 @@ import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDtoSpec;
-import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDto;
-import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
@@ -69,10 +67,8 @@ class GesuchNotizResourceImplTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     // create a gesuch
     private GesuchDtoSpec gesuch;
-
-    private JuristischeAbklaerungNotizDtoSpec juristischeAbklaerungNotizDtoSpec;
     private GesuchNotizDto juristischeAbklaerungNotizDto;
-    private JuristischeAbklaerungNotizDto abklaerungNotizDto;
+    private GesuchNotizDto abklaerungNotizDto;
     private JuristischeAbklaerungNotizAntwortDtoSpec juristischeAbklaerungNotizAntwortDtoSpec;
 
     @Test
@@ -225,14 +221,14 @@ class GesuchNotizResourceImplTest {
         gesuchCreateDto.setText("test");
         gesuchCreateDto.setBetreff("test");
         gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.JURISTISCHE_NOTIZ);
-        final var juristsicheNotiz = gesuchNotizApiSpec.createNotiz()
+        gesuchNotizApiSpec.createNotiz()
             .body(gesuchCreateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
-            .as(JuristischeAbklaerungNotizDto.class);
+            .as(GesuchNotizDto.class);
     }
 
     // get all notizen as SB
@@ -270,7 +266,7 @@ class GesuchNotizResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(JuristischeAbklaerungNotizDto.class);
+            .as(GesuchNotizDto.class);
 
         gesuchNotizApiSpec.answerJuristischeAbklaerungNotiz()
             .notizIdPath(juristischeAbklaerungNotizDto.getId())

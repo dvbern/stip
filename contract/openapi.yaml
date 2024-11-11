@@ -4085,26 +4085,6 @@ components:
       properties:
         antwort:
           type: string
-    JuristischeAbklaerungNotiz:
-      allOf:
-        - $ref: '#/components/schemas/GesuchNotizCreate'
-      type: object
-      required:
-        - id
-        - antwort
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        antwort:
-          type: string
-        userErstellt:
-          type: string
-        timestampErstellt:
-          $ref: '#/components/schemas/LocalDate'
-        userMutiert:
-          type: string
-        timestampMutiert:
-          $ref: '#/components/schemas/LocalDate'
     GesuchNotizCreate:
       type: object
       required:

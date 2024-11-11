@@ -7,6 +7,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("JuristischeAbklaerungNotizAntwort")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -23,7 +28,7 @@ public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("antwort")
   @NotNull
   public String getAntwort() {
@@ -57,7 +62,7 @@ public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class JuristischeAbklaerungNotizAntwortDto {\n");
-
+    
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
     sb.append("}");
     return sb.toString();
