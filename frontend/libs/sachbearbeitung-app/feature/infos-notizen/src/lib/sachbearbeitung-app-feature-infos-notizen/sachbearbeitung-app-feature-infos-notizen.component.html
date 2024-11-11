@@ -5,6 +5,17 @@
         'sachbearbeitung-app.infos.notizen.description' | translate
       }}
     </caption>
+
+    <!-- notizTyp  -->
+    <ng-container matColumnDef="notizTyp">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'sachbearbeitung-app.infos.notizen.table.notizTyp' | translate }}
+      </th>
+      <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="text-nowrap">
+        {{ 'sachbearbeitung-app.infos.notizen.notizTyp.' + notiz.notizTyp | translate }}
+      </td>
+    </ng-container>
+
     <!-- Datum -->
     <ng-container matColumnDef="datum">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>

@@ -4,7 +4,6 @@ import {
   Component,
   HostBinding,
   inject,
-  input,
 } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -23,6 +22,7 @@ import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   GesuchNotiz,
@@ -42,12 +42,12 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 type SBNotiz = {
-  typ: 'GESUCH_NOTIZ';
+  notizTyp: 'GESUCH_NOTIZ';
   notiz?: GesuchNotiz;
 };
 
 type JurNotiz = {
-  typ: 'JURISTISCHE_NOTIZ';
+  notizTyp: 'JURISTISCHE_NOTIZ';
   notiz?: JuristischeAbklaerungNotiz;
 };
 
@@ -60,8 +60,8 @@ export type NotizDialogResult = {
   antwort?: string;
 };
 
-export const isJurNotiz = (notiz: NotizDialogData): notiz is JurNotiz => {
-  return notiz.typ === 'JURISTISCHE_NOTIZ';
+const isJurNotiz = (data: NotizDialogData): data is JurNotiz => {
+  return data.notizTyp === 'JURISTISCHE_NOTIZ';
 };
 
 @Component({
@@ -69,19 +69,12 @@ export const isJurNotiz = (notiz: NotizDialogData): notiz is JurNotiz => {
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     MatFormFieldModule,
     ReactiveFormsModule,
     TranslateModule,
-    SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
-    SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiFormSaveComponent,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     MatInputModule,
-    MatCell,
-    TypeSafeMatCellDefDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-infos-notizen-detail-dialog.component.html',
@@ -105,14 +98,22 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     text: [<string | null>null, [Validators.required]],
     antwort: [<string | null>null],
   });
+
   // notizIdSig = input.required<string>({ alias: 'notizId' });
   languageSig = this.store.selectSignal(selectLanguage);
+  public isJurNotizFn = isJurNotiz;
+
+  notizStore = inject(NotizStore);
 
   constructor() {
     // this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
 
     if (isJurNotiz(this.dialogData)) {
-      // to be implemented
+      this.form.patchValue({
+        betreff: this.dialogData.notiz?.betreff,
+        text: this.dialogData.notiz?.text,
+        antwort: this.dialogData.notiz?.antwort,
+      });
     } else {
       this.form.patchValue({
         betreff: this.dialogData.notiz?.betreff,

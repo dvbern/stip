@@ -26,6 +26,7 @@ import {
   GesuchNotiz,
   GesuchNotizCreate,
   GesuchNotizTyp,
+  JuristischeAbklaerungNotiz,
 } from '@dv/shared/model/gesuch';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiFocusableListDirective } from '@dv/shared/ui/focusable-list';
@@ -37,7 +38,10 @@ import {
 } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
-import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../sachbearbeitung-app-feature-infos-notizen-detail-dialog/sachbearbeitung-app-feature-infos-notizen-detail-dialog.component';
+import {
+  NotizDialogData,
+  SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent,
+} from '../sachbearbeitung-app-feature-infos-notizen-detail-dialog/sachbearbeitung-app-feature-infos-notizen-detail-dialog.component';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
@@ -65,7 +69,14 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
 export class SachbearbeitungAppFeatureInfosNotizenComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
-  displayedColumns = ['datum', 'user', 'betreff', 'notiz', 'actions'];
+  displayedColumns = [
+    'notizTyp',
+    'datum',
+    'user',
+    'betreff',
+    'notiz',
+    'actions',
+  ];
   notizStore = inject(NotizStore);
 
   gesuchIdSig = input.required<string>({ alias: 'id' });
@@ -81,6 +92,8 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   constructor() {
     this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
 
+    this.notizStore.setJurist();
+
     effect(
       () => {
         const gesuchId = this.gesuchIdSig();
@@ -93,11 +106,11 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
     );
   }
 
-  createNotiz(typ: GesuchNotizTyp) {
+  createNotiz(notizTyp: GesuchNotizTyp) {
     SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent.open(
       this.dialog,
       {
-        typ,
+        notizTyp,
       },
     ).subscribe((result) => {
       const gesuchId = this.gesuchIdSig();
@@ -106,7 +119,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
         const gesuchNotizCreate: GesuchNotizCreate = {
           betreff: result.betreff,
           text: result.text,
-          notizTyp: 'GESUCH_NOTIZ',
+          notizTyp,
           gesuchId,
         };
 
@@ -117,13 +130,25 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
     });
   }
 
-  editNotiz(notiz: GesuchNotiz) {
+  editNotiz(notiz: GesuchNotiz | JuristischeAbklaerungNotiz) {
+    let dialogData: NotizDialogData | undefined;
+
+    if (isJurNotiz(notiz)) {
+      dialogData = {
+        notizTyp: 'JURISTISCHE_NOTIZ',
+        notiz,
+      };
+    } else {
+      dialogData = {
+        notizTyp: 'GESUCH_NOTIZ',
+        notiz,
+      };
+    }
+
+    // to be continued
     SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent.open(
       this.dialog,
-      {
-        typ: 'GESUCH_NOTIZ',
-        notiz,
-      },
+      dialogData,
     ).subscribe(() => {
       // const gesuchId = this.gesuchIdSig();
       // if (notizDaten) {
@@ -146,3 +171,9 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
       });
   }
 }
+
+const isJurNotiz = (
+  notiz: GesuchNotiz | JuristischeAbklaerungNotiz,
+): notiz is JuristischeAbklaerungNotiz => {
+  return notiz.notizTyp === 'JURISTISCHE_NOTIZ';
+};
