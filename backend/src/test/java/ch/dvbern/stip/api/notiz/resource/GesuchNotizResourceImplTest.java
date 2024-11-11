@@ -250,16 +250,6 @@ class GesuchNotizResourceImplTest {
             .as(JuristischeAbklaerungNotizDto[].class);
         final var notiz = Arrays.stream(notizen).toList().get(0);
         assertNotNull(notiz.getNotizTyp());
-
-        juristischeAbklaerungNotizDto = gesuchNotizApiSpec.getJuristischeAbklaerungNotiz()
-            .notizIdPath(notiz.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(JuristischeAbklaerungNotizDto.class);
     }
 
     // update notiz as SB

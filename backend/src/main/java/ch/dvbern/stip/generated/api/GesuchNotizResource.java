@@ -1,22 +1,13 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
-import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDto;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
-
-
-
-import java.io.InputStream;
-import java.util.Map;
-import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
@@ -41,11 +32,6 @@ public interface GesuchNotizResource {
     @Path("/notiz/{notizId}")
     @Produces({ "text/plain" })
     Response deleteNotiz(@PathParam("notizId") UUID notizId);
-
-    @GET
-    @Path("/notiz/juristischeAbklaerung/{notizId}")
-    @Produces({ "application/json", "text/plain" })
-    Response getJuristischeAbklaerungNotiz(@PathParam("notizId") UUID notizId);
 
     @GET
     @Path("/notiz/juristischeAbklaerung/all/{gesuchId}")

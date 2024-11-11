@@ -65,7 +65,6 @@ public class GesuchNotizApiSpec {
                 answerJuristischeAbklaerungNotiz(),
                 createNotiz(),
                 deleteNotiz(),
-                getJuristischeAbklaerungNotiz(),
                 getJuristischeAbklaerungNotizen(),
                 getNotiz(),
                 getNotizen(),
@@ -83,10 +82,6 @@ public class GesuchNotizApiSpec {
 
     public DeleteNotizOper deleteNotiz() {
         return new DeleteNotizOper(createReqSpec());
-    }
-
-    public GetJuristischeAbklaerungNotizOper getJuristischeAbklaerungNotiz() {
-        return new GetJuristischeAbklaerungNotizOper(createReqSpec());
     }
 
     public GetJuristischeAbklaerungNotizenOper getJuristischeAbklaerungNotizen() {
@@ -318,79 +313,6 @@ public class GesuchNotizApiSpec {
          * @return operation
          */
         public DeleteNotizOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * get a single Juristische Abklaerung Notiz of a Gesuch with the given Notiz-Id
-     * 
-     *
-     * @see #notizIdPath  (required)
-     * return JuristischeAbklaerungNotizDtoSpec
-     */
-    public static class GetJuristischeAbklaerungNotizOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/notiz/juristischeAbklaerung/{notizId}";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetJuristischeAbklaerungNotizOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/notiz/juristischeAbklaerung/{notizId}
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/notiz/juristischeAbklaerung/{notizId}
-         * @param handler handler
-         * @return JuristischeAbklaerungNotizDtoSpec
-         */
-        public JuristischeAbklaerungNotizDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<JuristischeAbklaerungNotizDtoSpec> type = new TypeRef<JuristischeAbklaerungNotizDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String NOTIZ_ID_PATH = "notizId";
-
-        /**
-         * @param notizId (UUID)  (required)
-         * @return operation
-         */
-        public GetJuristischeAbklaerungNotizOper notizIdPath(Object notizId) {
-            reqSpec.addPathParam(NOTIZ_ID_PATH, notizId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetJuristischeAbklaerungNotizOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetJuristischeAbklaerungNotizOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
