@@ -13,6 +13,8 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.LandDtoSpec;
+import ch.dvbern.stip.generated.dto.LandEuEftaDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,12 +57,22 @@ public class StammdatenApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                getLaender()
+                getLaender(),
+                getLaenderEuEfta(),
+                setLaenderEuEfta()
         );
     }
 
     public GetLaenderOper getLaender() {
         return new GetLaenderOper(createReqSpec());
+    }
+
+    public GetLaenderEuEftaOper getLaenderEuEfta() {
+        return new GetLaenderEuEftaOper(createReqSpec());
+    }
+
+    public SetLaenderEuEftaOper setLaenderEuEfta() {
+        return new SetLaenderEuEftaOper(createReqSpec());
     }
 
     /**
@@ -77,7 +89,7 @@ public class StammdatenApiSpec {
      * Returns a List of LandCode
      * 
      *
-     * return List&lt;String&gt;
+     * return List&lt;LandDtoSpec&gt;
      */
     public static class GetLaenderOper implements Oper {
 
@@ -107,10 +119,10 @@ public class StammdatenApiSpec {
         /**
          * GET /stammdaten/land
          * @param handler handler
-         * @return List&lt;String&gt;
+         * @return List&lt;LandDtoSpec&gt;
          */
-        public List<String> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<String>> type = new TypeRef<List<String>>(){};
+        public List<LandDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<LandDtoSpec>> type = new TypeRef<List<LandDtoSpec>>(){};
             return execute(handler).as(type);
         }
 
@@ -130,6 +142,139 @@ public class StammdatenApiSpec {
          * @return operation
          */
         public GetLaenderOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * return List&lt;LandEuEftaDtoSpec&gt;
+     */
+    public static class GetLaenderEuEftaOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/stammdaten/land/euefta";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetLaenderEuEftaOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /stammdaten/land/euefta
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /stammdaten/land/euefta
+         * @param handler handler
+         * @return List&lt;LandEuEftaDtoSpec&gt;
+         */
+        public List<LandEuEftaDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<LandEuEftaDtoSpec>> type = new TypeRef<List<LandEuEftaDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetLaenderEuEftaOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetLaenderEuEftaOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #body  (required)
+     * return List&lt;LandEuEftaDtoSpec&gt;
+     */
+    public static class SetLaenderEuEftaOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/stammdaten/land/euefta";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public SetLaenderEuEftaOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /stammdaten/land/euefta
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /stammdaten/land/euefta
+         * @param handler handler
+         * @return List&lt;LandEuEftaDtoSpec&gt;
+         */
+        public List<LandEuEftaDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<LandEuEftaDtoSpec>> type = new TypeRef<List<LandEuEftaDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param landEuEftaDtoSpec (List&lt;LandEuEftaDtoSpec&gt;)  (required)
+         * @return operation
+         */
+        public SetLaenderEuEftaOper body(List<LandEuEftaDtoSpec> landEuEftaDtoSpec) {
+            reqSpec.setBody(landEuEftaDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public SetLaenderEuEftaOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public SetLaenderEuEftaOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
