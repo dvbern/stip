@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { EMPTY, Observable, catchError, of, throwError } from 'rxjs';
 
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
   HANDLE_NOT_FOUND,

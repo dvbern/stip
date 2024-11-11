@@ -84,6 +84,9 @@ public class ApiClient {
     public PlzApiSpec plz() {
         return PlzApiSpec.plz(config.reqSpecSupplier);
     }
+    public SozialdienstApiSpec sozialdienst() {
+        return SozialdienstApiSpec.sozialdienst(config.reqSpecSupplier);
+    }
     public StammdatenApiSpec stammdaten() {
         return StammdatenApiSpec.stammdaten(config.reqSpecSupplier);
     }

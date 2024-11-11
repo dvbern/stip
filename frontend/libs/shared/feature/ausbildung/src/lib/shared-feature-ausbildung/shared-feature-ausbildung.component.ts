@@ -36,8 +36,8 @@ import {
   SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchCacheView,
 } from '@dv/shared/data-access/gesuch';
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelError } from '@dv/shared/model/error';
 import { AusbildungsPensum, Ausbildungsstaette } from '@dv/shared/model/gesuch';
 import { getTranslatableProp, isDefined } from '@dv/shared/model/type-util';

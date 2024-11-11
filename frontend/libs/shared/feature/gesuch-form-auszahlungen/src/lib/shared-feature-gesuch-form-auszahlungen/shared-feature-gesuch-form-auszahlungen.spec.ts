@@ -1,8 +1,8 @@
 import { FormControl } from '@angular/forms';
 
 import { Kontoinhaber } from '@dv/shared/model/gesuch';
+import { ibanValidator } from '@dv/shared/util/validator-iban';
 
-import { ibanValidator } from './shared-feature-gesuch-form-auszahlungen.component';
 import {
   calculateHasNecessaryPreSteps,
   calculateKontoinhaberValues,

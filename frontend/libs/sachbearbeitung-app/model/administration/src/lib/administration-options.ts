@@ -42,11 +42,20 @@ export const OPTION_BENUTZERVERWALTUNG: AdminOption = {
   iconSymbolName: 'people',
 };
 
+export const OPTION_SOZIALDIENST: AdminOption = {
+  type: 'PARENT',
+  route: 'sozialdienste',
+  translationKey: 'sachbearbeitung-app.admin.option.sozialdienst',
+  titleTranslationKey: 'sachbearbeitung-app.admin.sozialdienst.route.overview',
+  iconSymbolName: 'supervisor_account',
+};
+
 export const AdminOptions = [
   OPTION_AUSBILDUNGSSTAETTE,
   OPTION_BUCHSTABEN_ZUTEILUNG,
   OPTION_GESUCHSPERIODEN,
   OPTION_BENUTZERVERWALTUNG,
+  OPTION_SOZIALDIENST,
 ];
 
 export type ChildAdminOption = {
@@ -81,4 +90,13 @@ export const CHILD_OPTION_BENUTZER_ERSTELLEN = (
   route: 'erstellen',
   titleTranslationKey,
   parentRoute: OPTION_BENUTZERVERWALTUNG.route,
+});
+
+export const CHILD_OPTION_SOZIALDIENST = (
+  titleTranslationKey: string,
+): ChildAdminOption => ({
+  type: 'CHILD',
+  route: 'sozialdienst',
+  titleTranslationKey,
+  parentRoute: OPTION_SOZIALDIENST.route,
 });

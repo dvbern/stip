@@ -38,26 +38,27 @@
         <!-- filter -->
         <ng-container matColumnDef="filter">
           <th colspan="2" mat-header-cell *matHeaderCellDef>
-            <mat-form-field class="filter-form-field">
-              <input
-                #filter
-                matInput
-                (keyup)="store.setFilter(filter.value)"
-                type="text"
-                [placeholder]="'sachbearbeitung-app.admin.ausbildungsstaette.filter' | translate"
-              />
+            <div class="d-flex position-relative align-items-center justify-content-end">
+              <mat-form-field class="filter-form-field">
+                <input
+                  #filter
+                  matInput
+                  (keyup)="store.setFilter(filter.value)"
+                  type="text"
+                  [placeholder]="'sachbearbeitung-app.admin.ausbildungsstaette.filter' | translate"
+                />
+              </mat-form-field>
               @if (filter.value) {
                 <button
                   type="button"
-                  matSuffix
-                  mat-icon-button
+                  class="btn btn-link position-absolute p-0 btn-sm"
                   aria-label="Clear"
                   (click)="store.setFilter(''); filter.value = ''"
                 >
                   <span class="material-symbols-rounded align-middle">clear</span>
                 </button>
               }
-            </mat-form-field>
+            </div>
           </th>
         </ng-container>
 

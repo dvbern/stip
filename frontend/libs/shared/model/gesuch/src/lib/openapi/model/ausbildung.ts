@@ -42,7 +42,7 @@ export interface Ausbildung {
     isAusbildungAusland?: boolean;
     status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
-    editable?: boolean;
+    editable: boolean;
 }
 
 

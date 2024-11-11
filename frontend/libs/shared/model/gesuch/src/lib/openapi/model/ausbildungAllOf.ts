@@ -15,7 +15,7 @@ import { AusbildungsStatus } from './ausbildungsStatus';
 export interface AusbildungAllOf { 
     status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
-    editable?: boolean;
+    editable: boolean;
 }
 
 
