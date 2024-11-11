@@ -18,9 +18,9 @@
         <dd class="tw-mb-6">
           @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.count; as count) {
             @if (count > 1) {
-              {{ 'gesuch-app.dashboard.periode.status.missingDocuments' | translate: { count } }}
+              {{ 'gesuch-app.dashboard.gesuch.status.missingDocuments' | translate: { count } }}
             } @else {
-              {{ 'gesuch-app.dashboard.periode.status.missingDocument' | translate }}
+              {{ 'gesuch-app.dashboard.gesuch.status.missingDocument' | translate }}
             }
           } @else {
             {{ 'shared.gesuch.status.contract.' + gesuch.gesuchStatus | translate }}
