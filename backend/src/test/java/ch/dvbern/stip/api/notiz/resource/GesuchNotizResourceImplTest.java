@@ -248,8 +248,8 @@ class GesuchNotizResourceImplTest {
             .extract()
             .body()
             .as(JuristischeAbklaerungNotizDto[].class);
-        final var notiz = Arrays.stream(notizen).toList().get(0);
-        assertNotNull(notiz.getNotizTyp());
+        juristischeAbklaerungNotizDto = Arrays.stream(notizen).toList().get(0);
+        assertNotNull(juristischeAbklaerungNotizDto.getNotizTyp());
     }
 
     // update notiz as SB
