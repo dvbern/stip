@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { map, pipe, switchMap, tap } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,

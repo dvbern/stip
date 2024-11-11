@@ -885,6 +885,188 @@ paths:
                 $ref: '#/components/schemas/GesuchsperiodeWithDaten'
       operationId: publishGesuchsperiode
       summary: Publishes a Gesuchsperiode with the given id
+  /sozialdienst:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstCreate'
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns created Sozialdienst
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: createSozialdienst
+      summary: Create a new Sozialdienst
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstUpdate'
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns updated Sozialdienst
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienst
+      summary: Update a Sozialdienst
+    get:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sozialdienst'
+          description: Returns all Sozialdienste
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllSozialdienste
+      summary: Returns all Sozialdienste
+  /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin:
+    parameters:
+      - name: sozialdienstId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstAdminUpdate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstAdmin'
+          description: Updates data of a Sozialdienst admin
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienstAdmin
+  /sozialdienst/{sozialdienstId}/replaceSozialdienstAdmin:
+    parameters:
+      - name: sozialdienstId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstAdminCreate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstAdmin'
+          description: Replaces a Sozialdienst admin by a new one
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: replaceSozialdienstAdmin
+  /sozialdienst/{sozialdienstId}:
+    parameters:
+      - name: sozialdienstId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Deletes a Sozialdienst by id
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteSozialdienst
+      summary: Delete a Sozialdienst by Id
+      tags:
+        - Sozialdienst
+    get:
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns a Sozialdienst by id
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getSozialdienst
+      summary: Get a Sozialdienst by Id
+      tags:
+        - Sozialdienst
   /stammdaten/land:
     get:
       tags:
@@ -3679,6 +3861,85 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/SteuerdatenUpdate'
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+    SozialdienstAdminCreate:
+      required:
+        - keycloakId
+        - vorname
+        - nachname
+        - email
+      properties:
+        keycloakId:
+          type: string
+        vorname:
+          type: string
+        nachname:
+          type: string
+        email:
+          type: string
+    SozialdienstAdmin:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstAdminCreate'
+    SozialdienstAdminUpdate:
+      required:
+        - vorname
+        - nachname
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+    SozialdienstCreate:
+      required:
+        - name
+        - iban
+        - adresse
+        - sozialdienstAdmin
+      properties:
+        name:
+          type: string
+        iban:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+        sozialdienstAdmin:
+          $ref: '#/components/schemas/SozialdienstAdminCreate'
+    SozialdienstUpdate:
+      required:
+        - id
+        - name
+        - iban
+        - adresse
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        iban:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+    Sozialdienst:
+      required:
+        - id
+        - name
+        - adresse
+        - iban
+        - sozialdienstAdmin
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+        iban:
+          type: string
+        sozialdienstAdmin:
+          $ref: '#/components/schemas/SozialdienstAdmin'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -3792,12 +4053,12 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gesuchTrancheId:
           description: 'ID der tranche für welche die Berechnung ausgeführt wurde.
-                        Mehrere resultate mit der gleichen ID sind die berechnungen für
-                        getrennte eltern mit Kindern die eine Obhutsteilung haben'
+            Mehrere resultate mit der gleichen ID sind die berechnungen für
+            getrennte eltern mit Kindern die eine Obhutsteilung haben'
           $ref: '#/components/schemas/UUID'
         berechnungsanteilKinder:
           description: 'Anteil dieser Berechnung am Berechnungstotal.
-                        Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
+            Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
           type: number
         berechnungsStammdaten:
           description: 'Stammdaten für die Stipendienberechnung'
@@ -4263,7 +4524,7 @@ components:
       required: true
       schema:
         type: integer
-    
+
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []
