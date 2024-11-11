@@ -173,6 +173,19 @@ public class GesuchDokumentService {
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+
+        final var dokumenteToDeleteFromS3 = new ArrayList<String>();
+        final var dokumentList = gesuchDokument.getDokumente().stream().toList();
+        for (var dokument : dokumentList) {
+            dokument.getGesuchDokumente().remove(gesuchDokument);
+            gesuchDokument.getDokumente().remove(dokument);
+            if (dokument.getGesuchDokumente().isEmpty()) {
+                dokumenteToDeleteFromS3.add(dokument.getObjectId());
+                dokumentRepository.delete(dokument);
+            }
+        }
+        executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
+
         gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
         dokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
@@ -284,21 +297,9 @@ public class GesuchDokumentService {
             .getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT)
             .toList();
 
-        final var dokumenteToDeleteFromS3 = new ArrayList<String>();
-        for (final var gesuchDokument : gesuchDokumente) {
-            dokumenteToDeleteFromS3.addAll(
-                gesuchDokument
-                    .getDokumente()
-                    .stream()
-                    .map(Dokument::getObjectId)
-                    .toList()
-            );
-
-            gesuchDokument.getDokumente().clear();
+        for (var gesuchdokument : gesuchDokumente) {
+            gesuchDokumentRepository.delete(gesuchdokument);
         }
-
-        executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
-
     }
 
     public void scanDokument(final FileUpload fileUpload) {
