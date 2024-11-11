@@ -27,16 +27,11 @@
                   (click)="$event.stopPropagation()"
                 />
               </mat-form-field>
-              @if (nameFilter.value) {
-                <button
-                  type="button"
-                  class="btn btn-link position-absolute p-0 btn-sm"
-                  aria-label="Clear"
-                  (click)="nameFilterSig.set(null); nameFilter.value = ''"
-                >
-                  <span class="material-symbols-rounded align-middle">clear</span>
-                </button>
-              }
+              <dv-shared-ui-clear-button
+                class="clear d-flex align-items-center position-absolute"
+                (clear)="nameFilterSig.set(null); nameFilter.value = ''"
+                [valueSig]="nameFilter.value"
+              ></dv-shared-ui-clear-button>
             </div>
           </th>
           <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource" class="fw-bold">
@@ -62,16 +57,11 @@
                   (click)="$event.stopPropagation()"
                 />
               </mat-form-field>
-              @if (ortFilter.value) {
-                <button
-                  type="button"
-                  class="btn btn-link position-absolute p-0 btn-sm"
-                  aria-label="Clear"
-                  (click)="ortFilterSig.set(null); ortFilter.value = ''"
-                >
-                  <span class="material-symbols-rounded align-middle">clear</span>
-                </button>
-              }
+              <dv-shared-ui-clear-button
+                class="clear d-flex align-items-center position-absolute"
+                (clear)="ortFilterSig.set(null); ortFilter.value = ''"
+                [valueSig]="ortFilter.value"
+              ></dv-shared-ui-clear-button>
             </div>
           </th>
           <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource">
