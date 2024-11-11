@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.notiz.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import ch.dvbern.stip.api.notiz.entity.JuristischeAbklaerungNotiz;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
@@ -35,4 +36,6 @@ public interface JuristischeNotizMapper {
     );
 
     GesuchNotizDto toDto(JuristischeAbklaerungNotiz entity);
+
+    GesuchNotizDto toDto(GesuchNotiz entity);
 }

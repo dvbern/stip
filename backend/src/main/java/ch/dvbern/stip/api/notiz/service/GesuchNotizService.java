@@ -23,8 +23,8 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
+import ch.dvbern.stip.api.notiz.entity.JuristischeAbklaerungNotiz;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
-import ch.dvbern.stip.api.notiz.repo.JuristischeNotizRepository;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizTypDto;
@@ -41,14 +41,13 @@ public class GesuchNotizService {
     private final GesuchNotizMapper gesuchNotizMapper;
     private final JuristischeNotizMapper juristischeNotizMapper;
     private final GesuchRepository gesuchRepository;
-    private final JuristischeNotizRepository juristischeNotizRepository;
 
     @Transactional
     public List<GesuchNotizDto> getAllByGesuchId(final UUID gesuchId) {
         var gesuchNotizen =
             gesuchNotizRepository.findAllByGesuchId(gesuchId).stream().map(gesuchNotizMapper::toDto).toList();
         var juristischeNotizen =
-            juristischeNotizRepository.findAllByGesuchId(gesuchId).stream().map(juristischeNotizMapper::toDto).toList();
+            gesuchNotizRepository.findAllByGesuchId(gesuchId).stream().map(juristischeNotizMapper::toDto).toList();
         List<GesuchNotizDto> notizen = new ArrayList<>();
         notizen.addAll(gesuchNotizen);
         notizen.addAll(juristischeNotizen);
@@ -103,9 +102,8 @@ public class GesuchNotizService {
         final JuristischeAbklaerungNotizAntwortDto dto,
         final UUID notizId
     ) {
-        final var juristischeNotiz = juristischeNotizRepository.requireById(notizId);
+        final var juristischeNotiz = (JuristischeAbklaerungNotiz) gesuchNotizRepository.requireById(notizId);
         final var entity = juristischeNotizMapper.partialUpdate(dto, juristischeNotiz);
         return juristischeNotizMapper.toDto(entity);
     }
-
 }
