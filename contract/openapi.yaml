@@ -2698,7 +2698,7 @@ components:
       properties:
         land:
           $ref: '#/components/schemas/Land'
-        isEu:
+        isEuEfta:
           type: boolean
     Land:
       enum:
