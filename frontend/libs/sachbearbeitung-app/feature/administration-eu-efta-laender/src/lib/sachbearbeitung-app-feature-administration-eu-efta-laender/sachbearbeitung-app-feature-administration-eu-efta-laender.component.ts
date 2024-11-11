@@ -13,16 +13,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import {
-  debounceTime,
-  distinct,
-  distinctUntilChanged,
-  map,
-  startWith,
-} from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs';
 
 import { EuEftaLaenderStore } from '@dv/sachbearbeitung-app/data-access/eu-efta-laender';
-import { LandEuEfta } from '@dv/shared/model/gesuch';
+import { Land } from '@dv/shared/model/gesuch';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 const sharedCountryKeyPrefix = 'shared.country.';
@@ -51,7 +45,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
   private translate = inject(TranslateService);
   laenderStore = inject(EuEftaLaenderStore);
   countryFilter = new FormControl<string | null>(null);
-  countryList = new FormControl<LandEuEfta[]>([]);
+  countryList = new FormControl<string[]>([]);
 
   private countryFilterChangedSig = toSignal(
     this.countryFilter.valueChanges.pipe(
@@ -61,15 +55,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
     ),
   );
   private countryListChangedSig = toSignal(
-    this.countryList.valueChanges.pipe(
-      debounceTime(300),
-      distinct((list) =>
-        list
-          ?.filter((l) => l.isEuEfta)
-          .map((l) => l.land)
-          .join(','),
-      ),
-    ),
+    this.countryList.valueChanges.pipe(debounceTime(300)),
   );
   private countryTranslationsSig = toSignal(
     this.translate.onLangChange.pipe(
@@ -105,9 +91,11 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
           .map(({ key }) => key)
       : undefined;
 
-    return hiddenCountries?.reduce(
-      (acc, key) => ({ ...acc, [key]: true }),
-      {} as Record<string, boolean>,
+    return (
+      hiddenCountries?.reduce(
+        (acc, key) => ({ ...acc, [key]: true }),
+        {} as Record<string, boolean>,
+      ) ?? {}
     );
   });
 
@@ -122,7 +110,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
       }
 
       this.countryList.patchValue(
-        laender.filter((l) => l.isEuEfta),
+        laender.filter((l) => l.isEuEfta).map((l) => l.land),
         { emitEvent: false },
       );
     });
@@ -137,19 +125,21 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
 
         const remainingCountries =
           untracked(this.laenderStore.euEftaLaenderListViewSig)?.filter(
-            (l) => !selectedCountries.includes(l),
+            (l) => !selectedCountries.includes(l.land),
           ) ?? [];
 
         this.laenderStore.saveLaender$([
-          ...selectedCountries.map((l) => ({ ...l, marked: true })),
-          ...remainingCountries.map((l) => ({ ...l, marked: false })),
+          ...selectedCountries.map((land) => ({
+            land: land as Land,
+            isEuEfta: true,
+          })),
+          ...remainingCountries.map(({ land }) => ({
+            land,
+            isEuEfta: false,
+          })),
         ]);
       },
       { allowSignalWrites: true },
     );
-  }
-
-  compareFn(a: LandEuEfta, b: LandEuEfta) {
-    return a.land === b.land;
   }
 }

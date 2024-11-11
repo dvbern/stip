@@ -12,14 +12,9 @@
     </mat-form-field>
   </div>
   <div class="row">
-    <mat-selection-list
-      class="col-12 col-md-8 col-xl-6"
-      [compareWith]="compareFn"
-      [formControl]="countryList"
-      [disableRipple]="true"
-    >
+    <mat-selection-list class="col-12 col-md-8 col-xl-6" [formControl]="countryList" [disableRipple]="true">
       @for (l of laenderStore.euEftaLaenderListViewSig(); track l.land) {
-        <mat-list-option [value]="l" [class.d-none]="hiddenCountriesSig()?.[l.land]">{{
+        <mat-list-option [value]="l.land" [class.d-none]="hiddenCountriesSig()[l.land]">{{
           'shared.country.' + l.land | translate
         }}</mat-list-option>
       }
