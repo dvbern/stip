@@ -17,6 +17,8 @@ import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs';
 
 import { EuEftaLaenderStore } from '@dv/sachbearbeitung-app/data-access/eu-efta-laender';
 import { Land } from '@dv/shared/model/gesuch';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 const sharedCountryKeyPrefix = 'shared.country.';
@@ -31,6 +33,8 @@ const sharedCountryKeyPrefix = 'shared.country.';
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
+    SharedUiLoadingComponent,
+    SharedUiRdIsPendingPipe,
   ],
   providers: [
     provideMaterialDefaultOptions({
@@ -54,9 +58,7 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
       distinctUntilChanged(),
     ),
   );
-  private countryListChangedSig = toSignal(
-    this.countryList.valueChanges.pipe(debounceTime(300)),
-  );
+  private countryListChangedSig = toSignal(this.countryList.valueChanges);
   private countryTranslationsSig = toSignal(
     this.translate.onLangChange.pipe(
       startWith({
