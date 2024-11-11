@@ -282,6 +282,24 @@ class GesuchNotizResourceImplTest {
         assertEquals(abklaerungNotizDto.getAntwort(), antwort.getAntwort());
     }
 
+    // get all notizen as SB
+    @Test
+    @TestAsSachbearbeiter
+    @Order(10)
+    void getJuristischeNotizenWithAnswer() {
+        final var notizen = gesuchNotizApiSpec.getNotizen()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchNotizDto[].class);
+        juristischeAbklaerungNotizDto = Arrays.stream(notizen).toList().get(notizen.length - 1);
+        assertNotNull(juristischeAbklaerungNotizDto.getNotizTyp());
+        assertNotNull(juristischeAbklaerungNotizDto.getAntwort());
+    }
     /**
      * Note: the possibility to delete a juristische notiz
      * is not forseen yet or not part of KSTIP-1130

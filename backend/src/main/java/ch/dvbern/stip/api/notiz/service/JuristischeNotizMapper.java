@@ -17,25 +17,34 @@
 
 package ch.dvbern.stip.api.notiz.service;
 
+import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import ch.dvbern.stip.api.notiz.entity.JuristischeAbklaerungNotiz;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
-public interface JuristischeNotizMapper {
-    JuristischeAbklaerungNotiz toEntity(GesuchNotizCreateDto dto);
+public abstract class JuristischeNotizMapper extends EntityUpdateMapper<GesuchNotizDto, GesuchNotiz> {
+    abstract JuristischeAbklaerungNotiz toEntity(GesuchNotizCreateDto dto);
 
-    JuristischeAbklaerungNotiz partialUpdate(
+    abstract JuristischeAbklaerungNotiz partialUpdate(
         JuristischeAbklaerungNotizAntwortDto dto,
         @MappingTarget JuristischeAbklaerungNotiz entity
     );
 
-    GesuchNotizDto toDto(JuristischeAbklaerungNotiz entity);
+    abstract GesuchNotizDto toDto(JuristischeAbklaerungNotiz entity);
 
-    GesuchNotizDto toDto(GesuchNotiz entity);
+    abstract GesuchNotizDto toDto(GesuchNotiz entity);
+
+    @AfterMapping
+    public void mapAntwortIfJuristischeNotiz(GesuchNotiz entity, @MappingTarget GesuchNotizDto dto) {
+        if (entity instanceof JuristischeAbklaerungNotiz juristischeAbklaerungNotiz) {
+            dto.setAntwort(juristischeAbklaerungNotiz.getAntwort());
+        }
+    }
 }
