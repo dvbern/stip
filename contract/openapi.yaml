@@ -2694,7 +2694,7 @@ components:
       type: object
       required:
         - land
-        - isEu
+        - isEuEfta
       properties:
         land:
           $ref: '#/components/schemas/Land'
