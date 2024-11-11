@@ -71,7 +71,8 @@ class GesuchNotizResourceImplTest {
     private GesuchDtoSpec gesuch;
 
     private JuristischeAbklaerungNotizDtoSpec juristischeAbklaerungNotizDtoSpec;
-    private JuristischeAbklaerungNotizDto juristischeAbklaerungNotizDto;
+    private GesuchNotizDto juristischeAbklaerungNotizDto;
+    private JuristischeAbklaerungNotizDto abklaerungNotizDto;
     private JuristischeAbklaerungNotizAntwortDtoSpec juristischeAbklaerungNotizAntwortDtoSpec;
 
     @Test
@@ -239,7 +240,7 @@ class GesuchNotizResourceImplTest {
     @TestAsJurist
     @Order(8)
     void getJuristischeNotizen() {
-        final var notizen = gesuchNotizApiSpec.getJuristischeAbklaerungNotizen()
+        final var notizen = gesuchNotizApiSpec.getNotizen()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -247,7 +248,7 @@ class GesuchNotizResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(JuristischeAbklaerungNotizDto[].class);
+            .as(GesuchNotizDto[].class);
         juristischeAbklaerungNotizDto = Arrays.stream(notizen).toList().get(0);
         assertNotNull(juristischeAbklaerungNotizDto.getNotizTyp());
     }
@@ -257,12 +258,10 @@ class GesuchNotizResourceImplTest {
     @TestAsJurist
     @Order(9)
     void updateJuristischeNotiz() {
-        // todo: add id
-        // todo: remove referenzes to user from openapi.yaml
         var antwort = new JuristischeAbklaerungNotizAntwortDtoSpec();
         antwort.setAntwort("Test antwort");
 
-        juristischeAbklaerungNotizDto = gesuchNotizApiSpec.answerJuristischeAbklaerungNotiz()
+        abklaerungNotizDto = gesuchNotizApiSpec.answerJuristischeAbklaerungNotiz()
             .notizIdPath(juristischeAbklaerungNotizDto.getId())
             .body(antwort)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -280,7 +279,11 @@ class GesuchNotizResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
-        assertEquals(juristischeAbklaerungNotizDto.getAntwort(), antwort.getAntwort());
+        assertEquals(abklaerungNotizDto.getAntwort(), antwort.getAntwort());
     }
 
+    /**
+     * Note: the possibility to delete a juristische notiz
+     * is not forseen yet or not part of KSTIP-1130
+     */
 }

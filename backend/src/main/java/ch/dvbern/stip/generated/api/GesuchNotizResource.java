@@ -34,11 +34,6 @@ public interface GesuchNotizResource {
     Response deleteNotiz(@PathParam("notizId") UUID notizId);
 
     @GET
-    @Path("/{gesuchId}/notiz/juristischeAbklaerung")
-    @Produces({ "application/json", "text/plain" })
-    Response getJuristischeAbklaerungNotizen(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
     @Path("/notiz/{notizId}")
     @Produces({ "application/json", "text/plain" })
     Response getNotiz(@PathParam("notizId") UUID notizId);

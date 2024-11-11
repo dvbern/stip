@@ -17,7 +17,6 @@ import ch.dvbern.stip.generated.dto.GesuchNotizCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDtoSpec;
-import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
@@ -65,7 +64,6 @@ public class GesuchNotizApiSpec {
                 answerJuristischeAbklaerungNotiz(),
                 createNotiz(),
                 deleteNotiz(),
-                getJuristischeAbklaerungNotizen(),
                 getNotiz(),
                 getNotizen(),
                 updateNotiz()
@@ -82,10 +80,6 @@ public class GesuchNotizApiSpec {
 
     public DeleteNotizOper deleteNotiz() {
         return new DeleteNotizOper(createReqSpec());
-    }
-
-    public GetJuristischeAbklaerungNotizenOper getJuristischeAbklaerungNotizen() {
-        return new GetJuristischeAbklaerungNotizenOper(createReqSpec());
     }
 
     public GetNotizOper getNotiz() {
@@ -313,79 +307,6 @@ public class GesuchNotizApiSpec {
          * @return operation
          */
         public DeleteNotizOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * get all juristische abklaerung notizen of a gesuch
-     * 
-     *
-     * @see #gesuchIdPath  (required)
-     * return List&lt;JuristischeAbklaerungNotizDtoSpec&gt;
-     */
-    public static class GetJuristischeAbklaerungNotizenOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/notiz/juristischeAbklaerung";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetJuristischeAbklaerungNotizenOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/{gesuchId}/notiz/juristischeAbklaerung
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/{gesuchId}/notiz/juristischeAbklaerung
-         * @param handler handler
-         * @return List&lt;JuristischeAbklaerungNotizDtoSpec&gt;
-         */
-        public List<JuristischeAbklaerungNotizDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<JuristischeAbklaerungNotizDtoSpec>> type = new TypeRef<List<JuristischeAbklaerungNotizDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID)  (required)
-         * @return operation
-         */
-        public GetJuristischeAbklaerungNotizenOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetJuristischeAbklaerungNotizenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetJuristischeAbklaerungNotizenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -348,36 +348,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: answerJuristischeAbklaerungNotiz
       summary: Sets the Answer of a Juristische Abklaerung Notiz Antwort
-  '/gesuch/{gesuchId}/notiz/juristischeAbklaerung':
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchNotiz
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/JuristischeAbklaerungNotiz'
-          description: |
-            get all juristische abklaerung notizen of a gesuch
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getJuristischeAbklaerungNotizen
-      summary: get all juristische abklaerung notizen of a gesuch
   '/gesuch/notiz/{notizId}':
     parameters:
       - name: notizId
@@ -4179,6 +4149,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         notizTyp:
           $ref: '#/components/schemas/GesuchNotizTyp'
+        antwort:
+          type: string
       allOf:
         - type: object
         - $ref: '#/components/schemas/GesuchNotizUpdate'

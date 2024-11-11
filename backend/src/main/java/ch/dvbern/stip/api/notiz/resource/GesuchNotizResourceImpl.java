@@ -67,22 +67,15 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         return Response.noContent().build();
     }
 
+    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_JURIST, OidcConstants.ROLE_SACHBEARBEITER })
-    @AllowAll
-    @Override
-    public Response getJuristischeAbklaerungNotizen(UUID gesuchId) {
-        return Response.ok(service.getAllJuristischeNotizen(gesuchId)).build();
-    }
-
-    @AllowAll
-    @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response getNotiz(UUID notizId) {
         return Response.ok(service.getById(notizId)).build();
     }
 
     @AllowAll
-    @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
+    @RolesAllowed({ OidcConstants.ROLE_JURIST, OidcConstants.ROLE_SACHBEARBEITER })
     @Override
     public Response getNotizen(UUID gesuchId) {
         final var notizen = service.getAllByGesuchId(gesuchId);

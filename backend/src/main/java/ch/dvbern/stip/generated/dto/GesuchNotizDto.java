@@ -1,14 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.UUID;
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
+
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonTypeName("GesuchNotiz")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -22,6 +22,7 @@ public class GesuchNotizDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String betreff;
   private @Valid String text;
+  private @Valid String antwort;
 
   /**
    **/
@@ -137,6 +138,24 @@ public class GesuchNotizDto  implements Serializable {
     this.text = text;
   }
 
+  /**
+   **/
+  public GesuchNotizDto antwort(String antwort) {
+    this.antwort = antwort;
+    return this;
+  }
+
+
+  @JsonProperty("antwort")
+  public String getAntwort() {
+    return antwort;
+  }
+
+  @JsonProperty("antwort")
+  public void setAntwort(String antwort) {
+    this.antwort = antwort;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -152,12 +171,13 @@ public class GesuchNotizDto  implements Serializable {
         Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
         Objects.equals(this.id, gesuchNotiz.id) &&
         Objects.equals(this.betreff, gesuchNotiz.betreff) &&
-        Objects.equals(this.text, gesuchNotiz.text);
+        Objects.equals(this.text, gesuchNotiz.text) &&
+        Objects.equals(this.antwort, gesuchNotiz.antwort);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, notizTyp, id, betreff, text);
+    return Objects.hash(userErstellt, timestampErstellt, notizTyp, id, betreff, text, antwort);
   }
 
   @Override
@@ -171,6 +191,7 @@ public class GesuchNotizDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
     sb.append("}");
     return sb.toString();
   }
