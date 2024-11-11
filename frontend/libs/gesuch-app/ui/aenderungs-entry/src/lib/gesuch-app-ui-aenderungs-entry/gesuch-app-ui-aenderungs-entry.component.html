@@ -51,9 +51,10 @@
       [routerLink]="['/gesuch', gesuchId, 'aenderung', tranche.id]"
     >
       {{
-        tranche.status === 'IN_BEARBEITUNG_GS'
+        (tranche.status === 'IN_BEARBEITUNG_GS'
           ? 'gesuch-app.dashboard.aenderung.edit'
-          : ('gesuch-app.dashboard.aenderung.open' | translate)
+          : 'gesuch-app.dashboard.aenderung.open'
+        ) | translate
       }}
     </a>
   </div>
