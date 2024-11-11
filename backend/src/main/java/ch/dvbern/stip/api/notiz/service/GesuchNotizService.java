@@ -25,13 +25,11 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import ch.dvbern.stip.api.notiz.entity.JuristischeAbklaerungNotiz;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
-import ch.dvbern.stip.api.notiz.repo.JuristischeNotizRepository;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizTypDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
-import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,11 +41,17 @@ public class GesuchNotizService {
     private final GesuchNotizMapper gesuchNotizMapper;
     private final JuristischeNotizMapper juristischeNotizMapper;
     private final GesuchRepository gesuchRepository;
-    private final JuristischeNotizRepository juristischeNotizRepository;
 
     @Transactional
     public List<GesuchNotizDto> getAllByGesuchId(final UUID gesuchId) {
-        return gesuchNotizRepository.findAllByGesuchId(gesuchId).stream().map(gesuchNotizMapper::toDto).toList();
+        var gesuchNotizen =
+            gesuchNotizRepository.findAllByGesuchId(gesuchId).stream().map(gesuchNotizMapper::toDto).toList();
+        var juristischeNotizen =
+            gesuchNotizRepository.findAllByGesuchId(gesuchId).stream().map(juristischeNotizMapper::toDto).toList();
+        List<GesuchNotizDto> notizen = new ArrayList<>();
+        notizen.addAll(gesuchNotizen);
+        notizen.addAll(juristischeNotizen);
+        return notizen;
     }
 
     @Transactional
@@ -67,7 +71,6 @@ public class GesuchNotizService {
         gesuchNotizRepository.findAllByGesuchId(gesuchId).forEach(gesuchNotizRepository::delete);
     }
 
-    // todo: distinguish?
     @Transactional
     public GesuchNotizDto create(final GesuchNotizCreateDto createDto) {
         final var gesuch = gesuchRepository.requireById(createDto.getGesuchId());
@@ -76,7 +79,6 @@ public class GesuchNotizService {
             juristischeNotiz.setGesuch(gesuch);
             gesuchNotizRepository.persistAndFlush(juristischeNotiz);
 
-            // convert
             final var notiz = (GesuchNotiz) juristischeNotiz;
             return gesuchNotizMapper.toDto(notiz);
 
@@ -86,7 +88,6 @@ public class GesuchNotizService {
             gesuchNotizRepository.persistAndFlush(notiz);
             return gesuchNotizMapper.toDto(notiz);
         }
-
     }
 
     @Transactional
@@ -97,37 +98,12 @@ public class GesuchNotizService {
     }
 
     @Transactional
-    public JuristischeAbklaerungNotizDto answerJuristischeNotiz(
+    public GesuchNotizDto answerJuristischeNotiz(
         final JuristischeAbklaerungNotizAntwortDto dto,
         final UUID notizId
     ) {
-        final var juristischeNotiz = juristischeNotizRepository.requireById(notizId);
+        final var juristischeNotiz = (JuristischeAbklaerungNotiz) gesuchNotizRepository.requireById(notizId);
         final var entity = juristischeNotizMapper.partialUpdate(dto, juristischeNotiz);
         return juristischeNotizMapper.toDto(entity);
     }
-
-    @Transactional
-    public JuristischeAbklaerungNotizDto getJuristischeNotizById(final UUID notizId) {
-        final var juristischeNotiz = juristischeNotizRepository.requireById(notizId);
-        return juristischeNotizMapper.toDto(juristischeNotiz);
-    }
-
-    @Transactional
-    public List<JuristischeAbklaerungNotizDto> getAllJuristischeNotizen(final UUID gesuchId) {
-        // todo: refactor - cause: mapstruct illegall access exception
-        ArrayList<JuristischeAbklaerungNotizDto> list = new ArrayList<>();
-        final var results = juristischeNotizRepository.findAllByGesuchId(gesuchId);
-        for (JuristischeAbklaerungNotiz result : results) {
-            list.add(juristischeNotizMapper.toDto(result));
-        }
-        return list;
-        /*
-         * return juristischeNotizRepository.findAllByGesuchId(gesuchId)
-         * .stream()
-         * .map(juristischeNotizMapper::toDto)
-         * .toList();
-         *
-         */
-    }
-
 }

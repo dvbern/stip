@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchNotizDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   GesuchNotizDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
   GesuchNotizDtoSpec.JSON_PROPERTY_NOTIZ_TYP,
+  GesuchNotizDtoSpec.JSON_PROPERTY_ANTWORT,
   GesuchNotizDtoSpec.JSON_PROPERTY_ID,
   GesuchNotizDtoSpec.JSON_PROPERTY_BETREFF,
   GesuchNotizDtoSpec.JSON_PROPERTY_TEXT
@@ -48,6 +49,9 @@ public class GesuchNotizDtoSpec {
 
   public static final String JSON_PROPERTY_NOTIZ_TYP = "notizTyp";
   private GesuchNotizTypDtoSpec notizTyp;
+
+  public static final String JSON_PROPERTY_ANTWORT = "antwort";
+  private String antwort;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -123,9 +127,9 @@ public class GesuchNotizDtoSpec {
    * Get notizTyp
    * @return notizTyp
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchNotizTypDtoSpec getNotizTyp() {
     return notizTyp;
@@ -133,9 +137,35 @@ public class GesuchNotizDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setNotizTyp(GesuchNotizTypDtoSpec notizTyp) {
     this.notizTyp = notizTyp;
+  }
+
+
+  public GesuchNotizDtoSpec antwort(String antwort) {
+    
+    this.antwort = antwort;
+    return this;
+  }
+
+   /**
+   * Get antwort
+   * @return antwort
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANTWORT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getAntwort() {
+    return antwort;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANTWORT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAntwort(String antwort) {
+    this.antwort = antwort;
   }
 
 
@@ -149,9 +179,9 @@ public class GesuchNotizDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -159,7 +189,7 @@ public class GesuchNotizDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -228,6 +258,7 @@ public class GesuchNotizDtoSpec {
     return Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
         Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
         Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
+        Objects.equals(this.antwort, gesuchNotiz.antwort) &&
         Objects.equals(this.id, gesuchNotiz.id) &&
         Objects.equals(this.betreff, gesuchNotiz.betreff) &&
         Objects.equals(this.text, gesuchNotiz.text);
@@ -235,7 +266,7 @@ public class GesuchNotizDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, notizTyp, id, betreff, text);
+    return Objects.hash(userErstellt, timestampErstellt, notizTyp, antwort, id, betreff, text);
   }
 
   @Override
@@ -245,6 +276,7 @@ public class GesuchNotizDtoSpec {
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
+    sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");

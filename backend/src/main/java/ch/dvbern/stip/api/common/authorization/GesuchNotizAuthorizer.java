@@ -20,7 +20,8 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.notiz.repo.JuristischeNotizRepository;
+import ch.dvbern.stip.api.notiz.entity.JuristischeAbklaerungNotiz;
+import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +30,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class GesuchNotizAuthorizer extends BaseAuthorizer {
-    private final JuristischeNotizRepository juristischeNotizRepository;
+    private final GesuchNotizRepository juristischeNotizRepository;
 
     public void canUpdate(UUID juristischeNotizId) {
         final var notiz = juristischeNotizRepository.requireById(juristischeNotizId);
-        if (Objects.nonNull(notiz.getAntwort())) {
+        if (Objects.nonNull(((JuristischeAbklaerungNotiz) notiz).getAntwort())) {
             throw new UnauthorizedException();
         }
     }
-
 }

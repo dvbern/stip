@@ -37,8 +37,6 @@ import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDtoSpec;
-import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDto;
-import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
@@ -69,9 +67,8 @@ class GesuchNotizResourceImplTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     // create a gesuch
     private GesuchDtoSpec gesuch;
-
-    private JuristischeAbklaerungNotizDtoSpec juristischeAbklaerungNotizDtoSpec;
-    private JuristischeAbklaerungNotizDto juristischeAbklaerungNotizDto;
+    private GesuchNotizDto juristischeAbklaerungNotizDto;
+    private GesuchNotizDto abklaerungNotizDto;
     private JuristischeAbklaerungNotizAntwortDtoSpec juristischeAbklaerungNotizAntwortDtoSpec;
 
     @Test
@@ -224,14 +221,14 @@ class GesuchNotizResourceImplTest {
         gesuchCreateDto.setText("test");
         gesuchCreateDto.setBetreff("test");
         gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.JURISTISCHE_NOTIZ);
-        final var juristsicheNotiz = gesuchNotizApiSpec.createNotiz()
+        gesuchNotizApiSpec.createNotiz()
             .body(gesuchCreateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
-            .as(JuristischeAbklaerungNotizDto.class);
+            .as(GesuchNotizDto.class);
     }
 
     // get all notizen as SB
@@ -239,7 +236,7 @@ class GesuchNotizResourceImplTest {
     @TestAsJurist
     @Order(8)
     void getJuristischeNotizen() {
-        final var notizen = gesuchNotizApiSpec.getJuristischeAbklaerungNotizen()
+        final var notizen = gesuchNotizApiSpec.getNotizen()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -247,19 +244,9 @@ class GesuchNotizResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(JuristischeAbklaerungNotizDto[].class);
-        final var notiz = Arrays.stream(notizen).toList().get(0);
-        assertNotNull(notiz.getNotizTyp());
-
-        juristischeAbklaerungNotizDto = gesuchNotizApiSpec.getJuristischeAbklaerungNotiz()
-            .notizIdPath(notiz.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(JuristischeAbklaerungNotizDto.class);
+            .as(GesuchNotizDto[].class);
+        juristischeAbklaerungNotizDto = Arrays.stream(notizen).toList().get(0);
+        assertNotNull(juristischeAbklaerungNotizDto.getNotizTyp());
     }
 
     // update notiz as SB
@@ -267,12 +254,10 @@ class GesuchNotizResourceImplTest {
     @TestAsJurist
     @Order(9)
     void updateJuristischeNotiz() {
-        // todo: add id
-        // todo: remove referenzes to user from openapi.yaml
         var antwort = new JuristischeAbklaerungNotizAntwortDtoSpec();
         antwort.setAntwort("Test antwort");
 
-        juristischeAbklaerungNotizDto = gesuchNotizApiSpec.answerJuristischeAbklaerungNotiz()
+        abklaerungNotizDto = gesuchNotizApiSpec.answerJuristischeAbklaerungNotiz()
             .notizIdPath(juristischeAbklaerungNotizDto.getId())
             .body(antwort)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -281,7 +266,7 @@ class GesuchNotizResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(JuristischeAbklaerungNotizDto.class);
+            .as(GesuchNotizDto.class);
 
         gesuchNotizApiSpec.answerJuristischeAbklaerungNotiz()
             .notizIdPath(juristischeAbklaerungNotizDto.getId())
@@ -290,7 +275,29 @@ class GesuchNotizResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
-        assertEquals(juristischeAbklaerungNotizDto.getAntwort(), antwort.getAntwort());
+        assertEquals(abklaerungNotizDto.getAntwort(), antwort.getAntwort());
     }
 
+    // get all notizen as SB
+    @Test
+    @TestAsSachbearbeiter
+    @Order(10)
+    void getJuristischeNotizenWithAnswer() {
+        final var notizen = gesuchNotizApiSpec.getNotizen()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchNotizDto[].class);
+        juristischeAbklaerungNotizDto = Arrays.stream(notizen).toList().get(notizen.length - 1);
+        assertNotNull(juristischeAbklaerungNotizDto.getNotizTyp());
+        assertNotNull(juristischeAbklaerungNotizDto.getAntwort());
+    }
+    /**
+     * Note: the possibility to delete a juristische notiz
+     * is not forseen yet or not part of KSTIP-1130
+     */
 }

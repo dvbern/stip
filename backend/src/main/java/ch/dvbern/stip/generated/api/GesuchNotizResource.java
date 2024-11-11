@@ -4,7 +4,6 @@ import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
-import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -41,16 +40,6 @@ public interface GesuchNotizResource {
     @Path("/notiz/{notizId}")
     @Produces({ "text/plain" })
     Response deleteNotiz(@PathParam("notizId") UUID notizId);
-
-    @GET
-    @Path("/notiz/juristischeAbklaerung/{notizId}")
-    @Produces({ "application/json", "text/plain" })
-    Response getJuristischeAbklaerungNotiz(@PathParam("notizId") UUID notizId);
-
-    @GET
-    @Path("/notiz/juristischeAbklaerung/all/{gesuchId}")
-    @Produces({ "application/json", "text/plain" })
-    Response getJuristischeAbklaerungNotizen(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/notiz/{notizId}")
