@@ -2796,10 +2796,7 @@ components:
             'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp'
           type: integer
         sozialhilfebeitraege:
-          description: |
-            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater'
-            'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp'
-          type: integer
+          type: boolean
         wohnkosten:
           description: 'Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen'
           type: integer
@@ -4263,7 +4260,7 @@ components:
       required: true
       schema:
         type: integer
-    
+
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []

@@ -50,9 +50,11 @@ class BothElternRequiredDocumentsProducerTest {
         gesuchFormular.setElterns(
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.VATER)
-                    .setWohnkosten(1),
+                    .setWohnkosten(1)
+                    .setSozialhilfebeitraege(false),
                 new Eltern().setElternTyp(ElternTyp.MUTTER)
                     .setWohnkosten(1)
+                    .setSozialhilfebeitraege(false)
             )
         );
         tranche.setGesuchFormular(gesuchFormular);
