@@ -21,6 +21,8 @@ import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -43,5 +45,6 @@ import org.hibernate.envers.Audited;
 public class LandEuEfta extends AbstractMandantEntity {
     @NotNull
     @Column(name = "land", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Land land;
 }
