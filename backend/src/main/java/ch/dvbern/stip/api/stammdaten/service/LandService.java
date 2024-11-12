@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.stammdaten.service;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,7 +55,7 @@ public class LandService {
                 land.setIsEuEfta(true);
             }
         }
-        return lands;
+        return lands.stream().sorted(Comparator.comparing(LandEuEftaDto::getLand)).collect(Collectors.toList());
     }
 
     @Transactional
