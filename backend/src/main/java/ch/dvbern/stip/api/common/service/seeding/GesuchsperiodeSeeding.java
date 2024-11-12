@@ -139,7 +139,7 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setPersonen5(29220)
             .setPersonen6(31668)
             .setPersonen7(34116)
-            .setProWeiterePerson(2488)
+            .setProWeiterePerson(2448)
             .setKinder0018(1400)
             .setJugendlicheErwachsene1925(4600)
             .setErwachsene2699(5400)
