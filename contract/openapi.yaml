@@ -43,6 +43,10 @@ paths:
         - Gesuch
       responses:
         '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UUID'
           description: New Gesuch is created
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -126,7 +130,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GsDashboard'
+                  $ref: '#/components/schemas/FallDashboardItem'
           description: Returns gesuche for dashboard filtered by gs
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -362,6 +366,86 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteNotiz
       summary: delete a Notiz of a Gesuch with the given Notiz-Id
+  /ausbildung:
+    post:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AusbildungUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ausbildung'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createAusbildung
+      summary: Returniert die erstellte Ausbildung
+  /ausbildung/{ausbildungId}:
+    parameters:
+      - name: ausbildungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ausbildung'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAusbildung
+      summary: Returniert die Ausbildung
+    patch:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AusbildungUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ausbildung'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateAusbildung
+      summary: Returniert die Ausbildung
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -1249,33 +1333,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteAusbildungsstaette
       summary: Delete Ausbildungsstaette
-  '/gesuch/fall/{fallId}':
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Return alle Gesuche die gehoeren zu dieser Fall
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesucheForFall
-      summary: Return alle Gesuche die gehören zu dieser Fall
-    parameters:
-      - name: fallId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
   '/gesuch/{gesuchId}':
     parameters:
       - name: gesuchId
@@ -2793,7 +2850,9 @@ components:
           $ref: '#/components/schemas/Kontoinhaber'
     Gesuch:
       required:
-        - fall
+        - fallId
+        - fallNummer
+        - ausbildungId
         - gesuchsperiode
         - gesuchStatus
         - gesuchNummer
@@ -2802,8 +2861,12 @@ components:
         - gesuchTrancheToWorkWith
       type: object
       properties:
-        fall:
-          $ref: '#/components/schemas/Fall'
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
+        ausbildungId:
+          $ref: '#/components/schemas/UUID'
         gesuchsperiode:
           $ref: '#/components/schemas/Gesuchsperiode'
         gesuchStatus:
@@ -2820,7 +2883,33 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
-    GsDashboard:
+    FallDashboardItem:
+      required:
+        - fall
+        - ausbildungDashboardItems
+        - notifications
+      type: object
+      properties:
+        fall:
+          $ref: '#/components/schemas/Fall'
+        ausbildungDashboardItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/AusbildungDashboardItem'
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+    AusbildungDashboardItem:
+      type: object
+      properties:
+        gesuchs:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDashboardItem'
+      allOf:
+        - $ref: '#/components/schemas/Ausbildung'
+    GesuchDashboardItem:
       required:
         - id
         - gesuchsperiode
@@ -2856,13 +2945,10 @@ components:
             $ref: '#/components/schemas/GesuchTranche'
     GesuchCreate:
       required:
-        - fallId
-        - gesuchsperiodeId
+        - ausbildungId
       type: object
       properties:
-        fallId:
-          $ref: '#/components/schemas/UUID'
-        gesuchsperiodeId:
+        ausbildungId:
           $ref: '#/components/schemas/UUID'
     GesuchUpdate:
       required:
@@ -3271,7 +3357,8 @@ components:
         - ANDERE
       type: string
     GesuchFormular:
-      required: []
+      required:
+        - ausbildung
       type: object
       properties:
         ausbildung:
@@ -3395,8 +3482,8 @@ components:
       required: []
       type: object
       properties:
-        ausbildung:
-          $ref: '#/components/schemas/AusbildungUpdate'
+        # ausbildung:
+        #   $ref: '#/components/schemas/AusbildungUpdate'
         personInAusbildung:
           $ref: '#/components/schemas/PersonInAusbildungUpdate'
         familiensituation:
@@ -3588,12 +3675,17 @@ components:
         - $ref: '#/components/schemas/EinnahmenKostenUpdate'
     AusbildungBase:
       required:
+        - fallId
         - fachrichtung
         - ausbildungBegin
         - ausbildungEnd
         - pensum
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        fallId:
+          $ref: '#/components/schemas/UUID'
         fachrichtung:
           type: string
         ausbildungNichtGefunden:
@@ -3618,10 +3710,17 @@ components:
         isAusbildungAusland:
           type: boolean
     Ausbildung:
+      required:
+        - status
+        - editable
       type: object
       properties:
+        status:
+          $ref: '#/components/schemas/AusbildungsStatus'
         ausbildungsgang:
           $ref: '#/components/schemas/Ausbildungsgang'
+        editable:
+          type: boolean
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     AusbildungUpdate:
@@ -3956,6 +4055,11 @@ components:
           $ref: '#/components/schemas/Bildungskategorie'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
+    AusbildungsStatus:
+      enum:
+        - AKTIV
+        - ABGEBROCHEN
+        - ABGESCHLOSSEN
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addYears, max, setMonth, startOfMonth, subMonths } from 'date-fns';
 
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { LebenslaufItemUpdate } from '@dv/shared/model/gesuch';
@@ -17,6 +19,7 @@ import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   dateFromMonthYearString,
@@ -28,16 +31,18 @@ import { SharedFeatureGesuchFormLebenslaufEditorComponent } from '../shared-feat
 import { TimelineAddCommand } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline';
 import { TwoColumnTimelineComponent } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline.component';
 
-const AUSBILDUNGS_MONTH = 8; // August
-const MIN_EDUCATION_AGE = 16; // August
+const AUSBILDUNGS_MONTH = 8;
+const MIN_EDUCATION_AGE = 16;
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf',
   standalone: true,
   imports: [
+    CommonModule,
     SharedFeatureGesuchFormLebenslaufEditorComponent,
     TranslateModule,
     TwoColumnTimelineComponent,
+    SharedUiRdIsPendingPipe,
     SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
@@ -48,6 +53,7 @@ const MIN_EDUCATION_AGE = 16; // August
 })
 export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   private store = inject(Store);
+  ausbildungsstatteStore = inject(AusbildungsstaetteStore);
   languageSig = this.store.selectSignal(selectLanguage);
   hasUnsavedChanges = false;
 
@@ -97,6 +103,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormLebenslauf.init());
+    this.ausbildungsstatteStore.loadAusbildungsstaetten$();
   }
 
   public handleAddAusbildung(addCommand: TimelineAddCommand | undefined): void {

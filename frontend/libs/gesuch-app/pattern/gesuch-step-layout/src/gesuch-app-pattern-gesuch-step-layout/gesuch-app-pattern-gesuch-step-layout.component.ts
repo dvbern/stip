@@ -3,9 +3,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
   computed,
   inject,
+  input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -26,6 +26,7 @@ import {
 } from '@dv/shared/data-access/language';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
+import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -34,7 +35,6 @@ import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-gesuch-app-pattern-gesuch-step-layout',
@@ -57,8 +57,9 @@ import { isDefined } from '@dv/shared/util-fn/type-guards';
   providers: [SharedUtilHeaderService],
 })
 export class GesuchAppPatternGesuchStepLayoutComponent {
-  @Input()
-  step?: SharedModelGesuchFormStep;
+  stepSig = input<SharedModelGesuchFormStep | undefined>(undefined, {
+    alias: 'step',
+  });
 
   navClicked = new EventEmitter<{ value: boolean }>();
 
@@ -86,11 +87,11 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   });
   currentStepProgressSig = computed(() => {
     const stepsFlow = this.stepsViewSig().stepsFlow;
-    return this.stepManager.getStepProgress(stepsFlow, this.step);
+    return this.stepManager.getStepProgress(stepsFlow, this.stepSig());
   });
   currentStepSig = computed(() => {
     const steps = this.stepsSig();
-    return steps.find((step) => step.route === this.step?.route);
+    return steps.find((step) => step.route === this.stepSig()?.route);
   });
 
   constructor() {

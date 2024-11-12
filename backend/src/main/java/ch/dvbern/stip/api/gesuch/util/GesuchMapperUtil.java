@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
-import ch.dvbern.stip.api.gesuch.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.enterprise.context.ApplicationScoped;

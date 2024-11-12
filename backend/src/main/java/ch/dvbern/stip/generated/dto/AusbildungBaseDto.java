@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AusbildungsPensumDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -20,15 +21,36 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class AusbildungBaseDto  implements Serializable {
+  private @Valid UUID fallId;
   private @Valid String fachrichtung;
   private @Valid String ausbildungBegin;
   private @Valid String ausbildungEnd;
   private @Valid AusbildungsPensumDto pensum;
+  private @Valid UUID id;
   private @Valid Boolean ausbildungNichtGefunden;
   private @Valid String alternativeAusbildungsstaette;
   private @Valid String alternativeAusbildungsgang;
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
+
+  /**
+   **/
+  public AusbildungBaseDto fallId(UUID fallId) {
+    this.fallId = fallId;
+    return this;
+  }
+
+  
+  @JsonProperty("fallId")
+  @NotNull
+  public UUID getFallId() {
+    return fallId;
+  }
+
+  @JsonProperty("fallId")
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
+  }
 
   /**
    **/
@@ -106,6 +128,24 @@ public class AusbildungBaseDto  implements Serializable {
   @JsonProperty("pensum")
   public void setPensum(AusbildungsPensumDto pensum) {
     this.pensum = pensum;
+  }
+
+  /**
+   **/
+  public AusbildungBaseDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -211,10 +251,12 @@ public class AusbildungBaseDto  implements Serializable {
       return false;
     }
     AusbildungBaseDto ausbildungBase = (AusbildungBaseDto) o;
-    return Objects.equals(this.fachrichtung, ausbildungBase.fachrichtung) &&
+    return Objects.equals(this.fallId, ausbildungBase.fallId) &&
+        Objects.equals(this.fachrichtung, ausbildungBase.fachrichtung) &&
         Objects.equals(this.ausbildungBegin, ausbildungBase.ausbildungBegin) &&
         Objects.equals(this.ausbildungEnd, ausbildungBase.ausbildungEnd) &&
         Objects.equals(this.pensum, ausbildungBase.pensum) &&
+        Objects.equals(this.id, ausbildungBase.id) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildungBase.ausbildungNichtGefunden) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildungBase.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildungBase.alternativeAusbildungsgang) &&
@@ -224,7 +266,7 @@ public class AusbildungBaseDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fachrichtung, ausbildungBegin, ausbildungEnd, pensum, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -232,10 +274,12 @@ public class AusbildungBaseDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungBaseDto {\n");
     
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");

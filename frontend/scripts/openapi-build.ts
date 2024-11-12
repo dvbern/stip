@@ -119,6 +119,7 @@ async function generateOpenApi(directory: string, apis: string[]) {
     ' -g typescript-angular' +
     ' --template-dir scripts/conf/openapi-templates' +
     ` --global-property models,apis=${apisString},supportingFiles` +
+    ' --openapi-normalizer REFACTOR_ALLOF_WITH_PROPERTIES_ONLY=true' +
     ` -p ngVersion=${ngVersion}` +
     ' -p basePath=/api/v1' +
     ' -p supportsES6=true' +
@@ -159,6 +160,7 @@ async function sleep(msec: number) {
   // Keep in mind: there is one file generated per OpenAPI-@Tag,
   // Names are CamelCase versions from OpenAPIConst Tags
   const generatedApis = [
+    'Ausbildung',
     'Ausbildungsgang',
     'Ausbildungsstaette',
     'Benutzer',

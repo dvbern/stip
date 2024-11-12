@@ -1,13 +1,11 @@
 import {
   Elternschaftsteilung,
+  GesuchFormular,
   GesuchFormularUpdate,
-  SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { type } from '@dv/shared/util-fn/type-guards';
+import { type } from '@dv/shared/model/type-util';
 
 import {
-  AUSBILDUNG,
   AUSZAHLUNG,
   EINNAHMEN_KOSTEN,
   ELTERN,
@@ -41,7 +39,6 @@ const alimentAufteilungCases = [
 const validationCases = type<
   [SharedModelGesuchFormStep, keyof GesuchFormularUpdate][]
 >([
-  [AUSBILDUNG, 'ausbildung'],
   [PERSON, 'personInAusbildung'],
   [FAMILIENSITUATION, 'familiensituation'],
   [ELTERN, 'elterns'],
@@ -65,7 +62,7 @@ describe('GesuchFormSteps', () => {
           personInAusbildung: {
             zivilstand,
           },
-        } as Partial<SharedModelGesuchFormular>),
+        } as GesuchFormular),
       ).toBe(state);
     },
   );
@@ -78,7 +75,7 @@ describe('GesuchFormSteps', () => {
           familiensituation: {
             werZahltAlimente,
           },
-        } as Partial<SharedModelGesuchFormular>),
+        } as GesuchFormular),
       ).toBe(state);
     },
   );
@@ -87,7 +84,10 @@ describe('GesuchFormSteps', () => {
     'route %s should be valid if %s is set',
     (step, field) => {
       expect(
-        isStepValid(step, { [field]: {} }, { errors: [], hasDocuments: null }),
+        isStepValid(step, { [field]: {} } as any, {
+          errors: [],
+          hasDocuments: null,
+        }),
       ).toBe('VALID');
     },
   );
@@ -106,11 +106,10 @@ describe('GesuchFormSteps', () => {
     'route %s validity should be undefined if %s is not set',
     (step, field) => {
       expect(
-        isStepValid(
-          step,
-          { [field]: null },
-          { errors: [], hasDocuments: null },
-        ),
+        isStepValid(step, { [field]: null } as any, {
+          errors: [],
+          hasDocuments: null,
+        }),
       ).toBe(undefined);
     },
   );

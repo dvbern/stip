@@ -1,7 +1,7 @@
 import { format, intervalToDuration, isValid, parse, parseISO } from 'date-fns';
 
 import { Language } from '@dv/shared/model/language';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/model/type-util';
 
 import { DateFormatVariant, getFormatDef, parseDateForVariant } from '../index';
 

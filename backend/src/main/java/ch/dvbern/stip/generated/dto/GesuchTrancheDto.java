@@ -25,8 +25,8 @@ public class GesuchTrancheDto  implements Serializable {
   private @Valid UUID id;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
-  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status;
-  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
+  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus status;
+  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
   private @Valid String comment;
   private @Valid GesuchFormularDto gesuchFormular;
 
@@ -89,7 +89,7 @@ public class GesuchTrancheDto  implements Serializable {
 
   /**
    **/
-  public GesuchTrancheDto status(ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status) {
+  public GesuchTrancheDto status(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus status) {
     this.status = status;
     return this;
   }
@@ -97,18 +97,18 @@ public class GesuchTrancheDto  implements Serializable {
   
   @JsonProperty("status")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus getStatus() {
+  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus getStatus() {
     return status;
   }
 
   @JsonProperty("status")
-  public void setStatus(ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus status) {
+  public void setStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus status) {
     this.status = status;
   }
 
   /**
    **/
-  public GesuchTrancheDto typ(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+  public GesuchTrancheDto typ(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
     return this;
   }
@@ -116,12 +116,12 @@ public class GesuchTrancheDto  implements Serializable {
   
   @JsonProperty("typ")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp getTyp() {
+  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
     return typ;
   }
 
   @JsonProperty("typ")
-  public void setTyp(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+  public void setTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
   }
 

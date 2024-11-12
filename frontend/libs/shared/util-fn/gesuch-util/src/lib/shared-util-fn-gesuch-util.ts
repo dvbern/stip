@@ -13,8 +13,8 @@ import {
   GesuchFormStepView,
   gesuchFormStepsFieldMap,
 } from '@dv/shared/model/gesuch-form';
+import { isDefined } from '@dv/shared/model/type-util';
 import { lowercased } from '@dv/shared/util-fn/string-helper';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 export interface ElternSituation {
   expectVater: boolean;
@@ -124,9 +124,11 @@ export const selectChangeForView = <K extends SharedModelGesuchFormularProps>(
 
   const current = currentFormular;
 
-  const previous = sachbearbeiterHasChangesOnView
-    ? changes?.sb?.tranche?.gesuchFormular?.[key]
-    : changes?.gs?.tranche?.gesuchFormular?.[key];
+  const previous = (
+    sachbearbeiterHasChangesOnView
+      ? changes?.sb?.tranche?.gesuchFormular?.[key]
+      : changes?.gs?.tranche?.gesuchFormular?.[key]
+  )!;
 
   return { current, previous };
 };

@@ -69,11 +69,11 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     @Override
     @AllowAll
     public Response getGesuchsperiode(UUID gesuchsperiodeId) {
-        final var gesuchsperiod = gesuchsperiodenService
+        final var gesuchsperiode = gesuchsperiodenService
             .getGesuchsperiode(gesuchsperiodeId)
             .orElseThrow(NotFoundException::new);
 
-        return Response.ok(gesuchsperiod).build();
+        return Response.ok(gesuchsperiode).build();
     }
 
     @RolesAllowed(STAMMDATEN_READ)
