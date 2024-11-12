@@ -174,18 +174,6 @@ public class GesuchDokumentService {
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
 
-        final var dokumenteToDeleteFromS3 = new ArrayList<String>();
-        final var dokumentList = gesuchDokument.getDokumente().stream().toList();
-        for (var dokument : dokumentList) {
-            dokument.getGesuchDokumente().remove(gesuchDokument);
-            gesuchDokument.getDokumente().remove(dokument);
-            if (dokument.getGesuchDokumente().isEmpty()) {
-                dokumenteToDeleteFromS3.add(dokument.getObjectId());
-                dokumentRepository.delete(dokument);
-            }
-        }
-        executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
-
         gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
         dokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
@@ -297,9 +285,23 @@ public class GesuchDokumentService {
             .getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT)
             .toList();
 
+        final var dokumenteToDeleteFromS3 = new ArrayList<String>();
         for (var gesuchdokument : gesuchDokumente) {
+            final var dokumentList = gesuchdokument.getDokumente().stream().toList();
+            for (var dokument : dokumentList) {
+                dokument.getGesuchDokumente().remove(gesuchdokument);
+                gesuchdokument.getDokumente().remove(dokument);
+
+                // If no other references to this physical document exist, delete it as well
+                if (dokument.getGesuchDokumente().isEmpty()) {
+                    dokumenteToDeleteFromS3.add(dokument.getObjectId());
+                    dokumentRepository.delete(dokument);
+                }
+            }
             gesuchDokumentRepository.delete(gesuchdokument);
         }
+
+        executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
     }
 
     public void scanDokument(final FileUpload fileUpload) {

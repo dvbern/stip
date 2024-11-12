@@ -242,14 +242,13 @@ class GesuchDokumentServiceTest {
         gsDokService.deleteAbgelehnteDokumenteForGesuch(new Gesuch());
 
         // Assert
-        assertThat(gesuchDokumente.size(), is(2));
+        assertThat(gesuchDokumente.size(), is(1));
         final var abgelehntesGesuchDokument = gesuchDokumente
             .values()
             .stream()
             .filter(x -> x.getStatus() == Dokumentstatus.ABGELEHNT)
-            .findFirst()
-            .get();
-        assertThat(abgelehntesGesuchDokument.getDokumente().size(), is(0));
+            .findFirst();
+        assertThat(abgelehntesGesuchDokument.isEmpty(), is(true));
     }
 
     private static class GesuchDokumentServiceMock extends GesuchDokumentService {
