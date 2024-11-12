@@ -17,7 +17,9 @@
 
 package ch.dvbern.stip.api.plz.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -28,7 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.zip.ZipFile;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.plz.entity.GeoCollectionItem;
 import ch.dvbern.stip.api.plz.entity.Plz;
@@ -123,14 +125,14 @@ public class PlzDataFetchService {
         final String csvFileData = loadCsvFileData(uri);
         final Set<List<String>> plzHashSet = new HashSet<>();
         try (
-        final CSVReader csvReader = new CSVReaderBuilder(new StringReader(csvFileData))
-            .withSkipLines(1)
-            .withCSVParser(
-                new CSVParserBuilder()
-                    .withSeparator(';')
-                    .build()
-            )
-            .build()
+            final CSVReader csvReader = new CSVReaderBuilder(new StringReader(csvFileData))
+                .withSkipLines(1)
+                .withCSVParser(
+                    new CSVParserBuilder()
+                        .withSeparator(';')
+                        .build()
+                )
+                .build()
         ) {
             csvReader.readAll()
                 .forEach(
@@ -152,31 +154,12 @@ public class PlzDataFetchService {
     }
 
     private String loadCsvFileData(final URI uri) throws IOException {
-        final var resource = this.getClass().getClassLoader().getResource("ortschaftenverzeichnis_plz_2056.csv.zip");
-        if (resource == null) {
-            return "";
-        }
-
         try (
-        final var zipFile = new ZipFile(resource.getFile());
+            final var resource = this.getClass().getClassLoader().getResourceAsStream("ortschaften_plz.csv");
+            final var reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8));
         ) {
-            for (final var zipEntry : zipFile.stream().toList()) {
-                if (zipEntry.getName().endsWith(".csv")) {
-                    final int fileLen = (int) zipEntry.getSize();
-                    final byte[] bytes = new byte[fileLen];
-                    final var zin = zipFile.getInputStream(zipEntry);
-
-                    int bytesRead = 0;
-                    while (bytesRead < fileLen) {
-                        bytesRead += zin.read(bytes, bytesRead, fileLen - bytesRead);
-                    }
-
-                    return new String(bytes, StandardCharsets.UTF_8);
-                }
-            }
+            return reader.lines().collect(Collectors.joining("\n"));
         }
-
-        return "";
     }
 
     @Transactional

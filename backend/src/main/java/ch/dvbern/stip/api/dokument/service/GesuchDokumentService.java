@@ -303,9 +303,9 @@ public class GesuchDokumentService {
 
     public void scanDokument(final FileUpload fileUpload) {
         try (
-        final ByteArrayInputStream inputStream = new ByteArrayInputStream(
-            IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile())).readAllBytes()
-        )
+            final ByteArrayInputStream inputStream = new ByteArrayInputStream(
+                IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile())).readAllBytes()
+            )
         ) {
             // scan the file and check the results
             List<AntivirusScanResult> results = antivirus.scan(fileUpload.fileName(), inputStream);
