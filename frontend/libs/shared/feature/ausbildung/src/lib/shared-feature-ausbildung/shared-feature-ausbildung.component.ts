@@ -455,6 +455,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     const ausbildungId =
       this.gesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith.gesuchFormular
         ?.ausbildung.id;
+    const ausbildungsgang = ausbildungsgangId ? { ausbildungId } : {};
     const { type, fallId } = this.usageTypeSig();
 
     switch (type) {
@@ -463,7 +464,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
           ausbildung: {
             fallId: fallId,
             ...formValues,
-            ausbildungsgangId,
+            ...ausbildungsgang,
           },
           onSuccess: () => {
             this.ausbildungSaved.emit();
@@ -480,8 +481,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
           ausbildungUpdate: {
             ...formValues,
             id: ausbildungId,
-            ausbildungsgangId,
             fallId: fallId,
+            ...ausbildungsgang,
           },
           onSuccess: () => {
             this.globalNotificationStore.createSuccessNotification({
