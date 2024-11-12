@@ -17,9 +17,9 @@
 
 package ch.dvbern.stip.api.stammdaten.service;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,16 +38,15 @@ public class LandService {
     private final LandEuEftaRepository landEuEftaRepository;
     private final LandEuEftaMapper landEuEftaMapper;
 
-    public Collection<String> getAllLaender() {
+    public Set<String> getAllLaender() {
         return Stream.of(Land.values())
             .map(Land::name)
             .collect(Collectors.toSet());
     }
 
     @Transactional
-    public Collection<LandEuEftaDto> getAllLandEuEfta() {
+    public List<LandEuEftaDto> getAllLandEuEfta() {
         var lands = Stream.of(Land.values()).map(landEuEftaMapper::toDto).collect(Collectors.toSet());
-
         var landsEuEfta = landEuEftaRepository.findAll().stream().map(LandEuEfta::getLand).toList();
 
         for (var land : lands) {
@@ -55,14 +54,16 @@ public class LandService {
                 land.setIsEuEfta(true);
             }
         }
-        return lands.stream().sorted(Comparator.comparing(LandEuEftaDto::getLand)).collect(Collectors.toList());
+
+        return lands.stream().sorted(Comparator.comparing(LandEuEftaDto::getLand)).toList();
     }
 
     @Transactional
-    public Collection<LandEuEftaDto> setLaenderEuEfta(List<LandEuEftaDto> landEuEftaDto) {
+    public List<LandEuEftaDto> setLaenderEuEfta(List<LandEuEftaDto> landEuEftaDto) {
         for (LandEuEftaDto dto : landEuEftaDto) {
             landEuEftaRepository.setLandEuEfta(dto.getLand(), dto.getIsEuEfta());
         }
+
         return getAllLandEuEfta();
     }
 }
