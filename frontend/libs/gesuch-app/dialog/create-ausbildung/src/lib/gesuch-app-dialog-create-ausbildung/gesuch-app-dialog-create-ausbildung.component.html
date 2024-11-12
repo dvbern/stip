@@ -1,0 +1,19 @@
+<section class="tw-flex tw-flex-col tw-relative tw-p-8 tw-rounded-lg tw-overflow-y-auto tw-max-h-dvh">
+  <button
+    type="button"
+    (click)="cancel()"
+    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+
+  <h1 class="tw-text-3xl">
+    {{ 'gesuch-app.ausbildung.dialog.title' | translate }}
+  </h1>
+
+  <dv-shared-feature-ausbildung
+    [fallIdSig]="dialogData.fallId"
+    (ausbildungSaved)="savedSuccess()"
+  ></dv-shared-feature-ausbildung>
+</section>

@@ -28,9 +28,9 @@ export const PERSON = {
 } satisfies SharedModelGesuchFormStep;
 
 export const AUSBILDUNG: SharedModelGesuchFormStep = {
-  route: 'education',
-  translationKey: 'shared.education.title',
-  titleTranslationKey: 'shared.education.title',
+  route: 'ausbildung',
+  translationKey: 'shared.ausbildung.title',
+  titleTranslationKey: 'shared.ausbildung.title',
   iconSymbolName: 'school',
 } satisfies SharedModelGesuchFormStep;
 
@@ -243,7 +243,6 @@ export const isStepValid = (
     SharedModelGesuchFormularPropsSteuerdatenSteps
   > = {
     [PERSON.route]: 'personInAusbildung',
-    [AUSBILDUNG.route]: 'ausbildung',
     [LEBENSLAUF.route]: 'lebenslaufItems',
     [FAMILIENSITUATION.route]: 'familiensituation',
     [ELTERN.route]: 'elterns',

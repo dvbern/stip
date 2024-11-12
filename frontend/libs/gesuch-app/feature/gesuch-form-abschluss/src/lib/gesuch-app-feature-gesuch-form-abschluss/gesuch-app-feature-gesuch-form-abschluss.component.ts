@@ -16,11 +16,11 @@ import { filter } from 'rxjs';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
+import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-gesuch-app-feature-gesuch-form-abschluss',

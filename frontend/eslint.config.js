@@ -65,10 +65,12 @@ module.exports = [
                 'type:pattern',
                 'type:data-access',
                 'type:event',
+                'type:dialog',
                 'type:ui',
                 'type:util',
                 'type:util-fn',
                 'type:model',
+                'type:global',
               ],
             },
             {
@@ -81,6 +83,7 @@ module.exports = [
                 'type:util',
                 'type:util-fn',
                 'type:model',
+                'type:global',
               ],
             },
             {
@@ -92,6 +95,7 @@ module.exports = [
                 'type:util-data-access',
                 'type:util-fn',
                 'type:model',
+                'type:global',
               ],
             },
             {
@@ -110,11 +114,24 @@ module.exports = [
               bannedExternalImports: ['@ngrx/*'],
             },
             {
+              sourceTag: 'type:dialog',
+              onlyDependOnLibsWithTags: [
+                'type:feature',
+                'type:ui',
+                'type:util',
+                'type:util-data-access',
+                'type:util-fn',
+                'type:model',
+              ],
+              bannedExternalImports: ['@ngrx/*'],
+            },
+            {
               sourceTag: 'type:util',
               onlyDependOnLibsWithTags: [
                 'type:util',
                 'type:util-fn',
                 'type:model',
+                'type:global',
               ],
               bannedExternalImports: [
                 '@ngrx/component-store',

@@ -22,7 +22,10 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
@@ -33,6 +36,8 @@ import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -79,6 +84,39 @@ public class GesuchsperiodenService {
             .findAllActiveForDate(LocalDate.now())
             .map(gesuchsperiodeMapper::toDto)
             .toList();
+    }
+
+    public Gesuchsperiode getGesuchsperiodeForAusbildung(final Ausbildung ausbildung) {
+        final var ausbildungBegin = ausbildung.getAusbildungBegin();
+
+        for (int yearOffset = 1; yearOffset >= -1; yearOffset--) {
+            var ausbildungsBeginAssumed = ausbildungBegin.withYear(LocalDate.now().getYear() + yearOffset);
+
+            if (ausbildungsBeginAssumed.isBefore(ausbildungBegin)) {
+                break;
+            }
+
+            var eligibleGesuchsperiode =
+                gesuchsperiodeRepository.findAllStartBeforeOrAt(ausbildungsBeginAssumed);
+
+            if (
+                (eligibleGesuchsperiode != null) &&
+                eligibleGesuchsperiode
+                    .getGesuchsperiodeStart()
+                    .plusMonths(6)
+                    .isAfter(ausbildungsBeginAssumed)
+            ) {
+                return eligibleGesuchsperiode;
+            }
+        }
+
+        throw new CustomValidationsException(
+            "No valid gesuchsperiode found for the ausbildungsbegin provided",
+            new CustomConstraintViolation(
+                VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE,
+                "gesuchsperiode"
+            )
+        );
     }
 
     @Transactional

@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
@@ -30,9 +31,9 @@ import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenReposit
 import ch.dvbern.stip.api.benutzer.util.TestRollen;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
@@ -104,6 +105,9 @@ class ZuordnungServiceTest {
             .setNachname("Alfred");
 
         fall = (Fall) new Fall().setId(fallId);
+
+        final var ausbildung = new Ausbildung().setFall(fall);
+
         final var gesuch = new Gesuch().setGesuchTranchen(
             List.of(
                 new GesuchTranche().setGesuchFormular(
@@ -112,8 +116,10 @@ class ZuordnungServiceTest {
             )
         );
 
-        gesuch.setFall(fall);
-        fall.setGesuch(Set.of(gesuch));
+        gesuch.setAusbildung(ausbildung);
+
+        fall.setAusbildungs(Set.of(ausbildung));
+        ausbildung.setGesuchs(List.of(gesuch));
 
         final var gesuchsRepo = Mockito.mock(GesuchRepository.class);
         Mockito.when(gesuchsRepo.findAllNewestWithPia()).thenReturn(Stream.of(gesuch));

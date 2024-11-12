@@ -20,8 +20,8 @@ package ch.dvbern.stip.api.steuerdaten.entity;
 import java.util.LinkedHashSet;
 
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import org.junit.jupiter.api.Test;
 

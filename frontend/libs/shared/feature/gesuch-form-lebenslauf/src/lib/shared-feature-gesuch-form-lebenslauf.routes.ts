@@ -1,11 +1,6 @@
 import { Route } from '@angular/router';
-import { provideEffects } from '@ngrx/effects';
-import { provideState } from '@ngrx/store';
 
-import {
-  gesuchAppDataAccessAusbildungsstaetteEffects,
-  gesuchAppDataAccessAusbildungsstaettesFeature,
-} from '@dv/shared/data-access/ausbildungsstaette';
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
@@ -17,8 +12,7 @@ export const gesuchAppFeatureGesuchFormLebenslaufRoutes: Route[] = [
     pathMatch: 'prefix',
     providers: [
       // ausbildungsstaette needed for the planned ausbildung at the bottom of lebenslauf
-      provideState(gesuchAppDataAccessAusbildungsstaettesFeature),
-      provideEffects(gesuchAppDataAccessAusbildungsstaetteEffects),
+      AusbildungsstaetteStore,
     ],
     children: [
       ...idAndTrancheIdRoutes(

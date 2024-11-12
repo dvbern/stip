@@ -28,11 +28,395 @@ public enum LandDtoSpec {
   
   CH("CH"),
   
+  AF("AF"),
+  
+  EG("EG"),
+  
+  AL("AL"),
+  
+  DZ("DZ"),
+  
+  AD("AD"),
+  
+  AO("AO"),
+  
+  AG("AG"),
+  
+  GQ("GQ"),
+  
+  AR("AR"),
+  
+  AM("AM"),
+  
+  AZ("AZ"),
+  
+  ET("ET"),
+  
+  AU("AU"),
+  
+  BS("BS"),
+  
+  BH("BH"),
+  
+  BD("BD"),
+  
+  BB("BB"),
+  
+  BY("BY"),
+  
+  BE("BE"),
+  
+  BZ("BZ"),
+  
+  BJ("BJ"),
+  
+  BT("BT"),
+  
+  BO("BO"),
+  
+  BA("BA"),
+  
+  BR("BR"),
+  
+  BN("BN"),
+  
+  BG("BG"),
+  
+  BF("BF"),
+  
+  BI("BI"),
+  
+  CV("CV"),
+  
+  CL("CL"),
+  
+  CN("CN"),
+  
+  CK("CK"),
+  
+  CR("CR"),
+  
+  CI("CI"),
+  
+  DK("DK"),
+  
   DE("DE"),
+  
+  DM("DM"),
+  
+  DO("DO"),
+  
+  DJ("DJ"),
+  
+  EC("EC"),
+  
+  SV("SV"),
+  
+  ER("ER"),
+  
+  EE("EE"),
+  
+  SZ("SZ"),
+  
+  FJ("FJ"),
+  
+  FI("FI"),
   
   FR("FR"),
   
-  IT("IT");
+  GA("GA"),
+  
+  GM("GM"),
+  
+  GE("GE"),
+  
+  GH("GH"),
+  
+  GD("GD"),
+  
+  GR("GR"),
+  
+  GT("GT"),
+  
+  GN("GN"),
+  
+  GW("GW"),
+  
+  GF("GF"),
+  
+  HT("HT"),
+  
+  VA("VA"),
+  
+  HN("HN"),
+  
+  IN("IN"),
+  
+  ID("ID"),
+  
+  IQ("IQ"),
+  
+  IR("IR"),
+  
+  IE("IE"),
+  
+  IS("IS"),
+  
+  IL("IL"),
+  
+  IT("IT"),
+  
+  JM("JM"),
+  
+  JP("JP"),
+  
+  YE("YE"),
+  
+  JO("JO"),
+  
+  KH("KH"),
+  
+  CM("CM"),
+  
+  CA("CA"),
+  
+  KZ("KZ"),
+  
+  QA("QA"),
+  
+  KE("KE"),
+  
+  KG("KG"),
+  
+  KI("KI"),
+  
+  CO("CO"),
+  
+  KM("KM"),
+  
+  CG("CG"),
+  
+  CD("CD"),
+  
+  KR("KR"),
+  
+  KP("KP"),
+  
+  XK("XK"),
+  
+  HR("HR"),
+  
+  CU("CU"),
+  
+  KW("KW"),
+  
+  LA("LA"),
+  
+  LS("LS"),
+  
+  LV("LV"),
+  
+  LB("LB"),
+  
+  LR("LR"),
+  
+  LY("LY"),
+  
+  LI("LI"),
+  
+  LT("LT"),
+  
+  LU("LU"),
+  
+  MG("MG"),
+  
+  MW("MW"),
+  
+  MY("MY"),
+  
+  MV("MV"),
+  
+  ML("ML"),
+  
+  MT("MT"),
+  
+  MA("MA"),
+  
+  MH("MH"),
+  
+  MR("MR"),
+  
+  MU("MU"),
+  
+  MX("MX"),
+  
+  FM("FM"),
+  
+  MO("MO"),
+  
+  MC("MC"),
+  
+  MN("MN"),
+  
+  ME("ME"),
+  
+  MZ("MZ"),
+  
+  MM("MM"),
+  
+  NA("NA"),
+  
+  NR("NR"),
+  
+  NP("NP"),
+  
+  NZ("NZ"),
+  
+  NI("NI"),
+  
+  NL("NL"),
+  
+  NE("NE"),
+  
+  NG("NG"),
+  
+  NU("NU"),
+  
+  MK("MK"),
+  
+  NO("NO"),
+  
+  OM("OM"),
+  
+  AT("AT"),
+  
+  PK("PK"),
+  
+  PW("PW"),
+  
+  PA("PA"),
+  
+  PG("PG"),
+  
+  PY("PY"),
+  
+  PE("PE"),
+  
+  PH("PH"),
+  
+  PL("PL"),
+  
+  PT("PT"),
+  
+  RW("RW"),
+  
+  RO("RO"),
+  
+  RU("RU"),
+  
+  SB("SB"),
+  
+  ZM("ZM"),
+  
+  WS("WS"),
+  
+  SM("SM"),
+  
+  ST("ST"),
+  
+  SA("SA"),
+  
+  SE("SE"),
+  
+  SN("SN"),
+  
+  RS("RS"),
+  
+  SC("SC"),
+  
+  SL("SL"),
+  
+  ZW("ZW"),
+  
+  SG("SG"),
+  
+  SK("SK"),
+  
+  SI("SI"),
+  
+  SO("SO"),
+  
+  ES("ES"),
+  
+  LK("LK"),
+  
+  KN("KN"),
+  
+  LC("LC"),
+  
+  VC("VC"),
+  
+  ZA("ZA"),
+  
+  SD("SD"),
+  
+  SS("SS"),
+  
+  SR("SR"),
+  
+  SY("SY"),
+  
+  TJ("TJ"),
+  
+  TZ("TZ"),
+  
+  TH("TH"),
+  
+  TL("TL"),
+  
+  TG("TG"),
+  
+  TO("TO"),
+  
+  TT("TT"),
+  
+  TD("TD"),
+  
+  CZ("CZ"),
+  
+  TN("TN"),
+  
+  TR("TR"),
+  
+  TM("TM"),
+  
+  TV("TV"),
+  
+  UG("UG"),
+  
+  UA("UA"),
+  
+  HU("HU"),
+  
+  UY("UY"),
+  
+  UZ("UZ"),
+  
+  VU("VU"),
+  
+  VE("VE"),
+  
+  AE("AE"),
+  
+  US("US"),
+  
+  GB("GB"),
+  
+  VN("VN"),
+  
+  CF("CF"),
+  
+  CY("CY");
 
   private String value;
 

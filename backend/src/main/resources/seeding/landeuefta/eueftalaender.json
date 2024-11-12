@@ -1,0 +1,786 @@
+[
+  {
+    "land": "CH",
+    "isEuEfta": true
+  },
+  {
+    "land": "AF",
+    "isEuEfta": false
+  },
+  {
+    "land": "EG",
+    "isEuEfta": false
+  },
+  {
+    "land": "AL",
+    "isEuEfta": false
+  },
+  {
+    "land": "DZ",
+    "isEuEfta": false
+  },
+  {
+    "land": "AD",
+    "isEuEfta": false
+  },
+  {
+    "land": "AO",
+    "isEuEfta": false
+  },
+  {
+    "land": "AG",
+    "isEuEfta": false
+  },
+  {
+    "land": "GQ",
+    "isEuEfta": false
+  },
+  {
+    "land": "AR",
+    "isEuEfta": false
+  },
+  {
+    "land": "AM",
+    "isEuEfta": false
+  },
+  {
+    "land": "AZ",
+    "isEuEfta": false
+  },
+  {
+    "land": "ET",
+    "isEuEfta": false
+  },
+  {
+    "land": "AU",
+    "isEuEfta": false
+  },
+  {
+    "land": "BS",
+    "isEuEfta": false
+  },
+  {
+    "land": "BH",
+    "isEuEfta": false
+  },
+  {
+    "land": "BD",
+    "isEuEfta": false
+  },
+  {
+    "land": "BB",
+    "isEuEfta": false
+  },
+  {
+    "land": "BY",
+    "isEuEfta": false
+  },
+  {
+    "land": "BE",
+    "isEuEfta": true
+  },
+  {
+    "land": "BZ",
+    "isEuEfta": false
+  },
+  {
+    "land": "BJ",
+    "isEuEfta": false
+  },
+  {
+    "land": "BT",
+    "isEuEfta": false
+  },
+  {
+    "land": "BO",
+    "isEuEfta": false
+  },
+  {
+    "land": "BA",
+    "isEuEfta": false
+  },
+  {
+    "land": "BR",
+    "isEuEfta": false
+  },
+  {
+    "land": "BN",
+    "isEuEfta": false
+  },
+  {
+    "land": "BG",
+    "isEuEfta": true
+  },
+  {
+    "land": "BF",
+    "isEuEfta": false
+  },
+  {
+    "land": "BI",
+    "isEuEfta": false
+  },
+  {
+    "land": "CV",
+    "isEuEfta": false
+  },
+  {
+    "land": "CL",
+    "isEuEfta": false
+  },
+  {
+    "land": "CN",
+    "isEuEfta": false
+  },
+  {
+    "land": "CK",
+    "isEuEfta": false
+  },
+  {
+    "land": "CR",
+    "isEuEfta": false
+  },
+  {
+    "land": "CI",
+    "isEuEfta": false
+  },
+  {
+    "land": "DK",
+    "isEuEfta": true
+  },
+  {
+    "land": "DE",
+    "isEuEfta": true
+  },
+  {
+    "land": "DM",
+    "isEuEfta": false
+  },
+  {
+    "land": "DO",
+    "isEuEfta": false
+  },
+  {
+    "land": "DJ",
+    "isEuEfta": false
+  },
+  {
+    "land": "EC",
+    "isEuEfta": false
+  },
+  {
+    "land": "SV",
+    "isEuEfta": false
+  },
+  {
+    "land": "ER",
+    "isEuEfta": false
+  },
+  {
+    "land": "EE",
+    "isEuEfta": true
+  },
+  {
+    "land": "SZ",
+    "isEuEfta": false
+  },
+  {
+    "land": "FJ",
+    "isEuEfta": false
+  },
+  {
+    "land": "FI",
+    "isEuEfta": true
+  },
+  {
+    "land": "FR",
+    "isEuEfta": true
+  },
+  {
+    "land": "GA",
+    "isEuEfta": false
+  },
+  {
+    "land": "GM",
+    "isEuEfta": false
+  },
+  {
+    "land": "GE",
+    "isEuEfta": false
+  },
+  {
+    "land": "GH",
+    "isEuEfta": false
+  },
+  {
+    "land": "GD",
+    "isEuEfta": false
+  },
+  {
+    "land": "GR",
+    "isEuEfta": true
+  },
+  {
+    "land": "GT",
+    "isEuEfta": false
+  },
+  {
+    "land": "GN",
+    "isEuEfta": false
+  },
+  {
+    "land": "GW",
+    "isEuEfta": false
+  },
+  {
+    "land": "GF",
+    "isEuEfta": false
+  },
+  {
+    "land": "HT",
+    "isEuEfta": false
+  },
+  {
+    "land": "VA",
+    "isEuEfta": false
+  },
+  {
+    "land": "HN",
+    "isEuEfta": false
+  },
+  {
+    "land": "IN",
+    "isEuEfta": false
+  },
+  {
+    "land": "ID",
+    "isEuEfta": false
+  },
+  {
+    "land": "IQ",
+    "isEuEfta": false
+  },
+  {
+    "land": "IR",
+    "isEuEfta": false
+  },
+  {
+    "land": "IE",
+    "isEuEfta": true
+  },
+  {
+    "land": "IS",
+    "isEuEfta": true
+  },
+  {
+    "land": "IL",
+    "isEuEfta": false
+  },
+  {
+    "land": "IT",
+    "isEuEfta": true
+  },
+  {
+    "land": "JM",
+    "isEuEfta": false
+  },
+  {
+    "land": "JP",
+    "isEuEfta": false
+  },
+  {
+    "land": "YE",
+    "isEuEfta": false
+  },
+  {
+    "land": "JO",
+    "isEuEfta": false
+  },
+  {
+    "land": "KH",
+    "isEuEfta": false
+  },
+  {
+    "land": "CM",
+    "isEuEfta": false
+  },
+  {
+    "land": "CA",
+    "isEuEfta": false
+  },
+  {
+    "land": "KZ",
+    "isEuEfta": false
+  },
+  {
+    "land": "QA",
+    "isEuEfta": false
+  },
+  {
+    "land": "KE",
+    "isEuEfta": false
+  },
+  {
+    "land": "KG",
+    "isEuEfta": false
+  },
+  {
+    "land": "KI",
+    "isEuEfta": false
+  },
+  {
+    "land": "CO",
+    "isEuEfta": false
+  },
+  {
+    "land": "KM",
+    "isEuEfta": false
+  },
+  {
+    "land": "CG",
+    "isEuEfta": false
+  },
+  {
+    "land": "CD",
+    "isEuEfta": false
+  },
+  {
+    "land": "KR",
+    "isEuEfta": false
+  },
+  {
+    "land": "KP",
+    "isEuEfta": false
+  },
+  {
+    "land": "XK",
+    "isEuEfta": false
+  },
+  {
+    "land": "HR",
+    "isEuEfta": true
+  },
+  {
+    "land": "CU",
+    "isEuEfta": false
+  },
+  {
+    "land": "KW",
+    "isEuEfta": false
+  },
+  {
+    "land": "LA",
+    "isEuEfta": false
+  },
+  {
+    "land": "LS",
+    "isEuEfta": false
+  },
+  {
+    "land": "LV",
+    "isEuEfta": true
+  },
+  {
+    "land": "LB",
+    "isEuEfta": false
+  },
+  {
+    "land": "LR",
+    "isEuEfta": false
+  },
+  {
+    "land": "LY",
+    "isEuEfta": false
+  },
+  {
+    "land": "LI",
+    "isEuEfta": true
+  },
+  {
+    "land": "LT",
+    "isEuEfta": true
+  },
+  {
+    "land": "LU",
+    "isEuEfta": true
+  },
+  {
+    "land": "MG",
+    "isEuEfta": false
+  },
+  {
+    "land": "MW",
+    "isEuEfta": false
+  },
+  {
+    "land": "MY",
+    "isEuEfta": false
+  },
+  {
+    "land": "MV",
+    "isEuEfta": false
+  },
+  {
+    "land": "ML",
+    "isEuEfta": false
+  },
+  {
+    "land": "MT",
+    "isEuEfta": true
+  },
+  {
+    "land": "MA",
+    "isEuEfta": false
+  },
+  {
+    "land": "MH",
+    "isEuEfta": false
+  },
+  {
+    "land": "MR",
+    "isEuEfta": false
+  },
+  {
+    "land": "MU",
+    "isEuEfta": false
+  },
+  {
+    "land": "MX",
+    "isEuEfta": false
+  },
+  {
+    "land": "FM",
+    "isEuEfta": false
+  },
+  {
+    "land": "MO",
+    "isEuEfta": false
+  },
+  {
+    "land": "MC",
+    "isEuEfta": false
+  },
+  {
+    "land": "MN",
+    "isEuEfta": false
+  },
+  {
+    "land": "ME",
+    "isEuEfta": false
+  },
+  {
+    "land": "MZ",
+    "isEuEfta": false
+  },
+  {
+    "land": "MM",
+    "isEuEfta": false
+  },
+  {
+    "land": "NA",
+    "isEuEfta": false
+  },
+  {
+    "land": "NR",
+    "isEuEfta": false
+  },
+  {
+    "land": "NP",
+    "isEuEfta": false
+  },
+  {
+    "land": "NZ",
+    "isEuEfta": false
+  },
+  {
+    "land": "NI",
+    "isEuEfta": false
+  },
+  {
+    "land": "NL",
+    "isEuEfta": true
+  },
+  {
+    "land": "NE",
+    "isEuEfta": false
+  },
+  {
+    "land": "NG",
+    "isEuEfta": false
+  },
+  {
+    "land": "NU",
+    "isEuEfta": false
+  },
+  {
+    "land": "MK",
+    "isEuEfta": false
+  },
+  {
+    "land": "NO",
+    "isEuEfta": true
+  },
+  {
+    "land": "OM",
+    "isEuEfta": false
+  },
+  {
+    "land": "AT",
+    "isEuEfta": true
+  },
+  {
+    "land": "PK",
+    "isEuEfta": false
+  },
+  {
+    "land": "PW",
+    "isEuEfta": false
+  },
+  {
+    "land": "PA",
+    "isEuEfta": false
+  },
+  {
+    "land": "PG",
+    "isEuEfta": false
+  },
+  {
+    "land": "PY",
+    "isEuEfta": false
+  },
+  {
+    "land": "PE",
+    "isEuEfta": false
+  },
+  {
+    "land": "PH",
+    "isEuEfta": false
+  },
+  {
+    "land": "PL",
+    "isEuEfta": true
+  },
+  {
+    "land": "PT",
+    "isEuEfta": true
+  },
+  {
+    "land": "RW",
+    "isEuEfta": false
+  },
+  {
+    "land": "RO",
+    "isEuEfta": true
+  },
+  {
+    "land": "RU",
+    "isEuEfta": false
+  },
+  {
+    "land": "SB",
+    "isEuEfta": false
+  },
+  {
+    "land": "ZM",
+    "isEuEfta": false
+  },
+  {
+    "land": "WS",
+    "isEuEfta": false
+  },
+  {
+    "land": "SM",
+    "isEuEfta": false
+  },
+  {
+    "land": "ST",
+    "isEuEfta": false
+  },
+  {
+    "land": "SA",
+    "isEuEfta": false
+  },
+  {
+    "land": "SE",
+    "isEuEfta": true
+  },
+  {
+    "land": "SN",
+    "isEuEfta": false
+  },
+  {
+    "land": "RS",
+    "isEuEfta": false
+  },
+  {
+    "land": "SC",
+    "isEuEfta": false
+  },
+  {
+    "land": "SL",
+    "isEuEfta": false
+  },
+  {
+    "land": "ZW",
+    "isEuEfta": false
+  },
+  {
+    "land": "SG",
+    "isEuEfta": false
+  },
+  {
+    "land": "SK",
+    "isEuEfta": true
+  },
+  {
+    "land": "SI",
+    "isEuEfta": true
+  },
+  {
+    "land": "SO",
+    "isEuEfta": false
+  },
+  {
+    "land": "ES",
+    "isEuEfta": true
+  },
+  {
+    "land": "LK",
+    "isEuEfta": false
+  },
+  {
+    "land": "KN",
+    "isEuEfta": false
+  },
+  {
+    "land": "LC",
+    "isEuEfta": false
+  },
+  {
+    "land": "VC",
+    "isEuEfta": false
+  },
+  {
+    "land": "ZA",
+    "isEuEfta": false
+  },
+  {
+    "land": "SD",
+    "isEuEfta": false
+  },
+  {
+    "land": "SS",
+    "isEuEfta": false
+  },
+  {
+    "land": "SR",
+    "isEuEfta": false
+  },
+  {
+    "land": "SY",
+    "isEuEfta": false
+  },
+  {
+    "land": "TJ",
+    "isEuEfta": false
+  },
+  {
+    "land": "TZ",
+    "isEuEfta": false
+  },
+  {
+    "land": "TH",
+    "isEuEfta": false
+  },
+  {
+    "land": "TL",
+    "isEuEfta": false
+  },
+  {
+    "land": "TG",
+    "isEuEfta": false
+  },
+  {
+    "land": "TO",
+    "isEuEfta": false
+  },
+  {
+    "land": "TT",
+    "isEuEfta": false
+  },
+  {
+    "land": "TD",
+    "isEuEfta": false
+  },
+  {
+    "land": "CZ",
+    "isEuEfta": true
+  },
+  {
+    "land": "TN",
+    "isEuEfta": false
+  },
+  {
+    "land": "TR",
+    "isEuEfta": false
+  },
+  {
+    "land": "TM",
+    "isEuEfta": false
+  },
+  {
+    "land": "TV",
+    "isEuEfta": false
+  },
+  {
+    "land": "UG",
+    "isEuEfta": false
+  },
+  {
+    "land": "UA",
+    "isEuEfta": false
+  },
+  {
+    "land": "HU",
+    "isEuEfta": true
+  },
+  {
+    "land": "UY",
+    "isEuEfta": false
+  },
+  {
+    "land": "UZ",
+    "isEuEfta": false
+  },
+  {
+    "land": "VU",
+    "isEuEfta": false
+  },
+  {
+    "land": "VE",
+    "isEuEfta": false
+  },
+  {
+    "land": "AE",
+    "isEuEfta": false
+  },
+  {
+    "land": "US",
+    "isEuEfta": false
+  },
+  {
+    "land": "GB",
+    "isEuEfta": false
+  },
+  {
+    "land": "VN",
+    "isEuEfta": false
+  },
+  {
+    "land": "CF",
+    "isEuEfta": false
+  },
+  {
+    "land": "CY",
+    "isEuEfta": true
+  }
+]

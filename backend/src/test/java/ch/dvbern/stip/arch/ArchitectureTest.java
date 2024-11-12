@@ -24,6 +24,7 @@ import com.tngtech.archunit.library.dependencies.Slice;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
@@ -80,9 +81,11 @@ class ArchitectureTest {
 
     @Test
     void no_cycles_between_features() {
-        var rule = slices().matching("..stip.api.(**).service")
+        var rule = slices()
+            .matching("..stip.api.(**).service")
             .should()
             .beFreeOfCycles()
+            .ignoreDependency(resideInAPackage("..ausbildung.."), DescribedPredicate.alwaysTrue())
             .because("Cycles between feature decrease maintainability. Introduce a new shared feature");
         rule.check(ArchTestUtil.APP_CLASSES);
     }

@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.generator.api;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
@@ -79,16 +78,15 @@ public class GesuchTestSpecGenerator {
         });
     }
 
-    public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAusbildung() {
-        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
-            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
-            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
-            model.getGesuchTrancheToWorkWith()
-                .setGesuchFormular(
-                    AusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAusbildung()
-                );
-        });
-    }
+    // public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAusbildung() {
+    // return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
+    // model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+    // model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
+    // model.getGesuchTrancheToWorkWith().setGesuchFormular(
+    // AusbildungUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecAusbildung()
+    // );
+    // });
+    // }
 
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecAuszahlung() {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
@@ -171,7 +169,7 @@ public class GesuchTestSpecGenerator {
         return TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model) -> {
             model.setPersonInAusbildung(PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec());
             model.getPersonInAusbildung().setZivilstand(ZivilstandDtoSpec.VERHEIRATET);
-            model.setAusbildung(AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec());
+            // model.setAusbildung(AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec());
             model.setLebenslaufItems(LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs());
             model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
             model.setElterns(ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2));

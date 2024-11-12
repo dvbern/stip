@@ -26,6 +26,7 @@ import {
   SPECIAL_VALIDATION_ERRORS,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
+import { isDefined } from '@dv/shared/model/type-util';
 import { shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
@@ -37,7 +38,6 @@ import {
   pending,
 } from '@dv/shared/util/remote-data';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 type EinreichenState = {
   validationResult: CachedRemoteData<ValidationReport>;

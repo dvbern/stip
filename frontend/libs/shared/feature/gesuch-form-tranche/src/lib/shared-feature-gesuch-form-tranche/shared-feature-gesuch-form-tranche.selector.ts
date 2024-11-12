@@ -14,7 +14,7 @@ export const selectSharedFeatureGesuchFormTrancheView = createSelector(
     tranche: cache.gesuch?.gesuchTrancheToWorkWith,
     gesuch: cache.gesuch,
     gesuchId: cache.gesuch?.id,
-    fallNummer: cache.gesuch?.fall.fallNummer,
+    fallNummer: cache.gesuch?.fallNummer,
     gesuchsNummer: cache.gesuch?.gesuchNummer,
     sachbearbeiter: cache.gesuch?.bearbeiter,
     lastUpdate: gesuchsView.lastUpdate,

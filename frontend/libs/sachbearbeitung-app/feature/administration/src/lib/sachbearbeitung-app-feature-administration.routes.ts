@@ -3,10 +3,21 @@ import { Route } from '@angular/router';
 import {
   OPTION_AUSBILDUNGSSTAETTE,
   OPTION_BUCHSTABEN_ZUTEILUNG,
+  OPTION_EU_EFTA_LAENDER,
   OPTION_GESUCHSPERIODEN,
+  OPTION_SOZIALDIENST,
 } from '@dv/sachbearbeitung-app/model/administration';
 
 export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
+  {
+    path: OPTION_SOZIALDIENST.route,
+    loadChildren: () =>
+      import(
+        '@dv/sachbearbeitung-app/feature/administration-sozialdienst'
+      ).then(
+        (m) => m.sachbearbeitungAppFeatureAdministrationSozialdienstRoutes,
+      ),
+  },
   {
     path: OPTION_AUSBILDUNGSSTAETTE.route,
     loadChildren: () =>
@@ -35,6 +46,16 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
       import(
         '@dv/sachbearbeitung-app/feature/administration-gesuchsperiode'
       ).then((m) => m.sachbearbeitungAppFeatureGesuchsperiodeRoutes),
+  },
+  {
+    path: OPTION_EU_EFTA_LAENDER.route,
+    title: OPTION_EU_EFTA_LAENDER.titleTranslationKey,
+    loadChildren: () =>
+      import(
+        '@dv/sachbearbeitung-app/feature/administration-eu-efta-laender'
+      ).then(
+        (m) => m.sachbearbeitungAppFeatureAdministrationEuEftaLaenderRoutes,
+      ),
   },
   {
     path: 'benutzerverwaltung',

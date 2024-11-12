@@ -28,70 +28,40 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchCreateDtoSpec
  */
 @JsonPropertyOrder({
-  GesuchCreateDtoSpec.JSON_PROPERTY_FALL_ID,
-  GesuchCreateDtoSpec.JSON_PROPERTY_GESUCHSPERIODE_ID
+  GesuchCreateDtoSpec.JSON_PROPERTY_AUSBILDUNG_ID
 })
 @JsonTypeName("GesuchCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchCreateDtoSpec {
-  public static final String JSON_PROPERTY_FALL_ID = "fallId";
-  private UUID fallId;
-
-  public static final String JSON_PROPERTY_GESUCHSPERIODE_ID = "gesuchsperiodeId";
-  private UUID gesuchsperiodeId;
+  public static final String JSON_PROPERTY_AUSBILDUNG_ID = "ausbildungId";
+  private UUID ausbildungId;
 
   public GesuchCreateDtoSpec() {
   }
 
-  public GesuchCreateDtoSpec fallId(UUID fallId) {
+  public GesuchCreateDtoSpec ausbildungId(UUID ausbildungId) {
     
-    this.fallId = fallId;
+    this.ausbildungId = ausbildungId;
     return this;
   }
 
    /**
-   * Get fallId
-   * @return fallId
+   * Get ausbildungId
+   * @return ausbildungId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public UUID getFallId() {
-    return fallId;
+  public UUID getAusbildungId() {
+    return ausbildungId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallId(UUID fallId) {
-    this.fallId = fallId;
-  }
-
-
-  public GesuchCreateDtoSpec gesuchsperiodeId(UUID gesuchsperiodeId) {
-    
-    this.gesuchsperiodeId = gesuchsperiodeId;
-    return this;
-  }
-
-   /**
-   * Get gesuchsperiodeId
-   * @return gesuchsperiodeId
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getGesuchsperiodeId() {
-    return gesuchsperiodeId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsperiodeId(UUID gesuchsperiodeId) {
-    this.gesuchsperiodeId = gesuchsperiodeId;
+  public void setAusbildungId(UUID ausbildungId) {
+    this.ausbildungId = ausbildungId;
   }
 
   @Override
@@ -103,21 +73,19 @@ public class GesuchCreateDtoSpec {
       return false;
     }
     GesuchCreateDtoSpec gesuchCreate = (GesuchCreateDtoSpec) o;
-    return Objects.equals(this.fallId, gesuchCreate.fallId) &&
-        Objects.equals(this.gesuchsperiodeId, gesuchCreate.gesuchsperiodeId);
+    return Objects.equals(this.ausbildungId, gesuchCreate.ausbildungId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, gesuchsperiodeId);
+    return Objects.hash(ausbildungId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchCreateDtoSpec {\n");
-    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
-    sb.append("    gesuchsperiodeId: ").append(toIndentedString(gesuchsperiodeId)).append("\n");
+    sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

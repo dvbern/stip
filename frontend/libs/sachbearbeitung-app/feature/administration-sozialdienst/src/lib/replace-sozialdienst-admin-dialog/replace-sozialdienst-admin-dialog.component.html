@@ -1,0 +1,53 @@
+<section class="d-flex flex-column position-relative p-4 rounded">
+  <button
+    type="button"
+    (click)="cancel()"
+    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+
+  <h1 class="title h5 mb-4 d-flex">
+    {{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel' | translate }}
+  </h1>
+  <div>{{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.message' | translate }}</div>
+
+  <form [formGroup]="form" class="mt-4" novalidate>
+    <mat-form-field dvSharedUiFormField class="col-12 mt-4">
+      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | translate }}</mat-label>
+      <input matInput formControlName="nachname" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field dvSharedUiFormField class="col-12 mt-4">
+      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | translate }}</mat-label>
+      <input matInput formControlName="vorname" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field dvSharedUiFormField class="col-12 mt-4">
+      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | translate }}</mat-label>
+      <input matInput formControlName="email" type="email" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'email'">
+        {{ 'shared.form.error.email' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="d-flex mt-4 justify-content-between">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary ms-2" (click)="confirm()">
+        {{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.confirm' | translate }}
+      </button>
+    </div>
+  </form>
+</section>

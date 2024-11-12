@@ -162,7 +162,7 @@ public class ElternteilV1 {
                 if (Boolean.TRUE.equals(familiensituation.getVaterWiederverheiratet())) {
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         29,
-                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29
+                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29//
                                        // für
                                        // margin
                     );
@@ -183,7 +183,7 @@ public class ElternteilV1 {
                 if (Boolean.TRUE.equals(familiensituation.getMutterWiederverheiratet())) {
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         29,
-                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29
+                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29//
                                        // für
                                        // margin
                     );

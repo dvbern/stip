@@ -8,8 +8,6 @@ import {
   catchError,
   combineLatestWith,
   concatMap,
-  exhaustMap,
-  filter,
   map,
   switchMap,
   tap,
@@ -17,11 +15,9 @@ import {
 } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
-import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
@@ -32,10 +28,10 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { AppType } from '@dv/shared/model/config';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
-  AusbildungUpdate,
   Gesuch,
   GesuchFormularUpdate,
   GesuchService,
@@ -51,7 +47,6 @@ import {
 } from '@dv/shared/util/http';
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import {
@@ -94,34 +89,6 @@ export const loadOwnGesuchs = createEffect(
   { functional: true },
 );
 
-export const loadGsDashboard = createEffect(
-  (
-    actions$ = inject(Actions),
-    gesuchService = inject(GesuchService),
-    storeUtil = inject(StoreUtilService),
-  ) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.loadGsDashboard),
-      storeUtil.waitForBenutzerData$(),
-      concatMap(() =>
-        gesuchService.getGsDashboard$().pipe(
-          map((gsDashboard) =>
-            SharedDataAccessGesuchEvents.gsDashboardLoadedSuccess({
-              gsDashboard,
-            }),
-          ),
-          catchError((error) => [
-            SharedDataAccessGesuchEvents.gsDashboardLoadedFailure({
-              error: sharedUtilFnErrorTransformer(error),
-            }),
-          ]),
-        ),
-      ),
-    );
-  },
-  { functional: true },
-);
-
 export const loadGesuch = createEffect(
   (
     actions$ = inject(Actions),
@@ -135,7 +102,6 @@ export const loadGesuch = createEffect(
         SharedDataAccessGesuchEvents.loadGesuch,
         SharedEventGesuchFormPartner.init,
         SharedEventGesuchFormPerson.init,
-        SharedEventGesuchFormEducation.init,
         SharedEventGesuchFormEltern.init,
         SharedEventGesuchFormElternSteuerdaten.init,
         SharedEventGesuchFormFamiliensituation.init,
@@ -249,48 +215,12 @@ export const loadGesuch = createEffect(
   { functional: true },
 );
 
-export const createGesuch = createEffect(
-  (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.createGesuch),
-      exhaustMap(({ create }) =>
-        gesuchService.createGesuch$({ gesuchCreate: create }).pipe(
-          switchMap(() =>
-            gesuchService.getGesucheForFall$({
-              fallId: create.fallId,
-            }),
-          ),
-          map(
-            (gesuche) =>
-              gesuche.find(
-                ({ gesuchsperiode: { id } }) => id === create.gesuchsperiodeId,
-              )?.id,
-          ),
-          filter(isDefined),
-          map((id) =>
-            SharedDataAccessGesuchEvents.gesuchCreatedSuccess({
-              id,
-            }),
-          ),
-          catchError((error) => [
-            SharedDataAccessGesuchEvents.gesuchCreatedFailure({
-              error: sharedUtilFnErrorTransformer(error),
-            }),
-          ]),
-        ),
-      ),
-    );
-  },
-  { functional: true },
-);
-
 export const updateGesuch = createEffect(
   (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
     return actions$.pipe(
       ofType(
         SharedEventGesuchFormPartner.nextStepTriggered,
         SharedEventGesuchFormPerson.saveTriggered,
-        SharedEventGesuchFormEducation.saveTriggered,
         SharedEventGesuchFormElternSteuerdaten.saveTriggered,
         SharedEventGesuchFormFamiliensituation.saveTriggered,
         SharedEventGesuchFormAuszahlung.saveTriggered,
@@ -405,7 +335,6 @@ export const redirectToGesuchFormNextStep = createEffect(
         SharedEventGesuchFormLebenslauf.nextTriggered,
         SharedEventGesuchFormPartner.nextTriggered,
         SharedEventGesuchFormPerson.nextTriggered,
-        SharedEventGesuchFormEducation.nextTriggered,
         SharedEventGesuchFormElternSteuerdaten.nextTriggered,
         SharedEventGesuchFormFamiliensituation.nextTriggered,
         SharedEventGesuchFormAuszahlung.nextTriggered,
@@ -615,8 +544,6 @@ const handleStatusChange$ = <AC extends ActionCreator<string, Creator>>(
 export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
   loadGesuch,
-  loadGsDashboard,
-  createGesuch,
   updateGesuch,
   updateGesuchSubform,
   removeGesuch,
@@ -631,19 +558,18 @@ export const sharedDataAccessGesuchEffects = {
   setGesuchVersendet,
 };
 
-const viewOnlyFields = ['steuerdatenTabs'] as const satisfies [
-  keyof SharedModelGesuchFormular,
-];
-/**
- * Formular fields that are only used while viewing data but should be removed on update
- */
-type ViewOnlyFields = (typeof viewOnlyFields)[number];
+const viewOnlyFields = [
+  'steuerdatenTabs',
+] as const satisfies (keyof SharedModelGesuchFormular)[];
 
 const prepareFormularData = (
   id: string,
   gesuchFormular: GesuchFormularUpdate | Partial<SharedModelGesuchFormular>,
 ): GesuchUpdate => {
-  const { ausbildung, ...formular } = gesuchFormular;
+  const { ...formular } = gesuchFormular;
+  if ('ausbildung' in formular) {
+    delete formular.ausbildung;
+  }
   viewOnlyFields.forEach((field) => {
     if (field in formular) {
       delete formular[field];
@@ -654,55 +580,7 @@ const prepareFormularData = (
       id,
       gesuchFormular: {
         ...formular,
-        ausbildung: toAusbildung(ausbildung),
       },
     },
-  };
-};
-
-/**
- * Get the given Formular property Data as View or Update Data
- *
- * * **View Type**: SharedModelGesuchFormular[K]
- *   > represents the type that is being returned from the API (GET)
- * * **Update Type**: GesuchFormularUpdate[K]
- *   > the values that can be sent to the API for an update (PUT)
- *
- * The distinciton is necessary because the API returns more data than is necessary for an update
- * for example the API returns the full Ausbildungsgang object, but for an update only the ID is necessary
- */
-type ViewOrUpdateData<
-  K extends Exclude<keyof SharedModelGesuchFormular, ViewOnlyFields>,
-> = GesuchFormularUpdate[K] | Partial<SharedModelGesuchFormular>[K];
-
-/**
- * Check if Type T represent the Edit type of R
- */
-const isEditData = <T, R extends T>(
-  value: T,
-  keyExists: keyof R,
-): value is R => {
-  return typeof value === 'object' && value && keyExists in value;
-};
-
-/**
- * Convert the given Ausbildung to an AusbildungUpdate if necessary
- */
-const toAusbildung = (ausbildung: ViewOrUpdateData<'ausbildung'>) => {
-  if (!ausbildung) {
-    return undefined;
-  }
-  if (
-    isEditData<ViewOrUpdateData<'ausbildung'>, AusbildungUpdate>(
-      ausbildung,
-      'ausbildungsgangId',
-    )
-  ) {
-    return ausbildung;
-  }
-  return {
-    ...ausbildung,
-    ausbildungsgang: undefined,
-    ausbildungsgangId: ausbildung.ausbildungsgang?.id,
   };
 };

@@ -11,10 +11,10 @@
  */
 
 export interface GesuchNotiz { 
-    userErstellt: string;
-    timestampErstellt: string;
     id?: string;
     betreff: string;
     text: string;
+    userErstellt: string;
+    timestampErstellt: string;
 }
 

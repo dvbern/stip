@@ -26,8 +26,9 @@ import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
@@ -171,6 +172,7 @@ class GesuchUpdateDefaultValuesTest {
     private GesuchTranche prepareGesuchTrancheWithIds(GesuchTrancheUpdateDto trancheUpdate) {
         GesuchTranche tranche = initGesuchTranche();
         GesuchFormular gesuchFormular = new GesuchFormular();
+        gesuchFormular.setTranche(tranche);
 
         trancheUpdate.getGesuchFormular().getElterns().forEach(elternUpdateDto -> {
             elternUpdateDto.setId(UUID.randomUUID());

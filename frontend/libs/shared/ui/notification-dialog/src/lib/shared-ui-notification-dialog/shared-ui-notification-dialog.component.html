@@ -20,7 +20,9 @@
 
       <div class="d-flex flex-column">
         <dt>{{ 'shared.nachrichten.date' | translate }}:</dt>
-        <dd>{{ notification.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>
+        <dd>
+          <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
+        </dd>
       </div>
     </div>
     <dt>{{ 'shared.nachrichten.subject' | translate }}:</dt>
