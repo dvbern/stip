@@ -26,7 +26,7 @@
   </mat-expansion-panel-header>
 
   <div class="tw-flex tw-gap-6 tw-flex-col">
-    @for (gesuch of ausbildung.gesuchs; track gesuch) {
+    @for (gesuch of ausbildung.gesuchs; track gesuch.id) {
       <dv-gesuch-app-ui-dashboard-gesuch
         [gesuchSig]="gesuch"
         [class.bg-tertiary]="ausbildung.status !== 'AKTIV'"

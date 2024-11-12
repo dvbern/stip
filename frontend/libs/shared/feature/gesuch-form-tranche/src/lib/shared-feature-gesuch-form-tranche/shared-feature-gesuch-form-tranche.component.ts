@@ -12,10 +12,9 @@ import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatOption } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -30,10 +29,7 @@ import {
 } from '@dv/shared/data-access/gesuch-aenderung';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { isDefined } from '@dv/shared/model/type-util';
-import {
-  SharedUiFormFieldDirective,
-  SharedUiFormMessageErrorDirective,
-} from '@dv/shared/ui/form';
+import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
@@ -51,16 +47,12 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
   imports: [
     CommonModule,
     FormsModule,
-    MatError,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatOption,
+    RouterLink,
     MatSelect,
     ReactiveFormsModule,
-    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
     SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
     SharedUiHeaderSuffixDirective,
     SharedUiIfSachbearbeiterDirective,
     TranslateModule,
