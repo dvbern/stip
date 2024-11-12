@@ -155,7 +155,6 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     ],
     sozialversicherungsnummer: [<string | undefined>undefined, []],
     ergaenzungsleistungen: [<string | null>null, [Validators.required]],
-    sozialhilfebeitraege: [<string | null>null, [Validators.required]],
     wohnkosten: [<string | null>null, [Validators.required]],
     geburtsdatum: [
       '',
@@ -174,11 +173,11 @@ export class SharedFeatureGesuchFormElternEditorComponent {
         ),
       ],
     ],
+    sozialhilfebeitraege: [<boolean | null>null, [Validators.required]],
     ausweisbFluechtling: [<boolean | null>null, [Validators.required]],
   });
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
     'ergaenzungsleistungen',
-    'sozialhilfebeitraege',
     'wohnkosten',
   ]);
 
@@ -204,10 +203,11 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   );
   sozialhilfeDocumentSig = this.createUploadOptionsSig(() => {
     const elternTyp = this.elternteilSig().elternTyp;
-    const sozialhilfe =
-      fromFormatedNumber(this.sozialhilfeChangedSig() ?? undefined) ?? 0;
+    const sozialhilfebeitraege = this.sozialhilfeChangedSig();
 
-    return sozialhilfe > 0 ? `ELTERN_SOZIALHILFEBUDGET_${elternTyp}` : null;
+    return sozialhilfebeitraege === true
+      ? `ELTERN_SOZIALHILFEBUDGET_${elternTyp}`
+      : null;
   });
 
   private wohnkostenChangedSig = toSignal(

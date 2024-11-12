@@ -335,7 +335,7 @@
   "shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_MUTTER": "Kopie Leistungsausweis Ergänzungsleistungen des Vorjahres inklusive Berechnungsblatt Ihrer Mutter",
   "shared.form.eltern.file.SOZIALHILFEBUDGET_MUTTER": "Kopie Sozialhilfebudget Ihrer Mutter des vorherigen Kalenderjahres ",
   "shared.form.eltern.ergaenzungsleistungen.label": "Ergänzungsleistung",
-  "shared.form.eltern.sozialhilfebeitraege.label": "Sozialhilfebeträge",
+  "shared.form.eltern.sozialhilfebeitraege.label": "Werden Sozialhilfebeiträge ausbezahlt?",
 
   "shared.eltern-steuer.title.FAMILIE": "Steuerdaten für Familie",
   "shared.eltern-steuer.title.MUTTER": "Steuerdaten für Mutter",

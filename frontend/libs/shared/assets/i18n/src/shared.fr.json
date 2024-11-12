@@ -335,7 +335,7 @@
   "shared.form.eltern.file.ERGAENZUNGSLEISTUNGEN_MUTTER": "Copie de l’attestation relative aux prestations complémentaires perçues l’année précédente avec la feuille de calcul pour votre mère",
   "shared.form.eltern.file.SOZIALHILFEBUDGET_MUTTER": "Copie du budget de l’aide sociale de l’année civile précédente",
   "shared.form.eltern.ergaenzungsleistungen.label": "Ergänzungsleistung",
-  "shared.form.eltern.sozialhilfebeitraege.label": "Sozialhilfebeträge",
+  "shared.form.eltern.sozialhilfebeitraege.label": "Des contributions d'aide sociale sont-elles versées ?",
 
   "shared.elternteil-steuer.title.FAMILIE": "Données fiscales pour la famille",
   "shared.elternteil-steuer.title.MUTTER": "Données fiscales pour la mère",
