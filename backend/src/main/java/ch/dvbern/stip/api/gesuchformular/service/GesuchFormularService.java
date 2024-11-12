@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchformular.validation.AusbildungPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.PersonInAusbildungPageValidation;
@@ -43,12 +42,11 @@ public class GesuchFormularService {
         validationGroups.add(DocumentsRequiredValidationGroup.class);
         // Since lebenslaufItems are nullable in GesuchFormular the validator has to be added manually if it is not
         // already present
-        // Only do this if we are also validating PersonInAusbildungPage and AusbildungPage and not already
+        // Only do this if we are also validating PersonInAusbildungPage and not already
         // validating LebenslaufItemPage
         // (i.e. no lebenslaufitem is present)
         if (
             validationGroups.contains(PersonInAusbildungPageValidation.class) &&
-            validationGroups.contains(AusbildungPageValidation.class) &&
             !validationGroups.contains(LebenslaufItemPageValidation.class)
         ) {
             validationGroups.add(LebenslaufItemPageValidation.class);
