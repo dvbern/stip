@@ -173,6 +173,7 @@ export class GesuchAppFeatureCockpitComponent {
               gesuchId: ausbildung.gesuchs[0].id,
             }),
           );
+          this.store.dispatch(SharedDataAccessGesuchEvents.reset());
         }
       });
   }

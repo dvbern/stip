@@ -65,6 +65,8 @@ export const sharedDataAccessGesuchsFeature = createFeature({
   reducer: createReducer(
     initialState,
 
+    on(SharedDataAccessGesuchEvents.reset, (): State => initialState),
+
     on(
       SharedDataAccessGesuchEvents.init,
       (state): State => ({
