@@ -33,7 +33,7 @@ import {
 import {
   isGesuchReadonly,
   isTrancheReadonly,
-} from '@dv/shared/util/readonly-state';
+} from '@dv/shared/util/permission-state';
 import { capitalized, lowercased } from '@dv/shared/util-fn/string-helper';
 import { type } from '@dv/shared/util-fn/type-guards';
 
