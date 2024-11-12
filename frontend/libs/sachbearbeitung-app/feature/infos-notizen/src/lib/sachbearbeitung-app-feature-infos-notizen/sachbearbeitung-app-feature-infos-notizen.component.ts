@@ -16,12 +16,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import { PermissionStore } from '@dv/shared/global/permission';
 import {
   GesuchNotiz,
   GesuchNotizCreate,
@@ -48,7 +48,6 @@ import {
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     TranslateModule,
     MatFormFieldModule,
     MatTableModule,
@@ -78,6 +77,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
     'actions',
   ];
   notizStore = inject(NotizStore);
+  permissionStore = inject(PermissionStore);
 
   gesuchIdSig = input.required<string>({ alias: 'id' });
   sortSig = viewChild(MatSort);
@@ -91,8 +91,6 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
 
   constructor() {
     this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-
-    this.notizStore.setJurist();
 
     effect(
       () => {
