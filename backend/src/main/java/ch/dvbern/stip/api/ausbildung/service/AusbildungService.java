@@ -59,7 +59,10 @@ public class AusbildungService {
         gesuchCreateDto.setAusbildungId(ausbildung.getId());
         gesuchService.createGesuch(gesuchCreateDto);
 
-        ausbildung.setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
+        if (ausbildung.getAusbildungsgang() != null) {
+            ausbildung
+                .setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
+        }
 
         return ausbildungMapper.toDto(ausbildung);
     }
@@ -95,7 +98,10 @@ public class AusbildungService {
                 new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1))
             );
         ausbildungRepository.persistAndFlush(ausbildung);
-        ausbildung.setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
+        if (ausbildung.getAusbildungsgang() != null) {
+            ausbildung
+                .setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
+        }
         return ausbildungMapper.toDto(ausbildung);
     }
 }

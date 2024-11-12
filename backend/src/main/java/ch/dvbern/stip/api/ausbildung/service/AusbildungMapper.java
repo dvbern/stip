@@ -105,6 +105,15 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
     @Mapping(source = "fallId", target = "fall.id")
     public abstract Ausbildung partialUpdate(AusbildungUpdateDto ausbildungDto, @MappingTarget Ausbildung ausbildung);
 
+    @AfterMapping
+    public void resetAusbildungsgangIfNull(
+        @MappingTarget Ausbildung ausbildung
+    ) {
+        if (ausbildung.getAusbildungsgang().getId() == null) {
+            ausbildung.setAusbildungsgang(null);
+        }
+    }
+
     @Override
     @BeforeMapping
     protected void resetDependentDataBeforeUpdate(

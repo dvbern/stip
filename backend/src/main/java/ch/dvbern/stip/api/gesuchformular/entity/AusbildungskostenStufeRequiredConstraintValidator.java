@@ -39,7 +39,10 @@ public class AusbildungskostenStufeRequiredConstraintValidator
         GesuchFormular gesuchFormular,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        if (gesuchFormular.getAusbildung() == null || gesuchFormular.getEinnahmenKosten() == null) {
+        if (
+            gesuchFormular.getAusbildung() == null || gesuchFormular.getEinnahmenKosten() == null
+            || gesuchFormular.getAusbildung().getAusbildungsgang() == null
+        ) {
             return true;
         }
         if (
