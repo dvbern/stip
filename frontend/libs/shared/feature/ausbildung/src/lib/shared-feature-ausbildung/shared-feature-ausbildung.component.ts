@@ -455,7 +455,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     const ausbildungId =
       this.gesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith.gesuchFormular
         ?.ausbildung.id;
-    const ausbildungsgang = ausbildungsgangId ? { ausbildungId } : {};
+    const ausbildungsgang = ausbildungsgangId ? { ausbildungsgangId } : {};
     const { type, fallId } = this.usageTypeSig();
 
     switch (type) {
