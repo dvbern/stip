@@ -395,7 +395,7 @@
   "shared.form.lebenslauf.add.ausbildung.short": "Formation",
   "shared.form.lebenslauf.add.taetigkeit.short": "Activité",
   "shared.form.lebenslauf.top.info": "Veuillez indiquer toutes les formations et activités suivies depuis l'âge de 16 ans jusqu'au début de la formation actuelle.",
-  "shared.form.lebenslauf.top.missing-dates": "Veuillez d'abord remplir les étapes \"Personne en formation\" et \"Formation\"..",
+  "shared.form.lebenslauf.top.missing-dates": "Veuillez d'abord remplir \"Personne en formation\".",
   "shared.form.lebenslauf.item.name": "Formation ou activité",
   "shared.form.lebenslauf.item.name.ausbildung": "Type de formation",
   "shared.form.lebenslauf.item.name.taetigkeit": "Activité",

@@ -395,7 +395,7 @@
   "shared.form.lebenslauf.add.ausbildung.short": "Ausbildung",
   "shared.form.lebenslauf.add.taetigkeit.short": "Tätigkeit",
   "shared.form.lebenslauf.top.info": "Es ist eine lückenlose Auflistung aller bisherigen Ausbildung und Tätigkeiten aufzuführen vom 16. Lebensjahr bis zum Beginn der aktueller Ausbildung.",
-  "shared.form.lebenslauf.top.missing-dates": "Bitte füllen Sie zuerst die Schritte \"Person in Ausbildung\" und \"Ausbildung\" aus.",
+  "shared.form.lebenslauf.top.missing-dates": "Bitte füllen Sie zuerst \"Person in Ausbildung\" aus.",
   "shared.form.lebenslauf.item.name": "Ausbildung oder Tätigkeit",
   "shared.form.lebenslauf.item.name.ausbildung": "Art der Ausbildung",
   "shared.form.lebenslauf.item.name.taetigkeit": "Tätigkeit",
