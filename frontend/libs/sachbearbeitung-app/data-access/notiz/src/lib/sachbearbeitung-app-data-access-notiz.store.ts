@@ -1,8 +1,7 @@
-import { Injectable, Signal, computed, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -23,48 +22,12 @@ import {
 type NotizState = {
   notizen: CachedRemoteData<GesuchNotiz[]>;
   notiz: CachedRemoteData<GesuchNotiz>;
-  userIsJurist: boolean;
 };
 
 const initialState: NotizState = {
   notizen: initial(),
   notiz: initial(),
-  userIsJurist: false,
 };
-
-/**
- * Decodes a JWT token and returns the payload as a JSON object.
- *
- * @param token - The JWT token to decode.
- * @returns The decoded payload as an object, or null if decoding fails.
- */
-function decodeJwt<T extends object = { [key: string]: any }>(
-  token: string,
-): T | null {
-  try {
-    // Split the token into its parts
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-      throw new Error('Invalid JWT format');
-    }
-
-    // Base64Url decode the payload
-    const base64Url = parts[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join(''),
-    );
-
-    // Parse the JSON payload
-    return JSON.parse(jsonPayload);
-  } catch (error) {
-    console.error('Failed to decode JWT:', error);
-    return null;
-  }
-}
 
 @Injectable()
 export class NotizStore extends signalStore(
@@ -74,7 +37,6 @@ export class NotizStore extends signalStore(
 ) {
   private notizService = inject(GesuchNotizService);
   private notificationStore = inject(GlobalNotificationStore);
-  private authService = inject(OAuthService);
 
   notizenListViewSig = computed(() => {
     return fromCachedDataSig(this.notizen);
@@ -83,11 +45,6 @@ export class NotizStore extends signalStore(
   notizViewSig = computed(() => {
     return fromCachedDataSig(this.notiz);
   });
-
-  setJurist() {
-    // randomly set userIsJurist to true or false
-    patchState(this, { userIsJurist: Math.random() < 0.5 });
-  }
 
   loadNotizen$ = rxMethod<{ gesuchId: string }>(
     pipe(

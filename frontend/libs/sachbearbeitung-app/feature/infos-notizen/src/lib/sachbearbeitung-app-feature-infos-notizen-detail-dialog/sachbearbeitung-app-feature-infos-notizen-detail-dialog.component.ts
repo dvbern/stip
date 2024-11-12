@@ -17,12 +17,9 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatCell } from '@angular/material/table';
-import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   GesuchNotiz,
@@ -31,14 +28,7 @@ import {
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
-  SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import {
-  SharedUiRdIsPendingPipe,
-  SharedUiRdIsPendingWithoutCachePipe,
-} from '@dv/shared/ui/remote-data-pipe';
-import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 type SBNotiz = {
@@ -99,15 +89,10 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     antwort: [<string | null>null],
   });
 
-  // notizIdSig = input.required<string>({ alias: 'notizId' });
   languageSig = this.store.selectSignal(selectLanguage);
   public isJurNotizFn = isJurNotiz;
 
-  notizStore = inject(NotizStore);
-
   constructor() {
-    // this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-
     if (isJurNotiz(this.dialogData)) {
       this.form.patchValue({
         betreff: this.dialogData.notiz?.betreff,
