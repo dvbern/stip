@@ -12,12 +12,20 @@
     </mat-form-field>
   </div>
   <div class="row">
-    <mat-selection-list class="col-12 col-md-8 col-xl-6" [formControl]="countryList" [disableRipple]="true">
-      @for (l of laenderStore.euEftaLaenderListViewSig(); track l.land) {
-        <mat-list-option [value]="l.land" [class.d-none]="hiddenCountriesSig()[l.land]">{{
-          'shared.country.' + l.land | translate
-        }}</mat-list-option>
+    <div class="col-12 col-md-8 col-xl-6 position-relative">
+      @if (laenderStore.euEftaLaender() | rdIsPending) {
+        <dv-shared-ui-loading class="position-absolute mt-5 left-0 w-100"></dv-shared-ui-loading>
       }
-    </mat-selection-list>
+      <mat-selection-list class="w-100" [formControl]="countryList" [disableRipple]="true">
+        @for (l of laenderStore.euEftaLaenderListViewSig(); track l.land) {
+          <mat-list-option
+            [value]="l.land"
+            [class.d-none]="hiddenCountriesSig()[l.land]"
+            [disabled]="laenderStore.euEftaLaender() | rdIsPending"
+            >{{ 'shared.country.' + l.land | translate }}</mat-list-option
+          >
+        }
+      </mat-selection-list>
+    </div>
   </div>
 </div>

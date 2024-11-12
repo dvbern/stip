@@ -44,11 +44,15 @@ public class StammdatenResourceImpl implements StammdatenResource {
     }
 
     @Override
+    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public Response getLaenderEuEfta() {
         return Response.ok(landService.getAllLandEuEfta()).build();
     }
 
     @Override
+    @AllowAll
+    @RolesAllowed(STAMMDATEN_READ)
     public Response setLaenderEuEfta(List<LandEuEftaDto> landEuEftaDto) {
         return Response.ok(landService.setLaenderEuEfta(landEuEftaDto)).build();
     }
