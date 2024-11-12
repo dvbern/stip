@@ -168,7 +168,7 @@ class GesuchFillFormularTest {
     void addPersonInAusbildung() {
         final var pia = PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec();
         currentFormular.setPersonInAusbildung(pia);
-        final var returnedGesuch = patchAndValidate();
+        final var returnedGesuch = patchGesuch();
 
         assertThat(
             returnedGesuch.getGesuchTrancheToWorkWith()
