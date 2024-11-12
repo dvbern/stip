@@ -32,6 +32,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchNotizDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   GesuchNotizDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
+  GesuchNotizDtoSpec.JSON_PROPERTY_USER_MUTIERT,
+  GesuchNotizDtoSpec.JSON_PROPERTY_TIMESTAMP_MUTIERT,
   GesuchNotizDtoSpec.JSON_PROPERTY_NOTIZ_TYP,
   GesuchNotizDtoSpec.JSON_PROPERTY_ANTWORT,
   GesuchNotizDtoSpec.JSON_PROPERTY_ID,
@@ -46,6 +48,12 @@ public class GesuchNotizDtoSpec {
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private LocalDate timestampErstellt;
+
+  public static final String JSON_PROPERTY_USER_MUTIERT = "userMutiert";
+  private String userMutiert;
+
+  public static final String JSON_PROPERTY_TIMESTAMP_MUTIERT = "timestampMutiert";
+  private LocalDate timestampMutiert;
 
   public static final String JSON_PROPERTY_NOTIZ_TYP = "notizTyp";
   private GesuchNotizTypDtoSpec notizTyp;
@@ -114,6 +122,58 @@ public class GesuchNotizDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTimestampErstellt(LocalDate timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
+  }
+
+
+  public GesuchNotizDtoSpec userMutiert(String userMutiert) {
+    
+    this.userMutiert = userMutiert;
+    return this;
+  }
+
+   /**
+   * Get userMutiert
+   * @return userMutiert
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getUserMutiert() {
+    return userMutiert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUserMutiert(String userMutiert) {
+    this.userMutiert = userMutiert;
+  }
+
+
+  public GesuchNotizDtoSpec timestampMutiert(LocalDate timestampMutiert) {
+    
+    this.timestampMutiert = timestampMutiert;
+    return this;
+  }
+
+   /**
+   * Get timestampMutiert
+   * @return timestampMutiert
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getTimestampMutiert() {
+    return timestampMutiert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTimestampMutiert(LocalDate timestampMutiert) {
+    this.timestampMutiert = timestampMutiert;
   }
 
 
@@ -257,6 +317,8 @@ public class GesuchNotizDtoSpec {
     GesuchNotizDtoSpec gesuchNotiz = (GesuchNotizDtoSpec) o;
     return Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
         Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
+        Objects.equals(this.userMutiert, gesuchNotiz.userMutiert) &&
+        Objects.equals(this.timestampMutiert, gesuchNotiz.timestampMutiert) &&
         Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
         Objects.equals(this.antwort, gesuchNotiz.antwort) &&
         Objects.equals(this.id, gesuchNotiz.id) &&
@@ -266,7 +328,7 @@ public class GesuchNotizDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, notizTyp, antwort, id, betreff, text);
+    return Objects.hash(userErstellt, timestampErstellt, userMutiert, timestampMutiert, notizTyp, antwort, id, betreff, text);
   }
 
   @Override
@@ -275,6 +337,8 @@ public class GesuchNotizDtoSpec {
     sb.append("class GesuchNotizDtoSpec {\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
+    sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");

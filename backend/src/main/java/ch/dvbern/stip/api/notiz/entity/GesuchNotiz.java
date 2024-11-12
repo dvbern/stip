@@ -71,4 +71,8 @@ public class GesuchNotiz extends AbstractMandantEntity {
     @Column(name = "notiz_typ", nullable = false)
     @Enumerated(EnumType.STRING)
     private NotizTyp notizTyp;
+
+    @Column(name = "antwort")
+    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    private String antwort;
 }

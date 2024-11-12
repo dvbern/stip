@@ -110,6 +110,7 @@ class GesuchNotizResourceImplTest {
             .extract()
             .body()
             .as(GesuchNotizDtoSpec[].class);
+        assertEquals(1, notizen.length);
         final var notiz = Arrays.stream(notizen).toList().get(0);
 
         final var notizById = gesuchNotizApiSpec.getNotiz()
@@ -245,6 +246,7 @@ class GesuchNotizResourceImplTest {
             .extract()
             .body()
             .as(GesuchNotizDto[].class);
+        assertEquals(1, notizen.length);
         juristischeAbklaerungNotizDto = Arrays.stream(notizen).toList().get(0);
         assertNotNull(juristischeAbklaerungNotizDto.getNotizTyp());
     }
@@ -295,6 +297,8 @@ class GesuchNotizResourceImplTest {
         juristischeAbklaerungNotizDto = Arrays.stream(notizen).toList().get(notizen.length - 1);
         assertNotNull(juristischeAbklaerungNotizDto.getNotizTyp());
         assertNotNull(juristischeAbklaerungNotizDto.getAntwort());
+        assertNotNull(juristischeAbklaerungNotizDto.getUserMutiert());
+        assertNotNull(juristischeAbklaerungNotizDto.getTimestampMutiert());
     }
     /**
      * Note: the possibility to delete a juristische notiz

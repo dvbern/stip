@@ -20,7 +20,6 @@ package ch.dvbern.stip.arch;
 import java.util.Arrays;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.notiz.entity.JuristischeAbklaerungNotiz;
 import ch.dvbern.stip.api.sozialdienstadmin.entity.SozialdienstAdmin;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
@@ -89,7 +88,6 @@ class JpaTest {
         var rule = classes().that()
             .areAssignableTo(AbstractMandantEntity.class)
             .and()
-            .areNotAssignableTo(JuristischeAbklaerungNotiz.class)
             .areNotAssignableTo(SozialdienstAdmin.class)
             .and()
             .areAnnotatedWith(Entity.class)

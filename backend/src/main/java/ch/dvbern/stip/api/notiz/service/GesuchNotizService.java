@@ -17,17 +17,13 @@
 
 package ch.dvbern.stip.api.notiz.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
-import ch.dvbern.stip.api.notiz.entity.JuristischeAbklaerungNotiz;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
-import ch.dvbern.stip.generated.dto.GesuchNotizTypDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -39,19 +35,11 @@ import lombok.RequiredArgsConstructor;
 public class GesuchNotizService {
     private final GesuchNotizRepository gesuchNotizRepository;
     private final GesuchNotizMapper gesuchNotizMapper;
-    private final JuristischeNotizMapper juristischeNotizMapper;
     private final GesuchRepository gesuchRepository;
 
     @Transactional
     public List<GesuchNotizDto> getAllByGesuchId(final UUID gesuchId) {
-        var gesuchNotizen =
-            gesuchNotizRepository.findAllByGesuchId(gesuchId).stream().map(gesuchNotizMapper::toDto).toList();
-        var juristischeNotizen =
-            gesuchNotizRepository.findAllByGesuchId(gesuchId).stream().map(juristischeNotizMapper::toDto).toList();
-        List<GesuchNotizDto> notizen = new ArrayList<>();
-        notizen.addAll(gesuchNotizen);
-        notizen.addAll(juristischeNotizen);
-        return notizen;
+        return gesuchNotizRepository.findAllByGesuchId(gesuchId).stream().map(gesuchNotizMapper::toDto).toList();
     }
 
     @Transactional
@@ -74,20 +62,11 @@ public class GesuchNotizService {
     @Transactional
     public GesuchNotizDto create(final GesuchNotizCreateDto createDto) {
         final var gesuch = gesuchRepository.requireById(createDto.getGesuchId());
-        if (createDto.getNotizTyp().equals(GesuchNotizTypDto.JURISTISCHE_NOTIZ)) {
-            final var juristischeNotiz = juristischeNotizMapper.toEntity(createDto);
-            juristischeNotiz.setGesuch(gesuch);
-            gesuchNotizRepository.persistAndFlush(juristischeNotiz);
+        final var notiz = gesuchNotizMapper.toEntity(createDto);
+        notiz.setGesuch(gesuch);
+        gesuchNotizRepository.persistAndFlush(notiz);
+        return gesuchNotizMapper.toDto(notiz);
 
-            final var notiz = (GesuchNotiz) juristischeNotiz;
-            return gesuchNotizMapper.toDto(notiz);
-
-        } else {
-            final var notiz = gesuchNotizMapper.toEntity(createDto);
-            notiz.setGesuch(gesuch);
-            gesuchNotizRepository.persistAndFlush(notiz);
-            return gesuchNotizMapper.toDto(notiz);
-        }
     }
 
     @Transactional
@@ -102,8 +81,8 @@ public class GesuchNotizService {
         final JuristischeAbklaerungNotizAntwortDto dto,
         final UUID notizId
     ) {
-        final var juristischeNotiz = (JuristischeAbklaerungNotiz) gesuchNotizRepository.requireById(notizId);
-        final var entity = juristischeNotizMapper.partialUpdate(dto, juristischeNotiz);
-        return juristischeNotizMapper.toDto(entity);
+        final var juristischeNotiz = gesuchNotizRepository.requireById(notizId);
+        final var entity = gesuchNotizMapper.partialUpdate(dto, juristischeNotiz);
+        return gesuchNotizMapper.toDto(entity);
     }
 }

@@ -4388,6 +4388,10 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+        userMutiert:
+          type: string
+        timestampMutiert:
+          $ref: '#/components/schemas/LocalDate'
         notizTyp:
           $ref: '#/components/schemas/GesuchNotizTyp'
         antwort:
