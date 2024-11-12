@@ -36,6 +36,7 @@
   "sachbearbeitung-app.admin.option.ausbildungsstaette": "Ausbildungsstätte",
   "sachbearbeitung-app.admin.option.buchstabenZuteilung": "Buchstaben-Zuteilung",
   "sachbearbeitung-app.admin.option.gesuchsperioden": "Gesuchsperioden",
+  "sachbearbeitung-app.admin.option.euEftaLaender": "EU/EFTA Länder",
   "sachbearbeitung-app.admin.option.benutzerverwaltung": "Benutzerverwaltung",
   "sachbearbeitung-app.admin.option.sozialdienst": "Sozialdienste",
 
@@ -61,6 +62,9 @@
   "sachbearbeitung-app.admin.gesuchsperiode.route.overview": "Gesuchsperioden und Gesuchsjahre Übersicht",
   "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Gesuchsperiode erstellen",
   "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Gesuchsperiode Detail Ansicht",
+
+  "sachbearbeitung-app.admin.euEftaLaender.description": "Mit der folgenden Auswahl-Liste können Sie die EU/EFTA Länder verwalten.",
+  "sachbearbeitung-app.admin.euEftaLaender.route.overview": "EU/EFTA Länder Verwaltung",
 
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.title": "Ausbildungsjahr publizieren",
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.description": "Änderungen sind nach der publizierung nicht mehr möglich.",
