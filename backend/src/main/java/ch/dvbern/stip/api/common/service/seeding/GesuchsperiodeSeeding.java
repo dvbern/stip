@@ -30,8 +30,6 @@ import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
-
 @Singleton
 @RequiredArgsConstructor
 @Slf4j
@@ -60,14 +58,22 @@ public class GesuchsperiodeSeeding extends Seeder {
                 "Automne",
                 newJahr,
                 LocalDate.of(currentYear, 7, 1),
-                LocalDate.of(currentYear + 1, 6, 30)
+                LocalDate.of(currentYear + 1, 6, 30),
+                LocalDate.of(currentYear, 7, 15),
+                LocalDate.of(currentYear + 1, 3, 31),
+                LocalDate.of(currentYear, 12, 31),
+                LocalDate.of(currentYear + 1, 3, 31)
             ),
             getPeriodeForSeeding(
                 "Frühling",
                 "Printemps",
                 newJahr,
                 LocalDate.of(currentYear, 1, 1),
-                LocalDate.of(currentYear, 12, 31)
+                LocalDate.of(currentYear, 12, 31),
+                LocalDate.of(currentYear, 1, 15),
+                LocalDate.of(currentYear, 9, 30),
+                LocalDate.of(currentYear, 6, 30),
+                LocalDate.of(currentYear, 9, 30)
             )
         );
 
@@ -96,7 +102,11 @@ public class GesuchsperiodeSeeding extends Seeder {
         final String prefixFr,
         final Gesuchsjahr jahr,
         final LocalDate from,
-        final LocalDate to
+        final LocalDate to,
+        final LocalDate aufschaltterminStart,
+        final LocalDate aufschaltterminStopp,
+        final LocalDate einreichefristNormal,
+        final LocalDate einreichefristReduziert
     ) {
         String jahrAsString = String.valueOf(jahr.getTechnischesJahr());
 
@@ -107,10 +117,10 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setGesuchsjahr(jahr)
             .setGesuchsperiodeStart(from)
             .setGesuchsperiodeStopp(to)
-            .setAufschaltterminStart(from)
-            .setAufschaltterminStopp(to)
-            .setEinreichefristNormal(to.minusMonths(7).with(lastDayOfMonth()))
-            .setEinreichefristReduziert(to.minusMonths(4).with(lastDayOfMonth()))
+            .setAufschaltterminStart(aufschaltterminStart)
+            .setAufschaltterminStopp(aufschaltterminStopp)
+            .setEinreichefristNormal(einreichefristNormal)
+            .setEinreichefristReduziert(einreichefristReduziert)
             .setAusbKostenSekII(2000)
             .setAusbKostenTertiaer(3000)
             .setFreibetragVermoegen(0)
@@ -122,14 +132,14 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setIntegrationszulage(2400)
             .setLimiteEkFreibetragIntegrationszulage(13200)
             .setStipLimiteMinimalstipendium(500)
-            .setPerson1(11724)
-            .setPersonen2(17940)
-            .setPersonen3(21816)
-            .setPersonen4(25080)
-            .setPersonen5(28368)
-            .setPersonen6(31656)
-            .setPersonen7(34944)
-            .setProWeiterePerson(3288)
+            .setPerson1(12072)
+            .setPersonen2(18468)
+            .setPersonen3(22452)
+            .setPersonen4(25836)
+            .setPersonen5(29220)
+            .setPersonen6(31668)
+            .setPersonen7(34116)
+            .setProWeiterePerson(2488)
             .setKinder0018(1400)
             .setJugendlicheErwachsene1925(4600)
             .setErwachsene2699(5400)
@@ -144,13 +154,13 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setWohnkostenPersoenlich4pers(19932)
             .setWohnkostenPersoenlich5pluspers(25260)
             .setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT)
-            .setPreisProMahlzeit(7)
-            .setMaxSaeule3a(7000)
+            .setPreisProMahlzeit(10)
+            .setMaxSaeule3a(7056)
             .setAnzahlWochenLehre(47)
             .setAnzahlWochenSchule(38)
             .setVermoegensanteilInProzent(15)
             .setLimiteAlterAntragsstellerHalbierungElternbeitrag(25)
-            .setReduzierungDesGrundbedarfs(2754)
+            .setReduzierungDesGrundbedarfs(2838)
             .setZweiterAuszahlungsterminMonat(6)
             .setZweiterAuszahlungsterminTag(1);
     }
