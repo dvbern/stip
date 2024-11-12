@@ -56,7 +56,7 @@ public class LandEuEftaSeeding extends Seeder {
         try {
             dtos = objectMapper.readValue(json, new TypeReference<List<LandEuEftaDto>>() {});
         } catch (JsonProcessingException e) {
-            LOG.error(String.format("Failed to deserialize eueftalaender json"), e);
+            LOG.error("Failed to deserialize eueftalaender json", e);
             return;
         }
         landService.setLaenderEuEfta(dtos);
@@ -71,7 +71,7 @@ public class LandEuEftaSeeding extends Seeder {
         var jsonString = "";
         final var classLoader = getClass().getClassLoader();
 
-        try (final var is = classLoader.getResourceAsStream(String.format("/seeding/landeuefta/eueftalaender.json"))) {
+        try (final var is = classLoader.getResourceAsStream("/seeding/landeuefta/eueftalaender.json")) {
             if (is != null) {
                 final var reader = new BufferedReader(new InputStreamReader(is));
                 jsonString = reader.lines().collect(Collectors.joining());
@@ -79,7 +79,7 @@ public class LandEuEftaSeeding extends Seeder {
                 LOG.warn("Tried to load eueftalaender.json but cannot find it");
             }
         } catch (IOException e) {
-            LOG.error(String.format("Failed to load eueftalaender eueftalaender.json"), e);
+            LOG.error("Failed to load eueftalaender eueftalaender.json", e);
         }
         return jsonString;
     }

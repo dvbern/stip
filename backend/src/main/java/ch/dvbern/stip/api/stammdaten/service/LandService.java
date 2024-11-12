@@ -48,7 +48,7 @@ public class LandService {
     public Collection<LandEuEftaDto> getAllLandEuEfta() {
         var lands = Stream.of(Land.values()).map(landEuEftaMapper::toDto).collect(Collectors.toSet());
 
-        var landsEuEfta = landEuEftaRepository.findAll().stream().map(LandEuEfta::getLand).collect(Collectors.toList());
+        var landsEuEfta = landEuEftaRepository.findAll().stream().map(LandEuEfta::getLand).toList();
 
         for (var land : lands) {
             if (landsEuEfta.contains(land.getLand())) {
