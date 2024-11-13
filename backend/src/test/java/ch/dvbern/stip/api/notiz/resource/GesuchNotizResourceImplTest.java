@@ -70,6 +70,7 @@ class GesuchNotizResourceImplTest {
     private GesuchDtoSpec gesuch;
     private GesuchNotizDto juristischeAbklaerungNotizDto;
     private GesuchNotizDto abklaerungNotizDto;
+    private GesuchNotizDto gesuchNotizDto;
 
     @Test
     @TestAsGesuchsteller
@@ -83,17 +84,20 @@ class GesuchNotizResourceImplTest {
     @TestAsSachbearbeiter
     @Order(2)
     void notizErstellen() {
-        var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
-        gesuchCreateDto.setGesuchId(gesuch.getId());
-        gesuchCreateDto.setText("test");
-        gesuchCreateDto.setBetreff("test");
-        gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
-        gesuchNotizApiSpec.createNotiz()
-            .body(gesuchCreateDto)
+        var gesuchNotizCreateDto = new GesuchNotizCreateDtoSpec();
+        gesuchNotizCreateDto.setGesuchId(gesuch.getId());
+        gesuchNotizCreateDto.setText("test");
+        gesuchNotizCreateDto.setBetreff("test");
+        gesuchNotizCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
+        gesuchNotizDto = gesuchNotizApiSpec.createNotiz()
+            .body(gesuchNotizCreateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchNotizDto.class);
     }
 
     // get all notizen as SB
@@ -114,7 +118,7 @@ class GesuchNotizResourceImplTest {
         final var notiz = Arrays.stream(notizen).toList().get(0);
         assertEquals(GesuchNotizTypDtoSpec.GESUCH_NOTIZ, notiz.getNotizTyp());
 
-        final var notizById = gesuchNotizApiSpec.getNotiz()
+        gesuchNotizApiSpec.getNotiz()
             .notizIdPath(notiz.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -175,7 +179,7 @@ class GesuchNotizResourceImplTest {
         gesuchCreateDto.setText("test");
         gesuchCreateDto.setBetreff("test");
         gesuchCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
-        final var notiz = gesuchNotizApiSpec.createNotiz()
+        gesuchNotizApiSpec.createNotiz()
             .body(gesuchCreateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -287,7 +291,7 @@ class GesuchNotizResourceImplTest {
     @Test
     @TestAsJurist
     @Order(11)
-    void updateJuristischeNotiz() {
+    void answerJuristischeNotiz() {
         var antwort = new JuristischeAbklaerungNotizAntwortDtoSpec();
         antwort.setAntwort("Test antwort");
 
@@ -332,8 +336,45 @@ class GesuchNotizResourceImplTest {
         assertNotNull(juristischeAbklaerungNotizDto.getUserMutiert());
         assertNotNull(juristischeAbklaerungNotizDto.getTimestampMutiert());
     }
+
     /**
      * Note: the possibility to delete a juristische notiz
      * is not forseen yet or not part of KSTIP-1130
      */
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(13)
+    void anotherNotizErstellen() {
+        var gesuchNotizCreateDto = new GesuchNotizCreateDtoSpec();
+        gesuchNotizCreateDto.setGesuchId(gesuch.getId());
+        gesuchNotizCreateDto.setText("test");
+        gesuchNotizCreateDto.setBetreff("test");
+        gesuchNotizCreateDto.setNotizTyp(GesuchNotizTypDtoSpec.GESUCH_NOTIZ);
+        gesuchNotizDto = gesuchNotizApiSpec.createNotiz()
+            .body(gesuchNotizCreateDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchNotizDto.class);
+    }
+
+    @Test
+    @TestAsJurist
+    @Order(14)
+    void answerJuristischeNotizShouldfail() {
+        var antwort = new JuristischeAbklaerungNotizAntwortDtoSpec();
+        antwort.setAntwort("Test antwort");
+
+        gesuchNotizApiSpec.answerJuristischeAbklaerungNotiz()
+            .notizIdPath(gesuchNotizDto.getId())
+            .body(antwort)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+    }
 }
