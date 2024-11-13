@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.math.BigDecimal;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -29,10 +28,6 @@ public class FamiliensituationUpdateDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund vaterUnbekanntVerstorben;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund;
   private @Valid Boolean vaterWiederverheiratet;
-  private @Valid ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung sorgerecht;
-  private @Valid ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung obhut;
-  private @Valid BigDecimal obhutMutter;
-  private @Valid BigDecimal obhutVater;
   private @Valid ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente;
 
   /**
@@ -200,80 +195,6 @@ public class FamiliensituationUpdateDto  implements Serializable {
 
   /**
    **/
-  public FamiliensituationUpdateDto sorgerecht(ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung sorgerecht) {
-    this.sorgerecht = sorgerecht;
-    return this;
-  }
-
-  
-  @JsonProperty("sorgerecht")
-  public ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung getSorgerecht() {
-    return sorgerecht;
-  }
-
-  @JsonProperty("sorgerecht")
-  public void setSorgerecht(ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung sorgerecht) {
-    this.sorgerecht = sorgerecht;
-  }
-
-  /**
-   **/
-  public FamiliensituationUpdateDto obhut(ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung obhut) {
-    this.obhut = obhut;
-    return this;
-  }
-
-  
-  @JsonProperty("obhut")
-  public ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung getObhut() {
-    return obhut;
-  }
-
-  @JsonProperty("obhut")
-  public void setObhut(ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung obhut) {
-    this.obhut = obhut;
-  }
-
-  /**
-   * Required nur wenn obhut &#x3D; GEMEINSAM
-   **/
-  public FamiliensituationUpdateDto obhutMutter(BigDecimal obhutMutter) {
-    this.obhutMutter = obhutMutter;
-    return this;
-  }
-
-  
-  @JsonProperty("obhutMutter")
-  public BigDecimal getObhutMutter() {
-    return obhutMutter;
-  }
-
-  @JsonProperty("obhutMutter")
-  public void setObhutMutter(BigDecimal obhutMutter) {
-    this.obhutMutter = obhutMutter;
-  }
-
-  /**
-   * Required nur wenn obhut &#x3D; GEMEINSAM
-   **/
-  public FamiliensituationUpdateDto obhutVater(BigDecimal obhutVater) {
-    this.obhutVater = obhutVater;
-    return this;
-  }
-
-  
-  @JsonProperty("obhutVater")
-  public BigDecimal getObhutVater() {
-    return obhutVater;
-  }
-
-  @JsonProperty("obhutVater")
-  public void setObhutVater(BigDecimal obhutVater) {
-    this.obhutVater = obhutVater;
-  }
-
-  /**
-   **/
   public FamiliensituationUpdateDto werZahltAlimente(ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente) {
     this.werZahltAlimente = werZahltAlimente;
     return this;
@@ -309,16 +230,12 @@ public class FamiliensituationUpdateDto  implements Serializable {
         Objects.equals(this.vaterUnbekanntVerstorben, familiensituationUpdate.vaterUnbekanntVerstorben) &&
         Objects.equals(this.vaterUnbekanntGrund, familiensituationUpdate.vaterUnbekanntGrund) &&
         Objects.equals(this.vaterWiederverheiratet, familiensituationUpdate.vaterWiederverheiratet) &&
-        Objects.equals(this.sorgerecht, familiensituationUpdate.sorgerecht) &&
-        Objects.equals(this.obhut, familiensituationUpdate.obhut) &&
-        Objects.equals(this.obhutMutter, familiensituationUpdate.obhutMutter) &&
-        Objects.equals(this.obhutVater, familiensituationUpdate.obhutVater) &&
         Objects.equals(this.werZahltAlimente, familiensituationUpdate.werZahltAlimente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(elternVerheiratetZusammen, elternteilUnbekanntVerstorben, gerichtlicheAlimentenregelung, mutterUnbekanntVerstorben, mutterUnbekanntGrund, mutterWiederverheiratet, vaterUnbekanntVerstorben, vaterUnbekanntGrund, vaterWiederverheiratet, sorgerecht, obhut, obhutMutter, obhutVater, werZahltAlimente);
+    return Objects.hash(elternVerheiratetZusammen, elternteilUnbekanntVerstorben, gerichtlicheAlimentenregelung, mutterUnbekanntVerstorben, mutterUnbekanntGrund, mutterWiederverheiratet, vaterUnbekanntVerstorben, vaterUnbekanntGrund, vaterWiederverheiratet, werZahltAlimente);
   }
 
   @Override
@@ -335,10 +252,6 @@ public class FamiliensituationUpdateDto  implements Serializable {
     sb.append("    vaterUnbekanntVerstorben: ").append(toIndentedString(vaterUnbekanntVerstorben)).append("\n");
     sb.append("    vaterUnbekanntGrund: ").append(toIndentedString(vaterUnbekanntGrund)).append("\n");
     sb.append("    vaterWiederverheiratet: ").append(toIndentedString(vaterWiederverheiratet)).append("\n");
-    sb.append("    sorgerecht: ").append(toIndentedString(sorgerecht)).append("\n");
-    sb.append("    obhut: ").append(toIndentedString(obhut)).append("\n");
-    sb.append("    obhutMutter: ").append(toIndentedString(obhutMutter)).append("\n");
-    sb.append("    obhutVater: ").append(toIndentedString(obhutVater)).append("\n");
     sb.append("    werZahltAlimente: ").append(toIndentedString(werZahltAlimente)).append("\n");
     sb.append("}");
     return sb.toString();

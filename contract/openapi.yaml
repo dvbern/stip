@@ -2714,16 +2714,6 @@ components:
           $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
         vaterWiederverheiratet:
           type: boolean
-        sorgerecht:
-          $ref: '#/components/schemas/Elternschaftsteilung'
-        obhut:
-          $ref: '#/components/schemas/Elternschaftsteilung'
-        obhutMutter:
-          description: Required nur wenn obhut = GEMEINSAM
-          type: number
-        obhutVater:
-          description: Required nur wenn obhut = GEMEINSAM
-          type: number
         werZahltAlimente:
           $ref: '#/components/schemas/Elternschaftsteilung'
           description: Required nur wenn gerichtlicheAlimentenregelung = true
