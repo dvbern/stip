@@ -1,7 +1,6 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
-import { SharedEventGesuchFormEducation } from '@dv/shared/event/gesuch-form-education';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
@@ -12,7 +11,7 @@ import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-le
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
-  GsDashboard,
+  FallDashboardItem,
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SteuerdatenTyp,
@@ -32,7 +31,7 @@ export interface State {
   gesuchFormular: SharedModelGesuchFormular | null;
   isEditingTranche: boolean | null;
   gesuchs: SharedModelGesuch[];
-  gsDashboard: GsDashboard[];
+  gsDashboard: FallDashboardItem[];
   cache: {
     gesuch: SharedModelGesuch | null;
     gesuchId: string | null;
@@ -66,6 +65,8 @@ export const sharedDataAccessGesuchsFeature = createFeature({
   reducer: createReducer(
     initialState,
 
+    on(SharedDataAccessGesuchEvents.reset, (): State => initialState),
+
     on(
       SharedDataAccessGesuchEvents.init,
       (state): State => ({
@@ -89,7 +90,6 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung,
       SharedDataAccessGesuchEvents.setGesuchVersendet,
       SharedEventGesuchFormPerson.init,
-      SharedEventGesuchFormEducation.init,
       SharedEventGesuchFormFamiliensituation.init,
       SharedEventGesuchFormEltern.init,
       SharedEventGesuchFormElternSteuerdaten.init,
@@ -112,7 +112,6 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       SharedDataAccessGesuchEvents.loadAll,
       SharedDataAccessGesuchEvents.loadAllDebounced,
       SharedEventGesuchFormPerson.saveTriggered,
-      SharedEventGesuchFormEducation.saveTriggered,
       SharedEventGesuchFormFamiliensituation.saveTriggered,
       SharedEventGesuchFormEltern.saveTriggered,
       SharedEventGesuchFormEltern.saveSubformTriggered,

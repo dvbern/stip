@@ -30,9 +30,13 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
@@ -53,15 +57,16 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.service.GesuchTrancheMapper;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -91,6 +96,8 @@ public class TestcaseSeeding extends Seeder {
     private final GesuchRepository gesuchRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final DokumentRepository dokumentRepository;
+    private final AusbildungRepository ausbildungRepository;
+    private final AusbildungMapper ausbildungMapper;
 
     @Override
     public int getPriority() {
@@ -126,9 +133,9 @@ public class TestcaseSeeding extends Seeder {
             }
 
             // Find and map to already seeded values
-            final var ausbildung = dto.getGesuchTrancheToWorkWith().getGesuchFormular().getAusbildung();
-            ausbildung.getAusbildungsgang()
-                .setId(getOrCreateAusbildungsgaenge(possibleAusbildungsgaenge, ausbildung.getAusbildungsgang()));
+            final var ausbildungDto = dto.getGesuchTrancheToWorkWith().getGesuchFormular().getAusbildung();
+            ausbildungDto.getAusbildungsgang()
+                .setId(getOrCreateAusbildungsgaenge(possibleAusbildungsgaenge, ausbildungDto.getAusbildungsgang()));
 
             // Map to entity and correct the mapping
             final var tranche = gesuchTrancheMapper.toEntity(dto.getGesuchTrancheToWorkWith());
@@ -149,18 +156,22 @@ public class TestcaseSeeding extends Seeder {
 
             // Create Gesuchsteller, Fall and Gesuch
             final var fall = createFall(String.format("BE.F.T%04d", index), createGesuchsteller(testcase));
+            final var ausbildung = createAusbildung(ausbildungDto);
+            ausbildung.setId(null);
             final var gesuch = createGesuch(
                 gesuchperiodeToAttach,
                 String.format("BE.%s.G.T%04d", year, index),
                 tranche
             );
-
-            gesuch.setFall(fall);
-            fall.setGesuch(Set.of(gesuch));
+            fall.setAusbildungs(Set.of(ausbildung));
+            ausbildung.setGesuchs(List.of(gesuch));
+            ausbildung.setFall(fall);
+            gesuch.setAusbildung(ausbildung);
             tranche.setGesuch(gesuch);
+            tranche.getGesuchFormular().setTranche(tranche);
 
-            // Persist to database
             fallRepository.persist(fall);
+            ausbildungRepository.persist(ausbildung);
             gesuchRepository.persist(gesuch);
 
             uploadDocuments(tranche, json);
@@ -297,7 +308,6 @@ public class TestcaseSeeding extends Seeder {
 
         nullId.accept(formular.getPersonInAusbildung());
         formular.getPersonInAusbildung().getAdresse().setId(null);
-        nullId.accept(formular.getAusbildung());
         nullId.accept(formular.getFamiliensituation());
         nullId.accept(formular.getPartner());
 
@@ -348,6 +358,14 @@ public class TestcaseSeeding extends Seeder {
         return new Fall()
             .setFallNummer(fallNummer)
             .setGesuchsteller(gesuchsteller);
+    }
+
+    Ausbildung createAusbildung(final AusbildungDto ausbildungDto) {
+        var ausbildung = ausbildungMapper.toEntity(ausbildungDto);
+        if (ausbildung.getStatus() == null) {
+            ausbildung.setStatus(AusbildungsStatus.AKTIV);
+        }
+        return ausbildung;
     }
 
     Gesuch createGesuch(final Gesuchsperiode gesuchsperiode, final String gesuchNummer, final GesuchTranche tranche) {

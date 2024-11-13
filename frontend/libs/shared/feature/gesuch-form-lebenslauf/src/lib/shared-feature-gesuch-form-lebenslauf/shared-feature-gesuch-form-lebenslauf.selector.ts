@@ -1,17 +1,14 @@
 import { createSelector } from '@ngrx/store';
 
-import { selectSharedDataAccessAusbildungsstaettesView } from '@dv/shared/data-access/ausbildungsstaette';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 
 export const selectSharedFeatureGesuchFormLebenslaufVew = createSelector(
   selectSharedDataAccessGesuchsView,
-  selectSharedDataAccessAusbildungsstaettesView,
-  (gesuchsView, ausbildungsstaettesView) => ({
-    loading: gesuchsView.loading || ausbildungsstaettesView.loading,
+  (gesuchsView) => ({
+    loading: gesuchsView.loading,
     gesuch: gesuchsView.gesuch,
     gesuchFormular: gesuchsView.gesuchFormular,
     ausbildung: gesuchsView.gesuchFormular?.ausbildung,
-    ausbildungsstaettes: ausbildungsstaettesView.ausbildungsstaettes,
     lebenslaufItems: (gesuchsView.gesuchFormular?.lebenslaufItems ?? []).filter(
       (each) => each?.id,
     ),

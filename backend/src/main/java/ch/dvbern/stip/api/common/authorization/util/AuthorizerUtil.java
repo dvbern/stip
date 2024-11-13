@@ -26,6 +26,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class AuthorizerUtil {
     public boolean isGesuchstellerOfGesuch(final Benutzer currentBenutzer, final Gesuch gesuch) {
-        return Objects.equals(gesuch.getFall().getGesuchsteller().getId(), currentBenutzer.getId());
+        return Objects.equals(
+            gesuch.getAusbildung().getFall().getGesuchsteller().getId(),
+            currentBenutzer.getId()
+        );
     }
 }

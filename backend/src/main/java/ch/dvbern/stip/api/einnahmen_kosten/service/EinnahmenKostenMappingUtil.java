@@ -19,8 +19,8 @@ package ch.dvbern.stip.api.einnahmen_kosten.service;
 
 import java.util.Objects;
 
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.util.GesuchFormularCalculationUtil;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

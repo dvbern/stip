@@ -10,7 +10,7 @@ import {
 } from 'rxjs';
 
 import { Gesuchstatus } from '@dv/shared/model/gesuch';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/model/type-util';
 
 /**
  * Returns the latest gesuch id from the view

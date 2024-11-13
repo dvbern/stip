@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuch.entity;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

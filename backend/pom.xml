@@ -646,6 +646,9 @@
                   <goal>generate</goal>
                 </goals>
                 <configuration>
+                  <openapiNormalizer>
+                    REFACTOR_ALLOF_WITH_PROPERTIES_ONLY=true
+                  </openapiNormalizer>
                   <inputSpec>${contract.path}</inputSpec>
                   <generatorName>jaxrs-spec</generatorName>
                   <library>quarkus</library>
@@ -659,33 +662,34 @@
                   <apiNameSuffix>Resource</apiNameSuffix>
                   <generateSupportingFiles>false</generateSupportingFiles>
                   <schemaMappings>FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
-                    Gesuchstatus=ch.dvbern.stip.api.gesuch.type.Gesuchstatus,
-                    Anrede=ch.dvbern.stip.api.common.type.Anrede,
-                    Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
-                    Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
-                    Zivilstand=ch.dvbern.stip.api.personinausbildung.type.Zivilstand,
-                    ElternAbwesenheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund,
-                    ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
-                    Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung,
-                    ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
-                    Land=ch.dvbern.stip.api.stammdaten.type.Land,
-                    DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
-                    Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
-                    Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
-                    Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
-                    Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
-                    WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
-                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt,
-                    Bildungsstufe=ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe,
-                    SteuerdatenTyp=ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp,
-                    GetGesucheSBQueryType=ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType,
-                    NotificationType=ch.dvbern.stip.api.notification.type.NotificationType,
-                    Dokumentstatus=ch.dvbern.stip.api.dokument.type.Dokumentstatus,
-                    GesuchTrancheStatus=ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus,
-                    GesuchTrancheTyp=ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp,
-                    SbDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbDashboardColumn,
-                    SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder
-                  </schemaMappings>
+					  Gesuchstatus=ch.dvbern.stip.api.gesuch.type.Gesuchstatus,
+					  Anrede=ch.dvbern.stip.api.common.type.Anrede,
+					  Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
+					  Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
+					  Zivilstand=ch.dvbern.stip.api.personinausbildung.type.Zivilstand,
+					  ElternAbwesenheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund,
+					  ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
+					  Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung,
+					  ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
+					  Land=ch.dvbern.stip.api.stammdaten.type.Land,
+					  DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
+					  Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
+					  Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
+					  Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
+					  Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
+					  WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
+					  LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt,
+					  Bildungsstufe=ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe,
+					  SteuerdatenTyp=ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp,
+					  GetGesucheSBQueryType=ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType,
+					  NotificationType=ch.dvbern.stip.api.notification.type.NotificationType,
+					  Dokumentstatus=ch.dvbern.stip.api.dokument.type.Dokumentstatus,
+					  GesuchTrancheStatus=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus,
+					  GesuchTrancheTyp=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp,
+					  SbDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbDashboardColumn,
+					  SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
+					  AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus
+				  </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
                   <configOptions>

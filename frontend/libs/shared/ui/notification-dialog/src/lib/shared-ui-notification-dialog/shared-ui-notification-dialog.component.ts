@@ -8,6 +8,7 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 
 import { Notification } from '@dv/shared/model/gesuch';
+import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 
 type NotificationDialogData = {
   notification: Notification;
@@ -16,7 +17,7 @@ type NotificationDialogData = {
 @Component({
   selector: 'dv-shared-ui-notification-dialog',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, SharedUiTooltipDateComponent],
   templateUrl: './shared-ui-notification-dialog.component.html',
   styleUrl: './shared-ui-notification-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

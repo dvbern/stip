@@ -3,7 +3,7 @@
 <ng-template dvHeaderSuffix>
   <h2 class="fw-bold">
     @if (tranche) {
-      {{ 'shared.form.title.suffix.' + tranche.typ | translate: { position: currentTrancheIndexSig() + 1 } }}
+      {{ 'shared.form.title.suffix.' + tranche.typ | translate: { position: currentTrancheNumberSig() } }}
       {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
       {{ tranche.gueltigBis | date: 'MM.yyyy' }}
     }

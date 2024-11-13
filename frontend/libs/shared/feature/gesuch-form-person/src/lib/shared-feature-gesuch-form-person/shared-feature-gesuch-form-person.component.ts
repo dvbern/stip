@@ -48,6 +48,7 @@ import {
   Zivilstand,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
+import { isDefined } from '@dv/shared/model/type-util';
 import { AppSettings } from '@dv/shared/pattern/app-settings';
 import {
   SharedPatternDocumentUploadComponent,
@@ -88,7 +89,6 @@ import {
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
 

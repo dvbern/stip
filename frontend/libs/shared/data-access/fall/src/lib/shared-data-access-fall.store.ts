@@ -5,6 +5,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { merge, partition, pipe, shareReplay, switchMap, tap } from 'rxjs';
 
 import { Fall, FallService } from '@dv/shared/model/gesuch';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   CachedRemoteData,
   cachedPending,
@@ -13,7 +14,6 @@ import {
   initial,
 } from '@dv/shared/util/remote-data';
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 type FallState = {
   cachedCurrentFall: CachedRemoteData<Fall>;

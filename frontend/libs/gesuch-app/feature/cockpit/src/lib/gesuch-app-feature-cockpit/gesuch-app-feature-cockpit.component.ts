@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
   computed,
   effect,
   inject,
@@ -13,17 +12,28 @@ import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { GesuchAppEventCockpit } from '@dv/gesuch-app/event/cockpit';
+import { DashboardStore } from '@dv/gesuch-app/data-access/dashboard';
+import { GesuchAppDialogCreateAusbildungComponent } from '@dv/gesuch-app/dialog/create-ausbildung';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import { GesuchAppUiAenderungsEntryComponent } from '@dv/gesuch-app/ui/aenderungs-entry';
+import {
+  GesuchAppUiDashboardAusbildungComponent,
+  GesuchAppUiDashboardCompactAusbildungComponent,
+} from '@dv/gesuch-app/ui/dashboard';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { FallStore } from '@dv/shared/data-access/fall';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
+import {
+  SharedDataAccessGesuchEvents,
+  selectLastUpdate,
+} from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
-import { sharedDataAccessGesuchsperiodeEvents } from '@dv/shared/data-access/gesuchsperiode';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
-import { NotificationStore } from '@dv/shared/data-access/notification';
-import { GesuchTrancheSlim, Gesuchsperiode } from '@dv/shared/model/gesuch';
+import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
+import {
+  AenderungMelden,
+  GesuchTrancheSlim,
+  Gesuchsperiode,
+} from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
@@ -50,6 +60,8 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiVersionTextComponent,
     SharedUiNotificationsComponent,
     SharedUiRdIsPendingPipe,
+    GesuchAppUiDashboardAusbildungComponent,
+    GesuchAppUiDashboardCompactAusbildungComponent,
     GesuchAppUiAenderungsEntryComponent,
   ],
   providers: [FallStore],
@@ -57,51 +69,57 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
   styleUrls: ['./gesuch-app-feature-cockpit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GesuchAppFeatureCockpitComponent implements OnInit {
+export class GesuchAppFeatureCockpitComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
+  dashboardStore = inject(DashboardStore);
   fallStore = inject(FallStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
-  notificationStore = inject(NotificationStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
-  // Do not initialize signals in computed directly, just usage
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
   @Input({ required: true }) tranche?: GesuchTrancheSlim;
 
+  private gotNewFallSig = computed(() => {
+    return this.fallStore.currentFallViewSig()?.id;
+  });
+  private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
+
   constructor() {
+    this.fallStore.loadCurrentFall$();
+
     effect(
       () => {
-        const gesuchId = this.cockpitViewSig().gesuchsperiodes?.[0]?.gesuch?.id;
-        if (gesuchId) {
-          this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+        const fallId = this.gotNewFallSig();
+
+        if (fallId) {
+          this.dashboardStore.loadDashboard$();
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
+    effect(
+      () => {
+        if (this.gesuchUpdatedSig()) {
+          this.dashboardStore.loadDashboard$();
         }
       },
       { allowSignalWrites: true },
     );
   }
 
-  ngOnInit() {
-    this.fallStore.loadCurrentFall$();
-    this.notificationStore.loadNotifications$();
-    this.store.dispatch(GesuchAppEventCockpit.init());
-    this.store.dispatch(SharedDataAccessGesuchEvents.loadGsDashboard());
-    this.store.dispatch(sharedDataAccessGesuchsperiodeEvents.init());
-  }
-
-  handleCreate(periode: Gesuchsperiode, fallId: string) {
-    this.store.dispatch(
-      SharedDataAccessGesuchEvents.createGesuch({
-        create: {
-          fallId,
-          gesuchsperiodeId: periode.id,
-        },
-      }),
-    );
+  createAusbildung(fallId: string) {
+    GesuchAppDialogCreateAusbildungComponent.open(
+      this.dialog,
+      fallId,
+    ).subscribe(() => {
+      this.dashboardStore.loadDashboard$();
+    });
   }
 
   trackByPerioden(
@@ -121,26 +139,49 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
     );
   }
 
-  aenderungMelden(gesuchId: string, minDate: string, maxDate: string) {
+  aenderungMelden(melden: AenderungMelden) {
+    const {
+      gesuch: { id, gesuchsperiode },
+    } = melden;
     SharedUiAenderungMeldenDialogComponent.open(this.dialog, {
-      minDate: new Date(minDate),
-      maxDate: new Date(maxDate),
+      minDate: new Date(gesuchsperiode.gesuchsperiodeStart),
+      maxDate: new Date(gesuchsperiode.gesuchsperiodeStopp),
     })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
           this.gesuchAenderungStore.createGesuchAenderung$({
-            gesuchId,
+            gesuchId: id,
             createAenderungsantragRequest: result,
           });
         }
       });
   }
 
+  deleteAusbildung(ausbildung: SharedModelGsAusbildungView) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'gesuch-app.dashboard.ausbildung.delete.dialog.title',
+      message: 'gesuch-app.dashboard.ausbildung.delete.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.delete',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.store.dispatch(
+            SharedDataAccessGesuchEvents.deleteGesuch({
+              gesuchId: ausbildung.gesuchs[0].id,
+            }),
+          );
+          this.store.dispatch(SharedDataAccessGesuchEvents.reset());
+        }
+      });
+  }
+
   deleteGesuch(gesuchId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'gesuch-app.gesuch.delete.dialog.title',
-      message: 'gesuch-app.gesuch.delete.dialog.message',
+      title: 'gesuch-app.dashboard.gesuch.delete.dialog.title',
+      message: 'gesuch-app.dashboard.gesuch.delete.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.delete',
     })
@@ -156,8 +197,8 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
 
   deleteAenderung(aenderungId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'gesuch-app.aenderungs-entry.delete.dialog.title',
-      message: 'gesuch-app.aenderungs-entry.delete.dialog.message',
+      title: 'gesuch-app.dashboard.aenderung.delete.dialog.title',
+      message: 'gesuch-app.dashboard.aenderung.delete.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.delete',
     })
@@ -166,6 +207,9 @@ export class GesuchAppFeatureCockpitComponent implements OnInit {
         if (result) {
           this.gesuchAenderungStore.deleteGesuchAenderung$({
             aenderungId,
+            onSuccess: () => {
+              this.dashboardStore.loadDashboard$();
+            },
           });
         }
       });

@@ -8,8 +8,8 @@ import {
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { isDefined } from '@dv/shared/model/type-util';
 import { canViewVerfuegung } from '@dv/shared/util/permission-state';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 export const allowVerfuegung: CanActivateFn = () => {
   const store = inject(Store);

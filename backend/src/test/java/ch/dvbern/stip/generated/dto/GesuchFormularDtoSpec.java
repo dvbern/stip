@@ -107,9 +107,9 @@ public class GesuchFormularDtoSpec {
    * Get ausbildung
    * @return ausbildung
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungDtoSpec getAusbildung() {
     return ausbildung;
@@ -117,7 +117,7 @@ public class GesuchFormularDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAusbildung(AusbildungDtoSpec ausbildung) {
     this.ausbildung = ausbildung;
   }

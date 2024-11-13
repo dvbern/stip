@@ -14,7 +14,6 @@ import { EinnahmenKostenUpdate } from './einnahmenKostenUpdate';
 import { KindUpdate } from './kindUpdate';
 import { SteuerdatenUpdate } from './steuerdatenUpdate';
 import { FamiliensituationUpdate } from './familiensituationUpdate';
-import { AusbildungUpdate } from './ausbildungUpdate';
 import { AuszahlungUpdate } from './auszahlungUpdate';
 import { PartnerUpdate } from './partnerUpdate';
 import { GeschwisterUpdate } from './geschwisterUpdate';
@@ -22,7 +21,6 @@ import { LebenslaufItemUpdate } from './lebenslaufItemUpdate';
 import { PersonInAusbildungUpdate } from './personInAusbildungUpdate';
 
 export interface GesuchFormularUpdate { 
-    ausbildung?: AusbildungUpdate;
     personInAusbildung?: PersonInAusbildungUpdate;
     familiensituation?: FamiliensituationUpdate;
     partner?: PartnerUpdate;

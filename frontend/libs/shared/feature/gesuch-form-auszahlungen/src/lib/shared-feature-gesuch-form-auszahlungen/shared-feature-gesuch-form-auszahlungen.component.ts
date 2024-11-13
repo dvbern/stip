@@ -35,6 +35,7 @@ import {
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { AUSZAHLUNG } from '@dv/shared/model/gesuch-form';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -58,7 +59,6 @@ import {
 } from '@dv/shared/util/form';
 import { ibanValidator } from '@dv/shared/util/validator-iban';
 import { calculateElternSituationGesuch } from '@dv/shared/util-fn/gesuch-util';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-gesuch-form-auszahlungen.selector';
 

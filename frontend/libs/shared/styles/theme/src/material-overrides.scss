@@ -235,7 +235,8 @@ $dv-all-colors: (
   display: block;
   margin: 0 -16px;
 }
-.mat-accordion.large .mat-expansion-panel-header {
+.mat-accordion.large .mat-expansion-panel-header,
+.mat-expansion-panel.large .mat-expansion-panel-header {
   height: auto;
 }
 

@@ -1,22 +1,28 @@
+import { provideHttpClient } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
 import { default as userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import {
   Ausbildung,
+  GesuchFormular,
   GesuchFormularUpdate,
   PersonInAusbildung,
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import {
+  provideSharedPatternJestTestAusbildungstaetten,
+  provideSharedPatternJestTestSetup,
+} from '@dv/shared/pattern/jest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { mockElementScrollIntoView } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormEinnahmenkostenComponent } from './shared-feature-gesuch-form-einnahmenkosten.component';
 
-async function setup(gesuchFormular: GesuchFormularUpdate) {
+async function setup(gesuchFormular: GesuchFormular) {
   mockElementScrollIntoView();
   return await render(SharedFeatureGesuchFormEinnahmenkostenComponent, {
     imports: [
@@ -24,9 +30,9 @@ async function setup(gesuchFormular: GesuchFormularUpdate) {
       NoopAnimationsModule,
     ],
     providers: [
+      provideHttpClient(),
       provideMockStore({
         initialState: {
-          ausbildungsstaettes: { ausbildungsstaettes: [] },
           gesuchs: {
             gesuch: {
               gesuchTrancheToWorkWith: { id: '1', typ: 'tranche' },
@@ -49,6 +55,8 @@ async function setup(gesuchFormular: GesuchFormularUpdate) {
       }),
       provideMaterialDefaultOptions(),
       provideSharedPatternJestTestSetup(),
+      provideSharedPatternJestTestAusbildungstaetten(),
+      AusbildungsstaetteStore,
     ],
   });
 }
@@ -74,20 +82,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
       const { queryByTestId, detectChanges } = await setup({
         personInAusbildung: undefined,
         ausbildung: createEmptyAusbildung(),
-        familiensituation: { elternVerheiratetZusammen: true },
-      });
-
-      detectChanges();
-
-      expect(
-        queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
-      ).toBeInTheDocument();
-    });
-
-    it('should display warning if ausbildung is undefined', async () => {
-      const { queryByTestId, detectChanges } = await setup({
-        personInAusbildung: createEmptyPersonInAusbildung(),
-        ausbildung: undefined,
         familiensituation: { elternVerheiratetZusammen: true },
       });
 
@@ -340,6 +334,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
 
 function createEmptyAusbildung(): Ausbildung {
   return {
+    fallId: 'asdf',
     fachrichtung: '',
     ausbildungBegin: '',
     ausbildungEnd: '',

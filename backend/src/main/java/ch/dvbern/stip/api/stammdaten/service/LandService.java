@@ -17,21 +17,53 @@
 
 package ch.dvbern.stip.api.stammdaten.service;
 
-import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.stammdaten.entity.LandEuEfta;
+import ch.dvbern.stip.api.stammdaten.repo.LandEuEftaRepository;
 import ch.dvbern.stip.api.stammdaten.type.Land;
+import ch.dvbern.stip.api.stammdaten.type.LandEuEftaMapper;
+import ch.dvbern.stip.generated.dto.LandEuEftaDto;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
 @RequiredArgsConstructor
 public class LandService {
+    private final LandEuEftaRepository landEuEftaRepository;
+    private final LandEuEftaMapper landEuEftaMapper;
 
-    public Collection<String> getAllLaender() {
+    public Set<String> getAllLaender() {
         return Stream.of(Land.values())
             .map(Land::name)
             .collect(Collectors.toSet());
+    }
+
+    @Transactional
+    public List<LandEuEftaDto> getAllLandEuEfta() {
+        var lands = Stream.of(Land.values()).map(landEuEftaMapper::toDto).collect(Collectors.toSet());
+        var landsEuEfta = landEuEftaRepository.findAll().stream().map(LandEuEfta::getLand).toList();
+
+        for (var land : lands) {
+            if (landsEuEfta.contains(land.getLand())) {
+                land.setIsEuEfta(true);
+            }
+        }
+
+        return lands.stream().sorted(Comparator.comparing(LandEuEftaDto::getLand)).toList();
+    }
+
+    @Transactional
+    public List<LandEuEftaDto> setLaenderEuEfta(List<LandEuEftaDto> landEuEftaDto) {
+        for (LandEuEftaDto dto : landEuEftaDto) {
+            landEuEftaRepository.setLandEuEfta(dto.getLand(), dto.getIsEuEfta());
+        }
+
+        return getAllLandEuEfta();
     }
 }

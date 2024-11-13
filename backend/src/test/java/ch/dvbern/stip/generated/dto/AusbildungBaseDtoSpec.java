@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -28,6 +29,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * AusbildungBaseDtoSpec
  */
 @JsonPropertyOrder({
+  AusbildungBaseDtoSpec.JSON_PROPERTY_ID,
+  AusbildungBaseDtoSpec.JSON_PROPERTY_FALL_ID,
   AusbildungBaseDtoSpec.JSON_PROPERTY_FACHRICHTUNG,
   AusbildungBaseDtoSpec.JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN,
   AusbildungBaseDtoSpec.JSON_PROPERTY_AUSBILDUNG_BEGIN,
@@ -41,6 +44,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("AusbildungBase")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class AusbildungBaseDtoSpec {
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
+  public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  private UUID fallId;
+
   public static final String JSON_PROPERTY_FACHRICHTUNG = "fachrichtung";
   private String fachrichtung;
 
@@ -70,6 +79,58 @@ public class AusbildungBaseDtoSpec {
 
   public AusbildungBaseDtoSpec() {
   }
+
+  public AusbildungBaseDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+
+  public AusbildungBaseDtoSpec fallId(UUID fallId) {
+    
+    this.fallId = fallId;
+    return this;
+  }
+
+   /**
+   * Get fallId
+   * @return fallId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getFallId() {
+    return fallId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
+  }
+
 
   public AusbildungBaseDtoSpec fachrichtung(String fachrichtung) {
     
@@ -313,7 +374,9 @@ public class AusbildungBaseDtoSpec {
       return false;
     }
     AusbildungBaseDtoSpec ausbildungBase = (AusbildungBaseDtoSpec) o;
-    return Objects.equals(this.fachrichtung, ausbildungBase.fachrichtung) &&
+    return Objects.equals(this.id, ausbildungBase.id) &&
+        Objects.equals(this.fallId, ausbildungBase.fallId) &&
+        Objects.equals(this.fachrichtung, ausbildungBase.fachrichtung) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildungBase.ausbildungNichtGefunden) &&
         Objects.equals(this.ausbildungBegin, ausbildungBase.ausbildungBegin) &&
         Objects.equals(this.ausbildungEnd, ausbildungBase.ausbildungEnd) &&
@@ -326,13 +389,15 @@ public class AusbildungBaseDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungBaseDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");

@@ -1,6 +1,5 @@
 import { createSelector } from '@ngrx/store';
 
-import { selectSharedDataAccessAusbildungsstaettesView } from '@dv/shared/data-access/ausbildungsstaette';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { Wohnsitz } from '@dv/shared/model/gesuch';
 import {
@@ -10,8 +9,7 @@ import {
 
 export const selectSharedFeatureGesuchFormEinnahmenkostenView = createSelector(
   selectSharedDataAccessGesuchsView,
-  selectSharedDataAccessAusbildungsstaettesView,
-  (gesuchsView, ausbildungsstaettesView) => {
+  (gesuchsView) => {
     const { current, previous } = selectChangeForView(
       gesuchsView,
       'einnahmenKosten',
@@ -24,7 +22,6 @@ export const selectSharedFeatureGesuchFormEinnahmenkostenView = createSelector(
       trancheId: gesuchsView.trancheId,
       formChanges: getChangesForForm(current, previous),
       allowTypes: gesuchsView.allowTypes,
-      ausbildungsstaettes: ausbildungsstaettesView.ausbildungsstaettes,
       gesuchFormular: gesuchsView.gesuchFormular,
       einnahmenKosten: gesuchsView.gesuchFormular?.einnahmenKosten,
       wohnsitzNotEigenerHaushalt:

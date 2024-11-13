@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
@@ -41,7 +40,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchFormularUpdateDtoSpec
  */
 @JsonPropertyOrder({
-  GesuchFormularUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNG,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_PERSON_IN_AUSBILDUNG,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_FAMILIENSITUATION,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_PARTNER,
@@ -56,9 +54,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("GesuchFormularUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchFormularUpdateDtoSpec {
-  public static final String JSON_PROPERTY_AUSBILDUNG = "ausbildung";
-  private AusbildungUpdateDtoSpec ausbildung;
-
   public static final String JSON_PROPERTY_PERSON_IN_AUSBILDUNG = "personInAusbildung";
   private PersonInAusbildungUpdateDtoSpec personInAusbildung;
 
@@ -91,32 +86,6 @@ public class GesuchFormularUpdateDtoSpec {
 
   public GesuchFormularUpdateDtoSpec() {
   }
-
-  public GesuchFormularUpdateDtoSpec ausbildung(AusbildungUpdateDtoSpec ausbildung) {
-    
-    this.ausbildung = ausbildung;
-    return this;
-  }
-
-   /**
-   * Get ausbildung
-   * @return ausbildung
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public AusbildungUpdateDtoSpec getAusbildung() {
-    return ausbildung;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildung(AusbildungUpdateDtoSpec ausbildung) {
-    this.ausbildung = ausbildung;
-  }
-
 
   public GesuchFormularUpdateDtoSpec personInAusbildung(PersonInAusbildungUpdateDtoSpec personInAusbildung) {
     
@@ -426,8 +395,7 @@ public class GesuchFormularUpdateDtoSpec {
       return false;
     }
     GesuchFormularUpdateDtoSpec gesuchFormularUpdate = (GesuchFormularUpdateDtoSpec) o;
-    return Objects.equals(this.ausbildung, gesuchFormularUpdate.ausbildung) &&
-        Objects.equals(this.personInAusbildung, gesuchFormularUpdate.personInAusbildung) &&
+    return Objects.equals(this.personInAusbildung, gesuchFormularUpdate.personInAusbildung) &&
         Objects.equals(this.familiensituation, gesuchFormularUpdate.familiensituation) &&
         Objects.equals(this.partner, gesuchFormularUpdate.partner) &&
         Objects.equals(this.auszahlung, gesuchFormularUpdate.auszahlung) &&
@@ -441,14 +409,13 @@ public class GesuchFormularUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuerdaten);
+    return Objects.hash(personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuerdaten);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchFormularUpdateDtoSpec {\n");
-    sb.append("    ausbildung: ").append(toIndentedString(ausbildung)).append("\n");
     sb.append("    personInAusbildung: ").append(toIndentedString(personInAusbildung)).append("\n");
     sb.append("    familiensituation: ").append(toIndentedString(familiensituation)).append("\n");
     sb.append("    partner: ").append(toIndentedString(partner)).append("\n");

@@ -30,19 +30,19 @@ import {
   SharedModelGesuchFormStep,
   TRANCHE,
 } from '@dv/shared/model/gesuch-form';
+import { type } from '@dv/shared/model/type-util';
 import {
   isGesuchReadonly,
   isTrancheReadonly,
 } from '@dv/shared/util/permission-state';
 import { capitalized, lowercased } from '@dv/shared/util-fn/string-helper';
-import { type } from '@dv/shared/util-fn/type-guards';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
 const baseSteps = [
   TRANCHE,
-  PERSON,
   AUSBILDUNG,
+  PERSON,
   LEBENSLAUF,
   FAMILIENSITUATION,
   ELTERN,

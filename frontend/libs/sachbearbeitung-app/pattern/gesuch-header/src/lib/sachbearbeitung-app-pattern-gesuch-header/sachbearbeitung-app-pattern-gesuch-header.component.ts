@@ -22,6 +22,7 @@ import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
@@ -35,7 +36,6 @@ import {
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
 import { canViewVerfuegung } from '@dv/shared/util/permission-state';
-import { assertUnreachable } from '@dv/shared/util-fn/type-guards';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',

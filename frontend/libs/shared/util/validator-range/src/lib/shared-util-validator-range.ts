@@ -5,7 +5,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { isDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/model/type-util';
 
 export function sharedUtilValidatorRange(
   min: number,

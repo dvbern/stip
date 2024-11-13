@@ -83,7 +83,10 @@ export const SharedModelError = z.intersection(
       ({ error: { validationErrors, validationWarnings, hasDocuments } }) =>
         createError('validationError', {
           message: validationErrors[0]?.message,
-          messageKey: 'shared.genericError.validation',
+          messageKey:
+            validationErrors[0]?.messageTemplate ??
+            'shared.genericError.validation',
+          messageKeys: validationErrors.map((e) => e.messageTemplate),
           validationErrors,
           validationWarnings,
           hasDocuments,
@@ -122,7 +125,7 @@ export type SharedModelError = z.infer<typeof SharedModelError>;
 
 const createError = <K extends SharedModelErrorTypes, T>(
   type: K,
-  data: T & { messageKey: string; message?: string },
+  data: T & { messageKey: string; messageKeys?: string[]; message?: string },
 ) => ({
   type,
   ...data,
