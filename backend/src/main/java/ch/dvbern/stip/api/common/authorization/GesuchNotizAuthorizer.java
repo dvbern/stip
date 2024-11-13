@@ -17,23 +17,23 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.Objects;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.notiz.entity.NotizTyp;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
+import java.util.UUID;
+
 @ApplicationScoped
 @RequiredArgsConstructor
 @Authorizer
 public class GesuchNotizAuthorizer extends BaseAuthorizer {
-    private final GesuchNotizRepository juristischeNotizRepository;
+    private final GesuchNotizRepository gesuchNotizRepository;
 
     public void canUpdate(UUID notizId) {
-        final var notiz = juristischeNotizRepository.requireById(notizId);
+        final var notiz = gesuchNotizRepository.requireById(notizId);
         if (notiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
             throw new UnauthorizedException();
         }
@@ -44,7 +44,7 @@ public class GesuchNotizAuthorizer extends BaseAuthorizer {
     }
 
     public void canSetAnswer(UUID notizId) {
-        final var notiz = juristischeNotizRepository.requireById(notizId);
+        final var notiz = gesuchNotizRepository.requireById(notizId);
         if (Objects.nonNull(notiz.getAntwort())) {
             throw new UnauthorizedException();
         }
