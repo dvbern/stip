@@ -177,7 +177,7 @@ class GesuchGetGesucheTest {
     @TestAsJurist
     @Order(11)
     void getAlleJurisitischeAbklaerungOneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_JUR_ABKLAERUNG_MEINE);
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_JURISTISCHE_ABKLAERUNG_MEINE);
         allAreNotInWrongStatus(
             found,
             GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
