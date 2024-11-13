@@ -1,3 +1,4 @@
+import { FallDashboardItem } from '@dv/shared/model/gesuch';
 import {
   E2eUser,
   TestContexts,
@@ -6,6 +7,7 @@ import {
   deleteGesuch,
 } from '@dv/shared/util-fn/e2e-util';
 
+import { AusbildungValues } from './po/ausbildung.po';
 import { CockpitPO } from './po/cockpit.po';
 
 /**
@@ -13,9 +15,12 @@ import { CockpitPO } from './po/cockpit.po';
  *
  * It also registers a beforeAll to initialize the API Contexts and afterAll hook to delete the created gesuch
  */
-export const initializeTest = (authType: E2eUser) => {
+export const initializeTest = (
+  authType: E2eUser,
+  ausbildung: AusbildungValues,
+) => {
   let contexts: TestContexts;
-  let gesuchId: string;
+  let gesuchId: string | undefined;
   const test = createTest(authType).extend<{ cockpit: CockpitPO }>({
     cockpit: async ({ page }, use) => {
       const cockpit = new CockpitPO(page);
@@ -27,8 +32,10 @@ export const initializeTest = (authType: E2eUser) => {
       await cockpit.goToDashBoard();
       const dashboardResponse = await dashboardPromise;
 
-      const dashboardBody = await dashboardResponse.json();
-      gesuchId = dashboardBody.length > 0 ? dashboardBody[0].id : undefined;
+      const dashboardBody: FallDashboardItem[] | undefined =
+        await dashboardResponse.json();
+      gesuchId =
+        dashboardBody?.[0]?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
       if (gesuchId) {
         const response = await deleteGesuch(contexts.api, gesuchId);
         if (response.status() >= 400) {
@@ -42,15 +49,21 @@ export const initializeTest = (authType: E2eUser) => {
       // extract gesuch new gesuch id
       const requestPromise = page.waitForResponse((response) => {
         return (
-          response.url().includes('/api/v1/gesuch/fall/') &&
+          response.url().includes('/api/v1/gesuch/benutzer/me/gs-dashboard') &&
           response.status() === 200 &&
           response.request().method() === 'GET'
         );
       });
-      await cockpit.getGesuchNew().click();
+
+      await cockpit.createNewStipendium(ausbildung);
+
       const response = await requestPromise;
-      const body = await response.json();
-      gesuchId = body[0].id;
+      const body: FallDashboardItem[] | undefined = await response.json();
+      gesuchId = body?.[0].ausbildungDashboardItems?.[0].gesuchs?.[0].id;
+      if (!gesuchId) {
+        throw new Error('Failed to create new gesuch');
+      }
+      cockpit.getGesuchEdit().click();
 
       await use(cockpit);
     },
@@ -67,7 +80,9 @@ export const initializeTest = (authType: E2eUser) => {
 
   test.afterAll(async () => {
     if (contexts) {
-      await deleteGesuch(contexts.api, gesuchId);
+      if (gesuchId) {
+        await deleteGesuch(contexts.api, gesuchId);
+      }
       await contexts.dispose();
     }
   });
