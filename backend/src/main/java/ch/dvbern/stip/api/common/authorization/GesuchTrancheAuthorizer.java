@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -73,6 +74,15 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             if (gesuchTranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
                 throw new UnauthorizedException();
             }
+        }
+    }
+
+    @Transactional
+    public void canEinreichen(final UUID gesuchTrancheId) {
+        canRead(gesuchTrancheId);
+        final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
+        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_GS) {
+            throw new UnauthorizedException();
         }
     }
 

@@ -51,7 +51,11 @@ public enum Gesuchstatus {
     );
 
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
-        Collections.unmodifiableSet(EnumSet.allOf(Gesuchstatus.class));
+        Collections.unmodifiableSet(
+            EnumSet.of(
+                IN_BEARBEITUNG_SB
+            )
+        );
 
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;

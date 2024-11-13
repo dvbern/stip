@@ -1278,7 +1278,7 @@ class GesuchServiceTest {
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
 
         // act
-        gesuchService.gesuchFehlendeDokumente(gesuch.getId());
+        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
 
         // assert
         Mockito.verify(notificationService).createMissingDocumentNotification(any());

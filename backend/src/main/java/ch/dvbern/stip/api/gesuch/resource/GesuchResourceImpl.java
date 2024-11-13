@@ -118,7 +118,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @AllowAll
     @Override
     public Response gesuchFehlendeDokumenteUebermitteln(UUID gesuchId) {
-        gesuchService.gesuchFehlendeDokumente(gesuchId);
+        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuchId);
         return Response.ok().build();
     }
 

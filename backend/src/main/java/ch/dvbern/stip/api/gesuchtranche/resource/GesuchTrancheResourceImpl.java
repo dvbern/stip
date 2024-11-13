@@ -119,7 +119,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response aenderungEinreichen(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        gesuchTrancheAuthorizer.canEinreichen(aenderungId);
         gesuchTrancheService.aenderungEinreichen(aenderungId);
         return Response.ok().build();
     }
@@ -154,5 +154,13 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         gesuchTrancheAuthorizer.canUpdate(aenderungId);
         final var tranche = gesuchTrancheService.aenderungManuellAnpassen(aenderungId);
         return Response.ok(tranche).build();
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        gesuchTrancheService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
+        return Response.ok().build();
     }
 }
