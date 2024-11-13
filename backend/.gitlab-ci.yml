@@ -1,4 +1,6 @@
 stages: [build, analyze, package]
+variables:
+  GIT_DEPTH: 0
 
 include:
   - component: 'gitlab.dvbern.ch/components/build/maven@1.5.0'

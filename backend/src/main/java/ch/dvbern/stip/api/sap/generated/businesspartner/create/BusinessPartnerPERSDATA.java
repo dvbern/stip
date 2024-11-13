@@ -2,6 +2,7 @@
 package ch.dvbern.stip.api.sap.generated.businesspartner.create;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;

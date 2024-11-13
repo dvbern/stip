@@ -19,6 +19,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Notification } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationDialogComponent } from '@dv/shared/ui/notification-dialog';
+import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 
 @Component({
@@ -30,6 +31,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     RouterLink,
     MatPaginatorModule,
     SharedUiIconChipComponent,
+    SharedUiTooltipDateComponent,
   ],
   providers: [
     { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },

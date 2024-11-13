@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="stip.kibon.ch" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" id="_29C4516C-614A-48F3-B851-A25E8853C853" name="Familienbudget" expressionLanguage="FEEL" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="stip.kibon.ch">
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/"
+				 xmlns="stip.kibon.ch"
+				 xmlns:kie="http://www.drools.org/kie/dmn/1.2"
+				 xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/"
+				 xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/"
+				 xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+				 id="_29C4516C-614A-48F3-B851-A25E8853C853"
+				 name="Familienbudget"
+				 expressionLanguage="FEEL"
+				 typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/"
+				 namespace="stip.kibon.ch">
   <dmn:description>Berechnet Familienbudget für einen Elternetil</dmn:description>
   <dmn:extensionElements/>
   <dmn:itemDefinition id="_B0C80C2B-05F7-404C-A74E-61B514AD5835" name="ElternteilV1" isCollection="false">

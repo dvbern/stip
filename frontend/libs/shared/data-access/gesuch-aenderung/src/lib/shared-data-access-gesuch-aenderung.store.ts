@@ -6,8 +6,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { map, pipe, switchMap, tap } from 'rxjs';
 
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,
@@ -161,14 +160,17 @@ export class GesuchAenderungStore extends signalStore(
     ),
   );
 
-  deleteGesuchAenderung$ = rxMethod<{ aenderungId: string }>(
+  deleteGesuchAenderung$ = rxMethod<{
+    aenderungId: string;
+    onSuccess?: () => void;
+  }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           cachedGesuchAenderung: cachedPending(state.cachedGesuchAenderung),
         }));
       }),
-      switchMap(({ aenderungId }) =>
+      switchMap(({ aenderungId, onSuccess }) =>
         this.gesuchTrancheService.deleteAenderung$({ aenderungId }).pipe(
           handleApiResponse(
             () => {
@@ -181,9 +183,7 @@ export class GesuchAenderungStore extends signalStore(
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey: 'shared.dialog.gesuch-aenderung.delete.success',
                 });
-                this.store.dispatch(
-                  SharedDataAccessGesuchEvents.loadGsDashboard(),
-                );
+                onSuccess?.();
               },
             },
           ),

@@ -2,12 +2,15 @@ import * as z from 'zod';
 
 import { SharedModelState } from '@dv/shared/model/state-colors';
 
-export const SACHBEARBEITER_APP_ROLES = [
-  'Sachbearbeiter',
+export const BENUTZER_VERWALTUNG_ROLES = [
   'Admin',
+  'Sachbearbeiter',
   'Jurist',
 ] as const;
-export type UsableRole = (typeof SACHBEARBEITER_APP_ROLES)[number];
+
+export const SOZIALDIENST_ADMIN_ROLE = 'Sozialdienst-Admin';
+
+export type BenutzerVerwaltungRole = (typeof BENUTZER_VERWALTUNG_ROLES)[number];
 
 export const SharedModelRoleList = z.array(
   z.object({ id: z.string(), name: z.string() }),
@@ -24,6 +27,20 @@ export const SharedModelBenutzerApi = z.object({
 });
 export type SharedModelBenutzerApi = z.infer<typeof SharedModelBenutzerApi>;
 
+export interface KeycloakUserCreate {
+  vorname: string;
+  name: string;
+  email: string;
+}
+
+export const byBenutzertVerwaltungRoles = (role: SharedModelRole) => {
+  return BENUTZER_VERWALTUNG_ROLES.some((r) => r === role.name);
+};
+
+export const bySozialdienstAdminRole = (role: SharedModelRole) => {
+  return role.name === SOZIALDIENST_ADMIN_ROLE;
+};
+
 export const SharedModelBenutzerList = z.array(SharedModelBenutzerApi);
 export type SharedModelBenutzerList = z.infer<typeof SharedModelBenutzerList>;
 
@@ -32,7 +49,7 @@ export type SharedModelBenutzerWithRoles = SharedModelBenutzerApi & {
 };
 
 export type SharedModelBenutzerRole = {
-  name: UsableRole;
+  name: BenutzerVerwaltungRole;
   color: SharedModelState;
 };
 

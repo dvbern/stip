@@ -43,6 +43,10 @@ paths:
         - Gesuch
       responses:
         '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UUID'
           description: New Gesuch is created
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -126,7 +130,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GsDashboard'
+                  $ref: '#/components/schemas/FallDashboardItem'
           description: Returns gesuche for dashboard filtered by gs
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -362,6 +366,86 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteNotiz
       summary: delete a Notiz of a Gesuch with the given Notiz-Id
+  /ausbildung:
+    post:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AusbildungUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ausbildung'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createAusbildung
+      summary: Returniert die erstellte Ausbildung
+  /ausbildung/{ausbildungId}:
+    parameters:
+      - name: ausbildungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ausbildung'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAusbildung
+      summary: Returniert die Ausbildung
+    patch:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AusbildungUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ausbildung'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateAusbildung
+      summary: Returniert die Ausbildung
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -885,6 +969,188 @@ paths:
                 $ref: '#/components/schemas/GesuchsperiodeWithDaten'
       operationId: publishGesuchsperiode
       summary: Publishes a Gesuchsperiode with the given id
+  /sozialdienst:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstCreate'
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns created Sozialdienst
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: createSozialdienst
+      summary: Create a new Sozialdienst
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstUpdate'
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns updated Sozialdienst
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienst
+      summary: Update a Sozialdienst
+    get:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sozialdienst'
+          description: Returns all Sozialdienste
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllSozialdienste
+      summary: Returns all Sozialdienste
+  /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin:
+    parameters:
+      - name: sozialdienstId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstAdminUpdate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstAdmin'
+          description: Updates data of a Sozialdienst admin
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienstAdmin
+  /sozialdienst/{sozialdienstId}/replaceSozialdienstAdmin:
+    parameters:
+      - name: sozialdienstId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstAdminCreate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstAdmin'
+          description: Replaces a Sozialdienst admin by a new one
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: replaceSozialdienstAdmin
+  /sozialdienst/{sozialdienstId}:
+    parameters:
+      - name: sozialdienstId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Deletes a Sozialdienst by id
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteSozialdienst
+      summary: Delete a Sozialdienst by Id
+      tags:
+        - Sozialdienst
+    get:
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns a Sozialdienst by id
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getSozialdienst
+      summary: Get a Sozialdienst by Id
+      tags:
+        - Sozialdienst
   /stammdaten/land:
     get:
       tags:
@@ -896,7 +1162,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/components/schemas/Land'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -906,6 +1172,55 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getLaender
       summary: Returns a List of LandCode
+  /stammdaten/land/euefta:
+    get:
+      tags:
+        - Stammdaten
+      responses:
+        '200':
+          description: Returns all countries and whether they're part of eu/efta or not
+          content:
+            application/json:
+              schema:
+                type: Array
+                items:
+                  $ref: '#/components/schemas/LandEuEfta'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getLaenderEuEfta
+    patch:
+      tags:
+        - Stammdaten
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                type: Array
+                items:
+                  $ref: '#/components/schemas/LandEuEfta'
+      responses:
+        '200':
+          description: 'EU/EFTA Länder wurden erflogreich gesetzt'
+          content:
+            application/json:
+              schema:
+                type: Array
+                items:
+                  $ref: '#/components/schemas/LandEuEfta'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: setLaenderEuEfta
   /ausbildungsstaette:
     get:
       tags:
@@ -1018,33 +1333,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteAusbildungsstaette
       summary: Delete Ausbildungsstaette
-  '/gesuch/fall/{fallId}':
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gesuch'
-          description: Return alle Gesuche die gehoeren zu dieser Fall
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesucheForFall
-      summary: Return alle Gesuche die gehören zu dieser Fall
-    parameters:
-      - name: fallId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
   '/gesuch/{gesuchId}':
     parameters:
       - name: gesuchId
@@ -2562,7 +2850,9 @@ components:
           $ref: '#/components/schemas/Kontoinhaber'
     Gesuch:
       required:
-        - fall
+        - fallId
+        - fallNummer
+        - ausbildungId
         - gesuchsperiode
         - gesuchStatus
         - gesuchNummer
@@ -2571,8 +2861,12 @@ components:
         - gesuchTrancheToWorkWith
       type: object
       properties:
-        fall:
-          $ref: '#/components/schemas/Fall'
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
+        ausbildungId:
+          $ref: '#/components/schemas/UUID'
         gesuchsperiode:
           $ref: '#/components/schemas/Gesuchsperiode'
         gesuchStatus:
@@ -2589,7 +2883,33 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
-    GsDashboard:
+    FallDashboardItem:
+      required:
+        - fall
+        - ausbildungDashboardItems
+        - notifications
+      type: object
+      properties:
+        fall:
+          $ref: '#/components/schemas/Fall'
+        ausbildungDashboardItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/AusbildungDashboardItem'
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+    AusbildungDashboardItem:
+      type: object
+      properties:
+        gesuchs:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDashboardItem'
+      allOf:
+        - $ref: '#/components/schemas/Ausbildung'
+    GesuchDashboardItem:
       required:
         - id
         - gesuchsperiode
@@ -2625,13 +2945,10 @@ components:
             $ref: '#/components/schemas/GesuchTranche'
     GesuchCreate:
       required:
-        - fallId
-        - gesuchsperiodeId
+        - ausbildungId
       type: object
       properties:
-        fallId:
-          $ref: '#/components/schemas/UUID'
-        gesuchsperiodeId:
+        ausbildungId:
           $ref: '#/components/schemas/UUID'
     GesuchUpdate:
       required:
@@ -2640,12 +2957,215 @@ components:
       properties:
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTrancheUpdate'
+    LandEuEfta:
+      title: Is the country part of eu/efta
+      type: object
+      required:
+        - land
+        - isEuEfta
+      properties:
+        land:
+          $ref: '#/components/schemas/Land'
+        isEuEfta:
+          type: boolean
     Land:
       enum:
-        - CH
-        - DE
-        - FR
-        - IT
+        - 'CH'
+        - 'AF'
+        - 'EG'
+        - 'AL'
+        - 'DZ'
+        - 'AD'
+        - 'AO'
+        - 'AG'
+        - 'GQ'
+        - 'AR'
+        - 'AM'
+        - 'AZ'
+        - 'ET'
+        - 'AU'
+        - 'BS'
+        - 'BH'
+        - 'BD'
+        - 'BB'
+        - 'BY'
+        - 'BE'
+        - 'BZ'
+        - 'BJ'
+        - 'BT'
+        - 'BO'
+        - 'BA'
+        - 'BR'
+        - 'BN'
+        - 'BG'
+        - 'BF'
+        - 'BI'
+        - 'CV'
+        - 'CL'
+        - 'CN'
+        - 'CK'
+        - 'CR'
+        - 'CI'
+        - 'DK'
+        - 'DE'
+        - 'DM'
+        - 'DO'
+        - 'DJ'
+        - 'EC'
+        - 'SV'
+        - 'ER'
+        - 'EE'
+        - 'SZ'
+        - 'FJ'
+        - 'FI'
+        - 'FR'
+        - 'GA'
+        - 'GM'
+        - 'GE'
+        - 'GH'
+        - 'GD'
+        - 'GR'
+        - 'GT'
+        - 'GN'
+        - 'GW'
+        - 'GF'
+        - 'HT'
+        - 'VA'
+        - 'HN'
+        - 'IN'
+        - 'ID'
+        - 'IQ'
+        - 'IR'
+        - 'IE'
+        - 'IS'
+        - 'IL'
+        - 'IT'
+        - 'JM'
+        - 'JP'
+        - 'YE'
+        - 'JO'
+        - 'KH'
+        - 'CM'
+        - 'CA'
+        - 'KZ'
+        - 'QA'
+        - 'KE'
+        - 'KG'
+        - 'KI'
+        - 'CO'
+        - 'KM'
+        - 'CG'
+        - 'CD'
+        - 'KR'
+        - 'KP'
+        - 'XK'
+        - 'HR'
+        - 'CU'
+        - 'KW'
+        - 'LA'
+        - 'LS'
+        - 'LV'
+        - 'LB'
+        - 'LR'
+        - 'LY'
+        - 'LI'
+        - 'LT'
+        - 'LU'
+        - 'MG'
+        - 'MW'
+        - 'MY'
+        - 'MV'
+        - 'ML'
+        - 'MT'
+        - 'MA'
+        - 'MH'
+        - 'MR'
+        - 'MU'
+        - 'MX'
+        - 'FM'
+        - 'MO'
+        - 'MC'
+        - 'MN'
+        - 'ME'
+        - 'MZ'
+        - 'MM'
+        - 'NA'
+        - 'NR'
+        - 'NP'
+        - 'NZ'
+        - 'NI'
+        - 'NL'
+        - 'NE'
+        - 'NG'
+        - 'NU'
+        - 'MK'
+        - 'NO'
+        - 'OM'
+        - 'AT'
+        - 'PK'
+        - 'PW'
+        - 'PA'
+        - 'PG'
+        - 'PY'
+        - 'PE'
+        - 'PH'
+        - 'PL'
+        - 'PT'
+        - 'RW'
+        - 'RO'
+        - 'RU'
+        - 'SB'
+        - 'ZM'
+        - 'WS'
+        - 'SM'
+        - 'ST'
+        - 'SA'
+        - 'SE'
+        - 'SN'
+        - 'RS'
+        - 'SC'
+        - 'SL'
+        - 'ZW'
+        - 'SG'
+        - 'SK'
+        - 'SI'
+        - 'SO'
+        - 'ES'
+        - 'LK'
+        - 'KN'
+        - 'LC'
+        - 'VC'
+        - 'ZA'
+        - 'SD'
+        - 'SS'
+        - 'SR'
+        - 'SY'
+        - 'TJ'
+        - 'TZ'
+        - 'TH'
+        - 'TL'
+        - 'TG'
+        - 'TO'
+        - 'TT'
+        - 'TD'
+        - 'CZ'
+        - 'TN'
+        - 'TR'
+        - 'TM'
+        - 'TV'
+        - 'UG'
+        - 'UA'
+        - 'HU'
+        - 'UY'
+        - 'UZ'
+        - 'VU'
+        - 'VE'
+        - 'AE'
+        - 'US'
+        - 'GB'
+        - 'VN'
+        - 'CF'
+        - 'CY'
       type: string
     Sprache:
       enum:
@@ -2837,7 +3357,8 @@ components:
         - ANDERE
       type: string
     GesuchFormular:
-      required: []
+      required:
+        - ausbildung
       type: object
       properties:
         ausbildung:
@@ -2961,8 +3482,8 @@ components:
       required: []
       type: object
       properties:
-        ausbildung:
-          $ref: '#/components/schemas/AusbildungUpdate'
+        # ausbildung:
+        #   $ref: '#/components/schemas/AusbildungUpdate'
         personInAusbildung:
           $ref: '#/components/schemas/PersonInAusbildungUpdate'
         familiensituation:
@@ -3154,12 +3675,17 @@ components:
         - $ref: '#/components/schemas/EinnahmenKostenUpdate'
     AusbildungBase:
       required:
+        - fallId
         - fachrichtung
         - ausbildungBegin
         - ausbildungEnd
         - pensum
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        fallId:
+          $ref: '#/components/schemas/UUID'
         fachrichtung:
           type: string
         ausbildungNichtGefunden:
@@ -3184,10 +3710,17 @@ components:
         isAusbildungAusland:
           type: boolean
     Ausbildung:
+      required:
+        - status
+        - editable
       type: object
       properties:
+        status:
+          $ref: '#/components/schemas/AusbildungsStatus'
         ausbildungsgang:
           $ref: '#/components/schemas/Ausbildungsgang'
+        editable:
+          type: boolean
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     AusbildungUpdate:
@@ -3522,6 +4055,11 @@ components:
           $ref: '#/components/schemas/Bildungskategorie'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
+    AusbildungsStatus:
+      enum:
+        - AKTIV
+        - ABGEBROCHEN
+        - ABGESCHLOSSEN
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS
@@ -3679,6 +4217,85 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/SteuerdatenUpdate'
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+    SozialdienstAdminCreate:
+      required:
+        - keycloakId
+        - vorname
+        - nachname
+        - email
+      properties:
+        keycloakId:
+          type: string
+        vorname:
+          type: string
+        nachname:
+          type: string
+        email:
+          type: string
+    SozialdienstAdmin:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstAdminCreate'
+    SozialdienstAdminUpdate:
+      required:
+        - vorname
+        - nachname
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+    SozialdienstCreate:
+      required:
+        - name
+        - iban
+        - adresse
+        - sozialdienstAdmin
+      properties:
+        name:
+          type: string
+        iban:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+        sozialdienstAdmin:
+          $ref: '#/components/schemas/SozialdienstAdminCreate'
+    SozialdienstUpdate:
+      required:
+        - id
+        - name
+        - iban
+        - adresse
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        iban:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+    Sozialdienst:
+      required:
+        - id
+        - name
+        - adresse
+        - iban
+        - sozialdienstAdmin
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
+        iban:
+          type: string
+        sozialdienstAdmin:
+          $ref: '#/components/schemas/SozialdienstAdmin'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -3792,12 +4409,12 @@ components:
           $ref: '#/components/schemas/LocalDate'
         gesuchTrancheId:
           description: 'ID der tranche für welche die Berechnung ausgeführt wurde.
-                        Mehrere resultate mit der gleichen ID sind die berechnungen für
-                        getrennte eltern mit Kindern die eine Obhutsteilung haben'
+            Mehrere resultate mit der gleichen ID sind die berechnungen für
+            getrennte eltern mit Kindern die eine Obhutsteilung haben'
           $ref: '#/components/schemas/UUID'
         berechnungsanteilKinder:
           description: 'Anteil dieser Berechnung am Berechnungstotal.
-                        Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
+            Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
           type: number
         berechnungsStammdaten:
           description: 'Stammdaten für die Stipendienberechnung'
@@ -4263,7 +4880,7 @@ components:
       required: true
       schema:
         type: integer
-    
+
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []

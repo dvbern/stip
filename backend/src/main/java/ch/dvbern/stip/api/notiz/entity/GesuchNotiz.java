@@ -54,7 +54,6 @@ public class GesuchNotiz extends AbstractMandantEntity {
 
     @Column(name = "betreff")
     @Size(max = DB_DEFAULT_MAX_LENGTH)
-
     private String betreff;
 
     @Column(name = "text")

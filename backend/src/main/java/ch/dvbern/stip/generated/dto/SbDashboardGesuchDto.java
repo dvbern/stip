@@ -24,7 +24,7 @@ public class SbDashboardGesuchDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID gesuchTrancheId;
   private @Valid String fallNummer;
-  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
+  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
   private @Valid String piaNachname;
   private @Valid String piaVorname;
   private @Valid LocalDate piaGeburtsdatum;
@@ -91,7 +91,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   /**
    **/
-  public SbDashboardGesuchDto typ(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+  public SbDashboardGesuchDto typ(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
     return this;
   }
@@ -99,12 +99,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   
   @JsonProperty("typ")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp getTyp() {
+  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
     return typ;
   }
 
   @JsonProperty("typ")
-  public void setTyp(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+  public void setTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
   }
 

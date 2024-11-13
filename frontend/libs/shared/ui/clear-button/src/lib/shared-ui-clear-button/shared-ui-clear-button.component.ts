@@ -10,8 +10,8 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 
+import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 type AllowedValues =
   | Date

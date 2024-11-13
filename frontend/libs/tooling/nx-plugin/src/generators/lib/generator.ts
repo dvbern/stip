@@ -21,6 +21,7 @@ import {
 import { LibTypeGeneratorMap, NormalizedSchema } from './generator.interface';
 import { LibGeneratorSchema } from './schema';
 import { dataAccessTypeFactory } from './types/data-access';
+import { dialogTypeFactory } from './types/dialog';
 import { eventTypeFactory } from './types/event';
 import { featureTypeFactory } from './types/feature';
 import { modelTypeFactory } from './types/model';
@@ -39,6 +40,7 @@ const LIB_TYPE_GENERATOR_MAP: LibTypeGeneratorMap = {
   util: utilTypeFactory,
   'util-data-access': utilDataAccessTypeFactory,
   'util-fn': utilFnTypeFactory,
+  dialog: dialogTypeFactory,
   model: modelTypeFactory,
 };
 

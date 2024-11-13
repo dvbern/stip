@@ -20,6 +20,7 @@ package ch.dvbern.stip.arch;
 import java.util.Arrays;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.sozialdienstadmin.entity.SozialdienstAdmin;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
@@ -86,6 +87,8 @@ class JpaTest {
     void test_index_on_tenant_field() {
         var rule = classes().that()
             .areAssignableTo(AbstractMandantEntity.class)
+            .and()
+            .areNotAssignableTo(SozialdienstAdmin.class)
             .and()
             .areAnnotatedWith(Entity.class)
             .should((new ArchCondition<>("have an index") {

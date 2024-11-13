@@ -36,6 +36,9 @@ public class ApiClient {
         return new ApiClient(config);
     }
 
+    public AusbildungApiSpec ausbildung() {
+        return AusbildungApiSpec.ausbildung(config.reqSpecSupplier);
+    }
     public AusbildungsgangApiSpec ausbildungsgang() {
         return AusbildungsgangApiSpec.ausbildungsgang(config.reqSpecSupplier);
     }
@@ -80,6 +83,9 @@ public class ApiClient {
     }
     public PlzApiSpec plz() {
         return PlzApiSpec.plz(config.reqSpecSupplier);
+    }
+    public SozialdienstApiSpec sozialdienst() {
+        return SozialdienstApiSpec.sozialdienst(config.reqSpecSupplier);
     }
     public StammdatenApiSpec stammdaten() {
         return StammdatenApiSpec.stammdaten(config.reqSpecSupplier);

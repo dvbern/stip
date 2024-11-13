@@ -23,15 +23,18 @@ import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
@@ -52,6 +55,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -64,31 +69,54 @@ import static org.hamcrest.Matchers.not;
 @Slf4j
 class GesuchGetGesucheTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
     @Inject
     ConfigService configService;
 
-    private GesuchDtoSpec gesuch;
+    private static GesuchDtoSpec gesuch;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
-    void gesuchErstellen() {
-        gesuch = TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
+    void getGsDashboardNoAusbildungTest() {
+        final var fall = TestUtil.getOrCreateFall(fallApiSpec);
+        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+
+        assertThat(fallDashboardItems.length, is(1));
+
+        final var fallDashboardItem = fallDashboardItems[0];
+        final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
+
+        assertThat(fallDashboardItem.getNotifications().isEmpty(), is(true));
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(2)
+    void gesuchErstellen() {
+        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(3)
     void fillGesuch() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(3)
+    @Order(4)
     void getMeineBearbeitbarenNoneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -96,7 +124,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(4)
+    @Order(5)
     void getAlleBearbeitbarenNoneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -104,7 +132,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(5)
+    @Order(6)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchIdPath(gesuch.getId())
@@ -116,7 +144,7 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void getMeineBearbeitbarenOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
@@ -124,18 +152,71 @@ class GesuchGetGesucheTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void getAlleBearbeitbarenOneFound() {
         final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
     @Test
+    @TestAsGesuchsteller
+    @Order(9)
+    void getGsDashboardTest() {
+        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+
+        assertThat(fallDashboardItems.length, is(1));
+
+        final var fallDashboardItem = fallDashboardItems[0];
+        final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
+
+        assertThat(fallDashboardItem.getNotifications().size(), greaterThanOrEqualTo(1));
+
+        assertThat(ausbildungDashboardItems.size(), greaterThanOrEqualTo(1));
+
+        final var ausbildungDashboardItem = ausbildungDashboardItems.get(0);
+        final var gesuchDashboardItems = ausbildungDashboardItem.getGesuchs();
+
+        assertThat(gesuchDashboardItems.size(), greaterThanOrEqualTo(1));
+
+        final var gesuchDashboardItem = gesuchDashboardItems.get(0);
+
+        assertThat(gesuchDashboardItem.getGesuchStatus(), is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
+    }
+
+    @Test
     @TestAsAdmin
-    @Order(8)
+    @Order(10)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(11)
+    void getGsDashboardTestNoAusbildung() {
+        final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+
+        assertThat(fallDashboardItems.length, is(1));
+
+        final var fallDashboardItem = fallDashboardItems[0];
+        final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
+
+        assertThat(ausbildungDashboardItems.size(), is(0));
     }
 
     private void allAreNotInWrongStatus(
