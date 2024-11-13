@@ -102,8 +102,7 @@ public class Eltern extends AbstractPerson {
 
     @NotNull
     @Column(name = "sozialhilfebeitraege", nullable = false)
-    @Min(0)
-    private Integer sozialhilfebeitraege;
+    private boolean sozialhilfebeitraege = true;
 
     @NotNull
     @Column(name = "ergaenzungsleistungen", nullable = false)
