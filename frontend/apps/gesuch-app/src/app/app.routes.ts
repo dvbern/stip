@@ -13,7 +13,7 @@ export const appRoutes: Route[] = [
   {
     path: 'gesuch-app-feature-cockpit',
     canActivate: [hasBenutzer],
-    title: 'gesuch-app.cockpit.title',
+    title: 'gesuch-app.dashboard.title',
     loadChildren: () =>
       import('@dv/gesuch-app/feature/cockpit').then(
         (m) => m.gesuchAppFeatureCockpitRoutes,

@@ -20,7 +20,7 @@
       >
         <span>{{ 'shared.nachrichten.type.' + notification.notificationType | translate }}</span>
         <span>{{ notification.userErstellt }}</span>
-        <span>{{ notification.timestampErstellt | date: 'dd.MM.yyyy' }}</span>
+        <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
       </button>
     }
   </div>

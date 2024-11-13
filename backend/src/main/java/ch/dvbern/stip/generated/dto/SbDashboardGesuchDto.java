@@ -24,12 +24,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID gesuchTrancheId;
   private @Valid String fallNummer;
-  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
+  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
   private @Valid String piaNachname;
   private @Valid String piaVorname;
   private @Valid LocalDate piaGeburtsdatum;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
-  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus trancheStatus;
+  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus;
   private @Valid String bearbeiter;
   private @Valid LocalDate letzteAktivitaet;
 
@@ -92,7 +92,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   /**
    **/
-  public SbDashboardGesuchDto typ(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+  public SbDashboardGesuchDto typ(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
     return this;
   }
@@ -100,12 +100,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   
   @JsonProperty("typ")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp getTyp() {
+  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
     return typ;
   }
 
   @JsonProperty("typ")
-  public void setTyp(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+  public void setTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
   }
 
@@ -187,7 +187,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   /**
    **/
-  public SbDashboardGesuchDto trancheStatus(ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus trancheStatus) {
+  public SbDashboardGesuchDto trancheStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus) {
     this.trancheStatus = trancheStatus;
     return this;
   }
@@ -195,12 +195,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   
   @JsonProperty("trancheStatus")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus getTrancheStatus() {
+  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus getTrancheStatus() {
     return trancheStatus;
   }
 
   @JsonProperty("trancheStatus")
-  public void setTrancheStatus(ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus trancheStatus) {
+  public void setTrancheStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus) {
     this.trancheStatus = trancheStatus;
   }
 

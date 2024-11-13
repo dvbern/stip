@@ -1,18 +1,43 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.ausbildung.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
@@ -32,6 +57,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Table(
     name = "ausbildung",
     indexes = {
+        @Index(name = "IX_ausbildung_fall_id", columnList = "fall_id"),
         @Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),
         @Index(name = "IX_ausbildung_mandant", columnList = "mandant")
     }
@@ -39,6 +65,15 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Getter
 @Setter
 public class Ausbildung extends AbstractMandantEntity {
+    @NotNull
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fall_id", foreignKey = @ForeignKey(name = "FK_ausbildung_fall_id"))
+    private Fall fall;
+
+    @NotNull
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "ausbildung")
+    private List<Gesuch> gesuchs = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "ausbildungsgang_id", foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
     private Ausbildungsgang ausbildungsgang;
@@ -82,4 +117,8 @@ public class Ausbildung extends AbstractMandantEntity {
     @NotNull
     @Column(name = "is_ausbildung_ausland")
     private Boolean isAusbildungAusland = false;
+
+    @NotNull
+    @Column(name = "status", nullable = false)
+    private AusbildungsStatus status = AusbildungsStatus.AKTIV;
 }

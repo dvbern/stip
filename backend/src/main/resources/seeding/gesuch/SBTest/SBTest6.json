@@ -1,0 +1,329 @@
+{
+  "fall": {
+    "id": "c87ca8c8-ae67-4189-b626-6086f95e500f",
+    "fallNummer": "BE.F.415401",
+    "mandant": "bern"
+  },
+  "gesuchsperiode": {
+    "id": "04aea35c-3051-4ac9-b853-20fb5bec0a50",
+    "bezeichnungDe": "Herbst 2024",
+    "bezeichnungFr": "Automne 2024",
+    "gueltigkeitStatus": "PUBLIZIERT",
+    "gesuchsperiodeStart": "2024-07-01",
+    "gesuchsperiodeStopp": "2025-06-30",
+    "aufschaltterminStart": "2024-07-01",
+    "aufschaltterminStopp": "2025-06-30",
+    "einreichefristNormal": "2024-11-30",
+    "einreichefristReduziert": "2025-02-28",
+    "gesuchsjahr": {
+      "id": "b2e84aaf-fb5c-4ed5-b597-a615827eedf5",
+      "bezeichnungDe": "Gesuchsjahr 24",
+      "bezeichnungFr": "Année de la demande 24",
+      "technischesJahr": 2024,
+      "gueltigkeitStatus": "PUBLIZIERT"
+    },
+    "ausbKosten_SekII": 2000,
+    "ausbKosten_Tertiaer": 3000
+  },
+  "gesuchStatus": "IN_BEARBEITUNG_SB",
+  "gesuchNummer": "2024.BE.G.59992",
+  "id": "84a849b3-b616-4263-9d43-44109ac03335",
+  "aenderungsdatum": "2024-10-30",
+  "gesuchTrancheToWorkWith": {
+    "id": "af7a5799-8bf9-405d-99c3-e56a9d3d256b",
+    "gueltigAb": "2024-07-01",
+    "gueltigBis": "2024-12-31",
+    "status": "UEBERPRUEFEN",
+    "typ": "TRANCHE",
+    "comment": null,
+    "gesuchFormular": {
+      "ausbildung": {
+        "fachrichtung": "IPS 23",
+        "ausbildungBegin": "9.2024",
+        "ausbildungEnd": "8.2027",
+        "pensum": "VOLLZEIT",
+        "ausbildungsgang": {
+          "id": "859d7998-2c64-47cb-9d46-fff667227e28",
+          "bildungskategorie": {
+            "bezeichnungDe": "Universitäten und Eidg. Technische Hochschulen",
+            "bezeichnungFr": "Universités et Ecoles polytechniques fédérales",
+            "bildungsstufe": "TERTIAER",
+            "bfs": 9,
+            "id": "e620530f-513c-4043-bb84-5882101d3e5f"
+          },
+          "bezeichnungDe": "Bachelor",
+          "bezeichnungFr": "Bachelor",
+          "ausbildungsstaetteId": null
+        },
+        "ausbildungNichtGefunden": false,
+        "alternativeAusbildungsstaette": null,
+        "alternativeAusbildungsgang": null,
+        "ausbildungsort": "Bern",
+        "isAusbildungAusland": false
+      },
+      "personInAusbildung": {
+        "adresse": {
+          "land": "CH",
+          "strasse": "Sonnenweg",
+          "plz": "3013",
+          "ort": "Bern",
+          "id": "79c08a76-10f4-41fc-a06c-240e8f3d284b",
+          "coAdresse": null,
+          "hausnummer": "5"
+        },
+        "sozialversicherungsnummer": "756.7297.7421.58",
+        "vorname": "Irma",
+        "anrede": "FRAU",
+        "identischerZivilrechtlicherWohnsitz": true,
+        "email": "rahel.sahli@be.ch",
+        "telefonnummer": "0312458566",
+        "geburtsdatum": "2001-05-30",
+        "nationalitaet": "CH",
+        "wohnsitz": "EIGENER_HAUSHALT",
+        "sozialhilfebeitraege": false,
+        "nachname": "Böhni",
+        "korrespondenzSprache": "DEUTSCH",
+        "heimatort": "Truebschachen",
+        "niederlassungsstatus": null,
+        "einreisedatum": null,
+        "zivilstand": "LEDIG",
+        "wohnsitzAnteilMutter": null,
+        "wohnsitzAnteilVater": null,
+        "vormundschaft": false,
+        "identischerZivilrechtlicherWohnsitzOrt": null,
+        "identischerZivilrechtlicherWohnsitzPLZ": null
+      },
+      "familiensituation": {
+        "elternVerheiratetZusammen": false,
+        "elternteilUnbekanntVerstorben": false,
+        "gerichtlicheAlimentenregelung": false,
+        "mutterUnbekanntVerstorben": null,
+        "mutterUnbekanntGrund": null,
+        "mutterWiederverheiratet": false,
+        "vaterUnbekanntVerstorben": null,
+        "vaterUnbekanntGrund": null,
+        "vaterWiederverheiratet": false,
+        "sorgerecht": "GEMEINSAM",
+        "obhut": "MUTTER",
+        "obhutMutter": null,
+        "obhutVater": null,
+        "werZahltAlimente": null
+      },
+      "partner": null,
+      "auszahlung": {
+        "vorname": "Irma",
+        "adresse": {
+          "land": "CH",
+          "strasse": "Sonnenweg",
+          "plz": "3013",
+          "ort": "Bern",
+          "id": "79c08a76-10f4-41fc-a06c-240e8f3d284b",
+          "coAdresse": null,
+          "hausnummer": "5"
+        },
+        "iban": "CH98 0900 0000 3112 5052 7",
+        "nachname": "Böhni",
+        "kontoinhaber": "GESUCHSTELLER"
+      },
+      "elterns": [
+        {
+          "vorname": "Martin",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Schneestrasse",
+            "plz": "3014",
+            "ort": "Bern",
+            "id": "9af331aa-1594-4e15-b310-11ac2312e83a",
+            "coAdresse": null,
+            "hausnummer": "1"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "0312487562",
+          "geburtsdatum": "1968-11-02",
+          "ausweisbFluechtling": false,
+          "elternTyp": "VATER",
+          "nachname": "Meier",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 9324,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.2676.6499.12",
+          "id": "9bfd4f57-751d-42b3-987a-2aa3f21354bd"
+        },
+        {
+          "vorname": "Regine",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Moosweg",
+            "plz": "3017",
+            "ort": "Bern",
+            "id": "86598102-8b53-49fc-a44a-767762660e06",
+            "coAdresse": null,
+            "hausnummer": "1"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "0321125422",
+          "geburtsdatum": "1969-08-12",
+          "ausweisbFluechtling": false,
+          "elternTyp": "MUTTER",
+          "nachname": "Böhni",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 19440,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.0244.5428.25",
+          "id": "70a10701-b50b-4281-b449-a2d7d09e362f"
+        }
+      ],
+      "geschwisters": [
+        {
+          "vorname": "Nicolas",
+          "geburtsdatum": "2008-06-03",
+          "wohnsitz": "MUTTER_VATER",
+          "ausbildungssituation": "IN_AUSBILDUNG",
+          "nachname": "Riesen",
+          "id": "16e4a00e-2be6-4d43-8078-8a7e020ea255",
+          "wohnsitzAnteilMutter": 0.00,
+          "wohnsitzAnteilVater": 100.00
+        }
+      ],
+      "lebenslaufItems": [
+        {
+          "von": "8.2017",
+          "bis": "7.2018",
+          "wohnsitz": "BE",
+          "id": "46cba1b1-9667-440b-8017-79345ff9c2cc",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ANDERE_TAETIGKEIT",
+          "taetigkeitsBeschreibung": "Praktikum"
+        },
+        {
+          "von": "8.2018",
+          "bis": "7.2021",
+          "wohnsitz": "BE",
+          "id": "2b4fcb2d-c590-4266-888d-475c8de00fdf",
+          "bildungsart": "EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS",
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": "FaBe K",
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2021",
+          "bis": "9.2021",
+          "wohnsitz": "BE",
+          "id": "1b659893-74e9-4697-bd61-0c446654ef7e",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ANDERE_TAETIGKEIT",
+          "taetigkeitsBeschreibung": "Ferien"
+        },
+        {
+          "von": "10.2021",
+          "bis": "5.2023",
+          "wohnsitz": "BE",
+          "id": "3e5b2c3b-ad8a-47b5-84ad-e6df584fc82f",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ERWERBSTAETIGKEIT",
+          "taetigkeitsBeschreibung": "diverse Anstellungen"
+        },
+        {
+          "von": "6.2023",
+          "bis": "8.2024",
+          "wohnsitz": "BE",
+          "id": "a0cb78a2-67c0-4a26-b2a3-2bf1dfcfaa26",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ANDERE_TAETIGKEIT",
+          "taetigkeitsBeschreibung": "Vorkurs PH Bern"
+        }
+      ],
+      "kinds": null,
+      "einnahmenKosten": {
+        "nettoerwerbseinkommen": 11080,
+        "fahrkosten": 558,
+        "verdienstRealisiert": false,
+        "alimente": null,
+        "zulagen": 0,
+        "renten": 0,
+        "eoLeistungen": 0,
+        "ergaenzungsleistungen": 0,
+        "beitraege": 0,
+        "ausbildungskostenSekundarstufeZwei": null,
+        "ausbildungskostenTertiaerstufe": 2000,
+        "wohnkosten": 7560,
+        "wgWohnend": true,
+        "willDarlehen": false,
+        "auswaertigeMittagessenProWoche": null,
+        "betreuungskostenKinder": null,
+        "veranlagungsCode": 0,
+        "steuerjahr": 2023,
+        "vermoegen": 9433,
+        "steuernKantonGemeinde": 0
+      },
+      "steuerdaten": [
+        {
+          "steuerdatenTyp": "MUTTER",
+          "steuernKantonGemeinde": 12022,
+          "steuernBund": 1004,
+          "fahrkosten": 1375,
+          "verpflegung": 2200,
+          "totalEinkuenfte": 77710,
+          "eigenmietwert": 0,
+          "isArbeitsverhaeltnisSelbstaendig": false,
+          "kinderalimente": 0,
+          "vermoegen": 21251,
+          "id": "1e6e4f39-30ee-4c69-bf40-1e3a2b7681ea",
+          "fahrkostenPartner": 0,
+          "verpflegungPartner": 0,
+          "steuerjahr": 2023,
+          "veranlagungsCode": 0,
+          "saeule3a": null,
+          "saeule2": null
+        },
+        {
+          "steuerdatenTyp": "VATER",
+          "steuernKantonGemeinde": 3112,
+          "steuernBund": 93,
+          "fahrkosten": 700,
+          "verpflegung": 1650,
+          "totalEinkuenfte": 48443,
+          "eigenmietwert": 0,
+          "isArbeitsverhaeltnisSelbstaendig": true,
+          "kinderalimente": 0,
+          "vermoegen": 25680,
+          "id": "82ea8a31-3ca9-4c94-8b2e-25e44aa97be5",
+          "fahrkostenPartner": 0,
+          "verpflegungPartner": 0,
+          "steuerjahr": 2023,
+          "veranlagungsCode": 0,
+          "saeule3a": 0,
+          "saeule2": 0
+        }
+      ],
+      "steuerdatenTabs": [
+        "MUTTER",
+        "VATER"
+      ]
+    }
+  },
+  "bearbeiter": "Daniel Margreth"
+}

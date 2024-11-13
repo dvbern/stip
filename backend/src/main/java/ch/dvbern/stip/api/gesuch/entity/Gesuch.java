@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.entity;
 
 import java.time.LocalDate;
@@ -10,13 +27,14 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.fall.entity.Fall;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
@@ -41,16 +59,17 @@ import org.hibernate.annotations.JoinFormula;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
-@DocumentsRequiredFehlendeDokumenteConstraint(groups = {
-    GesuchFehlendeDokumenteValidationGroup.class
-})
+@DocumentsRequiredFehlendeDokumenteConstraint(
+    groups = {
+        GesuchFehlendeDokumenteValidationGroup.class
+    }
+)
 @OnlyOneTrancheInBearbeitungConstraint
 @Audited
 @Entity
 @Table(
     name = "gesuch",
     indexes = {
-        @Index(name = "IX_gesuch_fall_id", columnList = "fall_id"),
         @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
         @Index(name = "IX_gesuch_mandant", columnList = "mandant")
     }
@@ -59,9 +78,9 @@ import org.hibernate.envers.NotAudited;
 @Setter
 public class Gesuch extends AbstractMandantEntity {
     @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "fall_id", foreignKey = @ForeignKey(name = "FK_gesuch_fall_id"))
-    private Fall fall;
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_ausbildung_id"))
+    private Ausbildung ausbildung;
 
     @NotNull
     @ManyToOne(optional = false)
@@ -181,7 +200,8 @@ public class Gesuch extends AbstractMandantEntity {
 
     public Optional<GesuchTranche> getAenderungZuUeberpruefen() {
         return getGesuchTranchen().stream()
-            .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+            .filter(
+                tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG
                 && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN
             )
             .findFirst();

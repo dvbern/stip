@@ -8,11 +8,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package ch.dvbern.stip.api.dokument.entity;
@@ -23,7 +23,7 @@ import java.util.List;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -46,7 +46,9 @@ import org.hibernate.envers.Audited;
     name = "gesuch_dokument",
     indexes = {
         @Index(name = "IX_gesuch_dokument_gesuch_tranche_id", columnList = "gesuch_tranche_id"),
-        @Index(name = "IX_gesuch_dokument_gesuch_tranche_id_dokument_typ", columnList = "gesuch_tranche_id,dokument_typ"),
+        @Index(
+            name = "IX_gesuch_dokument_gesuch_tranche_id_dokument_typ", columnList = "gesuch_tranche_id,dokument_typ"
+        ),
         @Index(name = "IX_gesuch_dokument_mandant", columnList = "mandant")
     }
 )

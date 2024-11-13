@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.berechnung.service;
 
 import java.math.BigDecimal;
@@ -16,9 +33,9 @@ import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
@@ -48,8 +65,8 @@ import org.kie.dmn.core.api.event.DefaultDMNRuntimeEventListener;
 @RequiredArgsConstructor
 @Slf4j
 public class BerechnungService {
-    private static final List<String>
-        BERECHNUNG_MODEL_NAMES = List.of("Stipendium", "Familienbudget", "PersoenlichesBudget");
+    private static final List<String> BERECHNUNG_MODEL_NAMES =
+        List.of("Stipendium", "Familienbudget", "PersoenlichesBudget");
     private static final String STIPENDIUM_DECISION_NAME = "Stipendium";
 
     private final PersonenImHaushaltService personenImHaushaltService;
@@ -68,10 +85,11 @@ public class BerechnungService {
         final int minorVersion
     ) {
         final var mapper = persoenlichesBudgetResultatMappers.stream().filter(persoenlichesBudgetResultatMapper -> {
-            final var versionAnnotation = persoenlichesBudgetResultatMapper.getClass().getAnnotation(DmnModelVersion.class);
+            final var versionAnnotation =
+                persoenlichesBudgetResultatMapper.getClass().getAnnotation(DmnModelVersion.class);
             return (versionAnnotation != null) &&
-                (versionAnnotation.major() == majorVersion) &&
-                (versionAnnotation.minor() == minorVersion);
+            (versionAnnotation.major() == majorVersion) &&
+            (versionAnnotation.minor() == minorVersion);
         }).findFirst();
 
         if (mapper.isEmpty()) {
@@ -79,29 +97,50 @@ public class BerechnungService {
                 "Cannot find a PersoenlichesBudgetResultatMapper for version " + majorVersion + '.' + minorVersion
             );
         }
-        final var decisionResults = berechnungResult.getDecisionEventList().stream().filter(
-            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("PersoenlichesbudgetBerechnet")
-        ).toList().get(0).getResult().getDecisionResults();
+        final var decisionResults = berechnungResult.getDecisionEventList()
+            .stream()
+            .filter(
+                afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision()
+                    .getName()
+                    .equals("PersoenlichesbudgetBerechnet")
+            )
+            .toList()
+            .get(0)
+            .getResult()
+            .getDecisionResults();
 
-        final int einnahmenPersoenlichesBudget = ((BigDecimal) decisionResults.stream().filter(
-            dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenPersoenlichesBudget")
-        ).toList().get(0).getResult()).intValue();
+        final int einnahmenPersoenlichesBudget = ((BigDecimal) decisionResults.stream()
+            .filter(
+                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenPersoenlichesBudget")
+            )
+            .toList()
+            .get(0)
+            .getResult()).intValue();
 
-        final int ausgabenPersoenlichesBudget = ((BigDecimal) decisionResults.stream().filter(
-            dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenPersoenlichesBudget")
-        ).toList().get(0).getResult()).intValue();
+        final int ausgabenPersoenlichesBudget = ((BigDecimal) decisionResults.stream()
+            .filter(
+                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenPersoenlichesBudget")
+            )
+            .toList()
+            .get(0)
+            .getResult()).intValue();
 
-        final int persoenlichesbudgetBerechnet = ((BigDecimal) decisionResults.stream().filter(
-            dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("PersoenlichesbudgetBerechnet")
-        ).toList().get(0).getResult()).intValue();
+        final int persoenlichesbudgetBerechnet = ((BigDecimal) decisionResults.stream()
+            .filter(
+                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("PersoenlichesbudgetBerechnet")
+            )
+            .toList()
+            .get(0)
+            .getResult()).intValue();
 
-        return mapper.get().mapFromRequest(
-            berechnungRequest,
-            einnahmenPersoenlichesBudget,
-            ausgabenPersoenlichesBudget,
-            persoenlichesbudgetBerechnet,
-            familienBudgetresultatList
-        );
+        return mapper.get()
+            .mapFromRequest(
+                berechnungRequest,
+                einnahmenPersoenlichesBudget,
+                ausgabenPersoenlichesBudget,
+                persoenlichesbudgetBerechnet,
+                familienBudgetresultatList
+            );
     }
 
     private FamilienBudgetresultatDto familienBudgetresultatFromRequest(
@@ -115,8 +154,8 @@ public class BerechnungService {
         final var mapper = familienBudgetresultatMappers.stream().filter(familienBudgetresultatMapper -> {
             final var versionAnnotation = familienBudgetresultatMapper.getClass().getAnnotation(DmnModelVersion.class);
             return (versionAnnotation != null) &&
-                (versionAnnotation.major() == majorVersion) &&
-                (versionAnnotation.minor() == minorVersion);
+            (versionAnnotation.major() == majorVersion) &&
+            (versionAnnotation.minor() == minorVersion);
         }).findFirst();
 
         if (mapper.isEmpty()) {
@@ -124,37 +163,72 @@ public class BerechnungService {
                 "Cannot find a FamilienBudgetresultatMapper for version " + majorVersion + '.' + minorVersion
             );
         }
-        final var decisionResults = berechnungResult.getDecisionEventList().stream().filter(
-            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals("Familienbudget_" + (budgetToUse + 1))
-        ).toList().get(0).getResult().getDecisionResults();
+        final var decisionResults = berechnungResult.getDecisionEventList()
+            .stream()
+            .filter(
+                afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision()
+                    .getName()
+                    .equals("Familienbudget_" + (budgetToUse + 1))
+            )
+            .toList()
+            .get(0)
+            .getResult()
+            .getDecisionResults();
 
         @SuppressWarnings("unchecked") // It's fine (and necessary)
-        final var familienbudgetMap = ((HashMap<String, BigDecimal>) decisionResults.stream().filter(
+        final var familienbudgetMap = ((HashMap<String, BigDecimal>) decisionResults.stream()
+            .filter(
                 dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("Familienbudget_" + (budgetToUse + 1))
-        ).toList().get(0).getResult());
+            )
+            .toList()
+            .get(0)
+            .getResult());
         final int familienbudgetBerechnet = familienbudgetMap.get("familienbudgetBerechnet").intValue();
 
         final String fambudgetKey = "familienbudgetBerechnet";
-        final var einnahmenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList().stream().filter(
-            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals(fambudgetKey)
-        ).toList().get(budgetToUse).getResult().getDecisionResults().stream().filter(
-            dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenFamilienbudget")
-        ).toList().get(0).getResult()).intValue();
+        final var einnahmenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList()
+            .stream()
+            .filter(
+                afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals(fambudgetKey)
+            )
+            .toList()
+            .get(budgetToUse)
+            .getResult()
+            .getDecisionResults()
+            .stream()
+            .filter(
+                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenFamilienbudget")
+            )
+            .toList()
+            .get(0)
+            .getResult()).intValue();
 
-        final var ausgabenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList().stream().filter(
-            afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals(fambudgetKey)
-        ).toList().get(budgetToUse).getResult().getDecisionResults().stream().filter(
-            dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenFamilienbudget")
-        ).toList().get(0).getResult()).intValue();
+        final var ausgabenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList()
+            .stream()
+            .filter(
+                afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals(fambudgetKey)
+            )
+            .toList()
+            .get(budgetToUse)
+            .getResult()
+            .getDecisionResults()
+            .stream()
+            .filter(
+                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenFamilienbudget")
+            )
+            .toList()
+            .get(0)
+            .getResult()).intValue();
 
-        return mapper.get().mapFromRequest(
-            berechnungRequest,
-            steuerdatenTyp,
-            budgetToUse,
-            einnahmenFamilienbudget,
-            ausgabenFamilienbudget,
-            familienbudgetBerechnet
-        );
+        return mapper.get()
+            .mapFromRequest(
+                berechnungRequest,
+                steuerdatenTyp,
+                budgetToUse,
+                einnahmenFamilienbudget,
+                ausgabenFamilienbudget,
+                familienbudgetBerechnet
+            );
     }
 
     private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(
@@ -165,8 +239,8 @@ public class BerechnungService {
         final var mapper = berechnungsStammdatenMappers.stream().filter(berechnungsStammdatenMapper -> {
             final var versionAnnotation = berechnungsStammdatenMapper.getClass().getAnnotation(DmnModelVersion.class);
             return (versionAnnotation != null) &&
-                (versionAnnotation.major() == majorVersion) &&
-                (versionAnnotation.minor() == minorVersion);
+            (versionAnnotation.major() == majorVersion) &&
+            (versionAnnotation.minor() == minorVersion);
         }).findFirst();
 
         if (mapper.isEmpty()) {
@@ -190,14 +264,23 @@ public class BerechnungService {
         final int majorVersion,
         final int minorVersion
     ) {
-        final var gesuchTrancheStatusToFilterFor = List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN);
-        final var gesuchTranchen = gesuch.getGesuchTranchen().stream().filter(
-            gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE
-        ).filter(
-            gesuchTranche -> gesuchTrancheStatusToFilterFor.contains(gesuchTranche.getStatus())
-        ).sorted(
-            Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb())
-        ).toList();
+        final var gesuchTrancheStatusToFilterFor = List.of(
+            GesuchTrancheStatus.AKZEPTIERT,
+            GesuchTrancheStatus.IN_BEARBEITUNG_GS,
+            GesuchTrancheStatus.UEBERPRUEFEN
+        );
+        final var gesuchTranchen = gesuch.getGesuchTranchen()
+            .stream()
+            .filter(
+                gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE
+            )
+            .filter(
+                gesuchTranche -> gesuchTrancheStatusToFilterFor.contains(gesuchTranche.getStatus())
+            )
+            .sorted(
+                Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb())
+            )
+            .toList();
 
         List<TranchenBerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
         for (final var gesuchTranche : gesuchTranchen) {
@@ -219,7 +302,8 @@ public class BerechnungService {
             berechnungsresultate.addAll(trancheBerechnungsresultate);
         }
 
-        int berechnungsresultat = -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnung).sum();
+        int berechnungsresultat =
+            -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnung).sum();
         if (berechnungsresultat < -gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
             berechnungsresultat = 0;
         }
@@ -239,10 +323,12 @@ public class BerechnungService {
         final var steuerdaten = gesuchFormular.getSteuerdaten();
 
         List<AbstractFamilieEntity> kinderDerElternInHaushalten = new ArrayList<>(
-            gesuchFormular.getGeschwisters().stream()
+            gesuchFormular.getGeschwisters()
+                .stream()
                 .filter(
                     geschwister -> geschwister.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT
-                ).map(AbstractFamilieEntity.class::cast)
+                )
+                .map(AbstractFamilieEntity.class::cast)
                 .toList()
         );
 
@@ -250,10 +336,14 @@ public class BerechnungService {
             kinderDerElternInHaushalten.add(gesuchFormular.getPersonInAusbildung());
         }
 
-        final var teilZeitKinderInHaushalten = kinderDerElternInHaushalten.stream().filter(
-            geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilVater(),  BigDecimal.ZERO).intValue() > 0 &&
-                           Objects.requireNonNullElse(geschwister.getWohnsitzAnteilMutter(), BigDecimal.ZERO).intValue() > 0
-        ).toList();
+        final var teilZeitKinderInHaushalten = kinderDerElternInHaushalten.stream()
+            .filter(
+                geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilVater(), BigDecimal.ZERO)
+                    .intValue() > 0
+                &&
+                Objects.requireNonNullElse(geschwister.getWohnsitzAnteilMutter(), BigDecimal.ZERO).intValue() > 0
+            )
+            .toList();
 
         int noKinderOhneEigenenHaushalt = teilZeitKinderInHaushalten.size();
 
@@ -279,9 +369,12 @@ public class BerechnungService {
 
             final List<FamilienBudgetresultatDto> familienBudgetresultatList = new ArrayList<>();
 
-            final ListIterator<Steuerdaten> steuerdatenListIterator = steuerdaten.stream().sorted(
-                Comparator.comparing(Steuerdaten::getSteuerdatenTyp)
-            ).toList().listIterator();
+            final ListIterator<Steuerdaten> steuerdatenListIterator = steuerdaten.stream()
+                .sorted(
+                    Comparator.comparing(Steuerdaten::getSteuerdatenTyp)
+                )
+                .toList()
+                .listIterator();
 
             while (steuerdatenListIterator.hasNext()) {
                 final var budgetIndex = steuerdatenListIterator.nextIndex();
@@ -328,26 +421,31 @@ public class BerechnungService {
                     )
                 );
             } else {
-                // To address differences in the stipendienberechnung based on how many kids are in the households and how their care is divided between father and mother,
-                // we calculate how many "kidpercentages" each household has and divide this by the total number of kids in all households.
-                // This value can then be multiplied with the respective stipendienberechnung to get a proportianal stipendienamount.
+                // To address differences in the stipendienberechnung based on how many kids are in the households and
+                // how their care is divided between father and mother,
+                // we calculate how many "kidpercentages" each household has and divide this by the total number of kids
+                // in all households.
+                // This value can then be multiplied with the respective stipendienberechnung to get a proportianal
+                // stipendienamount.
                 BigDecimal kinderProzente = BigDecimal.ZERO;
 
-
-
                 for (final var kindDerElternInHaushalten : teilZeitKinderInHaushalten) {
-                    kinderProzente = kinderProzente.add(kindDerElternInHaushalten.getWohnsitzAnteil(elternTypToSolveFor));
+                    kinderProzente =
+                        kinderProzente.add(kindDerElternInHaushalten.getWohnsitzAnteil(elternTypToSolveFor));
                 }
 
                 final BigDecimal kinderProzenteNormalized = kinderProzente.divide(
-                    BigDecimal.valueOf(teilZeitKinderInHaushalten.size()), 2, RoundingMode.HALF_UP
+                    BigDecimal.valueOf(teilZeitKinderInHaushalten.size()),
+                    2,
+                    RoundingMode.HALF_UP
                 );
 
-                // Calculate the total stipendien amount based on the respective amounts and their relative kid percentages.
+                // Calculate the total stipendien amount based on the respective amounts and their relative kid
+                // percentages.
                 final var berechnung = kinderProzenteNormalized.multiply(
                     BigDecimal.valueOf(stipendienCalculated.getStipendien())
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
-                    ).intValue();
+                ).intValue();
 
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
@@ -386,12 +484,14 @@ public class BerechnungService {
         final var builder = berechnungRequests.stream().filter(berechnungRequestBuilder -> {
             final var versionAnnotation = berechnungRequestBuilder.getClass().getAnnotation(DmnModelVersion.class);
             return (versionAnnotation != null) &&
-                (versionAnnotation.major() == majorVersion) &&
-                (versionAnnotation.minor() == minorVersion);
+            (versionAnnotation.major() == majorVersion) &&
+            (versionAnnotation.minor() == minorVersion);
         }).findFirst();
 
         if (builder.isEmpty()) {
-            throw new IllegalArgumentException("Cannot find a builder for version " + majorVersion + '.' + minorVersion);
+            throw new IllegalArgumentException(
+                "Cannot find a builder for version " + majorVersion + '.' + minorVersion
+            );
         }
 
         return builder.get().buildRequest(gesuch, gesuchTranche, elternTyp);

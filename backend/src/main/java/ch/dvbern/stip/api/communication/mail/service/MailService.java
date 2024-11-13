@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.communication.mail.service;
 
 import java.io.File;
@@ -41,7 +58,8 @@ public class MailService {
             .to(receiver)
             .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.standard.notification"))
             .send()
-            .onFailure().invoke(this::handleFailure)
+            .onFailure()
+            .invoke(this::handleFailure)
             .subscribe()
             .asCompletionStage();
     }
@@ -56,7 +74,8 @@ public class MailService {
             .to(welcomeMailDto.getEmail())
             .subject("Benuzter Erstellt/ Utilisateur Créé")
             .send()
-            .onFailure().invoke(this::handleFailure)
+            .onFailure()
+            .invoke(this::handleFailure)
             .subscribe()
             .asCompletionStage();
     }
@@ -82,26 +101,34 @@ public class MailService {
     }
 
     public Uni<Void> sendEmailWithAttachment(String to, String subject, String htmlContent, List<File> attachments) {
-        Mail mail = Mail.withHtml(to, subject,
+        Mail mail = Mail.withHtml(
+            to,
+            subject,
             htmlContent
         );
-        attachments.forEach(attachment -> mail.addAttachment(
-            attachment.getName(),
-            attachment,
-            FileUtil.getFileMimeType(attachment)
-        ));
+        attachments.forEach(
+            attachment -> mail.addAttachment(
+                attachment.getName(),
+                attachment,
+                FileUtil.getFileMimeType(attachment)
+            )
+        );
         return reactiveMailer.send(mail);
     }
 
     public void sendEmailWithAttachmentSync(String to, String subject, String htmlContent, List<File> attachments) {
-        Mail mail = Mail.withHtml(to, subject,
+        Mail mail = Mail.withHtml(
+            to,
+            subject,
             htmlContent
         );
-        attachments.forEach(attachment -> mail.addAttachment(
-            attachment.getName(),
-            attachment,
-            FileUtil.getFileMimeType(attachment)
-        ));
+        attachments.forEach(
+            attachment -> mail.addAttachment(
+                attachment.getName(),
+                attachment,
+                FileUtil.getFileMimeType(attachment)
+            )
+        );
         mailer.send(mail);
     }
 
@@ -112,8 +139,7 @@ public class MailService {
     @CheckedTemplate
     static class Templates {
 
-        private Templates() {
-        }
+        private Templates() {}
 
         public static MailTemplateInstance getStandardNotification(String name, String vorname, AppLanguages language) {
             return switch (language) {

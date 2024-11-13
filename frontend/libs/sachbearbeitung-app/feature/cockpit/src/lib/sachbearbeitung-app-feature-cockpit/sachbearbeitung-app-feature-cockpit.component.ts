@@ -61,6 +61,7 @@ import {
   SharedModelGesuch,
   SortOrder,
 } from '@dv/shared/model/gesuch';
+import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFocusableListDirective,
@@ -77,7 +78,6 @@ import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 import { toBackendLocalDate } from '@dv/shared/util/validator-date';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 const PAGE_SIZES = [10, 20, 50];
 const DEFAULT_PAGE_SIZE = 10;

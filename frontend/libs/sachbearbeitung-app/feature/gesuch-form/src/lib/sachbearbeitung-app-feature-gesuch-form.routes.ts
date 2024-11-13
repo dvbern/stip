@@ -134,8 +134,8 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     },
     title: AUSBILDUNG.translationKey,
     loadChildren: () =>
-      import('@dv/shared/feature/gesuch-form-education').then(
-        (m) => m.gesuchAppFeatureGesuchFormEducationRoutes,
+      import('@dv/shared/feature/ausbildung').then(
+        (m) => m.sharedFeatureAusbildungRoutes,
       ),
   },
   {

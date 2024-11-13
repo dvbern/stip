@@ -21,49 +21,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GesuchNotizDto  implements Serializable {
-  private @Valid String userErstellt;
-  private @Valid LocalDate timestampErstellt;
   private @Valid String betreff;
   private @Valid String text;
+  private @Valid String userErstellt;
+  private @Valid LocalDate timestampErstellt;
   private @Valid UUID id;
-
-  /**
-   **/
-  public GesuchNotizDto userErstellt(String userErstellt) {
-    this.userErstellt = userErstellt;
-    return this;
-  }
-
-  
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
-    return userErstellt;
-  }
-
-  @JsonProperty("userErstellt")
-  public void setUserErstellt(String userErstellt) {
-    this.userErstellt = userErstellt;
-  }
-
-  /**
-   **/
-  public GesuchNotizDto timestampErstellt(LocalDate timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
-    return this;
-  }
-
-  
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public LocalDate getTimestampErstellt() {
-    return timestampErstellt;
-  }
-
-  @JsonProperty("timestampErstellt")
-  public void setTimestampErstellt(LocalDate timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
-  }
 
   /**
    **/
@@ -105,6 +67,44 @@ public class GesuchNotizDto  implements Serializable {
 
   /**
    **/
+  public GesuchNotizDto userErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("userErstellt")
+  @NotNull
+  public String getUserErstellt() {
+    return userErstellt;
+  }
+
+  @JsonProperty("userErstellt")
+  public void setUserErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
+  }
+
+  /**
+   **/
+  public GesuchNotizDto timestampErstellt(LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("timestampErstellt")
+  @NotNull
+  public LocalDate getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+  @JsonProperty("timestampErstellt")
+  public void setTimestampErstellt(LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
+  /**
+   **/
   public GesuchNotizDto id(UUID id) {
     this.id = id;
     return this;
@@ -131,16 +131,16 @@ public class GesuchNotizDto  implements Serializable {
       return false;
     }
     GesuchNotizDto gesuchNotiz = (GesuchNotizDto) o;
-    return Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
-        Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
-        Objects.equals(this.betreff, gesuchNotiz.betreff) &&
+    return Objects.equals(this.betreff, gesuchNotiz.betreff) &&
         Objects.equals(this.text, gesuchNotiz.text) &&
+        Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
+        Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
         Objects.equals(this.id, gesuchNotiz.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, betreff, text, id);
+    return Objects.hash(betreff, text, userErstellt, timestampErstellt, id);
   }
 
   @Override
@@ -148,10 +148,10 @@ public class GesuchNotizDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizDto {\n");
     
-    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
-    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();

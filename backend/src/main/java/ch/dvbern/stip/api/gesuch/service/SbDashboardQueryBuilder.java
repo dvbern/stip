@@ -1,21 +1,39 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
-import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,6 +44,7 @@ import lombok.RequiredArgsConstructor;
 public class SbDashboardQueryBuilder {
     private static final QGesuchFormular formular = QGesuchFormular.gesuchFormular;
     private static final QGesuch gesuch = QGesuch.gesuch;
+    private static final QAusbildung ausbildung = QAusbildung.ausbildung;
     private QGesuchTranche tranche;
 
     private final GesuchRepository gesuchRepository;
@@ -47,13 +66,16 @@ public class SbDashboardQueryBuilder {
         };
 
         joinFormular(query);
-        return query.where(formular.personInAusbildung.vorname.isNotNull()
-            .and(formular.personInAusbildung.nachname.isNotNull()));
+        return query.where(
+            formular.personInAusbildung.vorname.isNotNull()
+                .and(formular.personInAusbildung.nachname.isNotNull())
+        );
     }
 
     public void fallNummer(final JPAQuery<Gesuch> query, final String fallNummer) {
         joinGesuch(query);
-        query.where(gesuch.fall.fallNummer.containsIgnoreCase(fallNummer));
+        query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
+        query.where(ausbildung.fall.fallNummer.containsIgnoreCase(fallNummer));
     }
 
     public void piaNachname(final JPAQuery<Gesuch> query, final String nachname) {
@@ -89,9 +111,12 @@ public class SbDashboardQueryBuilder {
 
     public void bearbeiter(final JPAQuery<Gesuch> query, final String bearbeiter) {
         joinGesuch(query);
-        query.join(QZuordnung.zuordnung).on(gesuch.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
-        query.where(QZuordnung.zuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
-            .or(QZuordnung.zuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter)));
+        query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
+        query.join(QZuordnung.zuordnung).on(ausbildung.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
+        query.where(
+            QZuordnung.zuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
+                .or(QZuordnung.zuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter))
+        );
     }
 
     public void letzteAktivitaet(
@@ -104,7 +129,7 @@ public class SbDashboardQueryBuilder {
 
     public void orderBy(final JPAQuery<Gesuch> query, final SbDashboardColumn column, final SortOrder sortOrder) {
         final var fieldSpecified = switch (column) {
-            case FALLNUMMER -> gesuch.fall.fallNummer;
+            case FALLNUMMER -> ausbildung.fall.fallNummer;
             case TYP -> tranche.typ;
             case PIA_NACHNAME -> {
                 joinFormular(query);
@@ -121,7 +146,8 @@ public class SbDashboardQueryBuilder {
             case STATUS -> gesuch.gesuchStatus;
             case BEARBEITER -> {
                 final var fall = QFall.fall;
-                query.join(fall).on(gesuch.fall.id.eq(fall.id));
+                query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
+                query.join(fall).on(ausbildung.id.eq(fall.id));
                 yield fall.sachbearbeiterZuordnung.sachbearbeiter.nachname;
             }
             case LETZTE_AKTIVITAET -> gesuch.timestampMutiert;

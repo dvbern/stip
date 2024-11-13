@@ -1,4 +1,4 @@
-@for (step of stepsViewSig(); track $index; let first = $first) {
+@for (step of stepsViewSig(); track $index; let index = $index) {
   <a
     class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal position-relative overflow-visible"
     [class.btn-light]="!step.isActive"
@@ -30,7 +30,7 @@
     </span>
   </a>
 
-  @if (first) {
+  @if (index === 1) {
     <hr class="mt-4 mb-4 pb-2" />
   }
 }

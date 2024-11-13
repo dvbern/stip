@@ -8,11 +8,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package ch.dvbern.stip.api.gesuch.service;
@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
@@ -35,35 +36,40 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheHistoryRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
-import ch.dvbern.stip.generated.dto.GsDashboardDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
@@ -74,7 +80,6 @@ import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -101,11 +106,13 @@ public class GesuchService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
     private final GesuchNummerService gesuchNummerService;
-    private final GsDashboardMapper gsDashboardMapper;
+    private final FallRepository fallRepository;
+    private final FallDashboardItemMapper fallDashboardItemMapper;
     private final ConfigService configService;
     private final GesuchNotizService gesuchNotizService;
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
+    private final AusbildungRepository ausbildungRepository;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithOldestTranche(UUID id) {
@@ -115,9 +122,11 @@ public class GesuchService {
     @Transactional
     public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
         return gesuchRepository.findByIdOptional(gesuchId)
-            .map(gesuch -> gesuchMapperUtil.mapWithTranche(
-                gesuch,
-                gesuch.getGesuchTrancheById(gesuchTrancheId).orElseThrow(NotFoundException::new))
+            .map(
+                gesuch -> gesuchMapperUtil.mapWithTranche(
+                    gesuch,
+                    gesuch.getGesuchTrancheById(gesuchTrancheId).orElseThrow(NotFoundException::new)
+                )
             );
     }
 
@@ -145,15 +154,23 @@ public class GesuchService {
             final Integer steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
             final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
             steuerjahrToSet = ValidateUpdateLegalityUtil
-                .getAndValidateLegalityValue(benutzerRollenIdentifiers,
-                    steuerjahrDtoValue, steuerjahrExistingValue, steuerjahrDefaultValue);
+                .getAndValidateLegalityValue(
+                    benutzerRollenIdentifiers,
+                    steuerjahrDtoValue,
+                    steuerjahrExistingValue,
+                    steuerjahrDefaultValue
+                );
 
             final Integer veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsCode();
             final Integer veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsCode();
             final Integer veranlagungscodeDefaltValue = 0;
             veranlagungsCodeToSet = ValidateUpdateLegalityUtil
-                .getAndValidateLegalityValue(benutzerRollenIdentifiers,
-                    veranlagungsCodeDtoValue, veranlagungsCodeExistingValue, veranlagungscodeDefaltValue);
+                .getAndValidateLegalityValue(
+                    benutzerRollenIdentifiers,
+                    veranlagungsCodeDtoValue,
+                    veranlagungsCodeExistingValue,
+                    veranlagungscodeDefaltValue
+                );
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
         einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
@@ -169,13 +186,21 @@ public class GesuchService {
             .getGesuchsperiode()
             .getGesuchsjahr();
 
-        final var steuerdatenList = trancheToUpdate.getGesuchFormular().getSteuerdaten().stream()
-            .filter(tab -> tab.getSteuerdatenTyp() != null).toList();
+        final var steuerdatenList = trancheToUpdate.getGesuchFormular()
+            .getSteuerdaten()
+            .stream()
+            .filter(tab -> tab.getSteuerdatenTyp() != null)
+            .toList();
 
         for (final var steuerdatenUpdateDto : steuerdatenUpdateDtos) {
-            setAndValidateSteuerdatenTabUpdateLegality(steuerdatenUpdateDto,
-                steuerdatenList.stream().filter(tab -> tab.getId().equals(steuerdatenUpdateDto.getId())).
-                    findFirst().orElse(null), gesuchsjahr);
+            setAndValidateSteuerdatenTabUpdateLegality(
+                steuerdatenUpdateDto,
+                steuerdatenList.stream()
+                    .filter(tab -> tab.getId().equals(steuerdatenUpdateDto.getId()))
+                    .findFirst()
+                    .orElse(null),
+                gesuchsjahr
+            );
         }
     }
 
@@ -197,16 +222,22 @@ public class GesuchService {
             final Integer steuerjahrDtoValue = steuerdatenUpdateDto.getSteuerjahr();
             final Integer steuerjahrExistingValue = steuerdatenTabs.getSteuerjahr();
             final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-            steuerjahrToSet = ValidateUpdateLegalityUtil.
-                getAndValidateLegalityValue(benutzerRollenIdentifiers,
-                    steuerjahrDtoValue, steuerjahrExistingValue, steuerjahrDefaultValue);
+            steuerjahrToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
+                benutzerRollenIdentifiers,
+                steuerjahrDtoValue,
+                steuerjahrExistingValue,
+                steuerjahrDefaultValue
+            );
 
             final Integer veranlagungsCodeDtoValue = steuerdatenUpdateDto.getVeranlagungsCode();
             final Integer veranlagungsCodeExistingValue = steuerdatenTabs.getVeranlagungsCode();
             final Integer veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.
-                getAndValidateLegalityValue(benutzerRollenIdentifiers, veranlagungsCodeDtoValue,
-                    veranlagungsCodeExistingValue, veranlagungscodeDefaltValue);
+            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
+                benutzerRollenIdentifiers,
+                veranlagungsCodeDtoValue,
+                veranlagungsCodeExistingValue,
+                veranlagungscodeDefaltValue
+            );
         }
 
         steuerdatenUpdateDto.setSteuerjahr(steuerjahrToSet);
@@ -237,14 +268,17 @@ public class GesuchService {
                 trancheToUpdate
             );
         }
-        if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null
-            && !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()) {
+        if (
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null
+            && !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()
+        ) {
             setAndValidateSteuerdatenUpdateLegality(
                 gesuchUpdateDto
                     .getGesuchTrancheToWorkWith()
                     .getGesuchFormular()
                     .getSteuerdaten(),
-                trancheToUpdate);
+                trancheToUpdate
+            );
         }
 
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
@@ -274,11 +308,18 @@ public class GesuchService {
     @Transactional
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
+        gesuch.setAusbildung(ausbildungRepository.requireById(gesuch.getAusbildung().getId()));
+        final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
+            gesuch.getAusbildung()
+        );
+
+        gesuch.setGesuchsperiode(gesuchsperiode);
         createInitialGesuchTranche(gesuch);
         gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
         gesuchRepository.persistAndFlush(gesuch);
         return gesuchMapperUtil.mapWithTranche(
-            gesuch, gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
+            gesuch,
+            gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
         );
     }
 
@@ -287,11 +328,20 @@ public class GesuchService {
             .getGesuchsperiode(gesuch.getGesuchsperiode().getId())
             .orElseThrow(NotFoundException::new);
 
+        var ausbildungsstart = gesuch.getAusbildung()
+            .getAusbildungBegin()
+            .withYear(periode.getGesuchsperiodeStart().getYear());
+        if (ausbildungsstart.isAfter(periode.getGesuchsperiodeStopp())) {
+            ausbildungsstart = ausbildungsstart.minusYears(1);
+        }
+
         var tranche = new GesuchTranche()
-            .setGueltigkeit(new DateRange(periode.getGesuchsperiodeStart(), periode.getGesuchsperiodeStopp()))
+            .setGueltigkeit(new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1)))
             .setGesuch(gesuch)
             .setGesuchFormular(new GesuchFormular())
             .setTyp(GesuchTrancheTyp.TRANCHE);
+
+        tranche.getGesuchFormular().setTranche(tranche);
 
         gesuch.getGesuchTranchen().add(tranche);
     }
@@ -363,10 +413,10 @@ public class GesuchService {
             .toList();
 
         return new PaginatedSbDashboardDto(
-            results,
             page,
             results.size(),
-            Math.toIntExact(countQuery.fetchFirst())
+            Math.toIntExact(countQuery.fetchFirst()),
+            results
         );
     }
 
@@ -378,32 +428,13 @@ public class GesuchService {
             .toList();
     }
 
-    public List<GsDashboardDto> findGsDashboard() {
-        List<GsDashboardDto> gsDashboardDtos = new ArrayList<>();
+    public List<FallDashboardItemDto> getFallDashboardItemDtos() {
+        List<FallDashboardItemDto> fallDashboardItemDtos = new ArrayList<>();
         final var benutzer = benutzerService.getCurrentBenutzer();
-        final var gesuche = gesuchRepository.findForGs(benutzer.getId()).toList();
+        final var fall = fallRepository.findFallForGsOptional(benutzer.getId()).orElseThrow(NotFoundException::new);
+        fallDashboardItemDtos.add(fallDashboardItemMapper.toDto(fall));
 
-        for (var gesuch : gesuche) {
-            final var gesuchTranchen = gesuchTrancheService.getAllTranchenForGesuch(gesuch.getId());
-
-            final var offeneAenderung = gesuchTranchen.stream()
-                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
-                    && Set.of(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN).contains(tranche.getStatus()))
-                .findFirst().orElse(null);
-
-            final var missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()
-                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE))
-                .map(tranche -> ImmutablePair.of(
-                    tranche.getId(),
-                    gesuchTrancheService.getRequiredDokumentTypes(tranche.getId()).size()
-                ))
-                .filter(pair -> pair.getRight() > 0)
-                .findFirst();
-
-            gsDashboardDtos.add(gsDashboardMapper.toDto(gesuch, offeneAenderung, missingDocumentsTrancheIdAndCount));
-        }
-
-        return gsDashboardDtos;
+        return fallDashboardItemDtos;
     }
 
     @Transactional
@@ -417,11 +448,18 @@ public class GesuchService {
         preventUpdateVonGesuchIfReadOnly(gesuch);
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
-        gesuch.getGesuchTranchen().forEach(
-            gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
-        );
+        gesuch.getGesuchTranchen()
+            .forEach(
+                gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
+            );
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
+        final var ausbildung = gesuch.getAusbildung();
         gesuchRepository.delete(gesuch);
+        ausbildung.getGesuchs().remove(gesuch);
+
+        if (ausbildung.getGesuchs().isEmpty()) {
+            ausbildungRepository.delete(ausbildung);
+        }
     }
 
     @Transactional
@@ -459,7 +497,8 @@ public class GesuchService {
     public void gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
         // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto);
+        gesuchStatusService
+            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto);
     }
 
     @Transactional
@@ -506,11 +545,15 @@ public class GesuchService {
     public List<GesuchDokumentDto> getGesuchDokumenteForGesuch(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        return gesuch.getGesuchTranchen().stream().filter(
+        return gesuch.getGesuchTranchen()
+            .stream()
+            .filter(
                 gesuchTranche -> gesuchTranche.getStatus() != GesuchTrancheStatus.ABGELEHNT
-            ).flatMap(
+            )
+            .flatMap(
                 gesuchTranche -> gesuchDokumentRepository.findAllForGesuchTranche(gesuchTranche.getId())
-            ).map(gesuchDokumentMapper::toDto)
+            )
+            .map(gesuchDokumentMapper::toDto)
             .toList();
     }
 

@@ -10,9 +10,12 @@
  * Do not edit the class manually.
  */
 
-export type NotificationType = 'GESUCH_EINGEREICHT';
+export type NotificationType = 'GESUCH_EINGEREICHT' | 'GESUCH_STATUS_CHANGE_WITH_COMMENT' | 'FEHLENDE_DOKUMENTE' | 'AENDERUNG_ABGELEHNT';
 
 export const NotificationType = {
-    GESUCH_EINGEREICHT: 'GESUCH_EINGEREICHT' as NotificationType
+    GESUCH_EINGEREICHT: 'GESUCH_EINGEREICHT' as NotificationType,
+    GESUCH_STATUS_CHANGE_WITH_COMMENT: 'GESUCH_STATUS_CHANGE_WITH_COMMENT' as NotificationType,
+    FEHLENDE_DOKUMENTE: 'FEHLENDE_DOKUMENTE' as NotificationType,
+    AENDERUNG_ABGELEHNT: 'AENDERUNG_ABGELEHNT' as NotificationType
 };
 

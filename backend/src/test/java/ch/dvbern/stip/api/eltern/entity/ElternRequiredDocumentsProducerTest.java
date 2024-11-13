@@ -1,15 +1,31 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.eltern.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,11 +47,13 @@ class ElternRequiredDocumentsProducerTest {
 
     @Test
     void mutterIfErgaenzungsleistungen() {
-        formular.setElterns(Set.of(
-            new Eltern().setElternTyp(ElternTyp.MUTTER)
-                .setErgaenzungsleistungen(1)
+        formular.setElterns(
+            Set.of(
+                new Eltern().setElternTyp(ElternTyp.MUTTER)
+                    .setErgaenzungsleistungen(1)
 
-        ));
+            )
+        );
 
         RequiredDocsUtil.requiresOneOfManyAndType(
             getRequiredDocuments(formular),
@@ -45,10 +63,12 @@ class ElternRequiredDocumentsProducerTest {
 
     @Test
     void vaterIfErgaenzungsleistungen() {
-        formular.setElterns(Set.of(
-            new Eltern().setElternTyp(ElternTyp.VATER)
-                .setErgaenzungsleistungen(1)
-        ));
+        formular.setElterns(
+            Set.of(
+                new Eltern().setElternTyp(ElternTyp.VATER)
+                    .setErgaenzungsleistungen(1)
+            )
+        );
 
         RequiredDocsUtil.requiresOneOfManyAndType(
             getRequiredDocuments(formular),
@@ -58,10 +78,12 @@ class ElternRequiredDocumentsProducerTest {
 
     @Test
     void mutterIfSozialhilfebeitraege() {
-        formular.setElterns(Set.of(
-            new Eltern().setElternTyp(ElternTyp.MUTTER)
-                .setSozialhilfebeitraege(1)
-        ));
+        formular.setElterns(
+            Set.of(
+                new Eltern().setElternTyp(ElternTyp.MUTTER)
+                    .setSozialhilfebeitraege(1)
+            )
+        );
 
         RequiredDocsUtil.requiresOneOfManyAndType(
             getRequiredDocuments(formular),
@@ -71,10 +93,12 @@ class ElternRequiredDocumentsProducerTest {
 
     @Test
     void vaterIfSozialhilfebeitraege() {
-        formular.setElterns(Set.of(
-            new Eltern().setElternTyp(ElternTyp.VATER)
-                .setSozialhilfebeitraege(1)
-        ));
+        formular.setElterns(
+            Set.of(
+                new Eltern().setElternTyp(ElternTyp.VATER)
+                    .setSozialhilfebeitraege(1)
+            )
+        );
 
         RequiredDocsUtil.requiresOneOfManyAndType(
             getRequiredDocuments(formular),
@@ -84,10 +108,12 @@ class ElternRequiredDocumentsProducerTest {
 
     @Test
     void wohnkostenRequired() {
-        formular.setElterns(Set.of(
-            new Eltern().setElternTyp(ElternTyp.VATER)
-                .setWohnkosten(1)
-        ));
+        formular.setElterns(
+            Set.of(
+                new Eltern().setElternTyp(ElternTyp.VATER)
+                    .setWohnkosten(1)
+            )
+        );
 
         RequiredDocsUtil.requiresOneOfManyAndType(
             getRequiredDocuments(formular),
@@ -97,10 +123,12 @@ class ElternRequiredDocumentsProducerTest {
 
     @Test
     void familieWohnkostenRequired() {
-        formular.setElterns(Set.of(
+        formular.setElterns(
+            Set.of(
                 new Eltern().setElternTyp(ElternTyp.VATER)
                     .setWohnkosten(1)
-            ))
+            )
+        )
             .setFamiliensituation(new Familiensituation().setElternVerheiratetZusammen(true));
 
         RequiredDocsUtil.requiresOneOfManyAndType(
@@ -111,10 +139,12 @@ class ElternRequiredDocumentsProducerTest {
 
     @Test
     void vaterWohnkostenRequired() {
-        formular.setElterns(Set.of(
+        formular.setElterns(
+            Set.of(
                 new Eltern().setElternTyp(ElternTyp.VATER)
                     .setWohnkosten(1)
-            ))
+            )
+        )
             .setFamiliensituation(new Familiensituation().setElternVerheiratetZusammen(false));
 
         RequiredDocsUtil.requiresOneOfManyAndType(

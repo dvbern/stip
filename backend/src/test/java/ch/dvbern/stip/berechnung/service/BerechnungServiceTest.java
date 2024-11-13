@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.berechnung.service;
 
 import java.math.BigDecimal;
@@ -21,7 +38,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
@@ -84,17 +101,19 @@ class BerechnungServiceTest {
 
     @TestAsGesuchsteller
     @ParameterizedTest
-    @CsvSource({
-        "1, -6427",
-        "2, -14192",
-        "3, 6441",
-        "4, -17986",
-        "5, -39751", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
-        "6, -27179",
-        "7, -6669",
-        "8, -266",   // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
-        "9, -23527"
-    })
+    @CsvSource(
+        {
+            "1, -6427",
+            "2, -14192",
+            "3, 6441",
+            "4, -17986",
+            "5, -39751", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
+            "6, -27179",
+            "7, -6669",
+            "8, -266", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
+            "9, -23527"
+        }
+    )
     void testBerechnungFaelle(final int fall, final int expectedStipendien) {
         // Load Fall resources/berechnung/fall_{fall}.json, deserialize to a BerechnungRequestV1
         // and calculate Stipendien for it
@@ -105,8 +124,20 @@ class BerechnungServiceTest {
     @Test
     @TestAsGesuchsteller
     void testMinimalGesuchBerechnung() {
-        //Arrange
+        // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(10)
+                        )
+                )
+        );
+
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
 
@@ -135,26 +166,17 @@ class BerechnungServiceTest {
                 .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
         );
 
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(10)
-                        )
-                )
-        );
-
-        //Act
+        // Act
         List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultatDtos = null;
-        for (int i = 0; i< 1; i++) { // for profiling
+        for (int i = 0; i < 1; i++) { // for profiling
             tranchenBerechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
-                gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
+                gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
+                1,
+                0
             );
         }
 
-        //Assert
+        // Assert
         for (final var berechnungsresultatDto : tranchenBerechnungsresultatDtos) {
             assertThat(berechnungsresultatDto.getBerechnung(), is(not(nullValue())));
         }
@@ -163,19 +185,33 @@ class BerechnungServiceTest {
     @Test
     @TestAsGesuchsteller
     void testFall7GesuchBerechnung() {
-        //Arrange
+        // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
+                        )
+                )
+        );
+
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
 
         gesuch.setGesuchTranchen(
             List.of(
-                gesuch.getNewestGesuchTranche().get()
+                gesuch.getNewestGesuchTranche()
+                    .get()
                     .setGueltigkeit(
                         new DateRange(
                             LocalDate.of(2023, 8, 1),
                             LocalDate.of(2024, 7, 31)
                         )
-                    ).setTyp(GesuchTrancheTyp.TRANCHE)
+                    )
+                    .setTyp(GesuchTrancheTyp.TRANCHE)
             )
         );
 
@@ -236,7 +272,21 @@ class BerechnungServiceTest {
             )
         );
 
-        gesuchFormular.setAusbildung(
+        // Act
+        final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+
+        // Assert
+        assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(6669)));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void testFall8GesuchBerechnung() {
+        // Arrange
+        final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
@@ -247,30 +297,19 @@ class BerechnungServiceTest {
                 )
         );
 
-        //Act
-        final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
-
-        //Assert
-        assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(6669)));
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void testFall8GesuchBerechnung() {
-        //Arrange
-        final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
 
         gesuch.setGesuchTranchen(
             List.of(
-                gesuch.getNewestGesuchTranche().get()
+                gesuch.getNewestGesuchTranche()
+                    .get()
                     .setGueltigkeit(
                         new DateRange(
                             LocalDate.of(2023, 8, 1),
                             LocalDate.of(2024, 7, 31)
                         )
-                    ).setTyp(GesuchTrancheTyp.TRANCHE)
+                    )
+                    .setTyp(GesuchTrancheTyp.TRANCHE)
             )
         );
 
@@ -345,21 +384,10 @@ class BerechnungServiceTest {
             )
         );
 
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
-                        )
-                )
-        );
-
-        //Act
+        // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
-        //Assert
+        // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
         assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(266)));
     }
@@ -367,26 +395,10 @@ class BerechnungServiceTest {
     @Test
     @TestAsGesuchsteller
     void testFall11GesuchBerechnung() {
-        //Arrange
+        // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
-        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
-        gesuch.setGesuchTranchen(
-            List.of(
-                gesuch.getNewestGesuchTranche().get()
-                    .setGueltigkeit(
-                        new DateRange(
-                            LocalDate.of(2023, 8, 1),
-                            LocalDate.of(2024, 7, 31)
-                        )
-                    ).setTyp(GesuchTrancheTyp.TRANCHE)
-            )
-        );
 
-        gesuch.getGesuchsperiode()
-            .setAnzahlWochenLehre(47)
-            .setAnzahlWochenSchule(38);
-
-        gesuchFormular.setAusbildung(
+        gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
@@ -397,13 +409,33 @@ class BerechnungServiceTest {
                 )
         );
 
+        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+        gesuch.setGesuchTranchen(
+            List.of(
+                gesuch.getNewestGesuchTranche()
+                    .get()
+                    .setGueltigkeit(
+                        new DateRange(
+                            LocalDate.of(2023, 8, 1),
+                            LocalDate.of(2024, 7, 31)
+                        )
+                    )
+                    .setTyp(GesuchTrancheTyp.TRANCHE)
+            )
+        );
+
+        gesuch.getGesuchsperiode()
+            .setAnzahlWochenLehre(47)
+            .setAnzahlWochenSchule(38);
+
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)
             .setSozialhilfebeitraege(false)
             .setWohnsitz(Wohnsitz.MUTTER_VATER)
             .setWohnsitzAnteilMutter(BigDecimal.valueOf(0))
             .setWohnsitzAnteilVater(BigDecimal.valueOf(100))
-            .setGeburtsdatum( // Was 2000-01-01, used LocalDate.now to ensure complicity in the future
+            .setGeburtsdatum(
+                // Was 2000-01-01, used LocalDate.now to ensure complicity in the future
                 LocalDate.now().minusYears(24).minusMonths(6)
             );
 
@@ -465,8 +497,8 @@ class BerechnungServiceTest {
         gesuchFormular.setLebenslaufItems(
             Set.of(
                 new LebenslaufItem()
-                    .setVon(LocalDate.of(2016, 8 ,1))
-                    .setBis(LocalDate.of(2023, 8 ,1))
+                    .setVon(LocalDate.of(2016, 8, 1))
+                    .setBis(LocalDate.of(2023, 8, 1))
                     .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
             )
         );
@@ -483,7 +515,6 @@ class BerechnungServiceTest {
                 .setAusbildungskostenSekundarstufeZwei(950)
                 .setAuswaertigeMittagessenProWoche(5)
         );
-
 
         gesuchFormular.setSteuerdaten(
             Set.of(
@@ -515,12 +546,12 @@ class BerechnungServiceTest {
             )
         );
 
-        //Act
+        // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
         LOG.info(berechnungsresultatDto.toString());
 
-        //Assert
+        // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(2));
         assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(7044)));
     }
@@ -528,26 +559,10 @@ class BerechnungServiceTest {
     @Test
     @TestAsGesuchsteller
     void testFall14GesuchBerechnung() {
-        //Arrange
+        // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
-        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
-        gesuch.setGesuchTranchen(
-            List.of(
-                gesuch.getNewestGesuchTranche().get()
-                    .setGueltigkeit(
-                        new DateRange(
-                            LocalDate.of(2023, 8, 1),
-                            LocalDate.of(2024, 7, 31)
-                        )
-                    ).setTyp(GesuchTrancheTyp.TRANCHE)
-            )
-        );
 
-        gesuch.getGesuchsperiode()
-            .setAnzahlWochenLehre(47)
-            .setAnzahlWochenSchule(38);
-
-        gesuchFormular.setAusbildung(
+        gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
@@ -557,6 +572,25 @@ class BerechnungServiceTest {
                         )
                 )
         );
+
+        final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
+        gesuch.setGesuchTranchen(
+            List.of(
+                gesuch.getNewestGesuchTranche()
+                    .get()
+                    .setGueltigkeit(
+                        new DateRange(
+                            LocalDate.of(2023, 8, 1),
+                            LocalDate.of(2024, 7, 31)
+                        )
+                    )
+                    .setTyp(GesuchTrancheTyp.TRANCHE)
+            )
+        );
+
+        gesuch.getGesuchsperiode()
+            .setAnzahlWochenLehre(47)
+            .setAnzahlWochenSchule(38);
 
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)
@@ -610,8 +644,8 @@ class BerechnungServiceTest {
         gesuchFormular.setLebenslaufItems(
             Set.of(
                 new LebenslaufItem()
-                    .setVon(LocalDate.of(2016, 8 ,1))
-                    .setBis(LocalDate.of(2023, 8 ,1))
+                    .setVon(LocalDate.of(2016, 8, 1))
+                    .setBis(LocalDate.of(2023, 8, 1))
                     .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
             )
         );
@@ -620,7 +654,7 @@ class BerechnungServiceTest {
 
         gesuchFormular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setNettoerwerbseinkommen(9_100+gesuch.getGesuchsperiode().getEinkommensfreibetrag())
+                .setNettoerwerbseinkommen(9_100 + gesuch.getGesuchsperiode().getEinkommensfreibetrag())
                 .setVermoegen(0)
                 .setFahrkosten(2_760)
                 .setRenten(0)
@@ -628,7 +662,6 @@ class BerechnungServiceTest {
                 .setAusbildungskostenSekundarstufeZwei(0)
                 .setAuswaertigeMittagessenProWoche(0)
         );
-
 
         gesuchFormular.setSteuerdaten(
             Set.of(
@@ -660,20 +693,31 @@ class BerechnungServiceTest {
             )
         );
 
-        //Act
+        // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
-        //Assert
+        // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(2));
         assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(2126)));
     }
 
-
     @Test
     @TestAsGesuchsteller
     void testFall5GesuchBerechnungKinder() {
-        //Arrange
+        // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
+                        )
+                )
+        );
+
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
@@ -688,13 +732,15 @@ class BerechnungServiceTest {
             .setNiederlassungsstatus(Niederlassungsstatus.FLUECHTLING)
             .setNationalitaet(Land.IR)
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
-            .setGeburtsdatum(LocalDate.of(1996,7,1));
+            .setGeburtsdatum(LocalDate.of(1996, 7, 1));
 
-        gesuchFormular.setPartner((Partner) new Partner()
-            .setJahreseinkommen(25000)
-            .setVerpflegungskosten(1000)
-            .setFahrkosten(1600)
-            .setGeburtsdatum(LocalDate.of(1990,12,1)));
+        gesuchFormular.setPartner(
+            (Partner) new Partner()
+                .setJahreseinkommen(25000)
+                .setVerpflegungskosten(1000)
+                .setFahrkosten(1600)
+                .setGeburtsdatum(LocalDate.of(1990, 12, 1))
+        );
 
         gesuchFormular.setEinnahmenKosten(
             new EinnahmenKosten()
@@ -728,81 +774,71 @@ class BerechnungServiceTest {
                 .setVaterWiederverheiratet(false)
         );
 
-        gesuchFormular.setLebenslaufItems(Set.of(
-            new LebenslaufItem()
-                .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
-                .setVon(LocalDate.of(2011,8,1))
-                .setBis(LocalDate.of(2021,11,30))
-                .setTaetigkeitsBeschreibung("Hausfrau"),
-            new LebenslaufItem()
-                .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
-                .setVon(LocalDate.of(2021,12,1))
-                .setBis(LocalDate.of(2022,7,30))
-                .setTaetigkeitsBeschreibung("Flucht"),
-            new LebenslaufItem().
-                setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
-                .setVon(LocalDate.of(2022,8,1))
-                .setBis(LocalDate.of(2024,7,30))
-                .setTaetigkeitsBeschreibung("Diverse Jobs"),
-            new LebenslaufItem()
-                .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
-                .setVon(LocalDate.of(2024,8,1))
-                .setBis(LocalDate.of(2026,7,30))
-                .setTaetigkeitsBeschreibung("BFF Bern: EBA Lehre")
-            ));
+        gesuchFormular.setLebenslaufItems(
+            Set.of(
+                new LebenslaufItem()
+                    .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
+                    .setVon(LocalDate.of(2011, 8, 1))
+                    .setBis(LocalDate.of(2021, 11, 30))
+                    .setTaetigkeitsBeschreibung("Hausfrau"),
+                new LebenslaufItem()
+                    .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
+                    .setVon(LocalDate.of(2021, 12, 1))
+                    .setBis(LocalDate.of(2022, 7, 30))
+                    .setTaetigkeitsBeschreibung("Flucht"),
+                new LebenslaufItem().setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
+                    .setVon(LocalDate.of(2022, 8, 1))
+                    .setBis(LocalDate.of(2024, 7, 30))
+                    .setTaetigkeitsBeschreibung("Diverse Jobs"),
+                new LebenslaufItem()
+                    .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
+                    .setVon(LocalDate.of(2024, 8, 1))
+                    .setBis(LocalDate.of(2026, 7, 30))
+                    .setTaetigkeitsBeschreibung("BFF Bern: EBA Lehre")
+            )
+        );
 
         gesuchFormular.setElterns(
-            Set.of(
-            )
+            Set.of()
         );
 
         gesuchFormular.setSteuerdaten(
-            Set.of(
-            )
+            Set.of()
         );
 
         gesuchFormular.setGeschwisters(
-            Set.of(
-            )
+            Set.of()
         );
 
         Kind kind1 = (Kind) new Kind()
             .setNachname("Testfall5")
             .setVorname("Kind1")
-            .setGeburtsdatum(LocalDate.of(2013,9,1));
+            .setGeburtsdatum(LocalDate.of(2013, 9, 1));
         kind1.setWohnsitzAnteilPia(100);
         kind1.setAusbildungssituation(Ausbildungssituation.VORSCHULPFLICHTIG);
 
         Kind kind2 = (Kind) new Kind()
             .setNachname("Testfall5")
             .setVorname("Kind2")
-            .setGeburtsdatum(LocalDate.of(2019,6,1));
+            .setGeburtsdatum(LocalDate.of(2019, 6, 1));
         kind2.setWohnsitzAnteilPia(100);
         kind2.setAusbildungssituation(Ausbildungssituation.VORSCHULPFLICHTIG);
 
         gesuchFormular.setKinds(
             Set.of(
-                kind1,kind2
+                kind1,
+                kind2
             )
         );
 
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
-                        )
-                )
-        );
-
-        //Act
+        // Act
         final var berechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
-            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
+            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
+            1,
+            0
         );
 
-        //Assert
+        // Assert
         assertThat(berechnungsresultatDtos.size(), is(equalTo(1)));
         // TODO KSTIP-1503: Um 1 Franken daneben
         assertThat(berechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(-9937)));
@@ -811,8 +847,21 @@ class BerechnungServiceTest {
     @Test
     @TestAsGesuchsteller
     void testFall6BerechnungEinKind() {
-        //Arrange
+        // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(8)
+                        )
+                )
+                .setPensum(AusbildungsPensum.TEILZEIT)
+        );
+
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
@@ -828,8 +877,7 @@ class BerechnungServiceTest {
             .setNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C)
             .setNationalitaet(Land.DE)
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
-            .setGeburtsdatum(LocalDate.of(1988,4,1));
-
+            .setGeburtsdatum(LocalDate.of(1988, 4, 1));
 
         gesuchFormular.setEinnahmenKosten(
             new EinnahmenKosten()
@@ -862,53 +910,54 @@ class BerechnungServiceTest {
                 .setVaterWiederverheiratet(false)
         );
 
-        gesuchFormular.setLebenslaufItems(Set.of(
-            new LebenslaufItem()
-                .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
-                .setVon(LocalDate.of(2004,8,1))
-                .setBis(LocalDate.of(2008,7,30))
-                .setTaetigkeitsBeschreibung("Gymnasiale Maturität"),
-            new LebenslaufItem()
-                .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
-                .setVon(LocalDate.of(2008,8,1))
-                .setBis(LocalDate.of(2013,6,30))
-                .setTaetigkeitsBeschreibung("Diverse Jobs"),
-            new LebenslaufItem()
-                .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
-                .setVon(LocalDate.of(2013,7,1))
-                .setBis(LocalDate.of(2019,8,31))
-                .setTaetigkeitsBeschreibung("Diverse Jobs"),
-            new LebenslaufItem()
-                .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
-                .setVon(LocalDate.of(2019,8,1))
-                .setBis(LocalDate.of(2023,8,31))
-                .setTaetigkeitsBeschreibung("Bachelor (Hochschule/UNI)"),
-            new LebenslaufItem()
-                .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
-                .setVon(LocalDate.of(2023,9,1))
-                .setBis(LocalDate.of(2026,8,31))
-                .setTaetigkeitsBeschreibung("Fachhochschule Nordwestschweiz: Bachelor")
-        ));
+        gesuchFormular.setLebenslaufItems(
+            Set.of(
+                new LebenslaufItem()
+                    .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
+                    .setVon(LocalDate.of(2004, 8, 1))
+                    .setBis(LocalDate.of(2008, 7, 30))
+                    .setTaetigkeitsBeschreibung("Gymnasiale Maturität"),
+                new LebenslaufItem()
+                    .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
+                    .setVon(LocalDate.of(2008, 8, 1))
+                    .setBis(LocalDate.of(2013, 6, 30))
+                    .setTaetigkeitsBeschreibung("Diverse Jobs"),
+                new LebenslaufItem()
+                    .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
+                    .setVon(LocalDate.of(2013, 7, 1))
+                    .setBis(LocalDate.of(2019, 8, 31))
+                    .setTaetigkeitsBeschreibung("Diverse Jobs"),
+                new LebenslaufItem()
+                    .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
+                    .setVon(LocalDate.of(2019, 8, 1))
+                    .setBis(LocalDate.of(2023, 8, 31))
+                    .setTaetigkeitsBeschreibung("Bachelor (Hochschule/UNI)"),
+                new LebenslaufItem()
+                    .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
+                    .setVon(LocalDate.of(2023, 9, 1))
+                    .setBis(LocalDate.of(2026, 8, 31))
+                    .setTaetigkeitsBeschreibung("Fachhochschule Nordwestschweiz: Bachelor")
+            )
+        );
 
         gesuchFormular.setElterns(
-            Set.of( ((Eltern)
-                new Eltern()
+            Set.of(
+                ((Eltern) new Eltern()
                     .setWohnkosten(0)
-                    .setGeburtsdatum(LocalDate.of(1963,8,1)))
-                    .setElternTyp(ElternTyp.VATER)
-                    ,
-                ((Eltern)
-                    new Eltern()
+                    .setGeburtsdatum(LocalDate.of(1963, 8, 1)))
+                        .setElternTyp(ElternTyp.VATER),
+                ((Eltern) new Eltern()
                     .setWohnkosten(0)
-                    .setGeburtsdatum(LocalDate.of(1963,6,1)))
-                    .setElternTyp(ElternTyp.MUTTER)
+                    .setGeburtsdatum(LocalDate.of(1963, 6, 1)))
+                        .setElternTyp(ElternTyp.MUTTER)
             )
         );
 
         gesuchFormular.setSteuerdaten(
-            Set.of( new Steuerdaten().setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
-                .setTotalEinkuenfte(15201)
-                .setIsArbeitsverhaeltnisSelbstaendig(false)
+            Set.of(
+                new Steuerdaten().setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+                    .setTotalEinkuenfte(15201)
+                    .setIsArbeitsverhaeltnisSelbstaendig(false)
                     .setVerpflegung(0)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(0)
@@ -929,14 +978,13 @@ class BerechnungServiceTest {
         );
 
         gesuchFormular.setGeschwisters(
-            Set.of(
-            )
+            Set.of()
         );
 
         Kind kind1 = (Kind) new Kind()
             .setNachname("Testfall6")
             .setVorname("Kind1")
-            .setGeburtsdatum(LocalDate.of(2008,8,1));
+            .setGeburtsdatum(LocalDate.of(2008, 8, 1));
         kind1.setWohnsitzAnteilPia(0);
         kind1.setAusbildungssituation(Ausbildungssituation.VORSCHULPFLICHTIG);
 
@@ -946,23 +994,14 @@ class BerechnungServiceTest {
             )
         );
 
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(8)
-                        )
-                ).setPensum(AusbildungsPensum.TEILZEIT)
-        );
-
-        //Act
+        // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuchTranche(
-            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new), 1, 0
+            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
+            1,
+            0
         );
 
-        //Assert
+        // Assert
         assertThat(berechnungsresultatDto.size(), is(1));
         assertThat(berechnungsresultatDto.get(0).getBerechnung(), is(equalTo(-27179)));
     }

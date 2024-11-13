@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.quarkus.exception;
 
 import java.util.List;
@@ -46,12 +63,17 @@ class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingException
             if (cause instanceof AppValidationException av) {
                 // this case happens when e.g. the emailaddress is parsed and fails
                 // cause of this we get a message from the caused exception but the path from the jsonexception
-                return buildValidationErrorResponse(new AppValidationErrorResponse(List.of(
-                    Violation.fromReferenceList(
-                        tl.translate(av.getI18nMessage()),
-                        av.getClientKey(),
-                        exception.getPath()
-                    ))));
+                return buildValidationErrorResponse(
+                    new AppValidationErrorResponse(
+                        List.of(
+                            Violation.fromReferenceList(
+                                tl.translate(av.getI18nMessage()),
+                                av.getClientKey(),
+                                exception.getPath()
+                            )
+                        )
+                    )
+                );
             }
 
             AppFailureMessage failureMessage = AppFailureMessage.jsonMapping();
@@ -67,10 +89,13 @@ class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingException
             ExceptionId exceptionId = internalErrorMessage.getId();
             LOG.error("Error while building the error message: {}", exceptionId, rte);
             var msg = tl.translate(internalErrorMessage.getI18nMessage());
-            return buildFailureResponse(new AppFailureErrorResponse(
-                exceptionId,
-                msg,
-                "error building the validation error message, see server logfile for details"));
+            return buildFailureResponse(
+                new AppFailureErrorResponse(
+                    exceptionId,
+                    msg,
+                    "error building the validation error message, see server logfile for details"
+                )
+            );
         }
     }
 

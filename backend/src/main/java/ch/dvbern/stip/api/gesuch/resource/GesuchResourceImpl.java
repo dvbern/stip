@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.resource;
 
 import java.time.LocalDate;
@@ -10,10 +27,10 @@ import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -120,15 +137,15 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuch).build();
     }
 
-    @AllowAll
     @RolesAllowed(GESUCH_READ)
+    @AllowAll
     @Override
     public Response getGsDashboard() {
-        return Response.ok(gesuchService.findGsDashboard()).build();
+        return Response.ok(gesuchService.getFallDashboardItemDtos()).build();
     }
 
-    @AllowAll
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
+    @AllowAll
     @Override
     public Response getGesucheGs() {
         return Response.ok(gesuchService.findGesucheGs()).build();
@@ -176,13 +193,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getGesucheForFall(UUID fallId) {
-        fallAuthorizer.canRead(fallId);
-        return Response.ok(gesuchService.findAllForFall(fallId)).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
     public Response getStatusProtokoll(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         final var statusprotokoll = gesuchHistoryService.getStatusprotokoll(gesuchId);
@@ -213,8 +223,8 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     // TODO KSTIP-1247: Update which roles can do this
-    @AllowAll
     @RolesAllowed(GESUCH_READ)
+    @AllowAll
     @Override
     public Response getSbTrancheChanges(UUID aenderungId) {
         final var changes = gesuchService.getSbTrancheChanges(aenderungId);

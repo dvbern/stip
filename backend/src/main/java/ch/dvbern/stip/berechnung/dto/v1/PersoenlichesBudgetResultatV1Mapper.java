@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.math.BigDecimal;
@@ -69,8 +86,9 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             .steuerbaresVermoegen(antragssteller.getVermoegen())
             .anrechenbaresVermoegen(
                 BigDecimal.valueOf(
-                    antragssteller.getVermoegen() * berechnungsRequest.getStammdaten().getVermoegensanteilInProzent() / 100.0
-                    ).setScale(0, RoundingMode.HALF_UP).intValue()
+                    antragssteller.getVermoegen() * berechnungsRequest.getStammdaten().getVermoegensanteilInProzent()
+                    / 100.0
+                ).setScale(0, RoundingMode.HALF_UP).intValue()
             )
             .anteilFamilienbudget(
                 getAnteilFamilienBudget(familienBudgetresultatList, antragssteller)
@@ -102,9 +120,11 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
                 continue;
             }
             if (antragssteller.isHalbierungElternbeitrag()) {
-                anteilFamilienBudget += (familienBudget / (familienBudgetresultat.getAnzahlGeschwisterInAusbildung() + 1)) / 2;
+                anteilFamilienBudget +=
+                    (familienBudget / (familienBudgetresultat.getAnzahlGeschwisterInAusbildung() + 1)) / 2;
             } else {
-                anteilFamilienBudget += familienBudget / (familienBudgetresultat.getAnzahlGeschwisterInAusbildung() + 1);
+                anteilFamilienBudget +=
+                    familienBudget / (familienBudgetresultat.getAnzahlGeschwisterInAusbildung() + 1);
             }
         }
         return anteilFamilienBudget;

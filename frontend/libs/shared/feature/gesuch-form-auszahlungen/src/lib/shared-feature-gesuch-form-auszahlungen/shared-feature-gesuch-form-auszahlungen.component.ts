@@ -10,12 +10,9 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
-  AbstractControl,
   FormsModule,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,7 +21,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { extractIBAN } from 'ibantools';
 import { Subject, distinctUntilChanged, shareReplay } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -39,6 +35,7 @@ import {
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { AUSZAHLUNG } from '@dv/shared/model/gesuch-form';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -60,8 +57,8 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import { ibanValidator } from '@dv/shared/util/validator-iban';
 import { calculateElternSituationGesuch } from '@dv/shared/util-fn/gesuch-util';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-gesuch-form-auszahlungen.selector';
 
@@ -360,24 +357,4 @@ export class SharedFeatureGesuchFormAuszahlungenComponent implements OnInit {
       },
     };
   }
-}
-
-export function ibanValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    if (control.value === null || control.value === '') {
-      return null;
-    }
-    const extractIBANResult = extractIBAN('CH' + control.value);
-    if (!extractIBANResult.valid || extractIBANResult.countryCode !== 'CH') {
-      return { invalidIBAN: true };
-    }
-    // Check IBAN is not a QR-IBAN, a QR based one, has in the first 5 digits a value between 30000 and 31999
-    if (
-      +extractIBANResult.iban.substring(4, 9) >= 30000 &&
-      +extractIBANResult.iban.substring(4, 9) <= 31999
-    ) {
-      return { qrIBAN: true };
-    }
-    return null;
-  };
 }

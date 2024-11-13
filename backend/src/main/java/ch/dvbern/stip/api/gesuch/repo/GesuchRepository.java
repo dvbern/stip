@@ -1,15 +1,33 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.repo;
 
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
-import ch.dvbern.stip.api.gesuch.entity.QGesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.QGesuchTranche;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
+import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.JPAExpressions;
@@ -28,10 +46,13 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     public Stream<Gesuch> findForGs(final UUID gesuchstellerId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var gesuch = QGesuch.gesuch;
+        final var ausbildung = QAusbildung.ausbildung;
 
         final var query = queryFactory
             .selectFrom(gesuch)
-            .where(gesuch.fall.gesuchsteller.id.eq(gesuchstellerId));
+            .join(ausbildung)
+            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .where(ausbildung.fall.gesuchsteller.id.eq(gesuchstellerId));
         return query.stream();
     }
 
@@ -79,12 +100,15 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return query;
     }
 
-
     private JPAQuery<Gesuch> addMeineFilter(final UUID benutzerId, final JPAQuery<Gesuch> query) {
         final var gesuch = QGesuch.gesuch;
+        final var ausbildung = QAusbildung.ausbildung;
         final var zuordnung = QZuordnung.zuordnung;
 
-        query.join(zuordnung).on(gesuch.fall.id.eq(zuordnung.fall.id))
+        query.join(ausbildung)
+            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .join(zuordnung)
+            .on(ausbildung.fall.id.eq(zuordnung.fall.id))
             .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
 
         return query;
@@ -93,11 +117,13 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     public Stream<Gesuch> findAllForFall(UUID fallId) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuch = QGesuch.gesuch;
+        final var ausbildung = QAusbildung.ausbildung;
 
         var query = queryFactory
-            .select(gesuch)
-            .from(gesuch)
-            .where(gesuch.fall.id.eq(fallId));
+            .selectFrom(gesuch)
+            .join(ausbildung)
+            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .where(ausbildung.fall.id.eq(fallId));
         return query.stream();
     }
 
@@ -110,19 +136,27 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuch)
-            .join(tranche).on(tranche.gesuch.id.eq(gesuch.id))
-            .join(formular).on(formular.tranche.id.eq(tranche.id))
-            .join(pia).on(formular.personInAusbildung.id.eq(pia.id))
-            .join(gesuchsperiode).on(gesuch.gesuchsperiode.id.eq(gesuchsperiode.id))
+            .join(tranche)
+            .on(tranche.gesuch.id.eq(gesuch.id))
+            .join(formular)
+            .on(formular.tranche.id.eq(tranche.id))
+            .join(pia)
+            .on(formular.personInAusbildung.id.eq(pia.id))
+            .join(gesuchsperiode)
+            .on(gesuch.gesuchsperiode.id.eq(gesuchsperiode.id))
             .where(
                 gesuch.id.in(
                     JPAExpressions
                         .select(gesuch.id)
                         .from(gesuch)
-                        .join(tranche).on(tranche.gesuch.id.eq(gesuch.id))
-                        .join(formular).on(formular.tranche.id.eq(tranche.id))
-                        .join(pia).on(formular.personInAusbildung.id.eq(pia.id))
-                        .join(gesuchsperiode).on(gesuch.gesuchsperiode.id.eq(gesuchsperiode.id))
+                        .join(tranche)
+                        .on(tranche.gesuch.id.eq(gesuch.id))
+                        .join(formular)
+                        .on(formular.tranche.id.eq(tranche.id))
+                        .join(pia)
+                        .on(formular.personInAusbildung.id.eq(pia.id))
+                        .join(gesuchsperiode)
+                        .on(gesuch.gesuchsperiode.id.eq(gesuchsperiode.id))
                         .limit(1)
                 )
             )
@@ -152,7 +186,8 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuch)
-            .join(gesuchTranche).on(gesuchTranche.gesuch.id.eq(gesuch.id))
+            .join(gesuchTranche)
+            .on(gesuchTranche.gesuch.id.eq(gesuch.id))
             .where(gesuchTranche.id.eq(gesuchTrancheId))
             .stream()
             .findFirst()

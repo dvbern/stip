@@ -18,12 +18,12 @@ import { Subject, concat, from, of } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 
 import { SpecialValidationError } from '@dv/shared/model/gesuch-form';
+import { isDefined } from '@dv/shared/model/type-util';
 import { fromFormatedNumber } from '@dv/shared/util/maskito-util';
 import {
   ComponentWithForm,
   hasUnsavedChanges,
 } from '@dv/shared/util/unsaved-changes';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 type OnlyString<T> = T extends string ? T : never;
 type StringToNumber<T> = Exclude<T, string> | number;

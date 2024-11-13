@@ -8,20 +8,20 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package ch.dvbern.stip.api.fall.entity;
 
 import java.util.Set;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -70,6 +70,6 @@ public class Fall extends AbstractMandantEntity {
     @OneToOne(mappedBy = "fall")
     private Zuordnung sachbearbeiterZuordnung;
 
-    @OneToMany(mappedBy = "fall")
-    private Set<Gesuch> gesuch;
+    @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
+    private Set<Ausbildung> ausbildungs;
 }

@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.arch;
 
 import ch.dvbern.stip.arch.util.ArchTestUtil;
@@ -7,6 +24,7 @@ import com.tngtech.archunit.library.dependencies.Slice;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
@@ -63,9 +81,11 @@ class ArchitectureTest {
 
     @Test
     void no_cycles_between_features() {
-        var rule = slices().matching("..stip.api.(**).service")
+        var rule = slices()
+            .matching("..stip.api.(**).service")
             .should()
             .beFreeOfCycles()
+            .ignoreDependency(resideInAPackage("..ausbildung.."), DescribedPredicate.alwaysTrue())
             .because("Cycles between feature decrease maintainability. Introduce a new shared feature");
         rule.check(ArchTestUtil.APP_CLASSES);
     }

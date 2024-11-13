@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.io.BufferedReader;
@@ -13,9 +30,13 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
@@ -36,15 +57,16 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.service.GesuchTrancheMapper;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -74,6 +96,8 @@ public class TestcaseSeeding extends Seeder {
     private final GesuchRepository gesuchRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final DokumentRepository dokumentRepository;
+    private final AusbildungRepository ausbildungRepository;
+    private final AusbildungMapper ausbildungMapper;
 
     @Override
     public int getPriority() {
@@ -109,19 +133,21 @@ public class TestcaseSeeding extends Seeder {
             }
 
             // Find and map to already seeded values
-            final var ausbildung = dto.getGesuchTrancheToWorkWith().getGesuchFormular().getAusbildung();
-            ausbildung.getAusbildungsgang()
-                .setId(getOrCreateAusbildungsgaenge(possibleAusbildungsgaenge, ausbildung.getAusbildungsgang()));
+            final var ausbildungDto = dto.getGesuchTrancheToWorkWith().getGesuchFormular().getAusbildung();
+            ausbildungDto.getAusbildungsgang()
+                .setId(getOrCreateAusbildungsgaenge(possibleAusbildungsgaenge, ausbildungDto.getAusbildungsgang()));
 
             // Map to entity and correct the mapping
             final var tranche = gesuchTrancheMapper.toEntity(dto.getGesuchTrancheToWorkWith());
             tranche.setTyp(GesuchTrancheTyp.TRANCHE);
             tranche.setStatus(GesuchTrancheStatus.AKZEPTIERT);
             tranche.setGesuchDokuments(new ArrayList<>());
-            tranche.setGueltigkeit(new DateRange(
-                gesuchperiodeToAttach.getGesuchsperiodeStart(),
-                gesuchperiodeToAttach.getGesuchsperiodeStopp()
-            ));
+            tranche.setGueltigkeit(
+                new DateRange(
+                    gesuchperiodeToAttach.getGesuchsperiodeStart(),
+                    gesuchperiodeToAttach.getGesuchsperiodeStopp()
+                )
+            );
 
             correctAuszahlungAdresse(tranche.getGesuchFormular());
 
@@ -130,18 +156,22 @@ public class TestcaseSeeding extends Seeder {
 
             // Create Gesuchsteller, Fall and Gesuch
             final var fall = createFall(String.format("BE.F.T%04d", index), createGesuchsteller(testcase));
+            final var ausbildung = createAusbildung(ausbildungDto);
+            ausbildung.setId(null);
             final var gesuch = createGesuch(
                 gesuchperiodeToAttach,
                 String.format("BE.%s.G.T%04d", year, index),
                 tranche
             );
-
-            gesuch.setFall(fall);
-            fall.setGesuch(Set.of(gesuch));
+            fall.setAusbildungs(Set.of(ausbildung));
+            ausbildung.setGesuchs(List.of(gesuch));
+            ausbildung.setFall(fall);
+            gesuch.setAusbildung(ausbildung);
             tranche.setGesuch(gesuch);
+            tranche.getGesuchFormular().setTranche(tranche);
 
-            // Persist to database
             fallRepository.persist(fall);
+            ausbildungRepository.persist(ausbildung);
             gesuchRepository.persist(gesuch);
 
             uploadDocuments(tranche, json);
@@ -152,7 +182,7 @@ public class TestcaseSeeding extends Seeder {
 
     @Override
     protected List<String> getProfiles() {
-        return configService.getSeedTestcasesOnProfile();
+        return List.of("dev");
     }
 
     UUID getOrCreateAusbildungsgaenge(
@@ -160,9 +190,12 @@ public class TestcaseSeeding extends Seeder {
         final AusbildungsgangDto dto
     ) {
         return possibleAusbildungsgaenge.stream()
-            .filter(possibleAusbildungsgang ->
-                possibleAusbildungsgang.getBildungskategorie().getBfs() == dto.getBildungskategorie().getBfs() &&
-                    possibleAusbildungsgang.getBezeichnungDe().equals(dto.getBezeichnungDe()))
+            .filter(
+                possibleAusbildungsgang -> possibleAusbildungsgang.getBildungskategorie()
+                    .getBfs() == dto.getBildungskategorie().getBfs()
+                &&
+                possibleAusbildungsgang.getBezeichnungDe().equals(dto.getBezeichnungDe())
+            )
             .findFirst()
             .orElseGet(() -> {
                 final var bildungskategorieToCreate = new Bildungskategorie()
@@ -173,10 +206,11 @@ public class TestcaseSeeding extends Seeder {
                 bildungskategorieRepository.persist(bildungskategorieToCreate);
 
                 final var toCreate = new Ausbildungsgang()
-                    .setAusbildungsstaette(((Ausbildungsstaette) new Ausbildungsstaette()
-                        .setNameDe(dto.getBildungskategorie().getBezeichnungDe())
-                        .setNameFr(dto.getBildungskategorie().getBezeichnungFr())
-                        .setId(dto.getAusbildungsstaetteId()))
+                    .setAusbildungsstaette(
+                        ((Ausbildungsstaette) new Ausbildungsstaette()
+                            .setNameDe(dto.getBildungskategorie().getBezeichnungDe())
+                            .setNameFr(dto.getBildungskategorie().getBezeichnungFr())
+                            .setId(dto.getAusbildungsstaetteId()))
                     )
                     .setBezeichnungFr(dto.getBezeichnungFr())
                     .setBezeichnungDe(dto.getBezeichnungDe())
@@ -274,7 +308,6 @@ public class TestcaseSeeding extends Seeder {
 
         nullId.accept(formular.getPersonInAusbildung());
         formular.getPersonInAusbildung().getAdresse().setId(null);
-        nullId.accept(formular.getAusbildung());
         nullId.accept(formular.getFamiliensituation());
         nullId.accept(formular.getPartner());
 
@@ -325,6 +358,14 @@ public class TestcaseSeeding extends Seeder {
         return new Fall()
             .setFallNummer(fallNummer)
             .setGesuchsteller(gesuchsteller);
+    }
+
+    Ausbildung createAusbildung(final AusbildungDto ausbildungDto) {
+        var ausbildung = ausbildungMapper.toEntity(ausbildungDto);
+        if (ausbildung.getStatus() == null) {
+            ausbildung.setStatus(AusbildungsStatus.AKTIV);
+        }
+        return ausbildung;
     }
 
     Gesuch createGesuch(final Gesuchsperiode gesuchsperiode, final String gesuchNummer, final GesuchTranche tranche) {

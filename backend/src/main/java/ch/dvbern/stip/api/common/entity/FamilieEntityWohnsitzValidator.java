@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.common.entity;
 
 import java.util.Map;
@@ -13,18 +30,24 @@ public class FamilieEntityWohnsitzValidator {
     // map of valid Wohnsitz values when ElternteilUnbekanntVerstorben is true
     private static final Map<Wohnsitz, Optional<Boolean>> ONE_ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP = Map.of(
         // will be evaluated
-        Wohnsitz.MUTTER_VATER, Optional.empty(),
-        Wohnsitz.FAMILIE, Optional.of(false),
+        Wohnsitz.MUTTER_VATER,
+        Optional.empty(),
+        Wohnsitz.FAMILIE,
+        Optional.of(false),
         // every other entry is valid = true
-        Wohnsitz.EIGENER_HAUSHALT, Optional.of(true)
+        Wohnsitz.EIGENER_HAUSHALT,
+        Optional.of(true)
     );
 
     // map of valid Wohnsitz values when ElternVerheiratetZusammen is false
     private static final Map<Wohnsitz, Boolean> ELTERN_SEPARATED_WOHNSITUATION_VALID_MAP = Map.of(
-        Wohnsitz.FAMILIE, false,
+        Wohnsitz.FAMILIE,
+        false,
         // every other entry is valid = true
-        Wohnsitz.MUTTER_VATER, true,
-        Wohnsitz.EIGENER_HAUSHALT, true
+        Wohnsitz.MUTTER_VATER,
+        true,
+        Wohnsitz.EIGENER_HAUSHALT,
+        true
     );
 
     public boolean isValid(AbstractFamilieEntity familieEntity, Familiensituation familiensituation) {
@@ -97,7 +120,7 @@ public class FamilieEntityWohnsitzValidator {
         } else {
             // one of both has to be 100%
             return isAnteilMutter100Percent
-                || isAnteilVater100Percent;
+            || isAnteilVater100Percent;
         }
     }
 

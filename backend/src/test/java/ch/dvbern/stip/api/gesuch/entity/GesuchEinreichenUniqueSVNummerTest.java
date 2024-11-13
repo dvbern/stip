@@ -1,23 +1,45 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -34,19 +56,19 @@ import static org.hamcrest.Matchers.is;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 public class GesuchEinreichenUniqueSVNummerTest {
+    private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
+    private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
+    private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    public static final String VALID_IBAN = "CH5604835012345678009";
-    private static final String UNIQUE_GUELTIGE_AHV_NUMMER = "756.2222.2222.24";
-    public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-    public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-
-    UUID gesuchTrancheId;
+    private static UUID gesuchTrancheId;
+    private static UUID ausbildungId;
+    private static final List<UUID> gesucheToDelete = new ArrayList<>();
 
     @Test
     @Order(1)
     @TestAsGesuchsteller
     void gesuchEinreichtenWithUniqueSvNummerAccepted() {
-        RestAssured.filters(new RequestLoggingFilter());
         UUID gesuchId = createFullGesuch();
 
         final var file = TestUtil.getTestPng();
@@ -54,7 +76,8 @@ public class GesuchEinreichenUniqueSVNummerTest {
             TestUtil.uploadFile(dokumentApiSpec, gesuchTrancheId, dokType, file);
         }
 
-        gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
+        gesuchApiSpec.gesuchEinreichen()
+            .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -62,13 +85,33 @@ public class GesuchEinreichenUniqueSVNummerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(2)
     @TestAsGesuchsteller
     void gesuchEinreichenWithNonUniqueSvNummerError() {
-        RestAssured.filters(new RequestLoggingFilter());
-        UUID gesuchId = createFullGesuch(); //neues Gesuch mit selber AHV-Nummer wird erstellt
+        final var gesuchCreateDtoSpec = new GesuchCreateDtoSpec();
+        gesuchCreateDtoSpec.setAusbildungId(ausbildungId);
+        UUID gesuchId = TestUtil.extractIdFromResponse(
+            gesuchApiSpec.createGesuch() // neues Gesuch mit selber AHV-Nummer wird erstellt
+                .body(gesuchCreateDtoSpec)
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.CREATED.getStatusCode())
+        );
 
-        var response = gesuchApiSpec.gesuchEinreichen().gesuchIdPath(gesuchId)
+        gesucheToDelete.add(gesuchId);
+        final var gesuch = gesuchApiSpec.getCurrentGesuch()
+            .gesuchIdPath(gesuchId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+
+        var response = gesuchApiSpec.gesuchEinreichen()
+            .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -80,35 +123,33 @@ public class GesuchEinreichenUniqueSVNummerTest {
             response.getValidationErrors().get(0).getMessageTemplate(),
             is(VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE)
         );
+    }
 
+    @Test
+    @Order(3)
+    @TestAsAdmin
+    void deleteGesuch() {
+        final var gesuche = gesuchApiSpec.getGesucheGs()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDto[].class);
+
+        for (final var gesuchToDelete : gesucheToDelete) {
+            TestUtil.deleteGesuch(gesuchApiSpec, gesuchToDelete);
+        }
     }
 
     private UUID createFullGesuch() {
-        var response = gesuchApiSpec.createGesuch()
-            .body(TestUtil.initGesuchCreateDto())
-            .execute(TestUtil.PEEK_IF_ENV_SET).then();
+        final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        ausbildungId = gesuch.getAusbildungId();
+        gesucheToDelete.add(gesuch.getId());
+        gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
+        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
 
-        response.assertThat()
-            .statusCode(Response.Status.CREATED.getStatusCode());
-
-        var gesuchId = TestUtil.extractIdFromResponse(response);
-        gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
-            .gesuchIdPath(gesuchId)
-            .execute(TestUtil.PEEK_IF_ENV_SET).then().extract()
-            .body()
-            .as(GesuchDtoSpec.class)
-            .getGesuchTrancheToWorkWith().getId();
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuchTrancheId);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setSozialversicherungsnummer(UNIQUE_GUELTIGE_AHV_NUMMER);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getAuszahlung().setIban(VALID_IBAN);
-        gesuchApiSpec.updateGesuch().gesuchIdPath(gesuchId).body(gesuchUpdateDTO).execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.ACCEPTED.getStatusCode());
-        return gesuchId;
+        return gesuch.getId();
     }
 }

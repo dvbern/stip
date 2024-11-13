@@ -45,7 +45,11 @@ describe('sharedUtilFnErrorTransformer - fn', () => {
       validationWarnings: [],
       hasDocuments: null,
       message: 'Es darf nur ein Gesuch pro Gesuchsteller eingereicht werden',
-      messageKey: 'shared.genericError.validation',
+      messageKey:
+        'dvbern.stip.validation.gesuch.einreichen.svnummer.unique.message',
+      messageKeys: [
+        'dvbern.stip.validation.gesuch.einreichen.svnummer.unique.message',
+      ],
       status: error.status,
     });
   });
@@ -115,7 +119,8 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
         validationWarnings: [],
         hasDocuments: null,
         message: 'error validation 1',
-        messageKey: 'shared.genericError.validation',
+        messageKey: 'dv.error.validation.1',
+        messageKeys: ['dv.error.validation.1', 'dv.error.validation.2'],
         status: 400,
       },
       {
@@ -124,7 +129,8 @@ describe('sharedUtilFnErrorTransformer - filter', () => {
         validationWarnings: [],
         hasDocuments: null,
         message: 'error validation 3',
-        messageKey: 'shared.genericError.validation',
+        messageKey: 'dv.error.validation.3',
+        messageKeys: ['dv.error.validation.3'],
         status: 400,
       },
     ]);

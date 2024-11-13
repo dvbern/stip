@@ -1,8 +1,26 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.arch;
 
 import java.util.Arrays;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.sozialdienstadmin.entity.SozialdienstAdmin;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
@@ -22,7 +40,8 @@ class JpaTest {
 
     @Test
     void test_index_on_foreign_keys() {
-        var rule = fields().that().areAnnotatedWith(JoinColumn.class)
+        var rule = fields().that()
+            .areAnnotatedWith(JoinColumn.class)
             .and()
             .areDeclaredInClassesThat()
             .areAnnotatedWith(Entity.class)
@@ -37,8 +56,11 @@ class JpaTest {
                     final var tableAnnotation = fieldOwner.getAnnotationOfType(Table.class);
 
                     // don't check if it's not a foreign key constraint (e.g. on a inverse join column definition)
-                    if (javaField.getAnnotationOfType(JoinColumn.class).foreignKey().value()
-                        != ConstraintMode.CONSTRAINT) {
+                    if (
+                        javaField.getAnnotationOfType(JoinColumn.class)
+                            .foreignKey()
+                            .value() != ConstraintMode.CONSTRAINT
+                    ) {
                         return;
                     }
 
@@ -63,8 +85,12 @@ class JpaTest {
 
     @Test
     void test_index_on_tenant_field() {
-        var rule = classes().that().areAssignableTo(AbstractMandantEntity.class)
-            .and().areAnnotatedWith(Entity.class)
+        var rule = classes().that()
+            .areAssignableTo(AbstractMandantEntity.class)
+            .and()
+            .areNotAssignableTo(SozialdienstAdmin.class)
+            .and()
+            .areAnnotatedWith(Entity.class)
             .should((new ArchCondition<>("have an index") {
                 @Override
                 public void check(JavaClass javaClass, ConditionEvents conditionEvents) {

@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.UUID;
@@ -9,8 +26,9 @@ import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
@@ -49,52 +67,55 @@ class GesuchUpdateDefaultValuesTest {
 
     @Test
     @TestAsSachbearbeiter
-    void testUpdateEinnahmeKostenVeranlagungscodeAsSB(){
+    void testUpdateEinnahmeKostenVeranlagungscodeAsSB() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(99);
-        var einnahmeKostenUpdateDto = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
+        var einnahmeKostenUpdateDto =
+            gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
         assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(99));
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
         assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(0));
     }
 
     @Test
     @TestAsGesuchsteller
-    void testUpdateEinnahmeKostenVeranlagungscodeAsGS(){
+    void testUpdateEinnahmeKostenVeranlagungscodeAsGS() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(99);
-        var einnahmeKostenUpdateDto = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
+        var einnahmeKostenUpdateDto =
+            gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
         assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(0));
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
         assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(0));
     }
 
     @Test
     @TestAsSachbearbeiter
-    void testUpdateGesuchEinnahmenKostenSteuerjahrAsSB(){
+    void testUpdateGesuchEinnahmenKostenSteuerjahrAsSB() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
-        var einnahmeKostenUpdateDto = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
+        var einnahmeKostenUpdateDto =
+            gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
@@ -102,21 +123,25 @@ class GesuchUpdateDefaultValuesTest {
             .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
-        assertThat(einnahmeKostenUpdateDto.getSteuerjahr(), is(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1));
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        assertThat(
+            einnahmeKostenUpdateDto.getSteuerjahr(),
+            is(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
+        );
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2023);
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
         assertThat(einnahmeKostenUpdateDto.getSteuerjahr(), is(2023));
     }
 
     @Test
     @TestAsGesuchsteller
-    void testUpdateGesuchEinnahmenKostenSteuerjahrAsGS(){
+    void testUpdateGesuchEinnahmenKostenSteuerjahrAsGS() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
-        var einnahmeKostenUpdateDto = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
+        var einnahmeKostenUpdateDto =
+            gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
         tranche.getGesuchFormular()
@@ -124,16 +149,20 @@ class GesuchUpdateDefaultValuesTest {
             .setAusbildungsgang(new Ausbildungsgang().setBildungskategorie(new Bildungskategorie()));
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
 
-
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
-        assertThat(einnahmeKostenUpdateDto.getSteuerjahr(), is(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1));
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        assertThat(
+            einnahmeKostenUpdateDto.getSteuerjahr(),
+            is(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
+        );
 
         // update attempt should be ignored, same default value should remain
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2023);
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto,tranche);
-        assertThat(einnahmeKostenUpdateDto.getSteuerjahr(), is(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1));
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        assertThat(
+            einnahmeKostenUpdateDto.getSteuerjahr(),
+            is(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
+        );
     }
-
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
@@ -143,6 +172,7 @@ class GesuchUpdateDefaultValuesTest {
     private GesuchTranche prepareGesuchTrancheWithIds(GesuchTrancheUpdateDto trancheUpdate) {
         GesuchTranche tranche = initGesuchTranche();
         GesuchFormular gesuchFormular = new GesuchFormular();
+        gesuchFormular.setTranche(tranche);
 
         trancheUpdate.getGesuchFormular().getElterns().forEach(elternUpdateDto -> {
             elternUpdateDto.setId(UUID.randomUUID());

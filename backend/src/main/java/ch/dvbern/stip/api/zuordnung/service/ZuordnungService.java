@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.zuordnung.service;
 
 import java.util.ArrayList;
@@ -40,7 +57,8 @@ public class ZuordnungService {
         // Filter out duplicate Faelle
         // This is okay because we only care about the newest Tranche, and findAllNewestWithPia orders them accordingly
         final var seen = new HashSet<UUID>();
-        final var fitered = newestWithPia.stream().filter(newest -> seen.add(newest.getFall().getId())).toList();
+        final var fitered =
+            newestWithPia.stream().filter(newest -> seen.add(newest.getAusbildung().getFall().getId())).toList();
         update(fitered);
     }
 
@@ -71,12 +89,12 @@ public class ZuordnungService {
                 sbToAssign = Optional.of(admin);
             }
 
-            var zuordnung = zuordnungen.remove(newest.getFall().getId());
+            var zuordnung = zuordnungen.remove(newest.getAusbildung().getFall().getId());
             if (zuordnung == null) {
                 // If none exists, create a new one and add it to the list to persist
                 zuordnung = new Zuordnung()
                     .setZuordnungType(ZuordnungType.AUTOMATIC)
-                    .setFall(newest.getFall())
+                    .setFall(newest.getAusbildung().getFall())
                     .setSachbearbeiter(sbToAssign.get());
 
                 newZuordnungen.add(zuordnung);
@@ -97,12 +115,11 @@ public class ZuordnungService {
         final PersonInAusbildung pia
     ) {
         return stammdaten.stream().filter(x -> {
-                final var range = pia.getKorrespondenzSprache() == Sprache.DEUTSCH ?
-                    x.getBuchstabenDe() :
-                    x.getBuchstabenFr();
+            final var range =
+                pia.getKorrespondenzSprache() == Sprache.DEUTSCH ? x.getBuchstabenDe() : x.getBuchstabenFr();
 
-                return BuchstabenRangeUtil.contains(range, pia.getNachname());
-            })
+            return BuchstabenRangeUtil.contains(range, pia.getNachname());
+        })
             .map(SachbearbeiterZuordnungStammdaten::getBenutzer)
             .findFirst();
     }

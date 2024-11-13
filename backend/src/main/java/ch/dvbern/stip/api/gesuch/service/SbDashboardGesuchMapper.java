@@ -1,8 +1,25 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.generated.dto.SbDashboardGesuchDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +40,7 @@ public class SbDashboardGesuchMapper {
         final var target = new SbDashboardGesuchDto();
         target.setId(gesuch.getId());
         target.setGesuchTrancheId(gesuchTranche.getId());
-        target.setFallNummer(gesuch.getFall().getFallNummer());
+        target.setFallNummer(gesuch.getAusbildung().getFall().getFallNummer());
         target.setTyp(gesuchTranche.getTyp());
 
         final var pia = gesuchTranche.getGesuchFormular().getPersonInAusbildung();
@@ -38,7 +55,7 @@ public class SbDashboardGesuchMapper {
         target.setGesuchStatus(gesuch.getGesuchStatus());
         target.setTrancheStatus(gesuchTranche.getStatus());
 
-        final var zuordnung = gesuch.getFall().getSachbearbeiterZuordnung();
+        final var zuordnung = gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung();
         if (zuordnung != null) {
             target.setBearbeiter(zuordnung.getSachbearbeiter().getFullName());
         }

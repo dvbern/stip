@@ -26,7 +26,6 @@ import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
     SharedUiIconChipComponent,
   ],
   templateUrl: './gesuch-app-ui-aenderungs-entry.component.html',
-  styleUrl: './gesuch-app-ui-aenderungs-entry.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppUiAenderungsEntryComponent {

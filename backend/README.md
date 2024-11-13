@@ -13,6 +13,14 @@
 
 > **_NOTE:_**  Quarkus ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
+### Formatting/ Linting
+
+The backend uses [Spotless](https://github.com/diffplug/spotless) in conjunction with a [custom eclipse style.xml](./stip-codestyle.xml) to check and apply formatting. This is however only applied to files that have changed compared to the `origin/main` branch. To manually run the check, simply `./mvnw spotless:check`, to apply them run `./mvnw spotless:apply`.
+
+There is also a git pre-commit hook ([here](../frontend/.husky/pre-commit)), installed automatically by the frontend, that runs `./mvnw spotless:check` and aborts the commit if any violations were found.
+
+When using IntelliJ for development you can install the [Spotless Applier](https://plugins.jetbrains.com/plugin/22455-spotless-applier) plugin. Enabling format on save is also simple, under `Settings` > `Tools` > `Actions on Save` activate `Run spotless`, it is recommended to only run it for Java files (using the dropdown in the same row). It is also recommended to enable `Optimize imports before applying` and `Prohibit imports with asterisk '*'` under `Settings` > `Tools` > `Spotless Applier` to automatically remove wildcard imports as Spotless currently cannot do it by itself. 
+
 ### Generate stubs from contract
 
 Whenever there is a changes to the contract you need to regenerate the JaxRS stubs for Quarkus. The regeneration is

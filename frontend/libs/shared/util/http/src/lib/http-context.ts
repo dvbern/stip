@@ -4,6 +4,9 @@ import { SharedModelError } from '@dv/shared/model/error';
 
 export const UNAUTHORIZED = new HttpContextToken<boolean>(() => false);
 export const IGNORE_ERRORS = new HttpContextToken<boolean>(() => false);
+export const IGNORE_BAD_REQUEST_ERRORS = new HttpContextToken<boolean>(
+  () => false,
+);
 export const IGNORE_NOT_FOUND_ERRORS = new HttpContextToken<boolean>(
   () => false,
 );
@@ -30,6 +33,16 @@ export const shouldIgnoreErrorsIf = (
   context: HttpContext = new HttpContext(),
 ) => {
   return context.set(IGNORE_ERRORS, ignore);
+};
+
+/**
+ * Set this context to ignore errors in the request error interceptor
+ */
+export const shouldIgnoreBadRequestErrorsIf = (
+  ignore: boolean,
+  context: HttpContext = new HttpContext(),
+) => {
+  return context.set(IGNORE_BAD_REQUEST_ERRORS, ignore);
 };
 
 /**

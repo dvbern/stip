@@ -11,9 +11,11 @@
  */
 import { Ausbildungsgang } from './ausbildungsgang';
 import { AusbildungsPensum } from './ausbildungsPensum';
+import { AusbildungsStatus } from './ausbildungsStatus';
 
 export interface Ausbildung { 
-    ausbildungsgang?: Ausbildungsgang;
+    id?: string;
+    fallId: string;
     fachrichtung: string;
     ausbildungNichtGefunden?: boolean;
     /**
@@ -38,6 +40,9 @@ export interface Ausbildung {
      */
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
+    status: AusbildungsStatus;
+    ausbildungsgang?: Ausbildungsgang;
+    editable: boolean;
 }
 
 

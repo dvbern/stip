@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.api.zuordnung.service;
 
 import java.util.ArrayList;
@@ -6,6 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
@@ -13,9 +31,9 @@ import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenReposit
 import ch.dvbern.stip.api.benutzer.util.TestRollen;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
@@ -61,30 +79,35 @@ class ZuordnungServiceTest {
         Mockito.when(szsRepo.findAll()).thenReturn(query);
 
         final var zuordnungRepo = Mockito.mock(ZuordnungRepository.class);
-        Mockito.when(zuordnungRepo.findAllWithType(ZuordnungType.AUTOMATIC)).thenReturn(
-            zuordnungen.stream().filter(x -> x.getZuordnungType() == ZuordnungType.AUTOMATIC)
-        );
+        Mockito.when(zuordnungRepo.findAllWithType(ZuordnungType.AUTOMATIC))
+            .thenReturn(
+                zuordnungen.stream().filter(x -> x.getZuordnungType() == ZuordnungType.AUTOMATIC)
+            );
         Mockito.doAnswer((Answer<Void>) invocation -> {
             final var toDrop = (Set<UUID>) invocation.getArgument(0);
             zuordnungen = zuordnungen.stream().filter(x -> toDrop.contains(x.getFall().getId())).toList();
             return null;
         }).when(zuordnungRepo).deleteByFallIds(Mockito.any());
         Mockito.doAnswer((Answer<Void>) invocation -> {
-                zuordnungen.addAll(invocation.getArgument(0));
-                return null;
-            }
+            zuordnungen.addAll(invocation.getArgument(0));
+            return null;
+        }
         ).when(zuordnungRepo).persist(Mockito.anyIterable());
 
         final var benutzerRepo = Mockito.mock(BenutzerRepository.class);
-        Mockito.when(benutzerRepo.findByRolle(Mockito.any())).thenReturn(
-            Stream.of(new Benutzer().setRollen(TestRollen.getComposite(TestRollen.ADMIN)))
-        );
+        Mockito.when(benutzerRepo.findByRolle(Mockito.any()))
+            .thenReturn(
+                Stream.of(new Benutzer().setRollen(TestRollen.getComposite(TestRollen.ADMIN)))
+            );
 
         final var pia = (PersonInAusbildung) new PersonInAusbildung()
             .setKorrespondenzSprache(Sprache.DEUTSCH)
             .setNachname("Alfred");
 
         fall = (Fall) new Fall().setId(fallId);
+
+        final var ausbildung = new Ausbildung().setFall(fall);
+
         final var gesuch = new Gesuch().setGesuchTranchen(
             List.of(
                 new GesuchTranche().setGesuchFormular(
@@ -93,8 +116,10 @@ class ZuordnungServiceTest {
             )
         );
 
-        gesuch.setFall(fall);
-        fall.setGesuch(Set.of(gesuch));
+        gesuch.setAusbildung(ausbildung);
+
+        fall.setAusbildungs(Set.of(ausbildung));
+        ausbildung.setGesuchs(List.of(gesuch));
 
         final var gesuchsRepo = Mockito.mock(GesuchRepository.class);
         Mockito.when(gesuchsRepo.findAllNewestWithPia()).thenReturn(Stream.of(gesuch));
@@ -113,15 +138,16 @@ class ZuordnungServiceTest {
     void testUpdateZuordnungOnFall() {
         final var oldSbId = UUID.randomUUID();
 
-        zuordnungen.add((Zuordnung) new Zuordnung()
-            .setZuordnungType(ZuordnungType.AUTOMATIC)
-            .setFall(fall)
-            .setSachbearbeiter(
-                (Benutzer) new Benutzer()
-                    .setRollen(TestRollen.getComposite(TestRollen.SACHBEARBEITER))
-                    .setId(oldSbId)
-            )
-            .setId(UUID.randomUUID())
+        zuordnungen.add(
+            (Zuordnung) new Zuordnung()
+                .setZuordnungType(ZuordnungType.AUTOMATIC)
+                .setFall(fall)
+                .setSachbearbeiter(
+                    (Benutzer) new Benutzer()
+                        .setRollen(TestRollen.getComposite(TestRollen.SACHBEARBEITER))
+                        .setId(oldSbId)
+                )
+                .setId(UUID.randomUUID())
         );
 
         zuordnungService.updateZuordnungOnAllFaelle();
