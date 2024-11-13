@@ -17,14 +17,14 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.notiz.entity.NotizTyp;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Objects;
-import java.util.UUID;
 
 @ApplicationScoped
 @RequiredArgsConstructor
