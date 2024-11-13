@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.GesuchTrancheStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,7 +39,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_PIA_NACHNAME,
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_PIA_VORNAME,
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_PIA_GEBURTSDATUM,
-  SbDashboardGesuchDtoSpec.JSON_PROPERTY_STATUS,
+  SbDashboardGesuchDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
+  SbDashboardGesuchDtoSpec.JSON_PROPERTY_TRANCHE_STATUS,
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_BEARBEITER,
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_LETZTE_AKTIVITAET
 })
@@ -66,8 +68,11 @@ public class SbDashboardGesuchDtoSpec {
   public static final String JSON_PROPERTY_PIA_GEBURTSDATUM = "piaGeburtsdatum";
   private LocalDate piaGeburtsdatum;
 
-  public static final String JSON_PROPERTY_STATUS = "status";
-  private GesuchstatusDtoSpec status;
+  public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
+  private GesuchstatusDtoSpec gesuchStatus;
+
+  public static final String JSON_PROPERTY_TRANCHE_STATUS = "trancheStatus";
+  private GesuchTrancheStatusDtoSpec trancheStatus;
 
   public static final String JSON_PROPERTY_BEARBEITER = "bearbeiter";
   private String bearbeiter;
@@ -260,29 +265,55 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  public SbDashboardGesuchDtoSpec status(GesuchstatusDtoSpec status) {
+  public SbDashboardGesuchDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
     
-    this.status = status;
+    this.gesuchStatus = gesuchStatus;
     return this;
   }
 
    /**
-   * Get status
-   * @return status
+   * Get gesuchStatus
+   * @return gesuchStatus
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public GesuchstatusDtoSpec getStatus() {
-    return status;
+  public GesuchstatusDtoSpec getGesuchStatus() {
+    return gesuchStatus;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(GesuchstatusDtoSpec status) {
-    this.status = status;
+  public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+    this.gesuchStatus = gesuchStatus;
+  }
+
+
+  public SbDashboardGesuchDtoSpec trancheStatus(GesuchTrancheStatusDtoSpec trancheStatus) {
+    
+    this.trancheStatus = trancheStatus;
+    return this;
+  }
+
+   /**
+   * Get trancheStatus
+   * @return trancheStatus
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TRANCHE_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GesuchTrancheStatusDtoSpec getTrancheStatus() {
+    return trancheStatus;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TRANCHE_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTrancheStatus(GesuchTrancheStatusDtoSpec trancheStatus) {
+    this.trancheStatus = trancheStatus;
   }
 
 
@@ -353,14 +384,15 @@ public class SbDashboardGesuchDtoSpec {
         Objects.equals(this.piaNachname, sbDashboardGesuch.piaNachname) &&
         Objects.equals(this.piaVorname, sbDashboardGesuch.piaVorname) &&
         Objects.equals(this.piaGeburtsdatum, sbDashboardGesuch.piaGeburtsdatum) &&
-        Objects.equals(this.status, sbDashboardGesuch.status) &&
+        Objects.equals(this.gesuchStatus, sbDashboardGesuch.gesuchStatus) &&
+        Objects.equals(this.trancheStatus, sbDashboardGesuch.trancheStatus) &&
         Objects.equals(this.bearbeiter, sbDashboardGesuch.bearbeiter) &&
         Objects.equals(this.letzteAktivitaet, sbDashboardGesuch.letzteAktivitaet);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchTrancheId, fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, gesuchTrancheId, fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, gesuchStatus, trancheStatus, bearbeiter, letzteAktivitaet);
   }
 
   @Override
@@ -374,7 +406,8 @@ public class SbDashboardGesuchDtoSpec {
     sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");
     sb.append("    piaVorname: ").append(toIndentedString(piaVorname)).append("\n");
     sb.append("    piaGeburtsdatum: ").append(toIndentedString(piaGeburtsdatum)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
+    sb.append("    trancheStatus: ").append(toIndentedString(trancheStatus)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    letzteAktivitaet: ").append(toIndentedString(letzteAktivitaet)).append("\n");
     sb.append("}");
