@@ -375,6 +375,6 @@ class GesuchNotizResourceImplTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
 }

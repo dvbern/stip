@@ -21,13 +21,11 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.notiz.entity.NotizTyp;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -83,9 +81,6 @@ public class GesuchNotizService {
         final UUID notizId
     ) {
         final var juristischeNotiz = gesuchNotizRepository.requireById(notizId);
-        if (!juristischeNotiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
-            throw new UnauthorizedException("Nur juristische Notizen dürfen beantwortet werden.");
-        }
         final var entity = gesuchNotizMapper.partialUpdate(dto, juristischeNotiz);
         return gesuchNotizMapper.toDto(entity);
     }
