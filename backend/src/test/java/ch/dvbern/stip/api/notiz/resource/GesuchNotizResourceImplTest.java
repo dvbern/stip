@@ -337,11 +337,6 @@ class GesuchNotizResourceImplTest {
         assertNotNull(juristischeAbklaerungNotizDto.getTimestampMutiert());
     }
 
-    /**
-     * Note: the possibility to delete a juristische notiz
-     * is not forseen yet or not part of KSTIP-1130
-     */
-
     @Test
     @TestAsSachbearbeiter
     @Order(13)
@@ -376,5 +371,21 @@ class GesuchNotizResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
+    }
+
+    /**
+     * Note: the possibility to delete a juristische notiz
+     * is not forseen yet or not part of KSTIP-1130
+     */
+    @Test
+    @TestAsSachbearbeiter
+    @Order(15)
+    void juristischeNotizDeleteShouldFail() {
+        gesuchNotizApiSpec.deleteNotiz()
+            .notizIdPath(juristischeAbklaerungNotizDto.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
 }

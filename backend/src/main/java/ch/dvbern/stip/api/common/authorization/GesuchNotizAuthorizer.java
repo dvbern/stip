@@ -40,6 +40,10 @@ public class GesuchNotizAuthorizer extends BaseAuthorizer {
     }
 
     public void canDelete(UUID notizId) {
+        final var notiz = gesuchNotizRepository.requireById(notizId);
+        if (notiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
+            throw new UnauthorizedException();
+        }
         canUpdate(notizId);
     }
 
