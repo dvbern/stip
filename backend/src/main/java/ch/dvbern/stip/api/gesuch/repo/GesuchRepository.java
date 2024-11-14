@@ -60,10 +60,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return addMeineFilter(benutzerId, getFindAlleBearbeitbarQuery());
     }
 
-    public JPAQuery<Gesuch> getFindAlleMeineInJurBearbeitungQuery() {
-        return getFindAlleJurBearbeitungQuery();
-    }
-
     public JPAQuery<Gesuch> getFindAlleQuery() {
         // TODO KSTIP-1587/ 1590: Implement Status Filter?
         return new JPAQueryFactory(entityManager).selectFrom(QGesuch.gesuch);
