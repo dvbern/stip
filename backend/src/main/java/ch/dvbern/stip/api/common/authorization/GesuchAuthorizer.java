@@ -45,6 +45,14 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final FallRepository fallRepository;
 
     @Transactional
+    public void canGetBerechnung(final UUID gesuchID) {
+        final var gesuch = gesuchRepository.requireById(gesuchID);
+        if (!Gesuchstatus.GESUCHSTELLER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
+            throw new UnauthorizedException();
+        }
+    }
+
+    @Transactional
     public void canRead(final UUID gesuchId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 

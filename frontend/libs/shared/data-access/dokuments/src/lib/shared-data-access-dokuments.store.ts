@@ -284,7 +284,7 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  private getRequiredDocumentTypes$ = rxMethod<string>(
+  getRequiredDocumentTypes$ = rxMethod<string>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({

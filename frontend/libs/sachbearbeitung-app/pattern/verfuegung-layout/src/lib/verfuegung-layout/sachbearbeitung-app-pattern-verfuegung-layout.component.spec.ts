@@ -7,6 +7,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
+import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+
 import { SachbearbeitungAppPatternVerfuegungLayoutComponent } from './sachbearbeitung-app-pattern-verfuegung-layout.component';
 
 describe('SachbearbeitungAppPatternVerfuegungLayoutComponent', () => {
@@ -39,6 +41,7 @@ describe('SachbearbeitungAppPatternVerfuegungLayoutComponent', () => {
             configs: {},
           },
         }),
+        provideSharedPatternJestTestSetup(),
       ],
     }).compileComponents();
 

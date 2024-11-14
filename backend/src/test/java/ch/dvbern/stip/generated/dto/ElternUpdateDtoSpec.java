@@ -90,7 +90,7 @@ public class ElternUpdateDtoSpec {
   private Integer ergaenzungsleistungen;
 
   public static final String JSON_PROPERTY_SOZIALHILFEBEITRAEGE = "sozialhilfebeitraege";
-  private Integer sozialhilfebeitraege;
+  private Boolean sozialhilfebeitraege;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
   private Integer wohnkosten;
@@ -436,28 +436,28 @@ public class ElternUpdateDtoSpec {
   }
 
 
-  public ElternUpdateDtoSpec sozialhilfebeitraege(Integer sozialhilfebeitraege) {
+  public ElternUpdateDtoSpec sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     
     this.sozialhilfebeitraege = sozialhilfebeitraege;
     return this;
   }
 
    /**
-   * &#39;Falls steuerdatenTyp &#x3D; Familie: Sozialhilfebeitraege Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Sozialhilfebeitraege steuerdatenTyp&#39; 
+   * Get sozialhilfebeitraege
    * @return sozialhilfebeitraege
   **/
   @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_SOZIALHILFEBEITRAEGE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getSozialhilfebeitraege() {
+  public Boolean getSozialhilfebeitraege() {
     return sozialhilfebeitraege;
   }
 
 
   @JsonProperty(JSON_PROPERTY_SOZIALHILFEBEITRAEGE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialhilfebeitraege(Integer sozialhilfebeitraege) {
+  public void setSozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     this.sozialhilfebeitraege = sozialhilfebeitraege;
   }
 

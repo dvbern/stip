@@ -35,7 +35,7 @@ public class ElternUpdateDtoSpecModel {
             model.setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATTER);
             model.setElternTyp(ElternTypDtoSpec.VATER);
             model.setWohnkosten(1);
-            model.setSozialhilfebeitraege(1);
+            model.setSozialhilfebeitraege(true);
             model.setErgaenzungsleistungen(1);
             model.setGeburtsdatum(
                 TestUtil.getRandomLocalDateBetween(LocalDate.of(1920, 1, 1), LocalDate.of(2002, 1, 1))

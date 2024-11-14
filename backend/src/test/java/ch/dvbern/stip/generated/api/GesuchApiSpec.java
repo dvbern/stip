@@ -20,7 +20,6 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
@@ -1347,7 +1346,7 @@ public class GesuchApiSpec {
         public static final String STATUS_QUERY = "status";
 
         /**
-         * @param status (GesuchstatusDtoSpec)  (optional)
+         * @param status (String)  (optional)
          * @return operation
          */
         public GetGesucheSbOper statusQuery(Object... status) {
