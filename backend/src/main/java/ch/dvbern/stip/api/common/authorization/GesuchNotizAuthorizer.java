@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.notiz.entity.NotizTyp;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
+import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class GesuchNotizAuthorizer extends BaseAuthorizer {
     public void canDelete(UUID notizId) {
         final var notiz = gesuchNotizRepository.requireById(notizId);
         if (notiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
-            throw new UnauthorizedException();
+            throw new ForbiddenException();
         }
         canUpdate(notizId);
     }
@@ -50,7 +51,7 @@ public class GesuchNotizAuthorizer extends BaseAuthorizer {
     public void canSetAnswer(UUID notizId) {
         final var notiz = gesuchNotizRepository.requireById(notizId);
         if (Objects.nonNull(notiz.getAntwort())) {
-            throw new UnauthorizedException();
+            throw new ForbiddenException();
         }
     }
 }

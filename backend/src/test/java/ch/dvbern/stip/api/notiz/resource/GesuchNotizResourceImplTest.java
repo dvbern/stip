@@ -311,7 +311,7 @@ class GesuchNotizResourceImplTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
         assertEquals(abklaerungNotizDto.getAntwort(), antwort.getAntwort());
     }
 
@@ -354,6 +354,10 @@ class GesuchNotizResourceImplTest {
             .as(GesuchNotizDto.class);
     }
 
+    /**
+     * Only juristische notizen are allowed to be answered
+     * expected BAD_REQUEST because of constraint validation
+     */
     @Test
     @TestAsJurist
     @Order(14)
@@ -383,7 +387,7 @@ class GesuchNotizResourceImplTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
 
     @Test

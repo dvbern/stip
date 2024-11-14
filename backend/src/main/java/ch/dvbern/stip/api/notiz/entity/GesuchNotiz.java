@@ -49,7 +49,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
         @Index(name = "IX_gesuch_notiz_gesuch_id", columnList = "gesuch_id")
     }
 )
-// @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class GesuchNotiz extends AbstractMandantEntity {
     @ManyToOne
     @JoinColumn(
