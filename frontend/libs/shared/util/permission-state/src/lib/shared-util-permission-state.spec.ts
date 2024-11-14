@@ -1,11 +1,14 @@
 import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
-import { isGesuchReadonly } from './shared-util-readonly-state';
+import {
+  canViewVerfuegung,
+  isGesuchReadonly,
+} from './shared-util-permission-state';
 
 const gesuch: SharedModelGesuch = {
   fall: {
     id: '',
-    fallNummer: 0,
+    fallNummer: '',
     mandant: '',
   },
   gesuchsperiode: {
@@ -30,7 +33,7 @@ const gesuch: SharedModelGesuch = {
     ausbKosten_Tertiaer: 0,
   },
   gesuchStatus: Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
-  gesuchNummer: 0,
+  gesuchNummer: '',
   id: '',
   aenderungsdatum: '',
   gesuchTrancheToWorkWith: {
@@ -55,5 +58,11 @@ describe('when App Sachbearbeitung', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
     expect(isGesuchReadonly(gesuch, 'sachbearbeitung-app')).toBeTruthy();
+  });
+
+  it('should allow verfuegung view if in bereit fuer bearbeitung', () => {
+    gesuch.gesuchStatus = Gesuchstatus.BEREIT_FUER_BEARBEITUNG;
+
+    expect(canViewVerfuegung(gesuch, 'sachbearbeitung-app')).toBe(true);
   });
 });
