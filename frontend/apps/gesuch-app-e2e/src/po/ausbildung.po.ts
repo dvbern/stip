@@ -7,8 +7,8 @@ import {
 } from '@dv/shared/util-fn/e2e-util';
 
 export interface AusbildungValues extends Ausbildung {
-  ausbildungsstaette: string;
-  ausbildungsgang: string;
+  ausbildungsstaetteText: string;
+  ausbildungsgangText: string;
   ausbildungsort: string;
 }
 
@@ -28,8 +28,7 @@ export class AusbildungPO {
     pensumSelect: Locator;
     ausbildungNichtGefundenCheckbox: Locator;
     loading: Locator;
-    buttonSaveContinue: Locator;
-    buttonNext: Locator;
+    buttonSave: Locator;
   };
 
   constructor(page: Page) {
@@ -62,20 +61,19 @@ export class AusbildungPO {
 
       loading: page.getByTestId('education-form-loading'),
 
-      buttonSaveContinue: page.getByTestId('button-save-continue'),
-      buttonNext: page.getByTestId('button-next'),
+      buttonSave: page.getByTestId('button-save'),
     };
   }
 
   public async fillEducationForm(ausbildung: AusbildungValues) {
     await selectMatOption(
       this.elems.ausbildungsstaetteSelect,
-      ausbildung.ausbildungsstaette,
+      ausbildung.ausbildungsstaetteText,
     );
 
     await selectMatOption(
       this.elems.ausbildungsgangSelect,
-      ausbildung.ausbildungsgang,
+      ausbildung.ausbildungsgangText,
     );
 
     await this.elems.fachrichtung.fill(ausbildung.fachrichtung);

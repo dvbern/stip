@@ -64,7 +64,7 @@ public class ElternRequiredDocumentsProducer {
             requiredDocs.add(ERGAENZUNGSLEISTUNGEN_MAP.get(elternteil.getElternTyp()));
         }
 
-        if (RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getSozialhilfebeitraege())) {
+        if (elternteil.isSozialhilfebeitraege()) {
             requiredDocs.add(SOZIALHILFEBUDGET_MAP.get(elternteil.getElternTyp()));
         }
 

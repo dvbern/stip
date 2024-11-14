@@ -52,7 +52,9 @@ public class SbDashboardGesuchMapper {
             LOG.warn("Gesuch was loaded to SB Dashboard that had no PiA");
         }
 
-        target.setStatus(gesuch.getGesuchStatus());
+        target.setGesuchStatus(gesuch.getGesuchStatus());
+        target.setTrancheStatus(gesuchTranche.getStatus());
+
         final var zuordnung = gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung();
         if (zuordnung != null) {
             target.setBearbeiter(zuordnung.getSachbearbeiter().getFullName());
