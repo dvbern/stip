@@ -488,7 +488,7 @@
           </execution>
         </executions>
         <configuration>
-<!--          <ratchetFrom>origin/main</ratchetFrom>-->
+          <ratchetFrom>origin/main</ratchetFrom>
           <java>
             <excludes>
               <include>src/**/generated/**/*.*</include>

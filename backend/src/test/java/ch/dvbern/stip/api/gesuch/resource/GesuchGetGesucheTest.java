@@ -225,7 +225,7 @@ class GesuchGetGesucheTest {
     ) {
         for (final var gesuch : gesuche) {
             for (final var status : wrongStatus) {
-                assertThat(gesuch.getStatus(), not(status));
+                assertThat(gesuch.getGesuchStatus(), not(status));
             }
         }
     }

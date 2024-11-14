@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -164,7 +163,7 @@ public class GesuchResourceImpl implements GesuchResource {
         String piaNachname,
         String piaVorname,
         LocalDate piaGeburtsdatum,
-        Gesuchstatus status,
+        String status,
         String bearbeiter,
         LocalDate letzteAktivitaetFrom,
         LocalDate letzteAktivitaetTo,

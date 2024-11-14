@@ -38,10 +38,7 @@ export interface Eltern {
      * \'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater\' \'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp\' 
      */
     ergaenzungsleistungen: number;
-    /**
-     * \'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater\' \'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp\' 
-     */
-    sozialhilfebeitraege: number;
+    sozialhilfebeitraege: boolean;
     /**
      * Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen
      */

@@ -99,6 +99,7 @@
                         (click)="$event.stopPropagation()"
                         class="fw-normal"
                         panelClass="table-select"
+                        (selectionChange)="resetStatus()"
                       >
                         @for (typ of availableTypes; track typ) {
                           <mat-option [value]="typ">
@@ -226,16 +227,16 @@
                         [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | translate"
                         panelClass="table-select"
                       >
-                        @for (status of availableStatusSig(); track status) {
-                          <mat-option [value]="status">
-                            {{ 'shared.gesuch.status.contract.' + status | translate }}
+                        @for (entry of availableStatusSig(); track status) {
+                          <mat-option [value]="entry.status">
+                            {{ entry.translationKey | translate }}
                           </mat-option>
                         }
                       </mat-select>
                     </mat-form-field>
                   </th>
                   <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="text-nowrap">
-                    {{ 'shared.gesuch.status.contract.' + gesuch.status | translate }}
+                    {{ gesuch.translationKey | translate }}
                   </td>
                 </ng-container>
 
