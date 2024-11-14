@@ -21,37 +21,24 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
-import {
-  GesuchNotiz,
-  JuristischeAbklaerungNotiz,
-} from '@dv/shared/model/gesuch';
+import { PermissionStore } from '@dv/shared/global/permission';
+import { GesuchNotiz, GesuchNotizTyp } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
-type SBNotiz = {
-  notizTyp: 'GESUCH_NOTIZ';
+export type NotizDialogData = {
+  notizTyp: GesuchNotizTyp;
   notiz?: GesuchNotiz;
 };
-
-type JurNotiz = {
-  notizTyp: 'JURISTISCHE_NOTIZ';
-  notiz?: JuristischeAbklaerungNotiz;
-};
-
-export type NotizDialogData = SBNotiz | JurNotiz;
 
 export type NotizDialogResult = {
   id: string | null | undefined;
   betreff: string;
   text: string;
   antwort?: string;
-};
-
-const isJurNotiz = (data: NotizDialogData): data is JurNotiz => {
-  return data.notizTyp === 'JURISTISCHE_NOTIZ';
 };
 
 @Component({
@@ -82,6 +69,8 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
   private formBuilder = inject(NonNullableFormBuilder);
 
   @HostBinding('class') defaultClasses = 'd-flex flex-column gap-2 p-5';
+
+  permissionStore = inject(PermissionStore);
   dialogData = inject<NotizDialogData>(MAT_DIALOG_DATA);
   form = this.formBuilder.group({
     betreff: [<string | null>null, [Validators.required]],
@@ -90,19 +79,14 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
   });
 
   languageSig = this.store.selectSignal(selectLanguage);
-  public isJurNotizFn = isJurNotiz;
+  isJurNotiz = this.dialogData.notiz?.notizTyp === 'JURISTISCHE_NOTIZ';
 
   constructor() {
-    if (isJurNotiz(this.dialogData)) {
+    if (this.dialogData.notiz) {
       this.form.patchValue({
         betreff: this.dialogData.notiz?.betreff,
         text: this.dialogData.notiz?.text,
         antwort: this.dialogData.notiz?.antwort,
-      });
-    } else {
-      this.form.patchValue({
-        betreff: this.dialogData.notiz?.betreff,
-        text: this.dialogData.notiz?.text,
       });
     }
   }
@@ -134,6 +118,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
       id: this.dialogData.notiz?.id,
       text: notizDaten.text,
       betreff: notizDaten.betreff,
+      antwort: notizDaten.antwort,
     });
   }
 }

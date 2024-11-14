@@ -69,6 +69,7 @@ module.exports = [
                 'type:util',
                 'type:util-fn',
                 'type:model',
+                'type:global',
               ],
             },
             {

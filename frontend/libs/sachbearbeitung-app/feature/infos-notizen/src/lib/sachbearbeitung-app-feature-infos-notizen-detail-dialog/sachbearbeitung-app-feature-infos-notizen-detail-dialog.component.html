@@ -1,4 +1,3 @@
-@let isJurNotiz = isJurNotizFn(dialogData);
 <h1 class="h3 mb-4">
   @if (dialogData.notiz?.id) {
     @if (isJurNotiz) {
@@ -36,7 +35,7 @@
   </div>
 }
 
-@if (isJurNotizFn(dialogData) && dialogData.notiz?.timestampMutiert) {
+@if (isJurNotiz && dialogData.notiz?.timestampMutiert) {
   <!-- datumMutiert -->
   <div class="row g-4 mb-4">
     <div class="col-12">
@@ -80,17 +79,15 @@
   </div>
 
   <!-- antwort text-->
-  @if (isJurNotiz && dialogData.notiz?.id) {
-    <div class="row g-4 mb-4">
-      <mat-form-field dvSharedUiFormField class="col-12">
-        <mat-label>{{ 'shared.form.notizen.antwort.label' | translate }}</mat-label>
-        <textarea formControlName="antwort" data-testid="form-notiz-antwort" matInput type="text" rows="4"></textarea>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-  }
+  <div class="row g-4 mb-4">
+    <mat-form-field dvSharedUiFormField class="col-12">
+      <mat-label>{{ 'shared.form.notizen.antwort.label' | translate }}</mat-label>
+      <textarea formControlName="antwort" data-testid="form-notiz-antwort" matInput type="text" rows="4"></textarea>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 
   <div class="d-flex mt-4 justify-content-end">
     <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">

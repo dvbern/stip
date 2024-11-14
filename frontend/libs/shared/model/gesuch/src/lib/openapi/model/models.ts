@@ -75,7 +75,6 @@ export * from './getGesucheSBQueryType';
 export * from './gsDashboard';
 export * from './gsDashboardMissingDocuments';
 export * from './gueltigkeitStatus';
-export * from './juristischeAbklaerungNotiz';
 export * from './juristischeAbklaerungNotizAntwort';
 export * from './kind';
 export * from './kindUpdate';

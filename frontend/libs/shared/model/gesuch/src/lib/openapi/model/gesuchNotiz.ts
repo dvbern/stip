@@ -14,8 +14,11 @@ import { GesuchNotizTyp } from './gesuchNotizTyp';
 export interface GesuchNotiz { 
     userErstellt: string;
     timestampErstellt: string;
+    userMutiert?: string;
+    timestampMutiert?: string;
     notizTyp: GesuchNotizTyp;
-    id?: string;
+    antwort?: string;
+    id: string;
     betreff: string;
     text: string;
 }

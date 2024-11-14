@@ -1,4 +1,5 @@
 <div class="shadow rounded-4 overflow-hidden mt-2">
+  <pre>{{ permissionStore.userIsJuristSig() }}</pre>
   <table mat-table class="dv-crud-table large-spacing" [dataSource]="notizSig()" matSort>
     <caption class="cdk-visually-hidden">
       {{
@@ -101,14 +102,25 @@
       </th>
       <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100">
         <div class="d-flex gap-1">
-          <button
-            type="button"
-            (click)="editNotiz(notiz)"
-            class="btn btn-link btn-sm"
-            [matTooltip]="'sachbearbeitung-app.infos.notiz.bearbeiten' | translate"
-          >
-            <i class="material-symbols-rounded fs-4">edit</i>
-          </button>
+          @if (notiz.notizTyp === 'GESUCH_NOTIZ' || (permissionStore.userIsJuristSig() && !notiz.antwort)) {
+            <button
+              type="button"
+              (click)="editNotiz(notiz)"
+              class="btn btn-link btn-sm"
+              [matTooltip]="'sachbearbeitung-app.infos.notiz.bearbeiten' | translate"
+            >
+              <i class="material-symbols-rounded fs-4">edit</i>
+            </button>
+          } @else {
+            <button
+              type="button"
+              (click)="editNotiz(notiz)"
+              class="btn btn-link btn-sm"
+              [matTooltip]="'sachbearbeitung-app.infos.notiz.anzeigen' | translate"
+            >
+              <i class="material-symbols-rounded fs-4">visibility</i>
+            </button>
+          }
           @if (notiz.id) {
             <button
               type="button"
