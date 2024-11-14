@@ -84,7 +84,6 @@ export class SharedFeatureGesuchDokumenteComponent {
   public dokumentsStore = inject(DokumentsStore);
 
   detailColumns = ['kommentar'];
-
   displayedColumns = [
     'expander',
     'documentName',
@@ -94,7 +93,6 @@ export class SharedFeatureGesuchDokumenteComponent {
   ];
 
   DokumentStatus = Dokumentstatus;
-
   expandedRowId: string | null = null;
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -184,10 +182,6 @@ export class SharedFeatureGesuchDokumenteComponent {
     );
   });
 
-  trackByFn(_index: number, item: SharedModelTableDokument) {
-    return item?.gesuchDokument?.id ?? item.dokumentTyp;
-  }
-
   constructor() {
     getLatestTrancheIdFromGesuch$(this.gesuchViewSig)
       .pipe(takeUntilDestroyed())
@@ -196,6 +190,10 @@ export class SharedFeatureGesuchDokumenteComponent {
       });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
+  }
+
+  trackByFn(_index: number, item: SharedModelTableDokument) {
+    return item?.gesuchDokument?.id ?? item.dokumentTyp;
   }
 
   dokumentAkzeptieren(document: SharedModelTableDokument) {
@@ -271,6 +269,8 @@ export class SharedFeatureGesuchDokumenteComponent {
         onSuccess: () => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+          // Also load the required documents again
+          this.dokumentsStore.getRequiredDocumentTypes$(trancheId);
         },
       });
     }
