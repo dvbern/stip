@@ -3,6 +3,7 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
+import { string } from 'zod';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
@@ -21,6 +22,7 @@ import {
 
 type NotizState = {
   notizen: CachedRemoteData<GesuchNotiz[]>;
+  // todo: change to not cached
   notiz: CachedRemoteData<GesuchNotiz>;
 };
 
@@ -76,9 +78,9 @@ export class NotizStore extends signalStore(
     ),
   );
 
-  editNotiz = rxMethod<{
+  editNotiz$ = rxMethod<{
     gesuchId: string;
-    notizDaten: GesuchNotizUpdate;
+    gesuchNotizUpdate: GesuchNotizUpdate;
   }>(
     pipe(
       tap(() => {
@@ -86,10 +88,10 @@ export class NotizStore extends signalStore(
           notiz: cachedPending(state.notiz),
         }));
       }),
-      switchMap(({ gesuchId, notizDaten }) =>
+      switchMap(({ gesuchId, gesuchNotizUpdate }) =>
         this.notizService
           .updateNotiz$({
-            gesuchNotizUpdate: notizDaten,
+            gesuchNotizUpdate,
           })
           .pipe(
             handleApiResponse(
@@ -111,7 +113,44 @@ export class NotizStore extends signalStore(
     ),
   );
 
-  createNotiz = rxMethod<{
+  answerJuristischeAbklaerungNotiz$ = rxMethod<{
+    gesuchId: string;
+    notizId: string;
+    juristischeAbklaerungNotizAntwort: { antwort: string };
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          notiz: cachedPending(state.notiz),
+        }));
+      }),
+      switchMap(({ gesuchId, notizId, juristischeAbklaerungNotizAntwort }) =>
+        this.notizService
+          .answerJuristischeAbklaerungNotiz$({
+            notizId,
+            juristischeAbklaerungNotizAntwort,
+          })
+          .pipe(
+            handleApiResponse(
+              (notiz) => {
+                patchState(this, { notiz });
+              },
+              {
+                onSuccess: () => {
+                  this.notificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.infos.notiz.bearbeiten.success',
+                  });
+                  this.loadNotizen$({ gesuchId });
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  createNotiz$ = rxMethod<{
     gesuchNotizCreate: GesuchNotizCreate;
   }>(
     pipe(
@@ -145,7 +184,7 @@ export class NotizStore extends signalStore(
     ),
   );
 
-  deleteNotiz = rxMethod<{
+  deleteNotiz$ = rxMethod<{
     gesuchId: string;
     notizId: string;
   }>(
