@@ -1,5 +1,4 @@
 import { expect } from '@playwright/test';
-import { addYears, format } from 'date-fns';
 
 import {
   Adresse,
@@ -29,15 +28,13 @@ import { KinderPO } from '../../po/kinder.po';
 import { LebenslaufPO } from '../../po/lebenslauf.po';
 import { PersonPO } from '../../po/person.po';
 import { SteuerdatenPO } from '../../po/steuerdaten.po';
-import { initializeTest } from '../../utils';
-
-const thisYear = format(new Date(), 'yyyy');
-const specificMonth = (month: number) =>
-  `${month}.${format(new Date(), 'yyyy')}`;
-const specificMonthPlusYears = (month: number, years: number) =>
-  `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
-const specificYearsAgo = (years: number) =>
-  format(addYears(new Date(), -years), 'yyyy');
+import {
+  initializeTest,
+  specificMonth,
+  specificMonthPlusYears,
+  specificYearsAgo,
+  thisYear,
+} from '../../utils';
 
 const ausbildung: AusbildungValues = {
   fallId: '',

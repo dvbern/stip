@@ -1,3 +1,5 @@
+import { addYears, format } from 'date-fns';
+
 import { FallDashboardItem } from '@dv/shared/model/gesuch';
 import {
   E2eUser,
@@ -93,3 +95,11 @@ export const initializeTest = (
     test,
   };
 };
+
+export const thisYear = format(new Date(), 'yyyy');
+export const specificMonth = (month: number) =>
+  `${month}.${format(new Date(), 'yyyy')}`;
+export const specificMonthPlusYears = (month: number, years: number) =>
+  `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
+export const specificYearsAgo = (years: number) =>
+  format(addYears(new Date(), -years), 'yyyy');
