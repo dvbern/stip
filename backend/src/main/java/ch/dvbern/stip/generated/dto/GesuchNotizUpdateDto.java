@@ -1,18 +1,13 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
-import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
-
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 @JsonTypeName("GesuchNotizUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -20,9 +15,28 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GesuchNotizUpdateDto  implements Serializable {
+  private @Valid UUID id;
   private @Valid String betreff;
   private @Valid String text;
-  private @Valid UUID id;
+
+  /**
+   **/
+  public GesuchNotizUpdateDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+
+  @JsonProperty("id")
+  @NotNull
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   /**
    **/
@@ -31,7 +45,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("betreff")
   @NotNull
   public String getBetreff() {
@@ -50,7 +64,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("text")
   @NotNull
   public String getText() {
@@ -60,24 +74,6 @@ public class GesuchNotizUpdateDto  implements Serializable {
   @JsonProperty("text")
   public void setText(String text) {
     this.text = text;
-  }
-
-  /**
-   **/
-  public GesuchNotizUpdateDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
   }
 
 
@@ -90,24 +86,24 @@ public class GesuchNotizUpdateDto  implements Serializable {
       return false;
     }
     GesuchNotizUpdateDto gesuchNotizUpdate = (GesuchNotizUpdateDto) o;
-    return Objects.equals(this.betreff, gesuchNotizUpdate.betreff) &&
-        Objects.equals(this.text, gesuchNotizUpdate.text) &&
-        Objects.equals(this.id, gesuchNotizUpdate.id);
+    return Objects.equals(this.id, gesuchNotizUpdate.id) &&
+        Objects.equals(this.betreff, gesuchNotizUpdate.betreff) &&
+        Objects.equals(this.text, gesuchNotizUpdate.text);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(betreff, text, id);
+    return Objects.hash(id, betreff, text);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizUpdateDto {\n");
-    
+
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

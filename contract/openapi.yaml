@@ -4366,6 +4366,7 @@ components:
     GesuchNotizUpdate:
       type: object
       required:
+        - id
         - betreff
         - text
       properties:

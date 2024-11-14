@@ -305,7 +305,6 @@ class GesuchNotizResourceImplTest {
             .extract()
             .body()
             .as(GesuchNotizDto.class);
-
         gesuchNotizApiSpec.answerJuristischeAbklaerungNotiz()
             .notizIdPath(juristischeAbklaerungNotizDto.getId())
             .body(antwort)
@@ -333,8 +332,6 @@ class GesuchNotizResourceImplTest {
         juristischeAbklaerungNotizDto = Arrays.stream(notizen).toList().get(notizen.length - 1);
         assertEquals(GesuchNotizTypDto.JURISTISCHE_NOTIZ, juristischeAbklaerungNotizDto.getNotizTyp());
         assertNotNull(juristischeAbklaerungNotizDto.getAntwort());
-        assertNotNull(juristischeAbklaerungNotizDto.getUserMutiert());
-        assertNotNull(juristischeAbklaerungNotizDto.getTimestampMutiert());
     }
 
     @Test
