@@ -1,4 +1,6 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
+
+import { AusbildungPO, AusbildungValues } from './ausbildung.po';
 
 export class CockpitPO {
   private page: Page;
@@ -19,7 +21,14 @@ export class CockpitPO {
     await this.page.goto('/gesuch-app-feature-cockpit');
   }
 
-  public getGesuchNew() {
-    return this.page.getByTestId('cockpit-gesuch-new').first();
+  public async createNewStipendium(ausbildung: AusbildungValues) {
+    await this.page.getByTestId('cockpit-create-ausbildung').click();
+
+    const ausbildungPO = new AusbildungPO(this.page);
+    await expect(ausbildungPO.elems.loading).toBeHidden();
+
+    await ausbildungPO.fillEducationForm(ausbildung);
+
+    await ausbildungPO.elems.buttonSave.click();
   }
 }
