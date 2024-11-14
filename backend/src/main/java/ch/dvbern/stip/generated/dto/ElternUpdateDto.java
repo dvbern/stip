@@ -31,7 +31,7 @@ public class ElternUpdateDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
   private @Valid String nachname;
   private @Valid Integer ergaenzungsleistungen;
-  private @Valid Integer sozialhilfebeitraege;
+  private @Valid Boolean sozialhilfebeitraege;
   private @Valid Integer wohnkosten;
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
@@ -212,9 +212,8 @@ public class ElternUpdateDto  implements Serializable {
   }
 
   /**
-   * &#39;Falls steuerdatenTyp &#x3D; Familie: Sozialhilfebeitraege Vater&#39; &#39;Falls steuerdatenTyp !&#x3D; Famile: Sozialhilfebeitraege steuerdatenTyp&#39; 
    **/
-  public ElternUpdateDto sozialhilfebeitraege(Integer sozialhilfebeitraege) {
+  public ElternUpdateDto sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     this.sozialhilfebeitraege = sozialhilfebeitraege;
     return this;
   }
@@ -222,12 +221,12 @@ public class ElternUpdateDto  implements Serializable {
   
   @JsonProperty("sozialhilfebeitraege")
   @NotNull
-  public Integer getSozialhilfebeitraege() {
+  public Boolean getSozialhilfebeitraege() {
     return sozialhilfebeitraege;
   }
 
   @JsonProperty("sozialhilfebeitraege")
-  public void setSozialhilfebeitraege(Integer sozialhilfebeitraege) {
+  public void setSozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     this.sozialhilfebeitraege = sozialhilfebeitraege;
   }
 

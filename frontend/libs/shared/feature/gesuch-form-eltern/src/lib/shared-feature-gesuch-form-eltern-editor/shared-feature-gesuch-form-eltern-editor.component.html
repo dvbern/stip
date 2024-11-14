@@ -153,35 +153,6 @@
       }
     </div>
 
-    <!-- Sozialhilfebeitraege-->
-    <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-      <mat-form-field dvSharedUiFormField class="flex-grow-1">
-        <mat-label>{{ 'shared.form.eltern.sozialhilfebeitraege.label' | translate }}</mat-label>
-        <input
-          formControlName="sozialhilfebeitraege"
-          data-testid="form-eltern.sozialhilfebeitraege"
-          matInput
-          [maskito]="maskitoNumber"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes?.sozialhilfebeitraege"></mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      @if (sozialhilfeDocumentSig(); as options) {
-        <div class="d-flex gap-2 align-items-center">
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        </div>
-      }
-    </div>
-  </div>
-
-  <div class="row g-4 my-2">
     <!-- Wohnkosten-->
     <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
       <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -208,7 +179,9 @@
         </div>
       }
     </div>
+  </div>
 
+  <div class="row g-4 my-2">
     <!-- GEBURTSDATUM -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
@@ -236,8 +209,8 @@
         {{ 'shared.form.error.maxDatePast' | translate }}
       </mat-error>
     </mat-form-field>
-  </div>
-  <div class="row g-4 my-2">
+
+    <!-- Telefonnummer -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.phone.label' | translate }}</mat-label>
       <input matInput type="text" formControlName="telefonnummer" data-testid="form-eltern-telefonnummer" />
@@ -252,6 +225,38 @@
   </div>
 
   <div class="row g-4 my-2">
+    <!-- Sozialhilfebeitraege-->
+    <mat-radio-group
+      class="flex-grow-1"
+      formControlName="sozialhilfebeitraege"
+      data-testid="form-eltern-sozialhilfeBeitraege"
+      dvSharedUiFormField
+    >
+      <label>{{ 'shared.form.eltern.sozialhilfebeitraege.label' | translate }}</label>
+      <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
+        <div class="d-flex flex-column">
+          <mat-radio-button data-testid="yes" [value]="true">{{
+            'shared.form.radio.yes' | translate
+          }}</mat-radio-button>
+          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
+          <dv-shared-ui-form-zuvor-hint
+            [changes]="changes?.sozialhilfebeitraege | translateChange: 'shared.form.zuvor.radio.$VALUE'"
+          ></dv-shared-ui-form-zuvor-hint>
+        </div>
+
+        @if (sozialhilfeDocumentSig(); as options) {
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1 ms-auto align-self-center"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        }
+      </div>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-radio-group>
+
+    <!-- Ausweis B-->
     <mat-radio-group
       formControlName="ausweisbFluechtling"
       data-testid="form-eltern-ausweisFluechtling"
