@@ -69,11 +69,6 @@ public interface GesuchTrancheResource {
     @Produces({ "application/json", "text/plain" })
     Response gesuchTrancheEinreichenValidieren(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
-    @PATCH
-    @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
-    @Produces({ "application/json", "text/plain" })
-    Response gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
     @GET
     @Path("/{gesuchId}")
     @Produces({ "application/json", "text/plain" })

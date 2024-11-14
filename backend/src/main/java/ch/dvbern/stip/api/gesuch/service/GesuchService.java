@@ -602,4 +602,12 @@ public class GesuchService {
             List.of(initialRevision, latestWhereStatusChanged)
         );
     }
+
+    @Transactional
+    public void gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
+        gesuchStatusService
+            .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+    }
 }

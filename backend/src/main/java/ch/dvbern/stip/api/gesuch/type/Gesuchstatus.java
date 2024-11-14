@@ -57,6 +57,11 @@ public enum Gesuchstatus {
             )
         );
 
+    public static final Set<Gesuchstatus> ADMIN_CAN_EDIT =
+        Collections.unmodifiableSet(
+            EnumSet.allOf(Gesuchstatus.class)
+        );
+
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
     }

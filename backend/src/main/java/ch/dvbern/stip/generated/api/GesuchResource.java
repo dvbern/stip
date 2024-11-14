@@ -76,6 +76,11 @@ public interface GesuchResource {
     Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
+    @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
+    @Produces({ "application/json", "text/plain" })
+    Response gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @PATCH
     @Path("/{gesuchId}/gesuchZurueckweisen")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })

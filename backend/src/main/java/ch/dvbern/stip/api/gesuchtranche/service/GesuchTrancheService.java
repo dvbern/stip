@@ -42,8 +42,6 @@ import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
-import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
@@ -79,7 +77,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GesuchTrancheService {
     private final GesuchRepository gesuchRepository;
-    private final GesuchStatusService gesuchStatusService;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheMapper gesuchTrancheMapper;
     private final GesuchDokumentMapper gesuchDokumentMapper;
@@ -375,13 +372,5 @@ public class GesuchTrancheService {
             .toList();
 
         return !trancheInDisallowedStates.isEmpty();
-    }
-
-    @Transactional
-    public void gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
-        gesuchStatusService
-            .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 }

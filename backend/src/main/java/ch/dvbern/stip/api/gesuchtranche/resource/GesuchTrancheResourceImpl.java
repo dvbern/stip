@@ -155,12 +155,4 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         final var tranche = gesuchTrancheService.aenderungManuellAnpassen(aenderungId);
         return Response.ok(tranche).build();
     }
-
-    @RolesAllowed(GESUCH_UPDATE)
-    @Override
-    public Response gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
-        gesuchTrancheService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
-        return Response.ok().build();
-    }
 }
