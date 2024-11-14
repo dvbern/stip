@@ -454,13 +454,13 @@ class BerechnungServiceTest {
                     .setElternTyp(ElternTyp.VATER)
                     .setWohnkosten(9_000)
                     .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0)
+                    .setSozialhilfebeitraege(false)
                     .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
                     .setWohnkosten(12_720)
                     .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0)
+                    .setSozialhilfebeitraege(false)
                     .setGeburtsdatum(LocalDate.of(1961, 1, 1))
             )
         );

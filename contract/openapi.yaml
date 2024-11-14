@@ -3339,10 +3339,7 @@ components:
             'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp'
           type: integer
         sozialhilfebeitraege:
-          description: |
-            'Falls steuerdatenTyp = Familie: Sozialhilfebeitraege Vater'
-            'Falls steuerdatenTyp != Famile: Sozialhilfebeitraege steuerdatenTyp'
-          type: integer
+          type: boolean
         wohnkosten:
           description: 'Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen'
           type: integer
@@ -4750,7 +4747,8 @@ components:
         - piaNachname
         - piaVorname
         - piaGeburtsdatum
-        - status
+        - trancheStatus
+        - gesuchStatus
         - bearbeiter
         - letzteAktivitaet
       properties:
@@ -4769,8 +4767,10 @@ components:
         piaGeburtsdatum:
           type: string
           format: date
-        status:
+        gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
+        trancheStatus:
+          $ref: '#/components/schemas/GesuchTrancheStatus'
         bearbeiter:
           type: string
         letzteAktivitaet:
@@ -4867,7 +4867,7 @@ components:
       in: query
       name: status
       schema:
-        $ref: '#/components/schemas/Gesuchstatus'
+        type: string
     bearbeiter:
       in: query
       name: bearbeiter

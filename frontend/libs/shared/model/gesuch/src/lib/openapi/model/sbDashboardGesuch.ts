@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GesuchTrancheTyp } from './gesuchTrancheTyp';
+import { GesuchTrancheStatus } from './gesuchTrancheStatus';
 import { Gesuchstatus } from './gesuchstatus';
 
 export interface SbDashboardGesuch { 
@@ -20,7 +21,8 @@ export interface SbDashboardGesuch {
     piaNachname: string;
     piaVorname: string;
     piaGeburtsdatum: string;
-    status: Gesuchstatus;
+    gesuchStatus: Gesuchstatus;
+    trancheStatus: GesuchTrancheStatus;
     bearbeiter: string;
     letzteAktivitaet: string;
 }
