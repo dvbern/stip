@@ -168,6 +168,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.steuerdaten.fieldRequiredIfType.message}";
     public static final String VALIDATION_DOCUMENTS_STATUS_ACCEPTED_MESSAGE =
         "{jakarta.validation.constraints.gesuchFormular.documents.mustBe.accepted.message}";
+    public static final String VALIDATION_GESUCHNOTIZ_ANTWORT_VALID_MESSAGE = "{" +
+    "jakarta.validation.constraints.gesuchnotiz.antwort.valid.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

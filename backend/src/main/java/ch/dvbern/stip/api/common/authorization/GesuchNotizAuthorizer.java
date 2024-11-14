@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.notiz.entity.NotizTyp;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,10 +30,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class GesuchNotizAuthorizer extends BaseAuthorizer {
-    private final GesuchNotizRepository juristischeNotizRepository;
+    private final GesuchNotizRepository gesuchNotizRepository;
 
-    public void canUpdate(UUID juristischeNotizId) {
-        final var notiz = juristischeNotizRepository.requireById(juristischeNotizId);
+    public void canUpdate(UUID notizId) {
+        final var notiz = gesuchNotizRepository.requireById(notizId);
+        if (notiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
+            throw new UnauthorizedException();
+        }
+    }
+
+    public void canDelete(UUID notizId) {
+        final var notiz = gesuchNotizRepository.requireById(notizId);
+        if (notiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
+            throw new UnauthorizedException();
+        }
+        canUpdate(notizId);
+    }
+
+    public void canSetAnswer(UUID notizId) {
+        final var notiz = gesuchNotizRepository.requireById(notizId);
         if (Objects.nonNull(notiz.getAntwort())) {
             throw new UnauthorizedException();
         }

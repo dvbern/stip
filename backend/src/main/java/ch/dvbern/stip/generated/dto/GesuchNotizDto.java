@@ -10,8 +10,6 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
-
-
 @JsonTypeName("GesuchNotiz")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor

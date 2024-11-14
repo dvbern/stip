@@ -66,7 +66,6 @@ public class GesuchNotizService {
         notiz.setGesuch(gesuch);
         gesuchNotizRepository.persistAndFlush(notiz);
         return gesuchNotizMapper.toDto(notiz);
-
     }
 
     @Transactional

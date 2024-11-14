@@ -45,7 +45,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         UUID notizId,
         JuristischeAbklaerungNotizAntwortDto juristischeAbklaerungNotizAntwortDto
     ) {
-        authorizer.canUpdate(notizId);
+        authorizer.canSetAnswer(notizId);
         return Response.ok(
             service.answerJuristischeNotiz(juristischeAbklaerungNotizAntwortDto, notizId)
         ).build();
@@ -63,6 +63,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response deleteNotiz(UUID notizId) {
+        authorizer.canDelete(notizId);
         service.delete(notizId);
         return Response.noContent().build();
     }
@@ -86,6 +87,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response updateNotiz(GesuchNotizUpdateDto gesuchNotizUpdateDto) {
+        authorizer.canUpdate(gesuchNotizUpdateDto.getId());
         final var notiz = service.update(gesuchNotizUpdateDto);
         return Response.ok(notiz).build();
     }

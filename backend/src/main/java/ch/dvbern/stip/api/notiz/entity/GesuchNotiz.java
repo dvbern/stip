@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.notiz.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.validation.GesuchNotizAntwortConstraint;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,8 +26,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -38,6 +37,7 @@ import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 
+@GesuchNotizAntwortConstraint
 @Getter
 @Setter
 @Entity
@@ -49,7 +49,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
         @Index(name = "IX_gesuch_notiz_gesuch_id", columnList = "gesuch_id")
     }
 )
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+// @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class GesuchNotiz extends AbstractMandantEntity {
     @ManyToOne
     @JoinColumn(
