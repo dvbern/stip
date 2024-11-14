@@ -388,4 +388,16 @@ class GesuchNotizResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
+
+    @Test
+    @TestAsJurist
+    @Order(16)
+    void juristischeNotizDeleteAsJuristShouldFail() {
+        gesuchNotizApiSpec.deleteNotiz()
+            .notizIdPath(juristischeAbklaerungNotizDto.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+    }
 }
