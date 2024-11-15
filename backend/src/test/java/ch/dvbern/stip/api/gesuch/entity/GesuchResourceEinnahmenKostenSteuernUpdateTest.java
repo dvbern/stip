@@ -23,13 +23,11 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
-import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.api.BenutzerApiSpec;
-import ch.dvbern.stip.generated.api.DokumentApiSpec;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -54,29 +52,16 @@ import static org.hamcrest.Matchers.notNullValue;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GesuchResourceEinnahmenKostenSteuernUpdateTest {
-    public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-    public final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
-    public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-    private final String geschwisterNameUpdateTest = "UPDATEDGeschwister";
-    private UUID gesuchId;
-    private GesuchDtoSpec gesuch;
+    private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
+    private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    private UUID piaAdresseId;
-    private UUID partnerAdresseId;
+    private static UUID gesuchId;
+    private static GesuchDtoSpec gesuch;
 
     void createGesuch() {
-        var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setFallId(UUID.fromString(TestConstants.FALL_TEST_ID));
-        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
-        var response = gesuchApiSpec.createGesuch()
-            .body(gesuchDTO)
-            .execute(ResponseBody::prettyPeek)
-            .then();
-
-        response.assertThat()
-            .statusCode(Status.CREATED.getStatusCode());
-
-        gesuchId = TestUtil.extractIdFromResponse(response);
+        final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        gesuchId = gesuch.getId();
     }
 
     void createTranche() {
@@ -95,7 +80,7 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(7)
+    @Order(1)
     void testUpdateGesuchEinnahmenKostenSteuern() {
         createGesuch();
         createTranche();
@@ -148,4 +133,10 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
         );
     }
 
+    @Test
+    @TestAsGesuchsteller
+    @Order(99)
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
+    }
 }

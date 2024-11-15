@@ -30,6 +30,10 @@
             "label": "Event - events dispatched by features / patterns (and consumed by data-access)"
           },
           {
+            "value": "dialog",
+            "label": "Dialog - standalone (simple / view / presentational) UI component used for dialogs. Is able to also render features"
+          },
+          {
             "value": "ui",
             "label": "UI - standalone (simple / view / presentational) UI component, eg calendar or toggle"
           },

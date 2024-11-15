@@ -10,7 +10,9 @@
       "esbenp.prettier-vscode",
       "Orta.vscode-jest",
       "dbaeumer.vscode-eslint",
-      "SonarSource.sonarlint-vscode"
+      "SonarSource.sonarlint-vscode",
+      "bradlc.vscode-tailwindcss",
+      "hyoban.tailwindcss-classname-highlight"
     ]
   },
   "tasks": {
@@ -53,6 +55,10 @@
     "eslint.validate": ["json"],
     "typescript.tsdk": "frontend/node_modules/typescript/lib",
     "jest.rootPath": "frontend",
+    "tailwindCSS.experimental.classRegex": [
+      "HostBinding.*class[\\s\\S*]*['\"`](.+?)['\"`]",
+      "tw\\([\\s\\S*]*['\"`](.+?)['\"`],?[\\s\\S*]*\\)"
+    ],
     "workbench.colorCustomizations": {
       "activityBar.activeBackground": "#097bd5",
       "activityBar.background": "#097bd5",

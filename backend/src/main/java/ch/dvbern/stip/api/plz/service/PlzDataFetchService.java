@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.plz.service;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
@@ -28,7 +30,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.zip.ZipFile;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import ch.dvbern.stip.api.plz.entity.GeoCollectionItem;
 import ch.dvbern.stip.api.plz.entity.Plz;
@@ -45,9 +48,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+@Slf4j
 @RequiredArgsConstructor
 @ApplicationScoped
 public class PlzDataFetchService {
@@ -121,16 +127,21 @@ public class PlzDataFetchService {
 
     private void loadNewData(final URI uri) throws IOException, CsvException {
         final String csvFileData = loadCsvFileData(uri);
+        if (csvFileData == null) {
+            LOG.error("Failed to load PLZ CSV");
+            return;
+        }
+
         final Set<List<String>> plzHashSet = new HashSet<>();
         try (
-        final CSVReader csvReader = new CSVReaderBuilder(new StringReader(csvFileData))
-            .withSkipLines(1)
-            .withCSVParser(
-                new CSVParserBuilder()
-                    .withSeparator(';')
-                    .build()
-            )
-            .build()
+            final CSVReader csvReader = new CSVReaderBuilder(new StringReader(csvFileData))
+                .withSkipLines(1)
+                .withCSVParser(
+                    new CSVParserBuilder()
+                        .withSeparator(';')
+                        .build()
+                )
+                .build()
         ) {
             csvReader.readAll()
                 .forEach(
@@ -152,23 +163,34 @@ public class PlzDataFetchService {
     }
 
     private String loadCsvFileData(final URI uri) throws IOException {
-        final var resource = this.getClass().getClassLoader().getResource("ortschaftenverzeichnis_plz_2056.csv.zip");
-        if (resource == null) {
-            return "";
-        }
+        final var downloadService = RestClientBuilder.newBuilder()
+            .baseUri(uri)
+            .build(GeoCollectionDowloadService.class);
 
-        try (
-        final var zipFile = new ZipFile(resource.getFile());
-        ) {
-            for (final var zipEntry : zipFile.stream().toList()) {
+        final var file = downloadService.getGeoCollectionDowload();
+
+        // Buffer the input, so we can reset it, since we have to read it twice
+        // https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4079029
+        try (final var bufferedInput = new BufferedInputStream(new ByteArrayInputStream(file))) {
+            bufferedInput.mark(Integer.MAX_VALUE);
+
+            final var csvSize = findCsvSize(bufferedInput);
+            if (csvSize == -1) {
+                LOG.error("Could not determine size of CSV");
+                return null;
+            }
+
+            bufferedInput.reset();
+            final var zipStream = new ZipInputStream(bufferedInput);
+
+            ZipEntry zipEntry;
+            while ((zipEntry = zipStream.getNextEntry()) != null) {
                 if (zipEntry.getName().endsWith(".csv")) {
-                    final int fileLen = (int) zipEntry.getSize();
-                    final byte[] bytes = new byte[fileLen];
-                    final var zin = zipFile.getInputStream(zipEntry);
+                    final var bytes = new byte[csvSize];
 
                     int bytesRead = 0;
-                    while (bytesRead < fileLen) {
-                        bytesRead += zin.read(bytes, bytesRead, fileLen - bytesRead);
+                    while (bytesRead < csvSize) {
+                        bytesRead += zipStream.read(bytes, bytesRead, csvSize - bytesRead);
                     }
 
                     return new String(bytes, StandardCharsets.UTF_8);
@@ -176,7 +198,25 @@ public class PlzDataFetchService {
             }
         }
 
-        return "";
+        LOG.error("No CSV file found in downloaded zip");
+        return null;
+    }
+
+    private int findCsvSize(final BufferedInputStream inStream) throws IOException {
+        // No try-with because it would close the underlying stream
+        final var zipStream = new ZipInputStream(inStream);
+        ZipEntry zipEntry;
+        while ((zipEntry = zipStream.getNextEntry()) != null) {
+            if (zipEntry.getName().endsWith(".csv")) {
+                if (zipEntry.getSize() < 0) {
+                    zipStream.getNextEntry();
+                }
+
+                return (int) zipEntry.getSize();
+            }
+        }
+
+        return -1;
     }
 
     @Transactional

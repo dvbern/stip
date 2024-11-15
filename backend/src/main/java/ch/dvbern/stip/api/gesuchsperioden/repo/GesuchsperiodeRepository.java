@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,13 +35,12 @@ import lombok.RequiredArgsConstructor;
 public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> {
     private final EntityManager entityManager;
 
+    static final QGesuchsperiode gesuchsperiode = QGesuchsperiode.gesuchsperiode;
+
     public Stream<Gesuchsperiode> findAllActiveForDate(LocalDate date) {
         var queryFactory = new JPAQueryFactory(entityManager);
-        var gesuchsperiode = QGesuchsperiode.gesuchsperiode;
-
         var query = queryFactory
-            .select(gesuchsperiode)
-            .from(gesuchsperiode)
+            .selectFrom(gesuchsperiode)
             .where(
                 gesuchsperiode.aufschaltterminStart.before(date)
                     .and(
@@ -51,8 +51,20 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
         return query.stream();
     }
 
+    public Gesuchsperiode findAllStartBeforeOrAt(LocalDate date) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var query = queryFactory
+            .selectFrom(gesuchsperiode)
+            .where(gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.PUBLIZIERT))
+            .where(
+                gesuchsperiode.gesuchsperiodeStart.before(date)
+                    .or(gesuchsperiode.gesuchsperiodeStart.eq(date))
+            )
+            .orderBy(gesuchsperiode.aufschaltterminStart.desc());
+        return query.fetchFirst();
+    }
+
     public Optional<Gesuchsperiode> getLatest() {
-        final var gesuchsperiode = QGesuchsperiode.gesuchsperiode;
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuchsperiode)
             .orderBy(gesuchsperiode.timestampErstellt.desc())

@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -51,16 +52,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Slf4j
 class DeleteGesuchAsAdminTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    private GesuchDtoSpec gesuch;
+    private static GesuchDtoSpec gesuch;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void gesuchErstellen() {
-        gesuch = TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
+        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
     }
 
     @Test
@@ -86,7 +88,7 @@ class DeleteGesuchAsAdminTest {
     @TestAsGesuchsteller
     @Order(4)
     void gesuchErstellen2() {
-        gesuch = TestUtil.createGesuchAndFall(fallApiSpec, gesuchApiSpec);
+        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
     }
 
     @Test

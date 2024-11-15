@@ -25,7 +25,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
-import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
@@ -41,6 +40,7 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -74,6 +74,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_ONLY_ONE_GESUCH_PER_YEAR;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -93,15 +94,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Slf4j
 // TODO KSTIP-1303: Test Aenderungsantrag once proper generation is done
 class GesuchFillFormularTest {
-    public final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-    public final GesuchTrancheApiSpec gesuchTrancheApiSpec =
+    private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
+    private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
-    public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-    public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
-    public final NotificationApiSpec notificationApiSpec =
+    private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
+    private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    private final NotificationApiSpec notificationApiSpec =
         NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
     private UUID fallId;
     private UUID gesuchId;
+    private UUID ausbildungId;
     private UUID gesuchTrancheId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
@@ -109,34 +112,42 @@ class GesuchFillFormularTest {
     @Test
     @TestAsGesuchsteller
     @Order(1)
-    void createFall() {
-        fallId = TestUtil.getOrCreateFall(fallApiSpec).getId();
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(2)
     void testCreateEndpoint() {
-        var gesuchDTO = new GesuchCreateDtoSpec();
-        gesuchDTO.setFallId(fallId);
-        gesuchDTO.setGesuchsperiodeId(TestConstants.TEST_GESUCHSPERIODE_ID);
-        var response = gesuchApiSpec.createGesuch()
-            .body(gesuchDTO)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.CREATED.getStatusCode());
-
-        gesuchId = TestUtil.extractIdFromResponse(response);
+        final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        gesuchId = gesuch.getId();
+        ausbildungId = gesuch.getAusbildungId();
         gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)
             .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+
             .extract()
             .body()
             .as(GesuchDtoSpec.class)
             .getGesuchTrancheToWorkWith()
             .getId();
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(2)
+    void gesuchCreateFail() {
+        var validationReport = gesuchApiSpec.createGesuch()
+            .body(new GesuchCreateDtoSpec().ausbildungId(ausbildungId))
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode())
+            .extract()
+            .body()
+            .as(ValidationReportDtoSpec.class);
+
+        assertThat(
+            validationReport.getValidationErrors().get(0).getMessageTemplate(),
+            is(VALIDATION_AUSBILDUNG_ONLY_ONE_GESUCH_PER_YEAR)
+        );
     }
 
     @Test
@@ -164,7 +175,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(4)
     void updateWithNotExistingGesuchTranche() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecAusbildung();
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuchId)
@@ -181,7 +192,7 @@ class GesuchFillFormularTest {
     void addPersonInAusbildung() {
         final var pia = PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec();
         currentFormular.setPersonInAusbildung(pia);
-        final var returnedGesuch = patchAndValidate();
+        final var returnedGesuch = patchGesuch();
 
         assertThat(
             returnedGesuch.getGesuchTrancheToWorkWith()
@@ -207,16 +218,6 @@ class GesuchFillFormularTest {
     @Test
     @TestAsGesuchsteller
     @Order(6)
-    void addAusbildung() {
-        final var ausbildung = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
-        currentFormular.setAusbildung(ausbildung);
-        // Don't validate for now, as the LebenslaufItem validator is broken
-        patchGesuch();
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(7)
     void addLebenslauf() {
         final var lebenslaufItems = LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs();
         currentFormular.setLebenslaufItems(lebenslaufItems);
@@ -225,7 +226,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(8)
+    @Order(7)
     void addFamiliensituation() {
         final var famsit = FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec();
         currentFormular.setFamiliensituation(famsit);
@@ -234,7 +235,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(9)
+    @Order(8)
     void addEltern() {
         final var eltern = ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2);
         eltern.get(0).setElternTyp(ElternTypDtoSpec.VATER);
@@ -248,7 +249,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(10)
+    @Order(9)
     void addSteuerdaten() {
         final var steuerdaten = SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
         currentFormular.setSteuerdaten(List.of(steuerdaten));
@@ -257,7 +258,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(11)
+    @Order(10)
     void addGeschwister() {
         final var geschwister = GeschwisterUpdateDtoSpecModel.geschwisterUpdateDtoSpecs();
         currentFormular.setGeschwisters(geschwister);
@@ -266,7 +267,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(12)
+    @Order(11)
     void addPartner() {
         // Set partner to null as Zivilstand is LEDIG
         final var partner = (PartnerUpdateDtoSpec) null;
@@ -436,7 +437,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsAdmin
-    @Order(30)
+    @Order(99)
     @AlwaysRun
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);

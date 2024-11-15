@@ -34,10 +34,6 @@ public class FamiliensituationCopyUtil {
         copy.setVaterUnbekanntVerstorben(other.getVaterUnbekanntVerstorben());
         copy.setVaterUnbekanntGrund(other.getVaterUnbekanntGrund());
         copy.setVaterWiederverheiratet(other.getVaterWiederverheiratet());
-        copy.setSorgerecht(other.getSorgerecht());
-        copy.setObhut(other.getObhut());
-        copy.setObhutMutter(other.getObhutMutter());
-        copy.setObhutVater(other.getObhutVater());
         copy.setWerZahltAlimente(other.getWerZahltAlimente());
 
         return copy;

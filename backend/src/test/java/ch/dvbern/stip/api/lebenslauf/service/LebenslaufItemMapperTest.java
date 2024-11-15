@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
@@ -33,7 +32,7 @@ import org.junit.jupiter.api.Test;
 
 class LebenslaufItemMapperTest {
 
-    LebenslaufItemMapper lebenslaufItemMapper = new LebenslaufItemMapperImpl(new DateMapperImpl());
+    LebenslaufItemMapper lebenslaufItemMapper = new LebenslaufItemMapperImpl();
 
     @Test
     void testLebenslaufMapperMapAddDelete() {

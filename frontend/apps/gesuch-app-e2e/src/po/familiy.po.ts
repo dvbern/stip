@@ -1,11 +1,11 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Familiensituation } from '@dv/shared/model/gesuch';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   expectFormToBeValid,
   selectMatRadio,
 } from '@dv/shared/util-fn/e2e-util';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 export class FamilyPO {
   public elems: {
@@ -22,8 +22,6 @@ export class FamilyPO {
     vaterUnbekanntGrundRadio: Locator;
     mutterWiederVerheiratetRadio: Locator;
     vaterWiederverheiratetRadio: Locator;
-    sorgerechtSelect: Locator;
-    obhutSelect: Locator;
 
     buttonNext: Locator;
     buttonPrevious: Locator;
@@ -66,9 +64,6 @@ export class FamilyPO {
       vaterWiederverheiratetRadio: page.getByTestId(
         'form-family-vaterWiederverheiratet',
       ),
-      sorgerechtSelect: page.getByTestId('form-family-sorgerecht'),
-      obhutSelect: page.getByTestId('form-family-obhut'),
-
       buttonNext: page.getByTestId('stepper-next'),
       buttonPrevious: page.getByTestId('stepper-previous'),
       buttonSaveContinue: page.getByTestId('button-save-continue'),

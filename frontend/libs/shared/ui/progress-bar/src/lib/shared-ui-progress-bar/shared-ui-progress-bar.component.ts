@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 
 import { SharedModelGesuchFormStepProgress } from '@dv/shared/model/gesuch-form';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/model/type-util';
 
 @Component({
   selector: 'dv-shared-ui-progress-bar',

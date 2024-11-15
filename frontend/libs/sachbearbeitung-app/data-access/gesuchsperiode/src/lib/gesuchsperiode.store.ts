@@ -4,7 +4,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { merge, pipe, switchMap, tap } from 'rxjs';
 
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   Gesuchsjahr,
   GesuchsjahrCreate,

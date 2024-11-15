@@ -19,9 +19,9 @@ package ch.dvbern.stip.api.fall.entity;
 
 import java.util.Set;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -70,6 +70,6 @@ public class Fall extends AbstractMandantEntity {
     @OneToOne(mappedBy = "fall")
     private Zuordnung sachbearbeiterZuordnung;
 
-    @OneToMany(mappedBy = "fall")
-    private Set<Gesuch> gesuch;
+    @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
+    private Set<Ausbildung> ausbildungs;
 }

@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 
 import { FormularChangeTypes } from '@dv/shared/model/gesuch-form';
+import { isDefined } from '@dv/shared/model/type-util';
 import { toFormatedNumber } from '@dv/shared/util/maskito-util';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { SharedUiZuvorHintComponent } from './shared-ui-form-zuvor-hint.template';
 

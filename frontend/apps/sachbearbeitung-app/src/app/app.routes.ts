@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
+import { allowVerfuegung } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
   {
@@ -8,6 +9,15 @@ export const appRoutes: Route[] = [
     loadChildren: () =>
       import('@dv/sachbearbeitung-app/feature/infos-notizen').then(
         (m) => m.sachbearbeitungAppFeatureInfosNotizenRoutes,
+      ),
+  },
+  {
+    path: 'sachbearbeitung-app-feature-administration-sozialdienst',
+    loadChildren: () =>
+      import(
+        '@dv/sachbearbeitung-app/feature/administration-sozialdienst'
+      ).then(
+        (m) => m.sachbearbeitungAppFeatureAdministrationSozialdienstRoutes,
       ),
   },
   {
@@ -54,7 +64,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'verfuegung',
-    canActivate: [hasBenutzer],
+    canActivate: [hasBenutzer, allowVerfuegung],
     title: 'sachbearbeitung-app.verfuegung.title',
     loadComponent: () =>
       import('@dv/sachbearbeitung-app/feature/verfuegung').then(

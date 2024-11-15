@@ -23,14 +23,14 @@ import java.util.Set;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 class BothElternRequiredDocumentsProducerTest {
@@ -50,9 +50,11 @@ class BothElternRequiredDocumentsProducerTest {
         gesuchFormular.setElterns(
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.VATER)
-                    .setWohnkosten(1),
+                    .setWohnkosten(1)
+                    .setSozialhilfebeitraege(false),
                 new Eltern().setElternTyp(ElternTyp.MUTTER)
                     .setWohnkosten(1)
+                    .setSozialhilfebeitraege(false)
             )
         );
         tranche.setGesuchFormular(gesuchFormular);

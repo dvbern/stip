@@ -1,5 +1,4 @@
 import { expect } from '@playwright/test';
-import { addYears, format } from 'date-fns';
 
 import {
   Adresse,
@@ -19,7 +18,7 @@ import {
   getE2eUrls,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { AusbildungPO, AusbildungValues } from '../../po/ausbildung.po';
+import { AusbildungValues } from '../../po/ausbildung.po';
 import { AuszahlungPO } from '../../po/auszahlung.po';
 import { EinnahmenKostenPO } from '../../po/einnahmen-kosten.po';
 import { ElternPO } from '../../po/eltern.po';
@@ -29,15 +28,26 @@ import { KinderPO } from '../../po/kinder.po';
 import { LebenslaufPO } from '../../po/lebenslauf.po';
 import { PersonPO } from '../../po/person.po';
 import { SteuerdatenPO } from '../../po/steuerdaten.po';
-import { initializeTest } from '../../utils';
+import {
+  initializeTest,
+  specificMonth,
+  specificMonthPlusYears,
+  specificYearsAgo,
+  thisYear,
+} from '../../utils';
 
-const thisYear = format(new Date(), 'yyyy');
-const specificMonth = (month: number) =>
-  `${month}.${format(new Date(), 'yyyy')}`;
-const specificMonthPlusYears = (month: number, years: number) =>
-  `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
-const specificYearsAgo = (years: number) =>
-  format(addYears(new Date(), -years), 'yyyy');
+const ausbildung: AusbildungValues = {
+  fallId: '',
+  status: 'AKTIV',
+  editable: true,
+  ausbildungsort: 'Bern',
+  ausbildungsstaetteText: 'Universität Bern',
+  ausbildungsgangText: 'Master',
+  fachrichtung: 'Kunstgeschichte',
+  ausbildungBegin: specificMonth(9),
+  ausbildungEnd: specificMonthPlusYears(8, 3),
+  pensum: 'VOLLZEIT',
+};
 
 const adressen = {
   person: {
@@ -77,16 +87,6 @@ const person = (seed: string): PersonInAusbildung => ({
   korrespondenzSprache: 'DEUTSCH',
 });
 
-const ausbildung: AusbildungValues = {
-  ausbildungsort: 'Bern',
-  ausbildungsstaette: 'Universität Bern',
-  ausbildungsgang: 'Master',
-  fachrichtung: 'Kunstgeschichte',
-  ausbildungBegin: specificMonth(9),
-  ausbildungEnd: specificMonthPlusYears(8, 3),
-  pensum: 'VOLLZEIT',
-};
-
 const taetigkeit: LebenslaufItem = {
   taetigkeitsart: 'ERWERBSTAETIGKEIT',
   taetigkeitsBeschreibung: 'Serviceangestellter',
@@ -113,7 +113,7 @@ const mutter = (seed: string): Eltern => ({
   identischerZivilrechtlicherWohnsitz: true,
   telefonnummer: '0316338355',
   ergaenzungsleistungen: 0,
-  sozialhilfebeitraege: 0,
+  sozialhilfebeitraege: false,
   wohnkosten: 16260,
   geburtsdatum: `01.01.${specificYearsAgo(44)}`,
   ausweisbFluechtling: false,
@@ -173,7 +173,7 @@ const einnahmenKosten: EinnahmenKosten = {
   willDarlehen: true,
 };
 
-const { test, getGesuchId } = initializeTest('GESUCHSTELLER');
+const { test, getGesuchId } = initializeTest('GESUCHSTELLER', ausbildung);
 
 test.describe('Neues gesuch erstellen', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -192,16 +192,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await personPO.elems.buttonSaveContinue.click();
 
-    // Step 2: Ausbildung ========================================================
-    await expectStepTitleToContainText('Ausbildung', page);
-    const ausbildungPO = new AusbildungPO(page);
-    await expect(ausbildungPO.elems.loading).toBeHidden();
-
-    await ausbildungPO.fillEducationForm(ausbildung);
-
-    await ausbildungPO.elems.buttonSaveContinue.click();
-
-    // Step 3: Lebenslauf ========================================================
+    // Step 2: Lebenslauf ========================================================
     await expectStepTitleToContainText('Lebenslauf', page);
     const lebenslaufPO = new LebenslaufPO(page);
     await expect(lebenslaufPO.elems.loading).toBeHidden();
@@ -210,7 +201,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await lebenslaufPO.elems.buttonContinue.click();
 
-    // Step 4: Familiensituation ===================================================
+    // Step 3: Familiensituation ===================================================
     await expectStepTitleToContainText('Familiensituation', page);
     const familiyPO = new FamilyPO(page);
     await expect(familiyPO.elems.loading).toBeHidden();
@@ -219,7 +210,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await familiyPO.elems.buttonSaveContinue.click();
 
-    // Step 5.1: Eltern =============================================================
+    // Step 4.1: Eltern =============================================================
     await expectStepTitleToContainText('Eltern', page);
     const elternPO = new ElternPO(page);
     await expect(elternPO.elems.loading).toBeHidden();
@@ -228,7 +219,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await elternPO.elems.buttonContinue.click();
 
-    // Step 5.2: Steuerdaten Eltern =================================================
+    // Step 4.2: Steuerdaten Eltern =================================================
     await expectStepTitleToContainText('Steuerdaten', page);
     const steuerdatenPO = new SteuerdatenPO(page);
     await expect(steuerdatenPO.elems.loading).toBeHidden();
@@ -237,7 +228,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await steuerdatenPO.elems.buttonSaveContinue.click();
 
-    // Step 6: Geschwister  ========================================================
+    // Step 5: Geschwister  ========================================================
     await expectStepTitleToContainText('Geschwister', page);
     const geschwisterPO = new GeschwisterPO(page);
     await expect(geschwisterPO.elems.loading).toBeHidden();
@@ -246,12 +237,12 @@ test.describe('Neues gesuch erstellen', () => {
 
     await geschwisterPO.elems.buttonContinue.click();
 
-    // Step 8: Kinder =============================================================
+    // Step 6: Kinder =============================================================
     await expectStepTitleToContainText('Kinder', page);
     const kinderPO = new KinderPO(page);
     await kinderPO.elems.buttonContinue.click();
 
-    // Step 9: Auszahlung ===========================================================
+    // Step 7: Auszahlung ===========================================================
     await expectStepTitleToContainText('Auszahlung', page);
     const auszahlungPO = new AuszahlungPO(page);
     await expect(auszahlungPO.elems.loading).toBeHidden();
@@ -266,7 +257,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await auszahlungPO.elems.buttonSaveContinue.click();
 
-    // Step 10: Einnahmen und Kosten =================================================
+    // Step 8: Einnahmen und Kosten =================================================
     await expectStepTitleToContainText('Einnahmen & Kosten', page);
     const einnahmenKostenPO = new EinnahmenKostenPO(page);
     await expect(einnahmenKostenPO.elems.loading).toBeHidden();
@@ -280,7 +271,7 @@ test.describe('Neues gesuch erstellen', () => {
     );
     await einnahmenKostenPO.elems.buttonSaveContinue.click();
 
-    // Step 11: Dokumente ===========================================================
+    // Step 9: Dokumente ===========================================================
 
     await expectStepTitleToContainText('Dokumente', page);
     await requiredDokumenteResponse;
@@ -303,7 +294,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await page.getByTestId('button-continue').click();
 
-    // Step 12: Freigabe ===========================================================
+    // Step 10: Freigabe ===========================================================
     await expectStepTitleToContainText('Freigabe', page);
 
     await page.getByTestId('button-abschluss').click();

@@ -57,7 +57,8 @@ public class ZuordnungService {
         // Filter out duplicate Faelle
         // This is okay because we only care about the newest Tranche, and findAllNewestWithPia orders them accordingly
         final var seen = new HashSet<UUID>();
-        final var fitered = newestWithPia.stream().filter(newest -> seen.add(newest.getFall().getId())).toList();
+        final var fitered =
+            newestWithPia.stream().filter(newest -> seen.add(newest.getAusbildung().getFall().getId())).toList();
         update(fitered);
     }
 
@@ -88,12 +89,12 @@ public class ZuordnungService {
                 sbToAssign = Optional.of(admin);
             }
 
-            var zuordnung = zuordnungen.remove(newest.getFall().getId());
+            var zuordnung = zuordnungen.remove(newest.getAusbildung().getFall().getId());
             if (zuordnung == null) {
                 // If none exists, create a new one and add it to the list to persist
                 zuordnung = new Zuordnung()
                     .setZuordnungType(ZuordnungType.AUTOMATIC)
-                    .setFall(newest.getFall())
+                    .setFall(newest.getAusbildung().getFall())
                     .setSachbearbeiter(sbToAssign.get());
 
                 newZuordnungen.add(zuordnung);

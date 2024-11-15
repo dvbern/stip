@@ -46,7 +46,7 @@ export interface KommentarDialogResult {
     ReactiveFormsModule,
   ],
   templateUrl: './shared-ui-kommentar-dialog.component.html',
-  styleUrl: './shared-ui-kommentar-dialog.component.scss',
+  styleUrls: ['./shared-ui-kommentar-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiKommentarDialogComponent {

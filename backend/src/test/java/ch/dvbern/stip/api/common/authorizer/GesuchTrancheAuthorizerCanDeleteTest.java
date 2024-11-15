@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.common.authorizer;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -27,11 +28,11 @@ import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import io.quarkus.security.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,9 +78,12 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
 
         gesuch = new Gesuch()
-            .setFall(
-                new Fall()
-                    .setGesuchsteller(currentBenutzer)
+            .setAusbildung(
+                new Ausbildung()
+                    .setFall(
+                        new Fall()
+                            .setGesuchsteller(currentBenutzer)
+                    )
             );
 
         authorizer = new GesuchTrancheAuthorizer(benutzerService, gesuchTrancheRepository, gesuchRepository);

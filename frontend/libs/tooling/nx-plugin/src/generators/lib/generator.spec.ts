@@ -1,16 +1,16 @@
-import { createTreeWithEmptyWorkspace } from '@nrwl/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nrwl/devkit';
+import { createTreeWithEmptyWorkspace } from '@nrwl/devkit/testing';
 
 import generator from './generator';
-import { LibGeneratorSchema } from './schema';
 import { LibType } from './generator.interface';
+import { LibGeneratorSchema } from './schema';
 
 // sanity tests, for generators it's better to keep it open and flexible to allow easy extension
 // and adjustment of the logic in the future
 
 describe('lib generator', () => {
   let tree: Tree;
-  let createOptions = (name: string, type: LibType): LibGeneratorSchema => ({
+  const createOptions = (name: string, type: LibType): LibGeneratorSchema => ({
     name,
     type,
     scope: 'shared',
@@ -122,6 +122,18 @@ describe('lib generator', () => {
       expect(config).toBeDefined();
       expect(tree.exists('libs/shared/ui/example/package.json')).toBeFalsy();
       expect(tree.exists('libs/shared/ui/example/README.md')).toBeFalsy();
+    });
+  });
+
+  describe('dialog', () => {
+    it('should generate dialog library', async () => {
+      await generator(tree, createOptions('example', 'dialog'));
+      const config = readProjectConfiguration(tree, 'shared-dialog-example');
+      expect(config).toBeDefined();
+      expect(
+        tree.exists('libs/shared/dialog/example/package.json'),
+      ).toBeFalsy();
+      expect(tree.exists('libs/shared/dialog/example/README.md')).toBeFalsy();
     });
   });
 

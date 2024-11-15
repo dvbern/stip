@@ -5,7 +5,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 
-import { GlobalNotificationStore } from '@dv/shared/data-access/global-notification';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   DokumentService,
   DokumentTyp,
@@ -284,7 +284,7 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  private getRequiredDocumentTypes$ = rxMethod<string>(
+  getRequiredDocumentTypes$ = rxMethod<string>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({

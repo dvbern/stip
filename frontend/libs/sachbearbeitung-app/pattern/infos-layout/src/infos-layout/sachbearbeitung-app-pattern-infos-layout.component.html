@@ -17,7 +17,7 @@
         @for (option of infosOptions; track $index) {
           <a
             type="button"
-            class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal shadow-none"
+            class="btn btn-nav mb-3 w-100 d-flex justify-content-start align-items-center fw-normal shadow-none"
             [routerLink]="['/', infosRoute, option.route, gesuchViewSig().gesuchId]"
             routerLinkActive="active"
             (click)="navClicked$.emit()"

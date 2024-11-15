@@ -24,11 +24,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID gesuchTrancheId;
   private @Valid String fallNummer;
-  private @Valid ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ;
+  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
   private @Valid String piaNachname;
   private @Valid String piaVorname;
   private @Valid LocalDate piaGeburtsdatum;
-  private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus status;
+  private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
+  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus;
   private @Valid String bearbeiter;
   private @Valid LocalDate letzteAktivitaet;
 
@@ -91,7 +92,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   /**
    **/
-  public SbDashboardGesuchDto typ(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+  public SbDashboardGesuchDto typ(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
     return this;
   }
@@ -99,12 +100,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   
   @JsonProperty("typ")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp getTyp() {
+  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
     return typ;
   }
 
   @JsonProperty("typ")
-  public void setTyp(ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp typ) {
+  public void setTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
   }
 
@@ -167,21 +168,40 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   /**
    **/
-  public SbDashboardGesuchDto status(ch.dvbern.stip.api.gesuch.type.Gesuchstatus status) {
-    this.status = status;
+  public SbDashboardGesuchDto gesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+    this.gesuchStatus = gesuchStatus;
     return this;
   }
 
   
-  @JsonProperty("status")
+  @JsonProperty("gesuchStatus")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getStatus() {
-    return status;
+  public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getGesuchStatus() {
+    return gesuchStatus;
   }
 
-  @JsonProperty("status")
-  public void setStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus status) {
-    this.status = status;
+  @JsonProperty("gesuchStatus")
+  public void setGesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+    this.gesuchStatus = gesuchStatus;
+  }
+
+  /**
+   **/
+  public SbDashboardGesuchDto trancheStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus) {
+    this.trancheStatus = trancheStatus;
+    return this;
+  }
+
+  
+  @JsonProperty("trancheStatus")
+  @NotNull
+  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus getTrancheStatus() {
+    return trancheStatus;
+  }
+
+  @JsonProperty("trancheStatus")
+  public void setTrancheStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus) {
+    this.trancheStatus = trancheStatus;
   }
 
   /**
@@ -239,14 +259,15 @@ public class SbDashboardGesuchDto  implements Serializable {
         Objects.equals(this.piaNachname, sbDashboardGesuch.piaNachname) &&
         Objects.equals(this.piaVorname, sbDashboardGesuch.piaVorname) &&
         Objects.equals(this.piaGeburtsdatum, sbDashboardGesuch.piaGeburtsdatum) &&
-        Objects.equals(this.status, sbDashboardGesuch.status) &&
+        Objects.equals(this.gesuchStatus, sbDashboardGesuch.gesuchStatus) &&
+        Objects.equals(this.trancheStatus, sbDashboardGesuch.trancheStatus) &&
         Objects.equals(this.bearbeiter, sbDashboardGesuch.bearbeiter) &&
         Objects.equals(this.letzteAktivitaet, sbDashboardGesuch.letzteAktivitaet);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchTrancheId, fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, gesuchTrancheId, fallNummer, typ, piaNachname, piaVorname, piaGeburtsdatum, gesuchStatus, trancheStatus, bearbeiter, letzteAktivitaet);
   }
 
   @Override
@@ -261,7 +282,8 @@ public class SbDashboardGesuchDto  implements Serializable {
     sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");
     sb.append("    piaVorname: ").append(toIndentedString(piaVorname)).append("\n");
     sb.append("    piaGeburtsdatum: ").append(toIndentedString(piaGeburtsdatum)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
+    sb.append("    trancheStatus: ").append(toIndentedString(trancheStatus)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    letzteAktivitaet: ").append(toIndentedString(letzteAktivitaet)).append("\n");
     sb.append("}");

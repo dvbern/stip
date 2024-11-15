@@ -27,12 +27,12 @@ import org.mapstruct.Mapper;
 public class DateMapperImpl {
 
     @DateToMonthYear
-    public String dateToMonthYear(LocalDate date) {
+    public static String dateToMonthYear(LocalDate date) {
         return date.getMonthValue() + "." + date.getYear();
     }
 
     @MonthYearToBeginOfMonth
-    public LocalDate monthYearToBeginOfMonth(String monthYear) {
+    public static LocalDate monthYearToBeginOfMonth(String monthYear) {
         String[] date = monthYear.split("\\.");
 
         if (date.length != 2) {
@@ -44,7 +44,7 @@ public class DateMapperImpl {
     }
 
     @MonthYearToEndOfMonth
-    public LocalDate monthYearToEndOfMonth(String monthYear) {
+    public static LocalDate monthYearToEndOfMonth(String monthYear) {
         LocalDate date = monthYearToBeginOfMonth(monthYear);
         return date.plusMonths(1).minusDays(1);
     }

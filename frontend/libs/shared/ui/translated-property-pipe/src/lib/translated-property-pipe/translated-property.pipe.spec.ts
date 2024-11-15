@@ -1,7 +1,6 @@
-import {
-  TranslatedPropertyPipe,
-  prepareLanguage,
-} from './translated-property.pipe';
+import { prepareLanguage } from '@dv/shared/model/type-util';
+
+import { TranslatedPropertyPipe } from './translated-property.pipe';
 
 describe('SharedUiTranslatedPropertyPipe', () => {
   describe('transform', () => {

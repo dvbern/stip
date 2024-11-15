@@ -38,10 +38,13 @@ import org.mapstruct.Named;
 public abstract class GesuchMapper {
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
     @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
+    @Mapping(target = "fallId", source = "ausbildung.fall.id")
+    @Mapping(target = "fallNummer", source = "ausbildung.fall.fallNummer")
+    @Mapping(target = "ausbildungId", source = "ausbildung.id")
     public abstract GesuchDto toDto(Gesuch gesuch);
 
-    @Mapping(source = "fallId", target = "fall.id")
-    @Mapping(source = "gesuchsperiodeId", target = "gesuchsperiode.id")
+    @Mapping(source = "ausbildungId", target = "ausbildung.id")
+    // @Mapping(source = "gesuchsperiodeId", target = "gesuchsperiode.id")
     public abstract Gesuch toNewEntity(GesuchCreateDto gesuchCreateDto);
 
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
@@ -50,7 +53,7 @@ public abstract class GesuchMapper {
 
     @Named("getFullNameOfSachbearbeiter")
     String getFullNameOfSachbearbeiter(Gesuch gesuch) {
-        final var zuordnung = gesuch.getFall().getSachbearbeiterZuordnung();
+        final var zuordnung = gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung();
         if (zuordnung == null) {
             return "";
         }

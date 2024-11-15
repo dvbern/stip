@@ -20,7 +20,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
@@ -33,7 +35,7 @@ import {
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
-import { assertUnreachable } from '@dv/shared/util-fn/type-guards';
+import { canViewVerfuegung } from '@dv/shared/util/permission-state';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
@@ -56,12 +58,19 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     alias: 'currentGesuch',
   });
   isLoadingSig = input.required<boolean>({ alias: 'isLoading' });
-  store = inject(Store);
-  router = inject(Router);
-  destroyRef = inject(DestroyRef);
+
+  private store = inject(Store);
+  private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
+  private dokumentsStore = inject(DokumentsStore);
+  private config = inject(SharedModelCompileTimeConfig);
   gesuchAenderungStore = inject(GesuchAenderungStore);
-  dokumentsStore = inject(DokumentsStore);
+  canViewVerfuegungSig = computed(() => {
+    const gesuch = this.currentGesuchSig();
+
+    return canViewVerfuegung(gesuch, this.config.appType);
+  });
 
   @Output() openSidenav = new EventEmitter<void>();
 

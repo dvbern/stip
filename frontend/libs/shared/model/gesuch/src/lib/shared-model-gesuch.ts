@@ -2,7 +2,7 @@ import { GesuchFormular } from './openapi/model/gesuchFormular';
 import { GesuchFormularUpdate } from './openapi/model/gesuchFormularUpdate';
 import { GesuchWithChanges } from './openapi/model/gesuchWithChanges';
 import { GetGesucheSBQueryType } from './openapi/model/getGesucheSBQueryType';
-import { GesuchTranche } from './openapi/model/models';
+import { GesuchDashboardItem, GesuchTranche } from './openapi/model/models';
 import { SteuerdatenTyp } from './openapi/model/steuerdatenTyp';
 
 export interface SharedModelGesuch extends GesuchWithChanges {
@@ -42,12 +42,11 @@ export type SharedModelGesuchFormularPropsSteuerdatenSteps =
 export const SHARED_MODEL_GESUCH_RESOURCE = `/gesuch`;
 export const SHARED_MODEL_GESUCHSPERIODE_RESOURCE = `/gesuchsperiode`;
 
-export enum GesuchsperiodeSemester {
-  HERBST = 'HERBST',
-  FRUEHLING = 'FRUEHLING',
-}
-
 export type GesuchFilter = keyof Omit<
   typeof GetGesucheSBQueryType,
   'ALLE_MEINE'
 >;
+
+export type AenderungMelden = {
+  gesuch: GesuchDashboardItem;
+};

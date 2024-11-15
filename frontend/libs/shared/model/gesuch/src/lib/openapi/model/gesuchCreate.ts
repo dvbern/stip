@@ -11,7 +11,6 @@
  */
 
 export interface GesuchCreate { 
-    fallId: string;
-    gesuchsperiodeId: string;
+    ausbildungId: string;
 }
 
