@@ -173,6 +173,7 @@ public class GesuchDokumentService {
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+
         gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
         dokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
@@ -285,20 +286,22 @@ public class GesuchDokumentService {
             .toList();
 
         final var dokumenteToDeleteFromS3 = new ArrayList<String>();
-        for (final var gesuchDokument : gesuchDokumente) {
-            dokumenteToDeleteFromS3.addAll(
-                gesuchDokument
-                    .getDokumente()
-                    .stream()
-                    .map(Dokument::getObjectId)
-                    .toList()
-            );
+        for (var gesuchdokument : gesuchDokumente) {
+            final var dokumentList = gesuchdokument.getDokumente().stream().toList();
+            for (var dokument : dokumentList) {
+                dokument.getGesuchDokumente().remove(gesuchdokument);
+                gesuchdokument.getDokumente().remove(dokument);
 
-            gesuchDokument.getDokumente().clear();
+                // If no other references to this physical document exist, delete it as well
+                if (dokument.getGesuchDokumente().isEmpty()) {
+                    dokumenteToDeleteFromS3.add(dokument.getObjectId());
+                    dokumentRepository.delete(dokument);
+                }
+            }
+            gesuchDokumentRepository.delete(gesuchdokument);
         }
 
         executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
-
     }
 
     public void scanDokument(final FileUpload fileUpload) {
