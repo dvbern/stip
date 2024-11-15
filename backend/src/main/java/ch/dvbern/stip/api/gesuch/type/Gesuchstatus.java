@@ -80,7 +80,6 @@ public enum Gesuchstatus {
             VERSANDBEREIT,
             VERSENDET,
             WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            IN_FREIGABE,
             STIPENDIENANSPRUCH
         )
     );
