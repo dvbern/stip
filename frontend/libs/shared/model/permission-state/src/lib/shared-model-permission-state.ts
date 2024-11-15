@@ -16,12 +16,30 @@ type Permissions = typeof Permissions;
 type PermissionFlag = keyof typeof Permissions;
 type P<T extends PermissionFlag> = T | ' ';
 
+/**
+ * Permissions for the gesuch and tranche interactions
+ *
+ * * `W` - Write
+ * * `V` - Verfuegung einsehen
+ * * `D` - Fehlende Dokumente hochladen
+ * * `F` - Freigeben
+ */
+type PermissionFlags = `${P<'W'>}${P<'V'>}${P<'D'>}${P<'F'>}`;
+
 export type Permission = Permissions[PermissionFlag]['name'];
 export type PermissionMap = Partial<ReturnType<typeof getPermissions>>;
 
 const hasPermission = (p: PermissionFlags, perm: keyof typeof Permissions) =>
   p.charAt(Permissions[perm].index) === perm;
 
+/**
+ * Transform a permission flags into a map of permissions with `can${Permission}` keys
+ *
+ * @example
+ * ```ts
+ * getPermissions('WV  ') === { canWrite: true, canViewVerfuegung: true, canUploadMissingDocuments: false, canFreigeben: false }
+ * ```
+ */
 const getPermissions = (permission: PermissionFlags) => {
   return (Object.keys(Permissions) as PermissionFlag[]).reduce(
     (acc, perm) => {
@@ -34,16 +52,6 @@ const getPermissions = (permission: PermissionFlags) => {
     {} as Record<`can${Capitalize<Permission>}`, boolean>,
   );
 };
-
-/**
- * Permissions for the gesuch and tranche interactions
- *
- * * `W` - Write
- * * `V` - Verfuegung einsehen
- * * `D` - Fehlende Dokumente hochladen
- * * `F` - Freigeben
- */
-type PermissionFlags = `${P<'W'>}${P<'V'>}${P<'D'>}${P<'F'>}`;
 
 const gs = 'gesuch-app' satisfies AppType;
 const sb = 'sachbearbeitung-app' satisfies AppType;
@@ -90,6 +98,9 @@ export const trancheReadWritestatusByAppType = {
   Record<AppType, PermissionFlags>
 >;
 
+/**
+ * Get the permissions for the gesuch based on the status and the app type
+ */
 export const getGesuchPermissions = (
   gesuch: SharedModelGesuch | null,
   appType?: AppType,
@@ -100,6 +111,9 @@ export const getGesuchPermissions = (
   return getPermissions(state);
 };
 
+/**
+ * Get the permissions for the tranche based on the status and the app type
+ */
 export const getTranchePermissions = (
   gesuch: SharedModelGesuch | null,
   appType?: AppType,
