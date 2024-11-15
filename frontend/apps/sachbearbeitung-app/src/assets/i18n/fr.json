@@ -376,6 +376,8 @@
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",
   "sachbearbeitung-app.cockpit.no-status-filter": "Toutes les demandes",
+  "sachbearbeitung-app.cockpit.quick-filter.ALLE_JURISTISCHE_ABKLAERUNG_MEINE": "Mes demandes",
+  "sachbearbeitung-app.cockpit.quick-filter.label.ALLE_JURISTISCHE_ABKLAERUNG_MEINE": "Afficher mes demandes",
   "sachbearbeitung-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Mes demandes éditables",
   "sachbearbeitung-app.cockpit.quick-filter.label.ALLE_BEARBEITBAR_MEINE": "Afficher mes demandes éditables",
   "sachbearbeitung-app.cockpit.quick-filter.ALLE_BEARBEITBAR": "Toutes les demandes éditables",

@@ -376,6 +376,8 @@
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",
   "sachbearbeitung-app.cockpit.gesuche": "Gesuche",
   "sachbearbeitung-app.cockpit.no-status-filter": "Alle Gesuche",
+  "sachbearbeitung-app.cockpit.quick-filter.ALLE_JURISTISCHE_ABKLAERUNG_MEINE": "Meine Gesuche",
+  "sachbearbeitung-app.cockpit.quick-filter.label.ALLE_JURISTISCHE_ABKLAERUNG_MEINE": "Meine Gesuche anzeigen",
   "sachbearbeitung-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Meine bearbeitbaren Gesuche",
   "sachbearbeitung-app.cockpit.quick-filter.label.ALLE_BEARBEITBAR_MEINE": "Meine bearbeitbaren Gesuche anzeigen",
   "sachbearbeitung-app.cockpit.quick-filter.ALLE_BEARBEITBAR": "Alle bearbeitbaren Gesuche",
