@@ -10,6 +10,7 @@
   <mat-sidenav-content class="d-flex flex-column">
     <dv-sachbearbeitung-app-pattern-gesuch-header
       [currentGesuch]="cacheViewSig().cache.gesuch"
+      [gesuchPermissions]="cacheViewSig().gesuchPermissions"
       [isLoading]="viewSig().loading"
       (openSidenav)="sidenav.open()"
     >

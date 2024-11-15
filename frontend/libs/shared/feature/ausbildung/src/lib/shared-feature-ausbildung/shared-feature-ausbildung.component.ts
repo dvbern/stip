@@ -40,7 +40,11 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelError } from '@dv/shared/model/error';
 import { AusbildungsPensum, Ausbildungsstaette } from '@dv/shared/model/gesuch';
-import { getTranslatableProp, isDefined } from '@dv/shared/model/type-util';
+import {
+  capitalized,
+  getTranslatableProp,
+  isDefined,
+} from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -60,7 +64,6 @@ import {
   onMonthYearInputBlur,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
-import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 const AusbildungRangeControls = ['ausbildungBegin', 'ausbildungEnd'] as const;
 type AusbildungRangeControls = (typeof AusbildungRangeControls)[number];

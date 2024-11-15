@@ -43,8 +43,8 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
       SachbearbeitungAppPatternGesuchHeaderComponent,
     );
     fixture.componentRef.setInput('currentGesuch', null);
+    fixture.componentRef.setInput('gesuchPermissions', {});
     fixture.componentRef.setInput('isLoading', false);
-    fixture.componentRef.setInput('navClicked', { value: null });
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -32,6 +32,7 @@ export const selectSharedFeatureGesuchFormPersonView = createSelector(
       },
       laender: stammdatenView.laender,
       readonly: gesuchsView.readonly,
+      gesuchPermissions: gesuchsView.gesuchPermissions,
     };
   },
 );

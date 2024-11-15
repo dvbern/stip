@@ -31,6 +31,7 @@ export const selectSharedFeatureGesuchFormEinnahmenkostenView = createSelector(
         gesuchsView.gesuchFormular?.familiensituation
           ?.gerichtlicheAlimentenregelung === true,
       readonly: gesuchsView.readonly,
+      gesuchPermissions: gesuchsView.gesuchPermissions,
     };
   },
 );

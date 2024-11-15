@@ -5,7 +5,7 @@ import {
   ElternTyp,
   Familiensituation,
 } from '@dv/shared/model/gesuch';
-import { lowercased } from '@dv/shared/util-fn/string-helper';
+import { lowercased } from '@dv/shared/model/type-util';
 
 type NonNullableRecord<T extends Record<string, unknown>> = {
   [K in keyof T]: NonNullable<T[K]>;
