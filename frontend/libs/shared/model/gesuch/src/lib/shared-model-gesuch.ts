@@ -42,11 +42,6 @@ export type SharedModelGesuchFormularPropsSteuerdatenSteps =
 export const SHARED_MODEL_GESUCH_RESOURCE = `/gesuch`;
 export const SHARED_MODEL_GESUCHSPERIODE_RESOURCE = `/gesuchsperiode`;
 
-export enum GesuchsperiodeSemester {
-  HERBST = 'HERBST',
-  FRUEHLING = 'FRUEHLING',
-}
-
 export type GesuchFilter = keyof Omit<
   typeof GetGesucheSBQueryType,
   'ALLE_MEINE'

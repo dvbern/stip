@@ -11,8 +11,6 @@
   "gesuch-app.dashboard.ausbildung.status.ABGESCHLOSSEN": "Abgeschlossen",
   "gesuch-app.dashboard.ausbildung.title": "Ausbildung \"{{ bezeichnungDe }}\"",
   "gesuch-app.dashboard.ausbildung.description": "Beginn der Ausbildung: {{ start }}, voraussichtliches Ende der Ausbildung {{ end }}",
-  "gesuch-app.dashboard.periode.semester.herbst": "Herbst",
-  "gesuch-app.dashboard.periode.semester.fruehling": "Frühjahr",
   "gesuch-app.dashboard.periode.einreichefrist.reduziert": "Die Eingabefrist ist abgelaufen",
   "gesuch-app.dashboard.periode.einreichefrist.remaining": "Sie haben noch <b>{{ days }}</b> Tage um das Gesuch einzureichen",
   "gesuch-app.dashboard.periode.einreichefrist.1remaining": "Sie haben noch <b>1</b> Tag um das Gesuch einzureichen",
