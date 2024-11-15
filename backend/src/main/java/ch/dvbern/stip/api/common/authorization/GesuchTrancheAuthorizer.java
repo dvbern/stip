@@ -81,7 +81,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     public void canEinreichen(final UUID gesuchTrancheId) {
         canRead(gesuchTrancheId);
         final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
-        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_GS) {
+        if (!Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(gesuch.getGesuchStatus())) {
             throw new UnauthorizedException();
         }
     }
