@@ -34,7 +34,7 @@ import { type } from '@dv/shared/model/type-util';
 import {
   isGesuchReadonly,
   isTrancheReadonly,
-} from '@dv/shared/util/readonly-state';
+} from '@dv/shared/util/permission-state';
 import { capitalized, lowercased } from '@dv/shared/util-fn/string-helper';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';

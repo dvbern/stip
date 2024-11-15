@@ -211,6 +211,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getBerechnungForGesuch(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
+        gesuchAuthorizer.canGetBerechnung(gesuchId);
         return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
     }
 

@@ -53,6 +53,18 @@ public enum Gesuchstatus {
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
         Collections.unmodifiableSet(EnumSet.allOf(Gesuchstatus.class));
 
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_GET_BERECHNUNG = Collections.unmodifiableSet(
+        EnumSet.of(
+            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            Gesuchstatus.IN_BEARBEITUNG_SB,
+            Gesuchstatus.IN_FREIGABE,
+            Gesuchstatus.VERFUEGT,
+            Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            Gesuchstatus.VERSANDBEREIT,
+            Gesuchstatus.VERSENDET
+        )
+    );
+
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
     }
