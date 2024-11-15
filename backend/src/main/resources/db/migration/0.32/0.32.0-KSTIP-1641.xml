@@ -14,12 +14,6 @@
   <changeSet author="anna-lea.fuhrer (generated)" id="1731511422814-6">
     <dropColumn columnName="sorgerecht" tableName="familiensituation_aud"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1731511422814-1">
-    <dropUniqueConstraint constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
-  </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1731511422814-2">
-    <addUniqueConstraint columnNames="mandant, land" constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
-  </changeSet>
 
   <changeSet author="anna-lea.fuhrer (generated)" id="1731570476668-3">
     <dropColumn columnName="obhut" tableName="familiensituation"/>
@@ -32,11 +26,5 @@
   </changeSet>
   <changeSet author="anna-lea.fuhrer (generated)" id="1731570476668-6">
     <dropColumn columnName="sorgerecht" tableName="familiensituation"/>
-  </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1731570476668-1">
-    <dropUniqueConstraint constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
-  </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1731570476668-2">
-    <addUniqueConstraint columnNames="mandant, land" constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
   </changeSet>
 </databaseChangeLog>
