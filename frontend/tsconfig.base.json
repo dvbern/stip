@@ -179,6 +179,7 @@
       "@dv/shared/ui/stepper-navigation": ["libs/shared/ui/stepper-navigation/src/index.ts"],
       "@dv/shared/ui/table-header-filter": ["libs/shared/ui/table-header-filter/src/index.ts"],
       "@dv/shared/ui/table-helper": ["libs/shared/ui/table-helper/src/index.ts"],
+      "@dv/shared/ui/text-limit": ["libs/shared/ui/text-limit/src/index.ts"],
       "@dv/shared/ui/tooltip-date": ["libs/shared/ui/tooltip-date/src/index.ts"],
       "@dv/shared/ui/translate-change": ["libs/shared/ui/translate-change/src/index.ts"],
       "@dv/shared/ui/translated-date-pipe": ["libs/shared/ui/translated-date-pipe/src/index.ts"],
