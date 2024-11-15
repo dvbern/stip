@@ -62,10 +62,10 @@ const sb = 'sachbearbeitung-app' satisfies AppType;
  * * Format is: { [Gesuchstatus]: { [AppType]: 'WV  ' | 'W   ' | ..., ... other AppTypes } }
  */
 export const permissionTableByAppType = {
-  IN_BEARBEITUNG_GS /**                */: { [gs]: 'W   ', [sb]: '    ' },
+  IN_BEARBEITUNG_GS /**                */: { [gs]: 'W  F', [sb]: '    ' },
   EINGEREICHT /**                      */: { [gs]: '    ', [sb]: '    ' },
   BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '    ', [sb]: ' V  ' },
-  IN_BEARBEITUNG_SB /**                */: { [gs]: '   F', [sb]: 'WV  ' },
+  IN_BEARBEITUNG_SB /**                */: { [gs]: '    ', [sb]: 'WV  ' },
   IN_FREIGABE /**                      */: { [gs]: '    ', [sb]: ' V  ' },
   ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '    ', [sb]: ' V  ' },
   ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '    ', [sb]: ' V  ' },

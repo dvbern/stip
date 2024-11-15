@@ -16,7 +16,6 @@ import {
   PERSON,
   TRANCHE,
 } from '@dv/shared/model/gesuch-form';
-import { isAllowedTo } from '@dv/shared/pattern/status-guard';
 
 export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
   {
@@ -167,7 +166,6 @@ export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
     resolve: {
       step: () => ABSCHLUSS,
     },
-    canActivate: [isAllowedTo('freigeben')],
     title: ABSCHLUSS.translationKey,
     loadChildren: () =>
       import('@dv/gesuch-app/feature/gesuch-form-abschluss').then(

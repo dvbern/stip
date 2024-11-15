@@ -234,9 +234,6 @@ export const isStepDisabled = (
           vaterUnbekanntVerstorben === 'UNBEKANNT'))
     );
   }
-  if (step === ABSCHLUSS) {
-    return !gesuchPermissions.canFreigeben;
-  }
   return false;
 };
 

@@ -106,6 +106,10 @@ export const selectSharedDataAccessGesuchsView = createSelector(
     const appType = config.compileTimeConfig?.appType;
     const gesuchPermissions = getGesuchPermissions(gesuch, appType);
     const tranchePermissions = getTranchePermissions(gesuch, appType);
+    const canWrite =
+      (trancheSetting?.type === 'AENDERUNG'
+        ? tranchePermissions.canWrite
+        : gesuchPermissions.canWrite) ?? true;
 
     return {
       config,
@@ -115,10 +119,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       gesuchFormular,
       tranchenChanges,
       isEditingTranche,
-      readonly:
-        trancheSetting?.type === 'AENDERUNG'
-          ? !tranchePermissions.canWrite
-          : !gesuchPermissions.canWrite,
+      readonly: !canWrite,
       gesuchPermissions,
       tranchePermissions,
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
