@@ -48,6 +48,7 @@ import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.api.NotificationApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
@@ -73,6 +74,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_ONLY_ONE_GESUCH_PER_YEAR;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_23_24;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -102,6 +104,7 @@ class GesuchFillFormularTest {
         NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
     private UUID fallId;
     private UUID gesuchId;
+    private UUID ausbildungId;
     private UUID gesuchTrancheId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
@@ -112,6 +115,7 @@ class GesuchFillFormularTest {
     void testCreateEndpoint() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
+        ausbildungId = gesuch.getAusbildungId();
         gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)
@@ -129,6 +133,26 @@ class GesuchFillFormularTest {
     @Test
     @TestAsGesuchsteller
     @Order(2)
+    void gesuchCreateFail() {
+        var validationReport = gesuchApiSpec.createGesuch()
+            .body(new GesuchCreateDtoSpec().ausbildungId(ausbildungId))
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode())
+            .extract()
+            .body()
+            .as(ValidationReportDtoSpec.class);
+
+        assertThat(
+            validationReport.getValidationErrors().get(0).getMessageTemplate(),
+            is(VALIDATION_AUSBILDUNG_ONLY_ONE_GESUCH_PER_YEAR)
+        );
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(3)
     void gesuchTrancheCreated() {
         final var gesuch = gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
@@ -149,7 +173,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(3)
+    @Order(4)
     void updateWithNotExistingGesuchTranche() {
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
@@ -164,7 +188,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(4)
+    @Order(5)
     void addPersonInAusbildung() {
         final var pia = PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec();
         currentFormular.setPersonInAusbildung(pia);
@@ -193,7 +217,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(5)
+    @Order(6)
     void addLebenslauf() {
         final var lebenslaufItems = LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs();
         currentFormular.setLebenslaufItems(lebenslaufItems);
@@ -202,7 +226,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(6)
+    @Order(7)
     void addFamiliensituation() {
         final var famsit = FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec();
         currentFormular.setFamiliensituation(famsit);
@@ -211,7 +235,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(7)
+    @Order(8)
     void addEltern() {
         final var eltern = ElternUpdateDtoSpecModel.elternUpdateDtoSpecs(2);
         eltern.get(0).setElternTyp(ElternTypDtoSpec.VATER);
@@ -225,7 +249,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(8)
+    @Order(9)
     void addSteuerdaten() {
         final var steuerdaten = SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
         currentFormular.setSteuerdaten(List.of(steuerdaten));
@@ -234,7 +258,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(9)
+    @Order(10)
     void addGeschwister() {
         final var geschwister = GeschwisterUpdateDtoSpecModel.geschwisterUpdateDtoSpecs();
         currentFormular.setGeschwisters(geschwister);
@@ -243,7 +267,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(10)
+    @Order(11)
     void addPartner() {
         // Set partner to null as Zivilstand is LEDIG
         final var partner = (PartnerUpdateDtoSpec) null;
@@ -253,7 +277,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(12)
+    @Order(13)
     void addKinder() {
         // Our PiA has no kinder
         final List<KindUpdateDtoSpec> kinder = List.of();
@@ -263,7 +287,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(13)
+    @Order(14)
     void addAuszahlung() {
         final var auszahlung = AuszahlungUpdateDtoSpecModel.auszahlungUpdateDtoSpec();
         currentFormular.setAuszahlung(auszahlung);
@@ -272,7 +296,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(14)
+    @Order(15)
     void addEinnahmenKosten() {
         final var einnahmenKosten = EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec();
         currentFormular.setEinnahmenKosten(einnahmenKosten);
@@ -281,7 +305,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(15)
+    @Order(16)
     void addDokumente() {
         for (final var dokTyp : DokumentTypDtoSpec.values()) {
             final var file = TestUtil.getTestPng();
@@ -293,7 +317,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(16)
+    @Order(17)
     void removeSuperfluousDocuments() {
         // getGesuchDokumente also removes superfluous documents from the Gesuch
         // This is needed so the follow check if only necessary documents are saved works
@@ -307,7 +331,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(17)
+    @Order(18)
     void noSuperfluousDocuments() {
         final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
             DokumentTypDtoSpec.EK_LOHNABRECHNUNG,
@@ -363,7 +387,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(18)
+    @Order(19)
     void gesuchEinreichenValidation() {
         final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidieren()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -384,7 +408,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(19)
+    @Order(20)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchIdPath(gesuchId)
@@ -396,7 +420,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(20)
+    @Order(21)
     void gesuchNotificationTest() {
         var notifications = notificationApiSpec.getNotificationsForCurrentUser()
             .execute(TestUtil.PEEK_IF_ENV_SET)
