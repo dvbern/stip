@@ -5,9 +5,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 
-import { State as ConfigState } from '@dv/shared/data-access/config';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { State as GesuchsState } from '@dv/shared/data-access/gesuch';
 import {
   CompileTimeConfig,
   SharedModelCompileTimeConfig,
@@ -53,7 +50,7 @@ export const mockedGesuchAppWritableGesuchState = (overrides?: {
       gesuchId: '123',
       gesuchFormular: gesuch.gesuchTrancheToWorkWith.gesuchFormular,
     },
-  } as GesuchsState;
+  };
 };
 
 const defaultCompileTimeConfig: CompileTimeConfig = {
@@ -70,7 +67,7 @@ export const provideCompileTimeConfig = (
 
 export const mockConfigsState = (
   compileTimeConfig: CompileTimeConfig = defaultCompileTimeConfig,
-) => ({ loading: false, error: undefined, compileTimeConfig }) as ConfigState;
+) => ({ loading: false, error: undefined, compileTimeConfig });
 
 export function provideSharedPatternJestTestSetup(
   compileTimeConfig: CompileTimeConfig = defaultCompileTimeConfig,
