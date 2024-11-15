@@ -63,8 +63,6 @@ import { SharedUiStepperNavigationComponent } from '@dv/shared/ui/stepper-naviga
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
-  numberToPercentString,
-  percentStringToNumber,
   updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
 
@@ -173,16 +171,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
       <boolean | undefined>undefined,
       [Validators.required],
     ],
-    sorgerecht: this.formBuilder.control<Elternschaftsteilung | undefined>(
-      undefined,
-      { validators: Validators.required },
-    ),
-    obhut: this.formBuilder.control<Elternschaftsteilung | undefined>(
-      undefined,
-      { validators: Validators.required },
-    ),
-    obhutMutter: ['', [Validators.required]],
-    obhutVater: ['', [Validators.required]],
   });
 
   duringAnimation: 'show' | 'hide' = 'show';
@@ -264,13 +252,9 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
       elternteilUnbekanntVerstorben,
       vaterUnbekanntVerstorben,
       mutterUnbekanntVerstorben,
-      obhut,
       vaterUnbekanntGrund,
       mutterUnbekanntGrund,
       mutterWiederverheiratet,
-      obhutMutter,
-      obhutVater,
-      sorgerecht,
       vaterWiederverheiratet,
     } = this.form.controls;
 
@@ -289,7 +273,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
     const mutterVerstorbenUnbekanntSig = toSignal(
       mutterUnbekanntVerstorben.valueChanges,
     );
-    const obhutSig = toSignal(obhut.valueChanges);
 
     effect(
       () => {
@@ -298,13 +281,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
           const initialFormFamSit = gesuchFormular?.familiensituation ?? {};
           this.form.patchValue({
             ...initialFormFamSit,
-
-            obhutMutter: numberToPercentString(
-              gesuchFormular?.familiensituation?.obhutMutter,
-            ),
-            obhutVater: numberToPercentString(
-              gesuchFormular?.familiensituation?.obhutVater,
-            ),
           });
         } else {
           this.form.reset();
@@ -382,23 +358,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
           resetOnInvisible: true,
         });
 
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: sorgerecht,
-          visible: elternteilUnbekanntVerstorben === false,
-          disabled:
-            this.viewSig().readonly || elternteilUnbekanntVerstorben !== false,
-          resetOnInvisible: true,
-        });
-
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: obhut,
-          visible: elternteilUnbekanntVerstorben === false,
-          disabled:
-            this.viewSig().readonly || elternteilUnbekanntVerstorben !== false,
-          resetOnInvisible: true,
-        });
         this.goNextStep();
       },
       { allowSignalWrites: true },
@@ -445,21 +404,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
     effect(
       () => {
         this.gotReenabledSig();
-        const notGemeinsam = obhutSig() !== Elternschaftsteilung.GEMEINSAM;
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: obhutVater,
-          visible: !notGemeinsam,
-          disabled: this.viewSig().readonly || notGemeinsam,
-          resetOnInvisible: true,
-        });
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: obhutMutter,
-          visible: !notGemeinsam,
-          disabled: this.viewSig().readonly || notGemeinsam,
-          resetOnInvisible: true,
-        });
       },
       { allowSignalWrites: true },
     );
@@ -617,9 +561,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
         ...convertTempFormToRealValues(this.form, [
           'elternVerheiratetZusammen',
         ]),
-        // nicht form.value, sonst werden keine Werte auf null gesetzt!
-        obhutVater: percentStringToNumber(this.form.getRawValue().obhutVater),
-        obhutMutter: percentStringToNumber(this.form.getRawValue().obhutMutter),
       },
     };
   }

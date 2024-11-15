@@ -75,8 +75,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_VORNAME_NOTBLANK_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE;
@@ -201,42 +199,29 @@ class GesuchValidatorTest {
     @Test
     void testFieldValidationErrorFamiliensituation() {
         String[] constraintMessages = {
-            VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE, VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE
+            VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE
         };
         Familiensituation familiensituation = new Familiensituation();
         // beim Obhut gemeinsam muessen die Obhut Mutter und Vater Feldern nicht null sein
-        familiensituation.setObhut(Elternschaftsteilung.GEMEINSAM);
         // beim gerichtliche Alimentregelung muesst die Wer Zahlt Alimente ausgewaehlt werden
         familiensituation.setGerichtlicheAlimentenregelung(true);
         Gesuch gesuch = prepareDummyGesuch();
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
         assertAllMessagesPresent(constraintMessages, gesuch);
 
-        // Test die Obhut Berechnung:
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
-            .getFamiliensituation()
-            .setObhutVater(new BigDecimal("40.00"));
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
-            .getFamiliensituation()
-            .setObhutMutter(new BigDecimal("50.00"));
-        assertAllMessagesPresent(new String[] { VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE }, gesuch);
         // korrekte Werten Meldung soll weg
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
-            .getFamiliensituation()
-            .setObhutMutter(new BigDecimal("60.00"));
+            .getFamiliensituation();
         assertAllMessagesNotPresent(new String[] { VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE }, gesuch);
     }
 
     @Test
     void testNullFieldValidationErrorFamiliensituation() {
         String[] constraintMessages = {
-            VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE,
-            VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_NULL_MESSAGE
+            VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE
         };
         Familiensituation familiensituation = new Familiensituation();
         // beim Obhut != gemeinsam muessen die Obhut Mutter und Vater Feldern null sein
-        familiensituation.setObhut(Elternschaftsteilung.VATER);
-        familiensituation.setObhutVater(BigDecimal.ONE);
         // beim keine gerichtliche Alimentregelung muesst die Wer Zahlt Alimente nicht ausgewaehlt werden
         familiensituation.setGerichtlicheAlimentenregelung(false);
         familiensituation.setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);

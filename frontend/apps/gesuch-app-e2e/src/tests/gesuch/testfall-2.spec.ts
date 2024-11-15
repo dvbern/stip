@@ -113,7 +113,7 @@ const mutter = (seed: string): Eltern => ({
   identischerZivilrechtlicherWohnsitz: true,
   telefonnummer: '0316338355',
   ergaenzungsleistungen: 0,
-  sozialhilfebeitraege: 0,
+  sozialhilfebeitraege: false,
   wohnkosten: 16260,
   geburtsdatum: `01.01.${specificYearsAgo(44)}`,
   ausweisbFluechtling: false,
