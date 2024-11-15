@@ -85,6 +85,7 @@
                 <span>{{ 'sachbearbeitung-app.infos.notiz.erstellen' | translate }}</span>
               </div>
             </button>
+
             <button
               mat-menu-item
               type="button"
@@ -102,7 +103,27 @@
       </th>
       <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100">
         <div class="d-flex gap-1">
-          @if (notiz.notizTyp === 'GESUCH_NOTIZ' || (permissionStore.userIsJuristSig() && !notiz.antwort)) {
+          @if (notiz.notizTyp === 'JURISTISCHE_NOTIZ' && permissionStore.userIsJuristSig() && !notiz.antwort) {
+            <button
+              type="button"
+              (click)="editNotiz(notiz)"
+              class="btn btn-link btn-sm"
+              [matTooltip]="'sachbearbeitung-app.infos.juristischeNotiz.bearbeiten' | translate"
+            >
+              <i class="material-symbols-rounded fs-4">edit</i>
+            </button>
+          } @else if (notiz.notizTyp === 'JURISTISCHE_NOTIZ') {
+            <button
+              type="button"
+              (click)="editNotiz(notiz)"
+              class="btn btn-link btn-sm"
+              [matTooltip]="'sachbearbeitung-app.infos.juristischeNotiz.anzeigen' | translate"
+            >
+              <i class="material-symbols-rounded fs-4">visibility</i>
+            </button>
+          }
+
+          @if (notiz.notizTyp === 'GESUCH_NOTIZ') {
             <button
               type="button"
               (click)="editNotiz(notiz)"
@@ -111,17 +132,6 @@
             >
               <i class="material-symbols-rounded fs-4">edit</i>
             </button>
-          } @else {
-            <button
-              type="button"
-              (click)="editNotiz(notiz)"
-              class="btn btn-link btn-sm"
-              [matTooltip]="'sachbearbeitung-app.infos.notiz.anzeigen' | translate"
-            >
-              <i class="material-symbols-rounded fs-4">visibility</i>
-            </button>
-          }
-          @if (notiz.id) {
             <button
               type="button"
               (click)="deleteNotiz(notiz.id)"

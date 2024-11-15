@@ -70,24 +70,51 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
 
   @HostBinding('class') defaultClasses = 'd-flex flex-column gap-2 p-5';
 
-  permissionStore = inject(PermissionStore);
-  dialogData = inject<NotizDialogData>(MAT_DIALOG_DATA);
-  form = this.formBuilder.group({
+  public permissionStore = inject(PermissionStore);
+  public dialogData = inject<NotizDialogData>(MAT_DIALOG_DATA);
+  public form = this.formBuilder.group({
     betreff: [<string | null>null, [Validators.required]],
     text: [<string | null>null, [Validators.required]],
     antwort: [<string | null>null],
   });
 
-  languageSig = this.store.selectSignal(selectLanguage);
-  isJurNotiz = this.dialogData.notiz?.notizTyp === 'JURISTISCHE_NOTIZ';
+  public languageSig = this.store.selectSignal(selectLanguage);
+  public isJurNotiz = this.dialogData.notizTyp === 'JURISTISCHE_NOTIZ';
 
   constructor() {
-    if (this.dialogData.notiz) {
-      this.form.patchValue({
-        betreff: this.dialogData.notiz?.betreff,
-        text: this.dialogData.notiz?.text,
-        antwort: this.dialogData.notiz?.antwort,
-      });
+    this.form.patchValue({
+      betreff: this.dialogData.notiz?.betreff,
+      text: this.dialogData.notiz?.text,
+      antwort: this.dialogData.notiz?.antwort,
+    });
+
+    if (!this.isJurNotiz) {
+      this.form.controls.antwort.disable();
+      return;
+    }
+
+    if (!this.permissionStore.userIsJuristSig()) {
+      if (this.dialogData.notiz?.id) {
+        this.form.controls.betreff.disable();
+        this.form.controls.text.disable();
+      }
+
+      this.form.controls.antwort.disable();
+      return;
+    }
+
+    if (this.permissionStore.userIsJuristSig()) {
+      if (this.dialogData.notiz?.id) {
+        this.form.controls.betreff.disable();
+        this.form.controls.text.disable();
+      }
+
+      if (this.dialogData.notiz?.antwort || !this.dialogData.notiz?.id) {
+        this.form.controls.antwort.disable();
+      } else {
+        this.form.controls.antwort.setValidators([Validators.required]);
+        this.form.controls.antwort.updateValueAndValidity();
+      }
     }
   }
 

@@ -3,7 +3,6 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
-import { string } from 'zod';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
@@ -22,7 +21,6 @@ import {
 
 type NotizState = {
   notizen: CachedRemoteData<GesuchNotiz[]>;
-  // todo: change to not cached
   notiz: CachedRemoteData<GesuchNotiz>;
 };
 

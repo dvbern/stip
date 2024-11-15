@@ -23,7 +23,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.notiz.entity.NotizTyp;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import io.quarkus.security.ForbiddenException;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +35,7 @@ public class GesuchNotizAuthorizer extends BaseAuthorizer {
     public void canUpdate(UUID notizId) {
         final var notiz = gesuchNotizRepository.requireById(notizId);
         if (notiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
-            throw new UnauthorizedException();
+            throw new ForbiddenException();
         }
     }
 
