@@ -1,7 +1,7 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
+import { isDefined } from '@dv/shared/model/type-util';
 
 const START_DIGITS = '756';
 type FieldsWithSV =

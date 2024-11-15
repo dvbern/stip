@@ -17,13 +17,21 @@
 
 package ch.dvbern.stip.api.generator.entities;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AuszahlungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
@@ -34,9 +42,9 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDto
 import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapper;
 import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
@@ -97,8 +105,32 @@ public final class GesuchGenerator {
             gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
         }
 
-        var gesuch = new Gesuch()
+        var ausbildungDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
+
+        DateTimeFormatter fmtStart = new DateTimeFormatterBuilder()
+            .appendPattern("MM.yyyy")
+            .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+            .toFormatter();
+
+        DateTimeFormatter fmtEnd = new DateTimeFormatterBuilder()
+            .appendPattern("MM.yyyy")
+            .parseDefaulting(ChronoField.DAY_OF_MONTH, 31)
+            .toFormatter();
+
+        var ausbildung = new Ausbildung()
             .setFall(new Fall())
+            .setAusbildungsgang((Ausbildungsgang) new Ausbildungsgang().setId(ausbildungDtoSpec.getAusbildungsgangId()))
+            .setAlternativeAusbildungsgang(ausbildungDtoSpec.getAlternativeAusbildungsgang())
+            .setAlternativeAusbildungsstaette(ausbildungDtoSpec.getAlternativeAusbildungsstaette())
+            .setFachrichtung(ausbildungDtoSpec.getFachrichtung())
+            .setAusbildungNichtGefunden(ausbildungDtoSpec.getAusbildungNichtGefunden())
+            .setAusbildungBegin(LocalDate.parse(ausbildungDtoSpec.getAusbildungBegin(), fmtStart))
+            .setAusbildungEnd(LocalDate.parse(ausbildungDtoSpec.getAusbildungEnd(), fmtEnd))
+            .setPensum(AusbildungsPensum.VOLLZEIT)
+            .setAusbildungsort(ausbildungDtoSpec.getAusbildungsort())
+            .setIsAusbildungAusland(ausbildungDtoSpec.getIsAusbildungAusland());
+        var gesuch = new Gesuch()
+            .setAusbildung(ausbildung)
             .setGesuchsperiode(
                 new Gesuchsperiode()
                     .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2023))

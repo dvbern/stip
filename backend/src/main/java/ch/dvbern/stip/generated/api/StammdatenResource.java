@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.LandEuEftaDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -21,4 +22,15 @@ public interface StammdatenResource {
     @GET
     @Produces({ "application/json", "text/plain" })
     Response getLaender();
+
+    @GET
+    @Path("/euefta")
+    @Produces({ "application/json", "text/plain" })
+    Response getLaenderEuEfta();
+
+    @PATCH
+    @Path("/euefta")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    Response setLaenderEuEfta(@Valid @NotNull List<LandEuEftaDto> landEuEftaDto);
 }

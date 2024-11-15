@@ -4,7 +4,7 @@ import {
   BenutzerVerwaltungRole,
   SharedModelBenutzerApi,
 } from '@dv/shared/model/benutzer';
-import { type } from '@dv/shared/util-fn/type-guards';
+import { type } from '@dv/shared/model/type-util';
 
 import {
   createBenutzerListFromRoleLookup,

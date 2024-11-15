@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.familiensituation.entity;
 
-import java.math.BigDecimal;
-
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
@@ -36,9 +34,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @Audited
-@ObhutGemeinsamRequiredFieldsConstraint
 @WerZahltAlimenteRequiredFieldConstraint
-@ObhutGemeinsamBerechnungConstraint
 @Entity
 @Table(
     name = "familiensituation",
@@ -86,24 +82,6 @@ public class Familiensituation extends AbstractMandantEntity {
     @Nullable
     @Column(name = "vater_wiederverheiratet")
     private Boolean vaterWiederverheiratet;
-
-    @Nullable
-    @Column(name = "sorgerecht")
-    @Enumerated(EnumType.STRING)
-    private Elternschaftsteilung sorgerecht;
-
-    @Nullable
-    @Column(name = "obhut")
-    @Enumerated(EnumType.STRING)
-    private Elternschaftsteilung obhut;
-
-    @Nullable
-    @Column(name = "obhut_mutter")
-    private BigDecimal obhutMutter;
-
-    @Nullable
-    @Column(name = "obhut_vater")
-    private BigDecimal obhutVater;
 
     @Nullable
     @Column(name = "wer_zahlt_alimente")

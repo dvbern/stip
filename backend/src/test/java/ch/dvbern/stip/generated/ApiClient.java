@@ -36,6 +36,9 @@ public class ApiClient {
         return new ApiClient(config);
     }
 
+    public AusbildungApiSpec ausbildung() {
+        return AusbildungApiSpec.ausbildung(config.reqSpecSupplier);
+    }
     public AusbildungsgangApiSpec ausbildungsgang() {
         return AusbildungsgangApiSpec.ausbildungsgang(config.reqSpecSupplier);
     }

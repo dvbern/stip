@@ -23,16 +23,6 @@ export interface Familiensituation {
     vaterUnbekanntVerstorben?: ElternAbwesenheitsGrund;
     vaterUnbekanntGrund?: ElternUnbekanntheitsGrund;
     vaterWiederverheiratet?: boolean;
-    sorgerecht?: Elternschaftsteilung;
-    obhut?: Elternschaftsteilung;
-    /**
-     * Required nur wenn obhut = GEMEINSAM
-     */
-    obhutMutter?: number;
-    /**
-     * Required nur wenn obhut = GEMEINSAM
-     */
-    obhutVater?: number;
     werZahltAlimente?: Elternschaftsteilung;
 }
 

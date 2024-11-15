@@ -3,7 +3,9 @@
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd"
+>
+
   <include file="db/migration/baseline.xml"/>
   <!-- <editor-fold desc="v0.19" defaultstate="collapsed"> -->
   <include file="db/migration/0.19/0.19.0-KSTIP-923.xml" />
@@ -14,7 +16,7 @@
   <include file="db/migration/0.20/0.20.0-KSTIP-991.xml" />
   <include file="/db/migration/0.20/0.20.0-KSTIP-46.xml" />
   <!--  </editor-fold> -->
-  
+
   <!-- <editor-fold desc="v0.21" defaultstate="collapsed"> -->
   <include file="db/migration/0.21/0.21.0-KSTIP-1055.xml" />
   <!--  </editor-fold> -->
@@ -22,7 +24,7 @@
   <!-- <editor-fold desc="v0.22" defaultstate="collapsed"> -->
   <include file="/db/migration/0.22/0.22.0-KSTIP-1148.xml" />
   <!--  </editor-fold> -->
-  
+
   <!-- <editor-fold desc="v0.22" defaultstate="collapsed"> -->
   <include file="db/migration/0.22/0.22.0-KSTIP-932.xml" />
   <include file="db/migration/0.22/0.22.0-KSTIP-1175.xml" />
@@ -54,26 +56,30 @@
   <include file="db/migration/0.27/0.27.0-KSTIP-1362.xml" />
   <include file="db/migration/0.27/0.27.0-KSTIP-1181.xml" />
   <!--  </editor-fold> -->
-  
+
   <!-- <editor-fold desc="v0.28" defaultstate="collapsed"> -->
   <include file="db/migration/0.28/0.28.0-KSTIP-1426.xml" />
   <include file="db/migration/0.28/0.28.0-KSTIP-1229.xml" />
   <include file="db/migration/0.28/0.28.0-KSTIP-1409.xml" />
   <include file="db/migration/0.28/0.28.0-KSTIP-1291.xml" />
   <!--  </editor-fold> -->
-  
-  
+
   <!-- <editor-fold desc="v0.30" defaultstate="collapsed"> -->
-  <include file="/db/migration/0.31/0.31.0-KSTIP-1018.xml" />
   <include file="db/migration/0.30/0.30.0-KSTIP-1596.xml" />
   <include file="db/migration/0.30/0.30.0-KSTIP-1216.xml" />
   <!--  </editor-fold> -->
-  
+
   <!-- <editor-fold desc="v0.31" defaultstate="collapsed"> -->
+  <include file="db/migration/0.31/0.31.0-KSTIP-1018.xml" />
   <include file="db/migration/0.31/0.31.0-KSTIP-1430.xml" />
   <!--  </editor-fold> -->
 
   <!-- <editor-fold desc="v0.32" defaultstate="collapsed"> -->
   <include file="/db/migration/0.32/0.32.0-KSTIP-1130.xml" />
+  <include file="/db/migration/0.32/0.32.0-KSTIP-1597.xml" />
+  <include file="/db/migration/0.32/0.32.0-KSTIP-1494.xml" />
+  <include file="/db/migration/0.32/0.32.0-KSTIP-1641.xml" />
+  <include file="/db/migration/0.32/0.32.0-KSTIP-1642.xml" />
   <!--  </editor-fold> -->
+  
 </databaseChangeLog>

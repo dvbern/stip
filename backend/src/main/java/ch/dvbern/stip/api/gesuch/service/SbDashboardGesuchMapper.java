@@ -18,8 +18,8 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.generated.dto.SbDashboardGesuchDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class SbDashboardGesuchMapper {
         final var target = new SbDashboardGesuchDto();
         target.setId(gesuch.getId());
         target.setGesuchTrancheId(gesuchTranche.getId());
-        target.setFallNummer(gesuch.getFall().getFallNummer());
+        target.setFallNummer(gesuch.getAusbildung().getFall().getFallNummer());
         target.setTyp(gesuchTranche.getTyp());
 
         final var pia = gesuchTranche.getGesuchFormular().getPersonInAusbildung();
@@ -52,8 +52,10 @@ public class SbDashboardGesuchMapper {
             LOG.warn("Gesuch was loaded to SB Dashboard that had no PiA");
         }
 
-        target.setStatus(gesuch.getGesuchStatus());
-        final var zuordnung = gesuch.getFall().getSachbearbeiterZuordnung();
+        target.setGesuchStatus(gesuch.getGesuchStatus());
+        target.setTrancheStatus(gesuchTranche.getStatus());
+
+        final var zuordnung = gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung();
         if (zuordnung != null) {
             target.setBearbeiter(zuordnung.getSachbearbeiter().getFullName());
         }

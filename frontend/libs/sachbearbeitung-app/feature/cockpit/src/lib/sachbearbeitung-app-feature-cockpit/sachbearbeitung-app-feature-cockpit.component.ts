@@ -53,6 +53,7 @@ import { selectVersion } from '@dv/shared/data-access/config';
 import {
   GesuchFilter,
   GesuchServiceGetGesucheSbRequestParams,
+  GesuchTrancheStatus,
   GesuchTrancheTyp,
   Gesuchstatus,
   SbDashboardColumn,
@@ -60,6 +61,7 @@ import {
   SharedModelGesuch,
   SortOrder,
 } from '@dv/shared/model/gesuch';
+import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFocusableListDirective,
@@ -76,15 +78,19 @@ import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
 import { toBackendLocalDate } from '@dv/shared/util/validator-date';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 const PAGE_SIZES = [10, 20, 50];
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
 const INPUT_DELAY = 600;
 
+type DashboardFormStatus = Gesuchstatus | GesuchTrancheStatus;
+
 type AppendStartEnd<T extends string> = `${T}From` | `${T}To`;
-type DashboardEntry = Omit<SbDashboardGesuch, 'id' | 'gesuchTrancheId'>;
+type DashboardEntry = Omit<
+  SbDashboardGesuch,
+  'id' | 'gesuchTrancheId' | 'gesuchStatus' | 'trancheStatus'
+> & { status: DashboardFormStatus };
 type DashboardEntryFields = keyof DashboardEntry;
 
 /**
@@ -247,11 +253,22 @@ export class SachbearbeitungAppFeatureCockpitComponent
   });
 
   availableStatusSig = computed(() => {
-    return this.gesuchStore
-      ?.cockpitViewSig()
-      ?.gesuche?.entries?.reduce<
-        Gesuchstatus[]
-      >((acc, entry) => (acc.includes(entry.status) ? acc : [...acc, entry.status]), []);
+    return Object.entries(
+      this.gesuchStore?.cockpitViewSig()?.gesuche?.entries?.reduce(
+        (acc, entry) => {
+          const status =
+            this.filterForm.value.typ == 'TRANCHE'
+              ? entry.gesuchStatus
+              : entry.trancheStatus;
+
+          return {
+            ...acc,
+            [status]: `shared.gesuch.status.${entry.typ == 'TRANCHE' ? 'contract' : 'tranche'}.${status}`,
+          };
+        },
+        {} as Record<DashboardFormStatus, string>,
+      ) ?? {},
+    ).map(([status, translationKey]) => ({ status, translationKey }));
   });
 
   filterFormChangedSig = toSignal(
@@ -271,9 +288,13 @@ export class SachbearbeitungAppFeatureCockpitComponent
   );
 
   gesucheDataSourceSig = computed(() => {
-    const gesuche = this.gesuchStore?.cockpitViewSig()?.gesuche?.entries?.map(
-      (entry) =>
-        ({
+    const gesuche = this.gesuchStore
+      ?.cockpitViewSig()
+      ?.gesuche?.entries?.map((entry) => {
+        const status =
+          entry.typ == 'TRANCHE' ? entry.gesuchStatus : entry.trancheStatus;
+        const translationKey = `shared.gesuch.status.${entry.typ == 'TRANCHE' ? 'contract' : 'tranche'}.${status}`;
+        return {
           id: entry.id,
           trancheId: entry.gesuchTrancheId,
           fallNummer: entry.fallNummer,
@@ -281,14 +302,16 @@ export class SachbearbeitungAppFeatureCockpitComponent
           piaNachname: entry.piaNachname,
           piaVorname: entry.piaVorname,
           piaGeburtsdatum: entry.piaGeburtsdatum,
-          status: entry.status,
+          status,
+          translationKey,
           bearbeiter: entry.bearbeiter,
           letzteAktivitaet: entry.letzteAktivitaet,
-        }) satisfies Record<DashboardEntryFields, unknown> & {
+        } satisfies Record<DashboardEntryFields, unknown> & {
           id: string;
           trancheId: string;
-        },
-    );
+          translationKey: string;
+        };
+      });
     const dataSource = new MatTableDataSource(gesuche);
 
     return dataSource;
@@ -462,6 +485,10 @@ export class SachbearbeitungAppFeatureCockpitComponent
       queryParamsHandling: 'merge',
       replaceUrl: true,
     });
+  }
+
+  resetStatus() {
+    this.filterForm.controls.status.reset();
   }
 
   paginate(event: PageEvent) {

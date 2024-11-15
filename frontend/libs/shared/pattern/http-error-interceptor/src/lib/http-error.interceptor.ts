@@ -38,7 +38,6 @@ export function withDvGlobalHttpErrorInterceptorFn({
     return [];
   } else {
     // explicit function name is displayed in stack traces, arrow functions are anonymous
-
     function HttpErrorInterceptor(
       req: HttpRequest<unknown>,
       next: HttpHandlerFn,
@@ -100,6 +99,9 @@ const handleUnknownHttpError = (
 ) => {
   return (error: SharedModelError) => {
     if (error.type === 'unknownHttpError') {
+      if (error.status === 400 && req.context.get(IGNORE_ERRORS)) {
+        return handledError(throwError(() => error));
+      }
       if (error.status === 401) {
         const unauthorizedHandler = req.context.get(HANDLE_UNAUTHORIZED);
         if (unauthorizedHandler) {

@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
@@ -35,36 +37,40 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheHistoryRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
-import ch.dvbern.stip.generated.dto.GsDashboardDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
@@ -75,7 +81,6 @@ import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -102,11 +107,13 @@ public class GesuchService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
     private final GesuchNummerService gesuchNummerService;
-    private final GsDashboardMapper gsDashboardMapper;
+    private final FallRepository fallRepository;
+    private final FallDashboardItemMapper fallDashboardItemMapper;
     private final ConfigService configService;
     private final GesuchNotizService gesuchNotizService;
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
+    private final AusbildungRepository ausbildungRepository;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithOldestTranche(UUID id) {
@@ -302,8 +309,20 @@ public class GesuchService {
     @Transactional
     public GesuchDto createGesuch(GesuchCreateDto gesuchCreateDto) {
         Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
+        gesuch.setAusbildung(ausbildungRepository.requireById(gesuch.getAusbildung().getId()));
+        final var gesuchsperiode = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
+            gesuch.getAusbildung()
+        );
+
+        gesuch.setGesuchsperiode(gesuchsperiode);
         createInitialGesuchTranche(gesuch);
         gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
+        gesuch.getAusbildung().getGesuchs().add(gesuch);
+        Set<ConstraintViolation<Ausbildung>> violations = validator.validate(gesuch.getAusbildung());
+        if (!violations.isEmpty()) {
+            throw new ValidationsException("Die Entität ist nicht valid", violations);
+        }
+
         gesuchRepository.persistAndFlush(gesuch);
         return gesuchMapperUtil.mapWithTranche(
             gesuch,
@@ -316,11 +335,20 @@ public class GesuchService {
             .getGesuchsperiode(gesuch.getGesuchsperiode().getId())
             .orElseThrow(NotFoundException::new);
 
+        var ausbildungsstart = gesuch.getAusbildung()
+            .getAusbildungBegin()
+            .withYear(periode.getGesuchsperiodeStart().getYear());
+        if (ausbildungsstart.isAfter(periode.getGesuchsperiodeStopp())) {
+            ausbildungsstart = ausbildungsstart.minusYears(1);
+        }
+
         var tranche = new GesuchTranche()
-            .setGueltigkeit(new DateRange(periode.getGesuchsperiodeStart(), periode.getGesuchsperiodeStopp()))
+            .setGueltigkeit(new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1)))
             .setGesuch(gesuch)
             .setGesuchFormular(new GesuchFormular())
             .setTyp(GesuchTrancheTyp.TRANCHE);
+
+        tranche.getGesuchFormular().setTranche(tranche);
 
         gesuch.getGesuchTranchen().add(tranche);
     }
@@ -332,7 +360,7 @@ public class GesuchService {
         final String piaNachname,
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
-        final Gesuchstatus status,
+        final String status,
         final String bearbeiter,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
@@ -365,7 +393,7 @@ public class GesuchService {
         }
 
         if (status != null) {
-            sbDashboardQueryBuilder.status(baseQuery, status);
+            sbDashboardQueryBuilder.status(baseQuery, typ, status);
         }
 
         if (bearbeiter != null) {
@@ -392,10 +420,10 @@ public class GesuchService {
             .toList();
 
         return new PaginatedSbDashboardDto(
-            results,
             page,
             results.size(),
-            Math.toIntExact(countQuery.fetchFirst())
+            Math.toIntExact(countQuery.fetchFirst()),
+            results
         );
     }
 
@@ -407,38 +435,13 @@ public class GesuchService {
             .toList();
     }
 
-    public List<GsDashboardDto> findGsDashboard() {
-        List<GsDashboardDto> gsDashboardDtos = new ArrayList<>();
+    public List<FallDashboardItemDto> getFallDashboardItemDtos() {
+        List<FallDashboardItemDto> fallDashboardItemDtos = new ArrayList<>();
         final var benutzer = benutzerService.getCurrentBenutzer();
-        final var gesuche = gesuchRepository.findForGs(benutzer.getId()).toList();
+        final var fall = fallRepository.findFallForGsOptional(benutzer.getId()).orElseThrow(NotFoundException::new);
+        fallDashboardItemDtos.add(fallDashboardItemMapper.toDto(fall));
 
-        for (var gesuch : gesuche) {
-            final var gesuchTranchen = gesuchTrancheService.getAllTranchenForGesuch(gesuch.getId());
-
-            final var offeneAenderung = gesuchTranchen.stream()
-                .filter(
-                    tranche -> tranche.getTyp().equals(GesuchTrancheTyp.AENDERUNG)
-                    && Set.of(GesuchTrancheStatus.IN_BEARBEITUNG_GS, GesuchTrancheStatus.UEBERPRUEFEN)
-                        .contains(tranche.getStatus())
-                )
-                .findFirst()
-                .orElse(null);
-
-            final var missingDocumentsTrancheIdAndCount = gesuchTranchen.stream()
-                .filter(tranche -> tranche.getTyp().equals(GesuchTrancheTyp.TRANCHE))
-                .map(
-                    tranche -> ImmutablePair.of(
-                        tranche.getId(),
-                        gesuchTrancheService.getRequiredDokumentTypes(tranche.getId()).size()
-                    )
-                )
-                .filter(pair -> pair.getRight() > 0)
-                .findFirst();
-
-            gsDashboardDtos.add(gsDashboardMapper.toDto(gesuch, offeneAenderung, missingDocumentsTrancheIdAndCount));
-        }
-
-        return gsDashboardDtos;
+        return fallDashboardItemDtos;
     }
 
     @Transactional
@@ -457,7 +460,13 @@ public class GesuchService {
                 gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
             );
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
+        final var ausbildung = gesuch.getAusbildung();
         gesuchRepository.delete(gesuch);
+        ausbildung.getGesuchs().remove(gesuch);
+
+        if (ausbildung.getGesuchs().isEmpty()) {
+            ausbildungRepository.delete(ausbildung);
+        }
     }
 
     @Transactional

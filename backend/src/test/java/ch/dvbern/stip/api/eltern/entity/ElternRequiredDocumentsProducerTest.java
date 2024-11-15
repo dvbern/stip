@@ -25,7 +25,7 @@ import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.gesuch.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +51,7 @@ class ElternRequiredDocumentsProducerTest {
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.MUTTER)
                     .setErgaenzungsleistungen(1)
+                    .setSozialhilfebeitraege(false)
 
             )
         );
@@ -67,6 +68,7 @@ class ElternRequiredDocumentsProducerTest {
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.VATER)
                     .setErgaenzungsleistungen(1)
+                    .setSozialhilfebeitraege(false)
             )
         );
 
@@ -81,7 +83,7 @@ class ElternRequiredDocumentsProducerTest {
         formular.setElterns(
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.MUTTER)
-                    .setSozialhilfebeitraege(1)
+                    .setSozialhilfebeitraege(true)
             )
         );
 
@@ -96,7 +98,7 @@ class ElternRequiredDocumentsProducerTest {
         formular.setElterns(
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.VATER)
-                    .setSozialhilfebeitraege(1)
+                    .setSozialhilfebeitraege(true)
             )
         );
 
@@ -112,6 +114,7 @@ class ElternRequiredDocumentsProducerTest {
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.VATER)
                     .setWohnkosten(1)
+                    .setSozialhilfebeitraege(false)
             )
         );
 
@@ -127,6 +130,7 @@ class ElternRequiredDocumentsProducerTest {
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.VATER)
                     .setWohnkosten(1)
+                    .setSozialhilfebeitraege(false)
             )
         )
             .setFamiliensituation(new Familiensituation().setElternVerheiratetZusammen(true));
@@ -143,6 +147,7 @@ class ElternRequiredDocumentsProducerTest {
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.VATER)
                     .setWohnkosten(1)
+                    .setSozialhilfebeitraege(false)
             )
         )
             .setFamiliensituation(new Familiensituation().setElternVerheiratetZusammen(false));

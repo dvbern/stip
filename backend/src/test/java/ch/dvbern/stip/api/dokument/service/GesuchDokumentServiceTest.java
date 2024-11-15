@@ -36,10 +36,10 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
@@ -61,9 +61,9 @@ import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTr
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -242,14 +242,13 @@ class GesuchDokumentServiceTest {
         gsDokService.deleteAbgelehnteDokumenteForGesuch(new Gesuch());
 
         // Assert
-        assertThat(gesuchDokumente.size(), is(2));
+        assertThat(gesuchDokumente.size(), is(1));
         final var abgelehntesGesuchDokument = gesuchDokumente
             .values()
             .stream()
             .filter(x -> x.getStatus() == Dokumentstatus.ABGELEHNT)
-            .findFirst()
-            .get();
-        assertThat(abgelehntesGesuchDokument.getDokumente().size(), is(0));
+            .findFirst();
+        assertThat(abgelehntesGesuchDokument.isEmpty(), is(true));
     }
 
     private static class GesuchDokumentServiceMock extends GesuchDokumentService {

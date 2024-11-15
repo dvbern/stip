@@ -38,7 +38,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
@@ -126,6 +126,18 @@ class BerechnungServiceTest {
     void testMinimalGesuchBerechnung() {
         // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(10)
+                        )
+                )
+        );
+
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
 
@@ -154,17 +166,6 @@ class BerechnungServiceTest {
                 .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
         );
 
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(10)
-                        )
-                )
-        );
-
         // Act
         List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultatDtos = null;
         for (int i = 0; i < 1; i++) { // for profiling
@@ -186,6 +187,18 @@ class BerechnungServiceTest {
     void testFall7GesuchBerechnung() {
         // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
+                        )
+                )
+        );
+
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
 
         gesuch.setGesuchTranchen(
@@ -259,17 +272,6 @@ class BerechnungServiceTest {
             )
         );
 
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
-                        )
-                )
-        );
-
         // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
@@ -283,6 +285,18 @@ class BerechnungServiceTest {
     void testFall8GesuchBerechnung() {
         // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
+                        )
+                )
+        );
+
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
 
         gesuch.setGesuchTranchen(
@@ -370,17 +384,6 @@ class BerechnungServiceTest {
             )
         );
 
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
-                        )
-                )
-        );
-
         // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
@@ -394,6 +397,18 @@ class BerechnungServiceTest {
     void testFall11GesuchBerechnung() {
         // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
+                        )
+                )
+        );
+
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuch.setGesuchTranchen(
             List.of(
@@ -412,17 +427,6 @@ class BerechnungServiceTest {
         gesuch.getGesuchsperiode()
             .setAnzahlWochenLehre(47)
             .setAnzahlWochenSchule(38);
-
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
-                        )
-                )
-        );
 
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)
@@ -450,13 +454,13 @@ class BerechnungServiceTest {
                     .setElternTyp(ElternTyp.VATER)
                     .setWohnkosten(9_000)
                     .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0)
+                    .setSozialhilfebeitraege(false)
                     .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
                     .setWohnkosten(12_720)
                     .setErgaenzungsleistungen(0)
-                    .setSozialhilfebeitraege(0)
+                    .setSozialhilfebeitraege(false)
                     .setGeburtsdatum(LocalDate.of(1961, 1, 1))
             )
         );
@@ -557,6 +561,18 @@ class BerechnungServiceTest {
     void testFall14GesuchBerechnung() {
         // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(9)
+                        )
+                )
+        );
+
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuch.setGesuchTranchen(
             List.of(
@@ -575,17 +591,6 @@ class BerechnungServiceTest {
         gesuch.getGesuchsperiode()
             .setAnzahlWochenLehre(47)
             .setAnzahlWochenSchule(38);
-
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(9)
-                        )
-                )
-        );
 
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)
@@ -701,6 +706,18 @@ class BerechnungServiceTest {
     void testFall5GesuchBerechnungKinder() {
         // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(5)
+                        )
+                )
+        );
+
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
@@ -814,17 +831,6 @@ class BerechnungServiceTest {
             )
         );
 
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(5)
-                        )
-                )
-        );
-
         // Act
         final var berechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
@@ -843,6 +849,19 @@ class BerechnungServiceTest {
     void testFall6BerechnungEinKind() {
         // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setAusbildungsgang(
+                    new Ausbildungsgang()
+                        .setBildungskategorie(
+                            new Bildungskategorie()
+                                .setBfs(8)
+                        )
+                )
+                .setPensum(AusbildungsPensum.TEILZEIT)
+        );
+
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
@@ -973,18 +992,6 @@ class BerechnungServiceTest {
             Set.of(
                 kind1
             )
-        );
-
-        gesuchFormular.setAusbildung(
-            new Ausbildung()
-                .setAusbildungsgang(
-                    new Ausbildungsgang()
-                        .setBildungskategorie(
-                            new Bildungskategorie()
-                                .setBfs(8)
-                        )
-                )
-                .setPensum(AusbildungsPensum.TEILZEIT)
         );
 
         // Act

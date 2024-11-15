@@ -164,12 +164,12 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.gesuchFormular.documents.invalidStatus.message}";
     public static final String VALIDATION_TRANCHEN_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchTranche.invalidStatus.message}";
-    public static final String VALIDATION_STEUERDATEN_FIELDS_REQUIRED_IF_TYPE =
-        "{jakarta.validation.constraints.steuerdaten.fieldRequiredIfType.message}";
-    public static final String VALIDATION_DOCUMENTS_STATUS_ACCEPTED_MESSAGE =
-        "{jakarta.validation.constraints.gesuchFormular.documents.mustBe.accepted.message}";
     public static final String VALIDATION_GESUCHNOTIZ_ANTWORT_VALID_MESSAGE = "{" +
     "jakarta.validation.constraints.gesuchnotiz.antwort.valid.message}";
+    public static final String VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE =
+        "jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message";
+    public static final String VALIDATION_AUSBILDUNG_ONLY_ONE_GESUCH_PER_YEAR =
+        "{jakarta.validation.constraints.ausbildung.gesuch.onlyone.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

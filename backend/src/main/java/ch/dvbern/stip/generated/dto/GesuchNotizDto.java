@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.GesuchNotizTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -9,6 +10,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("GesuchNotiz")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -16,72 +22,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GesuchNotizDto  implements Serializable {
-  private @Valid String userErstellt;
-  private @Valid LocalDate timestampErstellt;
-  private @Valid GesuchNotizTypDto notizTyp;
   private @Valid UUID id;
   private @Valid String betreff;
   private @Valid String text;
+  private @Valid String userErstellt;
+  private @Valid LocalDate timestampErstellt;
+  private @Valid GesuchNotizTypDto notizTyp;
   private @Valid String userMutiert;
   private @Valid LocalDate timestampMutiert;
   private @Valid String antwort;
-
-  /**
-   **/
-  public GesuchNotizDto userErstellt(String userErstellt) {
-    this.userErstellt = userErstellt;
-    return this;
-  }
-
-
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
-    return userErstellt;
-  }
-
-  @JsonProperty("userErstellt")
-  public void setUserErstellt(String userErstellt) {
-    this.userErstellt = userErstellt;
-  }
-
-  /**
-   **/
-  public GesuchNotizDto timestampErstellt(LocalDate timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
-    return this;
-  }
-
-
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public LocalDate getTimestampErstellt() {
-    return timestampErstellt;
-  }
-
-  @JsonProperty("timestampErstellt")
-  public void setTimestampErstellt(LocalDate timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
-  }
-
-  /**
-   **/
-  public GesuchNotizDto notizTyp(GesuchNotizTypDto notizTyp) {
-    this.notizTyp = notizTyp;
-    return this;
-  }
-
-
-  @JsonProperty("notizTyp")
-  @NotNull
-  public GesuchNotizTypDto getNotizTyp() {
-    return notizTyp;
-  }
-
-  @JsonProperty("notizTyp")
-  public void setNotizTyp(GesuchNotizTypDto notizTyp) {
-    this.notizTyp = notizTyp;
-  }
 
   /**
    **/
@@ -90,7 +39,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -109,7 +58,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("betreff")
   @NotNull
   public String getBetreff() {
@@ -128,7 +77,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("text")
   @NotNull
   public String getText() {
@@ -142,12 +91,69 @@ public class GesuchNotizDto  implements Serializable {
 
   /**
    **/
+  public GesuchNotizDto userErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("userErstellt")
+  @NotNull
+  public String getUserErstellt() {
+    return userErstellt;
+  }
+
+  @JsonProperty("userErstellt")
+  public void setUserErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
+  }
+
+  /**
+   **/
+  public GesuchNotizDto timestampErstellt(LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("timestampErstellt")
+  @NotNull
+  public LocalDate getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+  @JsonProperty("timestampErstellt")
+  public void setTimestampErstellt(LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
+  /**
+   **/
+  public GesuchNotizDto notizTyp(GesuchNotizTypDto notizTyp) {
+    this.notizTyp = notizTyp;
+    return this;
+  }
+
+  
+  @JsonProperty("notizTyp")
+  @NotNull
+  public GesuchNotizTypDto getNotizTyp() {
+    return notizTyp;
+  }
+
+  @JsonProperty("notizTyp")
+  public void setNotizTyp(GesuchNotizTypDto notizTyp) {
+    this.notizTyp = notizTyp;
+  }
+
+  /**
+   **/
   public GesuchNotizDto userMutiert(String userMutiert) {
     this.userMutiert = userMutiert;
     return this;
   }
 
-
+  
   @JsonProperty("userMutiert")
   public String getUserMutiert() {
     return userMutiert;
@@ -165,7 +171,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("timestampMutiert")
   public LocalDate getTimestampMutiert() {
     return timestampMutiert;
@@ -183,7 +189,7 @@ public class GesuchNotizDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("antwort")
   public String getAntwort() {
     return antwort;
@@ -204,12 +210,12 @@ public class GesuchNotizDto  implements Serializable {
       return false;
     }
     GesuchNotizDto gesuchNotiz = (GesuchNotizDto) o;
-    return Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
-        Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
-        Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
-        Objects.equals(this.id, gesuchNotiz.id) &&
+    return Objects.equals(this.id, gesuchNotiz.id) &&
         Objects.equals(this.betreff, gesuchNotiz.betreff) &&
         Objects.equals(this.text, gesuchNotiz.text) &&
+        Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
+        Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
+        Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
         Objects.equals(this.userMutiert, gesuchNotiz.userMutiert) &&
         Objects.equals(this.timestampMutiert, gesuchNotiz.timestampMutiert) &&
         Objects.equals(this.antwort, gesuchNotiz.antwort);
@@ -217,20 +223,20 @@ public class GesuchNotizDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, notizTyp, id, betreff, text, userMutiert, timestampMutiert, antwort);
+    return Objects.hash(id, betreff, text, userErstellt, timestampErstellt, notizTyp, userMutiert, timestampMutiert, antwort);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizDto {\n");
-
-    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
-    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
-    sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
     sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");

@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -40,10 +39,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FamiliensituationDtoSpec.JSON_PROPERTY_VATER_UNBEKANNT_VERSTORBEN,
   FamiliensituationDtoSpec.JSON_PROPERTY_VATER_UNBEKANNT_GRUND,
   FamiliensituationDtoSpec.JSON_PROPERTY_VATER_WIEDERVERHEIRATET,
-  FamiliensituationDtoSpec.JSON_PROPERTY_SORGERECHT,
-  FamiliensituationDtoSpec.JSON_PROPERTY_OBHUT,
-  FamiliensituationDtoSpec.JSON_PROPERTY_OBHUT_MUTTER,
-  FamiliensituationDtoSpec.JSON_PROPERTY_OBHUT_VATER,
   FamiliensituationDtoSpec.JSON_PROPERTY_WER_ZAHLT_ALIMENTE
 })
 @JsonTypeName("Familiensituation")
@@ -75,18 +70,6 @@ public class FamiliensituationDtoSpec {
 
   public static final String JSON_PROPERTY_VATER_WIEDERVERHEIRATET = "vaterWiederverheiratet";
   private Boolean vaterWiederverheiratet;
-
-  public static final String JSON_PROPERTY_SORGERECHT = "sorgerecht";
-  private ElternschaftsteilungDtoSpec sorgerecht;
-
-  public static final String JSON_PROPERTY_OBHUT = "obhut";
-  private ElternschaftsteilungDtoSpec obhut;
-
-  public static final String JSON_PROPERTY_OBHUT_MUTTER = "obhutMutter";
-  private BigDecimal obhutMutter;
-
-  public static final String JSON_PROPERTY_OBHUT_VATER = "obhutVater";
-  private BigDecimal obhutVater;
 
   public static final String JSON_PROPERTY_WER_ZAHLT_ALIMENTE = "werZahltAlimente";
   private ElternschaftsteilungDtoSpec werZahltAlimente;
@@ -328,110 +311,6 @@ public class FamiliensituationDtoSpec {
   }
 
 
-  public FamiliensituationDtoSpec sorgerecht(ElternschaftsteilungDtoSpec sorgerecht) {
-    
-    this.sorgerecht = sorgerecht;
-    return this;
-  }
-
-   /**
-   * Get sorgerecht
-   * @return sorgerecht
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SORGERECHT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public ElternschaftsteilungDtoSpec getSorgerecht() {
-    return sorgerecht;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_SORGERECHT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSorgerecht(ElternschaftsteilungDtoSpec sorgerecht) {
-    this.sorgerecht = sorgerecht;
-  }
-
-
-  public FamiliensituationDtoSpec obhut(ElternschaftsteilungDtoSpec obhut) {
-    
-    this.obhut = obhut;
-    return this;
-  }
-
-   /**
-   * Get obhut
-   * @return obhut
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_OBHUT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public ElternschaftsteilungDtoSpec getObhut() {
-    return obhut;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_OBHUT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setObhut(ElternschaftsteilungDtoSpec obhut) {
-    this.obhut = obhut;
-  }
-
-
-  public FamiliensituationDtoSpec obhutMutter(BigDecimal obhutMutter) {
-    
-    this.obhutMutter = obhutMutter;
-    return this;
-  }
-
-   /**
-   * Required nur wenn obhut &#x3D; GEMEINSAM
-   * @return obhutMutter
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_OBHUT_MUTTER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public BigDecimal getObhutMutter() {
-    return obhutMutter;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_OBHUT_MUTTER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setObhutMutter(BigDecimal obhutMutter) {
-    this.obhutMutter = obhutMutter;
-  }
-
-
-  public FamiliensituationDtoSpec obhutVater(BigDecimal obhutVater) {
-    
-    this.obhutVater = obhutVater;
-    return this;
-  }
-
-   /**
-   * Required nur wenn obhut &#x3D; GEMEINSAM
-   * @return obhutVater
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_OBHUT_VATER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public BigDecimal getObhutVater() {
-    return obhutVater;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_OBHUT_VATER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setObhutVater(BigDecimal obhutVater) {
-    this.obhutVater = obhutVater;
-  }
-
-
   public FamiliensituationDtoSpec werZahltAlimente(ElternschaftsteilungDtoSpec werZahltAlimente) {
     
     this.werZahltAlimente = werZahltAlimente;
@@ -475,16 +354,12 @@ public class FamiliensituationDtoSpec {
         Objects.equals(this.vaterUnbekanntVerstorben, familiensituation.vaterUnbekanntVerstorben) &&
         Objects.equals(this.vaterUnbekanntGrund, familiensituation.vaterUnbekanntGrund) &&
         Objects.equals(this.vaterWiederverheiratet, familiensituation.vaterWiederverheiratet) &&
-        Objects.equals(this.sorgerecht, familiensituation.sorgerecht) &&
-        Objects.equals(this.obhut, familiensituation.obhut) &&
-        Objects.equals(this.obhutMutter, familiensituation.obhutMutter) &&
-        Objects.equals(this.obhutVater, familiensituation.obhutVater) &&
         Objects.equals(this.werZahltAlimente, familiensituation.werZahltAlimente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(elternVerheiratetZusammen, elternteilUnbekanntVerstorben, gerichtlicheAlimentenregelung, mutterUnbekanntVerstorben, mutterUnbekanntGrund, mutterWiederverheiratet, vaterUnbekanntVerstorben, vaterUnbekanntGrund, vaterWiederverheiratet, sorgerecht, obhut, obhutMutter, obhutVater, werZahltAlimente);
+    return Objects.hash(elternVerheiratetZusammen, elternteilUnbekanntVerstorben, gerichtlicheAlimentenregelung, mutterUnbekanntVerstorben, mutterUnbekanntGrund, mutterWiederverheiratet, vaterUnbekanntVerstorben, vaterUnbekanntGrund, vaterWiederverheiratet, werZahltAlimente);
   }
 
   @Override
@@ -500,10 +375,6 @@ public class FamiliensituationDtoSpec {
     sb.append("    vaterUnbekanntVerstorben: ").append(toIndentedString(vaterUnbekanntVerstorben)).append("\n");
     sb.append("    vaterUnbekanntGrund: ").append(toIndentedString(vaterUnbekanntGrund)).append("\n");
     sb.append("    vaterWiederverheiratet: ").append(toIndentedString(vaterWiederverheiratet)).append("\n");
-    sb.append("    sorgerecht: ").append(toIndentedString(sorgerecht)).append("\n");
-    sb.append("    obhut: ").append(toIndentedString(obhut)).append("\n");
-    sb.append("    obhutMutter: ").append(toIndentedString(obhutMutter)).append("\n");
-    sb.append("    obhutVater: ").append(toIndentedString(obhutVater)).append("\n");
     sb.append("    werZahltAlimente: ").append(toIndentedString(werZahltAlimente)).append("\n");
     sb.append("}");
     return sb.toString();

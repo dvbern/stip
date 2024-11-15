@@ -33,6 +33,7 @@ import io.quarkus.qute.TemplateInstance;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -48,7 +49,10 @@ public class NotificationService {
             .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
             .setGesuch(gesuch);
 
-        final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
@@ -96,11 +100,12 @@ public class NotificationService {
 
     @Transactional
     public List<NotificationDto> getNotificationsForCurrentUser() {
-        return notificationRepository.getAllForUser(
-            benutzerService.getCurrentBenutzer().getId()
-        )
-            .map(notificationMapper::toDto)
-            .toList();
+        return getNotificationsForUser(benutzerService.getCurrentBenutzer().getId());
+    }
+
+    @Transactional
+    public List<NotificationDto> getNotificationsForUser(final UUID userId) {
+        return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
     }
 
     public void createMissingDocumentNotification(final Gesuch gesuch) {
@@ -111,11 +116,13 @@ public class NotificationService {
         final var sprache = pia.getKorrespondenzSprache();
         String msg = Templates.getGesuchFehlendeDokumenteText(
             sprache,
-            gesuch.getFall()
+            gesuch.getAusbildung()
+                .getFall()
                 .getSachbearbeiterZuordnung()
                 .getSachbearbeiter()
                 .getVorname(),
-            gesuch.getFall()
+            gesuch.getAusbildung()
+                .getFall()
                 .getSachbearbeiterZuordnung()
                 .getSachbearbeiter()
                 .getNachname()

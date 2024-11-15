@@ -20,45 +20,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GesuchCreateDto  implements Serializable {
-  private @Valid UUID fallId;
-  private @Valid UUID gesuchsperiodeId;
+  private @Valid UUID ausbildungId;
 
   /**
    **/
-  public GesuchCreateDto fallId(UUID fallId) {
-    this.fallId = fallId;
+  public GesuchCreateDto ausbildungId(UUID ausbildungId) {
+    this.ausbildungId = ausbildungId;
     return this;
   }
 
   
-  @JsonProperty("fallId")
+  @JsonProperty("ausbildungId")
   @NotNull
-  public UUID getFallId() {
-    return fallId;
+  public UUID getAusbildungId() {
+    return ausbildungId;
   }
 
-  @JsonProperty("fallId")
-  public void setFallId(UUID fallId) {
-    this.fallId = fallId;
-  }
-
-  /**
-   **/
-  public GesuchCreateDto gesuchsperiodeId(UUID gesuchsperiodeId) {
-    this.gesuchsperiodeId = gesuchsperiodeId;
-    return this;
-  }
-
-  
-  @JsonProperty("gesuchsperiodeId")
-  @NotNull
-  public UUID getGesuchsperiodeId() {
-    return gesuchsperiodeId;
-  }
-
-  @JsonProperty("gesuchsperiodeId")
-  public void setGesuchsperiodeId(UUID gesuchsperiodeId) {
-    this.gesuchsperiodeId = gesuchsperiodeId;
+  @JsonProperty("ausbildungId")
+  public void setAusbildungId(UUID ausbildungId) {
+    this.ausbildungId = ausbildungId;
   }
 
 
@@ -71,13 +51,12 @@ public class GesuchCreateDto  implements Serializable {
       return false;
     }
     GesuchCreateDto gesuchCreate = (GesuchCreateDto) o;
-    return Objects.equals(this.fallId, gesuchCreate.fallId) &&
-        Objects.equals(this.gesuchsperiodeId, gesuchCreate.gesuchsperiodeId);
+    return Objects.equals(this.ausbildungId, gesuchCreate.ausbildungId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, gesuchsperiodeId);
+    return Objects.hash(ausbildungId);
   }
 
   @Override
@@ -85,8 +64,7 @@ public class GesuchCreateDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchCreateDto {\n");
     
-    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
-    sb.append("    gesuchsperiodeId: ").append(toIndentedString(gesuchsperiodeId)).append("\n");
+    sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

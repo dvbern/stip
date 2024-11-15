@@ -12,10 +12,9 @@ import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatOption } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -29,10 +28,8 @@ import {
   GesuchAenderungStore,
 } from '@dv/shared/data-access/gesuch-aenderung';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import {
-  SharedUiFormFieldDirective,
-  SharedUiFormMessageErrorDirective,
-} from '@dv/shared/ui/form';
+import { isDefined } from '@dv/shared/model/type-util';
+import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
@@ -41,7 +38,6 @@ import {
   getLatestTrancheIdFromGesuchOnUpdate$,
 } from '@dv/shared/util/gesuch';
 import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 
@@ -51,16 +47,12 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
   imports: [
     CommonModule,
     FormsModule,
-    MatError,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatOption,
+    RouterLink,
     MatSelect,
     ReactiveFormsModule,
-    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
     SharedUiFormFieldDirective,
-    SharedUiFormMessageErrorDirective,
     SharedUiHeaderSuffixDirective,
     SharedUiIfSachbearbeiterDirective,
     TranslateModule,
@@ -95,11 +87,11 @@ export class SharedFeatureGesuchFormTrancheComponent {
     bemerkung: [''],
   });
 
-  currentTrancheIndexSig = computed(() => {
+  currentTrancheNumberSig = computed(() => {
     const currentTranche = this.viewSig().tranche;
 
     if (!currentTranche) {
-      return 0;
+      return '…';
     }
 
     const tranchen = this.gesuchAenderungStore.tranchenViewSig();
@@ -112,7 +104,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
       (aenderung) => aenderung.id === currentTranche.id,
     );
 
-    return index ?? 0;
+    return index >= 0 ? index + 1 : '…';
   });
 
   constructor() {

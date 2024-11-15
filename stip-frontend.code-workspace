@@ -53,6 +53,7 @@
     "eslint.validate": ["json"],
     "typescript.tsdk": "frontend/node_modules/typescript/lib",
     "jest.rootPath": "frontend",
+    "tailwindCSS.experimental.classRegex": ["HostBinding.*class[\\s\\S*]*['\"`](.+?)['\"`]"],
     "workbench.colorCustomizations": {
       "activityBar.activeBackground": "#097bd5",
       "activityBar.background": "#097bd5",

@@ -24,6 +24,7 @@ import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -34,6 +35,7 @@ import {
   FAMILIENSITUATION,
   PERSON,
 } from '@dv/shared/model/gesuch-form';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -47,6 +49,7 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
@@ -65,7 +68,6 @@ import {
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
-import { isDefined } from '@dv/shared/util-fn/type-guards';
 
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
 
@@ -80,6 +82,7 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     MatInputModule,
     MatRadioModule,
     MaskitoDirective,
+    SharedUiRdIsPendingPipe,
     SharedUiInfoContainerComponent,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
@@ -141,6 +144,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     ],
   });
 
+  ausbildungsstaetteStore = inject(AusbildungsstaetteStore);
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormEinnahmenkostenView,
   );
@@ -187,7 +191,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   );
 
   formStateSig = computed(() => {
-    const { gesuchFormular, ausbildungsstaettes, gesuch } = this.viewSig();
+    const { gesuchFormular, gesuch } = this.viewSig();
+    const ausbildung = gesuchFormular?.ausbildung;
+    const ausbildungsstaettes =
+      this.ausbildungsstaetteStore.ausbildungsstaetteViewSig();
 
     if (!gesuchFormular) {
       return {
@@ -199,8 +206,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         ],
       };
     }
-    const { personInAusbildung, familiensituation, kinds, ausbildung } =
-      gesuchFormular;
+    const { personInAusbildung, familiensituation, kinds } = gesuchFormular;
 
     const schritte = [
       ...(!personInAusbildung ? [PERSON.translationKey] : []),
@@ -500,6 +506,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(SharedEventGesuchFormEinnahmenkosten.init());
+    this.ausbildungsstaetteStore.loadAusbildungsstaetten$();
   }
 
   trackByIndex(index: number) {

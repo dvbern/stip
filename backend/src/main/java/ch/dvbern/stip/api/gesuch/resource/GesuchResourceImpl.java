@@ -27,11 +27,10 @@ import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.json.CreatedResponseBuilder;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuch.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -138,15 +137,15 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuch).build();
     }
 
-    @AllowAll
     @RolesAllowed(GESUCH_READ)
+    @AllowAll
     @Override
     public Response getGsDashboard() {
-        return Response.ok(gesuchService.findGsDashboard()).build();
+        return Response.ok(gesuchService.getFallDashboardItemDtos()).build();
     }
 
-    @AllowAll
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
+    @AllowAll
     @Override
     public Response getGesucheGs() {
         return Response.ok(gesuchService.findGesucheGs()).build();
@@ -164,7 +163,7 @@ public class GesuchResourceImpl implements GesuchResource {
         String piaNachname,
         String piaVorname,
         LocalDate piaGeburtsdatum,
-        Gesuchstatus status,
+        String status,
         String bearbeiter,
         LocalDate letzteAktivitaetFrom,
         LocalDate letzteAktivitaetTo,
@@ -194,13 +193,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getGesucheForFall(UUID fallId) {
-        fallAuthorizer.canRead(fallId);
-        return Response.ok(gesuchService.findAllForFall(fallId)).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
     public Response getStatusProtokoll(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         final var statusprotokoll = gesuchHistoryService.getStatusprotokoll(gesuchId);
@@ -219,6 +211,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public Response getBerechnungForGesuch(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
+        gesuchAuthorizer.canGetBerechnung(gesuchId);
         return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
     }
 
@@ -231,8 +224,8 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     // TODO KSTIP-1247: Update which roles can do this
-    @AllowAll
     @RolesAllowed(GESUCH_READ)
+    @AllowAll
     @Override
     public Response getSbTrancheChanges(UUID aenderungId) {
         final var changes = gesuchService.getSbTrancheChanges(aenderungId);

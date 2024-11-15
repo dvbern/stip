@@ -9,7 +9,7 @@
     <!-- Gesuch -->
     <button
       type="button"
-      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-tranche-auswahl"
       [class.active]="isTrancheRouteSig()"
       [matMenuTriggerFor]="gesuchMenu"
@@ -23,7 +23,7 @@
         @for (tranche of gesuchAenderungStore.tranchenViewSig().list; track $index) {
           <a
             [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'tranche', tranche.id]"
-            class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+            class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
             [class.active]="currentGesuchSig()?.gesuchTrancheToWorkWith?.id === tranche.id"
@@ -45,9 +45,9 @@
     <a
       [routerLink]="['/', 'verfuegung', currentGesuchSig()?.id]"
       routerLinkActive="active"
-      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-verfuegung"
-      [class.disabled]="!currentGesuchSig()"
+      [class.disabled]="!canViewVerfuegungSig()"
     >
       <i class="material-symbols-rounded text-white me-2">equal</i>
       <span>{{ 'sachbearbeitung-app.header.verfuegung' | translate }}</span>
@@ -57,7 +57,7 @@
     @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
     <button
       type="button"
-      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-aenderungen"
       [class.active]="isAenderungRouteSig()"
       [disabled]="!aenderungen.hasAenderungen"
@@ -72,7 +72,7 @@
         @for (aenderung of aenderungen.byStatus.open; track $index) {
           <a
             [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'aenderung', aenderung.id]"
-            class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+            class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
             [class.active]="currentGesuchSig()?.gesuchTrancheToWorkWith?.id === aenderung.id"
@@ -95,7 +95,7 @@
         @for (aenderung of aenderungen.byStatus.completed; track $index) {
           <a
             [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'aenderung', aenderung.id]"
-            class="btn btn-light btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+            class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
             [class.active]="currentGesuchSig()?.gesuchTrancheToWorkWith?.id === aenderung.id"
@@ -116,7 +116,7 @@
     <!-- Infos-->
     <a
       [routerLink]="['/', 'infos', currentGesuchSig()?.id]"
-      class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-infos"
       [class.active]="isInfosRouteSig()"
     >

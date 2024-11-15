@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.dokument.util;
 import java.util.List;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.gesuch.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
