@@ -286,6 +286,7 @@
   "sachbearbeitung-app.infos.juristischeNotiz.erstellen": "Juristische Notiz erstellen",
   "sachbearbeitung-app.infos.juristischeNotiz.anzeigen": "Juristische Notiz anzeigen",
   "sachbearbeitung-app.infos.notiz.erstellen.success": "Notiz wurde erfolgreich erstellt",
+  "sachbearbeitung-app.infos.juristischeNotiz.unbeantwortet": "Notiz unbeantwortet",
   "sachbearbeitung-app.infos.juristischeNotiz.bearbeiten": "Juristische Notiz beantworten",
   "sachbearbeitung-app.infos.notiz.bearbeiten": "Notiz bearbeiten",
   "sachbearbeitung-app.infos.notiz.bearbeiten.success": "Notiz wurde erfolgreich bearbeitet",

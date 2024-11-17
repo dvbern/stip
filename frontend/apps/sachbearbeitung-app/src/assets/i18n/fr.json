@@ -285,6 +285,7 @@
   "sachbearbeitung-app.infos.notiz.erstellen": "Créer une note",
   "sachbearbeitung-app.infos.juristischeNotiz.erstellen": "Créer une note juridique",
   "sachbearbeitung-app.infos.juristischeNotiz.anzeigen": "Afficher la note",
+  "sachbearbeitung-app.infos.juristischeNotiz.unbeantwortet": "Non répondu",
   "sachbearbeitung-app.infos.notiz.erstellen.success": "La note a été créée avec succès",
   "sachbearbeitung-app.infos.juristischeNotiz.bearbeiten": "Répondre la note juridique",
   "sachbearbeitung-app.infos.notiz.bearbeiten": "Modifier la note",
