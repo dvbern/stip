@@ -248,10 +248,10 @@ export class SachbearbeitungAppFeatureCockpitComponent
     this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
   availableQuickFiltersSig = computed(() => {
-    const roles = this.permissionStore.userRoles();
+    const roles = this.permissionStore.permissionsMapSig();
 
     return this.quickFilters.filter((filter) =>
-      filter.roles.some((role) => roles?.includes(role)),
+      filter.roles.some((role) => roles?.[role]),
     );
   });
   letzteAktivitaetRangeSig = computed(() => {
