@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.type;
+package ch.dvbern.stip.api.common.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
