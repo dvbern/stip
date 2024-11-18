@@ -20,7 +20,6 @@ import { MatInputModule } from '@angular/material/input';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { selectLanguage } from '@dv/shared/data-access/language';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchNotiz, GesuchNotizTyp } from '@dv/shared/model/gesuch';
 import {
@@ -78,7 +77,6 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     antwort: [<string | null>null],
   });
 
-  public languageSig = this.store.selectSignal(selectLanguage);
   public isJurNotiz = this.dialogData.notizTyp === 'JURISTISCHE_NOTIZ';
 
   constructor() {
@@ -126,6 +124,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
         NotizDialogResult
       >(SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent, {
         data,
+        width: '800px',
       })
       .afterClosed();
   }

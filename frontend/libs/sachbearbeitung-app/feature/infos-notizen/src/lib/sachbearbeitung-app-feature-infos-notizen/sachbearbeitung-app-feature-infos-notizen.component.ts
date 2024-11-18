@@ -27,12 +27,8 @@ import {
   GesuchNotizTyp,
 } from '@dv/shared/model/gesuch';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
-import { SharedUiFocusableListDirective } from '@dv/shared/ui/focusable-list';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import {
-  SharedUiRdIsPendingPipe,
-  SharedUiRdIsPendingWithoutCachePipe,
-} from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
 import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../sachbearbeitung-app-feature-infos-notizen-detail-dialog/sachbearbeitung-app-feature-infos-notizen-detail-dialog.component';
@@ -46,9 +42,7 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
     MatTableModule,
     TypeSafeMatCellDefDirective,
     MatTooltipModule,
-    SharedUiFocusableListDirective,
     SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
     MatMenuModule,
   ],
@@ -154,6 +148,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
               antwort: result.antwort,
             },
           });
+          return;
         }
       });
   }

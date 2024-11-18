@@ -540,7 +540,7 @@
   "shared.form.notizen.datumMutiert.label": "Date Modified",
   "shared.form.notizen.userErstellt.label": "Gestionnaire de dossier",
   "shared.form.notizen.userMutiert.label": "Juriste",
-  "shared.form.notizen.antwort.label": "Réponse",
+  "shared.form.notizen.antwort.label": "Décision",
   "shared.form.notizen.notizTyp.GESUCH_NOTIZ": "Note",
   "shared.form.notizen.notizTyp.JURISTISCHE_NOTIZ": "Legal Note",
   "shared.form.notizen.datum.label": "Date",
