@@ -80,7 +80,12 @@
       class="btn btn-primary"
       (click)="handleSave()"
       data-testid="dialog-confirm"
-      [disabled]="form.invalid || (dialogData.notiz?.id && !userIsJurist) || dialogData.notiz?.antwort"
+      [disabled]="
+        form.invalid ||
+        (!isJurNotiz && !permissionStore.permissionsMapSig()?.Sachbearbeiter) ||
+        (isJurNotiz && dialogData.notiz?.id && !userIsJurist) ||
+        dialogData.notiz?.antwort
+      "
     >
       {{ 'shared.form.save' | translate }}
     </button>
