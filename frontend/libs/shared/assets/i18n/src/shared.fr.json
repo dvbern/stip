@@ -227,6 +227,10 @@
   "shared.form.tranche.pia.label": "Personne en formation",
   "shared.form.tranche.gesuchsnummer.label": "Numéro de la demande",
   "shared.form.tranche.fallnummer.label": "Numéro de cas",
+  "shared.form.tranche.gesuchsperiode.label": "Période de la demande",
+  "shared.form.tranche.gesuchsperiode.semester.herbst": "Automne {{ year }}",
+  "shared.form.tranche.gesuchsperiode.semester.fruehling": "Printemps {{ year }}",
+  "shared.form.tranche.einreichefrist.label": "Délai de soumission",
   "shared.form.tranche.sachbearbeiter.label": "Gestionnaire de dossier",
   "shared.form.tranche.von.label": "De",
   "shared.form.tranche.bis.label": "Jusqu'à",
@@ -818,5 +822,6 @@
   "shared.country.YT": "Mayotte",
   "shared.country.ZA": "Afrique Du Sud",
   "shared.country.ZM": "Zambie",
-  "shared.country.ZW": "Zimbabwe"
+  "shared.country.ZW": "Zimbabwe",
+  "shared.country.STATELESS": "Apatride"
 }

@@ -2,10 +2,28 @@ import { expect } from '@playwright/test';
 
 import { SmallImageFile, selectMatRadio } from '@dv/shared/util-fn/e2e-util';
 
+import { AusbildungValues } from '../../po/ausbildung.po';
 import { PersonPO } from '../../po/person.po';
-import { initializeTest } from '../../utils';
+import {
+  initializeTest,
+  specificMonth,
+  specificMonthPlusYears,
+} from '../../utils';
 
-const { test } = initializeTest('GESUCHSTELLER');
+const ausbildung: AusbildungValues = {
+  fallId: '',
+  status: 'AKTIV',
+  editable: true,
+  ausbildungsort: 'Bern',
+  ausbildungsstaetteText: 'Universität Bern',
+  ausbildungsgangText: 'Master',
+  fachrichtung: 'Kunstgeschichte',
+  ausbildungBegin: specificMonth(9),
+  ausbildungEnd: specificMonthPlusYears(8, 3),
+  pensum: 'VOLLZEIT',
+};
+
+const { test } = initializeTest('GESUCHSTELLER', ausbildung);
 
 test.describe('Dokument upload', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

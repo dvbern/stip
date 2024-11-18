@@ -5,7 +5,6 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { endOfDay, format } from 'date-fns';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   Ausbildung,
   AusbildungService,
@@ -23,7 +22,6 @@ import {
   handleApiResponse,
   initial,
   success,
-  transformErrorSig,
 } from '@dv/shared/util/remote-data';
 
 type AusbildungState = {
@@ -40,7 +38,6 @@ export class AusbildungStore extends signalStore(
   withState(initialState),
   withDevtools('AusbildungStore'),
 ) {
-  private config = inject(SharedModelCompileTimeConfig);
   private ausbildungService = inject(AusbildungService);
 
   ausbildungViewSig = computed(() => {
@@ -52,10 +49,6 @@ export class AusbildungStore extends signalStore(
       minEndDatum,
       minEndDatumFormatted: format(minEndDatum, 'MM.yyyy'),
     };
-  });
-
-  ausbildungFailureViewSig = computed(() => {
-    return transformErrorSig(this.ausbildung());
   });
 
   resetAusbildungErrors = () => {
@@ -84,6 +77,7 @@ export class AusbildungStore extends signalStore(
   createAusbildung$ = rxMethod<{
     ausbildung: AusbildungUpdate;
     onSuccess: () => void;
+    onFailure: (error: unknown) => void;
   }>(
     pipe(
       tap(({ ausbildung }) => {
@@ -91,7 +85,7 @@ export class AusbildungStore extends signalStore(
           ausbildung: cachedPending(success(ausbildung as Ausbildung)),
         }));
       }),
-      switchMap(({ ausbildung: ausbildungUpdate, onSuccess }) =>
+      switchMap(({ ausbildung: ausbildungUpdate, onSuccess, onFailure }) =>
         this.ausbildungService
           .createAusbildung$({ ausbildungUpdate }, undefined, undefined, {
             context: shouldIgnoreBadRequestErrorsIf(
@@ -111,6 +105,7 @@ export class AusbildungStore extends signalStore(
               },
               {
                 onSuccess,
+                onFailure,
               },
             ),
           ),
@@ -122,6 +117,7 @@ export class AusbildungStore extends signalStore(
     ausbildungId: string;
     ausbildungUpdate: AusbildungUpdate;
     onSuccess: () => void;
+    onFailure: (error: unknown) => void;
   }>(
     pipe(
       tap(() => {
@@ -129,7 +125,7 @@ export class AusbildungStore extends signalStore(
           ausbildung: cachedPending(state.ausbildung),
         }));
       }),
-      switchMap(({ ausbildungId, ausbildungUpdate, onSuccess }) =>
+      switchMap(({ ausbildungId, ausbildungUpdate, onSuccess, onFailure }) =>
         this.ausbildungService
           .updateAusbildung$({
             ausbildungId,
@@ -142,6 +138,7 @@ export class AusbildungStore extends signalStore(
               },
               {
                 onSuccess,
+                onFailure,
               },
             ),
           ),

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.familiensituation.entity;
+package ch.dvbern.stip.api.ausbildung.entity;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -26,15 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_ONLY_ONE_GESUCH_PER_YEAR;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ObhutGemeinsamBerechnungConstraintValidator.class)
+@Constraint(validatedBy = OnlyOneGesuchPerYearConstraintValidator.class)
 @Documented
-public @interface ObhutGemeinsamBerechnungConstraint {
-
-    String message() default VALIDATION_OBHUT_GEMEINSAM_BERECHNUNG_MESSAGE;
+public @interface OnlyOneGesuchPerYearConstraint {
+    String message() default VALIDATION_AUSBILDUNG_ONLY_ONE_GESUCH_PER_YEAR;
 
     Class<?>[] groups() default {};
 

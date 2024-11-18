@@ -53,6 +53,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @AusbildungNichtGefundenRequiredNullFieldsConstraint
 @AusbildungEndDateMustBeAfterStartConstraint
 @AusbildungsortRequiredIfSwissConstraint
+@OnlyOneGesuchPerYearConstraint
 @Entity
 @Table(
     name = "ausbildung",

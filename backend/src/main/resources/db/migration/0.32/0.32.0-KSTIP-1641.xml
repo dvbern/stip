@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1731511422814-3">
+    <dropColumn columnName="obhut" tableName="familiensituation_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1731511422814-4">
+    <dropColumn columnName="obhut_mutter" tableName="familiensituation_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1731511422814-5">
+    <dropColumn columnName="obhut_vater" tableName="familiensituation_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1731511422814-6">
+    <dropColumn columnName="sorgerecht" tableName="familiensituation_aud"/>
+  </changeSet>
+
+  <changeSet author="anna-lea.fuhrer (generated)" id="1731570476668-3">
+    <dropColumn columnName="obhut" tableName="familiensituation"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1731570476668-4">
+    <dropColumn columnName="obhut_mutter" tableName="familiensituation"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1731570476668-5">
+    <dropColumn columnName="obhut_vater" tableName="familiensituation"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1731570476668-6">
+    <dropColumn columnName="sorgerecht" tableName="familiensituation"/>
+  </changeSet>
+</databaseChangeLog>

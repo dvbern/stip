@@ -22,8 +22,6 @@ export class FamilyPO {
     vaterUnbekanntGrundRadio: Locator;
     mutterWiederVerheiratetRadio: Locator;
     vaterWiederverheiratetRadio: Locator;
-    sorgerechtSelect: Locator;
-    obhutSelect: Locator;
 
     buttonNext: Locator;
     buttonPrevious: Locator;
@@ -66,9 +64,6 @@ export class FamilyPO {
       vaterWiederverheiratetRadio: page.getByTestId(
         'form-family-vaterWiederverheiratet',
       ),
-      sorgerechtSelect: page.getByTestId('form-family-sorgerecht'),
-      obhutSelect: page.getByTestId('form-family-obhut'),
-
       buttonNext: page.getByTestId('stepper-next'),
       buttonPrevious: page.getByTestId('stepper-previous'),
       buttonSaveContinue: page.getByTestId('button-save-continue'),

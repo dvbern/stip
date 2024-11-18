@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.familiensituation.entity;
+package ch.dvbern.stip.api.adresse.entity;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -26,15 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ADRESSE_LAND_NOT_STATELESS;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER })
+@Target({ ElementType.FIELD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ObhutGemeinsamRequiredFieldsConstraintValidator.class)
+@Constraint(validatedBy = NotStatelessConstraintValidator.class)
 @Documented
-public @interface ObhutGemeinsamRequiredFieldsConstraint {
-
-    String message() default VALIDATION_OBHUT_GEMEINSAM_FIELD_REQUIRED_MESSAGE;
+public @interface NotStatelessConstraint {
+    String message() default VALIDATION_ADRESSE_LAND_NOT_STATELESS;
 
     Class<?>[] groups() default {};
 

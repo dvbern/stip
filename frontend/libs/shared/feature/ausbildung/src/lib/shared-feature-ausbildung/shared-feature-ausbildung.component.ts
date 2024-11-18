@@ -10,13 +10,11 @@ import {
   input,
   output,
 } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
-  AsyncValidatorFn,
   FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -28,7 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
-import { Observable, filter, map, startWith, take } from 'rxjs';
+import { startWith } from 'rxjs';
 
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
@@ -40,11 +38,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelError } from '@dv/shared/model/error';
 import { AusbildungsPensum, Ausbildungsstaette } from '@dv/shared/model/gesuch';
-import {
-  capitalized,
-  getTranslatableProp,
-  isDefined,
-} from '@dv/shared/model/type-util';
+import { capitalized, getTranslatableProp } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -64,10 +58,18 @@ import {
   onMonthYearInputBlur,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
+import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 const AusbildungRangeControls = ['ausbildungBegin', 'ausbildungEnd'] as const;
 type AusbildungRangeControls = (typeof AusbildungRangeControls)[number];
-type KnowErrors = Record<'periodeNotFound', true | null>;
+type KnownErrors = Record<'periodeNotFound', true | null>;
+
+const KnownErrorKeys = {
+  'jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message':
+    {
+      periodeNotFound: true,
+    },
+} satisfies Record<string, KnownErrors>;
 
 @Component({
   selector: 'dv-shared-feature-ausbildung',
@@ -211,9 +213,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.formUtils.registerFormForUnsavedCheck(this);
     const controls = this.form.controls;
 
-    const validateBeginEndFn = this.validateBeginEnd(
-      toObservable(this.ausbildungStore.ausbildungFailureViewSig),
-    );
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(
       () => {
@@ -255,7 +254,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     ].forEach(({ control, getAdditionalValidators }) =>
       effect(() => {
         control.clearValidators();
-        control.addAsyncValidators([validateBeginEndFn]);
         control.addValidators([
           Validators.required,
           parseableDateValidatorForLocale(this.languageSig(), 'monthYear'),
@@ -461,6 +459,17 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     const ausbildungsgang = ausbildungsgangId ? { ausbildungsgangId } : {};
     const { type, fallId } = this.usageTypeSig();
 
+    const onFailure = (error: unknown) => {
+      const { parsedError, knownError } = parseKnownError(error);
+
+      if (!knownError) {
+        this.globalNotificationStore.handleHttpRequestFailed([parsedError]);
+        return;
+      }
+
+      this.withAusbildungRange((ctrl) => ctrl.setErrors(knownError));
+    };
+
     switch (type) {
       case 'dialog': {
         this.ausbildungStore.createAusbildung$({
@@ -472,6 +481,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
           onSuccess: () => {
             this.ausbildungSaved.emit();
           },
+          onFailure,
         });
         break;
       }
@@ -492,33 +502,13 @@ export class SharedFeatureAusbildungComponent implements OnInit {
               messageKey: 'shared.ausbildung.saved.success',
             });
           },
+          onFailure,
         });
         break;
       }
     }
 
     this.form.markAsPristine();
-  }
-
-  private validateBeginEnd(
-    error$: Observable<SharedModelError | undefined>,
-  ): AsyncValidatorFn {
-    return () =>
-      error$.pipe(
-        filter(isDefined),
-        map((error) => {
-          if (
-            error?.messageKey ===
-            'jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message'
-          ) {
-            return {
-              periodeNotFound: true,
-            } satisfies KnowErrors as ValidationErrors;
-          }
-          return null;
-        }),
-        take(1),
-      );
   }
 
   private withAusbildungRange = (
@@ -529,3 +519,20 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
   };
 }
+
+const isKnownErrorKey = (key: string): key is keyof typeof KnownErrorKeys =>
+  key in KnownErrorKeys;
+
+const parseKnownError = (
+  error: unknown,
+): { knownError?: KnownErrors; parsedError: SharedModelError } => {
+  const parsedError = sharedUtilFnErrorTransformer(error);
+  if (parsedError.type === 'validationError') {
+    const key = parsedError.messageKey;
+    if (isKnownErrorKey(key)) {
+      return { knownError: KnownErrorKeys[key], parsedError };
+    }
+  }
+
+  return { parsedError };
+};

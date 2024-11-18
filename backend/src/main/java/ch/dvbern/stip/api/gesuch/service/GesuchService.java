@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -316,6 +317,12 @@ public class GesuchService {
         gesuch.setGesuchsperiode(gesuchsperiode);
         createInitialGesuchTranche(gesuch);
         gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
+        gesuch.getAusbildung().getGesuchs().add(gesuch);
+        Set<ConstraintViolation<Ausbildung>> violations = validator.validate(gesuch.getAusbildung());
+        if (!violations.isEmpty()) {
+            throw new ValidationsException("Die Entität ist nicht valid", violations);
+        }
+
         gesuchRepository.persistAndFlush(gesuch);
         return gesuchMapperUtil.mapWithTranche(
             gesuch,
