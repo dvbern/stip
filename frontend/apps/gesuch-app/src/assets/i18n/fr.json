@@ -11,8 +11,6 @@
   "gesuch-app.dashboard.ausbildung.status.ABGESCHLOSSEN": "Terminé",
   "gesuch-app.dashboard.ausbildung.title": "Formation \"{{ bezeichnungDe }}\"",
   "gesuch-app.dashboard.ausbildung.description": "Début de la formation: {{ start }}, fin prévue de la formation {{ end }}",
-  "gesuch-app.dashboard.periode.semester.herbst": "Automne",
-  "gesuch-app.dashboard.periode.semester.fruehling": "Printemps",
   "gesuch-app.dashboard.periode.einreichefrist.reduziert": "Le délai de dépôt est expiré",
   "gesuch-app.dashboard.periode.einreichefrist.remaining": "Il vous reste <b>{{ days }}</b> jours pour soumettre la demande",
   "gesuch-app.dashboard.periode.einreichefrist.1remaining": "Il vous reste <b>1</b> jour pour soumettre la demande",

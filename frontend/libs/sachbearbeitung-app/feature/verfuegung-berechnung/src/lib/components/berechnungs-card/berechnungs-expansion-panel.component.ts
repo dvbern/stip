@@ -8,8 +8,8 @@ import {
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { capitalized } from '@dv/shared/model/type-util';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
-import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 import { Berechnung, BerechnungsValue } from '../../../models';
 

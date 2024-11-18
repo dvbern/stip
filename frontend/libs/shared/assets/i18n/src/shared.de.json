@@ -124,7 +124,10 @@
   "shared.dokumente.reject.action": "Ablehnen",
   "shared.dokumente.reject.success": "Dokument wurde abgelehnt",
   "shared.dokumente.accept.success": "Dokument wurde akzeptiert",
+  "shared.dokumente.uebermitteln": "Änderungen dem Gesuchsteller übermitteln",
   "shared.dokumente.uebermitteln.success": "Änderungen dem Gesuchsteller übermittelt",
+  "shared.dokumente.fehlendeDokumenteEinreichen": "Dokumente übermitteln",
+  "shared.dokumente.fehlendeDokumenteEinreichen.success": "Die Dokumente wurden erfolgreich übermittelt",
   "shared.dokumente.table.requiredDocuments": "Benötigtes Dokument",
   "shared.dokumente.table.formStep": "Schritt",
   "shared.dokumente.table.filename": "Dateiname",
@@ -139,7 +142,6 @@
   "shared.dokumente.dokumentStatus.NO_DOCUMENT": "Kein Dokument",
   "shared.dokumente.dokumentStatus.action.accept": "Bestätigen",
   "shared.dokumente.dokumentStatus.action.reject": "Ablehnen",
-  "shared.dokumente.dokumentStatus.action.sendMissingDocuments": "Änderungen dem Gesuchsteller übermitteln",
 
   "shared.nachrichten.title": "Nachrichten",
   "shared.nachricht.title": "Nachricht",
@@ -149,6 +151,7 @@
   "shared.nachrichten.date": "Datum",
   "shared.nachrichten.type.GESUCH_EINGEREICHT": "Gesuch eingereicht",
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
+  "shared.nachrichten.type.FEHLENDE_DOKUMENTE_EINREICHEN": "Fehlende Dokumente wurden übermittelt",
   "shared.nachrichten.type.AENDERUNG_ABGELEHNT": "Änderung abgelehnt",
   "shared.nachrichten.type.GESUCH_STATUS_CHANGE_WITH_COMMENT": "Statusänderung mit Kommentar",
   "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
@@ -224,6 +227,10 @@
   "shared.form.tranche.pia.label": "Person in Ausbildung",
   "shared.form.tranche.gesuchsnummer.label": "Gesuchsnummer",
   "shared.form.tranche.fallnummer.label": "Fallnummer",
+  "shared.form.tranche.gesuchsperiode.label": "Gesuchsperiode",
+  "shared.form.tranche.gesuchsperiode.semester.herbst": "Herbst {{ year }}",
+  "shared.form.tranche.gesuchsperiode.semester.fruehling": "Frühling {{ year }}",
+  "shared.form.tranche.einreichefrist.label": "Einreichefrist",
   "shared.form.tranche.sachbearbeiter.label": "Sachbearbeiter",
   "shared.form.tranche.von.label": "Von",
   "shared.form.tranche.bis.label": "Bis",
@@ -526,11 +533,13 @@
 
   "shared.abschluss.title": "Freigabe",
   "shared.form.abschluss.notReady": "Es wurden noch nicht alle Seiten ausgefüllt. Sie können das Gesuch erst freigeben, wenn sie alle Pflichtfelder ausgefüllt haben.",
+  "shared.form.abschluss.fehlendeDokumente": "Einige Dokumente fehlen und müssen hochgeladen werden.",
   "shared.form.abschluss.ready": "Alle Pflichtfelder wurden ausgefüllt. Sie können das Gesuch jetzt freigeben.",
   "shared.form.abschluss.dialog.title": "Gesuch wirklich freigeben?",
   "shared.form.abschluss.dialog.text": "Nachträgliche Änderungen sind nicht mehr möglich.",
   "shared.form.abschluss.submitted": "Gesuch wurde freigegeben. Sie haben nur noch lesend Zugriff auf das Gesuch.",
   "shared.form.abschluss.abschliessen": "Freigeben",
+  "shared.form.abschluss.fehlendeDokumenteEinreichen": "Die Dokumente dem Sachbearbeiter übermitteln",
   "shared.form.tranche-abschluss.notReady": "Es fehlen noch Angaben. Bitte füllen Sie alle Pflichtfelder aus.",
 
   "shared.protokoll.title": "Protokoll",
@@ -818,5 +827,6 @@
   "shared.country.YT": "Mayotte",
   "shared.country.ZA": "Südafrika",
   "shared.country.ZM": "Sambia",
-  "shared.country.ZW": "Simbabwe"
+  "shared.country.ZW": "Simbabwe",
+  "shared.country.STATELESS": "Staatenlos"
 }

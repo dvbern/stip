@@ -7,6 +7,7 @@
   <mat-sidenav-content class="d-flex flex-column">
     <dv-sachbearbeitung-app-pattern-gesuch-header
       [currentGesuch]="gesuchViewSig().gesuch"
+      [gesuchPermissions]="gesuchViewSig().gesuchPermissions"
       [isLoading]="gesuchViewSig().loading"
       (openSidenav)="sidenav.open()"
     >

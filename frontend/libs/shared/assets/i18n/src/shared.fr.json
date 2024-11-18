@@ -124,7 +124,10 @@
   "shared.dokumente.reject.action": "Rejeter",
   "shared.dokumente.reject.success": "Document rejeté",
   "shared.dokumente.accept.success": "Document accepté",
+  "shared.dokumente.uebermitteln": "Informer le demandeur aux changements de documents",
   "shared.dokumente.uebermitteln.success": "Le demandeur a été informé des modifications apportées aux documents",
+  "shared.dokumente.fehlendeDokumenteEinreichen": "Transmettre des documents ",
+  "shared.dokumente.fehlendeDokumenteEinreichen.success": "Le demandeur a été informé des documents manquants",
   "shared.dokumente.table.requiredDocuments": "Document requis",
   "shared.dokumente.table.formStep": "Étape",
   "shared.dokumente.table.filename": "Nom du fichier",
@@ -139,7 +142,6 @@
   "shared.dokumente.dokumentStatus.NO_DOCUMENT": "Aucun document",
   "shared.dokumente.dokumentStatus.action.accept": "Accepter",
   "shared.dokumente.dokumentStatus.action.reject": "Rejeter",
-  "shared.dokumente.dokumentStatus.action.sendMissingDocuments": "Informer le demandeur aux changements de documents",
 
   "shared.nachrichten.title": "Messages",
   "shared.nachricht.title": "Message",
@@ -149,6 +151,7 @@
   "shared.nachrichten.date": "Date",
   "shared.nachrichten.type.GESUCH_EINGEREICHT": "Demande soumise",
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE": "Documents manquants",
+  "shared.nachrichten.type.FEHLENDE_DOKUMENTE_EINREICHEN": "Les documents manquants ont été transmis",
   "shared.nachrichten.type.AENDERUNG_ABGELEHNT": "Changement rejeté",
   "shared.nachrichten.type.GESUCH_STATUS_CHANGE_WITH_COMMENT": "Changement de statut avec commentaire",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
@@ -224,6 +227,10 @@
   "shared.form.tranche.pia.label": "Personne en formation",
   "shared.form.tranche.gesuchsnummer.label": "Numéro de la demande",
   "shared.form.tranche.fallnummer.label": "Numéro de cas",
+  "shared.form.tranche.gesuchsperiode.label": "Période de la demande",
+  "shared.form.tranche.gesuchsperiode.semester.herbst": "Automne {{ year }}",
+  "shared.form.tranche.gesuchsperiode.semester.fruehling": "Printemps {{ year }}",
+  "shared.form.tranche.einreichefrist.label": "Délai de soumission",
   "shared.form.tranche.sachbearbeiter.label": "Gestionnaire de dossier",
   "shared.form.tranche.von.label": "De",
   "shared.form.tranche.bis.label": "Jusqu'à",
@@ -526,11 +533,13 @@
 
   "shared.abschluss.title": "Validation",
   "shared.form.abschluss.notReady": "Toutes les pages n'ont pas été remplies. Vous ne pouvez pas valider la demande tant que tous les champs obligatoires ne sont pas remplis.",
+  "shared.form.abschluss.fehlendeDokumente": "Certains documents manquent et doivent être téléchargés.",
   "shared.form.abschluss.ready": "Tous les champs obligatoires ont été remplis. Vous pouvez maintenant valider la demande.",
   "shared.form.abschluss.dialog.title": "Voulez-vous vraiment valider la demande ?",
   "shared.form.abschluss.dialog.text": "Les modifications ultérieures ne seront pas possibles.",
   "shared.form.abschluss.submitted": "La demande a été validée. Vous avez maintenant un accès en lecture seule à la demande.",
   "shared.form.abschluss.abschliessen": "Valider",
+  "shared.form.abschluss.fehlendeDokumenteEinreichen": "Informer le demandeur des documents manquants",
   "shared.form.tranche-abschluss.notReady": "Il manque encore des informations. Veuillez remplir tous les champs obligatoires.",
 
   "shared.protokoll.title": "Protocole",
@@ -819,5 +828,6 @@
   "shared.country.YT": "Mayotte",
   "shared.country.ZA": "Afrique Du Sud",
   "shared.country.ZM": "Zambie",
-  "shared.country.ZW": "Zimbabwe"
+  "shared.country.ZW": "Zimbabwe",
+  "shared.country.STATELESS": "Apatride"
 }

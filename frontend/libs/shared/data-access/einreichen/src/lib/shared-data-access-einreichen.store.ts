@@ -104,7 +104,7 @@ export class EinreichenStore extends signalStore(
 
   einreichenViewSig = computed(() => {
     const validationReport = this.einreichenValidationResult.data();
-    const { gesuch, isEditingTranche } = this.cachedGesuchViewSig();
+    const { gesuch, isEditingTranche, trancheTyp } = this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
 
     const error = validationReport
@@ -113,18 +113,28 @@ export class EinreichenStore extends signalStore(
     const validationErrors = getValidationErrors(error) ?? [];
 
     return {
-      loading: isPending(this.validationResult()),
+      loading:
+        isPending(this.validationResult()) ||
+        isPending(this.einreichenValidationResult()),
       specialValidationErrors: validationErrors
         .filter(isSpecialValidationError)
         .map((error) =>
           SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error),
         ),
+      gesuchStatus: gesuch?.gesuchStatus,
       abschlussPhase: toAbschlussPhase(gesuch, {
         appType: compileTimeConfig?.appType,
         isComplete: hasNoValidationErrors(error),
-        checkTranche: !!isEditingTranche,
+        checkTranche: !!isEditingTranche && trancheTyp === 'AENDERUNG',
       }),
     };
+  });
+
+  einreicheOperationIsInProgressSig = computed(() => {
+    return (
+      isPending(this.einreichungsResult()) ||
+      isPending(this.trancheEinreichenResult())
+    );
   });
 
   validateSteps$ = rxMethod<{
@@ -164,7 +174,7 @@ export class EinreichenStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          validationResult: cachedPending(state.validationResult),
+          einreichenValidationResult: cachedPending(state.validationResult),
         }));
       }),
       switchMap(({ gesuchTrancheId }) => this.validate$(gesuchTrancheId)),

@@ -80,6 +80,7 @@ public class GesuchApiSpec {
                 deleteGesuch(),
                 gesuchEinreichen(),
                 gesuchFehlendeDokumenteUebermitteln(),
+                gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisen(),
                 getBerechnungForGesuch(),
                 getCurrentGesuch(),
@@ -129,6 +130,10 @@ public class GesuchApiSpec {
 
     public GesuchFehlendeDokumenteUebermittelnOper gesuchFehlendeDokumenteUebermitteln() {
         return new GesuchFehlendeDokumenteUebermittelnOper(createReqSpec());
+    }
+
+    public GesuchTrancheFehlendeDokumenteEinreichenOper gesuchTrancheFehlendeDokumenteEinreichen() {
+        return new GesuchTrancheFehlendeDokumenteEinreichenOper(createReqSpec());
     }
 
     public GesuchZurueckweisenOper gesuchZurueckweisen() {
@@ -797,6 +802,68 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GesuchFehlendeDokumenteUebermittelnOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Dem SB übermitteln das fehlende Dokumente hochgeladen wurden
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     */
+    public static class GesuchTrancheFehlendeDokumenteEinreichenOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GesuchTrancheFehlendeDokumenteEinreichenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GesuchTrancheFehlendeDokumenteEinreichenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GesuchTrancheFehlendeDokumenteEinreichenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GesuchTrancheFehlendeDokumenteEinreichenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

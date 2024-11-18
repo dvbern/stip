@@ -1,7 +1,7 @@
 @let tranche = viewSig().tranche;
 
 <ng-template dvHeaderSuffix>
-  <h2 class="fw-bold">
+  <h2 class="tw-font-bold">
     @if (tranche) {
       {{ 'shared.form.title.suffix.' + tranche.typ | translate: { position: currentTrancheNumberSig() } }}
       {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
@@ -10,98 +10,98 @@
   </h2>
 </ng-template>
 
-<form [formGroup]="form">
-  <div class="row g-4 mt-4">
-    <!-- Status -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>
-        @if (viewSig().isEditingTranche) {
-          {{ 'shared.form.tranche.status.label.' + viewSig().tranche?.typ | translate }}
-        } @else {
-          {{ 'shared.form.tranche.status.label.GESUCH' | translate }}
-        }
-      </mat-label>
+<form [formGroup]="form" class="tw-form-grid">
+  <!-- Status -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>
+      @if (viewSig().isEditingTranche) {
+        {{ 'shared.form.tranche.status.label.' + viewSig().tranche?.typ | translate }}
+      } @else {
+        {{ 'shared.form.tranche.status.label.GESUCH' | translate }}
+      }
+    </mat-label>
 
-      <input readonly type="text" matInput formControlName="status" data-testid="form-tranche-status" />
-    </mat-form-field>
+    <input readonly type="text" matInput formControlName="status" data-testid="form-tranche-status" />
+  </mat-form-field>
 
-    <!-- PiA -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.tranche.pia.label' | translate }} </mat-label>
+  <!-- PiA -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ 'shared.form.tranche.pia.label' | translate }} </mat-label>
 
-      <input readonly type="text" matInput formControlName="pia" data-testid="form-tranche-pia" />
-    </mat-form-field>
-  </div>
-  <div class="row g-4 mt-0">
-    <!-- Gesuchsnummer -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.tranche.gesuchsnummer.label' | translate }} </mat-label>
+    <input readonly type="text" matInput formControlName="pia" data-testid="form-tranche-pia" />
+  </mat-form-field>
 
-      <input readonly type="text" matInput formControlName="gesuchsnummer" data-testid="form-tranche-gesuchsnummer" />
-    </mat-form-field>
+  <!-- Gesuchsnummer -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ 'shared.form.tranche.gesuchsnummer.label' | translate }} </mat-label>
 
-    <!-- Fallnummer -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.tranche.fallnummer.label' | translate }} </mat-label>
+    <input readonly type="text" matInput formControlName="gesuchsnummer" data-testid="form-tranche-gesuchsnummer" />
+  </mat-form-field>
 
-      <input readonly type="text" matInput formControlName="fallnummer" data-testid="form-tranche-sachbearbeiter" />
-    </mat-form-field>
-  </div>
-  <div class="row g-4 mt-0">
-    <!-- Von -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.tranche.von.label' | translate }} </mat-label>
+  <!-- Fallnummer -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ 'shared.form.tranche.fallnummer.label' | translate }} </mat-label>
 
-      <input readonly type="text" matInput formControlName="von" data-testid="form-tranche-von" />
-    </mat-form-field>
+    <input readonly type="text" matInput formControlName="fallnummer" data-testid="form-tranche-fallnummer" />
+  </mat-form-field>
 
-    <!-- Bis -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.tranche.bis.label' | translate }} </mat-label>
+  <!-- Gesuchsperiode -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ 'shared.form.tranche.gesuchsperiode.label' | translate }} </mat-label>
 
-      <input
-        readonly
-        type="text"
-        matInput
-        formControlName="bis"
-        placeholder="dd.mm.yyyy"
-        data-testid="form-tranche-bis"
-      />
-    </mat-form-field>
-  </div>
+    <input readonly type="text" matInput formControlName="gesuchsperiode" data-testid="form-tranche-gesuchsperiode" />
+  </mat-form-field>
 
-  <div class="row g-4 mt-0">
-    <!-- Bemerkung -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-12 col-xl-8">
-      <mat-label>{{ 'shared.form.tranche.bemerkung.label' | translate }} </mat-label>
-      <textarea
-        readonly
-        rows="3"
-        type="text"
-        matInput
-        formControlName="bemerkung"
-        data-testid="form-tranche-bemerkung"
-      ></textarea>
-    </mat-form-field>
-  </div>
-  <div class="row g-4 mt-0">
-    <!-- Zuständiger Sachbearbeiter -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-12 col-xl-4">
-      <mat-label>{{ 'shared.form.tranche.sachbearbeiter.label' | translate }} </mat-label>
-      <input readonly type="text" matInput formControlName="sachbearbeiter" data-testid="form-tranche-sachbearbeiter" />
-    </mat-form-field>
-  </div>
+  <!-- Einreichefrist -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ 'shared.form.tranche.einreichefrist.label' | translate }} </mat-label>
+
+    <input readonly type="text" matInput formControlName="einreichefrist" data-testid="form-tranche-einreichefrist" />
+  </mat-form-field>
+
+  <!-- Von -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ 'shared.form.tranche.von.label' | translate }} </mat-label>
+
+    <input readonly type="text" matInput formControlName="von" data-testid="form-tranche-von" />
+  </mat-form-field>
+
+  <!-- Bis -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ 'shared.form.tranche.bis.label' | translate }} </mat-label>
+
+    <input readonly type="text" matInput formControlName="bis" data-testid="form-tranche-bis" />
+  </mat-form-field>
+
+  <!-- Bemerkung -->
+  <mat-form-field dvSharedUiFormField class="md:tw-col-span-2">
+    <mat-label>{{ 'shared.form.tranche.bemerkung.label' | translate }} </mat-label>
+    <textarea
+      readonly
+      rows="3"
+      type="text"
+      matInput
+      formControlName="bemerkung"
+      data-testid="form-tranche-bemerkung"
+    ></textarea>
+  </mat-form-field>
+
+  <!-- Zuständiger Sachbearbeiter -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ 'shared.form.tranche.sachbearbeiter.label' | translate }} </mat-label>
+    <input readonly type="text" matInput formControlName="sachbearbeiter" data-testid="form-tranche-sachbearbeiter" />
+  </mat-form-field>
 </form>
 
 <ng-container *dvIfSachbearbeiter>
-  <div class="row mt-5">
+  <div class="tw-mt-8">
     @let gesuchId = viewSig().gesuchId;
     @let abschlussPhase = einreichenStore.einreichenViewSig().abschlussPhase;
     @let specialValidationErrors = einreichenStore.einreichenViewSig().specialValidationErrors;
     @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
       @switch (abschlussPhase) {
         @case ('READY_TO_SEND') {
-          <div class="col-12 col-md-12 col-xl-8 d-flex gap-5">
+          <div class="xl:tw-max-w-3xl tw-flex tw-items-center tw-gap-8">
             <button
               class="btn btn-outline-primary flex-grow-1"
               data-testid="aenderung-reject"
@@ -129,7 +129,7 @@
           </div>
         }
         @case ('NOT_READY') {
-          <div class="col-12 col-md-12 col-xl-8">
+          <div class="xl:tw-max-w-3xl">
             @if (specialValidationErrors.length === 0) {
               <div class="alert alert-warning d-flex" role="alert" data-testid="alert-warning">
                 <span class="text-warning material-symbols-rounded me-3">warning</span>

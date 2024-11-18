@@ -7,6 +7,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { GesuchFormular, PersonInAusbildung } from '@dv/shared/model/gesuch';
 import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
+import { mockedGesuchAppWritableGesuchState } from '@dv/shared/pattern/jest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person.component';
@@ -25,16 +26,7 @@ async function setup() {
           language: {
             language: 'de',
           },
-          gesuch: null,
-          gesuchFormular: {
-            personInAusbildung: {} as PersonInAusbildung,
-          } as GesuchFormular,
-          gesuchs: {
-            cache: {
-              gesuchId: null,
-              gesuchFormular: null,
-            },
-          },
+          gesuchs: mockedGesuchAppWritableGesuchState({}),
           configs: {},
         },
       }),
@@ -114,6 +106,7 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
             adresse: {},
           } as PersonInAusbildung,
         } as GesuchFormular,
+        gesuchPermissions: {},
         formChanges: null,
         benutzerEinstellungen: {
           digitaleKommunikation: undefined,

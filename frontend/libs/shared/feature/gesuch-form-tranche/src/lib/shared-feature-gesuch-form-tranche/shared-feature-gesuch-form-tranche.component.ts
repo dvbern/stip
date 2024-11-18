@@ -81,6 +81,8 @@ export class SharedFeatureGesuchFormTrancheComponent {
     pia: [''],
     gesuchsnummer: [''],
     fallnummer: [''],
+    gesuchsperiode: [''],
+    einreichefrist: [''],
     sachbearbeiter: [''],
     von: [''],
     bis: [''],
@@ -122,11 +124,13 @@ export class SharedFeatureGesuchFormTrancheComponent {
           tranche,
           gesuchsNummer,
           fallNummer,
+          periode,
           sachbearbeiter,
         } = this.viewSig();
 
-        // React to language change
-        this.languageSig();
+        // Also used to react to language change
+        // if not used anymore, still call it if this.translate is still used
+        const language = this.languageSig();
 
         const defaultComment = this.defaultCommentSig();
         if (!tranche) {
@@ -145,9 +149,19 @@ export class SharedFeatureGesuchFormTrancheComponent {
           pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
           gesuchsnummer: gesuchsNummer,
           fallnummer: fallNummer,
+          gesuchsperiode: periode
+            ? this.translate.instant(
+                `shared.form.tranche.gesuchsperiode.semester.${periode.semester}`,
+                periode,
+              )
+            : '',
+          einreichefrist: formatBackendLocalDate(
+            periode?.einreichefrist,
+            language,
+          ),
           sachbearbeiter: sachbearbeiter,
-          von: formatBackendLocalDate(tranche.gueltigAb, this.languageSig()),
-          bis: formatBackendLocalDate(tranche.gueltigBis, this.languageSig()),
+          von: formatBackendLocalDate(tranche.gueltigAb, language),
+          bis: formatBackendLocalDate(tranche.gueltigBis, language),
           bemerkung: tranche.comment ?? defaultComment,
         });
       },

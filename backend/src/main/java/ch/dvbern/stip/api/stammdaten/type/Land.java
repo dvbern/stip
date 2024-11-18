@@ -216,7 +216,8 @@ public enum Land {
     GB("Vereinigtes Königreich", "Royaume-Uni"),
     VN("Vietnam", "Vietnam"),
     CF("Zentralafrikanische Republik", "République centrafricaine"),
-    CY("Zypern", "Chypre");
+    CY("Zypern", "Chypre"),
+    STATELESS("Staatenlos", "Apatride");
 
     private final String landDE;
     private final String landFR;

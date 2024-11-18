@@ -15,12 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.notification.type;
+package ch.dvbern.stip.api.adresse.entity;
 
-public enum NotificationType {
-    GESUCH_EINGEREICHT,
-    GESUCH_STATUS_CHANGE_WITH_COMMENT,
-    FEHLENDE_DOKUMENTE_EINREICHEN,
-    FEHLENDE_DOKUMENTE,
-    AENDERUNG_ABGELEHNT
+import ch.dvbern.stip.api.stammdaten.type.Land;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
+public class NotStatelessConstraintValidator implements ConstraintValidator<NotStatelessConstraint, Land> {
+    @Override
+    public boolean isValid(Land value, ConstraintValidatorContext context) {
+        return value != Land.STATELESS;
+    }
 }
