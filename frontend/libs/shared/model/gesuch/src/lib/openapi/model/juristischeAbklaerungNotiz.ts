@@ -11,13 +11,17 @@
  */
 import { GesuchNotizTyp } from './gesuchNotizTyp';
 
-export interface GesuchNotizAllOf { 
-    userErstellt: string;
-    timestampErstellt: string;
+export interface JuristischeAbklaerungNotiz { 
+    id: string;
+    antwort: string;
+    userErstellt?: string;
+    timestampErstellt?: string;
     userMutiert?: string;
     timestampMutiert?: string;
+    gesuchId: string;
+    betreff: string;
+    text: string;
     notizTyp: GesuchNotizTyp;
-    antwort?: string;
 }
 
 

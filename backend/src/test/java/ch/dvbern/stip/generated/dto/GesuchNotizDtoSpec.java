@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,6 +32,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchNotizDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   GesuchNotizDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
+  GesuchNotizDtoSpec.JSON_PROPERTY_USER_MUTIERT,
+  GesuchNotizDtoSpec.JSON_PROPERTY_TIMESTAMP_MUTIERT,
+  GesuchNotizDtoSpec.JSON_PROPERTY_NOTIZ_TYP,
+  GesuchNotizDtoSpec.JSON_PROPERTY_ANTWORT,
   GesuchNotizDtoSpec.JSON_PROPERTY_ID,
   GesuchNotizDtoSpec.JSON_PROPERTY_BETREFF,
   GesuchNotizDtoSpec.JSON_PROPERTY_TEXT
@@ -43,6 +48,18 @@ public class GesuchNotizDtoSpec {
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private LocalDate timestampErstellt;
+
+  public static final String JSON_PROPERTY_USER_MUTIERT = "userMutiert";
+  private String userMutiert;
+
+  public static final String JSON_PROPERTY_TIMESTAMP_MUTIERT = "timestampMutiert";
+  private LocalDate timestampMutiert;
+
+  public static final String JSON_PROPERTY_NOTIZ_TYP = "notizTyp";
+  private GesuchNotizTypDtoSpec notizTyp;
+
+  public static final String JSON_PROPERTY_ANTWORT = "antwort";
+  private String antwort;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -108,6 +125,110 @@ public class GesuchNotizDtoSpec {
   }
 
 
+  public GesuchNotizDtoSpec userMutiert(String userMutiert) {
+    
+    this.userMutiert = userMutiert;
+    return this;
+  }
+
+   /**
+   * Get userMutiert
+   * @return userMutiert
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getUserMutiert() {
+    return userMutiert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUserMutiert(String userMutiert) {
+    this.userMutiert = userMutiert;
+  }
+
+
+  public GesuchNotizDtoSpec timestampMutiert(LocalDate timestampMutiert) {
+    
+    this.timestampMutiert = timestampMutiert;
+    return this;
+  }
+
+   /**
+   * Get timestampMutiert
+   * @return timestampMutiert
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getTimestampMutiert() {
+    return timestampMutiert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTimestampMutiert(LocalDate timestampMutiert) {
+    this.timestampMutiert = timestampMutiert;
+  }
+
+
+  public GesuchNotizDtoSpec notizTyp(GesuchNotizTypDtoSpec notizTyp) {
+    
+    this.notizTyp = notizTyp;
+    return this;
+  }
+
+   /**
+   * Get notizTyp
+   * @return notizTyp
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GesuchNotizTypDtoSpec getNotizTyp() {
+    return notizTyp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setNotizTyp(GesuchNotizTypDtoSpec notizTyp) {
+    this.notizTyp = notizTyp;
+  }
+
+
+  public GesuchNotizDtoSpec antwort(String antwort) {
+    
+    this.antwort = antwort;
+    return this;
+  }
+
+   /**
+   * Get antwort
+   * @return antwort
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANTWORT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getAntwort() {
+    return antwort;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANTWORT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAntwort(String antwort) {
+    this.antwort = antwort;
+  }
+
+
   public GesuchNotizDtoSpec id(UUID id) {
     
     this.id = id;
@@ -118,9 +239,9 @@ public class GesuchNotizDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -128,7 +249,7 @@ public class GesuchNotizDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -196,6 +317,10 @@ public class GesuchNotizDtoSpec {
     GesuchNotizDtoSpec gesuchNotiz = (GesuchNotizDtoSpec) o;
     return Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
         Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
+        Objects.equals(this.userMutiert, gesuchNotiz.userMutiert) &&
+        Objects.equals(this.timestampMutiert, gesuchNotiz.timestampMutiert) &&
+        Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
+        Objects.equals(this.antwort, gesuchNotiz.antwort) &&
         Objects.equals(this.id, gesuchNotiz.id) &&
         Objects.equals(this.betreff, gesuchNotiz.betreff) &&
         Objects.equals(this.text, gesuchNotiz.text);
@@ -203,7 +328,7 @@ public class GesuchNotizDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, id, betreff, text);
+    return Objects.hash(userErstellt, timestampErstellt, userMutiert, timestampMutiert, notizTyp, antwort, id, betreff, text);
   }
 
   @Override
@@ -212,6 +337,10 @@ public class GesuchNotizDtoSpec {
     sb.append("class GesuchNotizDtoSpec {\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
+    sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
+    sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
+    sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");

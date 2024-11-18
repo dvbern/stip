@@ -4,7 +4,6 @@ import {
   Component,
   HostBinding,
   inject,
-  input,
 } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -18,50 +17,41 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatCell } from '@angular/material/table';
-import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import {
-  GesuchNotiz,
-  GesuchNotizCreate,
-  GesuchNotizUpdate,
-} from '@dv/shared/model/gesuch';
+import { PermissionStore } from '@dv/shared/global/permission';
+import { GesuchNotiz, GesuchNotizTyp } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
-  SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import {
-  SharedUiRdIsPendingPipe,
-  SharedUiRdIsPendingWithoutCachePipe,
-} from '@dv/shared/ui/remote-data-pipe';
-import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
-import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
+
+export type NotizDialogData = {
+  notizTyp: GesuchNotizTyp;
+  notiz?: GesuchNotiz;
+};
+
+export type NotizDialogResult = {
+  id: string | null | undefined;
+  betreff: string;
+  text: string;
+  antwort?: string;
+};
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     MatFormFieldModule,
     ReactiveFormsModule,
     TranslateModule,
-    SharedUiLoadingComponent,
-    SharedUiRdIsPendingPipe,
-    SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiFormSaveComponent,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     MatInputModule,
-    MatCell,
-    TypeSafeMatCellDefDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-infos-notizen-detail-dialog.component.html',
@@ -72,43 +62,68 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     inject<
       MatDialogRef<
         SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent,
-        GesuchNotizUpdate | GesuchNotizCreate
+        NotizDialogResult
       >
     >(MatDialogRef);
   private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
 
   @HostBinding('class') defaultClasses = 'd-flex flex-column gap-2 p-5';
-  dialogData = inject<GesuchNotiz | undefined>(MAT_DIALOG_DATA);
-  form = this.formBuilder.group({
-    datum: [<string | undefined>undefined],
-    user: [<string | null>null],
+
+  public permissionStore = inject(PermissionStore);
+  public dialogData = inject<NotizDialogData>(MAT_DIALOG_DATA);
+  public form = this.formBuilder.group({
     betreff: [<string | null>null, [Validators.required]],
     text: [<string | null>null, [Validators.required]],
+    antwort: [<string | null>null],
   });
-  notizIdSig = input.required<string>({ alias: 'notizId' });
-  languageSig = this.store.selectSignal(selectLanguage);
+
+  public languageSig = this.store.selectSignal(selectLanguage);
+  public isJurNotiz = this.dialogData.notizTyp === 'JURISTISCHE_NOTIZ';
 
   constructor() {
-    this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-
     this.form.patchValue({
-      datum: parseBackendLocalDateAndPrint(
-        this.dialogData?.timestampErstellt,
-        this.languageSig(),
-      ),
-      betreff: this.dialogData?.betreff,
-      text: this.dialogData?.text,
-      user: this.dialogData?.userErstellt,
+      betreff: this.dialogData.notiz?.betreff,
+      text: this.dialogData.notiz?.text,
+      antwort: this.dialogData.notiz?.antwort,
     });
+
+    if (!this.isJurNotiz) {
+      this.form.controls.antwort.disable();
+      return;
+    }
+
+    if (!this.permissionStore.userIsJuristSig()) {
+      if (this.dialogData.notiz?.id) {
+        this.form.controls.betreff.disable();
+        this.form.controls.text.disable();
+      }
+
+      this.form.controls.antwort.disable();
+      return;
+    }
+
+    if (this.permissionStore.userIsJuristSig()) {
+      if (this.dialogData.notiz?.id) {
+        this.form.controls.betreff.disable();
+        this.form.controls.text.disable();
+      }
+
+      if (this.dialogData.notiz?.antwort || !this.dialogData.notiz?.id) {
+        this.form.controls.antwort.disable();
+      } else {
+        this.form.controls.antwort.setValidators([Validators.required]);
+        this.form.controls.antwort.updateValueAndValidity();
+      }
+    }
   }
 
-  static open(dialog: MatDialog, data?: GesuchNotiz) {
+  static open(dialog: MatDialog, data: NotizDialogData) {
     return dialog
       .open<
         SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent,
-        GesuchNotiz,
-        GesuchNotizUpdate | GesuchNotizCreate
+        NotizDialogData,
+        NotizDialogResult
       >(SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent, {
         data,
       })
@@ -127,9 +142,10 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     const notizDaten = convertTempFormToRealValues(this.form);
 
     this.dialogRef.close({
-      id: this.dialogData?.id,
+      id: this.dialogData.notiz?.id,
       text: notizDaten.text,
       betreff: notizDaten.betreff,
+      antwort: notizDaten.antwort,
     });
   }
 }

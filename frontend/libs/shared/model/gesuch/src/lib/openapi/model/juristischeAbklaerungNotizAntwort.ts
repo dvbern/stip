@@ -9,16 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchNotizTyp } from './gesuchNotizTyp';
 
-export interface GesuchNotizAllOf { 
-    userErstellt: string;
-    timestampErstellt: string;
-    userMutiert?: string;
-    timestampMutiert?: string;
-    notizTyp: GesuchNotizTyp;
-    antwort?: string;
+export interface JuristischeAbklaerungNotizAntwort { 
+    antwort: string;
 }
-
-
 

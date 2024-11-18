@@ -15,21 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.common.validation;
 
-public final class OidcConstants {
+import java.util.Objects;
 
-    public static final String CLAIM_AHV_NUMMER = "ahv_nummer";
-    public static final String ROLE_GESUCHSTELLER = "Gesuchsteller";
-    public static final String ROLE_SACHBEARBEITER = "Sachbearbeiter";
-    public static final String ROLE_ADMIN = "Admin";
-    public static final String ROLE_JURIST = "Jurist";
-    public static final String ROLE_FREIGABESTELLE = "Freigabestelle";
-    public static final String ROLE_SOZIALDIENST_MITARBEITER = "Sozialdienst-Mitarbeiter";
-    public static final String ROLE_SOZIALDIENST_ADMIN = "Sozialdienst-Admin";
+import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
+import ch.dvbern.stip.api.notiz.entity.NotizTyp;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-    private OidcConstants() {
+@ApplicationScoped
+public class GesuchNotizAntwortValidator implements ConstraintValidator<GesuchNotizAntwortConstraint, GesuchNotiz> {
 
+    @Override
+    public boolean isValid(GesuchNotiz gesuchNotiz, ConstraintValidatorContext context) {
+        return !(gesuchNotiz.getNotizTyp().equals(NotizTyp.GESUCH_NOTIZ)
+        && Objects.nonNull(gesuchNotiz.getAntwort()));
     }
-
 }

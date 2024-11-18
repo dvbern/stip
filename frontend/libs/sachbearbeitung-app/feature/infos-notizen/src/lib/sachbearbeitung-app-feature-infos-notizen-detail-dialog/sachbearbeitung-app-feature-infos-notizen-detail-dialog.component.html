@@ -1,67 +1,170 @@
-<h1 class="h3 mb-4">
-  @if (dialogData?.id) {
-    {{ 'sachbearbeitung-app.infos.notiz.bearbeiten' | translate }}
+<h1 class="tw-text-xl tw-mb-8">
+  @if (dialogData.notiz?.id) {
+    @if (isJurNotiz && (!permissionStore.userIsJuristSig() || dialogData.notiz?.antwort)) {
+      {{ 'sachbearbeitung-app.infos.juristischeNotiz.anzeigen' | translate }}
+    } @else {
+      {{ 'sachbearbeitung-app.infos.juristischeNotiz.bearbeiten' | translate }}
+    }
   } @else {
-    {{ 'sachbearbeitung-app.infos.notiz.erstellen' | translate }}
+    @if (isJurNotiz) {
+      {{ 'sachbearbeitung-app.infos.juristischeNotiz.erstellen' | translate }}
+    } @else {
+      {{ 'sachbearbeitung-app.infos.notiz.erstellen' | translate }}
+    }
   }
 </h1>
 
-<form [formGroup]="form" (ngSubmit)="handleSave()" data-testid="form-notiz-form" class="w-100">
-  @if (dialogData?.id) {
-    <div class="row g-4 mb-4">
-      <!-- Datum -->
-      <mat-form-field dvSharedUiFormField class="col-12">
-        <mat-label>{{ 'shared.form.notizen.datum.label' | translate }}</mat-label>
-        <input formControlName="datum" data-testid="form-gesuchsjahr-datum" [readonly]="true" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="row g-4 mb-4">
-      <!-- User -->
-      <mat-form-field dvSharedUiFormField class="col-12">
-        <mat-label>{{ 'shared.form.notizen.user.label' | translate }}</mat-label>
-        <input formControlName="user" data-testid="form-gesuchsjahr-user" [readonly]="true" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
+@if (dialogData.notizTyp === 'GESUCH_NOTIZ') {
+  @if (dialogData.notiz?.id) {
+    <ul class="tw-grid tw-grid-cols-[max-content_1fr] tw-gap-x-2 tw-pl-0">
+      <li class="tw-contents">
+        <span>{{ 'shared.form.notizen.datumErstellt.label' | translate }}:</span>
+        <span class="tw-font-semibold">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</span>
+      </li>
+      <li class="tw-contents">
+        <span>{{ 'shared.form.notizen.userErstellt.label' | translate }}:</span>
+        <span class="tw-font-semibold">{{ dialogData.notiz?.userErstellt }}</span>
+      </li>
+    </ul>
   }
-  <div class="row g-4 mb-4">
-    <!-- Betreff -->
-    <mat-form-field dvSharedUiFormField class="col-12">
-      <mat-label>{{ 'shared.form.notizen.betreff.label' | translate }}</mat-label>
-      <input formControlName="betreff" data-testid="form-gesuchsjahr-betreff" matInput type="text" />
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-  <div class="row g-4 mb-4">
-    <!-- Text -->
-    <mat-form-field dvSharedUiFormField class="col-12">
-      <mat-label>{{ 'shared.form.notizen.text.label' | translate }}</mat-label>
-      <textarea formControlName="text" data-testid="form-gesuchsjahr-betreff" matInput type="text" rows="4"></textarea>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-  </div>
 
-  <div class="d-flex mt-4 justify-content-end">
-    <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
-      {{ 'shared.cancel' | translate }}
-    </button>
-    <button
-      type="button"
-      class="btn btn-primary ms-3"
-      (click)="handleSave()"
-      data-testid="dialog-confirm"
-      [disabled]="form.invalid"
-    >
-      {{ 'shared.form.save' | translate }}
-    </button>
-  </div>
-</form>
+  <form [formGroup]="form" (ngSubmit)="handleSave()" data-testid="form-notiz-form" class="tw-w-full tw-mt-4">
+    <!-- Betreff -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'shared.form.notizen.betreff.label' | translate }}</mat-label>
+      <input formControlName="betreff" data-testid="form-notiz-betreff" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Text -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full tw-mt-4">
+      <mat-label>{{ 'shared.form.notizen.text.label' | translate }}</mat-label>
+      <textarea formControlName="text" data-testid="form-notiz-text" matInput type="text" rows="3"></textarea>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="tw-flex tw-justify-end tw-mt-6 tw-gap-6">
+      <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="handleSave()"
+        data-testid="dialog-confirm"
+        [disabled]="form.invalid"
+      >
+        {{ 'shared.form.save' | translate }}
+      </button>
+    </div>
+  </form>
+}
+
+@if (isJurNotiz) {
+  <form [formGroup]="form" (ngSubmit)="handleSave()" data-testid="form-notiz-form">
+    @if (dialogData.notiz?.id) {
+      <!-- betreff -->
+      <div class="tw-flex tw-gap-2">
+        <div>{{ 'shared.form.notizen.betreff.label' | translate }}:</div>
+        <div class="tw-font-semibold">{{ dialogData.notiz?.betreff }}</div>
+      </div>
+
+      <!-- horizontal line -->
+      <hr class="tw-my-6" />
+
+      <!-- datumErstellt -->
+      <ul class="tw-grid tw-grid-cols-[min-content_1fr] tw-gap-x-2 tw-pl-0">
+        <li class="tw-contents">
+          <span>{{ 'shared.form.notizen.datumErstellt.label' | translate }}:</span>
+          <span class="tw-font-semibold">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</span>
+        </li>
+        <li class="tw-contents">
+          <span>{{ 'shared.form.notizen.userErstellt.label' | translate }}:</span>
+          <span class="tw-font-semibold">{{ dialogData.notiz?.userErstellt }}</span>
+        </li>
+      </ul>
+
+      <!-- text -->
+      <div class="tw-flex tw-gap-2">
+        <div>{{ 'shared.form.notizen.text.label' | translate }}:</div>
+        <div class="tw-font-semibold">
+          {{ dialogData.notiz?.text }}
+        </div>
+      </div>
+
+      <!-- horizontal line -->
+      <hr class="tw-my-6" />
+
+      @if (dialogData.notiz?.antwort) {
+        <ul class="tw-grid tw-grid-cols-[max-content_1fr] tw-gap-x-2 tw-pl-0">
+          <li class="tw-contents">
+            <span>{{ 'shared.form.notizen.datumMutiert.label' | translate }}:</span>
+            <span class="tw-font-semibold">{{ dialogData.notiz?.timestampMutiert | date: 'dd.MM.yyyy' }}</span>
+          </li>
+          <li class="tw-contents">
+            <span>{{ 'shared.form.notizen.userMutiert.label' | translate }}:</span>
+            <span class="tw-font-semibold">{{ dialogData.notiz?.userMutiert }}</span>
+          </li>
+        </ul>
+
+        <div class="tw-flex tw-gap-2 tw-mb-8">
+          <div>{{ 'shared.form.notizen.antwort.label' | translate }}:</div>
+          <div class="tw-font-semibold">{{ dialogData.notiz?.antwort }}</div>
+        </div>
+      } @else if (permissionStore.userIsJuristSig()) {
+        <mat-form-field dvSharedUiFormField class="tw-w-full">
+          <mat-label>{{ 'shared.form.notizen.antwort.label' | translate }}</mat-label>
+          <textarea formControlName="antwort" data-testid="form-notiz-antwort" matInput type="text" rows="3"></textarea>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      } @else {
+        <div class="tw-w-full">
+          <div class="tw-font-semibold">
+            {{ 'sachbearbeitung-app.infos.juristischeNotiz.unbeantwortet' | translate }}
+          </div>
+        </div>
+      }
+    } @else {
+      <!-- Betreff -->
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-label>{{ 'shared.form.notizen.betreff.label' | translate }}</mat-label>
+        <input formControlName="betreff" data-testid="form-notiz-betreff" matInput type="text" />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Text -->
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-label>{{ 'shared.form.notizen.text.label' | translate }}</mat-label>
+        <textarea formControlName="text" data-testid="form-notiz-text" matInput type="text" rows="3"></textarea>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+    }
+
+    <div class="tw-flex tw-gap-6 tw-mt-6 tw-justify-end">
+      <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="handleSave()"
+        data-testid="dialog-confirm"
+        [disabled]="
+          form.invalid || (dialogData.notiz?.id && !permissionStore.userIsJuristSig()) || dialogData.notiz?.antwort
+        "
+      >
+        {{ 'shared.form.save' | translate }}
+      </button>
+    </div>
+  </form>
+}
