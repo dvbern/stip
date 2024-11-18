@@ -50,6 +50,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
+import { PermissionStore } from '@dv/shared/global/permission';
+import { BenutzerVerwaltungRole } from '@dv/shared/model/benutzer';
 import {
   GesuchFilter,
   GesuchServiceGetGesucheSbRequestParams,
@@ -151,6 +153,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 {
   private store = inject(Store);
   private router = inject(Router);
+  private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   show = input<GesuchFilter | undefined>(undefined);
@@ -211,18 +214,30 @@ export class SachbearbeitungAppFeatureCockpitComponent
   gesuchStore = inject(GesuchStore);
   dataSoruce = new MatTableDataSource<SharedModelGesuch>([]);
 
-  quickFilters: { typ: GesuchFilter; icon: string }[] = [
+  quickFilters: {
+    typ: GesuchFilter;
+    icon: string;
+    roles: BenutzerVerwaltungRole[];
+  }[] = [
+    {
+      typ: 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE',
+      icon: 'person',
+      roles: ['Jurist'],
+    },
     {
       typ: 'ALLE_BEARBEITBAR_MEINE',
       icon: 'person',
+      roles: ['Sachbearbeiter'],
     },
     {
       typ: 'ALLE_BEARBEITBAR',
       icon: 'people',
+      roles: ['Sachbearbeiter'],
     },
     {
       typ: 'ALLE',
       icon: 'all_inclusive',
+      roles: ['Sachbearbeiter', 'Jurist'],
     },
   ];
 
@@ -232,6 +247,13 @@ export class SachbearbeitungAppFeatureCockpitComponent
   private letzteAktivitaetToChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
+  availableQuickFiltersSig = computed(() => {
+    const roles = this.permissionStore.permissionsMapSig();
+
+    return this.quickFilters.filter((filter) =>
+      filter.roles.some((role) => roles?.[role]),
+    );
+  });
   letzteAktivitaetRangeSig = computed(() => {
     const start = this.letzteAktivitaetFromChangedSig();
     const end = this.letzteAktivitaetToChangedSig();

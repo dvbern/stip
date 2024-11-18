@@ -10,11 +10,12 @@
  * Do not edit the class manually.
  */
 
-export type GetGesucheSBQueryType = 'ALLE_BEARBEITBAR' | 'ALLE_BEARBEITBAR_MEINE' | 'ALLE_MEINE' | 'ALLE';
+export type GetGesucheSBQueryType = 'ALLE_BEARBEITBAR' | 'ALLE_BEARBEITBAR_MEINE' | 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE' | 'ALLE_MEINE' | 'ALLE';
 
 export const GetGesucheSBQueryType = {
     ALLE_BEARBEITBAR: 'ALLE_BEARBEITBAR' as GetGesucheSBQueryType,
     ALLE_BEARBEITBAR_MEINE: 'ALLE_BEARBEITBAR_MEINE' as GetGesucheSBQueryType,
+    ALLE_JURISTISCHE_ABKLAERUNG_MEINE: 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE' as GetGesucheSBQueryType,
     ALLE_MEINE: 'ALLE_MEINE' as GetGesucheSBQueryType,
     ALLE: 'ALLE' as GetGesucheSBQueryType
 };
