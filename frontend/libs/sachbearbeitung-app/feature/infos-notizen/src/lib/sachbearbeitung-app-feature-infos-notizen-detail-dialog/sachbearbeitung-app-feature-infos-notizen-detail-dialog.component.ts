@@ -17,7 +17,6 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -64,7 +63,6 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
         NotizDialogResult
       >
     >(MatDialogRef);
-  private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
 
   @HostBinding('class') defaultClasses = 'd-flex flex-column gap-2 p-5';
@@ -78,6 +76,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
   });
 
   public isJurNotiz = this.dialogData.notizTyp === 'JURISTISCHE_NOTIZ';
+  public userIsJurist = this.permissionStore.permissionsMapSig()?.Jurist;
 
   constructor() {
     this.form.patchValue({
@@ -91,7 +90,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
       return;
     }
 
-    if (!this.permissionStore.userIsJuristSig()) {
+    if (!this.userIsJurist) {
       if (this.dialogData.notiz?.id) {
         this.form.controls.betreff.disable();
         this.form.controls.text.disable();
@@ -101,7 +100,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
       return;
     }
 
-    if (this.permissionStore.userIsJuristSig()) {
+    if (this.userIsJurist) {
       if (this.dialogData.notiz?.id) {
         this.form.controls.betreff.disable();
         this.form.controls.text.disable();

@@ -3,8 +3,10 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { OAuthService } from 'angular-oauth2-oidc';
 
+import { BenutzerVerwaltungRole } from '@dv/shared/model/benutzer';
+
 type PermissionState = {
-  userRoles: string[] | null;
+  userRoles: BenutzerVerwaltungRole[] | null;
 };
 
 const initialState: PermissionState = {
@@ -19,10 +21,16 @@ export class PermissionStore extends signalStore(
 ) {
   authService = inject(OAuthService);
 
-  userIsJuristSig = computed(() => {
+  permissionsMapSig = computed(() => {
     const userRoles = this.userRoles();
 
-    return userRoles?.includes('Jurist') ?? false;
+    return userRoles?.reduce(
+      (acc, role) => {
+        acc[role] = true;
+        return acc;
+      },
+      {} as Record<BenutzerVerwaltungRole, true | undefined>,
+    );
   });
 
   constructor() {
