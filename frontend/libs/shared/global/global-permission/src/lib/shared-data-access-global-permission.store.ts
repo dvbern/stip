@@ -34,7 +34,7 @@ export class PermissionStore extends signalStore(
     const token = this.authService.getAccessToken();
     const payload = decodeJwt(token);
 
-    if (payload && payload['realm_access']['roles']) {
+    if (payload?.['realm_access']['roles']) {
       const userRoles = payload['realm_access']['roles'];
       patchState(this, { userRoles });
     }
