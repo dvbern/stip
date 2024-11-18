@@ -14,6 +14,8 @@ import {
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
 import {
+  mockConfigsState,
+  mockedGesuchAppWritableGesuchState,
   provideSharedPatternJestTestAusbildungstaetten,
   provideSharedPatternJestTestSetup,
 } from '@dv/shared/pattern/jest-test-setup';
@@ -22,7 +24,7 @@ import { mockElementScrollIntoView } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormEinnahmenkostenComponent } from './shared-feature-gesuch-form-einnahmenkosten.component';
 
-async function setup(gesuchFormular: GesuchFormular) {
+async function setup(formular: GesuchFormular) {
   mockElementScrollIntoView();
   return await render(SharedFeatureGesuchFormEinnahmenkostenComponent, {
     imports: [
@@ -33,24 +35,19 @@ async function setup(gesuchFormular: GesuchFormular) {
       provideHttpClient(),
       provideMockStore({
         initialState: {
-          gesuchs: {
+          gesuchs: mockedGesuchAppWritableGesuchState({
+            tranche: { id: '1', typ: 'TRANCHE' },
             gesuch: {
-              gesuchTrancheToWorkWith: { id: '1', typ: 'tranche' },
               gesuchsperiode: {
                 gesuchsjahr: {
                   technischesJahr: new Date().getFullYear(),
                 },
               },
             },
-            gesuchFormular,
-            cache: {
-              gesuch: null,
-              gesuchId: null,
-              gesuchFormular: null,
-            },
-          },
+            formular,
+          }),
           language: { language: 'de' },
-          configs: {},
+          configs: mockConfigsState(),
         },
       }),
       provideMaterialDefaultOptions(),
@@ -207,6 +204,8 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE, {
           kinds: undefined,
         });
+
+      detectChanges();
       await userEvent.click(getByTestId('button-save-continue'));
 
       detectChanges();
@@ -222,6 +221,7 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
           kinds: [{} as never],
         });
 
+      detectChanges();
       await userEvent.click(getByTestId('button-save-continue'));
 
       detectChanges();
@@ -349,6 +349,8 @@ function createEmptyAusbildung(): Ausbildung {
         bildungsstufe: 'SEKUNDAR_2',
       },
     },
+    editable: true,
+    status: 'AKTIV',
   };
 }
 

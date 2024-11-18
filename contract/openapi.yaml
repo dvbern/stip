@@ -1564,6 +1564,29 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchFehlendeDokumenteUebermitteln
       summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
+  '/gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Fehlende Dokumente eingereicht
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchTrancheFehlendeDokumenteEinreichen
+      summary: Dem SB übermitteln das fehlende Dokumente hochgeladen wurden
   '/gesuch/{gesuchId}/bearbeitungAbschliessen':
     parameters:
       - $ref: '#/components/parameters/gesuchId'

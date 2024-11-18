@@ -7,12 +7,12 @@ import {
 } from '@angular/forms';
 
 import { ElternTyp, GesuchFormular, Wohnsitz } from '@dv/shared/model/gesuch';
+import { capitalized, lowercased } from '@dv/shared/model/type-util';
 import {
   isVerstorbenUnbekannt,
   numberToPercentString,
   percentStringToNumber,
 } from '@dv/shared/util/form';
-import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 type WohnsitzAnteile<T> = {
   wohnsitzAnteilVater: T;
@@ -84,7 +84,9 @@ export const prepareWohnsitzForm = (payload: {
         ? missingPercentage
         : // If no elternteil is unknown or dead, we set the anteil to the value.
           numberToPercentString(
-            projector(formular)?.[`wohnsitzAnteil${capitalized(elternTyp)}`],
+            projector(formular)?.[
+              `wohnsitzAnteil${capitalized(lowercased(elternTyp))}`
+            ],
           );
     };
     return mutterMissing && vaterMissing

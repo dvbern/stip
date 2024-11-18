@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
-import { SharedModelGesuchFormular } from '@dv/shared/model/gesuch';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import {
   GesuchFormStepView,
   RETURN_TO_HOME,
@@ -16,6 +17,8 @@ import {
   providedIn: 'root',
 })
 export class SharedUtilGesuchFormStepManagerService {
+  private appType = inject(SharedModelCompileTimeConfig).appType;
+
   /**
    * Returns the progress of the current step compared to the total steps
    */
@@ -45,15 +48,16 @@ export class SharedUtilGesuchFormStepManagerService {
    */
   getValidatedSteps(
     steps: SharedModelGesuchFormStep[],
-    gesuchFormular: SharedModelGesuchFormular | null,
+    gesuch: SharedModelGesuch | null,
     invalidProps?: StepValidation,
-    readonly = false,
   ): GesuchFormStepView[] {
+    const gesuchFormular =
+      gesuch?.gesuchTrancheToWorkWith.gesuchFormular ?? null;
     return steps.map((step, index) => ({
       ...step,
       nextStep: steps[index + 1],
       status: isStepValid(step, gesuchFormular, invalidProps),
-      disabled: isStepDisabled(step, gesuchFormular, readonly),
+      disabled: isStepDisabled(step, gesuch, this.appType),
     }));
   }
 
@@ -63,8 +67,7 @@ export class SharedUtilGesuchFormStepManagerService {
   getNextStepOf(
     stepsFlow: SharedModelGesuchFormStep[],
     step: SharedModelGesuchFormStep,
-    gesuchFormular: SharedModelGesuchFormular | null,
-    readonly = false,
+    gesuch: SharedModelGesuch | null,
   ): SharedModelGesuchFormStep {
     const currentIndex = findStepIndex(step, stepsFlow);
 
@@ -75,7 +78,7 @@ export class SharedUtilGesuchFormStepManagerService {
     let nextIndex = 0;
 
     for (let i = currentIndex + 1; i < stepsFlow.length; i++) {
-      if (!isStepDisabled(stepsFlow[i], gesuchFormular, readonly)) {
+      if (!isStepDisabled(stepsFlow[i], gesuch, this.appType)) {
         nextIndex = i;
         break;
       }

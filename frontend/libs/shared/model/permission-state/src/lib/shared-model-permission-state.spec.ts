@@ -1,16 +1,11 @@
 import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
-import {
-  canViewVerfuegung,
-  isGesuchReadonly,
-} from './shared-util-permission-state';
+import { getGesuchPermissions } from './shared-model-permission-state';
 
 const gesuch: SharedModelGesuch = {
-  fall: {
-    id: '',
-    fallNummer: '',
-    mandant: '',
-  },
+  fallId: '',
+  fallNummer: '',
+  ausbildungId: '',
   gesuchsperiode: {
     id: '',
     bezeichnungDe: '',
@@ -49,7 +44,7 @@ describe('when App Gesuchsteller', () => {
   it('should be readonly if in bearbeitung Sachbearbeiter', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_SB;
 
-    expect(isGesuchReadonly(gesuch, 'gesuch-app')).toBeTruthy();
+    expect(getGesuchPermissions(gesuch, 'gesuch-app').canWrite).toBe(false);
   });
 });
 
@@ -57,12 +52,16 @@ describe('when App Sachbearbeitung', () => {
   it('should be readonly if in bearbeitung Gesuchsteller', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
-    expect(isGesuchReadonly(gesuch, 'sachbearbeitung-app')).toBeTruthy();
+    expect(getGesuchPermissions(gesuch, 'sachbearbeitung-app').canWrite).toBe(
+      false,
+    );
   });
 
   it('should allow verfuegung view if in bereit fuer bearbeitung', () => {
     gesuch.gesuchStatus = Gesuchstatus.BEREIT_FUER_BEARBEITUNG;
 
-    expect(canViewVerfuegung(gesuch, 'sachbearbeitung-app')).toBe(true);
+    expect(
+      getGesuchPermissions(gesuch, 'sachbearbeitung-app').canViewVerfuegung,
+    ).toBe(true);
   });
 });

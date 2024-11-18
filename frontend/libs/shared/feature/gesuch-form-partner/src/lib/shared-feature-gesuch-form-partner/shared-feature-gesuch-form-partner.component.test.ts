@@ -6,7 +6,11 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
-import { GesuchFormular, PartnerUpdate } from '@dv/shared/model/gesuch';
+import {
+  mockConfigsState,
+  mockedGesuchAppWritableGesuchState,
+  provideCompileTimeConfig,
+} from '@dv/shared/pattern/jest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { checkMatCheckbox } from '@dv/shared/util-fn/comp-test';
 
@@ -24,27 +28,24 @@ async function setup() {
           language: {
             language: 'de',
           },
-          gesuch: null,
-          gesuchFormular: {
-            partner: {} as PartnerUpdate,
-          } as GesuchFormular,
-          gesuchs: {
-            cache: {
-              gesuchId: null,
-              gesuchFormular: null,
+          gesuchs: mockedGesuchAppWritableGesuchState({
+            formular: {
+              partner: {
+                adresse: {},
+                geburtsdatum: '1990-01-01',
+              },
             },
-          },
-          loading: false,
-          error: undefined,
+          }),
           stammdatens: {
             laender: [],
           },
-          configs: {},
+          configs: mockConfigsState(),
         },
       }),
       provideMaterialDefaultOptions(),
       provideHttpClient(),
       provideHttpClientTesting(),
+      provideCompileTimeConfig(),
     ],
   });
 }

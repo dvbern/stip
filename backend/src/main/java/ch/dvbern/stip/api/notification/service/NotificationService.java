@@ -43,6 +43,21 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
 
+    @Transactional(TxType.REQUIRES_NEW)
+    public void deleteNotificationsForGesuch(final UUID gesuchId) {
+        notificationRepository.deleteAllForGesuch(gesuchId);
+    }
+
+    @Transactional
+    public List<NotificationDto> getNotificationsForCurrentUser() {
+        return getNotificationsForUser(benutzerService.getCurrentBenutzer().getId());
+    }
+
+    @Transactional
+    public List<NotificationDto> getNotificationsForUser(final UUID userId) {
+        return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
+    }
+
     @Transactional
     public void createGesuchEingereichtNotification(final Gesuch gesuch) {
         Notification notification = new Notification()
@@ -93,21 +108,6 @@ public class NotificationService {
         notificationRepository.persistAndFlush(notification);
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
-    public void deleteNotificationsForGesuch(final UUID gesuchId) {
-        notificationRepository.deleteAllForGesuch(gesuchId);
-    }
-
-    @Transactional
-    public List<NotificationDto> getNotificationsForCurrentUser() {
-        return getNotificationsForUser(benutzerService.getCurrentBenutzer().getId());
-    }
-
-    @Transactional
-    public List<NotificationDto> getNotificationsForUser(final UUID userId) {
-        return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
-    }
-
     public void createMissingDocumentNotification(final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE)
@@ -131,11 +131,36 @@ public class NotificationService {
         notificationRepository.persistAndFlush(notification);
     }
 
+    public void createGesuchFehlendeDokumenteEinreichenNotification(final Gesuch gesuch) {
+        final var pia = gesuch.getCurrentGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
+        String msg = Templates.getFehlendeDokumenteEinreichenText(anrede, pia.getNachname(), sprache).render();
+
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE_EINREICHEN)
+            .setGesuch(gesuch)
+            .setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
+
     @CheckedTemplate
     public static class Templates {
         public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
 
         public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
+
+        public static TemplateInstance getGesuchEingereichtText(
+            final String anrede,
+            final String nachname,
+            final Sprache korrespondenzSprache
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+
+                return gesuchEingereichtFR(anrede, nachname);
+            }
+            return gesuchEingereichtDE(anrede, nachname);
+        }
 
         public static native TemplateInstance gesuchStatusChangeWithKommentarDE(
             String anrede,
@@ -148,6 +173,18 @@ public class NotificationService {
             String nachname,
             String kommentar
         );
+
+        public static TemplateInstance getGesuchStatusChangeWithKommentarText(
+            String anrede,
+            String nachname,
+            String kommentar,
+            Sprache korrespondenzSprache
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return gesuchStatusChangeWithKommentarFR(anrede, nachname, kommentar);
+            }
+            return gesuchStatusChangeWithKommentarDE(anrede, nachname, kommentar);
+        }
 
         public static native TemplateInstance gesuchFehlendeDokumenteDE(String sbVorname, String sbNachname);
 
@@ -164,29 +201,17 @@ public class NotificationService {
             return gesuchFehlendeDokumenteDE(sbVorname, sbNachname);
         }
 
-        public static TemplateInstance getGesuchEingereichtText(
+        public static native TemplateInstance aenderungAbgelehntDE(
             final String anrede,
             final String nachname,
-            final Sprache korrespondenzSprache
-        ) {
-            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+            final String kommentar
+        );
 
-                return gesuchEingereichtFR(anrede, nachname);
-            }
-            return gesuchEingereichtDE(anrede, nachname);
-        }
-
-        public static TemplateInstance getGesuchStatusChangeWithKommentarText(
-            String anrede,
-            String nachname,
-            String kommentar,
-            Sprache korrespondenzSprache
-        ) {
-            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
-                return gesuchStatusChangeWithKommentarFR(anrede, nachname, kommentar);
-            }
-            return gesuchStatusChangeWithKommentarDE(anrede, nachname, kommentar);
-        }
+        public static native TemplateInstance aenderungAbgelehntFR(
+            final String anrede,
+            final String nachname,
+            final String kommentar
+        );
 
         public static TemplateInstance getAenderungAbgelehnt(
             final String anrede,
@@ -200,16 +225,26 @@ public class NotificationService {
             return aenderungAbgelehntDE(anrede, nachname, kommentar);
         }
 
-        public static native TemplateInstance aenderungAbgelehntDE(
+        public static native TemplateInstance gesuchFehlendeDokumenteEinreichenDe(
             final String anrede,
-            final String nachname,
-            final String kommentar
+            final String nachname
         );
 
-        public static native TemplateInstance aenderungAbgelehntFR(
+        public static native TemplateInstance gesuchFehlendeDokumenteEinreichenFr(
+            final String anrede,
+            final String nachname
+        );
+
+        public static TemplateInstance getFehlendeDokumenteEinreichenText(
             final String anrede,
             final String nachname,
-            final String kommentar
-        );
+            final Sprache korrespondenzSprache
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+
+                return gesuchFehlendeDokumenteEinreichenFr(anrede, nachname);
+            }
+            return gesuchFehlendeDokumenteEinreichenDe(anrede, nachname);
+        }
     }
 }

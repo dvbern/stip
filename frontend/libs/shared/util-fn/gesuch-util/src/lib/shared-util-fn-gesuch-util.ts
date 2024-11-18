@@ -14,7 +14,7 @@ import {
   gesuchFormStepsFieldMap,
 } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
-import { lowercased } from '@dv/shared/util-fn/string-helper';
+import { lowercased } from '@dv/shared/model/type-util';
 
 export interface ElternSituation {
   expectVater: boolean;

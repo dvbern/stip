@@ -3,5 +3,5 @@ export const lowercased = <T extends string>(value: T) =>
 
 export const capitalized = <T extends string>(text: T) =>
   (text.length > 1
-    ? `${text[0].toLocaleUpperCase()}${text.slice(1).toLocaleLowerCase()}`
-    : text.toUpperCase()) as Capitalize<Lowercase<T>>;
+    ? `${text[0].toLocaleUpperCase()}${text.slice(1)}`
+    : text.toUpperCase()) as Capitalize<T>;

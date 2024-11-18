@@ -73,15 +73,13 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   stepsSig = computed(() => {
-    const cachedGesuchFormular = this.cacheViewSig().cache.gesuchFormular;
+    const cachedGesuch = this.cacheViewSig().cache.gesuch;
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
     const steps = this.stepsViewSig().steps;
-    const readonly = this.cacheViewSig().readonly;
     const validatedSteps = this.stepManager.getValidatedSteps(
       steps,
-      cachedGesuchFormular,
+      cachedGesuch,
       invalidFormularProps.validations,
-      readonly,
     );
     return validatedSteps;
   });

@@ -51,7 +51,16 @@ public enum Gesuchstatus {
     );
 
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT =
-        Collections.unmodifiableSet(EnumSet.allOf(Gesuchstatus.class));
+        Collections.unmodifiableSet(
+            EnumSet.of(
+                IN_BEARBEITUNG_SB
+            )
+        );
+
+    public static final Set<Gesuchstatus> ADMIN_CAN_EDIT =
+        Collections.unmodifiableSet(
+            EnumSet.allOf(Gesuchstatus.class)
+        );
 
     public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_GET_BERECHNUNG = Collections.unmodifiableSet(
         EnumSet.of(
@@ -62,6 +71,16 @@ public enum Gesuchstatus {
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
             Gesuchstatus.VERSANDBEREIT,
             Gesuchstatus.VERSENDET
+        )
+    );
+
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN = Collections.unmodifiableSet(
+        EnumSet.of(
+            VERFUEGT,
+            VERSANDBEREIT,
+            VERSENDET,
+            WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            STIPENDIENANSPRUCH
         )
     );
 

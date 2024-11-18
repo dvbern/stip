@@ -1,7 +1,7 @@
 import {
   Elternschaftsteilung,
-  GesuchFormular,
   GesuchFormularUpdate,
+  SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
 import { type } from '@dv/shared/model/type-util';
 
@@ -58,11 +58,20 @@ describe('GesuchFormSteps', () => {
     'should %s Partner Step if GS is %s',
     (_, zivilstand, state) => {
       expect(
-        isStepDisabled(PARTNER, {
-          personInAusbildung: {
-            zivilstand,
-          },
-        } as GesuchFormular),
+        isStepDisabled(
+          PARTNER,
+          {
+            gesuchStatus: 'IN_BEARBEITUNG_GS',
+            gesuchTrancheToWorkWith: {
+              gesuchFormular: {
+                personInAusbildung: {
+                  zivilstand,
+                },
+              },
+            },
+          } as SharedModelGesuch,
+          'gesuch-app',
+        ),
       ).toBe(state);
     },
   );
@@ -71,11 +80,20 @@ describe('GesuchFormSteps', () => {
     'should %s Eltern Step if GS is %s',
     (_, werZahltAlimente, state) => {
       expect(
-        isStepDisabled(ELTERN, {
-          familiensituation: {
-            werZahltAlimente,
-          },
-        } as GesuchFormular),
+        isStepDisabled(
+          ELTERN,
+          {
+            gesuchStatus: 'IN_BEARBEITUNG_GS',
+            gesuchTrancheToWorkWith: {
+              gesuchFormular: {
+                familiensituation: {
+                  werZahltAlimente,
+                },
+              },
+            },
+          } as SharedModelGesuch,
+          'gesuch-app',
+        ),
       ).toBe(state);
     },
   );
