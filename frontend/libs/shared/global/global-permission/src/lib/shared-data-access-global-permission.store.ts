@@ -21,10 +21,16 @@ export class PermissionStore extends signalStore(
 ) {
   authService = inject(OAuthService);
 
-  userIsJuristSig = computed(() => {
+  permissionsMapSig = computed(() => {
     const userRoles = this.userRoles();
 
-    return userRoles?.includes('Jurist') ?? false;
+    return userRoles?.reduce(
+      (acc, role) => {
+        acc[role] = true;
+        return acc;
+      },
+      {} as Record<BenutzerVerwaltungRole, true | undefined>,
+    );
   });
 
   constructor() {

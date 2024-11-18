@@ -74,17 +74,19 @@
       <!-- Actions -->
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>
-          <button
-            type="button"
-            class="btn btn-outline-dark btn-sm p-2 d-inline-flex lh-1 align-items-center"
-            [matTooltip]="'sachbearbeitung-app.infos.notiz.erstellen' | translate"
-            [class.active]="aktionTrigger.menuOpen"
-            #aktionTrigger="matMenuTrigger"
-            [matMenuTriggerFor]="notizMenu"
-            [matMenuTriggerRestoreFocus]="false"
-          >
-            <i class="material-symbols-rounded fs-4">add</i>
-          </button>
+          @if (permissionStore.permissionsMapSig()?.Sachbearbeiter) {
+            <button
+              type="button"
+              class="btn btn-outline-dark btn-sm p-2 d-inline-flex lh-1 align-items-center"
+              [matTooltip]="'sachbearbeitung-app.infos.notiz.erstellen' | translate"
+              [class.active]="aktionTrigger.menuOpen"
+              #aktionTrigger="matMenuTrigger"
+              [matMenuTriggerFor]="notizMenu"
+              [matMenuTriggerRestoreFocus]="false"
+            >
+              <i class="material-symbols-rounded fs-4">add</i>
+            </button>
+          }
 
           <mat-menu #notizMenu="matMenu" class="header-menu-panel mt-2 rounded">
             <div class="d-flex flex-column gap-2">
@@ -118,7 +120,9 @@
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100">
           <div class="d-flex gap-1">
-            @if (notiz.notizTyp === 'JURISTISCHE_NOTIZ' && permissionStore.userIsJuristSig() && !notiz.antwort) {
+            @if (
+              notiz.notizTyp === 'JURISTISCHE_NOTIZ' && permissionStore.permissionsMapSig()?.Jurist && !notiz.antwort
+            ) {
               <button
                 type="button"
                 (click)="editNotiz(notiz)"

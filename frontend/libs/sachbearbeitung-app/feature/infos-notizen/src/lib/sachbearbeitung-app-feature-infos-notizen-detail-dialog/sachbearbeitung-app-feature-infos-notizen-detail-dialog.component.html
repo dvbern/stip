@@ -45,7 +45,7 @@
         <div class="tw-w-full">
           <div class="tw-font-semibold">{{ dialogData.notiz?.antwort }}</div>
         </div>
-      } @else if (permissionStore.userIsJuristSig()) {
+      } @else if (userIsJurist) {
         <mat-form-field dvSharedUiFormField class="tw-w-full">
           <mat-label>{{ 'shared.form.notizen.antwort.label' | translate }}</mat-label>
           <textarea
@@ -80,9 +80,7 @@
       class="btn btn-primary"
       (click)="handleSave()"
       data-testid="dialog-confirm"
-      [disabled]="
-        form.invalid || (dialogData.notiz?.id && !permissionStore.userIsJuristSig()) || dialogData.notiz?.antwort
-      "
+      [disabled]="form.invalid || (dialogData.notiz?.id && !userIsJurist) || dialogData.notiz?.antwort"
     >
       {{ 'shared.form.save' | translate }}
     </button>
