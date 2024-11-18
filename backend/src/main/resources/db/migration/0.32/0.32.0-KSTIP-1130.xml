@@ -1,13 +1,13 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
   <changeSet author="anna-lea.fuhrer (generated)" id="1731416661537-1">
     <addColumn tableName="gesuch_notizen">
-      <column name="antwort" type="varchar(255)"/>
+      <column name="antwort" type="varchar(2000)"/>
     </addColumn>
   </changeSet>
   <changeSet author="anna-lea.fuhrer (generated)" id="1731416661537-2">
     <addColumn tableName="gesuch_notizen_aud">
-      <column name="antwort" type="varchar(255)"/>
+      <column name="antwort" type="varchar(2000)"/>
     </addColumn>
   </changeSet>
   <changeSet author="anna-lea.fuhrer (generated)" id="1731416661537-3">
@@ -21,5 +21,9 @@
     <addColumn tableName="gesuch_notizen_aud">
       <column name="notiz_typ" type="varchar(255)"/>
     </addColumn>
+  </changeSet>
+  <changeSet id="1731939102-1" author="fabrice jakob">
+    <modifyDataType tableName="gesuch_notizen" columnName="text" newDataType="varchar(2000)"/>
+    <modifyDataType tableName="gesuch_notizen_aud" columnName="text" newDataType="varchar(2000)"/>
   </changeSet>
 </databaseChangeLog>
