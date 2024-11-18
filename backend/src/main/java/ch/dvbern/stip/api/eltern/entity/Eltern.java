@@ -41,7 +41,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MID_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 
 @Audited
@@ -64,7 +64,7 @@ public class Eltern extends AbstractPerson {
     private Adresse adresse;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_MID_LENGTH)
     @Column(name = "sozialversicherungsnummer")
     private String sozialversicherungsnummer;
 
@@ -74,7 +74,7 @@ public class Eltern extends AbstractPerson {
     private ElternTyp elternTyp;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_MID_LENGTH)
     @Column(name = "telefonnummer", nullable = false)
     private String telefonnummer;
 
@@ -87,7 +87,7 @@ public class Eltern extends AbstractPerson {
     private boolean identischerZivilrechtlicherWohnsitz = true;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_MID_LENGTH)
     @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort")
     private String identischerZivilrechtlicherWohnsitzOrt;
 
