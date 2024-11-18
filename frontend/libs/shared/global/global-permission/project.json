@@ -1,0 +1,27 @@
+{
+  "name": "shared-global-permission",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/global/global-permission/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:global", "scope:shared"],
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/global/global-permission/tsconfig.lib.json"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/shared/global/global-permission/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  }
+}

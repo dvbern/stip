@@ -69,6 +69,16 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return new JPAQueryFactory(entityManager).selectFrom(QGesuch.gesuch);
     }
 
+    public JPAQuery<Gesuch> getFindAlleJurBearbeitungQuery() {
+        // TODO KSTIP-1587/ 1590: Implement Status Filter?
+        final var query = getFindAlleQuery();
+        return addStatusFilter(
+            query,
+            Gesuchstatus.JURISTISCHE_ABKLAERUNG,
+            Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
+        );
+    }
+
     public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
         // TODO KSTIP-1587/ 1590: Implement Status Filter?
         final var query = getFindAlleQuery();
@@ -80,7 +90,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
             Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
             Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
-            Gesuchstatus.JURISTISCHE_ABKLAERUNG,
             Gesuchstatus.IN_FREIGABE,
             Gesuchstatus.VERFUEGT,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,

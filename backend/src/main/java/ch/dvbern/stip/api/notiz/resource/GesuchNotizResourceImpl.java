@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.generated.api.GesuchNotizResource;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
@@ -36,6 +37,19 @@ import lombok.RequiredArgsConstructor;
 public class GesuchNotizResourceImpl implements GesuchNotizResource {
     private final GesuchNotizService service;
     private final GesuchNotizAuthorizer authorizer;
+
+    @AllowAll
+    @RolesAllowed({ OidcConstants.ROLE_JURIST })
+    @Override
+    public Response answerJuristischeAbklaerungNotiz(
+        UUID notizId,
+        JuristischeAbklaerungNotizAntwortDto juristischeAbklaerungNotizAntwortDto
+    ) {
+        authorizer.canSetAnswer(notizId);
+        return Response.ok(
+            service.answerJuristischeNotiz(juristischeAbklaerungNotizAntwortDto, notizId)
+        ).build();
+    }
 
     @AllowAll
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
@@ -49,19 +63,20 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response deleteNotiz(UUID notizId) {
+        authorizer.canDelete(notizId);
         service.delete(notizId);
         return Response.noContent().build();
     }
 
     @AllowAll
-    @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
+    @RolesAllowed({ OidcConstants.ROLE_JURIST, OidcConstants.ROLE_SACHBEARBEITER })
     @Override
     public Response getNotiz(UUID notizId) {
         return Response.ok(service.getById(notizId)).build();
     }
 
     @AllowAll
-    @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
+    @RolesAllowed({ OidcConstants.ROLE_JURIST, OidcConstants.ROLE_SACHBEARBEITER })
     @Override
     public Response getNotizen(UUID gesuchId) {
         final var notizen = service.getAllByGesuchId(gesuchId);
@@ -72,6 +87,7 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public Response updateNotiz(GesuchNotizUpdateDto gesuchNotizUpdateDto) {
+        authorizer.canUpdate(gesuchNotizUpdateDto.getId());
         final var notiz = service.update(gesuchNotizUpdateDto);
         return Response.ok(notiz).build();
     }

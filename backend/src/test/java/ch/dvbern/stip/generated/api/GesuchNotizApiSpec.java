@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
@@ -60,12 +61,17 @@ public class GesuchNotizApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                answerJuristischeAbklaerungNotiz(),
                 createNotiz(),
                 deleteNotiz(),
                 getNotiz(),
                 getNotizen(),
                 updateNotiz()
         );
+    }
+
+    public AnswerJuristischeAbklaerungNotizOper answerJuristischeAbklaerungNotiz() {
+        return new AnswerJuristischeAbklaerungNotizOper(createReqSpec());
     }
 
     public CreateNotizOper createNotiz() {
@@ -98,6 +104,79 @@ public class GesuchNotizApiSpec {
         return this;
     }
 
+    /**
+     * Sets the Answer of a Juristische Abklaerung Notiz Antwort
+     * 
+     *
+     * @see #notizIdPath  (required)
+     * @see #body  (required)
+     */
+    public static class AnswerJuristischeAbklaerungNotizOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/notiz/juristischeAbklaerung/{notizId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public AnswerJuristischeAbklaerungNotizOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/notiz/juristischeAbklaerung/{notizId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param juristischeAbklaerungNotizAntwortDtoSpec (JuristischeAbklaerungNotizAntwortDtoSpec)  (required)
+         * @return operation
+         */
+        public AnswerJuristischeAbklaerungNotizOper body(JuristischeAbklaerungNotizAntwortDtoSpec juristischeAbklaerungNotizAntwortDtoSpec) {
+            reqSpec.setBody(juristischeAbklaerungNotizAntwortDtoSpec);
+            return this;
+        }
+
+        public static final String NOTIZ_ID_PATH = "notizId";
+
+        /**
+         * @param notizId (UUID)  (required)
+         * @return operation
+         */
+        public AnswerJuristischeAbklaerungNotizOper notizIdPath(Object notizId) {
+            reqSpec.addPathParam(NOTIZ_ID_PATH, notizId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public AnswerJuristischeAbklaerungNotizOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public AnswerJuristischeAbklaerungNotizOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
     /**
      * Creates a new Notiz for an existing gesuch
      * 

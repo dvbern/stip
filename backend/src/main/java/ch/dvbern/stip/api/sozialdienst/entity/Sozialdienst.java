@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MID_LENGTH;
 
 @Getter
 @Setter
@@ -50,7 +50,7 @@ public class Sozialdienst extends AbstractMandantEntity {
     private String name;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_MID_LENGTH)
     @Column(name = "iban", nullable = false)
     @IbanConstraint
     private String iban;

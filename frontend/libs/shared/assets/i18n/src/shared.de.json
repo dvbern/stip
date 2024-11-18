@@ -545,10 +545,15 @@
   "shared.protokoll.title": "Protokoll",
 
   "shared.notizen.title": "Notizen",
-  "shared.form.notizen.datum.label": "Datum",
+  "shared.form.notizen.datumErstellt.label": "Datum erstellt",
+  "shared.form.notizen.datumMutiert.label": "Datum mutiert",
   "shared.form.notizen.betreff.label": "Betreff",
   "shared.form.notizen.text.label": "Text",
-  "shared.form.notizen.user.label": "User",
+  "shared.form.notizen.userErstellt.label": "Sachbearbeiter",
+  "shared.form.notizen.userMutiert.label": "Jurist",
+  "shared.form.notizen.antwort.label": "Entscheid",
+  "shared.form.notizen.notizTyp.GESUCH_NOTIZ": "Notiz",
+  "shared.form.notizen.notizTyp.JURISTISCHE_NOTIZ": "Juristische Notiz",
 
   "shared.role.Admin": "Admin",
   "shared.role.Jurist": "Jurist",

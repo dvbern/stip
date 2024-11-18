@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MID_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
 
 @Entity
@@ -52,13 +52,13 @@ public class Adresse extends AbstractMandantEntity {
     private Land land = Land.CH;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_MID_LENGTH)
     @Column(name = "co_adresse")
     private String coAdresse;
 
     @NotNull
     @NotBlank
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_MID_LENGTH)
     @Column(name = "strasse", nullable = false)
     private String strasse;
 
@@ -75,7 +75,7 @@ public class Adresse extends AbstractMandantEntity {
 
     @NotNull
     @NotBlank
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_MID_LENGTH)
     @Column(name = "ort", nullable = false)
     private String ort;
 }

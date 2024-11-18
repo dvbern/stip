@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,7 +31,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchNotizCreateDtoSpec.JSON_PROPERTY_GESUCH_ID,
   GesuchNotizCreateDtoSpec.JSON_PROPERTY_BETREFF,
-  GesuchNotizCreateDtoSpec.JSON_PROPERTY_TEXT
+  GesuchNotizCreateDtoSpec.JSON_PROPERTY_TEXT,
+  GesuchNotizCreateDtoSpec.JSON_PROPERTY_NOTIZ_TYP
 })
 @JsonTypeName("GesuchNotizCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,6 +45,9 @@ public class GesuchNotizCreateDtoSpec {
 
   public static final String JSON_PROPERTY_TEXT = "text";
   private String text;
+
+  public static final String JSON_PROPERTY_NOTIZ_TYP = "notizTyp";
+  private GesuchNotizTypDtoSpec notizTyp;
 
   public GesuchNotizCreateDtoSpec() {
   }
@@ -124,6 +129,32 @@ public class GesuchNotizCreateDtoSpec {
     this.text = text;
   }
 
+
+  public GesuchNotizCreateDtoSpec notizTyp(GesuchNotizTypDtoSpec notizTyp) {
+    
+    this.notizTyp = notizTyp;
+    return this;
+  }
+
+   /**
+   * Get notizTyp
+   * @return notizTyp
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GesuchNotizTypDtoSpec getNotizTyp() {
+    return notizTyp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setNotizTyp(GesuchNotizTypDtoSpec notizTyp) {
+    this.notizTyp = notizTyp;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -135,12 +166,13 @@ public class GesuchNotizCreateDtoSpec {
     GesuchNotizCreateDtoSpec gesuchNotizCreate = (GesuchNotizCreateDtoSpec) o;
     return Objects.equals(this.gesuchId, gesuchNotizCreate.gesuchId) &&
         Objects.equals(this.betreff, gesuchNotizCreate.betreff) &&
-        Objects.equals(this.text, gesuchNotizCreate.text);
+        Objects.equals(this.text, gesuchNotizCreate.text) &&
+        Objects.equals(this.notizTyp, gesuchNotizCreate.notizTyp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, betreff, text);
+    return Objects.hash(gesuchId, betreff, text, notizTyp);
   }
 
   @Override
@@ -150,6 +182,7 @@ public class GesuchNotizCreateDtoSpec {
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("}");
     return sb.toString();
   }
