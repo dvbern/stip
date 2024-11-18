@@ -42,6 +42,7 @@ import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -261,7 +262,7 @@ class GesuchNotizResourceImplTest {
     @Test
     @TestAsSachbearbeiter
     @Order(9)
-    void updateJuristischeNotizAsSBShouldFali() {
+    void updateJuristischeNotizAsSBShouldFail() {
         var update = new GesuchNotizUpdateDtoSpec();
         update.setId(juristischeAbklaerungNotizDto.getId());
         update.setText("update");
@@ -272,7 +273,7 @@ class GesuchNotizResourceImplTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
     @Test
