@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
@@ -60,6 +61,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchHistoryService gesuchHistoryService;
     private final GesuchAuthorizer gesuchAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
+    private final GesuchTrancheService gesuchTrancheService;
     private final FallAuthorizer fallAuthorizer;
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -117,7 +119,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @AllowAll
     @Override
     public Response gesuchFehlendeDokumenteUebermitteln(UUID gesuchId) {
-        gesuchService.gesuchFehlendeDokumente(gesuchId);
+        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuchId);
         return Response.ok().build();
     }
 
@@ -262,6 +264,14 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response juristischAbklaeren(UUID gesuchId) {
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.juristischAbklaeren(gesuchId);
+        return Response.ok().build();
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public Response gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
+        gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
         return Response.ok().build();
     }
 }

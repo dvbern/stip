@@ -35,7 +35,7 @@ import {
   MASK_SOZIALVERSICHERUNGSNUMMER,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
-import { isDefined } from '@dv/shared/model/type-util';
+import { capitalized, isDefined, lowercased } from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -69,7 +69,6 @@ import {
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
-import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 import { selectSharedFeatureGesuchFormElternView } from '../shared-feature-gesuch-form-eltern/shared-feature-gesuch-form-eltern.selector';
 
@@ -310,7 +309,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
 
       const svValidators = [
         sharedUtilValidatorAhv(
-          `eltern${capitalized(elternteil.elternTyp)}`,
+          `eltern${capitalized(lowercased(elternteil.elternTyp))}`,
           gesuchFormular,
         ),
       ];

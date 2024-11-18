@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { signal } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -26,9 +27,15 @@ async function setup(abschlussPhase: AbschlussPhase) {
             loading: false,
             abschlussPhase,
             specialValidationErrors: [],
+            gesuchStatus: 'IN_BEARBEITUNG_GS',
           }),
+          einreicheOperationIsInProgressSig:
+            signal<
+              ReturnType<EinreichenStore['einreicheOperationIsInProgressSig']>
+            >(false),
         },
       },
+      provideHttpClient(),
       provideSharedPatternJestTestSetup(),
       provideMockStore({
         initialState: {

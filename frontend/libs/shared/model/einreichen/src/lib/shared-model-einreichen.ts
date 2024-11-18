@@ -7,6 +7,7 @@ import {
 
 export type AbschlussPhase =
   | 'NOT_READY'
+  | 'FEHLENDE_DOKUMENTE'
   | 'READY_TO_SEND'
   | 'SUBMITTED'
   | 'AKZETPIERT'
@@ -17,6 +18,7 @@ const sb = 'sachbearbeitung-app' satisfies AppType;
 const ___ = null;
 const S__ = 'SUBMITTED';
 const _R_ = 'READY_TO_SEND';
+const __F = 'FEHLENDE_DOKUMENTE';
 
 const AbschlussPhaseMap = {
   GESUCH_IN_BEARBEITUNG_GS /**                */: { [gs]: _R_, [sb]: ___ },
@@ -26,7 +28,7 @@ const AbschlussPhaseMap = {
   GESUCH_IN_FREIGABE /**                      */: { [gs]: S__, [sb]: S__ },
   GESUCH_ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: S__, [sb]: S__ },
   GESUCH_ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: S__, [sb]: S__ },
-  GESUCH_FEHLENDE_DOKUMENTE /**               */: { [gs]: _R_, [sb]: S__ },
+  GESUCH_FEHLENDE_DOKUMENTE /**               */: { [gs]: __F, [sb]: S__ },
   GESUCH_GESUCH_ABGELEHNT /**                 */: { [gs]: S__, [sb]: S__ },
   GESUCH_JURISTISCHE_ABKLAERUNG /**           */: { [gs]: S__, [sb]: S__ },
   GESUCH_KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: S__, [sb]: S__ },
@@ -38,10 +40,10 @@ const AbschlussPhaseMap = {
   GESUCH_VERFUEGT /**                         */: { [gs]: S__, [sb]: S__ },
   GESUCH_VERSENDET /**                        */: { [gs]: S__, [sb]: S__ },
   // ---------------------------------------------------------------------
-  TRANCHE_ABGELEHNT /**                       */: { [gs]: S__, [sb]: S__ },
-  TRANCHE_AKZEPTIERT /**                      */: { [gs]: S__, [sb]: S__ },
   TRANCHE_IN_BEARBEITUNG_GS /**               */: { [gs]: _R_, [sb]: ___ },
   TRANCHE_UEBERPRUEFEN /**                    */: { [gs]: S__, [sb]: _R_ },
+  TRANCHE_ABGELEHNT /**                       */: { [gs]: S__, [sb]: S__ },
+  TRANCHE_AKZEPTIERT /**                      */: { [gs]: S__, [sb]: S__ },
   TRANCHE_MANUELLE_AENDERUNG /**              */: { [gs]: S__, [sb]: S__ },
 } satisfies Record<
   `${`GESUCH_${Gesuchstatus}` | `TRANCHE_${GesuchTrancheStatus}`}`,
@@ -63,7 +65,13 @@ export const toAbschlussPhase = (
 
   if (!phase) return null;
 
-  return phase === 'READY_TO_SEND' && !options?.isComplete
-    ? 'NOT_READY'
-    : phase;
+  if (phase === 'READY_TO_SEND' && !options?.isComplete) {
+    return 'NOT_READY';
+  }
+
+  if (phase === 'FEHLENDE_DOKUMENTE' && options?.isComplete) {
+    return 'READY_TO_SEND';
+  }
+
+  return phase;
 };

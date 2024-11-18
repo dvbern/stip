@@ -36,7 +36,7 @@ export class PermissionStore extends signalStore(
     const token = this.authService.getAccessToken();
     const payload = decodeJwt(token);
 
-    if (payload && payload['realm_access']['roles']) {
+    if (payload?.['realm_access']['roles']) {
       const userRoles = payload['realm_access']['roles'];
       patchState(this, { userRoles });
     }
@@ -45,7 +45,7 @@ export class PermissionStore extends signalStore(
 
 /**
  * Decodes a JWT token and returns the payload as a JSON object.
- *
+ * https://stackoverflow.com/questions/38552003/how-to-decode-jwt-token-in-javascript-without-using-a-libraryhttps://stackoverflow.com/questions/38552003/how-to-decode-jwt-token-in-javascript-without-using-a-library
  * @param token - The JWT token to decode.
  * @returns The decoded payload as an object, or null if decoding fails.
  */

@@ -6,6 +6,10 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { LebenslaufAusbildungsArt } from '@dv/shared/model/gesuch';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
+import {
+  mockConfigsState,
+  mockedGesuchAppWritableGesuchState,
+} from '@dv/shared/pattern/jest-test-setup';
 import { clickMatSelectOption } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from './shared-feature-gesuch-form-lebenslauf-editor.component';
@@ -24,17 +28,9 @@ async function setup(type: SharedModelLebenslauf['type']) {
       provideMockStore({
         initialState: {
           language: { language: 'de' },
-          gesuchs: {
-            gesuch: null,
-            gesuchFormular: {},
-            cache: {
-              gesuch: null,
-              gesuchId: null,
-              gesuchFormular: null,
-            },
-          },
+          gesuchs: mockedGesuchAppWritableGesuchState({}),
           ausbildungsstaettes: { ausbildungsstaettes: [] },
-          configs: {},
+          configs: mockConfigsState(),
         },
       }),
     ],

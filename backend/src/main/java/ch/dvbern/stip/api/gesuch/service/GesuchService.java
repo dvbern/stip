@@ -543,7 +543,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchFehlendeDokumente(final UUID gesuchId) {
+    public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
@@ -607,5 +607,13 @@ public class GesuchService {
             aenderung,
             List.of(initialRevision, latestWhereStatusChanged)
         );
+    }
+
+    @Transactional
+    public void gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
+        gesuchStatusService
+            .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 }

@@ -106,9 +106,9 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
 
   private reloadDokumente() {
     if (this.uploadViewSig().initialDocuments) {
-      this.dokumentsStore.getDokumenteAndRequired$(
-        this.uploadViewSig().trancheId,
-      );
+      this.dokumentsStore.getDokumenteAndRequired$({
+        gesuchTrancheId: this.uploadViewSig().trancheId,
+      });
     }
     this.dokumentsStore.getGesuchDokument$({
       trancheId: this.uploadViewSig().trancheId,

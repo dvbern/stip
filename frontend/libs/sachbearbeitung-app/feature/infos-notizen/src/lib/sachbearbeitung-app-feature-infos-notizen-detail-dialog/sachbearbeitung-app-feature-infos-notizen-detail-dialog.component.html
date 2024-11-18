@@ -1,71 +1,19 @@
 <h1 class="tw-text-xl tw-mb-8">
-  @if (dialogData.notiz?.id) {
-    @if (isJurNotiz && (!permissionStore.userIsJuristSig() || dialogData.notiz?.antwort)) {
-      {{ 'sachbearbeitung-app.infos.juristischeNotiz.anzeigen' | translate }}
-    } @else {
-      {{ 'sachbearbeitung-app.infos.juristischeNotiz.bearbeiten' | translate }}
-    }
-  } @else {
-    @if (isJurNotiz) {
-      {{ 'sachbearbeitung-app.infos.juristischeNotiz.erstellen' | translate }}
-    } @else {
-      {{ 'sachbearbeitung-app.infos.notiz.erstellen' | translate }}
-    }
-  }
+  {{ 'sachbearbeitung-app.infos.notizen.notizTyp.' + dialogData.notizTyp | translate }}
 </h1>
 
-@if (dialogData.notizTyp === 'GESUCH_NOTIZ') {
-  @if (dialogData.notiz?.id) {
-    <ul class="tw-grid tw-grid-cols-[max-content_1fr] tw-gap-x-2 tw-pl-0">
-      <li class="tw-contents">
-        <span>{{ 'shared.form.notizen.datumErstellt.label' | translate }}:</span>
-        <span class="tw-font-semibold">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</span>
-      </li>
-      <li class="tw-contents">
-        <span>{{ 'shared.form.notizen.userErstellt.label' | translate }}:</span>
-        <span class="tw-font-semibold">{{ dialogData.notiz?.userErstellt }}</span>
-      </li>
-    </ul>
+<form [formGroup]="form" (ngSubmit)="handleSave()" data-testid="form-notiz-form" class="tw-w-full tw-mt-4">
+  @if (dialogData.notizTyp === 'GESUCH_NOTIZ') {
+    @if (dialogData.notiz?.id) {
+      <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
+
+      <hr class="tw-my-8" />
+    }
+
+    <ng-container [ngTemplateOutlet]="betreffTextControls"></ng-container>
   }
 
-  <form [formGroup]="form" (ngSubmit)="handleSave()" data-testid="form-notiz-form" class="tw-w-full tw-mt-4">
-    <!-- Betreff -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'shared.form.notizen.betreff.label' | translate }}</mat-label>
-      <input formControlName="betreff" data-testid="form-notiz-betreff" matInput type="text" />
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-
-    <!-- Text -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full tw-mt-4">
-      <mat-label>{{ 'shared.form.notizen.text.label' | translate }}</mat-label>
-      <textarea formControlName="text" data-testid="form-notiz-text" matInput type="text" rows="3"></textarea>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
-      </mat-error>
-    </mat-form-field>
-
-    <div class="tw-flex tw-justify-end tw-mt-6 tw-gap-6">
-      <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
-        {{ 'shared.cancel' | translate }}
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="handleSave()"
-        data-testid="dialog-confirm"
-        [disabled]="form.invalid"
-      >
-        {{ 'shared.form.save' | translate }}
-      </button>
-    </div>
-  </form>
-}
-
-@if (isJurNotiz) {
-  <form [formGroup]="form" (ngSubmit)="handleSave()" data-testid="form-notiz-form">
+  @if (isJurNotiz) {
     @if (dialogData.notiz?.id) {
       <!-- betreff -->
       <div class="tw-flex tw-gap-2">
@@ -73,52 +21,41 @@
         <div class="tw-font-semibold">{{ dialogData.notiz?.betreff }}</div>
       </div>
 
-      <!-- horizontal line -->
-      <hr class="tw-my-6" />
+      <hr class="tw-my-8" />
 
-      <!-- datumErstellt -->
-      <ul class="tw-grid tw-grid-cols-[min-content_1fr] tw-gap-x-2 tw-pl-0">
-        <li class="tw-contents">
-          <span>{{ 'shared.form.notizen.datumErstellt.label' | translate }}:</span>
-          <span class="tw-font-semibold">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</span>
-        </li>
-        <li class="tw-contents">
-          <span>{{ 'shared.form.notizen.userErstellt.label' | translate }}:</span>
-          <span class="tw-font-semibold">{{ dialogData.notiz?.userErstellt }}</span>
-        </li>
-      </ul>
+      <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
 
       <!-- text -->
-      <div class="tw-flex tw-gap-2">
-        <div>{{ 'shared.form.notizen.text.label' | translate }}:</div>
+      <div class="tw-w-full">
         <div class="tw-font-semibold">
           {{ dialogData.notiz?.text }}
         </div>
       </div>
 
-      <!-- horizontal line -->
-      <hr class="tw-my-6" />
+      <hr class="tw-my-8" />
 
       @if (dialogData.notiz?.antwort) {
-        <ul class="tw-grid tw-grid-cols-[max-content_1fr] tw-gap-x-2 tw-pl-0">
-          <li class="tw-contents">
-            <span>{{ 'shared.form.notizen.datumMutiert.label' | translate }}:</span>
-            <span class="tw-font-semibold">{{ dialogData.notiz?.timestampMutiert | date: 'dd.MM.yyyy' }}</span>
-          </li>
-          <li class="tw-contents">
-            <span>{{ 'shared.form.notizen.userMutiert.label' | translate }}:</span>
-            <span class="tw-font-semibold">{{ dialogData.notiz?.userMutiert }}</span>
-          </li>
-        </ul>
+        <dl class="tw-grid tw-grid-cols-[max-content_1fr] tw-gap-x-2 tw-pl-0">
+          <dt class="tw-font-normal">{{ 'shared.form.notizen.datumMutiert.label' | translate }}:</dt>
+          <dd class="tw-font-semibold">{{ dialogData.notiz?.timestampMutiert | date: 'dd.MM.yyyy' }}</dd>
+          <dt class="tw-font-normal">{{ 'shared.form.notizen.userMutiert.label' | translate }}:</dt>
+          <dd class="tw-font-semibold">{{ dialogData.notiz?.userMutiert }}</dd>
+        </dl>
 
-        <div class="tw-flex tw-gap-2 tw-mb-8">
-          <div>{{ 'shared.form.notizen.antwort.label' | translate }}:</div>
+        <div class="tw-w-full">
           <div class="tw-font-semibold">{{ dialogData.notiz?.antwort }}</div>
         </div>
       } @else if (permissionStore.userIsJuristSig()) {
         <mat-form-field dvSharedUiFormField class="tw-w-full">
           <mat-label>{{ 'shared.form.notizen.antwort.label' | translate }}</mat-label>
-          <textarea formControlName="antwort" data-testid="form-notiz-antwort" matInput type="text" rows="3"></textarea>
+          <textarea
+            formControlName="antwort"
+            maxlength="2000"
+            data-testid="form-notiz-antwort"
+            matInput
+            type="text"
+            rows="4"
+          ></textarea>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -131,40 +68,61 @@
         </div>
       }
     } @else {
-      <!-- Betreff -->
-      <mat-form-field dvSharedUiFormField class="tw-w-full">
-        <mat-label>{{ 'shared.form.notizen.betreff.label' | translate }}</mat-label>
-        <input formControlName="betreff" data-testid="form-notiz-betreff" matInput type="text" />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-
-      <!-- Text -->
-      <mat-form-field dvSharedUiFormField class="tw-w-full">
-        <mat-label>{{ 'shared.form.notizen.text.label' | translate }}</mat-label>
-        <textarea formControlName="text" data-testid="form-notiz-text" matInput type="text" rows="3"></textarea>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+      <ng-container [ngTemplateOutlet]="betreffTextControls"></ng-container>
     }
+  }
+  <div class="tw-flex tw-gap-6 tw-mt-10 tw-justify-end">
+    <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
+      {{ 'shared.cancel' | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="handleSave()"
+      data-testid="dialog-confirm"
+      [disabled]="
+        form.invalid || (dialogData.notiz?.id && !permissionStore.userIsJuristSig()) || dialogData.notiz?.antwort
+      "
+    >
+      {{ 'shared.form.save' | translate }}
+    </button>
+  </div>
 
-    <div class="tw-flex tw-gap-6 tw-mt-6 tw-justify-end">
-      <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
-        {{ 'shared.cancel' | translate }}
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="handleSave()"
-        data-testid="dialog-confirm"
-        [disabled]="
-          form.invalid || (dialogData.notiz?.id && !permissionStore.userIsJuristSig()) || dialogData.notiz?.antwort
-        "
-      >
-        {{ 'shared.form.save' | translate }}
-      </button>
-    </div>
-  </form>
-}
+  <ng-template #betreffTextControls>
+    <!-- Betreff -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-label>{{ 'shared.form.notizen.betreff.label' | translate }}</mat-label>
+      <input formControlName="betreff" data-testid="form-notiz-betreff" matInput type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Text -->
+    <mat-form-field dvSharedUiFormField class="tw-w-full tw-mt-4">
+      <mat-label>{{ 'shared.form.notizen.text.label' | translate }}</mat-label>
+      <textarea
+        formControlName="text"
+        maxlength="2000"
+        data-testid="form-notiz-text"
+        matInput
+        type="text"
+        rows="4"
+      ></textarea>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </ng-template>
+
+  <ng-template #datumUserErstellt>
+    <dl class="tw-grid tw-grid-cols-[min-content_1fr] tw-gap-x-2 tw-pl-0">
+      <!-- datumErstellt -->
+      <dt class="tw-font-normal">{{ 'shared.form.notizen.datumErstellt.label' | translate }}:</dt>
+      <dd class="tw-font-semibold">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>
+      <!-- userErstellt -->
+      <dt class="tw-font-normal">{{ 'shared.form.notizen.userErstellt.label' | translate }}:</dt>
+      <dd class="tw-font-semibold">{{ dialogData.notiz?.userErstellt }}</dd>
+    </dl>
+  </ng-template>
+</form>

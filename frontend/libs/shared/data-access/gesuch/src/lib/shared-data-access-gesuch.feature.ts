@@ -12,6 +12,7 @@ import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person
 import { SharedModelError } from '@dv/shared/model/error';
 import {
   FallDashboardItem,
+  GesuchTrancheTyp,
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SteuerdatenTyp,
@@ -30,6 +31,7 @@ export interface State {
   gesuch: SharedModelGesuch | null;
   gesuchFormular: SharedModelGesuchFormular | null;
   isEditingTranche: boolean | null;
+  trancheTyp: GesuchTrancheTyp | null;
   gesuchs: SharedModelGesuch[];
   gsDashboard: FallDashboardItem[];
   cache: {
@@ -47,6 +49,7 @@ const initialState: State = {
   gesuch: null,
   gesuchFormular: null,
   isEditingTranche: null,
+  trancheTyp: null,
   gesuchs: [],
   gsDashboard: [],
   cache: {
@@ -172,10 +175,8 @@ export const sharedDataAccessGesuchsFeature = createFeature({
           gesuch,
           gesuchFormular: gesuchFormular,
           isEditingTranche: !!trancheId,
-          steuerdatenTabs: success(
-            gesuch.gesuchTrancheToWorkWith?.gesuchFormular?.steuerdatenTabs ??
-              [],
-          ),
+          trancheTyp: gesuch?.gesuchTrancheToWorkWith?.typ,
+          steuerdatenTabs: success(gesuchFormular?.steuerdatenTabs ?? []),
           cache: {
             gesuch: gesuch ?? state.cache.gesuch,
             gesuchId: gesuch.id ?? state.cache.gesuchId,

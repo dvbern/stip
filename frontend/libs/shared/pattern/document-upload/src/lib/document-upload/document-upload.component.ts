@@ -82,9 +82,9 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
         });
 
         if (initialDocuments) {
-          this.dokumentsStore.getDokumenteAndRequired$(
-            this.optionsSig().trancheId,
-          );
+          this.dokumentsStore.getDokumenteAndRequired$({
+            gesuchTrancheId: this.optionsSig().trancheId,
+          });
         }
       });
   }

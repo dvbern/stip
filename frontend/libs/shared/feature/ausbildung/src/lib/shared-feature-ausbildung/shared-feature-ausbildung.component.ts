@@ -38,7 +38,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelError } from '@dv/shared/model/error';
 import { AusbildungsPensum, Ausbildungsstaette } from '@dv/shared/model/gesuch';
-import { getTranslatableProp } from '@dv/shared/model/type-util';
+import { capitalized, getTranslatableProp } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -59,7 +59,6 @@ import {
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
-import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 const AusbildungRangeControls = ['ausbildungBegin', 'ausbildungEnd'] as const;
 type AusbildungRangeControls = (typeof AusbildungRangeControls)[number];
