@@ -50,6 +50,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { BenutzerVerwaltungRole } from '@dv/shared/model/benutzer';
 import {
   GesuchFilter,
@@ -152,6 +153,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 {
   private store = inject(Store);
   private router = inject(Router);
+  private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   show = input<GesuchFilter | undefined>(undefined);
@@ -246,10 +248,10 @@ export class SachbearbeitungAppFeatureCockpitComponent
     this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
   availableQuickFiltersSig = computed(() => {
-    const roles: BenutzerVerwaltungRole[] = ['Jurist']; // TODO use real roles
+    const roles = this.permissionStore.userRoles();
 
     return this.quickFilters.filter((filter) =>
-      filter.roles.some((role) => roles.includes(role)),
+      filter.roles.some((role) => roles?.includes(role)),
     );
   });
   letzteAktivitaetRangeSig = computed(() => {

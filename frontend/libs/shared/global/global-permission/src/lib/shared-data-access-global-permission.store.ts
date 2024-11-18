@@ -3,8 +3,10 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { OAuthService } from 'angular-oauth2-oidc';
 
+import { BenutzerVerwaltungRole } from '@dv/shared/model/benutzer';
+
 type PermissionState = {
-  userRoles: string[] | null;
+  userRoles: BenutzerVerwaltungRole[] | null;
 };
 
 const initialState: PermissionState = {
