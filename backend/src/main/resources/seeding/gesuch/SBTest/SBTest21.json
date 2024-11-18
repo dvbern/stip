@@ -1,0 +1,162 @@
+{
+  "fall": {
+    "id": "ba5f5e47-26cd-4b68-b0cd-915a1b6c964e",
+    "fallNummer": "BE.F.415405",
+    "mandant": "bern"
+  },
+  "gesuchsperiode": {
+    "id": "8005fa24-cf60-404f-8735-89129e6f0e22",
+    "bezeichnungDe": "Herbst 2024",
+    "bezeichnungFr": "Automne 2024",
+    "gueltigkeitStatus": "PUBLIZIERT",
+    "gesuchsperiodeStart": "2024-07-01",
+    "gesuchsperiodeStopp": "2025-06-30",
+    "aufschaltterminStart": "2024-07-15",
+    "aufschaltterminStopp": "2025-03-31",
+    "einreichefristNormal": "2024-12-31",
+    "einreichefristReduziert": "2025-03-31",
+    "gesuchsjahr": {
+      "id": "55f03e78-4f0e-42dd-af04-d96850ceb3c9",
+      "bezeichnungDe": "Gesuchsjahr 24",
+      "bezeichnungFr": "Année de la demande 24",
+      "technischesJahr": 2024,
+      "gueltigkeitStatus": "PUBLIZIERT"
+    },
+    "ausbKosten_SekII": 2000,
+    "ausbKosten_Tertiaer": 3000
+  },
+  "gesuchStatus": "IN_BEARBEITUNG_GS",
+  "gesuchNummer": "2024.BE.G.59912",
+  "id": "4057c6c0-b8be-43bc-a2b7-b47b5769ad7f",
+  "aenderungsdatum": "2024-11-12",
+  "gesuchTrancheToWorkWith": {
+    "id": "459cd8c2-8d1f-4b70-91a9-91a6cd53c84f",
+    "gueltigAb": "2024-07-01",
+    "gueltigBis": "2025-06-30",
+    "status": "IN_BEARBEITUNG_GS",
+    "typ": "TRANCHE",
+    "comment": null,
+    "gesuchFormular": {
+      "ausbildung": {
+        "fachrichtung": "Wirtschaftsinformatik",
+        "ausbildungBegin": "9.2023",
+        "ausbildungEnd": "2.2025",
+        "pensum": "TEILZEIT",
+        "ausbildungsgang": {
+          "id": "77465a0d-eba1-4197-a17f-e287792d8448",
+          "bildungskategorie": {
+            "bezeichnungDe": "Fachhochschulen",
+            "bezeichnungFr": "Hautes écoles spécialisées",
+            "bildungsstufe": "TERTIAER",
+            "bfs": 8,
+            "id": "6a38f3ac-824b-40a4-8aef-486de8c2262d"
+          },
+          "bezeichnungDe": "Bachelor",
+          "bezeichnungFr": "Bachelor",
+          "ausbildungsstaetteId": null
+        },
+        "ausbildungNichtGefunden": false,
+        "alternativeAusbildungsstaette": null,
+        "alternativeAusbildungsgang": null,
+        "ausbildungsort": "Bern",
+        "isAusbildungAusland": false
+      },
+      "personInAusbildung": {
+        "adresse": {
+          "land": "CH",
+          "strasse": "Schwanengasse",
+          "plz": "3018",
+          "ort": "Bern",
+          "id": "7515e0ac-7655-4004-ada8-dc066bba7d80",
+          "coAdresse": null,
+          "hausnummer": "5"
+        },
+        "sozialversicherungsnummer": "756.5565.7362.36",
+        "vorname": "Betunjo",
+        "anrede": "HERR",
+        "identischerZivilrechtlicherWohnsitz": true,
+        "email": "alain.bumann@be.ch",
+        "telefonnummer": "031 633 85 12",
+        "geburtsdatum": "1997-06-05",
+        "nationalitaet": "CH",
+        "wohnsitz": "FAMILIE",
+        "sozialhilfebeitraege": false,
+        "nachname": "Florales",
+        "korrespondenzSprache": "DEUTSCH",
+        "heimatort": "Bern",
+        "niederlassungsstatus": null,
+        "einreisedatum": null,
+        "zivilstand": "LEDIG",
+        "wohnsitzAnteilMutter": null,
+        "wohnsitzAnteilVater": null,
+        "vormundschaft": false,
+        "identischerZivilrechtlicherWohnsitzOrt": null,
+        "identischerZivilrechtlicherWohnsitzPLZ": null
+      },
+      "familiensituation": null,
+      "partner": null,
+      "auszahlung": null,
+      "elterns": null,
+      "geschwisters": null,
+      "lebenslaufItems": [
+        {
+          "von": "8.2012",
+          "bis": "7.2013",
+          "wohnsitz": "BE",
+          "id": "d1b13aa4-bcee-43e7-bc7a-874a2a9643f2",
+          "bildungsart": "BERUFSVORBEREITENDES_SCHULJAHR",
+          "ausbildungAbgeschlossen": true,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2013",
+          "bis": "7.2015",
+          "wohnsitz": "BE",
+          "id": "fcfc0aef-a492-4a00-9ac0-a9c5e42f3541",
+          "bildungsart": "FACHMATURITAET",
+          "ausbildungAbgeschlossen": true,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2015",
+          "bis": "7.2019",
+          "wohnsitz": "BE",
+          "id": "e981c6d5-30b5-452d-8310-64e31bc0f0ea",
+          "bildungsart": "EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS",
+          "ausbildungAbgeschlossen": true,
+          "berufsbezeichnung": "Elektriker",
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2019",
+          "bis": "8.2021",
+          "wohnsitz": "BE",
+          "id": "984a09e2-f9e3-48b2-9e40-7ed13ec417f3",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ERWERBSTAETIGKEIT",
+          "taetigkeitsBeschreibung": "diverse Jobs"
+        }
+      ],
+      "kinds": null,
+      "einnahmenKosten": null,
+      "steuerdaten": null,
+      "steuerdatenTabs": null
+    }
+  },
+  "bearbeiter": "Philipp1 Schärer"
+}
