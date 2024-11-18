@@ -148,7 +148,6 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
               antwort: result.antwort,
             },
           });
-          return;
         }
       });
   }

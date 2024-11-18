@@ -1,9 +1,5 @@
 <h1 class="tw-text-xl tw-mb-8">
-  @if (dialogData.notizTyp === 'GESUCH_NOTIZ') {
-    {{ 'sachbearbeitung-app.infos.notizen.notizTyp.GESUCH_NOTIZ' | translate }}
-  } @else {
-    {{ 'sachbearbeitung-app.infos.notizen.notizTyp.JURISTISCHE_NOTIZ' | translate }}
-  }
+  {{ 'sachbearbeitung-app.infos.notizen.notizTyp.' + dialogData.notizTyp | translate }}
 </h1>
 
 <form [formGroup]="form" (ngSubmit)="handleSave()" data-testid="form-notiz-form" class="tw-w-full tw-mt-4">
@@ -52,7 +48,14 @@
       } @else if (permissionStore.userIsJuristSig()) {
         <mat-form-field dvSharedUiFormField class="tw-w-full">
           <mat-label>{{ 'shared.form.notizen.antwort.label' | translate }}</mat-label>
-          <textarea formControlName="antwort" data-testid="form-notiz-antwort" matInput type="text" rows="3"></textarea>
+          <textarea
+            formControlName="antwort"
+            maxlength="2000"
+            data-testid="form-notiz-antwort"
+            matInput
+            type="text"
+            rows="3"
+          ></textarea>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -98,7 +101,14 @@
     <!-- Text -->
     <mat-form-field dvSharedUiFormField class="tw-w-full tw-mt-4">
       <mat-label>{{ 'shared.form.notizen.text.label' | translate }}</mat-label>
-      <textarea formControlName="text" data-testid="form-notiz-text" matInput type="text" rows="3"></textarea>
+      <textarea
+        formControlName="text"
+        maxlength="2000"
+        data-testid="form-notiz-text"
+        matInput
+        type="text"
+        rows="3"
+      ></textarea>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
