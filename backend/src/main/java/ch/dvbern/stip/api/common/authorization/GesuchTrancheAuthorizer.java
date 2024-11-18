@@ -43,7 +43,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     public void canRead(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         // Admins can always read every GesuchTranche
-        if (isAdmin(currentBenutzer)) {
+        if (isAdminSbOrJurist(currentBenutzer)) {
             return;
         }
 

@@ -20,9 +20,28 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GesuchNotizUpdateDto  implements Serializable {
+  private @Valid UUID id;
   private @Valid String betreff;
   private @Valid String text;
-  private @Valid UUID id;
+
+  /**
+   **/
+  public GesuchNotizUpdateDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  @NotNull
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   /**
    **/
@@ -62,24 +81,6 @@ public class GesuchNotizUpdateDto  implements Serializable {
     this.text = text;
   }
 
-  /**
-   **/
-  public GesuchNotizUpdateDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -90,14 +91,14 @@ public class GesuchNotizUpdateDto  implements Serializable {
       return false;
     }
     GesuchNotizUpdateDto gesuchNotizUpdate = (GesuchNotizUpdateDto) o;
-    return Objects.equals(this.betreff, gesuchNotizUpdate.betreff) &&
-        Objects.equals(this.text, gesuchNotizUpdate.text) &&
-        Objects.equals(this.id, gesuchNotizUpdate.id);
+    return Objects.equals(this.id, gesuchNotizUpdate.id) &&
+        Objects.equals(this.betreff, gesuchNotizUpdate.betreff) &&
+        Objects.equals(this.text, gesuchNotizUpdate.text);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(betreff, text, id);
+    return Objects.hash(id, betreff, text);
   }
 
   @Override
@@ -105,9 +106,9 @@ public class GesuchNotizUpdateDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizUpdateDto {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

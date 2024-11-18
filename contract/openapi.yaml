@@ -321,6 +321,37 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateNotiz
       summary: Updates the Notiz of a Gesuch with the given Notiz-Id
+  '/gesuch/notiz/juristischeAbklaerung/{notizId}':
+    parameters:
+      - name: notizId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JuristischeAbklaerungNotizAntwort'
+        required: true
+      tags:
+        - GesuchNotiz
+      responses:
+        '202':
+          description: Juristische Abklaerung Notiz Antwort posted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: answerJuristischeAbklaerungNotiz
+      summary: Sets the Answer of a Juristische Abklaerung Notiz Antwort
   '/gesuch/notiz/{notizId}':
     parameters:
       - name: notizId
@@ -4377,6 +4408,10 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+    GesuchNotizTyp:
+      enum:
+        - GESUCH_NOTIZ
+        - JURISTISCHE_NOTIZ
     NotificationType:
       enum:
         - GESUCH_EINGEREICHT
@@ -4671,12 +4706,20 @@ components:
       properties:
         text:
           type: string
+    JuristischeAbklaerungNotizAntwort:
+      type: object
+      required:
+        - antwort
+      properties:
+        antwort:
+          type: string
     GesuchNotizCreate:
       type: object
       required:
         - gesuchId
         - betreff
         - text
+        - notizTyp
       properties:
         gesuchId:
           $ref: '#/components/schemas/UUID'
@@ -4685,9 +4728,12 @@ components:
           type: string
         text:
           type: string
+        notizTyp:
+          $ref: '#/components/schemas/GesuchNotizTyp'
     GesuchNotizUpdate:
       type: object
       required:
+        - id
         - betreff
         - text
       properties:
@@ -4702,12 +4748,22 @@ components:
       required:
         - userErstellt
         - timestampErstellt
+        - notizTyp
+        - id
       type: object
       properties:
         userErstellt:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+        userMutiert:
+          type: string
+        timestampMutiert:
+          $ref: '#/components/schemas/LocalDate'
+        notizTyp:
+          $ref: '#/components/schemas/GesuchNotizTyp'
+        antwort:
+          type: string
       allOf:
         - type: object
         - $ref: '#/components/schemas/GesuchNotizUpdate'

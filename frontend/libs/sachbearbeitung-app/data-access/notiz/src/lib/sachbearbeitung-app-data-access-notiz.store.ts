@@ -76,9 +76,9 @@ export class NotizStore extends signalStore(
     ),
   );
 
-  editNotiz = rxMethod<{
+  editNotiz$ = rxMethod<{
     gesuchId: string;
-    notizDaten: GesuchNotizUpdate;
+    gesuchNotizUpdate: GesuchNotizUpdate;
   }>(
     pipe(
       tap(() => {
@@ -86,10 +86,10 @@ export class NotizStore extends signalStore(
           notiz: cachedPending(state.notiz),
         }));
       }),
-      switchMap(({ gesuchId, notizDaten }) =>
+      switchMap(({ gesuchId, gesuchNotizUpdate }) =>
         this.notizService
           .updateNotiz$({
-            gesuchNotizUpdate: notizDaten,
+            gesuchNotizUpdate,
           })
           .pipe(
             handleApiResponse(
@@ -111,8 +111,10 @@ export class NotizStore extends signalStore(
     ),
   );
 
-  createNotiz = rxMethod<{
-    notizDaten: GesuchNotizCreate;
+  answerJuristischeAbklaerungNotiz$ = rxMethod<{
+    gesuchId: string;
+    notizId: string;
+    juristischeAbklaerungNotizAntwort: { antwort: string };
   }>(
     pipe(
       tap(() => {
@@ -120,10 +122,45 @@ export class NotizStore extends signalStore(
           notiz: cachedPending(state.notiz),
         }));
       }),
-      switchMap(({ notizDaten }) =>
+      switchMap(({ gesuchId, notizId, juristischeAbklaerungNotizAntwort }) =>
+        this.notizService
+          .answerJuristischeAbklaerungNotiz$({
+            notizId,
+            juristischeAbklaerungNotizAntwort,
+          })
+          .pipe(
+            handleApiResponse(
+              (notiz) => {
+                patchState(this, { notiz });
+              },
+              {
+                onSuccess: () => {
+                  this.notificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.infos.notiz.bearbeiten.success',
+                  });
+                  this.loadNotizen$({ gesuchId });
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  createNotiz$ = rxMethod<{
+    gesuchNotizCreate: GesuchNotizCreate;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          notiz: cachedPending(state.notiz),
+        }));
+      }),
+      switchMap(({ gesuchNotizCreate }) =>
         this.notizService
           .createNotiz$({
-            gesuchNotizCreate: notizDaten,
+            gesuchNotizCreate,
           })
           .pipe(
             handleApiResponse(
@@ -136,7 +173,7 @@ export class NotizStore extends signalStore(
                     messageKey:
                       'sachbearbeitung-app.infos.notiz.erstellen.success',
                   });
-                  this.loadNotizen$({ gesuchId: notizDaten.gesuchId });
+                  this.loadNotizen$({ gesuchId: gesuchNotizCreate.gesuchId });
                 },
               },
             ),
@@ -145,7 +182,7 @@ export class NotizStore extends signalStore(
     ),
   );
 
-  deleteNotiz = rxMethod<{
+  deleteNotiz$ = rxMethod<{
     gesuchId: string;
     notizId: string;
   }>(

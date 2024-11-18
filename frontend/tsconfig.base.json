@@ -108,6 +108,7 @@
       "@dv/shared/feature/gesuch-form-tranche": ["libs/shared/feature/gesuch-form-tranche/src/index.ts"],
       "@dv/shared/feature/verfuegung-zusammenfassung": ["libs/shared/feature/verfuegung-zusammenfassung/src/index.ts"],
       "@dv/shared/global/notification": ["libs/shared/global/global-notification/src/index.ts"],
+      "@dv/shared/global/permission": ["libs/shared/global/global-permission/src/index.ts"],
       "@dv/shared/model/api": ["libs/shared/model/api/src/index.ts"],
       "@dv/shared/model/ausbildung": ["libs/shared/model/ausbildung/src/index.ts"],
       "@dv/shared/model/benutzer": ["libs/shared/model/benutzer/src/index.ts"],
