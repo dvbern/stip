@@ -23,7 +23,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { Adresse, Land, Plz } from '@dv/shared/model/gesuch';
 import {
@@ -79,6 +79,11 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
 
   translatedLaender$ = this.laender$.pipe(
     switchMap((laender) => this.countriesService.getCountryList(laender)),
+    map((translatedLaender) =>
+      translatedLaender.filter(
+        (translatedLand) => translatedLand.code !== 'STATELESS',
+      ),
+    ),
   );
   plzValues?: Plz[];
 

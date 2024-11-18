@@ -25,7 +25,6 @@ import { GesuchCreate } from '../model/gesuchCreate';
 import { GesuchTrancheTyp } from '../model/gesuchTrancheTyp';
 import { GesuchUpdate } from '../model/gesuchUpdate';
 import { GesuchWithChanges } from '../model/gesuchWithChanges';
-import { Gesuchstatus } from '../model/gesuchstatus';
 import { GetGesucheSBQueryType } from '../model/getGesucheSBQueryType';
 import { Kommentar } from '../model/kommentar';
 import { PaginatedSbDashboard } from '../model/paginatedSbDashboard';
@@ -100,7 +99,7 @@ export interface GesuchServiceGetGesucheSbRequestParams {
     piaNachname?: string;
     piaVorname?: string;
     piaGeburtsdatum?: string;
-    status?: Gesuchstatus;
+    status?: string;
     bearbeiter?: string;
     letzteAktivitaetFrom?: string;
     letzteAktivitaetTo?: string;
