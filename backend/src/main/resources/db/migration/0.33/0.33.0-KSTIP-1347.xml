@@ -1,0 +1,75 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="jafa (generated)" id="1732034598814-1">
+        <modifyDataType columnName="comment" newDataType="varchar(2000)" tableName="gesuch"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-2">
+        <modifyDataType columnName="comment" newDataType="varchar(2000)" tableName="gesuch_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-3">
+        <modifyDataType columnName="comment" newDataType="varchar(2000)" tableName="gesuch_tranche"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-4">
+        <modifyDataType columnName="comment" newDataType="varchar(2000)" tableName="gesuch_tranche_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-5">
+        <modifyDataType columnName="hausnummer" newDataType="varchar(20)" tableName="adresse"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-6">
+        <modifyDataType columnName="hausnummer" newDataType="varchar(20)" tableName="adresse_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-7">
+        <modifyDataType columnName="identischer_zivilrechtlicher_wohnsitz_plz" newDataType="varchar(20)" tableName="eltern"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-8">
+        <modifyDataType columnName="identischer_zivilrechtlicher_wohnsitz_plz" newDataType="varchar(20)" tableName="eltern_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-9">
+        <modifyDataType columnName="identischer_zivilrechtlicher_wohnsitz_plz" newDataType="varchar(20)" tableName="person_in_ausbildung"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-10">
+        <modifyDataType columnName="identischer_zivilrechtlicher_wohnsitz_plz" newDataType="varchar(20)" tableName="person_in_ausbildung_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-11">
+        <modifyDataType columnName="kantonskuerzel" newDataType="varchar(20)" tableName="plz"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-12">
+        <modifyDataType columnName="kantonskuerzel" newDataType="varchar(20)" tableName="plz_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-13">
+        <modifyDataType columnName="kommentar" newDataType="varchar(20)" tableName="gesuch_dokument_kommentar"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-14">
+        <modifyDataType columnName="kommentar" newDataType="varchar(20)" tableName="gesuch_dokument_kommentar_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-15">
+        <modifyDataType columnName="notification_text" newDataType="varchar(2000)" tableName="notification"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-16">
+        <modifyDataType columnName="notification_text" newDataType="varchar(2000)" tableName="notification_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-17">
+        <modifyDataType columnName="plz" newDataType="varchar(20)" tableName="adresse"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-18">
+        <modifyDataType columnName="plz" newDataType="varchar(20)" tableName="adresse_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-19">
+        <modifyDataType columnName="plz" newDataType="varchar(20)" tableName="plz"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-20">
+        <modifyDataType columnName="plz" newDataType="varchar(20)" tableName="plz_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-21">
+        <modifyDataType columnName="text" newDataType="varchar(2000)" tableName="gesuch_notizen"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-22">
+        <modifyDataType columnName="text" newDataType="varchar(2000)" tableName="gesuch_notizen_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-23">
+        <dropUniqueConstraint constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732034598814-24">
+        <addUniqueConstraint columnNames="mandant, land" constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
+    </changeSet>
+</databaseChangeLog>
