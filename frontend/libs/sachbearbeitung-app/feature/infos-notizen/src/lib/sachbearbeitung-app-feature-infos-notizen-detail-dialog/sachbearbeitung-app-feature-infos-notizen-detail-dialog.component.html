@@ -82,6 +82,7 @@
       data-testid="dialog-confirm"
       [disabled]="
         form.invalid ||
+        form.pristine ||
         (!isJurNotiz && !permissionStore.permissionsMapSig()?.Sachbearbeiter) ||
         (isJurNotiz && dialogData.notiz?.id && !userIsJurist) ||
         dialogData.notiz?.antwort
