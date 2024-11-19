@@ -177,18 +177,21 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
     );
     this.formUtils.registerFormForUnsavedCheck(this);
 
-    effect(() => {
-      const geschwister = this.geschwisterSig();
+    effect(
+      () => {
+        const geschwister = this.geschwisterSig();
 
-      this.form.patchValue({
-        ...geschwister,
-        geburtsdatum: parseBackendLocalDateAndPrint(
-          geschwister.geburtsdatum,
-          this.languageSig(),
-        ),
-        ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
-      });
-    });
+        this.form.patchValue({
+          ...geschwister,
+          geburtsdatum: parseBackendLocalDateAndPrint(
+            geschwister.geburtsdatum,
+            this.languageSig(),
+          ),
+          ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
+        });
+      },
+      { allowSignalWrites: true },
+    );
 
     effect(() => {
       const invalidFormularProps =
