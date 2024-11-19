@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   AdminOption,
@@ -31,7 +31,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     RouterModule,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import { AenderungMelden } from '@dv/shared/model/gesuch';
@@ -24,7 +24,7 @@ import { GesuchAppUiDashboardGesuchComponent } from './gesuch-app-ui-dashboard-g
   imports: [
     CommonModule,
     RouterLink,
-    TranslateModule,
+    TranslatePipe,
     TranslatedPropertyPipe,
     MatExpansionModule,
     GesuchAppUiDashboardGesuchComponent,

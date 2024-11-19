@@ -21,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { SozialdienstStore } from '@dv/sachbearbeitung-app/data-access/sozialdienst';
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -49,7 +49,7 @@ import { ReplaceSozialdienstAdminDialogComponent } from '../replace-sozialdienst
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    TranslateModule,
+    TranslatePipe,
     MaskitoDirective,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,

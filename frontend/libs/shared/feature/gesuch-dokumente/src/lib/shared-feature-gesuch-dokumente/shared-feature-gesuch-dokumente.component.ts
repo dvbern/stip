@@ -12,7 +12,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
@@ -62,7 +62,7 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
     CommonModule,
     RouterModule,
     SharedUiLoadingComponent,
-    TranslateModule,
+    TranslatePipe,
     MatTableModule,
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,

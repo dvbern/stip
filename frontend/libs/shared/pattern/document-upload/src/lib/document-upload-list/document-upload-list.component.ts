@@ -6,7 +6,7 @@ import {
   input,
 } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { UploadView } from '@dv/shared/model/dokument';
 
@@ -17,7 +17,7 @@ import { UploadStore } from '../upload.store';
   selector: 'dv-shared-pattern-document-upload-list',
   standalone: true,
   imports: [
-    TranslateModule,
+    TranslatePipe,
     MatFormFieldModule,
     SharedPatternDocumentUploadEntryComponent,
   ],

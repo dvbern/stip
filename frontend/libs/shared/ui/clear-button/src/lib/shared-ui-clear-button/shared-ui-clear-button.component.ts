@@ -7,7 +7,7 @@ import {
   input,
   output,
 } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { isDefined } from '@dv/shared/model/type-util';
@@ -24,7 +24,7 @@ type AllowedValues =
 @Component({
   selector: 'dv-shared-ui-clear-button',
   standalone: true,
-  imports: [CommonModule, SharedUiIconChipComponent, TranslateModule],
+  imports: [CommonModule, SharedUiIconChipComponent, TranslatePipe],
   templateUrl: './shared-ui-clear-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

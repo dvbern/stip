@@ -16,7 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
 import {
@@ -44,7 +44,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
-    TranslateModule,
+    TranslatePipe,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiFormSaveComponent,

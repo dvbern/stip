@@ -36,7 +36,7 @@ import {
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import {
   differenceInCalendarMonths,
   differenceInCalendarYears,
@@ -111,7 +111,7 @@ type DashboardFormFields =
   imports: [
     A11yModule,
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,

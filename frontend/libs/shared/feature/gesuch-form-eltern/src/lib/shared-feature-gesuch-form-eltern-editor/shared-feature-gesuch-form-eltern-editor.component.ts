@@ -23,7 +23,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
@@ -82,7 +82,7 @@ const MEDIUM_AGE_ADULT = 40;
   imports: [
     CommonModule,
     MaskitoDirective,
-    TranslateModule,
+    TranslatePipe,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

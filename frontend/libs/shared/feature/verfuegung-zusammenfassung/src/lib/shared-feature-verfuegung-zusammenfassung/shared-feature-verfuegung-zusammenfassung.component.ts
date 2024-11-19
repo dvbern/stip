@@ -8,7 +8,7 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
@@ -23,7 +23,8 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
   imports: [
     CommonModule,
     MatCardModule,
-    TranslateModule,
+    TranslateDirective,
+    TranslatePipe,
     RouterLink,
     SharedUiIconChipComponent,
     SharedUiFormatChfPipe,
