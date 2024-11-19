@@ -47,8 +47,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.EMAIL_VALIDATION_PATTERN;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EMAIL_MESSAGE;
 
@@ -88,23 +88,23 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     private boolean identischerZivilrechtlicherWohnsitz = true;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort")
     private String identischerZivilrechtlicherWohnsitzOrt;
 
     @Nullable
-    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz")
     private String identischerZivilrechtlicherWohnsitzPLZ;
 
     @NotNull
     @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE)
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "email", nullable = false)
     private String email;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "telefonnummer", nullable = false)
     private String telefonnummer;
 
@@ -114,7 +114,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     private Land nationalitaet = Land.CH;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "heimatort")
     private String heimatort;
 

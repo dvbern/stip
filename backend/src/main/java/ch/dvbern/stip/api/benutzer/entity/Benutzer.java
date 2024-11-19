@@ -47,7 +47,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Entity
 @Table(
@@ -64,17 +64,17 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Benutzer extends AbstractMandantEntity {
     @Nullable
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "keycloak_id", unique = true)
     private String keycloakId;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "nachname", nullable = false)
     private String nachname;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "vorname", nullable = false)
     private String vorname;
 

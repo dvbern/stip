@@ -46,7 +46,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @AusbildungNichtGefundenRequiredFieldsConstraint
@@ -80,17 +80,17 @@ public class Ausbildung extends AbstractMandantEntity {
     private Ausbildungsgang ausbildungsgang;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "alternative_ausbildungsgang")
     private String alternativeAusbildungsgang;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "alternative_ausbildungsstaette")
     private String alternativeAusbildungsstaette;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "fachrichtung", nullable = false)
     private String fachrichtung;
 

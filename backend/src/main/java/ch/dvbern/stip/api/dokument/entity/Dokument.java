@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -50,22 +50,22 @@ public class Dokument extends AbstractMandantEntity {
     private List<GesuchDokument> gesuchDokumente = new ArrayList<>();
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "filename", nullable = false)
     private String filename;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "filepath", nullable = false)
     private String filepath;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "filesize", nullable = false)
     private String filesize;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "object_id", nullable = false)
     private String objectId;
 }

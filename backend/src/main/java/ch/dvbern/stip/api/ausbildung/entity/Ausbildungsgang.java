@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -58,12 +58,12 @@ public class Ausbildungsgang extends AbstractMandantEntity {
     private Ausbildungsstaette ausbildungsstaette;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "bezeichnung_de", nullable = false)
     private String bezeichnungDe;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "bezeichnung_fr")
     private String bezeichnungFr;
 

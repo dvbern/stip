@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.arch;
 
+import java.util.Set;
+
 import ch.dvbern.stip.arch.util.ArchTestUtil;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
@@ -26,6 +28,9 @@ import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
 
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 import static com.tngtech.archunit.lang.SimpleConditionEvent.satisfied;
 import static com.tngtech.archunit.lang.SimpleConditionEvent.violated;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
@@ -59,38 +64,93 @@ public class StringAnnotationTest {
             .areAnnotatedWith(Size.class)
             .and()
             .areAnnotatedWith(Column.class)
-            .should(new SizeColumnFieldCondition());
+            .should(new SizeColumnFieldSameLengthCondition());
 
         rule.check(ArchTestUtil.APP_CLASSES);
     }
 
-    private static class SizeColumnFieldCondition extends ArchCondition<JavaField> {
-        public SizeColumnFieldCondition() {
-            super("Size and Column Annotation define same length");
+    @Test
+    void entity_string_fields_size_predefined_length() {
+        final var rule = fields().that()
+            .areDeclaredInClassesThat()
+            .areAnnotatedWith(Entity.class)
+            .and()
+            .haveRawType(String.class)
+            .and()
+            .areAnnotatedWith(Size.class)
+            .and()
+            .areAnnotatedWith(Column.class)
+            .should(new SizeColumnFieldDefinedLengthCondition());
+
+        rule.check(ArchTestUtil.APP_CLASSES);
+    }
+
+    abstract static class SizeColumnFieldCondition extends ArchCondition<JavaField> {
+        protected SizeColumnFieldCondition(final String description) {
+            super(description);
         }
+
+        abstract boolean doCheck(final Column column, final Size size);
+
+        abstract String getText(final boolean success, final String fieldPath);
 
         @Override
         public void check(JavaField item, ConditionEvents events) {
             Column columnAnnotation = item.getAnnotationOfType(Column.class);
             Size sizeAnnotation = item.getAnnotationOfType(Size.class);
-            var className = item.getOwner().getName();
-            var fieldName = item.getName();
 
-            if (columnAnnotation.length() == sizeAnnotation.max()) {
-                events.add(
-                    satisfied(
-                        item,
-                        String.format("%s.%s: Size and Column Annotation define same length", className, fieldName)
-                    )
-                );
+            final String fieldPath = String.format("%s.%s", item.getOwner().getName(), item.getName());
+            final var success = doCheck(columnAnnotation, sizeAnnotation);
+
+            if (success) {
+                events.add(satisfied(item, getText(success, fieldPath)));
             } else {
-                events.add(
-                    violated(
-                        item,
-                        String.format("%s.%s: Size and Column don't define same length", className, fieldName)
-                    )
-                );
+                events.add(violated(item, getText(success, fieldPath)));
             }
+        }
+    }
+
+    private static class SizeColumnFieldSameLengthCondition extends SizeColumnFieldCondition {
+        public SizeColumnFieldSameLengthCondition() {
+            super("Size and Column Annotation define same length");
+        }
+
+        @Override
+        public boolean doCheck(final Column column, final Size size) {
+            return column.length() == size.max();
+        }
+
+        @Override
+        String getText(boolean success, String fieldPath) {
+            if (success) {
+                return String.format("%s: Size and Column Annotation define same length", fieldPath);
+            }
+            return String.format("%s: Size and Column Annotation don't define same length", fieldPath);
+        }
+    }
+
+    private static class SizeColumnFieldDefinedLengthCondition extends SizeColumnFieldCondition {
+        static final Set<Integer> VALID_STRING_LENGTHS = Set.of(
+            DB_DEFAULT_STRING_SMALL_LENGTH,
+            DB_DEFAULT_STRING_MEDIUM_LENGTH,
+            DB_DEFAULT_STRING_MAX_LENGTH
+        );
+
+        public SizeColumnFieldDefinedLengthCondition() {
+            super("Size and Column Annotation define preset length");
+        }
+
+        @Override
+        public boolean doCheck(final Column column, final Size size) {
+            return VALID_STRING_LENGTHS.contains(column.length()) && VALID_STRING_LENGTHS.contains(size.max());
+        }
+
+        @Override
+        String getText(boolean success, String fieldPath) {
+            if (success) {
+                return String.format("%s: Size and Column Annotation define preset length", fieldPath);
+            }
+            return String.format("%s: Size and Column Annotation don't define preset length", fieldPath);
         }
     }
 }
