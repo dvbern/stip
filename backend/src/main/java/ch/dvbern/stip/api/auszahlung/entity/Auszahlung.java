@@ -60,12 +60,12 @@ public class Auszahlung extends AbstractMandantEntity {
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "vorname", nullable = false)
+    @Column(name = "vorname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String vorname;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "nachname", nullable = false)
+    @Column(name = "nachname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nachname;
 
     @NotNull
@@ -75,7 +75,7 @@ public class Auszahlung extends AbstractMandantEntity {
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "iban", nullable = false)
+    @Column(name = "iban", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @IbanConstraint
     private String iban;
 

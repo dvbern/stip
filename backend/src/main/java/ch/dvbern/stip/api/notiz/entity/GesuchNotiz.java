@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Getter
@@ -52,11 +53,11 @@ public class GesuchNotiz extends AbstractMandantEntity {
     )
     private Gesuch gesuch;
 
-    @Column(name = "betreff")
+    @Column(name = "betreff", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String betreff;
 
-    @Column(name = "text")
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "text", length = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
     private String text;
 }

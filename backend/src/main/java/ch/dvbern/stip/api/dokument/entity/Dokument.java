@@ -51,21 +51,21 @@ public class Dokument extends AbstractMandantEntity {
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "filename", nullable = false)
+    @Column(name = "filename", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String filename;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "filepath", nullable = false)
+    @Column(name = "filepath", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String filepath;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "filesize", nullable = false)
+    @Column(name = "filesize", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String filesize;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "object_id", nullable = false)
+    @Column(name = "object_id", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String objectId;
 }

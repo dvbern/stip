@@ -65,21 +65,22 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 public class Benutzer extends AbstractMandantEntity {
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "keycloak_id", unique = true)
+    @Column(name = "keycloak_id", unique = true, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String keycloakId;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "nachname", nullable = false)
+    @Column(name = "nachname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nachname;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "vorname", nullable = false)
+    @Column(name = "vorname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String vorname;
 
     @AhvConstraint(optional = true)
-    @Column(name = "sozialversicherungsnummer")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "sozialversicherungsnummer", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Nullable
     private String sozialversicherungsnummer;
 

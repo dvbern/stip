@@ -44,9 +44,12 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 
 @Audited
 @Entity
@@ -91,7 +94,8 @@ public class GesuchTranche extends AbstractEntity {
     private GesuchTrancheStatus status = GesuchTrancheStatus.IN_BEARBEITUNG_GS;
 
     @Nullable
-    @Column(name = "comment")
+    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Column(name = "comment", length = DB_DEFAULT_STRING_MAX_LENGTH)
     private String comment;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuchTranche")

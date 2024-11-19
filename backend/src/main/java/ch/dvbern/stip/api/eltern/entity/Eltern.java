@@ -65,7 +65,7 @@ public class Eltern extends AbstractPerson {
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "sozialversicherungsnummer")
+    @Column(name = "sozialversicherungsnummer", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String sozialversicherungsnummer;
 
     @NotNull
@@ -75,7 +75,7 @@ public class Eltern extends AbstractPerson {
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "telefonnummer", nullable = false)
+    @Column(name = "telefonnummer", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String telefonnummer;
 
     @NotNull
@@ -88,12 +88,12 @@ public class Eltern extends AbstractPerson {
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort")
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String identischerZivilrechtlicherWohnsitzOrt;
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz")
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String identischerZivilrechtlicherWohnsitzPLZ;
 
     @Nullable

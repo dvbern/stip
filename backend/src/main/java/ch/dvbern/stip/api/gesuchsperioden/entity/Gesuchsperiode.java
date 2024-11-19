@@ -36,9 +36,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -53,13 +56,16 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 public class Gesuchsperiode extends AbstractMandantEntity {
-    @Column(nullable = false, name = "bezeichnung_de")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(nullable = false, name = "bezeichnung_de", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String bezeichnungDe;
 
-    @Column(nullable = false, name = "bezeichnung_fr")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(nullable = false, name = "bezeichnung_fr", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String bezeichnungFr;
 
-    @Column(nullable = false, name = "fiskaljahr")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(nullable = false, name = "fiskaljahr", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String fiskaljahr;
 
     @NotNull

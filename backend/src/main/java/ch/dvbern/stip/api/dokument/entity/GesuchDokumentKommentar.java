@@ -71,6 +71,6 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "kommentar", nullable = true)
+    @Column(name = "kommentar", nullable = true, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String kommentar;
 }

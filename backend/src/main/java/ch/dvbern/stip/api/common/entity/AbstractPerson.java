@@ -39,12 +39,12 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 public abstract class AbstractPerson extends AbstractMandantEntity {
     @NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "nachname", nullable = false)
+    @Column(name = "nachname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nachname;
 
     @NotBlank(message = VALIDATION_VORNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "vorname", nullable = false)
+    @Column(name = "vorname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String vorname;
 
     @NotNull

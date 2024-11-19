@@ -75,7 +75,8 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @NotNull
     @AhvConstraint
-    @Column(name = "sozialversicherungsnummer", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "sozialversicherungsnummer", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String sozialversicherungsnummer;
 
     @NotNull
@@ -89,23 +90,23 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort")
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String identischerZivilrechtlicherWohnsitzOrt;
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz")
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String identischerZivilrechtlicherWohnsitzPLZ;
 
     @NotNull
     @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String email;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "telefonnummer", nullable = false)
+    @Column(name = "telefonnummer", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String telefonnummer;
 
     @NotNull
@@ -115,7 +116,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "heimatort")
+    @Column(name = "heimatort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String heimatort;
 
     @Enumerated(EnumType.STRING)

@@ -81,17 +81,17 @@ public class Ausbildung extends AbstractMandantEntity {
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "alternative_ausbildungsgang")
+    @Column(name = "alternative_ausbildungsgang", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String alternativeAusbildungsgang;
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "alternative_ausbildungsstaette")
+    @Column(name = "alternative_ausbildungsstaette", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String alternativeAusbildungsstaette;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "fachrichtung", nullable = false)
+    @Column(name = "fachrichtung", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String fachrichtung;
 
     @Column(name = "ausbildung_nicht_gefunden", nullable = false)
@@ -112,7 +112,8 @@ public class Ausbildung extends AbstractMandantEntity {
     private AusbildungsPensum pensum;
 
     @Nullable
-    @Column(name = "ausbildungsort")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "ausbildungsort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String ausbildungsort;
 
     @NotNull

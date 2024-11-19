@@ -42,6 +42,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Setter
 public class Rolle extends AbstractMandantEntity {
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "keycloak_identifier", unique = true)
+    @Column(name = "keycloak_identifier", unique = true, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String keycloakIdentifier;
 }

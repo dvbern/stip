@@ -52,29 +52,29 @@ public class Adresse extends AbstractMandantEntity {
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "co_adresse")
+    @Column(name = "co_adresse", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String coAdresse;
 
     @NotNull
     @NotBlank
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "strasse", nullable = false)
+    @Column(name = "strasse", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String strasse;
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "hausnummer")
+    @Column(name = "hausnummer", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String hausnummer;
 
     @NotNull
     @NotBlank
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "plz", nullable = false)
+    @Column(name = "plz", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String plz;
 
     @NotNull
     @NotBlank
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "ort", nullable = false)
+    @Column(name = "ort", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String ort;
 }

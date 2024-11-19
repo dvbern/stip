@@ -46,12 +46,13 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 )
 public class Sozialdienst extends AbstractMandantEntity {
     @NotNull
-    @Column(name = "name")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "name", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String name;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "iban", nullable = false)
+    @Column(name = "iban", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @IbanConstraint
     private String iban;
 

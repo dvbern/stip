@@ -59,6 +59,9 @@ import org.hibernate.annotations.JoinFormula;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
+
 @DocumentsRequiredFehlendeDokumenteConstraint(
     groups = {
         GesuchFehlendeDokumenteValidationGroup.class
@@ -94,7 +97,8 @@ public class Gesuch extends AbstractMandantEntity {
     private Gesuchstatus gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
     @NotNull
-    @Column(name = "gesuch_nummer", nullable = false, updatable = false)
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "gesuch_nummer", nullable = false, updatable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String gesuchNummer;
 
     @NotNull
@@ -107,7 +111,8 @@ public class Gesuch extends AbstractMandantEntity {
     private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
 
     @Nullable
-    @Column(name = "comment")
+    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Column(name = "comment", length = DB_DEFAULT_STRING_MAX_LENGTH)
     private String comment;
 
     @Nullable

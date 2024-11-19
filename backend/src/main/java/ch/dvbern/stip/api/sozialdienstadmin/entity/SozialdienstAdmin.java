@@ -39,6 +39,6 @@ public class SozialdienstAdmin extends Benutzer {
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE)
-    @Column(name = "email", nullable = true)
+    @Column(name = "email", nullable = true, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String email;
 }
