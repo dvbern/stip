@@ -15,45 +15,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.kind.entity;
+package ch.dvbern.stip.api.ausbildung.entity;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-@ApplicationScoped
-@RequiredArgsConstructor
-public class KindRequiredDocumentsProducer implements RequiredDocumentProducer {
+public class AusbildungRequiredDocumentsProducer implements RequiredDocumentProducer {
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        final var kinds = formular.getKinds();
-        if (kinds == null) {
+        final var ausbildung = formular.getAusbildung();
+        if (ausbildung == null) {
             return ImmutablePair.of("", Set.of());
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
-        kinds.forEach(kind -> {
-            if (kind.getErhalteneAlimentebeitraege() != null) {
-                requiredDocs.add(DokumentTyp.KINDER_ALIMENTENVERORDUNG);
-            }
-            if (
-                Objects.nonNull(kind.getAusbildungssituation()) &&
-                kind.getAusbildungssituation().equals(Ausbildungssituation.IN_AUSBILDUNG)
-            ) {
-                requiredDocs.add(DokumentTyp.KINDER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
-            }
-        }
-        );
+        requiredDocs.add(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
 
-        return ImmutablePair.of("kinds", requiredDocs);
+        return ImmutablePair.of("ausbildung", requiredDocs);
     }
 }

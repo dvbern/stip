@@ -15,51 +15,36 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.kind.entity;
+package ch.dvbern.stip.api.ausbildung.entity;
 
-import java.util.Set;
-
-import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class KindRequiredDocumentsProducerTest {
-    private KindRequiredDocumentsProducer producer;
-
+@QuarkusTest
+class AusbildungRequiredDocumentsProducerTest {
+    private AusbildungRequiredDocumentsProducer producer;
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        producer = new KindRequiredDocumentsProducer();
+        producer = new AusbildungRequiredDocumentsProducer();
         formular = new GesuchFormular();
     }
 
     @Test
-    void requiresIfAlimentebeitraege() {
-        formular.setKinds(
-            Set.of(
-                new Kind()
-                    .setErhalteneAlimentebeitraege(1)
-            )
+    void requiresBestaetigungAusbildungsstaette() {
+        GesuchTranche tranche = GesuchGenerator.initGesuchTranche();
+        formular.setTranche(tranche);
+        RequiredDocsUtil.requiresOneAndType(
+            producer.getRequiredDocuments(formular),
+            DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         );
-
-        final var requiredDocs = producer.getRequiredDocuments(formular);
-        RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_ALIMENTENVERORDUNG);
     }
 
-    @Test
-    void requiresIfInAusbildung() {
-        formular.setKinds(
-            Set.of(
-                new Kind()
-                    .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
-            )
-        );
-
-        final var requiredDocs = producer.getRequiredDocuments(formular);
-        RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
-    }
 }
