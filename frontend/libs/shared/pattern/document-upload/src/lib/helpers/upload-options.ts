@@ -7,6 +7,8 @@ import { PermissionMap } from '@dv/shared/model/permission-state';
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   readonly [K in DokumentTyp]: DokumentOptions['titleKey'];
 } = {
+  AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE:
+    'shared.form.ausbildung.file.AUSBILDUNGSSTAETTE',
   PERSON_NIEDERLASSUNGSSTATUS_B:
     'shared.form.person.file.AUFENTHALTSBEWILLIGUNG_B',
   PERSON_NIEDERLASSUNGSSTATUS_C:
@@ -44,6 +46,8 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION:
     'shared.form.kinder.file.UNTERHALTSVERTRAG_TRENNUNGSKONVENTION',
   KINDER_ALIMENTENVERORDUNG: 'shared.form.kinder.file.ALIMENTENVERORDNUNG',
+  KINDER_BESTAETIGUNG_AUSBILDUNGSSTAETTE:
+    'shared.form.kinder.file.AUSBILDUNGSSTAETTE',
   PARTNER_AUSBILDUNG_LOHNABRECHNUNG:
     'shared.form.partner.file.AUSBILDUNG_LOHNABRECHNUNG',
   PARTNER_BELEG_OV_ABONNEMENT: 'shared.form.partner.file.OV_ABONNEMENT',

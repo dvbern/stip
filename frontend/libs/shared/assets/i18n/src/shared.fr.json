@@ -288,6 +288,7 @@
   "shared.form.ausbildung.isAusbildungAusland.label": "Formation à l'étranger",
   "shared.form.ausbildung.ausbildungsort.label": "Lieu de formation",
   "shared.form.ausbildung.ausbildungsstaette.label": "Centre de formation",
+  "shared.form.ausbildung.file.AUSBILDUNGSSTAETTE": "Confirmation du centre de formation",
   "shared.form.ausbildung.ausbildungsgang.label": "Formation",
   "shared.form.ausbildung.fachrichtung.label": "Spécialisation",
   "shared.form.ausbildung.manuell.label": "Saisir un autre centre de formation",
@@ -395,6 +396,7 @@
   "shared.form.kinder.erhalteneAlimentebeitraege.label": "Pensions alimentaires reçues",
   "shared.form.kinder.file.UNTERHALTSVERTRAG_TRENNUNGSKONVENTION": "Copie de la convention de séparation/de divorce ou d’entretien",
   "shared.form.kinder.file.ALIMENTENVERORDNUNG": "Copie de l’ordonnance alimentaire",
+  "shared.form.kinder.file.AUSBILDUNGSSTAETTE": "Copie d’une attestation actuelle de l’établissement de formation indiquant que votre enfant suit une formation postobligatoire et dont la date d’émission est postérieure au début de la formation (pour les apprenti-e-s, une attestation actuelle de l’employeur)",
 
   "shared.lebenslauf.title": "Curriculum vitae",
   "shared.form.lebenslauf.add.ausbildung": "Ajouter une formation",
