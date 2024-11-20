@@ -25,6 +25,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 export type NotizDialogData = {
@@ -49,6 +50,7 @@ export type NotizDialogResult = {
     TranslatePipe,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
     MatInputModule,
   ],
   templateUrl:

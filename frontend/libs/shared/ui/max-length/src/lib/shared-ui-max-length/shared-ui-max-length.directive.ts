@@ -7,20 +7,20 @@ import {
   input,
 } from '@angular/core';
 
-type MaxSize = 'small' | 'medium' | 'large';
+type MaxLength = 'small' | 'medium' | 'large';
 
-const maxSize = {
+const maxLength = {
   small: 20,
   medium: 255,
-  large: 3000,
-} satisfies Record<MaxSize, number>;
+  large: 2000,
+} satisfies Record<MaxLength, number>;
 
 @Directive({
-  selector: 'input[dvTextLimit], textarea[dvTextLimit]',
+  selector: 'input[dvMaxLength], textarea[dvMaxLength]',
   standalone: true,
 })
-export class SharedUiTextLimitDirective {
-  dvTextLimitSig = input<MaxSize | ''>('', { alias: 'dvTextLimit' });
+export class SharedUiMaxLengthDirective {
+  dvMaxLengthSig = input<MaxLength | ''>('', { alias: 'dvMaxLength' });
 
   private elementRef =
     inject<ElementRef<HTMLInputElement | HTMLTextAreaElement>>(ElementRef);
@@ -31,7 +31,7 @@ export class SharedUiTextLimitDirective {
       this.renderer.setAttribute(
         this.elementRef.nativeElement,
         'maxlength',
-        maxSize[this.dvTextLimitSig() || 'medium'].toString(),
+        maxLength[this.dvMaxLengthSig() || 'medium'].toString(),
       );
     });
   }

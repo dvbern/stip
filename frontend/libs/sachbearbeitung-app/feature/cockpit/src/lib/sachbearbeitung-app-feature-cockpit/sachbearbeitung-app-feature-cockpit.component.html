@@ -70,6 +70,7 @@
                         <input
                           id="fallNummer"
                           matInput
+                          [dvMaxLength]="'small'"
                           class="w-100"
                           formControlName="fallNummer"
                           data-testid="cockpit-filter-fall"
@@ -125,6 +126,7 @@
                           id="piaNachname"
                           class="w-100"
                           matInput
+                          dvMaxLength
                           formControlName="piaNachname"
                           (click)="$event.stopPropagation()"
                         />
@@ -152,6 +154,7 @@
                           id="piaVorname"
                           class="w-100"
                           matInput
+                          dvMaxLength
                           formControlName="piaVorname"
                           (click)="$event.stopPropagation()"
                         />
@@ -186,6 +189,7 @@
                           id="piaGeburtsdatum"
                           class="w-100"
                           matInput
+                          [dvMaxLength]="'small'"
                           formControlName="piaGeburtsdatum"
                           [matDatepicker]="geburtsdatumDatepicker"
                           (click)="$event.stopPropagation()"
@@ -251,6 +255,7 @@
                           id="bearbeiter"
                           class="w-100"
                           matInput
+                          dvMaxLength
                           formControlName="bearbeiter"
                           (click)="$event.stopPropagation()"
                         />
@@ -278,6 +283,7 @@
                           id="letzteAktivitaet"
                           class="range"
                           matInput
+                          dvMaxLength
                           [value]="letzteAktivitaetRangeSig()"
                           disabled
                           (click)="$event.stopPropagation()"

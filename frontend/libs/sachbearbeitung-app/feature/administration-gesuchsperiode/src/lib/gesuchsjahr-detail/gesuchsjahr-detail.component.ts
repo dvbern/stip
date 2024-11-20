@@ -38,6 +38,7 @@ import {
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
@@ -69,6 +70,7 @@ import { PublishComponent } from '../publish/publish.component';
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiMaxLengthDirective,
     MatDatepicker,
     MatDatepickerToggle,
     MatDatepickerInput,

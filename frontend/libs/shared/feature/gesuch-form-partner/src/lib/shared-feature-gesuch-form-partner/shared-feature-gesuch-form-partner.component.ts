@@ -50,6 +50,7 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
@@ -97,6 +98,7 @@ const MEDIUM_AGE_ADULT = 30;
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedUiFormReadonlyDirective,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-partner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
