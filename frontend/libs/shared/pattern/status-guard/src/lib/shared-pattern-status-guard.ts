@@ -7,6 +7,9 @@ import {
   SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
+import { PermissionStore } from '@dv/shared/global/permission';
+import { BenutzerVerwaltungRole } from '@dv/shared/model/benutzer';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   Permission,
@@ -30,6 +33,19 @@ export const isAllowedTo =
           : new RedirectCommand(router.parseUrl('/')),
       ),
     );
+  };
+
+export const hasRoles =
+  (roles: BenutzerVerwaltungRole[]): CanActivateFn =>
+  () => {
+    const permissionStore = inject(PermissionStore);
+    const notification = inject(GlobalNotificationStore);
+
+    const roleMap = permissionStore.permissionsMapSig();
+    return roles.some((role) => roleMap?.[role])
+      ? true
+      : (notification.handleForbiddenError(),
+        new RedirectCommand(inject(Router).parseUrl('/')));
   };
 
 const loadAndGetGesuch$ = (store: Store) => {

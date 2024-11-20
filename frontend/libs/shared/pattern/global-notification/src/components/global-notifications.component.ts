@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Event, NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
@@ -82,17 +82,9 @@ export class GlobalNotificationsComponent {
       .subscribe(() => {
         this.store.clearUnimportantNotifications();
       });
-    this.router.events
-      .pipe(filter(byNavigationEnd), takeUntilDestroyed())
-      .subscribe(() => {
-        this.store.clearNonPermanentNotifications();
-      });
   }
 
   removeNotification(id: number): void {
     this.store.removeNotification(id);
   }
 }
-
-const byNavigationEnd = (event: Event): event is NavigationEnd =>
-  event instanceof NavigationEnd;

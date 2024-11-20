@@ -110,6 +110,7 @@ module.exports = [
                 'type:util-data-access',
                 'type:util-fn',
                 'type:model',
+                'type:global',
               ],
               bannedExternalImports: ['@ngrx/*'],
             },
