@@ -10,7 +10,7 @@
   <div class="row g-4 my-2">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
-      <input matInput formControlName="nachname" data-testid="form-geschwister-nachname" type="text" />
+      <input matInput dvMaxLength formControlName="nachname" data-testid="form-geschwister-nachname" type="text" />
       <mat-hint *dvZuvorHint="changes?.nachname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -18,7 +18,7 @@
     </mat-form-field>
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
-      <input matInput formControlName="vorname" data-testid="form-geschwister-vorname" type="text" />
+      <input matInput dvMaxLength formControlName="vorname" data-testid="form-geschwister-vorname" type="text" />
       <mat-hint *dvZuvorHint="changes?.vorname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -34,6 +34,7 @@
       <input
         placeholder="dd.mm.yyyy"
         matInput
+        [dvMaxLength]="'small'"
         formControlName="geburtsdatum"
         data-testid="form-geschwister-geburtsdatum"
         (blur)="onGeburtsdatumBlur()"
@@ -58,7 +59,6 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.wohnsitz.label' | translate }}</mat-label>
       <mat-select
-        matInput
         formControlName="wohnsitz"
         data-testid="form-geschwister-wohnsitz"
         [placeholder]="'shared.form.select.empty' | translate"

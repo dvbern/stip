@@ -1,10 +1,10 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 export default {
-  displayName: 'shared-ui-text-limit',
+  displayName: 'shared-ui-max-length',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/ui/text-limit',
+  coverageDirectory: '../../../../coverage/libs/shared/ui/max-length',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

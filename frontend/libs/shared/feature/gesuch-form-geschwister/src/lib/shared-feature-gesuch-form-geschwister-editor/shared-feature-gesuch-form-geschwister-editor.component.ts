@@ -46,6 +46,7 @@ import {
   SharedUiFormZuvorHintComponent,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
@@ -89,6 +90,7 @@ const MEDIUM_AGE = 20;
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],

@@ -30,6 +30,7 @@
           formControlName="ausbildungsstaette"
           data-testid="form-education-ausbildungsstaette"
           matInput
+          dvMaxLength
           [matAutocomplete]="staetten"
           [placeholder]="'shared.form.select.empty' | translate"
         />
@@ -61,6 +62,7 @@
         </mat-label>
         <input
           matInput
+          dvMaxLength
           type="text"
           formControlName="alternativeAusbildungsstaette"
           data-testid="form-education-alternativeAusbildungsstaette"
@@ -92,6 +94,7 @@
         <input
           type="text"
           matInput
+          dvMaxLength
           formControlName="alternativeAusbildungsgang"
           data-testid="form-education-alternativeAusbildungsgang"
         />
@@ -106,7 +109,13 @@
       <mat-label>
         {{ 'shared.form.ausbildung.fachrichtung.label' | translate }}
       </mat-label>
-      <input type="text" matInput formControlName="fachrichtung" data-testid="form-education-fachrichtung" />
+      <input
+        type="text"
+        matInput
+        dvMaxLength
+        formControlName="fachrichtung"
+        data-testid="form-education-fachrichtung"
+      />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -116,7 +125,13 @@
       <mat-label>
         {{ 'shared.form.ausbildung.ausbildungsort.label' | translate }}
       </mat-label>
-      <input type="text" matInput formControlName="ausbildungsort" data-testid="form-education-ausbildungsort" />
+      <input
+        type="text"
+        matInput
+        dvMaxLength
+        formControlName="ausbildungsort"
+        data-testid="form-education-ausbildungsort"
+      />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -146,6 +161,7 @@
 
       <input
         matInput
+        [dvMaxLength]="'small'"
         data-testid="form-education-beginn-der-ausbildung"
         formControlName="ausbildungBegin"
         placeholder="MM.yyyy"
@@ -179,6 +195,7 @@
 
       <input
         matInput
+        [dvMaxLength]="'small'"
         data-testid="form-education-ende-der-ausbildung"
         formControlName="ausbildungEnd"
         placeholder="MM.yyyy"
