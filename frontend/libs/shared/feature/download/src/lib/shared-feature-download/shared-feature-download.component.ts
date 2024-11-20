@@ -8,7 +8,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { debounceTime, exhaustMap, filter, take, tap } from 'rxjs';
 
@@ -18,7 +18,7 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 @Component({
   selector: 'dv-shared-feature-download',
   standalone: true,
-  imports: [CommonModule, TranslateModule, SharedUiLoadingComponent],
+  imports: [CommonModule, TranslatePipe, SharedUiLoadingComponent],
   templateUrl: './shared-feature-download.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

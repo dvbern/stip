@@ -5,14 +5,14 @@ import {
   HostBinding,
   Input,
 } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
   selector: 'dv-shared-ui-form-save',
   standalone: true,
-  imports: [CommonModule, SharedUiLoadingComponent, TranslateModule],
+  imports: [CommonModule, SharedUiLoadingComponent, TranslatePipe],
   templateUrl: './shared-ui-form-save.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

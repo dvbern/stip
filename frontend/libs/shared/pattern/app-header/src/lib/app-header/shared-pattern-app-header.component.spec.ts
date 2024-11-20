@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { SharedPatternAppHeaderComponent } from './shared-pattern-app-header.component';
@@ -13,12 +13,13 @@ describe('SharedPatternAppHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedPatternAppHeaderComponent, TranslateModule.forRoot()],
+      imports: [SharedPatternAppHeaderComponent],
       providers: [
         provideHttpClient(),
         provideRouter([]),
         provideOAuthClient(),
         provideMockStore(),
+        provideTranslateService(),
       ],
     }).compileComponents();
 

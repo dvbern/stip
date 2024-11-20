@@ -6,7 +6,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   DEFAULT_LANGUAGE,
@@ -17,7 +17,7 @@ import {
 @Component({
   selector: 'dv-shared-ui-language-selector',
   standalone: true,
-  imports: [UpperCasePipe, TranslateModule],
+  imports: [UpperCasePipe, TranslatePipe],
   templateUrl: './shared-ui-language-selector.component.html',
   styleUrls: ['./shared-ui-language-selector.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

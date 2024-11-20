@@ -21,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
@@ -76,7 +76,8 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslateDirective,
+    TranslatePipe,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

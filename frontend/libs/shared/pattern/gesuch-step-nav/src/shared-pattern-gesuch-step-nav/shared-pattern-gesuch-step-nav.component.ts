@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { GesuchFormStepView, StepState } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
@@ -23,7 +23,7 @@ import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav
   standalone: true,
   imports: [
     RouterLink,
-    TranslateModule,
+    TranslatePipe,
     SharedUiIconChipComponent,
     SharedUiChangeIndicatorComponent,
     RouterLinkActive,

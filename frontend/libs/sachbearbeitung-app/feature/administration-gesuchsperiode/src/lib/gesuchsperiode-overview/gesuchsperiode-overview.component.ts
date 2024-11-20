@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
 import { Gesuchsjahr, Gesuchsperiode } from '@dv/shared/model/gesuch';
@@ -34,7 +34,7 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
     MatSortModule,
     MatChipsModule,
     RouterLink,
-    TranslateModule,
+    TranslatePipe,
     TranslatedPropertyPipe,
     TypeSafeMatCellDefDirective,
     SharedUiFocusableListDirective,

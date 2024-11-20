@@ -30,7 +30,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
@@ -84,7 +84,7 @@ const animationTime = 500;
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslateModule,
+    TranslatePipe,
     MaskitoDirective,
     MatFormFieldModule,
     MatRadioModule,

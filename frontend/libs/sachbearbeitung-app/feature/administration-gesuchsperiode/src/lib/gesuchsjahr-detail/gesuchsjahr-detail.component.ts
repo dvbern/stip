@@ -28,7 +28,7 @@ import {
 import { MatInput } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaskitoDirective } from '@maskito/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
 import {
@@ -60,7 +60,7 @@ import { PublishComponent } from '../publish/publish.component';
     MatFormFieldModule,
     MatHint,
     MatInput,
-    TranslateModule,
+    TranslatePipe,
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,

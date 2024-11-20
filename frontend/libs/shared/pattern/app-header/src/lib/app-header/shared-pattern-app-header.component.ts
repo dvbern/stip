@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
@@ -35,7 +35,7 @@ import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-select
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     RouterOutlet,
     RouterLink,
     MatMenuModule,

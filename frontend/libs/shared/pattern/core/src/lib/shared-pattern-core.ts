@@ -28,7 +28,7 @@ import {
   MissingTranslationHandler,
   MissingTranslationHandlerParams,
   TranslateLoader,
-  TranslateModule,
+  provideTranslateService,
 } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
@@ -134,27 +134,26 @@ export function provideSharedPatternCore(
       sharedDataAccessLanguageEffects,
       sharedDataAccessStammdatenEffects,
     ),
+    provideTranslateService({
+      missingTranslationHandler: {
+        provide: MissingTranslationHandler,
+        useClass: ExplicitMissingTranslationHandler,
+      },
+      useDefaultLang: false, // easier to notice missing translations
+      loader: {
+        provide: TranslateLoader,
+        useFactory: () =>
+          new MultiTranslateHttpLoader(inject(HttpBackend), [
+            { prefix: './assets/i18n/', suffix: '.json' },
+            { prefix: './assets/i18n/shared.', suffix: '.json' },
+          ]),
+      },
+    }),
     provideRouterStore(),
     ...(isDevMode() ? [provideStoreDevtools({ connectInZone: true })] : []),
 
     // modules which don't support Angular Standalone APIs yet
-    importProvidersFrom([
-      TranslateModule.forRoot({
-        missingTranslationHandler: {
-          provide: MissingTranslationHandler,
-          useClass: ExplicitMissingTranslationHandler,
-        },
-        useDefaultLang: false, // easier to notice missing translations
-        loader: {
-          provide: TranslateLoader,
-          useFactory: () =>
-            new MultiTranslateHttpLoader(inject(HttpBackend), [
-              { prefix: './assets/i18n/', suffix: '.json' },
-              { prefix: './assets/i18n/shared.', suffix: '.json' },
-            ]),
-        },
-      }),
-    ]),
+    importProvidersFrom([]),
     {
       provide: SharedModelCompileTimeConfig,
       useFactory: () => new SharedModelCompileTimeConfig(compileTimeConfig),

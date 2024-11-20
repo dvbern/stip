@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   SharedPatternAppHeaderComponent,
@@ -22,7 +22,7 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiSearchComponent,
-    TranslateModule,
+    TranslatePipe,
     GlobalNotificationsComponent,
   ],
   templateUrl: './sachbearbeitung-app-pattern-overview-layout.component.html',

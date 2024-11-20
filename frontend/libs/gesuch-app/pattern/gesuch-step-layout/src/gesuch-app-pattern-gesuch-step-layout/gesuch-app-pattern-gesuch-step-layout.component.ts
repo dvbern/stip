@@ -10,7 +10,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
@@ -43,7 +43,8 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     CommonModule,
     SharedPatternGesuchStepNavComponent,
     SharedUiProgressBarComponent,
-    TranslateModule,
+    TranslateDirective,
+    TranslatePipe,
     SharedUiIconChipComponent,
     SharedUiLanguageSelectorComponent,
     GesuchAppPatternMainLayoutComponent,

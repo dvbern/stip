@@ -25,7 +25,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { isAfter, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -102,7 +102,7 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslateModule,
+    TranslatePipe,
     MaskitoDirective,
     MatFormFieldModule,
     MatInputModule,

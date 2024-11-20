@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   SharedUiFormatChfPipe,
@@ -14,7 +14,7 @@ import { FamilienBerechnung } from '../../../models';
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
   ],

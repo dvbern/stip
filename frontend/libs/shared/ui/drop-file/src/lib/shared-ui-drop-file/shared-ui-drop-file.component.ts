@@ -9,12 +9,12 @@ import {
   Renderer2,
   inject,
 } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'dv-shared-ui-drop-file',
   standalone: true,
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
   templateUrl: './shared-ui-drop-file.component.html',
   styleUrls: ['./shared-ui-drop-file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
