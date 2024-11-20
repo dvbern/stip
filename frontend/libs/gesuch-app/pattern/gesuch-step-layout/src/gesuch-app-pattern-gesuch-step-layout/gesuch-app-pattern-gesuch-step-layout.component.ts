@@ -10,7 +10,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
@@ -43,7 +43,8 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     CommonModule,
     SharedPatternGesuchStepNavComponent,
     SharedUiProgressBarComponent,
-    TranslateModule,
+    TranslateDirective,
+    TranslatePipe,
     SharedUiIconChipComponent,
     SharedUiLanguageSelectorComponent,
     GesuchAppPatternMainLayoutComponent,
@@ -73,15 +74,13 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   stepsSig = computed(() => {
-    const cachedGesuchFormular = this.cacheViewSig().cache.gesuchFormular;
+    const cachedGesuch = this.cacheViewSig().cache.gesuch;
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
     const steps = this.stepsViewSig().steps;
-    const readonly = this.cacheViewSig().readonly;
     const validatedSteps = this.stepManager.getValidatedSteps(
       steps,
-      cachedGesuchFormular,
+      cachedGesuch,
       invalidFormularProps.validations,
-      readonly,
     );
     return validatedSteps;
   });

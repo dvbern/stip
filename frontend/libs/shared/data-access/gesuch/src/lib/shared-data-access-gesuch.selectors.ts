@@ -30,12 +30,11 @@ import {
   SharedModelGesuchFormStep,
   TRANCHE,
 } from '@dv/shared/model/gesuch-form';
-import { type } from '@dv/shared/model/type-util';
 import {
-  isGesuchReadonly,
-  isTrancheReadonly,
-} from '@dv/shared/util/permission-state';
-import { capitalized, lowercased } from '@dv/shared/util-fn/string-helper';
+  getGesuchPermissions,
+  getTranchePermissions,
+} from '@dv/shared/model/permission-state';
+import { capitalized, lowercased, type } from '@dv/shared/model/type-util';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
@@ -104,6 +103,14 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       isEditingTranche,
       gesuchTranche,
     );
+    const appType = config.compileTimeConfig?.appType;
+    const gesuchPermissions = getGesuchPermissions(gesuch, appType);
+    const tranchePermissions = getTranchePermissions(gesuch, appType);
+    const canWrite =
+      (trancheSetting?.type === 'AENDERUNG'
+        ? tranchePermissions.canWrite
+        : gesuchPermissions.canWrite) ?? true;
+
     return {
       config,
       lastUpdate,
@@ -112,12 +119,9 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       gesuchFormular,
       tranchenChanges,
       isEditingTranche,
-      readonly: trancheSetting?.type
-        ? isTrancheReadonly(
-            gesuch?.gesuchTrancheToWorkWith ?? null,
-            config.compileTimeConfig?.appType,
-          )
-        : isGesuchReadonly(gesuch, config.compileTimeConfig?.appType),
+      readonly: !canWrite,
+      gesuchPermissions,
+      tranchePermissions,
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       trancheSetting,
       gesuchId: gesuch?.id,
@@ -188,20 +192,28 @@ export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
 export const selectSharedDataAccessGesuchCache = createSelector(
   sharedDataAccessGesuchsFeature.selectCache,
   sharedDataAccessGesuchsFeature.selectIsEditingTranche,
-  (cache, isEditingTranche) => ({ ...cache, isEditingTranche }),
+  sharedDataAccessGesuchsFeature.selectTrancheTyp,
+  (cache, isEditingTranche, trancheTyp) => ({
+    ...cache,
+    isEditingTranche,
+    trancheTyp,
+  }),
 );
 export const selectSharedDataAccessGesuchCacheView = createSelector(
   selectSharedDataAccessGesuchCache,
   selectSharedDataAccessConfigsView,
-  ({ isEditingTranche, ...cache }, config) => {
+  ({ isEditingTranche, trancheTyp, ...cache }, config) => {
+    const appType = config.compileTimeConfig?.appType;
+    const gesuchPermissions = getGesuchPermissions(cache.gesuch, appType);
+    const tranchePermissions = getTranchePermissions(cache.gesuch, appType);
+
     return {
       cache,
+      trancheTyp,
       readonly: isEditingTranche
-        ? isTrancheReadonly(
-            cache.gesuch?.gesuchTrancheToWorkWith ?? null,
-            config.compileTimeConfig?.appType,
-          )
-        : isGesuchReadonly(cache.gesuch, config.compileTimeConfig?.appType),
+        ? !tranchePermissions.canWrite
+        : !gesuchPermissions.canWrite,
+      gesuchPermissions,
     };
   },
 );
@@ -349,7 +361,7 @@ export const hasSteuerdatenChanges = (
           steuerdatenTypChange.type !== 'UPDATE')
       ) {
         affectedSteps.add(
-          `steuerdaten${steuerdatenTyp === 'FAMILIE' ? '' : capitalized(steuerdatenTyp)}`,
+          `steuerdaten${steuerdatenTyp === 'FAMILIE' ? '' : capitalized(lowercased(steuerdatenTyp))}`,
         );
       }
     },

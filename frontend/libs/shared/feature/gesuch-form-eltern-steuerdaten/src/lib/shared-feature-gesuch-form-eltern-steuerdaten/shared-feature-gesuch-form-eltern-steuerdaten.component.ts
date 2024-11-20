@@ -19,7 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
@@ -58,7 +58,7 @@ import { selectSharedFeatureGesuchFormSteuerdatenView } from './shared-feature-g
     CommonModule,
     ReactiveFormsModule,
     MaskitoDirective,
-    TranslateModule,
+    TranslatePipe,
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,

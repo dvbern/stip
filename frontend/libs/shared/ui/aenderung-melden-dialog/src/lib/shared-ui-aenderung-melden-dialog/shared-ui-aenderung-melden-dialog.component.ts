@@ -16,7 +16,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { endOfMonth, startOfMonth } from 'date-fns';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -42,7 +42,7 @@ type GesuchAenderungData = {
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     ReactiveFormsModule,
     MatInputModule,
     MatFormFieldModule,

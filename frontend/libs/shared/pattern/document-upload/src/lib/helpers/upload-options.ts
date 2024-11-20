@@ -2,6 +2,7 @@ import { Signal, computed } from '@angular/core';
 
 import { DokumentOptions } from '@dv/shared/model/dokument';
 import { Dokument, DokumentTyp, GesuchDokument } from '@dv/shared/model/gesuch';
+import { PermissionMap } from '@dv/shared/model/permission-state';
 
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   readonly [K in DokumentTyp]: DokumentOptions['titleKey'];
@@ -99,7 +100,7 @@ export function createUploadOptionsFactory<
   T extends Signal<{
     trancheId: string | undefined;
     allowTypes: string | undefined;
-    readonly: boolean;
+    gesuchPermissions: PermissionMap;
   }>,
 >(view: T) {
   /**
@@ -126,9 +127,12 @@ export function createUploadOptionsFactory<
     options?: { singleUpload?: boolean; initialDocuments?: Dokument[] },
   ) => {
     return computed<DokumentOptions | null>(() => {
+      const permissions = view().gesuchPermissions;
       const trancheId = view().trancheId;
       const allowTypes = view().allowTypes;
-      const readonly = view().readonly;
+      const readonly = !(
+        permissions.canUploadMissingDocuments || permissions.canWrite
+      );
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
         ? {

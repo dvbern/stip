@@ -21,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
@@ -47,7 +47,6 @@ import {
   SharedUiFormZuvorHintComponent,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
-import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
@@ -77,7 +76,8 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslateDirective,
+    TranslatePipe,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -94,7 +94,6 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
-    SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-einnahmenkosten.component.html',
   styleUrl: './shared-feature-gesuch-form-einnahmenkosten.component.scss',

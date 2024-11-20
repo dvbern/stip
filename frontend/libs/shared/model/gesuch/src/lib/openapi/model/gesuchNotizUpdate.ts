@@ -11,7 +11,7 @@
  */
 
 export interface GesuchNotizUpdate { 
-    id?: string;
+    id: string;
     betreff: string;
     text: string;
 }

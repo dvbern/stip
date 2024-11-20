@@ -11,7 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { combineLatest, filter } from 'rxjs';
 
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
@@ -40,7 +40,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   imports: [
     CommonModule,
     RouterLink,
-    TranslateModule,
+    TranslatePipe,
     GlobalNotificationsComponent,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
@@ -74,15 +74,13 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   stepsSig = computed(() => {
-    const cachedGesuchFormular = this.cacheViewSig().cache.gesuchFormular;
+    const { gesuch } = this.cacheViewSig().cache;
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
     const steps = this.stepsViewSig().steps;
-    const readonly = this.cacheViewSig().readonly;
     const validatedSteps = this.stepManager.getValidatedSteps(
       steps,
-      cachedGesuchFormular,
+      gesuch,
       invalidFormularProps.validations,
-      readonly,
     );
     return validatedSteps;
   });

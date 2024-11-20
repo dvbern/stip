@@ -12,7 +12,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
@@ -39,7 +39,10 @@ import {
 import { detailExpand } from '@dv/shared/ui/animations';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
-import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
+import {
+  SharedUiIfGesuchstellerDirective,
+  SharedUiIfSachbearbeiterDirective,
+} from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
 import {
@@ -59,12 +62,13 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
     CommonModule,
     RouterModule,
     SharedUiLoadingComponent,
-    TranslateModule,
+    TranslatePipe,
     MatTableModule,
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiBadgeComponent,
     SharedUiIconBadgeComponent,
+    SharedUiIfGesuchstellerDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiPrefixAppTypePipe,
     TypeSafeMatCellDefDirective,
@@ -185,34 +189,37 @@ export class SharedFeatureGesuchDokumenteComponent {
   constructor() {
     getLatestTrancheIdFromGesuch$(this.gesuchViewSig)
       .pipe(takeUntilDestroyed())
-      .subscribe((trancheId) => {
-        this.dokumentsStore.getDokumenteAndRequired$(trancheId, true);
+      .subscribe((gesuchTrancheId) => {
+        this.dokumentsStore.getDokumenteAndRequired$({
+          gesuchTrancheId,
+          ignoreCache: true,
+        });
       });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
   trackByFn(_index: number, item: SharedModelTableDokument) {
-    return item?.gesuchDokument?.id ?? item.dokumentTyp;
+    return item.dokumentTyp;
   }
 
   dokumentAkzeptieren(document: SharedModelTableDokument) {
-    const trancheId = this.gesuchViewSig().trancheId;
+    const gesuchTrancheId = this.gesuchViewSig().trancheId;
 
-    if (!document?.gesuchDokument?.id || !trancheId) return;
+    if (!document?.gesuchDokument?.id || !gesuchTrancheId) return;
 
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: document.gesuchDokument.id,
       afterSuccess: () => {
-        this.dokumentsStore.getDokumenteAndRequired$(trancheId);
+        this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
       },
     });
   }
 
   dokumentAblehnen(document: SharedModelTableDokument) {
-    const { trancheId } = this.gesuchViewSig();
+    const { trancheId: gesuchTrancheId } = this.gesuchViewSig();
 
-    if (!trancheId) return;
+    if (!gesuchTrancheId) return;
 
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
@@ -228,12 +235,12 @@ export class SharedFeatureGesuchDokumenteComponent {
       .subscribe((result) => {
         if (result) {
           this.dokumentsStore.gesuchDokumentAblehnen$({
-            gesuchTrancheId: trancheId,
+            gesuchTrancheId: gesuchTrancheId,
             kommentar: result.kommentar,
             gesuchDokumentId: result.id,
             dokumentTyp: document.dokumentTyp as DokumentTyp,
             afterSuccess: () => {
-              this.dokumentsStore.getDokumenteAndRequired$(trancheId);
+              this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
             },
           });
         }
@@ -257,6 +264,20 @@ export class SharedFeatureGesuchDokumenteComponent {
       dokumentTyp: dokument.dokumentTyp as DokumentTyp,
       gesuchTrancheId: trancheId,
     });
+  }
+
+  fehlendeDokumenteEinreichen() {
+    const { gesuchId, trancheId } = this.gesuchViewSig();
+
+    if (gesuchId && trancheId) {
+      this.dokumentsStore.fehlendeDokumenteEinreichen$({
+        trancheId,
+        onSuccess: () => {
+          // Reload gesuch because the status has changed
+          this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+        },
+      });
+    }
   }
 
   fehlendeDokumenteUebermitteln() {

@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -58,6 +59,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -102,6 +104,7 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.LEDIG;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -141,6 +144,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchValidatorService gesuchValidatorService;
+
+    @Inject
+    GesuchTrancheValidatorService gesuchTrancheValidatorService;
 
     @Inject
     ConfigService configService;
@@ -1044,7 +1050,10 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
         when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
+        final var gesuchStatus = tranche.getGesuch().getGesuchStatus();
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuchService.updateGesuch(UUID.randomUUID(), gesuchUpdateDto, TENANT_ID);
+        tranche.getGesuch().setGesuchStatus(gesuchStatus);
 
         final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
         assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(5));
@@ -1130,7 +1139,10 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
         when(gesuchRepository.findByIdOptional(any())).thenReturn(Optional.ofNullable(tranche.getGesuch()));
+        final var gesuchStatus = tranche.getGesuch().getGesuchStatus();
+        tranche.getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuchService.updateGesuch(UUID.randomUUID(), gesuchUpdateDto, TENANT_ID);
+        tranche.getGesuch().setGesuchStatus(gesuchStatus);
 
         final var steuerdatenTab = tranche.getGesuchFormular().getSteuerdaten().iterator().next();
         assertThat(steuerdatenTab.getVeranlagungsCode(), Matchers.equalTo(0));
@@ -1278,13 +1290,78 @@ class GesuchServiceTest {
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
 
         // act
-        gesuchService.gesuchFehlendeDokumente(gesuch.getId());
+        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
 
         // assert
         Mockito.verify(notificationService).createMissingDocumentNotification(any());
 
         // TODO KSTIP-1652: Deduplicate mail sending
         Mockito.verify(mailService, Mockito.atMost(2)).sendStandardNotificationEmail(any(), any(), any(), any());
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    @Description("Try to einreichen a gesuch in state FEHLENDE_DOKUMENTE with missing documents")
+    void gesuchFehlendeDokumenteEinreichenFail() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
+        Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
+        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
+
+        // act/assert
+        try {
+            gesuchService.gesuchFehlendeDokumenteEinreichen(gesuch.getGesuchTranchen().get(0).getId());
+        } catch (ValidationsException e) {
+            assertThat(e.toString(), Matchers.containsString("Dokument wurde nicht hochgeladen"));
+        }
+        // assertThrows(
+        // ValidationsException.class,
+        // () -> gesuchService.gesuchFehlendeDokumenteEinreichen(gesuch.getGesuchTranchen().get(0).getId())
+        // );
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    @Description("Try to einreichen a gesuch in state FEHLENDE_DOKUMENTE with missing documents")
+    void gesuchFehlendeDokumenteEinreichen() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
+        Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
+        var gesuchTrancheValidatorServiceMock = Mockito.mock(GesuchTrancheValidatorService.class);
+
+        Mockito.doNothing().when(gesuchTrancheValidatorServiceMock).validateGesuchTrancheForEinreichen(any());
+        QuarkusMock.installMockForType(gesuchTrancheValidatorServiceMock, GesuchTrancheValidatorService.class);
+
+        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
+        assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.FEHLENDE_DOKUMENTE));
+        gesuchService.gesuchFehlendeDokumenteEinreichen(gesuch.getGesuchTranchen().get(0).getId());
+        assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {

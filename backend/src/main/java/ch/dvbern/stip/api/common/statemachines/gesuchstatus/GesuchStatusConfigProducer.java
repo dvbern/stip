@@ -80,10 +80,7 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, Gesuchstatus.IN_BEARBEITUNG_GS)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.BEREIT_FUER_BEARBEITUNG); // TODO: KSTIP-1583 -
-                                                                                                // Remove/Add proper
-                                                                                                // state change
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
@@ -141,7 +138,7 @@ public class GesuchStatusConfigProducer {
     private Gesuch extractGesuchFromStateMachineArgs(Object[] args) {
         if (args.length == 0 || !(args[0] instanceof Gesuch)) {
             throw new AppErrorException(
-                "State Transition args sollte einen Gesuch Objekt enthalten, es gibt einen Problem in die "
+                "State Transition args sollten einen Gesuch Objekt enthalten, es gibt ein Problem in den "
                 + "Statemachine args"
             );
         }

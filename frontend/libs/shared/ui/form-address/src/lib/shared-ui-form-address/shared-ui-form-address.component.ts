@@ -21,9 +21,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { Adresse, Land, Plz } from '@dv/shared/model/gesuch';
 import {
@@ -52,7 +52,7 @@ type AddresseFormGroup = FormGroup<{
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
@@ -79,6 +79,11 @@ export class SharedUiFormAddressComponent implements DoCheck, OnChanges {
 
   translatedLaender$ = this.laender$.pipe(
     switchMap((laender) => this.countriesService.getCountryList(laender)),
+    map((translatedLaender) =>
+      translatedLaender.filter(
+        (translatedLand) => translatedLand.code !== 'STATELESS',
+      ),
+    ),
   );
   plzValues?: Plz[];
 

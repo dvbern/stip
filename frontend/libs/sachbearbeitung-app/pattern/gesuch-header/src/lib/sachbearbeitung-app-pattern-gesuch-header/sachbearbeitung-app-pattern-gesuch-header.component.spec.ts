@@ -3,7 +3,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
@@ -16,15 +16,13 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        SachbearbeitungAppPatternGesuchHeaderComponent,
-        TranslateModule.forRoot(),
-      ],
+      imports: [SachbearbeitungAppPatternGesuchHeaderComponent],
       providers: [
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideOAuthClient(),
+        provideTranslateService(),
         provideMockStore({
           initialState: {
             gesuchs: {
@@ -43,8 +41,8 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
       SachbearbeitungAppPatternGesuchHeaderComponent,
     );
     fixture.componentRef.setInput('currentGesuch', null);
+    fixture.componentRef.setInput('gesuchPermissions', {});
     fixture.componentRef.setInput('isLoading', false);
-    fixture.componentRef.setInput('navClicked', { value: null });
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

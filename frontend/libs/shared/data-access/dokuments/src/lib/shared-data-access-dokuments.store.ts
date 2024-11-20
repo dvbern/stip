@@ -3,7 +3,7 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
+import { EMPTY, catchError, combineLatest, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
@@ -18,7 +18,10 @@ import {
 import {
   CachedRemoteData,
   RemoteData,
+  cachedFailure,
   cachedPending,
+  catchRemoteDataError,
+  failure,
   fromCachedDataSig,
   handleApiResponse,
   initial,
@@ -262,10 +265,85 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  getDokumenteAndRequired$(gesuchTrancheId: string, ignoreCache?: boolean) {
-    this.getGesuchDokumente$({ gesuchTrancheId, ignoreCache });
-    this.getRequiredDocumentTypes$(gesuchTrancheId);
-  }
+  fehlendeDokumenteEinreichen$ = rxMethod<{
+    trancheId: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          dokuments: cachedPending(state.dokuments),
+          requiredDocumentTypes: cachedPending(state.requiredDocumentTypes),
+        }));
+      }),
+      switchMap(({ trancheId, onSuccess }) =>
+        this.gesuchService
+          .gesuchTrancheFehlendeDokumenteEinreichen$({
+            gesuchTrancheId: trancheId,
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.getRequiredDocumentTypes$(trancheId);
+                onSuccess();
+              },
+              error: (error) => {
+                patchState(this, (state) => ({
+                  dokuments: cachedFailure(state.dokuments, error),
+                  requiredDocumentTypes: cachedFailure(
+                    state.requiredDocumentTypes,
+                    error,
+                  ),
+                }));
+              },
+            }),
+          ),
+      ),
+    ),
+  );
+
+  getDokumenteAndRequired$ = rxMethod<{
+    gesuchTrancheId: string;
+    ignoreCache?: boolean;
+  }>(
+    pipe(
+      tap(({ ignoreCache }) => {
+        patchState(this, (state) => ({
+          dokuments: ignoreCache ? pending() : cachedPending(state.dokuments),
+          requiredDocumentTypes: cachedPending(state.requiredDocumentTypes),
+        }));
+      }),
+      switchMap(({ gesuchTrancheId }) =>
+        combineLatest([
+          this.trancheService.getGesuchDokumente$({ gesuchTrancheId }),
+          this.trancheService.getRequiredGesuchDokumentTyp$({
+            gesuchTrancheId,
+          }),
+        ]),
+      ),
+      tapResponse({
+        next: ([dokuments, requiredDocumentTypes]) => {
+          patchState(this, () => ({
+            // Patch both lists at the same time to avoid unecessary rerenders
+            dokuments: success(dokuments),
+            requiredDocumentTypes: success(requiredDocumentTypes),
+          }));
+        },
+        error: (error) => {
+          patchState(this, () => ({
+            dokuments: failure(error),
+            requiredDocumentTypes: failure(error),
+          }));
+        },
+      }),
+      catchRemoteDataError((error) => {
+        patchState(this, () => ({
+          dokuments: failure(error),
+          requiredDocumentTypes: failure(error),
+        }));
+      }),
+    ),
+  );
 
   getGesuchDokumente$ = rxMethod<{
     gesuchTrancheId: string;

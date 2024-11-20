@@ -12,7 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { StatusprotokollStore } from '@dv/sachbearbeitung-app/data-access/statusprotokoll';
 import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
@@ -23,7 +23,7 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     MatTableModule,
     MatSortModule,
     TypeSafeMatCellDefDirective,

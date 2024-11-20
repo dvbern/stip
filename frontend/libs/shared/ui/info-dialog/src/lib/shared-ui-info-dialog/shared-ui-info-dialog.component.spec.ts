@@ -4,7 +4,7 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import {
   InfoDialogData,
@@ -27,12 +27,9 @@ describe('SharedUiInfoDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        SharedUiInfoDialogComponent,
-        MatDialogModule,
-        TranslateModule.forRoot(),
-      ],
+      imports: [SharedUiInfoDialogComponent, MatDialogModule],
       providers: [
+        provideTranslateService(),
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
       ],

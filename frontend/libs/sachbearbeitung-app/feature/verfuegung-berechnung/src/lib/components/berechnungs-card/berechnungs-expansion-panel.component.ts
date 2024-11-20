@@ -6,10 +6,10 @@ import {
   input,
 } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
+import { capitalized } from '@dv/shared/model/type-util';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
-import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 import { Berechnung, BerechnungsValue } from '../../../models';
 
@@ -18,7 +18,7 @@ import { Berechnung, BerechnungsValue } from '../../../models';
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     MatExpansionModule,
     SharedUiFormatChfPipe,
   ],

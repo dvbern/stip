@@ -1,0 +1,347 @@
+{
+  "fall": {
+    "id": "8907ae21-6e31-43d8-9c8e-dc5c27783819",
+    "fallNummer": "BE.F.415408",
+    "mandant": "bern"
+  },
+  "gesuchsperiode": {
+    "id": "8005fa24-cf60-404f-8735-89129e6f0e22",
+    "bezeichnungDe": "Herbst 2024",
+    "bezeichnungFr": "Automne 2024",
+    "gueltigkeitStatus": "PUBLIZIERT",
+    "gesuchsperiodeStart": "2024-07-01",
+    "gesuchsperiodeStopp": "2025-06-30",
+    "aufschaltterminStart": "2024-07-15",
+    "aufschaltterminStopp": "2025-03-31",
+    "einreichefristNormal": "2024-12-31",
+    "einreichefristReduziert": "2025-03-31",
+    "gesuchsjahr": {
+      "id": "55f03e78-4f0e-42dd-af04-d96850ceb3c9",
+      "bezeichnungDe": "Gesuchsjahr 24",
+      "bezeichnungFr": "Année de la demande 24",
+      "technischesJahr": 2024,
+      "gueltigkeitStatus": "PUBLIZIERT"
+    },
+    "ausbKosten_SekII": 2000,
+    "ausbKosten_Tertiaer": 3000
+  },
+  "gesuchStatus": "IN_BEARBEITUNG_SB",
+  "gesuchNummer": "2024.BE.G.59910",
+  "id": "7fe50de1-33e5-4921-ade2-8b27598e5463",
+  "aenderungsdatum": "2024-11-13",
+  "gesuchTrancheToWorkWith": {
+    "id": "243d0205-3a98-4352-abaf-baf6527a2648",
+    "gueltigAb": "2024-07-01",
+    "gueltigBis": "2025-06-30",
+    "status": "UEBERPRUEFEN",
+    "typ": "TRANCHE",
+    "comment": null,
+    "gesuchFormular": {
+      "ausbildung": {
+        "fachrichtung": "Hebamme",
+        "ausbildungBegin": "3.2020",
+        "ausbildungEnd": "2.2025",
+        "pensum": "TEILZEIT",
+        "ausbildungsgang": {
+          "id": "77465a0d-eba1-4197-a17f-e287792d8448",
+          "bildungskategorie": {
+            "bezeichnungDe": "Fachhochschulen",
+            "bezeichnungFr": "Hautes écoles spécialisées",
+            "bildungsstufe": "TERTIAER",
+            "bfs": 8,
+            "id": "6a38f3ac-824b-40a4-8aef-486de8c2262d"
+          },
+          "bezeichnungDe": "Bachelor",
+          "bezeichnungFr": "Bachelor",
+          "ausbildungsstaetteId": null
+        },
+        "ausbildungNichtGefunden": false,
+        "alternativeAusbildungsstaette": null,
+        "alternativeAusbildungsgang": null,
+        "ausbildungsort": "Bern",
+        "isAusbildungAusland": false
+      },
+      "personInAusbildung": {
+        "adresse": {
+          "land": "CH",
+          "strasse": "Güterstrasse",
+          "plz": "2502",
+          "ort": "Biel",
+          "id": "e3b517de-eadf-4ed8-bf00-006b263fb6ab",
+          "coAdresse": null,
+          "hausnummer": "1"
+        },
+        "sozialversicherungsnummer": "756.5093.0193.99",
+        "vorname": "Rosmarina",
+        "anrede": "FRAU",
+        "identischerZivilrechtlicherWohnsitz": true,
+        "email": "alain.bumann@be.ch",
+        "telefonnummer": "031 633 85 12",
+        "geburtsdatum": "1995-12-31",
+        "nationalitaet": "CH",
+        "wohnsitz": "EIGENER_HAUSHALT",
+        "sozialhilfebeitraege": false,
+        "nachname": "Herbas",
+        "korrespondenzSprache": "DEUTSCH",
+        "heimatort": "Biel",
+        "niederlassungsstatus": null,
+        "einreisedatum": null,
+        "zivilstand": "KONKUBINAT",
+        "wohnsitzAnteilMutter": null,
+        "wohnsitzAnteilVater": null,
+        "vormundschaft": false,
+        "identischerZivilrechtlicherWohnsitzOrt": null,
+        "identischerZivilrechtlicherWohnsitzPLZ": null
+      },
+      "familiensituation": {
+        "elternVerheiratetZusammen": true,
+        "elternteilUnbekanntVerstorben": null,
+        "gerichtlicheAlimentenregelung": null,
+        "mutterUnbekanntVerstorben": null,
+        "mutterUnbekanntGrund": null,
+        "mutterWiederverheiratet": null,
+        "vaterUnbekanntVerstorben": null,
+        "vaterUnbekanntGrund": null,
+        "vaterWiederverheiratet": null,
+        "sorgerecht": null,
+        "obhut": null,
+        "obhutMutter": null,
+        "obhutVater": null,
+        "werZahltAlimente": null
+      },
+      "partner": {
+        "adresse": {
+          "land": "CH",
+          "strasse": "Güterstrasse",
+          "plz": "2502",
+          "ort": "Biel",
+          "id": "f976d49e-a572-4831-9f2b-aea2476df690",
+          "coAdresse": null,
+          "hausnummer": "1"
+        },
+        "vorname": "Pepino",
+        "geburtsdatum": "1994-05-04",
+        "sozialversicherungsnummer": "756.2116.2807.50",
+        "nachname": "Verduro",
+        "ausbildungMitEinkommenOderErwerbstaetig": false,
+        "jahreseinkommen": null,
+        "fahrkosten": null,
+        "verpflegungskosten": null
+      },
+      "auszahlung": {
+        "vorname": "Rosmarina",
+        "adresse": {
+          "land": "CH",
+          "strasse": "Güterstrasse",
+          "plz": "2502",
+          "ort": "Biel",
+          "id": "e3b517de-eadf-4ed8-bf00-006b263fb6ab",
+          "coAdresse": null,
+          "hausnummer": "1"
+        },
+        "iban": "CH33 0900 0000 3000 0823 3",
+        "nachname": "Herbas",
+        "kontoinhaber": "GESUCHSTELLER"
+      },
+      "elterns": [
+        {
+          "vorname": "Minza",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Hirtenweg",
+            "plz": "2502",
+            "ort": "Biel",
+            "id": "67408036-5b12-431c-ab57-93ecba05554b",
+            "coAdresse": null,
+            "hausnummer": "10"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "032 111 22 33",
+          "geburtsdatum": "1967-01-03",
+          "ausweisbFluechtling": false,
+          "elternTyp": "MUTTER",
+          "nachname": "Herbas",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 15120,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.3441.5190.89",
+          "id": "56dbe903-54b2-465b-a55e-423e51d66ee4"
+        },
+        {
+          "vorname": "Oregano",
+          "adresse": {
+            "land": "CH",
+            "strasse": "Hirtenweg",
+            "plz": "2502",
+            "ort": "Biel",
+            "id": "feb2fc6d-2203-4973-aa34-76352f3bb767",
+            "coAdresse": null,
+            "hausnummer": "10"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "telefonnummer": "032 111 22 33",
+          "geburtsdatum": "1958-07-20",
+          "ausweisbFluechtling": false,
+          "elternTyp": "VATER",
+          "nachname": "Herbas",
+          "ergaenzungsleistungen": 0,
+          "sozialhilfebeitraege": 0,
+          "wohnkosten": 15120,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "sozialversicherungsnummer": "756.4429.3349.84",
+          "id": "9daae992-d96f-471e-8f80-380ed901143b"
+        }
+      ],
+      "geschwisters": [
+        {
+          "vorname": "Kressa",
+          "geburtsdatum": "2004-09-05",
+          "wohnsitz": "FAMILIE",
+          "ausbildungssituation": "IN_AUSBILDUNG",
+          "nachname": "Herbas",
+          "id": "9cf60873-2d3a-497a-a00c-2c3d7685e2d9",
+          "wohnsitzAnteilMutter": null,
+          "wohnsitzAnteilVater": null
+        },
+        {
+          "vorname": "Peterli",
+          "geburtsdatum": "2004-09-05",
+          "wohnsitz": "FAMILIE",
+          "ausbildungssituation": "IN_AUSBILDUNG",
+          "nachname": "Herbas",
+          "id": "01856aea-0f8b-44ec-83c2-519e24da3810",
+          "wohnsitzAnteilMutter": null,
+          "wohnsitzAnteilVater": null
+        }
+      ],
+      "lebenslaufItems": [
+        {
+          "von": "8.2011",
+          "bis": "7.2012",
+          "wohnsitz": "BE",
+          "id": "fdda5694-fd48-4f7f-96b1-a1dfa60f186a",
+          "bildungsart": "BERUFSVORBEREITENDES_SCHULJAHR",
+          "ausbildungAbgeschlossen": true,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2012",
+          "bis": "7.2015",
+          "wohnsitz": "BE",
+          "id": "f88dc9b4-01f6-4e82-9f5e-3bb5a32e6e42",
+          "bildungsart": "EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS",
+          "ausbildungAbgeschlossen": true,
+          "berufsbezeichnung": "Handelsdiplom EFZ",
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "8.2015",
+          "bis": "9.2015",
+          "wohnsitz": "BE",
+          "id": "45a5d9b8-e007-417f-97fc-89652eaa3512",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ANDERE_TAETIGKEIT",
+          "taetigkeitsBeschreibung": "Studiumsvorbereitung"
+        },
+        {
+          "von": "9.2015",
+          "bis": "8.2018",
+          "wohnsitz": "BE",
+          "id": "74c370c1-97d4-43d1-b49a-2d64e130ff74",
+          "bildungsart": "BACHELOR_FACHHOCHSCHULE",
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": "Psychologie",
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": null,
+          "taetigkeitsBeschreibung": null
+        },
+        {
+          "von": "9.2018",
+          "bis": "2.2020",
+          "wohnsitz": "BE",
+          "id": "3489dda7-a799-41e3-b847-64319336f87a",
+          "bildungsart": null,
+          "ausbildungAbgeschlossen": false,
+          "berufsbezeichnung": null,
+          "fachrichtung": null,
+          "titelDesAbschlusses": null,
+          "taetigkeitsart": "ANDERE_TAETIGKEIT",
+          "taetigkeitsBeschreibung": "Familie"
+        }
+      ],
+      "kinds": [
+        {
+          "vorname": "Arveja",
+          "geburtsdatum": "2018-11-01",
+          "ausbildungssituation": "VORSCHULPFLICHTIG",
+          "wohnsitzAnteilPia": 100,
+          "nachname": "Verduro",
+          "id": "a65e56c6-6df8-498a-92b3-1251d0be7a9c",
+          "erhalteneAlimentebeitraege": null
+        }
+      ],
+      "einnahmenKosten": {
+        "nettoerwerbseinkommen": 15000,
+        "fahrkosten": 2700,
+        "verdienstRealisiert": false,
+        "alimente": null,
+        "zulagen": 0,
+        "renten": 0,
+        "eoLeistungen": 0,
+        "ergaenzungsleistungen": 0,
+        "beitraege": 0,
+        "ausbildungskostenSekundarstufeZwei": null,
+        "ausbildungskostenTertiaerstufe": 3000,
+        "wohnkosten": 13080,
+        "wgWohnend": false,
+        "willDarlehen": false,
+        "auswaertigeMittagessenProWoche": null,
+        "betreuungskostenKinder": 0,
+        "veranlagungsCode": 0,
+        "steuerjahr": 2023,
+        "vermoegen": 0,
+        "steuernKantonGemeinde": 0
+      },
+      "steuerdaten": [
+        {
+          "steuerdatenTyp": "FAMILIE",
+          "steuernKantonGemeinde": 50,
+          "steuernBund": 0,
+          "fahrkosten": 940,
+          "verpflegung": 1590,
+          "totalEinkuenfte": 44822,
+          "eigenmietwert": 0,
+          "isArbeitsverhaeltnisSelbstaendig": false,
+          "kinderalimente": 0,
+          "vermoegen": 0,
+          "id": "73bf8680-145d-4324-b330-9624915dedfb",
+          "fahrkostenPartner": 0,
+          "verpflegungPartner": 0,
+          "steuerjahr": 2023,
+          "veranlagungsCode": 0,
+          "saeule3a": null,
+          "saeule2": null
+        }
+      ],
+      "steuerdatenTabs": [
+        "FAMILIE"
+      ]
+    }
+  },
+  "bearbeiter": "UATTestcase1 UATTestcase1"
+}

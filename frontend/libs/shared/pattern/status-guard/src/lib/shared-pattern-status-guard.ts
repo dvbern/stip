@@ -8,22 +8,29 @@ import {
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { isDefined } from '@dv/shared/model/type-util';
-import { canViewVerfuegung } from '@dv/shared/util/permission-state';
+import {
+  Permission,
+  getGesuchPermissions,
+} from '@dv/shared/model/permission-state';
+import { capitalized, isDefined } from '@dv/shared/model/type-util';
 
-export const allowVerfuegung: CanActivateFn = () => {
-  const store = inject(Store);
-  const router = inject(Router);
-  const config = inject(SharedModelCompileTimeConfig);
+export const isAllowedTo =
+  (permission: Permission): CanActivateFn =>
+  () => {
+    const store = inject(Store);
+    const router = inject(Router);
+    const config = inject(SharedModelCompileTimeConfig);
 
-  return getLatestGesuch$(store).pipe(
-    map((gesuch) =>
-      canViewVerfuegung(gesuch, config.appType)
-        ? true
-        : new RedirectCommand(router.parseUrl('/')),
-    ),
-  );
-};
+    return getLatestGesuch$(store).pipe(
+      map((gesuch) =>
+        getGesuchPermissions(gesuch, config.appType)[
+          `can${capitalized(permission)}`
+        ]
+          ? true
+          : new RedirectCommand(router.parseUrl('/')),
+      ),
+    );
+  };
 
 const loadAndGetGesuch$ = (store: Store) => {
   store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());

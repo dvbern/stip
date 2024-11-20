@@ -12,7 +12,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   SharedUiFormFieldDirective,
@@ -38,7 +38,7 @@ export interface KommentarDialogResult {
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     MatFormFieldModule,
     MatInputModule,
     SharedUiFormFieldDirective,

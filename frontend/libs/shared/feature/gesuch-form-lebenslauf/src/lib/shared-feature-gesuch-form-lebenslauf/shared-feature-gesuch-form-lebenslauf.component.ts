@@ -8,7 +8,7 @@ import {
   inject,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { addYears, max, setMonth, startOfMonth, subMonths } from 'date-fns';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
@@ -40,7 +40,7 @@ const MIN_EDUCATION_AGE = 16;
   imports: [
     CommonModule,
     SharedFeatureGesuchFormLebenslaufEditorComponent,
-    TranslateModule,
+    TranslatePipe,
     TwoColumnTimelineComponent,
     SharedUiRdIsPendingPipe,
     SharedUiInfoContainerComponent,

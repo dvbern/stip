@@ -1,4 +1,5 @@
-@if (gesuchViewSig().loading) {
+@let gesuch = gesuchViewSig();
+@if (gesuch.loading) {
   <dv-shared-ui-loading data-testid="dokumente-loading"></dv-shared-ui-loading>
 } @else {
   <div class="col-12">
@@ -41,7 +42,7 @@
               {{ 'shared.dokumente.table.formStep' | translate }}
             </th>
             <td class="text-nowrap" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-              <a [routerLink]="['/gesuch', dokument.formStep.route, gesuchViewSig().gesuchId]">
+              <a [routerLink]="['/gesuch', dokument.formStep.route, gesuch.gesuchId]">
                 {{ dokument.formStep.translationKey | translate }}
               </a>
             </td>
@@ -74,7 +75,7 @@
             <td class="status-cell" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
               <div class="d-flex gap-2">
                 @if (dokument?.gesuchDokument?.id) {
-                  @if (gesuchViewSig().config.isSachbearbeitungApp && !gesuchViewSig().readonly) {
+                  @if (gesuch.config.isSachbearbeitungApp && !gesuch.readonly) {
                     @switch (dokument?.gesuchDokument?.status) {
                       @case ('AUSSTEHEND') {
                         <button
@@ -118,7 +119,7 @@
                       }
                       @case ('AUSSTEHEND') {
                         <dv-shared-ui-icon-badge
-                          [type]="gesuchViewSig().config.isSachbearbeitungApp ? 'warning' : 'info'"
+                          [type]="gesuch.config.isSachbearbeitungApp ? 'warning' : 'info'"
                           class="status"
                         >
                           {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
@@ -221,15 +222,36 @@
         data-testid="dokumente-button-sendMissingDocuments"
         [disabled]="dokumentsStore.hasAusstehendeDokumentsSig()"
       >
-        {{ 'shared.dokumente.dokumentStatus.action.sendMissingDocuments' | translate }}
+        {{ 'shared.dokumente.uebermitteln' | translate }}
       </button>
     }
   </div>
 
   <!-- Buttons -->
-  <dv-shared-ui-step-form-buttons>
-    <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-continue">
-      {{ 'shared.form.gonext' | translate }}
-    </button>
+  <dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
+    @let dokumente = dokumentsStore.dokuments();
+    @let missingDocuments = dokumentsStore.requiredDocumentTypes().data?.length ?? 0;
+    @if (gesuch.gesuchPermissions.canFreigeben) {
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="handleContinue()"
+        data-testid="button-continue"
+        [disabled]="dokumente | rdIsPending"
+      >
+        {{ 'shared.form.gonext' | translate }}
+      </button>
+    }
+    @if (gesuch.gesuchPermissions.canUploadMissingDocuments) {
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="fehlendeDokumenteEinreichen()"
+        data-testid="button-save"
+        [disabled]="(dokumente | rdIsPending) || missingDocuments > 0"
+      >
+        {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | translate }}
+      </button>
+    }
   </dv-shared-ui-step-form-buttons>
 }

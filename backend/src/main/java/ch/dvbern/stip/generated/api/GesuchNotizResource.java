@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -22,6 +23,12 @@ import jakarta.validation.Valid;
 @Path("/gesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface GesuchNotizResource {
+
+    @PATCH
+    @Path("/notiz/juristischeAbklaerung/{notizId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    Response answerJuristischeAbklaerungNotiz(@PathParam("notizId") UUID notizId,@Valid @NotNull JuristischeAbklaerungNotizAntwortDto juristischeAbklaerungNotizAntwortDto);
 
     @POST
     @Path("/notiz/create")
