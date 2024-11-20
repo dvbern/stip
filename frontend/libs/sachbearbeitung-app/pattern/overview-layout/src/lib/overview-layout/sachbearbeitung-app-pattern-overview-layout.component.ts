@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -16,7 +15,6 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
   selector: 'dv-sachbearbeitung-app-pattern-overview-layout',
   standalone: true,
   imports: [
-    CommonModule,
     RouterLink,
     RouterLinkActive,
     MatSidenavModule,
