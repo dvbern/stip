@@ -59,7 +59,7 @@ import org.hibernate.annotations.JoinFormula;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 
 @DocumentsRequiredFehlendeDokumenteConstraint(
@@ -111,8 +111,8 @@ public class Gesuch extends AbstractMandantEntity {
     private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
 
     @Nullable
-    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
-    @Column(name = "comment", length = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
+    @Column(name = "comment", length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String comment;
 
     @Nullable

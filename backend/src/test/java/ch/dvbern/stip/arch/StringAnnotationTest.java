@@ -28,6 +28,7 @@ import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
 
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
@@ -35,7 +36,7 @@ import static com.tngtech.archunit.lang.SimpleConditionEvent.satisfied;
 import static com.tngtech.archunit.lang.SimpleConditionEvent.violated;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
-public class StringAnnotationTest {
+class StringAnnotationTest {
     @Test
     void entity_string_fields_are_annotated_consistently() {
         final var rule = fields().that()
@@ -133,6 +134,7 @@ public class StringAnnotationTest {
         static final Set<Integer> VALID_STRING_LENGTHS = Set.of(
             DB_DEFAULT_STRING_SMALL_LENGTH,
             DB_DEFAULT_STRING_MEDIUM_LENGTH,
+            DB_DEFAULT_STRING_INPUT_MAX_LENGTH,
             DB_DEFAULT_STRING_MAX_LENGTH
         );
 

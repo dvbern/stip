@@ -49,7 +49,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 
 @Audited
 @Entity
@@ -94,8 +94,8 @@ public class GesuchTranche extends AbstractEntity {
     private GesuchTrancheStatus status = GesuchTrancheStatus.IN_BEARBEITUNG_GS;
 
     @Nullable
-    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
-    @Column(name = "comment", length = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
+    @Column(name = "comment", length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String comment;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuchTranche")

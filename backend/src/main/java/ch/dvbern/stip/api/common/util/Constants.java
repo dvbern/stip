@@ -21,7 +21,8 @@ public final class Constants {
 
     public static final int DB_DEFAULT_STRING_SMALL_LENGTH = 20;
     public static final int DB_DEFAULT_STRING_MEDIUM_LENGTH = 255;
-    public static final int DB_DEFAULT_STRING_MAX_LENGTH = 2000;
+    public static final int DB_DEFAULT_STRING_INPUT_MAX_LENGTH = 2000;
+    public static final int DB_DEFAULT_STRING_MAX_LENGTH = 2200;
 
     public static final int FALL_GESUCH_NUMBER_GEN_SEED = 184932;
 
