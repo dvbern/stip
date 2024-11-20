@@ -14,7 +14,6 @@ type MessageOrKey =
   | Required<Pick<CreateNotification, 'message'>>
   | Required<Pick<CreateNotification, 'messageKey'>>;
 
-const CRITICAL_NOTIFICATIONS: NotificationType[] = ['SEVERE'];
 const PERMANENT_NOTIFICATIONS: NotificationType[] = ['ERROR_PERMANENT'];
 
 export interface State {
@@ -96,19 +95,6 @@ export class GlobalNotificationStore extends signalStore(
   removeNotification(notificationId: number) {
     const notifications = this.notifications().filter(
       (notification) => notification.id !== notificationId,
-    );
-
-    return patchState(this, {
-      notifications: notifications,
-    });
-  }
-
-  /**
-   * Clear all notifications that are not important.
-   */
-  clearUnimportantNotifications() {
-    const notifications = this.notifications().filter((notification) =>
-      CRITICAL_NOTIFICATIONS.includes(notification.type),
     );
 
     return patchState(this, {

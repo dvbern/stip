@@ -80,7 +80,7 @@ export class GlobalNotificationsComponent {
         takeUntilDestroyed(),
       )
       .subscribe(() => {
-        this.store.clearUnimportantNotifications();
+        this.store.clearNonPermanentNotifications();
       });
   }
 

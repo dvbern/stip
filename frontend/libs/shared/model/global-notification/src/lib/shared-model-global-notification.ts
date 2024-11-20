@@ -6,7 +6,6 @@ export type Notification = {
   message?: string;
   messageKey?: string;
   content?: SharedModelError;
-  navigationId?: number;
 };
 
 export type CreateNotification = Omit<Notification, 'id'>;
