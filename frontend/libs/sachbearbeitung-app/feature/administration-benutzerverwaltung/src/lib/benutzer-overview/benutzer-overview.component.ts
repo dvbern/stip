@@ -17,7 +17,7 @@ import {
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
 import { SharedModelBenutzer } from '@dv/shared/model/benutzer';
@@ -35,7 +35,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,

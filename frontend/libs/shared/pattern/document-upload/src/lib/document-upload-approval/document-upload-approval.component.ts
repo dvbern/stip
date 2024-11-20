@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { UploadView } from '@dv/shared/model/dokument';
@@ -38,7 +38,7 @@ import { isInitial } from '@dv/shared/util/remote-data';
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiRdIsPendingPipe,
     SharedUiLoadingComponent,
-    TranslateModule,
+    TranslatePipe,
   ],
   templateUrl: './document-upload-approval.component.html',
   styleUrl: './document-upload-approval.component.scss',

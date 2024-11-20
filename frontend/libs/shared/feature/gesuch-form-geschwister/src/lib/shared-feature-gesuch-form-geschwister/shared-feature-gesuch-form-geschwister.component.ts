@@ -6,7 +6,7 @@ import {
   inject,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
@@ -26,7 +26,7 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
   selector: 'dv-shared-feature-gesuch-form-geschwister',
   standalone: true,
   imports: [
-    TranslateModule,
+    TranslatePipe,
     SharedFeatureGesuchFormGeschwisterEditorComponent,
     SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,

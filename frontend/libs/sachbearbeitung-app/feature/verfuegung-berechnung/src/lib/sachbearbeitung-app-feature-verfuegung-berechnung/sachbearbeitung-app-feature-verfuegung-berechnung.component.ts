@@ -10,7 +10,7 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { addDays, differenceInMonths } from 'date-fns';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
@@ -32,7 +32,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
   imports: [
     CommonModule,
     MatCardModule,
-    TranslateModule,
+    TranslatePipe,
     MatExpansionModule,
     SharedUiFormatChfPipe,
     BerechnungsCardComponent,

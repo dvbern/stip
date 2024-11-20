@@ -16,7 +16,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
@@ -38,7 +38,7 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     MatTableModule,
     TypeSafeMatCellDefDirective,
     MatTooltipModule,

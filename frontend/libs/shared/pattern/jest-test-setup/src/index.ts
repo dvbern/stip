@@ -1,7 +1,7 @@
 import { importProvidersFrom } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 
@@ -75,11 +75,8 @@ export function provideSharedPatternJestTestSetup(
   return [
     provideOAuthClient(),
     provideCompileTimeConfig(compileTimeConfig),
-    importProvidersFrom([
-      RouterTestingModule,
-      TranslateModule.forRoot(),
-      NoopAnimationsModule,
-    ]),
+    provideTranslateService(),
+    importProvidersFrom([RouterTestingModule, NoopAnimationsModule]),
     {
       provide: StoreUtilService,
       useValue: <{ [K in keyof StoreUtilService]: StoreUtilService[K] }>{

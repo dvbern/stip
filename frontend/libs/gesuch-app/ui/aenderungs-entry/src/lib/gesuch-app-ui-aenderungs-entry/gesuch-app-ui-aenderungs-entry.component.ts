@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { GesuchTrancheSlim } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -19,7 +19,7 @@ import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
     RouterLink,

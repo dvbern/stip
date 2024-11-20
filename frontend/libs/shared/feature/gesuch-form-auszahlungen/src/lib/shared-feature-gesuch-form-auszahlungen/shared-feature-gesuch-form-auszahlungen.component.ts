@@ -20,7 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Subject, distinctUntilChanged, shareReplay } from 'rxjs';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -74,7 +74,7 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiProgressBarComponent,
-    TranslateModule,
+    TranslatePipe,
     MaskitoDirective,
     SharedUiInfoContainerComponent,
     SharedUiFormAddressComponent,

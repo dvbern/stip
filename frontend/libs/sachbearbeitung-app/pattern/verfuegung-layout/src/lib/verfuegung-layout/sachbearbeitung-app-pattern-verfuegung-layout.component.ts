@@ -10,7 +10,7 @@ import {
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   VERFUEGUNG_OPTIONS,
@@ -30,7 +30,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     RouterLink,
     RouterLinkActive,
     MatSidenavModule,

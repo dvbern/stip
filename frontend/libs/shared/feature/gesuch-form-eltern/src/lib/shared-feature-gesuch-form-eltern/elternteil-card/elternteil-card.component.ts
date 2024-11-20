@@ -5,7 +5,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { ElternTyp, ElternUpdate } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -13,7 +13,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern-card',
   standalone: true,
-  imports: [TranslateModule, SharedUiIconChipComponent],
+  imports: [TranslatePipe, SharedUiIconChipComponent],
   templateUrl: './elternteil-card.component.html',
   styleUrls: ['./elternteil-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

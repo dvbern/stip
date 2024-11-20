@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { SharedUtilFormService } from './shared-util-form.service';
 
@@ -34,7 +34,7 @@ describe('SharedUtilFormService', () => {
     jest.spyOn(wndw, 'addEventListener');
     jest.spyOn(wndw, 'removeEventListener');
     await TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
+      providers: [provideTranslateService()],
       declarations: [TestComponent],
     }).compileComponents();
     service = TestBed.inject(SharedUtilFormService);
