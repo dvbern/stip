@@ -32,12 +32,22 @@ public class BaseAuthorizer {
         return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER));
     }
 
+    protected boolean isAdminSbOrJurist(final Benutzer currentBenutzer) {
+        return currentBenutzer.hasOneOfRoles(
+            Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_JURIST)
+        );
+    }
+
     protected boolean isAdmin(final Benutzer currentBenutzer) {
         return currentBenutzer.hasRole(OidcConstants.ROLE_ADMIN);
     }
 
     protected boolean isSachbearbeiter(final Benutzer currentBenutzer) {
         return currentBenutzer.hasRole(OidcConstants.ROLE_SACHBEARBEITER);
+    }
+
+    protected boolean isJurist(final Benutzer currentBenutzer) {
+        return currentBenutzer.hasRole(OidcConstants.ROLE_JURIST);
     }
 
     protected boolean isGesuchsteller(final Benutzer currentBenutzer) {

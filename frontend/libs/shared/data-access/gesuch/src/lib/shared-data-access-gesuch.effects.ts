@@ -349,12 +349,12 @@ export const redirectToGesuchFormNextStep = createEffect(
         ([
           { id, origin },
           { stepsFlow: stepFlowSig },
-          { gesuchFormular, readonly, trancheSetting },
+          { gesuch, trancheSetting },
         ]) => {
           router.navigate([
             'gesuch',
             ...stepManager
-              .getNextStepOf(stepFlowSig, origin, gesuchFormular, readonly)
+              .getNextStepOf(stepFlowSig, origin, gesuch)
               .route.split('/'),
             id,
             ...(trancheSetting?.routesSuffix ?? []),

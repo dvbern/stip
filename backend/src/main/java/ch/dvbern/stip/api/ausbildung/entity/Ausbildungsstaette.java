@@ -43,11 +43,11 @@ public class Ausbildungsstaette extends AbstractEntity {
 
     @NotNull
     @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "name_de", nullable = false)
+    @Column(name = "name_de", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nameDe;
 
     @NotNull
     @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "name_fr", nullable = false)
+    @Column(name = "name_fr", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nameFr;
 }

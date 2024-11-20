@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.GesuchNotizTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -23,6 +24,7 @@ public class GesuchNotizCreateDto  implements Serializable {
   private @Valid UUID gesuchId;
   private @Valid String betreff;
   private @Valid String text;
+  private @Valid GesuchNotizTypDto notizTyp;
 
   /**
    **/
@@ -81,6 +83,25 @@ public class GesuchNotizCreateDto  implements Serializable {
     this.text = text;
   }
 
+  /**
+   **/
+  public GesuchNotizCreateDto notizTyp(GesuchNotizTypDto notizTyp) {
+    this.notizTyp = notizTyp;
+    return this;
+  }
+
+  
+  @JsonProperty("notizTyp")
+  @NotNull
+  public GesuchNotizTypDto getNotizTyp() {
+    return notizTyp;
+  }
+
+  @JsonProperty("notizTyp")
+  public void setNotizTyp(GesuchNotizTypDto notizTyp) {
+    this.notizTyp = notizTyp;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -93,12 +114,13 @@ public class GesuchNotizCreateDto  implements Serializable {
     GesuchNotizCreateDto gesuchNotizCreate = (GesuchNotizCreateDto) o;
     return Objects.equals(this.gesuchId, gesuchNotizCreate.gesuchId) &&
         Objects.equals(this.betreff, gesuchNotizCreate.betreff) &&
-        Objects.equals(this.text, gesuchNotizCreate.text);
+        Objects.equals(this.text, gesuchNotizCreate.text) &&
+        Objects.equals(this.notizTyp, gesuchNotizCreate.notizTyp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, betreff, text);
+    return Objects.hash(gesuchId, betreff, text, notizTyp);
   }
 
   @Override
@@ -109,6 +131,7 @@ public class GesuchNotizCreateDto  implements Serializable {
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("}");
     return sb.toString();
   }

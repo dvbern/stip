@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -35,4 +36,9 @@ public interface GesuchNotizMapper {
     GesuchNotiz toEntity(GesuchNotizCreateDto notizCreateDto);
 
     GesuchNotiz partialUpdate(GesuchNotizUpdateDto notizDto, @MappingTarget GesuchNotiz notiz);
+
+    GesuchNotiz partialUpdate(
+        JuristischeAbklaerungNotizAntwortDto dto,
+        @MappingTarget GesuchNotiz entity
+    );
 }

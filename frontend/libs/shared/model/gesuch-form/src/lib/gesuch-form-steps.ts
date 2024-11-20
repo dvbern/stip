@@ -1,11 +1,14 @@
+import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
+  SharedModelGesuch,
   SharedModelGesuchFormular,
   SharedModelGesuchFormularPropsSteuerdatenSteps,
   SteuerdatenSteps,
   SteuerdatenTyp,
   Zivilstand,
 } from '@dv/shared/model/gesuch';
+import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 
 import {
   SharedModelGesuchFormStep,
@@ -191,9 +194,13 @@ export const findStepIndex = (
 
 export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
-  formular: SharedModelGesuchFormular | null,
-  readonly = false,
+  gesuch: SharedModelGesuch | null,
+  appType: AppType,
 ) => {
+  const formular = gesuch?.gesuchTrancheToWorkWith.gesuchFormular ?? null;
+  const gesuchPermissions = getGesuchPermissions(gesuch, appType);
+  const readonly = !gesuchPermissions?.canWrite;
+
   if (step === PARTNER) {
     const zivilstand = formular?.personInAusbildung?.zivilstand;
     return (

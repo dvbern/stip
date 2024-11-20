@@ -9,12 +9,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GesuchNotizTyp } from './gesuchNotizTyp';
 
 export interface GesuchNotiz { 
-    id?: string;
+    id: string;
     betreff: string;
     text: string;
     userErstellt: string;
     timestampErstellt: string;
+    userMutiert?: string;
+    timestampMutiert?: string;
+    notizTyp: GesuchNotizTyp;
+    antwort?: string;
 }
+
+
 

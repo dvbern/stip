@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export type Land = 'CH' | 'AF' | 'EG' | 'AL' | 'DZ' | 'AD' | 'AO' | 'AG' | 'GQ' | 'AR' | 'AM' | 'AZ' | 'ET' | 'AU' | 'BS' | 'BH' | 'BD' | 'BB' | 'BY' | 'BE' | 'BZ' | 'BJ' | 'BT' | 'BO' | 'BA' | 'BR' | 'BN' | 'BG' | 'BF' | 'BI' | 'CV' | 'CL' | 'CN' | 'CK' | 'CR' | 'CI' | 'DK' | 'DE' | 'DM' | 'DO' | 'DJ' | 'EC' | 'SV' | 'ER' | 'EE' | 'SZ' | 'FJ' | 'FI' | 'FR' | 'GA' | 'GM' | 'GE' | 'GH' | 'GD' | 'GR' | 'GT' | 'GN' | 'GW' | 'GF' | 'HT' | 'VA' | 'HN' | 'IN' | 'ID' | 'IQ' | 'IR' | 'IE' | 'IS' | 'IL' | 'IT' | 'JM' | 'JP' | 'YE' | 'JO' | 'KH' | 'CM' | 'CA' | 'KZ' | 'QA' | 'KE' | 'KG' | 'KI' | 'CO' | 'KM' | 'CG' | 'CD' | 'KR' | 'KP' | 'XK' | 'HR' | 'CU' | 'KW' | 'LA' | 'LS' | 'LV' | 'LB' | 'LR' | 'LY' | 'LI' | 'LT' | 'LU' | 'MG' | 'MW' | 'MY' | 'MV' | 'ML' | 'MT' | 'MA' | 'MH' | 'MR' | 'MU' | 'MX' | 'FM' | 'MO' | 'MC' | 'MN' | 'ME' | 'MZ' | 'MM' | 'NA' | 'NR' | 'NP' | 'NZ' | 'NI' | 'NL' | 'NE' | 'NG' | 'NU' | 'MK' | 'NO' | 'OM' | 'AT' | 'PK' | 'PW' | 'PA' | 'PG' | 'PY' | 'PE' | 'PH' | 'PL' | 'PT' | 'RW' | 'RO' | 'RU' | 'SB' | 'ZM' | 'WS' | 'SM' | 'ST' | 'SA' | 'SE' | 'SN' | 'RS' | 'SC' | 'SL' | 'ZW' | 'SG' | 'SK' | 'SI' | 'SO' | 'ES' | 'LK' | 'KN' | 'LC' | 'VC' | 'ZA' | 'SD' | 'SS' | 'SR' | 'SY' | 'TJ' | 'TZ' | 'TH' | 'TL' | 'TG' | 'TO' | 'TT' | 'TD' | 'CZ' | 'TN' | 'TR' | 'TM' | 'TV' | 'UG' | 'UA' | 'HU' | 'UY' | 'UZ' | 'VU' | 'VE' | 'AE' | 'US' | 'GB' | 'VN' | 'CF' | 'CY';
+export type Land = 'CH' | 'AF' | 'EG' | 'AL' | 'DZ' | 'AD' | 'AO' | 'AG' | 'GQ' | 'AR' | 'AM' | 'AZ' | 'ET' | 'AU' | 'BS' | 'BH' | 'BD' | 'BB' | 'BY' | 'BE' | 'BZ' | 'BJ' | 'BT' | 'BO' | 'BA' | 'BR' | 'BN' | 'BG' | 'BF' | 'BI' | 'CV' | 'CL' | 'CN' | 'CK' | 'CR' | 'CI' | 'DK' | 'DE' | 'DM' | 'DO' | 'DJ' | 'EC' | 'SV' | 'ER' | 'EE' | 'SZ' | 'FJ' | 'FI' | 'FR' | 'GA' | 'GM' | 'GE' | 'GH' | 'GD' | 'GR' | 'GT' | 'GN' | 'GW' | 'GF' | 'HT' | 'VA' | 'HN' | 'IN' | 'ID' | 'IQ' | 'IR' | 'IE' | 'IS' | 'IL' | 'IT' | 'JM' | 'JP' | 'YE' | 'JO' | 'KH' | 'CM' | 'CA' | 'KZ' | 'QA' | 'KE' | 'KG' | 'KI' | 'CO' | 'KM' | 'CG' | 'CD' | 'KR' | 'KP' | 'XK' | 'HR' | 'CU' | 'KW' | 'LA' | 'LS' | 'LV' | 'LB' | 'LR' | 'LY' | 'LI' | 'LT' | 'LU' | 'MG' | 'MW' | 'MY' | 'MV' | 'ML' | 'MT' | 'MA' | 'MH' | 'MR' | 'MU' | 'MX' | 'FM' | 'MO' | 'MC' | 'MN' | 'ME' | 'MZ' | 'MM' | 'NA' | 'NR' | 'NP' | 'NZ' | 'NI' | 'NL' | 'NE' | 'NG' | 'NU' | 'MK' | 'NO' | 'OM' | 'AT' | 'PK' | 'PW' | 'PA' | 'PG' | 'PY' | 'PE' | 'PH' | 'PL' | 'PT' | 'RW' | 'RO' | 'RU' | 'SB' | 'ZM' | 'WS' | 'SM' | 'ST' | 'SA' | 'SE' | 'SN' | 'RS' | 'SC' | 'SL' | 'ZW' | 'SG' | 'SK' | 'SI' | 'SO' | 'ES' | 'LK' | 'KN' | 'LC' | 'VC' | 'ZA' | 'SD' | 'SS' | 'SR' | 'SY' | 'TJ' | 'TZ' | 'TH' | 'TL' | 'TG' | 'TO' | 'TT' | 'TD' | 'CZ' | 'TN' | 'TR' | 'TM' | 'TV' | 'UG' | 'UA' | 'HU' | 'UY' | 'UZ' | 'VU' | 'VE' | 'AE' | 'US' | 'GB' | 'VN' | 'CF' | 'CY' | 'STATELESS';
 
 export const Land = {
     CH: 'CH' as Land,
@@ -208,6 +208,7 @@ export const Land = {
     GB: 'GB' as Land,
     VN: 'VN' as Land,
     CF: 'CF' as Land,
-    CY: 'CY' as Land
+    CY: 'CY' as Land,
+    STATELESS: 'STATELESS' as Land
 };
 

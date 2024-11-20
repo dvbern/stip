@@ -58,6 +58,31 @@ export const failure = (error: unknown): Failure => ({
 });
 
 /**
+ * Returns a failure remote data object with cached data from a previous successful
+ * remote data object if possible.
+ *
+ * @example
+ * tapResponse({
+ *   next: () => {
+ *     onSuccess();
+ *   },
+ *   error: (error) => {
+ *     patchState(this, (state) => ({
+ *       something: cachedFailure(state.something, error),
+ *     }));
+ *   },
+ * });
+ */
+export const cachedFailure = <T>(
+  previousRd: CachedRemoteData<T>,
+  error: unknown,
+): CachedFailure<T> => ({
+  type: 'failure',
+  data: previousRd.data,
+  error,
+});
+
+/**
  * Checks if the given remote data object is in the failure state.
  *
  * @example

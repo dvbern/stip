@@ -23,5 +23,10 @@ describe('NotizStore', () => {
       data: undefined,
       error: undefined,
     });
+    expect(store.notiz()).toEqual({
+      type: 'initial',
+      data: undefined,
+      error: undefined,
+    });
   });
 });

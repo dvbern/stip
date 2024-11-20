@@ -22,7 +22,7 @@ import {
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { merge } from 'rxjs';
 
 import { AdminAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/ausbildungsstaette';
@@ -48,7 +48,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     SharedUiLoadingComponent,
     MatFormFieldModule,
     SharedUiFormFieldDirective,
-    TranslateModule,
+    TranslatePipe,
     MatInputModule,
     MatTableModule,
     MatButtonModule,

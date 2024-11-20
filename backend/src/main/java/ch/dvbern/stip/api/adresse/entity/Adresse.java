@@ -48,6 +48,7 @@ public class Adresse extends AbstractMandantEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "land", nullable = false)
+    @NotStatelessConstraint
     private Land land = Land.CH;
 
     @Nullable

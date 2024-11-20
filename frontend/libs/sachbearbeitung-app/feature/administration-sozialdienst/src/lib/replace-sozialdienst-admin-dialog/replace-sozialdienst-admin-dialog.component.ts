@@ -12,7 +12,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
 import {
@@ -34,7 +34,7 @@ export interface ReplaceSozialdienstAdminDialogResult {
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     MatFormFieldModule,
     MatInputModule,
     SharedUiFormFieldDirective,

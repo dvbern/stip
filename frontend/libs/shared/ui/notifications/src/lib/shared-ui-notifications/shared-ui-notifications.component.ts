@@ -14,7 +14,7 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { Notification } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -27,7 +27,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     RouterLink,
     MatPaginatorModule,
     SharedUiIconChipComponent,

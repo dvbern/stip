@@ -59,12 +59,12 @@ public class Ausbildungsgang extends AbstractMandantEntity {
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "bezeichnung_de", nullable = false)
+    @Column(name = "bezeichnung_de", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String bezeichnungDe;
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "bezeichnung_fr")
+    @Column(name = "bezeichnung_fr", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String bezeichnungFr;
 
     @ManyToOne(optional = false)

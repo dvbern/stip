@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { SharedUiKommentarDialogComponent } from './shared-ui-kommentar-dialog.component';
 
@@ -11,12 +11,9 @@ describe('SharedUiKommentarDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        SharedUiKommentarDialogComponent,
-        NoopAnimationsModule,
-        TranslateModule.forRoot(),
-      ],
+      imports: [SharedUiKommentarDialogComponent, NoopAnimationsModule],
       providers: [
+        provideTranslateService(),
         {
           provide: MAT_DIALOG_DATA,
           useValue: {

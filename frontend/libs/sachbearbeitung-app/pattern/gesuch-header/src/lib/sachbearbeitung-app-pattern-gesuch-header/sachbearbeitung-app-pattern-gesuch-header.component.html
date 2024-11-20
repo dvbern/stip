@@ -5,6 +5,7 @@
   }"
   (openSidenav)="openSidenav.emit()"
 >
+  @let gesuch = currentGesuchSig();
   <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
     <!-- Gesuch -->
     <button
@@ -22,11 +23,11 @@
       <div class="d-flex flex-column gap-2">
         @for (tranche of gesuchAenderungStore.tranchenViewSig().list; track $index) {
           <a
-            [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'tranche', tranche.id]"
+            [routerLink]="['/', 'gesuch', gesuch?.id, 'tranche', tranche.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
-            [class.active]="currentGesuchSig()?.gesuchTrancheToWorkWith?.id === tranche.id"
+            [class.active]="gesuch?.gesuchTrancheToWorkWith?.id === tranche.id"
           >
             <span>
               {{
@@ -43,11 +44,11 @@
 
     <!-- Verfuegung-->
     <a
-      [routerLink]="['/', 'verfuegung', currentGesuchSig()?.id]"
+      [routerLink]="['/', 'verfuegung', gesuch?.id]"
       routerLinkActive="active"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-verfuegung"
-      [class.disabled]="!canViewVerfuegungSig()"
+      [class.disabled]="!gesuchPermissionsSig().canViewVerfuegung"
     >
       <i class="material-symbols-rounded text-white me-2">equal</i>
       <span>{{ 'sachbearbeitung-app.header.verfuegung' | translate }}</span>
@@ -71,11 +72,11 @@
       <div class="d-flex flex-column gap-2">
         @for (aenderung of aenderungen.byStatus.open; track $index) {
           <a
-            [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'aenderung', aenderung.id]"
+            [routerLink]="['/', 'gesuch', gesuch?.id, 'aenderung', aenderung.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
-            [class.active]="currentGesuchSig()?.gesuchTrancheToWorkWith?.id === aenderung.id"
+            [class.active]="gesuch?.gesuchTrancheToWorkWith?.id === aenderung.id"
           >
             <span>
               {{
@@ -94,11 +95,11 @@
         </div>
         @for (aenderung of aenderungen.byStatus.completed; track $index) {
           <a
-            [routerLink]="['/', 'gesuch', currentGesuchSig()?.id, 'aenderung', aenderung.id]"
+            [routerLink]="['/', 'gesuch', gesuch?.id, 'aenderung', aenderung.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
-            [class.active]="currentGesuchSig()?.gesuchTrancheToWorkWith?.id === aenderung.id"
+            [class.active]="gesuch?.gesuchTrancheToWorkWith?.id === aenderung.id"
           >
             <span>
               {{
@@ -115,7 +116,7 @@
 
     <!-- Infos-->
     <a
-      [routerLink]="['/', 'infos', currentGesuchSig()?.id]"
+      [routerLink]="['/', 'infos', gesuch?.id]"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-infos"
       [class.active]="isInfosRouteSig()"

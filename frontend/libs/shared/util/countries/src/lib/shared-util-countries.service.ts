@@ -40,6 +40,7 @@ export class SharedUtilCountriesService {
         return [
           { code: 'CH', text: translations['shared.country.CH'] },
           ...translated,
+          { code: 'STATELESS', text: translations['shared.country.STATELESS'] },
         ];
       }),
     );

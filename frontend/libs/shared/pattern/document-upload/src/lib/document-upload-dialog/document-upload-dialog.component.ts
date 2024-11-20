@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Subject, mergeMap } from 'rxjs';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -25,7 +25,7 @@ import { UploadStore } from '../upload.store';
   selector: 'dv-shared-pattern-document-upload-dialog',
   standalone: true,
   imports: [
-    TranslateModule,
+    TranslatePipe,
     MatDialogModule,
     MatFormFieldModule,
     SharedUiDropFileComponent,

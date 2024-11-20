@@ -119,7 +119,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public Response aenderungEinreichen(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canUpdate(aenderungId);
+        gesuchTrancheAuthorizer.canEinreichen(aenderungId);
         gesuchTrancheService.aenderungEinreichen(aenderungId);
         return Response.ok().build();
     }

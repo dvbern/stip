@@ -10,16 +10,21 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
+import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import {
+  SharedDataAccessGesuchEvents,
+  selectSharedDataAccessGesuchsView,
+} from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 
 @Component({
@@ -28,9 +33,10 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
   imports: [
     CommonModule,
     RouterLink,
-    TranslateModule,
+    TranslatePipe,
     SharedUiInfoContainerComponent,
     SharedUiLoadingComponent,
+    SharedUiRdIsPendingPipe,
   ],
   templateUrl: './gesuch-app-feature-gesuch-form-abschluss.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,6 +47,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   destroyRef = inject(DestroyRef);
 
   einreichenStore = inject(EinreichenStore);
+  dokumentsStore = inject(DokumentsStore);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
   constructor() {
@@ -85,5 +92,19 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
           }
         }
       });
+  }
+
+  fehlendeDokumenteEinreichen() {
+    const { gesuchId, trancheId } = this.gesuchViewSig();
+
+    if (gesuchId && trancheId) {
+      this.dokumentsStore.fehlendeDokumenteEinreichen$({
+        trancheId,
+        onSuccess: () => {
+          // Reload gesuch because the status has changed
+          this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+        },
+      });
+    }
   }
 }

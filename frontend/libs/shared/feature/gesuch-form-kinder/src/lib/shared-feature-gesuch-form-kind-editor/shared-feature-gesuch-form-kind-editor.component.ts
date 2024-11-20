@@ -25,7 +25,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
@@ -84,7 +84,7 @@ const MEDIUM_AGE = 20;
     CommonModule,
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
-    TranslateModule,
+    TranslatePipe,
     SharedUiFormMessageErrorDirective,
     MatFormFieldModule,
     MatCheckboxModule,

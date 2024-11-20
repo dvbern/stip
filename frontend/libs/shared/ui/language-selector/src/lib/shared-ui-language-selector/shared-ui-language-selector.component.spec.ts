@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { SharedUiLanguageSelectorComponent } from './shared-ui-language-selector.component';
 
@@ -9,7 +9,8 @@ describe('SharedUiLanguageSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiLanguageSelectorComponent, TranslateModule.forRoot()],
+      imports: [SharedUiLanguageSelectorComponent],
+      providers: [provideTranslateService()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUiLanguageSelectorComponent);

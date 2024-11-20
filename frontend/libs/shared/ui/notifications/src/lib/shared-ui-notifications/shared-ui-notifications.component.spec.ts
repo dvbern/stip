@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { SharedUiNotificationsComponent } from './shared-ui-notifications.component';
 
@@ -9,7 +9,8 @@ describe('SharedUiNotificationsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiNotificationsComponent, TranslateModule.forRoot()],
+      imports: [SharedUiNotificationsComponent],
+      providers: [provideTranslateService()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUiNotificationsComponent);

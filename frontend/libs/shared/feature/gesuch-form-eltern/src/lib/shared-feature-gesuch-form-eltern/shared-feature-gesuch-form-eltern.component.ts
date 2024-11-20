@@ -6,21 +6,22 @@ import {
   inject,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   ElternTyp,
   ElternUpdate,
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
 import { ELTERN, isStepDisabled } from '@dv/shared/model/gesuch-form';
+import { capitalized, lowercased } from '@dv/shared/model/type-util';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { capitalized } from '@dv/shared/util-fn/string-helper';
 
 import { ElternteilCardComponent } from './elternteil-card/elternteil-card.component';
 import { selectSharedFeatureGesuchFormElternView } from './shared-feature-gesuch-form-eltern.selector';
@@ -30,7 +31,7 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
   selector: 'dv-shared-feature-gesuch-form-eltern',
   standalone: true,
   imports: [
-    TranslateModule,
+    TranslatePipe,
     SharedFeatureGesuchFormElternEditorComponent,
     ElternteilCardComponent,
     SharedUiStepFormButtonsComponent,
@@ -42,6 +43,7 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
 })
 export class SharedFeatureGesuchFormElternComponent {
   private store = inject(Store);
+  private appType = inject(SharedModelCompileTimeConfig).appType;
 
   hasUnsavedChanges = false;
   laenderSig = computed(() => {
@@ -64,7 +66,7 @@ export class SharedFeatureGesuchFormElternComponent {
           !loading &&
           gesuch &&
           gesuchFormular &&
-          isStepDisabled(ELTERN, gesuchFormular)
+          isStepDisabled(ELTERN, gesuch, this.appType)
         ) {
           this.store.dispatch(
             SharedEventGesuchFormEltern.nextTriggered({
@@ -208,5 +210,5 @@ const isElternTypeExpected = (
   eltern: ElternUpdate,
   expected: { expectVater: boolean; expectMutter: boolean },
 ) => {
-  return expected[`expect${capitalized(eltern.elternTyp)}`];
+  return expected[`expect${capitalized(lowercased(eltern.elternTyp))}`];
 };

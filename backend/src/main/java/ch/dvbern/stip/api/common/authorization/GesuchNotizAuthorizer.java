@@ -17,6 +17,12 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.notiz.entity.NotizTyp;
+import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
+import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -24,4 +30,27 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class GesuchNotizAuthorizer extends BaseAuthorizer {
+    private final GesuchNotizRepository gesuchNotizRepository;
+
+    public void canUpdate(UUID notizId) {
+        final var notiz = gesuchNotizRepository.requireById(notizId);
+        if (notiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
+            throw new ForbiddenException();
+        }
+    }
+
+    public void canDelete(UUID notizId) {
+        final var notiz = gesuchNotizRepository.requireById(notizId);
+        if (notiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
+            throw new ForbiddenException();
+        }
+        canUpdate(notizId);
+    }
+
+    public void canSetAnswer(UUID notizId) {
+        final var notiz = gesuchNotizRepository.requireById(notizId);
+        if (Objects.nonNull(notiz.getAntwort())) {
+            throw new ForbiddenException();
+        }
+    }
 }
