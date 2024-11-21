@@ -79,6 +79,8 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
 
   public isJurNotiz = this.dialogData.notizTyp === 'JURISTISCHE_NOTIZ';
   public userIsJurist = this.permissionStore.permissionsMapSig()?.Jurist;
+  public userIsSachbearbeiter =
+    this.permissionStore.permissionsMapSig()?.Sachbearbeiter;
 
   constructor() {
     this.form.patchValue({
@@ -89,6 +91,11 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
 
     if (!this.isJurNotiz) {
       this.form.controls.antwort.disable();
+
+      if (!this.userIsSachbearbeiter) {
+        this.form.controls.betreff.disable();
+        this.form.controls.text.disable();
+      }
       return;
     }
 

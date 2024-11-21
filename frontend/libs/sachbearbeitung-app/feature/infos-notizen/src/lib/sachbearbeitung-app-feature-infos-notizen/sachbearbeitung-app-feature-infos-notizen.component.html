@@ -142,7 +142,7 @@
               </button>
             }
 
-            @if (notiz.notizTyp === 'GESUCH_NOTIZ') {
+            @if (notiz.notizTyp === 'GESUCH_NOTIZ' && permissionStore.permissionsMapSig()?.Sachbearbeiter) {
               <button
                 type="button"
                 (click)="editNotiz(notiz)"
@@ -158,6 +158,15 @@
                 [matTooltip]="'sachbearbeitung-app.infos.notiz.delete' | translate"
               >
                 <i class="material-symbols-rounded fs-4">delete</i>
+              </button>
+            } @else if (notiz.notizTyp === 'GESUCH_NOTIZ') {
+              <button
+                type="button"
+                (click)="editNotiz(notiz)"
+                class="btn btn-link btn-sm"
+                [matTooltip]="'sachbearbeitung-app.infos.notiz.anzeigen' | translate"
+              >
+                <i class="material-symbols-rounded fs-4">visibility</i>
               </button>
             }
           </div>

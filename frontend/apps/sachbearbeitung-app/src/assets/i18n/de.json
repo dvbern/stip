@@ -290,6 +290,7 @@
   "sachbearbeitung-app.infos.notiz.erstellen.success": "Notiz wurde erfolgreich erstellt",
   "sachbearbeitung-app.infos.notiz.bearbeiten": "Notiz bearbeiten",
   "sachbearbeitung-app.infos.notiz.bearbeiten.success": "Notiz wurde erfolgreich bearbeitet",
+  "sachbearbeitung-app.infos.notiz.anzeigen": "Notiz anzeigen",
   "sachbearbeitung-app.infos.notiz.delete": "Notiz Löschen",
   "sachbearbeitung-app.infos.notiz.delete.success": "Notiz wurde erfolgreich gelöscht",
   "sachbearbeitung-app.infos.notiz.delete.title": "Notiz löschen",
