@@ -36,7 +36,7 @@ export const isAllowedTo =
   };
 
 export const hasRoles =
-  (roles: BenutzerVerwaltungRole[]): CanActivateFn =>
+  (roles: BenutzerVerwaltungRole[], redirectUrl = '/'): CanActivateFn =>
   () => {
     const permissionStore = inject(PermissionStore);
     const notification = inject(GlobalNotificationStore);
@@ -45,7 +45,7 @@ export const hasRoles =
     return roles.some((role) => roleMap?.[role])
       ? true
       : (notification.handleForbiddenError(),
-        new RedirectCommand(inject(Router).parseUrl('/')));
+        new RedirectCommand(inject(Router).parseUrl(redirectUrl)));
   };
 
 const loadAndGetGesuch$ = (store: Store) => {
