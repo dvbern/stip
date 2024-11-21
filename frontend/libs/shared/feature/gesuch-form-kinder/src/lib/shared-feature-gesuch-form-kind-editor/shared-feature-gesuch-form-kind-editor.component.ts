@@ -167,10 +167,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     this.form.controls.erhalteneAlimentebeitraege.valueChanges,
   );
 
-  ausbildungssituationSig = toSignal(
-    this.form.controls.ausbildungssituation.valueChanges,
-  );
-
   alimenteDocumentSig = this.createUploadOptionsSig(() => {
     const alimente = fromFormatedNumber(this.alimentenBeitraegeSig() ?? '0');
 
@@ -185,14 +181,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     }
 
     return changes.erhalteneAlimentebeitraege !== null;
-  });
-
-  ausbildungssituationDocumentSig = this.createUploadOptionsSig(() => {
-    const ausbildungssituation = this.ausbildungssituationSig();
-
-    return ausbildungssituation === Ausbildungssituation.IN_AUSBILDUNG
-      ? DokumentTyp.KINDER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
-      : null;
   });
 
   constructor() {

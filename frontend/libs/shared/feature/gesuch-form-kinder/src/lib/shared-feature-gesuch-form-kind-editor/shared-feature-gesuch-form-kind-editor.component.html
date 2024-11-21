@@ -80,39 +80,29 @@
 
   <div class="row g-4 my-2">
     <!-- Ausbildungssituation -->
-    <mat-radio-group
-      formControlName="ausbildungssituation"
-      data-testid="form-kind-ausbildungssituation"
-      dvSharedUiFormField
-      class="col-12 col-md-6"
-    >
+    <div class="col-12 col-md-6 col-xl-4">
       <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | translate }}</label>
-      <div class="d-flex gap-2 flex-wrap col-12 justify-content-between">
-        <div class="d-flex flex-column">
-          @for (a of ausbildungssituationValues; track trackByIndex($index)) {
-            <mat-radio-button [attr.data-testid]="a" [value]="a">{{
-              'shared.form.geschwister.ausbildungssituation.select.' + a | translate
-            }}</mat-radio-button>
-          }
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          <dv-shared-ui-form-zuvor-hint
-            [changes]="
-              changes?.ausbildungssituation
-                | translateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
-            "
-          ></dv-shared-ui-form-zuvor-hint>
-        </div>
-
-        @if (ausbildungssituationDocumentSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1 mt-2"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
+      <mat-radio-group
+        class="d-flex flex-column"
+        formControlName="ausbildungssituation"
+        data-testid="form-kind-ausbildungssituation"
+        dvSharedUiFormField
+      >
+        @for (a of ausbildungssituationValues; track trackByIndex($index)) {
+          <mat-radio-button [attr.data-testid]="a" [value]="a">{{
+            'shared.form.geschwister.ausbildungssituation.select.' + a | translate
+          }}</mat-radio-button>
         }
-      </div>
-    </mat-radio-group>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-radio-group>
+      <mat-hint
+        *dvZuvorHint="
+          changes?.ausbildungssituation | translateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
+        "
+      ></mat-hint>
+    </div>
   </div>
 
   <div class="row g-4 my-2">
