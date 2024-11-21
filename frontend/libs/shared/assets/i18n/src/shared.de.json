@@ -281,6 +281,9 @@
   "shared.form.person.korrespondenzSprache.FRANZOESISCH": "Französisch",
   "shared.form.person.validation.uniqueSvnummer": "Die eingegebene AHV-Nummer wurde bereits in einem anderen Gesuch verwendet.",
   "shared.form.person.validation.wohnsitz": "Die Wohnsitz Angaben stimmen nicht mit den Angaben der Familiensituation überein.",
+  "shared.form.person.zustaendigerKanton.label": "Zuständiger Kanton",
+  "shared.form.person.zustaendigerKanton.BERN": "Bern",
+  "shared.form.person.zustaendigerKanton.ANDERER_KANTON": "Anderer Kanton",
 
   "shared.ausbildung.title": "Ausbildung",
   "shared.ausbildung.saved.success": "Ausbildung wurde erfolgreich gespeichert",
