@@ -74,8 +74,10 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
+import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
@@ -114,6 +116,7 @@ public class GesuchService {
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
     private final AusbildungRepository ausbildungRepository;
+    private final StipDecisionService stipDecisionService;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithOldestTranche(UUID id) {
@@ -476,9 +479,31 @@ public class GesuchService {
             throw new IllegalStateException("Gesuch kann only be eingereicht with exactly 1 Tranche");
         }
 
+        final var gesuchTranche = gesuch.getGesuchTranchen().get(0);
         // No need to validate the entire Gesuch here, as it's done in the state machine
-        gesuchTrancheValidatorService.validateAdditionalEinreichenCriteria(gesuch.getGesuchTranchen().get(0));
+        gesuchTrancheValidatorService.validateAdditionalEinreichenCriteria(gesuchTranche);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
+
+        stipendienAnspruchPruefen(gesuchTranche);
+    }
+
+    @Transactional(TxType.REQUIRES_NEW)
+    public void stipendienAnspruchPruefen(final GesuchTranche gesuchTranche) {
+        final var decision = stipDecisionService.decide(gesuchTranche);
+        final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(decision);
+        final var kommentarDto = new KommentarDto();
+        kommentarDto.setText(
+            stipDecisionService.getTextForDecision(
+                decision,
+                gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+            )
+        );
+
+        gesuchStatusService.triggerStateMachineEventWithComment(
+            gesuchTranche.getGesuch(),
+            gesuchStatusChangeEvent,
+            kommentarDto
+        );
     }
 
     @Transactional
