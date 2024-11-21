@@ -281,6 +281,9 @@
   "shared.form.person.korrespondenzSprache.FRANZOESISCH": "Français",
   "shared.form.person.validation.uniqueSvnummer": "Le numéro AVS indiqué a déjà été utilisé dans cette demande.",
   "shared.form.person.validation.wohnsitz": "Les informations de résidence ne correspondent pas aux informations de la situation familiale.",
+  "shared.form.person.zustaendigerKanton.label": "Canton responsable",
+  "shared.form.person.zustaendigerKanton.BERN": "Canton de Berne",
+  "shared.form.person.zustaendigerKanton.ANDERER_KANTON": "Autre canton",
 
   "shared.ausbildung.title": "Formation",
   "shared.ausbildung.saved.success": "Formation enregistrée avec succès",

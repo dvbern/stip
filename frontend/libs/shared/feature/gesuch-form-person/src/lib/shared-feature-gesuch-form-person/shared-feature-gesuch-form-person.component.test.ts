@@ -80,6 +80,7 @@ describe(SharedFeatureGesuchFormPersonComponent.name, () => {
       'form-person-nationalitaet',
       'form-person-wohnsitz',
       // 'form-person-niederlassungsstatus',
+      // 'form-person-zustaendigerKanton',
       'form-address-land',
     ];
 

@@ -46,6 +46,7 @@ import {
   Wohnsitz,
   WohnsitzKanton,
   Zivilstand,
+  ZustaendigerKanton,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -141,6 +142,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly spracheValues = Object.values(Sprache);
   readonly zivilstandValues = Object.values(Zivilstand);
   readonly niederlassungsStatusValues = Object.values(Niederlassungsstatus);
+  readonly zugstaendigerKantonValues = Object.values(ZustaendigerKanton);
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
@@ -270,6 +272,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     korrespondenzSprache: this.formBuilder.control<Sprache>('' as Sprache, {
       validators: Validators.required,
     }),
+    zustaendigerKanton: this.formBuilder.control<
+      ZustaendigerKanton | undefined
+    >(undefined),
   });
 
   wohnsitzHelper = prepareWohnsitzForm({
@@ -489,9 +494,11 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     effect(
       () => {
         this.gotReenabledSig();
+        const niederlassungsstatus = niederlassungsstatusChangedSig();
+
         // Niederlassung B -> required einreisedatum
         const showEinreisedatum =
-          niederlassungsstatusChangedSig() ===
+          niederlassungsstatus ===
           Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B;
         this.formUtils.setRequired(
           this.form.controls.einreisedatum,
@@ -501,6 +508,22 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.einreisedatum,
           visible: showEinreisedatum,
+          disabled: this.viewSig().readonly,
+          resetOnInvisible: true,
+        });
+
+        // Fluechtling -> required zustaendigerKanton
+        const showZustaendigerKanton =
+          niederlassungsstatus === Niederlassungsstatus.FLUECHTLING;
+
+        this.formUtils.setRequired(
+          this.form.controls.zustaendigerKanton,
+          showZustaendigerKanton,
+        );
+        updateVisbilityAndDisbledState({
+          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
+          formControl: this.form.controls.zustaendigerKanton,
+          visible: showZustaendigerKanton,
           disabled: this.viewSig().readonly,
           resetOnInvisible: true,
         });
@@ -627,16 +650,4 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       },
     };
   }
-}
-
-export function isFluechtlingOrHasAusweisB(
-  niederlassungsstatus?: Niederlassungsstatus,
-) {
-  return (
-    !!niederlassungsstatus &&
-    [
-      Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B,
-      Niederlassungsstatus.FLUECHTLING,
-    ].includes(niederlassungsstatus)
-  );
 }
