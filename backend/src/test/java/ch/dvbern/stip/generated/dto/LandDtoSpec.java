@@ -416,7 +416,9 @@ public enum LandDtoSpec {
   
   CF("CF"),
   
-  CY("CY");
+  CY("CY"),
+  
+  STATELESS("STATELESS");
 
   private String value;
 

@@ -22,7 +22,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
@@ -75,7 +75,7 @@ const MEDIUM_AGE = 20;
     CommonModule,
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
-    TranslateModule,
+    TranslatePipe,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -177,18 +177,21 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
     );
     this.formUtils.registerFormForUnsavedCheck(this);
 
-    effect(() => {
-      const geschwister = this.geschwisterSig();
+    effect(
+      () => {
+        const geschwister = this.geschwisterSig();
 
-      this.form.patchValue({
-        ...geschwister,
-        geburtsdatum: parseBackendLocalDateAndPrint(
-          geschwister.geburtsdatum,
-          this.languageSig(),
-        ),
-        ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
-      });
-    });
+        this.form.patchValue({
+          ...geschwister,
+          geburtsdatum: parseBackendLocalDateAndPrint(
+            geschwister.geburtsdatum,
+            this.languageSig(),
+          ),
+          ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
+        });
+      },
+      { allowSignalWrites: true },
+    );
 
     effect(() => {
       const invalidFormularProps =

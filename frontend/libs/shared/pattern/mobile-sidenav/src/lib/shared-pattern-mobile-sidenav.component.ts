@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
@@ -27,7 +27,7 @@ import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-select
   imports: [
     CommonModule,
     MatSidenavModule,
-    TranslateModule,
+    TranslatePipe,
     SharedUiLanguageSelectorComponent,
   ],
   templateUrl: './shared-pattern-mobile-sidenav.component.html',

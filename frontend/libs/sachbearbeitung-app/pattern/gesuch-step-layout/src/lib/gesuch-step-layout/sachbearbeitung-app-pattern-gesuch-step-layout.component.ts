@@ -11,7 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { combineLatest, filter } from 'rxjs';
 
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
@@ -40,7 +40,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   imports: [
     CommonModule,
     RouterLink,
-    TranslateModule,
+    TranslatePipe,
     GlobalNotificationsComponent,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,

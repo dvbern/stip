@@ -7,7 +7,7 @@ import {
 } from '@angular/material/dialog';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { provideMockStore } from '@ngrx/store/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
@@ -32,15 +32,12 @@ describe('GesuchAppDialogCreateAusbildungComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        GesuchAppDialogCreateAusbildungComponent,
-        MatDialogModule,
-        TranslateModule.forRoot(),
-      ],
+      imports: [GesuchAppDialogCreateAusbildungComponent, MatDialogModule],
       providers: [
         provideMockStore(),
         provideHttpClient(),
         provideSharedPatternJestTestSetup(),
+        provideTranslateService(),
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
       ],

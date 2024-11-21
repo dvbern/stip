@@ -15,10 +15,9 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelect } from '@angular/material/select';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { filter, firstValueFrom } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -29,7 +28,10 @@ import {
 } from '@dv/shared/data-access/gesuch-aenderung';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { isDefined } from '@dv/shared/model/type-util';
-import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
+import {
+  SharedUiFormFieldDirective,
+  SharedUiFormReadonlyDirective,
+} from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
@@ -48,14 +50,14 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     CommonModule,
     FormsModule,
     RouterLink,
-    MatSelect,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     SharedUiFormFieldDirective,
     SharedUiHeaderSuffixDirective,
     SharedUiIfSachbearbeiterDirective,
-    TranslateModule,
+    SharedUiFormReadonlyDirective,
+    TranslatePipe,
   ],
   templateUrl: './shared-feature-gesuch-form-tranche.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

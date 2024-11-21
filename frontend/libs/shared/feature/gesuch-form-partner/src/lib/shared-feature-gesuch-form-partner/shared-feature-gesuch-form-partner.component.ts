@@ -20,7 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -80,7 +80,7 @@ const MEDIUM_AGE_ADULT = 30;
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslateModule,
+    TranslatePipe,
     SharedUiFormFieldDirective,
     SharedUiFormAddressComponent,
     MatFormFieldModule,

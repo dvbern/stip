@@ -10,7 +10,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { DashboardStore } from '@dv/gesuch-app/data-access/dashboard';
 import { GesuchAppDialogCreateAusbildungComponent } from '@dv/gesuch-app/dialog/create-ausbildung';
@@ -52,7 +52,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
   imports: [
     CommonModule,
     RouterLink,
-    TranslateModule,
+    TranslatePipe,
     GesuchAppPatternMainLayoutComponent,
     SharedUiLanguageSelectorComponent,
     SharedUiIconChipComponent,

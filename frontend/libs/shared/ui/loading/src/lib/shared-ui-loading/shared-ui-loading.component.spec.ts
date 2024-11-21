@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { SharedUiLoadingComponent } from './shared-ui-loading.component';
 
@@ -9,7 +9,8 @@ describe('SharedUiLoadingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiLoadingComponent, TranslateModule.forRoot()],
+      imports: [SharedUiLoadingComponent],
+      providers: [provideTranslateService()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUiLoadingComponent);

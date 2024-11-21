@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   SharedUiFormatChfNegativePipe,
@@ -20,7 +20,7 @@ import { Berechnung } from '../../../models';
     CommonModule,
     MatCardModule,
     MatExpansionModule,
-    TranslateModule,
+    TranslatePipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfNegativePipe,
     BerechnungsExpansionPanelComponent,
