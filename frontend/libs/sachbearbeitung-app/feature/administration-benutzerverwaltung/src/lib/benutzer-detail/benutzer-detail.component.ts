@@ -30,6 +30,7 @@ import {
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
@@ -48,6 +49,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiFormSaveComponent,
+    SharedUiMaxLengthDirective,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,

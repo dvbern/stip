@@ -7,7 +7,7 @@
     </h2>
     <mat-form-field class="col-12 col-md-4 col-xl-3">
       <mat-label>{{ 'shared.search' | translate }}</mat-label>
-      <input matInput [formControl]="countryFilter" />
+      <input matInput dvMaxLength [formControl]="countryFilter" />
       <i class="material-symbols-rounded me-2" matSuffix>search</i>
     </mat-form-field>
   </div>

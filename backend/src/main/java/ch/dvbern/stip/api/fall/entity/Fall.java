@@ -34,9 +34,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 
 @Audited
 @Entity
@@ -51,7 +54,8 @@ import org.hibernate.envers.Audited;
 @Setter
 public class Fall extends AbstractMandantEntity {
     @NotNull
-    @Column(name = "fall_nummer", nullable = false, updatable = false)
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "fall_nummer", nullable = false, updatable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String fallNummer;
 
     @OneToOne(fetch = FetchType.LAZY)

@@ -71,6 +71,7 @@ import {
 } from '@dv/shared/ui/focusable-list';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiTableHeaderFilterComponent } from '@dv/shared/ui/table-header-filter';
 import {
   TypeSafeMatCellDefDirective,
@@ -128,6 +129,7 @@ type DashboardFormFields =
     SharedUiFocusableListDirective,
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
+    SharedUiMaxLengthDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
     RouterModule,

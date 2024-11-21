@@ -45,6 +45,7 @@ import {
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import {
@@ -90,6 +91,7 @@ const KnownErrorKeys = {
     SharedUiLoadingComponent,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-feature-ausbildung.component.html',
   providers: [AusbildungStore, AusbildungsstaetteStore],

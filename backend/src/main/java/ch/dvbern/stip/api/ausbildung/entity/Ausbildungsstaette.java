@@ -42,12 +42,12 @@ public class Ausbildungsstaette extends AbstractEntity {
     private List<Ausbildungsgang> ausbildungsgaenge;
 
     @NotNull
-    @Size(max = Constants.DB_DEFAULT_MID_LENGTH)
-    @Column(name = "name_de", nullable = false)
+    @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "name_de", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nameDe;
 
     @NotNull
-    @Size(max = Constants.DB_DEFAULT_MID_LENGTH)
-    @Column(name = "name_fr", nullable = false)
+    @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "name_fr", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nameFr;
 }

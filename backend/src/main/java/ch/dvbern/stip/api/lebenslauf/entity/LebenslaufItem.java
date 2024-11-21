@@ -32,9 +32,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @LebenslaufItemArtRequiredFieldsConstraint
@@ -66,19 +69,23 @@ public class LebenslaufItem extends AbstractMandantEntity {
     private Taetigkeitsart taetigkeitsart;
 
     @Nullable
-    @Column(name = "taetigkeits_beschreibung")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "taetigkeits_beschreibung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String taetigkeitsBeschreibung;
 
     @Nullable
-    @Column(name = "berufsbezeichnung")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "berufsbezeichnung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String berufsbezeichnung;
 
     @Nullable
-    @Column(name = "fachrichtung")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "fachrichtung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String fachrichtung;
 
     @Nullable
-    @Column(name = "titel_des_abschlusses")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "titel_des_abschlusses", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String titelDesAbschlusses;
 
     @Column(name = "ausbildung_abgeschlossen", nullable = false)

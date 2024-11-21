@@ -91,7 +91,7 @@
         <!-- Name -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
-          <input type="text" matInput formControlName="nachname" data-testid="form-person-nachname" />
+          <input type="text" matInput dvMaxLength formControlName="nachname" data-testid="form-person-nachname" />
           <mat-hint *dvZuvorHint="view.formChanges?.nachname"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -100,7 +100,7 @@
         <!-- Vorname -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
-          <input type="text" matInput formControlName="vorname" data-testid="form-person-vorname" />
+          <input type="text" matInput dvMaxLength formControlName="vorname" data-testid="form-person-vorname" />
           <mat-hint *dvZuvorHint="view.formChanges?.vorname"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -147,6 +147,7 @@
                 <input
                   type="text"
                   matInput
+                  [dvMaxLength]="'small'"
                   formControlName="identischerZivilrechtlicherWohnsitzPLZ"
                   data-testid="form-person-identischer-zivilrechlicher-wohnsitz-plz"
                 />
@@ -162,6 +163,7 @@
                 <input
                   type="text"
                   matInput
+                  dvMaxLength
                   formControlName="identischerZivilrechtlicherWohnsitzOrt"
                   data-testid="form-person-identischer-zivilrechlicher-wohnsitz-ort"
                 />
@@ -183,7 +185,7 @@
         <!-- E-MAIL -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.person.email.label' | translate }}</mat-label>
-          <input matInput type="email" formControlName="email" data-testid="form-person-email" />
+          <input matInput dvMaxLength type="email" formControlName="email" data-testid="form-person-email" />
           <mat-hint *dvZuvorHint="view.formChanges?.email"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -196,7 +198,13 @@
         <!-- TEL -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.phone.label' | translate }}</mat-label>
-          <input type="text" matInput formControlName="telefonnummer" data-testid="form-person-telefonnummer" />
+          <input
+            type="text"
+            matInput
+            dvMaxLength
+            formControlName="telefonnummer"
+            data-testid="form-person-telefonnummer"
+          />
           <mat-hint *dvZuvorHint="view.formChanges?.telefonnummer"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -214,6 +222,7 @@
 
           <input
             matInput
+            [dvMaxLength]="'small'"
             placeholder="dd.mm.yyyy"
             formControlName="geburtsdatum"
             data-testid="form-person-geburtsdatum"
@@ -357,7 +366,7 @@
           <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ 'shared.form.person.origin.label' | translate }}</mat-label>
-              <input type="text" matInput formControlName="heimatort" data-testid="form-person-heimatort" />
+              <input type="text" matInput dvMaxLength formControlName="heimatort" data-testid="form-person-heimatort" />
               <mat-hint *dvZuvorHint="view.formChanges?.heimatort"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
@@ -380,6 +389,7 @@
             <input
               type="text"
               matInput
+              [dvMaxLength]="'small'"
               placeholder="dd.mm.yyyy"
               formControlName="einreisedatum"
               data-testid="form-person-einreisedatum"

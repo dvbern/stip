@@ -16,7 +16,7 @@
   <form [formGroup]="form" class="mt-4" novalidate>
     <mat-form-field dvSharedUiFormField class="col-12 mt-4">
       <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | translate }}</mat-label>
-      <input matInput formControlName="nachname" />
+      <input matInput dvMaxLength formControlName="nachname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -24,7 +24,7 @@
 
     <mat-form-field dvSharedUiFormField class="col-12 mt-4">
       <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | translate }}</mat-label>
-      <input matInput formControlName="vorname" />
+      <input matInput dvMaxLength formControlName="vorname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -32,7 +32,7 @@
 
     <mat-form-field dvSharedUiFormField class="col-12 mt-4">
       <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | translate }}</mat-label>
-      <input matInput formControlName="email" type="email" />
+      <input matInput dvMaxLength formControlName="email" type="email" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
