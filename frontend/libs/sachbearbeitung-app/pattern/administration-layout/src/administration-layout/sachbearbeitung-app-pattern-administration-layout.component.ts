@@ -20,7 +20,6 @@ import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
-import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
@@ -39,7 +38,6 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
-    GlobalNotificationsComponent,
   ],
   templateUrl:
     './sachbearbeitung-app-pattern-administration-layout.component.html',

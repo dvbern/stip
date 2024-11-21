@@ -65,6 +65,7 @@ import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
@@ -122,6 +123,7 @@ const MEDIUM_AGE_GESUCHSSTELLER = 20;
     SharedUiZuvorHintDirective,
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

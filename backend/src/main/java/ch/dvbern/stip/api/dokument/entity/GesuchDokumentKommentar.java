@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 
 @Audited
 @Entity
@@ -70,7 +70,7 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     private Dokumentstatus dokumentstatus;
 
     @Nullable
-    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(name = "kommentar", nullable = true)
+    @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
+    @Column(name = "kommentar", nullable = true, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String kommentar;
 }

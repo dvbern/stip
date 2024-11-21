@@ -48,6 +48,7 @@
               <input
                 [maskito]="zuweisungInputMask"
                 matInput
+                dvMaxLength
                 type="text"
                 formControlName="buchstabenDe"
                 (blur)="normalizeZuweisung(element.benutzerId, 'De')"
@@ -75,6 +76,7 @@
               <input
                 [maskito]="zuweisungInputMask"
                 matInput
+                dvMaxLength
                 type="text"
                 formControlName="buchstabenFr"
                 (blur)="normalizeZuweisung(element.benutzerId, 'Fr')"

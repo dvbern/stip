@@ -33,6 +33,7 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
@@ -58,6 +59,7 @@ import { ReplaceSozialdienstAdminDialogComponent } from '../replace-sozialdienst
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiFormAddressComponent,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl: './sozialdienst-detail.component.html',
   styleUrl: './sozialdienst-detail.component.scss',

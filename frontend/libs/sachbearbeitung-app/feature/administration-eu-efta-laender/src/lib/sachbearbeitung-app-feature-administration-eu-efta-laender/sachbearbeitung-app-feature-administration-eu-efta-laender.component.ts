@@ -18,6 +18,7 @@ import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs';
 import { EuEftaLaenderStore } from '@dv/sachbearbeitung-app/data-access/eu-efta-laender';
 import { Land } from '@dv/shared/model/gesuch';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
@@ -35,6 +36,7 @@ const sharedCountryKeyPrefix = 'shared.country.';
     MatListModule,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
+    SharedUiMaxLengthDirective,
   ],
   providers: [
     provideMaterialDefaultOptions({
