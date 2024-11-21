@@ -4,7 +4,7 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import {
   ConfirmDialogData,
@@ -29,12 +29,9 @@ describe('SharedUiConfirmDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        SharedUiConfirmDialogComponent,
-        MatDialogModule,
-        TranslateModule.forRoot(),
-      ],
+      imports: [SharedUiConfirmDialogComponent, MatDialogModule],
       providers: [
+        provideTranslateService(),
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
       ],

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { SharedUtilCountriesService } from './shared-util-countries.service';
 
@@ -8,7 +8,7 @@ describe('SharedUtilCountriesService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
+      providers: [provideTranslateService()],
     });
     service = TestBed.inject(SharedUtilCountriesService);
   });

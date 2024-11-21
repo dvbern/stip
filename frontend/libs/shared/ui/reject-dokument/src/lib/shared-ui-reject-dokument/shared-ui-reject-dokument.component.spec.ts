@@ -5,7 +5,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { GesuchDokument } from '@dv/shared/model/gesuch';
 
@@ -13,7 +13,7 @@ import { SharedUiRejectDokumentComponent } from './shared-ui-reject-dokument.com
 
 const dialogData: GesuchDokument = {
   id: '123',
-};
+} as any;
 
 class MatDialogRefMock {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -29,10 +29,10 @@ describe('SharedUiRejectDokumentComponent', () => {
       imports: [
         SharedUiRejectDokumentComponent,
         MatDialogModule,
-        TranslateModule.forRoot(),
         NoopAnimationsModule,
       ],
       providers: [
+        provideTranslateService(),
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
       ],

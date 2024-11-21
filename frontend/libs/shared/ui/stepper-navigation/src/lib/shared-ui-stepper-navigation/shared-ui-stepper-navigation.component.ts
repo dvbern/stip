@@ -5,12 +5,12 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'dv-shared-ui-stepper-navigation',
   standalone: true,
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
   templateUrl: './shared-ui-stepper-navigation.component.html',
   styleUrls: ['./shared-ui-stepper-navigation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

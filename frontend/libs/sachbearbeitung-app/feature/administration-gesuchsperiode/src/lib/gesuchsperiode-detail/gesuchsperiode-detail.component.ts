@@ -31,7 +31,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaskitoDirective } from '@maskito/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import {
+  TranslateDirective,
+  TranslatePipe,
+  TranslateService,
+} from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
 import { GesuchsperiodeWithDaten } from '@dv/shared/model/gesuch';
@@ -69,7 +73,8 @@ import { PublishComponent } from '../publish/publish.component';
     MatHint,
     MatInputModule,
     MatSelectModule,
-    TranslateModule,
+    TranslateDirective,
+    TranslatePipe,
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,

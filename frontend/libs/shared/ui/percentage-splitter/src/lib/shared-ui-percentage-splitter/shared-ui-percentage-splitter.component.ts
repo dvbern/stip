@@ -13,7 +13,7 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MaskitoDirective } from '@maskito/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   SharedUiFormFieldDirective,
@@ -32,7 +32,7 @@ import { maskitoPercent } from '@dv/shared/util/maskito-util';
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    TranslateModule,
+    TranslatePipe,
   ],
   templateUrl: './shared-ui-percentage-splitter.component.html',
   styleUrls: ['./shared-ui-percentage-splitter.component.scss'],

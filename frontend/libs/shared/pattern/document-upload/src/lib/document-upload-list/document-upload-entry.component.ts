@@ -12,7 +12,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { Observable, filter, map, switchMap } from 'rxjs';
 
 import { DokumentView, UploadView } from '@dv/shared/model/dokument';
@@ -25,7 +25,8 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
+    TranslateDirective,
     SharedUiIconChipComponent,
     MatProgressBarModule,
     RouterLink,

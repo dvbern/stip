@@ -10,7 +10,7 @@ import {
   SimpleChanges,
   inject,
 } from '@angular/core';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import {
   Ausbildung,
@@ -40,7 +40,7 @@ import {
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-visual',
   standalone: true,
-  imports: [CommonModule, TranslateModule, SharedUiIconChipComponent],
+  imports: [CommonModule, TranslatePipe, SharedUiIconChipComponent],
   templateUrl: './two-column-timeline.component.html',
   styleUrls: ['./two-column-timeline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

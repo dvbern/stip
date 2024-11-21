@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { SharedUtilPaginatorTranslation } from './shared-util-paginator-translation';
 
@@ -8,8 +8,7 @@ describe('SharedUtilPaginatorTranslationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
-      providers: [SharedUtilPaginatorTranslation],
+      providers: [SharedUtilPaginatorTranslation, provideTranslateService()],
     });
     service = TestBed.inject(SharedUtilPaginatorTranslation);
   });

@@ -17,7 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { filter, firstValueFrom } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -57,7 +57,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     SharedUiHeaderSuffixDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiFormReadonlyDirective,
-    TranslateModule,
+    TranslatePipe,
   ],
   templateUrl: './shared-feature-gesuch-form-tranche.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

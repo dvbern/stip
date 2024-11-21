@@ -17,7 +17,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoOptions } from '@maskito/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { SachbearbeiterStore } from '@dv/sachbearbeitung-app/data-access/sachbearbeiter';
 import { BuchstabenZuordnung } from '@dv/sachbearbeitung-app/model/administration';
@@ -53,7 +53,7 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
     MatTableModule,
     MatSortModule,
     MatCheckboxModule,
-    TranslateModule,
+    TranslatePipe,
     SharedUiFormSaveComponent,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,

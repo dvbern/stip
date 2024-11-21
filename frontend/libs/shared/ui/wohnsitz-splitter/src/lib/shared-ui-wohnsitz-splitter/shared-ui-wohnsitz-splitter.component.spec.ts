@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { SharedUiWohnsitzSplitterComponent } from './shared-ui-wohnsitz-splitter.component';
 
@@ -11,11 +11,8 @@ describe('SharedUiWohnsitzSplitterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        NoopAnimationsModule,
-        TranslateModule.forRoot(),
-        SharedUiWohnsitzSplitterComponent,
-      ],
+      imports: [NoopAnimationsModule, SharedUiWohnsitzSplitterComponent],
+      providers: [provideTranslateService()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUiWohnsitzSplitterComponent);

@@ -23,7 +23,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
@@ -82,7 +82,7 @@ const MEDIUM_AGE_ADULT = 40;
   imports: [
     CommonModule,
     MaskitoDirective,
-    TranslateModule,
+    TranslatePipe,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -278,44 +278,49 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       { allowSignalWrites: true },
     );
 
-    effect(() => {
-      const elternteil = this.elternteilSig();
-      const gesuchFormular = this.gesuchFormularSig();
+    effect(
+      () => {
+        const elternteil = this.elternteilSig();
+        const gesuchFormular = this.gesuchFormularSig();
 
-      this.form.patchValue({
-        ...elternteil,
-        ...this.numberConverter.toString(elternteil),
-        geburtsdatum: parseBackendLocalDateAndPrint(
-          elternteil.geburtsdatum,
-          this.languageSig(),
-        ),
-      });
+        this.form.patchValue({
+          ...elternteil,
+          ...this.numberConverter.toString(elternteil),
+          geburtsdatum: parseBackendLocalDateAndPrint(
+            elternteil.geburtsdatum,
+            this.languageSig(),
+          ),
+        });
 
-      if (elternteil.adresse) {
-        SharedUiFormAddressComponent.patchForm(
-          this.form.controls.adresse,
-          elternteil.adresse,
+        if (elternteil.adresse) {
+          SharedUiFormAddressComponent.patchForm(
+            this.form.controls.adresse,
+            elternteil.adresse,
+          );
+        }
+
+        const otherElternteil = gesuchFormular.elterns?.find(
+          (e) => e.elternTyp !== elternteil.elternTyp,
         );
-      }
+        if (otherElternteil && !isDefined(elternteil.wohnkosten)) {
+          this.form.controls.wohnkosten.patchValue(
+            otherElternteil.wohnkosten.toString(),
+          );
+        }
 
-      const otherElternteil = gesuchFormular.elterns?.find(
-        (e) => e.elternTyp !== elternteil.elternTyp,
-      );
-      if (otherElternteil && !isDefined(elternteil.wohnkosten)) {
-        this.form.controls.wohnkosten.patchValue(
-          otherElternteil.wohnkosten.toString(),
+        const svValidators = [
+          sharedUtilValidatorAhv(
+            `eltern${capitalized(lowercased(elternteil.elternTyp))}`,
+            gesuchFormular,
+          ),
+        ];
+        this.form.controls.sozialversicherungsnummer.clearValidators();
+        this.form.controls.sozialversicherungsnummer.addValidators(
+          svValidators,
         );
-      }
-
-      const svValidators = [
-        sharedUtilValidatorAhv(
-          `eltern${capitalized(lowercased(elternteil.elternTyp))}`,
-          gesuchFormular,
-        ),
-      ];
-      this.form.controls.sozialversicherungsnummer.clearValidators();
-      this.form.controls.sozialversicherungsnummer.addValidators(svValidators);
-    });
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   handleSave() {

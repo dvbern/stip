@@ -5,7 +5,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedFeatureAusbildungComponent } from '@dv/shared/feature/ausbildung';
 
@@ -16,7 +16,7 @@ export type CreateAusbildungData = {
 @Component({
   selector: 'dv-gesuch-app-dialog-create-ausbildung',
   standalone: true,
-  imports: [CommonModule, TranslateModule, SharedFeatureAusbildungComponent],
+  imports: [CommonModule, TranslatePipe, SharedFeatureAusbildungComponent],
   templateUrl: './gesuch-app-dialog-create-ausbildung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
