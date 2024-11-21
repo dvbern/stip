@@ -272,7 +272,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     korrespondenzSprache: this.formBuilder.control<Sprache>('' as Sprache, {
       validators: Validators.required,
     }),
-    // todo: set requred if fluechtling
     zustaendigerKanton: this.formBuilder.control<
       ZustaendigerKanton | undefined
     >(undefined),
