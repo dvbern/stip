@@ -18,10 +18,8 @@
 package ch.dvbern.stip.api.kind.entity;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -44,12 +42,6 @@ public class KindRequiredDocumentsProducer implements RequiredDocumentProducer {
         kinds.forEach(kind -> {
             if (kind.getErhalteneAlimentebeitraege() != null) {
                 requiredDocs.add(DokumentTyp.KINDER_ALIMENTENVERORDUNG);
-            }
-            if (
-                Objects.nonNull(kind.getAusbildungssituation()) &&
-                kind.getAusbildungssituation().equals(Ausbildungssituation.IN_AUSBILDUNG)
-            ) {
-                requiredDocs.add(DokumentTyp.KINDER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
             }
         }
         );

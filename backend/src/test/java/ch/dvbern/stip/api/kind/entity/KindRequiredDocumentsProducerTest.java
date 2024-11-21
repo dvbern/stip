@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.kind.entity;
 
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
@@ -48,18 +47,5 @@ class KindRequiredDocumentsProducerTest {
 
         final var requiredDocs = producer.getRequiredDocuments(formular);
         RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_ALIMENTENVERORDUNG);
-    }
-
-    @Test
-    void requiresIfInAusbildung() {
-        formular.setKinds(
-            Set.of(
-                new Kind()
-                    .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
-            )
-        );
-
-        final var requiredDocs = producer.getRequiredDocuments(formular);
-        RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
     }
 }
