@@ -47,6 +47,7 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
@@ -84,6 +85,7 @@ import { PublishComponent } from '../publish/publish.component';
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiHeaderSuffixDirective,
+    SharedUiMaxLengthDirective,
     PublishComponent,
     TranslatedPropertyPipe,
     MatDatepicker,

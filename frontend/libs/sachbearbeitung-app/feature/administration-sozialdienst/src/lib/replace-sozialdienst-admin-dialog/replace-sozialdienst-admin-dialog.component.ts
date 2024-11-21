@@ -19,6 +19,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 
 export interface ReplaceSozialdienstAdminDialogData {
   sozialdienstAdminId: string;
@@ -39,6 +40,7 @@ export interface ReplaceSozialdienstAdminDialogResult {
     MatInputModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
     ReactiveFormsModule,
   ],
   templateUrl: './replace-sozialdienst-admin-dialog.component.html',

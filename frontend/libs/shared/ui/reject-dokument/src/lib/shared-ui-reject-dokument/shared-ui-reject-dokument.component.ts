@@ -15,6 +15,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 
 export interface RejectDokument {
   id: string;
@@ -31,6 +32,7 @@ export interface RejectDokument {
     MatInputModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
     ReactiveFormsModule,
   ],
   templateUrl: './shared-ui-reject-dokument.component.html',

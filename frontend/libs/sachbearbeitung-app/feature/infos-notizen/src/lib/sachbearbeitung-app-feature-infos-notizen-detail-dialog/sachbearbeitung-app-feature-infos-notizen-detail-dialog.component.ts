@@ -25,6 +25,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 export type NotizDialogData = {
@@ -49,6 +50,7 @@ export type NotizDialogResult = {
     TranslatePipe,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
     MatInputModule,
   ],
   templateUrl:
@@ -77,6 +79,8 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
 
   public isJurNotiz = this.dialogData.notizTyp === 'JURISTISCHE_NOTIZ';
   public userIsJurist = this.permissionStore.permissionsMapSig()?.Jurist;
+  public userIsSachbearbeiter =
+    this.permissionStore.permissionsMapSig()?.Sachbearbeiter;
 
   constructor() {
     this.form.patchValue({
@@ -87,6 +91,11 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
 
     if (!this.isJurNotiz) {
       this.form.controls.antwort.disable();
+
+      if (!this.userIsSachbearbeiter) {
+        this.form.controls.betreff.disable();
+        this.form.controls.text.disable();
+      }
       return;
     }
 

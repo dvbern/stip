@@ -30,9 +30,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 
 @Audited
 @Entity
@@ -51,7 +54,8 @@ public class Notification extends AbstractMandantEntity {
     private NotificationType notificationType;
 
     @NotNull
-    @Column(name = "notification_text")
+    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Column(name = "notification_text", length = DB_DEFAULT_STRING_MAX_LENGTH)
     private String notificationText;
 
     @ManyToOne(optional = false)

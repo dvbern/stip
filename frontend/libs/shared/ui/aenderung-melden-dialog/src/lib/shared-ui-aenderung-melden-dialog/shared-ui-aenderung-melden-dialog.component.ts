@@ -25,6 +25,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { provideMonthYearSachbearbeiterDateAdapter } from '@dv/shared/util/date-adapter';
 import {
   convertTempFormToRealValues,
@@ -49,6 +50,7 @@ type GesuchAenderungData = {
     MatDatepickerModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-ui-aenderung-melden-dialog.component.html',
   styleUrl: './shared-ui-aenderung-melden-dialog.component.scss',

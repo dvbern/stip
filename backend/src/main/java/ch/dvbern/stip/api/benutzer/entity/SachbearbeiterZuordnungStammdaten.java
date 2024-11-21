@@ -28,9 +28,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Entity
 @Table(
@@ -45,12 +48,14 @@ import org.hibernate.envers.Audited;
 @Setter
 public class SachbearbeiterZuordnungStammdaten extends AbstractMandantEntity {
     @Nullable
-    @Column(name = "buchstaben_de")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "buchstaben_de", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @BuchstabenRangeConstraint
     private String buchstabenDe;
 
     @Nullable
-    @Column(name = "buchstaben_fr")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "buchstaben_fr", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @BuchstabenRangeConstraint
     private String buchstabenFr;
 

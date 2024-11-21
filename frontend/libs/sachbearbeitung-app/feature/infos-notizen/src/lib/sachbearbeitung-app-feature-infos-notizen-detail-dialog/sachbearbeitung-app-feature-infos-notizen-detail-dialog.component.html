@@ -53,6 +53,7 @@
             maxlength="2000"
             data-testid="form-notiz-antwort"
             matInput
+            [dvMaxLength]="'large'"
             type="text"
             rows="4"
           ></textarea>
@@ -82,6 +83,7 @@
       data-testid="dialog-confirm"
       [disabled]="
         form.invalid ||
+        form.pristine ||
         (!isJurNotiz && !permissionStore.permissionsMapSig()?.Sachbearbeiter) ||
         (isJurNotiz && dialogData.notiz?.id && !userIsJurist) ||
         dialogData.notiz?.antwort
@@ -95,7 +97,7 @@
     <!-- Betreff -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
       <mat-label>{{ 'shared.form.notizen.betreff.label' | translate }}</mat-label>
-      <input formControlName="betreff" data-testid="form-notiz-betreff" matInput type="text" />
+      <input formControlName="betreff" data-testid="form-notiz-betreff" matInput dvMaxLength type="text" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -109,6 +111,7 @@
         maxlength="2000"
         data-testid="form-notiz-text"
         matInput
+        [dvMaxLength]="'large'"
         type="text"
         rows="4"
       ></textarea>

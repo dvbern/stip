@@ -31,6 +31,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import {
   SharedUtilFormService,
@@ -58,6 +59,7 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiRdIsPendingPipe,
+    SharedUiMaxLengthDirective,
   ],
   providers: [
     provideMaterialDefaultOptions({

@@ -27,7 +27,7 @@
           <td mat-cell *dvMatCellDef="let staette; dataSource: ausbildungstaetteSource">
             @if (editedAusbildungsstaette === staette) {
               <mat-form-field>
-                <input formControlName="nameDe" type="text" matInput (click)="$event.stopPropagation()" />
+                <input formControlName="nameDe" type="text" matInput dvMaxLength (click)="$event.stopPropagation()" />
               </mat-form-field>
             } @else {
               {{ staette.nameDe }}
@@ -43,6 +43,7 @@
                 <input
                   #filter
                   matInput
+                  dvMaxLength
                   (keyup)="store.setFilter(filter.value)"
                   type="text"
                   [placeholder]="'sachbearbeitung-app.admin.ausbildungsstaette.filter' | translate"
@@ -70,7 +71,7 @@
           <td mat-cell *dvMatCellDef="let staette; dataSource: ausbildungstaetteSource">
             @if (editedAusbildungsstaette === staette) {
               <mat-form-field>
-                <input formControlName="nameFr" type="text" matInput (click)="$event.stopPropagation()" />
+                <input formControlName="nameFr" type="text" matInput dvMaxLength (click)="$event.stopPropagation()" />
               </mat-form-field>
             } @else {
               {{ staette.nameFr }}
@@ -189,6 +190,7 @@
                               formControlName="bezeichnungDe"
                               type="text"
                               matInput
+                              dvMaxLength
                               (click)="$event.stopPropagation()"
                             />
                           </mat-form-field>
@@ -210,6 +212,7 @@
                               formControlName="bezeichnungFr"
                               type="text"
                               matInput
+                              dvMaxLength
                               (click)="$event.stopPropagation()"
                             />
                           </mat-form-field>
