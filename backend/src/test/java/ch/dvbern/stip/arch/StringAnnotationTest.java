@@ -45,9 +45,7 @@ class StringAnnotationTest {
             .and()
             .haveRawType(String.class)
             .should()
-            .beAnnotatedWith(
-                Size.class
-            )
+            .beAnnotatedWith(Size.class)
             .andShould()
             .beAnnotatedWith(Column.class);
 
