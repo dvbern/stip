@@ -14,7 +14,6 @@ type MessageOrKey =
   | Required<Pick<CreateNotification, 'message'>>
   | Required<Pick<CreateNotification, 'messageKey'>>;
 
-const CRITICAL_NOTIFICATIONS: NotificationType[] = ['ERROR', 'SEVERE'];
 const PERMANENT_NOTIFICATIONS: NotificationType[] = ['ERROR_PERMANENT'];
 
 export interface State {
@@ -69,7 +68,7 @@ export class GlobalNotificationStore extends signalStore(
     return patchState(this, (state) => ({
       nextNotificationId: state.nextNotificationId + 1 + errors.length,
       notifications: [
-        ...this.notifications(),
+        ...state.notifications,
         ...errors.map((error, i) => ({
           id: state.nextNotificationId + i,
           type: 'ERROR' as const,
@@ -104,31 +103,19 @@ export class GlobalNotificationStore extends signalStore(
   }
 
   /**
-   * Clear all notifications that are not important.
-   */
-  clearUnimportantNotifications() {
-    const notifications = this.notifications().filter((notification) =>
-      CRITICAL_NOTIFICATIONS.includes(notification.type),
-    );
-
-    return patchState(this, {
-      notifications: notifications,
-    });
-  }
-
-  /**
    * Clear all persistent notifications.
    */
   clearNonPermanentNotifications() {
-    const notifications = this.notifications().filter(
-      (notification) =>
-        PERMANENT_NOTIFICATIONS.includes(notification.type) ||
-        notification.type === 'SUCCESS',
+    const allNotifications = this.notifications();
+    const notifications = allNotifications.filter((notification) =>
+      PERMANENT_NOTIFICATIONS.includes(notification.type),
     );
 
-    return patchState(this, {
-      notifications: notifications,
-    });
+    if (allNotifications.length !== notifications.length) {
+      patchState(this, {
+        notifications: notifications,
+      });
+    }
   }
 }
 

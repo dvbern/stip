@@ -7,13 +7,13 @@
       <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
         <a
           routerLink="/cockpit"
-          class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
           data-testid="gesuch-step-nav-overview"
         >
           <i class="material-symbols-rounded text-white me-2">list</i>
           <span>{{ 'sachbearbeitung-app.header.antraege' | translate }}</span>
         </a>
-        <div class="active btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
+        <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
           <i class="material-symbols-rounded text-white me-2">settings</i>
           <span>{{ 'sachbearbeitung-app.header.administration' | translate }}</span>
         </div>
@@ -91,11 +91,6 @@
             <ng-content></ng-content>
           </div>
         </div>
-      </div>
-
-      <!-- notifications/errors -->
-      <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <dv-global-notifications></dv-global-notifications>
       </div>
     </main>
   </mat-sidenav-content>

@@ -21,7 +21,6 @@ import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeit
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
-import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
@@ -36,7 +35,6 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SharedPatternAppHeaderComponent,
-    GlobalNotificationsComponent,
     SharedUiIconChipComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,
   ],

@@ -25,7 +25,6 @@ import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
-import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
@@ -41,7 +40,6 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     CommonModule,
     RouterLink,
     TranslatePipe,
-    GlobalNotificationsComponent,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SharedPatternGesuchStepNavComponent,

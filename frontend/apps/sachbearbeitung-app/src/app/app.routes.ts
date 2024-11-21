@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
-import { isAllowedTo } from '@dv/shared/pattern/status-guard';
+import { hasRoles, isAllowedTo } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
   {
@@ -29,7 +29,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'administration',
-    canActivate: [hasBenutzer],
+    canActivate: [hasBenutzer, hasRoles(['Admin'])],
     title: 'sachbearbeitung-app.admin.title',
     loadComponent: () =>
       import('@dv/sachbearbeitung-app/feature/administration').then(
