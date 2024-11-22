@@ -1412,6 +1412,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteGesuch
       summary: delete a Gesuch
+  '/gesuch/changes/{trancheId}':
+    parameters:
+      - name: trancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getChangesIdByTrancheId
+      summary: Returns a change by its id
   '/gesuch/{gesuchId}/current':
     parameters:
       - name: gesuchId
