@@ -1,31 +1,33 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="anna-lea.fuhrer (generated)" id="1732097803962-7">
-        <addColumn tableName="person_in_ausbildung">
-            <column name="zustaendiger_kanton" type="varchar(255)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1732097803962-8">
-        <addColumn tableName="person_in_ausbildung_aud">
-            <column name="zustaendiger_kanton" type="varchar(255)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1732097803962-1">
-        <modifyDataType columnName="antwort" newDataType="varchar(255)" tableName="gesuch_notizen"/>
-    </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1732097803962-2">
-        <modifyDataType columnName="antwort" newDataType="varchar(255)" tableName="gesuch_notizen_aud"/>
-    </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1732097803962-3">
-        <modifyDataType columnName="text" newDataType="varchar(255)" tableName="gesuch_notizen"/>
-    </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1732097803962-4">
-        <modifyDataType columnName="text" newDataType="varchar(255)" tableName="gesuch_notizen_aud"/>
-    </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1732097803962-5">
-        <dropUniqueConstraint constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
-    </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1732097803962-6">
-        <addUniqueConstraint columnNames="mandant, land" constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
-    </changeSet>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-7">
+    <addColumn tableName="person_in_ausbildung">
+      <column name="zustaendiger_kanton" type="varchar(255)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-8">
+    <addColumn tableName="person_in_ausbildung_aud">
+      <column name="zustaendiger_kanton" type="varchar(255)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-1">
+    <modifyDataType columnName="antwort" newDataType="varchar(255)" tableName="gesuch_notizen"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-2">
+    <modifyDataType columnName="antwort" newDataType="varchar(255)" tableName="gesuch_notizen_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-3">
+    <modifyDataType columnName="text" newDataType="varchar(255)" tableName="gesuch_notizen"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-4">
+    <modifyDataType columnName="text" newDataType="varchar(255)" tableName="gesuch_notizen_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-5">
+    <dropUniqueConstraint constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-6">
+    <addUniqueConstraint columnNames="mandant, land" constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
+  </changeSet>
 </databaseChangeLog>

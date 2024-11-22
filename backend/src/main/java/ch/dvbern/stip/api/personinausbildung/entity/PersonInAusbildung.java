@@ -144,6 +144,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Column(name = "korrespondenz_sprache", nullable = false)
     private Sprache korrespondenzSprache;
 
+    @Nullable
     @Enumerated(EnumType.STRING)
     @Column(name = "zustaendiger_kanton")
     private ZustaendigerKanton zustaendigerKanton;
