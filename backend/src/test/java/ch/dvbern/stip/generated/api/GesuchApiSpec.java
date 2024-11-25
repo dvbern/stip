@@ -88,7 +88,7 @@ public class GesuchApiSpec {
                 getGesucheGs(),
                 getGesucheSb(),
                 getGsDashboard(),
-                getGsTrancheChanges(),
+                getGsTrancheChangesInBearbeitung(),
                 getSbTrancheChanges(),
                 getStatusProtokoll(),
                 juristischAbklaeren(),
@@ -164,8 +164,8 @@ public class GesuchApiSpec {
         return new GetGsDashboardOper(createReqSpec());
     }
 
-    public GetGsTrancheChangesOper getGsTrancheChanges() {
-        return new GetGsTrancheChangesOper(createReqSpec());
+    public GetGsTrancheChangesInBearbeitungOper getGsTrancheChangesInBearbeitung() {
+        return new GetGsTrancheChangesInBearbeitungOper(createReqSpec());
     }
 
     public GetSbTrancheChangesOper getSbTrancheChanges() {
@@ -1530,7 +1530,7 @@ public class GesuchApiSpec {
      * @see #aenderungIdPath Die ID der Aenderung (required)
      * return GesuchWithChangesDtoSpec
      */
-    public static class GetGsTrancheChangesOper implements Oper {
+    public static class GetGsTrancheChangesInBearbeitungOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/gesuch/{aenderungId}/aenderung/gs/changes";
@@ -1538,7 +1538,7 @@ public class GesuchApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetGsTrancheChangesOper(RequestSpecBuilder reqSpec) {
+        public GetGsTrancheChangesInBearbeitungOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -1571,7 +1571,7 @@ public class GesuchApiSpec {
          * @param aenderungId (UUID) Die ID der Aenderung (required)
          * @return operation
          */
-        public GetGsTrancheChangesOper aenderungIdPath(Object aenderungId) {
+        public GetGsTrancheChangesInBearbeitungOper aenderungIdPath(Object aenderungId) {
             reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
             return this;
         }
@@ -1581,7 +1581,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetGsTrancheChangesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetGsTrancheChangesInBearbeitungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1591,7 +1591,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetGsTrancheChangesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetGsTrancheChangesInBearbeitungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

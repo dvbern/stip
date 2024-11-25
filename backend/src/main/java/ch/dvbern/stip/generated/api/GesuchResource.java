@@ -106,7 +106,7 @@ public interface GesuchResource {
     @GET
     @Path("/{aenderungId}/aenderung/gs/changes")
     @Produces({ "application/json", "text/plain" })
-    Response getGsTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
+    Response getGsTrancheChangesInBearbeitung(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
     @Path("/{aenderungId}/aenderung/sb/changes")

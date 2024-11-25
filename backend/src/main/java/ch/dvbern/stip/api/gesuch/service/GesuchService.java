@@ -599,7 +599,7 @@ public class GesuchService {
         );
     }
 
-    public GesuchWithChangesDto getGsTrancheChanges(final UUID aenderungId) {
+    public GesuchWithChangesDto getGsTrancheChangesInBearbeitung(final UUID aenderungId) {
         var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
 
         if (aenderung.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {

@@ -1786,7 +1786,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGsTrancheChanges
+      operationId: getGsTrancheChangesInBearbeitung
   '/gesuch/{aenderungId}/aenderung/sb/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'

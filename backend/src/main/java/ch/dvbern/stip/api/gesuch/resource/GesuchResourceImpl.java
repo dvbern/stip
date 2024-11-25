@@ -138,6 +138,15 @@ public class GesuchResourceImpl implements GesuchResource {
         return Response.ok(gesuchService.getFallDashboardItemDtos()).build();
     }
 
+    @RolesAllowed(GESUCH_READ)
+    @AllowAll
+    @Override
+    public Response getGsTrancheChangesInBearbeitung(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canRead(aenderungId);
+        final var changes = gesuchService.getGsTrancheChangesInBearbeitung(aenderungId);
+        return Response.ok(changes).build();
+    }
+
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
     @AllowAll
     @Override
@@ -213,14 +222,6 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response getChangesIdByTrancheId(UUID trancheId) {
         gesuchTrancheAuthorizer.canRead(trancheId);
         return Response.ok(gesuchService.getChangesByTrancheId(trancheId)).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public Response getGsTrancheChanges(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canRead(aenderungId);
-        final var changes = gesuchService.getGsTrancheChanges(aenderungId);
-        return Response.ok(changes).build();
     }
 
     // TODO KSTIP-1247: Update which roles can do this
