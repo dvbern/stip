@@ -2984,6 +2984,7 @@ components:
     GesuchDashboardItem:
       required:
         - id
+        - currentTrancheId
         - gesuchsperiode
         - gesuchStatus
       type: object
@@ -2993,6 +2994,8 @@ components:
         gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
         id:
+          $ref: '#/components/schemas/UUID'
+        currentTrancheId:
           $ref: '#/components/schemas/UUID'
         offeneAenderung:
           $ref: '#/components/schemas/GesuchTrancheSlim'
