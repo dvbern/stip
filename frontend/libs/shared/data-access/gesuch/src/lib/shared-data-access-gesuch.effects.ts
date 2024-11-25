@@ -129,6 +129,9 @@ export const loadGesuch = createEffect(
         if (!id) {
           throw new Error(ROUTE_ID_MISSING);
         }
+        if (!trancheTyp || !trancheId || !compileTimeConfig) {
+          throw new Error('Missing trancheTyp, trancheId or compileTimeConfig');
+        }
 
         const handle404And401 = {
           context: noGlobalErrorsIf(
@@ -176,27 +179,16 @@ export const loadGesuch = createEffect(
         // Different services for different types of tranches
         const services$ = {
           AENDERUNG: (appType: AppType) => aenderungServices$[appType],
-          TRANCHE: () => (gesuchTrancheId: string) =>
-            gesuchService.getGesuch$(
-              { gesuchId: id, gesuchTrancheId },
+          TRANCHE: () => (trancheId: string) =>
+            gesuchService.getChangesIdByTrancheId$(
+              { trancheId },
               undefined,
               undefined,
               handle404And401,
             ),
         } satisfies Record<GesuchTrancheTyp, unknown>;
 
-        return (
-          trancheTyp && trancheId && compileTimeConfig
-            ? // If there is a trancheTyp, trancheId and compileTimeConfig, use the matching service call
-              services$[trancheTyp](compileTimeConfig.appType)(trancheId)
-            : // Otherwise use the normal current gesuch service call
-              gesuchService.getCurrentGesuch$(
-                { gesuchId: id },
-                undefined,
-                undefined,
-                handle404And401,
-              )
-        ).pipe(
+        return services$[trancheTyp](compileTimeConfig.appType)(trancheId).pipe(
           map((gesuch) =>
             SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
               gesuch,
