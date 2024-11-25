@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
@@ -472,7 +473,7 @@ public class GesuchService {
         }
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void gesuchEinreichen(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (gesuch.getGesuchTranchen().size() != 1) {
@@ -483,21 +484,28 @@ public class GesuchService {
         // No need to validate the entire Gesuch here, as it's done in the state machine
         gesuchTrancheValidatorService.validateAdditionalEinreichenCriteria(gesuchTranche);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
-
-        stipendienAnspruchPruefen(gesuchTranche);
     }
 
     @Transactional(TxType.REQUIRES_NEW)
-    public void stipendienAnspruchPruefen(final GesuchTranche gesuchTranche) {
+    public void stipendienAnspruchPruefen(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.getGesuchTranchen().size() != 1) {
+            throw new IllegalStateException("Gesuch kann only be eingereicht with exactly 1 Tranche");
+        }
+
+        final var gesuchTranche = gesuch.getGesuchTranchen().get(0);
         final var decision = stipDecisionService.decide(gesuchTranche);
         final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(decision);
-        final var kommentarDto = new KommentarDto();
-        kommentarDto.setText(
-            stipDecisionService.getTextForDecision(
-                decision,
-                gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
-            )
-        );
+        KommentarDto kommentarDto = null;
+        if (decision != StipDecision.GESUCH_VALID) {
+            kommentarDto = new KommentarDto();
+            kommentarDto.setText(
+                stipDecisionService.getTextForDecision(
+                    decision,
+                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+                )
+            );
+        }
 
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuchTranche.getGesuch(),

@@ -128,13 +128,14 @@ class GesuchStatusprotokollTest {
             .body()
             .as(StatusprotokollEntryDtoSpec[].class);
 
-        assertThat(statusProtokoll.length, is(3));
+        assertThat(statusProtokoll.length, is(4));
         final var sorted = Arrays.stream(statusProtokoll)
             .sorted(Comparator.comparing(StatusprotokollEntryDtoSpec::getTimestamp))
             .toList();
         assertThat(sorted.get(0).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
-        assertThat(sorted.get(1).getStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
-        assertThat(sorted.get(2).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+        assertThat(sorted.get(1).getStatus(), is(GesuchstatusDtoSpec.EINGEREICHT));
+        assertThat(sorted.get(2).getStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+        assertThat(sorted.get(3).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
 
     @Test
@@ -171,9 +172,9 @@ class GesuchStatusprotokollTest {
             .sorted(Comparator.comparing(StatusprotokollEntryDtoSpec::getTimestamp))
             .toList();
 
-        assertThat(statusprotokollEntryList.size(), is(4));
+        assertThat(statusprotokollEntryList.size(), is(5));
         assertThat(
-            statusprotokollEntryList.get(3).getKommentar(),
+            statusprotokollEntryList.get(4).getKommentar(),
             Matchers.equalTo(ZURUECKWEISEN_COMMENT)
         );
     }

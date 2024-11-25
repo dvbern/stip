@@ -36,6 +36,7 @@ import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -51,7 +52,7 @@ public class GesuchStatusService {
         triggerStateMachineEventWithComment(gesuch, event, null);
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void triggerStateMachineEventWithComment(
         final Gesuch gesuch,
         final GesuchStatusChangeEvent event,
@@ -66,7 +67,7 @@ public class GesuchStatusService {
         final var sm = new StateMachine<>(
             gesuch.getGesuchStatus(),
             gesuch::getGesuchStatus,
-            s -> gesuch.setGesuchStatus(s)
+            status -> gesuch.setGesuchStatus(status)
                 .setGesuchStatusAenderungDatum(LocalDateTime.now())
                 .setComment(kommentarDto == null ? "" : kommentarDto.getText()),
             config

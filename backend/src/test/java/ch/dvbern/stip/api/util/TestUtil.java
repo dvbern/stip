@@ -366,6 +366,13 @@ public class TestUtil {
         return gesuch;
     }
 
+    public static Gesuch getGesuchForDecision(final UUID trancheUuid) {
+        final var baseGesuch = getGesuchForBerechnung(trancheUuid);
+        baseGesuch.getGesuchsperiode().setEinreichefristReduziert(LocalDate.now().plusMonths(1));
+        baseGesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(1));
+        return baseGesuch;
+    }
+
     public static Gesuch getGesuchForBerechnung(final UUID trancheUuid) {
         final var baseGesuch = getBaseGesuchForBerechnung(trancheUuid);
         baseGesuch.setAusbildung(
