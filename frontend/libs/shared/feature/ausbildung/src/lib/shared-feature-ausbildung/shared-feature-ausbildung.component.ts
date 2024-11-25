@@ -33,6 +33,7 @@ import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaet
 import {
   SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchCacheView,
+  selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -40,11 +41,16 @@ import { SharedModelError } from '@dv/shared/model/error';
 import { AusbildungsPensum, Ausbildungsstaette } from '@dv/shared/model/gesuch';
 import { capitalized, getTranslatableProp } from '@dv/shared/model/type-util';
 import {
+  SharedPatternDocumentUploadComponent,
+  createUploadOptionsFactory,
+} from '@dv/shared/pattern/document-upload';
+import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import {
@@ -90,6 +96,8 @@ const KnownErrorKeys = {
     SharedUiLoadingComponent,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
+    SharedPatternDocumentUploadComponent,
   ],
   templateUrl: './shared-feature-ausbildung.component.html',
   providers: [AusbildungStore, AusbildungsstaetteStore],
@@ -100,6 +108,13 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+  private languageSig = this.store.selectSignal(selectLanguage);
+  private gesuchViewSig = this.store.selectSignal(
+    selectSharedDataAccessGesuchsView,
+  );
+  private cachedGesuchViewSig = this.store.selectSignal(
+    selectSharedDataAccessGesuchCacheView,
+  );
   readonly ausbildungspensumValues = Object.values(AusbildungsPensum);
 
   fallIdSig = input.required<string | null>();
@@ -124,9 +139,12 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     }),
   });
 
+  private createUploadOptionsSig = createUploadOptionsFactory(
+    this.gesuchViewSig,
+  );
   private usageTypeSig = computed(() => {
     const fallId = this.fallIdSig();
-    const gesuchFallId = this.gesuchViewSig().cache.gesuch?.fallId;
+    const gesuchFallId = this.cachedGesuchViewSig().cache.gesuch?.fallId;
 
     return fallId
       ? { type: 'dialog' as const, fallId }
@@ -148,15 +166,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     const { type } = this.usageTypeSig();
     const {
       cache: { gesuchFormular },
-    } = this.gesuchViewSig();
+    } = this.cachedGesuchViewSig();
 
     return type === 'dialog' || gesuchFormular?.ausbildung?.editable;
   });
-
-  languageSig = this.store.selectSignal(selectLanguage);
-  gesuchViewSig = this.store.selectSignal(
-    selectSharedDataAccessGesuchCacheView,
-  );
 
   ausbildungsgangOptionsSig = computed(() => {
     const ausbildungsstaettes =
@@ -182,6 +195,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         }) ?? []
     );
   });
+  ausbildungsstaettDocumentSig = this.createUploadOptionsSig(
+    () => 'AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE',
+  );
   ausbildungsstaettOptionsSig: Signal<
     (Ausbildungsstaette & { translatedName?: string })[]
   > = computed(() => {
@@ -294,7 +310,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     effect(
       () => {
         const ausbildung = {
-          ...this.gesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
+          ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
             .gesuchFormular?.ausbildung,
         };
         const ausbildungstaetten =
@@ -454,8 +470,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     delete formValues.ausbildungsstaette;
 
     const ausbildungId =
-      this.gesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith.gesuchFormular
-        ?.ausbildung.id;
+      this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
+        .gesuchFormular?.ausbildung.id;
     const ausbildungsgang = ausbildungsgangId ? { ausbildungsgangId } : {};
     const { type, fallId } = this.usageTypeSig();
 

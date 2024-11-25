@@ -50,6 +50,7 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
@@ -85,6 +86,7 @@ import { selectSharedFeatureGesuchFormAuszahlungenView } from './shared-feature-
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-auszahlungen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

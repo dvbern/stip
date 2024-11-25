@@ -17,56 +17,63 @@
       {{ 'shared.form.ausbildung.place.title' | translate }}
     </h3>
 
-    @if (!form.value['ausbildungNichtGefunden']) {
-      <!-- STAETTE -->
-      <mat-form-field dvSharedUiFormField>
-        <mat-label>
-          {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
-        </mat-label>
+    <div class="tw-w-full tw-flex tw-gap-4">
+      @if (!form.value['ausbildungNichtGefunden']) {
+        <!-- STAETTE -->
+        <mat-form-field dvSharedUiFormField class="tw-grow">
+          <mat-label>
+            {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
+          </mat-label>
 
-        <input
-          id="typeahead-focus"
-          type="text"
-          formControlName="ausbildungsstaette"
-          data-testid="form-education-ausbildungsstaette"
-          matInput
-          [matAutocomplete]="staetten"
-          [placeholder]="'shared.form.select.empty' | translate"
-        />
-        @if (form.controls.ausbildungsstaette.value && isEditableSig()) {
-          <button
-            type="button"
-            matSuffix
-            mat-icon-button
-            aria-label="Clear"
-            (click)="form.controls.ausbildungsstaette.reset()"
-            data-testid="button-form-education-ausbildungsstaette-clear"
-          >
-            <span class="material-symbols-rounded align-middle">clear</span>
-          </button>
-        }
-        <mat-autocomplete #staetten="matAutocomplete">
-          @for (staette of ausbildungsstaettOptionsSig(); track $index) {
-            <mat-option [value]="staette.translatedName" [attr.data-testid]="staette.nameDe">
-              {{ staette.translatedName }}
-            </mat-option>
+          <input
+            id="typeahead-focus"
+            type="text"
+            formControlName="ausbildungsstaette"
+            data-testid="form-education-ausbildungsstaette"
+            matInput
+            dvMaxLength
+            [matAutocomplete]="staetten"
+            [placeholder]="'shared.form.select.empty' | translate"
+          />
+          @if (form.controls.ausbildungsstaette.value && isEditableSig()) {
+            <button
+              type="button"
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              (click)="form.controls.ausbildungsstaette.reset()"
+              data-testid="button-form-education-ausbildungsstaette-clear"
+            >
+              <span class="material-symbols-rounded align-middle">clear</span>
+            </button>
           }
-        </mat-autocomplete>
-      </mat-form-field>
-    } @else {
-      <!-- Alternative STAETTE -->
-      <mat-form-field dvSharedUiFormField>
-        <mat-label>
-          {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
-        </mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="alternativeAusbildungsstaette"
-          data-testid="form-education-alternativeAusbildungsstaette"
-        />
-      </mat-form-field>
-    }
+          <mat-autocomplete #staetten="matAutocomplete">
+            @for (staette of ausbildungsstaettOptionsSig(); track $index) {
+              <mat-option [value]="staette.translatedName" [attr.data-testid]="staette.nameDe">
+                {{ staette.translatedName }}
+              </mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      } @else {
+        <!-- Alternative STAETTE -->
+        <mat-form-field dvSharedUiFormField>
+          <mat-label>
+            {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
+          </mat-label>
+          <input
+            matInput
+            dvMaxLength
+            type="text"
+            formControlName="alternativeAusbildungsstaette"
+            data-testid="form-education-alternativeAusbildungsstaette"
+          />
+        </mat-form-field>
+      }
+      @if (ausbildungsstaettDocumentSig(); as options) {
+        <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+      }
+    </div>
 
     <!-- GANG -->
     <mat-form-field dvSharedUiFormField class="tw-col-start-1">
@@ -92,6 +99,7 @@
         <input
           type="text"
           matInput
+          dvMaxLength
           formControlName="alternativeAusbildungsgang"
           data-testid="form-education-alternativeAusbildungsgang"
         />
@@ -106,7 +114,13 @@
       <mat-label>
         {{ 'shared.form.ausbildung.fachrichtung.label' | translate }}
       </mat-label>
-      <input type="text" matInput formControlName="fachrichtung" data-testid="form-education-fachrichtung" />
+      <input
+        type="text"
+        matInput
+        dvMaxLength
+        formControlName="fachrichtung"
+        data-testid="form-education-fachrichtung"
+      />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -116,7 +130,13 @@
       <mat-label>
         {{ 'shared.form.ausbildung.ausbildungsort.label' | translate }}
       </mat-label>
-      <input type="text" matInput formControlName="ausbildungsort" data-testid="form-education-ausbildungsort" />
+      <input
+        type="text"
+        matInput
+        dvMaxLength
+        formControlName="ausbildungsort"
+        data-testid="form-education-ausbildungsort"
+      />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
@@ -146,6 +166,7 @@
 
       <input
         matInput
+        [dvMaxLength]="'small'"
         data-testid="form-education-beginn-der-ausbildung"
         formControlName="ausbildungBegin"
         placeholder="MM.yyyy"
@@ -179,6 +200,7 @@
 
       <input
         matInput
+        [dvMaxLength]="'small'"
         data-testid="form-education-ende-der-ausbildung"
         formControlName="ausbildungEnd"
         placeholder="MM.yyyy"

@@ -39,7 +39,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MID_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -59,13 +59,13 @@ public class Auszahlung extends AbstractMandantEntity {
     private Kontoinhaber kontoinhaber;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "vorname", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "vorname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String vorname;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "nachname", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "nachname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nachname;
 
     @NotNull
@@ -74,8 +74,8 @@ public class Auszahlung extends AbstractMandantEntity {
     private Adresse adresse;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "iban", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "iban", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @IbanConstraint
     private String iban;
 

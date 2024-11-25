@@ -56,12 +56,12 @@ public abstract class AbstractEntity implements Serializable {
     @Column(name = "timestamp_mutiert", nullable = false)
     private LocalDateTime timestampMutiert;
 
-    @Size(max = Constants.DB_DEFAULT_MID_LENGTH)
-    @Column(name = "user_erstellt", nullable = false)
+    @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "user_erstellt", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String userErstellt;
 
-    @Size(max = Constants.DB_DEFAULT_MID_LENGTH)
-    @Column(name = "user_mutiert", nullable = false)
+    @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "user_mutiert", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String userMutiert;
 
     // java:S2097 https://sonarqube-next.dvbern.ch/coding_rules?open=java%3AS2097&rule_key=java%3AS2097

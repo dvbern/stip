@@ -29,7 +29,13 @@
         <!-- BezeichnungDe -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungDe.label' | translate }}</mat-label>
-          <input formControlName="bezeichnungDe" data-testid="form-gesuchsjahr-bezeichnungDe" matInput type="text" />
+          <input
+            formControlName="bezeichnungDe"
+            data-testid="form-gesuchsjahr-bezeichnungDe"
+            matInput
+            dvMaxLength
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -37,7 +43,13 @@
         <!-- BezeichnungFr -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungFr.label' | translate }}</mat-label>
-          <input formControlName="bezeichnungFr" data-testid="form-gesuchsjahr-bezeichnungFr" matInput type="text" />
+          <input
+            formControlName="bezeichnungFr"
+            data-testid="form-gesuchsjahr-bezeichnungFr"
+            matInput
+            dvMaxLength
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>

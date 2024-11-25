@@ -31,9 +31,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint
@@ -60,7 +63,8 @@ public class Partner extends AbstractPerson {
 
     @NotNull
     @AhvConstraint
-    @Column(name = "sozialversicherungsnummer", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "sozialversicherungsnummer", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String sozialversicherungsnummer;
 
     @NotNull

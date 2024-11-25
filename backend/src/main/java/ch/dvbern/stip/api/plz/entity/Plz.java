@@ -24,9 +24,13 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 
 @Entity
 @Table(
@@ -41,14 +45,17 @@ import org.hibernate.envers.Audited;
 @Setter
 public class Plz extends AbstractEntity {
     @NotNull
-    @Column(name = "plz", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "plz", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String plz;
 
     @NotNull
-    @Column(name = "ort", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "ort", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String ort;
 
     @NotNull
-    @Column(name = "kantonskuerzel", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "kantonskuerzel", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String kantonskuerzel;
 }

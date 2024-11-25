@@ -46,7 +46,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MID_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @AusbildungNichtGefundenRequiredFieldsConstraint
@@ -80,18 +80,18 @@ public class Ausbildung extends AbstractMandantEntity {
     private Ausbildungsgang ausbildungsgang;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "alternative_ausbildungsgang")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "alternative_ausbildungsgang", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String alternativeAusbildungsgang;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "alternative_ausbildungsstaette")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "alternative_ausbildungsstaette", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String alternativeAusbildungsstaette;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "fachrichtung", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "fachrichtung", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String fachrichtung;
 
     @Column(name = "ausbildung_nicht_gefunden", nullable = false)
@@ -112,7 +112,8 @@ public class Ausbildung extends AbstractMandantEntity {
     private AusbildungsPensum pensum;
 
     @Nullable
-    @Column(name = "ausbildungsort")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "ausbildungsort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String ausbildungsort;
 
     @NotNull

@@ -27,6 +27,7 @@ import { Sozialdienst } from '@dv/shared/model/gesuch';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
@@ -53,6 +54,7 @@ type Filter = {
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
     SharedUiClearButtonComponent,
+    SharedUiMaxLengthDirective,
     MatFormFieldModule,
     MatInputModule,
   ],

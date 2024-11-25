@@ -46,7 +46,7 @@
       <div class="row g-4 my-2">
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
-          <input formControlName="nachname" data-testid="form-partner-nachname" matInput type="text" />
+          <input formControlName="nachname" data-testid="form-partner-nachname" matInput dvMaxLength type="text" />
           <mat-hint *dvZuvorHint="view.formChanges?.nachname"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -54,7 +54,7 @@
         </mat-form-field>
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
-          <input formControlName="vorname" data-testid="form-partner-vorname" matInput type="text" />
+          <input formControlName="vorname" data-testid="form-partner-vorname" matInput dvMaxLength type="text" />
           <mat-hint *dvZuvorHint="view.formChanges?.vorname"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -80,6 +80,7 @@
 
           <input
             matInput
+            [dvMaxLength]="'small'"
             placeholder="dd.mm.yyyy"
             formControlName="geburtsdatum"
             data-testid="form-partner-geburtsdatum"

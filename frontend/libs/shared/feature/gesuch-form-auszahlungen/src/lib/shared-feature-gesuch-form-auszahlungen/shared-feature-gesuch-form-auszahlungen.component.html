@@ -60,7 +60,13 @@
         <!-- Nachname -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
-          <input matInput type="text" [formControlName]="'nachname'" data-testid="form-auszahlung-nachname" />
+          <input
+            matInput
+            dvMaxLength
+            type="text"
+            [formControlName]="'nachname'"
+            data-testid="form-auszahlung-nachname"
+          />
           <mat-hint *dvZuvorHint="view.formChanges?.nachname"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -70,7 +76,7 @@
         <!-- Vorname -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
-          <input matInput type="text" [formControlName]="'vorname'" data-testid="form-auszahlung-vorname" />
+          <input matInput dvMaxLength type="text" [formControlName]="'vorname'" data-testid="form-auszahlung-vorname" />
           <mat-hint *dvZuvorHint="view.formChanges?.vorname"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}

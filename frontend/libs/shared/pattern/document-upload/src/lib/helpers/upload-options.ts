@@ -7,6 +7,8 @@ import { PermissionMap } from '@dv/shared/model/permission-state';
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   readonly [K in DokumentTyp]: DokumentOptions['titleKey'];
 } = {
+  AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE:
+    'shared.form.ausbildung.file.AUSBILDUNGSSTAETTE',
   PERSON_NIEDERLASSUNGSSTATUS_B:
     'shared.form.person.file.AUFENTHALTSBEWILLIGUNG_B',
   PERSON_NIEDERLASSUNGSSTATUS_C:

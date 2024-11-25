@@ -31,6 +31,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import { SharedUtilCountriesService } from '@dv/shared/util/countries';
@@ -64,6 +65,7 @@ type AddresseFormGroup = FormGroup<{
     SharedUiPlzOrtAutocompleteDirective,
     SharedUiZuvorHintDirective,
     SharedUiTranslateChangePipe,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-ui-form-address.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

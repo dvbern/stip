@@ -41,8 +41,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MID_LENGTH;
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 
 @Audited
 @Entity
@@ -64,8 +64,8 @@ public class Eltern extends AbstractPerson {
     private Adresse adresse;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "sozialversicherungsnummer")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "sozialversicherungsnummer", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String sozialversicherungsnummer;
 
     @NotNull
@@ -74,8 +74,8 @@ public class Eltern extends AbstractPerson {
     private ElternTyp elternTyp;
 
     @NotNull
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "telefonnummer", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "telefonnummer", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String telefonnummer;
 
     @NotNull
@@ -87,13 +87,13 @@ public class Eltern extends AbstractPerson {
     private boolean identischerZivilrechtlicherWohnsitz = true;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String identischerZivilrechtlicherWohnsitzOrt;
 
     @Nullable
-    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz")
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String identischerZivilrechtlicherWohnsitzPLZ;
 
     @Nullable
