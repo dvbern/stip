@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -57,13 +57,15 @@ class GesuchResourceEinnahmenKostenSteuernTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
     private static UUID gesuchId;
-    private static GesuchDtoSpec gesuch;
+    private static UUID trancheId;
+    private static GesuchWithChangesDtoSpec gesuch;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void testCreateEndpoint() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        trancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         gesuchId = gesuch.getId();
     }
 
@@ -71,13 +73,13 @@ class GesuchResourceEinnahmenKostenSteuernTest {
     @TestAsGesuchsteller
     @Order(2)
     void gesuchTrancheCreated() {
-        gesuch = gesuchApiSpec.getCurrentGesuch()
-            .gesuchIdPath(gesuchId)
+        gesuch = gesuchApiSpec.getChangesIdByTrancheId()
+            .trancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
 
         assertThat(gesuch.getGesuchTrancheToWorkWith(), notNullValue());
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigAb(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb()));
@@ -121,13 +123,13 @@ class GesuchResourceEinnahmenKostenSteuernTest {
             .then()
             .assertThat()
             .statusCode(Status.ACCEPTED.getStatusCode());
-        gesuch = gesuchApiSpec.getCurrentGesuch()
-            .gesuchIdPath(gesuchId)
+        gesuch = gesuchApiSpec.getChangesIdByTrancheId()
+            .trancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
         assertThat(
             gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuernKantonGemeinde(),
             is(0)

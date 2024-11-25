@@ -83,7 +83,7 @@ public class GesuchApiSpec {
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisen(),
                 getBerechnungForGesuch(),
-                getCurrentGesuch(),
+                getChangesIdByTrancheId(),
                 getGesuch(),
                 getGesucheGs(),
                 getGesucheSb(),
@@ -144,8 +144,8 @@ public class GesuchApiSpec {
         return new GetBerechnungForGesuchOper(createReqSpec());
     }
 
-    public GetCurrentGesuchOper getCurrentGesuch() {
-        return new GetCurrentGesuchOper(createReqSpec());
+    public GetChangesIdByTrancheIdOper getChangesIdByTrancheId() {
+        return new GetChangesIdByTrancheIdOper(createReqSpec());
     }
 
     public GetGesuchOper getGesuch() {
@@ -1015,28 +1015,28 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Returns the Gesuch with the given Id
+     * Returns a change by its id
      * 
      *
-     * @see #gesuchIdPath  (required)
-     * return GesuchDtoSpec
+     * @see #trancheIdPath  (required)
+     * return GesuchWithChangesDtoSpec
      */
-    public static class GetCurrentGesuchOper implements Oper {
+    public static class GetChangesIdByTrancheIdOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/current";
+        public static final String REQ_URI = "/gesuch/changes/{trancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetCurrentGesuchOper(RequestSpecBuilder reqSpec) {
+        public GetChangesIdByTrancheIdOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/{gesuchId}/current
+         * GET /gesuch/changes/{trancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1047,23 +1047,23 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/current
+         * GET /gesuch/changes/{trancheId}
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchWithChangesDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String TRANCHE_ID_PATH = "trancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param trancheId (UUID)  (required)
          * @return operation
          */
-        public GetCurrentGesuchOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetChangesIdByTrancheIdOper trancheIdPath(Object trancheId) {
+            reqSpec.addPathParam(TRANCHE_ID_PATH, trancheId);
             return this;
         }
 
@@ -1072,7 +1072,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetCurrentGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetChangesIdByTrancheIdOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1082,7 +1082,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetCurrentGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetChangesIdByTrancheIdOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

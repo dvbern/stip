@@ -50,10 +50,10 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.KindUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
@@ -115,17 +115,17 @@ class GesuchFillFormularTest {
     void testCreateEndpoint() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
+        gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         ausbildungId = gesuch.getAusbildungId();
-        gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
-            .gesuchIdPath(gesuchId)
+        gesuchTrancheId = gesuchApiSpec.getChangesIdByTrancheId()
+            .trancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
-
             .extract()
             .body()
-            .as(GesuchDtoSpec.class)
+            .as(GesuchWithChangesDtoSpec.class)
             .getGesuchTrancheToWorkWith()
             .getId();
     }
@@ -154,21 +154,29 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(3)
     void gesuchTrancheCreated() {
-        final var gesuch = gesuchApiSpec.getCurrentGesuch()
-            .gesuchIdPath(gesuchId)
+        final var gesuchWithChanges = gesuchApiSpec.getChangesIdByTrancheId()
+            .trancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
 
         trancheUpdateDtoSpec = new GesuchTrancheUpdateDtoSpec();
-        trancheUpdateDtoSpec.setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        trancheUpdateDtoSpec.setId(gesuchWithChanges.getGesuchTrancheToWorkWith().getId());
         trancheUpdateDtoSpec.setGesuchFormular(currentFormular);
 
-        assertThat(gesuch.getGesuchTrancheToWorkWith(), notNullValue());
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigAb(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb()));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigBis(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis()));
+        assertThat(gesuchWithChanges.getGesuchTrancheToWorkWith(), notNullValue());
+        assertThat(
+            gesuchWithChanges.getGesuchTrancheToWorkWith().getGueltigAb(),
+            is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb())
+        );
+        assertThat(
+            gesuchWithChanges.getGesuchTrancheToWorkWith().getGueltigBis(),
+            is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis())
+        );
     }
 
     @Test
@@ -444,13 +452,13 @@ class GesuchFillFormularTest {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
 
-    private GesuchDtoSpec patchAndValidate() {
+    private GesuchWithChangesDtoSpec patchAndValidate() {
         final var returnedGesuch = patchGesuch();
         validatePage();
         return returnedGesuch;
     }
 
-    private GesuchDtoSpec patchGesuch() {
+    private GesuchWithChangesDtoSpec patchGesuch() {
         final var gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
         gesuchUpdateDtoSpec.setGesuchTrancheToWorkWith(trancheUpdateDtoSpec);
 
@@ -462,15 +470,15 @@ class GesuchFillFormularTest {
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
 
-        return gesuchApiSpec.getCurrentGesuch()
-            .gesuchIdPath(gesuchId)
+        return gesuchApiSpec.getChangesIdByTrancheId()
+            .trancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
     }
 
     private void validatePage() {

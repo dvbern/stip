@@ -1,8 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GesuchDashboardItemMissingDocumentsDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
-import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -11,11 +8,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-
 
 @JsonTypeName("GesuchDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -26,6 +18,7 @@ public class GesuchDashboardItemDto  implements Serializable {
   private @Valid GesuchsperiodeDto gesuchsperiode;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
   private @Valid UUID id;
+  private @Valid UUID currentTrancheId;
   private @Valid GesuchTrancheSlimDto offeneAenderung;
   private @Valid GesuchDashboardItemMissingDocumentsDto missingDocuments;
 
@@ -36,7 +29,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchsperiode")
   @NotNull
   public GesuchsperiodeDto getGesuchsperiode() {
@@ -55,7 +48,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchStatus")
   @NotNull
   public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getGesuchStatus() {
@@ -74,7 +67,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -88,12 +81,31 @@ public class GesuchDashboardItemDto  implements Serializable {
 
   /**
    **/
+  public GesuchDashboardItemDto currentTrancheId(UUID currentTrancheId) {
+    this.currentTrancheId = currentTrancheId;
+    return this;
+  }
+
+
+  @JsonProperty("currentTrancheId")
+  @NotNull
+  public UUID getCurrentTrancheId() {
+    return currentTrancheId;
+  }
+
+  @JsonProperty("currentTrancheId")
+  public void setCurrentTrancheId(UUID currentTrancheId) {
+    this.currentTrancheId = currentTrancheId;
+  }
+
+  /**
+   **/
   public GesuchDashboardItemDto offeneAenderung(GesuchTrancheSlimDto offeneAenderung) {
     this.offeneAenderung = offeneAenderung;
     return this;
   }
 
-  
+
   @JsonProperty("offeneAenderung")
   public GesuchTrancheSlimDto getOffeneAenderung() {
     return offeneAenderung;
@@ -111,7 +123,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("missingDocuments")
   public GesuchDashboardItemMissingDocumentsDto getMissingDocuments() {
     return missingDocuments;
@@ -135,23 +147,25 @@ public class GesuchDashboardItemDto  implements Serializable {
     return Objects.equals(this.gesuchsperiode, gesuchDashboardItem.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuchDashboardItem.gesuchStatus) &&
         Objects.equals(this.id, gesuchDashboardItem.id) &&
+        Objects.equals(this.currentTrancheId, gesuchDashboardItem.currentTrancheId) &&
         Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
         Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, offeneAenderung, missingDocuments);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, missingDocuments);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDashboardItemDto {\n");
-    
+
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    currentTrancheId: ").append(toIndentedString(currentTrancheId)).append("\n");
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
     sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");
     sb.append("}");

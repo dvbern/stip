@@ -32,7 +32,6 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -79,16 +78,19 @@ class DokumentResourcesTest {
     void test_prepare_gesuch_for_dokument() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
-
-        gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
-            .gesuchIdPath(gesuchId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchDtoSpec.class)
-            .getGesuchTrancheToWorkWith()
-            .getId();
+        gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
+        /*
+         * gesuchTrancheId = gesuchApiSpec.getChangesIdByTrancheId()
+         * .trancheIdPath(gesuchTrancheId)
+         * .execute(ResponseBody::prettyPeek)
+         * .then()
+         * .extract()
+         * .body()
+         * .as(GesuchWithChangesDtoSpec.class)
+         * .getGesuchTrancheToWorkWith()
+         * .getId();
+         *
+         */
     }
 
     @Test

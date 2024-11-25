@@ -43,7 +43,7 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
-    public GesuchTranche getLatestWhereStatusChanged(final UUID gesuchTrancheId) {
+    public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
         final var reader = AuditReaderFactory.get(em);
         return (GesuchTranche) reader.createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, true, false)

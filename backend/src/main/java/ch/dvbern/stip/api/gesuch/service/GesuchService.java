@@ -75,6 +75,7 @@ import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -114,11 +115,6 @@ public class GesuchService {
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
     private final AusbildungRepository ausbildungRepository;
-
-    @Transactional
-    public Optional<GesuchDto> findGesuchWithOldestTranche(UUID id) {
-        return gesuchRepository.findByIdOptional(id).map(gesuchMapperUtil::mapWithOldestTranche);
-    }
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
@@ -587,11 +583,27 @@ public class GesuchService {
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
+    public GesuchWithChangesDto getChangesByTrancheId(UUID aenderungId) {
+        var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+
+        GesuchTranche changeset;
+        try {
+            changeset = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
+        } catch (NoResultException e) {
+            changeset = null;
+        }
+        return gesuchMapperUtil.toWithChangesDto(
+            aenderung.getGesuch(),
+            aenderung,
+            changeset
+        );
+    }
+
     public GesuchWithChangesDto getGsTrancheChanges(final UUID aenderungId) {
         var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
 
         if (aenderung.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS) {
-            aenderung = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+            aenderung = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
         }
 
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
@@ -601,7 +613,8 @@ public class GesuchService {
     public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
-        final var latestWhereStatusChanged = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+        final var latestWhereStatusChanged =
+            gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
         return gesuchMapperUtil.toWithChangesDto(
             aenderung.getGesuch(),
             aenderung,

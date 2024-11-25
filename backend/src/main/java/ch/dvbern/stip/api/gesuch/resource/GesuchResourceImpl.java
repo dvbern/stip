@@ -125,14 +125,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getCurrentGesuch(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
-        var gesuch = gesuchService.findGesuchWithOldestTranche(gesuchId).orElseThrow(NotFoundException::new);
-        return Response.ok(gesuch).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
     public Response getGesuch(UUID gesuchId, UUID gesuchTrancheId) {
         gesuchAuthorizer.canRead(gesuchId);
         var gesuch = gesuchService.findGesuchWithTranche(gesuchId, gesuchTrancheId).orElseThrow(NotFoundException::new);
@@ -214,6 +206,13 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.canRead(gesuchId);
         gesuchAuthorizer.canGetBerechnung(gesuchId);
         return Response.ok(gesuchService.getBerechnungsresultat(gesuchId)).build();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Response getChangesIdByTrancheId(UUID trancheId) {
+        gesuchTrancheAuthorizer.canRead(trancheId);
+        return Response.ok(gesuchService.getChangesByTrancheId(trancheId)).build();
     }
 
     @RolesAllowed(GESUCH_READ)

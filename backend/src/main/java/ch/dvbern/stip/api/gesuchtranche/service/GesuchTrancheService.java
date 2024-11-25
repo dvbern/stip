@@ -263,7 +263,8 @@ public class GesuchTrancheService {
             kommentarDto
         );
 
-        final var lastFreigegebenTranche = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+        final var lastFreigegebenTranche =
+            gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
         final var lastFreigegebenFormular = lastFreigegebenTranche.getGesuchFormular();
 
         var gesuchTrancheUpdateDto = new GesuchTrancheUpdateDto().id(

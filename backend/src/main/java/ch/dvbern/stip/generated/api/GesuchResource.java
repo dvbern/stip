@@ -1,27 +1,14 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
-import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
-import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
-import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
-import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
-
-
-
-import java.io.InputStream;
-import java.util.Map;
-import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
@@ -92,9 +79,9 @@ public interface GesuchResource {
     Response getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/current")
+    @Path("/changes/{trancheId}")
     @Produces({ "application/json", "text/plain" })
-    Response getCurrentGesuch(@PathParam("gesuchId") UUID gesuchId);
+    Response getChangesIdByTrancheId(@PathParam("trancheId") UUID trancheId);
 
     @GET
     @Path("/{gesuchId}/{gesuchTrancheId}")
