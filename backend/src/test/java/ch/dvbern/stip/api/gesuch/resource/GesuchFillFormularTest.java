@@ -334,6 +334,7 @@ class GesuchFillFormularTest {
     @Order(18)
     void noSuperfluousDocuments() {
         final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
+            DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
             DokumentTypDtoSpec.EK_LOHNABRECHNUNG,
             DokumentTypDtoSpec.EK_BELEG_BETREUUNGSKOSTEN_KINDER,
             DokumentTypDtoSpec.EK_MIETVERTRAG,

@@ -249,6 +249,7 @@ export const isStepValid = (
     string,
     SharedModelGesuchFormularPropsSteuerdatenSteps
   > = {
+    [AUSBILDUNG.route]: 'ausbildung',
     [PERSON.route]: 'personInAusbildung',
     [LEBENSLAUF.route]: 'lebenslaufItems',
     [FAMILIENSITUATION.route]: 'familiensituation',

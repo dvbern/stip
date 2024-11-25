@@ -288,6 +288,7 @@
   "shared.form.ausbildung.isAusbildungAusland.label": "Ist die Ausbildung im Ausland?",
   "shared.form.ausbildung.ausbildungsort.label": "Ausbildungsort",
   "shared.form.ausbildung.ausbildungsstaette.label": "Ausbildungsstätte",
+  "shared.form.ausbildung.file.AUSBILDUNGSSTAETTE": "Bestätigung der Ausbildungsstätte",
   "shared.form.ausbildung.ausbildungsgang.label": "Ausbildungsgang",
   "shared.form.ausbildung.fachrichtung.label": "Fachrichtung",
   "shared.form.ausbildung.manuell.label": "Andere Ausbildungsstätte erfassen",
