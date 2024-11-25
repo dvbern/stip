@@ -63,7 +63,7 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
     void createGesuch() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
-        trancheId = gesuch.getId();
+        trancheId = gesuch.getGesuchTrancheToWorkWith().getId();
     }
 
     void createTranche() {
