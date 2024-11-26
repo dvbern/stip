@@ -93,7 +93,7 @@ public class DateUtil {
         return (int) ChronoUnit.MONTHS.between(start, end.plusDays(1));
     }
 
-    public int getAlterInYears(final LocalDate geburtsdatum) {
+    public int getAgeInYears(final LocalDate geburtsdatum) {
         return (int) ChronoUnit.YEARS.between(geburtsdatum, LocalDate.now());
     }
 

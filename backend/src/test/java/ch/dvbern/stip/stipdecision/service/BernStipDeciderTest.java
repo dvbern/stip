@@ -49,7 +49,7 @@ class BernStipDeciderTest {
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
 
         var text = decider.getTextForDecision(decision, Sprache.DEUTSCH);
-        assertThat(text).isEqualTo("");
+        assertThat(text).isEmpty();
     }
 
     @Test

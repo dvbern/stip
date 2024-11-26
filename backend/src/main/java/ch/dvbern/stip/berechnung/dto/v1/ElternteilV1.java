@@ -94,13 +94,13 @@ public class ElternteilV1 {
             for (final var elternteil : eltern) {
                 builder.ergaenzungsleistungen(Objects.requireNonNullElse(elternteil.getErgaenzungsleistungen(), 0));
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    DateUtil.getAlterInYears(elternteil.getGeburtsdatum()),
+                    DateUtil.getAgeInYears(elternteil.getGeburtsdatum()),
                     gesuchsperiode
                 );
             }
             for (final var kindDerElternInHaushalten : kinderDerElternInHaushalten) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    DateUtil.getAlterInYears(kindDerElternInHaushalten.getGeburtsdatum()),
+                    DateUtil.getAgeInYears(kindDerElternInHaushalten.getGeburtsdatum()),
                     gesuchsperiode
                 );
             }
@@ -119,7 +119,7 @@ public class ElternteilV1 {
                 .toList();
             for (final var kind : kindDesElternteilsVollzeit) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    DateUtil.getAlterInYears(kind.getGeburtsdatum()),
+                    DateUtil.getAgeInYears(kind.getGeburtsdatum()),
                     gesuchsperiode
                 );
             }
@@ -137,7 +137,7 @@ public class ElternteilV1 {
             ) {
                 for (final var kind : kinderDerElternTeilzeit) {
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        DateUtil.getAlterInYears(kind.getGeburtsdatum()),
+                        DateUtil.getAgeInYears(kind.getGeburtsdatum()),
                         gesuchsperiode
                     );
                 }
@@ -155,7 +155,7 @@ public class ElternteilV1 {
                     .get(0);
                 wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    DateUtil.getAlterInYears(elternteilToUse.getGeburtsdatum()),
+                    DateUtil.getAgeInYears(elternteilToUse.getGeburtsdatum()),
                     gesuchsperiode
                 );
                 if (Boolean.TRUE.equals(familiensituation.getVaterWiederverheiratet())) {
@@ -176,7 +176,7 @@ public class ElternteilV1 {
                     .get(0);
                 wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    DateUtil.getAlterInYears(elternteilToUse.getGeburtsdatum()),
+                    DateUtil.getAgeInYears(elternteilToUse.getGeburtsdatum()),
                     gesuchsperiode
                 );
                 if (Boolean.TRUE.equals(familiensituation.getMutterWiederverheiratet())) {

@@ -49,7 +49,6 @@ public class KomplettEingereichtHandler implements GesuchStatusStateChangeHandle
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
         notificationService.createGesuchEingereichtNotification(gesuch);
-        // gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
         gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)

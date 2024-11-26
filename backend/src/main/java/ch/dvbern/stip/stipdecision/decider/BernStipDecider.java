@@ -118,7 +118,7 @@ public class BernStipDecider implements BaseStipDecider {
 
     private static boolean piaAelter35Jahre(final GesuchTranche gesuchTranche) {
         return DateUtil
-            .getAlterInYears(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getGeburtsdatum()) > 35;
+            .getAgeInYears(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getGeburtsdatum()) > 35;
     }
 
     private static TemplateInstance getEingabeFristAbgelaufenText(final Sprache korrespondenzSprache) {
@@ -158,6 +158,8 @@ public class BernStipDecider implements BaseStipDecider {
 
     @CheckedTemplate
     static final class Templates {
+        private Templates() {}
+
         public static native TemplateInstance eingabefristAbgelaufenDe();
 
         public static native TemplateInstance eingabefristAbgelaufenFr();

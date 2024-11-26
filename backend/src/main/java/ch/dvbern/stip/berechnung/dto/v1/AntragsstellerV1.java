@@ -98,7 +98,7 @@ public class AntragsstellerV1 {
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
             .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
             .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
-        int alter = DateUtil.getAlterInYears(personInAusbildung.getGeburtsdatum());
+        int alter = DateUtil.getAgeInYears(personInAusbildung.getGeburtsdatum());
         builder.alter(alter);
 
         int medizinischeGrundversorgung = 0;
@@ -109,7 +109,7 @@ public class AntragsstellerV1 {
             if (partner != null) {
                 anzahlPersonenImHaushalt += 1;
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    DateUtil.getAlterInYears(partner.getGeburtsdatum()),
+                    DateUtil.getAgeInYears(partner.getGeburtsdatum()),
                     gesuchsperiode
                 );
             }
@@ -118,7 +118,7 @@ public class AntragsstellerV1 {
                 if (kind.getWohnsitzAnteilPia() > 0) {
                     anzahlPersonenImHaushalt += 1;
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        DateUtil.getAlterInYears(kind.getGeburtsdatum()),
+                        DateUtil.getAgeInYears(kind.getGeburtsdatum()),
                         gesuchsperiode
                     );
                 }
