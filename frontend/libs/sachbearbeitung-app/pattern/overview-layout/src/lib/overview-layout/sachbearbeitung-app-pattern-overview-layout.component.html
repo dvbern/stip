@@ -7,13 +7,14 @@
   <mat-sidenav-content class="d-flex flex-column">
     <dv-shared-pattern-app-header (openSidenav)="sidenav.open()">
       <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
-        <div class="active btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
+        <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
           <i class="material-symbols-rounded text-white me-2">list</i>
           <span>{{ 'sachbearbeitung-app.header.antraege' | translate }}</span>
         </div>
         <a
+          *dvHasRoles="['Admin']"
           routerLink="/administration"
-          class="btn btn-light btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
           data-testid="gesuch-step-nav-administration"
         >
           <i class="material-symbols-rounded text-white me-2">settings</i>
@@ -25,11 +26,6 @@
     <!-- MAIN CONTENT -->
     <main class="page-body">
       <ng-content></ng-content>
-
-      <!-- notifications/errors -->
-      <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <dv-global-notifications></dv-global-notifications>
-      </div>
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

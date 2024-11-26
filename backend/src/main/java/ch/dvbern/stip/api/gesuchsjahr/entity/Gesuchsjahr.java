@@ -25,11 +25,14 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -42,10 +45,12 @@ import org.hibernate.envers.Audited;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Gesuchsjahr extends AbstractMandantEntity {
-    @Column(name = "bezeichnung_de")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "bezeichnung_de", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String bezeichnungDe;
 
-    @Column(name = "bezeichnung_fr")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "bezeichnung_fr", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String bezeichnungFr;
 
     @Column(name = "technisches_jahr")

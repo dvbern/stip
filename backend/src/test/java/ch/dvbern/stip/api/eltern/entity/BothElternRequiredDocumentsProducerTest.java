@@ -23,6 +23,7 @@ import java.util.Set;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import io.quarkus.test.junit.QuarkusTest;
@@ -60,6 +61,7 @@ class BothElternRequiredDocumentsProducerTest {
         tranche.setGesuchFormular(gesuchFormular);
         tranche.setGesuchDokuments(new ArrayList<>());
         gesuchFormular.setTranche(tranche);
+        gesuchFormular.getTranche().setGesuch(new Gesuch());
         final var requiredDocuments = requiredDokumentService
             .getRequiredDokumentsForGesuchFormular(gesuchFormular);
         assertEquals(1, requiredDocuments.size());

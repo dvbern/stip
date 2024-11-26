@@ -290,6 +290,7 @@
   "sachbearbeitung-app.infos.notiz.erstellen.success": "La note a été créée avec succès",
   "sachbearbeitung-app.infos.notiz.bearbeiten": "Modifier la note",
   "sachbearbeitung-app.infos.notiz.bearbeiten.success": "La note a été modifiée avec succès",
+  "sachbearbeitung-app.infos.notiz.anzeigen": "Afficher la note",
   "sachbearbeitung-app.infos.notiz.delete": "Supprimer la note",
   "sachbearbeitung-app.infos.notiz.delete.success": "La note a été supprimée avec succès",
   "sachbearbeitung-app.infos.notiz.delete.title": "Supprimer la note",
@@ -403,5 +404,8 @@
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Dernière activité",
   "sachbearbeitung-app.cockpit.table.typ": "Type",
 
-  "sachbearbeitung-app.gesuch-form.title": "Demande"
+  "sachbearbeitung-app.gesuch-form.title": "Demande",
+
+  "sachbearbeitung-app.unauthorized.title": "Accès refusé",
+  "sachbearbeitung-app.unauthorized.text": "Vous n'avez pas l'autorisation de voir cette page."
 }

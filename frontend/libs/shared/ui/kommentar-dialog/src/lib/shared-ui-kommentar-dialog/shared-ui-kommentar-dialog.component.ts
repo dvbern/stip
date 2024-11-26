@@ -18,6 +18,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 
 export interface KommentarDialogData {
   entityId: string;
@@ -43,6 +44,7 @@ export interface KommentarDialogResult {
     MatInputModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SharedUiMaxLengthDirective,
     ReactiveFormsModule,
   ],
   templateUrl: './shared-ui-kommentar-dialog.component.html',

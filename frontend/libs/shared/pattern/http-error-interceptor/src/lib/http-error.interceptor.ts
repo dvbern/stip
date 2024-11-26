@@ -107,7 +107,7 @@ const handleUnknownHttpError = (
         if (unauthorizedHandler) {
           unauthorizedHandler(error);
         } else {
-          oauth.logOut(false, router.url);
+          oauth.logOut();
         }
         return handledError(EMPTY);
       }

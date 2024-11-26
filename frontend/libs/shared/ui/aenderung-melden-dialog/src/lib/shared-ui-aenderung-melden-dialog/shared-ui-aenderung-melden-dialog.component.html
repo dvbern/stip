@@ -15,6 +15,7 @@
         <mat-label>{{ 'shared.dialog.gesuch-aenderung.von.label' | translate }}</mat-label>
         <input
           matInput
+          [dvMaxLength]="'small'"
           [matDatepicker]="vonPicker"
           [min]="dialogData.minDate"
           [max]="dialogData.maxDate"
@@ -43,6 +44,7 @@
         <mat-label>{{ 'shared.dialog.gesuch-aenderung.bis.label' | translate }}</mat-label>
         <input
           matInput
+          [dvMaxLength]="'small'"
           [matDatepicker]="bisPicker"
           [min]="form.controls.gueltigAb.value"
           [max]="dialogData.maxDate"
@@ -69,6 +71,7 @@
       <mat-label>{{ 'shared.dialog.gesuch-aenderung.comment.label' | translate }}</mat-label>
       <textarea
         matInput
+        [dvMaxLength]="'large'"
         formControlName="kommentar"
         [placeholder]="'shared.dialog.gesuch-aenderung.comment.placeholder' | translate"
       ></textarea>

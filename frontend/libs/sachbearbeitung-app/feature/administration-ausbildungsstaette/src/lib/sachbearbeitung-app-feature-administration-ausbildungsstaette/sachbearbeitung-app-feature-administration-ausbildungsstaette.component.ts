@@ -35,6 +35,7 @@ import {
 } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiFormFieldDirective } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { SharedUtilFormService } from '@dv/shared/util/form';
@@ -48,6 +49,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     SharedUiLoadingComponent,
     MatFormFieldModule,
     SharedUiFormFieldDirective,
+    SharedUiMaxLengthDirective,
     TranslatePipe,
     MatInputModule,
     MatTableModule,

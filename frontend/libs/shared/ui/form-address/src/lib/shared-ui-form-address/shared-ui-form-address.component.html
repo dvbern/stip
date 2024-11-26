@@ -4,7 +4,7 @@
   <!-- Strasse -->
   <mat-form-field dvSharedUiFormField class="col-8 col-lg-4 pe-0">
     <mat-label>{{ 'shared.form.shared.address.street.label' | translate }} </mat-label>
-    <input matInput type="text" formControlName="strasse" data-testid="form-address-strasse" />
+    <input matInput dvMaxLength type="text" formControlName="strasse" data-testid="form-address-strasse" />
     <mat-hint *dvZuvorHint="changes?.strasse"></mat-hint>
     <mat-error *dvSharedUiFormMessageError="'required'">
       {{ 'shared.form.error.required' | translate }}
@@ -14,7 +14,13 @@
   <!-- Nr -->
   <mat-form-field dvSharedUiFormField class="col-4 col-lg-2 ps-2">
     <mat-label>{{ 'shared.form.shared.address.number.label' | translate }} </mat-label>
-    <input matInput type="text" formControlName="hausnummer" data-testid="form-address-hausnummer" />
+    <input
+      matInput
+      [dvMaxLength]="'small'"
+      type="text"
+      formControlName="hausnummer"
+      data-testid="form-address-hausnummer"
+    />
     <mat-hint *dvZuvorHint="changes?.hausnummer"></mat-hint>
     <mat-error *dvSharedUiFormMessageError="'required'">
       {{ 'shared.form.error.required' | translate }}
@@ -32,6 +38,7 @@
       <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
       <input
         matInput
+        [dvMaxLength]="'small'"
         [matAutocomplete]="plzAutocomplete"
         type="text"
         formControlName="plz"
@@ -52,7 +59,7 @@
 
     <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-lg-4 ps-0">
       <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
-      <input matInput type="text" formControlName="ort" data-testid="form-address-ort" />
+      <input matInput dvMaxLength type="text" formControlName="ort" data-testid="form-address-ort" />
       <mat-hint *dvZuvorHint="changes?.ort"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -67,7 +74,7 @@
         'shared.form.optional.label' | translate
       }})</mat-label
     >
-    <input matInput type="text" formControlName="coAdresse" data-testid="form-address-coAdresse" />
+    <input matInput dvMaxLength type="text" formControlName="coAdresse" data-testid="form-address-coAdresse" />
     <mat-hint *dvZuvorHint="changes?.coAdresse"></mat-hint>
   </mat-form-field>
 

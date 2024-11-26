@@ -7,8 +7,8 @@ import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
-import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 
 @Component({
@@ -22,8 +22,8 @@ import { SharedUiSearchComponent } from '@dv/shared/ui/search';
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiSearchComponent,
+    SharedUiHasRolesDirective,
     TranslatePipe,
-    GlobalNotificationsComponent,
   ],
   templateUrl: './sachbearbeitung-app-pattern-overview-layout.component.html',
   styleUrls: ['./sachbearbeitung-app-pattern-overview-layout.component.scss'],

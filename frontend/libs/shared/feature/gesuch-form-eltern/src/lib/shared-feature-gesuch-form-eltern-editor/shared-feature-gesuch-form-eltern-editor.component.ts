@@ -48,6 +48,7 @@ import {
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
@@ -97,6 +98,7 @@ const MEDIUM_AGE_ADULT = 40;
     SharedUiTranslateChangePipe,
     SharedUiFormReadonlyDirective,
     SharedPatternDocumentUploadComponent,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-eltern-editor.component.scss'],

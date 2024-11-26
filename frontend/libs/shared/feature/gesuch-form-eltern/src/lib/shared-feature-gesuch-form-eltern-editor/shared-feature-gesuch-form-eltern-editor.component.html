@@ -45,7 +45,7 @@
   <div class="row g-4 my-2">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
-      <input formControlName="nachname" data-testid="form-eltern-nachname" matInput type="text" />
+      <input formControlName="nachname" data-testid="form-eltern-nachname" matInput dvMaxLength type="text" />
       <mat-hint *dvZuvorHint="changes?.nachname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -53,7 +53,7 @@
     </mat-form-field>
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
-      <input formControlName="vorname" data-testid="form-eltern-vorname" matInput type="text" />
+      <input formControlName="vorname" data-testid="form-eltern-vorname" matInput dvMaxLength type="text" />
       <mat-hint *dvZuvorHint="changes?.vorname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
@@ -95,6 +95,7 @@
             <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
             <input
               matInput
+              [dvMaxLength]="'small'"
               type="text"
               formControlName="identischerZivilrechtlicherWohnsitzPLZ"
               data-testid="form-eltern-identischerZivilrechtlicherWohnsitzPLZ"
@@ -110,6 +111,7 @@
             <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
             <input
               matInput
+              dvMaxLength
               type="text"
               formControlName="identischerZivilrechtlicherWohnsitzOrt"
               data-testid="form-eltern-identischerZivilrechtlicherWohnsitzOrt"
@@ -188,6 +190,7 @@
 
       <input
         matInput
+        [dvMaxLength]="'small'"
         type="text"
         placeholder="dd.mm.yyyy"
         formControlName="geburtsdatum"
@@ -213,7 +216,7 @@
     <!-- Telefonnummer -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.phone.label' | translate }}</mat-label>
-      <input matInput type="text" formControlName="telefonnummer" data-testid="form-eltern-telefonnummer" />
+      <input matInput dvMaxLength type="text" formControlName="telefonnummer" data-testid="form-eltern-telefonnummer" />
       <mat-hint *dvZuvorHint="changes?.telefonnummer"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}

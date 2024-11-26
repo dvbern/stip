@@ -38,7 +38,13 @@
         <!-- BezeichnungDe -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.bezeichnungDe.label' | translate }}</mat-label>
-          <input formControlName="bezeichnungDe" data-testid="form-gesuchsperiode-bezeichnungDe" matInput type="text" />
+          <input
+            formControlName="bezeichnungDe"
+            data-testid="form-gesuchsperiode-bezeichnungDe"
+            matInput
+            dvMaxLength
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -46,7 +52,13 @@
         <!-- BezeichnungFr -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.bezeichnungFr.label' | translate }}</mat-label>
-          <input formControlName="bezeichnungFr" data-testid="form-gesuchsperiode-bezeichnungFr" matInput type="text" />
+          <input
+            formControlName="bezeichnungFr"
+            data-testid="form-gesuchsperiode-bezeichnungFr"
+            matInput
+            dvMaxLength
+            type="text"
+          />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
@@ -106,7 +118,7 @@
             formControlName="gesuchsperiodeStart"
             data-testid="form-gesuchsperiodeStart"
             matInput
-            type="type"
+            [dvMaxLength]="'small'"
             [matDatepicker]="gesuchsperiodeStartDatepicker"
           />
           <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStartDatepicker"></mat-datepicker-toggle>
@@ -123,6 +135,7 @@
             formControlName="gesuchsperiodeStopp"
             data-testid="form-gesuchsperiode-gesuchsperiodeStopp"
             matInput
+            [dvMaxLength]="'small'"
             [matDatepicker]="gesuchsperiodeStoppDatepicker"
           />
           <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStoppDatepicker"></mat-datepicker-toggle>
@@ -141,6 +154,7 @@
             formControlName="aufschaltterminStart"
             data-testid="form-gesuchsperiode-aufschaltterminStart"
             matInput
+            [dvMaxLength]="'small'"
             [matDatepicker]="aufschaltterminStartDatepicker"
           />
           <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStartDatepicker"></mat-datepicker-toggle>
@@ -157,6 +171,7 @@
             formControlName="aufschaltterminStopp"
             data-testid="form-gesuchsperiode-aufschalttermin-stopp"
             matInput
+            [dvMaxLength]="'small'"
             [matDatepicker]="aufschaltterminStoppDatepicker"
           />
           <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStoppDatepicker"></mat-datepicker-toggle>
@@ -175,6 +190,7 @@
             formControlName="einreichefristNormal"
             data-testid="form-gesuchsperiode-einreichefrist-normal"
             matInput
+            [dvMaxLength]="'small'"
             [matDatepicker]="einreicherfristNormalDatepicker"
           />
           <mat-datepicker-toggle matIconSuffix [for]="einreicherfristNormalDatepicker"></mat-datepicker-toggle>
@@ -194,6 +210,7 @@
             formControlName="einreichefristReduziert"
             data-testid="form-gesuchsperiode-einreichefrist-reduziert"
             matInput
+            [dvMaxLength]="'small'"
             [matDatepicker]="einreicherfristReduziertDatepicker"
           />
           <mat-datepicker-toggle matIconSuffix [for]="einreicherfristReduziertDatepicker"></mat-datepicker-toggle>
@@ -271,7 +288,7 @@
             data-testid="form-gesuchsperiode-freibetrag_vermoegen"
             matInput
             [maskito]="maskitoNumber"
-            type="type"
+            type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}

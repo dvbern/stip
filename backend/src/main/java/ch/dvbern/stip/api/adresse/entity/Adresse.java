@@ -33,8 +33,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_MID_LENGTH;
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_SMALL_VALUE_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 
 @Entity
 @Table(
@@ -52,30 +52,30 @@ public class Adresse extends AbstractMandantEntity {
     private Land land = Land.CH;
 
     @Nullable
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "co_adresse")
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "co_adresse", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String coAdresse;
 
     @NotNull
     @NotBlank
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "strasse", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "strasse", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String strasse;
 
     @Nullable
-    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(name = "hausnummer")
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "hausnummer", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String hausnummer;
 
     @NotNull
     @NotBlank
-    @Size(max = DB_DEFAULT_SMALL_VALUE_LENGTH)
-    @Column(name = "plz", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "plz", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String plz;
 
     @NotNull
     @NotBlank
-    @Size(max = DB_DEFAULT_MID_LENGTH)
-    @Column(name = "ort", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "ort", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String ort;
 }
