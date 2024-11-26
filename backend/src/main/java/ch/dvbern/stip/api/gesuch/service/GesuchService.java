@@ -583,18 +583,18 @@ public class GesuchService {
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
-    public GesuchWithChangesDto getChangesByTrancheId(UUID aenderungId) {
-        var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
+    public GesuchWithChangesDto getChangesByTrancheId(UUID trancheId) {
+        var tranche = gesuchTrancheRepository.requireAenderungById(trancheId);
 
         GesuchTranche changeset;
         try {
-            changeset = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
+            changeset = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(trancheId);
         } catch (NoResultException e) {
             changeset = null;
         }
         return gesuchMapperUtil.toWithChangesDto(
-            aenderung.getGesuch(),
-            aenderung,
+            tranche.getGesuch(),
+            tranche,
             changeset
         );
     }
