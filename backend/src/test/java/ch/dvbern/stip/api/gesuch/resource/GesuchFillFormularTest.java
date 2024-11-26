@@ -117,7 +117,7 @@ class GesuchFillFormularTest {
         gesuchId = gesuch.getId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         ausbildungId = gesuch.getAusbildungId();
-        gesuchTrancheId = gesuchApiSpec.getChangesIdByTrancheId()
+        gesuchTrancheId = gesuchApiSpec.getChangesByTrancheId()
             .trancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -154,7 +154,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(3)
     void gesuchTrancheCreated() {
-        final var gesuchWithChanges = gesuchApiSpec.getChangesIdByTrancheId()
+        final var gesuchWithChanges = gesuchApiSpec.getChangesByTrancheId()
             .trancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -470,7 +470,7 @@ class GesuchFillFormularTest {
             .assertThat()
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
 
-        return gesuchApiSpec.getChangesIdByTrancheId()
+        return gesuchApiSpec.getChangesByTrancheId()
             .trancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

@@ -219,7 +219,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getChangesIdByTrancheId(UUID trancheId) {
+    public Response getChangesByTrancheId(UUID trancheId) {
         gesuchTrancheAuthorizer.canRead(trancheId);
         return Response.ok(gesuchService.getChangesByTrancheId(trancheId)).build();
     }

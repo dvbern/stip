@@ -68,7 +68,7 @@ class GesuchResourceEinnahmenKostenTest {
     }
 
     void createTranche() {
-        gesuch = gesuchApiSpec.getChangesIdByTrancheId()
+        gesuch = gesuchApiSpec.getChangesByTrancheId()
             .trancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -108,7 +108,7 @@ class GesuchResourceEinnahmenKostenTest {
             .then()
             .assertThat()
             .statusCode(Status.ACCEPTED.getStatusCode());
-        gesuch = gesuchApiSpec.getChangesIdByTrancheId()
+        gesuch = gesuchApiSpec.getChangesByTrancheId()
             .trancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()

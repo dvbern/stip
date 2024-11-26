@@ -3,14 +3,21 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
-import java.time.LocalDate;
-import java.util.UUID;
-
-import jakarta.ws.rs.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
 
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.util.UUID;
 
 
 @Path("/gesuch")
@@ -81,7 +88,7 @@ public interface GesuchResource {
     @GET
     @Path("/changes/{trancheId}")
     @Produces({ "application/json", "text/plain" })
-    Response getChangesIdByTrancheId(@PathParam("trancheId") UUID trancheId);
+    Response getChangesByTrancheId(@PathParam("trancheId") UUID trancheId);
 
     @GET
     @Path("/{gesuchId}/{gesuchTrancheId}")

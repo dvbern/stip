@@ -83,7 +83,7 @@ public class GesuchApiSpec {
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisen(),
                 getBerechnungForGesuch(),
-                getChangesIdByTrancheId(),
+                getChangesByTrancheId(),
                 getGesuch(),
                 getGesucheGs(),
                 getGesucheSb(),
@@ -144,8 +144,8 @@ public class GesuchApiSpec {
         return new GetBerechnungForGesuchOper(createReqSpec());
     }
 
-    public GetChangesIdByTrancheIdOper getChangesIdByTrancheId() {
-        return new GetChangesIdByTrancheIdOper(createReqSpec());
+    public GetChangesByTrancheIdOper getChangesByTrancheId() {
+        return new GetChangesByTrancheIdOper(createReqSpec());
     }
 
     public GetGesuchOper getGesuch() {
@@ -1021,7 +1021,7 @@ public class GesuchApiSpec {
      * @see #trancheIdPath  (required)
      * return GesuchWithChangesDtoSpec
      */
-    public static class GetChangesIdByTrancheIdOper implements Oper {
+    public static class GetChangesByTrancheIdOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/gesuch/changes/{trancheId}";
@@ -1029,7 +1029,7 @@ public class GesuchApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetChangesIdByTrancheIdOper(RequestSpecBuilder reqSpec) {
+        public GetChangesByTrancheIdOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -1062,7 +1062,7 @@ public class GesuchApiSpec {
          * @param trancheId (UUID)  (required)
          * @return operation
          */
-        public GetChangesIdByTrancheIdOper trancheIdPath(Object trancheId) {
+        public GetChangesByTrancheIdOper trancheIdPath(Object trancheId) {
             reqSpec.addPathParam(TRANCHE_ID_PATH, trancheId);
             return this;
         }
@@ -1072,7 +1072,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetChangesIdByTrancheIdOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetChangesByTrancheIdOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1082,7 +1082,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetChangesIdByTrancheIdOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetChangesByTrancheIdOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
