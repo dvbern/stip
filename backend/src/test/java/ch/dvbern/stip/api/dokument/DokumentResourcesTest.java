@@ -79,18 +79,6 @@ class DokumentResourcesTest {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
-        /*
-         * gesuchTrancheId = gesuchApiSpec.getChangesIdByTrancheId()
-         * .trancheIdPath(gesuchTrancheId)
-         * .execute(ResponseBody::prettyPeek)
-         * .then()
-         * .extract()
-         * .body()
-         * .as(GesuchWithChangesDtoSpec.class)
-         * .getGesuchTrancheToWorkWith()
-         * .getId();
-         *
-         */
     }
 
     @Test
