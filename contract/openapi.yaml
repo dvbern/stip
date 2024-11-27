@@ -3511,6 +3511,8 @@ components:
           type: string
         korrespondenzSprache:
           $ref: '#/components/schemas/Sprache'
+        zustaendigerKanton:
+          $ref: '#/components/schemas/ZustaendigerKanton'
     Benutzer:
       type: object
       allOf:
@@ -4840,6 +4842,11 @@ components:
       enum:
         - ASCENDING
         - DESCENDING
+    ZustaendigerKanton:
+      enum:
+        - BERN
+        - ANDERER_KANTON
+      type: string
   responses:
     Unauthorized:
       content:

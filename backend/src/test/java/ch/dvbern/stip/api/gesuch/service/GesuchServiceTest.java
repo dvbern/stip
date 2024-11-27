@@ -66,7 +66,9 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -181,6 +183,24 @@ class GesuchServiceTest {
         GesuchTranche tranche = updateFromZivilstandToZivilstand(gesuchUpdateDto, VERHEIRATET, LEDIG);
 
         assertThat(tranche.getGesuchFormular().getPartner(), Matchers.nullValue());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    void testNiederlassungsstatusFluechtlingToOtherShouldResetZustaendigerKantonRequired() {
+        final GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
+        var pia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+        pia.setNationalitaet(Land.NA);
+        pia.setHeimatort(null);
+        GesuchTranche tranche = updateFromNiederlassungsstatusToNiederlassungsstatus(
+            gesuchUpdateDto,
+            Niederlassungsstatus.FLUECHTLING,
+            Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C
+        );
+
+        assertThat(tranche.getGesuchFormular().getPersonInAusbildung().getZustaendigerKanton(), Matchers.nullValue());
     }
 
     @Test
@@ -1476,6 +1496,26 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setZivilstand(from);
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setZivilstand(to);
+        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
+        gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
+        return tranche;
+    }
+
+    private GesuchTranche updateFromNiederlassungsstatusToNiederlassungsstatus(
+        GesuchUpdateDto gesuchUpdateDto,
+        Niederlassungsstatus from,
+        Niederlassungsstatus to
+    ) {
+        GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setNiederlassungsstatus(from);
+        gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setNiederlassungsstatus(to);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
         return tranche;
