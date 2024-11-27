@@ -1,0 +1,63 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732710870075-5">
+    <createTable tableName="stip_decision_text">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="stip_decision_textPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="stipdecision" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="text_de" type="VARCHAR(2200)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="text_fr" type="VARCHAR(2200)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732710870075-6">
+    <createTable tableName="stip_decision_text_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="stipdecision" type="VARCHAR(255)"/>
+      <column name="text_de" type="VARCHAR(2200)"/>
+      <column name="text_fr" type="VARCHAR(2200)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732710870075-7">
+    <addPrimaryKey columnNames="rev, id" constraintName="stip_decision_text_audPK" tableName="stip_decision_text_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732710870075-8">
+    <addUniqueConstraint columnNames="stipdecision" constraintName="UC_STIP_DECISION_TEXTSTIPDECISION_COL" tableName="stip_decision_text"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1732710870075-9">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="stip_decision_text_aud" constraintName="FKtjlwujn2cm8a1vk377bt8cu9m" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+</databaseChangeLog>
