@@ -22,6 +22,7 @@ import ch.dvbern.stip.generated.dto.NiederlassungsstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.SpracheDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
+import ch.dvbern.stip.generated.dto.ZustaendigerKantonDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -57,7 +58,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_P_L_Z,
-  PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_KORRESPONDENZ_SPRACHE
+  PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_KORRESPONDENZ_SPRACHE,
+  PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_ZUSTAENDIGER_KANTON
 })
 @JsonTypeName("PersonInAusbildungUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -127,6 +129,9 @@ public class PersonInAusbildungUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_KORRESPONDENZ_SPRACHE = "korrespondenzSprache";
   private SpracheDtoSpec korrespondenzSprache;
+
+  public static final String JSON_PROPERTY_ZUSTAENDIGER_KANTON = "zustaendigerKanton";
+  private ZustaendigerKantonDtoSpec zustaendigerKanton;
 
   public PersonInAusbildungUpdateDtoSpec() {
   }
@@ -702,6 +707,32 @@ public class PersonInAusbildungUpdateDtoSpec {
     this.korrespondenzSprache = korrespondenzSprache;
   }
 
+
+  public PersonInAusbildungUpdateDtoSpec zustaendigerKanton(ZustaendigerKantonDtoSpec zustaendigerKanton) {
+    
+    this.zustaendigerKanton = zustaendigerKanton;
+    return this;
+  }
+
+   /**
+   * Get zustaendigerKanton
+   * @return zustaendigerKanton
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ZUSTAENDIGER_KANTON)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public ZustaendigerKantonDtoSpec getZustaendigerKanton() {
+    return zustaendigerKanton;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ZUSTAENDIGER_KANTON)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setZustaendigerKanton(ZustaendigerKantonDtoSpec zustaendigerKanton) {
+    this.zustaendigerKanton = zustaendigerKanton;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -732,12 +763,13 @@ public class PersonInAusbildungUpdateDtoSpec {
         Objects.equals(this.nachname, personInAusbildungUpdate.nachname) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, personInAusbildungUpdate.identischerZivilrechtlicherWohnsitzOrt) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, personInAusbildungUpdate.identischerZivilrechtlicherWohnsitzPLZ) &&
-        Objects.equals(this.korrespondenzSprache, personInAusbildungUpdate.korrespondenzSprache);
+        Objects.equals(this.korrespondenzSprache, personInAusbildungUpdate.korrespondenzSprache) &&
+        Objects.equals(this.zustaendigerKanton, personInAusbildungUpdate.zustaendigerKanton);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache, zustaendigerKanton);
   }
 
   @Override
@@ -766,6 +798,7 @@ public class PersonInAusbildungUpdateDtoSpec {
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");
     sb.append("    korrespondenzSprache: ").append(toIndentedString(korrespondenzSprache)).append("\n");
+    sb.append("    zustaendigerKanton: ").append(toIndentedString(zustaendigerKanton)).append("\n");
     sb.append("}");
     return sb.toString();
   }

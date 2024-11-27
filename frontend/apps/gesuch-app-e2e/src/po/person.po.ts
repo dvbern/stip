@@ -33,6 +33,7 @@ export class PersonPO {
     niederlassungsstatusSelect: Locator;
     infoNiederlassungsstatus: Locator;
     einreisedatum: Locator;
+    zustaendigerKantonSelect: Locator;
 
     loading: Locator;
 
@@ -79,6 +80,9 @@ export class PersonPO {
       infoNiederlassungsstatus: page.getByTestId(
         'info-person-niederlassungsstatus',
       ),
+      zustaendigerKantonSelect: page.getByTestId(
+        'form-person-zustaendigerKanton',
+      ),
 
       loading: page.getByTestId('form-person-loading'),
 
@@ -120,6 +124,10 @@ export class PersonPO {
     }
     if (person.wohnsitzAnteilVater) {
       await this.elems.wohnsitzVater.fill(`${person.wohnsitzAnteilVater}`);
+    }
+    if (person.zustaendigerKanton) {
+      await this.elems.zustaendigerKantonSelect.click();
+      await this.elems.page.getByTestId(person.zustaendigerKanton).click();
     }
 
     await selectMatRadio(

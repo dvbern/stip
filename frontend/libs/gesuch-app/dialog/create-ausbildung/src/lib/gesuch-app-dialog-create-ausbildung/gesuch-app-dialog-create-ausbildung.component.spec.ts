@@ -10,7 +10,10 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { provideTranslateService } from '@ngx-translate/core';
 
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import {
+  mockConfigsState,
+  provideSharedPatternJestTestSetup,
+} from '@dv/shared/pattern/jest-test-setup';
 
 import {
   CreateAusbildungData,
@@ -34,7 +37,11 @@ describe('GesuchAppDialogCreateAusbildungComponent', () => {
     await TestBed.configureTestingModule({
       imports: [GesuchAppDialogCreateAusbildungComponent, MatDialogModule],
       providers: [
-        provideMockStore(),
+        provideMockStore({
+          initialState: {
+            configs: mockConfigsState(),
+          },
+        }),
         provideHttpClient(),
         provideSharedPatternJestTestSetup(),
         provideTranslateService(),

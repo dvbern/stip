@@ -59,6 +59,8 @@ const initialState: BenutzerverwaltungState = {
   availableRoles: initial(),
 };
 
+const DEFAULT_ROLE = 'default-roles-bern';
+
 @Injectable()
 export class BenutzerverwaltungStore extends signalStore(
   { protectedState: false },
@@ -121,7 +123,9 @@ export class BenutzerverwaltungStore extends signalStore(
     pipe(
       map(({ user, roles }) => {
         const rolesToRemove = this.benutzer().data?.roles.filter(
-          (r) => !roles.some((role) => role.name === r.name),
+          (r) =>
+            !roles.some((role) => role.name === r.name) &&
+            r.name !== DEFAULT_ROLE,
         );
 
         return { user, roles, rolesToRemove };
