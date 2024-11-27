@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { Adresse } from './adresse';
+import { ZustaendigerKanton } from './zustaendigerKanton';
 import { Niederlassungsstatus } from './niederlassungsstatus';
 import { Sprache } from './sprache';
 import { Zivilstand } from './zivilstand';
@@ -58,6 +59,7 @@ export interface PersonInAusbildungUpdate {
      */
     identischerZivilrechtlicherWohnsitzPLZ?: string;
     korrespondenzSprache: Sprache;
+    zustaendigerKanton?: ZustaendigerKanton;
 }
 
 
