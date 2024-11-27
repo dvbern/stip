@@ -49,14 +49,15 @@ public class GesuchStatusService {
 
     @Transactional
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
-        triggerStateMachineEventWithComment(gesuch, event, null);
+        triggerStateMachineEventWithComment(gesuch, event, null, false);
     }
 
     @Transactional(TxType.REQUIRES_NEW)
     public void triggerStateMachineEventWithComment(
         final Gesuch gesuch,
         final GesuchStatusChangeEvent event,
-        final KommentarDto kommentarDto
+        final KommentarDto kommentarDto,
+        final boolean sendNotificationIfPossible
     ) {
         StateMachineUtil.addExit(
             config,
@@ -75,7 +76,7 @@ public class GesuchStatusService {
 
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
-        if (kommentarDto != null) {
+        if (kommentarDto != null && sendNotificationIfPossible) {
             MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
             notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
         }

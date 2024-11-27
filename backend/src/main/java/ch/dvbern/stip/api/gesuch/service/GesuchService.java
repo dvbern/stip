@@ -510,7 +510,8 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuchTranche.getGesuch(),
             gesuchStatusChangeEvent,
-            kommentarDto
+            kommentarDto,
+            false
         );
     }
 
@@ -538,7 +539,7 @@ public class GesuchService {
         // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService
-            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto);
+            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto, true);
     }
 
     @Transactional
