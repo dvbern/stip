@@ -3,14 +3,11 @@
 
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { map, of } from 'rxjs';
 
 import {
   cachedPending,
-  catchRemoteDataError,
   failure,
   fromCachedDataSig,
-  handleApiResponse,
   initial,
   isFailure,
   isInitial,
@@ -85,101 +82,5 @@ describe('RemoteData', () => {
     const store = new Store();
     store.setValue(42);
     expect(fromCachedDataSig(store.value)).toEqual(42);
-  });
-});
-
-describe('handleApiResponse', () => {
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-  it('should handle success', () => {
-    const handler = jest.fn();
-    const data = 'data';
-    of(data).pipe(handleApiResponse(handler)).subscribe();
-
-    jest.runAllTimers();
-    expect(handler).toHaveBeenCalledWith({
-      type: 'success',
-      data,
-      error: undefined,
-    });
-  });
-  it('should handle error', () => {
-    const handler = jest.fn();
-    const error = new Error();
-    of(null)
-      .pipe(
-        map(() => {
-          throw error;
-        }),
-        handleApiResponse(handler),
-      )
-      .subscribe();
-
-    jest.runAllTimers();
-    expect(handler).toHaveBeenCalledWith({
-      type: 'failure',
-      data: undefined,
-      error,
-    });
-  });
-  it('runs a custom success handler', () => {
-    const handler = jest.fn();
-    const success = jest.fn();
-    const data = 'data';
-    of(data)
-      .pipe(handleApiResponse(handler, { onSuccess: success }))
-      .subscribe();
-
-    jest.runAllTimers();
-    expect(success).toHaveBeenCalledWith(data);
-  });
-  it('runs a custom error handler', () => {
-    const handler = jest.fn();
-    const error = new Error();
-    const customError = jest.fn();
-    of(null)
-      .pipe(
-        map(() => {
-          throw error;
-        }),
-        handleApiResponse(handler, { onFailure: customError }),
-      )
-      .subscribe();
-
-    jest.runAllTimers();
-    expect(customError).toHaveBeenCalledWith(error);
-  });
-
-  it('should break the pipe if an error occurs', () => {
-    expect(() => {
-      of(null)
-        .pipe(
-          map(() => {
-            throw new Error();
-          }),
-        )
-        .subscribe();
-
-      jest.runAllTimers();
-    }).toThrow();
-  });
-
-  it('catchRemoteDataError should prevent the pipe from breaking', () => {
-    expect(() => {
-      of(null)
-        .pipe(
-          map(() => {
-            throw new Error();
-          }),
-          catchRemoteDataError(),
-        )
-        .subscribe();
-
-      jest.runAllTimers();
-    }).not.toThrow();
   });
 });

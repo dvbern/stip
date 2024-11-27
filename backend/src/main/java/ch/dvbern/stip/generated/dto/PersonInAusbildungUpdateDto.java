@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AdresseDto;
+import ch.dvbern.stip.generated.dto.ZustaendigerKantonDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -44,6 +45,7 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
   private @Valid Boolean vormundschaft;
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
+  private @Valid ZustaendigerKantonDto zustaendigerKanton;
 
   /**
    **/
@@ -460,6 +462,24 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
     this.identischerZivilrechtlicherWohnsitzPLZ = identischerZivilrechtlicherWohnsitzPLZ;
   }
 
+  /**
+   **/
+  public PersonInAusbildungUpdateDto zustaendigerKanton(ZustaendigerKantonDto zustaendigerKanton) {
+    this.zustaendigerKanton = zustaendigerKanton;
+    return this;
+  }
+
+  
+  @JsonProperty("zustaendigerKanton")
+  public ZustaendigerKantonDto getZustaendigerKanton() {
+    return zustaendigerKanton;
+  }
+
+  @JsonProperty("zustaendigerKanton")
+  public void setZustaendigerKanton(ZustaendigerKantonDto zustaendigerKanton) {
+    this.zustaendigerKanton = zustaendigerKanton;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -491,12 +511,13 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
         Objects.equals(this.wohnsitzAnteilVater, personInAusbildungUpdate.wohnsitzAnteilVater) &&
         Objects.equals(this.vormundschaft, personInAusbildungUpdate.vormundschaft) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, personInAusbildungUpdate.identischerZivilrechtlicherWohnsitzOrt) &&
-        Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, personInAusbildungUpdate.identischerZivilrechtlicherWohnsitzPLZ);
+        Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, personInAusbildungUpdate.identischerZivilrechtlicherWohnsitzPLZ) &&
+        Objects.equals(this.zustaendigerKanton, personInAusbildungUpdate.zustaendigerKanton);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaet, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, zustaendigerKanton);
   }
 
   @Override
@@ -526,6 +547,7 @@ public class PersonInAusbildungUpdateDto  implements Serializable {
     sb.append("    vormundschaft: ").append(toIndentedString(vormundschaft)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");
+    sb.append("    zustaendigerKanton: ").append(toIndentedString(zustaendigerKanton)).append("\n");
     sb.append("}");
     return sb.toString();
   }

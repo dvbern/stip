@@ -81,6 +81,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_BERECHNUNG_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE;
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -141,7 +142,8 @@ class GesuchValidatorTest {
         String[] constraintMessages =
             { VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE,
                 VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE,
-                VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_MESSAGE };
+                VALIDATION_NIEDERLASSUNGSSTATUS_FIELD_REQUIRED_MESSAGE
+            };
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         // Wohnsitz Anteil muessen leer sein beim Wohnsitz != MUTTER_VATER
         personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
@@ -152,6 +154,32 @@ class GesuchValidatorTest {
         // Beim Nationalitaet != CH duerfen keinen Heimatort erfasst werden
         personInAusbildung.setNationalitaet(Land.FR);
         personInAusbildung.setHeimatort("");
+
+        Gesuch gesuch = prepareDummyGesuch();
+        gesuch.getGesuchTranchen().get(0).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
+        assertAllMessagesPresent(constraintMessages, gesuch);
+    }
+
+    @Test
+    void testNullFieldValidationErrorForPersonInAusbildungZustaendigerKantonRequired() {
+        String[] constraintMessages =
+            { VALIDATION_IZW_FIELD_REQUIRED_NULL_MESSAGE, VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE,
+                VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE,
+                VALIDATION_ZUSTAENDIGER_KANTON_FIELD_REQUIRED_NULL_MESSAGE
+            };
+        PersonInAusbildung personInAusbildung = new PersonInAusbildung();
+        // Wohnsitz Anteil muessen leer sein beim Wohnsitz != MUTTER_VATER
+        personInAusbildung.setWohnsitz(Wohnsitz.FAMILIE);
+        personInAusbildung.setWohnsitzAnteilVater(BigDecimal.ONE);
+        // Beim IZV muessen die IZV Ort und PLZ leer sein
+        personInAusbildung.setIdentischerZivilrechtlicherWohnsitz(true);
+        personInAusbildung.setIdentischerZivilrechtlicherWohnsitzOrt("Test");
+        // Beim Nationalitaet != CH duerfen keinen Heimatort erfasst werden
+        personInAusbildung.setNationalitaet(Land.FR);
+        personInAusbildung.setHeimatort("");
+        // Bei Niederlassungsstatus == Fluechtling muss der ZustaendigerKanton angegeben werden
+        personInAusbildung.setNiederlassungsstatus(Niederlassungsstatus.FLUECHTLING);
+
         Gesuch gesuch = prepareDummyGesuch();
         gesuch.getGesuchTranchen().get(0).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         assertAllMessagesPresent(constraintMessages, gesuch);

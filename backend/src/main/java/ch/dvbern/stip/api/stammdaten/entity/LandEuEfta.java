@@ -35,7 +35,7 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "land_eu_efta",
     uniqueConstraints = @UniqueConstraint(
-        name = "UC_land_eu_efta", columnNames = { "mandant", "land" }
+        name = "UC_land_eu_efta_land_mandant", columnNames = { "land", "mandant" }
     ),
     indexes = @Index(name = "IX_land_mandant", columnList = "mandant,land")
 )

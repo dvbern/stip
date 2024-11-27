@@ -2476,7 +2476,6 @@ components:
         - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
         - KINDER_ALIMENTENVERORDUNG
-        - KINDER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         - PARTNER_AUSBILDUNG_LOHNABRECHNUNG
         - PARTNER_BELEG_OV_ABONNEMENT
         - AUSZAHLUNG_ABTRETUNGSERKLAERUNG
@@ -3511,6 +3510,8 @@ components:
           type: string
         korrespondenzSprache:
           $ref: '#/components/schemas/Sprache'
+        zustaendigerKanton:
+          $ref: '#/components/schemas/ZustaendigerKanton'
     Benutzer:
       type: object
       allOf:
@@ -4840,6 +4841,11 @@ components:
       enum:
         - ASCENDING
         - DESCENDING
+    ZustaendigerKanton:
+      enum:
+        - BERN
+        - ANDERER_KANTON
+      type: string
   responses:
     Unauthorized:
       content:
