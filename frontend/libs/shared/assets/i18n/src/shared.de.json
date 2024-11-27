@@ -178,6 +178,10 @@
   "shared.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
   "shared.gesuch.status.contract.VERSANDBEREIT": "Versandbereit",
   "shared.gesuch.status.contract.VERFUEGT": "Verfügt",
+  "shared.gesuch.status.contract.ABKLAERUNG_DURCH_RECHSTABTEILUNG": "Abklaerung durch Rechstabteilung",
+  "shared.gesuch.status.contract.JURISTISCHE_ABKLAERUNG": "Juristische Abklärung",
+  "shared.gesuch.status.contract.ANSPRUCH_MANUELL_PRUEFEN": "Anspruch manuell prüfen",
+  "shared.gesuch.status.contract.NICHT_ANSPRUCHSBERECHTIGT": "Nicht anspruchsberechtigt",
 
   "shared.gesuch.tranche.typ.AENDERUNG": "Änderung",
   "shared.gesuch.tranche.typ.TRANCHE": "Gesuch",
