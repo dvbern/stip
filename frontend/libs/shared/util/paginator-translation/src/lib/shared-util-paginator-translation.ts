@@ -14,6 +14,11 @@ type TranslatableProperties = keyof Pick<
   | 'rangeLabel'
 >;
 
+export const paginatorTranslationProvider = () => ({
+  provide: MatPaginatorIntl,
+  useClass: SharedUtilPaginatorTranslation,
+});
+
 @Injectable()
 export class SharedUtilPaginatorTranslation extends MatPaginatorIntl {
   public rangeLabel?: string;

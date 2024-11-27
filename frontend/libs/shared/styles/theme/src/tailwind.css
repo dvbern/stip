@@ -1,0 +1,18 @@
+@tailwind utilities;
+@tailwind components;
+
+@layer utilities {
+  .max-w-half {
+    max-width: min(45vw, 547px);
+  }
+}
+
+@layer components {
+  .dv-table {
+    @apply tw-mt-6 tw-overflow-hidden tw-rounded-xl tw-bg-white tw-pb-6 tw-shadow-sm;
+  }
+
+  .dv-form-grid {
+    @apply tw-grid tw-gap-6 tw-pt-12 md:tw-grid-cols-2 xl:tw-max-w-3xl;
+  }
+}

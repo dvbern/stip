@@ -1,12 +1,10 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
-  displayName: 'shared-util-fn-table-helper',
+  displayName: 'shared-ui-truncate-tooltip',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory:
-    '../../../../coverage/libs/shared/util-fn/shared-util-fn-table-helper',
+  coverageDirectory: '../../../../coverage/libs/shared/ui/truncate-tooltip',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

@@ -3,8 +3,6 @@ $prefix: 'dv-';
 $dv-size-unit: 0.25rem;
 
 // order matters
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
 @import 'bootstrap-variables';
 
 @mixin dv-variables {

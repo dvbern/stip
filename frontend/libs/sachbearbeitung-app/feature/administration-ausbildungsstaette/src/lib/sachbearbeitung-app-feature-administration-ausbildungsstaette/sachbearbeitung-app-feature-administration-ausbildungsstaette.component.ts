@@ -14,14 +14,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {
-  MatPaginator,
-  MatPaginatorIntl,
-  MatPaginatorModule,
-} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { merge } from 'rxjs';
 
@@ -39,7 +36,7 @@ import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { SharedUtilFormService } from '@dv/shared/util/form';
-import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
+import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-administration-ausbildungsstaette',
@@ -58,6 +55,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     ReactiveFormsModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatTooltipModule,
     TranslatedPropertyPipe,
     TypeSafeMatCellDefDirective,
   ],
@@ -66,10 +64,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
   styleUrl:
     './sachbearbeitung-app-feature-administration-ausbildungsstaette.component.scss',
   animations: [detailExpand],
-  providers: [
-    AdminAusbildungsstaetteStore,
-    { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },
-  ],
+  providers: [AdminAusbildungsstaetteStore, paginatorTranslationProvider()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureAdministrationAusbildungsstaetteComponent

@@ -12,6 +12,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -30,6 +31,8 @@ import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
+import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../sachbearbeitung-app-feature-infos-notizen-detail-dialog/sachbearbeitung-app-feature-infos-notizen-detail-dialog.component';
 
@@ -40,12 +43,15 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
     CommonModule,
     TranslatePipe,
     MatTableModule,
+    MatPaginatorModule,
     TypeSafeMatCellDefDirective,
     MatTooltipModule,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiTruncateTooltipDirective,
     MatMenuModule,
   ],
+  providers: [paginatorTranslationProvider()],
   templateUrl: './sachbearbeitung-app-feature-infos-notizen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -67,11 +73,13 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
 
   gesuchIdSig = input.required<string>({ alias: 'id' });
   sortSig = viewChild(MatSort);
+  paginatorSig = viewChild(MatPaginator);
 
   notizSig = computed(() => {
     const notiz = this.notizStore.notizenListViewSig();
     const datasource = new MatTableDataSource(notiz);
     datasource.sort = this.sortSig() ?? null;
+    datasource.paginator = this.paginatorSig() ?? null;
     return datasource;
   });
 

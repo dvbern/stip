@@ -20,7 +20,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {
   MatPaginator,
-  MatPaginatorIntl,
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
@@ -34,6 +33,7 @@ import {
   SortDirection,
 } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -77,9 +77,10 @@ import {
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
-import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
+import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 
 const PAGE_SIZES = [10, 20, 50];
@@ -120,6 +121,7 @@ type DashboardFormFields =
     MatInputModule,
     MatDatepickerModule,
     MatSelectModule,
+    MatTooltipModule,
     MatRadioModule,
     ReactiveFormsModule,
     RouterModule,
@@ -130,6 +132,7 @@ type DashboardFormFields =
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
     SharedUiMaxLengthDirective,
+    SharedUiTruncateTooltipDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
     RouterModule,
@@ -143,10 +146,7 @@ type DashboardFormFields =
   templateUrl: './sachbearbeitung-app-feature-cockpit.component.html',
   styleUrls: ['./sachbearbeitung-app-feature-cockpit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    provideDvDateAdapter(),
-    { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },
-  ],
+  providers: [provideDvDateAdapter(), paginatorTranslationProvider()],
 })
 export class SachbearbeitungAppFeatureCockpitComponent
   implements

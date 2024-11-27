@@ -12,13 +12,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {
-  MatPaginator,
-  MatPaginatorIntl,
-  MatPaginatorModule,
-} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -33,7 +30,8 @@ import {
   SharedUiRdIsPendingWithoutCachePipe,
 } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
-import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
+import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 type Filter = {
   column: string;
@@ -48,6 +46,7 @@ type Filter = {
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
+    MatTooltipModule,
     RouterLink,
     TypeSafeMatCellDefDirective,
     SharedUiRdIsPendingPipe,
@@ -55,15 +54,14 @@ type Filter = {
     SharedUiLoadingComponent,
     SharedUiClearButtonComponent,
     SharedUiMaxLengthDirective,
+    SharedUiTruncateTooltipDirective,
     MatFormFieldModule,
     MatInputModule,
   ],
+  providers: [paginatorTranslationProvider()],
   templateUrl: './sozialdienst-overview.component.html',
   styleUrl: './sozialdienst-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },
-  ],
 })
 export class SozialdienstOverviewComponent {
   private dialog = inject(MatDialog);

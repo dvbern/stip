@@ -9,13 +9,10 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  MatPaginator,
-  MatPaginatorIntl,
-  MatPaginatorModule,
-} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -29,7 +26,8 @@ import {
   SharedUiRdIsPendingWithoutCachePipe,
 } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
-import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
+import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 @Component({
   standalone: true,
@@ -39,19 +37,19 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
+    MatTooltipModule,
     RouterLink,
     TypeSafeMatCellDefDirective,
     SharedUiBadgeComponent,
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiTruncateTooltipDirective,
     SharedUiLoadingComponent,
   ],
   templateUrl: './benutzer-overview.component.html',
   styleUrls: ['./benutzer-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },
-  ],
+  providers: [paginatorTranslationProvider()],
 })
 export class BenutzerOverviewComponent {
   private dialog = inject(MatDialog);

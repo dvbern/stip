@@ -2,8 +2,8 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (benutzerListDataSourceSig(); as benutzerListSource) {
-    <div class="mt-4 shadow rounded-4" [class.opacity-50]="store.benutzers() | rdIsPending">
-      <table mat-table [dataSource]="benutzerListSource" matSort class="dv-crud-table">
+    <div class="tw-dv-table" [class.opacity-50]="store.benutzers() | rdIsPending">
+      <table mat-table [dataSource]="benutzerListSource" matSort>
         <caption class="cdk-visually-hidden">
           {{
             'sachbearbeitung-app.admin.benutzerverwaltung.overview.description' | translate
@@ -14,7 +14,12 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             {{ 'sachbearbeitung-app.admin.benutzerverwaltung.name.label' | translate }}
           </th>
-          <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource" class="fw-bold">
+          <td
+            mat-cell
+            *dvMatCellDef="let benutzer; dataSource: benutzerListSource"
+            class="tw-max-w-32 tw-truncate"
+            [dvTruncateTooltip]="benutzer.name"
+          >
             {{ benutzer.name }}
           </td>
         </ng-container>
@@ -23,7 +28,12 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             {{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | translate }}
           </th>
-          <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource">
+          <td
+            mat-cell
+            *dvMatCellDef="let benutzer; dataSource: benutzerListSource"
+            class="tw-max-w-32 tw-truncate"
+            [dvTruncateTooltip]="benutzer.email"
+          >
             {{ benutzer.email }}
           </td>
         </ng-container>
@@ -61,12 +71,13 @@
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>
-            <div class="action-cell-content">
-              <a [routerLink]="['.', 'create']" class="btn btn-outline-dark d-inline-flex lh-1 align-items-center">
-                <i class="material-symbols-rounded fs-5 me-2">add</i>
-                {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate }}
-              </a>
-            </div>
+            <a
+              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+              [routerLink]="['.', 'create']"
+              class="btn btn-outline-primary btn-sm"
+            >
+              <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
+            </a>
           </th>
           <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource">
             <div class="d-flex justify-content-end gap-2">
@@ -99,7 +110,7 @@
       </table>
       <mat-paginator
         [pageSizeOptions]="[10, 20, 50]"
-        pageSize="20"
+        pageSize="10"
         [length]="benutzerListSource.data.length"
         showFirstLastButtons
       >
