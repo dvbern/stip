@@ -36,6 +36,7 @@ import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -48,14 +49,15 @@ public class GesuchStatusService {
 
     @Transactional
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
-        triggerStateMachineEventWithComment(gesuch, event, null);
+        triggerStateMachineEventWithComment(gesuch, event, null, false);
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void triggerStateMachineEventWithComment(
         final Gesuch gesuch,
         final GesuchStatusChangeEvent event,
-        final KommentarDto kommentarDto
+        final KommentarDto kommentarDto,
+        final boolean sendNotificationIfPossible
     ) {
         StateMachineUtil.addExit(
             config,
@@ -66,7 +68,7 @@ public class GesuchStatusService {
         final var sm = new StateMachine<>(
             gesuch.getGesuchStatus(),
             gesuch::getGesuchStatus,
-            s -> gesuch.setGesuchStatus(s)
+            status -> gesuch.setGesuchStatus(status)
                 .setGesuchStatusAenderungDatum(LocalDateTime.now())
                 .setComment(kommentarDto == null ? "" : kommentarDto.getText()),
             config
@@ -74,7 +76,7 @@ public class GesuchStatusService {
 
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
-        if (kommentarDto != null) {
+        if (kommentarDto != null && sendNotificationIfPossible) {
             MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
             notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
         }

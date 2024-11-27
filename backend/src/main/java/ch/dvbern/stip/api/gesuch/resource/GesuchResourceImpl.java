@@ -111,6 +111,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public Response gesuchEinreichen(UUID gesuchId) {
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchEinreichen(gesuchId);
+        gesuchService.stipendienAnspruchPruefen(gesuchId);
         return Response.accepted().build();
     }
 

@@ -39,8 +39,6 @@ class ArchitectureTest {
         .definedBy("..service..")
         .layer("Repository")
         .definedBy("..repo..")
-        .optionalLayer("Domain")
-        .definedBy("..dto..")
         .layer("Entity")
         .definedBy("..entity..")
         .optionalLayer("Generated")
@@ -56,7 +54,9 @@ class ArchitectureTest {
         .optionalLayer("DTO")
         .definedBy("..dto..")
         .layer("Authorization")
-        .definedBy("..authorization..");
+        .definedBy("..authorization..")
+        .optionalLayer("Decider")
+        .definedBy("..decider..");
 
     @Test
     void test_layer_boundaries() {
@@ -73,7 +73,8 @@ class ArchitectureTest {
                 "Validation",
                 "Util",
                 "DTO",
-                "Authorization"
+                "Authorization",
+                "Decider"
             );
 
         rule.check(ArchTestUtil.APP_CLASSES);
