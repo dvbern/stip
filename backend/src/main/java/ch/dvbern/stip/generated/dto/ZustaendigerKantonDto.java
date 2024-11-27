@@ -1,5 +1,9 @@
 package ch.dvbern.stip.generated.dto;
 
+import java.io.Serializable;
+import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -7,9 +11,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Gets or Sets ZustaendigerKanton
  */
 public enum ZustaendigerKantonDto {
-
+  
   BERN("BERN"),
-
+  
   ANDERER_KANTON("ANDERER_KANTON");
 
   private String value;
@@ -32,7 +36,7 @@ public enum ZustaendigerKantonDto {
       }
       throw new IllegalArgumentException("Unexpected string value '" + s + "'");
 	}
-
+	
   @Override
   @JsonValue
   public String toString() {
