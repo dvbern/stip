@@ -22,8 +22,10 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,43 +36,127 @@ import lombok.extern.slf4j.Slf4j;
 public class StipDecisionTextSeeding extends Seeder {
     private final ConfigService configService;
     private final StipDecisionTextRepository decisionTextRepository;
-    public static final String AUSBILDUNG_NICHT_ANERKANNT_TEXT_DE =
-        "Stipendien und Darlehen können gewährt werden für den Besuch von anerkannten Ausbildungen, die zu einem anerkannten Abschluss führen. Ausbildungsstätten sind nur anerkannt, soweit sie zu einem Abschluss führen, der vom Kanton, von der Eidgenossenschaft oder von einem ausländischen Staat anerkannt ist (Art. 6 Abs. 1 und Art. 8 Abs. 2 des Gesetzes über die Ausbildungsbeiträge [ABG]).  \n"
-        +
-        "\n" +
-        "Gemäss Ihren Angaben im Gesuch führt Ihre Ausbildung nicht zu einem anerkannten Abschluss im Sinne der Ausbildungsbeitragsgesetzgebung. Deshalb können wir Ihnen leider keine Ausbildungsbeiträge gewähren.\n"
-        +
-        "\n";
+    private final StipDecisionService stipDecisionService;
 
-    public static final String AUSBILDUNG_NICHT_ANERKANNT_TEXT_FR =
-        "\"Des bourses et des prêts peuvent être octroyés aux personnes qui suivent une formation reconnue permettant l’obtention d’un diplôme reconnu. Les établissements de formation ne sont reconnus que s’ils délivrent un diplôme reconnu par le canton, par la Confédération ou par un Etat étranger (art. 6, al. 1 et art. 8, al. 2 de la loi sur l’octroi de subsides de formation [LSF]).\n"
-        +
-        "\n" +
-        "D’après les informations figurant dans votre demande, la formation que vous suivez ne permet pas d’obtenir un diplôme reconnu au sens de la législation sur l’octroi de subsides de formation. C’est pourquoi nous ne pouvons malheureusement pas vous accorder de subside de formation.\n"
-        +
-        "\"";
-    private static Set<StipDecisionText> decisionTexts = Set.of(
-        new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_NICHT_ANERKANNT)
-            .setTextDe(AUSBILDUNG_NICHT_ANERKANNT_TEXT_DE)
-            .setTextFr(AUSBILDUNG_NICHT_ANERKANNT_TEXT_FR),
-        new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_IM_LEBENSLAUF)
-            .setTextDe(AUSBILDUNG_NICHT_ANERKANNT_TEXT_DE)
-            .setTextFr(AUSBILDUNG_NICHT_ANERKANNT_TEXT_FR),
-        new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNGEN_LAENGER_12_JAHRE)
-            .setTextDe(AUSBILDUNG_NICHT_ANERKANNT_TEXT_DE)
-            .setTextFr(AUSBILDUNG_NICHT_ANERKANNT_TEXT_FR),
-        new StipDecisionText().setStipDecision(StipDecision.EINGABEFRIST_ABGELAUFEN)
-            .setTextDe(AUSBILDUNG_NICHT_ANERKANNT_TEXT_DE)
-            .setTextFr(AUSBILDUNG_NICHT_ANERKANNT_TEXT_FR),
-        new StipDecisionText().setStipDecision(StipDecision.PIA_AELTER_35_JAHRE)
-            .setTextDe(AUSBILDUNG_NICHT_ANERKANNT_TEXT_DE)
-            .setTextFr(AUSBILDUNG_NICHT_ANERKANNT_TEXT_FR)
-    );
+    private Set<StipDecisionText> getDecisionTexts() {
+        return Set.of(
+            new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_NICHT_ANERKANNT)
+                .setTextDe(
+                    stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNG_NICHT_ANERKANNT, Sprache.DEUTSCH)
+                )
+                .setTextFr(
+                    stipDecisionService
+                        .getTextForDecision(StipDecision.AUSBILDUNG_NICHT_ANERKANNT, Sprache.FRANZOESISCH)
+                ),
+
+            new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_IM_LEBENSLAUF)
+                .setTextDe(
+                    stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNG_IM_LEBENSLAUF, Sprache.DEUTSCH)
+                )
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNG_IM_LEBENSLAUF, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNGEN_LAENGER_12_JAHRE)
+                .setTextDe(
+                    stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNGEN_LAENGER_12_JAHRE, Sprache.DEUTSCH)
+                )
+                .setTextFr(
+                    stipDecisionService
+                        .getTextForDecision(StipDecision.AUSBILDUNGEN_LAENGER_12_JAHRE, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.EINGABEFRIST_ABGELAUFEN)
+                .setTextDe(
+                    stipDecisionService.getTextForDecision(StipDecision.EINGABEFRIST_ABGELAUFEN, Sprache.DEUTSCH)
+                )
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.EINGABEFRIST_ABGELAUFEN, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.PIA_AELTER_35_JAHRE)
+                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.PIA_AELTER_35_JAHRE, Sprache.DEUTSCH))
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.PIA_AELTER_35_JAHRE, Sprache.FRANZOESISCH)
+                ),
+
+            new StipDecisionText().setStipDecision(StipDecision.NICHT_EINTRETEN)
+                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.NICHT_EINTRETEN, Sprache.DEUTSCH))
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.NICHT_EINTRETEN, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.NICHTBERECHTIGTER_PERSONENKREIS)
+                .setTextDe(
+                    stipDecisionService
+                        .getTextForDecision(StipDecision.NICHTBERECHTIGTER_PERSONENKREIS, Sprache.DEUTSCH)
+                )
+                .setTextFr(
+                    stipDecisionService
+                        .getTextForDecision(StipDecision.NICHTBERECHTIGTER_PERSONENKREIS, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.KEIN_WOHNSITZ_KANTON_BE)
+                .setTextDe(
+                    stipDecisionService.getTextForDecision(StipDecision.KEIN_WOHNSITZ_KANTON_BE, Sprache.DEUTSCH)
+                )
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.KEIN_WOHNSITZ_KANTON_BE, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.SCHULJAHR_9_SEKSTUFE_1)
+                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.SCHULJAHR_9_SEKSTUFE_1, Sprache.DEUTSCH))
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.SCHULJAHR_9_SEKSTUFE_1, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_PBI1)
+                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNG_PBI1, Sprache.DEUTSCH))
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNG_PBI1, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.ART_32_BBV)
+                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.ART_32_BBV, Sprache.DEUTSCH))
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.ART_32_BBV, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.ZWEITAUSBILDUNG)
+                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.ZWEITAUSBILDUNG, Sprache.DEUTSCH))
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.ZWEITAUSBILDUNG, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG)
+                .setTextDe(
+                    stipDecisionService
+                        .getTextForDecision(
+                            StipDecision.AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG,
+                            Sprache.DEUTSCH
+                        )
+                )
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(
+                        StipDecision.AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG,
+                        Sprache.FRANZOESISCH
+                    )
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.EBA_LEHRE)
+                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.EBA_LEHRE, Sprache.DEUTSCH))
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.EBA_LEHRE, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.HOCHSCHULSTUDIUM_2)
+                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.HOCHSCHULSTUDIUM_2, Sprache.DEUTSCH))
+                .setTextFr(
+                    stipDecisionService.getTextForDecision(StipDecision.HOCHSCHULSTUDIUM_2, Sprache.FRANZOESISCH)
+                ),
+            new StipDecisionText().setStipDecision(StipDecision.MEHRERE_AUSBILDUNGSWECHSEL)
+                .setTextDe(
+                    stipDecisionService.getTextForDecision(StipDecision.MEHRERE_AUSBILDUNGSWECHSEL, Sprache.DEUTSCH)
+                )
+                .setTextFr(
+                    stipDecisionService
+                        .getTextForDecision(StipDecision.MEHRERE_AUSBILDUNGSWECHSEL, Sprache.FRANZOESISCH)
+                )
+        );
+    }
 
     @Override
     protected void doSeed() {
         LOG.info("Starting stip decision text seeding seeding");
-
+        final var decisionTexts = getDecisionTexts();
         decisionTexts.forEach(decisionText -> {
             decisionTextRepository.persistAndFlush(decisionText);
         });
