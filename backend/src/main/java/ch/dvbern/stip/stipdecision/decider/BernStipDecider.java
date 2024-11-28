@@ -24,7 +24,13 @@ import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
+import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
+import ch.dvbern.stip.api.plz.service.PlzService;
+import ch.dvbern.stip.api.stammdaten.service.LandService;
+import ch.dvbern.stip.api.stammdaten.type.Land;
+import ch.dvbern.stip.generated.dto.LandEuEftaDto;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.inject.Singleton;
@@ -34,6 +40,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @StipDeciderTenant(MandantIdentifier.BERN)
 public class BernStipDecider implements BaseStipDecider {
+    private final LandService landService;
+    private final PlzService plzService;
+
     @Override
     public StipDecision decide(final GesuchTranche gesuchTranche) {
         if (eingabefristAbgelaufen(gesuchTranche)) {
@@ -154,6 +163,196 @@ public class BernStipDecider implements BaseStipDecider {
             case FRANZOESISCH -> Templates.piaAelter35JahreFr();
             case DEUTSCH -> Templates.piaAelter35JahreDe();
         };
+    }
+
+    static final class StipendienrechtlicherWohnsitzKantonBernChecker {
+        private StipendienrechtlicherWohnsitzKantonBernChecker() {}
+
+        public static StipDecision evaluate(
+            final GesuchTranche gesuchTranche,
+            final LandService landService,
+            final PlzService plzService
+        ) {
+
+        }
+
+        private static StipDecision evaluateStep1(final GesuchTranche gesuchTranche, final LandService landService) {
+            if (piaHasSchweizerBuergerrecht(gesuchTranche)) {
+                return StipDecision.ANSPRUCH_UNKLAR;
+            }
+            if (piaIsFluechtling(gesuchTranche)) {
+                return StipDecision.ANSPRUCH_UNKLAR;
+            }
+            if (piaNationalitaetEuEfta(gesuchTranche, landService)) {
+                if (piaWohntSchweiz(gesuchTranche)) {
+                    return StipDecision.ANSPRUCH_UNKLAR;
+                }
+                return StipDecision.NICHT_BERECHTIGTE_PERSON;
+            }
+            if (piaHasNiederlassungsbewilligungC(gesuchTranche)) {
+                return StipDecision.ANSPRUCH_UNKLAR;
+            }
+            if (piaHasNiederlassungsbewilligungB(gesuchTranche) && pia5JahreInChWohnhaft(gesuchTranche)) {
+                return StipDecision.ANSPRUCH_UNKLAR;
+            }
+            return StipDecision.NICHT_BERECHTIGTE_PERSON;
+        }
+
+        private static StipDecision evaluateStep2(
+            final GesuchTranche gesuchTranche,
+            final LandService landService,
+            final PlzService plzService
+        ) {
+            if (piaVolljaehrig(gesuchTranche) && piaBerufsbefaehigendeAusbildungAbeschlossen(gesuchTranche)) {
+                return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
+            }
+            if (piaFluechtlingOderStaatenlos(gesuchTranche)) {
+                if (elternlosOderElternImAusland(gesuchTranche)) {
+                    if (piaBernZugewiesen(gesuchTranche)) {
+                        return StipDecision.GESUCH_VALID;
+                    }
+                    return StipDecision.NICHT_BERECHTIGTE_PERSON;
+                }
+                return StipDecision.ANSPRUCH_UNKLAR;
+            }
+
+            if (!piaNationalitaetEuEfta(gesuchTranche, landService)) {
+                if (elternlosOderElternImAusland(gesuchTranche)) {
+                    if (piaBernWohnhaft(gesuchTranche, plzService)) {
+                        return StipDecision.GESUCH_VALID;
+                    }
+                    return StipDecision.NICHT_BERECHTIGTE_PERSON;
+                }
+                return StipDecision.ANSPRUCH_UNKLAR;
+            }
+            if (piaHasSchweizerBuergerrecht(gesuchTranche) && elternlosOderElternImAusland(gesuchTranche)) {
+                return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
+
+            }
+            return StipDecision.ANSPRUCH_UNKLAR;
+        }
+
+        private static StipDecision evaluateStep3(final GesuchTranche gesuchTranche) {
+            if (piaBevormundet(gesuchTranche)) {
+                return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
+            }
+        }
+
+        private static boolean piaHasSchweizerBuergerrecht(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getNationalitaet() == Land.CH;
+        }
+
+        private static boolean piaIsFluechtling(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getNiederlassungsstatus() == Niederlassungsstatus.FLUECHTLING;
+        }
+
+        private static boolean piaWohntSchweiz(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular().getPersonInAusbildung().getAdresse().getLand() == Land.CH;
+        }
+
+        private static boolean piaHasNiederlassungsbewilligungC(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getNiederlassungsstatus() == Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C;
+        }
+
+        private static boolean piaHasNiederlassungsbewilligungB(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getNiederlassungsstatus() == Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B;
+        }
+
+        private static boolean pia5JahreInChWohnhaft(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getEinreisedatum() != null
+            && gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getEinreisedatum()
+                .isBefore(LocalDate.now().minusYears(5));
+        }
+
+        private static boolean piaVolljaehrig(final GesuchTranche gesuchTranche) {
+            return DateUtil.getAgeInYears(
+                gesuchTranche.getGesuchFormular()
+                    .getPersonInAusbildung()
+                    .getGeburtsdatum()
+            ) >= 18;
+        }
+
+        private static boolean piaBerufsbefaehigendeAusbildungAbeschlossen(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular()
+                .getLebenslaufItems()
+                .stream()
+                .anyMatch(
+                    item -> item.getBildungsart() != null
+                    && item.getBildungsart().isBerufsbefaehigenderAbschluss()
+                    && item.isAusbildungAbgeschlossen()
+                );
+        }
+
+        private static boolean piaFluechtlingOderStaatenlos(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getNiederlassungsstatus() == Niederlassungsstatus.FLUECHTLING
+            || gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNationalitaet() == Land.STATELESS;
+        }
+
+        private static boolean elternlosOderElternImAusland(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular().getElterns().isEmpty() || gesuchTranche.getGesuchFormular()
+                .getElterns()
+                .stream()
+                .noneMatch(eltern -> eltern.getAdresse().getLand() == Land.CH);
+        }
+
+        private static boolean piaBernZugewiesen(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getZustaendigerKanton() == ZustaendigerKanton.BERN;
+        }
+
+        private static boolean piaNationalitaetEuEfta(
+            final GesuchTranche gesuchTranche,
+            final LandService landService
+        ) {
+            return landService.getAllLandEuEfta()
+                .stream()
+                .map(LandEuEftaDto::getLand)
+                .toList()
+                .contains(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNationalitaet());
+        }
+
+        private static boolean piaBernWohnhaft(final GesuchTranche gesuchTranche, final PlzService plzService) {
+            return plzService.isInBern(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getAdresse());
+        }
+
+        private static boolean piaBevormundet(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular().getPersonInAusbildung().isVormundschaft();
+        }
+
+        private static StipDecision evaluateElternWohnsitz(
+            final GesuchTranche gesuchTranche,
+            final PlzService plzService
+        ) {
+            final int noEltern = gesuchTranche.getGesuchFormular().getElterns().size();
+            final int noElternInBern = (int) gesuchTranche.getGesuchFormular()
+                .getElterns()
+                .stream()
+                .filter(eltern -> plzService.isInBern(eltern.getAdresse()))
+                .count();
+
+            if (noElternInBern == noEltern) {
+                return StipDecision.GESUCH_VALID;
+            }
+            if (noElternInBern == 0) {
+                return StipDecision.NICHT_BERECHTIGTE_PERSON;
+            }
+            return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
+        }
     }
 
     @CheckedTemplate
