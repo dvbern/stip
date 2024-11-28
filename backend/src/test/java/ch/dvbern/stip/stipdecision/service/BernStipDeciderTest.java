@@ -142,6 +142,7 @@ class BernStipDeciderTest {
     @Test
     void testStipendienrechtlicherWohnsitzKantonBernCheckerEvaluateFailStep1() {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        Mockito.when(landService.landInEuEfta(ArgumentMatchers.any())).thenReturn(false);
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
         pia.setNationalitaet(Land.IR)
             .setNiederlassungsstatus(Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B)

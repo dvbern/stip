@@ -391,6 +391,7 @@ public class TestUtil {
         final var gesuchFormular = baseGesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)
+            .setAdresse(new Adresse())
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1));
 
@@ -461,7 +462,6 @@ public class TestUtil {
                     .setWohnkosten(0)
                     .setAdresse(new Adresse().setLand(Land.CH).setPlz("3000"))
                     .setGeburtsdatum(LocalDate.now().minusYears(30))
-
             )
         );
 
