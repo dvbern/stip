@@ -14,7 +14,7 @@ export class SharedUiTruncateTooltipDirective extends MatTooltip {
 
   override show(delay?: number, origin?: { x: number; y: number }): void {
     const element = this.elementRef.nativeElement;
-    const isEllipsing = element.offsetWidth != element.scrollWidth;
+    const isEllipsing = element.offsetWidth !== element.scrollWidth;
     if (isEllipsing) {
       super.show(delay, origin);
     }

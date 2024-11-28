@@ -10,7 +10,7 @@
     padding: 0;
   }
   .btn-sm {
-    line-height: 1;
+    line-height: 0;
   }
 
   .mat-mdc-header-row {
@@ -19,8 +19,8 @@
     border-bottom: solid 1px var(--mat-table-row-item-outline-color);
 
     .mat-mdc-header-cell {
-      @apply tw-pt-8;
-      @apply tw-pb-4;
+      @apply tw-pb-4 tw-pt-8;
+
       padding-left: var(--dv-table-header-spacing-horizontal, 16px);
       padding-right: var(--dv-table-header-spacing-horizontal, 16px);
 

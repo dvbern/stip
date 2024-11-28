@@ -56,7 +56,7 @@
               </caption>
 
               <ng-container matColumnDef="FALLNUMMER">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
                   <label class="pe-none" for="fallNummer">{{
                     'sachbearbeitung-app.cockpit.table.fall' | translate
                   }}</label>
@@ -90,7 +90,7 @@
 
               <!-- typ -->
               <ng-container matColumnDef="TYP">
-                <th mat-header-cell *matHeaderCellDef class="filtered tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
                   {{ 'sachbearbeitung-app.cockpit.table.typ' | translate }}
                   <mat-form-field class="d-flex">
                     <mat-select
@@ -112,7 +112,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-min-w-28 tw-whitespace-nowrap"
+                  class="tw-whitespace-nowrap"
                 >
                   {{ 'shared.gesuch.tranche.typ.' + gesuch.typ | translate }}
                 </td>
@@ -144,7 +144,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-max-w-32 tw-whitespace-nowrap"
+                  class="tw-whitespace-nowrap"
                   [dvTruncateTooltip]="gesuch.piaNachname"
                 >
                   {{ gesuch.piaNachname }}
@@ -190,7 +190,7 @@
                   *matHeaderCellDef
                   mat-sort-header
                   [start]="'desc'"
-                  class="filtered tw-whitespace-nowrap"
+                  class="filtered tw-w-40 tw-whitespace-nowrap"
                   example="01.01.2000"
                 >
                   <label class="pe-none" for="piaGeburtsdatum">{{
@@ -230,14 +230,14 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-min-w-28 tw-whitespace-nowrap"
+                  class="tw-whitespace-nowrap"
                 >
                   {{ gesuch.piaGeburtsdatum | date: 'dd.MM.yyyy' }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="STATUS">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-56 tw-whitespace-nowrap">
                   {{ 'sachbearbeitung-app.cockpit.table.status' | translate }}
                   <mat-form-field>
                     <mat-select
@@ -259,7 +259,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-max-w-44 tw-whitespace-nowrap"
+                  class="tw-w-48 tw-whitespace-nowrap"
                 >
                   {{ gesuch.translationKey | translate }}
                 </td>
@@ -291,7 +291,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-max-w-32 tw-whitespace-nowrap"
+                  class="tw-whitespace-nowrap"
                   [dvTruncateTooltip]="gesuch.bearbeiter"
                 >
                   {{ gesuch.bearbeiter }}
@@ -304,7 +304,7 @@
                   *matHeaderCellDef
                   mat-sort-header
                   [start]="'desc'"
-                  class="filtered tw-whitespace-nowrap"
+                  class="filtered tw-w-40 tw-whitespace-nowrap"
                 >
                   <label class="pe-none" for="letzteAktivitaet">{{
                     'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate
@@ -365,7 +365,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-min-w-28 tw-whitespace-nowrap"
+                  class="tw-whitespace-nowrap"
                 >
                   {{ gesuch.letzteAktivitaet | date: 'dd.MM.yyyy' }}
                 </td>
