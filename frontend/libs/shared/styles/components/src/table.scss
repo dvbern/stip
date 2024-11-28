@@ -55,13 +55,8 @@
   .mat-mdc-row {
     min-height: 48px;
 
-    &.edit-row {
-      .mat-mdc-cell:has(.mat-mdc-form-field) {
-        padding: 0;
-      }
-      .mat-mdc-cell:first-child {
-        padding-left: 2px;
-      }
+    &.edit-row .mat-mdc-cell:has(.mat-mdc-form-field) {
+      padding: 0 8px;
     }
 
     &.expanded-row {
