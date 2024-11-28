@@ -30,7 +30,6 @@ import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.stammdaten.service.LandService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
-import ch.dvbern.stip.generated.dto.LandEuEftaDto;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.inject.Singleton;
@@ -47,6 +46,11 @@ public class BernStipDecider implements BaseStipDecider {
     public StipDecision decide(final GesuchTranche gesuchTranche) {
         if (eingabefristAbgelaufen(gesuchTranche)) {
             return StipDecision.EINGABEFRIST_ABGELAUFEN;
+        }
+        final var stipendienrechtlicherWohnsitzKantonBernResult =
+            StipendienrechtlicherWohnsitzKantonBernChecker.evaluate(gesuchTranche, landService, plzService);
+        if (stipendienrechtlicherWohnsitzKantonBernResult != StipDecision.GESUCH_VALID) {
+            return stipendienrechtlicherWohnsitzKantonBernResult;
         }
         if (ausbildungNichtAnerkannt(gesuchTranche)) {
             return StipDecision.AUSBILDUNG_NICHT_ANERKANNT;
@@ -72,6 +76,9 @@ public class BernStipDecider implements BaseStipDecider {
             case AUSBILDUNG_IM_LEBENSLAUF -> getAusbildungImLebenslaufText(korrespondenzSprache).render();
             case AUSBILDUNGEN_LAENGER_12_JAHRE -> getAusbildungLaenger12JahreText(korrespondenzSprache).render();
             case PIA_AELTER_35_JAHRE -> getPiaAelter35JahreText(korrespondenzSprache).render();
+            case ANSPRUCH_MANUELL_PRUEFEN -> "ANSPRUCH_MANUELL_PRUEFEN";
+            case NICHT_BERECHTIGTE_PERSON -> "NICHT_BERECHTIGTE_PERSON";
+            case ANSPRUCH_UNKLAR -> throw new IllegalStateException("Unkown StipDecision: " + decision);
         };
     }
 
@@ -79,10 +86,11 @@ public class BernStipDecider implements BaseStipDecider {
     public GesuchStatusChangeEvent getGesuchStatusChangeEvent(StipDecision decision) {
         return switch (decision) {
             case GESUCH_VALID -> GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
-            case EINGABEFRIST_ABGELAUFEN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case EINGABEFRIST_ABGELAUFEN, NICHT_BERECHTIGTE_PERSON -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case AUSBILDUNG_NICHT_ANERKANNT -> GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG;
-            case AUSBILDUNG_IM_LEBENSLAUF, AUSBILDUNGEN_LAENGER_12_JAHRE -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case AUSBILDUNG_IM_LEBENSLAUF, AUSBILDUNGEN_LAENGER_12_JAHRE, ANSPRUCH_MANUELL_PRUEFEN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case PIA_AELTER_35_JAHRE -> GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG;
+            case ANSPRUCH_UNKLAR -> throw new IllegalStateException("Unkown StipDecision: " + decision);
         };
     }
 
@@ -173,7 +181,15 @@ public class BernStipDecider implements BaseStipDecider {
             final LandService landService,
             final PlzService plzService
         ) {
-
+            final var step1result = evaluateStep1(gesuchTranche, landService);
+            if (step1result != StipDecision.ANSPRUCH_UNKLAR) {
+                return step1result;
+            }
+            final var step2result = evaluateStep2(gesuchTranche, landService, plzService);
+            if (step2result != StipDecision.ANSPRUCH_UNKLAR) {
+                return step2result;
+            }
+            return evaluateStep3(gesuchTranche, plzService);
         }
 
         private static StipDecision evaluateStep1(final GesuchTranche gesuchTranche, final LandService landService) {
@@ -227,15 +243,35 @@ public class BernStipDecider implements BaseStipDecider {
             }
             if (piaHasSchweizerBuergerrecht(gesuchTranche) && elternlosOderElternImAusland(gesuchTranche)) {
                 return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
-
             }
             return StipDecision.ANSPRUCH_UNKLAR;
         }
 
-        private static StipDecision evaluateStep3(final GesuchTranche gesuchTranche) {
+        private static StipDecision evaluateStep3(final GesuchTranche gesuchTranche, final PlzService plzService) {
             if (piaBevormundet(gesuchTranche)) {
                 return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
             }
+            return evaluateElternWohnsitz(gesuchTranche, plzService);
+        }
+
+        private static StipDecision evaluateElternWohnsitz(
+            final GesuchTranche gesuchTranche,
+            final PlzService plzService
+        ) {
+            final int noEltern = gesuchTranche.getGesuchFormular().getElterns().size();
+            final int noElternInBern = (int) gesuchTranche.getGesuchFormular()
+                .getElterns()
+                .stream()
+                .filter(eltern -> plzService.isInBern(eltern.getAdresse()))
+                .count();
+
+            if (noElternInBern == noEltern) {
+                return StipDecision.GESUCH_VALID;
+            }
+            if (noElternInBern == 0) {
+                return StipDecision.NICHT_BERECHTIGTE_PERSON;
+            }
+            return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
         }
 
         private static boolean piaHasSchweizerBuergerrecht(final GesuchTranche gesuchTranche) {
@@ -319,11 +355,8 @@ public class BernStipDecider implements BaseStipDecider {
             final GesuchTranche gesuchTranche,
             final LandService landService
         ) {
-            return landService.getAllLandEuEfta()
-                .stream()
-                .map(LandEuEftaDto::getLand)
-                .toList()
-                .contains(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNationalitaet());
+            return landService
+                .landInEuEfta(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNationalitaet());
         }
 
         private static boolean piaBernWohnhaft(final GesuchTranche gesuchTranche, final PlzService plzService) {
@@ -332,26 +365,6 @@ public class BernStipDecider implements BaseStipDecider {
 
         private static boolean piaBevormundet(final GesuchTranche gesuchTranche) {
             return gesuchTranche.getGesuchFormular().getPersonInAusbildung().isVormundschaft();
-        }
-
-        private static StipDecision evaluateElternWohnsitz(
-            final GesuchTranche gesuchTranche,
-            final PlzService plzService
-        ) {
-            final int noEltern = gesuchTranche.getGesuchFormular().getElterns().size();
-            final int noElternInBern = (int) gesuchTranche.getGesuchFormular()
-                .getElterns()
-                .stream()
-                .filter(eltern -> plzService.isInBern(eltern.getAdresse()))
-                .count();
-
-            if (noElternInBern == noEltern) {
-                return StipDecision.GESUCH_VALID;
-            }
-            if (noElternInBern == 0) {
-                return StipDecision.NICHT_BERECHTIGTE_PERSON;
-            }
-            return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
         }
     }
 
