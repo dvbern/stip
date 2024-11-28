@@ -13,7 +13,6 @@ import {
   throwError,
 } from 'rxjs';
 
-import { KeycloakHttpService } from '@dv/sachbearbeitung-app/util/keycloak-http';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelBenutzerApi } from '@dv/shared/model/benutzer';
 import {
@@ -24,6 +23,7 @@ import {
   SozialdienstService,
   SozialdienstUpdate,
 } from '@dv/shared/model/gesuch';
+import { KeycloakHttpService } from '@dv/shared/util/keycloak-http';
 import {
   CachedRemoteData,
   RemoteData,

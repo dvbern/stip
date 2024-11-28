@@ -11,7 +11,7 @@ import {
   hasLocationHeader,
   roleToStateColor,
   toKnownUserErrorType,
-} from './sachbearbeitung-app-util-fn-keycloak-helper';
+} from './shared-util-fn-keycloak-helper';
 
 describe('Keycloak-Helper Functions', () => {
   it('hasLocationHeader - checks correctly for location header in a HttpResponse', () => {

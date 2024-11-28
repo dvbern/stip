@@ -1,22 +1,22 @@
 {
-  "name": "sachbearbeitung-app-data-access-sozialdienst",
+  "name": "shared-data-access-sozialdienst",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/sachbearbeitung-app/data-access/sozialdienst/src",
+  "sourceRoot": "libs/shared/data-access/sozialdienst/src",
   "prefix": "dv",
   "projectType": "library",
-  "tags": ["type:data-access", "scope:sachbearbeitung-app"],
+  "tags": ["type:data-access", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/sachbearbeitung-app/data-access/sozialdienst/tsconfig.lib.json"
+        "tsConfig": "libs/shared/data-access/sozialdienst/tsconfig.lib.json"
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/sachbearbeitung-app/data-access/sozialdienst/jest.config.ts"
+        "jestConfig": "libs/shared/data-access/sozialdienst/jest.config.ts"
       }
     },
     "lint": {

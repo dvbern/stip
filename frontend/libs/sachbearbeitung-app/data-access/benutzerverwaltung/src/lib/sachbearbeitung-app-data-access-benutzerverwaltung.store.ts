@@ -16,11 +16,6 @@ import {
   throwIfEmpty,
 } from 'rxjs';
 
-import { KeycloakHttpService } from '@dv/sachbearbeitung-app/util/keycloak-http';
-import {
-  createBenutzerListFromRoleLookup,
-  hasLocationHeader,
-} from '@dv/sachbearbeitung-app/util-fn/keycloak-helper';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   BENUTZER_VERWALTUNG_ROLES,
@@ -36,6 +31,7 @@ import {
   noGlobalErrorsIf,
   shouldIgnoreNotFoundErrorsIf,
 } from '@dv/shared/util/http';
+import { KeycloakHttpService } from '@dv/shared/util/keycloak-http';
 import {
   CachedRemoteData,
   RemoteData,
@@ -46,6 +42,10 @@ import {
   pending,
   success,
 } from '@dv/shared/util/remote-data';
+import {
+  createBenutzerListFromRoleLookup,
+  hasLocationHeader,
+} from '@dv/shared/util-fn/keycloak-helper';
 
 type BenutzerverwaltungState = {
   benutzers: CachedRemoteData<SharedModelBenutzer[]>;

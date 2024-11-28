@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
-import { SozialdienstStore } from './sachbearbeitung-app-data-access-sozialdienst.store';
+import { SozialdienstStore } from './shared-data-access-sozialdienst.store';
 
 describe('SozialdienstStore', () => {
   let store: SozialdienstStore;

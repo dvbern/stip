@@ -19,7 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { SozialdienstStore } from '@dv/sachbearbeitung-app/data-access/sozialdienst';
+import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { Sozialdienst } from '@dv/shared/model/gesuch';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
