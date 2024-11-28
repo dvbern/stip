@@ -1,25 +1,23 @@
-import type { Config } from 'tailwindcss';
-import plugin from 'tailwindcss/plugin';
+import { resolve } from 'node:path';
 
-// Used for tailwindcss IntelliSense
-const tw = (value: string) => value;
+import type { Config } from 'tailwindcss';
+
+import cssplugin from './cssplugin';
 
 export default {
   content: ['./apps/**/*.{html,ts}', './libs/**/*.{html,ts}'],
   prefix: 'tw-',
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'dv-warning': 'var(--dv-yellow-bg-subtle)',
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/container-queries'),
-    plugin(function ({ addComponents }) {
-      addComponents({
-        '.form-grid': {
-          [tw(
-            '@apply tw-grid md:tw-grid-cols-2 xl:tw-max-w-3xl tw-pt-12 tw-gap-6',
-          )]: {},
-        },
-      });
-    }),
+    cssplugin(
+      resolve(__dirname, './libs/shared/styles/theme/src/tailwind.css'),
+    ),
   ],
 } satisfies Config;

@@ -1,11 +1,10 @@
-<div class="col-12 container card p-3 mt-5 shadow row overflow-auto">
+<div class="tw-dv-table">
   @if (store.loading()) {
     <dv-shared-ui-loading class="loading-spinner"></dv-shared-ui-loading>
   }
   @if (store.tableData(); as ausbildungstaetteSource) {
     <form [formGroup]="form">
       <table
-        class="dv-expandable-table"
         mat-table
         matSort
         matSortActive="nameDe"
@@ -91,72 +90,68 @@
 
         <!-- actions -->
         <ng-container matColumnDef="actions">
-          <th class="action-cell" mat-header-cell *matHeaderCellDef>
-            <div class="action-cell-content">
-              <button
-                [title]="'sachbearbeitung-app.admin.ausbildungsstaette.add' | translate"
-                type="button"
-                class="btn btn-outline-primary btn-sm"
-                [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
-                (click)="addAusbildungsstaette(); $event.stopPropagation()"
-              >
-                <i class="material-symbols-rounded fs-4">add</i>
-              </button>
-            </div>
+          <th mat-header-cell *matHeaderCellDef>
+            <button
+              [matTooltip]="'sachbearbeitung-app.admin.ausbildungsstaette.add' | translate"
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
+              (click)="addAusbildungsstaette(); $event.stopPropagation()"
+            >
+              <i class="material-symbols-rounded fs-4">add</i>
+            </button>
           </th>
-          <td class="action-cell" mat-cell *dvMatCellDef="let staette; dataSource: ausbildungstaetteSource">
-            <div class="action-cell-content">
-              @if (editedAusbildungsstaette === staette) {
-                <button
-                  [title]="'sachbearbeitung-app.admin.ausbildungsstaette.save' | translate"
-                  type="button"
-                  class="btn btn-link btn-sm"
-                  (click)="saveAusbildungsstaette(); $event.stopPropagation()"
-                  [disabled]="!hasUnsavedChanges || !form.valid"
-                >
-                  <i class="material-symbols-rounded fs-4">save</i>
-                </button>
-
-                <button
-                  [title]="'sachbearbeitung-app.admin.ausbildungsstaette.cancel' | translate"
-                  type="button"
-                  class="btn btn-link btn-sm"
-                  (click)="cancelEditAusbildungsstaette(staette); $event.stopPropagation()"
-                >
-                  <i class="material-symbols-rounded fs-4">cancel</i>
-                </button>
-              } @else {
-                <button
-                  [title]="'sachbearbeitung-app.admin.ausbildungsstaette.edit' | translate"
-                  type="button"
-                  class="btn btn-link btn-sm"
-                  [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
-                  (click)="editAusbildungsstaette(staette); $event.stopPropagation()"
-                >
-                  <i class="material-symbols-rounded fs-4">edit</i>
-                </button>
-                <button
-                  [title]="'sachbearbeitung-app.admin.ausbildungsstaette.delete' | translate"
-                  type="button"
-                  class="btn btn-link btn-sm"
-                  [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
-                  (click)="deleteAusbildungsstaette(staette); $event.stopPropagation()"
-                >
-                  <i class="material-symbols-rounded fs-4">delete</i>
-                </button>
-              }
+          <td mat-cell *dvMatCellDef="let staette; dataSource: ausbildungstaetteSource">
+            @if (editedAusbildungsstaette === staette) {
               <button
-                [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
-                class="btn btn-link btn-sm"
+                [matTooltip]="'sachbearbeitung-app.admin.ausbildungsstaette.save' | translate"
                 type="button"
+                class="btn btn-link btn-sm"
+                (click)="saveAusbildungsstaette(); $event.stopPropagation()"
+                [disabled]="!hasUnsavedChanges || !form.valid"
               >
-                @if (expandedRowId === staette.id) {
-                  <i class="material-symbols-rounded fs-4">expand_less</i>
-                } @else {
-                  <i class="material-symbols-rounded fs-4">expand_more</i>
-                }
+                <i class="material-symbols-rounded fs-4">save</i>
               </button>
-            </div>
+
+              <button
+                [matTooltip]="'sachbearbeitung-app.admin.ausbildungsstaette.cancel' | translate"
+                type="button"
+                class="btn btn-link btn-sm"
+                (click)="cancelEditAusbildungsstaette(staette); $event.stopPropagation()"
+              >
+                <i class="material-symbols-rounded fs-4">cancel</i>
+              </button>
+            } @else {
+              <button
+                [matTooltip]="'sachbearbeitung-app.admin.ausbildungsstaette.edit' | translate"
+                type="button"
+                class="btn btn-link btn-sm"
+                [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
+                (click)="editAusbildungsstaette(staette); $event.stopPropagation()"
+              >
+                <i class="material-symbols-rounded fs-4">edit</i>
+              </button>
+              <button
+                [matTooltip]="'sachbearbeitung-app.admin.ausbildungsstaette.delete' | translate"
+                type="button"
+                class="btn btn-link btn-sm"
+                [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
+                (click)="deleteAusbildungsstaette(staette); $event.stopPropagation()"
+              >
+                <i class="material-symbols-rounded fs-4">delete</i>
+              </button>
+            }
+            <button
+              [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
+              class="btn btn-link btn-sm"
+              type="button"
+            >
+              @if (expandedRowId === staette.id) {
+                <i class="material-symbols-rounded fs-4">expand_less</i>
+              } @else {
+                <i class="material-symbols-rounded fs-4">expand_more</i>
+              }
+            </button>
           </td>
         </ng-container>
 
@@ -262,64 +257,56 @@
 
                     <!-- actions -->
                     <ng-container matColumnDef="actions">
-                      <th class="action-cell" mat-header-cell *matHeaderCellDef>
-                        <div class="action-cell-content">
-                          <button
-                            [title]="'sachbearbeitung-app.admin.ausbildungsgaenge.add' | translate"
-                            type="button"
-                            class="btn btn-outline-primary btn-sm"
-                            [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
-                            (click)="addAusbildungsgang(staette); $event.stopPropagation()"
-                          >
-                            <i class="material-symbols-rounded fs-4">add</i>
-                          </button>
-                        </div>
+                      <th mat-header-cell *matHeaderCellDef>
+                        <button
+                          [matTooltip]="'sachbearbeitung-app.admin.ausbildungsgaenge.add' | translate"
+                          type="button"
+                          class="btn btn-outline-primary btn-sm"
+                          [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
+                          (click)="addAusbildungsgang(staette); $event.stopPropagation()"
+                        >
+                          <i class="material-symbols-rounded fs-4">add</i>
+                        </button>
                       </th>
-                      <td
-                        class="action-cell"
-                        mat-cell
-                        *dvMatCellDef="let ausbildungsgang; dataSource: staette.ausbildungsgaenge ?? []"
-                      >
-                        <div class="action-cell-content">
-                          @if (editedAusbildungsgang === ausbildungsgang) {
-                            <button
-                              [title]="'sachbearbeitung-app.admin.ausbildungsgaenge.save' | translate"
-                              type="button"
-                              class="btn btn-link btn-sm"
-                              (click)="saveAusbildungsgang(staette); $event.stopPropagation()"
-                              [disabled]="!hasUnsavedChanges || !gangForm.valid"
-                            >
-                              <i class="material-symbols-rounded fs-4">save</i>
-                            </button>
-                            <button
-                              [title]="'sachbearbeitung-app.admin.ausbildungsgaenge.cancel' | translate"
-                              type="button"
-                              class="btn btn-link btn-sm"
-                              (click)="cancelEditAusbildungsgang(staette, ausbildungsgang); $event.stopPropagation()"
-                            >
-                              <i class="material-symbols-rounded fs-4">cancel</i>
-                            </button>
-                          } @else {
-                            <button
-                              [title]="'sachbearbeitung-app.admin.ausbildungsgaenge.edit' | translate"
-                              type="button"
-                              [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
-                              class="btn btn-link btn-sm"
-                              (click)="editAusbildungsgang(ausbildungsgang); $event.stopPropagation()"
-                            >
-                              <i class="material-symbols-rounded fs-4">edit</i>
-                            </button>
-                            <button
-                              [title]="'sachbearbeitung-app.admin.ausbildungsgaenge.delete' | translate"
-                              type="button"
-                              [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
-                              class="btn btn-link btn-sm"
-                              (click)="deleteAusbildungsgang(staette, ausbildungsgang); $event.stopPropagation()"
-                            >
-                              <i class="material-symbols-rounded fs-4">delete</i>
-                            </button>
-                          }
-                        </div>
+                      <td mat-cell *dvMatCellDef="let ausbildungsgang; dataSource: staette.ausbildungsgaenge ?? []">
+                        @if (editedAusbildungsgang === ausbildungsgang) {
+                          <button
+                            [matTooltip]="'sachbearbeitung-app.admin.ausbildungsgaenge.save' | translate"
+                            type="button"
+                            class="btn btn-link btn-sm"
+                            (click)="saveAusbildungsgang(staette); $event.stopPropagation()"
+                            [disabled]="!hasUnsavedChanges || !gangForm.valid"
+                          >
+                            <i class="material-symbols-rounded fs-4">save</i>
+                          </button>
+                          <button
+                            [matTooltip]="'sachbearbeitung-app.admin.ausbildungsgaenge.cancel' | translate"
+                            type="button"
+                            class="btn btn-link btn-sm"
+                            (click)="cancelEditAusbildungsgang(staette, ausbildungsgang); $event.stopPropagation()"
+                          >
+                            <i class="material-symbols-rounded fs-4">cancel</i>
+                          </button>
+                        } @else {
+                          <button
+                            [matTooltip]="'sachbearbeitung-app.admin.ausbildungsgaenge.edit' | translate"
+                            type="button"
+                            [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
+                            class="btn btn-link btn-sm"
+                            (click)="editAusbildungsgang(ausbildungsgang); $event.stopPropagation()"
+                          >
+                            <i class="material-symbols-rounded fs-4">edit</i>
+                          </button>
+                          <button
+                            [matTooltip]="'sachbearbeitung-app.admin.ausbildungsgaenge.delete' | translate"
+                            type="button"
+                            [disabled]="editedAusbildungsgang || editedAusbildungsstaette"
+                            class="btn btn-link btn-sm"
+                            (click)="deleteAusbildungsgang(staette, ausbildungsgang); $event.stopPropagation()"
+                          >
+                            <i class="material-symbols-rounded fs-4">delete</i>
+                          </button>
+                        }
                       </td>
                     </ng-container>
 
@@ -351,6 +338,12 @@
         ></tr>
 
         <tr mat-row class="detail-row" *matRowDef="let staette; columns: detailColumn"></tr>
+
+        <tr class="mat-mdc-row" *matNoDataRow>
+          <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+            {{ 'shared.table.noData' | translate }}
+          </td>
+        </tr>
       </table>
     </form>
   }

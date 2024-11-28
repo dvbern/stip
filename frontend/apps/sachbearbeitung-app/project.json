@@ -57,7 +57,10 @@
           "apps/sachbearbeitung-app/src/favicon.ico",
           "apps/sachbearbeitung-app/src/assets"
         ],
-        "styles": ["apps/sachbearbeitung-app/src/styles.scss"],
+        "styles": [
+          "apps/sachbearbeitung-app/src/styles.scss",
+          "libs/shared/styles/theme/src/tailwind.css"
+        ],
         "scripts": [],
         "stylePreprocessorOptions": {
           "includePaths": [

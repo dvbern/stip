@@ -43,6 +43,8 @@
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Übersicht aller Buchstaben-Zuteilungen",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Sachbearbeiter",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter": "Filtern nach Sachbearbeiter",
+  "sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.DE": "Buchstaben-Zuteilung Deutsch",
+  "sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.FR": "Buchstaben-Zuteilung Französisch",
   "sachbearbeitung-app.admin.buchstabenZuteilung.route.overview": "Buchstaben-Zuteilung Übersicht",
 
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.title": "Gesuchsperiode publizieren",

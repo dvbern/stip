@@ -67,6 +67,8 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
     );
   });
 
+  @HostBinding('class') klass = 'tw-block tw-self-start tw-relative tw-h-14';
+
   constructor() {
     // Load the gesuch step validity after the state of uploaded documents changes
     toObservable(this.uploadStore.documentChangedSig)
@@ -99,8 +101,6 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
       this.uploadStore.loadDocuments(this.optionsSig());
     }
   }
-
-  @HostBinding('class') class = 'd-block align-self-start position-relative';
 
   openDialog(): void {
     this.dialog.open<DialogType, DialogData>(

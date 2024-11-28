@@ -1,6 +1,6 @@
 @if (formSig(); as form) {
   <form (submit)="handleSave()" [formGroup]="form">
-    <div class="rounded-4 overflow-hidden bg-white my-3 shadow">
+    <div class="tw-dv-table">
       <table
         mat-table
         [dataSource]="zuweisungDataSourceSig()"
@@ -16,34 +16,44 @@
         </caption>
 
         <ng-container matColumnDef="fullName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="fs-6 fw-bolder">
-            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter' | translate }}
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-whitespace-nowrap">
+            <label class="pe-none" for="fallNummer">{{
+              'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter' | translate
+            }}</label>
+            <div class="tw-relative tw-flex">
+              <mat-form-field>
+                <input
+                  id="sachbearbeiter"
+                  #filter
+                  matInput
+                  type="text"
+                  dvMaxLength
+                  (keyup)="filterChangedSig.set(filter.value)"
+                  (click)="$event.stopPropagation()"
+                  [attr.aria-label]="
+                    'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter' | translate
+                  "
+                />
+              </mat-form-field>
+              <dv-shared-ui-clear-button
+                class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                (clear)="filter.value = ''"
+                [valueSig]="filter.value"
+              ></dv-shared-ui-clear-button>
+            </div>
           </th>
           <td mat-cell class="py-1" *matCellDef="let element">{{ element.fullName }}</td>
         </ng-container>
-        <ng-container matColumnDef="fullName-filter">
-          <th mat-header-cell *matHeaderCellDef>
-            <input
-              #filter
-              type="text"
-              (keyup)="filterChangedSig.set(filter.value)"
-              [attr.aria-label]="'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter' | translate"
-            />
+        <ng-container matColumnDef="buchstabenDe">
+          <th mat-header-cell *matHeaderCellDef class="tw-align-top">
+            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.DE' | translate }}
           </th>
-        </ng-container>
-        <ng-container matColumnDef="enabledDe">
-          <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
             <mat-checkbox
               (change)="shouldHandleLanguage($event.checked, element.benutzerId, 'De')"
               formControlName="enabledDe"
-              >{{ 'shared.language.DEUTSCH' | translate }}</mat-checkbox
-            >
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="buchstabenDe">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
+              [matTooltip]="'shared.language.DEUTSCH' | translate"
+            ></mat-checkbox>
             <mat-form-field dvSharedUiFormField>
               <input
                 [maskito]="zuweisungInputMask"
@@ -53,25 +63,19 @@
                 formControlName="buchstabenDe"
                 (blur)="normalizeZuweisung(element.benutzerId, 'De')"
               />
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
             </mat-form-field>
           </td>
         </ng-container>
-        <ng-container matColumnDef="enabledFr">
-          <th mat-header-cell *matHeaderCellDef></th>
+        <ng-container matColumnDef="buchstabenFr">
+          <th mat-header-cell *matHeaderCellDef class="tw-align-top">
+            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.FR' | translate }}
+          </th>
           <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
             <mat-checkbox
               (change)="shouldHandleLanguage($event.checked, element.benutzerId, 'Fr')"
               formControlName="enabledFr"
-              >{{ 'shared.language.FRANZOESISCH' | translate }}</mat-checkbox
-            >
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="buchstabenFr">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
+              [matTooltip]="'shared.language.FRANZOESISCH' | translate"
+            ></mat-checkbox>
             <mat-form-field dvSharedUiFormField>
               <input
                 [maskito]="zuweisungInputMask"
@@ -81,23 +85,21 @@
                 formControlName="buchstabenFr"
                 (blur)="normalizeZuweisung(element.benutzerId, 'Fr')"
               />
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
             </mat-form-field>
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns" class="combined-header-row"></tr>
-        <tr mat-header-row *matHeaderRowDef="displayedColumnFilters" class="combined-header-row"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         <tr class="mat-mdc-row" *matNoDataRow>
-          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+          <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
             {{ 'shared.table.noData' | translate }}
           </td>
         </tr>
       </table>
+
+      <mat-paginator showFirstLastButtons [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
     </div>
-    <dv-shared-ui-form-save [loading]="store.sachbearbeiter() | rdIsPending"></dv-shared-ui-form-save>
+    <dv-shared-ui-form-save class="tw-mt-6" [loading]="store.sachbearbeiter() | rdIsPending"></dv-shared-ui-form-save>
   </form>
 }
