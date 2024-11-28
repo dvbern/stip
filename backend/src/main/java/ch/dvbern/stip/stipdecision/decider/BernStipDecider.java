@@ -63,6 +63,20 @@ public class BernStipDecider implements BaseStipDecider {
             case AUSBILDUNG_IM_LEBENSLAUF -> getAusbildungImLebenslaufText(korrespondenzSprache).render();
             case AUSBILDUNGEN_LAENGER_12_JAHRE -> getAusbildungLaenger12JahreText(korrespondenzSprache).render();
             case PIA_AELTER_35_JAHRE -> getPiaAelter35JahreText(korrespondenzSprache).render();
+            case NICHT_EINTRETEN -> getNichtEintretenText(korrespondenzSprache).render();
+            case NICHTBERECHTIGTER_PERSONENKREIS -> getNichtBerechtigterPersonenkreisText(korrespondenzSprache)
+                .render();
+            case KEIN_WOHNSITZ_KANTON_BE -> getKeinWohnsitzImKantonBEText(korrespondenzSprache).render();
+            case SCHULJAHR_9_SEKSTUFE_1 -> getSchuljahr9Sekstufe1Text(korrespondenzSprache).render();
+            case AUSBILDUNG_PBI1 -> getAusbildungPBIText(korrespondenzSprache).render();
+            case ART_32_BBV -> getArt32BBVText(korrespondenzSprache).render();
+            case ZWEITAUSBILDUNG -> getZweitausbildungText(korrespondenzSprache).render();
+            case AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG -> getZweiteAusbildungGleicherStufeBVSVorbildungText(
+                korrespondenzSprache
+            ).render();
+            case EBA_LEHRE -> getZweiteEBALehreText(korrespondenzSprache).render();
+            case HOCHSCHULSTUDIUM_2 -> getZweitesHochschulstudiumText(korrespondenzSprache).render();
+            case MEHRERE_AUSBILDUNGSWECHSEL -> getMehrereAusbildungswechselText(korrespondenzSprache).render();
         };
     }
 
@@ -74,6 +88,18 @@ public class BernStipDecider implements BaseStipDecider {
             case AUSBILDUNG_NICHT_ANERKANNT -> GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG;
             case AUSBILDUNG_IM_LEBENSLAUF, AUSBILDUNGEN_LAENGER_12_JAHRE -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case PIA_AELTER_35_JAHRE -> GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG;
+            // todo KSTIP-1644: which states here?
+            case NICHT_EINTRETEN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case NICHTBERECHTIGTER_PERSONENKREIS -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case KEIN_WOHNSITZ_KANTON_BE -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case SCHULJAHR_9_SEKSTUFE_1 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case AUSBILDUNG_PBI1 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ART_32_BBV -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ZWEITAUSBILDUNG -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case EBA_LEHRE -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case HOCHSCHULSTUDIUM_2 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case MEHRERE_AUSBILDUNGSWECHSEL -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
         };
     }
 
