@@ -20,28 +20,47 @@ package ch.dvbern.stip.stipdecision.service;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
+import ch.dvbern.stip.api.plz.service.PlzService;
+import ch.dvbern.stip.api.stammdaten.service.LandService;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.stipdecision.decider.BernStipDecider;
+import ch.dvbern.stip.stipdecision.entity.StipDecisionTextRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@QuarkusTest
 @RequiredArgsConstructor
+@QuarkusTest
 @Slf4j
 class BernStipDeciderTest {
     @Inject
+    private StipDecisionTextRepository stipDecisionTextRepository;
+    private LandService landService;
+    private PlzService plzService;
     private BernStipDecider decider;
+
+    @BeforeEach
+    void setUp() {
+        landService = Mockito.mock(LandService.class);
+        plzService = Mockito.mock(PlzService.class);
+        Mockito.when(plzService.isInBern(ArgumentMatchers.any(Adresse.class))).thenReturn(true);
+        Mockito.when(landService.landInEuEfta(ArgumentMatchers.any())).thenReturn(true);
+        decider = new BernStipDecider(stipDecisionTextRepository, landService, plzService);
+    }
 
     @Test
     void testGetValidDecision() {
@@ -67,6 +86,8 @@ class BernStipDeciderTest {
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT);
+        var text = decider.getTextForDecision(decision, Sprache.DEUTSCH);
+        assertNotNull(text);
     }
 
     @Test
@@ -78,6 +99,8 @@ class BernStipDeciderTest {
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG);
+        var text = decider.getTextForDecision(decision, Sprache.DEUTSCH);
+        assertNotNull(text);
     }
 
     @Test
@@ -95,6 +118,8 @@ class BernStipDeciderTest {
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+        var text = decider.getTextForDecision(decision, Sprache.DEUTSCH);
+        assertNotNull(text);
     }
 
     @Test
@@ -107,6 +132,8 @@ class BernStipDeciderTest {
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+        var text = decider.getTextForDecision(decision, Sprache.DEUTSCH);
+        assertNotNull(text);
     }
 
     @Test
@@ -123,6 +150,8 @@ class BernStipDeciderTest {
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG);
+        var text = decider.getTextForDecision(decision, Sprache.DEUTSCH);
+        assertNotNull(text);
     }
 
 }
