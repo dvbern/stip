@@ -18,146 +18,37 @@
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.List;
-import java.util.Set;
 
-import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.personinausbildung.type.Sprache;
-import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.stipdecision.decider.StipDeciderTenant;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionTextRepository;
+import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getArt32BBVText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getAusbildungImLebenslaufText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getAusbildungLaenger12JahreText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getAusbildungNichtAnerkanntText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getAusbildungPBIText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getEingabeFristAbgelaufenText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getKeinWohnsitzImKantonBEText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getMehrereAusbildungswechselText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getNichtBerechtigterPersonenkreisText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getPiaAelter35JahreText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getSchuljahr9Sekstufe1Text;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getZweitausbildungText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getZweiteAusbildungGleicherStufeBVSVorbildungText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getZweiteEBALehreText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getZweitesHochschulstudiumText;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor
 public class StipDecisionTextSeeding extends Seeder {
     private final ConfigService configService;
+    private final TenantService tenantService;
     private final StipDecisionTextRepository decisionTextRepository;
+    private final Instance<BaseStipDecisionTextProvider> decisionTextProviders;
 
     @Override
     public int getPriority() {
         return 0;
     }
 
-    private Set<StipDecisionText> getDecisionTexts() {
-        return Set.of(
-            new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_NICHT_ANERKANNT)
-                .setTextDe(
-                    getAusbildungNichtAnerkanntText(Sprache.DEUTSCH).render()
-                )
-                .setTextFr(
-                    getAusbildungNichtAnerkanntText(Sprache.FRANZOESISCH).render()
-
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_IM_LEBENSLAUF)
-                .setTextDe(
-                    getAusbildungImLebenslaufText(Sprache.DEUTSCH).render()
-                )
-                .setTextFr(
-                    getAusbildungImLebenslaufText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNGEN_LAENGER_12_JAHRE)
-                .setTextDe(
-                    getAusbildungLaenger12JahreText(Sprache.DEUTSCH).render()
-                )
-                .setTextFr(
-                    getAusbildungLaenger12JahreText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.EINGABEFRIST_ABGELAUFEN)
-                .setTextDe(
-                    getEingabeFristAbgelaufenText(Sprache.DEUTSCH).render()
-                )
-                .setTextFr(
-                    getEingabeFristAbgelaufenText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.PIA_AELTER_35_JAHRE)
-                .setTextDe(getPiaAelter35JahreText(Sprache.DEUTSCH).render())
-                .setTextFr(
-                    getPiaAelter35JahreText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.NICHTBERECHTIGTER_PERSONENKREIS)
-                .setTextDe(
-                    getNichtBerechtigterPersonenkreisText(Sprache.DEUTSCH).render()
-                )
-                .setTextFr(
-                    getNichtBerechtigterPersonenkreisText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.KEIN_WOHNSITZ_KANTON_BE)
-                .setTextDe(
-                    getKeinWohnsitzImKantonBEText(Sprache.DEUTSCH).render()
-                )
-                .setTextFr(
-                    getKeinWohnsitzImKantonBEText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.SCHULJAHR_9_SEKSTUFE_1)
-                .setTextDe(getSchuljahr9Sekstufe1Text(Sprache.DEUTSCH).render())
-                .setTextFr(
-                    getSchuljahr9Sekstufe1Text(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_PBI1)
-                .setTextDe(getAusbildungPBIText(Sprache.DEUTSCH).render())
-                .setTextFr(
-                    getAusbildungPBIText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.ART_32_BBV)
-                .setTextDe(getArt32BBVText(Sprache.DEUTSCH).render())
-                .setTextFr(
-                    getArt32BBVText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.ZWEITAUSBILDUNG)
-                .setTextDe(getZweitausbildungText(Sprache.DEUTSCH).render())
-                .setTextFr(
-                    getZweitausbildungText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG)
-                .setTextDe(
-                    getZweiteAusbildungGleicherStufeBVSVorbildungText(Sprache.DEUTSCH).render()
-                )
-                .setTextFr(
-                    getZweiteAusbildungGleicherStufeBVSVorbildungText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.EBA_LEHRE)
-                .setTextDe(getZweiteEBALehreText(Sprache.DEUTSCH).render())
-                .setTextFr(
-                    getZweiteEBALehreText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.HOCHSCHULSTUDIUM_2)
-                .setTextDe(getZweitesHochschulstudiumText(Sprache.DEUTSCH).render())
-                .setTextFr(
-                    getZweitesHochschulstudiumText(Sprache.FRANZOESISCH).render()
-                ),
-            new StipDecisionText().setStipDecision(StipDecision.MEHRERE_AUSBILDUNGSWECHSEL)
-                .setTextDe(
-                    getMehrereAusbildungswechselText(Sprache.DEUTSCH).render()
-                )
-                .setTextFr(
-                    getMehrereAusbildungswechselText(Sprache.FRANZOESISCH).render()
-                )
-        );
-    }
-
     @Override
     protected void doSeed() {
+        final var decisionTextProvider = getDecisionTextProviderForTenantId(
+            tenantService.getCurrentTenant().getIdentifier()
+        );
         LOG.info("Starting stip decision text seeding seeding");
-        final var decisionTexts = getDecisionTexts();
+        final var decisionTexts = decisionTextProvider.getDecisionTexts();
         decisionTexts.forEach(decisionText -> {
             decisionTextRepository.persistAndFlush(decisionText);
         });
@@ -171,6 +62,22 @@ public class StipDecisionTextSeeding extends Seeder {
         // note: currently neeeds this profile to run unittests...
         profiles.add("test");
         return profiles;
+    }
+
+    private BaseStipDecisionTextProvider getDecisionTextProviderForTenantId(final String tenantId) {
+        final var textProvider = decisionTextProviders.stream()
+            .filter(provider -> {
+                final var annotation = provider.getClass().getAnnotation(StipDeciderTenant.class);
+                return annotation != null
+                && annotation.value().name().toLowerCase().equals(tenantId);
+            })
+            .findFirst();
+        if (textProvider.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Cannot find a StipDecisionTextProvider for tenant " + tenantId
+            );
+        }
+        return textProvider.get();
     }
 
 }
