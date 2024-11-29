@@ -19,11 +19,21 @@ package ch.dvbern.stip.stipdecision.entity;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.common.type.StipDecision;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @ApplicationScoped
 public class StipDecisionTextRepository implements BaseRepository<StipDecisionText> {
-    public StipDecisionText getByStipDecision(StipDecision stipDecision) {
-        return null;
+    private final EntityManager entityManager;
+
+    public StipDecisionText getTextByStipDecision(StipDecision stipDecision) {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var stipDecisionText = QStipDecisionText.stipDecisionText;
+        return queryFactory.selectFrom(stipDecisionText)
+            .where(stipDecisionText.stipDecision.eq(stipDecision))
+            .fetchOne();
     }
 }

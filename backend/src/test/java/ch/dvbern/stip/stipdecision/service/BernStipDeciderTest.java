@@ -27,20 +27,24 @@ import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.stipdecision.decider.BernStipDecider;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@QuarkusTest
 @RequiredArgsConstructor
 @Slf4j
 class BernStipDeciderTest {
-    private final BernStipDecider decider = new BernStipDecider();
+    @Inject
+    private BernStipDecider decider;
 
     @Test
     void testGetValidDecision() {
-        // var decider = new BernStipDecider();
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision).isEqualTo(StipDecision.GESUCH_VALID);
@@ -58,6 +62,8 @@ class BernStipDeciderTest {
         gesuch.getGesuchsperiode().setEinreichefristReduziert(LocalDate.now().minusDays(1));
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision).isEqualTo(StipDecision.EINGABEFRIST_ABGELAUFEN);
+        assertNotNull(decider.getTextForDecision(decision, Sprache.DEUTSCH));
+        assertNotNull(decider.getTextForDecision(decision, Sprache.FRANZOESISCH));
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT);

@@ -25,10 +25,26 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionTextRepository;
-import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getArt32BBVText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getAusbildungImLebenslaufText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getAusbildungLaenger12JahreText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getAusbildungNichtAnerkanntText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getAusbildungPBIText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getEingabeFristAbgelaufenText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getKeinWohnsitzImKantonBEText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getMehrereAusbildungswechselText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getNichtBerechtigterPersonenkreisText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getNichtEintretenText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getPiaAelter35JahreText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getSchuljahr9Sekstufe1Text;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getZweitausbildungText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getZweiteAusbildungGleicherStufeBVSVorbildungText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getZweiteEBALehreText;
+import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getZweitesHochschulstudiumText;
 
 @Slf4j
 @Singleton
@@ -36,119 +52,111 @@ import lombok.extern.slf4j.Slf4j;
 public class StipDecisionTextSeeding extends Seeder {
     private final ConfigService configService;
     private final StipDecisionTextRepository decisionTextRepository;
-    private final StipDecisionService stipDecisionService;
+
+    @Override
+    public int getPriority() {
+        return 0;
+    }
 
     private Set<StipDecisionText> getDecisionTexts() {
         return Set.of(
             new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_NICHT_ANERKANNT)
                 .setTextDe(
-                    stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNG_NICHT_ANERKANNT, Sprache.DEUTSCH)
+                    getAusbildungNichtAnerkanntText(Sprache.DEUTSCH).render()
                 )
                 .setTextFr(
-                    stipDecisionService
-                        .getTextForDecision(StipDecision.AUSBILDUNG_NICHT_ANERKANNT, Sprache.FRANZOESISCH)
-                ),
+                    getAusbildungNichtAnerkanntText(Sprache.FRANZOESISCH).render()
 
+                ),
             new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_IM_LEBENSLAUF)
                 .setTextDe(
-                    stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNG_IM_LEBENSLAUF, Sprache.DEUTSCH)
+                    getAusbildungImLebenslaufText(Sprache.DEUTSCH).render()
                 )
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNG_IM_LEBENSLAUF, Sprache.FRANZOESISCH)
+                    getAusbildungImLebenslaufText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNGEN_LAENGER_12_JAHRE)
                 .setTextDe(
-                    stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNGEN_LAENGER_12_JAHRE, Sprache.DEUTSCH)
+                    getAusbildungLaenger12JahreText(Sprache.DEUTSCH).render()
                 )
                 .setTextFr(
-                    stipDecisionService
-                        .getTextForDecision(StipDecision.AUSBILDUNGEN_LAENGER_12_JAHRE, Sprache.FRANZOESISCH)
+                    getAusbildungLaenger12JahreText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.EINGABEFRIST_ABGELAUFEN)
                 .setTextDe(
-                    stipDecisionService.getTextForDecision(StipDecision.EINGABEFRIST_ABGELAUFEN, Sprache.DEUTSCH)
+                    getEingabeFristAbgelaufenText(Sprache.DEUTSCH).render()
                 )
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.EINGABEFRIST_ABGELAUFEN, Sprache.FRANZOESISCH)
+                    getEingabeFristAbgelaufenText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.PIA_AELTER_35_JAHRE)
-                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.PIA_AELTER_35_JAHRE, Sprache.DEUTSCH))
+                .setTextDe(getPiaAelter35JahreText(Sprache.DEUTSCH).render())
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.PIA_AELTER_35_JAHRE, Sprache.FRANZOESISCH)
+                    getPiaAelter35JahreText(Sprache.FRANZOESISCH).render()
                 ),
 
             new StipDecisionText().setStipDecision(StipDecision.NICHT_EINTRETEN)
-                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.NICHT_EINTRETEN, Sprache.DEUTSCH))
+                .setTextDe(getNichtEintretenText(Sprache.DEUTSCH).render())
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.NICHT_EINTRETEN, Sprache.FRANZOESISCH)
+                    getNichtEintretenText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.NICHTBERECHTIGTER_PERSONENKREIS)
                 .setTextDe(
-                    stipDecisionService
-                        .getTextForDecision(StipDecision.NICHTBERECHTIGTER_PERSONENKREIS, Sprache.DEUTSCH)
+                    getNichtBerechtigterPersonenkreisText(Sprache.DEUTSCH).render()
                 )
                 .setTextFr(
-                    stipDecisionService
-                        .getTextForDecision(StipDecision.NICHTBERECHTIGTER_PERSONENKREIS, Sprache.FRANZOESISCH)
+                    getNichtBerechtigterPersonenkreisText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.KEIN_WOHNSITZ_KANTON_BE)
                 .setTextDe(
-                    stipDecisionService.getTextForDecision(StipDecision.KEIN_WOHNSITZ_KANTON_BE, Sprache.DEUTSCH)
+                    getKeinWohnsitzImKantonBEText(Sprache.DEUTSCH).render()
                 )
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.KEIN_WOHNSITZ_KANTON_BE, Sprache.FRANZOESISCH)
+                    getKeinWohnsitzImKantonBEText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.SCHULJAHR_9_SEKSTUFE_1)
-                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.SCHULJAHR_9_SEKSTUFE_1, Sprache.DEUTSCH))
+                .setTextDe(getSchuljahr9Sekstufe1Text(Sprache.DEUTSCH).render())
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.SCHULJAHR_9_SEKSTUFE_1, Sprache.FRANZOESISCH)
+                    getSchuljahr9Sekstufe1Text(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_PBI1)
-                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNG_PBI1, Sprache.DEUTSCH))
+                .setTextDe(getAusbildungPBIText(Sprache.DEUTSCH).render())
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.AUSBILDUNG_PBI1, Sprache.FRANZOESISCH)
+                    getAusbildungPBIText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.ART_32_BBV)
-                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.ART_32_BBV, Sprache.DEUTSCH))
+                .setTextDe(getArt32BBVText(Sprache.DEUTSCH).render())
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.ART_32_BBV, Sprache.FRANZOESISCH)
+                    getArt32BBVText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.ZWEITAUSBILDUNG)
-                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.ZWEITAUSBILDUNG, Sprache.DEUTSCH))
+                .setTextDe(getZweitausbildungText(Sprache.DEUTSCH).render())
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.ZWEITAUSBILDUNG, Sprache.FRANZOESISCH)
+                    getZweitausbildungText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG)
                 .setTextDe(
-                    stipDecisionService
-                        .getTextForDecision(
-                            StipDecision.AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG,
-                            Sprache.DEUTSCH
-                        )
+                    getZweiteAusbildungGleicherStufeBVSVorbildungText(Sprache.DEUTSCH).render()
                 )
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(
-                        StipDecision.AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG,
-                        Sprache.FRANZOESISCH
-                    )
+                    getZweiteAusbildungGleicherStufeBVSVorbildungText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.EBA_LEHRE)
-                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.EBA_LEHRE, Sprache.DEUTSCH))
+                .setTextDe(getZweiteEBALehreText(Sprache.DEUTSCH).render())
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.EBA_LEHRE, Sprache.FRANZOESISCH)
+                    getZweiteEBALehreText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.HOCHSCHULSTUDIUM_2)
-                .setTextDe(stipDecisionService.getTextForDecision(StipDecision.HOCHSCHULSTUDIUM_2, Sprache.DEUTSCH))
+                .setTextDe(getZweitesHochschulstudiumText(Sprache.DEUTSCH).render())
                 .setTextFr(
-                    stipDecisionService.getTextForDecision(StipDecision.HOCHSCHULSTUDIUM_2, Sprache.FRANZOESISCH)
+                    getZweitesHochschulstudiumText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.MEHRERE_AUSBILDUNGSWECHSEL)
                 .setTextDe(
-                    stipDecisionService.getTextForDecision(StipDecision.MEHRERE_AUSBILDUNGSWECHSEL, Sprache.DEUTSCH)
+                    getMehrereAusbildungswechselText(Sprache.DEUTSCH).render()
                 )
                 .setTextFr(
-                    stipDecisionService
-                        .getTextForDecision(StipDecision.MEHRERE_AUSBILDUNGSWECHSEL, Sprache.FRANZOESISCH)
+                    getMehrereAusbildungswechselText(Sprache.FRANZOESISCH).render()
                 )
         );
     }
@@ -166,7 +174,10 @@ public class StipDecisionTextSeeding extends Seeder {
 
     @Override
     protected List<String> getProfiles() {
-        return List.of("test");
-        // return configService.getSeedTestcasesOnProfile();
+        var profiles = configService.getSeedTestcasesOnProfile();
+        // note: currently neeeds this profile to run unittests...
+        profiles.add("test");
+        return profiles;
     }
+
 }
