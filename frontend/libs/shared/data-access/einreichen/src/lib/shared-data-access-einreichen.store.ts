@@ -13,7 +13,7 @@ import {
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { toAbschlussPhase } from '@dv/shared/model/einreichen';
-import { SharedModelError } from '@dv/shared/model/error';
+import { SharedModelError, ValidationError } from '@dv/shared/model/error';
 import {
   GesuchService,
   GesuchTrancheService,
@@ -24,6 +24,8 @@ import {
 } from '@dv/shared/model/gesuch';
 import {
   SPECIAL_VALIDATION_ERRORS,
+  SharedModelGesuchFormStep,
+  gesuchPropFormStepsMap,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -121,6 +123,10 @@ export class EinreichenStore extends signalStore(
         .map((error) =>
           SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error),
         ),
+      invalidFormularSteps: transformValidationReportToFormSteps(
+        validationReport,
+        gesuch?.gesuchTrancheToWorkWith.gesuchFormular,
+      ),
       gesuchStatus: gesuch?.gesuchStatus,
       abschlussPhase: toAbschlussPhase(gesuch, {
         appType: compileTimeConfig?.appType,
@@ -261,6 +267,52 @@ const getValidationErrors = (error?: SharedModelError) => {
     return error.validationErrors;
   }
   return undefined;
+};
+
+const transformValidationReportToFormSteps = (
+  report?: ValidationReport,
+  currentForm?: SharedModelGesuchFormular | null,
+): SharedModelGesuchFormStep[] => {
+  if (!report) {
+    return [];
+  }
+
+  const messages: (ValidationMessage | ValidationError)[] =
+    report.validationErrors.concat(report.validationWarnings);
+
+  // const formKeys: SharedModelGesuchFormularPropsSteuerdatenSteps[] = [
+  //   ...(Object.keys(
+  //     currentForm ?? {},
+  //   ) as SharedModelGesuchFormularPropsSteuerdatenSteps[]),
+  // ];
+
+  const steps: (SharedModelGesuchFormStep | undefined)[] = messages.map((m) => {
+    if (m.propertyPath?.startsWith('steuerdaten')) {
+      const steuerDatenTyp = currentForm?.steuerdatenTabs?.[0];
+      if (steuerDatenTyp === 'FAMILIE') {
+        return gesuchPropFormStepsMap['steuerdaten'];
+      }
+    }
+
+    if (m.messageTemplate?.includes('documents.required')) {
+      return gesuchPropFormStepsMap.dokuments;
+    }
+
+    if (m.propertyPath) {
+      return gesuchPropFormStepsMap[
+        m.propertyPath as SharedModelGesuchFormularPropsSteuerdatenSteps
+      ];
+    }
+
+    return undefined;
+  });
+
+  return steps.filter(isDefined).reduce((acc, step) => {
+    if (isDefined(step) && !acc.includes(step)) {
+      acc.push(step);
+    }
+    return acc;
+  }, [] as SharedModelGesuchFormStep[]);
 };
 
 const transformValidationMessagesToFormKeys = (
