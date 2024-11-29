@@ -1,10 +1,10 @@
 import { Route } from '@angular/router';
 
-import { SozialdienstStore } from '@dv/sachbearbeitung-app/data-access/sozialdienst';
 import {
   CHILD_OPTION_SOZIALDIENST,
   OPTION_SOZIALDIENST,
 } from '@dv/sachbearbeitung-app/model/administration';
+import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 
 import { SozialdienstDetailComponent } from './sozialdienst-detail/sozialdienst-detail.component';
 import { SozialdienstOverviewComponent } from './sozialdienst-overview/sozialdienst-overview.component';

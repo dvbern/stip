@@ -8,6 +8,7 @@ import {
   inject,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -28,14 +29,17 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
+import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import {
   AenderungMelden,
   GesuchTrancheSlim,
   Gesuchsperiode,
+  Sozialdienst,
 } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
+import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
@@ -43,6 +47,7 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
+import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
@@ -53,18 +58,24 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     CommonModule,
     RouterLink,
     TranslatePipe,
+    MatSelectModule,
     GesuchAppPatternMainLayoutComponent,
     SharedUiLanguageSelectorComponent,
     SharedUiIconChipComponent,
     SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
+    SharedUiClearButtonComponent,
     SharedUiNotificationsComponent,
     SharedUiRdIsPendingPipe,
     GesuchAppUiDashboardAusbildungComponent,
     GesuchAppUiDashboardCompactAusbildungComponent,
     GesuchAppUiAenderungsEntryComponent,
   ],
-  providers: [FallStore],
+  providers: [
+    FallStore,
+    SozialdienstStore,
+    provideMaterialDefaultOptions({ subscriptSizing: 'dynamic' }),
+  ],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
   styleUrls: ['./gesuch-app-feature-cockpit.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,9 +85,10 @@ export class GesuchAppFeatureCockpitComponent {
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
-  dashboardStore = inject(DashboardStore);
   fallStore = inject(FallStore);
+  dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  sozialdienstStore = inject(SozialdienstStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
@@ -91,6 +103,7 @@ export class GesuchAppFeatureCockpitComponent {
 
   constructor() {
     this.fallStore.loadCurrentFall$();
+    this.sozialdienstStore.loadAllSozialdienste$();
 
     effect(
       () => {
@@ -211,6 +224,20 @@ export class GesuchAppFeatureCockpitComponent {
               this.dashboardStore.loadDashboard$();
             },
           });
+        }
+      });
+  }
+
+  delegiereSozialdienst(sozialdienst: Sozialdienst) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'gesuch-app.dashboard.gesuch.delegieren',
+      message: 'gesuch-app.dashboard.gesuch.delegieren.message',
+      translationObject: sozialdienst,
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          // TODO KSTIP-1435: Implement
         }
       });
   }

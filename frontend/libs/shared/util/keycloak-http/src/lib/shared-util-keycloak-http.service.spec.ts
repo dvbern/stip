@@ -2,9 +2,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
-import { KeycloakHttpService } from './sachbearbeitung-app-util-keycloak-http.service';
+import { KeycloakHttpService } from './shared-util-keycloak-http.service';
 
-describe('SachbearbeitungAppUtilKeycloakHttpService', () => {
+describe('KeycloakHttpService', () => {
   let service: KeycloakHttpService;
 
   beforeEach(() => {

@@ -1,11 +1,10 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
 export default {
-  displayName: 'sachbearbeitung-app-data-access-sozialdienst',
+  displayName: 'shared-util-fn-keycloak-helper',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory:
-    '../../../../coverage/libs/sachbearbeitung-app/data-access/sozialdienst',
+  coverageDirectory: '../../../../coverage/libs/shared/util-fn/keycloak-helper',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

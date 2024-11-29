@@ -13,11 +13,6 @@ import {
   throwIfEmpty,
 } from 'rxjs';
 
-import {
-  getCurrentUrl,
-  hasLocationHeader,
-  toKnownUserErrorType,
-} from '@dv/sachbearbeitung-app/util-fn/keycloak-helper';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   BenutzerVerwaltungRole,
@@ -31,6 +26,11 @@ import {
 } from '@dv/shared/model/benutzer';
 import { MailService } from '@dv/shared/model/gesuch';
 import { noGlobalErrorsIf } from '@dv/shared/util/http';
+import {
+  getCurrentUrl,
+  hasLocationHeader,
+  toKnownUserErrorType,
+} from '@dv/shared/util-fn/keycloak-helper';
 
 @Injectable({
   providedIn: 'root',
