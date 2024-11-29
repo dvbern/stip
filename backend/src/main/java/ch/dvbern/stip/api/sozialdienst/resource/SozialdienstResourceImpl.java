@@ -58,7 +58,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     }
 
     @AllowAll
-    @RolesAllowed({ OidcConstants.ROLE_ADMIN })
+    @RolesAllowed({ OidcConstants.ROLE_GESUCHSTELLER, OidcConstants.ROLE_ADMIN })
     @Override
     public Response getAllSozialdienste() {
         final var sozialdienste = sozialdienstService.getAllSozialdienst();
