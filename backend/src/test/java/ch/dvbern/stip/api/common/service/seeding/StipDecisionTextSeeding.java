@@ -38,7 +38,6 @@ import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeed
 import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getKeinWohnsitzImKantonBEText;
 import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getMehrereAusbildungswechselText;
 import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getNichtBerechtigterPersonenkreisText;
-import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getNichtEintretenText;
 import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getPiaAelter35JahreText;
 import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getSchuljahr9Sekstufe1Text;
 import static ch.dvbern.stip.api.common.service.seeding.BernStipDecisionTextSeedingUtil.getZweitausbildungText;
@@ -93,12 +92,6 @@ public class StipDecisionTextSeeding extends Seeder {
                 .setTextDe(getPiaAelter35JahreText(Sprache.DEUTSCH).render())
                 .setTextFr(
                     getPiaAelter35JahreText(Sprache.FRANZOESISCH).render()
-                ),
-
-            new StipDecisionText().setStipDecision(StipDecision.NICHT_EINTRETEN)
-                .setTextDe(getNichtEintretenText(Sprache.DEUTSCH).render())
-                .setTextFr(
-                    getNichtEintretenText(Sprache.FRANZOESISCH).render()
                 ),
             new StipDecisionText().setStipDecision(StipDecision.NICHTBERECHTIGTER_PERSONENKREIS)
                 .setTextDe(

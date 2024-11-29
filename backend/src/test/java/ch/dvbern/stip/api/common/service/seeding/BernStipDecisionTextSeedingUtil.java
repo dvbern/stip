@@ -94,13 +94,6 @@ public class BernStipDecisionTextSeedingUtil {
         };
     }
 
-    public static TemplateInstance getNichtEintretenText(final Sprache korrespondenzSprache) {
-        return switch (korrespondenzSprache) {
-            case FRANZOESISCH -> Templates.nichtEintretenFr();
-            case DEUTSCH -> Templates.nichtEintretenDe();
-        };
-    }
-
     public static TemplateInstance getSchuljahr9Sekstufe1Text(final Sprache korrespondenzSprache) {
         return switch (korrespondenzSprache) {
             case FRANZOESISCH -> Templates.schuljahr9Sekstufe1Fr();
@@ -181,10 +174,6 @@ public class BernStipDecisionTextSeedingUtil {
         public static native TemplateInstance nichtBerechtigterPersonenkreisDe();
 
         public static native TemplateInstance nichtBerechtigterPersonenkreisFr();
-
-        public static native TemplateInstance nichtEintretenDe();
-
-        public static native TemplateInstance nichtEintretenFr();
 
         public static native TemplateInstance schuljahr9Sekstufe1De();
 

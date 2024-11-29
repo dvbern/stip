@@ -63,7 +63,6 @@ public class BernStipDecider extends BaseStipDecider {
             case AUSBILDUNG_IM_LEBENSLAUF, AUSBILDUNGEN_LAENGER_12_JAHRE -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case PIA_AELTER_35_JAHRE -> GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG;
             // note: states here are still not reachable
-            case NICHT_EINTRETEN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case NICHTBERECHTIGTER_PERSONENKREIS -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case KEIN_WOHNSITZ_KANTON_BE -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case SCHULJAHR_9_SEKSTUFE_1 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
