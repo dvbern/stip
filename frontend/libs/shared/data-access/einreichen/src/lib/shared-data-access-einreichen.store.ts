@@ -25,6 +25,7 @@ import {
 import {
   SPECIAL_VALIDATION_ERRORS,
   SharedModelGesuchFormStep,
+  gesuchFormStepsFieldMap,
   gesuchPropFormStepsMap,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
@@ -106,7 +107,9 @@ export class EinreichenStore extends signalStore(
 
   einreichenViewSig = computed(() => {
     const validationReport = this.einreichenValidationResult.data();
-    const { gesuch, isEditingTranche, trancheTyp } = this.cachedGesuchViewSig();
+    const { trancheSetting } = this.gesuchViewSig();
+    const { gesuch, isEditingTranche, trancheTyp, gesuchId } =
+      this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
 
     const error = validationReport
@@ -124,6 +127,8 @@ export class EinreichenStore extends signalStore(
           SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error),
         ),
       invalidFormularSteps: transformValidationReportToFormSteps(
+        gesuchId,
+        trancheSetting?.routesSuffix,
         validationReport,
         gesuch?.gesuchTrancheToWorkWith.gesuchFormular,
       ),
@@ -270,28 +275,33 @@ const getValidationErrors = (error?: SharedModelError) => {
 };
 
 const transformValidationReportToFormSteps = (
+  gesuchId: string | null,
+  routeSuffix?: readonly string[],
   report?: ValidationReport,
   currentForm?: SharedModelGesuchFormular | null,
-): SharedModelGesuchFormStep[] => {
-  if (!report) {
+): (SharedModelGesuchFormStep & { routes: (string | null)[] })[] => {
+  if (!report || !gesuchId) {
     return [];
   }
 
   const messages: (ValidationMessage | ValidationError)[] =
     report.validationErrors.concat(report.validationWarnings);
 
-  // const formKeys: SharedModelGesuchFormularPropsSteuerdatenSteps[] = [
-  //   ...(Object.keys(
-  //     currentForm ?? {},
-  //   ) as SharedModelGesuchFormularPropsSteuerdatenSteps[]),
-  // ];
-
-  const steps: (SharedModelGesuchFormStep | undefined)[] = messages.map((m) => {
+  const steps = messages.map((m) => {
     if (m.propertyPath?.startsWith('steuerdaten')) {
-      const steuerDatenTyp = currentForm?.steuerdatenTabs?.[0];
-      if (steuerDatenTyp === 'FAMILIE') {
-        return gesuchPropFormStepsMap['steuerdaten'];
-      }
+      return currentForm?.steuerdatenTabs?.map((tab) => {
+        if (tab === 'FAMILIE') {
+          return gesuchPropFormStepsMap['steuerdaten'];
+        }
+        if (tab === 'VATER') {
+          return gesuchPropFormStepsMap['steuerdatenVater'];
+        }
+        if (tab === 'MUTTER') {
+          return gesuchPropFormStepsMap['steuerdatenMutter'];
+        }
+
+        return undefined;
+      });
     }
 
     if (m.messageTemplate?.includes('documents.required')) {
@@ -307,12 +317,35 @@ const transformValidationReportToFormSteps = (
     return undefined;
   });
 
-  return steps.filter(isDefined).reduce((acc, step) => {
-    if (isDefined(step) && !acc.includes(step)) {
-      acc.push(step);
-    }
-    return acc;
-  }, [] as SharedModelGesuchFormStep[]);
+  return steps
+    .filter(isDefined)
+    .flat()
+    .reduce((acc, step) => {
+      if (isDefined(step) && !acc.includes(step)) {
+        acc.push(step);
+      }
+      return acc;
+    }, [] as SharedModelGesuchFormStep[])
+    .sort((a, b) => {
+      const stepsArr = Object.keys(gesuchFormStepsFieldMap);
+
+      return (
+        stepsArr.indexOf(a.route as string) -
+        stepsArr.indexOf(b.route as string)
+      );
+    })
+    .map((step) => {
+      return {
+        ...step,
+        routes: [
+          '/',
+          'gesuch',
+          ...step.route.split('/'),
+          gesuchId,
+          ...(routeSuffix ?? []),
+        ],
+      };
+    });
 };
 
 const transformValidationMessagesToFormKeys = (

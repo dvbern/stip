@@ -31,9 +31,7 @@
                   <ul class="mt-4">
                     @for (step of einreichenView.invalidFormularSteps; track step.route) {
                       <li>
-                        <a [routerLink]="['/gesuch', step.route, gesuch?.id]">{{
-                          step.titleTranslationKey | translate
-                        }}</a>
+                        <a [routerLink]="step.routes">{{ step.titleTranslationKey | translate }}</a>
                       </li>
                     }
                   </ul>
