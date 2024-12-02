@@ -88,6 +88,15 @@ const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
 const INPUT_DELAY = 600;
 
+const statusByTyp = {
+  TRANCHE: Object.values(Gesuchstatus).filter(
+    (key: Gesuchstatus) => key !== 'IN_BEARBEITUNG_GS',
+  ),
+  AENDERUNG: Object.values(GesuchTrancheStatus).filter(
+    (key: GesuchTrancheStatus) => key !== 'IN_BEARBEITUNG_GS',
+  ),
+} satisfies Record<GesuchTrancheTyp, unknown>;
+
 type DashboardFormStatus = Gesuchstatus | GesuchTrancheStatus;
 
 type AppendStartEnd<T extends string> = `${T}From` | `${T}To`;
@@ -276,23 +285,17 @@ export class SachbearbeitungAppFeatureCockpitComponent
       : format(start, 'dd.MM.yyyy');
   });
 
-  availableStatusSig = computed(() => {
-    return Object.entries(
-      this.gesuchStore?.cockpitViewSig()?.gesuche?.entries?.reduce(
-        (acc, entry) => {
-          const status =
-            this.filterForm.value.typ == 'TRANCHE'
-              ? entry.gesuchStatus
-              : entry.trancheStatus;
+  typChangedSig = toSignal(this.filterForm.controls.typ.valueChanges);
+  statusValuesSig = computed(() => {
+    const typ = this.typChangedSig();
+    if (!typ) {
+      return null;
+    }
 
-          return {
-            ...acc,
-            [status]: `shared.gesuch.status.${entry.typ == 'TRANCHE' ? 'contract' : 'tranche'}.${status}`,
-          };
-        },
-        {} as Record<DashboardFormStatus, string>,
-      ) ?? {},
-    ).map(([status, translationKey]) => ({ status, translationKey }));
+    return {
+      typ: typ === 'AENDERUNG' ? 'tranche' : 'contract',
+      status: statusByTyp[typ],
+    };
   });
 
   filterFormChangedSig = toSignal(
@@ -599,7 +602,7 @@ const parseTyp = (typ: string | undefined): GesuchTrancheTyp | undefined => {
 };
 
 const parseStatus = (status: string | undefined): Gesuchstatus | undefined => {
-  if (!status || Object.keys(Gesuchstatus).includes(status)) {
+  if (!status || !Object.keys(Gesuchstatus).includes(status)) {
     return undefined;
   }
   return status as Gesuchstatus;
