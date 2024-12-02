@@ -119,7 +119,7 @@
               </ng-container>
 
               <ng-container matColumnDef="PIA_NACHNAME">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
                   <label class="pe-none" for="piaNachname">{{
                     'sachbearbeitung-app.cockpit.table.nachname' | translate
                   }}</label>
@@ -152,7 +152,7 @@
               </ng-container>
 
               <ng-container matColumnDef="PIA_VORNAME">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
                   <label class="pe-none" for="piaVorname">{{
                     'sachbearbeitung-app.cockpit.table.vorname' | translate
                   }}</label>
@@ -237,20 +237,23 @@
               </ng-container>
 
               <ng-container matColumnDef="STATUS">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-56 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
                   {{ 'sachbearbeitung-app.cockpit.table.status' | translate }}
                   <mat-form-field>
                     <mat-select
                       [aria-label]="'sachbearbeitung-app.cockpit.table.status' | translate"
                       formControlName="status"
                       (click)="$event.stopPropagation()"
-                      class="fw-normal"
+                      class="status-select fw-normal"
                       [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | translate"
                       panelClass="table-select"
                     >
-                      @for (entry of availableStatusSig(); track status) {
-                        <mat-option [value]="entry.status">
-                          {{ entry.translationKey | translate }}
+                      <mat-option [value]="null">
+                        {{ 'sachbearbeitung-app.cockpit.no-status-filter' | translate }}
+                      </mat-option>
+                      @for (status of gesuchStatusValues; track status) {
+                        <mat-option [value]="status">
+                          {{ 'shared.gesuch.status.contract.' + status | translate }}
                         </mat-option>
                       }
                     </mat-select>
@@ -266,7 +269,7 @@
               </ng-container>
 
               <ng-container matColumnDef="BEARBEITER">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
                   <label class="pe-none" for="bearbeiter">{{
                     'sachbearbeitung-app.cockpit.table.bearbeiter' | translate
                   }}</label>

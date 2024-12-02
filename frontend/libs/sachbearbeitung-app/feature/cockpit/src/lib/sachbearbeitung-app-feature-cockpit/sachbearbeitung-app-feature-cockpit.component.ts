@@ -276,24 +276,9 @@ export class SachbearbeitungAppFeatureCockpitComponent
       : format(start, 'dd.MM.yyyy');
   });
 
-  availableStatusSig = computed(() => {
-    return Object.entries(
-      this.gesuchStore?.cockpitViewSig()?.gesuche?.entries?.reduce(
-        (acc, entry) => {
-          const status =
-            this.filterForm.value.typ == 'TRANCHE'
-              ? entry.gesuchStatus
-              : entry.trancheStatus;
-
-          return {
-            ...acc,
-            [status]: `shared.gesuch.status.${entry.typ == 'TRANCHE' ? 'contract' : 'tranche'}.${status}`,
-          };
-        },
-        {} as Record<DashboardFormStatus, string>,
-      ) ?? {},
-    ).map(([status, translationKey]) => ({ status, translationKey }));
-  });
+  gesuchStatusValues = Object.values(Gesuchstatus).filter(
+    (key: Gesuchstatus) => key !== 'IN_BEARBEITUNG_GS',
+  );
 
   filterFormChangedSig = toSignal(
     this.filterForm.valueChanges.pipe(debounceTime(INPUT_DELAY)),
@@ -599,7 +584,7 @@ const parseTyp = (typ: string | undefined): GesuchTrancheTyp | undefined => {
 };
 
 const parseStatus = (status: string | undefined): Gesuchstatus | undefined => {
-  if (!status || Object.keys(Gesuchstatus).includes(status)) {
+  if (!status || !Object.keys(Gesuchstatus).includes(status)) {
     return undefined;
   }
   return status as Gesuchstatus;
