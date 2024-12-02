@@ -9,7 +9,7 @@
   "gesuch-app.dashboard.ausbildung.status.AKTIV": "Actif",
   "gesuch-app.dashboard.ausbildung.status.ABGEBROCHEN": "Interrompu",
   "gesuch-app.dashboard.ausbildung.status.ABGESCHLOSSEN": "Terminé",
-  "gesuch-app.dashboard.ausbildung.title": "Formation \"{{ bezeichnungDe }}\"",
+  "gesuch-app.dashboard.ausbildung.title": "Formation \"{{ bezeichnungFr }}\"",
   "gesuch-app.dashboard.ausbildung.description": "Début de la formation: {{ start }}, fin prévue de la formation {{ end }}",
   "gesuch-app.dashboard.periode.einreichefrist.reduziert": "Le délai de dépôt est expiré",
   "gesuch-app.dashboard.periode.einreichefrist.remaining": "Il vous reste <b>{{ days }}</b> jours pour soumettre la demande",

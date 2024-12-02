@@ -1,13 +1,19 @@
 @let ausbildung = ausbildungSig();
 <div class="tw-grid tw-grid-cols-[1fr,auto]">
   <div>
-    <h2 class="tw-flex tw-text-2xl tw-gap-4 tw-mb-3 tw-items-center">
+    <h2 class="tw-mb-3 tw-flex tw-items-center tw-gap-4 tw-text-2xl">
       <dv-shared-ui-icon-chip style="background-color: var(--dv-success-bg-subtle); color: #81be06e0">
         <i class="material-symbols-rounded tw-text-2xl">school</i>
       </dv-shared-ui-icon-chip>
-      {{ 'gesuch-app.dashboard.ausbildung.title' | translate: ausbildung.ausbildungsgang }}
+      {{
+        'gesuch-app.dashboard.ausbildung.title'
+          | translate
+            : (ausbildung.ausbildungNichtGefunden
+                ? { bezeichnungDe: ausbildung.alternativeAusbildungsgang }
+                : ausbildung.ausbildungsgang)
+      }}
     </h2>
-    <p class="tw-ml-4 tw-mb-10">
+    <p class="tw-mb-10 tw-ml-4">
       {{
         'gesuch-app.dashboard.ausbildung.description'
           | translate
@@ -25,7 +31,7 @@
   }
 </div>
 
-<div class="tw-flex tw-gap-6 tw-flex-col">
+<div class="tw-flex tw-flex-col tw-gap-6">
   @for (gesuch of ausbildung.gesuchs; track gesuch.id) {
     <dv-gesuch-app-ui-dashboard-gesuch
       [gesuchSig]="gesuch"
