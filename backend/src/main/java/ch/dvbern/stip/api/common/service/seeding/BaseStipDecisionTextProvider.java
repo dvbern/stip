@@ -15,25 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.type;
+package ch.dvbern.stip.api.common.service.seeding;
 
-public enum StipDecision {
-    GESUCH_VALID,
-    EINGABEFRIST_ABGELAUFEN,
-    AUSBILDUNG_NICHT_ANERKANNT,
-    AUSBILDUNGEN_LAENGER_12_JAHRE,
-    AUSBILDUNG_IM_LEBENSLAUF,
-    PIA_AELTER_35_JAHRE,
-    KEIN_WOHNSITZ_KANTON_BE,
-    SCHULJAHR_9_SEKSTUFE_1,
-    AUSBILDUNG_PBI1,
-    ART_32_BBV,
-    ZWEITAUSBILDUNG,
-    AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG,
-    EBA_LEHRE,
-    HOCHSCHULSTUDIUM_2,
-    MEHRERE_AUSBILDUNGSWECHSEL,
-    NICHT_BERECHTIGTE_PERSON,
-    ANSPRUCH_MANUELL_PRUEFEN,
-    ANSPRUCH_UNKLAR
+import java.util.Set;
+
+import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
+
+public abstract class BaseStipDecisionTextProvider {
+    public abstract Set<StipDecisionText> getDecisionTexts();
 }

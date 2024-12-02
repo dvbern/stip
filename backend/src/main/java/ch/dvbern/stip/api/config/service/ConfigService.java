@@ -63,6 +63,10 @@ public class ConfigService {
     List<String> seedTestcasesOnProfile;
 
     @Getter
+    @ConfigProperty(name = "kstip.seeding.all-profiles")
+    List<String> seedAllProfiles;
+
+    @Getter
     @ConfigProperty(name = "kstip.seeding.testcases.to-seed")
     List<String> testcasesToSeed;
 

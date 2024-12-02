@@ -32,6 +32,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
@@ -51,6 +52,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
@@ -389,6 +391,7 @@ public class TestUtil {
         final var gesuchFormular = baseGesuch.getNewestGesuchTranche().get().getGesuchFormular();
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)
+            .setAdresse(new Adresse())
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1));
 
@@ -452,12 +455,13 @@ public class TestUtil {
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
                     .setWohnkosten(0)
+                    .setAdresse(new Adresse().setLand(Land.CH).setPlz("3000"))
                     .setGeburtsdatum(LocalDate.now().minusYears(30)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
                     .setWohnkosten(0)
+                    .setAdresse(new Adresse().setLand(Land.CH).setPlz("3000"))
                     .setGeburtsdatum(LocalDate.now().minusYears(30))
-
             )
         );
 
