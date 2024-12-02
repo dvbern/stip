@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.service.seeding.mandant.be;
+package ch.dvbern.stip.api.common.service.seeding.be;
 
 import java.util.Set;
 
@@ -27,21 +27,21 @@ import ch.dvbern.stip.stipdecision.decider.StipDeciderTenant;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import jakarta.inject.Singleton;
 
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getArt32BBVText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getAusbildungImLebenslaufText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getAusbildungLaenger12JahreText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getAusbildungNichtAnerkanntText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getAusbildungPBIText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getEingabeFristAbgelaufenText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getKeinWohnsitzImKantonBEText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getMehrereAusbildungswechselText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getNichtBerechtigterPersonenkreisText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getPiaAelter35JahreText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getSchuljahr9Sekstufe1Text;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getZweitausbildungText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getZweiteAusbildungGleicherStufeBVSVorbildungText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getZweiteEBALehreText;
-import static ch.dvbern.stip.api.common.service.seeding.mandant.be.BernStipDecisionTextSeedingUtil.getZweitesHochschulstudiumText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getArt32BBVText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getAusbildungImLebenslaufText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getAusbildungLaenger12JahreText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getAusbildungNichtAnerkanntText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getAusbildungPBIText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getEingabeFristAbgelaufenText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getKeinWohnsitzImKantonBEText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getMehrereAusbildungswechselText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getNichtBerechtigterPersonenkreisText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getPiaAelter35JahreText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getSchuljahr9Sekstufe1Text;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getZweitausbildungText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getZweiteAusbildungGleicherStufeBVSVorbildungText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getZweiteEBALehreText;
+import static ch.dvbern.stip.api.common.service.seeding.be.BernStipDecisionTextSeedingUtil.getZweitesHochschulstudiumText;
 
 @Singleton
 @StipDeciderTenant(MandantIdentifier.BERN)

@@ -22,7 +22,7 @@ import java.util.List;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.stipdecision.decider.StipDeciderTenant;
-import ch.dvbern.stip.stipdecision.entity.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -40,23 +40,19 @@ public class StipDecisionTextSeeding extends Seeder {
     @Override
     protected void doSeed() {
         final var decisionTextProvider = getDecisionTextProviderForTenantId(
-            tenantService.getCurrentTenant().getIdentifier()
+            getTenant()
         );
+        decisionTextRepository.deleteAll();
         LOG.info("Starting stip decision text seeding seeding");
         final var decisionTexts = decisionTextProvider.getDecisionTexts();
-        decisionTexts.forEach(decisionText -> {
-            decisionTextRepository.persistAndFlush(decisionText);
-        });
+        decisionTexts.forEach(decisionTextRepository::persistAndFlush);
         LOG.info("Finished stip decision text seeding seeding");
 
     }
 
     @Override
     protected List<String> getProfiles() {
-        var profiles = configService.getSeedTestcasesOnProfile();
-        // note: currently neeeds this profile to run unittests...
-        profiles.add("test");
-        return profiles;
+        return configService.getSeedAllProfiles();
     }
 
     private BaseStipDecisionTextProvider getDecisionTextProviderForTenantId(final String tenantId) {

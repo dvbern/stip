@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.service.seeding.mandant.be;
+package ch.dvbern.stip.api.common.service.seeding.be;
 
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import io.quarkus.qute.CheckedTemplate;

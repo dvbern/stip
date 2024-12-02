@@ -30,7 +30,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.stammdaten.service.LandService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
-import ch.dvbern.stip.stipdecision.entity.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import jakarta.inject.Singleton;
 
 @Singleton

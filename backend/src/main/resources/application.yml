@@ -18,6 +18,10 @@ kstip:
   seeding:
     seed-on:
       - 'dev'
+    all-profiles:
+      - 'dev'
+      - 'prod'
+      - 'test'
     testcases:
       seed-on:
         - 'dev'

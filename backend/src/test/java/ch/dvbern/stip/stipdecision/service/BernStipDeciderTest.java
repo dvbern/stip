@@ -30,7 +30,7 @@ import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.stammdaten.service.LandService;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.stipdecision.decider.BernStipDecider;
-import ch.dvbern.stip.stipdecision.entity.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;

@@ -15,10 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.stipdecision.entity;
+package ch.dvbern.stip.stipdecision.repo;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.common.type.StipDecision;
+import ch.dvbern.stip.stipdecision.entity.QStipDecisionText;
+import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;

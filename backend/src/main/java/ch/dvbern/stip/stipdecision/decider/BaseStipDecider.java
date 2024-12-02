@@ -21,7 +21,7 @@ import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
-import ch.dvbern.stip.stipdecision.entity.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -31,15 +31,14 @@ public abstract class BaseStipDecider {
     public abstract StipDecision decide(final GesuchTranche gesuchTranche);
 
     public String getTextForDecision(final StipDecision decision, final Sprache korrespondenzSprache) {
-        if (decision.equals(StipDecision.GESUCH_VALID)) {
+        if (decision == StipDecision.GESUCH_VALID) {
             return "";
-        } else {
-            final var decisionText = stipDecisionTextRepository.getTextByStipDecision(decision);
-            return switch (korrespondenzSprache) {
-                case FRANZOESISCH -> decisionText.getTextFr();
-                case DEUTSCH -> decisionText.getTextDe();
-            };
         }
+        final var decisionText = stipDecisionTextRepository.getTextByStipDecision(decision);
+        return switch (korrespondenzSprache) {
+            case FRANZOESISCH -> decisionText.getTextFr();
+            case DEUTSCH -> decisionText.getTextDe();
+        };
     }
 
     public abstract GesuchStatusChangeEvent getGesuchStatusChangeEvent(final StipDecision decision);
