@@ -13,7 +13,7 @@ import {
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { toAbschlussPhase } from '@dv/shared/model/einreichen';
-import { SharedModelError } from '@dv/shared/model/error';
+import { SharedModelError, ValidationError } from '@dv/shared/model/error';
 import {
   GesuchService,
   GesuchTrancheService,
@@ -24,6 +24,9 @@ import {
 } from '@dv/shared/model/gesuch';
 import {
   SPECIAL_VALIDATION_ERRORS,
+  SharedModelGesuchFormStep,
+  gesuchFormStepsFieldMap,
+  gesuchPropFormStepsMap,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -104,7 +107,9 @@ export class EinreichenStore extends signalStore(
 
   einreichenViewSig = computed(() => {
     const validationReport = this.einreichenValidationResult.data();
-    const { gesuch, isEditingTranche, trancheTyp } = this.cachedGesuchViewSig();
+    const { trancheSetting } = this.gesuchViewSig();
+    const { gesuch, isEditingTranche, trancheTyp, gesuchId } =
+      this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
 
     const error = validationReport
@@ -121,6 +126,12 @@ export class EinreichenStore extends signalStore(
         .map((error) =>
           SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error),
         ),
+      invalidFormularSteps: transformValidationReportToFormSteps(
+        gesuchId,
+        trancheSetting?.routesSuffix,
+        validationReport,
+        gesuch?.gesuchTrancheToWorkWith.gesuchFormular,
+      ),
       gesuchStatus: gesuch?.gesuchStatus,
       abschlussPhase: toAbschlussPhase(gesuch, {
         appType: compileTimeConfig?.appType,
@@ -261,6 +272,76 @@ const getValidationErrors = (error?: SharedModelError) => {
     return error.validationErrors;
   }
   return undefined;
+};
+
+const transformValidationReportToFormSteps = (
+  gesuchId: string | null,
+  routeSuffix?: readonly string[],
+  report?: ValidationReport,
+  currentForm?: SharedModelGesuchFormular | null,
+): (SharedModelGesuchFormStep & { routes: (string | null)[] })[] => {
+  if (!report || !gesuchId) {
+    return [];
+  }
+
+  const messages: (ValidationMessage | ValidationError)[] =
+    report.validationErrors.concat(report.validationWarnings);
+
+  const steps = messages.map((m) => {
+    if (m.propertyPath?.startsWith('steuerdaten')) {
+      return currentForm?.steuerdatenTabs?.map((tab) => {
+        switch (tab) {
+          case 'FAMILIE':
+            return gesuchPropFormStepsMap['steuerdaten'];
+          case 'VATER':
+            return gesuchPropFormStepsMap['steuerdatenVater'];
+          case 'MUTTER':
+            return gesuchPropFormStepsMap['steuerdatenMutter'];
+          default:
+            return undefined;
+        }
+      });
+    }
+
+    if (m.messageTemplate?.includes('documents.required')) {
+      return gesuchPropFormStepsMap.dokuments;
+    }
+
+    if (m.propertyPath) {
+      return gesuchPropFormStepsMap[
+        m.propertyPath as SharedModelGesuchFormularPropsSteuerdatenSteps
+      ];
+    }
+
+    return undefined;
+  });
+
+  return steps
+    .filter(isDefined)
+    .flat()
+    .reduce((acc, step) => {
+      if (isDefined(step) && !acc.includes(step)) {
+        acc.push(step);
+      }
+      return acc;
+    }, [] as SharedModelGesuchFormStep[])
+    .sort((a, b) => {
+      const stepsArr = Object.keys(gesuchFormStepsFieldMap);
+
+      return stepsArr.indexOf(a.route) - stepsArr.indexOf(b.route);
+    })
+    .map((step) => {
+      return {
+        ...step,
+        routes: [
+          '/',
+          'gesuch',
+          ...step.route.split('/'),
+          gesuchId,
+          ...(routeSuffix ?? []),
+        ],
+      };
+    });
 };
 
 const transformValidationMessagesToFormKeys = (

@@ -165,14 +165,34 @@ export const gesuchFormSteps = {
   DOKUMENTE,
   ABSCHLUSS,
 };
-export type GesuchFormSteps = keyof typeof gesuchFormSteps;
+export type GesuchFormStepKeys = keyof typeof gesuchFormSteps;
+
+export const gesuchPropFormStepsMap: Record<
+  SharedModelGesuchFormularPropsSteuerdatenSteps,
+  SharedModelGesuchFormStep
+> = {
+  ausbildung: AUSBILDUNG,
+  familiensituation: FAMILIENSITUATION,
+  partner: PARTNER,
+  personInAusbildung: PERSON,
+  auszahlung: AUSZAHLUNG,
+  elterns: ELTERN,
+  geschwisters: GESCHWISTER,
+  lebenslaufItems: LEBENSLAUF,
+  kinds: KINDER,
+  einnahmenKosten: EINNAHMEN_KOSTEN,
+  dokuments: DOKUMENTE,
+  steuerdaten: ELTERN_STEUER_FAMILIE,
+  steuerdatenMutter: ELTERN_STEUER_MUTTER,
+  steuerdatenVater: ELTERN_STEUER_VATER,
+};
 
 export const gesuchFormStepsFieldMap: Record<
   string,
   SharedModelGesuchFormularPropsSteuerdatenSteps
 > = {
-  [PERSON.route]: 'personInAusbildung',
   [AUSBILDUNG.route]: 'ausbildung',
+  [PERSON.route]: 'personInAusbildung',
   [LEBENSLAUF.route]: 'lebenslaufItems',
   [FAMILIENSITUATION.route]: 'familiensituation',
   [ELTERN.route]: 'elterns',
@@ -245,27 +265,8 @@ export const isStepValid = (
   if (invalidProps?.errors === undefined) {
     return undefined;
   }
-  const stepFieldMap: Record<
-    string,
-    SharedModelGesuchFormularPropsSteuerdatenSteps
-  > = {
-    [AUSBILDUNG.route]: 'ausbildung',
-    [PERSON.route]: 'personInAusbildung',
-    [LEBENSLAUF.route]: 'lebenslaufItems',
-    [FAMILIENSITUATION.route]: 'familiensituation',
-    [ELTERN.route]: 'elterns',
-    [ELTERN_STEUER_MUTTER.route]: 'steuerdatenMutter',
-    [ELTERN_STEUER_VATER.route]: 'steuerdatenVater',
-    [ELTERN_STEUER_FAMILIE.route]: 'steuerdaten',
-    [GESCHWISTER.route]: 'geschwisters',
-    [PARTNER.route]: 'partner',
-    [KINDER.route]: 'kinds',
-    [AUSZAHLUNG.route]: 'auszahlung',
-    [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
-    [DOKUMENTE.route]: 'dokuments',
-  };
 
-  const field = stepFieldMap[step.route];
+  const field = gesuchFormStepsFieldMap[step.route];
 
   if (!field) {
     return undefined;
@@ -307,7 +308,7 @@ export const getFormStepByDocumentType = (
       return gesuchFormSteps.DOKUMENTE;
     }
     default: {
-      const step = (Object.keys(gesuchFormSteps) as GesuchFormSteps[]).find(
+      const step = (Object.keys(gesuchFormSteps) as GesuchFormStepKeys[]).find(
         (key) => {
           if (key === 'EINNAHMEN_KOSTEN') {
             return dokumentTyp.startsWith('EK');

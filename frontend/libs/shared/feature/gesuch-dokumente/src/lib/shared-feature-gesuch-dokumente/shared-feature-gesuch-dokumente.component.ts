@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -37,7 +36,6 @@ import {
   createDocumentOptions,
 } from '@dv/shared/pattern/document-upload';
 import { detailExpand } from '@dv/shared/ui/animations';
-import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import {
   SharedUiIfGesuchstellerDirective,
@@ -66,13 +64,11 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
     MatTableModule,
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
-    SharedUiBadgeComponent,
     SharedUiIconBadgeComponent,
     SharedUiIfGesuchstellerDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiPrefixAppTypePipe,
     TypeSafeMatCellDefDirective,
-    MatExpansionPanel,
     SharedUiRdIsPendingPipe,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
