@@ -290,17 +290,16 @@ const transformValidationReportToFormSteps = (
   const steps = messages.map((m) => {
     if (m.propertyPath?.startsWith('steuerdaten')) {
       return currentForm?.steuerdatenTabs?.map((tab) => {
-        if (tab === 'FAMILIE') {
-          return gesuchPropFormStepsMap['steuerdaten'];
+        switch (tab) {
+          case 'FAMILIE':
+            return gesuchPropFormStepsMap['steuerdaten'];
+          case 'VATER':
+            return gesuchPropFormStepsMap['steuerdatenVater'];
+          case 'MUTTER':
+            return gesuchPropFormStepsMap['steuerdatenMutter'];
+          default:
+            return undefined;
         }
-        if (tab === 'VATER') {
-          return gesuchPropFormStepsMap['steuerdatenVater'];
-        }
-        if (tab === 'MUTTER') {
-          return gesuchPropFormStepsMap['steuerdatenMutter'];
-        }
-
-        return undefined;
       });
     }
 
@@ -329,10 +328,7 @@ const transformValidationReportToFormSteps = (
     .sort((a, b) => {
       const stepsArr = Object.keys(gesuchFormStepsFieldMap);
 
-      return (
-        stepsArr.indexOf(a.route as string) -
-        stepsArr.indexOf(b.route as string)
-      );
+      return stepsArr.indexOf(a.route) - stepsArr.indexOf(b.route);
     })
     .map((step) => {
       return {
