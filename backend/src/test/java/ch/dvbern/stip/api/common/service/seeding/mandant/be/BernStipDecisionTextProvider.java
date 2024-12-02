@@ -83,7 +83,7 @@ public class BernStipDecisionTextProvider extends BaseStipDecisionTextProvider {
                 .setTextFr(
                     getPiaAelter35JahreText(Sprache.FRANZOESISCH).render()
                 ),
-            new StipDecisionText().setStipDecision(StipDecision.NICHTBERECHTIGTER_PERSONENKREIS)
+            new StipDecisionText().setStipDecision(StipDecision.NICHT_BERECHTIGTE_PERSON)
                 .setTextDe(
                     getNichtBerechtigterPersonenkreisText(Sprache.DEUTSCH).render()
                 )

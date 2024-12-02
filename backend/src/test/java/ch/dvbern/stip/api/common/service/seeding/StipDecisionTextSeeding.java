@@ -38,11 +38,6 @@ public class StipDecisionTextSeeding extends Seeder {
     private final Instance<BaseStipDecisionTextProvider> decisionTextProviders;
 
     @Override
-    public int getPriority() {
-        return 0;
-    }
-
-    @Override
     protected void doSeed() {
         final var decisionTextProvider = getDecisionTextProviderForTenantId(
             tenantService.getCurrentTenant().getIdentifier()

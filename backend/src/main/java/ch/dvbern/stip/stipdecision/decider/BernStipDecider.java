@@ -76,9 +76,11 @@ public class BernStipDecider extends BaseStipDecider {
     public String getTextForDecision(final StipDecision decision, final Sprache korrespondenzSprache) {
         if (decision.equals(StipDecision.GESUCH_VALID)) {
             return "";
-        } else if (decision.equals(StipDecision.ANSPRUCH_MANUELL_PRUEFEN)) {
+        }
+        if (decision.equals(StipDecision.ANSPRUCH_MANUELL_PRUEFEN)) {
             return "ANSPRUCH_MANUELL_PRUEFEN";
-        } else if (decision.equals(StipDecision.ANSPRUCH_UNKLAR)) {
+        }
+        if (decision.equals(StipDecision.ANSPRUCH_UNKLAR)) {
             throw new IllegalStateException("Unkown StipDecision: " + decision);
         }
         return super.getTextForDecision(decision, korrespondenzSprache);
@@ -88,13 +90,13 @@ public class BernStipDecider extends BaseStipDecider {
     public GesuchStatusChangeEvent getGesuchStatusChangeEvent(StipDecision decision) {
         return switch (decision) {
             case GESUCH_VALID -> GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
-            case EINGABEFRIST_ABGELAUFEN, NICHT_BERECHTIGTE_PERSON -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case EINGABEFRIST_ABGELAUFEN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case AUSBILDUNG_NICHT_ANERKANNT -> GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG;
             case AUSBILDUNG_IM_LEBENSLAUF, AUSBILDUNGEN_LAENGER_12_JAHRE, ANSPRUCH_MANUELL_PRUEFEN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case PIA_AELTER_35_JAHRE -> GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG;
-            // note: states here are still not reachable
-            case NICHTBERECHTIGTER_PERSONENKREIS -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case NICHT_BERECHTIGTE_PERSON -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case KEIN_WOHNSITZ_KANTON_BE -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            // note: states here are still not reachable
             case SCHULJAHR_9_SEKSTUFE_1 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case AUSBILDUNG_PBI1 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case ART_32_BBV -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
@@ -215,7 +217,7 @@ public class BernStipDecider extends BaseStipDecider {
                     if (piaBernWohnhaft(gesuchTranche, plzService)) {
                         return StipDecision.GESUCH_VALID;
                     }
-                    return StipDecision.NICHT_BERECHTIGTE_PERSON;
+                    return StipDecision.KEIN_WOHNSITZ_KANTON_BE;
                 }
                 return StipDecision.ANSPRUCH_UNKLAR;
             }
