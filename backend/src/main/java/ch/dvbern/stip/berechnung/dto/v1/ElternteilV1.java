@@ -109,6 +109,13 @@ public class ElternteilV1 {
                 steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER
                     ? ElternTyp.MUTTER
                     : ElternTyp.VATER; // Never is Family
+            final var elternteilToUse = eltern.stream()
+                .filter(
+                    elternteil -> elternteil.getElternTyp() == steuernElternTyp
+                )
+                .toList()
+                .get(0);
+            builder.ergaenzungsleistungen(Objects.requireNonNullElse(elternteilToUse.getErgaenzungsleistungen(), 0));
 
             final var kindDesElternteilsVollzeit = kinderDerElternInHaushalten.stream()
                 .filter(
