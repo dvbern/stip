@@ -52,14 +52,8 @@
     }
   }
 
-  .mat-mdc-row {
-    min-height: 48px;
-
-    &.edit-row .mat-mdc-cell:has(.mat-mdc-form-field) {
-      padding: 0 8px;
-    }
-
-    &.expanded-row {
+  &.highlight-expanded {
+    .expanded-row {
       background-color: var(--dv-primary);
       color: white;
       .btn-link {
@@ -69,6 +63,14 @@
       + .detail-row {
         border-bottom: solid 2px var(--dv-primary);
       }
+    }
+  }
+
+  .mat-mdc-row {
+    min-height: 48px;
+
+    &.edit-row .mat-mdc-cell:has(.mat-mdc-form-field) {
+      padding: 0 8px;
     }
 
     &:hover:not(.expanded-row, .detail-row, .edit-row) {
