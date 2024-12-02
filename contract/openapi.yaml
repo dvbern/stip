@@ -307,8 +307,12 @@ paths:
       tags:
         - GesuchNotiz
       responses:
-        '202':
-          description: Notiz updated
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchNotiz'
+          description: Notiz aktualisiert
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -338,7 +342,11 @@ paths:
       tags:
         - GesuchNotiz
       responses:
-        '202':
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchNotiz'
           description: Juristische Abklaerung Notiz Antwort posted
         '400':
           $ref: '#/components/responses/BadRequest'

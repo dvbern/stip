@@ -21,5 +21,5 @@ public interface ConfigurationResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getDeploymentConfig();
+    DeploymentConfigDto getDeploymentConfig();
 }

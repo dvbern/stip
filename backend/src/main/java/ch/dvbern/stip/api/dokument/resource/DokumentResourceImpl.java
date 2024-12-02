@@ -32,6 +32,8 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
+import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkus.security.UnauthorizedException;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
@@ -68,23 +70,6 @@ public class DokumentResourceImpl implements DokumentResource {
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
 
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    @AllowAll
-    public Response getGesuchDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        final var gesuchDokument = gesuchDokumentService.findGesuchDokumentForTyp(gesuchTrancheId, dokumentTyp);
-        return Response.ok(gesuchDokument).build();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    @AllowAll
-    public Response getGesuchDokumentKommentare(DokumentTyp dokumentTyp, UUID gesuchId) {
-        return Response.ok()
-            .entity(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchId, dokumentTyp))
-            .build();
-    }
-
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     @AllowAll
@@ -118,6 +103,31 @@ public class DokumentResourceImpl implements DokumentResource {
             .invoke(throwable -> LOG.error(throwable.getMessage()))
             .onFailure()
             .recoverWithItem(Response.serverError().build());
+    }
+
+    @RolesAllowed(GESUCH_DELETE)
+    @Override
+    @AllowAll
+    @Blocking
+    public void deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
+        gesuchDokumentService.removeDokument(dokumentId);
+    }
+
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @Override
+    @AllowAll
+    public void gesuchDokumentAblehnen(
+        UUID gesuchDokumentId,
+        GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto
+    ) {
+        gesuchDokumentService.gesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
+    }
+
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @Override
+    @AllowAll
+    public void gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
+        gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 
     @Override
@@ -159,12 +169,12 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    public Response getDokumentDownloadToken(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
+    public String getDokumentDownloadToken(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
         if (gesuchDokumentService.findDokument(dokumentId).isEmpty()) {
             throw new NotFoundException();
         }
 
-        final var token = Jwt
+        return Jwt
             .claims()
             .upn(benutzerService.getCurrentBenutzername())
             .claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM, dokumentId.toString())
@@ -173,35 +183,19 @@ public class DokumentResourceImpl implements DokumentResource {
             .issuer(configService.getIssuer())
             .jws()
             .signWithSecret(configService.getSecret());
-
-        return Response.ok(token).build();
     }
 
-    @RolesAllowed(GESUCH_DELETE)
+    @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    @Blocking
-    public Response deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
-        gesuchDokumentService.removeDokument(dokumentId);
-        return Response.ok().build();
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(DokumentTyp dokumentTyp, UUID gesuchId) {
+        return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchId, dokumentTyp);
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    public Response gesuchDokumentAblehnen(
-        UUID gesuchDokumentId,
-        GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto
-    ) {
-        gesuchDokumentService.gesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
-        return Response.ok().build();
-    }
-
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
-    @Override
-    @AllowAll
-    public Response gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
-        gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
-        return Response.ok().build();
+    public NullableGesuchDokumentDto getGesuchDokumenteForTyp(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+        return gesuchDokumentService.findGesuchDokumentForTyp(gesuchTrancheId, dokumentTyp);
     }
 }

@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.notiz.resource;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
@@ -25,11 +26,11 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.generated.api.GesuchNotizResource;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -41,54 +42,48 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_JURIST })
     @Override
-    public Response answerJuristischeAbklaerungNotiz(
+    public GesuchNotizDto answerJuristischeAbklaerungNotiz(
         UUID notizId,
         JuristischeAbklaerungNotizAntwortDto juristischeAbklaerungNotizAntwortDto
     ) {
         authorizer.canSetAnswer(notizId);
-        return Response.ok(
-            service.answerJuristischeNotiz(juristischeAbklaerungNotizAntwortDto, notizId)
-        ).build();
+        return service.answerJuristischeNotiz(juristischeAbklaerungNotizAntwortDto, notizId);
     }
 
     @AllowAll
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
-    public Response createNotiz(GesuchNotizCreateDto gesuchNotizCreateDto) {
-        final var notiz = service.create(gesuchNotizCreateDto);
-        return Response.ok(notiz).build();
+    public GesuchNotizDto createNotiz(GesuchNotizCreateDto gesuchNotizCreateDto) {
+        return service.create(gesuchNotizCreateDto);
     }
 
     @AllowAll
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
-    public Response deleteNotiz(UUID notizId) {
+    public void deleteNotiz(UUID notizId) {
         authorizer.canDelete(notizId);
         service.delete(notizId);
-        return Response.noContent().build();
     }
 
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_JURIST, OidcConstants.ROLE_SACHBEARBEITER })
     @Override
-    public Response getNotiz(UUID notizId) {
-        return Response.ok(service.getById(notizId)).build();
+    public GesuchNotizDto getNotiz(UUID notizId) {
+        return service.getById(notizId);
     }
 
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_JURIST, OidcConstants.ROLE_SACHBEARBEITER })
     @Override
-    public Response getNotizen(UUID gesuchId) {
-        final var notizen = service.getAllByGesuchId(gesuchId);
-        return Response.ok(notizen).build();
+    public List<GesuchNotizDto> getNotizen(UUID gesuchId) {
+        return service.getAllByGesuchId(gesuchId);
     }
 
     @AllowAll
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
-    public Response updateNotiz(GesuchNotizUpdateDto gesuchNotizUpdateDto) {
+    public GesuchNotizDto updateNotiz(GesuchNotizUpdateDto gesuchNotizUpdateDto) {
         authorizer.canUpdate(gesuchNotizUpdateDto.getId());
-        final var notiz = service.update(gesuchNotizUpdateDto);
-        return Response.ok(notiz).build();
+        return service.update(gesuchNotizUpdateDto);
     }
 }

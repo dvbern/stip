@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
@@ -26,10 +27,13 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
@@ -44,115 +48,101 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Response createAenderungsantrag(
+    public GesuchTrancheDto createAenderungsantrag(
         UUID gesuchId,
         CreateAenderungsantragRequestDto createAenderungsantragRequestDto
     ) {
         gesuchAuthorizer.canUpdate(gesuchId, true);
-        final var trancheDto = gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
-        return Response.ok(trancheDto).build();
+        return gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getAllTranchenForGesuch(UUID gesuchId) {
+    public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
-        final var tranchenDtos = gesuchTrancheService.getAllTranchenForGesuch(gesuchId);
-        return Response.ok(tranchenDtos).build();
+        return gesuchTrancheService.getAllTranchenForGesuch(gesuchId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Response createGesuchTrancheCopy(
+    public GesuchTrancheDto createGesuchTrancheCopy(
         UUID gesuchId,
         CreateGesuchTrancheRequestDto createGesuchTrancheRequestDto
     ) {
         gesuchAuthorizer.canCreateTranche(gesuchId);
-        final var trancheDto = gesuchTrancheService.createTrancheCopy(
+        return gesuchTrancheService.createTrancheCopy(
             gesuchId,
             createGesuchTrancheRequestDto
         );
-        return Response.ok(trancheDto).build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response deleteAenderung(UUID aenderungId) {
+    public void deleteAenderung(UUID aenderungId) {
         gesuchTrancheAuthorizer.canDeleteAenderung(aenderungId);
         gesuchTrancheService.deleteAenderung(aenderungId);
-        return Response.ok().build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getGesuchDokumente(UUID gesuchTrancheId) {
+    public List<GesuchDokumentDto> getGesuchDokumente(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        var gesuchDokumente = gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
-        return Response.ok(gesuchDokumente).build();
+        return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getGesuchDokument(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
+    public GesuchDokumentDto getGesuchDokument(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        final var gesuchDokument = gesuchTrancheService.getGesuchDokument(gesuchTrancheId, dokumentTyp);
-        return Response.ok(gesuchDokument).build();
+        return gesuchTrancheService.getGesuchDokument(gesuchTrancheId, dokumentTyp);
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getRequiredGesuchDokumentTyp(UUID gesuchTrancheId) {
+    public List<DokumentTyp> getRequiredGesuchDokumentTyp(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        final var requiredTypes = gesuchTrancheService.getRequiredDokumentTypes(gesuchTrancheId);
-        return Response.ok(requiredTypes).build();
+        return gesuchTrancheService.getRequiredDokumentTypes(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response validateGesuchTranchePages(UUID gesuchTrancheId) {
+    public ValidationReportDto validateGesuchTranchePages(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return Response.ok(
-            gesuchTrancheService.validatePages(gesuchTrancheId)
-        ).build();
+        return gesuchTrancheService.validatePages(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response aenderungEinreichen(UUID aenderungId) {
+    public void aenderungEinreichen(UUID aenderungId) {
         gesuchTrancheAuthorizer.canEinreichen(aenderungId);
         gesuchTrancheService.aenderungEinreichen(aenderungId);
-        return Response.ok().build();
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response gesuchTrancheEinreichenValidieren(UUID gesuchTrancheId) {
+    public ValidationReportDto gesuchTrancheEinreichenValidieren(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
-        final var validationReport = gesuchTrancheService.einreichenValidieren(gesuchTrancheId);
-        return Response.ok(validationReport).build();
+        return gesuchTrancheService.einreichenValidieren(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Response aenderungAkzeptieren(UUID aenderungId) {
+    public GesuchTrancheDto aenderungAkzeptieren(UUID aenderungId) {
         gesuchTrancheAuthorizer.canUpdate(aenderungId);
-        final var newTranche = gesuchTrancheService.aenderungAkzeptieren(aenderungId);
-        return Response.ok(newTranche).build();
+        return gesuchTrancheService.aenderungAkzeptieren(aenderungId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Response aenderungAblehnen(UUID aenderungId, KommentarDto kommentarDto) {
+    public GesuchTrancheDto aenderungAblehnen(UUID aenderungId, KommentarDto kommentarDto) {
         gesuchTrancheAuthorizer.canUpdate(aenderungId);
-        final var tranche = gesuchTrancheService.aenderungAblehnen(aenderungId, kommentarDto);
-        return Response.ok(tranche).build();
+        return gesuchTrancheService.aenderungAblehnen(aenderungId, kommentarDto);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public Response aenderungManuellAnpassen(UUID aenderungId) {
+    public GesuchTrancheDto aenderungManuellAnpassen(UUID aenderungId) {
         gesuchTrancheAuthorizer.canUpdate(aenderungId);
-        final var tranche = gesuchTrancheService.aenderungManuellAnpassen(aenderungId);
-        return Response.ok(tranche).build();
+        return gesuchTrancheService.aenderungManuellAnpassen(aenderungId);
     }
 }

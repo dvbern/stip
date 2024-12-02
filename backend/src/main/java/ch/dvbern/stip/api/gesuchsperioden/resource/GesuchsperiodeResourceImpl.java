@@ -17,18 +17,20 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.resource;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeWithDatenDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchsperiodeWithDatenDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_CREATE;
@@ -44,68 +46,61 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     @RolesAllowed(STAMMDATEN_CREATE)
     @Override
     @AllowAll
-    public Response createGesuchsperiode(GesuchsperiodeCreateDto createGesuchsperiodeDto) {
-        final var gesuchsperiode = gesuchsperiodenService.createGesuchsperiode(createGesuchsperiodeDto);
-        return Response.ok(gesuchsperiode).build();
+    public GesuchsperiodeWithDatenDto createGesuchsperiode(GesuchsperiodeCreateDto createGesuchsperiodeDto) {
+        return gesuchsperiodenService.createGesuchsperiode(createGesuchsperiodeDto);
     }
 
     @RolesAllowed(STAMMDATEN_DELETE)
     @Override
     @AllowAll
-    public Response deleteGesuchsperiode(UUID gesuchsperiodeId) {
+    public void deleteGesuchsperiode(UUID gesuchsperiodeId) {
         gesuchsperiodenService.deleteGesuchsperiode(gesuchsperiodeId);
-        return Response.noContent().build();
     }
 
     @RolesAllowed(STAMMDATEN_READ)
     @Override
     @AllowAll
-    public Response getAktiveGesuchsperioden() {
-        final var activeGesuchsperioden = gesuchsperiodenService.getAllActive();
-        return Response.ok(activeGesuchsperioden).build();
+    public List<GesuchsperiodeDto> getAktiveGesuchsperioden() {
+        return gesuchsperiodenService.getAllActive();
     }
 
     @RolesAllowed(STAMMDATEN_READ)
     @Override
     @AllowAll
-    public Response getGesuchsperiode(UUID gesuchsperiodeId) {
-        final var gesuchsperiode = gesuchsperiodenService
-            .getGesuchsperiode(gesuchsperiodeId)
+    public GesuchsperiodeWithDatenDto getGesuchsperiode(UUID gesuchsperiodeId) {
+        return gesuchsperiodenService.getGesuchsperiode(gesuchsperiodeId)
             .orElseThrow(NotFoundException::new);
-
-        return Response.ok(gesuchsperiode).build();
     }
 
     @RolesAllowed(STAMMDATEN_READ)
     @Override
     @AllowAll
-    public Response getGesuchsperioden() {
-        return Response.ok(gesuchsperiodenService.getAllGesuchsperioden()).build();
+    public List<GesuchsperiodeDto> getGesuchsperioden() {
+        return gesuchsperiodenService.getAllGesuchsperioden();
     }
 
     @RolesAllowed(STAMMDATEN_READ)
     @Override
     @AllowAll
-    public Response getLatest() {
+    public NullableGesuchsperiodeWithDatenDto getLatest() {
         final var gesuchsperiode = gesuchsperiodenService.getLatest();
-        final var wrapped = new NullableGesuchsperiodeWithDatenDto(gesuchsperiode);
-        return Response.ok(wrapped).build();
+        return new NullableGesuchsperiodeWithDatenDto(gesuchsperiode);
     }
 
     @Override
     @AllowAll
     @RolesAllowed(STAMMDATEN_UPDATE)
-    public Response publishGesuchsperiode(UUID gesuchperiodeId) {
-        final var gesuchsperiode = gesuchsperiodenService.publishGesuchsperiode(gesuchperiodeId);
-        return Response.ok(gesuchsperiode).build();
+    public GesuchsperiodeWithDatenDto publishGesuchsperiode(UUID gesuchperiodeId) {
+        return gesuchsperiodenService.publishGesuchsperiode(gesuchperiodeId);
     }
 
     @RolesAllowed(STAMMDATEN_UPDATE)
     @Override
     @AllowAll
-    public Response updateGesuchsperiode(UUID gesuchsperiodeId, GesuchsperiodeUpdateDto gesuchsperiodeUpdateDto) {
-        final var gesuchsperiode = gesuchsperiodenService
-            .updateGesuchsperiode(gesuchsperiodeId, gesuchsperiodeUpdateDto);
-        return Response.ok(gesuchsperiode).build();
+    public GesuchsperiodeWithDatenDto updateGesuchsperiode(
+        UUID gesuchsperiodeId,
+        GesuchsperiodeUpdateDto gesuchsperiodeUpdateDto
+    ) {
+        return gesuchsperiodenService.updateGesuchsperiode(gesuchsperiodeId, gesuchsperiodeUpdateDto);
     }
 }

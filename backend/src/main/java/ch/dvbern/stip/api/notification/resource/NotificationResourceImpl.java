@@ -17,12 +17,14 @@
 
 package ch.dvbern.stip.api.notification.resource;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.api.NotificationResource;
+import ch.dvbern.stip.generated.dto.NotificationDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,7 +39,7 @@ public class NotificationResourceImpl implements NotificationResource {
     @RolesAllowed(GESUCH_READ)
     @AllowAll
     @Override
-    public Response getNotificationsForCurrentUser() {
-        return Response.ok(notificationService.getNotificationsForCurrentUser()).build();
+    public List<NotificationDto> getNotificationsForCurrentUser() {
+        return notificationService.getNotificationsForCurrentUser();
     }
 }

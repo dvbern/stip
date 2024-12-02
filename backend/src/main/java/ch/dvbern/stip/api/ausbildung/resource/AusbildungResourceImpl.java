@@ -23,10 +23,10 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.generated.api.AusbildungResource;
+import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_READ;
@@ -41,21 +41,21 @@ public class AusbildungResourceImpl implements AusbildungResource {
     @Override
     @RolesAllowed(GESUCH_UPDATE)
     @AllowAll
-    public Response createAusbildung(AusbildungUpdateDto ausbildungUpdateDto) {
-        return Response.ok(ausbildungService.createAusbildung(ausbildungUpdateDto)).build();
+    public AusbildungDto createAusbildung(AusbildungUpdateDto ausbildungUpdateDto) {
+        return ausbildungService.createAusbildung(ausbildungUpdateDto);
     }
 
     @Override
     @RolesAllowed(GESUCH_READ)
-    public Response getAusbildung(UUID ausbildungId) {
+    public AusbildungDto getAusbildung(UUID ausbildungId) {
         ausbildungAuthorizer.canRead(ausbildungId);
-        return Response.ok(ausbildungService.getAusbildungById(ausbildungId)).build();
+        return ausbildungService.getAusbildungById(ausbildungId);
     }
 
     @Override
     @RolesAllowed(GESUCH_UPDATE)
-    public Response updateAusbildung(UUID ausbildungId, AusbildungUpdateDto ausbildungUpdateDto) {
+    public AusbildungDto updateAusbildung(UUID ausbildungId, AusbildungUpdateDto ausbildungUpdateDto) {
         ausbildungAuthorizer.canUpdate(ausbildungId);
-        return Response.ok(ausbildungService.patchAusbildung(ausbildungId, ausbildungUpdateDto)).build();
+        return ausbildungService.patchAusbildung(ausbildungId, ausbildungUpdateDto);
     }
 }

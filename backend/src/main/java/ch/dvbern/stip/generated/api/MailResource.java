@@ -22,5 +22,5 @@ public interface MailResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "text/plain" })
-    Response sendWelcomeEmail(@Valid WelcomeMailDto welcomeMailDto);
+    void sendWelcomeEmail(@Valid WelcomeMailDto welcomeMailDto);
 }

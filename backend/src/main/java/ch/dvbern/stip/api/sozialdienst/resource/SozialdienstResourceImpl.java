@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.sozialdienst.resource;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
@@ -25,12 +26,13 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -44,63 +46,56 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public Response createSozialdienst(SozialdienstCreateDto sozialdienstCreateDto) {
-        final var sozialdienst = sozialdienstService.createSozialdienst(sozialdienstCreateDto);
-        return Response.ok(sozialdienst).build();
+    public SozialdienstDto createSozialdienst(SozialdienstCreateDto sozialdienstCreateDto) {
+        return sozialdienstService.createSozialdienst(sozialdienstCreateDto);
     }
 
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public Response deleteSozialdienst(UUID sozialdienstId) {
-        final var sozialdienst = sozialdienstService.deleteSozialdienst(sozialdienstId);
-        return Response.ok().entity(sozialdienst).build();
+    public SozialdienstDto deleteSozialdienst(UUID sozialdienstId) {
+        return sozialdienstService.deleteSozialdienst(sozialdienstId);
     }
 
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_GESUCHSTELLER, OidcConstants.ROLE_ADMIN })
     @Override
-    public Response getAllSozialdienste() {
-        final var sozialdienste = sozialdienstService.getAllSozialdienst();
-        return Response.ok().entity(sozialdienste).build();
+    public List<SozialdienstDto> getAllSozialdienste() {
+        return sozialdienstService.getAllSozialdienst();
     }
 
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public Response getSozialdienst(UUID sozialdienstId) {
-        final var sozialdienst = sozialdienstService.getSozialdienstById(sozialdienstId);
-        return Response.ok().entity(sozialdienst).build();
+    public SozialdienstDto getSozialdienst(UUID sozialdienstId) {
+        return sozialdienstService.getSozialdienstById(sozialdienstId);
     }
 
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public Response replaceSozialdienstAdmin(
+    public SozialdienstAdminDto replaceSozialdienstAdmin(
         UUID sozialdienstId,
         SozialdienstAdminCreateDto sozialdienstAdminCreateDto
     ) {
-        final var updated = sozialdienstService.replaceSozialdienstAdmin(sozialdienstId, sozialdienstAdminCreateDto);
-        return Response.ok().entity(updated).build();
+        return sozialdienstService.replaceSozialdienstAdmin(sozialdienstId, sozialdienstAdminCreateDto);
     }
 
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public Response updateSozialdienst(SozialdienstUpdateDto sozialdienstUpdateDto) {
-        final var updated = sozialdienstService.updateSozialdienst(sozialdienstUpdateDto);
-        return Response.ok().entity(updated).build();
+    public SozialdienstDto updateSozialdienst(SozialdienstUpdateDto sozialdienstUpdateDto) {
+        return sozialdienstService.updateSozialdienst(sozialdienstUpdateDto);
     }
 
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public Response updateSozialdienstAdmin(
+    public SozialdienstAdminDto updateSozialdienstAdmin(
         UUID sozialdienstId,
         SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto
     ) {
         final var sozialdienst = sozialdienstService.getSozialdienstById(sozialdienstId);
-        final var updated = sozialdienstService.updateSozialdienstAdmin(sozialdienstAdminUpdateDto, sozialdienst);
-        return Response.ok().entity(updated).build();
+        return sozialdienstService.updateSozialdienstAdmin(sozialdienstAdminUpdateDto, sozialdienst);
     }
 }

@@ -23,7 +23,6 @@ import ch.dvbern.stip.generated.api.MailResource;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SEND_EMAIL;
@@ -37,8 +36,7 @@ public class MailResourceImpl implements MailResource {
     @Override
     @AllowAll
     @RolesAllowed(SEND_EMAIL)
-    public Response sendWelcomeEmail(WelcomeMailDto welcomeMailDto) {
+    public void sendWelcomeEmail(WelcomeMailDto welcomeMailDto) {
         mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
-        return Response.ok().build();
     }
 }

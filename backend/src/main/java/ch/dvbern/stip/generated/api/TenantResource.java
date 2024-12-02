@@ -22,5 +22,5 @@ public interface TenantResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getCurrentTenant();
+    TenantInfoDto getCurrentTenant();
 }
