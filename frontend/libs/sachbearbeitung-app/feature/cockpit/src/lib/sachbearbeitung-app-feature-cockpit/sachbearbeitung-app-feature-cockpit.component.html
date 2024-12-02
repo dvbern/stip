@@ -239,21 +239,21 @@
               <ng-container matColumnDef="STATUS">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
                   {{ 'sachbearbeitung-app.cockpit.table.status' | translate }}
-                  <mat-form-field>
+                  <mat-form-field class="tw-w-full">
                     <mat-select
                       [aria-label]="'sachbearbeitung-app.cockpit.table.status' | translate"
                       formControlName="status"
                       (click)="$event.stopPropagation()"
-                      class="status-select fw-normal"
+                      class="!tw-font-normal"
                       [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | translate"
                       panelClass="table-select"
                     >
                       <mat-option [value]="null">
                         {{ 'sachbearbeitung-app.cockpit.no-status-filter' | translate }}
                       </mat-option>
-                      @for (status of gesuchStatusValues; track status) {
+                      @for (status of statusValuesSig()?.status; track status) {
                         <mat-option [value]="status">
-                          {{ 'shared.gesuch.status.contract.' + status | translate }}
+                          {{ 'shared.gesuch.status.' + statusValuesSig()?.typ + '.' + status | translate }}
                         </mat-option>
                       }
                     </mat-select>

@@ -88,6 +88,15 @@ const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_FILTER: GesuchFilter = 'ALLE_BEARBEITBAR_MEINE';
 const INPUT_DELAY = 600;
 
+const statusByTyp = {
+  TRANCHE: Object.values(Gesuchstatus).filter(
+    (key: Gesuchstatus) => key !== 'IN_BEARBEITUNG_GS',
+  ),
+  AENDERUNG: Object.values(GesuchTrancheStatus).filter(
+    (key: GesuchTrancheStatus) => key !== 'IN_BEARBEITUNG_GS',
+  ),
+} satisfies Record<GesuchTrancheTyp, unknown>;
+
 type DashboardFormStatus = Gesuchstatus | GesuchTrancheStatus;
 
 type AppendStartEnd<T extends string> = `${T}From` | `${T}To`;
@@ -276,9 +285,18 @@ export class SachbearbeitungAppFeatureCockpitComponent
       : format(start, 'dd.MM.yyyy');
   });
 
-  gesuchStatusValues = Object.values(Gesuchstatus).filter(
-    (key: Gesuchstatus) => key !== 'IN_BEARBEITUNG_GS',
-  );
+  typChangedSig = toSignal(this.filterForm.controls.typ.valueChanges);
+  statusValuesSig = computed(() => {
+    const typ = this.typChangedSig();
+    if (!typ) {
+      return null;
+    }
+
+    return {
+      typ: typ === 'AENDERUNG' ? 'tranche' : 'contract',
+      status: statusByTyp[typ],
+    };
+  });
 
   filterFormChangedSig = toSignal(
     this.filterForm.valueChanges.pipe(debounceTime(INPUT_DELAY)),
