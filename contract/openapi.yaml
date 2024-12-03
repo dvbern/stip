@@ -3627,7 +3627,6 @@ components:
     BenutzerUpdate:
       required:
         - nachname
-        - sozialversicherungsnummer
         - vorname
       type: object
       properties:
