@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.stammdaten.resource;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.stammdaten.service.LandService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.generated.api.StammdatenResource;
@@ -32,6 +33,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class StammdatenResourceImpl implements StammdatenResource {
     private final LandService landService;
 

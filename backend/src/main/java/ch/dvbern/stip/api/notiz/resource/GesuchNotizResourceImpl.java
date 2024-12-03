@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.GesuchNotizAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.generated.api.GesuchNotizResource;
@@ -35,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class GesuchNotizResourceImpl implements GesuchNotizResource {
     private final GesuchNotizService service;
     private final GesuchNotizAuthorizer authorizer;

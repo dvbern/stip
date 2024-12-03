@@ -21,6 +21,7 @@ import java.util.List;
 
 import ch.dvbern.stip.api.bildungskategorie.service.BildungskategorieService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.BildungskategorieResource;
 import ch.dvbern.stip.generated.dto.BildungskategorieDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -31,6 +32,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class BildungskategorieResourceImpl implements BildungskategorieResource {
     private final BildungskategorieService bildungskategorieService;
 

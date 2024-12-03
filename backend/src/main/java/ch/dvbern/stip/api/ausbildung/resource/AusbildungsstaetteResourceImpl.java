@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsstaetteService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteResource;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
@@ -37,6 +38,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResource {
     private final AusbildungsstaetteService ausbildungsstaetteService;
 

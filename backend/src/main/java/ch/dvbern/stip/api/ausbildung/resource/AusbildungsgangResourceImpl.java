@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.AusbildungsgangResource;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
@@ -36,6 +37,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class AusbildungsgangResourceImpl implements AusbildungsgangResource {
     private final AusbildungsgangService ausbildungsgangService;
 

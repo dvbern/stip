@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeCreateDto;
@@ -40,6 +41,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     private final GesuchsperiodenService gesuchsperiodenService;
 

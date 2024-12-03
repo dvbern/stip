@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
@@ -41,6 +42,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     private final GesuchTrancheService gesuchTrancheService;
     private final GesuchAuthorizer gesuchAuthorizer;

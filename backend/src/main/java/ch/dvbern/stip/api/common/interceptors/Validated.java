@@ -15,26 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.tenancy.resource;
+package ch.dvbern.stip.api.common.interceptors;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
-import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.generated.api.TenantResource;
-import ch.dvbern.stip.generated.dto.TenantInfoDto;
-import jakarta.enterprise.context.RequestScoped;
-import lombok.RequiredArgsConstructor;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@RequestScoped
-@RequiredArgsConstructor
-@Validated
-public class TenantResourceImpl implements TenantResource {
+import jakarta.interceptor.InterceptorBinding;
 
-    private final TenantService tenantService;
-
-    @Override
-    @AllowAll
-    public TenantInfoDto getCurrentTenant() {
-        return tenantService.getCurrentTenant();
-    }
+@InterceptorBinding
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+public @interface Validated {
 }

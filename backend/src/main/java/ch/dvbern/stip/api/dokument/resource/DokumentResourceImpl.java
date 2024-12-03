@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.common.util.StringUtil;
@@ -64,6 +65,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
 @RequestScoped
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class DokumentResourceImpl implements DokumentResource {
     private final GesuchDokumentService gesuchDokumentService;
     private final ConfigService configService;

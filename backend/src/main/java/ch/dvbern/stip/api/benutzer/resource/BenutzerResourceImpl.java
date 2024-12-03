@@ -23,6 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.BenutzerResource;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
@@ -38,6 +39,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class BenutzerResourceImpl implements BenutzerResource {
 
     private final BenutzerService benutzerService;

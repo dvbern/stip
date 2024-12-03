@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrService;
 import ch.dvbern.stip.generated.api.GesuchsjahrResource;
 import ch.dvbern.stip.generated.dto.GesuchsjahrCreateDto;
@@ -37,6 +38,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 
 @RequestScoped
 @AllArgsConstructor
+@Validated
 public class GesuchsjahrResourceImpl implements GesuchsjahrResource {
     private final GesuchsjahrService gesuchsjahrService;
 

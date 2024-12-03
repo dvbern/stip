@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class SozialdienstResourceImpl implements SozialdienstResource {
 
     private final SozialdienstService sozialdienstService;

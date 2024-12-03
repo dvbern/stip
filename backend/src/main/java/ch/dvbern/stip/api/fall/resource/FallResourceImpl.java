@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.fall.resource;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.generated.api.FallResource;
 import ch.dvbern.stip.generated.dto.FallDto;
@@ -34,6 +35,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class FallResourceImpl implements FallResource {
 
     private final FallService fallService;
