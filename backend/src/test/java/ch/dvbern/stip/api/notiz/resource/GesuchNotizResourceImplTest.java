@@ -201,7 +201,7 @@ class GesuchNotizResourceImplTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
+            .statusCode(Status.NO_CONTENT.getStatusCode());
 
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchIdPath(gesuch.getId())
