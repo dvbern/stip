@@ -88,7 +88,7 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
                 BigDecimal.valueOf(
                     antragssteller.getVermoegen() * berechnungsRequest.getStammdaten().getVermoegensanteilInProzent()
                     / 100.0
-                ).setScale(0, RoundingMode.HALF_UP).intValue()
+                ).setScale(0, RoundingMode.HALF_DOWN).intValue()
             )
             .anteilFamilienbudget(
                 getAnteilFamilienBudget(familienBudgetresultatList, antragssteller)
