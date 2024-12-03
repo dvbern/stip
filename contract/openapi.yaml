@@ -244,6 +244,34 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToVersendet
+  /gesuch/status/kein-stipendien-anspruch/{gesuchId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - $ref: '#/components/parameters/gesuchId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AusgewaehlterGrund'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToKeinStipendienAnspruch
   '/gesuch/{gesuchId}/notiz/all':
     parameters:
       - name: gesuchId
@@ -405,6 +433,23 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteNotiz
       summary: delete a Notiz of a Gesuch with the given Notiz-Id
+  /stip-decision/all:
+    get:
+      tags:
+        - StipDecision
+      responses:
+        '200':
+          description: 'Get all StipDecisionText entries'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StipDecisionText'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
   /ausbildung:
     post:
       tags:
@@ -4853,6 +4898,41 @@ components:
         - BERN
         - ANDERER_KANTON
       type: string
+    StipDecision:
+      enum:
+        - GESUCH_VALID
+        - EINGABEFRIST_ABGELAUFEN
+        - AUSBILDUNG_NICHT_ANERKANNT
+        - AUSBILDUNGEN_LAENGER_12_JAHRE
+        - AUSBILDUNG_IM_LEBENSLAUF
+        - PIA_AELTER_35_JAHRE
+        - KEIN_WOHNSITZ_KANTON_BE
+        - SCHULJAHR_9_SEKSTUFE_1
+        - AUSBILDUNG_PBI1
+        - ART_32_BBV
+        - ZWEITAUSBILDUNG
+        - AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG
+        - EBA_LEHRE
+        - HOCHSCHULSTUDIUM_2
+        - MEHRERE_AUSBILDUNGSWECHSEL
+        - NICHT_BERECHTIGTE_PERSON
+        - ANSPRUCH_MANUELL_PRUEFEN
+        - ANSPRUCH_UNKLAR
+    StipDecisionText:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        stipDecision:
+          $ref: '#/components/schemas/StipDecision'
+        titleDe:
+          type: string
+        textDe:
+          type: string
+        textFr:
+          type: string
+    AusgewaehlterGrund:
+      $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:
