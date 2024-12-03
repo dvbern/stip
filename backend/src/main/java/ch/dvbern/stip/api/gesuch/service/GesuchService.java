@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
@@ -74,9 +75,11 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
+import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
@@ -115,6 +118,7 @@ public class GesuchService {
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
     private final AusbildungRepository ausbildungRepository;
+    private final StipDecisionService stipDecisionService;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
@@ -465,16 +469,46 @@ public class GesuchService {
         }
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void gesuchEinreichen(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (gesuch.getGesuchTranchen().size() != 1) {
             throw new IllegalStateException("Gesuch kann only be eingereicht with exactly 1 Tranche");
         }
 
+        final var gesuchTranche = gesuch.getGesuchTranchen().get(0);
         // No need to validate the entire Gesuch here, as it's done in the state machine
-        gesuchTrancheValidatorService.validateAdditionalEinreichenCriteria(gesuch.getGesuchTranchen().get(0));
+        gesuchTrancheValidatorService.validateAdditionalEinreichenCriteria(gesuchTranche);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
+    }
+
+    @Transactional(TxType.REQUIRES_NEW)
+    public void stipendienAnspruchPruefen(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.getGesuchTranchen().size() != 1) {
+            throw new IllegalStateException("Gesuch kann only be eingereicht with exactly 1 Tranche");
+        }
+
+        final var gesuchTranche = gesuch.getGesuchTranchen().get(0);
+        final var decision = stipDecisionService.decide(gesuchTranche);
+        final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(decision);
+        KommentarDto kommentarDto = null;
+        if (decision != StipDecision.GESUCH_VALID) {
+            kommentarDto = new KommentarDto();
+            kommentarDto.setText(
+                stipDecisionService.getTextForDecision(
+                    decision,
+                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+                )
+            );
+        }
+
+        gesuchStatusService.triggerStateMachineEventWithComment(
+            gesuchTranche.getGesuch(),
+            gesuchStatusChangeEvent,
+            kommentarDto,
+            false
+        );
     }
 
     @Transactional
@@ -501,7 +535,7 @@ public class GesuchService {
         // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService
-            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto);
+            .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto, true);
     }
 
     @Transactional

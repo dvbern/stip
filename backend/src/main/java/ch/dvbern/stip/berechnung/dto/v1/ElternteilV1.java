@@ -18,12 +18,11 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -95,13 +94,13 @@ public class ElternteilV1 {
             for (final var elternteil : eltern) {
                 builder.ergaenzungsleistungen(Objects.requireNonNullElse(elternteil.getErgaenzungsleistungen(), 0));
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    (int) ChronoUnit.YEARS.between(elternteil.getGeburtsdatum(), LocalDate.now()),
+                    DateUtil.getAgeInYears(elternteil.getGeburtsdatum()),
                     gesuchsperiode
                 );
             }
             for (final var kindDerElternInHaushalten : kinderDerElternInHaushalten) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    (int) ChronoUnit.YEARS.between(kindDerElternInHaushalten.getGeburtsdatum(), LocalDate.now()),
+                    DateUtil.getAgeInYears(kindDerElternInHaushalten.getGeburtsdatum()),
                     gesuchsperiode
                 );
             }
@@ -120,7 +119,7 @@ public class ElternteilV1 {
                 .toList();
             for (final var kind : kindDesElternteilsVollzeit) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
+                    DateUtil.getAgeInYears(kind.getGeburtsdatum()),
                     gesuchsperiode
                 );
             }
@@ -138,7 +137,7 @@ public class ElternteilV1 {
             ) {
                 for (final var kind : kinderDerElternTeilzeit) {
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
+                        DateUtil.getAgeInYears(kind.getGeburtsdatum()),
                         gesuchsperiode
                     );
                 }
@@ -156,7 +155,7 @@ public class ElternteilV1 {
                     .get(0);
                 wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
+                    DateUtil.getAgeInYears(elternteilToUse.getGeburtsdatum()),
                     gesuchsperiode
                 );
                 if (Boolean.TRUE.equals(familiensituation.getVaterWiederverheiratet())) {
@@ -177,7 +176,7 @@ public class ElternteilV1 {
                     .get(0);
                 wohnkosten += elternteilToUse.getWohnkosten();
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    (int) ChronoUnit.YEARS.between(elternteilToUse.getGeburtsdatum(), LocalDate.now()),
+                    DateUtil.getAgeInYears(elternteilToUse.getGeburtsdatum()),
                     gesuchsperiode
                 );
                 if (Boolean.TRUE.equals(familiensituation.getMutterWiederverheiratet())) {

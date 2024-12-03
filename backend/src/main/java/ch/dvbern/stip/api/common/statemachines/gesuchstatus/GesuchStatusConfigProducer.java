@@ -51,6 +51,7 @@ public class GesuchStatusConfigProducer {
                 GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
                 Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
             )
+            .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN, Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
             .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT);
 

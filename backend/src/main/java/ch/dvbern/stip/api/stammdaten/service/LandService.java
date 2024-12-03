@@ -44,6 +44,14 @@ public class LandService {
             .collect(Collectors.toSet());
     }
 
+    public boolean landInEuEfta(Land land) {
+        return getAllLandEuEfta()
+            .stream()
+            .map(LandEuEftaDto::getLand)
+            .toList()
+            .contains(land);
+    }
+
     @Transactional
     public List<LandEuEftaDto> getAllLandEuEfta() {
         var lands = Stream.of(Land.values()).map(landEuEftaMapper::toDto).collect(Collectors.toSet());

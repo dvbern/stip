@@ -9,11 +9,7 @@
     @switch (dokumentRd.data?.status) {
       @case ('AUSSTEHEND') {
         @if (!uploadViewSig().readonly) {
-          <button
-            (click)="dokumentAblehnen()"
-            type="button"
-            class="btn table-btn btn-danger d-flex align-items-center gap-1"
-          >
+          <button (click)="dokumentAblehnen()" type="button" class="btn btn-danger d-flex align-items-center gap-1">
             <i class="material-symbols-rounded fs-4">close</i>
             <span>
               {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
@@ -22,7 +18,7 @@
           <button
             (click)="dokumentAkzeptieren()"
             type="button"
-            class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
+            class="btn btn-success text-white d-flex align-items-center gap-1"
           >
             <i class="material-symbols-rounded fs-4">check</i>
             <span>

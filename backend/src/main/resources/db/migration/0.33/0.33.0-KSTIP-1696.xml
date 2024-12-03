@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="jafa (generated)" id="1732620981238-3">
+        <addUniqueConstraint columnNames="land, mandant" constraintName="UC_land_eu_efta_land_mandant" tableName="land_eu_efta"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732620981238-4">
+        <dropUniqueConstraint constraintName="UC_land_eu_efta" tableName="land_eu_efta"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1732620981238-2">
+        <createIndex indexName="IX_land_mandant" tableName="land_eu_efta" unique="false">
+            <column name="mandant"/>
+            <column name="land"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

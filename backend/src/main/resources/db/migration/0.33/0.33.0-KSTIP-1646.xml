@@ -12,16 +12,4 @@
       <column name="zustaendiger_kanton" type="varchar(255)"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-1">
-    <modifyDataType columnName="antwort" newDataType="varchar(255)" tableName="gesuch_notizen"/>
-  </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-2">
-    <modifyDataType columnName="antwort" newDataType="varchar(255)" tableName="gesuch_notizen_aud"/>
-  </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-3">
-    <modifyDataType columnName="text" newDataType="varchar(255)" tableName="gesuch_notizen"/>
-  </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1732204030099-4">
-    <modifyDataType columnName="text" newDataType="varchar(255)" tableName="gesuch_notizen_aud"/>
-  </changeSet>
 </databaseChangeLog>

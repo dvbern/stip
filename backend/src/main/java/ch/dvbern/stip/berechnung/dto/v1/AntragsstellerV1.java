@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.berechnung.dto.v1;
 
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +24,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -98,7 +98,7 @@ public class AntragsstellerV1 {
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
             .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
             .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
-        int alter = (int) ChronoUnit.YEARS.between(personInAusbildung.getGeburtsdatum(), LocalDate.now());
+        int alter = DateUtil.getAgeInYears(personInAusbildung.getGeburtsdatum());
         builder.alter(alter);
 
         int medizinischeGrundversorgung = 0;
@@ -109,7 +109,7 @@ public class AntragsstellerV1 {
             if (partner != null) {
                 anzahlPersonenImHaushalt += 1;
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    (int) ChronoUnit.YEARS.between(partner.getGeburtsdatum(), LocalDate.now()),
+                    DateUtil.getAgeInYears(partner.getGeburtsdatum()),
                     gesuchsperiode
                 );
             }
@@ -118,7 +118,7 @@ public class AntragsstellerV1 {
                 if (kind.getWohnsitzAnteilPia() > 0) {
                     anzahlPersonenImHaushalt += 1;
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        (int) ChronoUnit.YEARS.between(kind.getGeburtsdatum(), LocalDate.now()),
+                        DateUtil.getAgeInYears(kind.getGeburtsdatum()),
                         gesuchsperiode
                     );
                 }

@@ -93,6 +93,10 @@ public class DateUtil {
         return (int) ChronoUnit.MONTHS.between(start, end.plusDays(1));
     }
 
+    public int getAgeInYears(final LocalDate geburtsdatum) {
+        return (int) ChronoUnit.YEARS.between(geburtsdatum, LocalDate.now());
+    }
+
     public boolean beforeOrEqual(final LocalDate left, final LocalDate right) {
         return left.isBefore(right) || left.isEqual(right);
     }

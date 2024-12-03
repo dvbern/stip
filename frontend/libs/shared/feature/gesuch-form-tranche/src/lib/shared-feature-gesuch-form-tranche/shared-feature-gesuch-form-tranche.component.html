@@ -10,7 +10,7 @@
   </h2>
 </ng-template>
 
-<form [formGroup]="form" class="tw-form-grid" [dvSharedUiFormReadonly]="true">
+<form [formGroup]="form" class="tw-dv-form-grid" [dvSharedUiFormReadonly]="true">
   <!-- Status -->
   <mat-form-field dvSharedUiFormField>
     <mat-label>
@@ -101,7 +101,7 @@
     @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
       @switch (abschlussPhase) {
         @case ('READY_TO_SEND') {
-          <div class="xl:tw-max-w-3xl tw-flex tw-items-center tw-gap-8">
+          <div class="tw-flex tw-items-center tw-gap-8 xl:tw-max-w-3xl">
             <button
               class="btn btn-outline-primary flex-grow-1"
               data-testid="aenderung-reject"

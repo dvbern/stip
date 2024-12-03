@@ -8,11 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  MatPaginatorIntl,
-  MatPaginatorModule,
-  PageEvent,
-} from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -20,7 +16,7 @@ import { Notification } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationDialogComponent } from '@dv/shared/ui/notification-dialog';
 import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
-import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-translation';
+import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 @Component({
   selector: 'dv-shared-ui-notifications',
@@ -33,9 +29,7 @@ import { SharedUtilPaginatorTranslation } from '@dv/shared/util/paginator-transl
     SharedUiIconChipComponent,
     SharedUiTooltipDateComponent,
   ],
-  providers: [
-    { provide: MatPaginatorIntl, useClass: SharedUtilPaginatorTranslation },
-  ],
+  providers: [paginatorTranslationProvider()],
   templateUrl: './shared-ui-notifications.component.html',
   styleUrl: './shared-ui-notifications.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

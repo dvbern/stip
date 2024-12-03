@@ -57,7 +57,15 @@
     "jest.rootPath": "frontend",
     "tailwindCSS.experimental.classRegex": [
       "HostBinding.*class[\\s\\S*]*['\"`](.+?)['\"`]",
-      "tw\\([\\s\\S*]*['\"`](.+?)['\"`],?[\\s\\S*]*\\)"
+      "tw([\\s\\S*]*['\"`](.+?)['\"`],?[\\s\\S*]*)"
+    ],
+    "tailwindCSS.files.exclude": [
+      "**/.git/**",
+      "**/node_modules/**",
+      "**/.hg/**",
+      "**/.svn/**",
+      "**/.nx/**",
+      "**/dist/**"
     ],
     "workbench.colorCustomizations": {
       "activityBar.activeBackground": "#097bd5",

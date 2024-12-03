@@ -2,8 +2,8 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (sozialDiensteListDataSourceSig(); as sozialdienstListSource) {
-    <div class="mt-4 shadow rounded-4" [class.opacity-50]="store.sozialdienste() | rdIsPending">
-      <table mat-table [dataSource]="sozialdienstListSource" matSort class="dv-crud-table">
+    <div class="tw-dv-table" [class.opacity-50]="store.sozialdienste() | rdIsPending">
+      <table mat-table [dataSource]="sozialdienstListSource" matSort>
         <caption class="cdk-visually-hidden">
           {{
             'sachbearbeitung-app.admin.sozialdienst.route.overview' | translate
@@ -11,19 +11,19 @@
         </caption>
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
             <label class="pe-none" for="nameFilter">
               {{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | translate }}
             </label>
             <div class="d-flex position-relative align-items-center justify-content-end">
               <mat-form-field class="filter-form-field">
                 <input
+                  id="nameFilter"
                   matInput
                   dvMaxLength
                   #nameFilter
                   type="text"
                   data-testid="sozialdienst-filter-name"
-                  placeholder="{{ 'sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder' | translate }}"
                   (keyup)="nameFilterSig.set(nameFilter.value)"
                   (click)="$event.stopPropagation()"
                 />
@@ -35,26 +35,31 @@
               ></dv-shared-ui-clear-button>
             </div>
           </th>
-          <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource" class="fw-bold">
+          <td
+            mat-cell
+            *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource"
+            class="tw-whitespace-nowrap tw-max-w-half"
+            [dvTruncateTooltip]="sozialdienst.name"
+          >
             {{ sozialdienst.name }}
           </td>
         </ng-container>
 
         <!-- ort -->
         <ng-container matColumnDef="ort">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered text-nowrap">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
             <label for="ortFilter">
               {{ 'sachbearbeitung-app.admin.sozialdienst.ort.label' | translate }}
             </label>
             <div class="d-flex position-relative align-items-center justify-content-end">
               <mat-form-field class="filter-form-field">
                 <input
+                  id="ortFilter"
                   matInput
                   dvMaxLength
                   #ortFilter
                   type="text"
                   data-testid="sozialdienst-filter-ort"
-                  placeholder="{{ 'sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder' | translate }}"
                   (keyup)="ortFilterSig.set(ortFilter.value)"
                   (click)="$event.stopPropagation()"
                 />
@@ -74,9 +79,12 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>
             <div class="action-cell-content">
-              <a [routerLink]="['.', 'create']" class="btn btn-outline-dark d-inline-flex lh-1 align-items-center">
-                <i class="material-symbols-rounded fs-5 me-2">add</i>
-                {{ 'sachbearbeitung-app.admin.sozialdienst.erstellen' | translate }}
+              <a
+                [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.erstellen' | translate"
+                [routerLink]="['.', 'create']"
+                class="btn btn-outline-primary btn-sm"
+              >
+                <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
               </a>
             </div>
           </th>
@@ -85,15 +93,15 @@
               <a
                 [routerLink]="['.', 'edit', sozialdienst.id]"
                 class="btn btn-link"
-                [attr.aria-label]="'sachbearbeitung-app.admin.sozialdienst.bearbeiten' | translate"
+                [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.bearbeiten' | translate"
               >
                 <i class="material-symbols-rounded fs-5">edit</i>
               </a>
               <button
                 type="button"
                 class="btn btn-link"
-                [attr.aria-label]="'sachbearbeitung-app.admin.sozialdienst.loeschen' | translate"
                 (click)="deleteSozialdienst(sozialdienst)"
+                [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.loeschen' | translate"
               >
                 <i class="material-symbols-rounded fs-5">delete</i>
               </button>

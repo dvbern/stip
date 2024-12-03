@@ -1,8 +1,8 @@
 @if (notizStore.notizen() | rdIsPendingWithoutCache) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
-  <div class="shadow rounded-4 tw-overflow-auto mt-2">
-    <table mat-table class="dv-crud-table large-spacing" [dataSource]="notizSig()" matSort>
+  <div class="tw-dv-table">
+    <table mat-table [dataSource]="notizSig()" matSort>
       <caption class="cdk-visually-hidden">
         {{
           'sachbearbeitung-app.infos.notizen.description' | translate
@@ -14,20 +14,22 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ 'sachbearbeitung-app.infos.notizen.table.notizTyp' | translate }}
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="text-nowrap">
-          @if (notiz.notizTyp === 'GESUCH_NOTIZ') {
-            <i
-              [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.GESUCH_NOTIZ' | translate"
-              class="material-symbols-rounded fs-4"
-              >notes</i
-            >
-          } @else {
-            <i
-              [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.JURISTISCHE_NOTIZ' | translate"
-              class="material-symbols-rounded fs-4"
-              >gavel</i
-            >
-          }
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
+          <div class="tw-flex tw-h-[53px] tw-items-center">
+            @if (notiz.notizTyp === 'GESUCH_NOTIZ') {
+              <i
+                [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.GESUCH_NOTIZ' | translate"
+                class="material-symbols-rounded fs-4"
+                >notes</i
+              >
+            } @else {
+              <i
+                [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.JURISTISCHE_NOTIZ' | translate"
+                class="material-symbols-rounded fs-4"
+                >gavel</i
+              >
+            }
+          </div>
         </td>
       </ng-container>
 
@@ -36,8 +38,10 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ 'sachbearbeitung-app.infos.notizen.table.datum' | translate }}
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="text-nowrap">
-          {{ notiz.timestampErstellt | date: 'dd.MM.yyyy' }}
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
+          <div class="tw-flex tw-h-[53px] tw-items-center">
+            {{ notiz.timestampErstellt | date: 'dd.MM.yyyy' }}
+          </div>
         </td>
       </ng-container>
 
@@ -46,8 +50,16 @@
         <th mat-header-cell *matHeaderCellDef>
           {{ 'sachbearbeitung-app.infos.notizen.table.user' | translate }}
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="text-nowrap">
-          {{ notiz.userErstellt }}
+        <td
+          mat-cell
+          *dvMatCellDef="let notiz; dataSource: notizSig()"
+          class="tw-max-w-28 tw-whitespace-nowrap tw-align-top"
+        >
+          <div class="tw-flex tw-h-[53px] tw-items-center">
+            <span class="tw-truncate" [dvTruncateTooltip]="notiz.userErstellt">
+              {{ notiz.userErstellt }}
+            </span>
+          </div>
         </td>
       </ng-container>
 
@@ -56,8 +68,16 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ 'sachbearbeitung-app.infos.notizen.table.betreff' | translate }}
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="text-nowrap">
-          {{ notiz.betreff | translate }}
+        <td
+          mat-cell
+          *dvMatCellDef="let notiz; dataSource: notizSig()"
+          class="tw-max-w-28 tw-whitespace-nowrap tw-align-top"
+        >
+          <div class="tw-flex tw-h-[53px] tw-items-center">
+            <span class="tw-truncate" [dvTruncateTooltip]="notiz.betreff">
+              {{ notiz.betreff | translate }}
+            </span>
+          </div>
         </td>
       </ng-container>
 
@@ -66,7 +86,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ 'sachbearbeitung-app.infos.notizen.table.notiz' | translate }}
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100">
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="!tw-py-1">
           {{ notiz.text }}
         </td>
       </ng-container>
@@ -118,8 +138,8 @@
             </div>
           </mat-menu>
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="w-100">
-          <div class="d-flex gap-1">
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
+          <div class="tw-flex tw-h-[53px] tw-items-center tw-gap-1">
             @if (
               notiz.notizTyp === 'JURISTISCHE_NOTIZ' && permissionStore.permissionsMapSig()?.Jurist && !notiz.antwort
             ) {
@@ -181,5 +201,7 @@
         </td>
       </tr>
     </table>
+
+    <mat-paginator showFirstLastButtons [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
   </div>
 }

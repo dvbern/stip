@@ -57,7 +57,10 @@
           "apps/gesuch-app/src/favicon.ico",
           "apps/gesuch-app/src/assets"
         ],
-        "styles": ["apps/gesuch-app/src/styles.scss"],
+        "styles": [
+          "apps/gesuch-app/src/styles.scss",
+          "libs/shared/styles/theme/src/tailwind.css"
+        ],
         "scripts": [],
         "stylePreprocessorOptions": {
           "includePaths": [

@@ -23,8 +23,8 @@ import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { SozialdienstStore } from '@dv/sachbearbeitung-app/data-access/sozialdienst';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { Land, MASK_IBAN, PATTERN_EMAIL } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,

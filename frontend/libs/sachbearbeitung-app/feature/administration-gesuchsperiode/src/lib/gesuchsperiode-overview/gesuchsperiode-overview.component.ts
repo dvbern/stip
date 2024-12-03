@@ -9,8 +9,10 @@ import {
 } from '@angular/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
@@ -25,6 +27,7 @@ import {
 } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
+import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 @Component({
   standalone: true,
@@ -33,6 +36,8 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
     MatTableModule,
     MatSortModule,
     MatChipsModule,
+    MatTooltipModule,
+    MatPaginatorModule,
     RouterLink,
     TranslatePipe,
     TranslatedPropertyPipe,
@@ -42,6 +47,7 @@ import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
     SharedUiRdIsPendingPipe,
     SharedUiRdIsPendingWithoutCachePipe,
   ],
+  providers: [paginatorTranslationProvider()],
   templateUrl: './gesuchsperiode-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -67,23 +73,37 @@ export class GesuchsperiodeOverviewComponent implements OnInit {
   ];
 
   gesuchsperiodenSortSig = viewChild('gesuchsperiodenSort', { read: MatSort });
+  gesuchsperiodenPaginatorSig = viewChild('gesuchsperiodenPaginator', {
+    read: MatPaginator,
+  });
   gesuchsperiodenDatasourceSig = computed(() => {
     const gesuchsperioden = this.store.gesuchsperiodenListViewSig();
     const datasource = new MatTableDataSource(gesuchsperioden);
     const sort = this.gesuchsperiodenSortSig();
+    const paginator = this.gesuchsperiodenPaginatorSig();
     if (sort) {
       datasource.sort = sort;
+    }
+    if (paginator) {
+      datasource.paginator = paginator;
     }
     return datasource;
   });
 
   gesuchsjahrSortSig = viewChild('gesuchsjahrSort', { read: MatSort });
+  gesuchsjahrPaginatorSig = viewChild('gesuchsjahrPaginator', {
+    read: MatPaginator,
+  });
   gesuchsJahrDatasourceSig = computed(() => {
     const gesuchsjahre = this.store.gesuchsjahreListViewSig();
     const datasource = new MatTableDataSource(gesuchsjahre);
     const sort = this.gesuchsjahrSortSig();
+    const paginator = this.gesuchsjahrPaginatorSig();
     if (sort) {
       datasource.sort = sort;
+    }
+    if (paginator) {
+      datasource.paginator = paginator;
     }
     return datasource;
   });

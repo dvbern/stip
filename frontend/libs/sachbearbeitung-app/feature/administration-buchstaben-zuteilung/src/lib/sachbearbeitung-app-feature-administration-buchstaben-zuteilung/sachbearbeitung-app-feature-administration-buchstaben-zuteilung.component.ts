@@ -4,17 +4,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  ViewChild,
   computed,
   inject,
   signal,
+  viewChild,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoOptions } from '@maskito/core';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -26,6 +28,7 @@ import {
   removeDuplicates,
   sortZuweisung,
 } from '@dv/sachbearbeitung-app/util-fn/sachbearbeiter-helper';
+import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -37,7 +40,7 @@ import {
   SharedUtilFormService,
   provideMaterialDefaultOptions,
 } from '@dv/shared/util/form';
-import { createFilterableColumns } from '@dv/shared/util-fn/table-helper';
+import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 const CHAR = '[a-z]{1,3} ?';
 const RANGE = `${CHAR}- ?(${CHAR})?`;
@@ -53,6 +56,8 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
     MatInputModule,
     MatTableModule,
     MatSortModule,
+    MatPaginatorModule,
+    MatTooltipModule,
     MatCheckboxModule,
     TranslatePipe,
     SharedUiFormSaveComponent,
@@ -60,11 +65,13 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
     SharedUiFormMessageErrorDirective,
     SharedUiRdIsPendingPipe,
     SharedUiMaxLengthDirective,
+    SharedUiClearButtonComponent,
   ],
   providers: [
     provideMaterialDefaultOptions({
       subscriptSizing: 'dynamic',
     }),
+    paginatorTranslationProvider(),
   ],
   templateUrl:
     './sachbearbeitung-app-feature-administration-buchstaben-zuteilung.component.html',
@@ -73,22 +80,14 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
 export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
   implements AfterViewInit
 {
-  @ViewChild(MatSort) sort!: MatSort;
   private elementRef = inject(ElementRef);
   private formBuilder = inject(FormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private sortSig = viewChild(MatSort);
+  private paginatorSig = viewChild(MatPaginator);
   store = inject(SachbearbeiterStore);
   filterChangedSig = signal<string | null>(null);
-  displayedColumns = [
-    'fullName',
-    'enabledDe',
-    'buchstabenDe',
-    'enabledFr',
-    'buchstabenFr',
-  ] as const;
-  displayedColumnFilters = createFilterableColumns(this.displayedColumns, [
-    'fullName',
-  ]);
+  displayedColumns = ['fullName', 'buchstabenDe', 'buchstabenFr'] as const;
   zuweisungInputMask: MaskitoOptions = {
     mask: new RegExp(`^(${RANGE}|${CHAR})(, ?(${RANGE}|${CHAR})?)*$`, 'i'),
     postprocessors: [
@@ -133,7 +132,8 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
     datasource.filterPredicate = (data, filter) => {
       return data.fullName.toLocaleLowerCase().includes(filter);
     };
-    datasource.sort = this.sort;
+    datasource.sort = this.sortSig() ?? null;
+    datasource.paginator = this.paginatorSig() ?? null;
     if (filter) {
       datasource.filter = filter.trim().toLocaleLowerCase();
     }

@@ -22,9 +22,19 @@
             }
             @case ('NOT_READY') {
               @if (einreichenView.specialValidationErrors.length === 0) {
-                <dv-shared-ui-info-container [type]="'warning'" data-testid="alert-warning">
-                  <span class="text-warning material-symbols-rounded me-3">warning</span>
-                  <span [innerHTML]="'shared.form.abschluss.notReady' | translate"></span>
+                <dv-shared-ui-info-container class="d-block" [type]="'warning'" data-testid="alert-warning">
+                  <div class="d-flex gap-2">
+                    <span class="text-warning material-symbols-rounded me-3">warning</span>
+                    <span [innerHTML]="'shared.form.abschluss.notReady' | translate"></span>
+                  </div>
+
+                  <ul class="mt-4">
+                    @for (step of einreichenView.invalidFormularSteps; track step.route) {
+                      <li>
+                        <a [routerLink]="step.routes">{{ step.titleTranslationKey | translate }}</a>
+                      </li>
+                    }
+                  </ul>
                 </dv-shared-ui-info-container>
               } @else {
                 @for (error of einreichenView.specialValidationErrors; track error) {

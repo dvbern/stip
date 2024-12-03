@@ -43,6 +43,8 @@
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Aperçu de la distribution des lettres",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Gestionnaire",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter": "Filtre gestionnaire",
+  "sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.DE": "Attribution des lettres Allemand",
+  "sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.FR": "Attribution des lettres Français",
   "sachbearbeitung-app.admin.buchstabenZuteilung.route.overview": "Aperçu de l'attribution des lettres",
 
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.title": "Publier la période de demande",
