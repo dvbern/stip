@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
-public class ValidatedAnnotationTest {
+class ValidatedAnnotationTest {
     @Test
     void test_resources_must_be_validated() {
         final var rule = classes()
