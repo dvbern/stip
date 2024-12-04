@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.GesuchNotizAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.generated.api.GesuchNotizResource;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
@@ -40,8 +41,8 @@ import lombok.RequiredArgsConstructor;
 public class GesuchNotizResourceImpl implements GesuchNotizResource {
     private final GesuchNotizService service;
     private final GesuchNotizAuthorizer authorizer;
+    private final GesuchService gesuchService;
 
-    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_JURIST })
     @Override
     public GesuchNotizDto answerJuristischeAbklaerungNotiz(
@@ -52,14 +53,13 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         return service.answerJuristischeNotiz(juristischeAbklaerungNotizAntwortDto, notizId);
     }
 
-    @AllowAll
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public GesuchNotizDto createNotiz(GesuchNotizCreateDto gesuchNotizCreateDto) {
-        return service.create(gesuchNotizCreateDto);
+        authorizer.canCreate(gesuchNotizCreateDto.getGesuchId(), gesuchNotizCreateDto.getNotizTyp());
+        return gesuchService.createGesuchNotiz(gesuchNotizCreateDto);
     }
 
-    @AllowAll
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public void deleteNotiz(UUID notizId) {
@@ -81,7 +81,6 @@ public class GesuchNotizResourceImpl implements GesuchNotizResource {
         return service.getAllByGesuchId(gesuchId);
     }
 
-    @AllowAll
     @RolesAllowed(OidcConstants.ROLE_SACHBEARBEITER)
     @Override
     public GesuchNotizDto updateNotiz(GesuchNotizUpdateDto gesuchNotizUpdateDto) {

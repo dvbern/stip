@@ -61,6 +61,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
+import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
@@ -69,6 +70,8 @@ import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
@@ -666,5 +669,17 @@ public class GesuchService {
         gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
         gesuchStatusService
             .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+    }
+
+    @Transactional
+    public GesuchNotizDto createGesuchNotiz(final GesuchNotizCreateDto createDto) {
+        final var gesuch = gesuchRepository.requireById(createDto.getGesuchId());
+        final var notiz = gesuchNotizService.create(gesuch, createDto);
+
+        if (createDto.getNotizTyp() == GesuchNotizTyp.JURISTISCHE_NOTIZ) {
+            juristischAbklaeren(gesuch.getId());
+        }
+
+        return notiz;
     }
 }

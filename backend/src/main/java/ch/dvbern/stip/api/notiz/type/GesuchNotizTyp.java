@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.notiz.entity;
+package ch.dvbern.stip.api.notiz.type;
 
-public enum NotizTyp {
+public enum GesuchNotizTyp {
     GESUCH_NOTIZ,
     JURISTISCHE_NOTIZ
 }

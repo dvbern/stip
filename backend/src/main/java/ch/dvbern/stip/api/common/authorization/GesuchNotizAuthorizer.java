@@ -20,8 +20,11 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.notiz.entity.NotizTyp;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
+import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -31,17 +34,19 @@ import lombok.RequiredArgsConstructor;
 @Authorizer
 public class GesuchNotizAuthorizer extends BaseAuthorizer {
     private final GesuchNotizRepository gesuchNotizRepository;
+    private final GesuchRepository gesuchRepository;
+    private final GesuchStatusService gesuchStatusService;
 
     public void canUpdate(UUID notizId) {
         final var notiz = gesuchNotizRepository.requireById(notizId);
-        if (notiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
+        if (notiz.getNotizTyp().equals(GesuchNotizTyp.JURISTISCHE_NOTIZ)) {
             throw new ForbiddenException();
         }
     }
 
     public void canDelete(UUID notizId) {
         final var notiz = gesuchNotizRepository.requireById(notizId);
-        if (notiz.getNotizTyp().equals(NotizTyp.JURISTISCHE_NOTIZ)) {
+        if (notiz.getNotizTyp().equals(GesuchNotizTyp.JURISTISCHE_NOTIZ)) {
             throw new ForbiddenException();
         }
         canUpdate(notizId);
@@ -51,6 +56,15 @@ public class GesuchNotizAuthorizer extends BaseAuthorizer {
         final var notiz = gesuchNotizRepository.requireById(notizId);
         if (Objects.nonNull(notiz.getAntwort())) {
             throw new ForbiddenException();
+        }
+    }
+
+    public void canCreate(final UUID gesuchId, final GesuchNotizTyp typ) {
+        if (typ == GesuchNotizTyp.JURISTISCHE_NOTIZ) {
+            final var gesuch = gesuchRepository.requireById(gesuchId);
+            if (!gesuchStatusService.canFire(gesuch, GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG)) {
+                throw new ForbiddenException();
+            }
         }
     }
 }

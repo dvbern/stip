@@ -20,10 +20,9 @@ package ch.dvbern.stip.api.notiz.service;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
-import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.notiz.entity.NotizTyp;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
@@ -39,7 +38,7 @@ public class GesuchNotizService {
     private final GesuchNotizRepository gesuchNotizRepository;
     private final GesuchNotizMapper gesuchNotizMapper;
     private final GesuchRepository gesuchRepository;
-    private final GesuchStatusService gesuchStatusService;
+    private final GesuchService gesuchService;
 
     @Transactional
     public List<GesuchNotizDto> getAllByGesuchId(final UUID gesuchId) {
@@ -64,15 +63,10 @@ public class GesuchNotizService {
     }
 
     @Transactional
-    public GesuchNotizDto create(final GesuchNotizCreateDto createDto) {
-        final var gesuch = gesuchRepository.requireById(createDto.getGesuchId());
+    public GesuchNotizDto create(final Gesuch gesuch, final GesuchNotizCreateDto createDto) {
         final var notiz = gesuchNotizMapper.toEntity(createDto);
         notiz.setGesuch(gesuch);
         gesuchNotizRepository.persistAndFlush(notiz);
-
-        if (notiz.getNotizTyp() == NotizTyp.JURISTISCHE_NOTIZ) {
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG);
-        }
 
         return gesuchNotizMapper.toDto(notiz);
     }
