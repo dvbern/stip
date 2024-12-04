@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.repo;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,10 +41,10 @@ public class GesuchHistoryRepository {
             .forRevisionsOfEntity(Gesuch.class, true, true)
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .addOrder(AuditEntity.property("timestampMutiert").desc())
             .getResultList()
             .stream()
             .map(Gesuch.class::cast)
-            .sorted(Comparator.comparing(Gesuch::getTimestampMutiert).reversed())
             .toList();
 
         return revisions;
