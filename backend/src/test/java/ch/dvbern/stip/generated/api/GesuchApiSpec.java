@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
@@ -447,11 +448,11 @@ public class GesuchApiSpec {
         }
 
          /**
-         * @param body (UUID)  (required)
+         * @param ausgewaehlterGrundDtoSpec (AusgewaehlterGrundDtoSpec)  (required)
          * @return operation
          */
-        public ChangeGesuchStatusToNegativeVerfuegungOper body(UUID body) {
-            reqSpec.setBody(body);
+        public ChangeGesuchStatusToNegativeVerfuegungOper body(AusgewaehlterGrundDtoSpec ausgewaehlterGrundDtoSpec) {
+            reqSpec.setBody(ausgewaehlterGrundDtoSpec);
             return this;
         }
 

@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
+import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -76,9 +77,9 @@ public class GesuchResourceImpl implements GesuchResource {
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
-    public GesuchDto changeGesuchStatusToNegativeVerfuegung(UUID gesuchId, UUID decision) {
+    public GesuchDto changeGesuchStatusToNegativeVerfuegung(UUID gesuchId, AusgewaehlterGrundDto grund) {
         gesuchAuthorizer.canUpdate(gesuchId);
-        return gesuchService.changeGesuchStatusToNegativeVerfuegung(gesuchId, decision);
+        return gesuchService.changeGesuchStatusToNegativeVerfuegung(gesuchId, grund.getDecisionId());
     }
 
     // TODO KSTIP-1247: roles allowed

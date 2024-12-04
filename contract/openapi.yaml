@@ -4914,7 +4914,12 @@ components:
         textFr:
           type: string
     AusgewaehlterGrund:
-      $ref: '#/components/schemas/UUID'
+      type: object
+      required:
+        - decisionId
+      properties:
+        decisionId:
+          $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:
