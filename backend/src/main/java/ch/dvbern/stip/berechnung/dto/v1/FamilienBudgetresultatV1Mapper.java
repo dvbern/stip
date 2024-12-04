@@ -58,7 +58,7 @@ public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMap
         }
         anrechenbaresVermoegen = BigDecimal.valueOf(
             anrechenbaresVermoegen * berechnungsRequest.getStammdaten().getVermoegensanteilInProzent() / 100.0
-        ).setScale(0, RoundingMode.HALF_DOWN).intValue();
+        ).setScale(0, RoundingMode.HALF_UP).intValue();
 
         return new FamilienBudgetresultatDto()
             .familienBudgetTyp(steuerdatenTyp)
