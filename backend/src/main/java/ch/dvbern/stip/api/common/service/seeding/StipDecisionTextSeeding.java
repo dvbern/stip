@@ -17,37 +17,39 @@
 
 package ch.dvbern.stip.api.common.service.seeding;
 
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.stipdecision.decider.StipDeciderTenant;
+import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
-import jakarta.enterprise.inject.Instance;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReaderBuilder;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor
 public class StipDecisionTextSeeding extends Seeder {
+    private static final String PATH_TO_CSV = "/seeding/stipDecisionText/%s/stipDecisionText.csv";
+
     private final ConfigService configService;
-    private final TenantService tenantService;
     private final StipDecisionTextRepository decisionTextRepository;
-    private final Instance<BaseStipDecisionTextProvider> decisionTextProviders;
 
     @Override
     protected void doSeed() {
-        final var decisionTextProvider = getDecisionTextProviderForTenantId(
-            getTenant()
-        );
-        decisionTextRepository.deleteAll();
-        LOG.info("Starting stip decision text seeding seeding");
-        final var decisionTexts = decisionTextProvider.getDecisionTexts();
-        decisionTexts.forEach(decisionTextRepository::persistAndFlush);
-        LOG.info("Finished stip decision text seeding seeding");
+        if (decisionTextRepository.count() != 0) {
+            LOG.info("stip decision texts already seeded, skipping...");
+            return;
+        }
 
+        final var decisionTexts = getDecisionTextsToSeed(getTenant());
+        decisionTextRepository.persist(decisionTexts);
     }
 
     @Override
@@ -55,20 +57,35 @@ public class StipDecisionTextSeeding extends Seeder {
         return configService.getSeedAllProfiles();
     }
 
-    private BaseStipDecisionTextProvider getDecisionTextProviderForTenantId(final String tenantId) {
-        final var textProvider = decisionTextProviders.stream()
-            .filter(provider -> {
-                final var annotation = provider.getClass().getAnnotation(StipDeciderTenant.class);
-                return annotation != null
-                && annotation.value().name().toLowerCase().equals(tenantId);
-            })
-            .findFirst();
-        if (textProvider.isEmpty()) {
-            throw new IllegalArgumentException(
-                "Cannot find a StipDecisionTextProvider for tenant " + tenantId
-            );
-        }
-        return textProvider.get();
-    }
+    @SneakyThrows
+    private List<StipDecisionText> getDecisionTextsToSeed(final String tenant) {
+        final var toLoad = String.format(PATH_TO_CSV, tenant);
+        try (final var resource = getClass().getResourceAsStream(toLoad)) {
+            if (resource == null) {
+                throw new RuntimeException(String.format("Could not load resource %s", toLoad));
+            }
 
+            try (
+                final var reader = new CSVReaderBuilder(new InputStreamReader(resource, StandardCharsets.UTF_8))
+                    .withSkipLines(1)
+                    .withCSVParser(
+                        new CSVParserBuilder()
+                            .withSeparator(';')
+                            .build()
+                    )
+                    .build();
+            ) {
+                return reader.readAll()
+                    .stream()
+                    .map(
+                        plzLine -> new StipDecisionText()
+                            .setStipDecision(StipDecision.valueOf(plzLine[0]))
+                            .setTitleDe(plzLine[1])
+                            .setTextDe(plzLine[2])
+                            .setTextFr(plzLine[3])
+                    )
+                    .toList();
+            }
+        }
+    }
 }

@@ -17,13 +17,17 @@
 
 package ch.dvbern.stip.stipdecision.service;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.generated.dto.StipDecisionTextDto;
 import ch.dvbern.stip.stipdecision.decider.BaseStipDecider;
 import ch.dvbern.stip.stipdecision.decider.StipDeciderTenant;
+import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +39,8 @@ import lombok.extern.slf4j.Slf4j;
 public class StipDecisionService {
     private final TenantService tenantService;
     private final Instance<BaseStipDecider> stipDeciders;
+    private final StipDecisionTextRepository stipDecisionTextRepository;
+    private final StipDecisionTextMapper stipDecisionTextMapper;
 
     private BaseStipDecider getDeciderForTenantId(final String tenantId) {
         final var decider = stipDeciders.stream().filter(stipDecider -> {
@@ -69,4 +75,7 @@ public class StipDecisionService {
         return decider.getGesuchStatusChangeEvent(decision);
     }
 
+    public List<StipDecisionTextDto> getAll() {
+        return stipDecisionTextRepository.findAll().stream().map(stipDecisionTextMapper::toDto).toList();
+    }
 }

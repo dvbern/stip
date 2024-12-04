@@ -46,6 +46,12 @@ public interface GesuchResource {
     GesuchDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
+    @Path("/status/kein-stipendien-anspruch/{gesuchId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto changeGesuchStatusToKeinStipendienAnspruch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull UUID body);
+
+    @POST
     @Path("/status/verfuegt/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto changeGesuchStatusToVerfuegt(@PathParam("gesuchId") UUID gesuchId);
@@ -130,11 +136,6 @@ public interface GesuchResource {
     @Path("/{gesuchId}/statusprotokoll")
     @Produces({ "application/json", "text/plain" })
     List<StatusprotokollEntryDto> getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);
-
-    @PATCH
-    @Path("/{gesuchId}/juristischAbklaeren")
-    @Produces({ "application/json", "text/plain" })
-    void juristischAbklaeren(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
     @Path("/{gesuchId}")

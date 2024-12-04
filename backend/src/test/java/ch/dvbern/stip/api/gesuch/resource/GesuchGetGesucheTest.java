@@ -244,12 +244,13 @@ class GesuchGetGesucheTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
 
-        gesuchApiSpec.juristischAbklaeren()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+        // TODO KSTIP-1585: Create juristische notiz instead
+        // gesuchApiSpec.juristischAbklaeren()
+        // .gesuchIdPath(gesuch.getId())
+        // .execute(TestUtil.PEEK_IF_ENV_SET)
+        // .then()
+        // .assertThat()
+        // .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
     @Test

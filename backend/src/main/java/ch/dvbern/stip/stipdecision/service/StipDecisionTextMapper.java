@@ -15,12 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.service.seeding;
+package ch.dvbern.stip.stipdecision.service;
 
-import java.util.Set;
-
+import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.generated.dto.StipDecisionTextDto;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
+import org.mapstruct.Mapper;
 
-public abstract class BaseStipDecisionTextProvider {
-    public abstract Set<StipDecisionText> getDecisionTexts();
+@Mapper(config = MappingConfig.class)
+public interface StipDecisionTextMapper {
+    StipDecisionTextDto toDto(StipDecisionText entity);
 }

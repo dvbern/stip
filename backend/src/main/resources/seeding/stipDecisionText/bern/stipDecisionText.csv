@@ -1,0 +1,115 @@
+﻿stipDecision;titleDe;textDe;textFr
+EINGABEFRIST_ABGELAUFEN;Nichteintreten;"Ihr Gesuch um einen Ausbildungsbeitrag für das Ausbildungsjahr %s ist mit einer Verspätung von mehr als drei Monaten am %s eingereicht worden. Deshalb können wir leider auf Ihr Gesuch nicht eintreten.
+
+Gemäss Artikel 36 Absatz 1 der Verordnung über die Ausbildungsbeiträge (ABV) ist der Eingabetermin für Gesuche a) der 30. Juni für Ausbildungsjahre, die in der ersten Jahreshälfte beginnen und b) der
+31. Dezember für Ausbildungsjahre, die in der zweiten Jahreshälfte beginnen. Bei Gesuchen, die mit einer Verspätung von bis zu drei Monaten eingehen, werden die Ausbildungsbeiträge entsprechend
+gekürzt und nur für ganze Monate ausgerichtet (Art. 36 Abs. 2 ABV). Auf Gesuche, die mit einer Verspätung von mehr als drei Monaten eingehen, wird nicht eingetreten (Art. 36 Abs. 3 ABV).
+";"Votre demande de subside de formation pour l’année de formation %s a été soumise le %s, soit avec un retard supérieur à trois mois, raison pour laquelle elle est malheureusement irrecevable.
+
+En vertu du l’article 36, alinéa 1 de l’ordonnance sur l’octroi de subsides de formation (OSF), les de-mandes doivent être remises a) au plus tard le 30 juin lorsque l’année de formation commence au
+premier semestre et b) au plus tard le 31 décembre lorsque l’année de formation commence au second
+semestre. Toute demande déposée avec un retard inférieur ou égal à trois mois entraîne la réduction proportionnelle des subsides de formation, qui ne sont versés que pour des mois entiers (art. 36, al. 2 OSF). Toute demande déposée avec un retard supérieur à trois mois est irrecevable (art. 36, al. 3 OSF)."
+NICHT_BERECHTIGTE_PERSON;Nicht berechtigter Personenkreis;"Das Gesuch ist rechtzeitig bei uns eingetroffen.
+
+Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören und keinen stipendienrechtlichen Wohnsitz im Kanton Bern erworben haben.
+
+Die Bedingungen des stipendienrechtlichen Wohnsitzes ersehen Sie aus beiliegendem Auszug.
+(Art. 12 und 13 des Gesetzes über die Ausbildungsbeiträge [ABG]). Sie können sich an die Stipendienstelle des Kantons %s wenden (Adresse: Stipendienstelle)
+
+";"Das Gesuch ist rechtzeitig bei uns eingetroffen.
+
+Après examen de votre situation, nous devons malheureusement vous informer que nous ne pouvons pas vous octroyer de subside de formation. En effet, vous ne faites pas partie du cercle des ayants droit et votre domicile légal en matière de subsides de formation n’est pas situé dans le canton de Berne.
+
+Nous vous invitons à consulter l’extrait de loi ci-joint pour connaître les critères permettant de détermi-ner le domicile légal en matière de subsides de formation (art. 12 et 13 de la loi sur l’octroi de subsides de formation [LSF]).
+
+Vous pouvez vous adresser au service des bourses d’études du canton de %s (adresses des ser-vices des bourses d'études).
+"
+KEIN_WOHNSITZ_KANTON_BE;keinen stipendienrechtlichen Wohnsitz im Kanton Bern;"Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören und keinen stipendienrechtlichen Wohnsitz im Kanton Bern erworben haben.
+
+Die Bedingungen des stipendienrechtlichen Wohnsitzes ersehen Sie aus beiliegendem Auszug.
+(Art. 12 und 13 des Gesetzes über die Ausbildungsbeiträge [ABG]). Sie können sich an die Stipendienstelle des Kantons %s wenden (Adresse: Stipendienstelle)
+
+";"Après examen de votre situation, nous devons malheureusement vous informer que nous ne pouvons pas vous octroyer de subside de formation. En effet, vous ne faites pas partie du cercle des ayants droit et votre domicile légal en matière de subsides de formation n’est pas situé dans le canton de Berne.
+
+Nous vous invitons à consulter l’extrait de loi ci-joint pour connaître les critères permettant de détermi-ner le domicile légal en matière de subsides de formation (art. 12 et 13 de la loi sur l’octroi de subsides de formation [LSF]).
+
+Vous pouvez vous adresser au service des bourses d’études du canton de %s (adresses des services des bourses d'études)..
+"
+AUSBILDUNG_NICHT_ANERKANNT;keine anerkannte Ausbildung;"Stipendien und Darlehen können gewährt werden für den Besuch von anerkannten Ausbildungen, die zu einem anerkannten Abschluss führen. Ausbildungsstätten sind nur anerkannt, soweit sie zu einem Abschluss führen, der vom Kanton, von der Eidgenossenschaft oder von einem ausländischen Staat anerkannt ist (Art. 6 Abs. 1 und Art. 8 Abs. 2 des Gesetzes über die Ausbildungsbeiträge [ABG]).
+
+Gemäss Ihren Angaben im Gesuch führt Ihre Ausbildung nicht zu einem anerkannten Abschluss im Sinne der Ausbildungsbeitragsgesetzgebung. Deshalb können wir Ihnen leider keine Ausbildungsbeiträge gewähren.
+
+";"Des bourses et des prêts peuvent être octroyés aux personnes qui suivent une formation reconnue permettant l’obtention d’un diplôme reconnu. Les établissements de formation ne sont reconnus que s’ils délivrent un diplôme reconnu par le canton, par la Confédération ou par un Etat étranger (art. 6, al. 1 et art. 8, al. 2 de la loi sur l’octroi de subsides de formation [LSF]).
+
+D’après les informations figurant dans votre demande, la formation que vous suivez ne permet pas d’obtenir un diplôme reconnu au sens de la législation sur l’octroi de subsides de formation. C’est pourquoi nous ne pouvons malheureusement pas vous accorder de subside de formation.
+"
+SCHULJAHR_9_SEKSTUFE_1;Gym 1 - 9. Schuljahr;"Sie befinden sich im 9. Schuljahr auf der Sekundarstufe I. Das Gesetz über die Ausbildungsbeiträge (ABG) hält fest, welche Ausbildungen stipendienrechtlich nicht anerkannt sind. So besteht für Ausbil-dungen auf der Primarstufe und der Sekundarstufe I gemäss Artikel 7 Absatz 2 Buchstabe a ABG kei-ne Beitragsberechtigung. Im Volksschulgesetz (VSG) ist geregelt, dass die Primarstufe 6 Jahre und die Sekundarstufe I 3 Jahre dauert (Art. 3 Abs. 2 VSG). Es ist nicht entscheidend, wo das 9. Schuljahr besucht wird. Deshalb können wir Ihnen leider keinen Ausbildungsbeitrag gewähren.
+
+";"Vous êtes en 11e année, soit au degré secondaire I. La loi sur l’octroi de subsides de formation (LSF)
+stipule quelles formations ne sont pas reconnues du point de vue de la législation sur l’octroi de sub-sides de formation. Conformément à l’article 7, alinéa 2, lettre à LSF, les formations dispensées au degré primaire et au degré secondaire I ne donnent pas droit à des subsides. La loi sur l’école obliga-toire (LEO) prévoit que l’école enfantine dure deux ans, le degré primaire dure six ans et le degré se-condaire I trois ans (art. 3, al. 2 LEO). Le lieu où la 11e année scolaire est effectuée n’est pas détermi-nant. C’est pourquoi nous ne pouvons malheureusement pas vous accorder de subside de formation.
+"
+AUSBILDUNG_BPI1;Ausbildung BPI1;"Das berufsvorbereitende Schuljahr Praxis und Integration (BPI) ist modular aufgebaut. Im ersten Jahr (BPI 1) stehen der Erwerb von Grundkompetenzen in einer Landessprache (hier in der deutschen Sprache) und die Berufsorientierung im Vordergrund. Im zweiten Jahr (BPI 2) steht der Berufseinstieg im Zentrum. Ein berufsvorbereitendes Schuljahr ist gemäss Artikel 7 Absatz 1 Buchstabe a des Gesetzes vom 18. November 2004 über die Ausbildungsbeiträge (ABG; BSG 438.31) eine Vorbil-dung und eine anerkannte Ausbildung. Allerdings gilt gemäss Artikel 1 Absatz 1 Buchstabe a der Verordnung vom 5. April 2006 über die Ausbildungsbeiträge (ABV; BSG 438.312) nur der Besuch eines berufsvorbereitenden Schuljahrs oder einer Vorlehre an einer Berufsvorbereitungsschule als Vorbildung.
+
+Das BPI 1 dient der Integration und ist stipendienrechtlich nicht anerkannt. Wir weisen gerne darauf hin, dass das BPI 2 hingegen einem berufsvorbereitenden Schuljahr Praxis und Allgemeinbildung entspricht. Wir werden demnach das Gesuch für das BPI 2 im Folgejahr gerne prüfen.
+";"L’année scolaire de préparation professionnelle Pratique et intégration (API) est modulaire. L’accent est mis la première année (API 1) sur l’acquisition de connaissances de base d’une langue fédérale (dans le cas présent le français) ainsi que sur l’orientation professionnelle, et lors de la deuxième année (API 2) sur l’entrée dans le monde du travail. En vertu de l’article 7, alinéa 1, lettre a de la loi du 18 novembre 2004 sur l’octroi de subsides de formation (LSF ; RSB 438.31), l’année scolaire de préparation profes-sionnelle est considérée comme une formation préparatoire reconnue. Toutefois, conformément à l’article 1, alinéa 1, lettre a de l’ordonnance du 5 avril 2006 sur l’octroi de subsides de formation (OSF ; RSB 438.312), la fréquentation d’une seule année scolaire de préparation professionnelle ou d’un seul préapprentissage dans une école de préparation professionnelle peut être prise en compte.
+
+L’API 1 vise l’intégration et n’est pas reconnue comme donnant droit à une bourse. Toutefois, nous te-nons à préciser que l’API 2 correspond quant à elle à une année scolaire de préparation professionnelle Pratique et formation générale qui, elle, est reconnue. Nous étudierons donc votre demande de subside pour l’API 2 l’année prochaine.
+"
+ART_32_BBV;Art. 32 BBV;"Der von Ihnen besuchte Lehrgang erfüllt die Voraussetzungen von Artikel 6 Absatz 1 des Gesetzes über die Ausbildungsbeiträge (ABG) nicht. Er dient lediglich der Vorbereitung auf die Lehrabschlussprüfung. Das Belegen eines Vorbereitungskurses ist im Vergleich zum Besuch des Berufsschulunterrichts im Rahmen einer Lehre nicht obligatorisch. Deshalb können wir Ihnen leider keinen Ausbil-dungsbeitrag gewähren.
+";La formation que vous avez suivie ne répond pas aux exigences de l’article 6, alinéa 1 de la loi sur l’octroi de subsides de formation (LSF). Elle permet uniquement de préparer les examens de fin d’apprentissage. Contrairement à l’enseignement dans une école professionnelle, l’accomplissement d’un cours préparatoire n’est pas obligatoire dans le cadre d’un apprentissage. C’est pourquoi nous ne pouvons malheureusement pas vous accorder de subside de formation.
+ZWEITAUSBILDUNG;Zweitausbildung;"Für Zweitausbildungen (z.B. eine zweite Lehre) werden keine Stipendien, sondern ausschliesslich Darlehen gewährt (Art. 10 Abs. 1 des Gesetzes vom 18. November 2004 über die Ausbildungsbeiträge [ABG; BSG 438.31]). Sofern Sie es wünschen, können Sie einen Darlehensantrag bei uns einreichen. Wir werden diesen gerne prüfen. ";"Für Zweitausbildungen (z.B. eine zweite Lehre) werden keine Stipendien, sondern ausschliesslich Dar-lehen gewährt (Art. 10 Abs. 1 des Gesetzes vom 18. November 2004 über die Ausbildungsbeiträge [ABG; BSG 438.31]). Sofern Sie es wünschen, können Sie einen Darlehensantrag bei uns einreichen. Wir werden diesen gerne prüfen. "
+AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG;2. Ausbildung auf gleicher Stufe (BVS oder Vorbildung);"Der Besuch eines berufsvorbereiteten Schuljahres, einer Vorlehre oder einer Vorbereitung auf die berufliche Grundbildung ist gemäss der Ausbildungsbeitragsgesetzgebung eine Vorbildung (Art. 7 Abs. 1 des Gesetzes über die Ausbildungsbeiträge [ABG] in Verbindung mit Art. 1 Abs. 1 Bst. a der Verordnung über die Ausbildungsbeiträge [ABV]). Eine zweite Vorbildung auf glei-cher Ausbildungsstufe ist keine anerkannte Ausbildung (Art. 1 Abs. 4 ABV).
+
+Gemäss dem zusammen mit dem Gesuch eingereichten Lebenslauf haben Sie bereits ein berufsvorbereitendes Schuljahr, eine Vorlehre oder eine Vorbereitung auf die berufliche Grundbildung absolviert und besuchen nun eine zweite Vorbildung auf gleicher Aus-bildungsstufe. Deshalb können wir Ihnen leider keine Ausbildungsbeiträge gewähren.
+";"Selon la législation sur l’octroi de subsides de formation, l’année scolaire de préparation professionnelle/le préapprentissage/une formation préparant à la formation professionnelle initiale (citer la formation suivie) constitue une formation préparatoire (art. 7, al. 1 de la loi sur l’octroi de subsides de formation [LSF] en corrélation avec l’art. 1, al. 1, lit. a de l’ordonnance sur l’octroi de subsides de for-mation [OSF]). Une deuxième formation préparatoire suivie au même niveau de formation n’est pas considérée comme une formation reconnue (art. 1, al. 4 OSF).
+
+D’après le CV joint à votre demande, vous avez déjà effectué une année scolaire de préparation professionnelle/un préapprentissage/une formation préparant à la formation professionnelle initiale (citer la formation suivie) et vous suivez maintenant une deuxième formation préparatoire au même niveau de formation. C’est pourquoi nous ne pouvons pas vous accorder de subside de formation.
+"
+EBA_LEHRE_2;2. EBA-Lehre;"Der Erwerb eines eidgenössischen Berufsattests ist gemäss Artikel 7 Absatz 1 Buchstabe a des Gesetzes vom 18. November 2004 über die Ausbildungsbeiträge (ABG; BSG 438.31) und gemäss Artikel 1 Absatz 2 der Verordnung vom 5. April 2006 über die Ausbildungsbeiträge (ABV; BSG 438.312) eine Vorbildung und eine anerkannte Ausbildung. Eine zweite Vorbildung auf gleicher Ausbildungs-stufe ist allerdings keine anerkannte Ausbildung (Artikel 1, Absatz 4 ABV).
+
+Da Sie bereits ein Berufsattest absolviert haben, können wir Ihnen keinen weiteren Ausbildungsbeitrag gewähren. Es besteht aus gesetzlichen Gründen kein Anspruch auf Ausbildungsbeiträge für eine zweite Vorbildung auf gleicher Ausbildungsstufe.
+";"En vertu de l’article 7, alinéa 1, lettre a de la loi du 18 novembre 2004 sur l’octroi de subsides de for-mation (LSF ; RSB 438.31) ainsi que de l’article 1, alinéa 2 de l’ordonnance du 5 avril 2006 sur l’octroi de subsides de formation (OSF ; RSB 438.312), les formations sanctionnées par une attestation fédé-rale de formation professionnelle (AFP) sont des formations préparatoires et sont donc reconnues. Cependant, une deuxième formation préparatoire suivie au même niveau de formation n’est pas consi-dérée comme une formation reconnue (art. 1, al. 4 OSF).
+
+Étant donné que vous avez déjà suivi une formation sanctionnée par une AFP, nous ne pouvons pas vous octroyer un nouveau subside de formation. Pour des raisons légales, nul ne peut prétendre à des subsides de formation pour une deuxième formation préparatoire suivie au même niveau de formation.
+"
+HOCHSCHULSTUDIUM_2;2. Hochschulstudium;"Für ein zweites Hochschulstudium oder die Weiterqualifikation auf Hochschulstufe können weder
+Stipendien noch Darlehen gewährt werden (Art. 7 Abs. 2 Bst. c des Gesetzes über die Ausbildungs
+beiträge [ABG]).
+
+";Aucun subside de formation ne peut être accordé pour des deuxièmes études ou une qualification complémentaire de niveau haute école (art. 7, al. 2, lit. c de la loi sur l’octroi de subsides de formation [LSF]).
+AUSBILDUNGEN_LAENGER_12_JAHRE;Ausbildung mehr als 12 Jahre;"Gemäss dem zusammen mit Ihrem Gesuch eingereichten Lebenslauf hat Ihre Ausbildung mehr als zwölf Jahre gedauert. Sie sind somit nicht mehr stipendienberechtigt.
+
+Die Beitragsberechtigung für Stipendien besteht während höchstens zwölf Ausbildungsjahren (Art. 14 Abs. 1 des Gesetzes über die Ausbildungsbeiträge [ABG]). An die Höchstdauer gemäss Artikel 14 Abs. 1 ABG werden alle Ausbildungssemester angerechnet, unabhängig davon, ob sie zu einem
+Abschluss geführt haben und ob dafür Ausbildungsbeiträge gewährt worden sind oder nicht (Art. 8 Abs. 1 der Verordnung über die Ausbildungsbeiträge [ABV]).
+
+Sofern Sie es wünschen, können Sie einen Darlehensantrag einreichen. Wir sind gerne bereit, diesen zu prüfen.
+";"D’après le CV joint à votre demande, votre formation a duré plus de douze ans, raison pour laquelle vous ne pouvez plus prétendre à une bourse.
+
+Le droit à l’obtention de bourses s’étend sur douze années de formation au plus (art. 14, al. 1 de la loi sur l’octroi de subsides de formation [LSF]). Sont pris en compte dans la durée maximale définie à l’article 14, alinéa 1 LSF tous les semestres de formation, qu’ils aient conduit à l’obtention d’un titre de fin d’études ou non et qu’ils aient donné lieu à l’octroi de subsides ou non (art. 8, al. 1 de l’ordonnance sur l’octroi de subsides de formation [OSF]).
+
+Si vous le souhaitez, vous pouvez déposer une demande de prêt, que nous nous ferons un plaisir d’examiner.
+"
+MEHRERE_AUSBILDUNGSWECHSEL;mehrere Ausbildungswechsel;"Gemäss Ihren Angaben im Gesuch haben Sie die Ausbildung vor einem Abschluss wiederholt gewechselt.
+
+Bei einem wiederholten Wechsel der Ausbildung besteht kein Beitragsanspruch mehr, weder in Stipendien- noch in Darlehensform (Art. 14 Abs. 3 des Gesetzes über die Ausbildungsbeiträge [ABG]).
+
+Deshalb können wir Ihnen leider keine Ausbildungsbeiträge gewähren.
+";"Selon les informations fournies, vous avez changé plusieurs fois de formations avant leur terme.
+
+En cas de changement de formation répété, il n’y a plus de droit aux subsides, que ce soit sous la forme d’une bourse ou d’un prêt (art. 14, al. 3 de la loi sur l’octroi de subsides de formation [LSF]). C’est pourquoi nous ne pouvons malheureusement pas vous accorder de subside de formation.
+"
+PIA_AELTER_35_JAHRE;Alter > 35 J.;"Nach dem vollendeten 35. Altersjahr entsteht keine Beitragsberechtigung mehr, ausser wenn
+• die Ausbildung dem beruflichen Einstieg oder Wiedereinstieg nach einer Familienphase oder nach der Betreuung von Angehörigen dient,
+• oder wichtige Gründe nachgewiesen werden, welche ein Fortsetzen der bisherigen Berufstä-tigkeit wesentlich erschweren (Art. 14 Abs. 4 des Gesetzes über die Ausbildungsbeiträge [ABG]).
+
+Sie haben zum Zeitpunkt des Ausbildungsbeginns bereits das 35. Altersjahr vollendet. Damit überschreiten Sie die gesetzliche Altersbeschränkung und sind daher nicht mehr beitragsberechtigt, ausser Sie können einen der Ausnahmegründe gemäss Artikel 14 Absatz 4 ABG geltend machen.
+
+Gemäss den zusammen mit Ihrem Gesuch eingereichten Unterlagen und dem Begründungsschreiben erfüllen Sie keinen der genannten Ausnahmegründe. Deshalb können wir Ihnen leider keine Ausbildungsbeiträge gewähren.
+";"Un requérant ou une requérante ayant dépassé l’âge de 35 ans n’a pas droit aux subsides sauf si
+•	la formation sert à l’insertion ou à la réinsertion après une période consacrée à la famille ou après une période consacrée à l’assistance de proches ;
+•	de justes motifs avérés entravent considérablement la continuation de l’activité professionnelle actuelle (art. 14, al. 4 de la loi sur l’octroi de subsides de formation [LSF]).
+
+Au moment où vous avez débuté votre formation, vous aviez déjà 35 ans. Vous dépassez donc la limite d’âge prévue par la loi et ne pouvez plus prétendre à un subside de formation, à moins que vous puis-siez faire valoir l’un des motifs d’exception au sens de l’article 14, alinéa 4 LSF.
+
+D’après les documents joints à votre demande et votre lettre de motivation, vous ne satisfaites à aucun de ces motifs d’exception, raison pour laquelle nous ne pouvons malheureusement pas vous accorder de subside de formation."
+AUSBILDUNG_IM_LEBENSLAUF;AUSBILDUNG_IM_LEBENSLAUF;AUSBILDUNG_IM_LEBENSLAUF;AUSBILDUNG_IM_LEBENSLAUF

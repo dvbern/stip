@@ -450,6 +450,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/ServerError'
+      operationId: getAll
   /ausbildung:
     post:
       tags:

@@ -688,7 +688,8 @@
 					  GesuchTrancheTyp=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp,
 					  SbDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbDashboardColumn,
 					  SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
-					  AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus
+					  AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
+            StipDecision=ch.dvbern.stip.api.common.type.StipDecision
 				  </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

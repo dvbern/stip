@@ -544,6 +544,7 @@ public class GesuchService {
 
     @Transactional
     public void juristischAbklaeren(final UUID gesuchId) {
+        // TODO KSTIP-1585: Call this when creating a juristische notiz
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG);
     }

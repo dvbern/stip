@@ -35,6 +35,15 @@ public abstract class BaseStipDecider {
             return "";
         }
         final var decisionText = stipDecisionTextRepository.getTextByStipDecision(decision);
+        if (decisionText == null) {
+            throw new IllegalStateException(
+                String.format(
+                    "A decision was returned by the decider which has no decision text, decision: %s",
+                    decision
+                )
+            );
+        }
+
         return switch (korrespondenzSprache) {
             case FRANZOESISCH -> decisionText.getTextFr();
             case DEUTSCH -> decisionText.getTextDe();

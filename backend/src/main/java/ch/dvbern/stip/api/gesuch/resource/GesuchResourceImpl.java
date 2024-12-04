@@ -76,6 +76,13 @@ public class GesuchResourceImpl implements GesuchResource {
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
+    public GesuchDto changeGesuchStatusToKeinStipendienAnspruch(UUID gesuchId, UUID body) {
+        return null;
+    }
+
+    // TODO KSTIP-1247: roles allowed
+    @RolesAllowed({ ROLE_SACHBEARBEITER })
+    @Override
     public GesuchDto changeGesuchStatusToVerfuegt(UUID gesuchId) {
         gesuchAuthorizer.canUpdate(gesuchId);
         return gesuchService.gesuchStatusToVerfuegt(gesuchId);
@@ -244,13 +251,6 @@ public class GesuchResourceImpl implements GesuchResource {
     public void gesuchZurueckweisen(UUID gesuchId, KommentarDto kommentarDto) {
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
-    }
-
-    @RolesAllowed(GESUCH_UPDATE)
-    @Override
-    public void juristischAbklaeren(UUID gesuchId) {
-        gesuchAuthorizer.canUpdate(gesuchId);
-        gesuchService.juristischAbklaeren(gesuchId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
