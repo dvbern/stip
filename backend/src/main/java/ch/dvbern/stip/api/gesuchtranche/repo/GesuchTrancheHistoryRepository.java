@@ -85,7 +85,7 @@ public class GesuchTrancheHistoryRepository {
                         AuditEntity.property("g", "gesuchStatus").hasChanged()
                     )
                 )
-                .addOrder(AuditEntity.revisionNumber().desc())
+                .addOrder(AuditEntity.revisionNumber().asc()) // ältester eintrag in history nehmen
                 .setMaxResults(1)
                 .getSingleResult();
         } catch (NoResultException ex) {

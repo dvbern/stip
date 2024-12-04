@@ -45,7 +45,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         canRead(gesuchTrancheId);
         final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
 
-        if (!Gesuchstatus.GESUCHSTELLER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
+        if (!Gesuchstatus.GESUCH_IS_VERFUEGT_OR_FURTHER.contains(gesuch.getGesuchStatus())) {
             throw new ForbiddenException();
         }
     }

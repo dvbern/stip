@@ -62,6 +62,15 @@ public enum Gesuchstatus {
             EnumSet.allOf(Gesuchstatus.class)
         );
 
+    public static final Set<Gesuchstatus> GESUCH_IS_VERFUEGT_OR_FURTHER = Collections.unmodifiableSet(
+        EnumSet.of(
+            Gesuchstatus.VERFUEGT,
+            Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            Gesuchstatus.VERSANDBEREIT,
+            Gesuchstatus.VERSENDET
+        )
+    );
+
     public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_GET_BERECHNUNG = Collections.unmodifiableSet(
         EnumSet.of(
             Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
