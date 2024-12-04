@@ -142,7 +142,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_READ)
     @AllowAll
     @Override
-    public Response getGsTrancheChangesInBearbeitung(UUID aenderungId) {
+    public Response getGsAenderungChangesInBearbeitung(UUID aenderungId) {
         gesuchTrancheAuthorizer.canRead(aenderungId);
         final var changes = gesuchService.getGsTrancheChangesInBearbeitung(aenderungId);
         return Response.ok(changes).build();
@@ -220,8 +220,8 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Response getChangesByTrancheId(UUID trancheId) {
-        gesuchTrancheAuthorizer.canRead(trancheId);
+    public Response getInitialTrancheChangesByTrancheId(UUID trancheId) {
+        gesuchTrancheAuthorizer.canReadInitialTrancheChanges(trancheId);
         return Response.ok(gesuchService.getChangesByTrancheId(trancheId)).build();
     }
 
@@ -229,7 +229,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_READ)
     @AllowAll
     @Override
-    public Response getSbTrancheChanges(UUID aenderungId) {
+    public Response getSbAenderungChanges(UUID aenderungId) {
         final var changes = gesuchService.getSbTrancheChanges(aenderungId);
         return Response.ok(changes).build();
     }

@@ -19,10 +19,13 @@ package ch.dvbern.stip.api.gesuchtranche.repo;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
@@ -54,4 +57,41 @@ public class GesuchTrancheHistoryRepository {
             .setMaxResults(1)
             .getSingleResult();
     }
+
+    @SuppressWarnings("unchecked")
+    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
+    public GesuchTranche getLatestWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
+        return findNewestGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.VERFUEGT);
+    }
+
+    @SuppressWarnings("unchecked")
+    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
+    public GesuchTranche getLatestWhereGesuchStatusChangedToEingereicht(final UUID gesuchId) {
+        return findNewestGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.EINGEREICHT);
+    }
+
+    private GesuchTranche findNewestGesuchTrancheOfGesuchInStatus(final UUID gesuchId, Gesuchstatus gesuchStatus) {
+        try {
+            final var reader = AuditReaderFactory.get(em);
+            return (GesuchTranche) reader
+                .createQuery()
+                .forRevisionsOfEntity(GesuchTranche.class, true, true)
+                .add(AuditEntity.property("gesuch_id").eq(gesuchId))
+                .traverseRelation("gesuch", JoinType.INNER, "g")
+                .up()
+                .add(
+                    AuditEntity.and(
+                        AuditEntity.property("g", "gesuchStatus").eq(gesuchStatus),
+                        AuditEntity.property("g", "gesuchStatus").hasChanged()
+                    )
+                )
+                .addOrder(AuditEntity.revisionNumber().desc())
+                .setMaxResults(1)
+                .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
+
+    }
+
 }

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -40,6 +41,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -77,7 +79,6 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
@@ -90,6 +91,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class GesuchService {
+    private final GesuchHistoryRepository gesuchHistoryRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
@@ -619,17 +621,21 @@ public class GesuchService {
 
     public GesuchWithChangesDto getChangesByTrancheId(UUID trancheId) {
         var tranche = gesuchTrancheRepository.requireAenderungById(trancheId);
+        final var gesuch = tranche.getGesuch();
 
-        GesuchTranche changeset;
-        try {
-            changeset = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(trancheId);
-        } catch (NoResultException e) {
-            changeset = null;
-        }
+        final var currentTrancheFromGesuchInStatusEingereicht =
+            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId());
+
+        final var currentTrancheFromGesuchInStatusVerfuegt =
+            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuch.getId());
+
         return gesuchMapperUtil.toWithChangesDto(
             tranche.getGesuch(),
-            tranche,
-            changeset
+            Objects.requireNonNullElseGet(
+                currentTrancheFromGesuchInStatusVerfuegt,
+                () -> gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId())
+            ),
+            currentTrancheFromGesuchInStatusEingereicht
         );
     }
 

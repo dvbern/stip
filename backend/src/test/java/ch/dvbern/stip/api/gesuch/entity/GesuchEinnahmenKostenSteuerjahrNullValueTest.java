@@ -73,14 +73,14 @@ class GesuchEinnahmenKostenSteuerjahrNullValueTest {
     @TestAsGesuchsteller
     @Order(2)
     void gesuchTrancheCreated() {
-        gesuch = gesuchApiSpec.getChangesByTrancheId()
-            .trancheIdPath(trancheId)
+        gesuch = gesuchApiSpec.getGesuch()
+            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-
         assertThat(gesuch.getGesuchTrancheToWorkWith(), notNullValue());
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigAb(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb()));
         assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigBis(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis()));
@@ -101,8 +101,9 @@ class GesuchEinnahmenKostenSteuerjahrNullValueTest {
             .then()
             .assertThat()
             .statusCode(Status.ACCEPTED.getStatusCode());
-        gesuch = gesuchApiSpec.getChangesByTrancheId()
-            .trancheIdPath(trancheId)
+        gesuch = gesuchApiSpec.getGesuch()
+            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()

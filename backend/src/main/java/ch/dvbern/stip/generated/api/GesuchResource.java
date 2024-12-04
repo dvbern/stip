@@ -4,12 +4,10 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
-
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
 
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -81,11 +79,6 @@ public interface GesuchResource {
     Response getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/changes/{trancheId}")
-    @Produces({ "application/json", "text/plain" })
-    Response getChangesByTrancheId(@PathParam("trancheId") UUID trancheId);
-
-    @GET
     @Path("/{gesuchId}/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     Response getGesuch(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
@@ -101,19 +94,24 @@ public interface GesuchResource {
     Response getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("typ") @NotNull   ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.gesuch.type.SbDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 
     @GET
+    @Path("/{aenderungId}/aenderung/gs/changes")
+    @Produces({ "application/json", "text/plain" })
+    Response getGsAenderungChangesInBearbeitung(@PathParam("aenderungId") UUID aenderungId);
+
+    @GET
     @Path("/benutzer/me/gs-dashboard")
     @Produces({ "application/json", "text/plain" })
     Response getGsDashboard();
 
     @GET
-    @Path("/{aenderungId}/aenderung/gs/changes")
+    @Path("/changes/{trancheId}")
     @Produces({ "application/json", "text/plain" })
-    Response getGsTrancheChangesInBearbeitung(@PathParam("aenderungId") UUID aenderungId);
+    Response getInitialTrancheChangesByTrancheId(@PathParam("trancheId") UUID trancheId);
 
     @GET
     @Path("/{aenderungId}/aenderung/sb/changes")
     @Produces({ "application/json", "text/plain" })
-    Response getSbTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
+    Response getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
     @Path("/{gesuchId}/statusprotokoll")

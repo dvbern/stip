@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -38,6 +39,16 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchRepository gesuchRepository;
+
+    @Transactional
+    public void canReadInitialTrancheChanges(final UUID gesuchTrancheId) {
+        canRead(gesuchTrancheId);
+        final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
+
+        if (!Gesuchstatus.GESUCHSTELLER_CAN_GET_BERECHNUNG.contains(gesuch.getGesuchStatus())) {
+            throw new ForbiddenException();
+        }
+    }
 
     @Transactional
     public void canRead(final UUID gesuchTrancheId) {

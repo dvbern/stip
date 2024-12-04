@@ -1437,7 +1437,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getChangesByTrancheId
+      operationId: getInitialTrancheChangesByTrancheId
       summary: Returns a change by its id
   '/gesuch/{gesuchId}/{gesuchTrancheId}':
     parameters:
@@ -1786,7 +1786,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGsTrancheChangesInBearbeitung
+      operationId: getGsAenderungChangesInBearbeitung
   '/gesuch/{aenderungId}/aenderung/sb/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
@@ -1808,7 +1808,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getSbTrancheChanges
+      operationId: getSbAenderungChanges
   /tenant/current:
     get:
       tags:

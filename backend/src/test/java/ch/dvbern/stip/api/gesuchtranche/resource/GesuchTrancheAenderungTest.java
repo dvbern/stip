@@ -38,12 +38,14 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -71,6 +73,7 @@ class GesuchTrancheAenderungTest {
 
     private GesuchTrancheSlimDtoSpec[] gesuchtranchen;
     private GesuchDtoSpec gesuch;
+    private GesuchWithChangesDtoSpec gesuchWithChanges;
 
     @Test
     @TestAsGesuchsteller
@@ -98,9 +101,33 @@ class GesuchTrancheAenderungTest {
             .statusCode(Response.Status.ACCEPTED.getStatusCode());
     }
 
-    @Test
+    // @Test
     @TestAsGesuchsteller
     @Order(4)
+    void gesuchWithChangesShouldNotBeAccessibleForGSBeforeVERFUEGT() {
+        gesuchApiSpec.getInitialTrancheChangesByTrancheId()
+            .trancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+    }
+
+    // @Test
+    @TestAsSachbearbeiter
+    @Order(5)
+    void gesuchWithChangesShouldNotBeAccessibleForSBBeforeVERFUEGT() {
+        gesuchApiSpec.getInitialTrancheChangesByTrancheId()
+            .trancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(6)
     void createFirstAenderungsantragFails() {
         createAenderungsanstrag()
             .then()
@@ -109,7 +136,7 @@ class GesuchTrancheAenderungTest {
     }
 
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(7)
     @Test
     void makeGesuchVerfuegt() {
         // TODO KSTIP-1631: Make Gesuch the correct state
@@ -119,17 +146,33 @@ class GesuchTrancheAenderungTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChangesByTrancheId()
+            .trancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        Assertions.assertNotNull(gesuchWithChanges.getGesuchTrancheToWorkWith());
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChangesByTrancheId()
+            .trancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(6)
+    @Order(8)
     void createFirstAenderungsantrag() {
         createAenderungsanstrag()
             .then()
@@ -139,7 +182,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(7)
+    @Order(9)
     @Description("Only one (open: NOT in State ABGELEHNT|AKZEPTIIERT) Aenderungsantrag should be allowed")
     void createSecondAenderungsantragFails() {
         createAenderungsanstrag()
