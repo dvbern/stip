@@ -62,6 +62,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
 
   displayedColumns = [
     'notizTyp',
+    'gesuchNummer',
     'datum',
     'user',
     'betreff',

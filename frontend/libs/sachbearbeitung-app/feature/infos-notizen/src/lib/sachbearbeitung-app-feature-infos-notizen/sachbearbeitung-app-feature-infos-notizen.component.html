@@ -33,6 +33,18 @@
         </td>
       </ng-container>
 
+      <!-- gesuchNummer  -->
+      <ng-container matColumnDef="gesuchNummer">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ 'sachbearbeitung-app.infos.notizen.table.gesuchNummer' | translate }}
+        </th>
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
+          <div class="tw-flex tw-h-[53px] tw-items-center">
+            {{ notiz.gesuchNummer }}
+          </div>
+        </td>
+      </ng-container>
+
       <!-- Datum -->
       <ng-container matColumnDef="datum">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
