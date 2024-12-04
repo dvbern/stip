@@ -118,7 +118,7 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
+            .statusCode(Status.NO_CONTENT.getStatusCode());
         gesuch = gesuchApiSpec.getCurrentGesuch()
             .gesuchIdPath(gesuchId)
             .execute(ResponseBody::prettyPeek)

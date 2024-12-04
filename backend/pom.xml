@@ -703,7 +703,7 @@
                     <useJakartaEe>true</useJakartaEe>
                     <useSwaggerAnnotations>false</useSwaggerAnnotations>
                     <interfaceOnly>true</interfaceOnly>
-                    <returnResponse>true</returnResponse>
+                    <returnResponse>false</returnResponse>
                     <additionalModelTypeAnnotations>@lombok.NoArgsConstructor
                       @lombok.AllArgsConstructor
                       @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)

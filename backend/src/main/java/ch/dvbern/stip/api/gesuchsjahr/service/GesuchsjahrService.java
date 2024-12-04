@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchsjahr.service;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
@@ -41,7 +41,7 @@ public class GesuchsjahrService {
         return gesuchsjahrMapper.toDto(gesuchsperiode);
     }
 
-    public Collection<GesuchsjahrDto> getGesuchsjahre() {
+    public List<GesuchsjahrDto> getGesuchsjahre() {
         return gesuchsjahrRepository.findAll()
             .stream()
             .map(gesuchsjahrMapper::toDto)

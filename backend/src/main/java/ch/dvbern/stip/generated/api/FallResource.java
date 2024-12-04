@@ -22,15 +22,15 @@ public interface FallResource {
     @POST
     @Path("/gs")
     @Produces({ "application/json", "text/plain" })
-    Response createFallForGs();
+    FallDto createFallForGs();
 
     @GET
     @Path("/sb")
     @Produces({ "application/json", "text/plain" })
-    Response getFaelleForSb();
+    List<FallDto> getFaelleForSb();
 
     @GET
     @Path("/gs")
     @Produces({ "application/json", "text/plain" })
-    Response getFallForGs();
+    FallDto getFallForGs();
 }

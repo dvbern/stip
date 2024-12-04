@@ -95,7 +95,7 @@ class GesuchTrancheAenderungTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.ACCEPTED.getStatusCode());
+            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 
     @Test
@@ -225,7 +225,7 @@ class GesuchTrancheAenderungTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
+            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
         // assert that list size is -1 to previous
         gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()

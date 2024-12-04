@@ -15,26 +15,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.config.resource;
+package ch.dvbern.stip.arch;
 
-import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.generated.api.ConfigurationResource;
-import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
-import jakarta.enterprise.context.RequestScoped;
-import lombok.RequiredArgsConstructor;
+import ch.dvbern.stip.arch.util.ArchTestUtil;
+import org.junit.jupiter.api.Test;
 
-@RequestScoped
-@RequiredArgsConstructor
-@Validated
-public class ConfigResourceImpl implements ConfigurationResource {
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
-    private final ConfigService configService;
+class ValidatedAnnotationTest {
+    @Test
+    void test_resources_must_be_validated() {
+        final var rule = classes()
+            .that()
+            .resideInAnyPackage("..resource..")
+            .should()
+            .beAnnotatedWith(Validated.class);
 
-    @Override
-    @AllowAll
-    public DeploymentConfigDto getDeploymentConfig() {
-        return configService.getDeploymentConfiguration();
+        rule.check(ArchTestUtil.APP_CLASSES);
     }
 }

@@ -17,12 +17,15 @@
 
 package ch.dvbern.stip.api.fall.resource;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.generated.api.FallResource;
+import ch.dvbern.stip.generated.dto.FallDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
@@ -32,6 +35,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class FallResourceImpl implements FallResource {
 
     private final FallService fallService;
@@ -39,21 +43,21 @@ public class FallResourceImpl implements FallResource {
     @RolesAllowed(FALL_CREATE)
     @Override
     @AllowAll
-    public Response createFallForGs() {
-        return Response.ok(fallService.createFallForGs()).build();
+    public FallDto createFallForGs() {
+        return fallService.createFallForGs();
     }
 
     @RolesAllowed({ FALL_READ, ROLE_SACHBEARBEITER })
     @Override
     @AllowAll
-    public Response getFaelleForSb() {
-        return Response.ok(fallService.findFaelleForSb()).build();
+    public List<FallDto> getFaelleForSb() {
+        return fallService.findFaelleForSb();
     }
 
     @RolesAllowed({ FALL_READ, ROLE_GESUCHSTELLER })
     @Override
     @AllowAll
-    public Response getFallForGs() {
-        return Response.ok(fallService.findFallForGs()).build();
+    public FallDto getFallForGs() {
+        return fallService.findFallForGs();
     }
 }

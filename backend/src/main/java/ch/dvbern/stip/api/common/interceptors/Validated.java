@@ -15,28 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.tenancy.service;
+package ch.dvbern.stip.api.common.interceptors;
 
-import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
-import ch.dvbern.stip.generated.dto.TenantInfoDto;
-import io.quarkus.test.Mock;
-import jakarta.enterprise.context.ApplicationScoped;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Mock
-@ApplicationScoped
-public class MockTenantService extends TenantService {
-    public MockTenantService() {
-        super(null);
-    }
+import jakarta.interceptor.InterceptorBinding;
 
-    @Override
-    public TenantInfoDto getCurrentTenant() {
-        return new TenantInfoDto()
-            .identifier("bern")
-            .clientAuth(
-                new TenantAuthConfigDto()
-                    .authServerUrl(keycloakFrontendUrl)
-                    .realm("bern")
-            );
-    }
+@InterceptorBinding
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+public @interface Validated {
 }

@@ -26,25 +26,25 @@ public interface AusbildungsstaetteResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createAusbildungsstaette(@Valid AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto);
+    AusbildungsstaetteDto createAusbildungsstaette(@Valid AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto);
 
     @DELETE
     @Path("/{ausbildungsstaetteId}")
     @Produces({ "text/plain" })
-    Response deleteAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId);
+    void deleteAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId);
 
     @GET
     @Path("/{ausbildungsstaetteId}")
     @Produces({ "application/json", "text/plain" })
-    Response getAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId);
+    AusbildungsstaetteDto getAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId);
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getAusbildungsstaetten();
+    List<AusbildungsstaetteDto> getAusbildungsstaetten();
 
     @PATCH
     @Path("/{ausbildungsstaetteId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response updateAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId,@Valid AusbildungsstaetteUpdateDto ausbildungsstaetteUpdateDto);
+    AusbildungsstaetteDto updateAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId,@Valid AusbildungsstaetteUpdateDto ausbildungsstaetteUpdateDto);
 }

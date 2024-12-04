@@ -33,112 +33,112 @@ public interface GesuchResource {
     @PATCH
     @Path("/{gesuchId}/bearbeitungAbschliessen")
     @Produces({ "application/json", "text/plain" })
-    Response bearbeitungAbschliessen(@PathParam("gesuchId") UUID gesuchId);
+    void bearbeitungAbschliessen(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Path("/status/bereit-fuer-bearbeitung/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    Response changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Path("/status/in-bearbeitung/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    Response changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Path("/status/verfuegt/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    Response changeGesuchStatusToVerfuegt(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToVerfuegt(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Path("/status/versendet/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    Response changeGesuchStatusToVersendet(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToVersendet(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
+    UUID createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
 
     @DELETE
     @Path("/{gesuchId}")
     @Produces({ "text/plain" })
-    Response deleteGesuch(@PathParam("gesuchId") UUID gesuchId);
+    void deleteGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
     @Path("/{gesuchId}/einreichen")
     @Produces({ "application/json", "text/plain" })
-    Response gesuchEinreichen(@PathParam("gesuchId") UUID gesuchId);
+    void gesuchEinreichen(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
     @Path("/{gesuchId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
-    Response gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
+    void gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
     @Produces({ "application/json", "text/plain" })
-    Response gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    void gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchId}/gesuchZurueckweisen")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response gesuchZurueckweisen(@PathParam("gesuchId") UUID gesuchId,@Valid KommentarDto kommentarDto);
+    void gesuchZurueckweisen(@PathParam("gesuchId") UUID gesuchId,@Valid KommentarDto kommentarDto);
 
     @GET
     @Path("/{gesuchId}/berechnung")
     @Produces({ "application/json", "text/plain" })
-    Response getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
+    BerechnungsresultatDto getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/current")
     @Produces({ "application/json", "text/plain" })
-    Response getCurrentGesuch(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto getCurrentGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesuch(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto getGesuch(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/benutzer/me/gs")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheGs();
+    List<GesuchDto> getGesucheGs();
 
     @GET
     @Path("/benutzer/me/sb/{getGesucheSBQueryType}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("typ") @NotNull   ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.gesuch.type.SbDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+    PaginatedSbDashboardDto getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("typ") @NotNull   ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.gesuch.type.SbDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 
     @GET
     @Path("/benutzer/me/gs-dashboard")
     @Produces({ "application/json", "text/plain" })
-    Response getGsDashboard();
+    List<FallDashboardItemDto> getGsDashboard();
 
     @GET
     @Path("/{aenderungId}/aenderung/gs/changes")
     @Produces({ "application/json", "text/plain" })
-    Response getGsTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
+    GesuchWithChangesDto getGsTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
     @Path("/{aenderungId}/aenderung/sb/changes")
     @Produces({ "application/json", "text/plain" })
-    Response getSbTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
+    GesuchWithChangesDto getSbTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
     @Path("/{gesuchId}/statusprotokoll")
     @Produces({ "application/json", "text/plain" })
-    Response getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);
+    List<StatusprotokollEntryDto> getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
     @Path("/{gesuchId}/juristischAbklaeren")
     @Produces({ "application/json", "text/plain" })
-    Response juristischAbklaeren(@PathParam("gesuchId") UUID gesuchId);
+    void juristischAbklaeren(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
     @Path("/{gesuchId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response updateGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
+    void updateGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
 }

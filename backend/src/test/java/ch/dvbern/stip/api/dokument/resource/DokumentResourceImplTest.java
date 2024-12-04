@@ -30,16 +30,15 @@ import ch.dvbern.stip.generated.api.DokumentResource;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static wiremock.org.hamcrest.MatcherAssert.assertThat;
-import static wiremock.org.hamcrest.Matchers.is;
 
 @QuarkusTest
 class DokumentResourceImplTest {
@@ -60,9 +59,8 @@ class DokumentResourceImplTest {
     @TestAsGesuchsteller
     // Gesuchsteller should be able to read all comments of a gesuch document
     void resourceShouldReturnCommentsOfADokument() {
-        assertThat(
-            dokumentResource.getGesuchDokumentKommentare(DokumentTyp.EK_VERDIENST, UUID.randomUUID()).getStatus(),
-            is(HttpStatus.SC_OK)
+        assertNotNull(
+            dokumentResource.getGesuchDokumentKommentare(DokumentTyp.EK_VERDIENST, UUID.randomUUID())
         );
     }
 
@@ -90,13 +88,13 @@ class DokumentResourceImplTest {
     @Test
     void sbShouldBeAbleToDenyDocumentTest() {
         doNothing().when(gesuchDokumentService).gesuchDokumentAblehnen(any(), any());
-        assertThat(dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null).getStatus(), is(HttpStatus.SC_OK));
+        assertDoesNotThrow(() -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null));
     }
 
     @TestAsSachbearbeiter
     @Test
     void sbShouldBeAbleToAcceptDocumentTest() {
         doNothing().when(gesuchDokumentService).gesuchDokumentAkzeptieren(any());
-        assertThat(dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null).getStatus(), is(HttpStatus.SC_OK));
+        assertDoesNotThrow(() -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null));
     }
 }

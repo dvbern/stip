@@ -109,7 +109,7 @@ class AusbildungResourceTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
+            .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
     @Test
@@ -195,7 +195,7 @@ class AusbildungResourceTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+            .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
     @Test

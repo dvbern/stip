@@ -17,9 +17,9 @@
 
 package ch.dvbern.stip.api.stammdaten.service;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,10 +38,8 @@ public class LandService {
     private final LandEuEftaRepository landEuEftaRepository;
     private final LandEuEftaMapper landEuEftaMapper;
 
-    public Set<String> getAllLaender() {
-        return Stream.of(Land.values())
-            .map(Land::name)
-            .collect(Collectors.toSet());
+    public List<Land> getAllLaender() {
+        return Arrays.stream(Land.values()).toList();
     }
 
     public boolean landInEuEfta(Land land) {
