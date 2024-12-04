@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { SharedModelError } from '@dv/shared/model/error';
 import { SharedModelGlobalNotification } from '@dv/shared/model/global-notification';
 
-import { GlobalNotificationStore } from './shared-data-access-global-notifications.store';
+import { GlobalNotificationStore } from './shared-global-notifications.store';
 
 describe('GlobalNotificationStore', () => {
   let store: GlobalNotificationStore;

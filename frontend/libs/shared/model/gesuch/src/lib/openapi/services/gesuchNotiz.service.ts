@@ -123,9 +123,9 @@ export class GesuchNotizService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any>;
-     public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
-     public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchNotiz>;
+     public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchNotiz>>;
+     public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchNotiz>>;
      public answerJuristischeAbklaerungNotiz$(requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const notizId = requestParameters.notizId;
         if (notizId === null || notizId === undefined) {
@@ -191,7 +191,7 @@ export class GesuchNotizService {
         }
 
         const localVarPath = `/gesuch/notiz/juristischeAbklaerung/${this.configuration.encodeParam({name: "notizId", value: notizId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchNotiz>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: juristischeAbklaerungNotizAntwort,
@@ -511,9 +511,9 @@ export class GesuchNotizService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public updateNotiz$(requestParameters: GesuchNotizServiceUpdateNotizRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any>;
-     public updateNotiz$(requestParameters: GesuchNotizServiceUpdateNotizRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
-     public updateNotiz$(requestParameters: GesuchNotizServiceUpdateNotizRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public updateNotiz$(requestParameters: GesuchNotizServiceUpdateNotizRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchNotiz>;
+     public updateNotiz$(requestParameters: GesuchNotizServiceUpdateNotizRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchNotiz>>;
+     public updateNotiz$(requestParameters: GesuchNotizServiceUpdateNotizRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchNotiz>>;
      public updateNotiz$(requestParameters: GesuchNotizServiceUpdateNotizRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchNotizUpdate = requestParameters.gesuchNotizUpdate;
         if (gesuchNotizUpdate === null || gesuchNotizUpdate === undefined) {
@@ -575,7 +575,7 @@ export class GesuchNotizService {
         }
 
         const localVarPath = `/gesuch/notiz`;
-        return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchNotiz>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: gesuchNotizUpdate,

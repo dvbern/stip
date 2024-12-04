@@ -188,6 +188,7 @@
   "shared.gesuch.status.contract.STIPENDIENANSPRUCH": "Stipendienanspruch",
   "shared.gesuch.status.contract.GESUCH_ABGELEHNT": "Gesuch abgelehnt",
   "shared.gesuch.status.contract.WARTEN_AUF_UNTERSCHRIFTENBLATT": "Warten auf Unterschriftenblatt",
+  "shared.gesuch.status.contract.NEGATIVE_VERFUEGUNG": "Negative Verfügung",
 
   "shared.gesuch.tranche.typ.AENDERUNG": "Änderung",
   "shared.gesuch.tranche.typ.TRANCHE": "Gesuch",

@@ -1,0 +1,41 @@
+<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-5">
+  <button
+    type="button"
+    (click)="cancel()"
+    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+
+  <h1 class="title h5 tw-mb-5 tw-flex">
+    {{ dialogData.titleKey | translate }}
+  </h1>
+  <p class="content tw-mb-0" [innerHTML]="dialogData.messageKey | translate"></p>
+
+  <form [formGroup]="form" class="tw-mt-5" novalidate>
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <mat-select
+        formControlName="grundId"
+        [placeholder]="'shared.form.select.empty' | translate"
+        [aria-label]="dialogData.labelKey | translate"
+      >
+        @for (grund of store.ablehnungsGruende(); track grund.id) {
+          <mat-option [value]="grund.id">{{ grund.titleDe }}</mat-option>
+        }
+      </mat-select>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="tw-mt-5 tw-flex tw-justify-between">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2" (click)="confirm()">
+        {{ dialogData.confirmKey | translate }}
+      </button>
+    </div>
+  </form>
+</section>

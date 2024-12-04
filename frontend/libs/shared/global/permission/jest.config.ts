@@ -4,8 +4,7 @@ export default {
   displayName: 'shared-global-permission',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory:
-    '../../../../coverage/libs/shared/global/global-permission',
+  coverageDirectory: '../../../../coverage/libs/shared/global/permission',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

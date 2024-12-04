@@ -2564,6 +2564,7 @@ components:
         - KEIN_STIPENDIENANSPRUCH
         - STIPENDIENANSPRUCH
         - GESUCH_ABGELEHNT
+        - NEGATIVE_VERFUEGUNG
       type: string
     GetGesucheSBQueryType:
       enum:

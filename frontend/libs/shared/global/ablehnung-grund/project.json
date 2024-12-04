@@ -1,7 +1,7 @@
 {
-  "name": "shared-global-notification",
+  "name": "shared-global-ablehnung-grund",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/global/global-notification/src",
+  "sourceRoot": "libs/shared/global/ablehnung-grund/src",
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:global", "scope:shared"],
@@ -9,19 +9,18 @@
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/shared/global/global-notification/tsconfig.lib.json"
+        "tsConfig": "libs/shared/global/ablehnung-grund/tsconfig.lib.json"
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/global/global-notification/jest.config.ts"
+        "jestConfig": "libs/shared/global/ablehnung-grund/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

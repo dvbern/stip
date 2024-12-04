@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { OAuthService } from 'angular-oauth2-oidc';
 
-import { PermissionStore } from './shared-data-access-global-permission.store';
+import { PermissionStore } from './shared-global-permission.store';
 
 describe('PermissionStore', () => {
   let store: PermissionStore;
