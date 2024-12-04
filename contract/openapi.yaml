@@ -290,7 +290,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/GesuchNotiz'
-          description: all notizen of a gesuch are returned
+          description: all notizen of a fall from given gesuch
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -298,7 +298,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getNotizen
-      summary: Get all notizen of a gesuch
+      summary: Get all notizen of a fall from given gesuch
   '/gesuch/notiz/create':
     post:
       requestBody:
@@ -4788,6 +4788,7 @@ components:
         - userErstellt
         - timestampErstellt
         - notizTyp
+        - gesuchNummer
         - id
       type: object
       properties:
@@ -4801,6 +4802,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         notizTyp:
           $ref: '#/components/schemas/GesuchNotizTyp'
+        gesuchNummer: 
+          type: string
         antwort:
           type: string
       allOf:
