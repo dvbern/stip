@@ -75,6 +75,7 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
+import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -118,6 +119,7 @@ public class GesuchService {
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
     private final AusbildungRepository ausbildungRepository;
     private final StipDecisionService stipDecisionService;
+    private final StipDecisionTextRepository stipDecisionTextRepository;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithOldestTranche(UUID id) {
@@ -581,6 +583,20 @@ public class GesuchService {
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+    }
+
+    @Transactional
+    public GesuchDto gesuchStatusToKeinStipendienAnspruch(final UUID gesuchId, final UUID decisionId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var decision = stipDecisionTextRepository.requireById(decisionId);
+        gesuchStatusService.triggerStateMachineEventWithComment(
+            gesuch,
+            GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
+            new KommentarDto(decision.getTitleDe()),
+            false // TODO KSTIP-1585: Send notification?
+        );
+
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
