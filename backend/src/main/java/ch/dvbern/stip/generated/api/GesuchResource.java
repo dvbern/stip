@@ -46,10 +46,10 @@ public interface GesuchResource {
     GesuchDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
-    @Path("/status/kein-stipendien-anspruch/{gesuchId}")
+    @Path("/status/negative-verfuegung/{gesuchId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToKeinStipendienAnspruch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull UUID body);
+    GesuchDto changeGesuchStatusToNegativeVerfuegung(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull UUID body);
 
     @POST
     @Path("/status/verfuegt/{gesuchId}")

@@ -74,7 +74,7 @@ public class GesuchApiSpec {
                 bearbeitungAbschliessen(),
                 changeGesuchStatusToBereitFuerBearbeitung(),
                 changeGesuchStatusToInBearbeitung(),
-                changeGesuchStatusToKeinStipendienAnspruch(),
+                changeGesuchStatusToNegativeVerfuegung(),
                 changeGesuchStatusToVerfuegt(),
                 changeGesuchStatusToVersendet(),
                 createGesuch(),
@@ -108,8 +108,8 @@ public class GesuchApiSpec {
         return new ChangeGesuchStatusToInBearbeitungOper(createReqSpec());
     }
 
-    public ChangeGesuchStatusToKeinStipendienAnspruchOper changeGesuchStatusToKeinStipendienAnspruch() {
-        return new ChangeGesuchStatusToKeinStipendienAnspruchOper(createReqSpec());
+    public ChangeGesuchStatusToNegativeVerfuegungOper changeGesuchStatusToNegativeVerfuegung() {
+        return new ChangeGesuchStatusToNegativeVerfuegungOper(createReqSpec());
     }
 
     public ChangeGesuchStatusToVerfuegtOper changeGesuchStatusToVerfuegt() {
@@ -410,15 +410,15 @@ public class GesuchApiSpec {
      * @see #body  (required)
      * return GesuchDtoSpec
      */
-    public static class ChangeGesuchStatusToKeinStipendienAnspruchOper implements Oper {
+    public static class ChangeGesuchStatusToNegativeVerfuegungOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/status/kein-stipendien-anspruch/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/status/negative-verfuegung/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public ChangeGesuchStatusToKeinStipendienAnspruchOper(RequestSpecBuilder reqSpec) {
+        public ChangeGesuchStatusToNegativeVerfuegungOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
@@ -426,7 +426,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/kein-stipendien-anspruch/{gesuchId}
+         * POST /gesuch/status/negative-verfuegung/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -437,7 +437,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/kein-stipendien-anspruch/{gesuchId}
+         * POST /gesuch/status/negative-verfuegung/{gesuchId}
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -450,7 +450,7 @@ public class GesuchApiSpec {
          * @param body (UUID)  (required)
          * @return operation
          */
-        public ChangeGesuchStatusToKeinStipendienAnspruchOper body(UUID body) {
+        public ChangeGesuchStatusToNegativeVerfuegungOper body(UUID body) {
             reqSpec.setBody(body);
             return this;
         }
@@ -461,7 +461,7 @@ public class GesuchApiSpec {
          * @param gesuchId (UUID) Die ID vom Gesuch (required)
          * @return operation
          */
-        public ChangeGesuchStatusToKeinStipendienAnspruchOper gesuchIdPath(Object gesuchId) {
+        public ChangeGesuchStatusToNegativeVerfuegungOper gesuchIdPath(Object gesuchId) {
             reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
@@ -471,7 +471,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public ChangeGesuchStatusToKeinStipendienAnspruchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public ChangeGesuchStatusToNegativeVerfuegungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -481,7 +481,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public ChangeGesuchStatusToKeinStipendienAnspruchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public ChangeGesuchStatusToNegativeVerfuegungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

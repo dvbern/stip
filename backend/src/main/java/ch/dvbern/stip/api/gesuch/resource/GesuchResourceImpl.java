@@ -76,9 +76,9 @@ public class GesuchResourceImpl implements GesuchResource {
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
-    public GesuchDto changeGesuchStatusToKeinStipendienAnspruch(UUID gesuchId, UUID decision) {
+    public GesuchDto changeGesuchStatusToNegativeVerfuegung(UUID gesuchId, UUID decision) {
         gesuchAuthorizer.canUpdate(gesuchId);
-        return gesuchService.gesuchStatusToKeinStipendienAnspruch(gesuchId, decision);
+        return gesuchService.changeGesuchStatusToNegativeVerfuegung(gesuchId, decision);
     }
 
     // TODO KSTIP-1247: roles allowed

@@ -586,14 +586,14 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto gesuchStatusToKeinStipendienAnspruch(final UUID gesuchId, final UUID decisionId) {
+    public GesuchDto changeGesuchStatusToNegativeVerfuegung(final UUID gesuchId, final UUID decisionId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var decision = stipDecisionTextRepository.requireById(decisionId);
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
             GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
             new KommentarDto(decision.getTitleDe()),
-            false // TODO KSTIP-1585: Send notification?
+            false
         );
 
         return gesuchMapperUtil.mapWithNewestTranche(gesuch);
