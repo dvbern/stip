@@ -108,6 +108,8 @@ export class PersonPO {
     await this.elems.telefonnummer.fill(person.telefonnummer);
     await this.elems.geburtsdatum.fill(person.geburtsdatum);
 
+    // Scroll a bit down to prevent flaky tests
+    await this.elems.sozialhilfeBeitraegeRadio.scrollIntoViewIfNeeded();
     await this.elems.nationalitaetSelect.click();
     await this.elems.page.getByTestId(person.nationalitaet).first().click();
 
