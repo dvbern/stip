@@ -17,12 +17,10 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
-import {
-  GesuchStore,
-  SharedDataAccessGesuchEvents,
-} from '@dv/shared/data-access/gesuch';
+import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
@@ -53,6 +51,7 @@ import {
     SharedPatternAppHeaderPartsDirective,
     SharedUiIconBadgeComponent,
   ],
+  providers: [GesuchStore],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
