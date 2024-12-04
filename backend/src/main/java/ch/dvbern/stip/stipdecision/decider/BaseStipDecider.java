@@ -44,10 +44,7 @@ public abstract class BaseStipDecider {
             );
         }
 
-        return switch (korrespondenzSprache) {
-            case FRANZOESISCH -> decisionText.getTextFr();
-            case DEUTSCH -> decisionText.getTextDe();
-        };
+        return decisionText.getTitleDe();
     }
 
     public abstract GesuchStatusChangeEvent getGesuchStatusChangeEvent(final StipDecision decision);
