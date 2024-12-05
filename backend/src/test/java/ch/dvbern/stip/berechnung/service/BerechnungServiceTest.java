@@ -404,7 +404,7 @@ class BerechnungServiceTest {
                     new Ausbildungsgang()
                         .setBildungskategorie(
                             new Bildungskategorie()
-                                .setBfs(5)
+                                .setBfs(6)
                         )
                 )
         );
