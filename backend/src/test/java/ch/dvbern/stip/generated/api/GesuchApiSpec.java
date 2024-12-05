@@ -262,6 +262,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
+     * @see #body  (optional)
      * return GesuchDtoSpec
      */
     public static class ChangeGesuchStatusToBereitFuerBearbeitungOper implements Oper {
@@ -274,6 +275,7 @@ public class GesuchApiSpec {
 
         public ChangeGesuchStatusToBereitFuerBearbeitungOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
@@ -297,6 +299,15 @@ public class GesuchApiSpec {
         public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
             return execute(handler).as(type);
+        }
+
+         /**
+         * @param kommentarDtoSpec (KommentarDtoSpec)  (optional)
+         * @return operation
+         */
+        public ChangeGesuchStatusToBereitFuerBearbeitungOper body(KommentarDtoSpec kommentarDtoSpec) {
+            reqSpec.setBody(kommentarDtoSpec);
+            return this;
         }
 
         public static final String GESUCH_ID_PATH = "gesuchId";

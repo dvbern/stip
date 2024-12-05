@@ -243,7 +243,7 @@ public class GesuchResourceImpl implements GesuchResource {
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
-    public GesuchDto changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+    public GesuchDto changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchId, KommentarDto kommentar) {
         gesuchAuthorizer.canUpdate(gesuchId);
         return gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId);
     }

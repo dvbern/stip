@@ -38,8 +38,9 @@ public interface GesuchResource {
 
     @POST
     @Path("/status/bereit-fuer-bearbeitung/{gesuchId}")
+    @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchId") UUID gesuchId,@Valid KommentarDto kommentarDto);
 
     @POST
     @Path("/status/in-bearbeitung/{gesuchId}")

@@ -176,6 +176,12 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
       responses:
         200:
           content:

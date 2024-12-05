@@ -562,8 +562,19 @@ public class GesuchService {
 
     @Transactional
     public GesuchDto gesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+        return gesuchStatusToBereitFuerBearbeitung(gesuchId, null);
+    }
+
+    @Transactional
+    public GesuchDto gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId, final KommentarDto kommentar) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        gesuchStatusService.triggerStateMachineEventWithComment(
+            gesuch,
+            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG,
+            kommentar,
+            false
+        );
+
         return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
