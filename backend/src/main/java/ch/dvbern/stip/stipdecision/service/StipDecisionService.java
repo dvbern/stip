@@ -19,7 +19,6 @@ package ch.dvbern.stip.stipdecision.service;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.common.type.StipDeciderResult;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
@@ -27,6 +26,7 @@ import ch.dvbern.stip.generated.dto.StipDecisionTextDto;
 import ch.dvbern.stip.stipdecision.decider.BaseStipDecider;
 import ch.dvbern.stip.stipdecision.decider.StipDeciderTenant;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +63,7 @@ public class StipDecisionService {
     }
 
     public String getTextForDecision(final StipDeciderResult decision) {
-        return decision.name();
+        return decision.getText();
     }
 
     public GesuchStatusChangeEvent getGesuchStatusChangeEvent(final StipDeciderResult decision) {

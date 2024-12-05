@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.common.type.StipDeciderResult;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
@@ -33,6 +32,7 @@ import ch.dvbern.stip.api.stammdaten.service.LandService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.stipdecision.decider.BernStipDecider;
+import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
