@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/"
-				 xmlns="https://kiegroup.org/dmn/_EF3E38E9-624A-45B0-BC0A-372B0B83A8B9"
-				 xmlns:kie="http://www.drools.org/kie/dmn/1.2"
-				 xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/"
-				 xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/"
-				 xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
-				 xmlns:included1="stip.kibon.ch"
-				 id="_29C4516C-614A-48F3-B851-A25E8853C853"
-				 name="PersoenlichesBudget"
-				 typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/"
-				 namespace="https://kiegroup.org/dmn/_EF3E38E9-624A-45B0-BC0A-372B0B83A8B9">
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="https://kiegroup.org/dmn/_EF3E38E9-624A-45B0-BC0A-372B0B83A8B9" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:included1="stip.kibon.ch" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" id="_29C4516C-614A-48F3-B851-A25E8853C853" name="PersoenlichesBudget" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="https://kiegroup.org/dmn/_EF3E38E9-624A-45B0-BC0A-372B0B83A8B9">
   <dmn:description>Berechnet das Prösnliche Budget auf basis von 1..2 Familienbudgets</dmn:description>
   <dmn:extensionElements/>
   <dmn:import id="_1774F3A7-11FA-48BC-A1FA-2E55E6E481FC" name="FamBudget" namespace="stip.kibon.ch" locationURI="Familienbudget.dmn" importType="http://www.omg.org/spec/DMN/20180521/MODEL/"/>
@@ -183,7 +173,7 @@
       <dmn:contextEntry>
         <dmn:variable id="_94428FA3-8AA0-4D52-A665-E0EF1E048116" name="Vermögen" typeRef="number"/>
         <dmn:literalExpression id="_1B7E8C1E-3022-4B7A-97EA-24C362B0CBE6">
-          <dmn:text>InputPersoenlichesbudget.antragssteller.vermoegen * Stammdaten.vermoegensanteilInProzent / 100</dmn:text>
+          <dmn:text>round half up(InputPersoenlichesbudget.antragssteller.vermoegen * Stammdaten.vermoegensanteilInProzent / 100.0)</dmn:text>
         </dmn:literalExpression>
       </dmn:contextEntry>
       <dmn:contextEntry>
@@ -226,7 +216,7 @@
         <dmn:variable id="_C4443D22-1B3C-4B6F-84BA-D4A70EF1C367" name="Elternbeitrag_1" typeRef="number"/>
         <dmn:decisionTable id="_97F8FB31-B0E2-46BD-9C84-735AA1EA9633" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
           <dmn:input id="_745190AF-5F3D-40D2-AE45-1AB19F09D861">
-            <dmn:inputExpression typeRef="number">
+            <dmn:inputExpression id="_BA35A51A-1FC3-4247-9FFE-AB2B595F42D6" typeRef="number">
               <dmn:text>Familienbudget_1.familienbudgetBerechnet</dmn:text>
             </dmn:inputExpression>
           </dmn:input>

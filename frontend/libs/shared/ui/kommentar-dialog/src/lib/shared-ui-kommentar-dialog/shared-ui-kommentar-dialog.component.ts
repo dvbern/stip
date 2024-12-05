@@ -33,6 +33,10 @@ export interface KommentarDialogResult {
   entityId: string;
   kommentar: string;
 }
+export interface OptionalKommentarDialogResult {
+  entityId: string;
+  kommentar?: string;
+}
 
 @Component({
   selector: 'lib-shared-ui-kommentar-dialog',
@@ -54,28 +58,47 @@ export interface KommentarDialogResult {
 export class SharedUiKommentarDialogComponent {
   private dialogRef =
     inject<
-      MatDialogRef<SharedUiKommentarDialogComponent, KommentarDialogResult>
+      MatDialogRef<
+        SharedUiKommentarDialogComponent,
+        KommentarDialogResult | OptionalKommentarDialogResult
+      >
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
-  dialogData = inject<KommentarDialogData>(MAT_DIALOG_DATA);
+  dialogData = inject<KommentarDialogData & { optional: boolean }>(
+    MAT_DIALOG_DATA,
+  );
 
   form = this.formBuilder.group({
-    kommentar: [<string | undefined>undefined, [Validators.required]],
+    kommentar: [<string | undefined>undefined],
   });
+
+  constructor() {
+    if (!this.dialogData.optional) {
+      this.form.controls.kommentar.addValidators(Validators.required);
+    }
+  }
 
   static open(dialog: MatDialog, data: KommentarDialogData) {
     return dialog.open<
       SharedUiKommentarDialogComponent,
-      KommentarDialogData,
+      KommentarDialogData & { optional: false },
       KommentarDialogResult
-    >(SharedUiKommentarDialogComponent, { data });
+    >(SharedUiKommentarDialogComponent, { data: { ...data, optional: false } });
+  }
+
+  static openOptional(dialog: MatDialog, data: KommentarDialogData) {
+    return dialog.open<
+      SharedUiKommentarDialogComponent,
+      KommentarDialogData & { optional: true },
+      OptionalKommentarDialogResult
+    >(SharedUiKommentarDialogComponent, { data: { ...data, optional: true } });
   }
 
   confirm() {
     this.form.markAllAsTouched();
     const entityId = this.dialogData.entityId;
     const kommentar = this.form.value.kommentar;
-    if (!entityId || !kommentar) {
+    if (!entityId || this.form.invalid) {
       return;
     }
     this.dialogRef.close({ entityId, kommentar });

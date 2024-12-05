@@ -245,7 +245,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public GesuchDto changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchId, KommentarDto kommentar) {
         gesuchAuthorizer.canUpdate(gesuchId);
-        return gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId);
+        return gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentar);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
