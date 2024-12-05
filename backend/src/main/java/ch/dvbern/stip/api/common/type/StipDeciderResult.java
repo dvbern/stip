@@ -1,0 +1,37 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package ch.dvbern.stip.api.common.type;
+
+public enum StipDeciderResult {
+    GESUCH_VALID, //
+    ANSPRUCH_UNKLAR,
+    ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG,
+    ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN, //
+    ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN, //
+    ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN,
+    ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNG_NICHT_ANERKANNT, //
+    ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG, //
+    ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNGSDAUER, //
+    ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA, //
+    NEGATIVVERFUEGUNG_NICHTEINTRETENSVERFUEGUNG, //
+    NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN,
+    NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_PIA_NICHT_BERN,
+    // NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN,
+    NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN, //
+    NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON, //
+}

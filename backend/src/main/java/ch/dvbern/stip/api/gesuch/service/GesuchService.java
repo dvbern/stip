@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
-import ch.dvbern.stip.api.common.type.StipDecision;
+import ch.dvbern.stip.api.common.type.StipDeciderResult;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
@@ -502,12 +502,11 @@ public class GesuchService {
         final var decision = stipDecisionService.decide(gesuchTranche);
         final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(decision);
         KommentarDto kommentarDto = null;
-        if (decision != StipDecision.GESUCH_VALID) {
+        if (decision != StipDeciderResult.GESUCH_VALID) {
             kommentarDto = new KommentarDto();
             kommentarDto.setText(
                 stipDecisionService.getTextForDecision(
-                    decision,
-                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+                    decision
                 )
             );
         }

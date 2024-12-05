@@ -19,10 +19,9 @@ package ch.dvbern.stip.stipdecision.service;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.common.type.StipDecision;
+import ch.dvbern.stip.api.common.type.StipDeciderResult;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.StipDecisionTextDto;
 import ch.dvbern.stip.stipdecision.decider.BaseStipDecider;
@@ -57,19 +56,17 @@ public class StipDecisionService {
         return decider.get();
     }
 
-    public StipDecision decide(GesuchTranche gesuchTranche) {
+    public StipDeciderResult decide(GesuchTranche gesuchTranche) {
         final var decider = getDeciderForTenantId(tenantService.getCurrentTenant().getIdentifier());
 
         return decider.decide(gesuchTranche);
     }
 
-    public String getTextForDecision(final StipDecision decision, final Sprache korrespondenzSprache) {
-        final var decider = getDeciderForTenantId(tenantService.getCurrentTenant().getIdentifier());
-
-        return decider.getTextForDecision(decision, korrespondenzSprache);
+    public String getTextForDecision(final StipDeciderResult decision) {
+        return decision.name();
     }
 
-    public GesuchStatusChangeEvent getGesuchStatusChangeEvent(final StipDecision decision) {
+    public GesuchStatusChangeEvent getGesuchStatusChangeEvent(final StipDeciderResult decision) {
         final var decider = getDeciderForTenantId(tenantService.getCurrentTenant().getIdentifier());
 
         return decider.getGesuchStatusChangeEvent(decision);
