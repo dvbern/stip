@@ -35,8 +35,11 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.GesuchNotizApiSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchNotizCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
@@ -45,6 +48,7 @@ import ch.dvbern.stip.generated.dto.SbDashboardGesuchDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +75,7 @@ import static org.junit.Assert.assertEquals;
 @Slf4j
 class GesuchGetGesucheTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
+    private final GesuchNotizApiSpec gesuchNotizApiSpec = GesuchNotizApiSpec.gesuchNotiz(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
@@ -244,12 +249,18 @@ class GesuchGetGesucheTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
 
-        gesuchApiSpec.juristischAbklaeren()
-            .gesuchIdPath(gesuch.getId())
+        gesuchNotizApiSpec.createNotiz()
+            .body(
+                new GesuchNotizCreateDtoSpec()
+                    .gesuchId(gesuch.getId())
+                    .notizTyp(GesuchNotizTypDtoSpec.JURISTISCHE_NOTIZ)
+                    .betreff("Test")
+                    .text("Test")
+            )
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode());
     }
 
     @Test

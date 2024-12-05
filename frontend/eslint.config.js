@@ -56,6 +56,7 @@ module.exports = [
                 'type:data-access',
                 'type:pattern',
                 'type:model',
+                'type:global',
               ],
             },
             {

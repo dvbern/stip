@@ -17,6 +17,8 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
@@ -49,6 +51,7 @@ import {
     SharedPatternAppHeaderPartsDirective,
     SharedUiIconBadgeComponent,
   ],
+  providers: [GesuchStore],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -66,6 +69,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   private dokumentsStore = inject(DokumentsStore);
+  private gesuchStore = inject(GesuchStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
   @Output() openSidenav = new EventEmitter<void>();
@@ -161,105 +165,88 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     const gesuch = this.currentGesuchSig();
     const hasAcceptedAllDokuments = this.hasAcceptedAllDocumentsSig();
     if (!gesuch) {
-      return [];
+      return {};
     }
 
-    return StatusUebergaengeMap[gesuch.gesuchStatus]?.map((status) =>
+    const list = StatusUebergaengeMap[gesuch.gesuchStatus]?.map((status) =>
       StatusUebergaengeOptions[status]({ hasAcceptedAllDokuments }),
     );
+
+    return {
+      list,
+      isNotEmpty: !!list?.length,
+    };
   });
 
-  setStatusUebergang(nextStatus: StatusUebergang) {
+  setStatusUebergang(nextStatus: StatusUebergang, gesuchId?: string) {
+    if (!gesuchId) {
+      return;
+    }
+
     switch (nextStatus) {
       case 'BEARBEITUNG_ABSCHLIESSEN':
-        this.setStatusBearbeitungAbschliessen();
-        break;
-      case 'ZURUECKWEISEN':
-        this.setStatusZurueckweisen();
-        break;
       case 'VERFUEGT':
-        this.setStatusVerfuegt();
+      case 'VERSENDET':
+        this.gesuchStore.setStatus$[nextStatus]({ gesuchId });
         break;
       case 'BEREIT_FUER_BEARBEITUNG':
-        this.setStatusBereitFuerBearbeitung();
+        SharedUiKommentarDialogComponent.openOptional(this.dialog, {
+          entityId: gesuchId,
+          titleKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title`,
+          messageKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message`,
+          placeholderKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder`,
+          confirmKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.confirm`,
+        })
+          .afterClosed()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((result) => {
+            if (result) {
+              this.gesuchStore.setStatus$['BEREIT_FUER_BEARBEITUNG']({
+                gesuchId,
+                text: result.kommentar,
+              });
+            }
+          });
         break;
-      case 'VERSENDET':
-        this.setGesuchVersendet();
+      case 'ZURUECKWEISEN':
+        SharedUiKommentarDialogComponent.open(this.dialog, {
+          entityId: gesuchId,
+          titleKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.title`,
+          messageKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.message`,
+          placeholderKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder`,
+          confirmKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.confirm`,
+        })
+          .afterClosed()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((result) => {
+            if (result) {
+              this.gesuchStore.setStatus$['ZURUECKWEISEN']({
+                gesuchId,
+                text: result.kommentar,
+              });
+            }
+          });
+        break;
+      case 'NEGATIVE_VERFUEGUNG_ERSTELLEN':
+        SachbearbeitungAppUiGrundAuswahlDialogComponent.open(this.dialog, {
+          titleKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.title`,
+          labelKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.label`,
+          messageKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.message`,
+          confirmKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.confirm`,
+        })
+          .afterClosed()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((result) => {
+            if (result) {
+              this.gesuchStore.setStatus$[nextStatus]({
+                gesuchId,
+                grundId: result.entityId,
+              });
+            }
+          });
         break;
       default:
         assertUnreachable(nextStatus);
-    }
-  }
-
-  setGesuchVersendet() {
-    this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchVersendet());
-  }
-
-  private setStatusBearbeitungAbschliessen() {
-    this.store.dispatch(
-      SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen(),
-    );
-  }
-
-  private setStatusVerfuegt() {
-    this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchVerfuegt());
-  }
-
-  private setStatusBereitFuerBearbeitung() {
-    const gesuchId = this.currentGesuchSig()?.id;
-
-    if (gesuchId) {
-      SharedUiKommentarDialogComponent.open(this.dialog, {
-        entityId: gesuchId,
-        titleKey:
-          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.title',
-        messageKey:
-          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.message',
-        placeholderKey:
-          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.placeholder',
-        confirmKey:
-          'sachbearbeitung-app.header.status-uebergang.bereit-fuer-bearbeitung.confirm',
-      })
-        .afterClosed()
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((result) => {
-          if (result) {
-            this.store.dispatch(
-              SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung({
-                kommentar: result.kommentar,
-              }),
-            );
-          }
-        });
-    }
-  }
-
-  private setStatusZurueckweisen() {
-    const gesuchId = this.currentGesuchSig()?.id;
-
-    if (gesuchId) {
-      SharedUiKommentarDialogComponent.open(this.dialog, {
-        entityId: gesuchId,
-        titleKey:
-          'sachbearbeitung-app.header.status-uebergang.zurueckweisen.title',
-        messageKey:
-          'sachbearbeitung-app.header.status-uebergang.zurueckweisen.message',
-        placeholderKey:
-          'sachbearbeitung-app.header.status-uebergang.zurueckweisen.placeholder',
-        confirmKey:
-          'sachbearbeitung-app.header.status-uebergang.zurueckweisen.confirm',
-      })
-        .afterClosed()
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((result) => {
-          if (result) {
-            this.store.dispatch(
-              SharedDataAccessGesuchEvents.setGesuchZurueckweisen({
-                kommentar: result.kommentar,
-              }),
-            );
-          }
-        });
     }
   }
 

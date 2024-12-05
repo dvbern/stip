@@ -39,6 +39,7 @@ const AbschlussPhaseMap = {
   GESUCH_VERSANDBEREIT /**                    */: { [gs]: S__, [sb]: S__ },
   GESUCH_VERFUEGT /**                         */: { [gs]: S__, [sb]: S__ },
   GESUCH_VERSENDET /**                        */: { [gs]: S__, [sb]: S__ },
+  GESUCH_NEGATIVE_VERFUEGUNG /**              */: { [gs]: S__, [sb]: S__ },
   // ---------------------------------------------------------------------
   TRANCHE_IN_BEARBEITUNG_GS /**               */: { [gs]: _R_, [sb]: ___ },
   TRANCHE_UEBERPRUEFEN /**                    */: { [gs]: S__, [sb]: _R_ },

@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
+import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -71,6 +72,14 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto changeGesuchStatusToInBearbeitung(UUID gesuchId) {
         gesuchAuthorizer.canUpdate(gesuchId);
         return gesuchService.gesuchStatusToInBearbeitung(gesuchId);
+    }
+
+    // TODO KSTIP-1247: roles allowed
+    @RolesAllowed({ ROLE_SACHBEARBEITER })
+    @Override
+    public GesuchDto changeGesuchStatusToNegativeVerfuegung(UUID gesuchId, AusgewaehlterGrundDto grund) {
+        gesuchAuthorizer.canUpdate(gesuchId);
+        return gesuchService.changeGesuchStatusToNegativeVerfuegung(gesuchId, grund.getDecisionId());
     }
 
     // TODO KSTIP-1247: roles allowed
@@ -234,9 +243,9 @@ public class GesuchResourceImpl implements GesuchResource {
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
-    public GesuchDto changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+    public GesuchDto changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchId, KommentarDto kommentar) {
         gesuchAuthorizer.canUpdate(gesuchId);
-        return gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId);
+        return gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentar);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -244,13 +253,6 @@ public class GesuchResourceImpl implements GesuchResource {
     public void gesuchZurueckweisen(UUID gesuchId, KommentarDto kommentarDto) {
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
-    }
-
-    @RolesAllowed(GESUCH_UPDATE)
-    @Override
-    public void juristischAbklaeren(UUID gesuchId) {
-        gesuchAuthorizer.canUpdate(gesuchId);
-        gesuchService.juristischAbklaeren(gesuchId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)

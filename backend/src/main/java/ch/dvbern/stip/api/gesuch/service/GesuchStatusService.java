@@ -65,15 +65,7 @@ public class GesuchStatusService {
             Gesuchstatus.values()
         );
 
-        final var sm = new StateMachine<>(
-            gesuch.getGesuchStatus(),
-            gesuch::getGesuchStatus,
-            status -> gesuch.setGesuchStatus(status)
-                .setGesuchStatusAenderungDatum(LocalDateTime.now())
-                .setComment(kommentarDto == null ? "" : kommentarDto.getText()),
-            config
-        );
-
+        final var sm = createStateMachine(gesuch, kommentarDto);
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
         if (kommentarDto != null && sendNotificationIfPossible) {
@@ -99,5 +91,24 @@ public class GesuchStatusService {
         }
 
         return editStates.contains(gesuchstatus);
+    }
+
+    public boolean canFire(final Gesuch gesuch, final GesuchStatusChangeEvent target) {
+        final var sm = createStateMachine(gesuch, null);
+        return sm.canFire(target);
+    }
+
+    private StateMachine<Gesuchstatus, GesuchStatusChangeEvent> createStateMachine(
+        final Gesuch gesuch,
+        final KommentarDto kommentarDto
+    ) {
+        return new StateMachine<>(
+            gesuch.getGesuchStatus(),
+            gesuch::getGesuchStatus,
+            status -> gesuch.setGesuchStatus(status)
+                .setGesuchStatusAenderungDatum(LocalDateTime.now())
+                .setComment(kommentarDto == null ? "" : kommentarDto.getText()),
+            config
+        );
     }
 }

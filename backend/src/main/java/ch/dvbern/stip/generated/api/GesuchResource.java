@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -37,13 +38,20 @@ public interface GesuchResource {
 
     @POST
     @Path("/status/bereit-fuer-bearbeitung/{gesuchId}")
+    @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchId") UUID gesuchId,@Valid KommentarDto kommentarDto);
 
     @POST
     @Path("/status/in-bearbeitung/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+
+    @POST
+    @Path("/status/negative-verfuegung/{gesuchId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto changeGesuchStatusToNegativeVerfuegung(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull AusgewaehlterGrundDto ausgewaehlterGrundDto);
 
     @POST
     @Path("/status/verfuegt/{gesuchId}")
@@ -130,11 +138,6 @@ public interface GesuchResource {
     @Path("/{gesuchId}/statusprotokoll")
     @Produces({ "application/json", "text/plain" })
     List<StatusprotokollEntryDto> getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);
-
-    @PATCH
-    @Path("/{gesuchId}/juristischAbklaeren")
-    @Produces({ "application/json", "text/plain" })
-    void juristischAbklaeren(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
     @Path("/{gesuchId}")

@@ -98,11 +98,11 @@ public class BernStipDecider extends BaseStipDecider {
             case KEIN_WOHNSITZ_KANTON_BE -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             // note: states here are still not reachable
             case SCHULJAHR_9_SEKSTUFE_1 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case AUSBILDUNG_PBI1 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case AUSBILDUNG_BPI1 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case ART_32_BBV -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case ZWEITAUSBILDUNG -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case EBA_LEHRE -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case EBA_LEHRE_2 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case HOCHSCHULSTUDIUM_2 -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case MEHRERE_AUSBILDUNGSWECHSEL -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case ANSPRUCH_UNKLAR -> throw new IllegalStateException("Unkown StipDecision: " + decision);

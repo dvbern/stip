@@ -20,5 +20,12 @@ if hasChanges $backend; then
     echo "[hooks] backend has unstaged changes, running spotless:check"
     cd $backend
 
-    ./mvnw spotless:check
+    if command -v mvnd 2>&1 >/dev/null
+    then
+        echo "[hooks] maven daemon found, using that"
+        mvnd spotless:check
+    else
+        echo "[hooks] maven daemon not found, using wrapper"
+        ./mvnw spotless:check
+    fi
 fi
