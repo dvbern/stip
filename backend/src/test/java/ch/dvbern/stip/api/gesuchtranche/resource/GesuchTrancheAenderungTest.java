@@ -113,24 +113,8 @@ class GesuchTrancheAenderungTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
-    @Order(5)
-    void gesuchWithChangesShouldNotBeAccessibleForSBBeforeVERFUEGT() {
-        // todo KSTIP-1594 : why does this have an impact on next tests?
-        /*
-         * gesuchApiSpec.getInitialTrancheChangesByTrancheId()
-         * .trancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-         * .execute(TestUtil.PEEK_IF_ENV_SET)
-         * .then()
-         * .assertThat()
-         * .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-         *
-         */
-    }
-
-    @Test
     @TestAsGesuchsteller
-    @Order(6)
+    @Order(5)
     void createFirstAenderungsantragFails() {
         createAenderungsanstrag()
             .then()
@@ -139,7 +123,7 @@ class GesuchTrancheAenderungTest {
     }
 
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(6)
     @Test
     void makeGesuchVerfuegt() {
         // TODO KSTIP-1631: Make Gesuch the correct state
@@ -149,6 +133,12 @@ class GesuchTrancheAenderungTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+        gesuchApiSpec.getInitialTrancheChangesByTrancheId()
+            .trancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.FORBIDDEN.getStatusCode());
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -167,7 +157,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(8)
+    @Order(7)
     void createFirstAenderungsantrag() {
         createAenderungsanstrag()
             .then()
@@ -177,7 +167,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(10)
+    @Order(8)
     @Description("Only one (open: NOT in State ABGELEHNT|AKZEPTIIERT) Aenderungsantrag should be allowed")
     void createSecondAenderungsantragFails() {
         createAenderungsanstrag()
