@@ -27,7 +27,7 @@
   "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder": "Begründung schreiben...",
   "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.confirm": "Zurückweisen",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title": "Gesuch bereit für Bearbeitung",
-  "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message": "Um ein Gesuch in bereit für Bearbeitung zu setzen, müssen Sie eine Begründung angeben.",
+  "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message": "Sie können eine Begründung angeben oder das Gesuch direkt zur Bearbeitung freigeben.",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder": "Begründung schreiben...",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.confirm": "Bereit für Bearbeitung",
   "sachbearbeitung-app.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.title": "Negative Verfügung erstellen",

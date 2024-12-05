@@ -27,7 +27,7 @@
   "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder": "Écrire une justification...",
   "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.confirm": "Rejeter",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title": "Demande prête pour traitement",
-  "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message": "Pour mettre une demande prête pour traitement, vous devez fournir une justification.",
+  "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message": "Vous pouvez fournir une justification ou approuver directement la demande.",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder": "Écrire une justification...",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.confirm": "Prête pour traitement",
   "sachbearbeitung-app.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.title": "Créer une décision négative",

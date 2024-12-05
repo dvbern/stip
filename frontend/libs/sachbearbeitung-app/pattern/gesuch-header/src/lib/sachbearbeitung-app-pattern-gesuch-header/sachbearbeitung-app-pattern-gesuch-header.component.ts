@@ -190,25 +190,42 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         this.gesuchStore.setStatus$[nextStatus]({ gesuchId });
         break;
       case 'BEREIT_FUER_BEARBEITUNG':
-      case 'ZURUECKWEISEN':
-        SharedUiKommentarDialogComponent.open(this.dialog, {
+        SharedUiKommentarDialogComponent.openOptional(this.dialog, {
           entityId: gesuchId,
-          titleKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.title`,
-          messageKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.message`,
-          placeholderKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.placeholder`,
-          confirmKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.confirm`,
+          titleKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title`,
+          messageKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message`,
+          placeholderKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder`,
+          confirmKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.confirm`,
         })
           .afterClosed()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$[nextStatus]({
+              this.gesuchStore.setStatus$['BEREIT_FUER_BEARBEITUNG']({
                 gesuchId,
                 text: result.kommentar,
               });
             }
           });
-
+        break;
+      case 'ZURUECKWEISEN':
+        SharedUiKommentarDialogComponent.open(this.dialog, {
+          entityId: gesuchId,
+          titleKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.title`,
+          messageKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.message`,
+          placeholderKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder`,
+          confirmKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.confirm`,
+        })
+          .afterClosed()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((result) => {
+            if (result) {
+              this.gesuchStore.setStatus$['ZURUECKWEISEN']({
+                gesuchId,
+                text: result.kommentar,
+              });
+            }
+          });
         break;
       case 'NEGATIVE_VERFUEGUNG_ERSTELLEN':
         SachbearbeitungAppUiGrundAuswahlDialogComponent.open(this.dialog, {

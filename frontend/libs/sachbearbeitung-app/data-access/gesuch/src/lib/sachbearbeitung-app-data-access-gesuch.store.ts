@@ -104,11 +104,12 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
-    BEREIT_FUER_BEARBEITUNG: rxMethod<{ gesuchId: string }>(
+    BEREIT_FUER_BEARBEITUNG: rxMethod<{ gesuchId: string; text?: string }>(
       pipe(
-        this.handleStatusChange(({ gesuchId }) =>
+        this.handleStatusChange(({ gesuchId, text }) =>
           this.gesuchService.changeGesuchStatusToBereitFuerBearbeitung$({
             gesuchId,
+            ...(text ? { kommentar: { text } } : {}),
           }),
         ),
       ),

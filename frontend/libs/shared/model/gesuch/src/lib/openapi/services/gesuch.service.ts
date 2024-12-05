@@ -45,6 +45,7 @@ export interface GesuchServiceBearbeitungAbschliessenRequestParams {
 
 export interface GesuchServiceChangeGesuchStatusToBereitFuerBearbeitungRequestParams {
     gesuchId: string;
+    kommentar?: Kommentar;
 }
 
 export interface GesuchServiceChangeGesuchStatusToInBearbeitungRequestParams {
@@ -290,6 +291,7 @@ export class GesuchService {
         if (gesuchId === null || gesuchId === undefined) {
             throw new Error('Required parameter gesuchId was null or undefined when calling changeGesuchStatusToBereitFuerBearbeitung$.');
         }
+        const kommentar = requestParameters.kommentar;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -325,6 +327,15 @@ export class GesuchService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -340,6 +351,7 @@ export class GesuchService {
         return this.httpClient.request<Gesuch>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: kommentar,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
