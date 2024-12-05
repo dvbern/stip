@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
@@ -71,27 +70,22 @@ public class GesuchTrancheHistoryRepository {
     }
 
     private GesuchTranche findNewestGesuchTrancheOfGesuchInStatus(final UUID gesuchId, Gesuchstatus gesuchStatus) {
-        try {
-            final var reader = AuditReaderFactory.get(em);
-            return (GesuchTranche) reader
-                .createQuery()
-                .forRevisionsOfEntity(GesuchTranche.class, true, true)
-                .add(AuditEntity.property("gesuch_id").eq(gesuchId))
-                .traverseRelation("gesuch", JoinType.INNER, "g")
-                .up()
-                .add(
-                    AuditEntity.and(
-                        AuditEntity.property("g", "gesuchStatus").eq(gesuchStatus),
-                        AuditEntity.property("g", "gesuchStatus").hasChanged()
-                    )
+        final var reader = AuditReaderFactory.get(em);
+        return (GesuchTranche) reader
+            .createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, true, true)
+            .add(AuditEntity.property("gesuch_id").eq(gesuchId))
+            .traverseRelation("gesuch", JoinType.INNER, "g")
+            .up()
+            .add(
+                AuditEntity.and(
+                    AuditEntity.property("g", "gesuchStatus").eq(gesuchStatus),
+                    AuditEntity.property("g", "gesuchStatus").hasChanged()
                 )
-                .addOrder(AuditEntity.revisionNumber().asc()) // ältester eintrag in history nehmen
-                .setMaxResults(1)
-                .getSingleResult();
-        } catch (NoResultException ex) {
-            return null;
-        }
-
+            )
+            .addOrder(AuditEntity.revisionNumber().asc())
+            .setMaxResults(1)
+            .getSingleResult();
     }
 
 }

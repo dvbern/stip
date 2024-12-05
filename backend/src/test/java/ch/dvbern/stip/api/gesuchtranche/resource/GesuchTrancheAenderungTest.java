@@ -177,7 +177,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(9)
+    @Order(10)
     @Description("Only one (open: NOT in State ABGELEHNT|AKZEPTIIERT) Aenderungsantrag should be allowed")
     void createSecondAenderungsantragFails() {
         createAenderungsanstrag()
