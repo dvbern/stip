@@ -100,7 +100,7 @@ class GesuchEinnahmenKostenSteuerjahrNullValueTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
+            .statusCode(Status.NO_CONTENT.getStatusCode());
         gesuch = gesuchApiSpec.getGesuch()
             .gesuchIdPath(gesuchId)
             .gesuchTrancheIdPath(trancheId)

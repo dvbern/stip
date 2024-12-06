@@ -4,14 +4,18 @@ import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
+import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Response;
 
+import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
@@ -106,7 +110,7 @@ public interface GesuchResource {
     @GET
     @Path("/{aenderungId}/aenderung/gs/changes")
     @Produces({ "application/json", "text/plain" })
-    Response getGsAenderungChangesInBearbeitung(@PathParam("aenderungId") UUID aenderungId);
+    GesuchWithChangesDto getGsAenderungChangesInBearbeitung(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
     @Path("/benutzer/me/gs-dashboard")

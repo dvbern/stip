@@ -46,7 +46,6 @@ import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -147,10 +146,9 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_READ)
     @AllowAll
     @Override
-    public Response getGsAenderungChangesInBearbeitung(UUID aenderungId) {
+    public GesuchWithChangesDto getGsAenderungChangesInBearbeitung(UUID aenderungId) {
         gesuchTrancheAuthorizer.canRead(aenderungId);
-        final var changes = gesuchService.getGsTrancheChangesInBearbeitung(aenderungId);
-        return Response.ok(changes).build();
+        return gesuchService.getGsTrancheChangesInBearbeitung(aenderungId);
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
@@ -222,10 +220,9 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    //    public GesuchWithChangesDto getGsTrancheChanges(UUID aenderungId) {
-    public Response getInitialTrancheChangesByTrancheId(UUID trancheId) {
+    public GesuchWithChangesDto getInitialTrancheChangesByTrancheId(UUID trancheId) {
         gesuchTrancheAuthorizer.canReadInitialTrancheChanges(trancheId);
-        return Response.ok(gesuchService.getChangesByTrancheId(trancheId)).build();
+        return gesuchService.getChangesByTrancheId(trancheId);
     }
 
     // TODO KSTIP-1247: Update which roles can do this
@@ -233,7 +230,6 @@ public class GesuchResourceImpl implements GesuchResource {
     @AllowAll
     @Override
     public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId) {
-    //public GesuchWithChangesDto getSbTrancheChanges(UUID aenderungId) {
         return gesuchService.getSbTrancheChanges(aenderungId);
     }
 
