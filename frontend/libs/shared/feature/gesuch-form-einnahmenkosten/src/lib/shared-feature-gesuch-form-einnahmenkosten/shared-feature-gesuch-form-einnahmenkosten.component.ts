@@ -126,7 +126,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     wohnkosten: [<string | null>null, [Validators.required]],
     betreuungskostenKinder: [<string | null>null, [Validators.required]],
     verdienstRealisiert: [<boolean | null>null, [Validators.required]],
-    willDarlehen: [<boolean | undefined>undefined, [Validators.required]],
     auswaertigeMittagessenProWoche: [
       <number | null>null,
       [Validators.required, sharedUtilValidatorRange(0, 5)],
@@ -405,7 +404,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           hatKinder,
           willSekundarstufeZwei,
           willTertiaerstufe,
-          istErwachsen,
           warErwachsenSteuerJahr,
         } = this.formStateSig();
 
@@ -426,10 +424,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         this.setDisabledStateAndHide(
           this.form.controls.ausbildungskostenTertiaerstufe,
           !willTertiaerstufe,
-        );
-        this.setDisabledStateAndHide(
-          this.form.controls.willDarlehen,
-          !istErwachsen,
         );
         this.setDisabledStateAndHide(
           this.form.controls.auswaertigeMittagessenProWoche,

@@ -1,3 +1,5 @@
+import { differenceInYears } from 'date-fns';
+
 import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
@@ -121,6 +123,13 @@ export const PROTOKOLL: SharedModelGesuchFormStep = {
   iconSymbolName: 'history',
 } satisfies SharedModelGesuchFormStep;
 
+export const DARLEHEN: SharedModelGesuchFormStep = {
+  route: 'darlehen',
+  translationKey: 'shared.darlehen.title',
+  titleTranslationKey: 'shared.darlehen.title',
+  iconSymbolName: 'money',
+} satisfies SharedModelGesuchFormStep;
+
 // Dynamic steps
 export const ELTERN_STEUERDATEN_ROUTE = 'eltern-steuerdaten';
 const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {
@@ -151,7 +160,7 @@ export const ELTERN_STEUER_STEPS: Record<
   VATER: ELTERN_STEUER_VATER,
 };
 
-export const gesuchFormSteps = {
+export const gesuchFormBaseSteps = {
   PERSON,
   AUSBILDUNG,
   LEBENSLAUF,
@@ -162,7 +171,14 @@ export const gesuchFormSteps = {
   KINDER,
   AUSZAHLUNG,
   EINNAHMEN_KOSTEN,
+  DARLEHEN,
   DOKUMENTE,
+};
+export type GesuchFormBaseStepKeys = keyof typeof gesuchFormBaseSteps;
+
+// @scph maybe rename to GesuchStellerFormSteps?
+export const gesuchFormSteps = {
+  ...gesuchFormBaseSteps,
   ABSCHLUSS,
 };
 export type GesuchFormStepKeys = keyof typeof gesuchFormSteps;
@@ -181,6 +197,7 @@ export const gesuchPropFormStepsMap: Record<
   lebenslaufItems: LEBENSLAUF,
   kinds: KINDER,
   einnahmenKosten: EINNAHMEN_KOSTEN,
+  darlehen: DARLEHEN,
   dokuments: DOKUMENTE,
   steuerdaten: ELTERN_STEUER_FAMILIE,
   steuerdatenMutter: ELTERN_STEUER_MUTTER,
@@ -204,6 +221,7 @@ export const gesuchFormStepsFieldMap: Record<
   [KINDER.route]: 'kinds',
   [AUSZAHLUNG.route]: 'auszahlung',
   [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
+  [DARLEHEN.route]: 'darlehen',
   [DOKUMENTE.route]: 'dokuments',
 };
 
@@ -253,6 +271,17 @@ export const isStepDisabled = (
         (vaterUnbekanntVerstorben === 'VERSTORBEN' ||
           vaterUnbekanntVerstorben === 'UNBEKANNT'))
     );
+  }
+
+  if (step === DARLEHEN) {
+    if (!formular?.personInAusbildung?.geburtsdatum) return true;
+
+    // @scph muessen wir hier date-fns verwenden um ein Date zu erstellen? macht alles komplizierter, finde ich.
+    const geburtsdatum = new Date(formular?.personInAusbildung?.geburtsdatum);
+    // todo: if this works, adjust in einkommen as well (replace getDateDifference and parseBackendLocalDateAndPrint)
+    const istErwachsen = differenceInYears(new Date(), geburtsdatum) >= 18;
+
+    return !istErwachsen;
   }
   return false;
 };

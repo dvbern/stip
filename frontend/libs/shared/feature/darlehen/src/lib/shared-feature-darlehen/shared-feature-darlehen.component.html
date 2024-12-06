@@ -1,0 +1,212 @@
+@let view = viewSig();
+
+<!-- loading -->
+@if (view.loading) {
+  <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
+} @else {
+  <form
+    [formGroup]="form"
+    [dvSharedUiFormReadonly]="view.readonly"
+    (gotReenabledSig)="gotReenabled$.next({})"
+    novalidate
+    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4"
+    data-testid="form-darlehen"
+    (ngSubmit)="handleSave()"
+  >
+    <h3 class="tw-mb-4 tw-pt-5">
+      {{ 'shared.form.darlehen.title' | translate }}
+    </h3>
+
+    <!-- willDarlehen -->
+    <mat-radio-group
+      class="d-flex flex-column"
+      formControlName="willDarlehen"
+      data-testid="form-darlehen-willDarlehen"
+      dvSharedUiFormField
+    >
+      <mat-label>{{ 'shared.form.darlehen.willDarlehen.label' | translate }}</mat-label>
+      <mat-radio-button data-testid="yes" [value]="true"> {{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
+      <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
+      <dv-shared-ui-form-zuvor-hint
+        [changes]="view.formChanges?.willDarlehen | translateChange: 'shared.form.zuvor.radio.$VALUE'"
+      ></dv-shared-ui-form-zuvor-hint>
+
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-radio-group>
+
+    <!-- Darlehensbetrag -->
+    <mat-form-field dvSharedUiFormField class="">
+      <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | translate }}</mat-label>
+      <input
+        formControlName="betragDarlehen"
+        data-testid="form-darlehen-betragDarlehen"
+        matInput
+        type="text"
+        [maskito]="maskitoNumber"
+      />
+      <mat-hint *dvZuvorHint="view.formChanges?.betragDarlehen"></mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- betragBezogenKanton -->
+    <mat-form-field dvSharedUiFormField class="">
+      <mat-label>{{ 'shared.form.darlehen.betragBezogenKanton.label' | translate }}</mat-label>
+      <input
+        formControlName="betragBezogenKanton"
+        data-testid="form-darlehen-betragBezogenKanton"
+        matInput
+        type="text"
+        [maskito]="maskitoNumber"
+      />
+      <mat-hint *dvZuvorHint="view.formChanges?.betragBezogenKanton"></mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- schulden -->
+    <mat-form-field dvSharedUiFormField class="">
+      <mat-label>{{ 'shared.form.darlehen.schulden.label' | translate }}</mat-label>
+      <input
+        formControlName="schulden"
+        data-testid="form-darlehen-schulden"
+        matInput
+        type="text"
+        [maskito]="maskitoNumber"
+      />
+      <mat-hint *dvZuvorHint="view.formChanges?.schulden"></mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- anzahlBetreibungen mit upload-->
+    <div>
+      <mat-form-field dvSharedUiFormField class="">
+        <mat-label>{{ 'shared.form.darlehen.anzahlBetreibungen.label' | translate }}</mat-label>
+        <input
+          formControlName="anzahlBetreibungen"
+          data-testid="form-darlehen-anzahlBetreibungen"
+          matInput
+          type="number"
+          min="0"
+        />
+        <mat-hint *dvZuvorHint="view.formChanges?.anzahlBetreibungen"></mat-hint>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | translate }}
+        </mat-error>
+      </mat-form-field>
+      @if (anzahlBetreibungenDocSig(); as options) {
+        <dv-shared-pattern-document-upload
+          class="flex-shrink-1"
+          [optionsSig]="options"
+        ></dv-shared-pattern-document-upload>
+      }
+    </div>
+
+    <fieldset class="tw-rounded" formGroupName="gruende">
+      <legend>{{ 'shared.form.darlehen.gruende.label' | translate }}</legend>
+
+      <!-- grundNichtBerechtigt -->
+      <div>
+        <mat-checkbox formControlName="grundNichtBerechtigt" data-testid="form-darlehen-grundNichtBerechtigt">
+          {{ 'shared.form.darlehen.grundNichtBerechtigt.label' | translate }}
+        </mat-checkbox>
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="view.formChanges?.grundNichtBerechtigt | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+        ></dv-shared-ui-form-zuvor-hint>
+      </div>
+      @if (grundNichtBerechtigtDocSig(); as options) {
+        <dv-shared-pattern-document-upload
+          class="flex-shrink-1"
+          [optionsSig]="options"
+        ></dv-shared-pattern-document-upload>
+      }
+
+      <!-- grundAusbildungZwoelfJahre -->
+      <div>
+        <mat-checkbox
+          formControlName="grundAusbildungZwoelfJahre"
+          data-testid="form-darlehen-grundAusbildungZwoelfJahre"
+        >
+          {{ 'shared.form.darlehen.grundAusbildungZwoelfJahre.label' | translate }}
+        </mat-checkbox>
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="
+            view.formChanges?.grundAusbildungZwoelfJahre | translateChange: 'shared.form.zuvor.checkbox.$VALUE'
+          "
+        ></dv-shared-ui-form-zuvor-hint>
+      </div>
+
+      <!-- grundHoheGebuehren -->
+      <div>
+        <mat-checkbox formControlName="grundHoheGebuehren" data-testid="form-darlehen-grundHoheGebuehren">
+          {{ 'shared.form.darlehen.grundHoheGebuehren.label' | translate }}
+        </mat-checkbox>
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="view.formChanges?.grundHoheGebuehren | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+        ></dv-shared-ui-form-zuvor-hint>
+      </div>
+      @if (grundHoheGebuehrenDocSig(); as options) {
+        <dv-shared-pattern-document-upload
+          class="flex-shrink-1"
+          [optionsSig]="options"
+        ></dv-shared-pattern-document-upload>
+      }
+
+      <!-- grundAnschaffungenFuerAusbildung -->
+      <div>
+        <mat-checkbox
+          formControlName="grundAnschaffungenFuerAusbildung"
+          data-testid="form-darlehen-grundAnschaffungenFuerAusbildung"
+        >
+          {{ 'shared.form.darlehen.grundAnschaffungenFuerAusbildung.label' | translate }}
+        </mat-checkbox>
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="
+            view.formChanges?.grundAnschaffungenFuerAusbildung | translateChange: 'shared.form.zuvor.checkbox.$VALUE'
+          "
+        ></dv-shared-ui-form-zuvor-hint>
+      </div>
+      @if (grundAnschaffungenFuerAusbildungDocSig(); as options) {
+        <dv-shared-pattern-document-upload
+          class="flex-shrink-1"
+          [optionsSig]="options"
+        ></dv-shared-pattern-document-upload>
+      }
+
+      <!-- grundZweitausbildung -->
+      <div>
+        <mat-checkbox formControlName="grundZweitausbildung" data-testid="form-darlehen-grundZweitausbildung">
+          {{ 'shared.form.darlehen.grundZweitausbildung.label' | translate }}
+        </mat-checkbox>
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="view.formChanges?.grundZweitausbildung | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+        ></dv-shared-ui-form-zuvor-hint>
+      </div>
+
+      <div class="tw-h-5">
+        <mat-error class="tw-text-sm">
+          {{ 'shared.form.darlehen.error.keinGrund' | translate }}
+        </mat-error>
+      </div>
+    </fieldset>
+
+    <!-- Buttons -->
+    <dv-shared-ui-step-form-buttons>
+      @if (!view.readonly) {
+        <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+          {{ 'shared.form.save-and-continue' | translate }}
+        </button>
+      } @else {
+        <button type="button" data-testid="button-next" class="btn btn-primary" (click)="handleContinue()">
+          {{ 'shared.form.gonext' | translate }}
+        </button>
+      }
+    </dv-shared-ui-step-form-buttons>
+  </form>
+}

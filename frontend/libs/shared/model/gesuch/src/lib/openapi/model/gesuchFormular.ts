@@ -10,17 +10,18 @@
  * Do not edit the class manually.
  */
 import { Steuerdaten } from './steuerdaten';
-import { Eltern } from './eltern';
 import { PersonInAusbildung } from './personInAusbildung';
+import { Familiensituation } from './familiensituation';
+import { LebenslaufItem } from './lebenslaufItem';
+import { Eltern } from './eltern';
 import { Ausbildung } from './ausbildung';
 import { SteuerdatenTyp } from './steuerdatenTyp';
+import { Darlehen } from './darlehen';
 import { Geschwister } from './geschwister';
 import { EinnahmenKosten } from './einnahmenKosten';
 import { Kind } from './kind';
-import { Familiensituation } from './familiensituation';
 import { Auszahlung } from './auszahlung';
 import { Partner } from './partner';
-import { LebenslaufItem } from './lebenslaufItem';
 
 export interface GesuchFormular { 
     ausbildung: Ausbildung;
@@ -35,5 +36,6 @@ export interface GesuchFormular {
     einnahmenKosten?: EinnahmenKosten;
     steuerdaten?: Array<Steuerdaten>;
     steuerdatenTabs?: Array<SteuerdatenTyp>;
+    darlehen?: Darlehen;
 }
 

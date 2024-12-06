@@ -157,6 +157,19 @@ form .readonly {
   @include mat.form-field-density(-2);
 }
 
+fieldset {
+  .mat-mdc-form-field-error {
+    display: none;
+  }
+
+  &.ng-touched.ng-invalid {
+    outline: 1px solid #{mat.m2-get-color-from-palette($gesuch-app-warn)};
+    .mat-mdc-form-field-error {
+      display: block;
+    }
+  }
+}
+
 .cdk-row.active,
 table tr.mat-mdc-row {
   &.active,

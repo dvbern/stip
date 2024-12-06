@@ -3,6 +3,7 @@ import { Route } from '@angular/router';
 import {
   AUSBILDUNG,
   AUSZAHLUNG,
+  DARLEHEN,
   DOKUMENTE,
   EINNAHMEN_KOSTEN,
   ELTERN,
@@ -147,6 +148,17 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-einnahmenkosten').then(
         (m) => m.gesuchAppFeatureGesuchFormEinnahmenkostenRoutes,
+      ),
+  },
+  {
+    path: DARLEHEN.route,
+    resolve: {
+      step: () => DARLEHEN,
+    },
+    title: DARLEHEN.translationKey,
+    loadChildren: () =>
+      import('@dv/shared/feature/darlehen').then(
+        (m) => m.sharedFeatureDarlehenRoutes,
       ),
   },
   {
