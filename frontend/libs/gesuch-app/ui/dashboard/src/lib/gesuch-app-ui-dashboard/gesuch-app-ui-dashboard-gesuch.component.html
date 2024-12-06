@@ -1,7 +1,7 @@
 @let gesuch = gesuchSig();
 @let periode = gesuch.gesuchsperiode;
-<div class="tw-@container tw-relative">
-  <div class="tw-absolute tw-top-0 tw-right-0 tw-font-bold">
+<div class="tw-relative tw-@container">
+  <div class="tw-absolute tw-right-0 tw-top-0 tw-font-bold">
     {{
       (gesuch.isErstgesuch
         ? 'gesuch-app.dashboard.gesuch.order.erstgesuch'
@@ -14,7 +14,7 @@
     [ngClass]="{ 'tw-grid-cols-[1fr] @lg:tw-grid-cols-[1fr,auto,1fr]': gesuch.offeneAenderung }"
   >
     <div class="tw-flex tw-flex-col">
-      <dl class="tw-flex tw-flex-col tw-mb-10" [class.tw-mb-0]="!gesuch.isActive">
+      <dl class="tw-mb-10 tw-flex tw-flex-col" [class.tw-mb-0]="!gesuch.isActive">
         <dt class="tw-font-bold">
           {{ 'gesuch-app.dashboard.gesuch.title' | translate: { yearRange: gesuch.yearRange } }}
         </dt>
@@ -64,7 +64,7 @@
                 "
               ></span>
             }
-            <dt class="tw-font-bold tw-mt-6">
+            <dt class="tw-mt-6 tw-font-bold">
               {{ 'gesuch-app.dashboard.periode.einreichefrist.text' | translate }}
             </dt>
             <dd>
@@ -89,69 +89,71 @@
           'tw-grid tw-grid-cols-2 xl:tw-grid-cols-3': !gesuch.offeneAenderung,
         }"
       >
-        @if (gesuch.isActive) {
-          @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
-          @if (gesuch.canEdit) {
+        @if (gesuch.id) {
+          @if (gesuch.isActive) {
+            @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
+            @if (gesuch.canEdit) {
+              <a
+                class="btn btn-primary"
+                data-testid="cockpit-gesuch-edit"
+                [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
+              >
+                {{ 'gesuch-app.dashboard.gesuch.edit' | translate }}
+              </a>
+
+              @if (gesuch.canDelete) {
+                <button
+                  type="button"
+                  class="btn btn-outline-primary"
+                  data-testid="gesuch-app.dashboard.gesuch.delete"
+                  (click)="deleteGesuch.emit(gesuch.id)"
+                >
+                  <span>{{ 'gesuch-app.dashboard.gesuch.delete' | translate }}</span>
+                </button>
+              }
+            } @else if (missingDocTrancheId) {
+              <a
+                class="btn btn-primary"
+                data-testid="cockpit-gesuch-upload-missing-documents"
+                [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', missingDocTrancheId]"
+              >
+                {{ 'gesuch-app.dashboard.gesuch.uploadMissingDocuments' | translate }}
+              </a>
+            }
+          }
+          @if (!gesuch.isActive || gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
             <a
-              class="btn btn-primary"
+              class="btn btn-outline-primary"
               data-testid="cockpit-gesuch-edit"
               [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
             >
-              {{ 'gesuch-app.dashboard.gesuch.edit' | translate }}
+              {{ 'gesuch-app.dashboard.gesuch.open' | translate }}
             </a>
 
-            @if (gesuch.canDelete) {
+            @if (
+              (gesuch.gesuchStatus === 'IN_FREIGABE' || gesuch.gesuchStatus === 'VERFUEGT') && !gesuch.offeneAenderung
+            ) {
               <button
                 type="button"
                 class="btn btn-outline-primary"
-                data-testid="gesuch-app.dashboard.gesuch.delete"
-                (click)="deleteGesuch.emit(gesuch.id)"
+                data-testid="cockpit-gesuch-aenderung-create"
+                (click)="aenderungMelden.emit()"
               >
-                <span>{{ 'gesuch-app.dashboard.gesuch.delete' | translate }}</span>
+                {{ 'gesuch-app.dashboard.aenderung.create' | translate }}
               </button>
             }
-          } @else if (missingDocTrancheId) {
-            <a
-              class="btn btn-primary"
-              data-testid="cockpit-gesuch-upload-missing-documents"
-              [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', missingDocTrancheId]"
-            >
-              {{ 'gesuch-app.dashboard.gesuch.uploadMissingDocuments' | translate }}
-            </a>
-          }
-        }
-        @if (!gesuch.isActive || gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
-          <a
-            class="btn btn-outline-primary"
-            data-testid="cockpit-gesuch-edit"
-            [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
-          >
-            {{ 'gesuch-app.dashboard.gesuch.open' | translate }}
-          </a>
-
-          @if (
-            (gesuch.gesuchStatus === 'IN_FREIGABE' || gesuch.gesuchStatus === 'VERFUEGT') && !gesuch.offeneAenderung
-          ) {
-            <button
-              type="button"
-              class="btn btn-outline-primary"
-              data-testid="cockpit-gesuch-aenderung-create"
-              (click)="aenderungMelden.emit()"
-            >
-              {{ 'gesuch-app.dashboard.aenderung.create' | translate }}
-            </button>
           }
         }
       </div>
     </div>
     @if (gesuch.offeneAenderung) {
       <!-- Vertical Line -->
-      <div class="tw-h-full tw-w-full tw-bg-[--dv-light-border-subtle] tw-min-h-[3px] tw-min-w-[3px]"></div>
+      <div class="tw-h-full tw-min-h-[3px] tw-w-full tw-min-w-[3px] tw-bg-[--dv-light-border-subtle]"></div>
       <div class="tw-flex tw-flex-col">
         @if (gesuch.offeneAenderung; as aenderung) {
           <div class="divider me-4"></div>
           <dv-gesuch-app-ui-aenderungs-entry
-            class="tw-flex tw-flex-col tw-flex-1"
+            class="tw-flex tw-flex-1 tw-flex-col"
             [tranche]="aenderung"
             [gesuchId]="gesuch.id"
             (deleteAenderung)="deleteAenderung.emit($event)"
