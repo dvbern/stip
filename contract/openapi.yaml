@@ -3733,9 +3733,9 @@ components:
         betragDarlehen:
           description: Required wenn willDarlehen = true
           type: integer
-        bereitsBezogenKanton:
+        betragBezogenKanton:
           description: Required wenn willDarlehen = true
-          type: boolean
+          type: integer
         schulden:
           description: Required wenn willDarlehen = true
           type: integer
