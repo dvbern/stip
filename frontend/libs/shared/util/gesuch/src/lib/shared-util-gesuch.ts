@@ -81,12 +81,12 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
  * Available status transitions actions for the gesuch
  */
 export type StatusUebergang =
-  | 'BEARBEITUNG_ABSCHLIESSEN'
-  | 'NEGATIVE_VERFUEGUNG_ERSTELLEN'
-  | 'ZURUECKWEISEN'
-  | 'VERFUEGT'
   | 'BEREIT_FUER_BEARBEITUNG'
-  | 'VERSENDET';
+  | 'ZURUECKWEISEN'
+  | 'BEARBEITUNG_ABSCHLIESSEN'
+  | 'VERFUEGT'
+  | 'VERSENDET'
+  | 'NEGATIVE_VERFUEGUNG_ERSTELLEN';
 
 /**
  * A map which contains the possible status transitions for specific gesuch statuses
@@ -98,7 +98,11 @@ export const StatusUebergaengeMap: Partial<
     'BEREIT_FUER_BEARBEITUNG',
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
   ],
-  IN_BEARBEITUNG_SB: ['BEARBEITUNG_ABSCHLIESSEN', 'ZURUECKWEISEN'],
+  IN_BEARBEITUNG_SB: [
+    'BEARBEITUNG_ABSCHLIESSEN',
+    'ZURUECKWEISEN',
+    'NEGATIVE_VERFUEGUNG_ERSTELLEN',
+  ],
   IN_FREIGABE: ['VERFUEGT', 'BEREIT_FUER_BEARBEITUNG'],
   VERSANDBEREIT: ['VERSENDET'],
 };
