@@ -84,6 +84,16 @@ export class GesuchStore extends signalStore(
   );
 
   setStatus$ = {
+    EINGEREICHT: rxMethod<{ gesuchId: string }>(
+      pipe(
+        this.handleStatusChange(({ gesuchId }) =>
+          this.gesuchService.gesuchEinreichen$({
+            gesuchId,
+          }),
+        ),
+      ),
+    ),
+
     VERFUEGT: rxMethod<{ gesuchId: string }>(
       pipe(
         this.handleStatusChange(({ gesuchId }) =>

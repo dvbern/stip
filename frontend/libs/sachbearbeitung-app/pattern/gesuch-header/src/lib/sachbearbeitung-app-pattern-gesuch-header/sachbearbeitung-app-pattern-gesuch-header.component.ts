@@ -184,6 +184,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     }
 
     switch (nextStatus) {
+      case 'EINGEREICHT':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'VERFUEGT':
       case 'VERSENDET':

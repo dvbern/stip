@@ -15,6 +15,7 @@
   "sachbearbeitung-app.header.back": "Retour",
   "sachbearbeitung-app.header.status-uebergang.abschliessen": "Terminer la rédaction",
   "sachbearbeitung-app.header.status-uebergang.freigabe": "Approuver",
+  "sachbearbeitung-app.header.status-uebergang.EINGEREICHT": "Soumis",
   "sachbearbeitung-app.header.status-uebergang.BEARBEITUNG_ABSCHLIESSEN": "Clôturer le traitement",
   "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN": "Rejeter la demande",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG": "Prêt pour traitement",

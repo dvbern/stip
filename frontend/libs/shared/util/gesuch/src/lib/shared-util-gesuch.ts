@@ -81,6 +81,7 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
  * Available status transitions actions for the gesuch
  */
 export type StatusUebergang =
+  | 'EINGEREICHT'
   | 'BEREIT_FUER_BEARBEITUNG'
   | 'ZURUECKWEISEN'
   | 'BEARBEITUNG_ABSCHLIESSEN'
@@ -107,14 +108,32 @@ export const StatusUebergaengeMap: Partial<
     'BEREIT_FUER_BEARBEITUNG',
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
   ],
+  ABKLAERUNG_DURCH_RECHSTABTEILUNG: [
+    'EINGEREICHT',
+    'NEGATIVE_VERFUEGUNG_ERSTELLEN',
+  ],
   IN_FREIGABE: ['VERFUEGT', 'BEREIT_FUER_BEARBEITUNG'],
   VERSANDBEREIT: ['VERSENDET'],
+};
+
+type StatusUebergangOption = {
+  icon: string;
+  titleKey: string;
+  typ: StatusUebergang;
+  disabledReason?: string;
 };
 
 /**
  * Options for the status transitions
  */
 export const StatusUebergaengeOptions = {
+  EINGEREICHT: () =>
+    ({
+      icon: 'check_circle_outline',
+      titleKey: 'EINGEREICHT',
+      typ: 'EINGEREICHT',
+      disabledReason: undefined,
+    }) as const,
   BEARBEITUNG_ABSCHLIESSEN: (context?: { hasAcceptedAllDokuments: boolean }) =>
     ({
       icon: 'check',
@@ -159,4 +178,4 @@ export const StatusUebergaengeOptions = {
       typ: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
       disabledReason: undefined,
     }) as const,
-} satisfies Record<StatusUebergang, unknown>;
+} satisfies Record<StatusUebergang, () => StatusUebergangOption>;
