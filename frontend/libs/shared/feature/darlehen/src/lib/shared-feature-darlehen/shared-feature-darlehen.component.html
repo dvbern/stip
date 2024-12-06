@@ -9,7 +9,7 @@
     [dvSharedUiFormReadonly]="view.readonly"
     (gotReenabledSig)="gotReenabled$.next({})"
     novalidate
-    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4"
+    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 lg:tw-w-1/2"
     data-testid="form-darlehen"
     (ngSubmit)="handleSave()"
   >
@@ -19,7 +19,7 @@
 
     <!-- willDarlehen -->
     <mat-radio-group
-      class="d-flex flex-column"
+      class="tw-mb-4 tw-flex tw-flex-col"
       formControlName="willDarlehen"
       data-testid="form-darlehen-willDarlehen"
       dvSharedUiFormField
@@ -37,7 +37,7 @@
     </mat-radio-group>
 
     <!-- Darlehensbetrag -->
-    <mat-form-field dvSharedUiFormField class="">
+    <mat-form-field dvSharedUiFormField>
       <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | translate }}</mat-label>
       <input
         formControlName="betragDarlehen"
@@ -53,7 +53,7 @@
     </mat-form-field>
 
     <!-- betragBezogenKanton -->
-    <mat-form-field dvSharedUiFormField class="">
+    <mat-form-field dvSharedUiFormField>
       <mat-label>{{ 'shared.form.darlehen.betragBezogenKanton.label' | translate }}</mat-label>
       <input
         formControlName="betragBezogenKanton"
@@ -69,7 +69,7 @@
     </mat-form-field>
 
     <!-- schulden -->
-    <mat-form-field dvSharedUiFormField class="">
+    <mat-form-field dvSharedUiFormField>
       <mat-label>{{ 'shared.form.darlehen.schulden.label' | translate }}</mat-label>
       <input
         formControlName="schulden"
@@ -85,8 +85,8 @@
     </mat-form-field>
 
     <!-- anzahlBetreibungen mit upload-->
-    <div>
-      <mat-form-field dvSharedUiFormField class="">
+    <div class="tw-flex tw-gap-2">
+      <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>{{ 'shared.form.darlehen.anzahlBetreibungen.label' | translate }}</mat-label>
         <input
           formControlName="anzahlBetreibungen"
@@ -108,11 +108,11 @@
       }
     </div>
 
-    <fieldset class="tw-rounded" formGroupName="gruende">
-      <legend>{{ 'shared.form.darlehen.gruende.label' | translate }}</legend>
+    <fieldset class="h tw-grid tw-grid-cols-[1fr_56px] tw-gap-x-6 tw-gap-y-4 tw-rounded" formGroupName="gruende">
+      <legend class="tw-col-span-full">{{ 'shared.form.darlehen.gruende.label' | translate }}</legend>
 
       <!-- grundNichtBerechtigt -->
-      <div>
+      <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
         <mat-checkbox formControlName="grundNichtBerechtigt" data-testid="form-darlehen-grundNichtBerechtigt">
           {{ 'shared.form.darlehen.grundNichtBerechtigt.label' | translate }}
         </mat-checkbox>
@@ -128,7 +128,7 @@
       }
 
       <!-- grundAusbildungZwoelfJahre -->
-      <div>
+      <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
         <mat-checkbox
           formControlName="grundAusbildungZwoelfJahre"
           data-testid="form-darlehen-grundAusbildungZwoelfJahre"
@@ -143,7 +143,7 @@
       </div>
 
       <!-- grundHoheGebuehren -->
-      <div>
+      <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
         <mat-checkbox formControlName="grundHoheGebuehren" data-testid="form-darlehen-grundHoheGebuehren">
           {{ 'shared.form.darlehen.grundHoheGebuehren.label' | translate }}
         </mat-checkbox>
@@ -159,7 +159,7 @@
       }
 
       <!-- grundAnschaffungenFuerAusbildung -->
-      <div>
+      <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
         <mat-checkbox
           formControlName="grundAnschaffungenFuerAusbildung"
           data-testid="form-darlehen-grundAnschaffungenFuerAusbildung"
@@ -180,7 +180,7 @@
       }
 
       <!-- grundZweitausbildung -->
-      <div>
+      <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
         <mat-checkbox formControlName="grundZweitausbildung" data-testid="form-darlehen-grundZweitausbildung">
           {{ 'shared.form.darlehen.grundZweitausbildung.label' | translate }}
         </mat-checkbox>
@@ -189,7 +189,7 @@
         ></dv-shared-ui-form-zuvor-hint>
       </div>
 
-      <div class="tw-h-5">
+      <div class="tw-col-span-full tw-h-5">
         <mat-error class="tw-text-sm">
           {{ 'shared.form.darlehen.error.keinGrund' | translate }}
         </mat-error>
