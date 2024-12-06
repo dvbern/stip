@@ -71,6 +71,7 @@ public class ElternteilV1 {
         final int anzahlPersonenImHaushalt,
         final List<AbstractFamilieEntity> kinderDerElternInHaushalten,
         final int anzahlGeschwisterInAusbildung,
+        final int anzahlGeschwisterInNachobligatorischerAusbildung,
         final ElternTyp elternTyp,
         final Familiensituation familiensituation
     ) {
@@ -109,6 +110,13 @@ public class ElternteilV1 {
                 steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER
                     ? ElternTyp.MUTTER
                     : ElternTyp.VATER; // Never is Family
+            final var elternteilToUse = eltern.stream()
+                .filter(
+                    elternteil -> elternteil.getElternTyp() == steuernElternTyp
+                )
+                .toList()
+                .get(0);
+            builder.ergaenzungsleistungen(Objects.requireNonNullElse(elternteilToUse.getErgaenzungsleistungen(), 0));
 
             final var kindDesElternteilsVollzeit = kinderDerElternInHaushalten.stream()
                 .filter(
@@ -161,9 +169,8 @@ public class ElternteilV1 {
                 if (Boolean.TRUE.equals(familiensituation.getVaterWiederverheiratet())) {
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         29,
-                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29//
-                                       // für
-                                       // margin
+                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist.
+                                       // 29 für margin
                     );
                 }
             }
@@ -182,9 +189,8 @@ public class ElternteilV1 {
                 if (Boolean.TRUE.equals(familiensituation.getMutterWiederverheiratet())) {
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         29,
-                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist. 29//
-                                       // für
-                                       // margin
+                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist.
+                                       // 29 für margin
                     );
                 }
             }
@@ -198,7 +204,7 @@ public class ElternteilV1 {
 
         builder.integrationszulage(
             Integer.min(
-                gesuchsperiode.getIntegrationszulage() * (anzahlGeschwisterInAusbildung + 1),
+                gesuchsperiode.getIntegrationszulage() * (anzahlGeschwisterInNachobligatorischerAusbildung + 1),
                 gesuchsperiode.getLimiteEkFreibetragIntegrationszulage() - gesuchsperiode.getEinkommensfreibetrag()
             )
         );
@@ -231,6 +237,7 @@ public class ElternteilV1 {
         final int anzahlPersonenImHaushalt,
         final List<AbstractFamilieEntity> kinderDerElternInHaushalten,
         final int anzahlGeschwisterInAusbildung,
+        final int anzahlGeschwisterInNachobligatorischerAusbildung,
         final ElternTyp elternTyp,
         final Familiensituation familiensituation
     ) {
@@ -241,6 +248,7 @@ public class ElternteilV1 {
             anzahlPersonenImHaushalt,
             kinderDerElternInHaushalten,
             anzahlGeschwisterInAusbildung,
+            anzahlGeschwisterInNachobligatorischerAusbildung,
             elternTyp,
             familiensituation
         ).build();

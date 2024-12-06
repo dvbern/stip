@@ -34,6 +34,10 @@
             "label": "Dialog - standalone (simple / view / presentational) UI component used for dialogs. Is able to also render features"
           },
           {
+            "value": "global",
+            "label": "Global - a global data-access ngrx signal store which can be used anywhere"
+          },
+          {
             "value": "ui",
             "label": "UI - standalone (simple / view / presentational) UI component, eg calendar or toggle"
           },

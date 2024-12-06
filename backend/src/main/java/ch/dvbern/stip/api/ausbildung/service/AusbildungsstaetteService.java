@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
@@ -42,7 +42,7 @@ public class AusbildungsstaetteService {
     }
 
     @Transactional
-    public Collection<AusbildungsstaetteDto> getAusbildungsstaetten() {
+    public List<AusbildungsstaetteDto> getAusbildungsstaetten() {
         return ausbildungsstaetteRepository.findAll()
             .stream()
             .map(ausbildungsstaetteMapper::toDto)

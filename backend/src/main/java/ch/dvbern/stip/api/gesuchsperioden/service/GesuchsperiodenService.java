@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.gesuchsperioden.service;
 
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -67,7 +67,7 @@ public class GesuchsperiodenService {
         return gesuchsperiodeMapper.toDatenDto(gesuchsperiode);
     }
 
-    public Collection<GesuchsperiodeDto> getAllGesuchsperioden() {
+    public List<GesuchsperiodeDto> getAllGesuchsperioden() {
         return this.gesuchsperiodeRepository.findAll()
             .stream()
             .map(gesuchsperiodeMapper::toDto)
@@ -79,7 +79,7 @@ public class GesuchsperiodenService {
         return gesuchsperiode.map(gesuchsperiodeMapper::toDatenDto);
     }
 
-    public Collection<GesuchsperiodeDto> getAllActive() {
+    public List<GesuchsperiodeDto> getAllActive() {
         return gesuchsperiodeRepository
             .findAllActiveForDate(LocalDate.now())
             .map(gesuchsperiodeMapper::toDto)

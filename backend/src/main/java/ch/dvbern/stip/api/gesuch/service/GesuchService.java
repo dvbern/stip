@@ -62,6 +62,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
+import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
@@ -70,12 +71,15 @@ import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
+import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
+import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -120,6 +124,7 @@ public class GesuchService {
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
     private final AusbildungRepository ausbildungRepository;
     private final StipDecisionService stipDecisionService;
+    private final StipDecisionTextRepository stipDecisionTextRepository;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
@@ -554,8 +559,19 @@ public class GesuchService {
 
     @Transactional
     public GesuchDto gesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+        return gesuchStatusToBereitFuerBearbeitung(gesuchId, null);
+    }
+
+    @Transactional
+    public GesuchDto gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId, final KommentarDto kommentar) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        gesuchStatusService.triggerStateMachineEventWithComment(
+            gesuch,
+            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG,
+            kommentar,
+            false
+        );
+
         return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
@@ -577,6 +593,20 @@ public class GesuchService {
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+    }
+
+    @Transactional
+    public GesuchDto changeGesuchStatusToNegativeVerfuegung(final UUID gesuchId, final UUID decisionId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var decision = stipDecisionTextRepository.requireById(decisionId);
+        gesuchStatusService.triggerStateMachineEventWithComment(
+            gesuch,
+            GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
+            new KommentarDto(decision.getTitleDe()),
+            false
+        );
+
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
@@ -667,5 +697,17 @@ public class GesuchService {
         gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
         gesuchStatusService
             .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+    }
+
+    @Transactional
+    public GesuchNotizDto createGesuchNotiz(final GesuchNotizCreateDto createDto) {
+        final var gesuch = gesuchRepository.requireById(createDto.getGesuchId());
+        final var notiz = gesuchNotizService.create(gesuch, createDto);
+
+        if (createDto.getNotizTyp() == GesuchNotizTyp.JURISTISCHE_NOTIZ) {
+            juristischAbklaeren(gesuch.getId());
+        }
+
+        return notiz;
     }
 }

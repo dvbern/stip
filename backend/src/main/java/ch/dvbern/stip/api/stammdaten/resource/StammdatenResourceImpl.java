@@ -20,40 +20,41 @@ package ch.dvbern.stip.api.stammdaten.resource;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.stammdaten.service.LandService;
+import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.generated.api.StammdatenResource;
 import ch.dvbern.stip.generated.dto.LandEuEftaDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
+@Validated
 public class StammdatenResourceImpl implements StammdatenResource {
     private final LandService landService;
 
     @Override
     @AllowAll
     @RolesAllowed(STAMMDATEN_READ)
-    public Response getLaender() {
-        var laender = landService.getAllLaender();
-        return Response.ok(laender).build();
+    public List<Land> getLaender() {
+        return landService.getAllLaender();
     }
 
     @Override
     @AllowAll
     @RolesAllowed(STAMMDATEN_READ)
-    public Response getLaenderEuEfta() {
-        return Response.ok(landService.getAllLandEuEfta()).build();
+    public List<LandEuEftaDto> getLaenderEuEfta() {
+        return landService.getAllLandEuEfta();
     }
 
     @Override
     @AllowAll
     @RolesAllowed(STAMMDATEN_READ)
-    public Response setLaenderEuEfta(List<LandEuEftaDto> landEuEftaDto) {
-        return Response.ok(landService.setLaenderEuEfta(landEuEftaDto)).build();
+    public List<LandEuEftaDto> setLaenderEuEfta(List<LandEuEftaDto> landEuEftaDto) {
+        return landService.setLaenderEuEfta(landEuEftaDto);
     }
 }

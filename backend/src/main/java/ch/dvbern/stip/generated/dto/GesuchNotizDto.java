@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GesuchNotizTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -27,7 +26,7 @@ public class GesuchNotizDto  implements Serializable {
   private @Valid String text;
   private @Valid String userErstellt;
   private @Valid LocalDate timestampErstellt;
-  private @Valid GesuchNotizTypDto notizTyp;
+  private @Valid ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
   private @Valid String userMutiert;
   private @Valid LocalDate timestampMutiert;
   private @Valid String antwort;
@@ -129,7 +128,7 @@ public class GesuchNotizDto  implements Serializable {
 
   /**
    **/
-  public GesuchNotizDto notizTyp(GesuchNotizTypDto notizTyp) {
+  public GesuchNotizDto notizTyp(ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp) {
     this.notizTyp = notizTyp;
     return this;
   }
@@ -137,12 +136,12 @@ public class GesuchNotizDto  implements Serializable {
   
   @JsonProperty("notizTyp")
   @NotNull
-  public GesuchNotizTypDto getNotizTyp() {
+  public ch.dvbern.stip.api.notiz.type.GesuchNotizTyp getNotizTyp() {
     return notizTyp;
   }
 
   @JsonProperty("notizTyp")
-  public void setNotizTyp(GesuchNotizTypDto notizTyp) {
+  public void setNotizTyp(ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp) {
     this.notizTyp = notizTyp;
   }
 

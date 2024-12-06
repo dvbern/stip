@@ -188,6 +188,7 @@
   "shared.gesuch.status.contract.STIPENDIENANSPRUCH": "Stipendienanspruch",
   "shared.gesuch.status.contract.GESUCH_ABGELEHNT": "Gesuch abgelehnt",
   "shared.gesuch.status.contract.WARTEN_AUF_UNTERSCHRIFTENBLATT": "Warten auf Unterschriftenblatt",
+  "shared.gesuch.status.contract.NEGATIVE_VERFUEGUNG": "Negative Verfügung",
 
   "shared.gesuch.tranche.typ.AENDERUNG": "Änderung",
   "shared.gesuch.tranche.typ.TRANCHE": "Gesuch",
@@ -556,7 +557,7 @@
   "shared.form.abschluss.fehlendeDokumenteEinreichen": "Die Dokumente dem Sachbearbeiter übermitteln",
   "shared.form.tranche-abschluss.notReady": "Es fehlen noch Angaben. Bitte füllen Sie alle Pflichtfelder aus.",
 
-  "shared.protokoll.title": "Protokoll",
+  "shared.protokoll.title": "Gesuchsverlauf",
 
   "shared.notizen.title": "Notizen",
   "shared.form.notizen.datumErstellt.label": "Datum erstellt",

@@ -28,36 +28,36 @@ public interface SozialdienstResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createSozialdienst(@Valid SozialdienstCreateDto sozialdienstCreateDto);
+    SozialdienstDto createSozialdienst(@Valid SozialdienstCreateDto sozialdienstCreateDto);
 
     @DELETE
     @Path("/{sozialdienstId}")
     @Produces({ "application/json", "text/plain" })
-    Response deleteSozialdienst(@PathParam("sozialdienstId") UUID sozialdienstId);
+    SozialdienstDto deleteSozialdienst(@PathParam("sozialdienstId") UUID sozialdienstId);
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getAllSozialdienste();
+    List<SozialdienstDto> getAllSozialdienste();
 
     @GET
     @Path("/{sozialdienstId}")
     @Produces({ "application/json", "text/plain" })
-    Response getSozialdienst(@PathParam("sozialdienstId") UUID sozialdienstId);
+    SozialdienstDto getSozialdienst(@PathParam("sozialdienstId") UUID sozialdienstId);
 
     @PATCH
     @Path("/{sozialdienstId}/replaceSozialdienstAdmin")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response replaceSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminCreateDto sozialdienstAdminCreateDto);
+    SozialdienstAdminDto replaceSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminCreateDto sozialdienstAdminCreateDto);
 
     @PATCH
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response updateSozialdienst(@Valid SozialdienstUpdateDto sozialdienstUpdateDto);
+    SozialdienstDto updateSozialdienst(@Valid SozialdienstUpdateDto sozialdienstUpdateDto);
 
     @PATCH
     @Path("/{sozialdienstId}/updateSozialdienstAdmin")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response updateSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto);
+    SozialdienstAdminDto updateSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto);
 }

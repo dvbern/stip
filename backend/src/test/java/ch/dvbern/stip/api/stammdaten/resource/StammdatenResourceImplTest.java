@@ -22,10 +22,9 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @QuarkusTest
@@ -36,7 +35,7 @@ class StammdatenResourceImplTest {
     @TestAsGesuchsteller
     @Test
     void getLaenderasGS() {
-        assertEquals(HttpStatus.SC_OK, stammdatenResource.getLaender().getStatus());
+        assertNotNull(stammdatenResource.getLaender());
     }
 
     @TestAsSachbearbeiter

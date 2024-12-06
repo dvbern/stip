@@ -162,6 +162,12 @@ public class BerechnungRequestV1 implements DmnRequest {
                             geschwister -> geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE
                         )
                         .count(),
+                    (int) gesuchFormular.getGeschwisters()
+                        .stream()
+                        .filter(
+                            geschwister -> geschwister.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG
+                        )
+                        .count(),
                     elternTyp,
                     gesuchFormular.getFamiliensituation()
                 )

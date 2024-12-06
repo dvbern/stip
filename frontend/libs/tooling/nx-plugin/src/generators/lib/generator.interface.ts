@@ -9,6 +9,7 @@ export type LibType =
   | 'pattern'
   | 'data-access'
   | 'event'
+  | 'global'
   | 'ui'
   | 'util'
   | 'util-data-access'
