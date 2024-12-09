@@ -2229,9 +2229,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchTrancheSlim'
+                $ref: '#/components/schemas/GesuchTrancheList'
           description: Alle GesuchTranchen fuer ein Gesuch
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -4190,6 +4188,15 @@ components:
           $ref: '#/components/schemas/GesuchFormularUpdate'
         id:
           $ref: '#/components/schemas/UUID'
+    GesuchTrancheList:
+      type: object
+      properties:
+        tranchen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+        initialTranche:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
     GesuchTrancheSlim:
       type: object
       required:
