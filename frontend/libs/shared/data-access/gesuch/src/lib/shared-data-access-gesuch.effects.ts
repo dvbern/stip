@@ -33,8 +33,8 @@ import { SharedModelError } from '@dv/shared/model/error';
 import {
   GesuchFormularUpdate,
   GesuchService,
-  GesuchTrancheTyp,
   GesuchUpdate,
+  GesuchUrlType,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
@@ -159,14 +159,14 @@ export const loadGesuch = createEffect(
         // Call the correct service based on the app type
         const aenderungServices$ = {
           'gesuch-app': (aenderungId: string) =>
-            gesuchService.getGsTrancheChanges$(
+            gesuchService.getGsAenderungChangesInBearbeitung$(
               { aenderungId },
               undefined,
               undefined,
               handle404And401,
             ),
           'sachbearbeitung-app': (aenderungId: string) =>
-            gesuchService.getSbTrancheChanges$(
+            gesuchService.getSbAenderungChanges$(
               { aenderungId },
               undefined,
               undefined,
@@ -177,20 +177,29 @@ export const loadGesuch = createEffect(
         // Different services for different types of tranches
         const services$ = {
           AENDERUNG: (appType: AppType) => aenderungServices$[appType],
-          TRANCHE: () => (trancheId: string) =>
-            gesuchService.getChangesIdByTrancheId$(
-              { trancheId },
+          TRANCHE: () => (gesuchTrancheId: string) =>
+            gesuchService.getGesuch$(
+              { gesuchId: id, gesuchTrancheId },
               undefined,
               undefined,
               handle404And401,
             ),
-        } satisfies Record<GesuchTrancheTyp, unknown>;
+          INITIAL: () => (trancheId: string) =>
+            gesuchService.getInitialTrancheChangesByTrancheId$(
+              {
+                trancheId,
+              },
+              undefined,
+              undefined,
+              handle404And401,
+            ),
+        } satisfies Record<GesuchUrlType, unknown>;
 
         return services$[trancheTyp](compileTimeConfig.appType)(trancheId).pipe(
           map((gesuch) =>
             SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
               gesuch,
-              trancheId,
+              typ: trancheTyp,
             }),
           ),
           catchError((error) => [
@@ -395,7 +404,10 @@ export const setGesuchToBearbeitung = createEffect(
           .changeGesuchStatusToInBearbeitung$({ gesuchId: id })
           .pipe(
             map((gesuch) =>
-              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
+              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
+                gesuch,
+                typ: 'TRANCHE',
+              }),
             ),
             catchError((error) => [
               SharedDataAccessGesuchEvents.gesuchLoadedFailure({

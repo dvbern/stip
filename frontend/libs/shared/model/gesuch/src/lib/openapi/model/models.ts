@@ -66,6 +66,7 @@ export * from './gesuchNotizCreate';
 export * from './gesuchNotizTyp';
 export * from './gesuchNotizUpdate';
 export * from './gesuchTranche';
+export * from './gesuchTrancheList';
 export * from './gesuchTrancheSlim';
 export * from './gesuchTrancheStatus';
 export * from './gesuchTrancheTyp';

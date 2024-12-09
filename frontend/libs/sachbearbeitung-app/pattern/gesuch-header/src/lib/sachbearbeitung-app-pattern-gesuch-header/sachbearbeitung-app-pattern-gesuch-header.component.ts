@@ -89,13 +89,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       return false;
     }
 
-    return (
-      // If it is a tranche route
-      this.router.url.includes('/tranche/') ||
-      // or a normal current gesuch route
-      (this.router.url.includes('/gesuch/') &&
-        !this.router.url.includes('/aenderung/'))
-    );
+    return this.router.url.includes('/tranche/');
   });
 
   isAenderungRouteSig = computed(() => {
@@ -104,7 +98,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       return false;
     }
 
-    return this.router.url.includes('/aenderung/');
+    return (
+      this.router.url.includes('/aenderung/') ||
+      this.router.url.includes('/initial/')
+    );
   });
 
   isInfosRouteSig = computed(() => {

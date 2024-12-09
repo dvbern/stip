@@ -53,13 +53,17 @@ const AbschlussPhaseMap = {
 
 export const toAbschlussPhase = (
   gesuch: SharedModelGesuch | null,
-  options: { appType?: AppType; isComplete?: boolean; checkTranche?: boolean },
+  options: {
+    appType?: AppType;
+    isComplete?: boolean;
+    checkAenderung?: boolean;
+  },
 ): AbschlussPhase | null => {
   const appType = options?.appType;
   if (!gesuch || !appType) {
     return 'NOT_READY';
   }
-  const key = options.checkTranche
+  const key = options.checkAenderung
     ? (`TRANCHE_${gesuch.gesuchTrancheToWorkWith.status}` as const)
     : (`GESUCH_${gesuch.gesuchStatus}` as const);
   const phase = AbschlussPhaseMap[key]?.[appType];

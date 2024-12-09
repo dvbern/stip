@@ -65,7 +65,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   }
 
   abschliessen() {
-    const { isEditingTranche, gesuch, trancheId } = this.gesuchViewSig();
+    const { isEditingAenderung, gesuch, trancheId } = this.gesuchViewSig();
     if (!gesuch || !trancheId) {
       return;
     }
@@ -81,8 +81,8 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
-          if (isEditingTranche) {
-            this.einreichenStore.trancheEinreichen$({
+          if (isEditingAenderung) {
+            this.einreichenStore.aenderungEinreichen$({
               trancheId,
             });
           } else {
