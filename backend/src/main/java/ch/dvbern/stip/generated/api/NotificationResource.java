@@ -21,5 +21,5 @@ public interface NotificationResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getNotificationsForCurrentUser();
+    List<NotificationDto> getNotificationsForCurrentUser();
 }

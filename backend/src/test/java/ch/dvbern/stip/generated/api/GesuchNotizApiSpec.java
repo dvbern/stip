@@ -110,6 +110,7 @@ public class GesuchNotizApiSpec {
      *
      * @see #notizIdPath  (required)
      * @see #body  (required)
+     * return GesuchNotizDtoSpec
      */
     public static class AnswerJuristischeAbklaerungNotizOper implements Oper {
 
@@ -135,6 +136,16 @@ public class GesuchNotizApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/notiz/juristischeAbklaerung/{notizId}
+         * @param handler handler
+         * @return GesuchNotizDtoSpec
+         */
+        public GesuchNotizDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchNotizDtoSpec> type = new TypeRef<GesuchNotizDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
          /**
@@ -462,6 +473,7 @@ public class GesuchNotizApiSpec {
      * 
      *
      * @see #body  (required)
+     * return GesuchNotizDtoSpec
      */
     public static class UpdateNotizOper implements Oper {
 
@@ -487,6 +499,16 @@ public class GesuchNotizApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/notiz
+         * @param handler handler
+         * @return GesuchNotizDtoSpec
+         */
+        public GesuchNotizDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchNotizDtoSpec> type = new TypeRef<GesuchNotizDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
          /**

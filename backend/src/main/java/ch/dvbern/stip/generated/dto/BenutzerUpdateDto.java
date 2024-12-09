@@ -20,29 +20,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class BenutzerUpdateDto  implements Serializable {
-  private @Valid String sozialversicherungsnummer;
   private @Valid String vorname;
   private @Valid String nachname;
+  private @Valid String sozialversicherungsnummer;
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
-
-  /**
-   **/
-  public BenutzerUpdateDto sozialversicherungsnummer(String sozialversicherungsnummer) {
-    this.sozialversicherungsnummer = sozialversicherungsnummer;
-    return this;
-  }
-
-  
-  @JsonProperty("sozialversicherungsnummer")
-  @NotNull
-  public String getSozialversicherungsnummer() {
-    return sozialversicherungsnummer;
-  }
-
-  @JsonProperty("sozialversicherungsnummer")
-  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
-    this.sozialversicherungsnummer = sozialversicherungsnummer;
-  }
 
   /**
    **/
@@ -84,6 +65,24 @@ public class BenutzerUpdateDto  implements Serializable {
 
   /**
    **/
+  public BenutzerUpdateDto sozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
+    return this;
+  }
+
+  
+  @JsonProperty("sozialversicherungsnummer")
+  public String getSozialversicherungsnummer() {
+    return sozialversicherungsnummer;
+  }
+
+  @JsonProperty("sozialversicherungsnummer")
+  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
+  }
+
+  /**
+   **/
   public BenutzerUpdateDto benutzereinstellungen(BenutzereinstellungenUpdateDto benutzereinstellungen) {
     this.benutzereinstellungen = benutzereinstellungen;
     return this;
@@ -110,15 +109,15 @@ public class BenutzerUpdateDto  implements Serializable {
       return false;
     }
     BenutzerUpdateDto benutzerUpdate = (BenutzerUpdateDto) o;
-    return Objects.equals(this.sozialversicherungsnummer, benutzerUpdate.sozialversicherungsnummer) &&
-        Objects.equals(this.vorname, benutzerUpdate.vorname) &&
+    return Objects.equals(this.vorname, benutzerUpdate.vorname) &&
         Objects.equals(this.nachname, benutzerUpdate.nachname) &&
+        Objects.equals(this.sozialversicherungsnummer, benutzerUpdate.sozialversicherungsnummer) &&
         Objects.equals(this.benutzereinstellungen, benutzerUpdate.benutzereinstellungen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, vorname, nachname, benutzereinstellungen);
+    return Objects.hash(vorname, nachname, sozialversicherungsnummer, benutzereinstellungen);
   }
 
   @Override
@@ -126,9 +125,9 @@ public class BenutzerUpdateDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class BenutzerUpdateDto {\n");
     
-    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
     sb.append("}");
     return sb.toString();

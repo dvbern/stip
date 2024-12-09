@@ -27,40 +27,40 @@ public interface GesuchsperiodeResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createGesuchsperiode(@Valid @NotNull GesuchsperiodeCreateDto gesuchsperiodeCreateDto);
+    GesuchsperiodeWithDatenDto createGesuchsperiode(@Valid @NotNull GesuchsperiodeCreateDto gesuchsperiodeCreateDto);
 
     @DELETE
     @Path("/{gesuchsperiodeId}")
     @Produces({ "text/plain" })
-    Response deleteGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId);
+    void deleteGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId);
 
     @GET
     @Path("/aktive")
     @Produces({ "application/json", "text/plain" })
-    Response getAktiveGesuchsperioden();
+    List<GesuchsperiodeDto> getAktiveGesuchsperioden();
 
     @GET
     @Path("/{gesuchsperiodeId}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId);
+    GesuchsperiodeWithDatenDto getGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId);
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getGesuchsperioden();
+    List<GesuchsperiodeDto> getGesuchsperioden();
 
     @GET
     @Path("/latest")
     @Produces({ "application/json", "text/plain" })
-    Response getLatest();
+    NullableGesuchsperiodeWithDatenDto getLatest();
 
     @PATCH
     @Path("/publish/{gesuchsperiodeId}")
     @Produces({ "application/json" })
-    Response publishGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId);
+    GesuchsperiodeWithDatenDto publishGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId);
 
     @PATCH
     @Path("/{gesuchsperiodeId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response updateGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId,@Valid GesuchsperiodeUpdateDto gesuchsperiodeUpdateDto);
+    GesuchsperiodeWithDatenDto updateGesuchsperiode(@PathParam("gesuchsperiodeId") UUID gesuchsperiodeId,@Valid GesuchsperiodeUpdateDto gesuchsperiodeUpdateDto);
 }

@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 import {
   Adresse,
   Auszahlung,
+  Darlehen,
   EinnahmenKosten,
   Eltern,
   Familiensituation,
@@ -20,6 +21,7 @@ import {
 
 import { AusbildungValues } from '../../po/ausbildung.po';
 import { AuszahlungPO } from '../../po/auszahlung.po';
+import { DarlehenPO } from '../../po/darlehen.po';
 import { EinnahmenKostenPO } from '../../po/einnahmen-kosten.po';
 import { ElternPO } from '../../po/eltern.po';
 import { FamilyPO } from '../../po/familiy.po';
@@ -170,7 +172,10 @@ const einnahmenKosten: EinnahmenKosten = {
   veranlagungsCode: 0,
   steuernKantonGemeinde: 0,
   verdienstRealisiert: false,
-  willDarlehen: true,
+};
+
+const darlehen: Darlehen = {
+  willDarlehen: false,
 };
 
 const { test, getGesuchId } = initializeTest('GESUCHSTELLER', ausbildung);
@@ -266,12 +271,21 @@ test.describe('Neues gesuch erstellen', () => {
 
     await einnahmenKostenPO.fillEinnahmenKostenForm(einnahmenKosten);
 
+    await einnahmenKostenPO.elems.buttonSaveContinue.click();
+
+    // Step 9: Darlehen =============================================================
+    await expectStepTitleToContainText('Darlehen', page);
+    const darlehenPO = new DarlehenPO(page);
+    await expect(darlehenPO.elems.loading).toBeHidden();
+
+    await darlehenPO.fillDarlehenForm(darlehen);
+
     const requiredDokumenteResponse = page.waitForResponse(
       '**/api/v1/gesuchtranche/*/requiredDokumente',
     );
-    await einnahmenKostenPO.elems.buttonSaveContinue.click();
+    await darlehenPO.elems.buttonSaveContinue.click();
 
-    // Step 9: Dokumente ===========================================================
+    // Step 10: Dokumente ===========================================================
 
     await expectStepTitleToContainText('Dokumente', page);
     await requiredDokumenteResponse;
@@ -294,29 +308,32 @@ test.describe('Neues gesuch erstellen', () => {
 
     await page.getByTestId('button-continue').click();
 
-    // Step 10: Freigabe ===========================================================
+    // Step 11: Freigabe ===========================================================
     await expectStepTitleToContainText('Freigabe', page);
 
     await page.getByTestId('button-abschluss').click();
+    const freigabeResponse = page.waitForResponse(
+      '**/api/v1/gesuch/*/einreichen',
+    );
     await page.getByTestId('dialog-confirm').click();
+    await freigabeResponse;
 
     // Go to Berechnung (SB-App)
     const urls = getE2eUrls();
     await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}`);
 
-    // TODO: Fix data after Wohnsitz / Familiensituation changes work correctly
-    // await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
-    //   /abgelehnt/,
-    //   { timeout: 10000 },
-    // );
+    await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
+      /accept/,
+      { timeout: 10000 },
+    );
 
-    // await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
+    await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
 
-    // await expect(
-    //   page.getByTestId('berechnung-persoenlich-total'),
-    // ).toContainText("- 14'192");
-    // await expect(page.getByTestId('berechnung-familien-total')).toContainText(
-    //   "- 54'856",
-    // );
+    await expect(
+      page.getByTestId('berechnung-persoenlich-total'),
+    ).toContainText("- 14'974");
+    await expect(page.getByTestId('berechnung-familien-total')).toContainText(
+      "- 55'492",
+    );
   });
 });

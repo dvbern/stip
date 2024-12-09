@@ -39,6 +39,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 public class Bildungskategorie extends AbstractEntity {
     // Bildungskategorien from BFS code 7 adn higher are of Bildungsstufe Tertiaer, lower are sekundaer_2
     private static final int MIN_TERTIAER_BFS = 7;
+    // Bildunkskategorien with BFS code 5 are considered lehren
+    public static final int LEHRE_BFS = 5;
 
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "bezeichnung_de", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)

@@ -77,21 +77,35 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
   ];
 }
 
+/**
+ * Available status transitions actions for the gesuch
+ */
 export type StatusUebergang =
   | 'BEARBEITUNG_ABSCHLIESSEN'
+  | 'NEGATIVE_VERFUEGUNG_ERSTELLEN'
   | 'ZURUECKWEISEN'
   | 'VERFUEGT'
   | 'BEREIT_FUER_BEARBEITUNG'
   | 'VERSENDET';
 
+/**
+ * A map which contains the possible status transitions for specific gesuch statuses
+ */
 export const StatusUebergaengeMap: Partial<
   Record<Gesuchstatus, StatusUebergang[]>
 > = {
+  ANSPRUCH_MANUELL_PRUEFEN: [
+    'BEREIT_FUER_BEARBEITUNG',
+    'NEGATIVE_VERFUEGUNG_ERSTELLEN',
+  ],
   IN_BEARBEITUNG_SB: ['BEARBEITUNG_ABSCHLIESSEN', 'ZURUECKWEISEN'],
   IN_FREIGABE: ['VERFUEGT', 'BEREIT_FUER_BEARBEITUNG'],
   VERSANDBEREIT: ['VERSENDET'],
 };
 
+/**
+ * Options for the status transitions
+ */
 export const StatusUebergaengeOptions = {
   BEARBEITUNG_ABSCHLIESSEN: (context?: { hasAcceptedAllDokuments: boolean }) =>
     ({
@@ -128,6 +142,13 @@ export const StatusUebergaengeOptions = {
       icon: 'mark_email_read',
       titleKey: 'VERSENDET',
       typ: 'VERSENDET',
+      disabledReason: undefined,
+    }) as const,
+  NEGATIVE_VERFUEGUNG_ERSTELLEN: () =>
+    ({
+      icon: 'block',
+      titleKey: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
+      typ: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
       disabledReason: undefined,
     }) as const,
 } satisfies Record<StatusUebergang, unknown>;

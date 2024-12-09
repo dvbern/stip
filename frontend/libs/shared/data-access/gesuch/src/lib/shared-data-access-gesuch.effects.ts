@@ -2,9 +2,8 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
-import { ActionCreator, Creator, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import {
-  Observable,
   catchError,
   combineLatestWith,
   concatMap,
@@ -18,6 +17,7 @@ import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
+import { SharedEventGesuchFormDarlehen } from '@dv/shared/event/gesuch-form-darlehen';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
@@ -32,7 +32,6 @@ import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { AppType } from '@dv/shared/model/config';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
-  Gesuch,
   GesuchFormularUpdate,
   GesuchService,
   GesuchTrancheTyp,
@@ -106,6 +105,7 @@ export const loadGesuch = createEffect(
         SharedEventGesuchFormElternSteuerdaten.init,
         SharedEventGesuchFormFamiliensituation.init,
         SharedEventGesuchFormAuszahlung.init,
+        SharedEventGesuchFormDarlehen.init,
         SharedEventGesuchFormGeschwister.init,
         SharedEventGesuchFormKinder.init,
         SharedEventGesuchFormLebenslauf.init,
@@ -225,6 +225,7 @@ export const updateGesuch = createEffect(
         SharedEventGesuchFormFamiliensituation.saveTriggered,
         SharedEventGesuchFormAuszahlung.saveTriggered,
         SharedEventGesuchFormEinnahmenkosten.saveTriggered,
+        SharedEventGesuchFormDarlehen.saveTriggered,
       ),
       concatMap(({ gesuchId, trancheId, gesuchFormular, origin }) => {
         return gesuchService
@@ -338,6 +339,7 @@ export const redirectToGesuchFormNextStep = createEffect(
         SharedEventGesuchFormElternSteuerdaten.nextTriggered,
         SharedEventGesuchFormFamiliensituation.nextTriggered,
         SharedEventGesuchFormAuszahlung.nextTriggered,
+        SharedEventGesuchFormDarlehen.nextTriggered,
         SharedEventGesuchFormEinnahmenkosten.nextTriggered,
         SharedEventGesuchDokumente.nextTriggered,
       ),
@@ -419,127 +421,6 @@ export const setGesuchToBearbeitung = createEffect(
   { functional: true },
 );
 
-export const setGesuchBearbeitungAbschliessen = createEffect(
-  (
-    actions$ = inject(Actions),
-    store = inject(Store),
-    gesuchService = inject(GesuchService),
-  ) => {
-    return handleStatusChange$(
-      SharedDataAccessGesuchEvents.setGesuchBearbeitungAbschliessen,
-      (gesuchId) =>
-        gesuchService.bearbeitungAbschliessen$({
-          gesuchId,
-        }),
-      actions$,
-      store,
-    );
-  },
-  { functional: true },
-);
-
-export const setGesuchZurueckweisen = createEffect(
-  (
-    actions$ = inject(Actions),
-    store = inject(Store),
-    gesuchService = inject(GesuchService),
-  ) => {
-    return handleStatusChange$(
-      SharedDataAccessGesuchEvents.setGesuchZurueckweisen,
-      (gesuchId, { kommentar }) =>
-        gesuchService.gesuchZurueckweisen$({
-          gesuchId,
-          kommentar: { text: kommentar },
-        }),
-      actions$,
-      store,
-    );
-  },
-  { functional: true },
-);
-
-export const setGesuchVerfuegt = createEffect(
-  (
-    actions$ = inject(Actions),
-    store = inject(Store),
-    gesuchService = inject(GesuchService),
-  ) => {
-    return handleStatusChange$(
-      SharedDataAccessGesuchEvents.setGesuchVerfuegt,
-      (gesuchId) =>
-        gesuchService.changeGesuchStatusToVerfuegt$({
-          gesuchId,
-        }),
-      actions$,
-      store,
-    );
-  },
-  { functional: true },
-);
-
-export const setGesuchBereitFuerBearbeitung = createEffect(
-  (
-    actions$ = inject(Actions),
-    store = inject(Store),
-    gesuchService = inject(GesuchService),
-  ) => {
-    return handleStatusChange$(
-      SharedDataAccessGesuchEvents.setGesuchBereitFuerBearbeitung,
-      (gesuchId) =>
-        gesuchService.changeGesuchStatusToBereitFuerBearbeitung$({
-          gesuchId,
-        }),
-      actions$,
-      store,
-    );
-  },
-  { functional: true },
-);
-
-export const setGesuchVersendet = createEffect(
-  (
-    actions$ = inject(Actions),
-    store = inject(Store),
-    gesuchService = inject(GesuchService),
-  ) => {
-    return handleStatusChange$(
-      SharedDataAccessGesuchEvents.setGesuchVersendet,
-      (gesuchId) => gesuchService.changeGesuchStatusToVersendet$({ gesuchId }),
-      actions$,
-      store,
-    );
-  },
-  { functional: true },
-);
-
-const handleStatusChange$ = <AC extends ActionCreator<string, Creator>>(
-  action: AC,
-  serviceCall: (
-    gesuchId: string,
-    payload: ReturnType<typeof action>,
-  ) => Observable<Gesuch>,
-  actions$: Actions,
-  store: Store,
-) => {
-  return actions$.pipe(
-    ofType(action),
-    concatLatestFrom(() => store.select(selectRouteId)),
-    concatMap(([payload, id]) => {
-      if (!id) {
-        throw new Error(ROUTE_ID_MISSING);
-      }
-      return serviceCall(id, payload).pipe(
-        map(() => SharedDataAccessGesuchEvents.loadGesuch()),
-        catchError((error) => [
-          SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-            error: sharedUtilFnErrorTransformer(error),
-          }),
-        ]),
-      );
-    }),
-  );
-};
-
 // add effects here
 export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
@@ -551,11 +432,6 @@ export const sharedDataAccessGesuchEffects = {
   redirectToGesuchFormNextStep,
   refreshGesuchFormStep,
   setGesuchToBearbeitung,
-  setGesuchBearbeitungAbschliessen,
-  setGesuchZurueckweisen,
-  setGesuchVerfuegt,
-  setGesuchBereitFuerBearbeitung,
-  setGesuchVersendet,
 };
 
 const viewOnlyFields = [

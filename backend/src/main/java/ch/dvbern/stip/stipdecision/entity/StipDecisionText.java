@@ -43,6 +43,11 @@ public class StipDecisionText extends AbstractMandantEntity {
     private StipDecision stipDecision;
 
     @NotNull
+    @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "title_de", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    private String titleDe;
+
+    @NotNull
     @Size(max = Constants.DB_DEFAULT_STRING_MAX_LENGTH)
     @Column(name = "text_de", nullable = false, length = Constants.DB_DEFAULT_STRING_MAX_LENGTH)
     private String textDe;

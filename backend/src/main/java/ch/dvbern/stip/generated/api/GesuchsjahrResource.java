@@ -25,30 +25,30 @@ public interface GesuchsjahrResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createGesuchsjahr(@Valid @NotNull GesuchsjahrCreateDto gesuchsjahrCreateDto);
+    GesuchsjahrDto createGesuchsjahr(@Valid @NotNull GesuchsjahrCreateDto gesuchsjahrCreateDto);
 
     @DELETE
     @Path("/{gesuchsjahrId}")
     @Produces({ "text/plain" })
-    Response deleteGesuchsjahr(@PathParam("gesuchsjahrId") UUID gesuchsjahrId);
+    void deleteGesuchsjahr(@PathParam("gesuchsjahrId") UUID gesuchsjahrId);
 
     @GET
     @Path("/{gesuchsjahrId}")
     @Produces({ "application/json", "text/plain" })
-    Response getGesuchsjahr(@PathParam("gesuchsjahrId") UUID gesuchsjahrId);
+    GesuchsjahrDto getGesuchsjahr(@PathParam("gesuchsjahrId") UUID gesuchsjahrId);
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getGesuchsjahre();
+    List<GesuchsjahrDto> getGesuchsjahre();
 
     @PATCH
     @Path("/publish/{gesuchsjahrId}")
     @Produces({ "application/json" })
-    Response publishGesuchsjahr(@PathParam("gesuchsjahrId") UUID gesuchsjahrId);
+    GesuchsjahrDto publishGesuchsjahr(@PathParam("gesuchsjahrId") UUID gesuchsjahrId);
 
     @PATCH
     @Path("/{gesuchsjahrId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response updateGesuchsjahr(@PathParam("gesuchsjahrId") UUID gesuchsjahrId,@Valid GesuchsjahrUpdateDto gesuchsjahrUpdateDto);
+    GesuchsjahrDto updateGesuchsjahr(@PathParam("gesuchsjahrId") UUID gesuchsjahrId,@Valid GesuchsjahrUpdateDto gesuchsjahrUpdateDto);
 }

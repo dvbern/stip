@@ -17,12 +17,15 @@
 
 package ch.dvbern.stip.api.plz.resource;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.generated.api.PlzResource;
+import ch.dvbern.stip.generated.dto.PlzDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,13 +34,14 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 @RequestScoped
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class PlzResourceImpl implements PlzResource {
     private final PlzService plzService;
 
     @RolesAllowed(STAMMDATEN_READ)
     @Override
     @AllowAll
-    public Response getPlz() {
-        return Response.ok(plzService.getAllPlz()).build();
+    public List<PlzDto> getPlz() {
+        return plzService.getAllPlz();
     }
 }

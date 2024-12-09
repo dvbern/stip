@@ -126,9 +126,8 @@
     </a>
 
     @let statusUebergaenge = statusUebergaengeOptionsSig();
-    @let hasStatusUebergaenge = statusUebergaenge?.length ?? 0 > 0;
     @let availableTrancheInteraction = availableTrancheInteractionSig();
-    @if (hasStatusUebergaenge || availableTrancheInteraction) {
+    @if (statusUebergaenge.isNotEmpty || availableTrancheInteraction) {
       <!-- Separator -->
       <div class="my-1 text-body-tertiary vr"></div>
 
@@ -184,16 +183,17 @@
           }
         }
 
-        @if (hasStatusUebergaenge && availableTrancheInteraction) {
+        @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
           <hr class="my-1" />
         }
 
-        @for (uebergang of statusUebergaenge; track $index) {
+        @let gesuchId = currentGesuchSig()?.id;
+        @for (uebergang of statusUebergaenge.list; track $index) {
           <button
             type="button"
             class="btn fw-normal px-2 shadow-none pe-auto"
             [attr.data-testid]="'gesuch-header-nav-status-uebergang-item-' + uebergang.typ"
-            [disabled]="uebergang.disabledReason"
+            [disabled]="uebergang.disabledReason || !gesuchId"
             [attr.title]="
               uebergang.disabledReason
                 ? ('sachbearbeitung-app.header.status-uebergang.disabled-reason.' + uebergang.disabledReason
@@ -201,7 +201,7 @@
                 : null
             "
             mat-menu-item
-            (click)="setStatusUebergang(uebergang.typ)"
+            (click)="setStatusUebergang(uebergang.typ, gesuchId)"
           >
             <div class="d-flex gap-2 align-items-center">
               <i class="material-symbols-rounded">{{ uebergang.icon }}</i>

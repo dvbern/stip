@@ -90,6 +90,9 @@ public class ApiClient {
     public StammdatenApiSpec stammdaten() {
         return StammdatenApiSpec.stammdaten(config.reqSpecSupplier);
     }
+    public StipDecisionApiSpec stipDecision() {
+        return StipDecisionApiSpec.stipDecision(config.reqSpecSupplier);
+    }
     public TenantApiSpec tenant() {
         return TenantApiSpec.tenant(config.reqSpecSupplier);
     }

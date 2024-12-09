@@ -46,6 +46,7 @@ import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @RequiredArgsConstructor
 @QuarkusTest
@@ -122,8 +123,7 @@ class BernStipDeciderTest {
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
-        var text = decider.getTextForDecision(decision, Sprache.DEUTSCH);
-        assertNotNull(text);
+        assertThrows(IllegalStateException.class, () -> decider.getTextForDecision(decision, Sprache.DEUTSCH));
     }
 
     @Test

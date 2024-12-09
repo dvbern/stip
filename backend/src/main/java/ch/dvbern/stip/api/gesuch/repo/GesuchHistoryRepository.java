@@ -41,6 +41,7 @@ public class GesuchHistoryRepository {
             .forRevisionsOfEntity(Gesuch.class, true, true)
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .addOrder(AuditEntity.property("timestampMutiert").desc())
             .getResultList()
             .stream()
             .map(Gesuch.class::cast)

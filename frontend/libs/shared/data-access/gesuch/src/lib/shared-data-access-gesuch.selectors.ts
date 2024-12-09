@@ -18,6 +18,7 @@ import {
   ELTERN_STEUER_STEPS,
   RETURN_TO_HOME,
   SharedModelGesuchFormStep,
+  TRANCHE,
   gesuchFormBaseSteps,
 } from '@dv/shared/model/gesuch-form';
 import {
@@ -28,7 +29,7 @@ import { capitalized, lowercased, type } from '@dv/shared/model/type-util';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
-const baseSteps = Object.values(gesuchFormBaseSteps);
+const baseSteps = [TRANCHE, ...Object.values(gesuchFormBaseSteps)];
 
 const { selectRouteParam } = getRouterSelectors();
 

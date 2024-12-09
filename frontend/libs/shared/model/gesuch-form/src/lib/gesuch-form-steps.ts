@@ -161,8 +161,8 @@ export const ELTERN_STEUER_STEPS: Record<
 };
 
 export const gesuchFormBaseSteps = {
-  PERSON,
   AUSBILDUNG,
+  PERSON,
   LEBENSLAUF,
   FAMILIENSITUATION,
   ELTERN,

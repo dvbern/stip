@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
@@ -74,6 +75,7 @@ public class GesuchApiSpec {
                 bearbeitungAbschliessen(),
                 changeGesuchStatusToBereitFuerBearbeitung(),
                 changeGesuchStatusToInBearbeitung(),
+                changeGesuchStatusToNegativeVerfuegung(),
                 changeGesuchStatusToVerfuegt(),
                 changeGesuchStatusToVersendet(),
                 createGesuch(),
@@ -91,7 +93,6 @@ public class GesuchApiSpec {
                 getGsTrancheChanges(),
                 getSbTrancheChanges(),
                 getStatusProtokoll(),
-                juristischAbklaeren(),
                 updateGesuch()
         );
     }
@@ -106,6 +107,10 @@ public class GesuchApiSpec {
 
     public ChangeGesuchStatusToInBearbeitungOper changeGesuchStatusToInBearbeitung() {
         return new ChangeGesuchStatusToInBearbeitungOper(createReqSpec());
+    }
+
+    public ChangeGesuchStatusToNegativeVerfuegungOper changeGesuchStatusToNegativeVerfuegung() {
+        return new ChangeGesuchStatusToNegativeVerfuegungOper(createReqSpec());
     }
 
     public ChangeGesuchStatusToVerfuegtOper changeGesuchStatusToVerfuegt() {
@@ -174,10 +179,6 @@ public class GesuchApiSpec {
 
     public GetStatusProtokollOper getStatusProtokoll() {
         return new GetStatusProtokollOper(createReqSpec());
-    }
-
-    public JuristischAbklaerenOper juristischAbklaeren() {
-        return new JuristischAbklaerenOper(createReqSpec());
     }
 
     public UpdateGesuchOper updateGesuch() {
@@ -261,6 +262,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
+     * @see #body  (optional)
      * return GesuchDtoSpec
      */
     public static class ChangeGesuchStatusToBereitFuerBearbeitungOper implements Oper {
@@ -273,6 +275,7 @@ public class GesuchApiSpec {
 
         public ChangeGesuchStatusToBereitFuerBearbeitungOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
@@ -296,6 +299,15 @@ public class GesuchApiSpec {
         public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
             return execute(handler).as(type);
+        }
+
+         /**
+         * @param kommentarDtoSpec (KommentarDtoSpec)  (optional)
+         * @return operation
+         */
+        public ChangeGesuchStatusToBereitFuerBearbeitungOper body(KommentarDtoSpec kommentarDtoSpec) {
+            reqSpec.setBody(kommentarDtoSpec);
+            return this;
         }
 
         public static final String GESUCH_ID_PATH = "gesuchId";
@@ -398,6 +410,90 @@ public class GesuchApiSpec {
          * @return operation
          */
         public ChangeGesuchStatusToInBearbeitungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #body  (required)
+     * return GesuchDtoSpec
+     */
+    public static class ChangeGesuchStatusToNegativeVerfuegungOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/status/negative-verfuegung/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeGesuchStatusToNegativeVerfuegungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/status/negative-verfuegung/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/status/negative-verfuegung/{gesuchId}
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param ausgewaehlterGrundDtoSpec (AusgewaehlterGrundDtoSpec)  (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToNegativeVerfuegungOper body(AusgewaehlterGrundDtoSpec ausgewaehlterGrundDtoSpec) {
+            reqSpec.setBody(ausgewaehlterGrundDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToNegativeVerfuegungOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToNegativeVerfuegungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToNegativeVerfuegungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1738,68 +1834,6 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetStatusProtokollOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Gas Gesuch an die Juristen ueberweisen
-     * 
-     *
-     * @see #gesuchIdPath Die ID vom Gesuch (required)
-     */
-    public static class JuristischAbklaerenOper implements Oper {
-
-        public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/juristischAbklaeren";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public JuristischAbklaerenOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * PATCH /gesuch/{gesuchId}/juristischAbklaeren
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID) Die ID vom Gesuch (required)
-         * @return operation
-         */
-        public JuristischAbklaerenOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public JuristischAbklaerenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public JuristischAbklaerenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

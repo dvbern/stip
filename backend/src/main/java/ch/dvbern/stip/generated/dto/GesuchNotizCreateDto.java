@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.GesuchNotizTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -24,7 +23,7 @@ public class GesuchNotizCreateDto  implements Serializable {
   private @Valid UUID gesuchId;
   private @Valid String betreff;
   private @Valid String text;
-  private @Valid GesuchNotizTypDto notizTyp;
+  private @Valid ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
 
   /**
    **/
@@ -85,7 +84,7 @@ public class GesuchNotizCreateDto  implements Serializable {
 
   /**
    **/
-  public GesuchNotizCreateDto notizTyp(GesuchNotizTypDto notizTyp) {
+  public GesuchNotizCreateDto notizTyp(ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp) {
     this.notizTyp = notizTyp;
     return this;
   }
@@ -93,12 +92,12 @@ public class GesuchNotizCreateDto  implements Serializable {
   
   @JsonProperty("notizTyp")
   @NotNull
-  public GesuchNotizTypDto getNotizTyp() {
+  public ch.dvbern.stip.api.notiz.type.GesuchNotizTyp getNotizTyp() {
     return notizTyp;
   }
 
   @JsonProperty("notizTyp")
-  public void setNotizTyp(GesuchNotizTypDto notizTyp) {
+  public void setNotizTyp(ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp) {
     this.notizTyp = notizTyp;
   }
 

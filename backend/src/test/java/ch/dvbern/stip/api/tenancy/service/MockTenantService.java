@@ -36,6 +36,7 @@ public class MockTenantService extends TenantService {
             .clientAuth(
                 new TenantAuthConfigDto()
                     .authServerUrl(keycloakFrontendUrl)
+                    .realm("bern")
             );
     }
 }

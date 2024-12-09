@@ -42,7 +42,8 @@ public enum Gesuchstatus {
     NICHT_BEITRAGSBERECHTIGT,
     KEIN_STIPENDIENANSPRUCH,
     STIPENDIENANSPRUCH,
-    GESUCH_ABGELEHNT;
+    GESUCH_ABGELEHNT,
+    NEGATIVE_VERFUEGUNG;
 
     public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(

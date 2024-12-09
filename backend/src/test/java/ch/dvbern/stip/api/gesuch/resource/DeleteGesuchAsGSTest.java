@@ -119,7 +119,7 @@ public class DeleteGesuchAsGSTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.ACCEPTED.getStatusCode());
+            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
     }
 
     @Test

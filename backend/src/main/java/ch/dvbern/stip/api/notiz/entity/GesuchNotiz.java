@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.notiz.entity;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.GesuchNotizAntwortConstraint;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -70,7 +71,7 @@ public class GesuchNotiz extends AbstractMandantEntity {
     @NotNull
     @Column(name = "notiz_typ", nullable = false)
     @Enumerated(EnumType.STRING)
-    private NotizTyp notizTyp;
+    private GesuchNotizTyp notizTyp;
 
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     @Column(name = "antwort", length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)

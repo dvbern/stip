@@ -21,5 +21,5 @@ public interface PlzResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getPlz();
+    List<PlzDto> getPlz();
 }
