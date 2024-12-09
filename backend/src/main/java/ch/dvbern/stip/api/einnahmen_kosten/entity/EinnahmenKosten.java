@@ -92,10 +92,6 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     private Integer ausbildungskostenTertiaerstufe;
 
     @Nullable
-    @Column(name = "will_darlehen")
-    private Boolean willDarlehen;
-
-    @Nullable
     @Column(name = "auswaertige_mittagessen_pro_woche")
     private Integer auswaertigeMittagessenProWoche;
 

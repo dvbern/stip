@@ -3562,6 +3562,8 @@ components:
             $ref: '#/components/schemas/KindUpdate'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        darlehen:
+          $ref: '#/components/schemas/Darlehen'
         steuerdaten:
           type: array
           items:

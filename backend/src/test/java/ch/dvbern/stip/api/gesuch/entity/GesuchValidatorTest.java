@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -60,8 +61,8 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DARLEHEN_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_HEIMATORT_FIELD_REQUIRED_MESSAGE;
@@ -464,9 +465,12 @@ class GesuchValidatorTest {
         kindSet.add(kind);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
+        Darlehen darlehen = new Darlehen();
+        darlehen.setWillDarlehen(true);
         gesuch.setGesuchsperiode(null);
         gesuch.setAusbildung(null);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);
         assertOneMessage(
             VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE,
             gesuch,
@@ -474,7 +478,7 @@ class GesuchValidatorTest {
             GesuchEinreichenValidationGroup.class
         );
         assertOneMessage(
-            VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE,
+            VALIDATION_DARLEHEN_REQUIRED_MESSAGE,
             gesuch,
             true,
             GesuchEinreichenValidationGroup.class

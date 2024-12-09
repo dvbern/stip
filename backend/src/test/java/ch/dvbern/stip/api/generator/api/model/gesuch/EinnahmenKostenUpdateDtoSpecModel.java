@@ -35,7 +35,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setFahrkosten(TestUtil.getRandomInt(1, 2500));
             model.setWohnkosten(TestUtil.getRandomInt(1, 2500));
             model.setVerdienstRealisiert(false);
-            model.setWillDarlehen(false);
+            // model.setWillDarlehen(false);
             model.setAuswaertigeMittagessenProWoche(3);
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
             model.setVeranlagungsCode(0);

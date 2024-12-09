@@ -124,8 +124,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.einnahmen.kosten.vermoegen.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.einnahmen.kosten.zulagen.required.message}";
-    public static final String VALIDATION_EINNAHMEN_KOSTEN_DARLEHEN_REQUIRED_MESSAGE =
-        "{jakarta.validation.constraints.einnahmen.kosten.darlehen.required.message}";
+    public static final String VALIDATION_DARLEHEN_REQUIRED_MESSAGE =
+        "{jakarta.validation.constraints.darlehen.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_VERMOEGEN_INVALID_VALUE_MESSAGE =
         "{jakarta.validation.constraints.einnahmen.kosten.vermoegen.invalid.value.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_AUSBILDUNGSKOSTEN_STUFE2_REQUIRED_MESSAGE =

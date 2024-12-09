@@ -38,7 +38,6 @@ public class EinnahmenKostenCopyUtil {
         copy.setBeitraege(other.getBeitraege());
         copy.setAusbildungskostenSekundarstufeZwei(other.getAusbildungskostenSekundarstufeZwei());
         copy.setAusbildungskostenTertiaerstufe(other.getAusbildungskostenTertiaerstufe());
-        copy.setWillDarlehen(other.getWillDarlehen());
         copy.setAuswaertigeMittagessenProWoche(other.getAuswaertigeMittagessenProWoche());
         copy.setBetreuungskostenKinder(other.getBetreuungskostenKinder());
         copy.setVeranlagungsCode(other.getVeranlagungsCode());
