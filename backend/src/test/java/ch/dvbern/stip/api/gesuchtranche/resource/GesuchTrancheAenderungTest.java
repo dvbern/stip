@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
-import java.util.Arrays;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
@@ -36,12 +34,13 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +69,7 @@ class GesuchTrancheAenderungTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    private GesuchTrancheSlimDtoSpec[] gesuchtranchen;
+    private GesuchTrancheListDtoSpec gesuchtranchen;
     private GesuchDtoSpec gesuch;
     private GesuchWithChangesDtoSpec gesuchWithChanges;
 
@@ -205,10 +204,10 @@ class GesuchTrancheAenderungTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
+            .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchTrancheSlimDtoSpec[].class);
+            .as(GesuchTrancheListDtoSpec.class);
     }
 
     @Test
@@ -216,7 +215,8 @@ class GesuchTrancheAenderungTest {
     @Order(9)
     @Description("The another GS must not be able do delete a Aenderung'")
     void deleteAenderungByOtherUserTest() {
-        final var aenderung = Arrays.stream(gesuchtranchen)
+        final var aenderung = gesuchtranchen.getTranchen()
+            .stream()
             .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
             .findFirst()
             .get();
@@ -235,15 +235,16 @@ class GesuchTrancheAenderungTest {
     @Order(10)
     @Description("The GS should be able do delete a Aenderung, if it is in State 'In Bearbeitung GS'")
     void deleteAenderungTest() {
-        GesuchTrancheSlimDtoSpec[] gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
+        var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
-            .as(GesuchTrancheSlimDtoSpec[].class);
-        int count = gesuchtranchen.length;
-        final var aenderung = Arrays.stream(gesuchtranchen)
+            .as(GesuchTrancheListDtoSpec.class)
+            .getTranchen();
+        int count = gesuchtranchen.size();
+        final var aenderung = gesuchtranchen.stream()
             .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
             .findFirst()
             .get();
@@ -262,7 +263,8 @@ class GesuchTrancheAenderungTest {
             .then()
             .extract()
             .body()
-            .as(GesuchTrancheSlimDtoSpec[].class);
+            .as(GesuchTrancheListDtoSpec.class)
+            .getTranchen();
         assertThat(gesuchtranchen).hasSizeLessThan(count);
     }
 
@@ -271,14 +273,15 @@ class GesuchTrancheAenderungTest {
     @Order(11)
     @Description("It should not be possible to delete a Tranche when a Aenderung should be deleted")
     void deleteAenderungShouldFailTest() {
-        GesuchTrancheSlimDtoSpec[] gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
+        final var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
-            .as(GesuchTrancheSlimDtoSpec[].class);
-        final var tranche = Arrays.stream(gesuchtranchen)
+            .as(GesuchTrancheListDtoSpec.class)
+            .getTranchen();
+        final var tranche = gesuchtranchen.stream()
             .filter(t -> t.getTyp() == GesuchTrancheTypDtoSpec.TRANCHE)
             .findFirst()
             .get();

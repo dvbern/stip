@@ -22,7 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -38,14 +38,17 @@ import lombok.RequiredArgsConstructor;
 public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final GesuchTrancheRepository gesuchTrancheRepository;
+    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchRepository gesuchRepository;
 
     @Transactional
     public void canReadInitialTrancheChanges(final UUID gesuchTrancheId) {
         canRead(gesuchTrancheId);
         final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
+        final var currentTrancheFromGesuchInStatusEingereicht = gesuchTrancheHistoryRepository
+            .getLatestWhereGesuchStatusChangedToVerfuegt(gesuch.getId());
 
-        if (!Gesuchstatus.GESUCH_IS_VERFUEGT_OR_FURTHER.contains(gesuch.getGesuchStatus())) {
+        if (currentTrancheFromGesuchInStatusEingereicht.isEmpty()) {
             throw new ForbiddenException();
         }
     }
@@ -89,10 +92,10 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canEinreichen(final UUID gesuchTrancheId) {
+    public void canAenderungEinreichen(final UUID gesuchTrancheId) {
         canRead(gesuchTrancheId);
-        final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
-        if (!Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(gesuch.getGesuchStatus())) {
+        final var aenderung = gesuchTrancheRepository.requireAenderungById(gesuchTrancheId);
+        if (!GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.contains(aenderung.getStatus())) {
             throw new UnauthorizedException();
         }
     }

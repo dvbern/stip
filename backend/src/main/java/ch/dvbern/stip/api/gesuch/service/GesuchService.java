@@ -661,10 +661,9 @@ public class GesuchService {
         return gesuchMapperUtil.toWithChangesDto(
             tranche.getGesuch(),
             // tranche to work with
-            currentTrancheFromGesuchInStatusVerfuegt,
-
+            currentTrancheFromGesuchInStatusVerfuegt.orElse(null),
             // changes
-            currentTrancheFromGesuchInStatusEingereicht
+            currentTrancheFromGesuchInStatusEingereicht.orElse(null)
         );
     }
 

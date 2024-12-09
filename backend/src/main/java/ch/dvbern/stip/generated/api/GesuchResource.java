@@ -12,9 +12,16 @@ import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
 
+
+
+
+import java.io.InputStream;
+import java.util.Map;
 import java.util.List;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;

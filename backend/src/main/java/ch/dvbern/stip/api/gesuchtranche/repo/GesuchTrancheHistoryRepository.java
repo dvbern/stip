@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.gesuchtranche.repo;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -57,21 +59,22 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
-    @SuppressWarnings("unchecked")
-    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
-    public GesuchTranche getLatestWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
+    public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
         return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.VERFUEGT);
     }
 
-    @SuppressWarnings("unchecked")
-    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
-    public GesuchTranche getLatestWhereGesuchStatusChangedToEingereicht(final UUID gesuchId) {
+    public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToEingereicht(final UUID gesuchId) {
         return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.EINGEREICHT);
     }
 
-    private GesuchTranche findCurrentGesuchTrancheOfGesuchInStatus(final UUID gesuchId, Gesuchstatus gesuchStatus) {
+    @SuppressWarnings("unchecked")
+    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
+    private Optional<GesuchTranche> findCurrentGesuchTrancheOfGesuchInStatus(
+        final UUID gesuchId,
+        Gesuchstatus gesuchStatus
+    ) {
         final var reader = AuditReaderFactory.get(em);
-        return ((Gesuch) reader
+        final List<Gesuch> resultList = reader
             .createQuery()
             .forRevisionsOfEntity(Gesuch.class, true, true)
             .add(AuditEntity.property("id").eq(gesuchId))
@@ -82,7 +85,8 @@ public class GesuchTrancheHistoryRepository {
             // .up()
             .addOrder(AuditEntity.revisionNumber().asc())
             .setMaxResults(1)
-            .getSingleResult()).getCurrentGesuchTranche();
+            .getResultList();
+        return resultList.stream().findFirst().map(Gesuch::getCurrentGesuchTranche);
     }
 
 }

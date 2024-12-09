@@ -84,16 +84,6 @@ public enum Gesuchstatus {
         )
     );
 
-    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN = Collections.unmodifiableSet(
-        EnumSet.of(
-            VERFUEGT,
-            VERSANDBEREIT,
-            VERSENDET,
-            WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            STIPENDIENANSPRUCH
-        )
-    );
-
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
     }
