@@ -521,7 +521,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public void bearbeitungAbschliessen(final UUID gesuchId) {
+    public GesuchDto bearbeitungAbschliessen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
@@ -537,14 +537,16 @@ public class GesuchService {
             // Yes Stipendien, next Status = In Freigabe
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_FREIGABE);
         }
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
-    public void gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
+    public GesuchDto gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
         // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto, true);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
@@ -593,9 +595,10 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
+    public GesuchDto gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
@@ -674,11 +677,12 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
+    public GesuchDto gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
         gesuchStatusService
             .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        return gesuchMapperUtil.mapWithTranche(gesuchTranche.getGesuch(), gesuchTranche);
     }
 
     @Transactional

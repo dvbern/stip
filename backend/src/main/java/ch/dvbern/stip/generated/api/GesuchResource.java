@@ -34,7 +34,7 @@ public interface GesuchResource {
     @PATCH
     @Path("/{gesuchId}/bearbeitungAbschliessen")
     @Produces({ "application/json", "text/plain" })
-    void bearbeitungAbschliessen(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto bearbeitungAbschliessen(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
     @Path("/status/bereit-fuer-bearbeitung/{gesuchId}")
@@ -81,18 +81,18 @@ public interface GesuchResource {
     @PATCH
     @Path("/{gesuchId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
-    void gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
     @Produces({ "application/json", "text/plain" })
-    void gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchId}/gesuchZurueckweisen")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    void gesuchZurueckweisen(@PathParam("gesuchId") UUID gesuchId,@Valid KommentarDto kommentarDto);
+    GesuchDto gesuchZurueckweisen(@PathParam("gesuchId") UUID gesuchId,@Valid KommentarDto kommentarDto);
 
     @GET
     @Path("/{gesuchId}/berechnung")

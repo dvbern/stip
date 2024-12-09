@@ -200,6 +200,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * return GesuchDtoSpec
      */
     public static class BearbeitungAbschliessenOper implements Oper {
 
@@ -224,6 +225,16 @@ public class GesuchApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/bearbeitungAbschliessen
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
         public static final String GESUCH_ID_PATH = "gesuchId";
@@ -845,6 +856,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
+     * return GesuchDtoSpec
      */
     public static class GesuchFehlendeDokumenteUebermittelnOper implements Oper {
 
@@ -869,6 +881,16 @@ public class GesuchApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/fehlendeDokumente
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
         public static final String GESUCH_ID_PATH = "gesuchId";
@@ -907,6 +929,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
+     * return GesuchDtoSpec
      */
     public static class GesuchTrancheFehlendeDokumenteEinreichenOper implements Oper {
 
@@ -931,6 +954,16 @@ public class GesuchApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
         public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
@@ -970,6 +1003,7 @@ public class GesuchApiSpec {
      *
      * @see #gesuchIdPath Die ID vom Gesuch (required)
      * @see #body  (optional)
+     * return GesuchDtoSpec
      */
     public static class GesuchZurueckweisenOper implements Oper {
 
@@ -995,6 +1029,16 @@ public class GesuchApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/gesuchZurueckweisen
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
         }
 
          /**

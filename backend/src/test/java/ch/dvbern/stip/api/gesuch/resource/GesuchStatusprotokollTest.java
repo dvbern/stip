@@ -151,7 +151,7 @@ class GesuchStatusprotokollTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test

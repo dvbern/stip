@@ -125,8 +125,8 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GESUCH_UPDATE)
     @AllowAll
     @Override
-    public void gesuchFehlendeDokumenteUebermitteln(UUID gesuchId) {
-        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuchId);
+    public GesuchDto gesuchFehlendeDokumenteUebermitteln(UUID gesuchId) {
+        return gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuchId);
     }
 
     @RolesAllowed(GESUCH_READ)
@@ -235,9 +235,9 @@ public class GesuchResourceImpl implements GesuchResource {
     // TODO KSTIP-1247: Only SB can execute these next 3
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public void bearbeitungAbschliessen(UUID gesuchId) {
+    public GesuchDto bearbeitungAbschliessen(UUID gesuchId) {
         gesuchAuthorizer.canUpdate(gesuchId);
-        gesuchService.bearbeitungAbschliessen(gesuchId);
+        return gesuchService.bearbeitungAbschliessen(gesuchId);
     }
 
     // TODO KSTIP-1247: roles allowed
@@ -250,15 +250,15 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public void gesuchZurueckweisen(UUID gesuchId, KommentarDto kommentarDto) {
+    public GesuchDto gesuchZurueckweisen(UUID gesuchId, KommentarDto kommentarDto) {
         gesuchAuthorizer.canUpdate(gesuchId);
-        gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
+        return gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public void gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
+    public GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
-        gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
+        return gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
     }
 }
