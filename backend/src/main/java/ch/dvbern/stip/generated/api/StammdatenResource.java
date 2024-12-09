@@ -21,16 +21,16 @@ public interface StammdatenResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getLaender();
+    List<ch.dvbern.stip.api.stammdaten.type.Land> getLaender();
 
     @GET
     @Path("/euefta")
     @Produces({ "application/json", "text/plain" })
-    Response getLaenderEuEfta();
+    List<LandEuEftaDto> getLaenderEuEfta();
 
     @PATCH
     @Path("/euefta")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response setLaenderEuEfta(@Valid @NotNull List<LandEuEftaDto> landEuEftaDto);
+    List<LandEuEftaDto> setLaenderEuEfta(@Valid @NotNull List<LandEuEftaDto> landEuEftaDto);
 }

@@ -21,5 +21,5 @@ public interface BildungskategorieResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    Response getBildungskategorien();
+    List<BildungskategorieDto> getBildungskategorien();
 }

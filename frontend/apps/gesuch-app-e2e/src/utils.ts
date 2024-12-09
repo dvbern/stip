@@ -61,7 +61,7 @@ export const initializeTest = (
 
       const response = await requestPromise;
       const body: FallDashboardItem[] | undefined = await response.json();
-      gesuchId = body?.[0].ausbildungDashboardItems?.[0].gesuchs?.[0].id;
+      gesuchId = body?.[0].ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
       if (!gesuchId) {
         throw new Error('Failed to create new gesuch');
       }

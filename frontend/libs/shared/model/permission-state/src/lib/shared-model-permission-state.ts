@@ -80,6 +80,7 @@ export const permissionTableByAppType = {
   VERSANDBEREIT /**                    */: { [gs]: '    ', [sb]: ' V  ' },
   VERFUEGT /**                         */: { [gs]: '    ', [sb]: ' V  ' },
   VERSENDET /**                        */: { [gs]: '    ', [sb]: ' V  ' },
+  NEGATIVE_VERFUEGUNG /**              */: { [gs]: '    ', [sb]: '    ' },
 } as const satisfies Record<Gesuchstatus, Record<AppType, PermissionFlags>>;
 
 /**

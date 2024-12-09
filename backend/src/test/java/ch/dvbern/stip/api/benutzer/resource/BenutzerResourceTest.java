@@ -125,7 +125,7 @@ class BenutzerResourceTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
+            .statusCode(Status.NO_CONTENT.getStatusCode());
         var sachbearbeiterListe = api.getSachbearbeitende()
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -157,7 +157,7 @@ class BenutzerResourceTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Status.ACCEPTED.getStatusCode());
+            .statusCode(Status.NO_CONTENT.getStatusCode());
         final var sachbearbeiterListe = api.getSachbearbeitende()
             .execute(ResponseBody::prettyPeek)
             .then()

@@ -23,10 +23,9 @@ import ch.dvbern.stip.generated.api.PlzResource;
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @QuarkusTest
@@ -37,7 +36,7 @@ class PlzResourceImplTest {
     @TestAsGesuchsteller
     @Test
     void getPlzAsGS() {
-        assertEquals(HttpStatus.SC_OK, plzResource.getPlz().getStatus());
+        assertNotNull(plzResource.getPlz());
     }
 
     @TestAsSachbearbeiter

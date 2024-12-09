@@ -188,6 +188,7 @@
   "shared.gesuch.status.contract.STIPENDIENANSPRUCH": "Droit à la bourse",
   "shared.gesuch.status.contract.GESUCH_ABGELEHNT": "Demande rejetée",
   "shared.gesuch.status.contract.WARTEN_AUF_UNTERSCHRIFTENBLATT": "En attente de la feuille de signatures",
+  "shared.gesuch.status.contract.NEGATIVE_VERFUEGUNG": "Décision négative",
 
   "shared.gesuch.tranche.typ.AENDERUNG": "Changement",
   "shared.gesuch.tranche.typ.TRANCHE": "Demande",
@@ -574,7 +575,7 @@
   "shared.form.abschluss.fehlendeDokumenteEinreichen": "Informer le demandeur des documents manquants",
   "shared.form.tranche-abschluss.notReady": "Il manque encore des informations. Veuillez remplir tous les champs obligatoires.",
 
-  "shared.protokoll.title": "Protocole",
+  "shared.protokoll.title": "Parcours de la demande",
 
   "shared.notizen.title": "Notes",
   "shared.form.notizen.datumErstellt.label": "Date Created",

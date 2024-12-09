@@ -25,21 +25,21 @@ public interface AusbildungsgangResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createAusbildungsgang(@Valid @NotNull AusbildungsgangCreateDto ausbildungsgangCreateDto);
+    AusbildungsgangDto createAusbildungsgang(@Valid @NotNull AusbildungsgangCreateDto ausbildungsgangCreateDto);
 
     @DELETE
     @Path("/{ausbildungsgangId}")
     @Produces({ "text/plain" })
-    Response deleteAusbildungsgang(@PathParam("ausbildungsgangId") UUID ausbildungsgangId);
+    void deleteAusbildungsgang(@PathParam("ausbildungsgangId") UUID ausbildungsgangId);
 
     @GET
     @Path("/{ausbildungsgangId}")
     @Produces({ "application/json", "text/plain" })
-    Response getAusbildungsgang(@PathParam("ausbildungsgangId") UUID ausbildungsgangId);
+    AusbildungsgangDto getAusbildungsgang(@PathParam("ausbildungsgangId") UUID ausbildungsgangId);
 
     @PUT
     @Path("/{ausbildungsgangId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response updateAusbildungsgang(@PathParam("ausbildungsgangId") UUID ausbildungsgangId,@Valid @NotNull AusbildungsgangUpdateDto ausbildungsgangUpdateDto);
+    AusbildungsgangDto updateAusbildungsgang(@PathParam("ausbildungsgangId") UUID ausbildungsgangId,@Valid @NotNull AusbildungsgangUpdateDto ausbildungsgangUpdateDto);
 }

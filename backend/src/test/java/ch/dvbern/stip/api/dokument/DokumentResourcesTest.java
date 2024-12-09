@@ -175,7 +175,7 @@ class DokumentResourcesTest {
             .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
             .execute(ResponseBody::prettyPeek)
             .then()
-            .statusCode(Status.OK.getStatusCode());
+            .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
     @Test

@@ -312,25 +312,28 @@ test.describe('Neues gesuch erstellen', () => {
     await expectStepTitleToContainText('Freigabe', page);
 
     await page.getByTestId('button-abschluss').click();
+    const freigabeResponse = page.waitForResponse(
+      '**/api/v1/gesuch/*/einreichen',
+    );
     await page.getByTestId('dialog-confirm').click();
+    await freigabeResponse;
 
     // Go to Berechnung (SB-App)
     const urls = getE2eUrls();
     await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}`);
 
-    // TODO: Fix data after Wohnsitz / Familiensituation changes work correctly
-    // await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
-    //   /abgelehnt/,
-    //   { timeout: 10000 },
-    // );
+    await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
+      /accept/,
+      { timeout: 10000 },
+    );
 
-    // await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
+    await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
 
-    // await expect(
-    //   page.getByTestId('berechnung-persoenlich-total'),
-    // ).toContainText("- 14'192");
-    // await expect(page.getByTestId('berechnung-familien-total')).toContainText(
-    //   "- 54'856",
-    // );
+    await expect(
+      page.getByTestId('berechnung-persoenlich-total'),
+    ).toContainText("- 14'974");
+    await expect(page.getByTestId('berechnung-familien-total')).toContainText(
+      "- 55'492",
+    );
   });
 });

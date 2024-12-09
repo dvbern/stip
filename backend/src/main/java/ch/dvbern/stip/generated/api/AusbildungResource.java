@@ -24,16 +24,16 @@ public interface AusbildungResource {
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createAusbildung(@Valid @NotNull AusbildungUpdateDto ausbildungUpdateDto);
+    AusbildungDto createAusbildung(@Valid @NotNull AusbildungUpdateDto ausbildungUpdateDto);
 
     @GET
     @Path("/{ausbildungId}")
     @Produces({ "application/json", "text/plain" })
-    Response getAusbildung(@PathParam("ausbildungId") UUID ausbildungId);
+    AusbildungDto getAusbildung(@PathParam("ausbildungId") UUID ausbildungId);
 
     @PATCH
     @Path("/{ausbildungId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response updateAusbildung(@PathParam("ausbildungId") UUID ausbildungId,@Valid @NotNull AusbildungUpdateDto ausbildungUpdateDto);
+    AusbildungDto updateAusbildung(@PathParam("ausbildungId") UUID ausbildungId,@Valid @NotNull AusbildungUpdateDto ausbildungUpdateDto);
 }

@@ -27,31 +27,31 @@ public interface BenutzerResource {
     @Path("/stammdaten/sachbearbeiter/{benutzerId}")
     @Consumes({ "application/json" })
     @Produces({ "text/plain" })
-    Response createOrUpdateSachbearbeiterStammdaten(@PathParam("benutzerId") UUID benutzerId,@Valid @NotNull SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto);
+    void createOrUpdateSachbearbeiterStammdaten(@PathParam("benutzerId") UUID benutzerId,@Valid @NotNull SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto);
 
     @PATCH
     @Path("/stammdaten/sachbearbeiter")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    Response createOrUpdateSachbearbeiterStammdatenList(@Valid List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdatenListDto);
+    void createOrUpdateSachbearbeiterStammdatenList(@Valid List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdatenListDto);
 
     @DELETE
     @Path("/{benutzerId}")
     @Produces({ "application/json", "text/plain" })
-    Response deleteBenutzer(@PathParam("benutzerId") String benutzerId);
+    void deleteBenutzer(@PathParam("benutzerId") String benutzerId);
 
     @GET
     @Path("/stammdaten/sachbearbeiter")
     @Produces({ "application/json", "text/plain" })
-    Response getSachbearbeitende();
+    List<BenutzerDto> getSachbearbeitende();
 
     @GET
     @Path("/stammdaten/sachbearbeiter/{benutzerId}")
     @Produces({ "application/json", "text/plain" })
-    Response getSachbearbeiterStammdaten(@PathParam("benutzerId") UUID benutzerId);
+    SachbearbeiterZuordnungStammdatenDto getSachbearbeiterStammdaten(@PathParam("benutzerId") UUID benutzerId);
 
     @GET
     @Path("/prepare/me")
     @Produces({ "application/json", "text/plain" })
-    Response prepareCurrentBenutzer();
+    BenutzerDto prepareCurrentBenutzer();
 }
