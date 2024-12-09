@@ -5,6 +5,7 @@ import { isDefined } from '@dv/shared/model/type-util';
 import {
   expectFormToBeValid,
   handleCheckbox,
+  selectMatRadio,
 } from '@dv/shared/util-fn/e2e-util';
 
 export class DarlehenPO {
@@ -12,7 +13,7 @@ export class DarlehenPO {
     page: Page;
     loading: Locator;
     form: Locator;
-    willDarlehenCheckbox: Locator;
+    willDarlehenRadio: Locator;
     betragDarlehen: Locator;
     betragBezogenKanton: Locator;
     schulden: Locator;
@@ -33,7 +34,7 @@ export class DarlehenPO {
       page,
       loading: page.getByTestId('form-darlehen-loading'),
       form: page.getByTestId('form-darlehen-form'),
-      willDarlehenCheckbox: page.getByTestId('form-darlehen-willDarlehen'),
+      willDarlehenRadio: page.getByTestId('form-darlehen-willDarlehen'),
       betragDarlehen: page.getByTestId('form-darlehen-betragDarlehen'),
       betragBezogenKanton: page.getByTestId(
         'form-darlehen-betragBezogenKanton',
@@ -56,18 +57,13 @@ export class DarlehenPO {
       grundZweitausbildungCheckbox: page.getByTestId(
         'form-darlehen-grundZweitausbildung',
       ),
-      buttonSaveContinue: page.getByTestId(
-        'form-darlehen-button-save-continue',
-      ),
-      buttonNext: page.getByTestId('form-darlehen-button-next'),
+      buttonSaveContinue: page.getByTestId('button-save-continue'),
+      buttonNext: page.getByTestId('button-next'),
     };
   }
 
   public async fillDarlehenForm(darlehen: Darlehen) {
-    await handleCheckbox(
-      this.elems.willDarlehenCheckbox,
-      darlehen.willDarlehen,
-    );
+    await selectMatRadio(this.elems.willDarlehenRadio, darlehen.willDarlehen);
 
     if (isDefined(darlehen.betragDarlehen)) {
       await this.elems.betragDarlehen.fill(`${darlehen.betragDarlehen}`);

@@ -116,6 +116,9 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     ),
   });
 
+  willDarlehenChangedSig = toSignal(
+    this.form.controls.willDarlehen.valueChanges,
+  );
   grundNichtBerechtigtChangedSig = toSignal(
     this.form.controls.gruende.controls.grundNichtBerechtigt.valueChanges,
   );
@@ -127,9 +130,10 @@ export class SharedFeatureDarlehenComponent implements OnInit {
       .valueChanges,
   );
 
-  anzahlBetreibungenDocSig = this.createUploadOptionsSig(
-    () => DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG,
-  );
+  anzahlBetreibungenDocSig = this.createUploadOptionsSig(() => {
+    const willDarlehen = this.willDarlehenChangedSig() ?? false;
+    return willDarlehen ? DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG : null;
+  });
   grundNichtBerechtigtDocSig = this.createUploadOptionsSig(() => {
     const isGrundNichtBerechtigt = this.grundNichtBerechtigtChangedSig();
     return isGrundNichtBerechtigt
@@ -157,15 +161,11 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
 
-    const willDarlehenChangedSig = toSignal(
-      this.form.controls.willDarlehen.valueChanges,
-    );
-
     // set disabled state
     effect(
       () => {
         this.gotReenabledSig();
-        const willDarlehen = willDarlehenChangedSig() ?? false;
+        const willDarlehen = this.willDarlehenChangedSig() ?? false;
 
         this.formUtils.setDisabledState(
           this.form.controls.betragDarlehen,

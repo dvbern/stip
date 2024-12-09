@@ -25,7 +25,7 @@ export const expectStepTitleToContainText = async (
 };
 
 export const handleCheckbox = async (
-  checkbox: Locator,
+  matCheckboxComp: Locator,
   value: boolean | undefined,
   options: {
     force?: boolean;
@@ -42,11 +42,13 @@ export const handleCheckbox = async (
     return;
   }
 
+  const checkbox = matCheckboxComp.locator('input[type="checkbox"]');
+
   if (value) {
     return checkbox.check(options);
   }
 
-  return checkbox.uncheck();
+  return checkbox.uncheck(options);
 };
 
 export const selectMatOption = async (locator: Locator, value: string) => {
