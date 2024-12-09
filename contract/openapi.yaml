@@ -1644,6 +1644,10 @@ paths:
         - Gesuch
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Fehlende Dokumente übermittelt
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1667,6 +1671,10 @@ paths:
         - Gesuch
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Fehlende Dokumente eingereicht
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1686,6 +1694,10 @@ paths:
         - Gesuch
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Bearbeitung des Gesuch Abschliessen
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1710,6 +1722,10 @@ paths:
               $ref: '#/components/schemas/Kommentar'
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Gesuch zurueckweisen and GS
         '400':
           $ref: '#/components/responses/BadRequest'
