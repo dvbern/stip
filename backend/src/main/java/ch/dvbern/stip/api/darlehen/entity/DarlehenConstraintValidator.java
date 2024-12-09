@@ -15,20 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuchformular.entity;
+package ch.dvbern.stip.api.darlehen.entity;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
-import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class EinnahmenKostenDarlehenRequiredConstraintValidator
-    implements ConstraintValidator<EinnahmenKostenDarlehenRequiredConstraint, GesuchFormular> {
+public class DarlehenConstraintValidator
+    implements ConstraintValidator<DarlehenValidationConstraint, GesuchFormular> {
     private String property = "";
 
     @Override
-    public void initialize(EinnahmenKostenDarlehenRequiredConstraint constraintAnnotation) {
+    public void initialize(DarlehenValidationConstraint constraintAnnotation) {
         property = constraintAnnotation.property();
     }
 
@@ -45,15 +46,23 @@ public class EinnahmenKostenDarlehenRequiredConstraintValidator
         GesuchFormular gesuchFormular,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        if (gesuchFormular.getPersonInAusbildung() == null || gesuchFormular.getEinnahmenKosten() == null) {
-            return true;
-        }
-        if (isVolljaehrig(gesuchFormular.getPersonInAusbildung().getGeburtsdatum())) {
-            if (gesuchFormular.getEinnahmenKosten().getWillDarlehen() == null) {
-                return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
-            } else {
-                return true;
-            }
+        final var pia = gesuchFormular.getPersonInAusbildung();
+        if (
+            Objects.nonNull(gesuchFormular.getDarlehen())
+            && gesuchFormular.getDarlehen().getWillDarlehen()
+        ) {
+            final var darlehen = gesuchFormular.getDarlehen();
+
+            return isVolljaehrig(pia.getGeburtsdatum())
+            && Objects.nonNull(darlehen.getGrundZweitausbildung())
+            && Objects.nonNull(darlehen.getGrundAnschaffungenFuerAusbildung())
+            && Objects.nonNull(darlehen.getGrundNichtBerechtigt())
+            && Objects.nonNull(darlehen.getGrundHoheGebuehren())
+            && Objects.nonNull(darlehen.getGrundAusbildungZwoelfJahre())
+            && Objects.nonNull(darlehen.getBetragDarlehen())
+            && Objects.nonNull(darlehen.getAnzahlBetreibungen())
+            && Objects.nonNull(darlehen.getSchulden())
+            && Objects.nonNull(darlehen.getBetragBezogenKanton());
         }
         return true;
     }
