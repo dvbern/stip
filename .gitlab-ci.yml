@@ -192,6 +192,7 @@ stop-e2e:
 
 clear-db:dev:
   extends: .set-replica-one
+  when: manual
   variables:
     REPLICA_PATH: 'clearDb.replicaCount'
 
