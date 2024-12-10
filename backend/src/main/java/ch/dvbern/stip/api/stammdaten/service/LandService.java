@@ -45,6 +45,7 @@ public class LandService {
     public boolean landInEuEfta(Land land) {
         return getAllLandEuEfta()
             .stream()
+            .filter(LandEuEftaDto::getIsEuEfta)
             .map(LandEuEftaDto::getLand)
             .toList()
             .contains(land);
