@@ -1,12 +1,12 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-
 import java.io.Serializable;
+import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
+
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonTypeName("Darlehen")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -47,6 +47,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    * Required wenn willDarlehen &#x3D; true
+   * minimum: 0
    **/
   public DarlehenDto betragDarlehen(Integer betragDarlehen) {
     this.betragDarlehen = betragDarlehen;
@@ -55,7 +56,7 @@ public class DarlehenDto  implements Serializable {
 
 
   @JsonProperty("betragDarlehen")
-  public Integer getBetragDarlehen() {
+ @Min(0)  public Integer getBetragDarlehen() {
     return betragDarlehen;
   }
 
@@ -66,6 +67,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    * Required wenn willDarlehen &#x3D; true
+   * minimum: 0
    **/
   public DarlehenDto betragBezogenKanton(Integer betragBezogenKanton) {
     this.betragBezogenKanton = betragBezogenKanton;
@@ -74,7 +76,7 @@ public class DarlehenDto  implements Serializable {
 
 
   @JsonProperty("betragBezogenKanton")
-  public Integer getBetragBezogenKanton() {
+ @Min(0)  public Integer getBetragBezogenKanton() {
     return betragBezogenKanton;
   }
 
@@ -85,6 +87,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    * Required wenn willDarlehen &#x3D; true
+   * minimum: 0
    **/
   public DarlehenDto schulden(Integer schulden) {
     this.schulden = schulden;
@@ -93,7 +96,7 @@ public class DarlehenDto  implements Serializable {
 
 
   @JsonProperty("schulden")
-  public Integer getSchulden() {
+ @Min(0)  public Integer getSchulden() {
     return schulden;
   }
 
@@ -104,6 +107,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    * Required wenn willDarlehen &#x3D; true - mit Fileupload
+   * minimum: 0
    **/
   public DarlehenDto anzahlBetreibungen(Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
@@ -112,7 +116,7 @@ public class DarlehenDto  implements Serializable {
 
 
   @JsonProperty("anzahlBetreibungen")
-  public Integer getAnzahlBetreibungen() {
+ @Min(0)  public Integer getAnzahlBetreibungen() {
     return anzahlBetreibungen;
   }
 

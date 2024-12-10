@@ -24,11 +24,17 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import lombok.RequiredArgsConstructor;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.hamcrest.core.Is.is;
 
+@RequiredArgsConstructor
 class DarlehenFieldsRequiredConstraintValidatorTest {
 
     private GesuchFormular gesuchFormular;
@@ -107,5 +113,23 @@ class DarlehenFieldsRequiredConstraintValidatorTest {
         assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isFalse();
         gesuchFormular.getDarlehen().setWillDarlehen(false);
         assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isTrue();
+    }
+
+    @Test
+    void avoidNegativeValuesTest() {
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        darlehen.setWillDarlehen(true);
+        darlehen.setBetragDarlehen(-1);
+        darlehen.setSchulden(-1);
+        darlehen.setBetragBezogenKanton(-1);
+        darlehen.setAnzahlBetreibungen(-1);
+        var violations = validator.validate(darlehen);
+        MatcherAssert.assertThat(violations.size(), is(4));
+        darlehen.setBetragDarlehen(0);
+        darlehen.setSchulden(0);
+        darlehen.setBetragBezogenKanton(0);
+        darlehen.setAnzahlBetreibungen(0);
+        violations = validator.validate(darlehen);
+        MatcherAssert.assertThat(violations.size(), is(0));
     }
 }

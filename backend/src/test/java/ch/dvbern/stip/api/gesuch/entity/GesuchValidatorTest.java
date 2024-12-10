@@ -465,20 +465,79 @@ class GesuchValidatorTest {
         kindSet.add(kind);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
         EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
-        Darlehen darlehen = new Darlehen();
-        darlehen.setWillDarlehen(true);
         gesuch.setGesuchsperiode(null);
         gesuch.setAusbildung(null);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);
         assertOneMessage(
             VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE,
             gesuch,
             true,
             GesuchEinreichenValidationGroup.class
         );
+    }
+
+    @Test
+    void testGesuchEinreichenValidationDarlehenPersonInAusbildungMinderjaehrig() {
+        PersonInAusbildung personInAusbildung = new PersonInAusbildung();
+        personInAusbildung.setGeburtsdatum(LocalDate.now().minusYears(16));
+        Gesuch gesuch = prepareDummyGesuch();
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
+        personInAusbildung.setZivilstand(Zivilstand.LEDIG);
+        Kind kind = new Kind();
+        Set<Kind> kindSet = new HashSet<Kind>();
+        kindSet.add(kind);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
+        EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
+        Darlehen darlehen = new Darlehen();
+        darlehen.setWillDarlehen(true);
+        darlehen.setGrundNichtBerechtigt(false);
+        darlehen.setGrundHoheGebuehren(false);
+        darlehen.setGrundAnschaffungenFuerAusbildung(false);
+        darlehen.setGrundZweitausbildung(false);
+        darlehen.setGrundAusbildungZwoelfJahre(false);
+        gesuch.setGesuchsperiode(null);
+        gesuch.setAusbildung(null);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);
         assertOneMessage(
             VALIDATION_DARLEHEN_REQUIRED_MESSAGE,
+            gesuch,
+            true,
+            GesuchEinreichenValidationGroup.class
+        );
+        assertOneMessage(
+            VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE,
+            gesuch,
+            true,
+            GesuchEinreichenValidationGroup.class
+        );
+    }
+
+    @Test
+    void testGesuchEinreichenValidationDarlehenPersonInAusbildungVolljaehrig() {
+        PersonInAusbildung personInAusbildung = new PersonInAusbildung();
+        personInAusbildung.setGeburtsdatum(LocalDate.now().minusYears(18));
+        Gesuch gesuch = prepareDummyGesuch();
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
+        personInAusbildung.setZivilstand(Zivilstand.LEDIG);
+        Kind kind = new Kind();
+        Set<Kind> kindSet = new HashSet<Kind>();
+        kindSet.add(kind);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setKinds(kindSet);
+        EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
+        Darlehen darlehen = new Darlehen();
+        darlehen.setWillDarlehen(true);
+        darlehen.setGrundNichtBerechtigt(false);
+        darlehen.setGrundHoheGebuehren(false);
+        darlehen.setGrundAnschaffungenFuerAusbildung(false);
+        darlehen.setGrundZweitausbildung(false);
+        darlehen.setGrundAusbildungZwoelfJahre(false);
+        gesuch.setGesuchsperiode(null);
+        gesuch.setAusbildung(null);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);
+        assertOneMessage(
+            VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE,
             gesuch,
             true,
             GesuchEinreichenValidationGroup.class

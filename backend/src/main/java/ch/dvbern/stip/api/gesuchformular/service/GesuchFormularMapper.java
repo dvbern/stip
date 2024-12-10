@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.darlehen.service.DarlehenMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
@@ -41,6 +42,7 @@ import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularDiffUtil;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -57,6 +59,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -74,7 +77,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         ElternMapper.class,
         KindMapper.class,
         EinnahmenKostenMapper.class,
-        SteuerdatenMapper.class
+        SteuerdatenMapper.class,
+        DarlehenMapper.class,
     }
 )
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
@@ -118,6 +122,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     /**
      * partial update mapper for the Gesuchssteller
      */
+    @Mapping(source = "darlehen", target = "darlehen")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract GesuchFormular partialUpdate(
         GesuchFormularUpdateDto gesuchFormularUpdateDto,
@@ -245,6 +250,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final @MappingTarget GesuchFormular targetFormular
     ) {
         resetEinnahmenKosten(newFormular, targetFormular);
+        resetDarlehen(newFormular, targetFormular);
         resetEltern(newFormular, targetFormular);
         resetLebenslaufItems(newFormular, targetFormular);
         resetPartner(newFormular, targetFormular);
@@ -312,6 +318,19 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 if (ek != null && newFormular.getKinds().isEmpty()) {
                     ek.setBetreuungskostenKinder(null);
                 }
+            }
+        );
+    }
+
+    void resetDarlehen(
+        final GesuchFormularUpdateDto newFormular,
+        final GesuchFormular targetFormular
+    ) {
+        resetFieldIf(
+            () -> !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(newFormular),
+            "Set Darlehen to null because pia is not volljaehrig",
+            () -> {
+                targetFormular.setDarlehen(null);
             }
         );
     }

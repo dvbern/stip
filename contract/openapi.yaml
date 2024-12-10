@@ -3776,15 +3776,19 @@ components:
         betragDarlehen:
           description: Required wenn willDarlehen = true
           type: integer
+          minimum: 0
         betragBezogenKanton:
           description: Required wenn willDarlehen = true
           type: integer
+          minimum: 0
         schulden:
           description: Required wenn willDarlehen = true
           type: integer
+          minimum: 0
         anzahlBetreibungen:
           description: Required wenn willDarlehen = true - mit Fileupload
           type: integer
+          minimum: 0
         grundNichtBerechtigt:
           description: Keine Stipendienberechtigung, auf Grund der tatsächlichen Kosten können die Mittel der Eltern jedoch nicht einbezogen werden - Falls Ja mit Fileupload
           type: boolean

@@ -108,6 +108,7 @@ public class DarlehenDtoSpec {
 
    /**
    * Required wenn willDarlehen &#x3D; true
+   * minimum: 0
    * @return betragDarlehen
   **/
   @jakarta.annotation.Nullable
@@ -134,6 +135,7 @@ public class DarlehenDtoSpec {
 
    /**
    * Required wenn willDarlehen &#x3D; true
+   * minimum: 0
    * @return betragBezogenKanton
   **/
   @jakarta.annotation.Nullable
@@ -160,6 +162,7 @@ public class DarlehenDtoSpec {
 
    /**
    * Required wenn willDarlehen &#x3D; true
+   * minimum: 0
    * @return schulden
   **/
   @jakarta.annotation.Nullable
@@ -186,6 +189,7 @@ public class DarlehenDtoSpec {
 
    /**
    * Required wenn willDarlehen &#x3D; true - mit Fileupload
+   * minimum: 0
    * @return anzahlBetreibungen
   **/
   @jakarta.annotation.Nullable

@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.darlehen.service;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
@@ -40,7 +42,7 @@ public abstract class DarlehenMapper extends EntityUpdateMapper<DarlehenDto, Dar
         @MappingTarget final Darlehen targetFormular
     ) {
         resetFieldIf(
-            () -> !newFormular.getWillDarlehen(),
+            () -> Objects.nonNull(newFormular.getWillDarlehen()) && !newFormular.getWillDarlehen(),
             "Clear Darlehen values because willDarlehen has changed",
             () -> {
                 targetFormular.setWillDarlehen(false);

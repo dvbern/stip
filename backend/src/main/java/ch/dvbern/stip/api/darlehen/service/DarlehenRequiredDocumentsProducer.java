@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.service;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,11 +33,26 @@ public class DarlehenRequiredDocumentsProducer implements RequiredDocumentProduc
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         if (
-            Objects.nonNull(formular.getDarlehen())
-            && !formular.getDarlehen().getWillDarlehen()
+            Objects.isNull(formular.getDarlehen()) ||
+            !formular.getDarlehen().getWillDarlehen()
         ) {
             return ImmutablePair.of("", Set.of());
         }
-        return ImmutablePair.of("", Set.of());
+        final var darlehen = formular.getDarlehen();
+        final var requiredDocs = new HashSet<DokumentTyp>();
+
+        requiredDocs.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
+
+        if (darlehen.getGrundNichtBerechtigt()) {
+            requiredDocs.add(DokumentTyp.DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN);
+        }
+        if (darlehen.getGrundHoheGebuehren()) {
+            requiredDocs.add(DokumentTyp.DARLEHEN_KOPIE_SCHULGELDRECHNUNG);
+        }
+        if (darlehen.getGrundAnschaffungenFuerAusbildung()) {
+            requiredDocs.add(DokumentTyp.DARLEHEN_BELEGE_ANSCHAFFUNGEN);
+        }
+
+        return ImmutablePair.of("darlehen", requiredDocs);
     }
 }

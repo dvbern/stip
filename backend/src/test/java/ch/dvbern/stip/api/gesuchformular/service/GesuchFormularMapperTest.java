@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapperImpl;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.darlehen.service.DarlehenMapperImpl;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -63,6 +64,7 @@ import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -70,6 +72,7 @@ import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
+import ch.dvbern.stip.generated.dto.PersonInAusbildungDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import org.junit.jupiter.api.Test;
@@ -723,7 +726,8 @@ class GesuchFormularMapperTest {
             new ElternMapperImpl(),
             new KindMapperImpl(),
             new EinnahmenKostenMapperImpl(),
-            new SteuerdatenMapperImpl()
+            new SteuerdatenMapperImpl(),
+            new DarlehenMapperImpl()
         );
 
         // Remove this once/ if SteuerdatenTabBerechnungsService is a DMN service and mock it
@@ -733,4 +737,25 @@ class GesuchFormularMapperTest {
 
         return mapper;
     }
+
+    @Test
+    void darlehenShouldBeResetToNullIfAgeUnder18() {
+        GesuchFormularDto formularDto = new GesuchFormularDto();
+        formularDto.setDarlehen(new DarlehenDto());
+        formularDto.setPersonInAusbildung(new PersonInAusbildungDto());
+        formularDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
+
+        final var mapper = createMapper();
+        var formular = mapper.toEntity(formularDto);
+        // assertThat(formular.getDarlehen(), is(nullValue()));
+
+        GesuchFormularUpdateDto updateDto = new GesuchFormularUpdateDto();
+        updateDto.setDarlehen(new DarlehenDto());
+        updateDto.setPersonInAusbildung(new PersonInAusbildungUpdateDto());
+        updateDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
+
+        final var updatedFormular = mapper.partialUpdate(updateDto, formular);
+        assertThat(updatedFormular.getDarlehen(), is(nullValue()));
+    }
+
 }

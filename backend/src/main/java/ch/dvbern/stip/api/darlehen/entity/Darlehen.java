@@ -23,6 +23,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,17 +45,21 @@ public class Darlehen extends AbstractMandantEntity {
     private Boolean willDarlehen;
 
     @Nullable
+    @Min(value = 0)
     @Column(name = "betrag_darlehen", nullable = true)
     private Integer betragDarlehen;
 
     @Nullable
+    @Min(value = 0)
     @Column(name = "betrag_bezogen_kanton", nullable = true)
     private Integer betragBezogenKanton;
 
+    @Min(value = 0)
     @Nullable
     @Column(name = "schulden", nullable = true)
     private Integer schulden;
 
+    @Min(value = 0)
     @Nullable
     @Column(name = "anzahl_betreibungen", nullable = true)
     private Integer anzahlBetreibungen;
