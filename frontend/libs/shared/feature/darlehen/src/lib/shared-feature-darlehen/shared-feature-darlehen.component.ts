@@ -130,8 +130,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   );
 
   anzahlBetreibungenDocSig = this.createUploadOptionsSig(() => {
-    const willDarlehen = this.willDarlehenChangedSig() ?? false;
-    return willDarlehen ? DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG : null;
+    return DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG;
   });
   grundNichtBerechtigtDocSig = this.createUploadOptionsSig(() => {
     const isGrundNichtBerechtigt = this.grundNichtBerechtigtChangedSig();
