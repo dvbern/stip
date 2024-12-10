@@ -1694,7 +1694,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchTrancheFehlendeDokumenteEinreichen
       summary: Dem SB übermitteln das fehlende Dokumente hochgeladen wurden
-  '/gesuch/{gesuchTrancehId}/bearbeitungAbschliessen':
+  '/gesuch/{gesuchTrancheId}/bearbeitungAbschliessen':
     parameters:
       - name: gesuchTrancheId
         schema:
