@@ -179,3 +179,36 @@ stop-e2e:
     - if: $PIPELINE_TYPE == "default"
       when: always
   allow_failure: true
+
+.set-replica-one:
+  extends: .install-argocd
+  stage: deploy
+  script:
+    - argocd app sync stip --insecure
+    - argocd app set stip --helm-set image.tag=$VERSION --insecure
+    - argocd app set stip --helm-set $REPLICA_PATH=1 --insecure
+    - argocd app sync stip --insecure
+    - argocd app wait stip --insecure
+
+clear-db:dev:
+  extends: .set-replica-one
+  variables:
+    REPLICA_PATH: 'clearDb.replicaCount'
+
+.set-replica-zero:
+  extends: .install-argocd
+  script:
+    - argocd app sync stip --insecure
+    - argocd app set stip --helm-set image.tag=$VERSION --insecure
+    - argocd app set stip --helm-set $REPLICA_PATH=0 --insecure
+    - argocd app sync stip --insecure
+    - argocd app wait stip --insecure
+
+stop-clear-db:dev:
+  extends: .set-replica-one
+  needs:
+    - clear-db:dev
+  rules:
+    - when: always
+  variables:
+    REPLICA_PATH: 'clearDb.replicaCount'
