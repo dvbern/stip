@@ -21,42 +21,44 @@ import lombok.Getter;
 
 @Getter
 public enum StipDeciderResult {
-    GESUCH_VALID("Gesuch valid"),
-    ANSPRUCH_UNKLAR("Anspruch unklar"),
+    GESUCH_VALID("stip.stipdecision.GESUCH_VALID"),
+    ANSPRUCH_UNKLAR("stip.stipdecision.ANSPRUCH_UNKLAR"),
     ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG(
-    "Anspruch manuell prüfen: Stipendienrechtlicher Wohnsitz, Finanziell unabhaengig"
+    "stip.stipdecision.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG"
     ),
     ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN(
-    "Anspruch manuell prüfen: Stipendienrechtlicher Wohnsitz, Heimatort nicht Bern"
+    "stip.stipdecision.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN"
     ),
     ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN(
-    "Anspruch manuell prüfen: Stipendienrechtlicher Wohnsitz, Wohnsitz Eltern nicht Bern"
+    "stip.stipdecision.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN"
     ),
     ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN(
-    "Anspruch manuell prüfen: Stipendienrechtlicher Wohnsitz, KESB nicht Bern"
+    "stip.stipdecision.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN"
     ),
-    ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNG_NICHT_ANERKANNT("Anspruch manuell prüfen: Ausbildung nicht anerkannt"),
-    ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG("Anspruch manuell prüfen: Zweitausbildung"),
-    ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNGSDAUER("Anspruch manuell prüfen: Ausbildungsdauer"),
-    ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA("Anspruch manuell prüfen: Alter PIA"),
-    NEGATIVVERFUEGUNG_NICHTEINTRETENSVERFUEGUNG("Negativverfügung: Nichteintretensverfügung"),
+    ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNG_NICHT_ANERKANNT(
+    "stip.stipdecision.ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNG_NICHT_ANERKANNT"
+    ),
+    ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG("stip.stipdecision.ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG"),
+    ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNGSDAUER("stip.stipdecision.ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNGSDAUER"),
+    ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA("stip.stipdecision.ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA"),
+    NEGATIVVERFUEGUNG_NICHTEINTRETENSVERFUEGUNG("stip.stipdecision.NEGATIVVERFUEGUNG_NICHTEINTRETENSVERFUEGUNG"),
     NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN(
-    "Negativverfügung: Stipendienrechtlicher Wohnsitz, Flüchtling nicht Bern"
+    "stip.stipdecision.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN"
     ),
     NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_PIA_NICHT_BERN(
-    "Negativverfügung: Stipendienrechtlicher Wohnsitz, Wohnsitz PIA nicht Bern"
+    "stip.stipdecision.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_PIA_NICHT_BERN"
     ),
-    // NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN("Negativverfügung: Stipendienrechtlicher
-    // Wohnsitz, Heimatort nicht Bern"),
+    // NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN(
+    // "stip.stipdecision.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN"
+    // ),
     NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN(
-    "Negativverfügung: Stipendienrechtlicher Wohnsitz, Wohnsitz Eltern nicht Bern"
+    "stip.stipdecision.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN"
     ),
-    NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON("Negativverfügung: Nicht berechtigte Person"),
-    ;
+    NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON("stip.stipdecision.NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON");
 
-    private final String text;
+    private final String translationkey;
 
-    StipDeciderResult(String text) {
-        this.text = text;
+    StipDeciderResult(String translationkey) {
+        this.translationkey = translationkey;
     }
 }

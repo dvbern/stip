@@ -506,7 +506,8 @@ public class GesuchService {
             kommentarDto = new KommentarDto();
             kommentarDto.setText(
                 stipDecisionService.getTextForDecision(
-                    decision
+                    decision,
+                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
                 )
             );
         }

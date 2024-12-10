@@ -19,8 +19,11 @@ package ch.dvbern.stip.stipdecision.service;
 
 import java.util.List;
 
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.StipDecisionTextDto;
 import ch.dvbern.stip.stipdecision.decider.BaseStipDecider;
@@ -62,8 +65,12 @@ public class StipDecisionService {
         return decider.decide(gesuchTranche);
     }
 
-    public String getTextForDecision(final StipDeciderResult decision) {
-        return decision.getText();
+    public String getTextForDecision(final StipDeciderResult decision, final Sprache sprache) {
+        return TLProducer.defaultBundle()
+            .forAppLanguage(
+                AppLanguages.fromLocale(sprache.getLocale())
+            )
+            .translate(decision.getTranslationkey());
     }
 
     public GesuchStatusChangeEvent getGesuchStatusChangeEvent(final StipDeciderResult decision) {
