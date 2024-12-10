@@ -18,6 +18,8 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   let component: SachbearbeitungAppPatternGesuchHeaderComponent;
   let fixture: ComponentFixture<SachbearbeitungAppPatternGesuchHeaderComponent>;
   const setStatus$ = {
+    SET_TO_BEARBEITUNG: jest.fn(),
+    EINGEREICHT: jest.fn(),
     BEARBEITUNG_ABSCHLIESSEN: jest.fn(),
     BEREIT_FUER_BEARBEITUNG: jest.fn(),
     NEGATIVE_VERFUEGUNG_ERSTELLEN: jest.fn(),
@@ -85,9 +87,9 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   ] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang',
     (nextStatus) => {
-      component.setStatusUebergang(nextStatus, 'gesuchId');
+      component.setStatusUebergang(nextStatus, 'gesuchTrancheId');
       expect(setStatus$[nextStatus]).toHaveBeenCalledWith({
-        gesuchId: 'gesuchId',
+        gesuchTrancheId: 'gesuchTrancheId',
       });
     },
   );

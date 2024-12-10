@@ -172,13 +172,13 @@
           <hr class="my-1" />
         }
 
-        @let gesuchId = currentGesuchSig()?.id;
+        @let gesuchTrancheId = currentGesuchSig()?.gesuchTrancheToWorkWith?.id;
         @for (uebergang of statusUebergaenge.list; track $index) {
           <button
             type="button"
             class="btn fw-normal px-2 shadow-none pe-auto"
             [attr.data-testid]="'gesuch-header-nav-status-uebergang-item-' + uebergang.typ"
-            [disabled]="uebergang.disabledReason || !gesuchId"
+            [disabled]="uebergang.disabledReason || !gesuchTrancheId"
             [attr.title]="
               uebergang.disabledReason
                 ? ('sachbearbeitung-app.header.status-uebergang.disabled-reason.' + uebergang.disabledReason
@@ -186,7 +186,7 @@
                 : null
             "
             mat-menu-item
-            (click)="setStatusUebergang(uebergang.typ, gesuchId)"
+            (click)="setStatusUebergang(uebergang.typ, gesuchTrancheId)"
           >
             <div class="d-flex gap-2 align-items-center">
               <i class="material-symbols-rounded">{{ uebergang.icon }}</i>

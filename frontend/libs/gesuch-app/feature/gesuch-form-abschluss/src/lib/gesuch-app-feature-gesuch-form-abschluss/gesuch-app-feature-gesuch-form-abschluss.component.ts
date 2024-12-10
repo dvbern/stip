@@ -87,7 +87,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
             });
           } else {
             this.einreichenStore.gesuchEinreichen$({
-              gesuchId: gesuch.id,
+              gesuchTrancheId: trancheId,
             });
           }
         }

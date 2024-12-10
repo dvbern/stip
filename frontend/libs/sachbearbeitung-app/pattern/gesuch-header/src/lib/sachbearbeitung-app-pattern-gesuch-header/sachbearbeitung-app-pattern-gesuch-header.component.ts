@@ -160,8 +160,8 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     };
   });
 
-  setStatusUebergang(nextStatus: StatusUebergang, gesuchId?: string) {
-    if (!gesuchId) {
+  setStatusUebergang(nextStatus: StatusUebergang, gesuchTrancheId?: string) {
+    if (!gesuchTrancheId) {
       return;
     }
 
@@ -171,11 +171,11 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'VERFUEGT':
       case 'VERSENDET':
-        this.gesuchStore.setStatus$[nextStatus]({ gesuchId });
+        this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
         break;
       case 'BEREIT_FUER_BEARBEITUNG':
         SharedUiKommentarDialogComponent.openOptional(this.dialog, {
-          entityId: gesuchId,
+          entityId: gesuchTrancheId,
           titleKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title`,
           messageKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message`,
           placeholderKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder`,
@@ -186,7 +186,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .subscribe((result) => {
             if (result) {
               this.gesuchStore.setStatus$['BEREIT_FUER_BEARBEITUNG']({
-                gesuchId,
+                gesuchTrancheId,
                 text: result.kommentar,
               });
             }
@@ -194,7 +194,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         break;
       case 'ZURUECKWEISEN':
         SharedUiKommentarDialogComponent.open(this.dialog, {
-          entityId: gesuchId,
+          entityId: gesuchTrancheId,
           titleKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.title`,
           messageKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.message`,
           placeholderKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder`,
@@ -205,7 +205,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .subscribe((result) => {
             if (result) {
               this.gesuchStore.setStatus$['ZURUECKWEISEN']({
-                gesuchId,
+                gesuchTrancheId,
                 text: result.kommentar,
               });
             }
@@ -223,7 +223,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .subscribe((result) => {
             if (result) {
               this.gesuchStore.setStatus$[nextStatus]({
-                gesuchId,
+                gesuchTrancheId,
                 grundId: result.entityId,
               });
             }
