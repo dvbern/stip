@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.authorization;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -100,7 +101,9 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
             return false;
         }
 
-        if (gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+        var editableStates = Set.of(Gesuchstatus.IN_BEARBEITUNG_SB, Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG);
+
+        if (editableStates.contains(gesuch.getGesuchStatus())) {
             return true;
         }
 
