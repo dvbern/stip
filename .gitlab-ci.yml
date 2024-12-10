@@ -221,8 +221,6 @@ db-clear:review:start:
 
 .db-clear:stop:
   extends: .set-replica-one
-  needs:
-    - clear-db:dev
   rules:
     - when: always
   variables:
@@ -230,6 +228,8 @@ db-clear:review:start:
 
 db-clear:dev:stop:
   extends: .db-clear:stop
+  needs:
+    - db-clear:dev:start
   variables:
     CURRENT_APP: 'stip'
   rules:
@@ -237,6 +237,8 @@ db-clear:dev:stop:
 
 db-clear:review:stop:
   extends: .db-clear:stop
+  needs:
+    - db-clear:review:start
   variables:
     CURRENT_APP: "stip-${CI_COMMIT_REF_SLUG}-${CI_MERGE_REQUEST_IID}"
   rules:
