@@ -17,9 +17,21 @@
 
 package ch.dvbern.stip.api;
 
+import io.quarkus.runtime.Quarkus;
+import io.quarkus.runtime.annotations.QuarkusMain;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
 
+@QuarkusMain
 @ApplicationPath("api/v1")
 public class StipApi extends Application {
+    public static void main(final String... args) {
+        final var shouldClear = Boolean.parseBoolean(System.getenv("KSTIP_CLEAR_DATABASE"));
+
+        if (shouldClear) {
+            Quarkus.run(StipDbClearApplication.class, args);
+        } else {
+            Quarkus.run(args);
+        }
+    }
 }
