@@ -184,32 +184,60 @@ stop-e2e:
   extends: .install-argocd
   stage: deploy
   script:
-    - argocd app sync stip --insecure
-    - argocd app set stip --helm-set image.tag=$VERSION --insecure
-    - argocd app set stip --helm-set $REPLICA_PATH=1 --insecure
-    - argocd app sync stip --insecure
-    - argocd app wait stip --insecure
+    - argocd app sync $CURRENT_APP --insecure
+    - argocd app set $CURRENT_APP --helm-set image.tag=$VERSION --insecure
+    - argocd app set $CURRENT_APP --helm-set $REPLICA_PATH=1 --insecure
+    - argocd app sync $CURRENT_APP --insecure
+    - argocd app wait $CURRENT_APP --insecure
 
-clear-db:dev:
+.db-clear:start:
   extends: .set-replica-one
   when: manual
   variables:
-    REPLICA_PATH: 'clearDb.replicaCount'
+    REPLICA_PATH: 'dbClear.replicaCount'
+
+db-clear:dev:start:
+  extends: .db-clear:start
+  variables:
+    CURRENT_APP: 'stip'
+  rules:
+    - if: $PIPELINE_TYPE == 'default'
+
+db-clear:review:start:
+  extends: .db-clear:start
+  variables:
+    CURRENT_APP: "stip-${CI_COMMIT_REF_SLUG}-${CI_MERGE_REQUEST_IID}"
+  rules:
+    - if: $PIPELINE_TYPE == 'mr'
 
 .set-replica-zero:
   extends: .install-argocd
   script:
-    - argocd app sync stip --insecure
-    - argocd app set stip --helm-set image.tag=$VERSION --insecure
-    - argocd app set stip --helm-set $REPLICA_PATH=0 --insecure
-    - argocd app sync stip --insecure
-    - argocd app wait stip --insecure
+    - argocd app sync $CURRENT_APP --insecure
+    - argocd app set $CURRENT_APP --helm-set image.tag=$VERSION --insecure
+    - argocd app set $CURRENT_APP --helm-set $REPLICA_PATH=0 --insecure
+    - argocd app sync $CURRENT_APP --insecure
+    - argocd app wait $CURRENT_APP --insecure
 
-stop-clear-db:dev:
+.db-clear:stop:
   extends: .set-replica-one
   needs:
     - clear-db:dev
   rules:
     - when: always
   variables:
-    REPLICA_PATH: 'clearDb.replicaCount'
+    REPLICA_PATH: 'dbClear.replicaCount'
+
+db-clear:dev:stop:
+  extends: .db-clear:stop
+  variables:
+    CURRENT_APP: 'stip'
+  rules:
+    - if: $PIPELINE_TYPE == 'default'
+
+db-clear:review:stop:
+  extends: .db-clear:stop
+  variables:
+    CURRENT_APP: "stip-${CI_COMMIT_REF_SLUG}-${CI_MERGE_REQUEST_IID}"
+  rules:
+    - if: $PIPELINE_TYPE == 'mr'
