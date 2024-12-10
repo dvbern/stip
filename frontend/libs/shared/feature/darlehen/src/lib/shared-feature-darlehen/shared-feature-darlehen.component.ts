@@ -163,31 +163,34 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     effect(
       () => {
         this.gotReenabledSig();
+        const readonly = this.viewSig().readonly;
         const willDarlehen = this.willDarlehenChangedSig() ?? false;
+
+        const disable = readonly || !willDarlehen;
 
         this.formUtils.setDisabledState(
           this.form.controls.betragDarlehen,
-          !willDarlehen,
+          disable,
           true,
         );
         this.formUtils.setDisabledState(
           this.form.controls.betragBezogenKanton,
-          !willDarlehen,
+          disable,
           true,
         );
         this.formUtils.setDisabledState(
           this.form.controls.schulden,
-          !willDarlehen,
+          disable,
           true,
         );
         this.formUtils.setDisabledState(
           this.form.controls.anzahlBetreibungen,
-          !willDarlehen,
+          disable,
           true,
         );
         this.formUtils.setDisabledState(
           this.form.controls.gruende,
-          !willDarlehen,
+          disable,
           true,
         );
       },
