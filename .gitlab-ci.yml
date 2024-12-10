@@ -198,6 +198,8 @@ stop-e2e:
 
 db-clear:dev:start:
   extends: .db-clear:start
+  environment:
+    name: dev
   variables:
     CURRENT_APP: 'stip'
   rules:
@@ -205,6 +207,8 @@ db-clear:dev:start:
 
 db-clear:review:start:
   extends: .db-clear:start
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
   variables:
     CURRENT_APP: "stip-${CI_COMMIT_REF_SLUG}-${CI_MERGE_REQUEST_IID}"
   rules:
@@ -228,6 +232,8 @@ db-clear:review:start:
 
 db-clear:dev:stop:
   extends: .db-clear:stop
+  environment:
+    name: dev
   needs:
     - db-clear:dev:start
   variables:
@@ -237,6 +243,8 @@ db-clear:dev:stop:
 
 db-clear:review:stop:
   extends: .db-clear:stop
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
   needs:
     - db-clear:review:start
   variables:
