@@ -10,6 +10,7 @@ import {
   GesuchService,
   GesuchServiceGetGesucheSbRequestParams,
   PaginatedSbDashboard,
+  SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
 import { StatusUebergang } from '@dv/shared/util/gesuch';
 import {
@@ -42,7 +43,10 @@ export class GesuchStore extends signalStore(
   private store = inject(Store);
   private gesuchService = inject(GesuchService);
   private handleStatusChange =
-    <T, R>(handler$: (params: T) => Observable<R>, onSuccess?: () => void) =>
+    <T, R extends SharedModelGesuch>(
+      handler$: (params: T) => Observable<R>,
+      onSuccess?: (data: R) => void,
+    ) =>
     (source$: Observable<T>) => {
       return source$.pipe(
         tap(() => patchState(this, { lastStatusChange: initial() })),
@@ -52,9 +56,13 @@ export class GesuchStore extends signalStore(
             patchState(this, { lastStatusChange: success(null) });
           },
           {
-            onSuccess: () => {
-              this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-              onSuccess?.();
+            onSuccess: (data) => {
+              this.store.dispatch(
+                SharedDataAccessGesuchEvents.gesuchSetReturned({
+                  gesuch: data,
+                }),
+              );
+              onSuccess?.(data);
             },
           },
         ),
@@ -84,6 +92,16 @@ export class GesuchStore extends signalStore(
   );
 
   setStatus$ = {
+    SET_TO_BEARBEITUNG: rxMethod<{ gesuchId: string }>(
+      pipe(
+        this.handleStatusChange(({ gesuchId }) =>
+          this.gesuchService.changeGesuchStatusToInBearbeitung$({
+            gesuchId,
+          }),
+        ),
+      ),
+    ),
+
     EINGEREICHT: rxMethod<{ gesuchId: string }>(
       pipe(
         this.handleStatusChange(({ gesuchId }) =>

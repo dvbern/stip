@@ -20,7 +20,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
@@ -30,7 +29,6 @@ import {
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
-import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import {
   StatusUebergaengeMap,
@@ -49,7 +47,6 @@ import {
     MatMenuModule,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
-    SharedUiIconBadgeComponent,
   ],
   providers: [GesuchStore],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
@@ -139,27 +136,12 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
 
     switch (gesuchStatus) {
-      case 'BEREIT_FUER_BEARBEITUNG':
-        return 'SET_TO_BEARBEITUNG';
       case 'IN_BEARBEITUNG_SB':
         return 'CREATE_TRANCHE';
       default:
         return null;
     }
   });
-
-  canSetToBearbeitungSig = computed(() => {
-    const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
-    if (!gesuchStatus) {
-      return false;
-    }
-
-    return gesuchStatus === 'BEREIT_FUER_BEARBEITUNG';
-  });
-
-  setToBearbeitung() {
-    this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchToBearbeitung());
-  }
 
   statusUebergaengeOptionsSig = computed(() => {
     const gesuch = this.currentGesuchSig();
@@ -184,6 +166,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     }
 
     switch (nextStatus) {
+      case 'SET_TO_BEARBEITUNG':
       case 'EINGEREICHT':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'VERFUEGT':

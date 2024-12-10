@@ -184,6 +184,26 @@ export const sharedDataAccessGesuchsFeature = createFeature({
     ),
 
     on(
+      SharedDataAccessGesuchEvents.gesuchSetReturned,
+      (state, { gesuch }): State => {
+        const gesuchFormular = getGesuchFormular(gesuch);
+        return {
+          ...state,
+          gesuch,
+          gesuchFormular: gesuchFormular,
+          steuerdatenTabs: success(gesuchFormular?.steuerdatenTabs ?? []),
+          cache: {
+            gesuch: gesuch ?? state.cache.gesuch,
+            gesuchId: gesuch.id ?? state.cache.gesuchId,
+            gesuchFormular: gesuchFormular ?? state.cache.gesuchFormular,
+          },
+          loading: false,
+          error: undefined,
+        };
+      },
+    ),
+
+    on(
       SharedDataAccessGesuchEvents.gesuchUpdatedSuccess,
       SharedDataAccessGesuchEvents.deleteGesuchSuccess,
       (state): State => ({

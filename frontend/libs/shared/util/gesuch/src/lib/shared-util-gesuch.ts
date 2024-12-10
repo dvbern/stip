@@ -81,6 +81,7 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
  * Available status transitions actions for the gesuch
  */
 export type StatusUebergang =
+  | 'SET_TO_BEARBEITUNG'
   | 'EINGEREICHT'
   | 'BEREIT_FUER_BEARBEITUNG'
   | 'ZURUECKWEISEN'
@@ -95,6 +96,7 @@ export type StatusUebergang =
 export const StatusUebergaengeMap: Partial<
   Record<Gesuchstatus, StatusUebergang[]>
 > = {
+  BEREIT_FUER_BEARBEITUNG: ['SET_TO_BEARBEITUNG'],
   ANSPRUCH_MANUELL_PRUEFEN: [
     'BEREIT_FUER_BEARBEITUNG',
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
@@ -127,6 +129,13 @@ type StatusUebergangOption = {
  * Options for the status transitions
  */
 export const StatusUebergaengeOptions = {
+  SET_TO_BEARBEITUNG: () =>
+    ({
+      icon: 'edit_note',
+      titleKey: 'SET_TO_BEARBEITUNG',
+      typ: 'SET_TO_BEARBEITUNG',
+      disabledReason: undefined,
+    }) as const,
   EINGEREICHT: () =>
     ({
       icon: 'check_circle_outline',

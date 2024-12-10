@@ -386,36 +386,36 @@ export const refreshGesuchFormStep = createEffect(
   { functional: true, dispatch: false },
 );
 
-export const setGesuchToBearbeitung = createEffect(
-  (
-    actions$ = inject(Actions),
-    store = inject(Store),
-    gesuchService = inject(GesuchService),
-  ) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.setGesuchToBearbeitung),
-      concatLatestFrom(() => store.select(selectRouteId)),
-      concatMap(([, id]) => {
-        if (!id) {
-          throw new Error(ROUTE_ID_MISSING);
-        }
-        return gesuchService
-          .changeGesuchStatusToInBearbeitung$({ gesuchId: id })
-          .pipe(
-            map((gesuch) =>
-              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
-            ),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
-      }),
-    );
-  },
-  { functional: true },
-);
+// export const setGesuchToBearbeitung = createEffect(
+//   (
+//     actions$ = inject(Actions),
+//     store = inject(Store),
+//     gesuchService = inject(GesuchService),
+//   ) => {
+//     return actions$.pipe(
+//       ofType(SharedDataAccessGesuchEvents.setGesuchToBearbeitung),
+//       concatLatestFrom(() => store.select(selectRouteId)),
+//       concatMap(([, id]) => {
+//         if (!id) {
+//           throw new Error(ROUTE_ID_MISSING);
+//         }
+//         return gesuchService
+//           .changeGesuchStatusToInBearbeitung$({ gesuchId: id })
+//           .pipe(
+//             map((gesuch) =>
+//               SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
+//             ),
+//             catchError((error) => [
+//               SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+//                 error: sharedUtilFnErrorTransformer(error),
+//               }),
+//             ]),
+//           );
+//       }),
+//     );
+//   },
+//   { functional: true },
+// );
 
 // add effects here
 export const sharedDataAccessGesuchEffects = {
@@ -427,7 +427,7 @@ export const sharedDataAccessGesuchEffects = {
   redirectToGesuchForm,
   redirectToGesuchFormNextStep,
   refreshGesuchFormStep,
-  setGesuchToBearbeitung,
+  // setGesuchToBearbeitung,
 };
 
 const viewOnlyFields = [
