@@ -75,7 +75,6 @@ import { selectSharedFeatureGesuchFormDarlehenView } from './shared-feature-darl
     SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-darlehen.component.html',
-  styleUrl: './shared-feature-darlehen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureDarlehenComponent implements OnInit {
@@ -94,8 +93,8 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   private atLeastOneCheckboxChecked: ValidatorFn = (
     control: AbstractControl,
   ) => {
-    const checked = Object.values(control.value).filter((v) => v === true);
-    return checked.length > 0 ? null : { atLeastOneCheckboxChecked: true };
+    const checked = Object.values(control.value).some((v) => v === true);
+    return checked ? null : { atLeastOneCheckboxChecked: true };
   };
 
   form = this.formBuilder.group({
@@ -103,7 +102,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     betragDarlehen: [<string | null>null, [Validators.required]],
     betragBezogenKanton: [<string | null>null, [Validators.required]],
     schulden: [<string | null>null, [Validators.required]],
-    anzahlBetreibungen: [<string | null>null, [Validators.required]],
+    anzahlBetreibungen: [<number | null>null, [Validators.required]],
     gruende: this.formBuilder.group(
       {
         grundNichtBerechtigt: [<boolean | undefined>undefined],
@@ -206,7 +205,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
             betragDarlehen: darlehen.betragDarlehen?.toString(),
             betragBezogenKanton: darlehen.betragBezogenKanton?.toString(),
             schulden: darlehen.schulden?.toString(),
-            anzahlBetreibungen: darlehen.anzahlBetreibungen?.toString(),
+            anzahlBetreibungen: darlehen.anzahlBetreibungen,
             gruende: {
               grundNichtBerechtigt: darlehen.grundNichtBerechtigt,
               grundAusbildungZwoelfJahre: darlehen.grundAusbildungZwoelfJahre,
@@ -246,7 +245,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
             formValues.betragBezogenKanton,
           ),
           schulden: fromFormatedNumber(formValues.schulden),
-          anzahlBetreibungen: fromFormatedNumber(formValues.anzahlBetreibungen),
+          anzahlBetreibungen: formValues.anzahlBetreibungen,
           grundNichtBerechtigt: formValues.gruende.grundNichtBerechtigt,
           grundAusbildungZwoelfJahre:
             formValues.gruende.grundAusbildungZwoelfJahre,

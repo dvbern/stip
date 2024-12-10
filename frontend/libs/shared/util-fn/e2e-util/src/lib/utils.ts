@@ -11,8 +11,6 @@ import seedRandom from 'seedrandom';
 
 import { BEARER_COOKIE } from './playwright.config.base';
 
-// Don't know why it fails, because the package is referenced in the package.json
-
 export const getStepTitle = async (page: Page) => {
   return page.getByTestId('step-title');
 };
