@@ -184,11 +184,11 @@ stop-e2e:
   extends: .install-argocd
   stage: deploy
   script:
-    - argocd app sync $CURRENT_APP --insecure
-    - argocd app set $CURRENT_APP --helm-set image.tag=$VERSION --insecure
-    - argocd app set $CURRENT_APP --helm-set $REPLICA_PATH=1 --insecure
-    - argocd app sync $CURRENT_APP --insecure
-    - argocd app wait $CURRENT_APP --insecure
+    - argocd app sync stip --insecure
+    - argocd app set stip --helm-set image.tag=$VERSION --insecure
+    - argocd app set stip --helm-set $REPLICA_PATH=1 --insecure
+    - argocd app sync stip --insecure
+    - argocd app wait stip --insecure
 
 .db-clear:start:
   extends: .set-replica-one
@@ -200,19 +200,24 @@ db-clear:dev:start:
   extends: .db-clear:start
   environment:
     name: dev
-  variables:
-    CURRENT_APP: 'stip'
   rules:
     - if: $PIPELINE_TYPE == 'default'
+
+db-clear:uat:start:
+  extends: .db-clear:start
+  environment:
+    name: uat
+  rules:
+    - if: $PIPELINE_TYPE == 'tag'
 
 .set-replica-zero:
   extends: .install-argocd
   script:
-    - argocd app sync $CURRENT_APP --insecure
-    - argocd app set $CURRENT_APP --helm-set image.tag=$VERSION --insecure
-    - argocd app set $CURRENT_APP --helm-set $REPLICA_PATH=0 --insecure
-    - argocd app sync $CURRENT_APP --insecure
-    - argocd app wait $CURRENT_APP --insecure
+    - argocd app sync stip --insecure
+    - argocd app set stip --helm-set image.tag=$VERSION --insecure
+    - argocd app set stip --helm-set $REPLICA_PATH=0 --insecure
+    - argocd app sync stip --insecure
+    - argocd app wait stip --insecure
 
 .db-clear:stop:
   extends: .set-replica-one
@@ -227,7 +232,14 @@ db-clear:dev:stop:
     name: dev
   needs:
     - db-clear:dev:start
-  variables:
-    CURRENT_APP: 'stip'
   rules:
     - if: $PIPELINE_TYPE == 'default'
+
+db-clear:uat:stop:
+  extends: .db-clear:stop
+  environment:
+    name: uat
+  needs:
+    - db-clear:uat:start
+  rules:
+    - if: $PIPELINE_TYPE == 'tag'
