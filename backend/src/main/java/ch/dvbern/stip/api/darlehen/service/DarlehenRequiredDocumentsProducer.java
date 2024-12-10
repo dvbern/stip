@@ -43,13 +43,16 @@ public class DarlehenRequiredDocumentsProducer implements RequiredDocumentProduc
 
         requiredDocs.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
 
-        if (darlehen.getGrundNichtBerechtigt()) {
+        if (Objects.nonNull(darlehen.getGrundNichtBerechtigt()) && darlehen.getGrundNichtBerechtigt()) {
             requiredDocs.add(DokumentTyp.DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN);
         }
-        if (darlehen.getGrundHoheGebuehren()) {
+        if (Objects.nonNull(darlehen.getGrundHoheGebuehren()) && darlehen.getGrundHoheGebuehren()) {
             requiredDocs.add(DokumentTyp.DARLEHEN_KOPIE_SCHULGELDRECHNUNG);
         }
-        if (darlehen.getGrundAnschaffungenFuerAusbildung()) {
+        if (
+            Objects.nonNull(darlehen.getGrundAnschaffungenFuerAusbildung())
+            && darlehen.getGrundAnschaffungenFuerAusbildung()
+        ) {
             requiredDocs.add(DokumentTyp.DARLEHEN_BELEGE_ANSCHAFFUNGEN);
         }
 
