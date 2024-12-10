@@ -176,7 +176,6 @@ export const gesuchFormBaseSteps = {
 };
 export type GesuchFormBaseStepKeys = keyof typeof gesuchFormBaseSteps;
 
-// @scph maybe rename to GesuchStellerFormSteps?
 export const gesuchFormSteps = {
   ...gesuchFormBaseSteps,
   ABSCHLUSS,
@@ -239,51 +238,51 @@ export const isStepDisabled = (
   const gesuchPermissions = getGesuchPermissions(gesuch, appType);
   const readonly = !gesuchPermissions?.canWrite;
 
-  if (step === PARTNER) {
-    const zivilstand = formular?.personInAusbildung?.zivilstand;
-    return (
-      !zivilstand ||
-      ![
-        Zivilstand.VERHEIRATET,
-        Zivilstand.KONKUBINAT,
-        Zivilstand.EINGETRAGENE_PARTNERSCHAFT,
-      ].includes(zivilstand)
-    );
-  }
-  if (step === GESCHWISTER) {
-    const geschwister = formular?.geschwisters;
-    return readonly && (!geschwister || geschwister.length === 0);
-  }
-  if (step === KINDER) {
-    const kinder = formular?.kinds;
-    return readonly && (!kinder || kinder.length === 0);
-  }
-  if (step === ELTERN) {
-    const werZahltAlimente = formular?.familiensituation?.werZahltAlimente;
-    const mutterUnbekanntVerstorben =
-      formular?.familiensituation?.mutterUnbekanntVerstorben;
-    const vaterUnbekanntVerstorben =
-      formular?.familiensituation?.vaterUnbekanntVerstorben;
-    return (
-      werZahltAlimente === 'GEMEINSAM' ||
-      ((mutterUnbekanntVerstorben === 'VERSTORBEN' ||
-        mutterUnbekanntVerstorben === 'UNBEKANNT') &&
-        (vaterUnbekanntVerstorben === 'VERSTORBEN' ||
-          vaterUnbekanntVerstorben === 'UNBEKANNT'))
-    );
-  }
+  switch (step) {
+    case PARTNER: {
+      const zivilstand = formular?.personInAusbildung?.zivilstand;
+      return (
+        !zivilstand ||
+        ![
+          Zivilstand.VERHEIRATET,
+          Zivilstand.KONKUBINAT,
+          Zivilstand.EINGETRAGENE_PARTNERSCHAFT,
+        ].includes(zivilstand)
+      );
+    }
+    case GESCHWISTER: {
+      const geschwister = formular?.geschwisters;
+      return readonly && (!geschwister || geschwister.length === 0);
+    }
+    case KINDER: {
+      const kinder = formular?.kinds;
+      return readonly && (!kinder || kinder.length === 0);
+    }
+    case ELTERN: {
+      const werZahltAlimente = formular?.familiensituation?.werZahltAlimente;
+      const mutterUnbekanntVerstorben =
+        formular?.familiensituation?.mutterUnbekanntVerstorben;
+      const vaterUnbekanntVerstorben =
+        formular?.familiensituation?.vaterUnbekanntVerstorben;
+      return (
+        werZahltAlimente === 'GEMEINSAM' ||
+        ((mutterUnbekanntVerstorben === 'VERSTORBEN' ||
+          mutterUnbekanntVerstorben === 'UNBEKANNT') &&
+          (vaterUnbekanntVerstorben === 'VERSTORBEN' ||
+            vaterUnbekanntVerstorben === 'UNBEKANNT'))
+      );
+    }
+    case DARLEHEN: {
+      if (!formular?.personInAusbildung?.geburtsdatum) return true;
 
-  if (step === DARLEHEN) {
-    if (!formular?.personInAusbildung?.geburtsdatum) return true;
+      const geburtsdatum = new Date(formular?.personInAusbildung?.geburtsdatum);
+      const istErwachsen = differenceInYears(new Date(), geburtsdatum) >= 18;
 
-    // @scph muessen wir hier date-fns verwenden um ein Date zu erstellen? macht alles komplizierter, finde ich.
-    const geburtsdatum = new Date(formular?.personInAusbildung?.geburtsdatum);
-    // todo: if this works, adjust in einkommen as well (replace getDateDifference and parseBackendLocalDateAndPrint)
-    const istErwachsen = differenceInYears(new Date(), geburtsdatum) >= 18;
-
-    return !istErwachsen;
+      return !istErwachsen;
+    }
+    default:
+      return false;
   }
-  return false;
 };
 
 export const isStepValid = (

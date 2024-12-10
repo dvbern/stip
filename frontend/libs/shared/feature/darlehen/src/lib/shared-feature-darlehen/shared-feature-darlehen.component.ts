@@ -75,7 +75,6 @@ import { selectSharedFeatureGesuchFormDarlehenView } from './shared-feature-darl
     SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-darlehen.component.html',
-  styleUrl: './shared-feature-darlehen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureDarlehenComponent implements OnInit {
@@ -94,8 +93,8 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   private atLeastOneCheckboxChecked: ValidatorFn = (
     control: AbstractControl,
   ) => {
-    const checked = Object.values(control.value).filter((v) => v === true);
-    return checked.length > 0 ? null : { atLeastOneCheckboxChecked: true };
+    const checked = Object.values(control.value).some((v) => v === true);
+    return checked ? null : { atLeastOneCheckboxChecked: true };
   };
 
   form = this.formBuilder.group({
@@ -103,7 +102,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     betragDarlehen: [<string | null>null, [Validators.required]],
     betragBezogenKanton: [<string | null>null, [Validators.required]],
     schulden: [<string | null>null, [Validators.required]],
-    anzahlBetreibungen: [<string | null>null, [Validators.required]],
+    anzahlBetreibungen: [<number | null>null, [Validators.required]],
     gruende: this.formBuilder.group(
       {
         grundNichtBerechtigt: [<boolean | undefined>undefined],
@@ -131,8 +130,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   );
 
   anzahlBetreibungenDocSig = this.createUploadOptionsSig(() => {
-    const willDarlehen = this.willDarlehenChangedSig() ?? false;
-    return willDarlehen ? DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG : null;
+    return DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG;
   });
   grundNichtBerechtigtDocSig = this.createUploadOptionsSig(() => {
     const isGrundNichtBerechtigt = this.grundNichtBerechtigtChangedSig();
@@ -165,31 +163,34 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     effect(
       () => {
         this.gotReenabledSig();
+        const readonly = this.viewSig().readonly;
         const willDarlehen = this.willDarlehenChangedSig() ?? false;
+
+        const disable = readonly || !willDarlehen;
 
         this.formUtils.setDisabledState(
           this.form.controls.betragDarlehen,
-          !willDarlehen,
+          disable,
           true,
         );
         this.formUtils.setDisabledState(
           this.form.controls.betragBezogenKanton,
-          !willDarlehen,
+          disable,
           true,
         );
         this.formUtils.setDisabledState(
           this.form.controls.schulden,
-          !willDarlehen,
+          disable,
           true,
         );
         this.formUtils.setDisabledState(
           this.form.controls.anzahlBetreibungen,
-          !willDarlehen,
+          disable,
           true,
         );
         this.formUtils.setDisabledState(
           this.form.controls.gruende,
-          !willDarlehen,
+          disable,
           true,
         );
       },
@@ -206,7 +207,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
             betragDarlehen: darlehen.betragDarlehen?.toString(),
             betragBezogenKanton: darlehen.betragBezogenKanton?.toString(),
             schulden: darlehen.schulden?.toString(),
-            anzahlBetreibungen: darlehen.anzahlBetreibungen?.toString(),
+            anzahlBetreibungen: darlehen.anzahlBetreibungen,
             gruende: {
               grundNichtBerechtigt: darlehen.grundNichtBerechtigt,
               grundAusbildungZwoelfJahre: darlehen.grundAusbildungZwoelfJahre,
@@ -226,7 +227,13 @@ export class SharedFeatureDarlehenComponent implements OnInit {
 
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
-    const formValues = convertTempFormToRealValues(this.form, ['willDarlehen']);
+    const formValues = convertTempFormToRealValues(this.form, [
+      'willDarlehen',
+      'betragDarlehen',
+      'betragBezogenKanton',
+      'schulden',
+      'anzahlBetreibungen',
+    ]);
 
     return {
       gesuchId: gesuch?.id,
@@ -240,7 +247,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
             formValues.betragBezogenKanton,
           ),
           schulden: fromFormatedNumber(formValues.schulden),
-          anzahlBetreibungen: fromFormatedNumber(formValues.anzahlBetreibungen),
+          anzahlBetreibungen: formValues.anzahlBetreibungen,
           grundNichtBerechtigt: formValues.gruende.grundNichtBerechtigt,
           grundAusbildungZwoelfJahre:
             formValues.gruende.grundAusbildungZwoelfJahre,

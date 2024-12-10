@@ -225,9 +225,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       personInAusbildung.geburtsdatum,
       this.languageSig(),
     );
-    const istErwachsen = !geburtsdatum
-      ? false
-      : (getDateDifference(geburtsdatum, new Date())?.years ?? 0) >= 18;
     const ausbildungsgang = ausbildungsstaettes
       .find((a) =>
         a.ausbildungsgaenge?.some(
@@ -255,7 +252,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       hatKinder,
       willSekundarstufeZwei,
       willTertiaerstufe,
-      istErwachsen,
       warErwachsenSteuerJahr,
     } as const;
   });
