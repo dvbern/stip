@@ -32,6 +32,7 @@ public class StipDbClearApplication implements QuarkusApplication {
 
     @Override
     public int run(String... args) throws Exception {
+        // Sanity check that nothing accidentally calls this
         if (!configService.getShouldClearDatabase()) {
             throw new IllegalStateException("StipDbClearApplication should only be ran if kstip.should-clear-database");
         }
