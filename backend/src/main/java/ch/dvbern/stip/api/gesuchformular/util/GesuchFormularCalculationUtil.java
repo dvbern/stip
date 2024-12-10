@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -63,14 +62,19 @@ public class GesuchFormularCalculationUtil {
         ) >= 18;
     }
 
-    public boolean isPersonInAusbildungVolljaehrig(final GesuchFormularUpdateDto gesuchFormular) {
-        if (gesuchFormular.getPersonInAusbildung() == null) {
+    public boolean isPersonInAusbildungVolljaehrig(final GesuchFormular gesuchFormular) {
+        if (
+            gesuchFormular.getPersonInAusbildung() == null
+            || gesuchFormular.getPersonInAusbildung().getGeburtsdatum() == null
+        ) {
             return false;
         }
 
-        return calculateNumberOfYearsBetween(
-            LocalDate.now(),
-            gesuchFormular.getPersonInAusbildung().getGeburtsdatum()
+        return Math.abs(
+            calculateNumberOfYearsBetween(
+                LocalDate.now(),
+                gesuchFormular.getPersonInAusbildung().getGeburtsdatum()
+            )
         ) >= 18;
     }
 }

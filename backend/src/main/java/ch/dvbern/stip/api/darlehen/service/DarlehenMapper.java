@@ -23,7 +23,7 @@ import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
-import org.mapstruct.BeforeMapping;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -36,7 +36,7 @@ public abstract class DarlehenMapper extends EntityUpdateMapper<DarlehenDto, Dar
     public abstract Darlehen paritalUpdate(DarlehenDto darlehenDto, @MappingTarget Darlehen entity);
 
     @Override
-    @BeforeMapping
+    @AfterMapping
     protected void resetDependentDataBeforeUpdate(
         final DarlehenDto newFormular,
         @MappingTarget final Darlehen targetFormular

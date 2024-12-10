@@ -59,7 +59,6 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -122,7 +121,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     /**
      * partial update mapper for the Gesuchssteller
      */
-    @Mapping(source = "darlehen", target = "darlehen")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract GesuchFormular partialUpdate(
         GesuchFormularUpdateDto gesuchFormularUpdateDto,
@@ -250,7 +248,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final @MappingTarget GesuchFormular targetFormular
     ) {
         resetEinnahmenKosten(newFormular, targetFormular);
-        resetDarlehen(newFormular, targetFormular);
         resetEltern(newFormular, targetFormular);
         resetLebenslaufItems(newFormular, targetFormular);
         resetPartner(newFormular, targetFormular);
@@ -259,9 +256,19 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
     @AfterMapping
     protected void resetDependentDataAfterUpdate(
+        final GesuchFormularUpdateDto newFormular,
+        final @MappingTarget GesuchFormular targetFormular
+    ) {
+        resetDarlehen(targetFormular);
+
+    }
+
+    @AfterMapping
+    protected void resetDependentDataAfterUpdate(
         final GesuchFormular newFormular
     ) {
         resetSteuerdatenAfterUpdate(newFormular);
+
     }
 
     void resetEinnahmenKosten(
@@ -323,11 +330,10 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     }
 
     void resetDarlehen(
-        final GesuchFormularUpdateDto newFormular,
         final GesuchFormular targetFormular
     ) {
         resetFieldIf(
-            () -> !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(newFormular),
+            () -> !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(targetFormular),
             "Set Darlehen to null because pia is not volljaehrig",
             () -> {
                 targetFormular.setDarlehen(null);
