@@ -38,7 +38,6 @@ public class PlzDataFetchScheduledTask {
     @Scheduled(cron = "{kstip.plzdata.cron}")
     public void run() {
         try {
-            // QuarkusTransaction.requiringNew().run(() -> {
             DataTenantResolver.setTenantId("none");
             LOG.info("Fetching PLZ data from scheduled task");
             try {
@@ -46,7 +45,6 @@ public class PlzDataFetchScheduledTask {
             } catch (IOException | CsvException e) {
                 LOG.error(e.toString(), e);
             }
-            // });
         } catch (Exception e) {
             LOG.error(e.toString(), e);
         }
