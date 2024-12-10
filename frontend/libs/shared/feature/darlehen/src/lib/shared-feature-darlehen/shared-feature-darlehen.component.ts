@@ -226,7 +226,13 @@ export class SharedFeatureDarlehenComponent implements OnInit {
 
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
-    const formValues = convertTempFormToRealValues(this.form, ['willDarlehen']);
+    const formValues = convertTempFormToRealValues(this.form, [
+      'willDarlehen',
+      'betragDarlehen',
+      'betragBezogenKanton',
+      'schulden',
+      'anzahlBetreibungen',
+    ]);
 
     return {
       gesuchId: gesuch?.id,
