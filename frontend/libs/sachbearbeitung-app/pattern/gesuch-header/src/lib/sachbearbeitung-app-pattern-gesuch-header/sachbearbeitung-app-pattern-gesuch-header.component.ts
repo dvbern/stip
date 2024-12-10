@@ -83,6 +83,11 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     return this.dokumentsStore.hasAcceptedAllDokumentsSig();
   });
 
+  /** Extract the gesuch id from the view to prevent unecessary signal updates */
+  private currentGesuchIdSig = computed(() => {
+    return this.currentGesuchSig()?.id;
+  });
+
   isTrancheRouteSig = computed(() => {
     const gesuch = this.currentGesuchSig();
     if (!gesuch) {
@@ -117,11 +122,16 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   constructor() {
     effect(
       () => {
-        const gesuchId = this.currentGesuchSig()?.id;
+        const gesuchId = this.currentGesuchIdSig();
         if (gesuchId) {
           this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
         }
+      },
+      { allowSignalWrites: true },
+    );
 
+    effect(
+      () => {
         const gesuchTrancheId =
           this.currentGesuchSig()?.gesuchTrancheToWorkWith.id;
         if (gesuchTrancheId) {
