@@ -679,6 +679,28 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: gesuchDokumentAblehnen
+  '/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}':
+    post:
+      tags:
+        - Dokument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UnterschriftenblattCreate'
+      parameters:
+        - $ref: '#/components/parameters/unterschriftenblattTyp'
+        - $ref: '#/components/parameters/gesuchId'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createUnterschriftenblatt
   '/fall/sb':
     get:
       tags:
@@ -2744,6 +2766,13 @@ components:
         technischesJahr:
           type: integer
     DokumentCreate:
+      required:
+        - fileUpload
+      type: object
+      properties:
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
+    UnterschriftenblattCreate:
       required:
         - fileUpload
       type: object
@@ -5046,6 +5075,12 @@ components:
       required: true
       schema:
         type: integer
+    unterschriftenblattTyp:
+      name: unterschriftenblattTyp
+      schema:
+        $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+      in: path
+      required: true
 
 security:
   - auth-uat-bern: []
