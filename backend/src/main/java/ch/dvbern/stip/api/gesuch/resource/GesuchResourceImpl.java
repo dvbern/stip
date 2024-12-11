@@ -131,13 +131,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public GesuchDto getCurrentGesuch(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
-        return gesuchService.findGesuchWithOldestTranche(gesuchId).orElseThrow(NotFoundException::new);
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
     public GesuchDto getGesuch(UUID gesuchId, UUID gesuchTrancheId) {
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchService.findGesuchWithTranche(gesuchId, gesuchTrancheId).orElseThrow(NotFoundException::new);
@@ -148,6 +141,14 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public List<FallDashboardItemDto> getGsDashboard() {
         return gesuchService.getFallDashboardItemDtos();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @AllowAll
+    @Override
+    public GesuchWithChangesDto getGsAenderungChangesInBearbeitung(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canRead(aenderungId);
+        return gesuchService.getGsTrancheChangesInBearbeitung(aenderungId);
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
@@ -219,16 +220,16 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public GesuchWithChangesDto getGsTrancheChanges(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canRead(aenderungId);
-        return gesuchService.getGsTrancheChanges(aenderungId);
+    public GesuchWithChangesDto getInitialTrancheChangesByTrancheId(UUID trancheId) {
+        gesuchTrancheAuthorizer.canReadInitialTrancheChanges(trancheId);
+        return gesuchService.getChangesByTrancheId(trancheId);
     }
 
     // TODO KSTIP-1247: Update which roles can do this
     @RolesAllowed(GESUCH_READ)
     @AllowAll
     @Override
-    public GesuchWithChangesDto getSbTrancheChanges(UUID aenderungId) {
+    public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId) {
         return gesuchService.getSbTrancheChanges(aenderungId);
     }
 

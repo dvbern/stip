@@ -14,7 +14,7 @@
   <!-- Status -->
   <mat-form-field dvSharedUiFormField>
     <mat-label>
-      @if (viewSig().isEditingTranche) {
+      @if (viewSig().isEditingAenderung) {
         {{ 'shared.form.tranche.status.label.' + viewSig().tranche?.typ | translate }}
       } @else {
         {{ 'shared.form.tranche.status.label.GESUCH' | translate }}

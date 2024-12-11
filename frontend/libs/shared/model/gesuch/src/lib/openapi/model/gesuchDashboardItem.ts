@@ -18,6 +18,7 @@ export interface GesuchDashboardItem {
     gesuchsperiode: Gesuchsperiode;
     gesuchStatus: Gesuchstatus;
     id: string;
+    currentTrancheId: string;
     offeneAenderung?: GesuchTrancheSlim;
     missingDocuments?: GesuchDashboardItemMissingDocuments;
 }

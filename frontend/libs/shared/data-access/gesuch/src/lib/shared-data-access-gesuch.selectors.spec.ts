@@ -32,7 +32,9 @@ describe('selectSharedDataAccessGesuchsView', () => {
       gesuch: null,
       gesuchs: [],
       gesuchFormular: null,
-      isEditingTranche: null,
+      isEditingAenderung: null,
+      trancheTyp: null,
+      gsDashboard: [],
       cache: {
         gesuch: null,
         gesuchId: null,
@@ -60,7 +62,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       state.loading,
       state.gesuch,
       state.gesuchFormular,
-      state.isEditingTranche,
+      state.isEditingAenderung,
     );
     expect(result.loading).toBeFalsy();
   });
@@ -73,6 +75,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
     } as Partial<Gesuch> as any;
     const action = SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
       gesuch: expected,
+      typ: 'TRANCHE',
     });
     expect(reducer(undefined, action).gesuchFormular).toEqual(
       expected.gesuchTrancheToWorkWith.gesuchFormular,
@@ -87,6 +90,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
     } as Partial<Gesuch> as any;
     const firstAction = SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
       gesuch: firstUpdate,
+      typ: 'TRANCHE',
     });
     const firstState = reducer(undefined, firstAction);
     const secondAction = SharedEventGesuchFormPerson.init();
@@ -117,7 +121,9 @@ describe('selectSharedDataAccessGesuchsView', () => {
       gesuch: null,
       gesuchs: [],
       gesuchFormular: null,
-      isEditingTranche: null,
+      isEditingAenderung: null,
+      trancheTyp: null,
+      gsDashboard: [],
       steuerdatenTabs: success([SteuerdatenTyp.FAMILIE]),
       cache: {
         gesuch: null,

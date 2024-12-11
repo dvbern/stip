@@ -4,7 +4,7 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -72,7 +72,7 @@ public interface GesuchTrancheResource {
     @GET
     @Path("/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    List<GesuchTrancheSlimDto> getAllTranchenForGesuch(@PathParam("gesuchId") UUID gesuchId);
+    GesuchTrancheListDto getAllTranchenForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchTrancheId}/dokumente/{dokumentTyp}")

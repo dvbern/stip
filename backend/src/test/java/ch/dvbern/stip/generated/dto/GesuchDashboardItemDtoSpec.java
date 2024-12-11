@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_ID,
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_CURRENT_TRANCHE_ID,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_OFFENE_AENDERUNG,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_MISSING_DOCUMENTS
 })
@@ -49,6 +50,9 @@ public class GesuchDashboardItemDtoSpec {
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
+
+  public static final String JSON_PROPERTY_CURRENT_TRANCHE_ID = "currentTrancheId";
+  private UUID currentTrancheId;
 
   public static final String JSON_PROPERTY_OFFENE_AENDERUNG = "offeneAenderung";
   private GesuchTrancheSlimDtoSpec offeneAenderung;
@@ -137,6 +141,32 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
+  public GesuchDashboardItemDtoSpec currentTrancheId(UUID currentTrancheId) {
+    
+    this.currentTrancheId = currentTrancheId;
+    return this;
+  }
+
+   /**
+   * Get currentTrancheId
+   * @return currentTrancheId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CURRENT_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getCurrentTrancheId() {
+    return currentTrancheId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CURRENT_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCurrentTrancheId(UUID currentTrancheId) {
+    this.currentTrancheId = currentTrancheId;
+  }
+
+
   public GesuchDashboardItemDtoSpec offeneAenderung(GesuchTrancheSlimDtoSpec offeneAenderung) {
     
     this.offeneAenderung = offeneAenderung;
@@ -200,13 +230,14 @@ public class GesuchDashboardItemDtoSpec {
     return Objects.equals(this.gesuchsperiode, gesuchDashboardItem.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuchDashboardItem.gesuchStatus) &&
         Objects.equals(this.id, gesuchDashboardItem.id) &&
+        Objects.equals(this.currentTrancheId, gesuchDashboardItem.currentTrancheId) &&
         Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
         Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, offeneAenderung, missingDocuments);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, missingDocuments);
   }
 
   @Override
@@ -216,6 +247,7 @@ public class GesuchDashboardItemDtoSpec {
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    currentTrancheId: ").append(toIndentedString(currentTrancheId)).append("\n");
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
     sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");
     sb.append("}");

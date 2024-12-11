@@ -121,7 +121,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
     effect(
       () => {
         const {
-          isEditingTranche,
+          isEditingAenderung,
           gesuch,
           tranche,
           gesuchsNummer,
@@ -140,7 +140,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
         }
         const pia = tranche.gesuchFormular?.personInAusbildung;
         const useTrancheStatus =
-          isEditingTranche && tranche.status !== 'UEBERPRUEFEN';
+          isEditingAenderung && tranche.status !== 'UEBERPRUEFEN';
         const status = useTrancheStatus ? tranche.status : gesuch?.gesuchStatus;
         const type = useTrancheStatus ? 'tranche' : 'contract';
 
