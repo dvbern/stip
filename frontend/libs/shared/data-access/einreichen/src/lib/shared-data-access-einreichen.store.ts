@@ -212,15 +212,15 @@ export class EinreichenStore extends signalStore(
     });
   };
 
-  gesuchEinreichen$ = rxMethod<{ gesuchId: string }>(
+  gesuchEinreichen$ = rxMethod<{ gesuchTrancheId: string }>(
     pipe(
       tap(() => {
         patchState(this, () => ({
           einreichungsResult: pending(),
         }));
       }),
-      switchMap(({ gesuchId }) =>
-        this.gesuchService.gesuchEinreichen$({ gesuchId }).pipe(
+      switchMap(({ gesuchTrancheId }) =>
+        this.gesuchService.gesuchEinreichen$({ gesuchTrancheId }).pipe(
           handleApiResponse(
             (einreichen) =>
               patchState(this, { einreichungsResult: einreichen }),

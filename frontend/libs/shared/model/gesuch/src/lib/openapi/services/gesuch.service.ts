@@ -39,31 +39,29 @@ import { Configuration }                                     from '../configurat
 
 
 export interface GesuchServiceBearbeitungAbschliessenRequestParams {
-    /** Die ID vom Gesuch */
-    gesuchId: string;
+    gesuchTrancheId: string;
 }
 
 export interface GesuchServiceChangeGesuchStatusToBereitFuerBearbeitungRequestParams {
-    gesuchId: string;
+    gesuchTrancheId: string;
     kommentar?: Kommentar;
 }
 
 export interface GesuchServiceChangeGesuchStatusToInBearbeitungRequestParams {
-    gesuchId: string;
+    gesuchTrancheId: string;
 }
 
 export interface GesuchServiceChangeGesuchStatusToNegativeVerfuegungRequestParams {
-    /** Die ID vom Gesuch */
-    gesuchId: string;
+    gesuchTrancheId: string;
     ausgewaehlterGrund: AusgewaehlterGrund;
 }
 
 export interface GesuchServiceChangeGesuchStatusToVerfuegtRequestParams {
-    gesuchId: string;
+    gesuchTrancheId: string;
 }
 
 export interface GesuchServiceChangeGesuchStatusToVersendetRequestParams {
-    gesuchId: string;
+    gesuchTrancheId: string;
 }
 
 export interface GesuchServiceCreateGesuchRequestParams {
@@ -75,11 +73,11 @@ export interface GesuchServiceDeleteGesuchRequestParams {
 }
 
 export interface GesuchServiceGesuchEinreichenRequestParams {
-    gesuchId: string;
+    gesuchTrancheId: string;
 }
 
 export interface GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams {
-    gesuchId: string;
+    gesuchTrancheId: string;
 }
 
 export interface GesuchServiceGesuchTrancheFehlendeDokumenteEinreichenRequestParams {
@@ -87,8 +85,7 @@ export interface GesuchServiceGesuchTrancheFehlendeDokumenteEinreichenRequestPar
 }
 
 export interface GesuchServiceGesuchZurueckweisenRequestParams {
-    /** Die ID vom Gesuch */
-    gesuchId: string;
+    gesuchTrancheId: string;
     kommentar?: Kommentar;
 }
 
@@ -215,9 +212,9 @@ export class GesuchService {
      public bearbeitungAbschliessen$(requestParameters: GesuchServiceBearbeitungAbschliessenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
      public bearbeitungAbschliessen$(requestParameters: GesuchServiceBearbeitungAbschliessenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
      public bearbeitungAbschliessen$(requestParameters: GesuchServiceBearbeitungAbschliessenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling bearbeitungAbschliessen$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling bearbeitungAbschliessen$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -265,7 +262,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/bearbeitungAbschliessen`;
+        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/bearbeitungAbschliessen`;
         return this.httpClient.request<Gesuch>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -287,9 +284,9 @@ export class GesuchService {
      public changeGesuchStatusToBereitFuerBearbeitung$(requestParameters: GesuchServiceChangeGesuchStatusToBereitFuerBearbeitungRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
      public changeGesuchStatusToBereitFuerBearbeitung$(requestParameters: GesuchServiceChangeGesuchStatusToBereitFuerBearbeitungRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
      public changeGesuchStatusToBereitFuerBearbeitung$(requestParameters: GesuchServiceChangeGesuchStatusToBereitFuerBearbeitungRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling changeGesuchStatusToBereitFuerBearbeitung$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToBereitFuerBearbeitung$.');
         }
         const kommentar = requestParameters.kommentar;
 
@@ -347,7 +344,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/status/bereit-fuer-bearbeitung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuch/status/bereit-fuer-bearbeitung/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Gesuch>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -370,9 +367,9 @@ export class GesuchService {
      public changeGesuchStatusToInBearbeitung$(requestParameters: GesuchServiceChangeGesuchStatusToInBearbeitungRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
      public changeGesuchStatusToInBearbeitung$(requestParameters: GesuchServiceChangeGesuchStatusToInBearbeitungRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
      public changeGesuchStatusToInBearbeitung$(requestParameters: GesuchServiceChangeGesuchStatusToInBearbeitungRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling changeGesuchStatusToInBearbeitung$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToInBearbeitung$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -420,7 +417,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/status/in-bearbeitung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuch/status/in-bearbeitung/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Gesuch>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -442,9 +439,9 @@ export class GesuchService {
      public changeGesuchStatusToNegativeVerfuegung$(requestParameters: GesuchServiceChangeGesuchStatusToNegativeVerfuegungRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
      public changeGesuchStatusToNegativeVerfuegung$(requestParameters: GesuchServiceChangeGesuchStatusToNegativeVerfuegungRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
      public changeGesuchStatusToNegativeVerfuegung$(requestParameters: GesuchServiceChangeGesuchStatusToNegativeVerfuegungRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling changeGesuchStatusToNegativeVerfuegung$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToNegativeVerfuegung$.');
         }
         const ausgewaehlterGrund = requestParameters.ausgewaehlterGrund;
         if (ausgewaehlterGrund === null || ausgewaehlterGrund === undefined) {
@@ -505,7 +502,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/status/negative-verfuegung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuch/status/negative-verfuegung/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Gesuch>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -528,9 +525,9 @@ export class GesuchService {
      public changeGesuchStatusToVerfuegt$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegtRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
      public changeGesuchStatusToVerfuegt$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegtRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
      public changeGesuchStatusToVerfuegt$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegtRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling changeGesuchStatusToVerfuegt$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToVerfuegt$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -578,7 +575,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/status/verfuegt/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuch/status/verfuegt/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Gesuch>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -600,9 +597,9 @@ export class GesuchService {
      public changeGesuchStatusToVersendet$(requestParameters: GesuchServiceChangeGesuchStatusToVersendetRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
      public changeGesuchStatusToVersendet$(requestParameters: GesuchServiceChangeGesuchStatusToVersendetRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
      public changeGesuchStatusToVersendet$(requestParameters: GesuchServiceChangeGesuchStatusToVersendetRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling changeGesuchStatusToVersendet$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToVersendet$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -650,7 +647,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/status/versendet/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuch/status/versendet/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Gesuch>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -824,13 +821,13 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public gesuchEinreichen$(requestParameters: GesuchServiceGesuchEinreichenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any>;
-     public gesuchEinreichen$(requestParameters: GesuchServiceGesuchEinreichenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
-     public gesuchEinreichen$(requestParameters: GesuchServiceGesuchEinreichenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public gesuchEinreichen$(requestParameters: GesuchServiceGesuchEinreichenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Gesuch>;
+     public gesuchEinreichen$(requestParameters: GesuchServiceGesuchEinreichenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
+     public gesuchEinreichen$(requestParameters: GesuchServiceGesuchEinreichenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
      public gesuchEinreichen$(requestParameters: GesuchServiceGesuchEinreichenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling gesuchEinreichen$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchEinreichen$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -878,8 +875,8 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/einreichen`;
-        return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
+        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/einreichen`;
+        return this.httpClient.request<Gesuch>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -901,9 +898,9 @@ export class GesuchService {
      public gesuchFehlendeDokumenteUebermitteln$(requestParameters: GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
      public gesuchFehlendeDokumenteUebermitteln$(requestParameters: GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
      public gesuchFehlendeDokumenteUebermitteln$(requestParameters: GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling gesuchFehlendeDokumenteUebermitteln$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchFehlendeDokumenteUebermitteln$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -951,7 +948,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/fehlendeDokumente`;
+        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/fehlendeDokumente`;
         return this.httpClient.request<Gesuch>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -1047,9 +1044,9 @@ export class GesuchService {
      public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
      public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
      public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling gesuchZurueckweisen$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchZurueckweisen$.');
         }
         const kommentar = requestParameters.kommentar;
 
@@ -1107,7 +1104,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gesuchZurueckweisen`;
+        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gesuchZurueckweisen`;
         return this.httpClient.request<Gesuch>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
