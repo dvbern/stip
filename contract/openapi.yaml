@@ -2227,16 +2227,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DokumentTyp'
+                $ref: '#/components/schemas/DokumenteToUpload'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getRequiredGesuchDokumentTyp
+      operationId: getDocumentsToUpload
   '/gesuchtranche/{gesuchId}':
     parameters:
       - name: gesuchId
@@ -4963,6 +4961,18 @@ components:
       properties:
         decisionId:
           $ref: '#/components/schemas/UUID'
+    DokumenteToUpload:
+      type: object
+      properties:
+        required:
+          type: array
+          items:
+            $ref: '#/components/schemas/DokumentTyp'
+        unterschriftenblaetter:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'        
+
   responses:
     Unauthorized:
       content:
