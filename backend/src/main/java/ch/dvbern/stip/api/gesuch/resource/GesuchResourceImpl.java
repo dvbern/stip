@@ -116,7 +116,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
-        gesuchService.gesuchStatusToVerfuegt(gesuchId);
+        gesuchService.gesuchStatusToVersendet(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
