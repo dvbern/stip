@@ -61,6 +61,7 @@ public class Unterschriftenblatt extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private UnterschriftenblattDokumentTyp dokumentTyp;
 
+    // TODO KSTIP-1465: Make this OneToMany
     @ManyToMany
     @JoinTable(
         name = "unterschriftenblatt_dokument",

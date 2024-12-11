@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
@@ -75,6 +76,11 @@ public interface GesuchTrancheResource {
     List<GesuchTrancheSlimDto> getAllTranchenForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
+    @Path("/{gesuchTrancheId}/requiredDokumente")
+    @Produces({ "application/json", "text/plain" })
+    DokumenteToUploadDto getDocumentsToUpload(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
     @Path("/{gesuchTrancheId}/dokumente/{dokumentTyp}")
     @Produces({ "application/json", "text/plain" })
     GesuchDokumentDto getGesuchDokument(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp);
@@ -83,11 +89,6 @@ public interface GesuchTrancheResource {
     @Path("/{gesuchTrancheId}/dokumente")
     @Produces({ "application/json", "text/plain" })
     List<GesuchDokumentDto> getGesuchDokumente(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @GET
-    @Path("/{gesuchTrancheId}/requiredDokumente")
-    @Produces({ "application/json", "text/plain" })
-    List<ch.dvbern.stip.api.dokument.type.DokumentTyp> getRequiredGesuchDokumentTyp(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/validatePages/{gesuchTrancheId}")

@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.DokumenteToUploadMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
@@ -58,8 +59,10 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
+import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
@@ -100,14 +103,23 @@ public class GesuchTrancheService {
     private final SteuerdatenMapper steuerdatenMapper;
     private final MailService mailService;
     private final NotificationService notificationService;
+    private final DokumenteToUploadMapper dokumenteToUploadMapper;
 
     public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(final UUID gesuchId) {
         return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
     }
 
-    public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTrancheId) {
+    public DokumenteToUploadDto getDokumenteToUpload(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        return getRequiredDokumentTypes(gesuchTranche);
+        final var required = getRequiredDokumentTypes(gesuchTranche);
+        // TODO KSTIP-1465: Call required service
+        final var unterschriftenblaetter = new ArrayList<UnterschriftenblattDokumentTyp>();
+
+        return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter);
+    }
+
+    public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTranche) {
+        return getRequiredDokumentTypes(gesuchTrancheRepository.requireById(gesuchTranche));
     }
 
     public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche) {
