@@ -26,7 +26,7 @@ import jakarta.ws.rs.core.Application;
 @ApplicationPath("api/v1")
 public class StipApi extends Application {
     public static void main(final String... args) {
-        final var shouldClear = Boolean.parseBoolean(System.getenv("KSTIP_CLEAR_DATABASE"));
+        final var shouldClear = Boolean.parseBoolean(System.getenv("KSTIP_SHOULD_CLEAR_DATABASE"));
 
         if (shouldClear) {
             Quarkus.run(StipDbClearApplication.class, args);
