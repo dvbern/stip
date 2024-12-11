@@ -44,6 +44,8 @@ public class PlzDataFetchScheduledTask {
                 plzDataFetchService.fetchData();
             } catch (IOException | CsvException e) {
                 LOG.error(e.toString(), e);
+            } finally {
+                DataTenantResolver.setTenantId(null);
             }
         } catch (Exception e) {
             LOG.error(e.toString(), e);
