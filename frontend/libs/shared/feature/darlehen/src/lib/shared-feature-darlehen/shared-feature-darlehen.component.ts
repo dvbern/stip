@@ -171,27 +171,27 @@ export class SharedFeatureDarlehenComponent implements OnInit {
         this.formUtils.setDisabledState(
           this.form.controls.betragDarlehen,
           disable,
-          true,
+          !willDarlehen,
         );
         this.formUtils.setDisabledState(
           this.form.controls.betragBezogenKanton,
           disable,
-          true,
+          !willDarlehen,
         );
         this.formUtils.setDisabledState(
           this.form.controls.schulden,
           disable,
-          true,
+          !willDarlehen,
         );
         this.formUtils.setDisabledState(
           this.form.controls.anzahlBetreibungen,
           disable,
-          true,
+          !willDarlehen,
         );
         this.formUtils.setDisabledState(
           this.form.controls.gruende,
           disable,
-          true,
+          !willDarlehen,
         );
       },
       { allowSignalWrites: true },
