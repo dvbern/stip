@@ -38,14 +38,15 @@ public class PlzDataFetchScheduledTask {
     @Scheduled(cron = "{kstip.plzdata.cron}")
     public void run() {
         try {
-            DataTenantResolver.setTenantId("none");
             LOG.info("Fetching PLZ data from scheduled task");
+            DataTenantResolver.setTenantId("none");
             try {
                 plzDataFetchService.fetchData();
             } catch (IOException | CsvException e) {
                 LOG.error(e.toString(), e);
             } finally {
                 DataTenantResolver.setTenantId(null);
+                LOG.info("Done Fetching PLZ data");
             }
         } catch (Exception e) {
             LOG.error(e.toString(), e);
