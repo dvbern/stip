@@ -2533,6 +2533,12 @@ components:
         - EK_VERDIENST
         - EK_VERMOEGEN
       type: string
+    UnterschriftenblattDokumentTyp:
+      type: string
+      enum:
+        - GEMEINSAM
+        - MUTTER
+        - VATER
     ElternAbwesenheitsGrund:
       enum:
         - VERSTORBEN
