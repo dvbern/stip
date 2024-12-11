@@ -554,7 +554,6 @@
   "shared.form.darlehen.grundHoheGebuehren.label": "Complément à la bourse pour frais de scolarité et d'études élevés.",
   "shared.form.darlehen.grundAnschaffungenFuerAusbildung.label": "Complément à la bourse pour les achats indispensables liés à la formation.",
   "shared.form.darlehen.grundZweitausbildung.label": "Pour une deuxième formation",
-  "shared.form.darlehen.error.keinGrund": "Veuillez sélectionner une raison",
   "shared.form.darlehen.file.BETREIBUNGSREGISTERAUSZUG": "Extrait du registre des poursuites",
   "shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN": "Il est obligatoire de télécharger un relevé des coûts réels des parents",
   "shared.form.darlehen.file.SCHULGELDRECHNUNG": "Il est obligatoire de télécharger une copie de la facture des frais de scolarité.",

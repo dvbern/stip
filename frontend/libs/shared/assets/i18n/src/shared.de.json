@@ -554,7 +554,6 @@
   "shared.form.darlehen.grundHoheGebuehren.label": "Ergänzend zum Stipendium für hohe Schul- und Studiengebühren.",
   "shared.form.darlehen.grundAnschaffungenFuerAusbildung.label": "Ergänzend zum Stipendium für unerlässliche Anschaffungen in Zusammenhang mit der Ausbildung.",
   "shared.form.darlehen.grundZweitausbildung.label": "Für Zweitausbildung",
-  "shared.form.darlehen.error.keinGrund": "Bitte wählen Sie mindestens einen Grund für das Darlehen.",
   "shared.form.darlehen.file.BETREIBUNGSREGISTERAUSZUG": "Betreibungsregisterauszug",
   "shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN": "Es ist zwingend eine Aufstellung der tatsächlichen Kosten der Eltern hochzuladen",
   "shared.form.darlehen.file.SCHULGELDRECHNUNG": "Es ist zwingend eine Kopie der Schulgeldrechnung hochzuladen.",
