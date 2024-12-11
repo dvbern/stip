@@ -49,6 +49,9 @@ public abstract class GesuchMapper {
 
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
     @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
+    @Mapping(source = "ausbildung.fall.id", target = "fallId")
+    @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
+    @Mapping(source = "ausbildung.id", target = "ausbildungId")
     public abstract GesuchWithChangesDto toWithChangesDto(Gesuch gesuch);
 
     @Named("getFullNameOfSachbearbeiter")

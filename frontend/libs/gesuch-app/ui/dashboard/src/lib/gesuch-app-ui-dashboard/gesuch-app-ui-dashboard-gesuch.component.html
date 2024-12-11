@@ -91,9 +91,13 @@
       >
         @if (gesuch.id) {
           @if (gesuch.isActive) {
-            @let trancheId = gesuch.missingDocuments?.trancheId;
+            @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
             @if (gesuch.canEdit) {
-              <a class="btn btn-primary" data-testid="cockpit-gesuch-edit" [routerLink]="['/gesuch', gesuch.id]">
+              <a
+                class="btn btn-primary"
+                data-testid="cockpit-gesuch-edit"
+                [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
+              >
                 {{ 'gesuch-app.dashboard.gesuch.edit' | translate }}
               </a>
 
@@ -107,18 +111,22 @@
                   <span>{{ 'gesuch-app.dashboard.gesuch.delete' | translate }}</span>
                 </button>
               }
-            } @else if (trancheId) {
+            } @else if (missingDocTrancheId) {
               <a
                 class="btn btn-primary"
                 data-testid="cockpit-gesuch-upload-missing-documents"
-                [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', trancheId]"
+                [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', missingDocTrancheId]"
               >
                 {{ 'gesuch-app.dashboard.gesuch.uploadMissingDocuments' | translate }}
               </a>
             }
           }
           @if (!gesuch.isActive || gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
-            <a class="btn btn-outline-primary" data-testid="cockpit-gesuch-edit" [routerLink]="['/gesuch', gesuch.id]">
+            <a
+              class="btn btn-outline-primary"
+              data-testid="cockpit-gesuch-edit"
+              [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
+            >
               {{ 'gesuch-app.dashboard.gesuch.open' | translate }}
             </a>
 

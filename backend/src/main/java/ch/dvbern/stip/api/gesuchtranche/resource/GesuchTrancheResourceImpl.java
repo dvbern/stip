@@ -31,7 +31,7 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -61,9 +61,9 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(UUID gesuchId) {
+    public GesuchTrancheListDto getAllTranchenForGesuch(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
-        return gesuchTrancheService.getAllTranchenForGesuch(gesuchId);
+        return gesuchTrancheService.getAllTranchenAndInitalTrancheForGesuch(gesuchId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -117,7 +117,7 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     public void aenderungEinreichen(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canEinreichen(aenderungId);
+        gesuchTrancheAuthorizer.canAenderungEinreichen(aenderungId);
         gesuchTrancheService.aenderungEinreichen(aenderungId);
     }
 

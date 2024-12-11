@@ -26,6 +26,7 @@ public class GesuchDashboardItemDto  implements Serializable {
   private @Valid GesuchsperiodeDto gesuchsperiode;
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
   private @Valid UUID id;
+  private @Valid UUID currentTrancheId;
   private @Valid GesuchTrancheSlimDto offeneAenderung;
   private @Valid GesuchDashboardItemMissingDocumentsDto missingDocuments;
 
@@ -88,6 +89,25 @@ public class GesuchDashboardItemDto  implements Serializable {
 
   /**
    **/
+  public GesuchDashboardItemDto currentTrancheId(UUID currentTrancheId) {
+    this.currentTrancheId = currentTrancheId;
+    return this;
+  }
+
+  
+  @JsonProperty("currentTrancheId")
+  @NotNull
+  public UUID getCurrentTrancheId() {
+    return currentTrancheId;
+  }
+
+  @JsonProperty("currentTrancheId")
+  public void setCurrentTrancheId(UUID currentTrancheId) {
+    this.currentTrancheId = currentTrancheId;
+  }
+
+  /**
+   **/
   public GesuchDashboardItemDto offeneAenderung(GesuchTrancheSlimDto offeneAenderung) {
     this.offeneAenderung = offeneAenderung;
     return this;
@@ -135,13 +155,14 @@ public class GesuchDashboardItemDto  implements Serializable {
     return Objects.equals(this.gesuchsperiode, gesuchDashboardItem.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuchDashboardItem.gesuchStatus) &&
         Objects.equals(this.id, gesuchDashboardItem.id) &&
+        Objects.equals(this.currentTrancheId, gesuchDashboardItem.currentTrancheId) &&
         Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
         Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, offeneAenderung, missingDocuments);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, missingDocuments);
   }
 
   @Override
@@ -152,6 +173,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    currentTrancheId: ").append(toIndentedString(currentTrancheId)).append("\n");
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
     sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");
     sb.append("}");

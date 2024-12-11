@@ -3,14 +3,16 @@ import { createSelector } from '@ngrx/store';
 import { IChange, diff } from 'json-diff-ts';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
-import { CompileTimeConfig } from '@dv/shared/model/config';
+import { AppType, CompileTimeConfig } from '@dv/shared/model/config';
 import {
   AppTrancheChange,
   GesuchTranche,
   GesuchTrancheTyp,
+  GesuchUrlType,
   SharedModelGesuch,
   SharedModelGesuchFormularPropsSteuerdatenSteps,
   SteuerdatenTyp,
+  TRANCHE_TYPE_INITIAL,
 } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
@@ -59,8 +61,11 @@ export const selectRouteId = selectRouteParam('id');
 
 const isExistingTrancheTyp = (
   trancheTyp: string | undefined,
-): trancheTyp is GesuchTrancheTyp => {
-  return Object.keys(GesuchTrancheTyp).includes(trancheTyp ?? '');
+): trancheTyp is GesuchUrlType => {
+  return (
+    Object.keys(GesuchTrancheTyp).includes(trancheTyp ?? '') ||
+    trancheTyp === TRANCHE_TYPE_INITIAL
+  );
 };
 export const selectTrancheTyp = createSelector(
   selectRouteParam('trancheTyp'),
@@ -88,7 +93,8 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   sharedDataAccessGesuchsFeature.selectLoading,
   sharedDataAccessGesuchsFeature.selectGesuch,
   sharedDataAccessGesuchsFeature.selectGesuchFormular,
-  sharedDataAccessGesuchsFeature.selectIsEditingTranche,
+  sharedDataAccessGesuchsFeature.selectIsEditingAenderung,
+  sharedDataAccessGesuchsFeature.selectTrancheTyp,
   (
     config,
     { tranchenChanges },
@@ -96,20 +102,11 @@ export const selectSharedDataAccessGesuchsView = createSelector(
     loading,
     gesuch,
     gesuchFormular,
-    isEditingTranche,
+    isEditingAenderung,
+    trancheTyp,
   ) => {
     const gesuchTranche = gesuch?.gesuchTrancheToWorkWith;
-    const trancheSetting = createTrancheSetting(
-      isEditingTranche,
-      gesuchTranche,
-    );
-    const appType = config.compileTimeConfig?.appType;
-    const gesuchPermissions = getGesuchPermissions(gesuch, appType);
-    const tranchePermissions = getTranchePermissions(gesuch, appType);
-    const canWrite =
-      (trancheSetting?.type === 'AENDERUNG'
-        ? tranchePermissions.canWrite
-        : gesuchPermissions.canWrite) ?? true;
+    const trancheSetting = createTrancheSetting(trancheTyp, gesuchTranche);
 
     return {
       config,
@@ -118,10 +115,12 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       gesuch,
       gesuchFormular,
       tranchenChanges,
-      isEditingTranche,
-      readonly: !canWrite,
-      gesuchPermissions,
-      tranchePermissions,
+      isEditingAenderung,
+      ...preparePermissions(
+        trancheTyp,
+        gesuch,
+        config.compileTimeConfig?.appType,
+      ),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       trancheSetting,
       gesuchId: gesuch?.id,
@@ -138,10 +137,7 @@ export const selectSharedDataAccessGesuchTrancheSettingsView = createSelector(
     const gesuchTranche = state.gesuch?.gesuchTrancheToWorkWith;
 
     return {
-      trancheSetting: createTrancheSetting(
-        state.isEditingTranche,
-        gesuchTranche,
-      ),
+      trancheSetting: createTrancheSetting(state.trancheTyp, gesuchTranche),
       cachedGesuchId: state.cache.gesuchId,
       cachedGesuchFormular: currentForm,
       tranchenChanges,
@@ -150,13 +146,13 @@ export const selectSharedDataAccessGesuchTrancheSettingsView = createSelector(
 );
 
 const createTrancheSetting = (
-  isEditingTranche: boolean | null,
+  gesuchUrlTyp: GesuchUrlType | null,
   gesuchTranche: GesuchTranche | undefined,
 ) => {
-  return gesuchTranche && isEditingTranche
+  return gesuchTranche && gesuchUrlTyp
     ? ({
         type: gesuchTranche.typ,
-        routesSuffix: [lowercased(gesuchTranche.typ), gesuchTranche.id],
+        routesSuffix: [lowercased(gesuchUrlTyp), gesuchTranche.id],
       } as const)
     : null;
 };
@@ -191,32 +187,50 @@ export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
 
 export const selectSharedDataAccessGesuchCache = createSelector(
   sharedDataAccessGesuchsFeature.selectCache,
-  sharedDataAccessGesuchsFeature.selectIsEditingTranche,
+  sharedDataAccessGesuchsFeature.selectIsEditingAenderung,
   sharedDataAccessGesuchsFeature.selectTrancheTyp,
-  (cache, isEditingTranche, trancheTyp) => ({
+  (cache, isEditingAenderung, trancheTyp) => ({
     ...cache,
-    isEditingTranche,
+    isEditingAenderung,
     trancheTyp,
   }),
 );
 export const selectSharedDataAccessGesuchCacheView = createSelector(
   selectSharedDataAccessGesuchCache,
   selectSharedDataAccessConfigsView,
-  ({ isEditingTranche, trancheTyp, ...cache }, config) => {
-    const appType = config.compileTimeConfig?.appType;
-    const gesuchPermissions = getGesuchPermissions(cache.gesuch, appType);
-    const tranchePermissions = getTranchePermissions(cache.gesuch, appType);
-
+  ({ trancheTyp, ...cache }, config) => {
     return {
       cache,
       trancheTyp,
-      readonly: isEditingTranche
-        ? !tranchePermissions.canWrite
-        : !gesuchPermissions.canWrite,
-      gesuchPermissions,
+      ...preparePermissions(
+        trancheTyp,
+        cache.gesuch,
+        config.compileTimeConfig?.appType,
+      ),
     };
   },
 );
+
+const preparePermissions = (
+  trancheTyp: GesuchUrlType | null,
+  gesuch: SharedModelGesuch | null,
+  appType: AppType | undefined,
+) => {
+  if (!gesuch || !appType)
+    return { readonly: false, gesuchPermissions: {}, tranchePermissions: {} };
+  const gesuchPermissions = getGesuchPermissions(gesuch, appType);
+  const tranchePermissions = getTranchePermissions(gesuch, appType);
+  const canWrite =
+    (trancheTyp === 'AENDERUNG'
+      ? tranchePermissions.canWrite
+      : gesuchPermissions.canWrite) ?? true;
+
+  return {
+    readonly: trancheTyp === 'INITIAL' || !canWrite,
+    gesuchPermissions,
+    tranchePermissions,
+  };
+};
 
 /**
  * Returns true if the gesuchFormular has the given property

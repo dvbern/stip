@@ -10,6 +10,7 @@ import {
   GesuchService,
   GesuchServiceGetGesucheSbRequestParams,
   PaginatedSbDashboard,
+  SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
 import { StatusUebergang } from '@dv/shared/util/gesuch';
 import {
@@ -42,7 +43,10 @@ export class GesuchStore extends signalStore(
   private store = inject(Store);
   private gesuchService = inject(GesuchService);
   private handleStatusChange =
-    <T, R>(handler$: (params: T) => Observable<R>, onSuccess?: () => void) =>
+    <T, R extends SharedModelGesuch>(
+      handler$: (params: T) => Observable<R>,
+      onSuccess?: (data: R) => void,
+    ) =>
     (source$: Observable<T>) => {
       return source$.pipe(
         tap(() => patchState(this, { lastStatusChange: initial() })),
@@ -52,9 +56,13 @@ export class GesuchStore extends signalStore(
             patchState(this, { lastStatusChange: success(null) });
           },
           {
-            onSuccess: () => {
-              this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-              onSuccess?.();
+            onSuccess: (data) => {
+              this.store.dispatch(
+                SharedDataAccessGesuchEvents.gesuchSetReturned({
+                  gesuch: data,
+                }),
+              );
+              onSuccess?.(data);
             },
           },
         ),
@@ -84,52 +92,75 @@ export class GesuchStore extends signalStore(
   );
 
   setStatus$ = {
-    VERFUEGT: rxMethod<{ gesuchId: string }>(
+    SET_TO_BEARBEITUNG: rxMethod<{ gesuchTrancheId: string }>(
       pipe(
-        this.handleStatusChange(({ gesuchId }) =>
+        this.handleStatusChange(({ gesuchTrancheId }) =>
+          this.gesuchService.changeGesuchStatusToInBearbeitung$({
+            gesuchTrancheId,
+          }),
+        ),
+      ),
+    ),
+
+    EINGEREICHT: rxMethod<{ gesuchTrancheId: string }>(
+      pipe(
+        this.handleStatusChange(({ gesuchTrancheId }) =>
+          this.gesuchService.gesuchEinreichen$({
+            gesuchTrancheId,
+          }),
+        ),
+      ),
+    ),
+
+    VERFUEGT: rxMethod<{ gesuchTrancheId: string }>(
+      pipe(
+        this.handleStatusChange(({ gesuchTrancheId }) =>
           this.gesuchService.changeGesuchStatusToVerfuegt$({
-            gesuchId,
+            gesuchTrancheId,
           }),
         ),
       ),
     ),
 
-    VERSENDET: rxMethod<{ gesuchId: string }>(
+    VERSENDET: rxMethod<{ gesuchTrancheId: string }>(
       pipe(
-        this.handleStatusChange(({ gesuchId }) =>
+        this.handleStatusChange(({ gesuchTrancheId }) =>
           this.gesuchService.changeGesuchStatusToVersendet$({
-            gesuchId,
+            gesuchTrancheId,
           }),
         ),
       ),
     ),
 
-    BEREIT_FUER_BEARBEITUNG: rxMethod<{ gesuchId: string; text?: string }>(
+    BEREIT_FUER_BEARBEITUNG: rxMethod<{
+      gesuchTrancheId: string;
+      text?: string;
+    }>(
       pipe(
-        this.handleStatusChange(({ gesuchId, text }) =>
+        this.handleStatusChange(({ gesuchTrancheId, text }) =>
           this.gesuchService.changeGesuchStatusToBereitFuerBearbeitung$({
-            gesuchId,
+            gesuchTrancheId,
             ...(text ? { kommentar: { text } } : {}),
           }),
         ),
       ),
     ),
 
-    BEARBEITUNG_ABSCHLIESSEN: rxMethod<{ gesuchId: string }>(
+    BEARBEITUNG_ABSCHLIESSEN: rxMethod<{ gesuchTrancheId: string }>(
       pipe(
-        this.handleStatusChange(({ gesuchId }) =>
+        this.handleStatusChange(({ gesuchTrancheId }) =>
           this.gesuchService.bearbeitungAbschliessen$({
-            gesuchId,
+            gesuchTrancheId,
           }),
         ),
       ),
     ),
 
-    ZURUECKWEISEN: rxMethod<{ gesuchId: string; text: string }>(
+    ZURUECKWEISEN: rxMethod<{ gesuchTrancheId: string; text: string }>(
       pipe(
-        this.handleStatusChange(({ gesuchId, text }) =>
+        this.handleStatusChange(({ gesuchTrancheId, text }) =>
           this.gesuchService.gesuchZurueckweisen$({
-            gesuchId,
+            gesuchTrancheId,
             kommentar: { text },
           }),
         ),
@@ -137,13 +168,13 @@ export class GesuchStore extends signalStore(
     ),
 
     NEGATIVE_VERFUEGUNG_ERSTELLEN: rxMethod<{
-      gesuchId: string;
+      gesuchTrancheId: string;
       grundId: string;
     }>(
       pipe(
-        this.handleStatusChange(({ gesuchId, grundId }) =>
+        this.handleStatusChange(({ gesuchTrancheId, grundId }) =>
           this.gesuchService.changeGesuchStatusToNegativeVerfuegung$({
-            gesuchId,
+            gesuchTrancheId,
             ausgewaehlterGrund: { decisionId: grundId },
           }),
         ),

@@ -33,8 +33,8 @@ import { SharedModelError } from '@dv/shared/model/error';
 import {
   GesuchFormularUpdate,
   GesuchService,
-  GesuchTrancheTyp,
   GesuchUpdate,
+  GesuchUrlType,
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
@@ -127,6 +127,9 @@ export const loadGesuch = createEffect(
         if (!id) {
           throw new Error(ROUTE_ID_MISSING);
         }
+        if (!trancheTyp || !trancheId || !compileTimeConfig) {
+          throw new Error('Missing trancheTyp, trancheId or compileTimeConfig');
+        }
 
         const handle404And401 = {
           context: noGlobalErrorsIf(
@@ -156,14 +159,14 @@ export const loadGesuch = createEffect(
         // Call the correct service based on the app type
         const aenderungServices$ = {
           'gesuch-app': (aenderungId: string) =>
-            gesuchService.getGsTrancheChanges$(
+            gesuchService.getGsAenderungChangesInBearbeitung$(
               { aenderungId },
               undefined,
               undefined,
               handle404And401,
             ),
           'sachbearbeitung-app': (aenderungId: string) =>
-            gesuchService.getSbTrancheChanges$(
+            gesuchService.getSbAenderungChanges$(
               { aenderungId },
               undefined,
               undefined,
@@ -181,24 +184,22 @@ export const loadGesuch = createEffect(
               undefined,
               handle404And401,
             ),
-        } satisfies Record<GesuchTrancheTyp, unknown>;
+          INITIAL: () => (trancheId: string) =>
+            gesuchService.getInitialTrancheChangesByTrancheId$(
+              {
+                trancheId,
+              },
+              undefined,
+              undefined,
+              handle404And401,
+            ),
+        } satisfies Record<GesuchUrlType, unknown>;
 
-        return (
-          trancheTyp && trancheId && compileTimeConfig
-            ? // If there is a trancheTyp, trancheId and compileTimeConfig, use the matching service call
-              services$[trancheTyp](compileTimeConfig.appType)(trancheId)
-            : // Otherwise use the normal current gesuch service call
-              gesuchService.getCurrentGesuch$(
-                { gesuchId: id },
-                undefined,
-                undefined,
-                handle404And401,
-              )
-        ).pipe(
+        return services$[trancheTyp](compileTimeConfig.appType)(trancheId).pipe(
           map((gesuch) =>
             SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
               gesuch,
-              trancheId,
+              typ: trancheTyp,
             }),
           ),
           catchError((error) => [
@@ -386,37 +387,6 @@ export const refreshGesuchFormStep = createEffect(
   { functional: true, dispatch: false },
 );
 
-export const setGesuchToBearbeitung = createEffect(
-  (
-    actions$ = inject(Actions),
-    store = inject(Store),
-    gesuchService = inject(GesuchService),
-  ) => {
-    return actions$.pipe(
-      ofType(SharedDataAccessGesuchEvents.setGesuchToBearbeitung),
-      concatLatestFrom(() => store.select(selectRouteId)),
-      concatMap(([, id]) => {
-        if (!id) {
-          throw new Error(ROUTE_ID_MISSING);
-        }
-        return gesuchService
-          .changeGesuchStatusToInBearbeitung$({ gesuchId: id })
-          .pipe(
-            map((gesuch) =>
-              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({ gesuch }),
-            ),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
-      }),
-    );
-  },
-  { functional: true },
-);
-
 // add effects here
 export const sharedDataAccessGesuchEffects = {
   loadOwnGesuchs,
@@ -427,7 +397,6 @@ export const sharedDataAccessGesuchEffects = {
   redirectToGesuchForm,
   redirectToGesuchFormNextStep,
   refreshGesuchFormStep,
-  setGesuchToBearbeitung,
 };
 
 const viewOnlyFields = [

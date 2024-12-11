@@ -18,9 +18,11 @@
 package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
@@ -66,6 +68,7 @@ import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
@@ -105,8 +108,38 @@ public class GesuchTrancheService {
     private final NotificationService notificationService;
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
 
+    public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
+        return gesuchTrancheRepository.requireById(gesuchTrancheId);
+    }
+
+    public UUID getGesuchIdOfTranche(final GesuchTranche gesuchTranche) {
+        return gesuchTranche.getGesuch().getId();
+    }
+
     public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(final UUID gesuchId) {
         return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
+    }
+
+    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuch(final UUID gesuchId) {
+        final var tranchenByTyp = gesuchTrancheRepository
+            .findForGesuch(gesuchId)
+            .collect(Collectors.groupingBy(GesuchTranche::getTyp));
+        final var currentTrancheFromGesuchInStatusVerfuegt =
+            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
+
+        final var trancheList = tranchenByTyp.getOrDefault(GesuchTrancheTyp.TRANCHE, List.of());
+        final var aenderungList = tranchenByTyp.getOrDefault(GesuchTrancheTyp.AENDERUNG, List.of())
+            .stream()
+            .sorted(Comparator.comparing(GesuchTranche::getTimestampMutiert))
+            .toList();
+        final var allTranchen = new ArrayList<GesuchTranche>(trancheList.size() + aenderungList.size());
+        allTranchen.addAll(trancheList);
+        allTranchen.addAll(aenderungList);
+
+        return gesuchTrancheMapper.toListDto(
+            allTranchen,
+            currentTrancheFromGesuchInStatusVerfuegt.orElse(null)
+        );
     }
 
     public DokumenteToUploadDto getDokumenteToUpload(final UUID gesuchTrancheId) {
@@ -275,7 +308,8 @@ public class GesuchTrancheService {
             kommentarDto
         );
 
-        final var lastFreigegebenTranche = gesuchTrancheHistoryRepository.getLatestWhereStatusChanged(aenderungId);
+        final var lastFreigegebenTranche =
+            gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
         final var lastFreigegebenFormular = lastFreigegebenTranche.getGesuchFormular();
 
         var gesuchTrancheUpdateDto = new GesuchTrancheUpdateDto().id(

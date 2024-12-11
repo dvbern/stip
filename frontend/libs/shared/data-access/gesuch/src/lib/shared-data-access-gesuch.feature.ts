@@ -12,7 +12,7 @@ import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person
 import { SharedModelError } from '@dv/shared/model/error';
 import {
   FallDashboardItem,
-  GesuchTrancheTyp,
+  GesuchUrlType,
   SharedModelGesuch,
   SharedModelGesuchFormular,
   SteuerdatenTyp,
@@ -30,8 +30,8 @@ import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events
 export interface State {
   gesuch: SharedModelGesuch | null;
   gesuchFormular: SharedModelGesuchFormular | null;
-  isEditingTranche: boolean | null;
-  trancheTyp: GesuchTrancheTyp | null;
+  isEditingAenderung: boolean | null;
+  trancheTyp: GesuchUrlType | null;
   gesuchs: SharedModelGesuch[];
   gsDashboard: FallDashboardItem[];
   cache: {
@@ -48,7 +48,7 @@ export interface State {
 const initialState: State = {
   gesuch: null,
   gesuchFormular: null,
-  isEditingTranche: null,
+  isEditingAenderung: null,
   trancheTyp: null,
   gesuchs: [],
   gsDashboard: [],
@@ -163,14 +163,34 @@ export const sharedDataAccessGesuchsFeature = createFeature({
 
     on(
       SharedDataAccessGesuchEvents.gesuchLoadedSuccess,
-      (state, { gesuch, trancheId }): State => {
+      (state, { gesuch, typ }): State => {
         const gesuchFormular = getGesuchFormular(gesuch);
         return {
           ...state,
           gesuch,
           gesuchFormular: gesuchFormular,
-          isEditingTranche: !!trancheId,
-          trancheTyp: gesuch?.gesuchTrancheToWorkWith?.typ,
+          isEditingAenderung: typ === 'AENDERUNG',
+          trancheTyp: typ,
+          steuerdatenTabs: success(gesuchFormular?.steuerdatenTabs ?? []),
+          cache: {
+            gesuch: gesuch ?? state.cache.gesuch,
+            gesuchId: gesuch.id ?? state.cache.gesuchId,
+            gesuchFormular: gesuchFormular ?? state.cache.gesuchFormular,
+          },
+          loading: false,
+          error: undefined,
+        };
+      },
+    ),
+
+    on(
+      SharedDataAccessGesuchEvents.gesuchSetReturned,
+      (state, { gesuch }): State => {
+        const gesuchFormular = getGesuchFormular(gesuch);
+        return {
+          ...state,
+          gesuch,
+          gesuchFormular: gesuchFormular,
           steuerdatenTabs: success(gesuchFormular?.steuerdatenTabs ?? []),
           cache: {
             gesuch: gesuch ?? state.cache.gesuch,

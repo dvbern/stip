@@ -224,14 +224,13 @@ export class DokumentsStore extends signalStore(
    * will trigger an email to the gesuchsteller
    */
   fehlendeDokumenteUebermitteln$ = rxMethod<{
-    gesuchId: string;
     trancheId: string;
     onSuccess: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchId, trancheId, onSuccess }) => {
+      switchMap(({ trancheId, onSuccess }) => {
         return this.gesuchService
-          .gesuchFehlendeDokumenteUebermitteln$({ gesuchId })
+          .gesuchFehlendeDokumenteUebermitteln$({ gesuchTrancheId: trancheId })
           .pipe(
             tap(() => {
               patchState(this, (state) => ({

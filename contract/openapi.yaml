@@ -140,12 +140,12 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGsDashboard
       summary: Returns gesuche for dashboard filtered by gs
-  /gesuch/status/in-bearbeitung/{gesuchId}:
+  /gesuch/status/in-bearbeitung/{gesuchTrancheId}:
     post:
       tags:
         - Gesuch
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -166,12 +166,12 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToInBearbeitung
-  /gesuch/status/bereit-fuer-bearbeitung/{gesuchId}:
+  /gesuch/status/bereit-fuer-bearbeitung/{gesuchTrancheId}:
     post:
       tags:
         - Gesuch
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -198,12 +198,12 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToBereitFuerBearbeitung
-  /gesuch/status/verfuegt/{gesuchId}:
+  /gesuch/status/verfuegt/{gesuchTrancheId}:
     post:
       tags:
         - Gesuch
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -224,12 +224,12 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToVerfuegt
-  /gesuch/status/versendet/{gesuchId}:
+  /gesuch/status/versendet/{gesuchTrancheId}:
     post:
       tags:
         - Gesuch
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -250,12 +250,16 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToVersendet
-  /gesuch/status/negative-verfuegung/{gesuchId}:
+  /gesuch/status/negative-verfuegung/{gesuchTrancheId}:
     post:
       tags:
         - Gesuch
       parameters:
-        - $ref: '#/components/parameters/gesuchId'
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
       requestBody:
         required: true
         content:
@@ -1495,9 +1499,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteGesuch
       summary: delete a Gesuch
-  '/gesuch/{gesuchId}/current':
+  '/gesuch/changes/{trancheId}':
     parameters:
-      - name: gesuchId
+      - name: trancheId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -1510,7 +1514,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1520,8 +1524,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getCurrentGesuch
-      summary: Returns the Gesuch with the given Id
+      operationId: getInitialTrancheChangesByTrancheId
+      summary: Returns a change by its id
   '/gesuch/{gesuchId}/{gesuchTrancheId}':
     parameters:
       - name: gesuchId
@@ -1632,18 +1636,22 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
-  '/gesuch/{gesuchId}/einreichen':
+  '/gesuch/{gesuchTrancheId}/einreichen':
     patch:
       tags:
         - Gesuch
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
       responses:
-        '201':
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Gesuch eingereicht
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1655,9 +1663,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichen
       summary: Das Gesuch einreichen
-  '/gesuch/{gesuchId}/fehlendeDokumente':
+  '/gesuch/{gesuchTrancheId}/fehlendeDokumente':
     parameters:
-      - name: gesuchId
+      - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -1667,6 +1675,10 @@ paths:
         - Gesuch
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Fehlende Dokumente übermittelt
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1690,6 +1702,10 @@ paths:
         - Gesuch
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Fehlende Dokumente eingereicht
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1701,14 +1717,22 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchTrancheFehlendeDokumenteEinreichen
       summary: Dem SB übermitteln das fehlende Dokumente hochgeladen wurden
-  '/gesuch/{gesuchId}/bearbeitungAbschliessen':
+  '/gesuch/{gesuchTrancheId}/bearbeitungAbschliessen':
     parameters:
-      - $ref: '#/components/parameters/gesuchId'
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     patch:
       tags:
         - Gesuch
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Bearbeitung des Gesuch Abschliessen
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1720,9 +1744,13 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: bearbeitungAbschliessen
       summary: Die Bearbeitung des Gesuch durch den SB abschliessen
-  '/gesuch/{gesuchId}/gesuchZurueckweisen':
+  '/gesuch/{gesuchTrancheId}/gesuchZurueckweisen':
     parameters:
-      - $ref: '#/components/parameters/gesuchId'
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     patch:
       tags:
         - Gesuch
@@ -1733,6 +1761,10 @@ paths:
               $ref: '#/components/schemas/Kommentar'
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Gesuch zurueckweisen and GS
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1850,7 +1882,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGsTrancheChanges
+      operationId: getGsAenderungChangesInBearbeitung
   '/gesuch/{aenderungId}/aenderung/sb/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
@@ -1872,7 +1904,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getSbTrancheChanges
+      operationId: getSbAenderungChanges
   /tenant/current:
     get:
       tags:
@@ -2250,9 +2282,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchTrancheSlim'
+                $ref: '#/components/schemas/GesuchTrancheList'
           description: Alle GesuchTranchen fuer ein Gesuch
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -3034,6 +3064,7 @@ components:
     GesuchDashboardItem:
       required:
         - id
+        - currentTrancheId
         - gesuchsperiode
         - gesuchStatus
       type: object
@@ -3043,6 +3074,8 @@ components:
         gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
         id:
+          $ref: '#/components/schemas/UUID'
+        currentTrancheId:
           $ref: '#/components/schemas/UUID'
         offeneAenderung:
           $ref: '#/components/schemas/GesuchTrancheSlim'
@@ -4221,6 +4254,15 @@ components:
           $ref: '#/components/schemas/GesuchFormularUpdate'
         id:
           $ref: '#/components/schemas/UUID'
+    GesuchTrancheList:
+      type: object
+      properties:
+        tranchen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+        initialTranche:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
     GesuchTrancheSlim:
       type: object
       required:

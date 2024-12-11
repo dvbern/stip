@@ -17,8 +17,12 @@
 
 package ch.dvbern.stip.api.gesuchtranche.repo;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,7 +47,7 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
-    public GesuchTranche getLatestWhereStatusChanged(final UUID gesuchTrancheId) {
+    public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
         final var reader = AuditReaderFactory.get(em);
         return (GesuchTranche) reader.createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, true, false)
@@ -54,4 +58,35 @@ public class GesuchTrancheHistoryRepository {
             .setMaxResults(1)
             .getSingleResult();
     }
+
+    public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToVerfuegt(final UUID gesuchId) {
+        return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.VERFUEGT);
+    }
+
+    public Optional<GesuchTranche> getLatestWhereGesuchStatusChangedToEingereicht(final UUID gesuchId) {
+        return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.EINGEREICHT);
+    }
+
+    @SuppressWarnings("unchecked")
+    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
+    private Optional<GesuchTranche> findCurrentGesuchTrancheOfGesuchInStatus(
+        final UUID gesuchId,
+        Gesuchstatus gesuchStatus
+    ) {
+        final var reader = AuditReaderFactory.get(em);
+        final List<Gesuch> resultList = reader
+            .createQuery()
+            .forRevisionsOfEntity(Gesuch.class, true, true)
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
+            .add(AuditEntity.property("gesuchStatus").hasChanged())
+            // todo KSTIP-1594: is this join really required?
+            // .traverseRelation("gesuchTranchen", JoinType.INNER, "g")
+            // .up()
+            .addOrder(AuditEntity.revisionNumber().asc())
+            .setMaxResults(1)
+            .getResultList();
+        return resultList.stream().findFirst().map(Gesuch::getCurrentGesuchTranche);
+    }
+
 }
