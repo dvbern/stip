@@ -248,13 +248,13 @@ export class SharedFeatureDarlehenComponent implements OnInit {
           ),
           schulden: fromFormatedNumber(formValues.schulden),
           anzahlBetreibungen: formValues.anzahlBetreibungen,
-          grundNichtBerechtigt: formValues.gruende.grundNichtBerechtigt,
+          grundNichtBerechtigt: !!formValues.gruende.grundNichtBerechtigt,
           grundAusbildungZwoelfJahre:
-            formValues.gruende.grundAusbildungZwoelfJahre,
-          grundHoheGebuehren: formValues.gruende.grundHoheGebuehren,
+            !!formValues.gruende.grundAusbildungZwoelfJahre,
+          grundHoheGebuehren: !!formValues.gruende.grundHoheGebuehren,
           grundAnschaffungenFuerAusbildung:
-            formValues.gruende.grundAnschaffungenFuerAusbildung,
-          grundZweitausbildung: formValues.gruende.grundZweitausbildung,
+            !!formValues.gruende.grundAnschaffungenFuerAusbildung,
+          grundZweitausbildung: !!formValues.gruende.grundZweitausbildung,
         },
       },
     };
