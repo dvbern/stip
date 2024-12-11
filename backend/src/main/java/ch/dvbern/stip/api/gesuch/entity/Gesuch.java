@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
+import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -149,6 +150,9 @@ public class Gesuch extends AbstractMandantEntity {
     @Setter(AccessLevel.NONE)
     @NotAudited
     private GesuchTranche aenderungZuUeberpruefen;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
+    private List<Unterschriftenblatt> unterschriftenblaetter = new ArrayList<>();
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()

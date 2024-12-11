@@ -1,0 +1,76 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package ch.dvbern.stip.api.unterschriftenblatt.service;
+
+import java.util.UUID;
+
+import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
+import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
+import io.quarkiverse.antivirus.runtime.Antivirus;
+import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.core.Response;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+
+@Slf4j
+@ApplicationScoped
+@RequiredArgsConstructor
+public class UnterschriftenblattService {
+    private static final String UNTERSCHRIFTENBLATT_DOKUMENT_PATH = "unterschriftenblatt/";
+
+    private final GesuchRepository gesuchRepository;
+    private final Antivirus antivirus;
+    private final ConfigService configService;
+    private final S3AsyncClient s3;
+
+    public Uni<Response> getUploadUnterschriftenblattUni(
+        final UnterschriftenblattDokumentTyp dokumentTyp,
+        final UUID gesuchId,
+        final FileUpload fileUpload
+    ) {
+        return DokumentUploadUtil.validateScanUploadDokument(
+            fileUpload,
+            s3,
+            configService,
+            antivirus,
+            UNTERSCHRIFTENBLATT_DOKUMENT_PATH,
+            objectId -> uploadDokument(
+                gesuchId,
+                dokumentTyp,
+                fileUpload,
+                objectId
+            ),
+            throwable -> LOG.error(throwable.getMessage())
+        );
+    }
+
+    public void uploadDokument(
+        final UUID gesuchId,
+        final UnterschriftenblattDokumentTyp dokumentTyp,
+        final FileUpload fileUpload,
+        final String objectId
+    ) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+    }
+}

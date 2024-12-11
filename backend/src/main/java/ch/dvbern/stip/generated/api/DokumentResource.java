@@ -33,7 +33,7 @@ public interface DokumentResource {
     @Path("/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
-    void createUnterschriftenblatt(@PathParam("unterschriftenblattTyp") ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp unterschriftenblattTyp,@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+    io.smallrye.mutiny.Uni<Response> createUnterschriftenblatt(@PathParam("unterschriftenblattTyp") ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp unterschriftenblattTyp,@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
     @DELETE
     @Path("/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}")

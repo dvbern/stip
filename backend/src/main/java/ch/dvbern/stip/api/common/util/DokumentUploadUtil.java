@@ -17,22 +17,68 @@
 
 package ch.dvbern.stip.api.common.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
+import ch.dvbern.stip.api.common.exception.AppFailureMessage;
+import ch.dvbern.stip.api.common.exception.AppValidationMessage;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import io.quarkiverse.antivirus.runtime.Antivirus;
+import io.quarkiverse.antivirus.runtime.AntivirusScanResult;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.Nullable;
 import jakarta.ws.rs.core.Response;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_FILE_UPLOAD_INVALID;
+
+@Slf4j
 @UtilityClass
 public class DokumentUploadUtil {
+    public Uni<Response> validateScanUploadDokument(
+        final FileUpload fileUpload,
+        final S3AsyncClient s3,
+        final ConfigService configService,
+        final Antivirus antivirus,
+        final String dokumentPathPrefix,
+        final Consumer<String> serviceCallback,
+        final @Nullable Consumer<Throwable> onFailure
+    ) {
+        if (!DokumentUploadUtil.checkFileUpload(fileUpload, configService)) {
+            throw new CustomValidationsException(
+                "File upload failed basic checks",
+                new CustomConstraintViolation(
+                    VALIDATION_FILE_UPLOAD_INVALID,
+                    ""
+                )
+            );
+        }
+
+        DokumentUploadUtil.scanDokument(antivirus, fileUpload);
+
+        return DokumentUploadUtil.uploadDokument(
+            fileUpload,
+            s3,
+            configService,
+            dokumentPathPrefix,
+            serviceCallback,
+            onFailure
+        );
+    }
+
     public Uni<Response> uploadDokument(
         final FileUpload fileUpload,
         final S3AsyncClient s3,
@@ -56,7 +102,7 @@ public class DokumentUploadUtil {
             .invoke(() -> serviceCallback.accept(objectId))
             .onItem()
             .ignore()
-            .andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
+            .andSwitchTo(Uni.createFrom().item(Response.ok().build()))
             .onFailure()
             .invoke(throwable -> {
                 if (onFailure != null) {
@@ -77,6 +123,32 @@ public class DokumentUploadUtil {
         }
 
         return true;
+    }
+
+    public void scanDokument(final Antivirus antivirus, final FileUpload fileUpload) {
+        try (
+            final ByteArrayInputStream inputStream = new ByteArrayInputStream(
+                IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile())).readAllBytes()
+            )
+        ) {
+            // scan the file and check the results
+            List<AntivirusScanResult> results = antivirus.scan(fileUpload.fileName(), inputStream);
+            for (AntivirusScanResult result : results) {
+                if (result.getStatus() != Response.Status.OK.getStatusCode()) {
+                    LOG.warn(
+                        "bad signature detected in file={} message={}",
+                        fileUpload.fileName(),
+                        result.getMessage()
+                    );
+                    throw AppValidationMessage.badSignatureDetectedInUpload().create();
+                }
+            }
+
+            inputStream.reset();
+        } catch (IOException e) {
+            LOG.error("could not scan document", e);
+            throw AppFailureMessage.internalError("could not scan file upload").create();
+        }
     }
 
     private CompletableFuture<PutObjectResponse> getUploadDokumentFuture(

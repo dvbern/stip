@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
@@ -66,6 +67,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
 @Validated
 public class DokumentResourceImpl implements DokumentResource {
     private final GesuchDokumentService gesuchDokumentService;
+    private final UnterschriftenblattService unterschriftenblattService;
     private final ConfigService configService;
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
@@ -73,17 +75,21 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     @AllowAll
+    @Blocking
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
         return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
     }
 
+    @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public void createUnterschriftenblatt(
+    @AllowAll
+    @Blocking
+    public Uni<Response> createUnterschriftenblatt(
         UnterschriftenblattDokumentTyp unterschriftenblattTyp,
         UUID gesuchId,
         FileUpload fileUpload
     ) {
-
+        return unterschriftenblattService.getUploadUnterschriftenblattUni(unterschriftenblattTyp, gesuchId, fileUpload);
     }
 
     @RolesAllowed(GESUCH_DELETE)

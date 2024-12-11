@@ -1,0 +1,105 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="fuju (generated)" id="1733920779826-1">
+        <createTable tableName="gesuch_unterschriftenblatt_dokument">
+            <column name="unterschriftenblatt_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dokument_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-2">
+        <createTable tableName="gesuch_unterschriftenblatt_dokument_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuch_unterschriftenblatt_dokument_audPK"/>
+            </column>
+            <column name="unterschriftenblatt_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuch_unterschriftenblatt_dokument_audPK"/>
+            </column>
+            <column name="dokument_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuch_unterschriftenblatt_dokument_audPK"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-3">
+        <createTable tableName="unterschriftenblatt">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="unterschriftenblattPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dokument_typ" type="VARCHAR(255)"/>
+            <column name="gesuch_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-4">
+        <createTable tableName="unterschriftenblatt_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="dokument_typ" type="VARCHAR(255)"/>
+            <column name="gesuch_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-5">
+        <addPrimaryKey columnNames="rev, id" constraintName="unterschriftenblatt_audPK" tableName="unterschriftenblatt_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-6">
+        <createIndex indexName="IX_unterschriftenblatt_mandant" tableName="unterschriftenblatt">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-7">
+        <createIndex indexName="unterschriftenblatt_dokument_dokument_id" tableName="gesuch_unterschriftenblatt_dokument">
+            <column name="dokument_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-8">
+        <createIndex indexName="unterschriftenblatt_dokument_unterschriftenblatt_id" tableName="gesuch_unterschriftenblatt_dokument">
+            <column name="unterschriftenblatt_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-9">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuch_unterschriftenblatt_dokument_aud" constraintName="FK2in442hj0d2ne8ip54tr9i404" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-10">
+        <addForeignKeyConstraint baseColumnNames="dokument_id" baseTableName="gesuch_unterschriftenblatt_dokument" constraintName="FK_dokument_unterschriftenblaetter" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dokument" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-11">
+        <addForeignKeyConstraint baseColumnNames="unterschriftenblatt_id" baseTableName="gesuch_unterschriftenblatt_dokument" constraintName="FK_unterschriftenblatt_dokumente" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="unterschriftenblatt" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-12">
+        <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="unterschriftenblatt" constraintName="FK_unterschriftenblatt_gesuch_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1733920779826-13">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="unterschriftenblatt_aud" constraintName="FKgutxkvnr7857q85djbtbhormv" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
