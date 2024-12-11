@@ -2243,7 +2243,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchDokument
-  '/gesuchtranche/{gesuchTrancheId}/requiredDokumente':
+  '/gesuchtranche/{gesuchTrancheId}/dokumenteToUpload':
     parameters:
       - name: gesuchTrancheId
         schema:
@@ -2255,7 +2255,7 @@ paths:
         - GesuchTranche
       responses:
         '200':
-          description: Required DokumentTyp returned
+          description: Returns the documents that are to be uploaded
           content:
             application/json:
               schema:

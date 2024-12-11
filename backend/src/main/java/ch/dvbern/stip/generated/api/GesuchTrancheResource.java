@@ -76,7 +76,7 @@ public interface GesuchTrancheResource {
     GesuchTrancheListDto getAllTranchenForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchTrancheId}/requiredDokumente")
+    @Path("/{gesuchTrancheId}/dokumenteToUpload")
     @Produces({ "application/json", "text/plain" })
     DokumenteToUploadDto getDocumentsToUpload(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 

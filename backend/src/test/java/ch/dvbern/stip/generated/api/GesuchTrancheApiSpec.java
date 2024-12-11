@@ -821,7 +821,7 @@ public class GesuchTrancheApiSpec {
     public static class GetDocumentsToUploadOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/requiredDokumente";
+        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/dokumenteToUpload";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -833,7 +833,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * GET /gesuchtranche/{gesuchTrancheId}/requiredDokumente
+         * GET /gesuchtranche/{gesuchTrancheId}/dokumenteToUpload
          * @param handler handler
          * @param <T> type
          * @return type
@@ -844,7 +844,7 @@ public class GesuchTrancheApiSpec {
         }
 
         /**
-         * GET /gesuchtranche/{gesuchTrancheId}/requiredDokumente
+         * GET /gesuchtranche/{gesuchTrancheId}/dokumenteToUpload
          * @param handler handler
          * @return DokumenteToUploadDtoSpec
          */
