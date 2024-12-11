@@ -88,6 +88,7 @@ class DarlehenFieldsRequiredConstraintValidatorTest {
 
         // Volljaehrig mit Darlehen Antwort
         darlehen.setWillDarlehen(true);
+        darlehen.setGrundNichtBerechtigt(true);
         gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
         assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null))
             .isTrue();
@@ -99,10 +100,20 @@ class DarlehenFieldsRequiredConstraintValidatorTest {
     }
 
     @Test
+    void atLeastOneReasonShouldBeSelectedTest() {
+        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
+        gesuchFormular.getDarlehen().setWillDarlehen(true);
+        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isFalse();
+        gesuchFormular.getDarlehen().setGrundHoheGebuehren(true);
+        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isTrue();
+    }
+
+    @Test
     void testWillDarlehenValidationTest() {
         // test with pre filled values & pia >= 18 years old
         gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
         darlehen.setWillDarlehen(true);
+        gesuchFormular.getDarlehen().setGrundHoheGebuehren(true);
         assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isTrue();
         darlehen.setWillDarlehen(false);
         assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isTrue();

@@ -41,6 +41,13 @@ public class DarlehenConstraintValidator
         return geburtsdatum.isBefore(volljaehrigCompareDate) || geburtsdatum.isEqual(volljaehrigCompareDate);
     }
 
+    private boolean isAtLeastOneReasonSelected(Darlehen darlehen) {
+        return Objects.nonNull(darlehen.getGrundZweitausbildung()) && darlehen.getGrundZweitausbildung()
+        || Objects.nonNull(darlehen.getGrundAusbildungZwoelfJahre()) && darlehen.getGrundAusbildungZwoelfJahre()
+        || Objects.nonNull(darlehen.getGrundHoheGebuehren()) && darlehen.getGrundHoheGebuehren()
+        || Objects.nonNull(darlehen.getGrundNichtBerechtigt()) && darlehen.getGrundNichtBerechtigt();
+    }
+
     @Override
     public boolean isValid(
         GesuchFormular gesuchFormular,
@@ -54,6 +61,7 @@ public class DarlehenConstraintValidator
             final var darlehen = gesuchFormular.getDarlehen();
 
             return isVolljaehrig(pia.getGeburtsdatum())
+            && isAtLeastOneReasonSelected(darlehen)
             && Objects.nonNull(darlehen.getGrundZweitausbildung())
             && Objects.nonNull(darlehen.getGrundAnschaffungenFuerAusbildung())
             && Objects.nonNull(darlehen.getGrundNichtBerechtigt())
