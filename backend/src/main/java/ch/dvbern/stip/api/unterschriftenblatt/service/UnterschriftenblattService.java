@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.unterschriftenblatt.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
@@ -25,6 +26,9 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
+import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import ch.dvbern.stip.api.unterschriftenblatt.repo.UnterschriftenblattRepository;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
@@ -50,6 +54,8 @@ public class UnterschriftenblattService {
     private final Antivirus antivirus;
     private final ConfigService configService;
     private final S3AsyncClient s3;
+    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
+    private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
 
     @Transactional
     public Uni<Response> getUploadUnterschriftenblattUni(
@@ -93,6 +99,37 @@ public class UnterschriftenblattService {
 
         unterschriftenblatt.getDokumente().add(dokument);
         dokumentRepository.persist(dokument);
+    }
+
+    public List<UnterschriftenblattDokumentTyp> getUnterschriftenblaetterToUpload(final Gesuch gesuch) {
+        final var initialTranche = gesuchTrancheHistoryRepository
+            .getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId());
+
+        GesuchTranche toGetFor;
+        if (initialTranche.isPresent()) {
+            toGetFor = initialTranche.get();
+        } else {
+            if (gesuch.getGesuchTranchen().size() != 1) {
+                throw new IllegalStateException("There are more than 1 Tranchen but none has been Eingereicht");
+            }
+
+            toGetFor = gesuch.getGesuchTranchen().get(0);
+        }
+
+        final var famsit = toGetFor.getGesuchFormular().getFamiliensituation();
+        if (famsit == null) {
+            return List.of();
+        }
+
+        return steuerdatenTabBerechnungsService
+            .calculateTabs(famsit)
+            .stream()
+            .map(steuerdatenTyp -> switch (steuerdatenTyp) {
+                case FAMILIE -> UnterschriftenblattDokumentTyp.GEMEINSAM;
+                case VATER -> UnterschriftenblattDokumentTyp.VATER;
+                case MUTTER -> UnterschriftenblattDokumentTyp.MUTTER;
+            })
+            .toList();
     }
 
     private Unterschriftenblatt createUnterschriftenblatt(

@@ -61,7 +61,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
-import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
@@ -107,6 +107,7 @@ public class GesuchTrancheService {
     private final MailService mailService;
     private final NotificationService notificationService;
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
+    private final UnterschriftenblattService unterschriftenblattService;
 
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
         return gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -144,9 +145,10 @@ public class GesuchTrancheService {
 
     public DokumenteToUploadDto getDokumenteToUpload(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+
         final var required = getRequiredDokumentTypes(gesuchTranche);
-        // TODO KSTIP-1465: Call required service
-        final var unterschriftenblaetter = new ArrayList<UnterschriftenblattDokumentTyp>();
+        final var unterschriftenblaetter = unterschriftenblattService
+            .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
 
         return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter);
     }
