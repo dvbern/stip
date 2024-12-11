@@ -105,13 +105,15 @@
         }
       </div>
 
-      <h3 class="tw-col-span-2 tw-mb-0 tw-pt-12">
-        {{ 'shared.form.darlehen.gruende.label' | translate }}
-      </h3>
       <fieldset
-        class="h tw-col-span-2 tw-grid tw-grid-cols-[1fr_56px] tw-gap-x-6 tw-gap-y-4 tw-rounded"
+        class="tw-col-span-2 tw-grid tw-grid-cols-[1fr_56px] tw-gap-x-6 tw-gap-y-4 tw-rounded"
         formGroupName="gruende"
       >
+        <legend class="tw-col-span-2">
+          <h3 class="tw-mb-0 tw-pt-12">
+            {{ 'shared.form.darlehen.gruende.label' | translate }}
+          </h3>
+        </legend>
         <!-- grundNichtBerechtigt -->
         <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
           <mat-checkbox
