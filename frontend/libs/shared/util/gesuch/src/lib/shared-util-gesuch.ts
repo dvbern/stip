@@ -81,12 +81,14 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
  * Available status transitions actions for the gesuch
  */
 export type StatusUebergang =
-  | 'BEARBEITUNG_ABSCHLIESSEN'
-  | 'NEGATIVE_VERFUEGUNG_ERSTELLEN'
-  | 'ZURUECKWEISEN'
-  | 'VERFUEGT'
+  | 'SET_TO_BEARBEITUNG'
+  | 'EINGEREICHT'
   | 'BEREIT_FUER_BEARBEITUNG'
-  | 'VERSENDET';
+  | 'ZURUECKWEISEN'
+  | 'BEARBEITUNG_ABSCHLIESSEN'
+  | 'VERFUEGT'
+  | 'VERSENDET'
+  | 'NEGATIVE_VERFUEGUNG_ERSTELLEN';
 
 /**
  * A map which contains the possible status transitions for specific gesuch statuses
@@ -94,19 +96,53 @@ export type StatusUebergang =
 export const StatusUebergaengeMap: Partial<
   Record<Gesuchstatus, StatusUebergang[]>
 > = {
+  BEREIT_FUER_BEARBEITUNG: ['SET_TO_BEARBEITUNG'],
   ANSPRUCH_MANUELL_PRUEFEN: [
     'BEREIT_FUER_BEARBEITUNG',
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
   ],
-  IN_BEARBEITUNG_SB: ['BEARBEITUNG_ABSCHLIESSEN', 'ZURUECKWEISEN'],
+  IN_BEARBEITUNG_SB: [
+    'BEARBEITUNG_ABSCHLIESSEN',
+    'ZURUECKWEISEN',
+    'NEGATIVE_VERFUEGUNG_ERSTELLEN',
+  ],
+  NICHT_ANSPRUCHSBERECHTIGT: [
+    'BEREIT_FUER_BEARBEITUNG',
+    'NEGATIVE_VERFUEGUNG_ERSTELLEN',
+  ],
+  ABKLAERUNG_DURCH_RECHSTABTEILUNG: [
+    'EINGEREICHT',
+    'NEGATIVE_VERFUEGUNG_ERSTELLEN',
+  ],
   IN_FREIGABE: ['VERFUEGT', 'BEREIT_FUER_BEARBEITUNG'],
   VERSANDBEREIT: ['VERSENDET'],
+};
+
+type StatusUebergangOption = {
+  icon: string;
+  titleKey: string;
+  typ: StatusUebergang;
+  disabledReason?: string;
 };
 
 /**
  * Options for the status transitions
  */
 export const StatusUebergaengeOptions = {
+  SET_TO_BEARBEITUNG: () =>
+    ({
+      icon: 'edit_note',
+      titleKey: 'SET_TO_BEARBEITUNG',
+      typ: 'SET_TO_BEARBEITUNG',
+      disabledReason: undefined,
+    }) as const,
+  EINGEREICHT: () =>
+    ({
+      icon: 'check_circle_outline',
+      titleKey: 'EINGEREICHT',
+      typ: 'EINGEREICHT',
+      disabledReason: undefined,
+    }) as const,
   BEARBEITUNG_ABSCHLIESSEN: (context?: { hasAcceptedAllDokuments: boolean }) =>
     ({
       icon: 'check',
@@ -151,4 +187,4 @@ export const StatusUebergaengeOptions = {
       typ: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
       disabledReason: undefined,
     }) as const,
-} satisfies Record<StatusUebergang, unknown>;
+} satisfies Record<StatusUebergang, () => StatusUebergangOption>;

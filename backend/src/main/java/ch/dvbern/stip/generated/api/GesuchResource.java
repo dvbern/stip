@@ -32,36 +32,36 @@ import jakarta.validation.Valid;
 public interface GesuchResource {
 
     @PATCH
-    @Path("/{gesuchId}/bearbeitungAbschliessen")
+    @Path("/{gesuchTrancheId}/bearbeitungAbschliessen")
     @Produces({ "application/json", "text/plain" })
-    void bearbeitungAbschliessen(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto bearbeitungAbschliessen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/status/bereit-fuer-bearbeitung/{gesuchId}")
+    @Path("/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchId") UUID gesuchId,@Valid KommentarDto kommentarDto);
+    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @POST
-    @Path("/status/in-bearbeitung/{gesuchId}")
+    @Path("/status/in-bearbeitung/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/status/negative-verfuegung/{gesuchId}")
+    @Path("/status/negative-verfuegung/{gesuchTrancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToNegativeVerfuegung(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull AusgewaehlterGrundDto ausgewaehlterGrundDto);
+    GesuchDto changeGesuchStatusToNegativeVerfuegung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull AusgewaehlterGrundDto ausgewaehlterGrundDto);
 
     @POST
-    @Path("/status/verfuegt/{gesuchId}")
+    @Path("/status/verfuegt/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToVerfuegt(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToVerfuegt(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/status/versendet/{gesuchId}")
+    @Path("/status/versendet/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToVersendet(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToVersendet(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
     @Consumes({ "application/json" })
@@ -74,25 +74,25 @@ public interface GesuchResource {
     void deleteGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
-    @Path("/{gesuchId}/einreichen")
+    @Path("/{gesuchTrancheId}/einreichen")
     @Produces({ "application/json", "text/plain" })
-    void gesuchEinreichen(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto gesuchEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchId}/fehlendeDokumente")
+    @Path("/{gesuchTrancheId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
-    void gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
     @Produces({ "application/json", "text/plain" })
-    void gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchId}/gesuchZurueckweisen")
+    @Path("/{gesuchTrancheId}/gesuchZurueckweisen")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    void gesuchZurueckweisen(@PathParam("gesuchId") UUID gesuchId,@Valid KommentarDto kommentarDto);
+    GesuchDto gesuchZurueckweisen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @GET
     @Path("/{gesuchId}/berechnung")

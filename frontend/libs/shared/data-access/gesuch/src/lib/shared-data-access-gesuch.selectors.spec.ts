@@ -44,6 +44,8 @@ describe('selectSharedDataAccessGesuchsView', () => {
       lastUpdate: null,
       loading: false,
       error: undefined,
+      trancheTyp: null,
+      gsDashboard: [],
     };
 
     const result = selectSharedDataAccessGesuchsView.projector(
@@ -133,6 +135,8 @@ describe('selectSharedDataAccessGesuchsView', () => {
       lastUpdate: null,
       loading: false,
       error: undefined,
+      trancheTyp: null,
+      gsDashboard: [],
     };
     const result = selectSharedDataAccessGesuchStepsView.projector(state, {
       deploymentConfig: undefined,
