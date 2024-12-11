@@ -127,7 +127,7 @@ export const DARLEHEN: SharedModelGesuchFormStep = {
   route: 'darlehen',
   translationKey: 'shared.darlehen.title',
   titleTranslationKey: 'shared.darlehen.title',
-  iconSymbolName: 'money',
+  iconSymbolName: 'account_balance',
 } satisfies SharedModelGesuchFormStep;
 
 // Dynamic steps
