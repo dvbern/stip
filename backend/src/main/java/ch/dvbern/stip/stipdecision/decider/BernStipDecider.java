@@ -20,92 +20,70 @@ package ch.dvbern.stip.stipdecision.decider;
 import java.time.LocalDate;
 
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
-import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
-import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.stammdaten.service.LandService;
 import ch.dvbern.stip.api.stammdaten.type.Land;
-import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import jakarta.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 
 @Singleton
+@RequiredArgsConstructor
 @StipDeciderTenant(MandantIdentifier.BERN)
 public class BernStipDecider extends BaseStipDecider {
     private final LandService landService;
     private final PlzService plzService;
 
-    public BernStipDecider(
-    StipDecisionTextRepository stipDecisionTextRepository, LandService landService, PlzService plzService
-    ) {
-        super(stipDecisionTextRepository);
-        this.landService = landService;
-        this.plzService = plzService;
-    }
-
     @Override
-    public StipDecision decide(final GesuchTranche gesuchTranche) {
+    public StipDeciderResult decide(final GesuchTranche gesuchTranche) {
         if (eingabefristAbgelaufen(gesuchTranche)) {
-            return StipDecision.EINGABEFRIST_ABGELAUFEN;
+            return StipDeciderResult.NEGATIVVERFUEGUNG_NICHTEINTRETENSVERFUEGUNG;
         }
         final var stipendienrechtlicherWohnsitzKantonBernResult =
             StipendienrechtlicherWohnsitzKantonBernChecker.evaluate(gesuchTranche, landService, plzService);
-        if (stipendienrechtlicherWohnsitzKantonBernResult != StipDecision.GESUCH_VALID) {
+        if (stipendienrechtlicherWohnsitzKantonBernResult != StipDeciderResult.GESUCH_VALID) {
             return stipendienrechtlicherWohnsitzKantonBernResult;
         }
         if (ausbildungNichtAnerkannt(gesuchTranche)) {
-            return StipDecision.AUSBILDUNG_NICHT_ANERKANNT;
+            return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNG_NICHT_ANERKANNT;
         }
         if (ausbildungImLebenslauf(gesuchTranche)) {
-            return StipDecision.AUSBILDUNG_IM_LEBENSLAUF;
+            return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG;
         }
         if (ausbildungLaenger12Jahre(gesuchTranche)) {
-            return StipDecision.AUSBILDUNGEN_LAENGER_12_JAHRE;
+            return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNGSDAUER;
         }
         if (piaAelter35Jahre(gesuchTranche)) {
-            return StipDecision.PIA_AELTER_35_JAHRE;
+            return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA;
         }
-        return StipDecision.GESUCH_VALID;
+        return StipDeciderResult.GESUCH_VALID;
     }
 
     @Override
-    public String getTextForDecision(final StipDecision decision, final Sprache korrespondenzSprache) {
-        if (decision.equals(StipDecision.GESUCH_VALID)) {
-            return "";
-        }
-        if (decision.equals(StipDecision.ANSPRUCH_MANUELL_PRUEFEN)) {
-            return "ANSPRUCH_MANUELL_PRUEFEN";
-        }
-        if (decision.equals(StipDecision.ANSPRUCH_UNKLAR)) {
-            throw new IllegalStateException("Unkown StipDecision: " + decision);
-        }
-        return super.getTextForDecision(decision, korrespondenzSprache);
-    }
-
-    @Override
-    public GesuchStatusChangeEvent getGesuchStatusChangeEvent(StipDecision decision) {
+    public GesuchStatusChangeEvent getGesuchStatusChangeEvent(StipDeciderResult decision) {
         return switch (decision) {
             case GESUCH_VALID -> GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
-            case EINGABEFRIST_ABGELAUFEN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case AUSBILDUNG_NICHT_ANERKANNT -> GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG;
-            case AUSBILDUNG_IM_LEBENSLAUF, AUSBILDUNGEN_LAENGER_12_JAHRE, ANSPRUCH_MANUELL_PRUEFEN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case PIA_AELTER_35_JAHRE -> GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG;
-            case NICHT_BERECHTIGTE_PERSON -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case KEIN_WOHNSITZ_KANTON_BE -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            // note: states here are still not reachable
-            case SCHULJAHR_9_SEKSTUFE_1 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case AUSBILDUNG_BPI1 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case ART_32_BBV -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case ZWEITAUSBILDUNG -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case EBA_LEHRE_2 -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case HOCHSCHULSTUDIUM_2 -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case MEHRERE_AUSBILDUNGSWECHSEL -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            case ANSPRUCH_UNKLAR -> throw new IllegalStateException("Unkown StipDecision: " + decision);
+            case NEGATIVVERFUEGUNG_NICHTEINTRETENSVERFUEGUNG -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_PIA_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            // case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN ->
+            // GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNGSDAUER -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
+            case ANSPRUCH_MANUELL_PRUEFEN_AUSBILDUNG_NICHT_ANERKANNT -> GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG;
+            case ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA -> GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG;
+            case ANSPRUCH_UNKLAR -> throw new IllegalStateException("Unkown StipDeciderResult: " + decision);
         };
     }
 
@@ -156,85 +134,88 @@ public class BernStipDecider extends BaseStipDecider {
     static final class StipendienrechtlicherWohnsitzKantonBernChecker {
         private StipendienrechtlicherWohnsitzKantonBernChecker() {}
 
-        public static StipDecision evaluate(
+        public static StipDeciderResult evaluate(
             final GesuchTranche gesuchTranche,
             final LandService landService,
             final PlzService plzService
         ) {
             final var step1result = evaluateStep1(gesuchTranche, landService);
-            if (step1result != StipDecision.ANSPRUCH_UNKLAR) {
+            if (step1result != StipDeciderResult.ANSPRUCH_UNKLAR) {
                 return step1result;
             }
             final var step2result = evaluateStep2(gesuchTranche, landService, plzService);
-            if (step2result != StipDecision.ANSPRUCH_UNKLAR) {
+            if (step2result != StipDeciderResult.ANSPRUCH_UNKLAR) {
                 return step2result;
             }
             return evaluateStep3(gesuchTranche, plzService);
         }
 
-        private static StipDecision evaluateStep1(final GesuchTranche gesuchTranche, final LandService landService) {
+        private static StipDeciderResult evaluateStep1(
+            final GesuchTranche gesuchTranche,
+            final LandService landService
+        ) {
             if (piaHasSchweizerBuergerrecht(gesuchTranche)) {
-                return StipDecision.ANSPRUCH_UNKLAR;
+                return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
             if (piaIsFluechtling(gesuchTranche)) {
-                return StipDecision.ANSPRUCH_UNKLAR;
+                return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
             if (piaNationalitaetEuEfta(gesuchTranche, landService)) {
                 if (piaWohntSchweiz(gesuchTranche)) {
-                    return StipDecision.ANSPRUCH_UNKLAR;
+                    return StipDeciderResult.ANSPRUCH_UNKLAR;
                 }
-                return StipDecision.NICHT_BERECHTIGTE_PERSON;
+                return StipDeciderResult.NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON;
             }
             if (piaHasNiederlassungsbewilligungC(gesuchTranche)) {
-                return StipDecision.ANSPRUCH_UNKLAR;
+                return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
             if (piaHasNiederlassungsbewilligungB(gesuchTranche) && pia5JahreInChWohnhaft(gesuchTranche)) {
-                return StipDecision.ANSPRUCH_UNKLAR;
+                return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
-            return StipDecision.NICHT_BERECHTIGTE_PERSON;
+            return StipDeciderResult.NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON;
         }
 
-        private static StipDecision evaluateStep2(
+        private static StipDeciderResult evaluateStep2(
             final GesuchTranche gesuchTranche,
             final LandService landService,
             final PlzService plzService
         ) {
             if (piaVolljaehrig(gesuchTranche) && piaBerufsbefaehigendeAusbildungAbeschlossen(gesuchTranche)) {
-                return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
+                return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG;
             }
             if (piaFluechtlingOderStaatenlos(gesuchTranche)) {
                 if (elternlosOderElternImAusland(gesuchTranche)) {
                     if (piaBernZugewiesen(gesuchTranche)) {
-                        return StipDecision.GESUCH_VALID;
+                        return StipDeciderResult.GESUCH_VALID;
                     }
-                    return StipDecision.NICHT_BERECHTIGTE_PERSON;
+                    return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN;
                 }
-                return StipDecision.ANSPRUCH_UNKLAR;
+                return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
 
             if (!piaNationalitaetEuEfta(gesuchTranche, landService)) {
                 if (elternlosOderElternImAusland(gesuchTranche)) {
                     if (piaBernWohnhaft(gesuchTranche, plzService)) {
-                        return StipDecision.GESUCH_VALID;
+                        return StipDeciderResult.GESUCH_VALID;
                     }
-                    return StipDecision.KEIN_WOHNSITZ_KANTON_BE;
+                    return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_PIA_NICHT_BERN;
                 }
-                return StipDecision.ANSPRUCH_UNKLAR;
+                return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
             if (piaHasSchweizerBuergerrecht(gesuchTranche) && elternlosOderElternImAusland(gesuchTranche)) {
-                return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
+                return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN;
             }
-            return StipDecision.ANSPRUCH_UNKLAR;
+            return StipDeciderResult.ANSPRUCH_UNKLAR;
         }
 
-        private static StipDecision evaluateStep3(final GesuchTranche gesuchTranche, final PlzService plzService) {
+        private static StipDeciderResult evaluateStep3(final GesuchTranche gesuchTranche, final PlzService plzService) {
             if (piaBevormundet(gesuchTranche)) {
-                return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
+                return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN;
             }
             return evaluateElternWohnsitz(gesuchTranche, plzService);
         }
 
-        private static StipDecision evaluateElternWohnsitz(
+        private static StipDeciderResult evaluateElternWohnsitz(
             final GesuchTranche gesuchTranche,
             final PlzService plzService
         ) {
@@ -246,12 +227,12 @@ public class BernStipDecider extends BaseStipDecider {
                 .count();
 
             if (noElternInBern == noEltern) {
-                return StipDecision.GESUCH_VALID;
+                return StipDeciderResult.GESUCH_VALID;
             }
             if (noElternInBern == 0) {
-                return StipDecision.NICHT_BERECHTIGTE_PERSON;
+                return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN;
             }
-            return StipDecision.ANSPRUCH_MANUELL_PRUEFEN;
+            return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN;
         }
 
         private static boolean piaHasSchweizerBuergerrecht(final GesuchTranche gesuchTranche) {
