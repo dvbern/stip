@@ -17,10 +17,16 @@
 
 package ch.dvbern.stip.api.notiz.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
@@ -28,17 +34,36 @@ import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RequestScoped
 public class GesuchNotizService {
+    private final GesuchRepository gesuchRepository;
     private final GesuchNotizRepository gesuchNotizRepository;
     private final GesuchNotizMapper gesuchNotizMapper;
 
+    private List<GesuchNotizDto> getAllByFall(final Fall fall) {
+        final var ausbildungs = fall.getAusbildungs();
+        List<Gesuch> gesuchs = new ArrayList<>();
+        ausbildungs.stream().map(Ausbildung::getGesuchs).forEach(gesuchs::addAll);
+        final var notizes = new ArrayList<GesuchNotiz>();
+        gesuchs.stream()
+            .map(gesuch -> gesuchNotizRepository.findAllByGesuchId(gesuch.getId()))
+            .forEach(notizes::addAll);
+        return notizes.stream().map(gesuchNotizMapper::toDto).collect(Collectors.toList());
+    }
+
     @Transactional
     public List<GesuchNotizDto> getAllByGesuchId(final UUID gesuchId) {
-        return gesuchNotizRepository.findAllByGesuchId(gesuchId).stream().map(gesuchNotizMapper::toDto).toList();
+        try {
+            final var gesuch = gesuchRepository.requireById(gesuchId);
+            return getAllByFall(gesuch.getAusbildung().getFall());
+        } catch (NotFoundException ex) {
+            return List.of();
+        }
+
     }
 
     @Transactional

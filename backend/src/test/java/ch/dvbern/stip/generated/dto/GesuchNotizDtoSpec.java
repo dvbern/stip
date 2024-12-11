@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchNotizDtoSpec.JSON_PROPERTY_USER_MUTIERT,
   GesuchNotizDtoSpec.JSON_PROPERTY_TIMESTAMP_MUTIERT,
   GesuchNotizDtoSpec.JSON_PROPERTY_NOTIZ_TYP,
+  GesuchNotizDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
   GesuchNotizDtoSpec.JSON_PROPERTY_ANTWORT,
   GesuchNotizDtoSpec.JSON_PROPERTY_ID,
   GesuchNotizDtoSpec.JSON_PROPERTY_BETREFF,
@@ -57,6 +58,9 @@ public class GesuchNotizDtoSpec {
 
   public static final String JSON_PROPERTY_NOTIZ_TYP = "notizTyp";
   private GesuchNotizTypDtoSpec notizTyp;
+
+  public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
+  private String gesuchNummer;
 
   public static final String JSON_PROPERTY_ANTWORT = "antwort";
   private String antwort;
@@ -203,6 +207,32 @@ public class GesuchNotizDtoSpec {
   }
 
 
+  public GesuchNotizDtoSpec gesuchNummer(String gesuchNummer) {
+    
+    this.gesuchNummer = gesuchNummer;
+    return this;
+  }
+
+   /**
+   * Get gesuchNummer
+   * @return gesuchNummer
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getGesuchNummer() {
+    return gesuchNummer;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchNummer(String gesuchNummer) {
+    this.gesuchNummer = gesuchNummer;
+  }
+
+
   public GesuchNotizDtoSpec antwort(String antwort) {
     
     this.antwort = antwort;
@@ -320,6 +350,7 @@ public class GesuchNotizDtoSpec {
         Objects.equals(this.userMutiert, gesuchNotiz.userMutiert) &&
         Objects.equals(this.timestampMutiert, gesuchNotiz.timestampMutiert) &&
         Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
+        Objects.equals(this.gesuchNummer, gesuchNotiz.gesuchNummer) &&
         Objects.equals(this.antwort, gesuchNotiz.antwort) &&
         Objects.equals(this.id, gesuchNotiz.id) &&
         Objects.equals(this.betreff, gesuchNotiz.betreff) &&
@@ -328,7 +359,7 @@ public class GesuchNotizDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, userMutiert, timestampMutiert, notizTyp, antwort, id, betreff, text);
+    return Objects.hash(userErstellt, timestampErstellt, userMutiert, timestampMutiert, notizTyp, gesuchNummer, antwort, id, betreff, text);
   }
 
   @Override
@@ -340,6 +371,7 @@ public class GesuchNotizDtoSpec {
     sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
     sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
+    sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");

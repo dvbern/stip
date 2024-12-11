@@ -396,7 +396,7 @@ public class GesuchNotizApiSpec {
         }
     }
     /**
-     * Get all notizen of a gesuch
+     * Get all notizen of a fall from given gesuch
      * 
      *
      * @see #gesuchIdPath  (required)

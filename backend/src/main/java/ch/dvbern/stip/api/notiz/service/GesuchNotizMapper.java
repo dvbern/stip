@@ -24,11 +24,13 @@ import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public interface GesuchNotizMapper {
 
+    @Mapping(source = "gesuch.gesuchNummer", target = "gesuchNummer")
     GesuchNotizDto toDto(GesuchNotiz notiz);
 
     GesuchNotiz toEntity(GesuchNotizDto notizDto);
