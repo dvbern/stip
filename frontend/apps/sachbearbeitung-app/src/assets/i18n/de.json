@@ -8,6 +8,8 @@
   "sachbearbeitung-app.header.infos": "Infos",
   "sachbearbeitung-app.header.tranche.item": "Tranche {{ index }} vom {{ date }}",
   "sachbearbeitung-app.header.aenderung.item": "Änderung {{ index }} vom {{ date }}",
+  "sachbearbeitung-app.header.initialTranche.item": "Erstgesuch vom {{ date }}",
+  "sachbearbeitung-app.header.aenderungen.initial": "Erstgesuch",
   "sachbearbeitung-app.header.aenderungen.akzeptierte": "Akzeptierte Änderungen",
   "sachbearbeitung-app.header.tranche.erstellen": "Tranchen",
   "sachbearbeitung-app.header.aktion": "Aktion",

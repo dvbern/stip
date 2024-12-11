@@ -17,16 +17,20 @@
 
 package ch.dvbern.stip.api.gesuchtranche.service;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(
@@ -43,9 +47,14 @@ public interface GesuchTrancheMapper {
     @Mapping(source = "gueltigkeit.gueltigBis", target = "gueltigBis")
     GesuchTrancheDto toDto(GesuchTranche gesuchTranche);
 
+    @Named("toSlimDto")
     @Mapping(source = "gueltigkeit.gueltigAb", target = "gueltigAb")
     @Mapping(source = "gueltigkeit.gueltigBis", target = "gueltigBis")
     GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche);
+
+    @Mapping(target = "tranchen", qualifiedByName = "toSlimDto")
+    @Mapping(target = "initialTranche", qualifiedByName = "toSlimDto")
+    GesuchTrancheListDto toListDto(List<GesuchTranche> tranchen, GesuchTranche initialTranche);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     GesuchTranche partialUpdate(GesuchTrancheUpdateDto gesuchUpdateDto, @MappingTarget GesuchTranche gesuch);

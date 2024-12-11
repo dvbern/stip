@@ -108,8 +108,7 @@ export class EinreichenStore extends signalStore(
   einreichenViewSig = computed(() => {
     const validationReport = this.einreichenValidationResult.data();
     const { trancheSetting } = this.gesuchViewSig();
-    const { gesuch, isEditingTranche, trancheTyp, gesuchId } =
-      this.cachedGesuchViewSig();
+    const { gesuch, trancheTyp, gesuchId } = this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
 
     const error = validationReport
@@ -136,7 +135,7 @@ export class EinreichenStore extends signalStore(
       abschlussPhase: toAbschlussPhase(gesuch, {
         appType: compileTimeConfig?.appType,
         isComplete: hasNoValidationErrors(error),
-        checkTranche: !!isEditingTranche && trancheTyp === 'AENDERUNG',
+        checkAenderung: trancheTyp === 'AENDERUNG',
       }),
     };
   });
@@ -168,7 +167,7 @@ export class EinreichenStore extends signalStore(
       switchMap(([{ gesuchTrancheId }, { typ, status }]) =>
         this.validate$(
           gesuchTrancheId,
-          typ !== 'AENDERUNG' || status === 'IN_BEARBEITUNG_GS',
+          typ === 'TRANCHE' || status === 'IN_BEARBEITUNG_GS',
         ),
       ),
       handleApiResponse((validationResult) => {
@@ -235,7 +234,7 @@ export class EinreichenStore extends signalStore(
     ),
   );
 
-  trancheEinreichen$ = rxMethod<{ trancheId: string }>(
+  aenderungEinreichen$ = rxMethod<{ trancheId: string }>(
     pipe(
       tap(() => {
         patchState(this, () => ({

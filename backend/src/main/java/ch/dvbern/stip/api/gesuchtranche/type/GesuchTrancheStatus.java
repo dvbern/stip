@@ -28,6 +28,12 @@ public enum GesuchTrancheStatus {
     AKZEPTIERT,
     ABGELEHNT;
 
+    public static final Set<GesuchTrancheStatus> GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN = Collections.unmodifiableSet(
+        EnumSet.of(
+            IN_BEARBEITUNG_GS
+        )
+    );
+
     public static final Set<GesuchTrancheStatus> GESUCHSTELLER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
             IN_BEARBEITUNG_GS

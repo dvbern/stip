@@ -64,6 +64,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
@@ -89,6 +90,7 @@ class GesuchGetGesucheTest {
     @TestAsGesuchsteller
     @Order(1)
     void getGsDashboardNoAusbildungTest() {
+
         final var fall = TestUtil.getOrCreateFall(fallApiSpec);
         final var fallDashboardItems = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -105,6 +107,24 @@ class GesuchGetGesucheTest {
         final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
 
         assertThat(fallDashboardItem.getNotifications().isEmpty(), is(true));
+
+        /*
+         * If only a ausbildung is created,
+         * but not yet a gesuch (or a tranche),
+         * an empty gesuch with a empty gesuchtranche should be returned
+         */
+        TestUtil.createAusbildung(ausbildungApiSpec, fall.getId());
+        final var fallDashboardItems2 = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto[].class);
+        assertNotNull(
+            fallDashboardItems2[0].getAusbildungDashboardItems().get(0).getGesuchs().get(0).getCurrentTrancheId()
+        );
     }
 
     @Test

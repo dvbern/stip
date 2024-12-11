@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuch.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
@@ -81,7 +82,11 @@ public class GesuchMapperUtil {
     ) {
         final var dto = gesuchMapper.toWithChangesDto(gesuch);
         dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
-        dto.setChanges(List.of(gesuchTrancheMapper.toDto(changes)));
+        if (Objects.isNull(changes)) {
+            dto.setChanges(List.of());
+        } else {
+            dto.setChanges(List.of(gesuchTrancheMapper.toDto(changes)));
+        }
         return dto;
     }
 

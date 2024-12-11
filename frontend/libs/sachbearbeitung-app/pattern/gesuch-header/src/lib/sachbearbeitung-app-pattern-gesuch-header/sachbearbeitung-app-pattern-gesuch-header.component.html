@@ -27,7 +27,7 @@
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
-            [class.active]="gesuch?.gesuchTrancheToWorkWith?.id === tranche.id"
+            [class.active]="isTrancheRouteSig() && gesuch?.gesuchTrancheToWorkWith?.id === tranche.id"
           >
             <span>
               {{
@@ -56,12 +56,13 @@
 
     <!-- Änderungen -->
     @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
+    @let initialTranche = gesuchAenderungStore.initialTrancheViewSig();
     <button
       type="button"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-aenderungen"
       [class.active]="isAenderungRouteSig()"
-      [disabled]="!aenderungen.hasAenderungen"
+      [disabled]="!aenderungen.hasAenderungen && !initialTranche"
       [matMenuTriggerFor]="aenderungenMenu"
     >
       <i class="material-symbols-rounded text-white me-2">update</i>
@@ -108,6 +109,30 @@
               }}
               -
               {{ aenderung.gueltigBis | date: 'dd.MM.YYYY' }}
+            </span>
+          </a>
+        }
+
+        @if (initialTranche) {
+          <div class="d-flex gap-2 align-items-center text-muted small">
+            <hr class="flex-grow-1" />
+            {{ 'sachbearbeitung-app.header.aenderungen.initial' | translate }}
+            <hr class="flex-grow-1" />
+          </div>
+          <a
+            [routerLink]="['/', 'gesuch', gesuch?.id, 'initial', initialTranche.id]"
+            class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+            data-testid="gesuch-step-nav-overview"
+            mat-menu-item
+            [class.active]="isAenderungRouteSig() && gesuch?.gesuchTrancheToWorkWith?.id === initialTranche.id"
+          >
+            <span>
+              {{
+                'sachbearbeitung-app.header.initialTranche.item'
+                  | translate: { date: initialTranche.gueltigAb | date: 'dd.MM.YYYY' }
+              }}
+              -
+              {{ initialTranche.gueltigBis | date: 'dd.MM.YYYY' }}
             </span>
           </a>
         }

@@ -18,7 +18,7 @@ import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -742,7 +742,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
-     * return List&lt;GesuchTrancheSlimDtoSpec&gt;
+     * return GesuchTrancheListDtoSpec
      */
     public static class GetAllTranchenForGesuchOper implements Oper {
 
@@ -772,10 +772,10 @@ public class GesuchTrancheApiSpec {
         /**
          * GET /gesuchtranche/{gesuchId}
          * @param handler handler
-         * @return List&lt;GesuchTrancheSlimDtoSpec&gt;
+         * @return GesuchTrancheListDtoSpec
          */
-        public List<GesuchTrancheSlimDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchTrancheSlimDtoSpec>> type = new TypeRef<List<GesuchTrancheSlimDtoSpec>>(){};
+        public GesuchTrancheListDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchTrancheListDtoSpec> type = new TypeRef<GesuchTrancheListDtoSpec>(){};
             return execute(handler).as(type);
         }
 

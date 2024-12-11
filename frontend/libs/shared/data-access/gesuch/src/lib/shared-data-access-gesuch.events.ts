@@ -4,6 +4,7 @@ import { SharedModelError } from '@dv/shared/model/error';
 import {
   FallDashboardItem,
   GesuchCreate,
+  GesuchUrlType,
   GetGesucheSBQueryType,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
@@ -26,7 +27,7 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     }>(),
     gesuchLoadedSuccess: props<{
       gesuch: SharedModelGesuch;
-      trancheId?: string;
+      typ: GesuchUrlType;
     }>(),
     gesuchSetReturned: props<{
       gesuch: SharedModelGesuch;

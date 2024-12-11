@@ -12,7 +12,7 @@ export const selectSharedFeatureGesuchFormTrancheView = createSelector(
   (gesuchsView, { cache }) => {
     const periode = cache.gesuch?.gesuchsperiode;
     return {
-      isEditingTranche: gesuchsView.isEditingTranche,
+      isEditingAenderung: gesuchsView.isEditingAenderung,
       loading: gesuchsView.loading,
       tranche: cache.gesuch?.gesuchTrancheToWorkWith,
       periode: periode

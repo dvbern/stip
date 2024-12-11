@@ -100,11 +100,6 @@ public interface GesuchResource {
     BerechnungsresultatDto getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/current")
-    @Produces({ "application/json", "text/plain" })
-    GesuchDto getCurrentGesuch(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
     @Path("/{gesuchId}/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto getGesuch(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
@@ -120,19 +115,24 @@ public interface GesuchResource {
     PaginatedSbDashboardDto getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("typ") @NotNull   ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.gesuch.type.SbDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 
     @GET
+    @Path("/{aenderungId}/aenderung/gs/changes")
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto getGsAenderungChangesInBearbeitung(@PathParam("aenderungId") UUID aenderungId);
+
+    @GET
     @Path("/benutzer/me/gs-dashboard")
     @Produces({ "application/json", "text/plain" })
     List<FallDashboardItemDto> getGsDashboard();
 
     @GET
-    @Path("/{aenderungId}/aenderung/gs/changes")
+    @Path("/changes/{trancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getGsTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
+    GesuchWithChangesDto getInitialTrancheChangesByTrancheId(@PathParam("trancheId") UUID trancheId);
 
     @GET
     @Path("/{aenderungId}/aenderung/sb/changes")
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getSbTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
+    GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
     @Path("/{gesuchId}/statusprotokoll")

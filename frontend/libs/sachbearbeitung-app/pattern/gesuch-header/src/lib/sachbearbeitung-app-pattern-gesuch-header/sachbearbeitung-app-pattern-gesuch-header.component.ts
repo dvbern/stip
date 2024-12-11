@@ -80,19 +80,18 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     return this.dokumentsStore.hasAcceptedAllDokumentsSig();
   });
 
+  /** Extract the gesuch id from the view to prevent unecessary signal updates */
+  private currentGesuchIdSig = computed(() => {
+    return this.currentGesuchSig()?.id;
+  });
+
   isTrancheRouteSig = computed(() => {
     const gesuch = this.currentGesuchSig();
     if (!gesuch) {
       return false;
     }
 
-    return (
-      // If it is a tranche route
-      this.router.url.includes('/tranche/') ||
-      // or a normal current gesuch route
-      (this.router.url.includes('/gesuch/') &&
-        !this.router.url.includes('/aenderung/'))
-    );
+    return this.router.url.includes('/tranche/');
   });
 
   isAenderungRouteSig = computed(() => {
@@ -101,7 +100,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       return false;
     }
 
-    return this.router.url.includes('/aenderung/');
+    return (
+      this.router.url.includes('/aenderung/') ||
+      this.router.url.includes('/initial/')
+    );
   });
 
   isInfosRouteSig = computed(() => {
@@ -117,11 +119,16 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   constructor() {
     effect(
       () => {
-        const gesuchId = this.currentGesuchSig()?.id;
+        const gesuchId = this.currentGesuchIdSig();
         if (gesuchId) {
           this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
         }
+      },
+      { allowSignalWrites: true },
+    );
 
+    effect(
+      () => {
         const gesuchTrancheId =
           this.currentGesuchSig()?.gesuchTrancheToWorkWith.id;
         if (gesuchTrancheId) {

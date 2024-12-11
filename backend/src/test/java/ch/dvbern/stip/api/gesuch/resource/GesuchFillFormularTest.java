@@ -54,6 +54,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.KindUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
@@ -115,19 +116,9 @@ class GesuchFillFormularTest {
     void testCreateEndpoint() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
+        gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         ausbildungId = gesuch.getAusbildungId();
-        gesuchTrancheId = gesuchApiSpec.getCurrentGesuch()
-            .gesuchIdPath(gesuchId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-
-            .extract()
-            .body()
-            .as(GesuchDtoSpec.class)
-            .getGesuchTrancheToWorkWith()
-            .getId();
+        gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
     }
 
     @Test
@@ -154,21 +145,28 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(3)
     void gesuchTrancheCreated() {
-        final var gesuch = gesuchApiSpec.getCurrentGesuch()
+        final var gesuch = gesuchApiSpec.getGesuch()
             .gesuchIdPath(gesuchId)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
 
         trancheUpdateDtoSpec = new GesuchTrancheUpdateDtoSpec();
         trancheUpdateDtoSpec.setId(gesuch.getGesuchTrancheToWorkWith().getId());
         trancheUpdateDtoSpec.setGesuchFormular(currentFormular);
 
         assertThat(gesuch.getGesuchTrancheToWorkWith(), notNullValue());
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigAb(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb()));
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigBis(), is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis()));
+        assertThat(
+            gesuch.getGesuchTrancheToWorkWith().getGueltigAb(),
+            is(GUELTIGKEIT_PERIODE_23_24.getGueltigAb())
+        );
+        assertThat(
+            gesuch.getGesuchTrancheToWorkWith().getGueltigBis(),
+            is(GUELTIGKEIT_PERIODE_23_24.getGueltigBis())
+        );
     }
 
     @Test
@@ -421,7 +419,7 @@ class GesuchFillFormularTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(21)
+    @Order(22)
     void gesuchNotificationTest() {
         var notifications = notificationApiSpec.getNotificationsForCurrentUser()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -462,12 +460,11 @@ class GesuchFillFormularTest {
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        return gesuchApiSpec.getCurrentGesuch()
+        return gesuchApiSpec.getGesuch()
             .gesuchIdPath(gesuchId)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .gesuchTrancheIdPath(trancheUpdateDtoSpec.getId())
+            .execute(ResponseBody::prettyPeek)
             .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
