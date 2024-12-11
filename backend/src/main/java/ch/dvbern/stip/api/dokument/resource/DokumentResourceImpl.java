@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -71,6 +72,7 @@ public class DokumentResourceImpl implements DokumentResource {
     private final ConfigService configService;
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
+    private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
@@ -82,13 +84,13 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    @AllowAll
     @Blocking
     public Uni<Response> createUnterschriftenblatt(
         UnterschriftenblattDokumentTyp unterschriftenblattTyp,
         UUID gesuchId,
         FileUpload fileUpload
     ) {
+        unterschriftenblattAuthorizer.canUpload(gesuchId);
         return unterschriftenblattService.getUploadUnterschriftenblattUni(unterschriftenblattTyp, gesuchId, fileUpload);
     }
 

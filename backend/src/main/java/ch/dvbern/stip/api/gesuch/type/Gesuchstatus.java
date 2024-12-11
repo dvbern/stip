@@ -97,7 +97,8 @@ public enum Gesuchstatus {
             FEHLENDE_DOKUMENTE,
             IN_FREIGABE,
             VERFUEGT,
-            WARTEN_AUF_UNTERSCHRIFTENBLATT
+            WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            VERSANDBEREIT
         )
     );
 

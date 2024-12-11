@@ -32,8 +32,8 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -61,8 +61,7 @@ public class Unterschriftenblatt extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private UnterschriftenblattDokumentTyp dokumentTyp;
 
-    // TODO KSTIP-1465: Make this OneToMany
-    @ManyToMany
+    @OneToMany
     @JoinTable(
         name = "unterschriftenblatt_dokument",
         joinColumns = @JoinColumn(
