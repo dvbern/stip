@@ -104,8 +104,8 @@ class GesuchFillFormularTest {
         NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
     private UUID fallId;
     private UUID gesuchId;
-    private UUID ausbildungId;
     private UUID gesuchTrancheId;
+    private UUID ausbildungId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
 
@@ -412,11 +412,11 @@ class GesuchFillFormularTest {
     @Order(20)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test

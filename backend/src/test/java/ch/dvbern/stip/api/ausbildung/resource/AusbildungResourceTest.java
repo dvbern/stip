@@ -105,11 +105,11 @@ class AusbildungResourceTest {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
         gesuchApiSpec.gesuchEinreichen()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test
@@ -117,7 +117,7 @@ class AusbildungResourceTest {
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -187,7 +187,7 @@ class AusbildungResourceTest {
 
         assertThat(updatedAusbildung.getAusbildungsort(), is(ausbildungsOrtToSet));
         gesuchApiSpec.gesuchZurueckweisen()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .body(
                 new KommentarDtoSpec()
                     .text("DONT_CARE")

@@ -90,11 +90,11 @@ class GesuchStatusprotokollTest {
     @Order(3)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test
@@ -102,7 +102,7 @@ class GesuchStatusprotokollTest {
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -143,7 +143,7 @@ class GesuchStatusprotokollTest {
     @Order(6)
     void gesuchZurueckweisen() {
         gesuchApiSpec.gesuchZurueckweisen()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .body(
                 new KommentarDtoSpec()
                     .text(ZURUECKWEISEN_COMMENT)

@@ -521,7 +521,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto bearbeitungAbschliessen(final UUID gesuchId) {
+    public void bearbeitungAbschliessen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
@@ -537,16 +537,14 @@ public class GesuchService {
             // Yes Stipendien, next Status = In Freigabe
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_FREIGABE);
         }
-        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
-    public GesuchDto gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
+    public void gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
         // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_GS, kommentarDto, true);
-        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
@@ -556,19 +554,18 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto gesuchStatusToInBearbeitung(UUID gesuchId) {
+    public void gesuchStatusToInBearbeitung(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
-        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
-    public GesuchDto gesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
-        return gesuchStatusToBereitFuerBearbeitung(gesuchId, null);
+    public void gesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+        gesuchStatusToBereitFuerBearbeitung(gesuchId, null);
     }
 
     @Transactional
-    public GesuchDto gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId, final KommentarDto kommentar) {
+    public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId, final KommentarDto kommentar) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
@@ -576,33 +573,28 @@ public class GesuchService {
             kommentar,
             false
         );
-
-        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
-    public GesuchDto gesuchStatusToVerfuegt(UUID gesuchId) {
+    public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
-        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
-    public GesuchDto gesuchStatusToVersendet(UUID gesuchId) {
+    public void gesuchStatusToVersendet(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSENDET);
-        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
-    public GesuchDto gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
+    public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
-        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
-    public GesuchDto changeGesuchStatusToNegativeVerfuegung(final UUID gesuchId, final UUID decisionId) {
+    public void changeGesuchStatusToNegativeVerfuegung(final UUID gesuchId, final UUID decisionId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var decision = stipDecisionTextRepository.requireById(decisionId);
         gesuchStatusService.triggerStateMachineEventWithComment(
@@ -611,8 +603,6 @@ public class GesuchService {
             new KommentarDto(decision.getTitleDe()),
             false
         );
-
-        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
     @Transactional
@@ -682,7 +672,7 @@ public class GesuchService {
         gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
         gesuchStatusService
             .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
-        return gesuchMapperUtil.mapWithTranche(gesuchTranche.getGesuch(), gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     @Transactional

@@ -115,11 +115,11 @@ public class DeleteGesuchAsGSTest {
     @Order(7)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode());
     }
 
     @Test

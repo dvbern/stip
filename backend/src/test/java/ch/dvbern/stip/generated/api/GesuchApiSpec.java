@@ -199,13 +199,13 @@ public class GesuchApiSpec {
      * Die Bearbeitung des Gesuch durch den SB abschliessen
      * 
      *
-     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return GesuchDtoSpec
      */
     public static class BearbeitungAbschliessenOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/bearbeitungAbschliessen";
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/bearbeitungAbschliessen";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -217,7 +217,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchId}/bearbeitungAbschliessen
+         * PATCH /gesuch/{gesuchTrancheId}/bearbeitungAbschliessen
          * @param handler handler
          * @param <T> type
          * @return type
@@ -228,7 +228,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchId}/bearbeitungAbschliessen
+         * PATCH /gesuch/{gesuchTrancheId}/bearbeitungAbschliessen
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -237,14 +237,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public BearbeitungAbschliessenOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public BearbeitungAbschliessenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -272,14 +272,14 @@ public class GesuchApiSpec {
      * 
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * @see #body  (optional)
      * return GesuchDtoSpec
      */
     public static class ChangeGesuchStatusToBereitFuerBearbeitungOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/status/bereit-fuer-bearbeitung/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/status/bereit-fuer-bearbeitung/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -292,7 +292,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/bereit-fuer-bearbeitung/{gesuchId}
+         * POST /gesuch/status/bereit-fuer-bearbeitung/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -303,7 +303,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/bereit-fuer-bearbeitung/{gesuchId}
+         * POST /gesuch/status/bereit-fuer-bearbeitung/{gesuchTrancheId}
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -321,14 +321,14 @@ public class GesuchApiSpec {
             return this;
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public ChangeGesuchStatusToBereitFuerBearbeitungOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public ChangeGesuchStatusToBereitFuerBearbeitungOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -356,13 +356,13 @@ public class GesuchApiSpec {
      * 
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return GesuchDtoSpec
      */
     public static class ChangeGesuchStatusToInBearbeitungOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/status/in-bearbeitung/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/status/in-bearbeitung/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -374,7 +374,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/in-bearbeitung/{gesuchId}
+         * POST /gesuch/status/in-bearbeitung/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -385,7 +385,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/in-bearbeitung/{gesuchId}
+         * POST /gesuch/status/in-bearbeitung/{gesuchTrancheId}
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -394,14 +394,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public ChangeGesuchStatusToInBearbeitungOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public ChangeGesuchStatusToInBearbeitungOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -429,14 +429,14 @@ public class GesuchApiSpec {
      * 
      * 
      *
-     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #gesuchTrancheIdPath  (required)
      * @see #body  (required)
      * return GesuchDtoSpec
      */
     public static class ChangeGesuchStatusToNegativeVerfuegungOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/status/negative-verfuegung/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/status/negative-verfuegung/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -449,7 +449,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/negative-verfuegung/{gesuchId}
+         * POST /gesuch/status/negative-verfuegung/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -460,7 +460,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/negative-verfuegung/{gesuchId}
+         * POST /gesuch/status/negative-verfuegung/{gesuchTrancheId}
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -478,14 +478,14 @@ public class GesuchApiSpec {
             return this;
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public ChangeGesuchStatusToNegativeVerfuegungOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public ChangeGesuchStatusToNegativeVerfuegungOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -513,13 +513,13 @@ public class GesuchApiSpec {
      * 
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return GesuchDtoSpec
      */
     public static class ChangeGesuchStatusToVerfuegtOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/status/verfuegt/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/status/verfuegt/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -531,7 +531,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/verfuegt/{gesuchId}
+         * POST /gesuch/status/verfuegt/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -542,7 +542,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/verfuegt/{gesuchId}
+         * POST /gesuch/status/verfuegt/{gesuchTrancheId}
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -551,14 +551,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public ChangeGesuchStatusToVerfuegtOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public ChangeGesuchStatusToVerfuegtOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -586,13 +586,13 @@ public class GesuchApiSpec {
      * 
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return GesuchDtoSpec
      */
     public static class ChangeGesuchStatusToVersendetOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuch/status/versendet/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/status/versendet/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -604,7 +604,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/versendet/{gesuchId}
+         * POST /gesuch/status/versendet/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -615,7 +615,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * POST /gesuch/status/versendet/{gesuchId}
+         * POST /gesuch/status/versendet/{gesuchTrancheId}
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -624,14 +624,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public ChangeGesuchStatusToVersendetOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public ChangeGesuchStatusToVersendetOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -793,12 +793,13 @@ public class GesuchApiSpec {
      * Das Gesuch einreichen
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
+     * return GesuchDtoSpec
      */
     public static class GesuchEinreichenOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/einreichen";
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/einreichen";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -810,7 +811,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchId}/einreichen
+         * PATCH /gesuch/{gesuchTrancheId}/einreichen
          * @param handler handler
          * @param <T> type
          * @return type
@@ -820,14 +821,24 @@ public class GesuchApiSpec {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/einreichen
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GesuchEinreichenOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GesuchEinreichenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -855,13 +866,13 @@ public class GesuchApiSpec {
      * Dem GS übermitteln das Dokumente nicht akzeptiert wurden
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * return GesuchDtoSpec
      */
     public static class GesuchFehlendeDokumenteUebermittelnOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/fehlendeDokumente";
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/fehlendeDokumente";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -873,7 +884,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchId}/fehlendeDokumente
+         * PATCH /gesuch/{gesuchTrancheId}/fehlendeDokumente
          * @param handler handler
          * @param <T> type
          * @return type
@@ -884,7 +895,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchId}/fehlendeDokumente
+         * PATCH /gesuch/{gesuchTrancheId}/fehlendeDokumente
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -893,14 +904,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GesuchFehlendeDokumenteUebermittelnOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GesuchFehlendeDokumenteUebermittelnOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -1001,14 +1012,14 @@ public class GesuchApiSpec {
      * Gas Gesuch an den GS zurueckweisen
      * 
      *
-     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #gesuchTrancheIdPath  (required)
      * @see #body  (optional)
      * return GesuchDtoSpec
      */
     public static class GesuchZurueckweisenOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/gesuchZurueckweisen";
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/gesuchZurueckweisen";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1021,7 +1032,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchId}/gesuchZurueckweisen
+         * PATCH /gesuch/{gesuchTrancheId}/gesuchZurueckweisen
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1032,7 +1043,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchId}/gesuchZurueckweisen
+         * PATCH /gesuch/{gesuchTrancheId}/gesuchZurueckweisen
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -1050,14 +1061,14 @@ public class GesuchApiSpec {
             return this;
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public GesuchZurueckweisenOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GesuchZurueckweisenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
