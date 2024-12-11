@@ -335,9 +335,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetFieldIf(
             () -> !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(targetFormular),
             "Set Darlehen to null because pia is not volljaehrig",
-            () -> {
-                targetFormular.setDarlehen(null);
-            }
+            () -> targetFormular.setDarlehen(null)
         );
     }
 
