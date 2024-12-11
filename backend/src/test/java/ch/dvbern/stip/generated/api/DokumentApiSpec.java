@@ -19,6 +19,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,6 +63,7 @@ public class DokumentApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createDokument(),
+                createUnterschriftenblatt(),
                 deleteDokument(),
                 gesuchDokumentAblehnen(),
                 gesuchDokumentAkzeptieren(),
@@ -74,6 +76,10 @@ public class DokumentApiSpec {
 
     public CreateDokumentOper createDokument() {
         return new CreateDokumentOper(createReqSpec());
+    }
+
+    public CreateUnterschriftenblattOper createUnterschriftenblatt() {
+        return new CreateUnterschriftenblattOper(createReqSpec());
     }
 
     public DeleteDokumentOper deleteDokument() {
@@ -197,6 +203,93 @@ public class DokumentApiSpec {
          * @return operation
          */
         public CreateDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #unterschriftenblattTypPath  (required)
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #fileUploadMultiPart  (required)
+     */
+    public static class CreateUnterschriftenblattOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateUnterschriftenblattOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("multipart/form-data");
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String UNTERSCHRIFTENBLATT_TYP_PATH = "unterschriftenblattTyp";
+
+        /**
+         * @param unterschriftenblattTyp (UnterschriftenblattDokumentTypDtoSpec)  (required)
+         * @return operation
+         */
+        public CreateUnterschriftenblattOper unterschriftenblattTypPath(Object unterschriftenblattTyp) {
+            reqSpec.addPathParam(UNTERSCHRIFTENBLATT_TYP_PATH, unterschriftenblattTyp);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public CreateUnterschriftenblattOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+         /**
+         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
+         * @see #reqSpec for customise
+         * @param fileUpload (File)  (required)
+         * @return operation
+         */
+         public CreateUnterschriftenblattOper fileUploadMultiPart(File fileUpload) {
+            reqSpec.addMultiPart(fileUpload);
+            return this;
+         }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateUnterschriftenblattOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateUnterschriftenblattOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -29,6 +29,12 @@ public interface DokumentResource {
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> createDokument(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
+    @POST
+    @Path("/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}")
+    @Consumes({ "multipart/form-data" })
+    @Produces({ "text/plain" })
+    void createUnterschriftenblatt(@PathParam("unterschriftenblattTyp") ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp unterschriftenblattTyp,@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+
     @DELETE
     @Path("/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}")
     @Produces({ "text/plain" })

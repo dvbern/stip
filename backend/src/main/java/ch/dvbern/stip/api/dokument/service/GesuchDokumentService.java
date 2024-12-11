@@ -30,6 +30,9 @@ import java.util.concurrent.CompletableFuture;
 
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.exception.AppValidationMessage;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -394,5 +397,33 @@ public class GesuchDokumentService {
             new GesuchDokument().setGesuchTranche(gesuchTranche).setDokumentTyp(dokumentTyp);
         gesuchDokumentRepository.persist(gesuchDokument);
         return gesuchDokument;
+    }
+
+    public Uni<Response> getUploadDokumentUni(
+        final DokumentTyp dokumentTyp,
+        final UUID gesuchTrancheId,
+        final FileUpload fileUpload
+    ) {
+        if (DokumentUploadUtil.checkFileUpload(fileUpload, configService)) {
+            throw new CustomValidationsException(
+                "File upload failed basic checks",
+                new CustomConstraintViolation("foo", "bar")
+            );
+        }
+
+        scanDokument(fileUpload);
+        return DokumentUploadUtil.uploadDokument(
+            fileUpload,
+            s3,
+            configService,
+            GESUCH_DOKUMENT_PATH,
+            objectId -> uploadDokument(
+                gesuchTrancheId,
+                dokumentTyp,
+                fileUpload,
+                objectId
+            ),
+            throwable -> LOG.error(throwable.getMessage())
+        );
     }
 }

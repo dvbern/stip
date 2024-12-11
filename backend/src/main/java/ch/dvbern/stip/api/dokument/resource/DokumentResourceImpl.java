@@ -26,11 +26,10 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.common.util.FileUtil;
-import ch.dvbern.stip.api.common.util.StringUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
@@ -48,7 +47,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
@@ -76,35 +74,16 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @AllowAll
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
-        if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
-            return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
-        }
+        return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
+    }
 
-        if (!FileUtil.checkFileExtensionAllowed(fileUpload.uploadedFile(), configService.getAllowedMimeTypes())) {
-            return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
-        }
+    @Override
+    public void createUnterschriftenblatt(
+        UnterschriftenblattDokumentTyp unterschriftenblattTyp,
+        UUID gesuchId,
+        FileUpload fileUpload
+    ) {
 
-        gesuchDokumentService.scanDokument(fileUpload);
-
-        String objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
-        return Uni.createFrom()
-            .completionStage(() -> gesuchDokumentService.getCreateDokumentFuture(objectId, fileUpload))
-            .onItem()
-            .invoke(
-                () -> gesuchDokumentService.uploadDokument(
-                    gesuchTrancheId,
-                    dokumentTyp,
-                    fileUpload,
-                    objectId
-                )
-            )
-            .onItem()
-            .ignore()
-            .andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
-            .onFailure()
-            .invoke(throwable -> LOG.error(throwable.getMessage()))
-            .onFailure()
-            .recoverWithItem(Response.serverError().build());
     }
 
     @RolesAllowed(GESUCH_DELETE)
