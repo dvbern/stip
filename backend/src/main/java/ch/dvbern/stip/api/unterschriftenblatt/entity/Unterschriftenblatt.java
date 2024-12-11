@@ -63,7 +63,7 @@ public class Unterschriftenblatt extends AbstractMandantEntity {
 
     @ManyToMany
     @JoinTable(
-        name = "gesuch_unterschriftenblatt_dokument",
+        name = "unterschriftenblatt_dokument",
         joinColumns = @JoinColumn(
             name = "unterschriftenblatt_id",
             referencedColumnName = "id",

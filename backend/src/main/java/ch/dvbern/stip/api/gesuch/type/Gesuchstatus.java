@@ -85,6 +85,22 @@ public enum Gesuchstatus {
         )
     );
 
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT = Collections.unmodifiableSet(
+        EnumSet.of(
+            ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+            ANSPRUCH_MANUELL_PRUEFEN,
+            NICHT_ANSPRUCHSBERECHTIGT,
+            BEREIT_FUER_BEARBEITUNG,
+            NEGATIVE_VERFUEGUNG,
+            IN_BEARBEITUNG_SB,
+            JURISTISCHE_ABKLAERUNG,
+            FEHLENDE_DOKUMENTE,
+            IN_FREIGABE,
+            VERFUEGT,
+            WARTEN_AUF_UNTERSCHRIFTENBLATT
+        )
+    );
+
     public boolean isEingereicht() {
         return this != IN_BEARBEITUNG_GS;
     }

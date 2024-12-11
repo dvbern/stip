@@ -21,11 +21,17 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
+import ch.dvbern.stip.api.unterschriftenblatt.repo.UnterschriftenblattRepository;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,10 +45,13 @@ public class UnterschriftenblattService {
     private static final String UNTERSCHRIFTENBLATT_DOKUMENT_PATH = "unterschriftenblatt/";
 
     private final GesuchRepository gesuchRepository;
+    private final UnterschriftenblattRepository unterschriftenblattRepository;
+    private final DokumentRepository dokumentRepository;
     private final Antivirus antivirus;
     private final ConfigService configService;
     private final S3AsyncClient s3;
 
+    @Transactional
     public Uni<Response> getUploadUnterschriftenblattUni(
         final UnterschriftenblattDokumentTyp dokumentTyp,
         final UUID gesuchId,
@@ -64,6 +73,7 @@ public class UnterschriftenblattService {
         );
     }
 
+    @Transactional
     public void uploadDokument(
         final UUID gesuchId,
         final UnterschriftenblattDokumentTyp dokumentTyp,
@@ -71,6 +81,29 @@ public class UnterschriftenblattService {
         final String objectId
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var unterschriftenblatt = unterschriftenblattRepository
+            .findByGesuchAndDokumentTyp(gesuchId, dokumentTyp)
+            .orElseGet(() -> createUnterschriftenblatt(gesuch, dokumentTyp));
 
+        final var dokument = new Dokument()
+            .setFilename(fileUpload.fileName())
+            .setFilesize(String.valueOf(fileUpload.size()))
+            .setFilepath(UNTERSCHRIFTENBLATT_DOKUMENT_PATH)
+            .setObjectId(objectId);
+
+        unterschriftenblatt.getDokumente().add(dokument);
+        dokumentRepository.persist(dokument);
+    }
+
+    private Unterschriftenblatt createUnterschriftenblatt(
+        final Gesuch gesuch,
+        final UnterschriftenblattDokumentTyp dokumentTyp
+    ) {
+        final var unterschriftenblatt = new Unterschriftenblatt()
+            .setGesuch(gesuch)
+            .setDokumentTyp(dokumentTyp);
+
+        unterschriftenblattRepository.persist(unterschriftenblatt);
+        return unterschriftenblatt;
     }
 }

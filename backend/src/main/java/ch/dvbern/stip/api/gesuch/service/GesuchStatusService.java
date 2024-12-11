@@ -93,6 +93,15 @@ public class GesuchStatusService {
         return editStates.contains(gesuchstatus);
     }
 
+    public boolean canUploadUnterschriftenblatt(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
+        final var editStates = new HashSet<Gesuchstatus>();
+        if (benutzer.hasRole(OidcConstants.ROLE_SACHBEARBEITER)) {
+            editStates.addAll(Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
+        }
+
+        return editStates.contains(gesuchstatus);
+    }
+
     public boolean canFire(final Gesuch gesuch, final GesuchStatusChangeEvent target) {
         final var sm = createStateMachine(gesuch, null);
         return sm.canFire(target);
