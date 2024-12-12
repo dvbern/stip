@@ -92,11 +92,11 @@ class GesuchTrancheAenderungTest {
     @Order(3)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode());
     }
 
     @Test
@@ -127,7 +127,7 @@ class GesuchTrancheAenderungTest {
     void makeGesuchVerfuegt() {
         // TODO KSTIP-1631: Make Gesuch the correct state
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -139,7 +139,7 @@ class GesuchTrancheAenderungTest {
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

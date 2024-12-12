@@ -40,6 +40,10 @@ public class GesuchMapperUtil {
         return mapWithTranche(gesuch, gesuch.getOldestGesuchTranche().orElseThrow(IllegalStateException::new));
     }
 
+    public GesuchDto mapWithGesuchOfTranche(final GesuchTranche gesuchTranche) {
+        return mapWithTranche(gesuchTranche.getGesuch(), gesuchTranche);
+    }
+
     /**
      * If a Gesuch contains a aenderung, two GesuchDtos will be returned.
      * One for the Gesuch

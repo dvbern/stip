@@ -140,12 +140,12 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGsDashboard
       summary: Returns gesuche for dashboard filtered by gs
-  /gesuch/status/in-bearbeitung/{gesuchId}:
+  /gesuch/status/in-bearbeitung/{gesuchTrancheId}:
     post:
       tags:
         - Gesuch
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -166,12 +166,12 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToInBearbeitung
-  /gesuch/status/bereit-fuer-bearbeitung/{gesuchId}:
+  /gesuch/status/bereit-fuer-bearbeitung/{gesuchTrancheId}:
     post:
       tags:
         - Gesuch
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -198,12 +198,12 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToBereitFuerBearbeitung
-  /gesuch/status/verfuegt/{gesuchId}:
+  /gesuch/status/verfuegt/{gesuchTrancheId}:
     post:
       tags:
         - Gesuch
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -224,12 +224,12 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToVerfuegt
-  /gesuch/status/versendet/{gesuchId}:
+  /gesuch/status/versendet/{gesuchTrancheId}:
     post:
       tags:
         - Gesuch
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
@@ -250,12 +250,16 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToVersendet
-  /gesuch/status/negative-verfuegung/{gesuchId}:
+  /gesuch/status/negative-verfuegung/{gesuchTrancheId}:
     post:
       tags:
         - Gesuch
       parameters:
-        - $ref: '#/components/parameters/gesuchId'
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
       requestBody:
         required: true
         content:
@@ -1609,18 +1613,22 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
-  '/gesuch/{gesuchId}/einreichen':
+  '/gesuch/{gesuchTrancheId}/einreichen':
     patch:
       tags:
         - Gesuch
       parameters:
-        - name: gesuchId
+        - name: gesuchTrancheId
           schema:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
       responses:
-        '201':
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Gesuch eingereicht
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1632,9 +1640,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichen
       summary: Das Gesuch einreichen
-  '/gesuch/{gesuchId}/fehlendeDokumente':
+  '/gesuch/{gesuchTrancheId}/fehlendeDokumente':
     parameters:
-      - name: gesuchId
+      - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -1644,6 +1652,10 @@ paths:
         - Gesuch
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Fehlende Dokumente übermittelt
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1667,6 +1679,10 @@ paths:
         - Gesuch
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Fehlende Dokumente eingereicht
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1678,14 +1694,22 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchTrancheFehlendeDokumenteEinreichen
       summary: Dem SB übermitteln das fehlende Dokumente hochgeladen wurden
-  '/gesuch/{gesuchId}/bearbeitungAbschliessen':
+  '/gesuch/{gesuchTrancheId}/bearbeitungAbschliessen':
     parameters:
-      - $ref: '#/components/parameters/gesuchId'
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     patch:
       tags:
         - Gesuch
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Bearbeitung des Gesuch Abschliessen
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1697,9 +1721,13 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: bearbeitungAbschliessen
       summary: Die Bearbeitung des Gesuch durch den SB abschliessen
-  '/gesuch/{gesuchId}/gesuchZurueckweisen':
+  '/gesuch/{gesuchTrancheId}/gesuchZurueckweisen':
     parameters:
-      - $ref: '#/components/parameters/gesuchId'
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     patch:
       tags:
         - Gesuch
@@ -1710,6 +1738,10 @@ paths:
               $ref: '#/components/schemas/Kommentar'
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
           description: Gesuch zurueckweisen and GS
         '400':
           $ref: '#/components/responses/BadRequest'

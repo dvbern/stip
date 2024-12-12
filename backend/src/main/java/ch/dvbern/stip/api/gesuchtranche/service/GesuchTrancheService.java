@@ -104,6 +104,14 @@ public class GesuchTrancheService {
     private final MailService mailService;
     private final NotificationService notificationService;
 
+    public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
+        return gesuchTrancheRepository.requireById(gesuchTrancheId);
+    }
+
+    public UUID getGesuchIdOfTranche(final GesuchTranche gesuchTranche) {
+        return gesuchTranche.getGesuch().getId();
+    }
+
     public List<GesuchTrancheSlimDto> getAllTranchenForGesuch(final UUID gesuchId) {
         return gesuchTrancheRepository.findForGesuch(gesuchId).map(gesuchTrancheMapper::toSlimDto).toList();
     }

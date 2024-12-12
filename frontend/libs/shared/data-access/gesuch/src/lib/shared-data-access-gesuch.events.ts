@@ -29,6 +29,9 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
       gesuch: SharedModelGesuch;
       typ: GesuchUrlType;
     }>(),
+    gesuchSetReturned: props<{
+      gesuch: SharedModelGesuch;
+    }>(),
     gesuchLoadedFailure: props<{ error: SharedModelError }>(),
     gesuchCreatedSuccess: props<{ id: string }>(),
     gesuchCreatedFailure: props<{ error: SharedModelError }>(),
@@ -50,11 +53,5 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     gesuchsLoadedFailure: props<{ error: SharedModelError }>(),
     gsDashboardLoadedSuccess: props<{ gsDashboard: FallDashboardItem[] }>(),
     gsDashboardLoadedFailure: props<{ error: SharedModelError }>(),
-    setGesuchToBearbeitung: emptyProps(),
-    setGesuchBearbeitungAbschliessen: emptyProps(),
-    setGesuchZurueckweisen: props<{ kommentar: string }>(),
-    setGesuchVerfuegt: emptyProps(),
-    setGesuchBereitFuerBearbeitung: props<{ kommentar: string }>(),
-    setGesuchVersendet: emptyProps(),
   },
 });

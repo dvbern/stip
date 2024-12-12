@@ -176,21 +176,6 @@
     <mat-menu #aktionMenu="matMenu" class="header-menu-panel mt-2 rounded">
       <div class="d-flex flex-column gap-2">
         @switch (availableTrancheInteraction) {
-          @case ('SET_TO_BEARBEITUNG') {
-            <!-- Switch to In Bearbeitung SB -->
-            <button
-              type="button"
-              class="btn fw-normal px-2 shadow-none"
-              data-testid="gesuch-header-nav-gesuch-bearbeiten"
-              mat-menu-item
-              (click)="setToBearbeitung()"
-            >
-              <div class="d-flex gap-2 align-items-center">
-                <i class="material-symbols-rounded">edit_note</i>
-                <span>{{ 'sachbearbeitung-app.header.gesuch-bearbeiten' | translate }}</span>
-              </div>
-            </button>
-          }
           @case ('CREATE_TRANCHE') {
             <!-- Tranche erstellen -->
             <button
@@ -212,13 +197,13 @@
           <hr class="my-1" />
         }
 
-        @let gesuchId = currentGesuchSig()?.id;
+        @let gesuchTrancheId = currentGesuchSig()?.gesuchTrancheToWorkWith?.id;
         @for (uebergang of statusUebergaenge.list; track $index) {
           <button
             type="button"
             class="btn fw-normal px-2 shadow-none pe-auto"
             [attr.data-testid]="'gesuch-header-nav-status-uebergang-item-' + uebergang.typ"
-            [disabled]="uebergang.disabledReason || !gesuchId"
+            [disabled]="uebergang.disabledReason || !gesuchTrancheId"
             [attr.title]="
               uebergang.disabledReason
                 ? ('sachbearbeitung-app.header.status-uebergang.disabled-reason.' + uebergang.disabledReason
@@ -226,7 +211,7 @@
                 : null
             "
             mat-menu-item
-            (click)="setStatusUebergang(uebergang.typ, gesuchId)"
+            (click)="setStatusUebergang(uebergang.typ, gesuchTrancheId)"
           >
             <div class="d-flex gap-2 align-items-center">
               <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
