@@ -7,6 +7,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("Darlehen")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -33,7 +38,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("willDarlehen")
   @NotNull
   public Boolean getWillDarlehen() {
@@ -54,7 +59,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("betragDarlehen")
  @Min(0)  public Integer getBetragDarlehen() {
     return betragDarlehen;
@@ -74,7 +79,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("betragBezogenKanton")
  @Min(0)  public Integer getBetragBezogenKanton() {
     return betragBezogenKanton;
@@ -94,7 +99,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("schulden")
  @Min(0)  public Integer getSchulden() {
     return schulden;
@@ -114,7 +119,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("anzahlBetreibungen")
  @Min(0)  public Integer getAnzahlBetreibungen() {
     return anzahlBetreibungen;
@@ -133,7 +138,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("grundNichtBerechtigt")
   public Boolean getGrundNichtBerechtigt() {
     return grundNichtBerechtigt;
@@ -152,7 +157,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("grundAusbildungZwoelfJahre")
   public Boolean getGrundAusbildungZwoelfJahre() {
     return grundAusbildungZwoelfJahre;
@@ -171,7 +176,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("grundHoheGebuehren")
   public Boolean getGrundHoheGebuehren() {
     return grundHoheGebuehren;
@@ -190,7 +195,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("grundAnschaffungenFuerAusbildung")
   public Boolean getGrundAnschaffungenFuerAusbildung() {
     return grundAnschaffungenFuerAusbildung;
@@ -208,7 +213,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("grundZweitausbildung")
   public Boolean getGrundZweitausbildung() {
     return grundZweitausbildung;
@@ -250,7 +255,7 @@ public class DarlehenDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DarlehenDto {\n");
-
+    
     sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
     sb.append("    betragDarlehen: ").append(toIndentedString(betragDarlehen)).append("\n");
     sb.append("    betragBezogenKanton: ").append(toIndentedString(betragBezogenKanton)).append("\n");
