@@ -33,8 +33,8 @@ public class DarlehenRequiredDocumentsProducer implements RequiredDocumentProduc
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         if (
-            Objects.isNull(formular.getDarlehen()) ||
-            !formular.getDarlehen().getWillDarlehen()
+            Objects.isNull(formular.getDarlehen())
+            || Boolean.FALSE.equals(formular.getDarlehen().getWillDarlehen())
         ) {
             return ImmutablePair.of("", Set.of());
         }
@@ -43,15 +43,14 @@ public class DarlehenRequiredDocumentsProducer implements RequiredDocumentProduc
 
         requiredDocs.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
 
-        if (Objects.nonNull(darlehen.getGrundNichtBerechtigt()) && darlehen.getGrundNichtBerechtigt()) {
+        if (Boolean.TRUE.equals(darlehen.getGrundNichtBerechtigt())) {
             requiredDocs.add(DokumentTyp.DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN);
         }
-        if (Objects.nonNull(darlehen.getGrundHoheGebuehren()) && darlehen.getGrundHoheGebuehren()) {
+        if (Boolean.TRUE.equals(darlehen.getGrundHoheGebuehren())) {
             requiredDocs.add(DokumentTyp.DARLEHEN_KOPIE_SCHULGELDRECHNUNG);
         }
         if (
-            Objects.nonNull(darlehen.getGrundAnschaffungenFuerAusbildung())
-            && darlehen.getGrundAnschaffungenFuerAusbildung()
+            Boolean.TRUE.equals(darlehen.getGrundAnschaffungenFuerAusbildung())
         ) {
             requiredDocs.add(DokumentTyp.DARLEHEN_BELEGE_ANSCHAFFUNGEN);
         }
