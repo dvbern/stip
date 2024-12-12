@@ -31,7 +31,7 @@ public abstract class DarlehenMapper extends EntityUpdateMapper<DarlehenDto, Dar
 
     public abstract Darlehen toEntity(DarlehenDto darlehenDto);
 
-    public abstract Darlehen paritalUpdate(DarlehenDto darlehenDto, @MappingTarget Darlehen entity);
+    public abstract Darlehen partialUpdate(DarlehenDto darlehenDto, @MappingTarget Darlehen entity);
 
     @Override
     @AfterMapping
