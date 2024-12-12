@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DARLEHEN_NOT_VALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DARLEHEN_REQUIRED_VOLLJAEHRIG_MESSAGE;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER, ElementType.FIELD })
+@Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = DarlehenConstraintValidator.class)
+@Constraint(validatedBy = DarlehenRequiredIfVolljaehrigConstraintValidator.class)
 @Documented
-public @interface DarlehenValidationConstraint {
-    String message() default VALIDATION_DARLEHEN_NOT_VALID_MESSAGE;
+public @interface DarlehenRequiredIfVolljaehrigConstraint {
+    String message() default VALIDATION_DARLEHEN_REQUIRED_VOLLJAEHRIG_MESSAGE;
 
     Class<?>[] groups() default {};
 

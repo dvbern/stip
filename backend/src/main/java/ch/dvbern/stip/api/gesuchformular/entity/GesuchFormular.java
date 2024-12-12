@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.common.validation.Severity;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.darlehen.entity.DarlehenRequiredIfVolljaehrigConstraint;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenValidationConstraint;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -107,7 +108,7 @@ import org.hibernate.envers.Audited;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
 )
-@DarlehenValidationConstraint(
+@DarlehenRequiredIfVolljaehrigConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         DarlehenPageValidation.class
@@ -249,7 +250,12 @@ public class GesuchFormular extends AbstractMandantEntity {
     @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
 
-    // @Nullable
+    @DarlehenValidationConstraint(
+        groups = {
+            GesuchEinreichenValidationGroup.class,
+            DarlehenPageValidation.class
+        }, property = "darlehen"
+    )
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(
         name = "darlehen_id",

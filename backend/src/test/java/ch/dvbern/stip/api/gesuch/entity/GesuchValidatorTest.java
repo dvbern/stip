@@ -61,7 +61,8 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DARLEHEN_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DARLEHEN_NOT_VALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DARLEHEN_REQUIRED_VOLLJAEHRIG_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE;
@@ -494,21 +495,35 @@ class GesuchValidatorTest {
         darlehen.setGrundHoheGebuehren(false);
         darlehen.setGrundAnschaffungenFuerAusbildung(false);
         darlehen.setGrundZweitausbildung(false);
-        darlehen.setGrundAusbildungZwoelfJahre(false);
+        darlehen.setGrundAusbildungZwoelfJahre(true);
         gesuch.setGesuchsperiode(null);
         gesuch.setAusbildung(null);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setDarlehen(darlehen);
         assertOneMessage(
-            VALIDATION_DARLEHEN_REQUIRED_MESSAGE,
+            VALIDATION_DARLEHEN_REQUIRED_VOLLJAEHRIG_MESSAGE,
             gesuch,
             true,
+            GesuchEinreichenValidationGroup.class
+        );
+        assertOneMessage(
+            VALIDATION_DARLEHEN_NOT_VALID_MESSAGE,
+            darlehen,
+            false,
             GesuchEinreichenValidationGroup.class
         );
         assertOneMessage(
             VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE,
             gesuch,
             true,
+            GesuchEinreichenValidationGroup.class
+        );
+
+        gesuch.getCurrentGesuchTranche().getGesuchFormular().setDarlehen(null);
+        assertOneMessage(
+            VALIDATION_DARLEHEN_REQUIRED_VOLLJAEHRIG_MESSAGE,
+            gesuch,
+            false,
             GesuchEinreichenValidationGroup.class
         );
     }
@@ -540,6 +555,12 @@ class GesuchValidatorTest {
             VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE,
             gesuch,
             true,
+            GesuchEinreichenValidationGroup.class
+        );
+        assertOneMessage(
+            VALIDATION_DARLEHEN_REQUIRED_VOLLJAEHRIG_MESSAGE,
+            gesuch,
+            false,
             GesuchEinreichenValidationGroup.class
         );
     }

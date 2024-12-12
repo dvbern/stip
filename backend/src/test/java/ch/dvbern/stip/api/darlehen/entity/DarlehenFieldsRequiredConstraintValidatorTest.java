@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.darlehen.entity;
 
-import java.time.LocalDate;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -37,7 +35,6 @@ import static org.hamcrest.core.Is.is;
 @RequiredArgsConstructor
 class DarlehenFieldsRequiredConstraintValidatorTest {
 
-    private GesuchFormular gesuchFormular;
     private Darlehen darlehen;
     private DarlehenConstraintValidator darlehenConstraintValidator;
 
@@ -52,8 +49,7 @@ class DarlehenFieldsRequiredConstraintValidatorTest {
 
     @BeforeEach
     void setUp() {
-        gesuchFormular = prepareGesuchFormularMitDarlehen();
-        darlehen = gesuchFormular.getDarlehen();
+        darlehen = new Darlehen();
         darlehen.setGrundAnschaffungenFuerAusbildung(false);
         darlehen.setGrundNichtBerechtigt(false);
         darlehen.setGrundZweitausbildung(false);
@@ -68,62 +64,27 @@ class DarlehenFieldsRequiredConstraintValidatorTest {
     }
 
     @Test
-    void testDarlehenRequiredAgeOfPiaConstraintValidator() {
-        // Geburtsdatum null soll keine Validation Fehler verfen als nicht validbar
-        darlehen.setWillDarlehen(true);
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null))
-            .isFalse();
-        darlehen.setWillDarlehen(false);
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null))
-            .isTrue();
-
-        // Minderjaehrig
-        darlehen.setWillDarlehen(true);
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(17));
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null))
-            .isFalse();
-        darlehen.setWillDarlehen(false);
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null))
-            .isTrue();
-
-        // Volljaehrig mit Darlehen Antwort
-        darlehen.setWillDarlehen(true);
-        darlehen.setGrundNichtBerechtigt(true);
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null))
-            .isTrue();
-
-        // Volljaehrig ohne darlehen Antwort
-        darlehen.setWillDarlehen(false);
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null))
-            .isTrue();
-    }
-
-    @Test
     void atLeastOneReasonShouldBeSelectedTest() {
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
-        gesuchFormular.getDarlehen().setWillDarlehen(true);
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isFalse();
-        gesuchFormular.getDarlehen().setGrundHoheGebuehren(true);
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isTrue();
+        darlehen.setWillDarlehen(true);
+        assertThat(darlehenConstraintValidator.isValid(darlehen, null)).isFalse();
+        darlehen.setGrundHoheGebuehren(true);
+        assertThat(darlehenConstraintValidator.isValid(darlehen, null)).isTrue();
     }
 
     @Test
     void testWillDarlehenValidationTest() {
-        // test with pre filled values & pia >= 18 years old
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
         darlehen.setWillDarlehen(true);
-        gesuchFormular.getDarlehen().setGrundHoheGebuehren(true);
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isTrue();
+        darlehen.setGrundHoheGebuehren(true);
+        assertThat(darlehenConstraintValidator.isValid(darlehen, null)).isTrue();
         darlehen.setWillDarlehen(false);
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isTrue();
+        assertThat(darlehenConstraintValidator.isValid(darlehen, null)).isTrue();
 
         // test empty values
-        gesuchFormular.setDarlehen(new Darlehen());
-        gesuchFormular.getDarlehen().setWillDarlehen(true);
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isFalse();
-        gesuchFormular.getDarlehen().setWillDarlehen(false);
-        assertThat(darlehenConstraintValidator.isValid(gesuchFormular, null)).isTrue();
+        darlehen = new Darlehen();
+        darlehen.setWillDarlehen(true);
+        assertThat(darlehenConstraintValidator.isValid(darlehen, null)).isFalse();
+        darlehen.setWillDarlehen(false);
+        assertThat(darlehenConstraintValidator.isValid(darlehen, null)).isTrue();
     }
 
     @Test

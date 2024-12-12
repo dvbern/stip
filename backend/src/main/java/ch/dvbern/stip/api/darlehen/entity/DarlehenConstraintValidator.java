@@ -17,28 +17,18 @@
 
 package ch.dvbern.stip.api.darlehen.entity;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class DarlehenConstraintValidator
-    implements ConstraintValidator<DarlehenValidationConstraint, GesuchFormular> {
+    implements ConstraintValidator<DarlehenValidationConstraint, Darlehen> {
     private String property = "";
 
     @Override
     public void initialize(DarlehenValidationConstraint constraintAnnotation) {
         property = constraintAnnotation.property();
-    }
-
-    private static boolean isVolljaehrig(LocalDate geburtsdatum) {
-        if (geburtsdatum == null) {
-            return false;
-        }
-        LocalDate volljaehrigCompareDate = LocalDate.now().minusYears(18);
-        return geburtsdatum.isBefore(volljaehrigCompareDate) || geburtsdatum.isEqual(volljaehrigCompareDate);
     }
 
     private boolean isAtLeastOneReasonSelected(Darlehen darlehen) {
@@ -50,18 +40,12 @@ public class DarlehenConstraintValidator
 
     @Override
     public boolean isValid(
-        GesuchFormular gesuchFormular,
+        final Darlehen darlehen,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        final var pia = gesuchFormular.getPersonInAusbildung();
-        if (
-            Objects.nonNull(gesuchFormular.getDarlehen())
-            && gesuchFormular.getDarlehen().getWillDarlehen()
-        ) {
-            final var darlehen = gesuchFormular.getDarlehen();
+        if (Objects.nonNull(darlehen) && darlehen.getWillDarlehen()) {
 
-            return isVolljaehrig(pia.getGeburtsdatum())
-            && isAtLeastOneReasonSelected(darlehen)
+            return isAtLeastOneReasonSelected(darlehen)
             && Objects.nonNull(darlehen.getGrundZweitausbildung())
             && Objects.nonNull(darlehen.getGrundAnschaffungenFuerAusbildung())
             && Objects.nonNull(darlehen.getGrundNichtBerechtigt())
