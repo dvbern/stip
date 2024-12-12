@@ -36,23 +36,23 @@ public abstract class DarlehenMapper extends EntityUpdateMapper<DarlehenDto, Dar
     @Override
     @AfterMapping
     protected void resetDependentDataBeforeUpdate(
-        final DarlehenDto newFormular,
-        @MappingTarget final Darlehen targetFormular
+        final DarlehenDto newDarlehen,
+        @MappingTarget final Darlehen targetDarlehen
     ) {
         resetFieldIf(
-            () -> Boolean.FALSE.equals(newFormular.getWillDarlehen()),
+            () -> Boolean.FALSE.equals(newDarlehen.getWillDarlehen()),
             "Clear Darlehen values because willDarlehen has changed",
             () -> {
-                targetFormular.setWillDarlehen(false);
-                targetFormular.setBetragDarlehen(null);
-                targetFormular.setAnzahlBetreibungen(null);
-                targetFormular.setSchulden(null);
-                targetFormular.setBetragBezogenKanton(null);
-                targetFormular.setGrundAusbildungZwoelfJahre(null);
-                targetFormular.setGrundHoheGebuehren(null);
-                targetFormular.setGrundZweitausbildung(null);
-                targetFormular.setGrundNichtBerechtigt(null);
-                targetFormular.setGrundAnschaffungenFuerAusbildung(null);
+                targetDarlehen.setWillDarlehen(false);
+                targetDarlehen.setBetragDarlehen(null);
+                targetDarlehen.setAnzahlBetreibungen(null);
+                targetDarlehen.setSchulden(null);
+                targetDarlehen.setBetragBezogenKanton(null);
+                targetDarlehen.setGrundAusbildungZwoelfJahre(null);
+                targetDarlehen.setGrundHoheGebuehren(null);
+                targetDarlehen.setGrundZweitausbildung(null);
+                targetDarlehen.setGrundNichtBerechtigt(null);
+                targetDarlehen.setGrundAnschaffungenFuerAusbildung(null);
             }
         );
     }
