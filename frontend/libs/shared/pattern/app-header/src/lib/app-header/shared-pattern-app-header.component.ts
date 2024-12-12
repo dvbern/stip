@@ -84,8 +84,6 @@ export class SharedPatternAppHeaderComponent {
   }
 
   logout() {
-    this.oauthService.redirectUri =
-      window.location.origin + window.location.pathname;
     this.oauthService.revokeTokenAndLogout();
   }
 
