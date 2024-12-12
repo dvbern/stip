@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.notiz.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -52,7 +51,7 @@ public class GesuchNotizService {
         gesuchs.stream()
             .map(gesuch -> gesuchNotizRepository.findAllByGesuchId(gesuch.getId()))
             .forEach(notizes::addAll);
-        return notizes.stream().map(gesuchNotizMapper::toDto).collect(Collectors.toList());
+        return notizes.stream().map(gesuchNotizMapper::toDto).toList();
     }
 
     @Transactional
