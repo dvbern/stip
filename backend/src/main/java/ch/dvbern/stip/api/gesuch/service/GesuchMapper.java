@@ -17,12 +17,18 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.time.LocalDate;
+import java.util.Comparator;
+
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -43,6 +49,10 @@ public abstract class GesuchMapper {
     @Mapping(target = "ausbildungId", source = "ausbildung.id")
     public abstract GesuchDto toDto(Gesuch gesuch);
 
+    @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
+    @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
+    public abstract GesuchInfoDto toInfoDto(Gesuch gesuch);
+
     @Mapping(source = "ausbildungId", target = "ausbildung.id")
     // @Mapping(source = "gesuchsperiodeId", target = "gesuchsperiode.id")
     public abstract Gesuch toNewEntity(GesuchCreateDto gesuchCreateDto);
@@ -62,5 +72,29 @@ public abstract class GesuchMapper {
         }
 
         return zuordnung.getSachbearbeiter().getFullName();
+    }
+
+    @Named("getStartDate")
+    static LocalDate getStartDate(Gesuch gesuch) {
+        return getGesuchDateRange(gesuch).getGueltigAb();
+    }
+
+    @Named("getEndDate")
+    static LocalDate getEndDate(Gesuch gesuch) {
+        return getGesuchDateRange(gesuch).getGueltigBis();
+    }
+
+    static DateRange getGesuchDateRange(Gesuch gesuch) {
+        final var tranchenStartEnd = gesuch.getTranchenTranchen().map(GesuchTranche::getGueltigkeit).toList();
+        final var startDatum = tranchenStartEnd.stream()
+            .min(Comparator.comparing(DateRange::getGueltigAb))
+            .map(DateRange::getGueltigAb)
+            .orElseThrow(IllegalStateException::new);
+        final var endDatum = tranchenStartEnd.stream()
+            .max(Comparator.comparing(DateRange::getGueltigBis))
+            .map(DateRange::getGueltigBis)
+            .orElseThrow(IllegalStateException::new);
+
+        return new DateRange(startDatum, endDatum);
     }
 }
