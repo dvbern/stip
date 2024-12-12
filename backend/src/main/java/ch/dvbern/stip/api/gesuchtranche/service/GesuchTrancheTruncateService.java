@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -39,6 +40,7 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 @RequiredArgsConstructor
 public class GesuchTrancheTruncateService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
+    private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
 
     void truncateExistingTranchen(final Gesuch gesuch, final GesuchTranche newTranche) {
         final var newTrancheRange = TrancheRange.from(newTranche);
@@ -66,7 +68,9 @@ public class GesuchTrancheTruncateService {
             } else if (overlaps == OverlapType.RIGHT || overlaps == OverlapType.RIGHT_FULL) {
                 handleRight(existingTranche, newTranche);
             } else if (overlaps == OverlapType.INSIDE) {
-                added.add(handleInside(existingTranche, newTranche));
+                final var newNewTranche = handleInside(existingTranche, newTranche);
+                added.add(newNewTranche);
+                gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(existingTranche, newNewTranche);
             }
         }
 
@@ -76,6 +80,7 @@ public class GesuchTrancheTruncateService {
         for (final var tranche : gesuch.getGesuchTranchen()) {
             if (tranche.getGueltigkeit().getMonths() <= 0) {
                 toRemove.add(tranche);
+                gesuchDokumentKommentarService.deleteForGesuchTrancheId(tranche.getId());
                 gesuchTrancheRepository.delete(tranche);
             }
         }

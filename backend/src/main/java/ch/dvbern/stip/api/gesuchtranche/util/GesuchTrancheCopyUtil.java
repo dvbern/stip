@@ -71,8 +71,14 @@ public class GesuchTrancheCopyUtil {
         return copy;
     }
 
-    public GesuchTranche createNewTranche(final GesuchTranche gesuchTranche) {
-        return createNewTranche(gesuchTranche, gesuchTranche.getGueltigkeit(), gesuchTranche.getComment());
+    public GesuchTranche createNewTranche(
+        final GesuchTranche gesuchTranche
+    ) {
+        return createNewTranche(
+            gesuchTranche,
+            gesuchTranche.getGueltigkeit(),
+            gesuchTranche.getComment()
+        );
     }
 
     /**
