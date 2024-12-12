@@ -19,6 +19,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 
 import java.util.ArrayList;
@@ -70,7 +71,8 @@ public class DokumentApiSpec {
                 getDokument(),
                 getDokumentDownloadToken(),
                 getGesuchDokumentKommentare(),
-                getGesuchDokumenteForTyp()
+                getGesuchDokumenteForTyp(),
+                getUnterschriftenblaetterForGesuch()
         );
     }
 
@@ -108,6 +110,10 @@ public class DokumentApiSpec {
 
     public GetGesuchDokumenteForTypOper getGesuchDokumenteForTyp() {
         return new GetGesuchDokumenteForTypOper(createReqSpec());
+    }
+
+    public GetUnterschriftenblaetterForGesuchOper getUnterschriftenblaetterForGesuch() {
+        return new GetUnterschriftenblaetterForGesuchOper(createReqSpec());
     }
 
     /**
@@ -851,6 +857,79 @@ public class DokumentApiSpec {
          * @return operation
          */
         public GetGesuchDokumenteForTypOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * return List&lt;UnterschriftenblattDokumentDtoSpec&gt;
+     */
+    public static class GetUnterschriftenblaetterForGesuchOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/unterschriftenblatt/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetUnterschriftenblaetterForGesuchOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /unterschriftenblatt/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /unterschriftenblatt/{gesuchId}
+         * @param handler handler
+         * @return List&lt;UnterschriftenblattDokumentDtoSpec&gt;
+         */
+        public List<UnterschriftenblattDokumentDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<UnterschriftenblattDokumentDtoSpec>> type = new TypeRef<List<UnterschriftenblattDokumentDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public GetUnterschriftenblaetterForGesuchOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetUnterschriftenblaetterForGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetUnterschriftenblaetterForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

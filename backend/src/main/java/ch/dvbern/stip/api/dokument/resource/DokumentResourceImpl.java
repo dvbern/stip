@@ -36,6 +36,7 @@ import ch.dvbern.stip.generated.api.DokumentResource;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
 import io.quarkus.security.UnauthorizedException;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
@@ -92,6 +93,13 @@ public class DokumentResourceImpl implements DokumentResource {
     ) {
         unterschriftenblattAuthorizer.canUpload(gesuchId);
         return unterschriftenblattService.getUploadUnterschriftenblattUni(unterschriftenblattTyp, gesuchId, fileUpload);
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    @AllowAll
+    public List<UnterschriftenblattDokumentDto> getUnterschriftenblaetterForGesuch(UUID gesuchId) {
+        return unterschriftenblattService.getForGesuchAndType(gesuchId);
     }
 
     @RolesAllowed(GESUCH_DELETE)

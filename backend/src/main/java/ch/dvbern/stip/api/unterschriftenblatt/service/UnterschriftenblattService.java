@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import ch.dvbern.stip.api.unterschriftenblatt.repo.UnterschriftenblattRepository;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -56,6 +57,7 @@ public class UnterschriftenblattService {
     private final S3AsyncClient s3;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
+    private final UnterschriftenblattMapper unterschriftenblattMapper;
 
     @Transactional
     public Uni<Response> getUploadUnterschriftenblattUni(
@@ -99,6 +101,13 @@ public class UnterschriftenblattService {
 
         unterschriftenblatt.getDokumente().add(dokument);
         dokumentRepository.persist(dokument);
+    }
+
+    public List<UnterschriftenblattDokumentDto> getForGesuchAndType(
+        final UUID gesuchId
+    ) {
+        final var found = unterschriftenblattRepository.requireForGesuch(gesuchId);
+        return found.map(unterschriftenblattMapper::toDto).toList();
     }
 
     public List<UnterschriftenblattDokumentTyp> getUnterschriftenblaetterToUpload(final Gesuch gesuch) {

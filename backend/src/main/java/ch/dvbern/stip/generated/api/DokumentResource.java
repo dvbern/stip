@@ -5,6 +5,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -70,4 +71,9 @@ public interface DokumentResource {
     @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}")
     @Produces({ "application/json", "text/plain" })
     NullableGesuchDokumentDto getGesuchDokumenteForTyp(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/unterschriftenblatt/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    List<UnterschriftenblattDokumentDto> getUnterschriftenblaetterForGesuch(@PathParam("gesuchId") UUID gesuchId);
 }
