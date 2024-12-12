@@ -2719,6 +2719,22 @@ components:
             $ref: '#/components/schemas/Dokument'
         status:
           $ref: '#/components/schemas/Dokumentstatus'
+    UnterschriftenblattDokument:
+      required:
+        - id
+        - dokumentTyp
+        - dokumente
+        - status
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        dokumentTyp:
+          $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
     Dokument:
       required:
         - id
