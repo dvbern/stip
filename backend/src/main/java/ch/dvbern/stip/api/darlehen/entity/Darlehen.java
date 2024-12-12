@@ -29,6 +29,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+@DarlehenValidationConstraint
 @Audited
 @Entity
 @Table(

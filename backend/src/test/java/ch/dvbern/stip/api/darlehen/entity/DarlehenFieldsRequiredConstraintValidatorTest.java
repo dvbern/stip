@@ -95,6 +95,7 @@ class DarlehenFieldsRequiredConstraintValidatorTest {
         darlehen.setSchulden(-1);
         darlehen.setBetragBezogenKanton(-1);
         darlehen.setAnzahlBetreibungen(-1);
+        darlehen.setGrundHoheGebuehren(true);
         var violations = validator.validate(darlehen);
         MatcherAssert.assertThat(violations.size(), is(4));
         darlehen.setBetragDarlehen(0);
