@@ -17,16 +17,16 @@
 
 package ch.dvbern.stip.api.darlehen.service;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 
 @ApplicationScoped
 public class DarlehenRequiredDocumentsProducer implements RequiredDocumentProducer {
