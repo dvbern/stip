@@ -40,6 +40,7 @@ import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
@@ -162,6 +163,12 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchDto getGesuch(UUID gesuchId, UUID gesuchTrancheId) {
         gesuchAuthorizer.canRead(gesuchId);
         return gesuchService.findGesuchWithTranche(gesuchId, gesuchTrancheId).orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
+        gesuchAuthorizer.canRead(gesuchId);
+        return gesuchService.getGesuchInfo(gesuchId);
     }
 
     @RolesAllowed(GESUCH_READ)
