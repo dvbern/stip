@@ -1603,7 +1603,7 @@ paths:
       operationId: getDokument
       summary: get Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-  '/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}':
+  '/dokument/{dokumentId}':
     get:
       tags:
         - Dokument
@@ -1619,21 +1619,9 @@ paths:
     delete:
       tags:
         - Dokument
-      parameters:
-        - name: dokumentTyp
-          schema:
-            $ref: '#/components/schemas/DokumentTyp'
-          in: path
-          required: true
-        - name: gesuchTrancheId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
       responses:
         '200':
-          description: |
-            Dokument deleted
+          description: Dokument deleted
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1645,16 +1633,6 @@ paths:
       operationId: deleteDokument
       summary: deletes a Dokument
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-      - name: dokumentTyp
-        schema:
-          $ref: '#/components/schemas/DokumentTyp'
-        in: path
-        required: true
       - name: dokumentId
         schema:
           $ref: '#/components/schemas/UUID'

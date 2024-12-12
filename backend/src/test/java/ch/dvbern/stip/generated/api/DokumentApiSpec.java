@@ -305,13 +305,11 @@ public class DokumentApiSpec {
      * 
      *
      * @see #dokumentIdPath  (required)
-     * @see #dokumentTypPath  (required)
-     * @see #gesuchTrancheIdPath  (required)
      */
     public static class DeleteDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = DELETE;
-        public static final String REQ_URI = "/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}";
+        public static final String REQ_URI = "/dokument/{dokumentId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -323,7 +321,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * DELETE /dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}
+         * DELETE /dokument/{dokumentId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -341,28 +339,6 @@ public class DokumentApiSpec {
          */
         public DeleteDokumentOper dokumentIdPath(Object dokumentId) {
             reqSpec.addPathParam(DOKUMENT_ID_PATH, dokumentId);
-            return this;
-        }
-
-        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
-
-        /**
-         * @param dokumentTyp (DokumentTypDtoSpec)  (required)
-         * @return operation
-         */
-        public DeleteDokumentOper dokumentTypPath(Object dokumentTyp) {
-            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
-            return this;
-        }
-
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
-
-        /**
-         * @param gesuchTrancheId (UUID)  (required)
-         * @return operation
-         */
-        public DeleteDokumentOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
@@ -598,15 +574,13 @@ public class DokumentApiSpec {
      * get Dokument Download Token
      * 
      *
-     * @see #gesuchTrancheIdPath  (required)
-     * @see #dokumentTypPath  (required)
      * @see #dokumentIdPath  (required)
      * return String
      */
     public static class GetDokumentDownloadTokenOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}";
+        public static final String REQ_URI = "/dokument/{dokumentId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -618,7 +592,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}
+         * GET /dokument/{dokumentId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -629,35 +603,13 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}
+         * GET /dokument/{dokumentId}
          * @param handler handler
          * @return String
          */
         public String executeAs(Function<Response, Response> handler) {
             TypeRef<String> type = new TypeRef<String>(){};
             return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
-
-        /**
-         * @param gesuchTrancheId (UUID)  (required)
-         * @return operation
-         */
-        public GetDokumentDownloadTokenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
-            return this;
-        }
-
-        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
-
-        /**
-         * @param dokumentTyp (DokumentTypDtoSpec)  (required)
-         * @return operation
-         */
-        public GetDokumentDownloadTokenOper dokumentTypPath(Object dokumentTyp) {
-            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
-            return this;
         }
 
         public static final String DOKUMENT_ID_PATH = "dokumentId";

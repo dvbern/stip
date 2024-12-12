@@ -106,7 +106,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @AllowAll
     @Blocking
-    public void deleteDokument(UUID dokumentId, DokumentTyp dokumentTyp, UUID gesuchId) {
+    public void deleteDokument(UUID dokumentId) {
         gesuchDokumentService.removeDokument(dokumentId);
     }
 
@@ -166,7 +166,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    public String getDokumentDownloadToken(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
+    public String getDokumentDownloadToken(UUID dokumentId) {
         if (gesuchDokumentService.findDokument(dokumentId).isEmpty()) {
             throw new NotFoundException();
         }
@@ -175,7 +175,6 @@ public class DokumentResourceImpl implements DokumentResource {
             .claims()
             .upn(benutzerService.getCurrentBenutzername())
             .claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM, dokumentId.toString())
-            .claim(DokumentDownloadConstants.GESUCH_ID_CLAIM, gesuchId.toString())
             .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
             .issuer(configService.getIssuer())
             .jws()

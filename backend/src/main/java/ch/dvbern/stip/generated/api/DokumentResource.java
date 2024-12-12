@@ -37,9 +37,9 @@ public interface DokumentResource {
     io.smallrye.mutiny.Uni<Response> createUnterschriftenblatt(@PathParam("unterschriftenblattTyp") ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp unterschriftenblattTyp,@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
     @DELETE
-    @Path("/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}")
+    @Path("/dokument/{dokumentId}")
     @Produces({ "text/plain" })
-    void deleteDokument(@PathParam("dokumentId") UUID dokumentId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    void deleteDokument(@PathParam("dokumentId") UUID dokumentId);
 
     @PATCH
     @Path("/gesuchDokument/{gesuchDokumentId}/ablehnen")
@@ -58,9 +58,9 @@ public interface DokumentResource {
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDokument(@QueryParam("token") @NotNull   String token);
 
     @GET
-    @Path("/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}")
+    @Path("/dokument/{dokumentId}")
     @Produces({ "text/plain" })
-    String getDokumentDownloadToken(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("dokumentId") UUID dokumentId);
+    String getDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
     @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare")

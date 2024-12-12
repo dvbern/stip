@@ -137,8 +137,6 @@ class DokumentResourcesTest {
 
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)
-            .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -160,9 +158,7 @@ class DokumentResourcesTest {
     @Order(5)
     void test_delete_dokument() {
         dokumentApiSpec.deleteDokument()
-            .gesuchTrancheIdPath(gesuchTrancheId)
             .dokumentIdPath(dokumentId)
-            .dokumentTypPath(DokumentTyp.PERSON_AUSWEIS)
             .execute(ResponseBody::prettyPeek)
             .then()
             .statusCode(Status.NO_CONTENT.getStatusCode());
