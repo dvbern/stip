@@ -33,7 +33,6 @@ import ch.dvbern.stip.generated.dto.GesuchNotizUpdateDto;
 import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -56,12 +55,8 @@ public class GesuchNotizService {
 
     @Transactional
     public List<GesuchNotizDto> getAllByGesuchId(final UUID gesuchId) {
-        try {
-            final var gesuch = gesuchRepository.requireById(gesuchId);
-            return getAllByFall(gesuch.getAusbildung().getFall());
-        } catch (NotFoundException ex) {
-            return List.of();
-        }
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return getAllByFall(gesuch.getAusbildung().getFall());
 
     }
 

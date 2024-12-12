@@ -253,16 +253,12 @@ class GesuchNotizResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        final var notizen = gesuchNotizApiSpec.getNotizen()
+        gesuchNotizApiSpec.getNotizen()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchNotizDto[].class);
-        assertEquals(0, notizen.length);
+            .statusCode(Status.NOT_FOUND.getStatusCode());
     }
 
     // Test Resources for Juristische Notiz
