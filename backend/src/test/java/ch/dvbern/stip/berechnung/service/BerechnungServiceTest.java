@@ -759,7 +759,6 @@ class BerechnungServiceTest {
                 .setSteuerjahr(2023)
                 .setVeranlagungsCode(0)
                 .setVerdienstRealisiert(false)
-                // .setWillDarlehen(true)
                 .setAuswaertigeMittagessenProWoche(0)
         );
 
@@ -896,7 +895,6 @@ class BerechnungServiceTest {
                 .setSteuerjahr(2023)
                 .setVeranlagungsCode(0)
                 .setVerdienstRealisiert(false)
-                // .setWillDarlehen(true)
                 .setAuswaertigeMittagessenProWoche(0)
         );
 

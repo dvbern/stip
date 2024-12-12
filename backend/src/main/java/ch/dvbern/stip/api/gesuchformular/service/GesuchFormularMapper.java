@@ -260,7 +260,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final @MappingTarget GesuchFormular targetFormular
     ) {
         resetDarlehen(targetFormular);
-
     }
 
     @AfterMapping
@@ -268,7 +267,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final GesuchFormular newFormular
     ) {
         resetSteuerdatenAfterUpdate(newFormular);
-
     }
 
     void resetEinnahmenKosten(
