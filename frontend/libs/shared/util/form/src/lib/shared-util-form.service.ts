@@ -281,6 +281,12 @@ export class SharedUtilFormService {
     form: T,
     expectedFields: KeysOfForm<T>[],
     specialValidationErrors?: SpecialValidationError[],
+    /**
+     * A function that revices the value of the control and returns true if the value is valid
+     * The function serves as an additional check to determine if the control should be invalidated
+     * in case there are multiple controls with the same field name, for example in an array as geschwister.
+     */
+    validatorFn?: (value: string) => boolean,
   ) {
     if (!specialValidationErrors || specialValidationErrors.length === 0) {
       return;
@@ -293,8 +299,16 @@ export class SharedUtilFormService {
         field in form.controls
       ) {
         const control = form.get(field);
-        control?.markAllAsTouched();
-        control?.patchValue(null);
+
+        if (validatorFn) {
+          if (!validatorFn(control?.value)) {
+            control?.markAllAsTouched();
+            control?.patchValue(null);
+          }
+        } else {
+          control?.markAllAsTouched();
+          control?.patchValue(null);
+        }
       }
     });
   }
