@@ -32,7 +32,7 @@
     </mat-radio-group>
 
     @if (willDarlehenChangedSig() && !view.loading) {
-      <div class="tw-dv-form-half">
+      <div class="tw-dv-form-half tw-pt-4">
         <!-- Darlehensbetrag -->
         <mat-form-field dvSharedUiFormField class="tw-mt-4 tw-w-full">
           <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | translate }}</mat-label>
@@ -104,9 +104,7 @@
             ></dv-shared-pattern-document-upload>
           }
         </div>
-      </div>
 
-      <div class="tw-dv-form-grid">
         <fieldset
           class="tw-col-span-2 tw-grid tw-grid-cols-[1fr_56px] tw-gap-x-6 tw-gap-y-4 tw-rounded"
           formGroupName="gruende"
