@@ -3816,6 +3816,9 @@ components:
         ausbildungEnd:
           description: Datum im Format mm.YYYY
           type: string
+        besuchtBMS:
+          description: Required bei Ausbildungskategorien 4 oder 5. Kann nur dann auf true gesetzt werden.
+          type: boolean
         pensum:
           $ref: '#/components/schemas/AusbildungsPensum'
         alternativeAusbildungsstaette:
