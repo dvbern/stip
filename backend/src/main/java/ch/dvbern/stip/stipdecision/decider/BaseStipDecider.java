@@ -17,35 +17,14 @@
 
 package ch.dvbern.stip.stipdecision.decider;
 
-import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.personinausbildung.type.Sprache;
-import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class BaseStipDecider {
-    private final StipDecisionTextRepository stipDecisionTextRepository;
+    public abstract StipDeciderResult decide(final GesuchTranche gesuchTranche);
 
-    public abstract StipDecision decide(final GesuchTranche gesuchTranche);
-
-    public String getTextForDecision(final StipDecision decision, final Sprache korrespondenzSprache) {
-        if (decision == StipDecision.GESUCH_VALID) {
-            return "";
-        }
-        final var decisionText = stipDecisionTextRepository.getTextByStipDecision(decision);
-        if (decisionText == null) {
-            throw new IllegalStateException(
-                String.format(
-                    "A decision was returned by the decider which has no decision text, decision: %s",
-                    decision
-                )
-            );
-        }
-
-        return decisionText.getTitleDe();
-    }
-
-    public abstract GesuchStatusChangeEvent getGesuchStatusChangeEvent(final StipDecision decision);
+    public abstract GesuchStatusChangeEvent getGesuchStatusChangeEvent(final StipDeciderResult decision);
 }

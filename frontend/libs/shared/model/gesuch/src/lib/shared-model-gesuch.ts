@@ -2,7 +2,11 @@ import { GesuchFormular } from './openapi/model/gesuchFormular';
 import { GesuchFormularUpdate } from './openapi/model/gesuchFormularUpdate';
 import { GesuchWithChanges } from './openapi/model/gesuchWithChanges';
 import { GetGesucheSBQueryType } from './openapi/model/getGesucheSBQueryType';
-import { GesuchDashboardItem, GesuchTranche } from './openapi/model/models';
+import {
+  GesuchDashboardItem,
+  GesuchTranche,
+  GesuchTrancheTyp,
+} from './openapi/model/models';
 import { SteuerdatenTyp } from './openapi/model/steuerdatenTyp';
 
 export interface SharedModelGesuch extends GesuchWithChanges {
@@ -37,6 +41,9 @@ export type SharedModelGesuchFormularPropsSteuerdatenSteps =
   | SharedModelGesuchFormularProps
   | SteuerdatenSteps
   | 'dokuments';
+
+export const TRANCHE_TYPE_INITIAL = 'INITIAL' as const;
+export type GesuchUrlType = GesuchTrancheTyp | typeof TRANCHE_TYPE_INITIAL;
 
 // TODO extract to env or generate with OpenAPI?
 export const SHARED_MODEL_GESUCH_RESOURCE = `/gesuch`;

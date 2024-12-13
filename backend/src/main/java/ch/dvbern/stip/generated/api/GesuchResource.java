@@ -32,35 +32,36 @@ import jakarta.validation.Valid;
 public interface GesuchResource {
 
     @PATCH
-    @Path("/{gesuchId}/bearbeitungAbschliessen")
+    @Path("/{gesuchTrancheId}/bearbeitungAbschliessen")
     @Produces({ "application/json", "text/plain" })
-    void bearbeitungAbschliessen(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto bearbeitungAbschliessen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/status/bereit-fuer-bearbeitung/{gesuchId}")
-    @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchId") UUID gesuchId);
-
-    @POST
-    @Path("/status/in-bearbeitung/{gesuchId}")
-    @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchId") UUID gesuchId);
-
-    @POST
-    @Path("/status/negative-verfuegung/{gesuchId}")
+    @Path("/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToNegativeVerfuegung(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull AusgewaehlterGrundDto ausgewaehlterGrundDto);
+    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @POST
-    @Path("/status/verfuegt/{gesuchId}")
+    @Path("/status/in-bearbeitung/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToVerfuegt(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/status/versendet/{gesuchId}")
+    @Path("/status/negative-verfuegung/{gesuchTrancheId}")
+    @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToVersendet(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto changeGesuchStatusToNegativeVerfuegung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull AusgewaehlterGrundDto ausgewaehlterGrundDto);
+
+    @POST
+    @Path("/status/verfuegt/{gesuchTrancheId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto changeGesuchStatusToVerfuegt(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @POST
+    @Path("/status/versendet/{gesuchTrancheId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto changeGesuchStatusToVersendet(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
     @Consumes({ "application/json" })
@@ -73,35 +74,30 @@ public interface GesuchResource {
     void deleteGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
-    @Path("/{gesuchId}/einreichen")
+    @Path("/{gesuchTrancheId}/einreichen")
     @Produces({ "application/json", "text/plain" })
-    void gesuchEinreichen(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto gesuchEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchId}/fehlendeDokumente")
+    @Path("/{gesuchTrancheId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
-    void gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchId") UUID gesuchId);
+    GesuchDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
     @Produces({ "application/json", "text/plain" })
-    void gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchId}/gesuchZurueckweisen")
+    @Path("/{gesuchTrancheId}/gesuchZurueckweisen")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    void gesuchZurueckweisen(@PathParam("gesuchId") UUID gesuchId,@Valid KommentarDto kommentarDto);
+    GesuchDto gesuchZurueckweisen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @GET
     @Path("/{gesuchId}/berechnung")
     @Produces({ "application/json", "text/plain" })
     BerechnungsresultatDto getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
-    @Path("/{gesuchId}/current")
-    @Produces({ "application/json", "text/plain" })
-    GesuchDto getCurrentGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/{gesuchTrancheId}")
@@ -119,19 +115,24 @@ public interface GesuchResource {
     PaginatedSbDashboardDto getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("typ") @NotNull   ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.gesuch.type.SbDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 
     @GET
+    @Path("/{aenderungId}/aenderung/gs/changes")
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto getGsAenderungChangesInBearbeitung(@PathParam("aenderungId") UUID aenderungId);
+
+    @GET
     @Path("/benutzer/me/gs-dashboard")
     @Produces({ "application/json", "text/plain" })
     List<FallDashboardItemDto> getGsDashboard();
 
     @GET
-    @Path("/{aenderungId}/aenderung/gs/changes")
+    @Path("/changes/{trancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getGsTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
+    GesuchWithChangesDto getInitialTrancheChangesByTrancheId(@PathParam("trancheId") UUID trancheId);
 
     @GET
     @Path("/{aenderungId}/aenderung/sb/changes")
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getSbTrancheChanges(@PathParam("aenderungId") UUID aenderungId);
+    GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId);
 
     @GET
     @Path("/{gesuchId}/statusprotokoll")

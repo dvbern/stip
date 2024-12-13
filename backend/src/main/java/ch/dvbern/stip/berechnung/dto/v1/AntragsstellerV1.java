@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.bildungskategorie.type.Bildungsstufe;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
@@ -164,7 +165,12 @@ public class AntragsstellerV1 {
         builder.verpflegung(Objects.requireNonNullElse(einnahmenKosten.getAuswaertigeMittagessenProWoche(), 0));
         builder.fremdbetreuung(Objects.requireNonNullElse(einnahmenKosten.getBetreuungskostenKinder(), 0));
         // TODO: builder.anteilFamilienbudget(Objects.requireNonNullElse());
-        // TODO: builder.lehre(Objects.requireNonNullElse());
+        builder.lehre(
+            gesuchFormular.getAusbildung()
+                .getAusbildungsgang()
+                .getBildungskategorie()
+                .getBfs() == Bildungskategorie.LEHRE_BFS
+        );
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
         builder.halbierungElternbeitrag(

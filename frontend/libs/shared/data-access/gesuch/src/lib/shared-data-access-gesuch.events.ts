@@ -4,6 +4,7 @@ import { SharedModelError } from '@dv/shared/model/error';
 import {
   FallDashboardItem,
   GesuchCreate,
+  GesuchUrlType,
   GetGesucheSBQueryType,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
@@ -26,7 +27,10 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     }>(),
     gesuchLoadedSuccess: props<{
       gesuch: SharedModelGesuch;
-      trancheId?: string;
+      typ: GesuchUrlType;
+    }>(),
+    gesuchSetReturned: props<{
+      gesuch: SharedModelGesuch;
     }>(),
     gesuchLoadedFailure: props<{ error: SharedModelError }>(),
     gesuchCreatedSuccess: props<{ id: string }>(),
@@ -49,11 +53,5 @@ export const SharedDataAccessGesuchEvents = createActionGroup({
     gesuchsLoadedFailure: props<{ error: SharedModelError }>(),
     gsDashboardLoadedSuccess: props<{ gsDashboard: FallDashboardItem[] }>(),
     gsDashboardLoadedFailure: props<{ error: SharedModelError }>(),
-    setGesuchToBearbeitung: emptyProps(),
-    setGesuchBearbeitungAbschliessen: emptyProps(),
-    setGesuchZurueckweisen: props<{ kommentar: string }>(),
-    setGesuchVerfuegt: emptyProps(),
-    setGesuchBereitFuerBearbeitung: props<{ kommentar: string }>(),
-    setGesuchVersendet: emptyProps(),
   },
 });

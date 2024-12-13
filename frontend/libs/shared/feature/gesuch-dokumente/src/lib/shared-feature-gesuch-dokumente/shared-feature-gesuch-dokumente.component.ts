@@ -277,11 +277,10 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   fehlendeDokumenteUebermitteln() {
-    const { gesuchId, trancheId } = this.gesuchViewSig();
+    const { trancheId } = this.gesuchViewSig();
 
-    if (gesuchId && trancheId) {
+    if (trancheId) {
       this.dokumentsStore.fehlendeDokumenteUebermitteln$({
-        gesuchId,
         trancheId,
         onSuccess: () => {
           // Reload gesuch because the status has changed

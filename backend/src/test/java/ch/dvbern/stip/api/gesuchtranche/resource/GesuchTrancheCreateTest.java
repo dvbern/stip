@@ -86,11 +86,11 @@ class GesuchTrancheCreateTest {
     @Order(3)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode());
     }
 
     @Test
@@ -121,7 +121,7 @@ class GesuchTrancheCreateTest {
     @Order(6)
     void setStatusInBearbeitungSb() {
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
-            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

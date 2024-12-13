@@ -25,7 +25,7 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 @Authorizer
 public class AusbildungAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
+    private final GesuchStatusService gesuchStatusService;
     private final AusbildungRepository ausbildungRepository;
     private final FallRepository fallRepository;
 
@@ -76,7 +77,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         final var ausbildung = ausbildungRepository.requireById(ausbildungId);
 
         // Only an Sb can edit a ausbildung, and only if it has at most one gesuch, at most one tranche ant the
-        // gesuch is in the state IN_BEARBEITUNG_SB
+        // gesuch is in the state IN_BEARBEITUNG_SB or ABKLAERUNG_DURCH_RECHSTABTEILUNG
 
         if (!isAdminOrSb(currentBenutzer)) {
             return false;
@@ -100,11 +101,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
             return false;
         }
 
-        if (gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
-            return true;
-        }
-
-        return false;
+        return gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus());
     }
 
     public void canUpdate(final UUID ausbildungId) {

@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -52,6 +53,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
     private GesuchTranche gesuchTranche_inBearbeitungGS;
 
     private GesuchTrancheRepository gesuchTrancheRepository;
+    private GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private GesuchRepository gesuchRepository;
 
     @BeforeEach
@@ -76,6 +78,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
 
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
+        gesuchTrancheHistoryRepository = Mockito.mock(GesuchTrancheHistoryRepository.class);
 
         gesuch = new Gesuch()
             .setAusbildung(
@@ -86,7 +89,12 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
                     )
             );
 
-        authorizer = new GesuchTrancheAuthorizer(benutzerService, gesuchTrancheRepository, gesuchRepository);
+        authorizer = new GesuchTrancheAuthorizer(
+            benutzerService,
+            gesuchTrancheRepository,
+            gesuchTrancheHistoryRepository,
+            gesuchRepository
+        );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchTranche_inBearbeitungGS);

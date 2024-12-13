@@ -30,6 +30,8 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
@@ -62,40 +64,60 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_UPDATE;
 @Validated
 public class GesuchResourceImpl implements GesuchResource {
     private final GesuchService gesuchService;
+    private final GesuchTrancheService gesuchTrancheService;
     private final TenantService tenantService;
     private final GesuchHistoryService gesuchHistoryService;
     private final GesuchAuthorizer gesuchAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
+    private final GesuchMapperUtil gesuchMapperUtil;
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public GesuchDto changeGesuchStatusToInBearbeitung(UUID gesuchId) {
+    public GesuchDto changeGesuchStatusToInBearbeitung(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
-        return gesuchService.gesuchStatusToInBearbeitung(gesuchId);
+        gesuchService.gesuchStatusToInBearbeitung(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
-    public GesuchDto changeGesuchStatusToNegativeVerfuegung(UUID gesuchId, AusgewaehlterGrundDto grund) {
+    public GesuchDto changeGesuchStatusToNegativeVerfuegung(
+        UUID gesuchTrancheId,
+        AusgewaehlterGrundDto ausgewaehlterGrundDto
+    ) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
-        return gesuchService.changeGesuchStatusToNegativeVerfuegung(gesuchId, grund.getDecisionId());
+        gesuchService.changeGesuchStatusToNegativeVerfuegung(
+            gesuchId,
+            ausgewaehlterGrundDto.getDecisionId()
+        );
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
-    public GesuchDto changeGesuchStatusToVerfuegt(UUID gesuchId) {
+    public GesuchDto changeGesuchStatusToVerfuegt(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
-        return gesuchService.gesuchStatusToVerfuegt(gesuchId);
+        gesuchService.gesuchStatusToVerfuegt(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
-    public GesuchDto changeGesuchStatusToVersendet(UUID gesuchId) {
+    public GesuchDto changeGesuchStatusToVersendet(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
-        return gesuchService.gesuchStatusToVersendet(gesuchId);
+        gesuchService.gesuchStatusToVersendet(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     @RolesAllowed(GESUCH_CREATE)
@@ -115,25 +137,24 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public void gesuchEinreichen(UUID gesuchId) {
+    public GesuchDto gesuchEinreichen(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     // TODO KSTIP-1247: Update which roles can do this
     @RolesAllowed(GESUCH_UPDATE)
     @AllowAll
     @Override
-    public void gesuchFehlendeDokumenteUebermitteln(UUID gesuchId) {
+    public GesuchDto gesuchFehlendeDokumenteUebermitteln(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuchId);
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public GesuchDto getCurrentGesuch(UUID gesuchId) {
-        gesuchAuthorizer.canRead(gesuchId);
-        return gesuchService.findGesuchWithOldestTranche(gesuchId).orElseThrow(NotFoundException::new);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     @RolesAllowed(GESUCH_READ)
@@ -148,6 +169,14 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public List<FallDashboardItemDto> getGsDashboard() {
         return gesuchService.getFallDashboardItemDtos();
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @AllowAll
+    @Override
+    public GesuchWithChangesDto getGsAenderungChangesInBearbeitung(UUID aenderungId) {
+        gesuchTrancheAuthorizer.canRead(aenderungId);
+        return gesuchService.getGsTrancheChangesInBearbeitung(aenderungId);
     }
 
     @RolesAllowed({ GESUCH_READ, ROLE_GESUCHSTELLER })
@@ -219,46 +248,55 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public GesuchWithChangesDto getGsTrancheChanges(UUID aenderungId) {
-        gesuchTrancheAuthorizer.canRead(aenderungId);
-        return gesuchService.getGsTrancheChanges(aenderungId);
+    public GesuchWithChangesDto getInitialTrancheChangesByTrancheId(UUID trancheId) {
+        gesuchTrancheAuthorizer.canReadInitialTrancheChanges(trancheId);
+        return gesuchService.getChangesByTrancheId(trancheId);
     }
 
     // TODO KSTIP-1247: Update which roles can do this
     @RolesAllowed(GESUCH_READ)
     @AllowAll
     @Override
-    public GesuchWithChangesDto getSbTrancheChanges(UUID aenderungId) {
+    public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId) {
         return gesuchService.getSbTrancheChanges(aenderungId);
     }
 
     // TODO KSTIP-1247: Only SB can execute these next 3
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public void bearbeitungAbschliessen(UUID gesuchId) {
+    public GesuchDto bearbeitungAbschliessen(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
-        gesuchService.bearbeitungAbschliessen(gesuchId);
+        gesuchService.bearbeitungAbschliessen(gesuchTrancheId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
-    public GesuchDto changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
+    public GesuchDto changeGesuchStatusToBereitFuerBearbeitung(UUID gesuchTrancheId, KommentarDto kommentarDto) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
-        return gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId);
+        gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentarDto);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public void gesuchZurueckweisen(UUID gesuchId, KommentarDto kommentarDto) {
+    public GesuchDto gesuchZurueckweisen(UUID gesuchTrancheId, KommentarDto kommentarDto) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchZurueckweisen(gesuchId, kommentarDto);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
-    public void gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
+    public GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
-        gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
+        return gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
     }
 }

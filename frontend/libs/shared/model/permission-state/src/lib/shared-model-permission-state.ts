@@ -67,7 +67,7 @@ export const permissionTableByAppType = {
   BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '    ', [sb]: ' V  ' },
   IN_BEARBEITUNG_SB /**                */: { [gs]: '    ', [sb]: 'WV  ' },
   IN_FREIGABE /**                      */: { [gs]: '    ', [sb]: ' V  ' },
-  ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '    ', [sb]: ' V  ' },
+  ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '    ', [sb]: 'WV  ' },
   ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '    ', [sb]: ' V  ' },
   FEHLENDE_DOKUMENTE /**               */: { [gs]: '  DF', [sb]: '    ' },
   GESUCH_ABGELEHNT /**                 */: { [gs]: '    ', [sb]: ' V  ' },

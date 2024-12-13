@@ -23,7 +23,7 @@ import { CreateGesuchTrancheRequest } from '../model/createGesuchTrancheRequest'
 import { DokumentTyp } from '../model/dokumentTyp';
 import { GesuchDokument } from '../model/gesuchDokument';
 import { GesuchTranche } from '../model/gesuchTranche';
-import { GesuchTrancheSlim } from '../model/gesuchTrancheSlim';
+import { GesuchTrancheList } from '../model/gesuchTrancheList';
 import { Kommentar } from '../model/kommentar';
 import { ValidationReport } from '../model/validationReport';
 
@@ -775,9 +775,9 @@ export class GesuchTrancheService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getAllTranchenForGesuch$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchTrancheSlim>>;
-     public getAllTranchenForGesuch$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchTrancheSlim>>>;
-     public getAllTranchenForGesuch$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchTrancheSlim>>>;
+     public getAllTranchenForGesuch$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchTrancheList>;
+     public getAllTranchenForGesuch$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchTrancheList>>;
+     public getAllTranchenForGesuch$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchTrancheList>>;
      public getAllTranchenForGesuch$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchId = requestParameters.gesuchId;
         if (gesuchId === null || gesuchId === undefined) {
@@ -830,7 +830,7 @@ export class GesuchTrancheService {
         }
 
         const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Array<GesuchTrancheSlim>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchTrancheList>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

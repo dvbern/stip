@@ -20,7 +20,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
@@ -30,7 +29,6 @@ import {
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
-import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import {
   StatusUebergaengeMap,
@@ -49,7 +47,6 @@ import {
     MatMenuModule,
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
-    SharedUiIconBadgeComponent,
   ],
   providers: [GesuchStore],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
@@ -83,19 +80,18 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     return this.dokumentsStore.hasAcceptedAllDokumentsSig();
   });
 
+  /** Extract the gesuch id from the view to prevent unecessary signal updates */
+  private currentGesuchIdSig = computed(() => {
+    return this.currentGesuchSig()?.id;
+  });
+
   isTrancheRouteSig = computed(() => {
     const gesuch = this.currentGesuchSig();
     if (!gesuch) {
       return false;
     }
 
-    return (
-      // If it is a tranche route
-      this.router.url.includes('/tranche/') ||
-      // or a normal current gesuch route
-      (this.router.url.includes('/gesuch/') &&
-        !this.router.url.includes('/aenderung/'))
-    );
+    return this.router.url.includes('/tranche/');
   });
 
   isAenderungRouteSig = computed(() => {
@@ -104,7 +100,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       return false;
     }
 
-    return this.router.url.includes('/aenderung/');
+    return (
+      this.router.url.includes('/aenderung/') ||
+      this.router.url.includes('/initial/')
+    );
   });
 
   isInfosRouteSig = computed(() => {
@@ -120,11 +119,16 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   constructor() {
     effect(
       () => {
-        const gesuchId = this.currentGesuchSig()?.id;
+        const gesuchId = this.currentGesuchIdSig();
         if (gesuchId) {
           this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
         }
+      },
+      { allowSignalWrites: true },
+    );
 
+    effect(
+      () => {
         const gesuchTrancheId =
           this.currentGesuchSig()?.gesuchTrancheToWorkWith.id;
         if (gesuchTrancheId) {
@@ -139,27 +143,12 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
 
     switch (gesuchStatus) {
-      case 'BEREIT_FUER_BEARBEITUNG':
-        return 'SET_TO_BEARBEITUNG';
       case 'IN_BEARBEITUNG_SB':
         return 'CREATE_TRANCHE';
       default:
         return null;
     }
   });
-
-  canSetToBearbeitungSig = computed(() => {
-    const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
-    if (!gesuchStatus) {
-      return false;
-    }
-
-    return gesuchStatus === 'BEREIT_FUER_BEARBEITUNG';
-  });
-
-  setToBearbeitung() {
-    this.store.dispatch(SharedDataAccessGesuchEvents.setGesuchToBearbeitung());
-  }
 
   statusUebergaengeOptionsSig = computed(() => {
     const gesuch = this.currentGesuchSig();
@@ -178,37 +167,56 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     };
   });
 
-  setStatusUebergang(nextStatus: StatusUebergang, gesuchId?: string) {
-    if (!gesuchId) {
+  setStatusUebergang(nextStatus: StatusUebergang, gesuchTrancheId?: string) {
+    if (!gesuchTrancheId) {
       return;
     }
 
     switch (nextStatus) {
+      case 'SET_TO_BEARBEITUNG':
+      case 'EINGEREICHT':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'VERFUEGT':
       case 'VERSENDET':
-        this.gesuchStore.setStatus$[nextStatus]({ gesuchId });
+        this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
         break;
       case 'BEREIT_FUER_BEARBEITUNG':
-      case 'ZURUECKWEISEN':
-        SharedUiKommentarDialogComponent.open(this.dialog, {
-          entityId: gesuchId,
-          titleKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.title`,
-          messageKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.message`,
-          placeholderKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.placeholder`,
-          confirmKey: `sachbearbeitung-app.header.status-uebergang.${nextStatus}.confirm`,
+        SharedUiKommentarDialogComponent.openOptional(this.dialog, {
+          entityId: gesuchTrancheId,
+          titleKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title`,
+          messageKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message`,
+          placeholderKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder`,
+          confirmKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.confirm`,
         })
           .afterClosed()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$[nextStatus]({
-                gesuchId,
+              this.gesuchStore.setStatus$['BEREIT_FUER_BEARBEITUNG']({
+                gesuchTrancheId,
                 text: result.kommentar,
               });
             }
           });
-
+        break;
+      case 'ZURUECKWEISEN':
+        SharedUiKommentarDialogComponent.open(this.dialog, {
+          entityId: gesuchTrancheId,
+          titleKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.title`,
+          messageKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.message`,
+          placeholderKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder`,
+          confirmKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.confirm`,
+        })
+          .afterClosed()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((result) => {
+            if (result) {
+              this.gesuchStore.setStatus$['ZURUECKWEISEN']({
+                gesuchTrancheId,
+                text: result.kommentar,
+              });
+            }
+          });
         break;
       case 'NEGATIVE_VERFUEGUNG_ERSTELLEN':
         SachbearbeitungAppUiGrundAuswahlDialogComponent.open(this.dialog, {
@@ -222,7 +230,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .subscribe((result) => {
             if (result) {
               this.gesuchStore.setStatus$[nextStatus]({
-                gesuchId,
+                gesuchTrancheId,
                 grundId: result.entityId,
               });
             }

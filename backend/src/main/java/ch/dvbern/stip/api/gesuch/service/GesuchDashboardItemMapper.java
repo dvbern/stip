@@ -39,6 +39,7 @@ public interface GesuchDashboardItemMapper {
     @Mapping(source = "gesuch.id", target = "id")
     @Mapping(source = "offeneAenderung", target = "offeneAenderung")
     @Mapping(source = "missingDocumentsTrancheIdAndCount", target = "missingDocuments")
+    @Mapping(source = "gesuch.latestGesuchTranche.id", target = "currentTrancheId")
     GesuchDashboardItemDto toDto(
         final Gesuch gesuch,
         final GesuchTrancheSlimDto offeneAenderung,

@@ -11,8 +11,8 @@ import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,
   GesuchTranche,
+  GesuchTrancheList,
   GesuchTrancheService,
-  GesuchTrancheSlim,
   GesuchTrancheStatus,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
@@ -27,12 +27,12 @@ import {
 
 type GesuchAenderungState = {
   cachedGesuchAenderung: CachedRemoteData<GesuchTranche>;
-  cachedTranchenSlim: CachedRemoteData<GesuchTrancheSlim[]>;
+  cachedTranchenList: CachedRemoteData<GesuchTrancheList>;
 };
 
 const initialState: GesuchAenderungState = {
   cachedGesuchAenderung: initial(),
-  cachedTranchenSlim: initial(),
+  cachedTranchenList: initial(),
 };
 
 export type AenderungChangeState = Extract<
@@ -61,13 +61,13 @@ export class GesuchAenderungStore extends signalStore(
   private router = inject(Router);
 
   aenderungenViewSig = computed(() => {
-    const tranchen = this.cachedTranchenSlim();
+    const list = this.cachedTranchenList();
     const aenderungen =
-      tranchen.data
+      list.data?.tranchen
         ?.filter((t) => t.typ === 'AENDERUNG')
         .map((t, index) => ({ ...t, index })) ?? [];
     return {
-      loading: isPending(tranchen),
+      loading: isPending(list),
       hasAenderungen: aenderungen.length > 0,
       list: aenderungen,
       byStatus: aenderungen.reduce(
@@ -87,18 +87,23 @@ export class GesuchAenderungStore extends signalStore(
   });
 
   tranchenViewSig = computed(() => {
-    const tranchen = this.cachedTranchenSlim();
+    const list = this.cachedTranchenList();
     return {
-      loading: isPending(tranchen),
-      list: tranchen.data?.filter((t) => t.typ === 'TRANCHE') ?? [],
+      loading: isPending(list),
+      list: list.data?.tranchen?.filter((t) => t.typ === 'TRANCHE') ?? [],
     };
+  });
+
+  initialTrancheViewSig = computed(() => {
+    const list = this.cachedTranchenList();
+    return list.data?.initialTranche ?? null;
   });
 
   getAllTranchenForGesuch$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          cachedTranchenSlim: cachedPending(state.cachedTranchenSlim),
+          cachedTranchenList: cachedPending(state.cachedTranchenList),
         }));
       }),
       switchMap((req) =>
@@ -110,7 +115,7 @@ export class GesuchAenderungStore extends signalStore(
       ),
       handleApiResponse((tranchen) => {
         patchState(this, () => ({
-          cachedTranchenSlim: tranchen,
+          cachedTranchenList: tranchen,
         }));
       }),
     ),
