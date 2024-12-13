@@ -203,6 +203,12 @@ public class Gesuch extends AbstractMandantEntity {
             .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
     }
 
+    public Stream<GesuchTranche> getTranchenTranchen() {
+        return getGesuchTranchen()
+            .stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE);
+    }
+
     public Optional<GesuchTranche> getAenderungZuUeberpruefen() {
         return getGesuchTranchen().stream()
             .filter(

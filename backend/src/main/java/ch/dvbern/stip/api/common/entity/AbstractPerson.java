@@ -50,4 +50,8 @@ public abstract class AbstractPerson extends AbstractMandantEntity {
     @NotNull
     @Column(name = "geburtsdatum", nullable = false)
     private LocalDate geburtsdatum;
+
+    public String getFullName() {
+        return getVorname() + " " + getNachname();
+    }
 }

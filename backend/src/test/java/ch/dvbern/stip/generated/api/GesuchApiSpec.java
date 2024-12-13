@@ -18,6 +18,7 @@ import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchInfoDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -86,6 +87,7 @@ public class GesuchApiSpec {
                 gesuchZurueckweisen(),
                 getBerechnungForGesuch(),
                 getGesuch(),
+                getGesuchInfo(),
                 getGesucheGs(),
                 getGesucheSb(),
                 getGsAenderungChangesInBearbeitung(),
@@ -151,6 +153,10 @@ public class GesuchApiSpec {
 
     public GetGesuchOper getGesuch() {
         return new GetGesuchOper(createReqSpec());
+    }
+
+    public GetGesuchInfoOper getGesuchInfo() {
+        return new GetGesuchInfoOper(createReqSpec());
     }
 
     public GetGesucheGsOper getGesucheGs() {
@@ -1246,6 +1252,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns the basic Gesuch info with the given Id
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return GesuchInfoDtoSpec
+     */
+    public static class GetGesuchInfoOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/info";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchInfoOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/info
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/info
+         * @param handler handler
+         * @return GesuchInfoDtoSpec
+         */
+        public GesuchInfoDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchInfoDtoSpec> type = new TypeRef<GesuchInfoDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchInfoOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchInfoOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchInfoOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

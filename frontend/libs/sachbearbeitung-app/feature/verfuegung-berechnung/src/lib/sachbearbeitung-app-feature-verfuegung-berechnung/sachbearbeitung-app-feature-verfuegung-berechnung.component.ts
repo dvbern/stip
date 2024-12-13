@@ -14,7 +14,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { addDays, differenceInMonths } from 'date-fns';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
@@ -63,30 +63,14 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       kosten: false,
     },
   };
-  gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
-  viewSig = computed(() => {
-    const { gesuch, gesuchFormular } = this.gesuchViewSig();
-
-    if (!gesuch || !gesuchFormular) {
-      return null;
-    }
-    return {
-      gesuchId: gesuch.id,
-      person: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
-    };
-  });
+  gesuchIdSig = this.store.selectSignal(selectRouteId);
   berechnungStore = inject(BerechnungStore);
 
   berechnungenSig = computed(() => {
-    const { gesuch, gesuchFormular } = this.gesuchViewSig();
     const index = this.indexSig();
     const view = this.berechnungStore.berechnungZusammenfassungViewSig();
-    if (
-      view.loading ||
-      !gesuch ||
-      !gesuchFormular ||
-      view.berechnungsresultate.length === 0
-    ) {
+    console.log('view', { view });
+    if (view.loading || view.berechnungsresultate.length === 0) {
       return { loading: view.loading, list: [] };
     }
 
@@ -94,6 +78,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       berechnung,
       gueltigAb,
       gueltigBis,
+      nameGesuchsteller,
       berechnungsStammdaten: sd,
       persoenlichesBudgetresultat: p,
       familienBudgetresultate,
@@ -112,7 +97,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         monate: differenceInMonths(addDays(gueltigBis, 2), gueltigAb),
         persoenlich: {
           typ: 'persoenlich' as const,
-          name: `${gesuchFormular.personInAusbildung?.nachname} ${gesuchFormular.personInAusbildung?.vorname}`,
+          name: nameGesuchsteller,
           total: p.persoenlichesbudgetBerechnet,
           totalEinnahmen: p.einnahmenPersoenlichesBudget,
           totalKosten: p.ausgabenPersoenlichesBudget,
@@ -163,7 +148,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
           familienBudgetresultate.map((f) => ({
             typ: 'familien' as const,
             nameKey: `sachbearbeitung-app.verfuegung.berechnung.familien.typ.${f.familienBudgetTyp}`,
-            year: gesuch?.gesuchsperiode.gesuchsjahr.technischesJahr - 1,
+            year: view.year - 1,
             total: f.familienbudgetBerechnet,
             totalEinnahmen: f.einnahmenFamilienbudget,
             totalKosten: f.ausgabenFamilienbudget,
@@ -205,7 +190,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   constructor() {
     effect(
       () => {
-        const { gesuchId } = this.gesuchViewSig();
+        const gesuchId = this.gesuchIdSig();
 
         if (!gesuchId) {
           return;

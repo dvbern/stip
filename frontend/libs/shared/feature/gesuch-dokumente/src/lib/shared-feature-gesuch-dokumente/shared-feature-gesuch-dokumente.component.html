@@ -46,7 +46,7 @@
           {{ 'shared.dokumente.table.formStep' | translate }}
         </th>
         <td class="tw-text-nowrap" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-          <a [routerLink]="['/gesuch', dokument.formStep.route, gesuch.gesuchId]">
+          <a [routerLink]="dokument.formStep.routes">
             {{ dokument.formStep.translationKey | translate }}
           </a>
         </td>
