@@ -2,7 +2,14 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   <div class="tw-dv-table">
-    <table mat-table [dataSource]="notizSig()" matSort>
+    <table
+      class="tw-w-full !tw-table-fixed"
+      mat-table
+      matSort
+      [dataSource]="notizSig()"
+      [dvSharedUiFocusableList]="items"
+      tabindex="0"
+    >
       <caption class="cdk-visually-hidden">
         {{
           'sachbearbeitung-app.infos.notizen.description' | translate
@@ -11,7 +18,7 @@
 
       <!-- notizTyp  -->
       <ng-container matColumnDef="notizTyp">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-14">
           {{ 'sachbearbeitung-app.infos.notizen.table.notizTyp' | translate }}
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
@@ -33,25 +40,13 @@
         </td>
       </ng-container>
 
-      <!-- gesuchNummer  -->
-      <ng-container matColumnDef="gesuchNummer">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ 'sachbearbeitung-app.infos.notizen.table.gesuchNummer' | translate }}
-        </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
-          <div class="tw-flex tw-h-[53px] tw-items-center">
-            {{ notiz.gesuchNummer }}
-          </div>
-        </td>
-      </ng-container>
-
       <!-- Datum -->
       <ng-container matColumnDef="datum">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-28">
           {{ 'sachbearbeitung-app.infos.notizen.table.datum' | translate }}
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
-          <div class="tw-flex tw-h-[53px] tw-items-center">
+          <div class="tw-flex tw-h-[53px] tw-items-center tw-truncate">
             {{ notiz.timestampErstellt | date: 'dd.MM.yyyy' }}
           </div>
         </td>
@@ -59,14 +54,10 @@
 
       <!-- User -->
       <ng-container matColumnDef="user">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef class="tw-w-36">
           {{ 'sachbearbeitung-app.infos.notizen.table.user' | translate }}
         </th>
-        <td
-          mat-cell
-          *dvMatCellDef="let notiz; dataSource: notizSig()"
-          class="tw-max-w-28 tw-whitespace-nowrap tw-align-top"
-        >
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-whitespace-nowrap tw-align-top">
           <div class="tw-flex tw-h-[53px] tw-items-center">
             <span class="tw-truncate" [dvTruncateTooltip]="notiz.userErstellt">
               {{ notiz.userErstellt }}
@@ -77,14 +68,10 @@
 
       <!-- Betreff -->
       <ng-container matColumnDef="betreff">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-auto">
           {{ 'sachbearbeitung-app.infos.notizen.table.betreff' | translate }}
         </th>
-        <td
-          mat-cell
-          *dvMatCellDef="let notiz; dataSource: notizSig()"
-          class="tw-max-w-28 tw-whitespace-nowrap tw-align-top"
-        >
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-whitespace-nowrap tw-align-top">
           <div class="tw-flex tw-h-[53px] tw-items-center">
             <span class="tw-truncate" [dvTruncateTooltip]="notiz.betreff">
               {{ notiz.betreff | translate }}
@@ -93,19 +80,9 @@
         </td>
       </ng-container>
 
-      <!-- notiz -->
-      <ng-container matColumnDef="notiz">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ 'sachbearbeitung-app.infos.notizen.table.notiz' | translate }}
-        </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="!tw-py-1">
-          {{ notiz.text }}
-        </td>
-      </ng-container>
-
       <!-- Actions -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>
+        <th mat-header-cell *matHeaderCellDef class="tw-w-32">
           @if (permissionStore.permissionsMapSig()?.Sachbearbeiter) {
             <button
               type="button"
@@ -151,13 +128,13 @@
           </mat-menu>
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
-          <div class="tw-flex tw-h-[53px] tw-items-center tw-gap-1">
+          <div class="tw-flex tw-h-[53px] tw-items-center tw-justify-end tw-gap-1">
             @if (
               notiz.notizTyp === 'JURISTISCHE_NOTIZ' && permissionStore.permissionsMapSig()?.Jurist && !notiz.antwort
             ) {
               <button
                 type="button"
-                (click)="editNotiz(notiz)"
+                (click)="editNotiz(notiz); $event.stopPropagation()"
                 class="btn btn-link btn-sm"
                 [matTooltip]="'sachbearbeitung-app.infos.juristischeNotiz.bearbeiten' | translate"
               >
@@ -166,7 +143,7 @@
             } @else if (notiz.notizTyp === 'JURISTISCHE_NOTIZ') {
               <button
                 type="button"
-                (click)="editNotiz(notiz)"
+                (click)="editNotiz(notiz); $event.stopPropagation()"
                 class="btn btn-link btn-sm"
                 [matTooltip]="'sachbearbeitung-app.infos.juristischeNotiz.anzeigen' | translate"
               >
@@ -177,7 +154,7 @@
             @if (notiz.notizTyp === 'GESUCH_NOTIZ' && permissionStore.permissionsMapSig()?.Sachbearbeiter) {
               <button
                 type="button"
-                (click)="editNotiz(notiz)"
+                (click)="editNotiz(notiz); $event.stopPropagation()"
                 class="btn btn-link btn-sm"
                 [matTooltip]="'sachbearbeitung-app.infos.notiz.bearbeiten' | translate"
               >
@@ -185,7 +162,7 @@
               </button>
               <button
                 type="button"
-                (click)="deleteNotiz(notiz.id)"
+                (click)="deleteNotiz(notiz.id); $event.stopPropagation()"
                 class="btn btn-link btn-sm"
                 [matTooltip]="'sachbearbeitung-app.infos.notiz.delete' | translate"
               >
@@ -194,7 +171,7 @@
             } @else if (notiz.notizTyp === 'GESUCH_NOTIZ') {
               <button
                 type="button"
-                (click)="editNotiz(notiz)"
+                (click)="editNotiz(notiz); $event.stopPropagation()"
                 class="btn btn-link btn-sm"
                 [matTooltip]="'sachbearbeitung-app.infos.notiz.anzeigen' | translate"
               >
@@ -206,7 +183,14 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let notiz; columns: displayedColumns"></tr>
+      <tr
+        class="highlightable"
+        mat-row
+        *matRowDef="let notiz; columns: displayedColumns"
+        dvSharedUiFocusableListItem
+        (click)="openNotiz(notiz)"
+        (interacted)="openNotiz(notiz)"
+      ></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
         <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
           {{ 'sachbearbeitung-app.infos.notizen.noData' | translate }}

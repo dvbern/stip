@@ -560,6 +560,7 @@
   "shared.protokoll.title": "Gesuchsverlauf",
 
   "shared.notizen.title": "Notizen",
+  "shared.form.notizen.gesuchNummer.label": "Gesuch",
   "shared.form.notizen.datumErstellt.label": "Datum erstellt",
   "shared.form.notizen.datumMutiert.label": "Datum mutiert",
   "shared.form.notizen.betreff.label": "Betreff",

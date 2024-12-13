@@ -1,8 +1,14 @@
-<h1 class="tw-text-xl tw-mb-8">
+<h1 class="tw-mb-8 tw-text-xl">
   {{ 'sachbearbeitung-app.infos.notizen.notizTyp.' + dialogData.notizTyp | translate }}
 </h1>
 
-<form [formGroup]="form" (ngSubmit)="handleSave()" data-testid="form-notiz-form" class="tw-w-full tw-mt-4">
+<form
+  class="tw-mt-4 tw-w-full"
+  data-testid="form-notiz-form"
+  [formGroup]="form"
+  [dvSharedUiFormReadonly]="dialogData.readonly"
+  (ngSubmit)="handleSave()"
+>
   @if (dialogData.notizTyp === 'GESUCH_NOTIZ') {
     @if (dialogData.notiz?.id) {
       <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
@@ -72,26 +78,28 @@
       <ng-container [ngTemplateOutlet]="betreffTextControls"></ng-container>
     }
   }
-  <div class="tw-flex tw-gap-6 tw-mt-10 tw-justify-end">
-    <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
-      {{ 'shared.cancel' | translate }}
-    </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="handleSave()"
-      data-testid="dialog-confirm"
-      [disabled]="
-        form.invalid ||
-        form.pristine ||
-        (!isJurNotiz && !permissionStore.permissionsMapSig()?.Sachbearbeiter) ||
-        (isJurNotiz && dialogData.notiz?.id && !userIsJurist) ||
-        dialogData.notiz?.antwort
-      "
-    >
-      {{ 'shared.form.save' | translate }}
-    </button>
-  </div>
+  @if (!dialogData.readonly) {
+    <div class="tw-mt-10 tw-flex tw-justify-end tw-gap-6">
+      <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="handleSave()"
+        data-testid="dialog-confirm"
+        [disabled]="
+          form.invalid ||
+          form.pristine ||
+          (!isJurNotiz && !permissionStore.permissionsMapSig()?.Sachbearbeiter) ||
+          (isJurNotiz && dialogData.notiz?.id && !userIsJurist) ||
+          dialogData.notiz?.antwort
+        "
+      >
+        {{ 'shared.form.save' | translate }}
+      </button>
+    </div>
+  }
 
   <ng-template #betreffTextControls>
     <!-- Betreff -->
@@ -104,7 +112,7 @@
     </mat-form-field>
 
     <!-- Text -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full tw-mt-4">
+    <mat-form-field dvSharedUiFormField class="tw-mt-4 tw-w-full">
       <mat-label>{{ 'shared.form.notizen.text.label' | translate }}</mat-label>
       <textarea
         formControlName="text"
@@ -123,6 +131,9 @@
 
   <ng-template #datumUserErstellt>
     <dl class="tw-grid tw-grid-cols-[min-content_1fr] tw-gap-x-2 tw-pl-0">
+      <!-- gesuchNummer -->
+      <dt class="tw-font-normal">{{ 'shared.form.notizen.gesuchNummer.label' | translate }}:</dt>
+      <dd class="tw-font-semibold">{{ dialogData.notiz?.gesuchNummer }}</dd>
       <!-- datumErstellt -->
       <dt class="tw-font-normal">{{ 'shared.form.notizen.datumErstellt.label' | translate }}:</dt>
       <dd class="tw-font-semibold">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>

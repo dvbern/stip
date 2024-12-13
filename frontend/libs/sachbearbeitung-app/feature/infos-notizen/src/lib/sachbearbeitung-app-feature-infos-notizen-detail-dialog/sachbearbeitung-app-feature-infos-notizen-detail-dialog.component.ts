@@ -24,6 +24,7 @@ import { GesuchNotiz, GesuchNotizTyp } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
@@ -31,6 +32,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 export type NotizDialogData = {
   notizTyp: GesuchNotizTyp;
   notiz?: GesuchNotiz;
+  readonly?: boolean;
 };
 
 export type NotizDialogResult = {
@@ -45,13 +47,14 @@ export type NotizDialogResult = {
   standalone: true,
   imports: [
     CommonModule,
-    MatFormFieldModule,
     ReactiveFormsModule,
     TranslatePipe,
+    MatInputModule,
+    MatFormFieldModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiMaxLengthDirective,
-    MatInputModule,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-infos-notizen-detail-dialog.component.html',
