@@ -4562,10 +4562,13 @@ components:
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
+        - year
         - berechnung
         - tranchenBerechnungsresultate
       type: object
       properties:
+        year:
+          type: integer
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für das Gesuch'
           type: integer
@@ -4577,6 +4580,7 @@ components:
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
+        - nameGesuchsteller
         - berechnung
         - gueltigAb
         - gueltigBis
@@ -4587,6 +4591,8 @@ components:
         - familienBudgetresultate
       type: object
       properties:
+        nameGesuchsteller:
+          type: string
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
           type: integer

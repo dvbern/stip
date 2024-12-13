@@ -9,20 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchDashboardItemMissingDocuments } from './gesuchDashboardItemMissingDocuments';
 import { Gesuchstatus } from './gesuchstatus';
-import { Gesuchsperiode } from './gesuchsperiode';
-import { GesuchTrancheSlim } from './gesuchTrancheSlim';
 
-export interface GesuchDashboardItem { 
-    gesuchsperiode: Gesuchsperiode;
-    gesuchStatus: Gesuchstatus;
+export interface GesuchInfo { 
     id: string;
-    currentTrancheId: string;
-    offeneAenderung?: GesuchTrancheSlim;
+    gesuchNummer: string;
+    gesuchStatus: Gesuchstatus;
     startDate: string;
     endDate: string;
-    missingDocuments?: GesuchDashboardItemMissingDocuments;
 }
 
 

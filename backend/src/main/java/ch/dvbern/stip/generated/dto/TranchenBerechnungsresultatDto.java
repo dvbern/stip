@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class TranchenBerechnungsresultatDto  implements Serializable {
+  private @Valid String nameGesuchsteller;
   private @Valid Integer berechnung;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
@@ -38,6 +39,25 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   private @Valid BerechnungsStammdatenDto berechnungsStammdaten;
   private @Valid PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
   private @Valid List<FamilienBudgetresultatDto> familienBudgetresultate = new ArrayList<>();
+
+  /**
+   **/
+  public TranchenBerechnungsresultatDto nameGesuchsteller(String nameGesuchsteller) {
+    this.nameGesuchsteller = nameGesuchsteller;
+    return this;
+  }
+
+  
+  @JsonProperty("nameGesuchsteller")
+  @NotNull
+  public String getNameGesuchsteller() {
+    return nameGesuchsteller;
+  }
+
+  @JsonProperty("nameGesuchsteller")
+  public void setNameGesuchsteller(String nameGesuchsteller) {
+    this.nameGesuchsteller = nameGesuchsteller;
+  }
 
   /**
    * Berechneter Stpendiumsanspruch für diese Tranche
@@ -220,7 +240,8 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
       return false;
     }
     TranchenBerechnungsresultatDto tranchenBerechnungsresultat = (TranchenBerechnungsresultatDto) o;
-    return Objects.equals(this.berechnung, tranchenBerechnungsresultat.berechnung) &&
+    return Objects.equals(this.nameGesuchsteller, tranchenBerechnungsresultat.nameGesuchsteller) &&
+        Objects.equals(this.berechnung, tranchenBerechnungsresultat.berechnung) &&
         Objects.equals(this.gueltigAb, tranchenBerechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
         Objects.equals(this.gesuchTrancheId, tranchenBerechnungsresultat.gesuchTrancheId) &&
@@ -232,7 +253,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, gueltigAb, gueltigBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(nameGesuchsteller, berechnung, gueltigAb, gueltigBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
@@ -240,6 +261,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranchenBerechnungsresultatDto {\n");
     
+    sb.append("    nameGesuchsteller: ").append(toIndentedString(nameGesuchsteller)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
