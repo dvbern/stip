@@ -282,7 +282,7 @@ export class SharedUtilFormService {
     expectedFields: KeysOfForm<T>[],
     specialValidationErrors?: SpecialValidationError[],
     /**
-     * A function that revices the value of the control and returns true if the value is valid
+     * A function that revises the value of the control and returns true if the value is valid
      * The function serves as an additional check to determine if the control should be invalidated
      * in case there are multiple controls with the same field name, for example in an array as geschwister.
      */
