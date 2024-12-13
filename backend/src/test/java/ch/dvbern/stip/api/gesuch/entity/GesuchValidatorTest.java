@@ -26,6 +26,7 @@ import java.util.Set;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -58,6 +59,7 @@ import org.junit.jupiter.api.TestInstance;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AHV_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE;
@@ -222,6 +224,47 @@ class GesuchValidatorTest {
             .setAusbildungsgang(new Ausbildungsgang());
         assertOneMessage(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), true);
         assertOneMessage(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), false);
+
+        /*
+         * besuchtBMS-Flag kann nur auf true gesetzt werden,
+         * wenn die Ausbildungskategorie den Wert 4 oder 5 hat
+         */
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
+            .getAusbildung()
+            .getAusbildungsgang()
+            .setBildungskategorie(new Bildungskategorie());
+        // Test Ausbildung Validation for BFS value = 4: both true/false valid
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
+            .getAusbildung()
+            .getAusbildungsgang()
+            .getBildungskategorie()
+            .setBfs(4);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(false);
+        assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(true);
+        assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
+
+        // Test Ausbildung Validation for BFS value = 5: both true/false valid
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
+            .getAusbildung()
+            .getAusbildungsgang()
+            .getBildungskategorie()
+            .setBfs(5);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(false);
+        assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(true);
+        assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
+
+        // Test Ausbildung Validation for BFS value = 0
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
+            .getAusbildung()
+            .getAusbildungsgang()
+            .getBildungskategorie()
+            .setBfs(0);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(true);
+        assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), true);
+        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setBesuchtBMS(false);
+        assertOneMessage(VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID, gesuch.getAusbildung(), false);
     }
 
     @Test

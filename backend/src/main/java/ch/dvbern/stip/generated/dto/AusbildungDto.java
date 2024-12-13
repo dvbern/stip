@@ -31,6 +31,7 @@ public class AusbildungDto  implements Serializable {
   private @Valid Boolean editable;
   private @Valid UUID id;
   private @Valid Boolean ausbildungNichtGefunden;
+  private @Valid Boolean besuchtBMS;
   private @Valid String alternativeAusbildungsstaette;
   private @Valid String alternativeAusbildungsgang;
   private @Valid String ausbildungsort;
@@ -209,6 +210,25 @@ public class AusbildungDto  implements Serializable {
   }
 
   /**
+   * Required bei Ausbildungskategorien 4 oder 5. Kann nur dann auf true gesetzt werden.
+   **/
+  public AusbildungDto besuchtBMS(Boolean besuchtBMS) {
+    this.besuchtBMS = besuchtBMS;
+    return this;
+  }
+
+  
+  @JsonProperty("besuchtBMS")
+  public Boolean getBesuchtBMS() {
+    return besuchtBMS;
+  }
+
+  @JsonProperty("besuchtBMS")
+  public void setBesuchtBMS(Boolean besuchtBMS) {
+    this.besuchtBMS = besuchtBMS;
+  }
+
+  /**
    * Required wenn andere ausbildungNichtGefunden &#x3D; true
    **/
   public AusbildungDto alternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
@@ -320,6 +340,7 @@ public class AusbildungDto  implements Serializable {
         Objects.equals(this.editable, ausbildung.editable) &&
         Objects.equals(this.id, ausbildung.id) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildung.ausbildungNichtGefunden) &&
+        Objects.equals(this.besuchtBMS, ausbildung.besuchtBMS) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildung.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildung.alternativeAusbildungsgang) &&
         Objects.equals(this.ausbildungsort, ausbildung.ausbildungsort) &&
@@ -329,7 +350,7 @@ public class AusbildungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, ausbildungNichtGefunden, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang);
+    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang);
   }
 
   @Override
@@ -346,6 +367,7 @@ public class AusbildungDto  implements Serializable {
     sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
+    sb.append("    besuchtBMS: ").append(toIndentedString(besuchtBMS)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");

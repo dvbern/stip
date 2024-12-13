@@ -71,6 +71,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.alternativeAusbildung.required.null.message}";
     public static final String VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.ausbildung.required.message}";
+    public static final String VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID =
+        "{jakarta.validation.constraints.ausbildung.besucht.bms.valid.message}";
     public static final String VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE =
         "{jakarta.validation.constraints.ausbildung.required.null.message}";
     public static final String VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE =
