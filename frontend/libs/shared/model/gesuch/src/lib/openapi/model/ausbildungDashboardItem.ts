@@ -27,6 +27,10 @@ export interface AusbildungDashboardItem {
      * Datum im Format mm.YYYY
      */
     ausbildungEnd: string;
+    /**
+     * Required bei Ausbildungskategorien 4 oder 5. Kann nur dann auf true gesetzt werden.
+     */
+    besuchtBMS?: boolean;
     pensum: AusbildungsPensum;
     /**
      * Required wenn andere ausbildungNichtGefunden = true
