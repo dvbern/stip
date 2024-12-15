@@ -51,6 +51,11 @@
 
   "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft",
 
+  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "Manuell integrierte Änderung",
+  "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
+  "shared.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
+  "shared.gesuch.status.tranche.AKZEPTIERT": "Akzeptiert",
+  "shared.gesuch.status.tranche.ABGELEHNT": "Abgelehnt",
   "gesuch-app.dashboard.gesuch.status.contract.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
   "gesuch-app.dashboard.gesuch.status.contract.EINGEREICHT": "Eingereicht",
   "gesuch-app.dashboard.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Eingereicht",

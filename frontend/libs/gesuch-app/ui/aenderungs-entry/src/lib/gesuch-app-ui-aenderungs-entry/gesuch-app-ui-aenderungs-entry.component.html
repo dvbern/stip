@@ -1,5 +1,5 @@
 <!-- Änderung Titel -->
-<div class="tw-flex tw-flex-col tw-flex-grow">
+<div class="tw-flex tw-flex-grow tw-flex-col">
   <div class="tw-flex tw-items-baseline">
     <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
       <i class="material-symbols-rounded fs-5">edit</i>
@@ -25,15 +25,15 @@
   </div>
 
   <!-- Status des Antrags -->
-  <div class="tw-flex tw-flex-col tw-align-top tw-flex-grow">
+  <div class="tw-flex tw-flex-grow tw-flex-col tw-align-top">
     @if (tranche.comment) {
       <span class="mt-4 fw-normal small">{{ tranche.comment }}</span>
     }
     <span class="mt-4 fw-normal small">{{ 'gesuch-app.dashboard.aenderung.status.title' | translate }}</span>
     <span class="fw-medium">
-      {{ 'shared.gesuch.status.tranche.' + tranche.status | translate }}
+      {{ 'gesuch-app.gesuch.status.tranche.' + tranche.status | translate }}
     </span>
-    <div class="tw-flex-grow mb-3"></div>
+    <div class="mb-3 tw-flex-grow"></div>
     @if (tranche.status === 'IN_BEARBEITUNG_GS') {
       <button
         type="button"
