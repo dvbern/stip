@@ -162,9 +162,9 @@
   "shared.gesuch.validation.link.personInAusbildung": "Person in Ausbildung",
   "shared.gesuch.validation.link.geschwisters": "Geschwister",
 
-  "shared.gesuch.status.ENTWURF": "Entwurf",
-  "shared.gesuch.status.PUBLIZIERT": "Publik - Aktiv",
-  "shared.gesuch.status.ARCHIVIERT": "Archiviert",
+  "shared.gesuch.periode.status.ENTWURF": "Entwurf",
+  "shared.gesuch.periode.status.PUBLIZIERT": "Publik - Aktiv",
+  "shared.gesuch.periode.status.ARCHIVIERT": "Archiviert",
 
   "sachbearbeitung-app.gesuch.status.tranche.MANUELLE_AENDERUNG": "Manuell integrierte Änderung",
   "sachbearbeitung-app.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",

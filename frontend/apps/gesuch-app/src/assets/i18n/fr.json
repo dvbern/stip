@@ -49,25 +49,5 @@
 
   "gesuch-app.ausbildung.dialog.title": "Saisir une formation pour une bourse",
 
-  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "En cours de vérification",
-
-  "gesuch-app.dashboard.gesuch.status.contract.IN_BEARBEITUNG_GS": "Traitement par le requérant",
-  "gesuch-app.dashboard.gesuch.status.contract.EINGEREICHT": "Complètement soumis",
-  "gesuch-app.dashboard.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Complètement soumis",
-  "gesuch-app.dashboard.gesuch.status.contract.IN_BEARBEITUNG_SB": "En cours de traitement",
-  "gesuch-app.dashboard.gesuch.status.contract.IN_FREIGABE": "Complètement soumis",
-  "gesuch-app.dashboard.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Documents manquants",
-  "gesuch-app.dashboard.gesuch.status.contract.VERSANDBEREIT": "Prêt à être envoyé",
-  "gesuch-app.dashboard.gesuch.status.contract.VERFUEGT": "En cours de vérification",
-  "gesuch-app.dashboard.gesuch.status.contract.ABKLAERUNG_DURCH_RECHSTABTEILUNG": "Clarification par le service juridique",
-  "gesuch-app.dashboard.gesuch.status.contract.JURISTISCHE_ABKLAERUNG": "Clarification juridique",
-  "gesuch-app.dashboard.gesuch.status.contract.ANSPRUCH_MANUELL_PRUEFEN": "Vérification manuelle des droits",
-  "gesuch-app.dashboard.gesuch.status.contract.NICHT_ANSPRUCHSBERECHTIGT": "Pas de droit à la bourse",
-  "gesuch-app.dashboard.gesuch.status.contract.VERSENDET": "En cours de vérification",
-  "gesuch-app.dashboard.gesuch.status.contract.NICHT_BEITRAGSBERECHTIGT": "Pas de droit à la contribution",
-  "gesuch-app.dashboard.gesuch.status.contract.KEIN_STIPENDIENANSPRUCH": "Pas de droit à la bourse",
-  "gesuch-app.dashboard.gesuch.status.contract.STIPENDIENANSPRUCH": "Droit à la bourse",
-  "gesuch-app.dashboard.gesuch.status.contract.GESUCH_ABGELEHNT": "Demande rejetée",
-  "gesuch-app.dashboard.gesuch.status.contract.WARTEN_AUF_UNTERSCHRIFTENBLATT": "En cours de vérification",
-  "gesuch-app.dashboard.gesuch.status.contract.NEGATIVE_VERFUEGUNG": "Décision négative"
+  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "En cours de vérification"
 }

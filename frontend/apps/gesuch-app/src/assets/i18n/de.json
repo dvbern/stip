@@ -49,30 +49,5 @@
 
   "gesuch-app.ausbildung.dialog.title": "Ausbildung für Stipendium erfassen",
 
-  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft",
-
-  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "Manuell integrierte Änderung",
-  "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
-  "shared.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
-  "shared.gesuch.status.tranche.AKZEPTIERT": "Akzeptiert",
-  "shared.gesuch.status.tranche.ABGELEHNT": "Abgelehnt",
-  "gesuch-app.dashboard.gesuch.status.contract.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
-  "gesuch-app.dashboard.gesuch.status.contract.EINGEREICHT": "Eingereicht",
-  "gesuch-app.dashboard.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Eingereicht",
-  "gesuch-app.dashboard.gesuch.status.contract.IN_BEARBEITUNG_SB": "In Bearbeitung",
-  "gesuch-app.dashboard.gesuch.status.contract.IN_FREIGABE": "Eingereicht",
-  "gesuch-app.dashboard.gesuch.status.contract.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
-  "gesuch-app.dashboard.gesuch.status.contract.VERSANDBEREIT": "Versandbereit",
-  "gesuch-app.dashboard.gesuch.status.contract.VERFUEGT": "Verfügt",
-  "gesuch-app.dashboard.gesuch.status.contract.ABKLAERUNG_DURCH_RECHSTABTEILUNG": "Abklärung durch Rechstabteilung",
-  "gesuch-app.dashboard.gesuch.status.contract.JURISTISCHE_ABKLAERUNG": "Juristische Abklärung",
-  "gesuch-app.dashboard.gesuch.status.contract.ANSPRUCH_MANUELL_PRUEFEN": "Anspruch manuell prüfen",
-  "gesuch-app.dashboard.gesuch.status.contract.NICHT_ANSPRUCHSBERECHTIGT": "Nicht anspruchsberechtigt",
-  "gesuch-app.dashboard.gesuch.status.contract.VERSENDET": "Verfügt",
-  "gesuch-app.dashboard.gesuch.status.contract.NICHT_BEITRAGSBERECHTIGT": "Nicht beitragsberechtigt",
-  "gesuch-app.dashboard.gesuch.status.contract.KEIN_STIPENDIENANSPRUCH": "Kein Stipendienanspruch",
-  "gesuch-app.dashboard.gesuch.status.contract.STIPENDIENANSPRUCH": "Stipendienanspruch",
-  "gesuch-app.dashboard.gesuch.status.contract.GESUCH_ABGELEHNT": "Gesuch abgelehnt",
-  "gesuch-app.dashboard.gesuch.status.contract.WARTEN_AUF_UNTERSCHRIFTENBLATT": "Verfügt",
-  "gesuch-app.dashboard.gesuch.status.contract.NEGATIVE_VERFUEGUNG": "Negative Verfügung"
+  "gesuch-app.dokumente.dokumentStatus.AUSSTEHEND": "Wird geprüft"
 }
