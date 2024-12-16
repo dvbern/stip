@@ -227,7 +227,7 @@ db-clear:uat:start:
     - argocd app wait stip --insecure
 
 .db-clear:stop:
-  extends: .set-replica-one
+  extends: .set-replica-zero
   rules:
     - when: always
   variables:
