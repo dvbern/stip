@@ -143,10 +143,22 @@ export class SharedUtilFormService {
   }
 
   /**
+   * Used to add or remove the required validators, validity checks are also triggered afterwards
+   */
+  setRequired(control: FormControl, required: boolean) {
+    if (required) {
+      control.addValidators(Validators.required);
+    } else {
+      control.removeValidators(Validators.required);
+    }
+    control.updateValueAndValidity();
+  }
+
+  /**
    * Used to set the disabled state of the given control
    */
   setDisabledState(
-    control: FormControl,
+    control: FormControl | FormGroup,
     isDisabled: boolean,
     clearOnDisable?: boolean,
     options?: { emitEvent: boolean },
@@ -239,18 +251,6 @@ export class SharedUtilFormService {
       },
       valuesSig: hiddenFieldsSig,
     };
-  }
-
-  /**
-   * Used to add or remove the required validators, validity checks are also triggered afterwards
-   */
-  setRequired(control: FormControl, required: boolean) {
-    if (required) {
-      control.addValidators(Validators.required);
-    } else {
-      control.removeValidators(Validators.required);
-    }
-    control.updateValueAndValidity();
   }
 
   /**

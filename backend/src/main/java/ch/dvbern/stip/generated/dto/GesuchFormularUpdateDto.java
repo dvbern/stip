@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
+import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -41,6 +42,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
   private @Valid List<LebenslaufItemUpdateDto> lebenslaufItems;
   private @Valid List<KindUpdateDto> kinds;
   private @Valid EinnahmenKostenUpdateDto einnahmenKosten;
+  private @Valid DarlehenDto darlehen;
   private @Valid List<SteuerdatenUpdateDto> steuerdaten;
 
   /**
@@ -271,6 +273,24 @@ public class GesuchFormularUpdateDto  implements Serializable {
 
   /**
    **/
+  public GesuchFormularUpdateDto darlehen(DarlehenDto darlehen) {
+    this.darlehen = darlehen;
+    return this;
+  }
+
+  
+  @JsonProperty("darlehen")
+  public DarlehenDto getDarlehen() {
+    return darlehen;
+  }
+
+  @JsonProperty("darlehen")
+  public void setDarlehen(DarlehenDto darlehen) {
+    this.darlehen = darlehen;
+  }
+
+  /**
+   **/
   public GesuchFormularUpdateDto steuerdaten(List<SteuerdatenUpdateDto> steuerdaten) {
     this.steuerdaten = steuerdaten;
     return this;
@@ -322,12 +342,13 @@ public class GesuchFormularUpdateDto  implements Serializable {
         Objects.equals(this.lebenslaufItems, gesuchFormularUpdate.lebenslaufItems) &&
         Objects.equals(this.kinds, gesuchFormularUpdate.kinds) &&
         Objects.equals(this.einnahmenKosten, gesuchFormularUpdate.einnahmenKosten) &&
+        Objects.equals(this.darlehen, gesuchFormularUpdate.darlehen) &&
         Objects.equals(this.steuerdaten, gesuchFormularUpdate.steuerdaten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuerdaten);
+    return Objects.hash(personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, darlehen, steuerdaten);
   }
 
   @Override
@@ -344,6 +365,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
+    sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
     sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
     sb.append("}");
     return sb.toString();

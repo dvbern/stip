@@ -32,7 +32,6 @@ public class EinnahmenKostenDto  implements Serializable {
   private @Valid Integer ausbildungskostenTertiaerstufe;
   private @Valid Integer wohnkosten;
   private @Valid Boolean wgWohnend;
-  private @Valid Boolean willDarlehen;
   private @Valid Integer auswaertigeMittagessenProWoche;
   private @Valid Integer betreuungskostenKinder;
   private @Valid Integer veranlagungsCode = 0;
@@ -284,25 +283,6 @@ public class EinnahmenKostenDto  implements Serializable {
   }
 
   /**
-   * Required nur wenn volljährig
-   **/
-  public EinnahmenKostenDto willDarlehen(Boolean willDarlehen) {
-    this.willDarlehen = willDarlehen;
-    return this;
-  }
-
-  
-  @JsonProperty("willDarlehen")
-  public Boolean getWillDarlehen() {
-    return willDarlehen;
-  }
-
-  @JsonProperty("willDarlehen")
-  public void setWillDarlehen(Boolean willDarlehen) {
-    this.willDarlehen = willDarlehen;
-  }
-
-  /**
    * Required nur wenn die Person keinen eigenen Haushalt führt
    **/
   public EinnahmenKostenDto auswaertigeMittagessenProWoche(Integer auswaertigeMittagessenProWoche) {
@@ -447,7 +427,6 @@ public class EinnahmenKostenDto  implements Serializable {
         Objects.equals(this.ausbildungskostenTertiaerstufe, einnahmenKosten.ausbildungskostenTertiaerstufe) &&
         Objects.equals(this.wohnkosten, einnahmenKosten.wohnkosten) &&
         Objects.equals(this.wgWohnend, einnahmenKosten.wgWohnend) &&
-        Objects.equals(this.willDarlehen, einnahmenKosten.willDarlehen) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.veranlagungsCode, einnahmenKosten.veranlagungsCode) &&
@@ -458,7 +437,7 @@ public class EinnahmenKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, wohnkosten, wgWohnend, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -479,7 +458,6 @@ public class EinnahmenKostenDto  implements Serializable {
     sb.append("    ausbildungskostenTertiaerstufe: ").append(toIndentedString(ausbildungskostenTertiaerstufe)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
-    sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
