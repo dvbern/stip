@@ -1476,9 +1476,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteGesuch
       summary: delete a Gesuch
-  '/gesuch/changes/{trancheId}':
+  '/gesuch/changes/{gesuchId}':
     parameters:
-      - name: trancheId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -1501,7 +1501,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getInitialTrancheChangesByTrancheId
+      operationId: getInitialTrancheChangesByGesuchId
       summary: Returns a change by its id
   '/gesuch/{gesuchId}/{gesuchTrancheId}':
     parameters:
