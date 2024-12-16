@@ -1,9 +1,5 @@
 import { AppType } from '@dv/shared/model/config';
-import {
-  GesuchTrancheStatus,
-  Gesuchstatus,
-  SharedModelGesuch,
-} from '@dv/shared/model/gesuch';
+import { GesuchTrancheStatus, Gesuchstatus } from '@dv/shared/model/gesuch';
 import { capitalized } from '@dv/shared/model/type-util';
 
 const Permissions = {
@@ -68,7 +64,7 @@ export const permissionTableByAppType = {
   IN_BEARBEITUNG_SB /**                */: { [gs]: '    ', [sb]: 'WV  ' },
   IN_FREIGABE /**                      */: { [gs]: '    ', [sb]: ' V  ' },
   ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '    ', [sb]: 'WV  ' },
-  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '    ', [sb]: ' V  ' },
+  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '    ', [sb]: '    ' },
   FEHLENDE_DOKUMENTE /**               */: { [gs]: '  DF', [sb]: '    ' },
   GESUCH_ABGELEHNT /**                 */: { [gs]: '    ', [sb]: ' V  ' },
   JURISTISCHE_ABKLAERUNG /**           */: { [gs]: '    ', [sb]: ' V  ' },
@@ -103,8 +99,8 @@ export const trancheReadWritestatusByAppType = {
  * Get the permissions for the gesuch based on the status and the app type
  */
 export const getGesuchPermissions = (
-  gesuch: SharedModelGesuch | null,
-  appType?: AppType,
+  gesuch: { gesuchStatus: Gesuchstatus } | null,
+  appType: AppType | undefined,
 ): PermissionMap => {
   if (!gesuch || !appType) return {};
 
@@ -116,7 +112,7 @@ export const getGesuchPermissions = (
  * Get the permissions for the tranche based on the status and the app type
  */
 export const getTranchePermissions = (
-  gesuch: SharedModelGesuch | null,
+  gesuch: { gesuchTrancheToWorkWith: { status: GesuchTrancheStatus } } | null,
   appType?: AppType,
 ): PermissionMap => {
   if (!gesuch || !appType) return {};

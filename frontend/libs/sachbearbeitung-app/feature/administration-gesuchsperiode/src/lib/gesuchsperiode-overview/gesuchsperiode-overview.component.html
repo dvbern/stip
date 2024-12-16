@@ -45,7 +45,7 @@
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
             <mat-chip [color]="gesuchsperiode.statusColor" highlighted>{{
-              'shared.gesuch.status.' + gesuchsperiode.gueltigkeitStatus | translate
+              'shared.gesuch.periode.status.' + gesuchsperiode.gueltigkeitStatus | translate
             }}</mat-chip>
           </td>
         </ng-container>
@@ -149,7 +149,7 @@
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource">
             <mat-chip [color]="gesuchsjahr.statusColor" highlighted>{{
-              'shared.gesuch.status.' + gesuchsjahr.gueltigkeitStatus | translate
+              'shared.gesuch.periode.status.' + gesuchsjahr.gueltigkeitStatus | translate
             }}</mat-chip>
           </td>
         </ng-container>

@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 import {
   Adresse,
   Auszahlung,
+  Darlehen,
   EinnahmenKosten,
   Eltern,
   Familiensituation,
@@ -20,6 +21,7 @@ import {
 
 import { AusbildungValues } from '../../po/ausbildung.po';
 import { AuszahlungPO } from '../../po/auszahlung.po';
+import { DarlehenPO } from '../../po/darlehen.po';
 import { EinnahmenKostenPO } from '../../po/einnahmen-kosten.po';
 import { ElternPO } from '../../po/eltern.po';
 import { FamilyPO } from '../../po/familiy.po';
@@ -170,10 +172,16 @@ const einnahmenKosten: EinnahmenKosten = {
   veranlagungsCode: 0,
   steuernKantonGemeinde: 0,
   verdienstRealisiert: false,
-  willDarlehen: true,
 };
 
-const { test, getGesuchId } = initializeTest('GESUCHSTELLER', ausbildung);
+const darlehen: Darlehen = {
+  willDarlehen: false,
+};
+
+const { test, getGesuchId, getTrancheId } = initializeTest(
+  'GESUCHSTELLER',
+  ausbildung,
+);
 
 test.describe('Neues gesuch erstellen', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -266,12 +274,21 @@ test.describe('Neues gesuch erstellen', () => {
 
     await einnahmenKostenPO.fillEinnahmenKostenForm(einnahmenKosten);
 
+    await einnahmenKostenPO.elems.buttonSaveContinue.click();
+
+    // Step 9: Darlehen =============================================================
+    await expectStepTitleToContainText('Darlehen', page);
+    const darlehenPO = new DarlehenPO(page);
+    await expect(darlehenPO.elems.loading).toBeHidden();
+
+    await darlehenPO.fillDarlehenForm(darlehen);
+
     const requiredDokumenteResponse = page.waitForResponse(
       '**/api/v1/gesuchtranche/*/requiredDokumente',
     );
-    await einnahmenKostenPO.elems.buttonSaveContinue.click();
+    await darlehenPO.elems.buttonSaveContinue.click();
 
-    // Step 9: Dokumente ===========================================================
+    // Step 10: Dokumente ===========================================================
 
     await expectStepTitleToContainText('Dokumente', page);
     await requiredDokumenteResponse;
@@ -294,7 +311,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await page.getByTestId('button-continue').click();
 
-    // Step 10: Freigabe ===========================================================
+    // Step 11: Freigabe ===========================================================
     await expectStepTitleToContainText('Freigabe', page);
 
     await page.getByTestId('button-abschluss').click();
@@ -306,14 +323,18 @@ test.describe('Neues gesuch erstellen', () => {
 
     // Go to Berechnung (SB-App)
     const urls = getE2eUrls();
-    await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}`);
+    await page.goto(
+      `${urls.sb}/verfuegung/${getGesuchId()}/tranche/${getTrancheId()}`,
+    );
 
     await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
       /accept/,
       { timeout: 10000 },
     );
 
-    await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
+    await page.goto(
+      `${urls.sb}/verfuegung/${getGesuchId()}/tranche/${getTrancheId()}/berechnung/1`,
+    );
 
     await expect(
       page.getByTestId('berechnung-persoenlich-total'),

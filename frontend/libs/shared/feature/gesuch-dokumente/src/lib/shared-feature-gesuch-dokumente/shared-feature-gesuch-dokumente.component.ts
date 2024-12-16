@@ -28,6 +28,7 @@ import {
 } from '@dv/shared/model/gesuch';
 import {
   DOKUMENTE,
+  SharedModelGesuchFormStep,
   getFormStepByDocumentType,
 } from '@dv/shared/model/gesuch-form';
 import {
@@ -111,14 +112,21 @@ export class SharedFeatureGesuchDokumenteComponent {
     const { dokuments, requiredDocumentTypes } =
       this.dokumentsStore.dokumenteViewSig();
 
-    const { readonly } = this.gesuchViewSig();
+    const { readonly, trancheSetting, gesuchId } = this.gesuchViewSig();
+
     const trancheId = this.gesuchViewSig().trancheId;
 
     const allowTypes = this.gesuchViewSig().allowTypes;
     const stepsFlow = this.stepViewSig().stepsFlow;
 
-    if (!trancheId || !allowTypes) {
-      return new MatTableDataSource<SharedModelTableDokument>([]);
+    if (!trancheId || !allowTypes || !gesuchId) {
+      return new MatTableDataSource<
+        SharedModelTableDokument & {
+          formStep: SharedModelGesuchFormStep & {
+            routes: string[];
+          };
+        }
+      >([]);
     }
 
     const uploadedDocuments: SharedModelTableDokument[] = dokuments.map(
@@ -170,15 +178,35 @@ export class SharedFeatureGesuchDokumenteComponent {
         };
       });
 
-    return new MatTableDataSource<SharedModelTableDokument>(
-      [...uploadedDocuments, ...missingDocuments].sort((a, b) =>
-        this.stepManager.compareStepsByFlow(
-          stepsFlow,
-          a.formStep,
-          b.formStep,
-          () => a.dokumentTyp.localeCompare(b.dokumentTyp),
-        ),
-      ),
+    return new MatTableDataSource<
+      SharedModelTableDokument & {
+        formStep: SharedModelGesuchFormStep & {
+          routes: string[];
+        };
+      }
+    >(
+      [...uploadedDocuments, ...missingDocuments]
+        .sort((a, b) =>
+          this.stepManager.compareStepsByFlow(
+            stepsFlow,
+            a.formStep,
+            b.formStep,
+            () => a.dokumentTyp.localeCompare(b.dokumentTyp),
+          ),
+        )
+        .map((dokument) => ({
+          ...dokument,
+          formStep: {
+            ...dokument.formStep,
+            routes: [
+              '/',
+              'gesuch',
+              ...dokument.formStep.route.split('/'),
+              gesuchId,
+              ...(trancheSetting?.routesSuffix ?? []),
+            ],
+          },
+        })),
     );
   });
 

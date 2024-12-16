@@ -111,6 +111,7 @@ export class EinreichenStore extends signalStore(
     const { gesuch, trancheTyp, gesuchId } = this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
 
+    const routesSuffix = trancheSetting?.routesSuffix ?? [];
     const error = validationReport
       ? sharedUtilFnErrorTransformer({ error: validationReport })
       : undefined;
@@ -122,12 +123,22 @@ export class EinreichenStore extends signalStore(
         isPending(this.einreichenValidationResult()),
       specialValidationErrors: validationErrors
         .filter(isSpecialValidationError)
-        .map((error) =>
-          SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error),
-        ),
+        .map((error) => {
+          const specialError =
+            SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error);
+          return {
+            ...specialError,
+            stepRoute: [
+              '/gesuch',
+              specialError.step.route,
+              gesuch?.id,
+              ...routesSuffix,
+            ],
+          };
+        }),
       invalidFormularSteps: transformValidationReportToFormSteps(
         gesuchId,
-        trancheSetting?.routesSuffix,
+        routesSuffix,
         validationReport,
         gesuch?.gesuchTrancheToWorkWith.gesuchFormular,
       ),

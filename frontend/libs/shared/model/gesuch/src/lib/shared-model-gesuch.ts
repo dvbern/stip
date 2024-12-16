@@ -45,10 +45,6 @@ export type SharedModelGesuchFormularPropsSteuerdatenSteps =
 export const TRANCHE_TYPE_INITIAL = 'INITIAL' as const;
 export type GesuchUrlType = GesuchTrancheTyp | typeof TRANCHE_TYPE_INITIAL;
 
-// TODO extract to env or generate with OpenAPI?
-export const SHARED_MODEL_GESUCH_RESOURCE = `/gesuch`;
-export const SHARED_MODEL_GESUCHSPERIODE_RESOURCE = `/gesuchsperiode`;
-
 export type GesuchFilter = keyof Omit<
   typeof GetGesucheSBQueryType,
   'ALLE_MEINE'

@@ -17,7 +17,7 @@ import {
   InfosOptions,
 } from '@dv/sachbearbeitung-app/model/infos';
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -46,5 +46,5 @@ export class SachbearbeitungAppPatterninfosLayoutComponent {
   infosOptions = INFOS_OPTIONS;
   infosRoute = INFOS_ROUTE;
   navClicked$ = new EventEmitter();
-  gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  gesuchIdSig = this.store.selectSignal(selectRouteId);
 }

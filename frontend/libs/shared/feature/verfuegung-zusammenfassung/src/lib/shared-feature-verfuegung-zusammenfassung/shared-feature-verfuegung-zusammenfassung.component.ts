@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
 import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -38,12 +38,12 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
 export class SharedFeatureVerfuegungZusammenfassungComponent {
   berechnungStore = inject(BerechnungStore);
   store = inject(Store);
-  gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  gesuchIdSig = this.store.selectSignal(selectRouteId);
 
   constructor() {
     effect(
       () => {
-        const { gesuchId } = this.gesuchViewSig();
+        const gesuchId = this.gesuchIdSig();
 
         if (!gesuchId) {
           return;

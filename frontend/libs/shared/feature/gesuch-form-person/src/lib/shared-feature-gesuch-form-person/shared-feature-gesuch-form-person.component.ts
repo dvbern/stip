@@ -287,9 +287,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   });
   showEinreiseDatumWarningSig = signal(false);
 
-  private wohnsitzChangedSig = toSignal(
-    this.form.controls.wohnsitz.valueChanges,
-  );
   private niederlassungsstatusChangedSig = toSignal(
     this.form.controls.niederlassungsstatus.valueChanges,
   );
@@ -329,15 +326,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       }
     };
 
-    effect(() => {
-      this.formUtils.invalidateControlIfValidationFails(
-        this.form,
-        ['wohnsitz'],
-        this.einreichenStore.validationViewSig().invalidFormularProps
-          .specialValidationErrors,
-      );
-    });
-
     // patch form value
     effect(
       () => {
@@ -372,6 +360,16 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           SharedUiFormAddressComponent.patchForm(
             this.form.controls.adresse,
             personForForm.adresse,
+          );
+          this.formUtils.invalidateControlIfValidationFails(
+            this.form,
+            ['wohnsitz'],
+            this.einreichenStore.validationViewSig().invalidFormularProps
+              .specialValidationErrors,
+            (value) =>
+              this.wohnsitzHelper
+                .wohnsitzValuesSig()
+                .includes(value as Wohnsitz),
           );
         } else {
           this.form.reset();

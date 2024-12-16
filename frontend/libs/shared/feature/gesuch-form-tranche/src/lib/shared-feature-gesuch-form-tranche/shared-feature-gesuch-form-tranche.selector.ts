@@ -1,6 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { endOfDay, format, getMonth, isAfter } from 'date-fns';
 
+import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import {
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchsView,
@@ -9,7 +10,8 @@ import {
 export const selectSharedFeatureGesuchFormTrancheView = createSelector(
   selectSharedDataAccessGesuchsView,
   selectSharedDataAccessGesuchCacheView,
-  (gesuchsView, { cache }) => {
+  selectSharedDataAccessConfigsView,
+  (gesuchsView, { cache }, config) => {
     const periode = cache.gesuch?.gesuchsperiode;
     return {
       isEditingAenderung: gesuchsView.isEditingAenderung,
@@ -36,6 +38,7 @@ export const selectSharedFeatureGesuchFormTrancheView = createSelector(
       gesuchsNummer: cache.gesuch?.gesuchNummer,
       sachbearbeiter: cache.gesuch?.bearbeiter,
       lastUpdate: gesuchsView.lastUpdate,
+      appType: config.compileTimeConfig?.appType,
     };
   },
 );

@@ -1,3 +1,5 @@
+import { differenceInYears } from 'date-fns';
+
 import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
@@ -121,6 +123,13 @@ export const PROTOKOLL: SharedModelGesuchFormStep = {
   iconSymbolName: 'history',
 } satisfies SharedModelGesuchFormStep;
 
+export const DARLEHEN: SharedModelGesuchFormStep = {
+  route: 'darlehen',
+  translationKey: 'shared.darlehen.title',
+  titleTranslationKey: 'shared.darlehen.title',
+  iconSymbolName: 'account_balance',
+} satisfies SharedModelGesuchFormStep;
+
 // Dynamic steps
 export const ELTERN_STEUERDATEN_ROUTE = 'eltern-steuerdaten';
 const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {
@@ -151,9 +160,9 @@ export const ELTERN_STEUER_STEPS: Record<
   VATER: ELTERN_STEUER_VATER,
 };
 
-export const gesuchFormSteps = {
-  PERSON,
+export const gesuchFormBaseSteps = {
   AUSBILDUNG,
+  PERSON,
   LEBENSLAUF,
   FAMILIENSITUATION,
   ELTERN,
@@ -162,7 +171,13 @@ export const gesuchFormSteps = {
   KINDER,
   AUSZAHLUNG,
   EINNAHMEN_KOSTEN,
+  DARLEHEN,
   DOKUMENTE,
+};
+export type GesuchFormBaseStepKeys = keyof typeof gesuchFormBaseSteps;
+
+export const gesuchFormSteps = {
+  ...gesuchFormBaseSteps,
   ABSCHLUSS,
 };
 export type GesuchFormStepKeys = keyof typeof gesuchFormSteps;
@@ -181,6 +196,7 @@ export const gesuchPropFormStepsMap: Record<
   lebenslaufItems: LEBENSLAUF,
   kinds: KINDER,
   einnahmenKosten: EINNAHMEN_KOSTEN,
+  darlehen: DARLEHEN,
   dokuments: DOKUMENTE,
   steuerdaten: ELTERN_STEUER_FAMILIE,
   steuerdatenMutter: ELTERN_STEUER_MUTTER,
@@ -204,6 +220,7 @@ export const gesuchFormStepsFieldMap: Record<
   [KINDER.route]: 'kinds',
   [AUSZAHLUNG.route]: 'auszahlung',
   [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
+  [DARLEHEN.route]: 'darlehen',
   [DOKUMENTE.route]: 'dokuments',
 };
 
@@ -221,40 +238,51 @@ export const isStepDisabled = (
   const gesuchPermissions = getGesuchPermissions(gesuch, appType);
   const readonly = !gesuchPermissions?.canWrite;
 
-  if (step === PARTNER) {
-    const zivilstand = formular?.personInAusbildung?.zivilstand;
-    return (
-      !zivilstand ||
-      ![
-        Zivilstand.VERHEIRATET,
-        Zivilstand.KONKUBINAT,
-        Zivilstand.EINGETRAGENE_PARTNERSCHAFT,
-      ].includes(zivilstand)
-    );
+  switch (step) {
+    case PARTNER: {
+      const zivilstand = formular?.personInAusbildung?.zivilstand;
+      return (
+        !zivilstand ||
+        ![
+          Zivilstand.VERHEIRATET,
+          Zivilstand.KONKUBINAT,
+          Zivilstand.EINGETRAGENE_PARTNERSCHAFT,
+        ].includes(zivilstand)
+      );
+    }
+    case GESCHWISTER: {
+      const geschwister = formular?.geschwisters;
+      return readonly && (!geschwister || geschwister.length === 0);
+    }
+    case KINDER: {
+      const kinder = formular?.kinds;
+      return readonly && (!kinder || kinder.length === 0);
+    }
+    case ELTERN: {
+      const werZahltAlimente = formular?.familiensituation?.werZahltAlimente;
+      const mutterUnbekanntVerstorben =
+        formular?.familiensituation?.mutterUnbekanntVerstorben;
+      const vaterUnbekanntVerstorben =
+        formular?.familiensituation?.vaterUnbekanntVerstorben;
+      return (
+        werZahltAlimente === 'GEMEINSAM' ||
+        ((mutterUnbekanntVerstorben === 'VERSTORBEN' ||
+          mutterUnbekanntVerstorben === 'UNBEKANNT') &&
+          (vaterUnbekanntVerstorben === 'VERSTORBEN' ||
+            vaterUnbekanntVerstorben === 'UNBEKANNT'))
+      );
+    }
+    case DARLEHEN: {
+      if (!formular?.personInAusbildung?.geburtsdatum) return true;
+
+      const geburtsdatum = new Date(formular?.personInAusbildung?.geburtsdatum);
+      const istErwachsen = differenceInYears(new Date(), geburtsdatum) >= 18;
+
+      return !istErwachsen;
+    }
+    default:
+      return false;
   }
-  if (step === GESCHWISTER) {
-    const geschwister = formular?.geschwisters;
-    return readonly && (!geschwister || geschwister.length === 0);
-  }
-  if (step === KINDER) {
-    const kinder = formular?.kinds;
-    return readonly && (!kinder || kinder.length === 0);
-  }
-  if (step === ELTERN) {
-    const werZahltAlimente = formular?.familiensituation?.werZahltAlimente;
-    const mutterUnbekanntVerstorben =
-      formular?.familiensituation?.mutterUnbekanntVerstorben;
-    const vaterUnbekanntVerstorben =
-      formular?.familiensituation?.vaterUnbekanntVerstorben;
-    return (
-      werZahltAlimente === 'GEMEINSAM' ||
-      ((mutterUnbekanntVerstorben === 'VERSTORBEN' ||
-        mutterUnbekanntVerstorben === 'UNBEKANNT') &&
-        (vaterUnbekanntVerstorben === 'VERSTORBEN' ||
-          vaterUnbekanntVerstorben === 'UNBEKANNT'))
-    );
-  }
-  return false;
 };
 
 export const isStepValid = (

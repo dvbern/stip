@@ -8,12 +8,7 @@
     </dv-shared-pattern-mobile-sidenav>
   </mat-sidenav>
   <mat-sidenav-content class="d-flex flex-column">
-    <dv-sachbearbeitung-app-pattern-gesuch-header
-      [currentGesuch]="cacheViewSig().cache.gesuch"
-      [gesuchPermissions]="cacheViewSig().gesuchPermissions"
-      [isLoading]="viewSig().loading"
-      (openSidenav)="sidenav.open()"
-    >
+    <dv-sachbearbeitung-app-pattern-gesuch-header (openSidenav)="sidenav.open()">
     </dv-sachbearbeitung-app-pattern-gesuch-header>
 
     <!-- MAIN CONTENT -->

@@ -17,6 +17,7 @@ import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
+import { SharedEventGesuchFormDarlehen } from '@dv/shared/event/gesuch-form-darlehen';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuerdaten';
@@ -26,7 +27,6 @@ import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder
 import { SharedEventGesuchFormLebenslauf } from '@dv/shared/event/gesuch-form-lebenslauf';
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
-import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { AppType } from '@dv/shared/model/config';
 import { SharedModelError } from '@dv/shared/model/error';
@@ -104,13 +104,13 @@ export const loadGesuch = createEffect(
         SharedEventGesuchFormElternSteuerdaten.init,
         SharedEventGesuchFormFamiliensituation.init,
         SharedEventGesuchFormAuszahlung.init,
+        SharedEventGesuchFormDarlehen.init,
         SharedEventGesuchFormGeschwister.init,
         SharedEventGesuchFormKinder.init,
         SharedEventGesuchFormLebenslauf.init,
         SharedEventGesuchFormEinnahmenkosten.init,
         SharedEventGesuchDokumente.init,
         SharedEventGesuchFormAbschluss.init,
-        SharedEventGesuchFormProtokoll.init,
       ),
       concatLatestFrom(() =>
         store
@@ -224,6 +224,7 @@ export const updateGesuch = createEffect(
         SharedEventGesuchFormFamiliensituation.saveTriggered,
         SharedEventGesuchFormAuszahlung.saveTriggered,
         SharedEventGesuchFormEinnahmenkosten.saveTriggered,
+        SharedEventGesuchFormDarlehen.saveTriggered,
       ),
       concatMap(({ gesuchId, trancheId, gesuchFormular, origin }) => {
         return gesuchService
@@ -337,6 +338,7 @@ export const redirectToGesuchFormNextStep = createEffect(
         SharedEventGesuchFormElternSteuerdaten.nextTriggered,
         SharedEventGesuchFormFamiliensituation.nextTriggered,
         SharedEventGesuchFormAuszahlung.nextTriggered,
+        SharedEventGesuchFormDarlehen.nextTriggered,
         SharedEventGesuchFormEinnahmenkosten.nextTriggered,
         SharedEventGesuchDokumente.nextTriggered,
       ),

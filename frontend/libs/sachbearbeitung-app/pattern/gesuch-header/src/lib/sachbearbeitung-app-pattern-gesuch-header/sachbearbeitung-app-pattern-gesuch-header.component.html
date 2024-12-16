@@ -5,7 +5,8 @@
   }"
   (openSidenav)="openSidenav.emit()"
 >
-  @let gesuch = currentGesuchSig();
+  @let gesuchId = gesuchIdSig();
+  @let trancheId = gesuchTrancheIdSig();
   <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
     <!-- Gesuch -->
     <button
@@ -23,11 +24,11 @@
       <div class="d-flex flex-column gap-2">
         @for (tranche of gesuchAenderungStore.tranchenViewSig().list; track $index) {
           <a
-            [routerLink]="['/', 'gesuch', gesuch?.id, 'tranche', tranche.id]"
+            [routerLink]="['/', 'gesuch', gesuchId, 'tranche', tranche.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
-            [class.active]="isTrancheRouteSig() && gesuch?.gesuchTrancheToWorkWith?.id === tranche.id"
+            [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
           >
             <span>
               {{
@@ -44,7 +45,7 @@
 
     <!-- Verfuegung-->
     <a
-      [routerLink]="['/', 'verfuegung', gesuch?.id]"
+      [routerLink]="['/', 'verfuegung', gesuchId]"
       routerLinkActive="active"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-verfuegung"
@@ -73,11 +74,11 @@
       <div class="d-flex flex-column gap-2">
         @for (aenderung of aenderungen.byStatus.open; track $index) {
           <a
-            [routerLink]="['/', 'gesuch', gesuch?.id, 'aenderung', aenderung.id]"
+            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
-            [class.active]="gesuch?.gesuchTrancheToWorkWith?.id === aenderung.id"
+            [class.active]="trancheId === aenderung.id"
           >
             <span>
               {{
@@ -96,11 +97,11 @@
         </div>
         @for (aenderung of aenderungen.byStatus.completed; track $index) {
           <a
-            [routerLink]="['/', 'gesuch', gesuch?.id, 'aenderung', aenderung.id]"
+            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
-            [class.active]="gesuch?.gesuchTrancheToWorkWith?.id === aenderung.id"
+            [class.active]="trancheId === aenderung.id"
           >
             <span>
               {{
@@ -120,11 +121,11 @@
             <hr class="flex-grow-1" />
           </div>
           <a
-            [routerLink]="['/', 'gesuch', gesuch?.id, 'initial', initialTranche.id]"
+            [routerLink]="['/', 'gesuch', gesuchId, 'initial', initialTranche.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
             data-testid="gesuch-step-nav-overview"
             mat-menu-item
-            [class.active]="isAenderungRouteSig() && gesuch?.gesuchTrancheToWorkWith?.id === initialTranche.id"
+            [class.active]="isAenderungRouteSig() && trancheId === initialTranche.id"
           >
             <span>
               {{
@@ -141,7 +142,7 @@
 
     <!-- Infos-->
     <a
-      [routerLink]="['/', 'infos', gesuch?.id]"
+      [routerLink]="['/', 'infos', gesuchId]"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-header-nav-infos"
       [class.active]="isInfosRouteSig()"
@@ -197,13 +198,12 @@
           <hr class="my-1" />
         }
 
-        @let gesuchTrancheId = currentGesuchSig()?.gesuchTrancheToWorkWith?.id;
         @for (uebergang of statusUebergaenge.list; track $index) {
           <button
             type="button"
             class="btn fw-normal px-2 shadow-none pe-auto"
             [attr.data-testid]="'gesuch-header-nav-status-uebergang-item-' + uebergang.typ"
-            [disabled]="uebergang.disabledReason || !gesuchTrancheId"
+            [disabled]="uebergang.disabledReason || !trancheId"
             [attr.title]="
               uebergang.disabledReason
                 ? ('sachbearbeitung-app.header.status-uebergang.disabled-reason.' + uebergang.disabledReason
@@ -211,7 +211,7 @@
                 : null
             "
             mat-menu-item
-            (click)="setStatusUebergang(uebergang.typ, gesuchTrancheId)"
+            (click)="setStatusUebergang(uebergang.typ, trancheId)"
           >
             <div class="d-flex gap-2 align-items-center">
               <i class="material-symbols-rounded">{{ uebergang.icon }}</i>

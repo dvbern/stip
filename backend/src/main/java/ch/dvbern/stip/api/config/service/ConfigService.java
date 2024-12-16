@@ -102,6 +102,10 @@ public class ConfigService {
     @ConfigProperty(name = "kstip.pagination.max-allowed-page-size")
     Integer maxAllowedPageSize;
 
+    @Getter
+    @ConfigProperty(name = "kstip.should-clear-database")
+    Boolean shouldClearDatabase;
+
     public DeploymentConfigDto getDeploymentConfiguration() {
         return new DeploymentConfigDto()
             .version(version)

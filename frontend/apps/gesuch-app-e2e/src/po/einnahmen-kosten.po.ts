@@ -26,7 +26,6 @@ export class EinnahmenKostenPO {
     auswaertigeMittagessenProWoche: Locator;
     wgWohnend: Locator;
     verdienstRealisiert: Locator;
-    willDarlehen: Locator;
     betreuungskostenKinder: Locator;
     steuerjahr: Locator;
     vermoegen: Locator;
@@ -74,7 +73,6 @@ export class EinnahmenKostenPO {
       verdienstRealisiert: page.getByTestId(
         'form-einnahmen-kosten-verdienstRealisiert',
       ),
-      willDarlehen: page.getByTestId('form-einnahmen-kosten-willDarlehen'),
       betreuungskostenKinder: page.getByTestId(
         'form-einnahmen-kosten-betreuungskostenKinder',
       ),
@@ -146,13 +144,6 @@ export class EinnahmenKostenPO {
       this.elems.verdienstRealisiert,
       einnahmenKosten.verdienstRealisiert,
     );
-
-    if (isDefined(einnahmenKosten.willDarlehen)) {
-      await selectMatRadio(
-        this.elems.willDarlehen,
-        einnahmenKosten.willDarlehen,
-      );
-    }
 
     await expectFormToBeValid(this.elems.form);
   }
