@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,6 +41,8 @@ public interface GesuchDashboardItemMapper {
     @Mapping(source = "offeneAenderung", target = "offeneAenderung")
     @Mapping(source = "missingDocumentsTrancheIdAndCount", target = "missingDocuments")
     @Mapping(source = "gesuch.latestGesuchTranche.id", target = "currentTrancheId")
+    @Mapping(source = "gesuch", target = "startDate", qualifiedByName = "getStartDate")
+    @Mapping(source = "gesuch", target = "endDate", qualifiedByName = "getEndDate")
     GesuchDashboardItemDto toDto(
         final Gesuch gesuch,
         final GesuchTrancheSlimDto offeneAenderung,
@@ -52,5 +55,15 @@ public interface GesuchDashboardItemMapper {
         return missingDocumentsTrancheIdAndCount
             .map(pair -> new GesuchDashboardItemMissingDocumentsDto(pair.getLeft(), pair.getRight()))
             .orElse(null);
+    }
+
+    @Named("getStartDate")
+    static LocalDate getStartDate(Gesuch gesuch) {
+        return GesuchMapper.getGesuchDateRange(gesuch).getGueltigAb();
+    }
+
+    @Named("getEndDate")
+    static LocalDate getEndDate(Gesuch gesuch) {
+        return GesuchMapper.getGesuchDateRange(gesuch).getGueltigBis();
     }
 }

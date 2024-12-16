@@ -178,7 +178,10 @@ const darlehen: Darlehen = {
   willDarlehen: false,
 };
 
-const { test, getGesuchId } = initializeTest('GESUCHSTELLER', ausbildung);
+const { test, getGesuchId, getTrancheId } = initializeTest(
+  'GESUCHSTELLER',
+  ausbildung,
+);
 
 test.describe('Neues gesuch erstellen', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -320,14 +323,18 @@ test.describe('Neues gesuch erstellen', () => {
 
     // Go to Berechnung (SB-App)
     const urls = getE2eUrls();
-    await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}`);
+    await page.goto(
+      `${urls.sb}/verfuegung/${getGesuchId()}/tranche/${getTrancheId()}`,
+    );
 
     await expect(page.getByTestId('zusammenfassung-resultat')).toHaveClass(
       /accept/,
       { timeout: 10000 },
     );
 
-    await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
+    await page.goto(
+      `${urls.sb}/verfuegung/${getGesuchId()}/tranche/${getTrancheId()}/berechnung/1`,
+    );
 
     await expect(
       page.getByTestId('berechnung-persoenlich-total'),

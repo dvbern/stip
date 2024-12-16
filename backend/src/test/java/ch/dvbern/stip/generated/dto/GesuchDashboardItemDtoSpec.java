@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -37,6 +38,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_ID,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_CURRENT_TRANCHE_ID,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_OFFENE_AENDERUNG,
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_START_DATE,
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_END_DATE,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_MISSING_DOCUMENTS
 })
 @JsonTypeName("GesuchDashboardItem")
@@ -56,6 +59,12 @@ public class GesuchDashboardItemDtoSpec {
 
   public static final String JSON_PROPERTY_OFFENE_AENDERUNG = "offeneAenderung";
   private GesuchTrancheSlimDtoSpec offeneAenderung;
+
+  public static final String JSON_PROPERTY_START_DATE = "startDate";
+  private LocalDate startDate;
+
+  public static final String JSON_PROPERTY_END_DATE = "endDate";
+  private LocalDate endDate;
 
   public static final String JSON_PROPERTY_MISSING_DOCUMENTS = "missingDocuments";
   private GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments;
@@ -193,6 +202,58 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
+  public GesuchDashboardItemDtoSpec startDate(LocalDate startDate) {
+    
+    this.startDate = startDate;
+    return this;
+  }
+
+   /**
+   * Get startDate
+   * @return startDate
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+
+  public GesuchDashboardItemDtoSpec endDate(LocalDate endDate) {
+    
+    this.endDate = endDate;
+    return this;
+  }
+
+   /**
+   * Get endDate
+   * @return endDate
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
+  }
+
+
   public GesuchDashboardItemDtoSpec missingDocuments(GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments) {
     
     this.missingDocuments = missingDocuments;
@@ -232,12 +293,14 @@ public class GesuchDashboardItemDtoSpec {
         Objects.equals(this.id, gesuchDashboardItem.id) &&
         Objects.equals(this.currentTrancheId, gesuchDashboardItem.currentTrancheId) &&
         Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
+        Objects.equals(this.startDate, gesuchDashboardItem.startDate) &&
+        Objects.equals(this.endDate, gesuchDashboardItem.endDate) &&
         Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, missingDocuments);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, startDate, endDate, missingDocuments);
   }
 
   @Override
@@ -249,6 +312,8 @@ public class GesuchDashboardItemDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    currentTrancheId: ").append(toIndentedString(currentTrancheId)).append("\n");
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
+    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
+    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");
     sb.append("}");
     return sb.toString();

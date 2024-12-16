@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.util;
 import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -47,6 +48,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecMode
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.partner.entity.Partner;
@@ -316,6 +318,7 @@ public class TestUtil {
     public static Gesuch getBaseGesuchForBerechnung(final UUID trancheUuid) {
         final var gesuch = new Gesuch().setGesuchsperiode(
             new Gesuchsperiode()
+                .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(Year.now().getValue()))
                 .setMaxSaeule3a(7000)
                 .setEinkommensfreibetrag(6000)
                 .setFreibetragErwerbseinkommen(6000)

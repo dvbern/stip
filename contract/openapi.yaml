@@ -1535,6 +1535,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuch
       summary: Returns the Gesuch with the given Id
+  '/gesuch/{gesuchId}/info':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchInfo'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchInfo
+      summary: Returns the basic Gesuch info with the given Id
   '/dokument/download':
     parameters:
       - name: token
@@ -3005,6 +3032,25 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
+    GesuchInfo:
+      required:
+        - id
+        - gesuchNummer
+        - gesuchStatus
+        - startDate
+        - endDate
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        gesuchNummer:
+          type: string
+        gesuchStatus:
+          $ref: '#/components/schemas/Gesuchstatus'
+        startDate:
+          $ref: '#/components/schemas/LocalDate'
+        endDate:
+          $ref: '#/components/schemas/LocalDate'
     FallDashboardItem:
       required:
         - fall
@@ -3037,6 +3083,8 @@ components:
         - currentTrancheId
         - gesuchsperiode
         - gesuchStatus
+        - startDate
+        - endDate
       type: object
       properties:
         gesuchsperiode:
@@ -3049,6 +3097,12 @@ components:
           $ref: '#/components/schemas/UUID'
         offeneAenderung:
           $ref: '#/components/schemas/GesuchTrancheSlim'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
         missingDocuments:
           required:
             - trancheId
@@ -4551,10 +4605,13 @@ components:
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
+        - year
         - berechnung
         - tranchenBerechnungsresultate
       type: object
       properties:
+        year:
+          type: integer
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für das Gesuch'
           type: integer
@@ -4566,6 +4623,7 @@ components:
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
+        - nameGesuchsteller
         - berechnung
         - gueltigAb
         - gueltigBis
@@ -4576,6 +4634,8 @@ components:
         - familienBudgetresultate
       type: object
       properties:
+        nameGesuchsteller:
+          type: string
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
           type: integer

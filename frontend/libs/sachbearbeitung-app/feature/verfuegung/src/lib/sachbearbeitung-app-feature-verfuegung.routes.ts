@@ -1,23 +1,14 @@
-import { inject } from '@angular/core';
 import { Route } from '@angular/router';
-import { Store } from '@ngrx/store';
 
 import {
   BERECHNUNG_ROUTE,
   OPTION_ZUSAMMENFASSUNG,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { SharedFeatureVerfuegungZusammenfassungComponent } from '@dv/shared/feature/verfuegung-zusammenfassung';
 
 export const sachbearbeitungAppFeatureVerfuegungRoutes: Route[] = [
   {
     path: ':id',
-    resolve: {
-      id: () => {
-        const store = inject(Store);
-        store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-      },
-    },
     children: [
       {
         path: OPTION_ZUSAMMENFASSUNG.route,
