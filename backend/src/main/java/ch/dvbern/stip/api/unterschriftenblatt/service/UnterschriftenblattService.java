@@ -103,6 +103,7 @@ public class UnterschriftenblattService {
         dokumentRepository.persist(dokument);
     }
 
+    @Transactional
     public List<UnterschriftenblattDokumentDto> getForGesuchAndType(
         final UUID gesuchId
     ) {
@@ -110,6 +111,7 @@ public class UnterschriftenblattService {
         return found.map(unterschriftenblattMapper::toDto).toList();
     }
 
+    @Transactional
     public List<UnterschriftenblattDokumentTyp> getUnterschriftenblaetterToUpload(final Gesuch gesuch) {
         final var initialTranche = gesuchTrancheHistoryRepository
             .getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId());

@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Authorizer
@@ -34,6 +35,7 @@ public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
     private final GesuchStatusService gesuchStatusService;
     private final BenutzerService benutzerService;
 
+    @Transactional
     public void canUpload(final UUID gesuchId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
         if (!isAdminOrSb(benutzer)) {
