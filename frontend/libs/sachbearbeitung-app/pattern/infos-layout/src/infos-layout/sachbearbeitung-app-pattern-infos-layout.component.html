@@ -5,12 +5,7 @@
     </dv-shared-pattern-mobile-sidenav>
   </mat-sidenav>
   <mat-sidenav-content class="d-flex flex-column">
-    <dv-sachbearbeitung-app-pattern-gesuch-header
-      [currentGesuch]="gesuchViewSig().gesuch"
-      [gesuchPermissions]="gesuchViewSig().gesuchPermissions"
-      [isLoading]="gesuchViewSig().loading"
-      (openSidenav)="sidenav.open()"
-    >
+    <dv-sachbearbeitung-app-pattern-gesuch-header (openSidenav)="sidenav.open()">
     </dv-sachbearbeitung-app-pattern-gesuch-header>
 
     <ng-template #navigation>
@@ -19,7 +14,7 @@
           <a
             type="button"
             class="btn btn-nav mb-3 w-100 d-flex justify-content-start align-items-center fw-normal shadow-none"
-            [routerLink]="['/', infosRoute, option.route, gesuchViewSig().gesuchId]"
+            [routerLink]="['/', infosRoute, option.route, gesuchIdSig()]"
             routerLinkActive="active"
             (click)="navClicked$.emit()"
           >

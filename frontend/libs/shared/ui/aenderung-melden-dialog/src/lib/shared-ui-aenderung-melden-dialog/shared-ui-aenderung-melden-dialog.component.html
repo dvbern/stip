@@ -46,7 +46,7 @@
           matInput
           [dvMaxLength]="'small'"
           [matDatepicker]="bisPicker"
-          [min]="form.controls.gueltigAb.value"
+          [min]="form.controls.gueltigAb.value ?? dialogData.minDate"
           [max]="dialogData.maxDate"
           formControlName="gueltigBis"
           [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | translate"

@@ -70,6 +70,7 @@ import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
@@ -453,6 +454,10 @@ public class GesuchService {
     @Transactional
     public List<GesuchDto> findAllForFall(UUID fallId) {
         return gesuchRepository.findAllForFall(fallId).map(gesuchMapperUtil::mapWithNewestTranche).toList();
+    }
+
+    public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
+        return gesuchMapper.toInfoDto(gesuchRepository.requireById(gesuchId));
     }
 
     @Transactional

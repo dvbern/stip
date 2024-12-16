@@ -309,6 +309,7 @@ public class BerechnungService {
         }
 
         return new BerechnungsresultatDto(
+            gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
             berechnungsresultat,
             berechnungsresultate
         );
@@ -400,6 +401,7 @@ public class BerechnungService {
                 }
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
+                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getFullName(),
                         stipendienCalculated.getStipendien(),
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
@@ -449,6 +451,7 @@ public class BerechnungService {
 
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
+                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getFullName(),
                         berechnung,
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),

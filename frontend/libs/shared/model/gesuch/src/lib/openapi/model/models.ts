@@ -61,6 +61,7 @@ export * from './gesuchDokumentAblehnenRequest';
 export * from './gesuchDokumentKommentar';
 export * from './gesuchFormular';
 export * from './gesuchFormularUpdate';
+export * from './gesuchInfo';
 export * from './gesuchNotiz';
 export * from './gesuchNotizAllOf';
 export * from './gesuchNotizCreate';
