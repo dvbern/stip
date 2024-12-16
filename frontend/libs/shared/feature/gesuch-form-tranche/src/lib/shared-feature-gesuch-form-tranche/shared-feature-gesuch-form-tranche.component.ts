@@ -128,6 +128,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
           fallNummer,
           periode,
           sachbearbeiter,
+          appType,
         } = this.viewSig();
 
         // Also used to react to language change
@@ -146,7 +147,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
         this.form.patchValue({
           status: this.translate.instant(
-            `shared.gesuch.status.${type}.${status ?? 'IN_BEARBEITUNG_GS'}`,
+            `${appType}.gesuch.status.${type}.${status ?? 'IN_BEARBEITUNG_GS'}`,
           ),
           pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
           gesuchsnummer: gesuchsNummer,

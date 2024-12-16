@@ -253,7 +253,7 @@
                       </mat-option>
                       @for (status of statusValuesSig()?.status; track status) {
                         <mat-option [value]="status">
-                          {{ 'shared.gesuch.status.' + statusValuesSig()?.typ + '.' + status | translate }}
+                          {{ 'sachbearbeitung-app.gesuch.status.' + statusValuesSig()?.typ + '.' + status | translate }}
                         </mat-option>
                       }
                     </mat-select>

@@ -1,9 +1,0 @@
-{
-  "name": "shared-event-gesuch-form-protokoll",
-  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/event/gesuch-form-protokoll/src",
-  "projectType": "library",
-  "tags": ["type:event", "scope:shared"],
-  "// targets": "to see all targets run: nx show project shared-event-gesuch-form-protokoll --web",
-  "targets": {}
-}

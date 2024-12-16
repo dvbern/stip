@@ -83,28 +83,6 @@ class EinnahmenKostenValidatorTest {
     }
 
     @Test
-    void testEinnahmenKostenDarlehenRequiredConstraintValidator() {
-        EinnahmenKostenDarlehenRequiredConstraintValidator einnahmenKostenDarlehenRequiredConstraintValidator =
-            new EinnahmenKostenDarlehenRequiredConstraintValidator();
-        // Geburtsdatum null soll keine Validation Fehler verfen als nicht validbar
-        GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
-        assertThat(einnahmenKostenDarlehenRequiredConstraintValidator.isValid(gesuchFormular, null))
-            .isTrue();
-        // Minderjaehrig
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(17));
-        assertThat(einnahmenKostenDarlehenRequiredConstraintValidator.isValid(gesuchFormular, null))
-            .isTrue();
-        // Volljaehrig ohne darlehen Antwort
-        gesuchFormular.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
-        assertThat(einnahmenKostenDarlehenRequiredConstraintValidator.isValid(gesuchFormular, null))
-            .isFalse();
-        // Volljaehrig mit Darlehen Antwort
-        gesuchFormular.getEinnahmenKosten().setWillDarlehen(false);
-        assertThat(einnahmenKostenDarlehenRequiredConstraintValidator.isValid(gesuchFormular, null))
-            .isTrue();
-    }
-
-    @Test
     void testAusbildungskostenStufeRequiredConstraintValidator() {
         AusbildungskostenStufeRequiredConstraintValidator ausbildungskostenStufeRequiredConstraintValidator =
             new AusbildungskostenStufeRequiredConstraintValidator();

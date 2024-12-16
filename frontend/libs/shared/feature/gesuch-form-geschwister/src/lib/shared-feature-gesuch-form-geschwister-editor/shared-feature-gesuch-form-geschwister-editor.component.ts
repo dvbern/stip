@@ -20,7 +20,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
@@ -85,7 +84,6 @@ const MEDIUM_AGE = 20;
     SharedUiZuvorHintDirective,
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
-    MaskitoDirective,
     SharedUiWohnsitzSplitterComponent,
     SharedUiStepFormButtonsComponent,
     SharedPatternDocumentUploadComponent,
@@ -191,20 +189,17 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
           ),
           ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
         });
+        this.formUtils.invalidateControlIfValidationFails(
+          this.form,
+          ['wohnsitz'],
+          this.einreichenStore.validationViewSig().invalidFormularProps
+            .specialValidationErrors,
+          (value) =>
+            this.wohnsitzHelper.wohnsitzValuesSig().includes(value as Wohnsitz),
+        );
       },
       { allowSignalWrites: true },
     );
-
-    effect(() => {
-      const invalidFormularProps =
-        this.einreichenStore.validationViewSig().invalidFormularProps;
-
-      this.formUtils.invalidateControlIfValidationFails(
-        this.form,
-        ['wohnsitz'],
-        invalidFormularProps.specialValidationErrors,
-      );
-    });
   }
 
   handleSave() {

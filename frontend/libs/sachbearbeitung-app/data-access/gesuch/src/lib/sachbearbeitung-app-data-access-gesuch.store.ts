@@ -7,6 +7,7 @@ import { Observable, pipe, switchMap, tap } from 'rxjs';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import {
+  GesuchInfo,
   GesuchService,
   GesuchServiceGetGesucheSbRequestParams,
   PaginatedSbDashboard,
@@ -25,11 +26,13 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type GesuchState = {
+  gesuchInfo: CachedRemoteData<GesuchInfo>;
   gesuche: CachedRemoteData<PaginatedSbDashboard>;
   lastStatusChange: RemoteData<null>;
 };
 
 const initialState: GesuchState = {
+  gesuchInfo: initial(),
   gesuche: initial(),
   lastStatusChange: initial(),
 };
@@ -62,6 +65,7 @@ export class GesuchStore extends signalStore(
                   gesuch: data,
                 }),
               );
+              this.loadGesuchInfo$({ gesuchId: data.id });
               onSuccess?.(data);
             },
           },
@@ -75,6 +79,23 @@ export class GesuchStore extends signalStore(
       loading: isPending(this.gesuche()),
     };
   });
+
+  loadGesuchInfo$ = rxMethod<{ gesuchId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          gesuchInfo: cachedPending(state.gesuchInfo),
+        }));
+      }),
+      switchMap(({ gesuchId }) =>
+        this.gesuchService
+          .getGesuchInfo$({ gesuchId })
+          .pipe(
+            handleApiResponse((gesuchInfo) => patchState(this, { gesuchInfo })),
+          ),
+      ),
+    ),
+  );
 
   loadGesuche$ = rxMethod<GesuchServiceGetGesucheSbRequestParams>(
     pipe(

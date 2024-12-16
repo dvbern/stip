@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.AuszahlungDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternDtoSpec;
 import ch.dvbern.stip.generated.dto.FamiliensituationDtoSpec;
@@ -53,7 +54,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchFormularDtoSpec.JSON_PROPERTY_KINDS,
   GesuchFormularDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN,
   GesuchFormularDtoSpec.JSON_PROPERTY_STEUERDATEN,
-  GesuchFormularDtoSpec.JSON_PROPERTY_STEUERDATEN_TABS
+  GesuchFormularDtoSpec.JSON_PROPERTY_STEUERDATEN_TABS,
+  GesuchFormularDtoSpec.JSON_PROPERTY_DARLEHEN
 })
 @JsonTypeName("GesuchFormular")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -93,6 +95,9 @@ public class GesuchFormularDtoSpec {
 
   public static final String JSON_PROPERTY_STEUERDATEN_TABS = "steuerdatenTabs";
   private List<SteuerdatenTypDtoSpec> steuerdatenTabs;
+
+  public static final String JSON_PROPERTY_DARLEHEN = "darlehen";
+  private DarlehenDtoSpec darlehen;
 
   public GesuchFormularDtoSpec() {
   }
@@ -456,6 +461,32 @@ public class GesuchFormularDtoSpec {
     this.steuerdatenTabs = steuerdatenTabs;
   }
 
+
+  public GesuchFormularDtoSpec darlehen(DarlehenDtoSpec darlehen) {
+    
+    this.darlehen = darlehen;
+    return this;
+  }
+
+   /**
+   * Get darlehen
+   * @return darlehen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DarlehenDtoSpec getDarlehen() {
+    return darlehen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDarlehen(DarlehenDtoSpec darlehen) {
+    this.darlehen = darlehen;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -476,12 +507,13 @@ public class GesuchFormularDtoSpec {
         Objects.equals(this.kinds, gesuchFormular.kinds) &&
         Objects.equals(this.einnahmenKosten, gesuchFormular.einnahmenKosten) &&
         Objects.equals(this.steuerdaten, gesuchFormular.steuerdaten) &&
-        Objects.equals(this.steuerdatenTabs, gesuchFormular.steuerdatenTabs);
+        Objects.equals(this.steuerdatenTabs, gesuchFormular.steuerdatenTabs) &&
+        Objects.equals(this.darlehen, gesuchFormular.darlehen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuerdaten, steuerdatenTabs);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, auszahlung, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuerdaten, steuerdatenTabs, darlehen);
   }
 
   @Override
@@ -500,6 +532,7 @@ public class GesuchFormularDtoSpec {
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
     sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
     sb.append("    steuerdatenTabs: ").append(toIndentedString(steuerdatenTabs)).append("\n");
+    sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

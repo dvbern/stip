@@ -23,6 +23,7 @@ export const initializeTest = (
 ) => {
   let contexts: TestContexts;
   let gesuchId: string | undefined;
+  let trancheId: string | undefined;
   const test = createTest(authType).extend<{ cockpit: CockpitPO }>({
     cockpit: async ({ page }, use) => {
       const cockpit = new CockpitPO(page);
@@ -38,6 +39,9 @@ export const initializeTest = (
         await dashboardResponse.json();
       gesuchId =
         dashboardBody?.[0]?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
+      trancheId =
+        dashboardBody?.[0]?.ausbildungDashboardItems?.[0]?.gesuchs?.[0]
+          .currentTrancheId;
       if (gesuchId) {
         const response = await deleteGesuch(contexts.api, gesuchId);
         if (response.status() >= 400) {
@@ -62,6 +66,8 @@ export const initializeTest = (
       const response = await requestPromise;
       const body: FallDashboardItem[] | undefined = await response.json();
       gesuchId = body?.[0].ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
+      trancheId =
+        body?.[0].ausbildungDashboardItems?.[0]?.gesuchs?.[0].currentTrancheId;
       if (!gesuchId) {
         throw new Error('Failed to create new gesuch');
       }
@@ -91,6 +97,7 @@ export const initializeTest = (
 
   return {
     getGesuchId: () => gesuchId,
+    getTrancheId: () => trancheId,
     getContext: () => contexts,
     test,
   };

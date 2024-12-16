@@ -19,5 +19,4 @@ export class SharedModelCompileTimeConfig {
   }
 }
 
-// TODO extract to env or generate with OpenAPI?
 export const SHARED_MODEL_CONFIG_RESOURCE = `/config/deployment`;

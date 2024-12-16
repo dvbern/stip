@@ -300,7 +300,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/GesuchNotiz'
-          description: all notizen of a gesuch are returned
+          description: all notizen of a fall from given gesuch
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -308,7 +308,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getNotizen
-      summary: Get all notizen of a gesuch
+      summary: Get all notizen of a fall from given gesuch
   '/gesuch/notiz/create':
     post:
       requestBody:
@@ -1535,6 +1535,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuch
       summary: Returns the Gesuch with the given Id
+  '/gesuch/{gesuchId}/info':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchInfo'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchInfo
+      summary: Returns the basic Gesuch info with the given Id
   '/dokument/download':
     parameters:
       - name: token
@@ -2562,6 +2589,10 @@ components:
         - EK_LOHNABRECHNUNG
         - EK_VERDIENST
         - EK_VERMOEGEN
+        - DARLEHEN_BETREIBUNGSREGISTERAUSZUG
+        - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
+        - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
+        - DARLEHEN_BELEGE_ANSCHAFFUNGEN
       type: string
     ElternAbwesenheitsGrund:
       enum:
@@ -3001,6 +3032,25 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
+    GesuchInfo:
+      required:
+        - id
+        - gesuchNummer
+        - gesuchStatus
+        - startDate
+        - endDate
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        gesuchNummer:
+          type: string
+        gesuchStatus:
+          $ref: '#/components/schemas/Gesuchstatus'
+        startDate:
+          $ref: '#/components/schemas/LocalDate'
+        endDate:
+          $ref: '#/components/schemas/LocalDate'
     FallDashboardItem:
       required:
         - fall
@@ -3033,6 +3083,8 @@ components:
         - currentTrancheId
         - gesuchsperiode
         - gesuchStatus
+        - startDate
+        - endDate
       type: object
       properties:
         gesuchsperiode:
@@ -3045,6 +3097,12 @@ components:
           $ref: '#/components/schemas/UUID'
         offeneAenderung:
           $ref: '#/components/schemas/GesuchTrancheSlim'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
         missingDocuments:
           required:
             - trancheId
@@ -3516,6 +3574,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SteuerdatenTyp'
+        darlehen:
+          $ref: '#/components/schemas/Darlehen'
     PersonInAusbildungUpdate:
       required:
         - adresse
@@ -3631,6 +3691,8 @@ components:
             $ref: '#/components/schemas/KindUpdate'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        darlehen:
+          $ref: '#/components/schemas/Darlehen'
         steuerdaten:
           type: array
           items:
@@ -3758,9 +3820,6 @@ components:
           type: boolean
         verdienstRealisiert:
           type: boolean
-        willDarlehen:
-          description: Required nur wenn volljährig
-          type: boolean
         auswaertigeMittagessenProWoche:
           description: Required nur wenn die Person keinen eigenen Haushalt führt
           type: integer
@@ -3793,6 +3852,44 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/EinnahmenKostenUpdate'
+    Darlehen:
+      type: object
+      required:
+        - willDarlehen
+      properties:
+        willDarlehen:
+          description: Required wenn volljährig, sonst nicht moeglich!
+          type: boolean
+        betragDarlehen:
+          description: Required wenn willDarlehen = true
+          type: integer
+          minimum: 0
+        betragBezogenKanton:
+          description: Required wenn willDarlehen = true
+          type: integer
+          minimum: 0
+        schulden:
+          description: Required wenn willDarlehen = true
+          type: integer
+          minimum: 0
+        anzahlBetreibungen:
+          description: Required wenn willDarlehen = true - mit Fileupload
+          type: integer
+          minimum: 0
+        grundNichtBerechtigt:
+          description: Keine Stipendienberechtigung, auf Grund der tatsächlichen Kosten können die Mittel der Eltern jedoch nicht einbezogen werden - Falls Ja mit Fileupload
+          type: boolean
+        grundAusbildungZwoelfJahre:
+          description: Keine Stipendienberechtigung wegen Überschreitens der Ausbildungsdauer von 12 Jahren.
+          type: boolean
+        grundHoheGebuehren:
+          description: Falls ja mit Fileupload
+          type: boolean
+        grundAnschaffungenFuerAusbildung:
+          description: Falls ja mit Fileupload
+          type: boolean
+        grundZweitausbildung:
+          type: boolean
     AusbildungBase:
       required:
         - fallId
@@ -4511,10 +4608,13 @@ components:
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
+        - year
         - berechnung
         - tranchenBerechnungsresultate
       type: object
       properties:
+        year:
+          type: integer
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für das Gesuch'
           type: integer
@@ -4526,6 +4626,7 @@ components:
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
+        - nameGesuchsteller
         - berechnung
         - gueltigAb
         - gueltigBis
@@ -4536,6 +4637,8 @@ components:
         - familienBudgetresultate
       type: object
       properties:
+        nameGesuchsteller:
+          type: string
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
           type: integer
@@ -4839,6 +4942,7 @@ components:
         - userErstellt
         - timestampErstellt
         - notizTyp
+        - gesuchNummer
         - id
       type: object
       properties:
@@ -4852,6 +4956,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         notizTyp:
           $ref: '#/components/schemas/GesuchNotizTyp'
+        gesuchNummer: 
+          type: string
         antwort:
           type: string
       allOf:

@@ -143,10 +143,22 @@ export class SharedUtilFormService {
   }
 
   /**
+   * Used to add or remove the required validators, validity checks are also triggered afterwards
+   */
+  setRequired(control: FormControl, required: boolean) {
+    if (required) {
+      control.addValidators(Validators.required);
+    } else {
+      control.removeValidators(Validators.required);
+    }
+    control.updateValueAndValidity();
+  }
+
+  /**
    * Used to set the disabled state of the given control
    */
   setDisabledState(
-    control: FormControl,
+    control: FormControl | FormGroup,
     isDisabled: boolean,
     clearOnDisable?: boolean,
     options?: { emitEvent: boolean },
@@ -242,18 +254,6 @@ export class SharedUtilFormService {
   }
 
   /**
-   * Used to add or remove the required validators, validity checks are also triggered afterwards
-   */
-  setRequired(control: FormControl, required: boolean) {
-    if (required) {
-      control.addValidators(Validators.required);
-    } else {
-      control.removeValidators(Validators.required);
-    }
-    control.updateValueAndValidity();
-  }
-
-  /**
    * Convert the value changes from a given control into a signal
    */
   signalFromChanges<R>(
@@ -281,6 +281,12 @@ export class SharedUtilFormService {
     form: T,
     expectedFields: KeysOfForm<T>[],
     specialValidationErrors?: SpecialValidationError[],
+    /**
+     * A function that revises the value of the control and returns true if the value is valid
+     * The function serves as an additional check to determine if the control should be invalidated
+     * in case there are multiple controls with the same field name, for example in an array as geschwister.
+     */
+    validatorFn?: (value: string) => boolean,
   ) {
     if (!specialValidationErrors || specialValidationErrors.length === 0) {
       return;
@@ -293,8 +299,16 @@ export class SharedUtilFormService {
         field in form.controls
       ) {
         const control = form.get(field);
-        control?.markAllAsTouched();
-        control?.patchValue(null);
+
+        if (validatorFn) {
+          if (!validatorFn(control?.value)) {
+            control?.markAllAsTouched();
+            control?.patchValue(null);
+          }
+        } else {
+          control?.markAllAsTouched();
+          control?.patchValue(null);
+        }
       }
     });
   }

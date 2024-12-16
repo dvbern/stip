@@ -20,6 +20,7 @@ export interface GesuchNotiz {
     userMutiert?: string;
     timestampMutiert?: string;
     notizTyp: GesuchNotizTyp;
+    gesuchNummer: string;
     antwort?: string;
 }
 
