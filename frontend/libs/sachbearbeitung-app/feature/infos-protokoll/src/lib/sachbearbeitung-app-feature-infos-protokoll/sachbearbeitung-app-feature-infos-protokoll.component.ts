@@ -16,7 +16,6 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { StatusprotokollStore } from '@dv/sachbearbeitung-app/data-access/statusprotokoll';
-import { SharedEventGesuchFormProtokoll } from '@dv/shared/event/gesuch-form-protokoll';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
@@ -60,7 +59,6 @@ export class SachbearbeitungAppFeatureInfosProtokollComponent {
     effect(
       () => {
         const gesuchId = this.gesuchIdSig();
-        this.store.dispatch(SharedEventGesuchFormProtokoll.init());
         this.statusprotokollStore.loadCachedStatusprotokoll$({
           gesuchId,
         });

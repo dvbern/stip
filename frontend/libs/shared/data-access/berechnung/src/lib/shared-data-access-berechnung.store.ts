@@ -35,11 +35,16 @@ export class BerechnungStore extends signalStore(
   private gesuchService = inject(GesuchService);
 
   berechnungZusammenfassungViewSig = computed(() => {
+    const berechnungRd = this.berechnung();
     const value: {
+      year: number;
       totalBetragStipendium: number;
       berechnungsresultate: Record<string, TranchenBerechnungsresultat[]>;
-    } = { totalBetragStipendium: 0, berechnungsresultate: {} };
-    const berechnungRd = this.berechnung();
+    } = {
+      year: berechnungRd.data?.year ?? 0,
+      totalBetragStipendium: 0,
+      berechnungsresultate: {},
+    };
 
     const byTrancheId = berechnungRd.data
       ? berechnungRd.data.tranchenBerechnungsresultate.reduce((acc, curr) => {

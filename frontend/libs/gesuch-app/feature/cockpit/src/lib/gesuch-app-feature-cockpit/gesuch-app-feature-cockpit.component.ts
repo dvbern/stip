@@ -9,14 +9,12 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { DashboardStore } from '@dv/gesuch-app/data-access/dashboard';
 import { GesuchAppDialogCreateAusbildungComponent } from '@dv/gesuch-app/dialog/create-ausbildung';
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
-import { GesuchAppUiAenderungsEntryComponent } from '@dv/gesuch-app/ui/aenderungs-entry';
 import {
   GesuchAppUiDashboardAusbildungComponent,
   GesuchAppUiDashboardCompactAusbildungComponent,
@@ -42,10 +40,7 @@ import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
-import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
@@ -56,20 +51,15 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     TranslatePipe,
     MatSelectModule,
     GesuchAppPatternMainLayoutComponent,
-    SharedUiLanguageSelectorComponent,
     SharedUiIconChipComponent,
-    SharedUiLoadingComponent,
     SharedUiVersionTextComponent,
     SharedUiClearButtonComponent,
     SharedUiNotificationsComponent,
-    SharedUiRdIsPendingPipe,
     GesuchAppUiDashboardAusbildungComponent,
     GesuchAppUiDashboardCompactAusbildungComponent,
-    GesuchAppUiAenderungsEntryComponent,
   ],
   providers: [
     FallStore,
@@ -154,11 +144,11 @@ export class GesuchAppFeatureCockpitComponent {
 
   aenderungMelden(melden: AenderungMelden) {
     const {
-      gesuch: { id, gesuchsperiode },
+      gesuch: { id, startDate, endDate },
     } = melden;
     SharedUiAenderungMeldenDialogComponent.open(this.dialog, {
-      minDate: new Date(gesuchsperiode.gesuchsperiodeStart),
-      maxDate: new Date(gesuchsperiode.gesuchsperiodeStopp),
+      minDate: new Date(startDate),
+      maxDate: new Date(endDate),
     })
       .afterClosed()
       .subscribe((result) => {

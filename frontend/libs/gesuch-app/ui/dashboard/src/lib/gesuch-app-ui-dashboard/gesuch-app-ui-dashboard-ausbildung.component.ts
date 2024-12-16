@@ -6,14 +6,12 @@ import {
   input,
   output,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import { AenderungMelden } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiTranslatedDatePipe } from '@dv/shared/ui/translated-date-pipe';
-import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 
 import { GesuchAppUiDashboardGesuchComponent } from './gesuch-app-ui-dashboard-gesuch.component';
 
@@ -22,9 +20,7 @@ import { GesuchAppUiDashboardGesuchComponent } from './gesuch-app-ui-dashboard-g
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     TranslatePipe,
-    TranslatedPropertyPipe,
     GesuchAppUiDashboardGesuchComponent,
     SharedUiIconChipComponent,
     SharedUiTranslatedDatePipe,

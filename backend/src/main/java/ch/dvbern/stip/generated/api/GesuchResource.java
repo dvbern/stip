@@ -5,6 +5,7 @@ import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
@@ -103,6 +104,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto getGesuch(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/{gesuchId}/info")
+    @Produces({ "application/json", "text/plain" })
+    GesuchInfoDto getGesuchInfo(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/benutzer/me/gs")

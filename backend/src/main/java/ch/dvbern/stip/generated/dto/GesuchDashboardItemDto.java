@@ -4,6 +4,7 @@ import ch.dvbern.stip.generated.dto.GesuchDashboardItemMissingDocumentsDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -27,6 +28,8 @@ public class GesuchDashboardItemDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
   private @Valid UUID id;
   private @Valid UUID currentTrancheId;
+  private @Valid LocalDate startDate;
+  private @Valid LocalDate endDate;
   private @Valid GesuchTrancheSlimDto offeneAenderung;
   private @Valid GesuchDashboardItemMissingDocumentsDto missingDocuments;
 
@@ -108,6 +111,44 @@ public class GesuchDashboardItemDto  implements Serializable {
 
   /**
    **/
+  public GesuchDashboardItemDto startDate(LocalDate startDate) {
+    this.startDate = startDate;
+    return this;
+  }
+
+  
+  @JsonProperty("startDate")
+  @NotNull
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+  @JsonProperty("startDate")
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+  /**
+   **/
+  public GesuchDashboardItemDto endDate(LocalDate endDate) {
+    this.endDate = endDate;
+    return this;
+  }
+
+  
+  @JsonProperty("endDate")
+  @NotNull
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+  @JsonProperty("endDate")
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
+  }
+
+  /**
+   **/
   public GesuchDashboardItemDto offeneAenderung(GesuchTrancheSlimDto offeneAenderung) {
     this.offeneAenderung = offeneAenderung;
     return this;
@@ -156,13 +197,15 @@ public class GesuchDashboardItemDto  implements Serializable {
         Objects.equals(this.gesuchStatus, gesuchDashboardItem.gesuchStatus) &&
         Objects.equals(this.id, gesuchDashboardItem.id) &&
         Objects.equals(this.currentTrancheId, gesuchDashboardItem.currentTrancheId) &&
+        Objects.equals(this.startDate, gesuchDashboardItem.startDate) &&
+        Objects.equals(this.endDate, gesuchDashboardItem.endDate) &&
         Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
         Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, missingDocuments);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, startDate, endDate, offeneAenderung, missingDocuments);
   }
 
   @Override
@@ -174,6 +217,8 @@ public class GesuchDashboardItemDto  implements Serializable {
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    currentTrancheId: ").append(toIndentedString(currentTrancheId)).append("\n");
+    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
+    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
     sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");
     sb.append("}");

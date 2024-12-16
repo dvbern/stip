@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Resultat der Berechnung (eine Tranche)
  */
 @JsonPropertyOrder({
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_NAME_GESUCHSTELLER,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
@@ -48,6 +49,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("TranchenBerechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class TranchenBerechnungsresultatDtoSpec {
+  public static final String JSON_PROPERTY_NAME_GESUCHSTELLER = "nameGesuchsteller";
+  private String nameGesuchsteller;
+
   public static final String JSON_PROPERTY_BERECHNUNG = "berechnung";
   private Integer berechnung;
 
@@ -74,6 +78,32 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   public TranchenBerechnungsresultatDtoSpec() {
   }
+
+  public TranchenBerechnungsresultatDtoSpec nameGesuchsteller(String nameGesuchsteller) {
+    
+    this.nameGesuchsteller = nameGesuchsteller;
+    return this;
+  }
+
+   /**
+   * Get nameGesuchsteller
+   * @return nameGesuchsteller
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_NAME_GESUCHSTELLER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getNameGesuchsteller() {
+    return nameGesuchsteller;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NAME_GESUCHSTELLER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setNameGesuchsteller(String nameGesuchsteller) {
+    this.nameGesuchsteller = nameGesuchsteller;
+  }
+
 
   public TranchenBerechnungsresultatDtoSpec berechnung(Integer berechnung) {
     
@@ -299,7 +329,8 @@ public class TranchenBerechnungsresultatDtoSpec {
       return false;
     }
     TranchenBerechnungsresultatDtoSpec tranchenBerechnungsresultat = (TranchenBerechnungsresultatDtoSpec) o;
-    return Objects.equals(this.berechnung, tranchenBerechnungsresultat.berechnung) &&
+    return Objects.equals(this.nameGesuchsteller, tranchenBerechnungsresultat.nameGesuchsteller) &&
+        Objects.equals(this.berechnung, tranchenBerechnungsresultat.berechnung) &&
         Objects.equals(this.gueltigAb, tranchenBerechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
         Objects.equals(this.gesuchTrancheId, tranchenBerechnungsresultat.gesuchTrancheId) &&
@@ -311,13 +342,14 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, gueltigAb, gueltigBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(nameGesuchsteller, berechnung, gueltigAb, gueltigBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranchenBerechnungsresultatDtoSpec {\n");
+    sb.append("    nameGesuchsteller: ").append(toIndentedString(nameGesuchsteller)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
