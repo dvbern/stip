@@ -130,6 +130,8 @@ run-e2e:
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /\[skip e2e\]/
       when: never
+    - if: $PIPELINE_TYPE == "default"
+      when: always
 
 wait-for-review:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
@@ -205,12 +207,14 @@ stop-e2e:
 
 db-clear:dev:start:
   extends: .db-clear:start
+  resource_group: 'argocd:dev'
   environment:
     name: dev
   rules:
     - if: $PIPELINE_TYPE == 'default'
 
 db-clear:uat:start:
+  resource_group: 'argocd:uat'
   extends: .db-clear:start
   environment:
     name: uat
@@ -219,6 +223,7 @@ db-clear:uat:start:
 
 .set-replica-zero:
   extends: .install-argocd
+  stage: deploy
   script:
     - argocd app sync stip --insecure
     - argocd app set stip --helm-set image.tag=$VERSION --insecure
@@ -227,7 +232,7 @@ db-clear:uat:start:
     - argocd app wait stip --insecure
 
 .db-clear:stop:
-  extends: .set-replica-one
+  extends: .set-replica-zero
   rules:
     - when: always
   variables:
@@ -235,6 +240,7 @@ db-clear:uat:start:
 
 db-clear:dev:stop:
   extends: .db-clear:stop
+  resource_group: 'argocd:dev'
   environment:
     name: dev
   needs:
@@ -244,6 +250,7 @@ db-clear:dev:stop:
 
 db-clear:uat:stop:
   extends: .db-clear:stop
+  resource_group: 'argocd:uat'
   environment:
     name: uat
   needs:

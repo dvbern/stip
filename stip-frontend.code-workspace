@@ -145,6 +145,7 @@
       "connectionId": "sonarqube-next-dvbern-ch",
       "projectKey": "stip_frontend"
     },
-    "yaml.maxItemsComputed": 10000
+    "yaml.maxItemsComputed": 10000,
+    "testing.automaticallyOpenTestResults": "neverOpen"
   }
 }
