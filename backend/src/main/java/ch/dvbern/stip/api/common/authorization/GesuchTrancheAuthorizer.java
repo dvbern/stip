@@ -40,18 +40,6 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchRepository gesuchRepository;
 
-    // @Transactional
-    // public void canReadInitialTrancheChanges(final UUID gesuchTrancheId) {
-    // canRead(gesuchTrancheId);
-    // final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
-    // final var currentTrancheFromGesuchInStatusEingereicht = gesuchTrancheHistoryRepository
-    // .getLatestWhereGesuchStatusChangedToVerfuegt(gesuch.getId());
-    //
-    // if (currentTrancheFromGesuchInStatusEingereicht.isEmpty()) {
-    // throw new ForbiddenException();
-    // }
-    // }
-
     @Transactional
     public void canRead(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
