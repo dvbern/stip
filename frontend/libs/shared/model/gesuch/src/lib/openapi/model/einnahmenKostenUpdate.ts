@@ -43,10 +43,6 @@ export interface EinnahmenKostenUpdate {
     wgWohnend?: boolean;
     verdienstRealisiert: boolean;
     /**
-     * Required nur wenn volljährig
-     */
-    willDarlehen?: boolean;
-    /**
      * Required nur wenn die Person keinen eigenen Haushalt führt
      */
     auswaertigeMittagessenProWoche?: number;

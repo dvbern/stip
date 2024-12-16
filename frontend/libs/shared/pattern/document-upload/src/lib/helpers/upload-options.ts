@@ -67,6 +67,14 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   EK_LOHNABRECHNUNG: 'shared.form.einnahmenkosten.file.LOHNABRECHNUNG',
   EK_VERDIENST: 'shared.form.einnahmenkosten.file.VERDIENST',
   EK_VERMOEGEN: 'shared.form.einnahmenkosten.file.VERMOEGEN',
+  DARLEHEN_BETREIBUNGSREGISTERAUSZUG:
+    'shared.form.darlehen.file.BETREIBUNGSREGISTERAUSZUG',
+  DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN:
+    'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN',
+  DARLEHEN_KOPIE_SCHULGELDRECHNUNG:
+    'shared.form.darlehen.file.SCHULGELDRECHNUNG',
+  DARLEHEN_BELEGE_ANSCHAFFUNGEN:
+    'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN',
 };
 
 /**
