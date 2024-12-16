@@ -3,6 +3,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  QueryList,
+  ViewChildren,
   computed,
   effect,
   inject,
@@ -26,6 +28,10 @@ import {
   GesuchNotizTyp,
 } from '@dv/shared/model/gesuch';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import {
+  SharedUiFocusableListDirective,
+  SharedUiFocusableListItemDirective,
+} from '@dv/shared/ui/focusable-list';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
@@ -42,12 +48,14 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
     TranslatePipe,
     MatTableModule,
     MatPaginatorModule,
-    TypeSafeMatCellDefDirective,
+    MatMenuModule,
     MatTooltipModule,
+    TypeSafeMatCellDefDirective,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiTruncateTooltipDirective,
-    MatMenuModule,
+    SharedUiFocusableListDirective,
+    SharedUiFocusableListItemDirective,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './sachbearbeitung-app-feature-infos-notizen.component.html',
@@ -57,14 +65,9 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
 
-  displayedColumns = [
-    'notizTyp',
-    'datum',
-    'user',
-    'betreff',
-    'notiz',
-    'actions',
-  ];
+  @ViewChildren(SharedUiFocusableListItemDirective)
+  items?: QueryList<SharedUiFocusableListItemDirective>;
+  displayedColumns = ['notizTyp', 'datum', 'user', 'betreff', 'actions'];
   notizStore = inject(NotizStore);
   permissionStore = inject(PermissionStore);
 
@@ -153,6 +156,17 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
           });
         }
       });
+  }
+
+  openNotiz(notiz: GesuchNotiz) {
+    SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent.open(
+      this.dialog,
+      {
+        notizTyp: notiz.notizTyp,
+        notiz,
+        readonly: true,
+      },
+    );
   }
 
   deleteNotiz(notizId: string) {
