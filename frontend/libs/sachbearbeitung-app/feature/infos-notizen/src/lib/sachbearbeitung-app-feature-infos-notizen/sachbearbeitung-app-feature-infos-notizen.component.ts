@@ -3,6 +3,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  QueryList,
+  ViewChildren,
   computed,
   effect,
   inject,
@@ -16,11 +18,9 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
-import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { PermissionStore } from '@dv/shared/global/permission';
 import {
   GesuchNotiz,
@@ -28,6 +28,10 @@ import {
   GesuchNotizTyp,
 } from '@dv/shared/model/gesuch';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import {
+  SharedUiFocusableListDirective,
+  SharedUiFocusableListItemDirective,
+} from '@dv/shared/ui/focusable-list';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
@@ -44,30 +48,26 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
     TranslatePipe,
     MatTableModule,
     MatPaginatorModule,
-    TypeSafeMatCellDefDirective,
+    MatMenuModule,
     MatTooltipModule,
+    TypeSafeMatCellDefDirective,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiTruncateTooltipDirective,
-    MatMenuModule,
+    SharedUiFocusableListDirective,
+    SharedUiFocusableListItemDirective,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './sachbearbeitung-app-feature-infos-notizen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureInfosNotizenComponent {
-  private store = inject(Store);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
 
-  displayedColumns = [
-    'notizTyp',
-    'datum',
-    'user',
-    'betreff',
-    'notiz',
-    'actions',
-  ];
+  @ViewChildren(SharedUiFocusableListItemDirective)
+  items?: QueryList<SharedUiFocusableListItemDirective>;
+  displayedColumns = ['notizTyp', 'datum', 'user', 'betreff', 'actions'];
   notizStore = inject(NotizStore);
   permissionStore = inject(PermissionStore);
 
@@ -84,8 +84,6 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   });
 
   constructor() {
-    this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-
     effect(
       () => {
         const gesuchId = this.gesuchIdSig();
@@ -158,6 +156,17 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
           });
         }
       });
+  }
+
+  openNotiz(notiz: GesuchNotiz) {
+    SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent.open(
+      this.dialog,
+      {
+        notizTyp: notiz.notizTyp,
+        notiz,
+        readonly: true,
+      },
+    );
   }
 
   deleteNotiz(notizId: string) {

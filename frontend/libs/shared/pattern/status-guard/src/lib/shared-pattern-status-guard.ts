@@ -1,37 +1,47 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, RedirectCommand, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { filter, map, switchMap, take } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 
-import {
-  SharedDataAccessGesuchEvents,
-  selectSharedDataAccessGesuchsView,
-} from '@dv/shared/data-access/gesuch';
+import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { BenutzerVerwaltungRole } from '@dv/shared/model/benutzer';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { GesuchService } from '@dv/shared/model/gesuch';
 import {
   Permission,
   getGesuchPermissions,
 } from '@dv/shared/model/permission-state';
-import { capitalized, isDefined } from '@dv/shared/model/type-util';
+import { capitalized } from '@dv/shared/model/type-util';
 
 export const isAllowedTo =
   (permission: Permission): CanActivateFn =>
   () => {
+    const gesuchService = inject(GesuchService);
     const store = inject(Store);
     const router = inject(Router);
     const config = inject(SharedModelCompileTimeConfig);
 
-    return getLatestGesuch$(store).pipe(
-      map((gesuch) =>
-        getGesuchPermissions(gesuch, config.appType)[
-          `can${capitalized(permission)}`
-        ]
-          ? true
-          : new RedirectCommand(router.parseUrl('/')),
-      ),
+    return store.select(selectRouteId).pipe(
+      switchMap((gesuchId) => {
+        if (!gesuchId) {
+          console.error('No gesuchId found in route');
+          return [false];
+        }
+
+        return gesuchService
+          .getGesuchInfo$({ gesuchId })
+          .pipe(
+            map(({ gesuchStatus }) =>
+              getGesuchPermissions({ gesuchStatus }, config.appType)[
+                `can${capitalized(permission)}`
+              ]
+                ? true
+                : new RedirectCommand(router.parseUrl('/')),
+            ),
+          );
+      }),
     );
   };
 
@@ -47,23 +57,3 @@ export const hasRoles =
       : (notification.handleForbiddenError(),
         new RedirectCommand(inject(Router).parseUrl(redirectUrl)));
   };
-
-const loadAndGetGesuch$ = (store: Store) => {
-  store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-
-  return store.select(selectSharedDataAccessGesuchsView).pipe(
-    filter(({ gesuch }) => isDefined(gesuch)),
-    map(({ gesuch }) => gesuch),
-    take(1),
-  );
-};
-
-const getLatestGesuch$ = (store: Store) => {
-  return store.select(selectSharedDataAccessGesuchsView).pipe(
-    take(1),
-    switchMap(({ gesuch }) =>
-      isDefined(gesuch) ? [gesuch] : loadAndGetGesuch$(store),
-    ),
-    filter((gesuch) => isDefined(gesuch)),
-  );
-};

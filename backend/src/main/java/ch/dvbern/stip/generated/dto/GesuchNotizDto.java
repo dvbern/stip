@@ -27,6 +27,7 @@ public class GesuchNotizDto  implements Serializable {
   private @Valid String userErstellt;
   private @Valid LocalDate timestampErstellt;
   private @Valid ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
+  private @Valid String gesuchNummer;
   private @Valid String userMutiert;
   private @Valid LocalDate timestampMutiert;
   private @Valid String antwort;
@@ -147,6 +148,25 @@ public class GesuchNotizDto  implements Serializable {
 
   /**
    **/
+  public GesuchNotizDto gesuchNummer(String gesuchNummer) {
+    this.gesuchNummer = gesuchNummer;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchNummer")
+  @NotNull
+  public String getGesuchNummer() {
+    return gesuchNummer;
+  }
+
+  @JsonProperty("gesuchNummer")
+  public void setGesuchNummer(String gesuchNummer) {
+    this.gesuchNummer = gesuchNummer;
+  }
+
+  /**
+   **/
   public GesuchNotizDto userMutiert(String userMutiert) {
     this.userMutiert = userMutiert;
     return this;
@@ -215,6 +235,7 @@ public class GesuchNotizDto  implements Serializable {
         Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
         Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
         Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
+        Objects.equals(this.gesuchNummer, gesuchNotiz.gesuchNummer) &&
         Objects.equals(this.userMutiert, gesuchNotiz.userMutiert) &&
         Objects.equals(this.timestampMutiert, gesuchNotiz.timestampMutiert) &&
         Objects.equals(this.antwort, gesuchNotiz.antwort);
@@ -222,7 +243,7 @@ public class GesuchNotizDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, betreff, text, userErstellt, timestampErstellt, notizTyp, userMutiert, timestampMutiert, antwort);
+    return Objects.hash(id, betreff, text, userErstellt, timestampErstellt, notizTyp, gesuchNummer, userMutiert, timestampMutiert, antwort);
   }
 
   @Override
@@ -236,6 +257,7 @@ public class GesuchNotizDto  implements Serializable {
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
+    sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
     sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");

@@ -30,9 +30,9 @@
         mat-cell
         *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()"
         class="tw-max-w-32 tw-whitespace-nowrap"
-        [dvTruncateTooltip]="'shared.gesuch.status.contract.' + protokoll.status | translate"
+        [dvTruncateTooltip]="'sachbearbeitung-app.gesuch.status.contract.' + protokoll.status | translate"
       >
-        {{ 'shared.gesuch.status.contract.' + protokoll.status | translate }}
+        {{ 'sachbearbeitung-app.gesuch.status.contract.' + protokoll.status | translate }}
       </td>
     </ng-container>
 

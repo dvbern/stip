@@ -162,7 +162,10 @@ public class Gesuch extends AbstractMandantEntity {
 
     public Optional<GesuchTranche> getTrancheValidOnDate(LocalDate date) {
         return tranchenValidOnDateStream(date)
-            .filter(tranche -> tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+            .filter(
+                tranche -> (tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+                && (tranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+            )
             .findFirst();
     }
 
@@ -205,6 +208,12 @@ public class Gesuch extends AbstractMandantEntity {
         return getGesuchTranchen()
             .stream()
             .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
+    }
+
+    public Stream<GesuchTranche> getTranchenTranchen() {
+        return getGesuchTranchen()
+            .stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE);
     }
 
     public Optional<GesuchTranche> getAenderungZuUeberpruefen() {

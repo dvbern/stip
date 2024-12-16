@@ -111,6 +111,8 @@ start-e2e:
     url: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     action: start
   rules:
+    - if: $CI_COMMIT_MESSAGE =~ /\[skip e2e\]/
+      when: never
     - if: $PIPELINE_TYPE == "default"
       when: on_success
   allow_failure: true
@@ -125,6 +127,11 @@ run-e2e:
   needs:
     - start-e2e
   allow_failure: true
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /\[skip e2e\]/
+      when: never
+    - if: $PIPELINE_TYPE == "default"
+      when: always
 
 wait-for-review:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
@@ -176,6 +183,73 @@ stop-e2e:
     url: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     action: stop
   rules:
+    - if: $CI_COMMIT_MESSAGE =~ /\[skip e2e\]/
+      when: never
     - if: $PIPELINE_TYPE == "default"
       when: always
   allow_failure: true
+
+.set-replica-one:
+  extends: .install-argocd
+  stage: deploy
+  script:
+    - argocd app set stip --helm-set $JOB_ENABLE_PATH=true --insecure
+    - argocd app sync stip --insecure
+    - argocd app wait stip --insecure
+
+.db-clear:start:
+  extends: .set-replica-one
+  when: manual
+  variables:
+    JOB_ENABLE_PATH: 'dbClear.enable'
+
+db-clear:dev:start:
+  extends: .db-clear:start
+  resource_group: 'argocd:dev'
+  environment:
+    name: dev
+  rules:
+    - if: $PIPELINE_TYPE == 'default'
+
+db-clear:uat:start:
+  resource_group: 'argocd:uat'
+  extends: .db-clear:start
+  environment:
+    name: uat
+  rules:
+    - if: $PIPELINE_TYPE == 'tag'
+
+.set-replica-zero:
+  extends: .install-argocd
+  stage: deploy
+  script:
+    - argocd app set stip --helm-set $JOB_ENABLE_PATH=false --insecure
+    - argocd app sync stip --insecure --prune
+    - argocd app wait stip --insecure
+
+.db-clear:stop:
+  extends: .set-replica-zero
+  rules:
+    - when: always
+  variables:
+    JOB_ENABLE_PATH: 'dbClear.enable'
+
+db-clear:dev:stop:
+  extends: .db-clear:stop
+  resource_group: 'argocd:dev'
+  environment:
+    name: dev
+  needs:
+    - db-clear:dev:start
+  rules:
+    - if: $PIPELINE_TYPE == 'default'
+
+db-clear:uat:stop:
+  extends: .db-clear:stop
+  resource_group: 'argocd:uat'
+  environment:
+    name: uat
+  needs:
+    - db-clear:uat:start
+  rules:
+    - if: $PIPELINE_TYPE == 'tag'

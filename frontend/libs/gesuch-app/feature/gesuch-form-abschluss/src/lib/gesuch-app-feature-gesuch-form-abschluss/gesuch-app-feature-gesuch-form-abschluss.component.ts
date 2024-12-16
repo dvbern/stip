@@ -4,6 +4,7 @@ import {
   Component,
   DestroyRef,
   OnInit,
+  computed,
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -49,6 +50,16 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
   einreichenStore = inject(EinreichenStore);
   dokumentsStore = inject(DokumentsStore);
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+
+  dokumenteRouteSig = computed(() => {
+    const { gesuchId, trancheSetting } = this.gesuchViewSig();
+    return [
+      '/gesuch',
+      'dokumente',
+      gesuchId,
+      ...(trancheSetting?.routesSuffix ?? []),
+    ];
+  });
 
   constructor() {
     getLatestTrancheIdFromGesuchOnUpdate$(this.gesuchViewSig)

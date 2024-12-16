@@ -1,49 +1,47 @@
-@if (viewSig(); as view) {
-  <p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | translate }}</p>
-  @if (berechnungenSig().loading) {
-    <dv-shared-ui-loading></dv-shared-ui-loading>
-  } @else {
-    @if (berechnungenSig().berechnung; as berechnung) {
-      <dl class="d-flex g-2">
-        <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.from' | translate }}:</dt>
-        <dd class="me-4">{{ berechnung.gueltigAb | date: 'MM.yyyy' }}</dd>
-        <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.to' | translate }}:</dt>
-        <dd class="me-4">{{ berechnung.gueltigBis | date: 'MM.yyyy' }}</dd>
-        <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.months' | translate }}:</dt>
-        <dd class="me-4">{{ berechnung.monate }}</dd>
-      </dl>
-      <div class="row">
-        <div class="col-12">
-          <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">
-            <dv-persoenliche-einnahmen
+<p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | translate }}</p>
+@if (berechnungenSig().loading) {
+  <dv-shared-ui-loading></dv-shared-ui-loading>
+} @else {
+  @if (berechnungenSig().berechnung; as berechnung) {
+    <dl class="d-flex g-2">
+      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.from' | translate }}:</dt>
+      <dd class="me-4">{{ berechnung.gueltigAb | date: 'MM.yyyy' }}</dd>
+      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.to' | translate }}:</dt>
+      <dd class="me-4">{{ berechnung.gueltigBis | date: 'MM.yyyy' }}</dd>
+      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.months' | translate }}:</dt>
+      <dd class="me-4">{{ berechnung.monate }}</dd>
+    </dl>
+    <div class="row">
+      <div class="col-12">
+        <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">
+          <dv-persoenliche-einnahmen
+            class="d-flex flex-column gap-3 ps-4"
+            [einnahmenSig]="berechnung.persoenlich.einnahmen"
+          ></dv-persoenliche-einnahmen>
+          <dv-persoenliche-kosten
+            class="d-flex flex-column gap-3 ps-4"
+            [kostenSig]="berechnung.persoenlich.kosten"
+          ></dv-persoenliche-kosten>
+        </dv-berechnungs-card>
+      </div>
+    </div>
+    <div class="row mt-4 mb-4">
+      @for (familienbudget of berechnung.familien; track $index) {
+        <div class="col-6">
+          <dv-berechnungs-card [berechnungSig]="familienbudget">
+            <dv-familien-einnahmen
               class="d-flex flex-column gap-3 ps-4"
-              [einnahmenSig]="berechnung.persoenlich.einnahmen"
-            ></dv-persoenliche-einnahmen>
-            <dv-persoenliche-kosten
+              [einnahmenSig]="familienbudget.einnahmen"
+            ></dv-familien-einnahmen>
+            <dv-familien-kosten
               class="d-flex flex-column gap-3 ps-4"
-              [kostenSig]="berechnung.persoenlich.kosten"
-            ></dv-persoenliche-kosten>
+              [kostenSig]="familienbudget.kosten"
+            ></dv-familien-kosten>
           </dv-berechnungs-card>
         </div>
-      </div>
-      <div class="row mt-4 mb-4">
-        @for (familienbudget of berechnung.familien; track $index) {
-          <div class="col-6">
-            <dv-berechnungs-card [berechnungSig]="familienbudget">
-              <dv-familien-einnahmen
-                class="d-flex flex-column gap-3 ps-4"
-                [einnahmenSig]="familienbudget.einnahmen"
-              ></dv-familien-einnahmen>
-              <dv-familien-kosten
-                class="d-flex flex-column gap-3 ps-4"
-                [kostenSig]="familienbudget.kosten"
-              ></dv-familien-kosten>
-            </dv-berechnungs-card>
-          </div>
-        }
-      </div>
-    } @else {
-      <p class="fs-5 text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.no-data' | translate }}</p>
-    }
+      }
+    </div>
+  } @else {
+    <p class="fs-5 text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.no-data' | translate }}</p>
   }
 }

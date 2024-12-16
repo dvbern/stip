@@ -40,7 +40,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_WG_WOHNEND,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERDIENST_REALISIERT,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_WILL_DARLEHEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_CODE,
@@ -89,9 +88,6 @@ public class EinnahmenKostenDtoSpec {
 
   public static final String JSON_PROPERTY_VERDIENST_REALISIERT = "verdienstRealisiert";
   private Boolean verdienstRealisiert;
-
-  public static final String JSON_PROPERTY_WILL_DARLEHEN = "willDarlehen";
-  private Boolean willDarlehen;
 
   public static final String JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE = "auswaertigeMittagessenProWoche";
   private Integer auswaertigeMittagessenProWoche;
@@ -452,32 +448,6 @@ public class EinnahmenKostenDtoSpec {
   }
 
 
-  public EinnahmenKostenDtoSpec willDarlehen(Boolean willDarlehen) {
-    
-    this.willDarlehen = willDarlehen;
-    return this;
-  }
-
-   /**
-   * Required nur wenn volljährig
-   * @return willDarlehen
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_WILL_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getWillDarlehen() {
-    return willDarlehen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_WILL_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWillDarlehen(Boolean willDarlehen) {
-    this.willDarlehen = willDarlehen;
-  }
-
-
   public EinnahmenKostenDtoSpec auswaertigeMittagessenProWoche(Integer auswaertigeMittagessenProWoche) {
     
     this.auswaertigeMittagessenProWoche = auswaertigeMittagessenProWoche;
@@ -663,7 +633,6 @@ public class EinnahmenKostenDtoSpec {
         Objects.equals(this.wohnkosten, einnahmenKosten.wohnkosten) &&
         Objects.equals(this.wgWohnend, einnahmenKosten.wgWohnend) &&
         Objects.equals(this.verdienstRealisiert, einnahmenKosten.verdienstRealisiert) &&
-        Objects.equals(this.willDarlehen, einnahmenKosten.willDarlehen) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.veranlagungsCode, einnahmenKosten.veranlagungsCode) &&
@@ -674,7 +643,7 @@ public class EinnahmenKostenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, willDarlehen, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskostenSekundarstufeZwei, ausbildungskostenTertiaerstufe, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -694,7 +663,6 @@ public class EinnahmenKostenDtoSpec {
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
     sb.append("    verdienstRealisiert: ").append(toIndentedString(verdienstRealisiert)).append("\n");
-    sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");

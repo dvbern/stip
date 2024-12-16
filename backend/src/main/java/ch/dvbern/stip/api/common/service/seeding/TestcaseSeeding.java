@@ -46,6 +46,7 @@ import ch.dvbern.stip.api.bildungskategorie.repo.BildungskategorieRepository;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -60,6 +61,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -150,6 +152,12 @@ public class TestcaseSeeding extends Seeder {
             );
 
             correctAuszahlungAdresse(tranche.getGesuchFormular());
+
+            // Update values to match database schema
+            final var formular = tranche.getGesuchFormular();
+            if (GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(formular)) {
+                formular.setDarlehen(new Darlehen().setWillDarlehen(false));
+            }
 
             // Clear IDs
             clearIds(tranche);

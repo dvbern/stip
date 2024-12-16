@@ -25,8 +25,28 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class BerechnungsresultatDto  implements Serializable {
+  private @Valid Integer year;
   private @Valid Integer berechnung;
   private @Valid List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
+
+  /**
+   **/
+  public BerechnungsresultatDto year(Integer year) {
+    this.year = year;
+    return this;
+  }
+
+  
+  @JsonProperty("year")
+  @NotNull
+  public Integer getYear() {
+    return year;
+  }
+
+  @JsonProperty("year")
+  public void setYear(Integer year) {
+    this.year = year;
+  }
 
   /**
    * Berechneter Stpendiumsanspruch für das Gesuch
@@ -94,13 +114,14 @@ public class BerechnungsresultatDto  implements Serializable {
       return false;
     }
     BerechnungsresultatDto berechnungsresultat = (BerechnungsresultatDto) o;
-    return Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
+    return Objects.equals(this.year, berechnungsresultat.year) &&
+        Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, tranchenBerechnungsresultate);
+    return Objects.hash(year, berechnung, tranchenBerechnungsresultate);
   }
 
   @Override
@@ -108,6 +129,7 @@ public class BerechnungsresultatDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class BerechnungsresultatDto {\n");
     
+    sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("}");

@@ -1,5 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { provideRouter } from '@angular/router';
@@ -11,6 +12,7 @@ import { of } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
 import { StatusUebergang } from '@dv/shared/util/gesuch';
+import { success } from '@dv/shared/util/remote-data';
 
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from './sachbearbeitung-app-pattern-gesuch-header.component';
 
@@ -58,6 +60,11 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     })
       .overrideProvider(GesuchStore, {
         useValue: {
+          gesuchInfo: signal(
+            success({
+              gesuchStatus: 'BEREIT_FUER_BEARBEITUNG',
+            }),
+          ),
           setStatus$,
         },
       })
@@ -66,9 +73,6 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     fixture = TestBed.createComponent(
       SachbearbeitungAppPatternGesuchHeaderComponent,
     );
-    fixture.componentRef.setInput('currentGesuch', null);
-    fixture.componentRef.setInput('gesuchPermissions', {});
-    fixture.componentRef.setInput('isLoading', false);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

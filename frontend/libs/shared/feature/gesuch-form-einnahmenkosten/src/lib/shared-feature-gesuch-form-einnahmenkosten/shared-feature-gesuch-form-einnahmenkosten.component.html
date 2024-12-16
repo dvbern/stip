@@ -557,34 +557,6 @@
           </mat-radio-group>
         </div>
       }
-      @if (!hiddenFieldsSetSig().has(form.controls.willDarlehen)) {
-        <div class="row g-4">
-          <!-- WILL_DARLEHEN -->
-          <div class="col-12 col-md-6 col-xl-6">
-            <mat-radio-group
-              class="d-flex flex-column"
-              formControlName="willDarlehen"
-              data-testid="form-einnahmen-kosten-willDarlehen"
-              dvSharedUiFormField
-            >
-              <mat-label>{{ 'shared.form.einnahmenkosten.willDarlehen.label' | translate }}</mat-label>
-              <mat-radio-button data-testid="yes" [value]="true">
-                {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
-              >
-              <mat-radio-button data-testid="no" [value]="false">{{
-                'shared.form.radio.no' | translate
-              }}</mat-radio-button>
-              <dv-shared-ui-form-zuvor-hint
-                [changes]="view.formChanges?.willDarlehen | translateChange: 'shared.form.zuvor.radio.$VALUE'"
-              ></dv-shared-ui-form-zuvor-hint>
-
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-radio-group>
-          </div>
-        </div>
-      }
 
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>

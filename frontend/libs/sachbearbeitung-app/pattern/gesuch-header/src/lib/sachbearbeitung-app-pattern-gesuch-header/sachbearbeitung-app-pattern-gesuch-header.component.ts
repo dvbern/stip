@@ -8,21 +8,30 @@ import {
   computed,
   effect,
   inject,
-  input,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
+import { filter, map } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
+import {
+  selectRouteId,
+  selectRouteTrancheId,
+} from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
-import { SharedModelGesuch } from '@dv/shared/model/gesuch';
-import { PermissionMap } from '@dv/shared/model/permission-state';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
@@ -35,6 +44,7 @@ import {
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
+import { isPending } from '@dv/shared/util/remote-data';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
@@ -53,57 +63,41 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppPatternGesuchHeaderComponent {
-  currentGesuchSig = input.required<SharedModelGesuch | null>({
-    alias: 'currentGesuch',
-  });
-  gesuchPermissionsSig = input.required<PermissionMap>({
-    alias: 'gesuchPermissions',
-  });
-  isLoadingSig = input.required<boolean>({ alias: 'isLoading' });
-
   private store = inject(Store);
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
+  private config = inject(SharedModelCompileTimeConfig);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
   @Output() openSidenav = new EventEmitter<void>();
 
-  private hasAcceptedAllDocumentsSig = computed(() => {
-    const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
+  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+  private hasAcceptedAllDocumentsSig =
+    this.dokumentsStore.hasAcceptedAllDokumentsSig;
+
+  isTrancheRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes('/tranche/')),
+    ),
+  );
+  isAenderungRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes('/aenderung/') || url.includes('/initial/')),
+    ),
+  );
+  gesuchPermissionsSig = computed(() => {
+    const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
     if (!gesuchStatus) {
-      return false;
+      return {};
     }
-
-    return this.dokumentsStore.hasAcceptedAllDokumentsSig();
+    return getGesuchPermissions({ gesuchStatus }, this.config.appType);
   });
-
-  /** Extract the gesuch id from the view to prevent unecessary signal updates */
-  private currentGesuchIdSig = computed(() => {
-    return this.currentGesuchSig()?.id;
-  });
-
-  isTrancheRouteSig = computed(() => {
-    const gesuch = this.currentGesuchSig();
-    if (!gesuch) {
-      return false;
-    }
-
-    return this.router.url.includes('/tranche/');
-  });
-
-  isAenderungRouteSig = computed(() => {
-    const gesuch = this.currentGesuchSig();
-    if (!gesuch) {
-      return false;
-    }
-
-    return (
-      this.router.url.includes('/aenderung/') ||
-      this.router.url.includes('/initial/')
-    );
+  isLoadingSig = computed(() => {
+    return isPending(this.gesuchStore.gesuchInfo());
   });
 
   isInfosRouteSig = computed(() => {
@@ -119,8 +113,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   constructor() {
     effect(
       () => {
-        const gesuchId = this.currentGesuchIdSig();
+        const gesuchId = this.gesuchIdSig();
         if (gesuchId) {
+          this.gesuchStore.loadGesuchInfo$({ gesuchId });
           this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
         }
       },
@@ -129,8 +124,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
     effect(
       () => {
-        const gesuchTrancheId =
-          this.currentGesuchSig()?.gesuchTrancheToWorkWith.id;
+        const gesuchTrancheId = this.gesuchTrancheIdSig();
         if (gesuchTrancheId) {
           this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
         }
@@ -140,24 +134,23 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   }
 
   availableTrancheInteractionSig = computed(() => {
-    const gesuchStatus = this.currentGesuchSig()?.gesuchStatus;
+    const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
 
-    switch (gesuchStatus) {
-      case 'IN_BEARBEITUNG_SB':
-        return 'CREATE_TRANCHE';
-      default:
-        return null;
+    if (gesuchStatus === 'IN_BEARBEITUNG_SB') {
+      return 'CREATE_TRANCHE';
+    } else {
+      return null;
     }
   });
 
   statusUebergaengeOptionsSig = computed(() => {
-    const gesuch = this.currentGesuchSig();
+    const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
     const hasAcceptedAllDokuments = this.hasAcceptedAllDocumentsSig();
-    if (!gesuch) {
+    if (!gesuchStatus) {
       return {};
     }
 
-    const list = StatusUebergaengeMap[gesuch.gesuchStatus]?.map((status) =>
+    const list = StatusUebergaengeMap[gesuchStatus]?.map((status) =>
       StatusUebergaengeOptions[status]({ hasAcceptedAllDokuments }),
     );
 
@@ -242,22 +235,29 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   }
 
   createTranche() {
-    const gesuch = this.currentGesuchSig();
-    if (!gesuch) return;
+    const gesuchId = this.gesuchIdSig();
+    const periode = this.gesuchStore.gesuchInfo().data;
+    if (!gesuchId || !periode) return;
 
     SharedUiAenderungMeldenDialogComponent.open(this.dialog, {
-      minDate: new Date(gesuch.gesuchsperiode.gesuchsperiodeStart),
-      maxDate: new Date(gesuch.gesuchsperiode.gesuchsperiodeStopp),
+      minDate: new Date(periode.startDate),
+      maxDate: new Date(periode.endDate),
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         if (result) {
           this.gesuchAenderungStore.createGesuchTrancheCopy$({
-            gesuchId: gesuch.id,
+            gesuchId,
             createGesuchTrancheRequest: result,
           });
         }
       });
   }
 }
+
+const urlAfterNavigationEnd = (router: Router) =>
+  router.events.pipe(
+    filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+    map((event) => event.url),
+  );

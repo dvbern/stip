@@ -3,7 +3,7 @@ import { Gesuchstatus } from '@dv/shared/model/gesuch';
 import { default as translationsDe } from './shared.de.json';
 import { default as translationsFr } from './shared.fr.json';
 
-const StatusKeyPrefix = 'shared.gesuch.status.contract.';
+const StatusKeyPrefix = 'sachbearbeitung-app.gesuch.status.contract.';
 type TranslationKeys = keyof typeof translationsDe;
 type StatusTranslationKeys = Extract<
   TranslationKeys,

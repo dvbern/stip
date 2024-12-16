@@ -1,7 +1,6 @@
 <ul class="nav flex-nowrap">
   @for (lang of languages; track trackByIndex($index)) {
     <li class="nav-item">
-      <!-- TODO: check if a language change should update the url, if not, use button again -->
       <a
         class="nav-link"
         [attr.data-testid]="'lang-' + lang"

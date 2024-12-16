@@ -16,21 +16,12 @@ import {
 } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
-  AUSBILDUNG,
-  AUSZAHLUNG,
-  DOKUMENTE,
-  EINNAHMEN_KOSTEN,
   ELTERN,
   ELTERN_STEUER_STEPS,
-  FAMILIENSITUATION,
-  GESCHWISTER,
-  KINDER,
-  LEBENSLAUF,
-  PARTNER,
-  PERSON,
   RETURN_TO_HOME,
   SharedModelGesuchFormStep,
   TRANCHE,
+  gesuchFormBaseSteps,
 } from '@dv/shared/model/gesuch-form';
 import {
   getGesuchPermissions,
@@ -40,20 +31,7 @@ import { capitalized, lowercased, type } from '@dv/shared/model/type-util';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
-const baseSteps = [
-  TRANCHE,
-  AUSBILDUNG,
-  PERSON,
-  LEBENSLAUF,
-  FAMILIENSITUATION,
-  ELTERN,
-  GESCHWISTER,
-  PARTNER,
-  KINDER,
-  AUSZAHLUNG,
-  EINNAHMEN_KOSTEN,
-  DOKUMENTE,
-];
+const baseSteps = [TRANCHE, ...Object.values(gesuchFormBaseSteps)];
 
 const { selectRouteParam } = getRouterSelectors();
 
@@ -86,13 +64,17 @@ export const selectSharedDataAccessCachedGesuchChanges = createSelector(
   },
 );
 
+export const selectSharedGesuchAndGesuchFromular = createSelector(
+  sharedDataAccessGesuchsFeature.selectGesuchsState,
+  ({ gesuch, gesuchFormular }) => ({ gesuch, gesuchFormular }),
+);
+
 export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedDataAccessConfigsView,
   selectSharedDataAccessCachedGesuchChanges,
   sharedDataAccessGesuchsFeature.selectLastUpdate,
   sharedDataAccessGesuchsFeature.selectLoading,
-  sharedDataAccessGesuchsFeature.selectGesuch,
-  sharedDataAccessGesuchsFeature.selectGesuchFormular,
+  selectSharedGesuchAndGesuchFromular,
   sharedDataAccessGesuchsFeature.selectIsEditingAenderung,
   sharedDataAccessGesuchsFeature.selectTrancheTyp,
   (
@@ -100,8 +82,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
     { tranchenChanges },
     lastUpdate,
     loading,
-    gesuch,
-    gesuchFormular,
+    { gesuch, gesuchFormular },
     isEditingAenderung,
     trancheTyp,
   ) => {

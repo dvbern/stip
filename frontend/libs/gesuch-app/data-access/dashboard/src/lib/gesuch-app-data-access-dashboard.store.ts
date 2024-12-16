@@ -39,6 +39,7 @@ export class DashboardStore extends signalStore(
     const fallDashboardItems = this.dashboard.data();
     const activeAusbildungen: SharedModelGsAusbildungView[] = [];
     const inactiveAusbildungen: SharedModelGsAusbildungView[] = [];
+
     fallDashboardItems?.forEach((item) =>
       item.ausbildungDashboardItems?.forEach(({ gesuchs, ...ausbildung }) => {
         const hasMoreThanOneGesuche = (gesuchs?.length ?? 0) > 1;

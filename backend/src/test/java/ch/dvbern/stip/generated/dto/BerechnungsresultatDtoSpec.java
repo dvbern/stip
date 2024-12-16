@@ -31,12 +31,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Resultat der Berechnung (gesamtes Gesuch)
  */
 @JsonPropertyOrder({
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_YEAR,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE
 })
 @JsonTypeName("Berechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class BerechnungsresultatDtoSpec {
+  public static final String JSON_PROPERTY_YEAR = "year";
+  private Integer year;
+
   public static final String JSON_PROPERTY_BERECHNUNG = "berechnung";
   private Integer berechnung;
 
@@ -45,6 +49,32 @@ public class BerechnungsresultatDtoSpec {
 
   public BerechnungsresultatDtoSpec() {
   }
+
+  public BerechnungsresultatDtoSpec year(Integer year) {
+    
+    this.year = year;
+    return this;
+  }
+
+   /**
+   * Get year
+   * @return year
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_YEAR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getYear() {
+    return year;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_YEAR)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setYear(Integer year) {
+    this.year = year;
+  }
+
 
   public BerechnungsresultatDtoSpec berechnung(Integer berechnung) {
     
@@ -114,19 +144,21 @@ public class BerechnungsresultatDtoSpec {
       return false;
     }
     BerechnungsresultatDtoSpec berechnungsresultat = (BerechnungsresultatDtoSpec) o;
-    return Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
+    return Objects.equals(this.year, berechnungsresultat.year) &&
+        Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnung, tranchenBerechnungsresultate);
+    return Objects.hash(year, berechnung, tranchenBerechnungsresultate);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BerechnungsresultatDtoSpec {\n");
+    sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("}");
