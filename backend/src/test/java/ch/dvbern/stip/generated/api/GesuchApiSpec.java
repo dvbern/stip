@@ -1754,7 +1754,7 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Returns a change by its id
+     * Returns the inital tranche changes by GesuchId
      * 
      *
      * @see #gesuchIdPath  (required)

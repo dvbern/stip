@@ -1502,7 +1502,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getInitialTrancheChangesByGesuchId
-      summary: Returns a change by its id
+      summary: Returns the inital tranche changes by GesuchId
   '/gesuch/{gesuchId}/{gesuchTrancheId}':
     parameters:
       - name: gesuchId

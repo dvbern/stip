@@ -184,10 +184,10 @@ export const loadGesuch = createEffect(
               undefined,
               handle404And401,
             ),
-          INITIAL: () => (trancheId: string) =>
-            gesuchService.getInitialTrancheChangesByTrancheId$(
+          INITIAL: () => () =>
+            gesuchService.getInitialTrancheChangesByGesuchId$(
               {
-                trancheId,
+                gesuchId: id,
               },
               undefined,
               undefined,
