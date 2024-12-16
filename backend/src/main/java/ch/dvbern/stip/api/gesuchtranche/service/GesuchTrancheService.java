@@ -143,6 +143,7 @@ public class GesuchTrancheService {
         );
     }
 
+    @Transactional
     public DokumenteToUploadDto getDokumenteToUpload(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
