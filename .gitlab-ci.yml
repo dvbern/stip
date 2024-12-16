@@ -223,7 +223,7 @@ db-clear:uat:start:
   extends: .install-argocd
   stage: deploy
   script:
-    - argocd app set stip --helm-set $JOB_ENABLE_PATH=0 --insecure
+    - argocd app set stip --helm-set $JOB_ENABLE_PATH=false --insecure
     - argocd app sync stip --insecure --prune
     - argocd app wait stip --insecure
 
