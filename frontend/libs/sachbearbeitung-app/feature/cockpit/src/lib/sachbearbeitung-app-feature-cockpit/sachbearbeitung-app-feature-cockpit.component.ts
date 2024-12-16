@@ -320,7 +320,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       ?.gesuche?.entries?.map((entry) => {
         const status =
           entry.typ == 'TRANCHE' ? entry.gesuchStatus : entry.trancheStatus;
-        const translationKey = `shared.gesuch.status.${entry.typ == 'TRANCHE' ? 'contract' : 'tranche'}.${status}`;
+        const translationKey = `sachbearbeitung-app.gesuch.status.${entry.typ == 'TRANCHE' ? 'contract' : 'tranche'}.${status}`;
         return {
           id: entry.id,
           trancheId: entry.gesuchTrancheId,
