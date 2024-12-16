@@ -730,6 +730,29 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getUnterschriftenblaetterForGesuch
+  '/unterschriftenblatt/dokument/{dokumentId}':
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteUnterschriftenblattDokument
+      summary: deletes a Dokument
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
   '/fall/sb':
     get:
       tags:

@@ -152,4 +152,15 @@ public class UnterschriftenblattService {
         unterschriftenblattRepository.persist(unterschriftenblatt);
         return unterschriftenblatt;
     }
+
+    @Transactional
+    public void removeDokument(final UUID dokumentId) {
+        final var dokument = dokumentRepository.requireById(dokumentId);
+        final var unterschriftenblatt = unterschriftenblattRepository.requireByDokumentId(dokumentId);
+
+        unterschriftenblatt.getDokumente().remove(dokument);
+        if (unterschriftenblatt.getDokumente().isEmpty()) {
+            unterschriftenblattRepository.delete(unterschriftenblatt);
+        }
+    }
 }

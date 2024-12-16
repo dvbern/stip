@@ -41,6 +41,11 @@ public interface DokumentResource {
     @Produces({ "text/plain" })
     void deleteDokument(@PathParam("dokumentId") UUID dokumentId);
 
+    @DELETE
+    @Path("/unterschriftenblatt/dokument/{dokumentId}")
+    @Produces({ "text/plain" })
+    void deleteUnterschriftenblattDokument(@PathParam("dokumentId") UUID dokumentId);
+
     @PATCH
     @Path("/gesuchDokument/{gesuchDokumentId}/ablehnen")
     @Consumes({ "application/json" })

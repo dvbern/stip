@@ -22,12 +22,14 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.dokument.entity.QDokument;
 import ch.dvbern.stip.api.unterschriftenblatt.entity.QUnterschriftenblatt;
 import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -56,5 +58,19 @@ public class UnterschriftenblattRepository implements BaseRepository<Unterschrif
             .selectFrom(unterschriftenblatt)
             .where(unterschriftenblatt.gesuch.id.eq(gesuchId))
             .stream();
+    }
+
+    public Unterschriftenblatt requireByDokumentId(final UUID dokumentId) {
+        final var unterschriftenblatt = QUnterschriftenblatt.unterschriftenblatt;
+        final var dokument = QDokument.dokument;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(unterschriftenblatt)
+            .join(dokument)
+            .on(unterschriftenblatt.dokumente.contains(dokument))
+            .where(dokument.id.eq(dokumentId))
+            .stream()
+            .findFirst()
+            .orElseThrow(NotFoundException::new);
     }
 }

@@ -66,6 +66,7 @@ public class DokumentApiSpec {
                 createDokument(),
                 createUnterschriftenblatt(),
                 deleteDokument(),
+                deleteUnterschriftenblattDokument(),
                 gesuchDokumentAblehnen(),
                 gesuchDokumentAkzeptieren(),
                 getDokument(),
@@ -86,6 +87,10 @@ public class DokumentApiSpec {
 
     public DeleteDokumentOper deleteDokument() {
         return new DeleteDokumentOper(createReqSpec());
+    }
+
+    public DeleteUnterschriftenblattDokumentOper deleteUnterschriftenblattDokument() {
+        return new DeleteUnterschriftenblattDokumentOper(createReqSpec());
     }
 
     public GesuchDokumentAblehnenOper gesuchDokumentAblehnen() {
@@ -358,6 +363,68 @@ public class DokumentApiSpec {
          * @return operation
          */
         public DeleteDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * deletes a Dokument
+     * 
+     *
+     * @see #dokumentIdPath  (required)
+     */
+    public static class DeleteUnterschriftenblattDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/unterschriftenblatt/dokument/{dokumentId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteUnterschriftenblattDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /unterschriftenblatt/dokument/{dokumentId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String DOKUMENT_ID_PATH = "dokumentId";
+
+        /**
+         * @param dokumentId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteUnterschriftenblattDokumentOper dokumentIdPath(Object dokumentId) {
+            reqSpec.addPathParam(DOKUMENT_ID_PATH, dokumentId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteUnterschriftenblattDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteUnterschriftenblattDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

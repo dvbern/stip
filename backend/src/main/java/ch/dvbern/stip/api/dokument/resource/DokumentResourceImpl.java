@@ -106,6 +106,14 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @AllowAll
     @Blocking
+    public void deleteUnterschriftenblattDokument(UUID dokumentId) {
+        unterschriftenblattService.removeDokument(dokumentId);
+    }
+
+    @RolesAllowed(GESUCH_DELETE)
+    @Override
+    @AllowAll
+    @Blocking
     public void deleteDokument(UUID dokumentId) {
         gesuchDokumentService.removeDokument(dokumentId);
     }
