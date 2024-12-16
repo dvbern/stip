@@ -219,6 +219,7 @@ db-clear:uat:start:
 
 .set-replica-zero:
   extends: .install-argocd
+  stage: deploy
   script:
     - argocd app sync stip --insecure
     - argocd app set stip --helm-set image.tag=$VERSION --insecure
