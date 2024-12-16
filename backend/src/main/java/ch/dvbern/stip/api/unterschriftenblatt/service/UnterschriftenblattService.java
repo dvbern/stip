@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.unterschriftenblatt.service;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -160,7 +161,15 @@ public class UnterschriftenblattService {
         final var dokument = dokumentRepository.requireById(dokumentId);
         final var unterschriftenblatt = unterschriftenblattRepository.requireByDokumentId(dokumentId);
 
+        dokumentRepository.delete(dokument);
         unterschriftenblatt.getDokumente().remove(dokument);
+
+        DokumentDeleteUtil.executeDeleteDokumentFromS3(
+            s3,
+            configService.getBucketName(),
+            UNTERSCHRIFTENBLATT_DOKUMENT_PATH + dokument.getObjectId()
+        );
+
         if (unterschriftenblatt.getDokumente().isEmpty()) {
             unterschriftenblattRepository.delete(unterschriftenblatt);
         }

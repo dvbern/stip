@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -58,11 +59,8 @@ import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.core.async.ResponsePublisher;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
-import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
-import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
@@ -205,32 +203,14 @@ public class GesuchDokumentService {
         );
     }
 
-    public CompletableFuture<DeleteObjectsResponse> deleteDokumentsFromS3Blocking(final List<String> objectIds) {
-        return s3.deleteObjects(
-            buildDeleteObjectsRequest(
-                configService.getBucketName(),
-                objectIds
-            )
-        );
-    }
-
-    private DeleteObjectsRequest buildDeleteObjectsRequest(final String bucketName, final List<String> objectIds) {
-        final var objectIdentifiers = objectIds.stream()
-            .map(
-                objectKey -> ObjectIdentifier.builder().key(GESUCH_DOKUMENT_PATH + objectKey).build()
-            )
-            .toList();
-        return DeleteObjectsRequest.builder()
-            .bucket(bucketName)
-            .delete(deleteObjectContainer -> deleteObjectContainer.objects(objectIdentifiers))
-            .build();
-    }
-
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {
-        Uni.createFrom()
-            .item(deleteDokumentsFromS3Blocking(objectIds))
-            .await()
-            .indefinitely();
+        DokumentDeleteUtil.executeDeleteDokumentsFromS3(
+            s3,
+            configService.getBucketName(),
+            objectIds.stream()
+                .map(objectId -> GESUCH_DOKUMENT_PATH + objectId)
+                .toList()
+        );
     }
 
     @Transactional
