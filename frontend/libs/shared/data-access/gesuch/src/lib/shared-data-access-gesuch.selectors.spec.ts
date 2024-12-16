@@ -44,8 +44,6 @@ describe('selectSharedDataAccessGesuchsView', () => {
       lastUpdate: null,
       loading: false,
       error: undefined,
-      trancheTyp: null,
-      gsDashboard: [],
     };
 
     const result = selectSharedDataAccessGesuchsView.projector(
@@ -62,9 +60,9 @@ describe('selectSharedDataAccessGesuchsView', () => {
       },
       state.lastUpdate,
       state.loading,
-      state.gesuch,
-      state.gesuchFormular,
+      { gesuch: state.gesuch, gesuchFormular: state.gesuchFormular },
       state.isEditingAenderung,
+      state.trancheTyp,
     );
     expect(result.loading).toBeFalsy();
   });
@@ -135,8 +133,6 @@ describe('selectSharedDataAccessGesuchsView', () => {
       lastUpdate: null,
       loading: false,
       error: undefined,
-      trancheTyp: null,
-      gsDashboard: [],
     };
     const result = selectSharedDataAccessGesuchStepsView.projector(state, {
       deploymentConfig: undefined,

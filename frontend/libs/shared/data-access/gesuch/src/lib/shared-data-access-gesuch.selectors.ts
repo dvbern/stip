@@ -64,13 +64,17 @@ export const selectSharedDataAccessCachedGesuchChanges = createSelector(
   },
 );
 
+export const selectSharedGesuchAndGesuchFromular = createSelector(
+  sharedDataAccessGesuchsFeature.selectGesuchsState,
+  ({ gesuch, gesuchFormular }) => ({ gesuch, gesuchFormular }),
+);
+
 export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedDataAccessConfigsView,
   selectSharedDataAccessCachedGesuchChanges,
   sharedDataAccessGesuchsFeature.selectLastUpdate,
   sharedDataAccessGesuchsFeature.selectLoading,
-  sharedDataAccessGesuchsFeature.selectGesuch,
-  sharedDataAccessGesuchsFeature.selectGesuchFormular,
+  selectSharedGesuchAndGesuchFromular,
   sharedDataAccessGesuchsFeature.selectIsEditingAenderung,
   sharedDataAccessGesuchsFeature.selectTrancheTyp,
   (
@@ -78,8 +82,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
     { tranchenChanges },
     lastUpdate,
     loading,
-    gesuch,
-    gesuchFormular,
+    { gesuch, gesuchFormular },
     isEditingAenderung,
     trancheTyp,
   ) => {
