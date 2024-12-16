@@ -17,8 +17,8 @@
 
 package ch.dvbern.stip.api.ausbildung.entity;
 
-import java.util.Arrays;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -26,7 +26,7 @@ import jakarta.validation.ConstraintValidatorContext;
 public class AusbildungBesuchtBMSValidationConstraintValidator
     implements ConstraintValidator<AusbildungBesuchtBMSValidationConstraint, Ausbildung> {
 
-    private static final Integer[] VALID_BFS_VALUES_FOR_BMS_FLAG = { 4, 5 };
+    private static final Set<Integer> VALID_BFS_VALUES_FOR_BMS_FLAG = Set.of(4, 5);
 
     @Override
     public boolean isValid(Ausbildung ausbildung, ConstraintValidatorContext context) {
@@ -39,9 +39,7 @@ public class AusbildungBesuchtBMSValidationConstraintValidator
         final var bildungsKategorie = ausbildung.getAusbildungsgang().getBildungskategorie().getBfs();
 
         // the BMS-Flag may only be set to true if bildungskategorie is 4 or 5
-        final var isBMSFlagUpdateableToTrue = Arrays.stream(VALID_BFS_VALUES_FOR_BMS_FLAG)
-            .toList()
-            .contains(bildungsKategorie);
+        final var isBMSFlagUpdateableToTrue = VALID_BFS_VALUES_FOR_BMS_FLAG.contains(bildungsKategorie);
 
         if (isBMSFlagUpdateableToTrue) {
             // both values (true/false) are valid for BMS flag
