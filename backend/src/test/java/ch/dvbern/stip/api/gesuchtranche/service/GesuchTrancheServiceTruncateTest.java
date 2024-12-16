@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.type.Kontoinhaber;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -329,10 +330,15 @@ class GesuchTrancheServiceTruncateTest {
         Mockito.doNothing()
             .when(mockGesuchDokumentKommentarService)
             .copyKommentareFromTrancheToTranche(Mockito.any(), Mockito.any());
+        final var mockGesuchDokumentService = Mockito.mock(GesuchDokumentService.class);
+        Mockito.doNothing()
+            .when(mockGesuchDokumentService)
+            .removeGesuchDokument(Mockito.any(UUID.class));
 
         return new GesuchTrancheTruncateService(
             mockTrancheRepo,
-            mockGesuchDokumentKommentarService
+            mockGesuchDokumentKommentarService,
+            mockGesuchDokumentService
         );
     }
 
