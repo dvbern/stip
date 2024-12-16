@@ -17,18 +17,34 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
-public interface DokumenteToUploadMapper {
-    DokumenteToUploadDto toDto(
+public abstract class DokumenteToUploadMapper {
+    public abstract DokumenteToUploadDto toDto(
         final List<DokumentTyp> required,
         final List<UnterschriftenblattDokumentTyp> unterschriftenblaetter
     );
+
+    @AfterMapping
+    protected void setNullToEmptyList(
+        @MappingTarget final DokumenteToUploadDto dokumenteToUploadDto
+    ) {
+        if (dokumenteToUploadDto.getRequired() == null) {
+            dokumenteToUploadDto.setRequired(new ArrayList<>());
+        }
+
+        if (dokumenteToUploadDto.getUnterschriftenblaetter() == null) {
+            dokumenteToUploadDto.setUnterschriftenblaetter(new ArrayList<>());
+        }
+    }
 }

@@ -133,6 +133,9 @@ public class UnterschriftenblattService {
             return List.of();
         }
 
+        final var existingTypes =
+            gesuch.getUnterschriftenblaetter().stream().map(Unterschriftenblatt::getDokumentTyp).toList();
+
         return steuerdatenTabBerechnungsService
             .calculateTabs(famsit)
             .stream()
@@ -141,6 +144,7 @@ public class UnterschriftenblattService {
                 case VATER -> UnterschriftenblattDokumentTyp.VATER;
                 case MUTTER -> UnterschriftenblattDokumentTyp.MUTTER;
             })
+            .filter(unterschriftenblattDokumentTyp -> !existingTypes.contains(unterschriftenblattDokumentTyp))
             .toList();
     }
 

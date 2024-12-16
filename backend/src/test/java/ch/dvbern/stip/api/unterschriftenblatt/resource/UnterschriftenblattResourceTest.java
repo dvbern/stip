@@ -27,12 +27,14 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -63,11 +65,23 @@ public class UnterschriftenblattResourceTest {
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
+    private final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
 
     @Test
     @Order(1)
+    @TestAsSachbearbeiter
+    void prepareSB() {
+        benutzerApiSpec.prepareCurrentBenutzer()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @Order(2)
     @TestAsGesuchsteller
     void createGesuch() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
@@ -75,14 +89,14 @@ public class UnterschriftenblattResourceTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     @TestAsGesuchsteller
     void toUploadContainsCorrectType() {
         getAndCheckDokumenteToUpload();
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     @TestAsSachbearbeiter
     void uploadBeforeEinreichenFails() {
         final var response = TestUtil.uploadUnterschriftenblatt(
@@ -96,7 +110,7 @@ public class UnterschriftenblattResourceTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     @TestAsGesuchsteller
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
@@ -108,14 +122,31 @@ public class UnterschriftenblattResourceTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     @TestAsGesuchsteller
     void toUploadStillContainsCorrectType() {
         getAndCheckDokumenteToUpload();
     }
 
     @Test
-    @Order(6)
+    @TestAsSachbearbeiter
+    @Order(7)
+    void gesuchStatusChangeToInBearbeitungSB() {
+        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+    }
+
+    @Test
+    @Order(8)
     @TestAsSachbearbeiter
     void uploadUnterschriftenblatt() {
         final var response = TestUtil.uploadUnterschriftenblatt(
@@ -125,19 +156,19 @@ public class UnterschriftenblattResourceTest {
             TestUtil.getTestPng()
         );
 
-        response.assertThat().statusCode(Status.NO_CONTENT.getStatusCode());
+        response.assertThat().statusCode(Status.CREATED.getStatusCode());
     }
 
     @Test
-    @Order(7)
+    @Order(9)
     @TestAsSachbearbeiter
     void toUploadContainsNone() {
         final var toUpload = getDokumenteToUpload();
-        checkToUploadCountIsOne(toUpload, 0);
+        checkToUploadCountIs(toUpload, 0);
     }
 
     @Test
-    @Order(8)
+    @Order(99)
     @TestAsAdmin
     @AlwaysRun
     void deleteGesuch() {
@@ -146,7 +177,7 @@ public class UnterschriftenblattResourceTest {
 
     private void getAndCheckDokumenteToUpload() {
         final var toUpload = getDokumenteToUpload();
-        checkToUploadCountIsOne(toUpload, 1);
+        checkToUploadCountIs(toUpload, 1);
         checkToUploadTypIsGemeinsam(toUpload);
     }
 
@@ -157,7 +188,7 @@ public class UnterschriftenblattResourceTest {
         assertThat(actualType, is(UnterschriftenblattDokumentTypDtoSpec.GEMEINSAM));
     }
 
-    private void checkToUploadCountIsOne(
+    private void checkToUploadCountIs(
         final DokumenteToUploadDtoSpec toUpload,
         final int unterschriftenblaetterCount
     ) {

@@ -19,12 +19,14 @@ package ch.dvbern.stip.api.notiz.resource;
 
 import java.util.Arrays;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -440,5 +442,13 @@ class GesuchNotizResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+    }
+
+    @Test
+    @Order(99)
+    @TestAsAdmin
+    @AlwaysRun
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 }
