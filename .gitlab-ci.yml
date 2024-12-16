@@ -224,7 +224,7 @@ db-clear:uat:start:
   stage: deploy
   script:
     - argocd app set stip --helm-set $JOB_ENABLE_PATH=0 --insecure
-    - argocd app sync stip --insecure
+    - argocd app sync stip --insecure --prune
     - argocd app wait stip --insecure
 
 .db-clear:stop:
