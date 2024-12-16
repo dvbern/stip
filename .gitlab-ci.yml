@@ -111,7 +111,7 @@ start-e2e:
     url: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     action: start
   rules:
-    - if: $CI_COMMIT_MESSAGE ~= /\[skip e2e\]/
+    - if: $CI_COMMIT_MESSAGE =~ /\[skip e2e\]/
       when: never
     - if: $PIPELINE_TYPE == "default"
       when: on_success
@@ -128,7 +128,7 @@ run-e2e:
     - start-e2e
   allow_failure: true
   rules:
-    - if: $CI_COMMIT_MESSAGE ~= /\[skip e2e\]/
+    - if: $CI_COMMIT_MESSAGE =~ /\[skip e2e\]/
       when: never
 
 wait-for-review:
@@ -181,7 +181,7 @@ stop-e2e:
     url: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     action: stop
   rules:
-    - if: $CI_COMMIT_MESSAGE ~= /\[skip e2e\]/
+    - if: $CI_COMMIT_MESSAGE =~ /\[skip e2e\]/
       when: never
     - if: $PIPELINE_TYPE == "default"
       when: always
