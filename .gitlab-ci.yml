@@ -130,6 +130,8 @@ run-e2e:
   rules:
     - if: $CI_COMMIT_MESSAGE =~ /\[skip e2e\]/
       when: never
+    - if: $PIPELINE_TYPE == "default"
+      when: always
 
 wait-for-review:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
