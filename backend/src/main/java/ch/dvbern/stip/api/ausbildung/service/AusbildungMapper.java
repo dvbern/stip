@@ -130,7 +130,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         resetFieldIf(
             () -> newAusbildung != null
             && ausbildung.getAusbildungsgang() != null
-            && (newAusbildung.getAusbildungsgangId() != ausbildung.getAusbildungsgang().getId())
+            && (AusbildungDiffUtil.hasAusbildungsgangChanged(ausbildung, newAusbildung))
             && (!VALID_BFS_VALUES_FOR_BMS_FLAG
                 .contains(ausbildung.getAusbildungsgang().getBildungskategorie().getBfs())),
             "Reset BMS-Flag if it has changed and Ausbildung is not valid",
