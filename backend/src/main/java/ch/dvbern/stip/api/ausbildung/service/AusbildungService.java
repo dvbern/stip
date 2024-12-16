@@ -81,7 +81,6 @@ public class AusbildungService {
             ausbildung
                 .setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
         }
-
         Set<ConstraintViolation<Ausbildung>> violations = validator.validate(ausbildung);
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);

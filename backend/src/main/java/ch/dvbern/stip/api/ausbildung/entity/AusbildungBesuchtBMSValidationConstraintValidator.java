@@ -26,7 +26,7 @@ import jakarta.validation.ConstraintValidatorContext;
 public class AusbildungBesuchtBMSValidationConstraintValidator
     implements ConstraintValidator<AusbildungBesuchtBMSValidationConstraint, Ausbildung> {
 
-    private static final Set<Integer> VALID_BFS_VALUES_FOR_BMS_FLAG = Set.of(4, 5);
+    public static final Set<Integer> VALID_BFS_VALUES_FOR_BMS_FLAG = Set.of(4, 5);
 
     @Override
     public boolean isValid(Ausbildung ausbildung, ConstraintValidatorContext context) {
