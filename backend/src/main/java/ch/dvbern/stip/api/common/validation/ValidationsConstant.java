@@ -177,8 +177,6 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildung.gesuch.onlyone.message}";
     public static final String VALIDATION_ADRESSE_LAND_NOT_STATELESS =
         "{jakarta.validation.constraints.adresse.land.no.stateless}";
-    public static final String VALIDATION_FILE_UPLOAD_INVALID =
-        "{jakarta.validation.constraints.file.upload.invalid.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");
