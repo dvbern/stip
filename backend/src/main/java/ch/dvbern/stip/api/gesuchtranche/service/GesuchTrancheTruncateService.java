@@ -70,7 +70,7 @@ public class GesuchTrancheTruncateService {
             } else if (overlaps == OverlapType.INSIDE) {
                 final var newNewTranche = handleInside(existingTranche, newTranche);
                 added.add(newNewTranche);
-                gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(existingTranche, newNewTranche);
+
             }
         }
 
@@ -145,6 +145,7 @@ public class GesuchTrancheTruncateService {
                     .minusMonths(1)
                     .with(lastDayOfMonth())
             );
+        gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(existingTranche, newNewTranche);
 
         return newNewTranche;
     }
