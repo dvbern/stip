@@ -158,7 +158,10 @@ public class Gesuch extends AbstractMandantEntity {
 
     public Optional<GesuchTranche> getTrancheValidOnDate(LocalDate date) {
         return tranchenValidOnDateStream(date)
-            .filter(tranche -> tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+            .filter(
+                tranche -> (tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+                && (tranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+            )
             .findFirst();
     }
 
