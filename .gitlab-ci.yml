@@ -193,9 +193,7 @@ stop-e2e:
   extends: .install-argocd
   stage: deploy
   script:
-    - argocd app sync stip --insecure
-    - argocd app set stip --helm-set image.tag=$VERSION --insecure
-    - argocd app set stip --helm-set $REPLICA_PATH=1 --insecure
+    - argocd app set stip --helm-set $JOB_ENABLE_PATH=true --insecure
     - argocd app sync stip --insecure
     - argocd app wait stip --insecure
 
@@ -203,7 +201,7 @@ stop-e2e:
   extends: .set-replica-one
   when: manual
   variables:
-    REPLICA_PATH: 'dbClear.replicaCount'
+    JOB_ENABLE_PATH: 'dbClear.enable'
 
 db-clear:dev:start:
   extends: .db-clear:start
@@ -225,9 +223,7 @@ db-clear:uat:start:
   extends: .install-argocd
   stage: deploy
   script:
-    - argocd app sync stip --insecure
-    - argocd app set stip --helm-set image.tag=$VERSION --insecure
-    - argocd app set stip --helm-set $REPLICA_PATH=0 --insecure
+    - argocd app set stip --helm-set $JOB_ENABLE_PATH=0 --insecure
     - argocd app sync stip --insecure
     - argocd app wait stip --insecure
 
@@ -236,7 +232,7 @@ db-clear:uat:start:
   rules:
     - when: always
   variables:
-    REPLICA_PATH: 'dbClear.replicaCount'
+    JOB_ENABLE_PATH: 'dbClear.enable'
 
 db-clear:dev:stop:
   extends: .db-clear:stop
