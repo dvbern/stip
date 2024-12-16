@@ -6,9 +6,6 @@
 }
 
 .tw-dv-table .mat-mdc-table {
-  .btn-link {
-    padding: 0;
-  }
   .btn-sm {
     line-height: 0;
   }
@@ -146,11 +143,11 @@
   }
 
   .btn-link {
+    padding: 0.4rem;
     text-decoration: none;
   }
 
-  .btn-outline-primary,
-  .btn-link {
+  .btn-outline-primary {
     padding: 0.4rem;
   }
 

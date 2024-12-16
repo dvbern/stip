@@ -136,11 +136,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   availableTrancheInteractionSig = computed(() => {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
 
-    switch (gesuchStatus) {
-      case 'IN_BEARBEITUNG_SB':
-        return 'CREATE_TRANCHE';
-      default:
-        return null;
+    if (gesuchStatus === 'IN_BEARBEITUNG_SB') {
+      return 'CREATE_TRANCHE';
+    } else {
+      return null;
     }
   });
 
