@@ -7,8 +7,6 @@ import {
   PlaywrightWorkerArgs,
   expect,
 } from '@playwright/test';
-// Don't know why it fails, because the package is referenced in the package.json
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import seedRandom from 'seedrandom';
 
 import { BEARER_COOKIE } from './playwright.config.base';
@@ -22,6 +20,33 @@ export const expectStepTitleToContainText = async (
   page: Page,
 ) => {
   return expect(await getStepTitle(page)).toContainText(text);
+};
+
+export const handleCheckbox = async (
+  matCheckboxComp: Locator,
+  value: boolean | undefined,
+  options: {
+    force?: boolean;
+    noWaitAfter?: boolean;
+    position?: {
+      x: number;
+      y: number;
+    };
+    timeout?: number;
+    trial?: boolean;
+  } = {},
+) => {
+  if (value === undefined) {
+    return;
+  }
+
+  const checkbox = matCheckboxComp.locator('input[type="checkbox"]');
+
+  if (value) {
+    return checkbox.check(options);
+  }
+
+  return checkbox.uncheck(options);
 };
 
 export const selectMatOption = async (locator: Locator, value: string) => {

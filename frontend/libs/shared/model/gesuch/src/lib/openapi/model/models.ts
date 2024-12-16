@@ -32,6 +32,7 @@ export * from './bildungskategorie';
 export * from './bildungsstufe';
 export * from './createAenderungsantragRequest';
 export * from './createGesuchTrancheRequest';
+export * from './darlehen';
 export * from './deploymentConfig';
 export * from './dokument';
 export * from './dokumentTyp';

@@ -61,4 +61,20 @@ public class GesuchFormularCalculationUtil {
             getVorjahrGesuchsjahrAsLocalDate(gesuchFormular)
         ) >= 18;
     }
+
+    public boolean isPersonInAusbildungVolljaehrig(final GesuchFormular gesuchFormular) {
+        if (
+            gesuchFormular.getPersonInAusbildung() == null
+            || gesuchFormular.getPersonInAusbildung().getGeburtsdatum() == null
+        ) {
+            return false;
+        }
+
+        return Math.abs(
+            calculateNumberOfYearsBetween(
+                LocalDate.now(),
+                gesuchFormular.getPersonInAusbildung().getGeburtsdatum()
+            )
+        ) >= 18;
+    }
 }

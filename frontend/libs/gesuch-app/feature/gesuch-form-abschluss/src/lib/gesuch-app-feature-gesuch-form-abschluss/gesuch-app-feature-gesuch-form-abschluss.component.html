@@ -14,9 +14,7 @@
                 <span class="text-warning material-symbols-rounded me-3">warning</span>
                 <div class="ms-3">
                   <span [innerHTML]="'shared.form.abschluss.fehlendeDokumente' | translate"></span>
-                  &nbsp;<a [routerLink]="['/gesuch', 'dokumente', gesuch?.id]">{{
-                    'shared.dokumente.title' | translate
-                  }}</a>
+                  &nbsp;<a [routerLink]="dokumenteRouteSig()">{{ 'shared.dokumente.title' | translate }}</a>
                 </div>
               </dv-shared-ui-info-container>
             }
@@ -42,9 +40,7 @@
                     <span class="text-danger material-symbols-rounded">error</span>
                     <div class="ms-3">
                       <span [innerHTML]="error.validationErrorKey | translate"></span>
-                      &nbsp;<a [routerLink]="['/gesuch', error.step.route, gesuch?.id]">{{
-                        error.linkKey | translate
-                      }}</a>
+                      &nbsp;<a [routerLink]="error.stepRoute">{{ error.linkKey | translate }}</a>
                     </div>
                   </dv-shared-ui-info-container>
                 }

@@ -74,6 +74,7 @@ kstip:
     current-minor-version: 0
   pagination:
     max-allowed-page-size: 50
+  should-clear-database: false
 
 quarkus:
   antivirus:

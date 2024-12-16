@@ -44,7 +44,7 @@ export const SPECIAL_VALIDATION_ERRORS: Record<
         ? wohnsitzFamiliensituationMap[validationError.propertyPath]
         : FAMILIENSITUATION,
     field: 'wohnsitz',
-    fieldErrorKey: 'shared.form.person.validation.wohnsitz',
+    fieldErrorKey: `shared.form.${validationError.propertyPath}.validation.wohnsitz`,
     validationErrorKey: 'shared.gesuch.validation.wohnsitz.message',
     linkKey: 'shared.gesuch.validation.link.' + validationError.propertyPath,
   }),

@@ -25,11 +25,14 @@ import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.common.validation.Severity;
+import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.darlehen.entity.DarlehenRequiredIfVolljaehrigConstraint;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchformular.validation.AusbildungPageValidation;
+import ch.dvbern.stip.api.gesuchformular.validation.DarlehenPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.ElternPageValidation;
@@ -104,11 +107,11 @@ import org.hibernate.envers.Audited;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
 )
-@EinnahmenKostenDarlehenRequiredConstraint(
+@DarlehenRequiredIfVolljaehrigConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
-        EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+        DarlehenPageValidation.class
+    }, property = "darlehen"
 )
 @EinnahmenKostenWohnkostenRequiredConstraint(
     groups = {
@@ -245,6 +248,16 @@ public class GesuchFormular extends AbstractMandantEntity {
     )
     @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(
+        name = "darlehen_id",
+        foreignKey = @ForeignKey(
+            name = "FK_gesuch_formular_darlehen_id"
+        )
+    )
+    @HasPageValidation(DarlehenPageValidation.class)
+    private @Valid Darlehen darlehen;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)

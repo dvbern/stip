@@ -157,6 +157,22 @@ form .readonly {
   @include mat.form-field-density(-2);
 }
 
+fieldset {
+  &.ng-touched.ng-invalid {
+    --mdc-checkbox-unselected-icon-color: #{mat.m2-get-color-from-palette(
+        $gesuch-app-warn
+      )};
+  }
+  .mat-mdc-checkbox {
+    .mdc-form-field {
+      align-items: flex-start;
+    }
+    .mdc-checkbox {
+      margin: -7px 0;
+    }
+  }
+}
+
 .cdk-row.active,
 table tr.mat-mdc-row {
   &.active,

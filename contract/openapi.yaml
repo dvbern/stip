@@ -2562,6 +2562,10 @@ components:
         - EK_LOHNABRECHNUNG
         - EK_VERDIENST
         - EK_VERMOEGEN
+        - DARLEHEN_BETREIBUNGSREGISTERAUSZUG
+        - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
+        - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
+        - DARLEHEN_BELEGE_ANSCHAFFUNGEN
       type: string
     ElternAbwesenheitsGrund:
       enum:
@@ -3516,6 +3520,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SteuerdatenTyp'
+        darlehen:
+          $ref: '#/components/schemas/Darlehen'
     PersonInAusbildungUpdate:
       required:
         - adresse
@@ -3631,6 +3637,8 @@ components:
             $ref: '#/components/schemas/KindUpdate'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        darlehen:
+          $ref: '#/components/schemas/Darlehen'
         steuerdaten:
           type: array
           items:
@@ -3758,9 +3766,6 @@ components:
           type: boolean
         verdienstRealisiert:
           type: boolean
-        willDarlehen:
-          description: Required nur wenn volljährig
-          type: boolean
         auswaertigeMittagessenProWoche:
           description: Required nur wenn die Person keinen eigenen Haushalt führt
           type: integer
@@ -3793,6 +3798,44 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/EinnahmenKostenUpdate'
+    Darlehen:
+      type: object
+      required:
+        - willDarlehen
+      properties:
+        willDarlehen:
+          description: Required wenn volljährig, sonst nicht moeglich!
+          type: boolean
+        betragDarlehen:
+          description: Required wenn willDarlehen = true
+          type: integer
+          minimum: 0
+        betragBezogenKanton:
+          description: Required wenn willDarlehen = true
+          type: integer
+          minimum: 0
+        schulden:
+          description: Required wenn willDarlehen = true
+          type: integer
+          minimum: 0
+        anzahlBetreibungen:
+          description: Required wenn willDarlehen = true - mit Fileupload
+          type: integer
+          minimum: 0
+        grundNichtBerechtigt:
+          description: Keine Stipendienberechtigung, auf Grund der tatsächlichen Kosten können die Mittel der Eltern jedoch nicht einbezogen werden - Falls Ja mit Fileupload
+          type: boolean
+        grundAusbildungZwoelfJahre:
+          description: Keine Stipendienberechtigung wegen Überschreitens der Ausbildungsdauer von 12 Jahren.
+          type: boolean
+        grundHoheGebuehren:
+          description: Falls ja mit Fileupload
+          type: boolean
+        grundAnschaffungenFuerAusbildung:
+          description: Falls ja mit Fileupload
+          type: boolean
+        grundZweitausbildung:
+          type: boolean
     AusbildungBase:
       required:
         - fallId
