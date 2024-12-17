@@ -31,11 +31,14 @@ import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import jakarta.inject.Inject;
+import jakarta.validation.Validator;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+
+import static ch.dvbern.stip.api.ausbildung.entity.AusbildungBesuchtBMSValidationConstraintValidator.VALID_BFS_VALUES_FOR_BMS_FLAG;
 
 @Mapper(
     config = MappingConfig.class,
@@ -44,6 +47,9 @@ import org.mapstruct.MappingTarget;
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
     @Inject
     AusbildungAuthorizer ausbildungAuthorizer;
+
+    @Inject
+    Validator validator;
 
     @Mapping(
         source = "ausbildungBegin",
@@ -113,6 +119,26 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         if (ausbildung.getAusbildungsgang().getId() == null) {
             ausbildung.setAusbildungsgang(null);
         }
+    }
+
+    @BeforeMapping
+    protected void resetDataIfNotValid(
+        final AusbildungUpdateDto newAusbildung,
+        @MappingTarget final Ausbildung ausbildung
+    ) {
+        // reset field if ausbildungsgang has changed and bfs of ausbildung is not in VALID_BFS_VALUES_FOR_BMS_FLAG
+        resetFieldIf(
+            () -> newAusbildung != null
+            && ausbildung.getAusbildungsgang() != null
+            && (AusbildungDiffUtil.hasAusbildungsgangChanged(ausbildung, newAusbildung))
+            && (!VALID_BFS_VALUES_FOR_BMS_FLAG
+                .contains(ausbildung.getAusbildungsgang().getBildungskategorie().getBfs())),
+            "Reset BMS-Flag if it has changed and Ausbildung is not valid",
+            () -> {
+                // reset invalid data
+                newAusbildung.setBesuchtBMS(false);
+            }
+        );
     }
 
     @Override
