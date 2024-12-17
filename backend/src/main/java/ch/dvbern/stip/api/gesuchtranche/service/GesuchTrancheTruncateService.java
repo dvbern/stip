@@ -64,15 +64,17 @@ public class GesuchTrancheTruncateService {
             final var existingTrancheRange = TrancheRange.from(existingTranche);
 
             final var overlaps = newTrancheRange.overlaps(existingTrancheRange);
-            if (overlaps == OverlapType.FULL || overlaps == OverlapType.EXACT) {
-                handleFull(existingTranche);
-            } else if (overlaps == OverlapType.LEFT || overlaps == OverlapType.LEFT_FULL) {
-                handleLeft(existingTranche, newTranche);
-            } else if (overlaps == OverlapType.RIGHT || overlaps == OverlapType.RIGHT_FULL) {
-                handleRight(existingTranche, newTranche);
-            } else if (overlaps == OverlapType.INSIDE) {
-                final var newNewTranche = handleInside(existingTranche, newTranche);
-                added.add(newNewTranche);
+            switch (overlaps) {
+                case FULL, EXACT -> handleFull(existingTranche);
+                case LEFT, LEFT_FULL -> handleLeft(existingTranche, newTranche);
+                case RIGHT, RIGHT_FULL -> handleRight(existingTranche, newTranche);
+                case INSIDE -> {
+                    final var newNewTranche = handleInside(existingTranche, newTranche);
+                    added.add(newNewTranche);
+                }
+                case NONE -> {
+                    // No action
+                }
             }
         }
 
