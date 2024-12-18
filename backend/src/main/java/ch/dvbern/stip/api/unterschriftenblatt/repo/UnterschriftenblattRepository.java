@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.unterschriftenblatt.repo;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -48,6 +49,18 @@ public class UnterschriftenblattRepository implements BaseRepository<Unterschrif
             .where(unterschriftenblatt.gesuch.id.eq(gesuchId).and(unterschriftenblatt.dokumentTyp.eq(dokumentTyp)))
             .stream()
             .findFirst();
+    }
+
+    public Stream<Unterschriftenblatt> findByGesuchAndDokumentTyps(
+        final UUID gesuchId,
+        final List<UnterschriftenblattDokumentTyp> dokumentTyps
+    ) {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var unterschriftenblatt = QUnterschriftenblatt.unterschriftenblatt;
+        return queryFactory
+            .selectFrom(unterschriftenblatt)
+            .where(unterschriftenblatt.gesuch.id.eq(gesuchId).and(unterschriftenblatt.dokumentTyp.in(dokumentTyps)))
+            .stream();
     }
 
     public Stream<Unterschriftenblatt> requireForGesuch(

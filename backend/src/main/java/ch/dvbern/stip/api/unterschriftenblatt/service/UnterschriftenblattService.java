@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.unterschriftenblatt.service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
@@ -150,6 +151,20 @@ public class UnterschriftenblattService {
             })
             .filter(unterschriftenblattDokumentTyp -> !existingTypes.contains(unterschriftenblattDokumentTyp))
             .toList();
+    }
+
+    public boolean requiredUnterschriftenblaetterExist(final Gesuch gesuch) {
+        final var required = getUnterschriftenblaetterToUpload(gesuch);
+        final var existing = unterschriftenblattRepository.findByGesuchAndDokumentTyps(gesuch.getId(), required);
+
+        final var existingSet = existing.map(Unterschriftenblatt::getDokumentTyp).collect(Collectors.toSet());
+        for (final var typ : required) {
+            if (!existingSet.contains(typ)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private Unterschriftenblatt createUnterschriftenblatt(

@@ -42,6 +42,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -63,6 +64,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -127,6 +129,7 @@ public class GesuchService {
     private final AusbildungRepository ausbildungRepository;
     private final StipDecisionService stipDecisionService;
     private final StipDecisionTextRepository stipDecisionTextRepository;
+    private final UnterschriftenblattService unterschriftenblattService;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
@@ -582,6 +585,23 @@ public class GesuchService {
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
+    }
+
+    @Transactional
+    public void gesuchStatusCheckUnterschriftenblatt(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.getGesuchStatus() != Gesuchstatus.VERFUEGT) {
+            return;
+        }
+
+        if (unterschriftenblattService.requiredUnterschriftenblaetterExist(gesuch)) {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+        } else {
+            gesuchStatusService.triggerStateMachineEvent(
+                gesuch,
+                GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT
+            );
+        }
     }
 
     @Transactional
