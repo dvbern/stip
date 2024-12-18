@@ -35,4 +35,15 @@ public class AusbildungDiffUtil {
 
         return !Objects.equals(target.getIsAusbildungAusland(), update.getIsAusbildungAusland());
     }
+
+    public boolean hasAusbildungsgangChanged(
+        final Ausbildung target,
+        final AusbildungUpdateDto update
+    ) {
+        if (target.getId() == null) {
+            return false;
+        }
+
+        return !Objects.equals(target.getAusbildungsgang().getId(), update.getAusbildungsgangId());
+    }
 }

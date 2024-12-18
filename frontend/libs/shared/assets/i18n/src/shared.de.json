@@ -332,6 +332,7 @@
   "shared.form.ausbildung.ausbildungsstaette.label": "Ausbildungsstätte",
   "shared.form.ausbildung.file.AUSBILDUNGSSTAETTE": "Bestätigung der Ausbildungsstätte",
   "shared.form.ausbildung.ausbildungsgang.label": "Ausbildungsgang",
+  "shared.form.ausbildung.besuchtBMS.label": "Ich besuche die Berufsmaturitätsschule (BMS)",
   "shared.form.ausbildung.fachrichtung.label": "Fachrichtung",
   "shared.form.ausbildung.manuell.label": "Andere Ausbildungsstätte erfassen",
   "shared.form.ausbildung.duration.title": "Ausbildungsdauer",

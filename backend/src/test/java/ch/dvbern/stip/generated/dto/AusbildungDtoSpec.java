@@ -40,6 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN,
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNG_BEGIN,
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNG_END,
+  AusbildungDtoSpec.JSON_PROPERTY_BESUCHT_B_M_S,
   AusbildungDtoSpec.JSON_PROPERTY_PENSUM,
   AusbildungDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE,
   AusbildungDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG,
@@ -75,6 +76,9 @@ public class AusbildungDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNG_END = "ausbildungEnd";
   private String ausbildungEnd;
+
+  public static final String JSON_PROPERTY_BESUCHT_B_M_S = "besuchtBMS";
+  private Boolean besuchtBMS;
 
   public static final String JSON_PROPERTY_PENSUM = "pensum";
   private AusbildungsPensumDtoSpec pensum;
@@ -328,6 +332,32 @@ public class AusbildungDtoSpec {
   }
 
 
+  public AusbildungDtoSpec besuchtBMS(Boolean besuchtBMS) {
+    
+    this.besuchtBMS = besuchtBMS;
+    return this;
+  }
+
+   /**
+   * Required bei Ausbildungskategorien 4 oder 5. Kann nur dann auf true gesetzt werden.
+   * @return besuchtBMS
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BESUCHT_B_M_S)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getBesuchtBMS() {
+    return besuchtBMS;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BESUCHT_B_M_S)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBesuchtBMS(Boolean besuchtBMS) {
+    this.besuchtBMS = besuchtBMS;
+  }
+
+
   public AusbildungDtoSpec pensum(AusbildungsPensumDtoSpec pensum) {
     
     this.pensum = pensum;
@@ -475,6 +505,7 @@ public class AusbildungDtoSpec {
         Objects.equals(this.ausbildungNichtGefunden, ausbildung.ausbildungNichtGefunden) &&
         Objects.equals(this.ausbildungBegin, ausbildung.ausbildungBegin) &&
         Objects.equals(this.ausbildungEnd, ausbildung.ausbildungEnd) &&
+        Objects.equals(this.besuchtBMS, ausbildung.besuchtBMS) &&
         Objects.equals(this.pensum, ausbildung.pensum) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildung.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildung.alternativeAusbildungsgang) &&
@@ -484,7 +515,7 @@ public class AusbildungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, ausbildungsgang, editable, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(status, ausbildungsgang, editable, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -500,6 +531,7 @@ public class AusbildungDtoSpec {
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
+    sb.append("    besuchtBMS: ").append(toIndentedString(besuchtBMS)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");

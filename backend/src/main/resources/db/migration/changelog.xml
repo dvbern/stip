@@ -93,5 +93,6 @@
   <include file="/db/migration/0.34/0.34.0-KSTIP-1585.xml" />
   <include file="/db/migration/0.34/0.34.0-KSTIP-1737.xml" />
   <include file="/db/migration/0.34/0.34.0-KSTIP-1465.xml" />
+  <include file="/db/migration/0.34/0.34.0-KSTIP-1789.xml" />
   <!--  </editor-fold> -->
 </databaseChangeLog>

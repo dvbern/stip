@@ -9,6 +9,7 @@ import {
   inject,
   input,
   output,
+  untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -52,7 +53,6 @@ import {
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
-import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -90,7 +90,6 @@ const KnownErrorKeys = {
     MatCheckboxModule,
     MatAutocompleteModule,
     MatSelectModule,
-    TranslatedPropertyPipe,
     SharedUiFormReadonlyDirective,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
@@ -128,6 +127,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     isAusbildungAusland: [false, []],
     ausbildungsstaette: [<string | undefined>undefined, [Validators.required]],
     ausbildungsgang: [<string | undefined>undefined, [Validators.required]],
+    besuchtBMS: [false, []],
     fachrichtung: [<string | null>null, [Validators.required]],
     ausbildungNichtGefunden: [false, []],
     alternativeAusbildungsgang: [<string | undefined>undefined],
@@ -162,6 +162,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private endChangedSig = toSignal(
     this.form.controls.ausbildungEnd.valueChanges,
   );
+  private ausbildungsgangChangedSig = toSignal(
+    this.form.controls.ausbildungsgang.valueChanges,
+  );
+
   isEditableSig = computed(() => {
     const { type } = this.usageTypeSig();
     const {
@@ -195,9 +199,26 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         }) ?? []
     );
   });
+
+  showBesuchtBMS = computed(() => {
+    const ausbildungsgangId = this.ausbildungsgangChangedSig();
+    if (!ausbildungsgangId) return false;
+
+    const ausbildungsgange = untracked(this.ausbildungsgangOptionsSig);
+    const gang = ausbildungsgange.find(
+      (ausbildungsgang) => ausbildungsgang.id === ausbildungsgangId,
+    );
+    if (!gang) return false;
+
+    const bfs = gang.bildungskategorie.bfs;
+
+    return bfs === 4 || bfs === 5;
+  });
+
   ausbildungsstaettDocumentSig = this.createUploadOptionsSig(
     () => 'AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE',
   );
+
   ausbildungsstaettOptionsSig: Signal<
     (Ausbildungsstaette & { translatedName?: string })[]
   > = computed(() => {
@@ -391,6 +412,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
         if (!staette) {
           this.form.controls.ausbildungsgang.reset();
+          this.form.controls.besuchtBMS.reset();
           if (!this.form.controls.ausbildungNichtGefunden) {
             this.form.controls.fachrichtung.reset();
             this.form.controls.ausbildungsort.reset();
@@ -434,6 +456,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   handleGangChangedByUser() {
     this.form.controls.fachrichtung.reset();
     this.form.controls.ausbildungsort.reset();
+    this.form.controls.besuchtBMS.reset();
   }
 
   handleManuellChangedByUser() {
@@ -443,6 +466,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.form.controls.alternativeAusbildungsgang.reset();
     this.form.controls.fachrichtung.reset();
     this.form.controls.ausbildungsort.reset();
+    this.form.controls.besuchtBMS.reset();
   }
 
   markDatesAsTouched() {

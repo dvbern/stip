@@ -54,6 +54,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @AusbildungEndDateMustBeAfterStartConstraint
 @AusbildungsortRequiredIfSwissConstraint
 @OnlyOneGesuchPerYearConstraint
+@AusbildungBesuchtBMSValidationConstraint
 @Entity
 @Table(
     name = "ausbildung",
@@ -78,6 +79,10 @@ public class Ausbildung extends AbstractMandantEntity {
     @ManyToOne
     @JoinColumn(name = "ausbildungsgang_id", foreignKey = @ForeignKey(name = "FK_ausbildung_ausbildungsgang_id"))
     private Ausbildungsgang ausbildungsgang;
+
+    @NotNull
+    @Column(name = "besucht_bms", nullable = false)
+    private boolean besuchtBMS = false;
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)

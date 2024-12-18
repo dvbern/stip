@@ -76,6 +76,11 @@ public class AusbildungService {
     public AusbildungDto patchAusbildung(final UUID ausbildungId, final AusbildungUpdateDto ausbildungUpdateDto) {
         var ausbildung = ausbildungRepository.requireById(ausbildungId);
         ausbildung = ausbildungMapper.partialUpdate(ausbildungUpdateDto, ausbildung);
+
+        if (ausbildung.getAusbildungsgang() != null) {
+            ausbildung
+                .setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
+        }
         Set<ConstraintViolation<Ausbildung>> violations = validator.validate(ausbildung);
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);
@@ -98,10 +103,7 @@ public class AusbildungService {
                 new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1))
             );
         ausbildungRepository.persistAndFlush(ausbildung);
-        if (ausbildung.getAusbildungsgang() != null) {
-            ausbildung
-                .setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
-        }
+
         return ausbildungMapper.toDto(ausbildung);
     }
 }
