@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchtranche.util;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
@@ -56,7 +57,21 @@ public class GesuchTrancheCopyUtil {
     ) {
         var endDate = createDto.getEnd();
         if (endDate == null) {
-            endDate = original.getGueltigkeit().getGueltigBis();
+            endDate = original.getGesuch()
+                .getGesuchTranchen()
+                .stream()
+                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+                .sorted(
+                    Comparator.comparing(
+                        gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigBis(),
+                        Comparator.reverseOrder()
+                    )
+                )
+                .findFirst()
+                .get()
+                .getGueltigkeit()
+                .getGueltigBis();
+            // endDate = original.getGueltigkeit().getGueltigBis();
         }
 
         final var copy = copyTranche(
