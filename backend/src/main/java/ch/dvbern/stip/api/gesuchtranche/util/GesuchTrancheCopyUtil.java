@@ -61,17 +61,14 @@ public class GesuchTrancheCopyUtil {
                 .getGesuchTranchen()
                 .stream()
                 .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
-                .sorted(
+                .max(
                     Comparator.comparing(
-                        gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigBis(),
-                        Comparator.reverseOrder()
+                        gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigBis()
                     )
                 )
-                .findFirst()
-                .get()
+                .orElseThrow(NotFoundException::new)
                 .getGueltigkeit()
                 .getGueltigBis();
-            // endDate = original.getGueltigkeit().getGueltigBis();
         }
 
         final var copy = copyTranche(
