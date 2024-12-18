@@ -1207,6 +1207,8 @@ paths:
         in: path
         required: true
     delete:
+      tags:
+        - Sozialdienst
       responses:
         200:
           content:
@@ -1224,9 +1226,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteSozialdienst
       summary: Delete a Sozialdienst by Id
+    get:
       tags:
         - Sozialdienst
-    get:
       responses:
         200:
           content:
@@ -1244,8 +1246,79 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getSozialdienst
       summary: Get a Sozialdienst by Id
+  /sozialdienst/benutzer:
+    get:
       tags:
         - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns all SozialdienstBenutzers of the Sozialdienst of the logged in SozialdienstAdmin
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getSozialdienstBenutzer
+    post:
+      description: create a new SozialdienstBenutzer that is assigned to the Sozialdienst of the currently logged in SozialdienstAdmin
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerCreate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns the created SozialdienstBenutzer
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: createSozialdienstBenutzer
+    patch:
+      description: update an exisitng SozialdienstBenutzer
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzer'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns the updated SozialdienstBenutzer
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienstBenutzer
+
   /stammdaten/land:
     get:
       tags:
@@ -4449,6 +4522,27 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+    SozialdienstBenutzerCreate:
+      required:
+        - vorname
+        - nachname
+        - email
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+        email:
+          type: string
+    SozialdienstBenutzer:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstBenutzerCreate'
     SozialdienstAdminCreate:
       required:
         - keycloakId
