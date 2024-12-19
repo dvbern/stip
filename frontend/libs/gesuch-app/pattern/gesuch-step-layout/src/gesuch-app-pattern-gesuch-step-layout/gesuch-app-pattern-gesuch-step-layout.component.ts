@@ -4,29 +4,38 @@ import {
   Component,
   EventEmitter,
   computed,
+  effect,
   inject,
   input,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { MatMenuModule } from '@angular/material/menu';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
-import { filter } from 'rxjs';
+import {
+  TranslateDirective,
+  TranslatePipe,
+  isDefined,
+} from '@ngx-translate/core';
+import { filter, map } from 'rxjs';
 
 import { GesuchAppPatternMainLayoutComponent } from '@dv/gesuch-app/pattern/main-layout';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  selectRouteId,
+  selectRouteTrancheId,
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
+import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
-import { isDefined } from '@dv/shared/model/type-util';
+import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -45,6 +54,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedUiProgressBarComponent,
     TranslateDirective,
     TranslatePipe,
+    MatMenuModule,
     SharedUiIconChipComponent,
     SharedUiLanguageSelectorComponent,
     GesuchAppPatternMainLayoutComponent,
@@ -66,9 +76,13 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
+  private router = inject(Router);
 
+  gesuchAenderungStore = inject(GesuchAenderungStore);
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
+  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
@@ -92,6 +106,11 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
     const steps = this.stepsSig();
     return steps.find((step) => step.route === this.stepSig()?.route);
   });
+  isTrancheRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes('/tranche/')),
+    ),
+  );
 
   constructor() {
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
@@ -99,6 +118,15 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
       .subscribe((gesuchTrancheId) => {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
+    effect(
+      () => {
+        const gesuchId = this.gesuchIdSig();
+        if (gesuchId) {
+          this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+        }
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   handleLanguageChangeHeader(language: Language) {
