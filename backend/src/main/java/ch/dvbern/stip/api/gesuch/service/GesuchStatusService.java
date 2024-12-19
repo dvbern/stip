@@ -96,7 +96,7 @@ public class GesuchStatusService {
     public boolean canUploadUnterschriftenblatt(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {
         final var editStates = new HashSet<Gesuchstatus>();
         if (benutzer.hasRole(OidcConstants.ROLE_SACHBEARBEITER)) {
-            editStates.addAll(Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
+            editStates.addAll(Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT);
         }
 
         return editStates.contains(gesuchstatus);
