@@ -11,8 +11,12 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Subject, mergeMap } from 'rxjs';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { DokumentOptions, UploadView } from '@dv/shared/model/dokument';
-import { GesuchDokument } from '@dv/shared/model/gesuch';
+import {
+  DokumentOptions,
+  SharedModelGesuchDokument,
+  UploadView,
+  isUploadable,
+} from '@dv/shared/model/dokument';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUiIfGesuchstellerDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUtilDocumentMergerService } from '@dv/shared/util/document-merger';
@@ -40,28 +44,31 @@ import { UploadStore } from '../upload.store';
 export class SharedPatternDocumentUploadDialogComponent {
   data = inject<{
     options: DokumentOptions;
-    gesuchDokument?: GesuchDokument;
+    dokumentModel: SharedModelGesuchDokument;
     store: UploadStore;
   }>(MAT_DIALOG_DATA);
-  translate = inject(TranslateService);
-  dialogRef = inject(DialogRef);
-  documentMerger = inject(SharedUtilDocumentMergerService);
-  config = inject(SharedModelCompileTimeConfig);
+  private translate = inject(TranslateService);
+  private dialogRef = inject(DialogRef);
+  private documentMerger = inject(SharedUtilDocumentMergerService);
+  private config = inject(SharedModelCompileTimeConfig);
 
   uploadViewSig = computed<UploadView>(() => ({
-    trancheId: this.data.options.trancheId,
-    type: this.data.options.dokumentTyp,
+    type: this.data.options.dokument.type,
+    permissions: this.data.options.permissions,
     readonly: this.data.options.readonly,
-    gesuchDokument: this.data.gesuchDokument,
-    initialDocuments: this.data.options.initialDocuments,
+    dokumentModel: this.data.dokumentModel,
+    initialDokuments: this.data.options.initialDokumente,
     hasEntries: this.data.store.hasEntriesSig(),
     isSachbearbeitungApp: this.config.isSachbearbeitungApp,
   }));
 
   showUplaodSig = computed(() => {
-    const { options, gesuchDokument, store } = this.data;
+    const { options, store } = this.data;
 
-    if (options.readonly && gesuchDokument?.status === 'AKZEPTIERT') {
+    if (
+      options.readonly &&
+      isUploadable(this.config.appType, options.dokument, options.permissions)
+    ) {
       return false;
     }
     if (!options.singleUpload) {

@@ -35,11 +35,7 @@
           type="button"
           class="dv-icon-button flex-shrink-0 delete-icon ms-2"
           [attr.aria-label]="'shared.form.delete' | translate"
-          [disabled]="
-            uploadViewSig().isSachbearbeitungApp ||
-            (uploadViewSig().readonly && uploadViewSig().gesuchDokument?.status === 'AKZEPTIERT') ||
-            loadingSig()
-          "
+          [disabled]="!isUploadableSig() || loadingSig()"
           (click)="checkForRemove$.emit()"
         >
           <span class="material-symbols-rounded align-middle text-muted">delete</span>

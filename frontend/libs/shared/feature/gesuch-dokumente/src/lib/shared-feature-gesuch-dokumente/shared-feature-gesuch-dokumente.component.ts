@@ -8,8 +8,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { RouterModule } from '@angular/router';
+import { MatTableModule } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -20,84 +19,105 @@ import {
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
-import { SharedModelTableDokument } from '@dv/shared/model/dokument';
 import {
-  DokumentTyp,
-  Dokumentstatus,
-  GesuchDokument,
-} from '@dv/shared/model/gesuch';
-import {
-  DOKUMENTE,
-  SharedModelGesuchFormStep,
-  getFormStepByDocumentType,
-} from '@dv/shared/model/gesuch-form';
-import {
-  DOKUMENT_TYP_TO_DOCUMENT_OPTIONS,
-  SharedPatternDocumentUploadComponent,
-  createDocumentOptions,
-} from '@dv/shared/pattern/document-upload';
-import { detailExpand } from '@dv/shared/ui/animations';
-import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
+  SharedModelGesuchDokument,
+  SharedModelTableGesuchDokument,
+} from '@dv/shared/model/dokument';
+import { DokumentTyp, Dokumentstatus } from '@dv/shared/model/gesuch';
+import { DOKUMENTE } from '@dv/shared/model/gesuch-form';
 import {
   SharedUiIfGesuchstellerDirective,
   SharedUiIfSachbearbeiterDirective,
 } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
 import {
   RejectDokument,
   SharedUiRejectDokumentComponent,
 } from '@dv/shared/ui/reject-dokument';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
-import { getLatestTrancheIdFromGesuch$ } from '@dv/shared/util/gesuch';
-import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
+import {
+  getLatestGesuchIdFromGesuch$,
+  getLatestTrancheIdFromGesuch$,
+} from '@dv/shared/util/gesuch';
+
+import { AdditionalDokumenteComponent } from './components/additional-dokumente/additional-dokumente.component';
+import { RequiredDokumenteComponent } from './components/required-dokumente/required-dokumente.component';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-dokumente',
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
-    SharedUiLoadingComponent,
     TranslatePipe,
     MatTableModule,
+    RequiredDokumenteComponent,
+    AdditionalDokumenteComponent,
     SharedUiStepFormButtonsComponent,
-    SharedPatternDocumentUploadComponent,
-    SharedUiIconBadgeComponent,
+    SharedUiLoadingComponent,
     SharedUiIfGesuchstellerDirective,
     SharedUiIfSachbearbeiterDirective,
-    SharedUiPrefixAppTypePipe,
-    TypeSafeMatCellDefDirective,
     SharedUiRdIsPendingPipe,
   ],
   templateUrl: './shared-feature-gesuch-dokumente.component.html',
-  styleUrl: './shared-feature-gesuch-dokumente.component.scss',
-  animations: [detailExpand],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchDokumenteComponent {
   private store = inject(Store);
-  private stepManager = inject(SharedUtilGesuchFormStepManagerService);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
   public dokumentsStore = inject(DokumentsStore);
 
-  detailColumns = ['kommentar'];
-  displayedColumns = [
-    'expander',
-    'documentName',
-    'formStep',
-    'status',
-    'actions',
-  ];
-
-  DokumentStatus = Dokumentstatus;
-  expandedRowId: string | null = null;
-
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+  additionalDokumenteViewSig = computed(() => {
+    const { allowTypes, gesuchId, gesuchPermissions } = this.gesuchViewSig();
+    const { dokuments, requiredDocumentTypes } =
+      this.dokumentsStore.additionalDokumenteViewSig();
+    const readonly = !gesuchPermissions.canUploadUnterschriftenblatt;
+
+    return {
+      gesuchId,
+      allowTypes,
+      unterschriftenblaetter: dokuments,
+      permissions: gesuchPermissions,
+      readonly,
+      showList:
+        !readonly && (dokuments.length > 0 || requiredDocumentTypes.length > 0),
+      requiredDocumentTypes,
+    };
+  });
+  standardDokumenteViewSig = computed(() => {
+    const {
+      allowTypes,
+      gesuchId,
+      gesuchPermissions,
+      trancheSetting,
+      trancheId,
+      readonly,
+      config: { isSachbearbeitungApp },
+    } = this.gesuchViewSig();
+    const { dokuments, requiredDocumentTypes } =
+      this.dokumentsStore.dokumenteViewSig();
+    const stepsFlow = this.stepViewSig().stepsFlow;
+    const kommentare = this.dokumentsStore.kommentareViewSig();
+
+    return {
+      gesuchId,
+      trancheId,
+      permissions: gesuchPermissions,
+      trancheSetting: trancheSetting ?? undefined,
+      isSachbearbeitungApp,
+      allowTypes,
+      stepsFlow,
+      dokuments,
+      kommentare,
+      requiredDocumentTypes,
+      readonly,
+    };
+  });
+
+  DokumentStatus = Dokumentstatus;
 
   canSendMissingDocumentsSig = computed(() => {
     const hasAbgelehnteDokuments =
@@ -108,109 +128,14 @@ export class SharedFeatureGesuchDokumenteComponent {
     return hasAbgelehnteDokuments && isInCorrectState;
   });
 
-  dokumenteDataSourceSig = computed(() => {
-    const { dokuments, requiredDocumentTypes } =
-      this.dokumentsStore.dokumenteViewSig();
-
-    const { readonly, trancheSetting, gesuchId } = this.gesuchViewSig();
-
-    const trancheId = this.gesuchViewSig().trancheId;
-
-    const allowTypes = this.gesuchViewSig().allowTypes;
-    const stepsFlow = this.stepViewSig().stepsFlow;
-
-    if (!trancheId || !allowTypes || !gesuchId) {
-      return new MatTableDataSource<
-        SharedModelTableDokument & {
-          formStep: SharedModelGesuchFormStep & {
-            routes: string[];
-          };
-        }
-      >([]);
-    }
-
-    const uploadedDocuments: SharedModelTableDokument[] = dokuments.map(
-      (gesuchDokument) => {
-        const dokumentTyp = gesuchDokument.dokumentTyp;
-
-        if (!dokumentTyp) {
-          throw new Error('Document type is missing');
-        }
-
-        const documentOptions = createDocumentOptions({
-          trancheId,
-          allowTypes,
-          dokumentTyp,
-          gesuchDokument,
-          initialDocuments: gesuchDokument.dokumente,
-          readonly,
-        });
-
-        const formStep = getFormStepByDocumentType(dokumentTyp);
-
-        return {
-          dokumentTyp,
-          gesuchDokument,
-          formStep,
-          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-          documentOptions,
-        };
-      },
-    );
-
-    const missingDocuments: SharedModelTableDokument[] =
-      requiredDocumentTypes.map((dokumentTyp) => {
-        const formStep = getFormStepByDocumentType(dokumentTyp);
-
-        const documentOptions = createDocumentOptions({
-          trancheId,
-          allowTypes,
-          dokumentTyp,
-          initialDocuments: [],
-          readonly,
-        });
-
-        return {
-          dokumentTyp,
-          formStep,
-          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-          documentOptions,
-        };
-      });
-
-    return new MatTableDataSource<
-      SharedModelTableDokument & {
-        formStep: SharedModelGesuchFormStep & {
-          routes: string[];
-        };
-      }
-    >(
-      [...uploadedDocuments, ...missingDocuments]
-        .sort((a, b) =>
-          this.stepManager.compareStepsByFlow(
-            stepsFlow,
-            a.formStep,
-            b.formStep,
-            () => a.dokumentTyp.localeCompare(b.dokumentTyp),
-          ),
-        )
-        .map((dokument) => ({
-          ...dokument,
-          formStep: {
-            ...dokument.formStep,
-            routes: [
-              '/',
-              'gesuch',
-              ...dokument.formStep.route.split('/'),
-              gesuchId,
-              ...(trancheSetting?.routesSuffix ?? []),
-            ],
-          },
-        })),
-    );
-  });
-
   constructor() {
+    getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
+      .pipe(takeUntilDestroyed())
+      .subscribe((gesuchId) => {
+        this.dokumentsStore.getAdditionalDokumente$({
+          gesuchId,
+        });
+      });
     getLatestTrancheIdFromGesuch$(this.gesuchViewSig)
       .pipe(takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {
@@ -223,34 +148,30 @@ export class SharedFeatureGesuchDokumenteComponent {
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
-  trackByFn(_index: number, item: SharedModelTableDokument) {
-    return item.dokumentTyp;
-  }
-
-  dokumentAkzeptieren(document: SharedModelTableDokument) {
+  dokumentAkzeptieren(dokument: SharedModelTableGesuchDokument) {
     const gesuchTrancheId = this.gesuchViewSig().trancheId;
 
-    if (!document?.gesuchDokument?.id || !gesuchTrancheId) return;
+    if (!dokument?.gesuchDokument?.id || !gesuchTrancheId) return;
 
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
-      gesuchDokumentId: document.gesuchDokument.id,
+      gesuchDokumentId: dokument?.gesuchDokument.id,
       afterSuccess: () => {
         this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
       },
     });
   }
 
-  dokumentAblehnen(document: SharedModelTableDokument) {
+  dokumentAblehnen(document: SharedModelTableGesuchDokument) {
     const { trancheId: gesuchTrancheId } = this.gesuchViewSig();
 
     if (!gesuchTrancheId) return;
 
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
-      GesuchDokument,
+      SharedModelGesuchDokument,
       RejectDokument
     >(SharedUiRejectDokumentComponent, {
-      data: document.gesuchDokument,
+      data: document.dokumentOptions.dokument,
     });
 
     dialogRef
@@ -262,7 +183,7 @@ export class SharedFeatureGesuchDokumenteComponent {
             gesuchTrancheId: gesuchTrancheId,
             kommentar: result.kommentar,
             gesuchDokumentId: result.id,
-            dokumentTyp: document.dokumentTyp as DokumentTyp,
+            dokumentTyp: document.dokumentTyp,
             afterSuccess: () => {
               this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
             },
@@ -271,21 +192,12 @@ export class SharedFeatureGesuchDokumenteComponent {
       });
   }
 
-  expandRow(dokument: SharedModelTableDokument) {
-    if (this.expandedRowId === dokument.dokumentTyp) {
-      this.expandedRowId = null;
-    } else {
-      this.expandedRowId = dokument.dokumentTyp;
-      this.getGesuchDokumentKommentare(dokument);
-    }
-  }
-
-  getGesuchDokumentKommentare(dokument: SharedModelTableDokument) {
+  getGesuchDokumentKommentare(dokument: SharedModelTableGesuchDokument) {
     const { trancheId } = this.gesuchViewSig();
     if (!trancheId) return;
 
     this.dokumentsStore.getGesuchDokumentKommentare$({
-      dokumentTyp: dokument.dokumentTyp as DokumentTyp,
+      dokumentTyp: dokument.gesuchDokument?.dokumentTyp as DokumentTyp,
       gesuchTrancheId: trancheId,
     });
   }

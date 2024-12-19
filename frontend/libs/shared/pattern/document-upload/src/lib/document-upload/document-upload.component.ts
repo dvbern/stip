@@ -7,6 +7,7 @@ import {
   computed,
   inject,
   input,
+  output,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -48,6 +49,7 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
   private uploadStore = inject(UploadStore);
   private einreichStore = inject(EinreichenStore);
   optionsSig = input.required<DokumentOptions>();
+  documentsChanged = output();
 
   gesuchDokumentSig = computed(() => {
     const { gesuchDokument } = this.uploadStore.dokumentListView();
@@ -77,22 +79,24 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
         takeUntilDestroyed(),
       )
       .subscribe(() => {
-        const initialDocuments = this.optionsSig().initialDocuments;
+        const { initialDokumente, dokument } = this.optionsSig();
 
-        this.einreichStore.validateSteps$({
-          gesuchTrancheId: this.optionsSig().trancheId,
-        });
-
-        if (initialDocuments) {
-          this.dokumentsStore.getDokumenteAndRequired$({
-            gesuchTrancheId: this.optionsSig().trancheId,
+        if (dokument.type === 'GESUCH_DOKUMENT') {
+          this.einreichStore.validateSteps$({
+            gesuchTrancheId: dokument.trancheId,
           });
+
+          if (initialDokumente) {
+            this.dokumentsStore.getDokumenteAndRequired$({
+              gesuchTrancheId: dokument.trancheId,
+            });
+          }
         }
       });
   }
 
   ngOnInit() {
-    const initialDocuments = this.optionsSig()?.initialDocuments;
+    const initialDocuments = this.optionsSig()?.initialDokumente;
 
     if (initialDocuments) {
       this.uploadStore.setInitialDocuments(initialDocuments);
@@ -108,8 +112,7 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
       {
         data: {
           options: this.optionsSig(),
-          gesuchDokument:
-            this.gesuchDokumentSig() ?? this.optionsSig().gesuchDokument,
+          dokumentModel: this.gesuchDokumentSig() ?? this.optionsSig().dokument,
           store: this.uploadStore,
         },
       },

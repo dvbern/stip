@@ -12,7 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { debounceTime, exhaustMap, filter, take, tap } from 'rxjs';
 
-import { DokumentService, DokumentTyp } from '@dv/shared/model/gesuch';
+import { DokumentService } from '@dv/shared/model/gesuch';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
@@ -23,8 +23,6 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureDownloadComponent implements OnInit {
-  gesuchTrancheIdSig = input.required<string>({ alias: 'gesuchTrancheId' });
-  typeSig = input.required<DokumentTyp>({ alias: 'type' });
   dokumentIdSig = input.required<string>({ alias: 'dokumentId' });
   oauthService = inject(OAuthService);
   dokumentService = inject(DokumentService);
@@ -44,9 +42,7 @@ export class SharedFeatureDownloadComponent implements OnInit {
 
       this.dokumentService
         .getDokumentDownloadToken$({
-          gesuchTrancheId: this.gesuchTrancheIdSig(),
           dokumentId: this.dokumentIdSig(),
-          dokumentTyp: this.typeSig(),
         })
         .pipe(
           tap((token) => {

@@ -53,11 +53,11 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   isInitial = isInitial;
 
   public ngOnInit(): void {
-    const { trancheId, type, hasEntries } = this.uploadViewSig();
-    if (!hasEntries) return;
+    const { dokumentModel, hasEntries } = this.uploadViewSig();
+    if (!hasEntries || dokumentModel.type === 'UNTERSCHRIFTENBLAETTER') return;
     this.dokumentsStore.getGesuchDokument$({
-      trancheId,
-      dokumentTyp: type,
+      trancheId: dokumentModel.trancheId,
+      dokumentTyp: dokumentModel.dokumentTyp,
     });
   }
 
@@ -78,6 +78,8 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   }
 
   dokumentAblehnen() {
+    const { dokumentModel, hasEntries } = this.uploadViewSig();
+    if (!hasEntries || dokumentModel.type === 'UNTERSCHRIFTENBLAETTER') return;
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
       GesuchDokument,
@@ -92,8 +94,8 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result) {
           this.dokumentsStore.gesuchDokumentAblehnen$({
-            gesuchTrancheId: this.uploadViewSig().trancheId,
-            dokumentTyp: this.uploadViewSig().type,
+            gesuchTrancheId: dokumentModel.trancheId,
+            dokumentTyp: dokumentModel.dokumentTyp,
             gesuchDokumentId: result.id,
             kommentar: result.kommentar,
             afterSuccess: () => {
@@ -105,14 +107,18 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   }
 
   private reloadDokumente() {
-    if (this.uploadViewSig().initialDocuments) {
+    const { dokumentModel, hasEntries, initialDokuments } =
+      this.uploadViewSig();
+    if (!hasEntries || dokumentModel.type === 'UNTERSCHRIFTENBLAETTER') return;
+
+    if (initialDokuments) {
       this.dokumentsStore.getDokumenteAndRequired$({
-        gesuchTrancheId: this.uploadViewSig().trancheId,
+        gesuchTrancheId: dokumentModel.trancheId,
       });
     }
     this.dokumentsStore.getGesuchDokument$({
-      trancheId: this.uploadViewSig().trancheId,
-      dokumentTyp: this.uploadViewSig().type,
+      trancheId: dokumentModel.trancheId,
+      dokumentTyp: dokumentModel.dokumentTyp,
     });
   }
 }

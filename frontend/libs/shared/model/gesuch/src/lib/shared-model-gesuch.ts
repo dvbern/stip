@@ -53,3 +53,8 @@ export type GesuchFilter = keyof Omit<
 export type AenderungMelden = {
   gesuch: GesuchDashboardItem;
 };
+
+export type TrancheSetting = {
+  type?: GesuchTrancheTyp;
+  routesSuffix?: string[];
+};
