@@ -1632,12 +1632,17 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
-  '/dokument/download':
+  '/dokument/{dokumentArt}/download':
     parameters:
       - name: token
         schema:
           type: string
         in: query
+        required: true
+      - name: dokumentArt
+        schema:
+          $ref: '#/components/schemas/DokumentArt'
+        in: path
         required: true
     get:
       tags:
@@ -2639,6 +2644,11 @@ components:
         - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
         - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
         - DARLEHEN_BELEGE_ANSCHAFFUNGEN
+      type: string
+    DokumentArt:
+      enum:
+        - GESUCH_DOKUMENT
+        - UNTERSCHRIFTENBLATT
       type: string
     UnterschriftenblattDokumentTyp:
       type: string

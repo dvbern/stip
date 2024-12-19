@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
@@ -569,12 +570,13 @@ public class DokumentApiSpec {
      * 
      *
      * @see #tokenQuery  (required)
+     * @see #dokumentArtPath  (required)
      * return File
      */
     public static class GetDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/dokument/download";
+        public static final String REQ_URI = "/dokument/{dokumentArt}/download";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -586,7 +588,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/download
+         * GET /dokument/{dokumentArt}/download
          * @param handler handler
          * @param <T> type
          * @return type
@@ -597,13 +599,24 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/download
+         * GET /dokument/{dokumentArt}/download
          * @param handler handler
          * @return File
          */
         public File executeAs(Function<Response, Response> handler) {
             TypeRef<File> type = new TypeRef<File>(){};
             return execute(handler).as(type);
+        }
+
+        public static final String DOKUMENT_ART_PATH = "dokumentArt";
+
+        /**
+         * @param dokumentArt (DokumentArtDtoSpec)  (required)
+         * @return operation
+         */
+        public GetDokumentOper dokumentArtPath(Object dokumentArt) {
+            reqSpec.addPathParam(DOKUMENT_ART_PATH, dokumentArt);
+            return this;
         }
 
         public static final String TOKEN_QUERY = "token";

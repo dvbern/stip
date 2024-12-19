@@ -691,7 +691,8 @@
                     AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
                     StipDecision=ch.dvbern.stip.api.common.type.StipDecision,
                     GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp,
-                    UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp
+                    UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
+                    DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

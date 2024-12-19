@@ -32,6 +32,7 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -146,6 +147,7 @@ class DokumentResourcesTest {
 
         dokumentApiSpec.getDokument()
             .tokenQuery(token)
+            .dokumentArtPath(DokumentArtDtoSpec.GESUCH_DOKUMENT)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()

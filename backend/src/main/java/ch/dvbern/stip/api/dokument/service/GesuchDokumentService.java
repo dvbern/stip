@@ -20,12 +20,10 @@ package ch.dvbern.stip.api.dokument.service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
+import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -40,12 +38,12 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -54,13 +52,9 @@ import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.core.async.AsyncResponseTransformer;
-import software.amazon.awssdk.core.async.ResponsePublisher;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
@@ -70,6 +64,7 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 @RequiredArgsConstructor
 public class GesuchDokumentService {
     private static final String GESUCH_DOKUMENT_PATH = "gesuch/";
+
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final DokumentMapper dokumentMapper;
     private final DokumentRepository dokumentRepository;
@@ -147,13 +142,6 @@ public class GesuchDokumentService {
             gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp);
         final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
-    }
-
-    @Transactional
-    public Optional<DokumentDto> findDokument(final UUID dokumentId) {
-        Objects.requireNonNull(dokumentId, "id muss gesetzt sein");
-        Dokument dokument = dokumentRepository.findById(dokumentId);
-        return Optional.ofNullable(dokumentMapper.toDto(dokument));
     }
 
     public void removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
@@ -297,28 +285,20 @@ public class GesuchDokumentService {
         executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
     }
 
-    public CompletableFuture<ResponsePublisher<GetObjectResponse>> getGetDokumentFuture(final String objectId) {
-        return s3.getObject(
-            buildGetRequest(
-                configService.getBucketName(),
-                objectId
-            ),
-            AsyncResponseTransformer.toPublisher()
+    public RestMulti<Buffer> getDokument(final UUID dokumentId) {
+        final var dokument = dokumentRepository.requireById(dokumentId);
+
+        return DokumentDownloadUtil.getDokument(
+            s3,
+            configService.getBucketName(),
+            dokument.getObjectId(),
+            GESUCH_DOKUMENT_PATH,
+            dokument.getFilename()
         );
     }
 
-    private GetObjectRequest buildGetRequest(final String bucketName, final String objectKey) {
-        return GetObjectRequest.builder()
-            .bucket(bucketName)
-            .key(GESUCH_DOKUMENT_PATH + objectKey)
-            .build();
-    }
-
-    private DeleteObjectRequest buildDeleteObjectRequest(final String bucketName, final String objectKey) {
-        return DeleteObjectRequest.builder()
-            .bucket(bucketName)
-            .key(GESUCH_DOKUMENT_PATH + objectKey)
-            .build();
+    public void checkIfDokumentExists(final UUID dokumentId) {
+        dokumentRepository.requireById(dokumentId);
     }
 
     private GesuchDokument createGesuchDokument(final GesuchTranche gesuchTranche, final DokumentTyp dokumentTyp) {

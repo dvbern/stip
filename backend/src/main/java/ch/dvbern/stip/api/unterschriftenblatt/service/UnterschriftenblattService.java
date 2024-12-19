@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
+import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -36,11 +37,13 @@ import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTy
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -48,7 +51,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class UnterschriftenblattService {
-    private static final String UNTERSCHRIFTENBLATT_DOKUMENT_PATH = "unterschriftenblatt/";
+    public static final String UNTERSCHRIFTENBLATT_DOKUMENT_PATH = "unterschriftenblatt/";
 
     private final GesuchRepository gesuchRepository;
     private final UnterschriftenblattRepository unterschriftenblattRepository;
@@ -177,5 +180,17 @@ public class UnterschriftenblattService {
         if (unterschriftenblatt.getDokumente().isEmpty()) {
             unterschriftenblattRepository.delete(unterschriftenblatt);
         }
+    }
+
+    public RestMulti<Buffer> getDokument(final UUID dokumentId) {
+        final var dokument = dokumentRepository.requireById(dokumentId);
+
+        return DokumentDownloadUtil.getDokument(
+            s3,
+            configService.getBucketName(),
+            dokument.getObjectId(),
+            UNTERSCHRIFTENBLATT_DOKUMENT_PATH,
+            dokument.getFilename()
+        );
     }
 }

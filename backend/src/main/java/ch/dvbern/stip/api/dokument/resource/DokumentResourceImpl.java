@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.dokument.resource;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -27,8 +26,10 @@ import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
+import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.dokument.type.DokumentArt;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
@@ -37,23 +38,16 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
-import io.quarkus.security.UnauthorizedException;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
-import io.smallrye.jwt.auth.principal.ParseException;
 import io.smallrye.jwt.build.Jwt;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mutiny.zero.flow.adapters.AdaptersToFlow;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
@@ -138,46 +132,20 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @AllowAll
     @Blocking
-    public RestMulti<Buffer> getDokument(String token) {
-        JsonWebToken jwt;
-        try {
-            jwt = jwtParser.verify(token, configService.getSecret());
-        } catch (ParseException e) {
-            throw new UnauthorizedException();
-        }
+    public RestMulti<Buffer> getDokument(String token, DokumentArt dokumentArt) {
+        final var dokumentId = DokumentDownloadUtil.getDokumentId(jwtParser, token, configService.getSecret());
 
-        final var dokumentId = UUID.fromString(
-            (String) jwt.claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM)
-                .orElseThrow(BadRequestException::new)
-        );
-
-        final var dokumentDto = gesuchDokumentService.findDokument(dokumentId).orElseThrow(NotFoundException::new);
-        return RestMulti.fromUniResponse(
-            Uni.createFrom()
-                .completionStage(() -> gesuchDokumentService.getGetDokumentFuture(dokumentDto.getObjectId())),
-            response -> Multi.createFrom()
-                .safePublisher(AdaptersToFlow.publisher(response))
-                .map(byteBuffer -> {
-                    byte[] result = new byte[byteBuffer.remaining()];
-                    byteBuffer.get(result);
-                    return Buffer.buffer(result);
-                }),
-            response -> Map.of(
-                "Content-Disposition",
-                List.of("attachment;filename=" + dokumentDto.getFilename()),
-                "Content-Type",
-                List.of("application/octet-stream")
-            )
-        );
+        return switch (dokumentArt) {
+            case GESUCH_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
+            case UNTERSCHRIFTENBLATT -> unterschriftenblattService.getDokument(dokumentId);
+        };
     }
 
     @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
     public String getDokumentDownloadToken(UUID dokumentId) {
-        if (gesuchDokumentService.findDokument(dokumentId).isEmpty()) {
-            throw new NotFoundException();
-        }
+        gesuchDokumentService.checkIfDokumentExists(dokumentId);
 
         return Jwt
             .claims()

@@ -58,9 +58,9 @@ public interface DokumentResource {
     void gesuchDokumentAkzeptieren(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
 
     @GET
-    @Path("/dokument/download")
+    @Path("/dokument/{dokumentArt}/download")
     @Produces({ "application/octet-stream" })
-    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDokument(@QueryParam("token") @NotNull   String token);
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDokument(@QueryParam("token") @NotNull   String token,@PathParam("dokumentArt") ch.dvbern.stip.api.dokument.type.DokumentArt dokumentArt);
 
     @GET
     @Path("/dokument/{dokumentId}")
