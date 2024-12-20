@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
@@ -103,6 +104,7 @@ public class GesuchTrancheService {
     private final SteuerdatenMapper steuerdatenMapper;
     private final MailService mailService;
     private final NotificationService notificationService;
+    private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
 
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
         return gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -229,11 +231,15 @@ public class GesuchTrancheService {
         final var trancheToCopy = gesuch.getTrancheValidOnDate(aenderungsantragCreateDto.getStart())
             .orElseThrow(NotFoundException::new);
 
-        final var newTranche = GesuchTrancheCopyUtil.createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
+        final var newTranche = GesuchTrancheCopyUtil
+            .createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
         gesuch.getGesuchTranchen().add(newTranche);
 
         // Manually persist so that when mapping happens the IDs on the new objects are set
         gesuchRepository.persistAndFlush(gesuch);
+
+        gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
+
         return gesuchTrancheMapper.toDto(newTranche);
     }
 
@@ -257,6 +263,8 @@ public class GesuchTrancheService {
         // Truncating also removes all tranchen no longer needed (i.e. those with gueltigkeit <= 0 months)
         gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
 
+        gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
+
         return gesuchTrancheMapper.toDto(newTranche);
     }
 
@@ -268,6 +276,8 @@ public class GesuchTrancheService {
         final var newTranche = GesuchTrancheCopyUtil.createNewTranche(aenderung);
         gesuch.getGesuchTranchen().add(newTranche);
         gesuchRepository.persistAndFlush(gesuch);
+
+        gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(aenderung, newTranche);
 
         gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
     }
