@@ -81,7 +81,7 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
       .subscribe(() => {
         const { initialDokumente, dokument } = this.optionsSig();
 
-        if (dokument.type === 'GESUCH_DOKUMENT') {
+        if (dokument.art === 'GESUCH_DOKUMENT') {
           this.einreichStore.validateSteps$({
             gesuchTrancheId: dokument.trancheId,
           });

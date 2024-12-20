@@ -35,6 +35,7 @@ export * from './createGesuchTrancheRequest';
 export * from './darlehen';
 export * from './deploymentConfig';
 export * from './dokument';
+export * from './dokumentArt';
 export * from './dokumentTyp';
 export * from './dokumenteToUpload';
 export * from './dokumentstatus';

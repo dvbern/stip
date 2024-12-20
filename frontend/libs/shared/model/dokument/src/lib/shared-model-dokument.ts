@@ -1,6 +1,7 @@
 import { AppType } from '@dv/shared/model/config';
 import {
   Dokument,
+  DokumentArt,
   DokumentTyp,
   GesuchDokument,
   UnterschriftenblattDokument,
@@ -8,16 +9,17 @@ import {
 } from '@dv/shared/model/gesuch';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { PermissionMap } from '@dv/shared/model/permission-state';
+import { Extends } from '@dv/shared/model/type-util';
 
 export type SharedModelStandardGesuchDokument = {
-  type: 'GESUCH_DOKUMENT';
+  art: Extends<DokumentArt, 'GESUCH_DOKUMENT'>;
   dokumentTyp: DokumentTyp;
   trancheId: string;
   gesuchDokument?: GesuchDokument;
 };
 
 export type SharedModelAdditionalGesuchDokument = {
-  type: 'UNTERSCHRIFTENBLAETTER';
+  art: Extends<DokumentArt, 'UNTERSCHRIFTENBLATT'>;
   dokumentTyp: UnterschriftenblattDokumentTyp;
   gesuchId: string;
   gesuchDokument?: UnterschriftenblattDokument;
@@ -26,7 +28,6 @@ export type SharedModelAdditionalGesuchDokument = {
 export type SharedModelGesuchDokument =
   | SharedModelStandardGesuchDokument
   | SharedModelAdditionalGesuchDokument;
-export type SharedModelDokumentType = SharedModelGesuchDokument['type'];
 
 export interface DokumentOptions {
   permissions: PermissionMap;
@@ -46,7 +47,6 @@ export interface SharedModelTableGesuchDokument {
 }
 
 export type SharedModelTableAdditionalDokument = {
-  type: 'UNTERSCHRIFTENBLAETTER';
   dokumentTyp: UnterschriftenblattDokumentTyp;
   gesuchDokument?: UnterschriftenblattDokument;
   dokumentOptions: DokumentOptions;
@@ -92,19 +92,22 @@ export const isUploadable = (
   dokumentModel: SharedModelGesuchDokument,
   permission: PermissionMap,
 ) => {
-  switch (dokumentModel.type) {
+  switch (dokumentModel.art) {
     case 'GESUCH_DOKUMENT': {
       return (
         appType !== 'sachbearbeitung-app' &&
         dokumentModel.gesuchDokument?.status !== 'AKZEPTIERT'
       );
     }
-    case 'UNTERSCHRIFTENBLAETTER': {
+    case 'UNTERSCHRIFTENBLATT': {
       return permission.canUploadUnterschriftenblatt;
     }
   }
 };
 
-export const getDownloadLink = (dokument: DokumentView) => {
-  return `/download/${dokument.file.id}`;
+export const getDownloadLink = (
+  dokumentArt: DokumentArt,
+  dokument: DokumentView,
+) => {
+  return `/download/${dokumentArt}/${dokument.file.id}`;
 };

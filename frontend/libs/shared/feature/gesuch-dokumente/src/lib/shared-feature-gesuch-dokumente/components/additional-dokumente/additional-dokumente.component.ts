@@ -74,7 +74,6 @@ export class AdditionalDokumenteComponent {
     const uploadedDokuments = unterschriftenblaetter.map(
       (gesuchDokument) =>
         ({
-          type: 'UNTERSCHRIFTENBLAETTER',
           dokumentTyp: gesuchDokument.dokumentTyp,
           gesuchDokument,
           dokumentOptions: createAdditionalDokumentOptions({
@@ -92,7 +91,6 @@ export class AdditionalDokumenteComponent {
     const list = [
       ...uploadedDokuments,
       ...requiredDocumentTypes.map((dokumentTyp) => ({
-        type: 'UNTERSCHRIFTENBLAETTER' as const,
         dokumentTyp: dokumentTyp,
         dokumentOptions: createAdditionalDokumentOptions({
           gesuchId,
@@ -108,6 +106,6 @@ export class AdditionalDokumenteComponent {
   });
 
   trackByFn(_index: number, item: SharedModelTableAdditionalDokument) {
-    return `${item.type}_${item.dokumentTyp}`;
+    return item.dokumentTyp;
   }
 }

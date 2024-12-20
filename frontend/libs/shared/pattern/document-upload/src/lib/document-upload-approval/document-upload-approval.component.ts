@@ -54,7 +54,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     const { dokumentModel, hasEntries } = this.uploadViewSig();
-    if (!hasEntries || dokumentModel.type === 'UNTERSCHRIFTENBLAETTER') return;
+    if (!hasEntries || dokumentModel.art === 'UNTERSCHRIFTENBLATT') return;
     this.dokumentsStore.getGesuchDokument$({
       trancheId: dokumentModel.trancheId,
       dokumentTyp: dokumentModel.dokumentTyp,
@@ -79,7 +79,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
 
   dokumentAblehnen() {
     const { dokumentModel, hasEntries } = this.uploadViewSig();
-    if (!hasEntries || dokumentModel.type === 'UNTERSCHRIFTENBLAETTER') return;
+    if (!hasEntries || dokumentModel.art === 'UNTERSCHRIFTENBLATT') return;
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
       GesuchDokument,
@@ -109,7 +109,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   private reloadDokumente() {
     const { dokumentModel, hasEntries, initialDokuments } =
       this.uploadViewSig();
-    if (!hasEntries || dokumentModel.type === 'UNTERSCHRIFTENBLAETTER') return;
+    if (!hasEntries || dokumentModel.art === 'UNTERSCHRIFTENBLATT') return;
 
     if (initialDokuments) {
       this.dokumentsStore.getDokumenteAndRequired$({

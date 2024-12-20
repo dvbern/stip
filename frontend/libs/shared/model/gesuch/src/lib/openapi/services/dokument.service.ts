@@ -18,6 +18,7 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { DokumentArt } from '../model/dokumentArt';
 import { DokumentTyp } from '../model/dokumentTyp';
 import { GesuchDokumentAblehnenRequest } from '../model/gesuchDokumentAblehnenRequest';
 import { GesuchDokumentKommentar } from '../model/gesuchDokumentKommentar';
@@ -61,6 +62,7 @@ export interface DokumentServiceGesuchDokumentAkzeptierenRequestParams {
 
 export interface DokumentServiceGetDokumentRequestParams {
     token: string;
+    dokumentArt: DokumentArt;
 }
 
 export interface DokumentServiceGetDokumentDownloadTokenRequestParams {
@@ -674,6 +676,10 @@ export class DokumentService {
         if (token === null || token === undefined) {
             throw new Error('Required parameter token was null or undefined when calling getDokument$.');
         }
+        const dokumentArt = requestParameters.dokumentArt;
+        if (dokumentArt === null || dokumentArt === undefined) {
+            throw new Error('Required parameter dokumentArt was null or undefined when calling getDokument$.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (token !== undefined && token !== null) {
@@ -714,7 +720,7 @@ export class DokumentService {
         }
 
 
-        const localVarPath = `/dokument/download`;
+        const localVarPath = `/dokument/${this.configuration.encodeParam({name: "dokumentArt", value: dokumentArt, in: "path", style: "simple", explode: false, dataType: "DokumentArt", dataFormat: undefined})}/download`;
         return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

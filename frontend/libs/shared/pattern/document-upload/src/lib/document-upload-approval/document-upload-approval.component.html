@@ -1,6 +1,6 @@
 @let dokumentRd = dokumentsStore.dokument();
 
-@if (uploadViewSig().dokumentModel.type === 'GESUCH_DOKUMENT') {
+@if (uploadViewSig().dokumentModel.art === 'GESUCH_DOKUMENT') {
   @if (dokumentRd | rdIsPendingWithoutCache) {
     <dv-shared-ui-loading style="height: 39px" type="icon"></dv-shared-ui-loading>
   } @else {

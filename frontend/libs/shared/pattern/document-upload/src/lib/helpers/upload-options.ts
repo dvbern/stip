@@ -158,7 +158,7 @@ export function createUploadOptionsFactory<
             dokument: {
               trancheId,
               dokumentTyp,
-              type: 'GESUCH_DOKUMENT',
+              art: 'GESUCH_DOKUMENT',
             },
             singleUpload: options?.singleUpload ?? false,
             initialDokumente: options?.initialDocuments,
@@ -198,7 +198,7 @@ export function createGesuchDokumentOptions(options: {
       dokumentTyp,
       trancheId,
       gesuchDokument,
-      type: 'GESUCH_DOKUMENT',
+      art: 'GESUCH_DOKUMENT',
     },
     initialDokumente: initialDocuments,
     readonly,
@@ -233,7 +233,7 @@ export function createAdditionalDokumentOptions(options: {
     dokument: {
       dokumentTyp,
       gesuchId,
-      type: 'UNTERSCHRIFTENBLAETTER',
+      art: 'UNTERSCHRIFTENBLATT',
       gesuchDokument,
     },
     initialDokumente: initialDocuments,

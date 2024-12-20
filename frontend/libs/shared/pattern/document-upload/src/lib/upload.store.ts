@@ -2,7 +2,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { patchState, signalState } from '@ngrx/signals';
-import { EMPTY, Subject, merge, of } from 'rxjs';
+import { Subject, merge, of } from 'rxjs';
 import {
   catchError,
   exhaustMap,
@@ -19,10 +19,11 @@ import {
   DokumentListView,
   DokumentOptions,
   DokumentState,
+  SharedModelAdditionalGesuchDokument,
   SharedModelStandardGesuchDokument,
 } from '@dv/shared/model/dokument';
 import { Dokument, DokumentService } from '@dv/shared/model/gesuch';
-import { assertUnreachable } from '@dv/shared/model/type-util';
+import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import { noGlobalErrorsIf, shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
@@ -104,19 +105,19 @@ export class UploadStore {
       .pipe(
         exhaustMap((options) =>
           (() => {
-            switch (options.dokument.type) {
+            const dokument = options.dokument;
+            switch (dokument.art) {
               case 'GESUCH_DOKUMENT': {
-                const dokument = options.dokument;
                 return this.documentService
                   .getGesuchDokumenteForTyp$({
-                    dokumentTyp: options.dokument.dokumentTyp,
-                    gesuchTrancheId: options.dokument.trancheId,
+                    dokumentTyp: dokument.dokumentTyp,
+                    gesuchTrancheId: dokument.trancheId,
                   })
                   .pipe(
                     map(
                       ({ value }) =>
                         ({
-                          type: 'GESUCH_DOKUMENT',
+                          art: 'GESUCH_DOKUMENT',
                           gesuchDokument: value,
                           dokumentTyp: dokument.dokumentTyp,
                           trancheId: dokument.trancheId,
@@ -124,10 +125,28 @@ export class UploadStore {
                     ),
                   );
               }
-              case 'UNTERSCHRIFTENBLAETTER':
-                return EMPTY;
+              case 'UNTERSCHRIFTENBLATT':
+                return this.documentService
+                  .getUnterschriftenblaetterForGesuch$({
+                    gesuchId: dokument.gesuchId,
+                  })
+                  .pipe(
+                    map((list) =>
+                      list.find((d) => d.dokumentTyp === dokument.dokumentTyp),
+                    ),
+                    filter(isDefined),
+                    map(
+                      (gesuchDokument) =>
+                        ({
+                          art: 'UNTERSCHRIFTENBLATT',
+                          gesuchDokument,
+                          dokumentTyp: dokument.dokumentTyp,
+                          gesuchId: dokument.gesuchId,
+                        }) satisfies SharedModelAdditionalGesuchDokument,
+                    ),
+                  );
               default:
-                assertUnreachable(options.dokument);
+                assertUnreachable(dokument);
             }
           })(),
         ),
@@ -171,12 +190,12 @@ export class UploadStore {
             },
           ] as const;
           const serviceCall$ = (() => {
-            switch (action.dokument.type) {
+            switch (action.dokument.art) {
               case 'GESUCH_DOKUMENT':
                 return this.documentService.deleteDokument$(
                   ...deleteCallParams,
                 );
-              case 'UNTERSCHRIFTENBLAETTER':
+              case 'UNTERSCHRIFTENBLATT':
                 return this.documentService.deleteUnterschriftenblattDokument$(
                   ...deleteCallParams,
                 );
@@ -348,7 +367,7 @@ export class UploadStore {
     ] as const;
 
     const uploadByType = () => {
-      switch (dokument.type) {
+      switch (dokument.art) {
         case 'GESUCH_DOKUMENT':
           return this.documentService.createDokument$(
             {
@@ -358,7 +377,7 @@ export class UploadStore {
             },
             ...serviceDefaultParams,
           );
-        case 'UNTERSCHRIFTENBLAETTER':
+        case 'UNTERSCHRIFTENBLATT':
           return this.documentService.createUnterschriftenblatt$(
             {
               ...action,

@@ -12,7 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { debounceTime, exhaustMap, filter, take, tap } from 'rxjs';
 
-import { DokumentService } from '@dv/shared/model/gesuch';
+import { DokumentArt, DokumentService } from '@dv/shared/model/gesuch';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
@@ -23,6 +23,7 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureDownloadComponent implements OnInit {
+  dokumentArtSig = input.required<DokumentArt>({ alias: 'dokumentArt' });
   dokumentIdSig = input.required<string>({ alias: 'dokumentId' });
   oauthService = inject(OAuthService);
   dokumentService = inject(DokumentService);
@@ -33,7 +34,7 @@ export class SharedFeatureDownloadComponent implements OnInit {
     'd-flex flex-column position-absolute top-0 bottom-0 start-0 end-0 p-5';
 
   private getDownloadPath = (token: string) => {
-    return `/api/v1/dokument/download?token=${token}`;
+    return `/api/v1/dokument/${this.dokumentArtSig()}/download?token=${token}`;
   };
 
   ngOnInit() {
