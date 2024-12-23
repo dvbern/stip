@@ -22,6 +22,10 @@ export const expectStepTitleToContainText = async (
   return expect(await getStepTitle(page)).toContainText(text);
 };
 
+export type DeepNullable<T> = {
+  [K in keyof T]: DeepNullable<T[K]> | null;
+};
+
 export const handleCheckbox = async (
   matCheckboxComp: Locator,
   value: boolean | undefined,
