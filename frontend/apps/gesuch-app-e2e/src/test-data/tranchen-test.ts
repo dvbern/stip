@@ -4,19 +4,24 @@ import {
 } from '@dv/shared/model/gesuch';
 import { DeepNullable, generateSVN } from '@dv/shared/util-fn/e2e-util';
 
-import { specificYearsAgo } from '../utils';
+import {
+  specificMonth,
+  specificMonthPlusYears,
+  specificYearsAgo,
+  thisYear,
+} from '../utils';
 
 export const ausbildung: AusbildungUpdate = {
-  fallId: '5a910351-4bb9-4737-a92e-ed7c07ebee9b',
+  fallId: 'to-be-set',
   ausbildungsort: 'E2E',
   isAusbildungAusland: false,
   besuchtBMS: false,
   fachrichtung: 'E2E',
   ausbildungNichtGefunden: false,
-  ausbildungBegin: '10.2023',
-  ausbildungEnd: '10.2026',
+  ausbildungBegin: specificMonth(9),
+  ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
-  ausbildungsgangId: 'bca26c99-a007-40d6-8f4e-a6ed0735203f',
+  ausbildungsgangId: 'to-be-set',
 };
 
 export const gesuchFormularUpdate = (
@@ -40,7 +45,7 @@ export const gesuchFormularUpdate = (
     identischerZivilrechtlicherWohnsitzOrt: null,
     email: 'stip-laura-sanchez@mailbucket.dvbern.ch',
     telefonnummer: '0791231212',
-    geburtsdatum: `01.01.${specificYearsAgo(20)}`,
+    geburtsdatum: `${specificYearsAgo(20)}-01-01`,
     nationalitaet: 'CH',
     heimatort: 'Bern',
     niederlassungsstatus: null,
@@ -82,8 +87,8 @@ export const gesuchFormularUpdate = (
   geschwisters: null,
   lebenslaufItems: [
     {
-      von: '8.2015',
-      bis: '9.2023',
+      von: `01.${specificYearsAgo(4)}`,
+      bis: `08.${thisYear}`,
       wohnsitz: 'AG',
       bildungsart: 'VORLEHRE',
       ausbildungAbgeschlossen: false,

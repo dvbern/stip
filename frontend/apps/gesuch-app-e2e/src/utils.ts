@@ -120,7 +120,7 @@ export const initializeTestByApi = (
           contexts.api,
           exitingGesuchId,
         );
-        expect(deleteResponse.status()).toBe(200);
+        expect(deleteResponse.ok()).toBeTruthy();
       }
 
       // get fall id
@@ -176,14 +176,14 @@ export const initializeTestByApi = (
     });
   });
 
-  // test.afterAll(async () => {
-  //   if (contexts) {
-  //     if (gesuchId) {
-  //       await deleteGesuch(contexts.api, gesuchId);
-  //     }
-  //     await contexts.dispose();
-  //   }
-  // });
+  test.afterAll(async () => {
+    if (contexts) {
+      if (gesuchId) {
+        await deleteGesuch(contexts.api, gesuchId);
+      }
+      await contexts.dispose();
+    }
+  });
 
   return {
     getGesuchId: () => gesuchId,

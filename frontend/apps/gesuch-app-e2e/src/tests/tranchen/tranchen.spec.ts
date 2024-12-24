@@ -1,6 +1,5 @@
 import { expect } from '@playwright/test';
 
-import { GesuchFormularUpdate } from '@dv/shared/model/gesuch';
 import {
   SmallImageFile,
   expectStepTitleToContainText,
