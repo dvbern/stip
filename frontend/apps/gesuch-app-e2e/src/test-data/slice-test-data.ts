@@ -1,0 +1,161 @@
+import {
+  Adresse,
+  Auszahlung,
+  Darlehen,
+  EinnahmenKosten,
+  Eltern,
+  Familiensituation,
+  Geschwister,
+  LebenslaufItem,
+  PersonInAusbildung,
+  Steuerdaten,
+} from '@dv/shared/model/gesuch';
+import {
+  generateSVN,
+  specificMonth,
+  specificMonthPlusYears,
+  specificYearsAgo,
+  thisYear,
+} from '@dv/shared/util-fn/e2e-util';
+
+import { AusbildungValues } from '../po/ausbildung.po';
+
+export const ausbildung: AusbildungValues = {
+  fallId: '',
+  status: 'AKTIV',
+  editable: true,
+  ausbildungsort: 'Bern',
+  ausbildungsstaetteText: 'Universität Bern',
+  ausbildungsgangText: 'Master',
+  fachrichtung: 'Kunstgeschichte',
+  ausbildungBegin: specificMonth(9),
+  ausbildungEnd: specificMonthPlusYears(8, 3),
+  pensum: 'VOLLZEIT',
+};
+
+export const adressen = {
+  person: {
+    land: 'CH',
+    coAdresse: '',
+    strasse: 'Kramgasse',
+    hausnummer: '1',
+    plz: '3011',
+    ort: 'Bern',
+  },
+  mutter: {
+    land: 'CH',
+    coAdresse: '',
+    strasse: 'Aarbergergasse',
+    hausnummer: '1',
+    plz: '3065',
+    ort: 'Bolligen',
+  },
+} as const satisfies Record<string, Adresse>;
+
+export const person = (seed: string): PersonInAusbildung => ({
+  sozialversicherungsnummer: generateSVN(seed + '_person'),
+  anrede: 'HERR',
+  nachname: 'Muster',
+  vorname: 'Fritz',
+  adresse: adressen.person,
+  identischerZivilrechtlicherWohnsitz: true,
+  email: 'max.muster@dvbern.ch',
+  telefonnummer: '0316338555',
+  geburtsdatum: `01.01.${specificYearsAgo(20)}`,
+  nationalitaet: 'CH',
+  heimatort: 'Bern',
+  zivilstand: 'LEDIG',
+  wohnsitz: 'MUTTER_VATER',
+  wohnsitzAnteilMutter: 100,
+  sozialhilfebeitraege: false,
+  korrespondenzSprache: 'DEUTSCH',
+});
+
+export const taetigkeit: LebenslaufItem = {
+  taetigkeitsart: 'ERWERBSTAETIGKEIT',
+  taetigkeitsBeschreibung: 'Serviceangestellter',
+  von: `01.${specificYearsAgo(4)}`,
+  bis: `08.${thisYear}`,
+  wohnsitz: 'BE',
+  id: '',
+};
+
+export const familienlsituation: Familiensituation = {
+  elternVerheiratetZusammen: false,
+  gerichtlicheAlimentenregelung: false,
+  elternteilUnbekanntVerstorben: true,
+  mutterUnbekanntVerstorben: 'WEDER_NOCH',
+  mutterWiederverheiratet: false,
+  vaterUnbekanntVerstorben: 'VERSTORBEN',
+};
+
+export const mutter = (seed: string): Eltern => ({
+  sozialversicherungsnummer: generateSVN(seed + '_mutter'),
+  nachname: 'Tester',
+  vorname: 'Mutter1',
+  adresse: adressen.mutter,
+  identischerZivilrechtlicherWohnsitz: true,
+  telefonnummer: '0316338355',
+  ergaenzungsleistungen: 0,
+  sozialhilfebeitraege: false,
+  wohnkosten: 16260,
+  geburtsdatum: `01.01.${specificYearsAgo(44)}`,
+  ausweisbFluechtling: false,
+  elternTyp: 'MUTTER',
+  id: '',
+});
+
+export const steuerdaten: Steuerdaten = {
+  steuerdatenTyp: 'MUTTER',
+  totalEinkuenfte: 8620,
+  eigenmietwert: 0,
+  isArbeitsverhaeltnisSelbstaendig: false,
+  kinderalimente: 0,
+  vermoegen: 0,
+  steuernKantonGemeinde: 0,
+  steuernBund: 0,
+  fahrkosten: 0,
+  fahrkostenPartner: 0,
+  verpflegung: 0,
+  verpflegungPartner: 0,
+  steuerjahr: +specificYearsAgo(2),
+  veranlagungsCode: 91,
+};
+
+export const bruder: Geschwister = {
+  nachname: 'Tester',
+  vorname: 'Geschwister1',
+  geburtsdatum: `01.01.${specificYearsAgo(19)}`,
+  wohnsitz: 'MUTTER_VATER',
+  ausbildungssituation: 'IN_AUSBILDUNG',
+  id: '',
+};
+
+export const auszahlung: Auszahlung = {
+  vorname: '',
+  adresse: adressen.person,
+  iban: 'CH9300762011623852957',
+  nachname: '',
+  kontoinhaber: 'GESUCHSTELLER',
+};
+
+export const einnahmenKosten: EinnahmenKosten = {
+  nettoerwerbseinkommen: 10000,
+  zulagen: 0,
+  renten: 1200,
+  eoLeistungen: 0,
+  ergaenzungsleistungen: 0,
+  beitraege: 3000,
+  ausbildungskostenTertiaerstufe: 1980,
+  fahrkosten: 798,
+  auswaertigeMittagessenProWoche: 5,
+  vermoegen: 6,
+  steuerjahr: +specificYearsAgo(1),
+  veranlagungsCode: 0,
+  steuernKantonGemeinde: 0,
+  verdienstRealisiert: false,
+};
+
+export const darlehen: Darlehen = {
+  willDarlehen: false,
+};

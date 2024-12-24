@@ -6,22 +6,23 @@ import {
   getE2eUrls,
 } from '@dv/shared/util-fn/e2e-util';
 
+import { initializeTest } from '../../initialize-test';
+import { setupGesuchWithApi } from '../../initialize-test-api';
 import { SachbearbeiterGesuchHeaderPO } from '../../po/sachbearbeiter-gesuch-header.po';
 import {
-  ausbildung,
-  gesuchFormularUpdate,
-} from '../../test-data/tranchen-test';
-import { initializeTestByApi } from '../../utils';
+  ausbildungValues,
+  gesuchFormularUpdateFn,
+} from '../../test-data/tranchen-test-data';
 
-const { test, getGesuchId, getTrancheId } = initializeTestByApi(
+const { test, getGesuchId, getTrancheId } = initializeTest(
   'GESUCHSTELLER',
-  ausbildung,
-  gesuchFormularUpdate,
+  ausbildungValues,
+  setupGesuchWithApi(gesuchFormularUpdateFn),
 );
 
-test.describe('Eine Tranche erstellen', () => {
+test.describe('Tranche erstellen', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  test('Gesuch UATTestcase1 Data', async ({ page, cockpit: _ }) => {
+  test('Tranchen Test Data', async ({ page, cockpit: _ }) => {
     test.slow();
 
     const urls = getE2eUrls();

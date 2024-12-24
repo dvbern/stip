@@ -2,14 +2,16 @@ import {
   AusbildungUpdate,
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
-import { DeepNullable, generateSVN } from '@dv/shared/util-fn/e2e-util';
-
 import {
+  DeepNullable,
+  generateSVN,
   specificMonth,
   specificMonthPlusYears,
   specificYearsAgo,
   thisYear,
-} from '../utils';
+} from '@dv/shared/util-fn/e2e-util';
+
+import { AusbildungValues } from '../po/ausbildung.po';
 
 export const ausbildung: AusbildungUpdate = {
   fallId: 'to-be-set',
@@ -24,7 +26,20 @@ export const ausbildung: AusbildungUpdate = {
   ausbildungsgangId: 'to-be-set',
 };
 
-export const gesuchFormularUpdate = (
+export const ausbildungValues: AusbildungValues = {
+  fallId: '',
+  status: 'AKTIV',
+  editable: true,
+  ausbildungsort: 'Bern',
+  ausbildungsstaetteText: 'Universität Bern',
+  ausbildungsgangText: 'Master',
+  fachrichtung: 'Kunstgeschichte',
+  ausbildungBegin: specificMonth(9),
+  ausbildungEnd: specificMonthPlusYears(8, 3),
+  pensum: 'VOLLZEIT',
+};
+
+export const gesuchFormularUpdateFn = (
   seed: string,
 ): DeepNullable<GesuchFormularUpdate> => ({
   personInAusbildung: {

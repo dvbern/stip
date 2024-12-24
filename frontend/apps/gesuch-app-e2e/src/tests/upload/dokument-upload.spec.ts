@@ -1,14 +1,15 @@
 import { expect } from '@playwright/test';
 
-import { SmallImageFile, selectMatRadio } from '@dv/shared/util-fn/e2e-util';
-
-import { AusbildungValues } from '../../po/ausbildung.po';
-import { PersonPO } from '../../po/person.po';
 import {
-  initializeTest,
+  SmallImageFile,
+  selectMatRadio,
   specificMonth,
   specificMonthPlusYears,
-} from '../../utils';
+} from '@dv/shared/util-fn/e2e-util';
+
+import { initializeTest } from '../../initialize-test';
+import { AusbildungValues } from '../../po/ausbildung.po';
+import { PersonPO } from '../../po/person.po';
 
 const ausbildung: AusbildungValues = {
   fallId: '',

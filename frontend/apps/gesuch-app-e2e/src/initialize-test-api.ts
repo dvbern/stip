@@ -1,32 +1,30 @@
 import { APIRequestContext, expect } from '@playwright/test';
-import { addYears, format } from 'date-fns';
 
 import {
   AusbildungUpdate,
   Ausbildungsstaette,
   FallDashboardItem,
   GesuchFormularUpdate,
-  GesuchUpdate,
 } from '@dv/shared/model/gesuch';
 import {
   DeepNullable,
   E2eUser,
+  SetupFn,
   TestContexts,
   createTest,
   createTestContexts,
   deleteGesuch,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { AusbildungValues } from './po/ausbildung.po';
 import { CockpitPO } from './po/cockpit.po';
 
 export const setGesuchApi = async (
   apiContext: APIRequestContext,
   gesuchId: string,
   trancheId: string,
-  gesuchFormularUpdate: GesuchFormularUpdate,
+  gesuchFormularUpdate: DeepNullable<GesuchFormularUpdate>,
 ) => {
-  const requestBody: GesuchUpdate = {
+  const requestBody = {
     gesuchTrancheToWorkWith: {
       gesuchFormular: gesuchFormularUpdate,
       id: trancheId,
@@ -100,7 +98,7 @@ export const getAusbildungsGangId = async (
 export const initializeTestByApi = (
   authType: E2eUser,
   ausbildung: AusbildungUpdate,
-  gesuchFormUpdate: (seed: string) => DeepNullable<GesuchFormularUpdate>,
+  gesuchFormUpdate: (seed: string) => GesuchFormularUpdate,
 ) => {
   let contexts: TestContexts;
   let gesuchId: string | undefined;
@@ -160,7 +158,7 @@ export const initializeTestByApi = (
         contexts.api,
         gesuchId,
         trancheId,
-        gesuchFormUpdate(seed) as GesuchFormularUpdate,
+        gesuchFormUpdate(seed),
       );
 
       await use(cockpit);
@@ -193,105 +191,10 @@ export const initializeTestByApi = (
   };
 };
 
-/**
- * Initialize test context, reset all gesuche and create a new Gesuch
- *
- * It also registers a beforeAll to initialize the API Contexts and afterAll hook to delete the created gesuch
- */
-export const initializeTest = (
-  authType: E2eUser,
-  ausbildung: AusbildungValues,
-) => {
-  let contexts: TestContexts;
-  let gesuchId: string | undefined;
-  let trancheId: string | undefined;
-  const test = createTest(authType).extend<{ cockpit: CockpitPO }>({
-    cockpit: async ({ page }, use) => {
-      const cockpit = new CockpitPO(page);
-
-      // delete if existing gesuch
-      const dashboardPromise = page.waitForResponse(
-        '**/api/v1/gesuch/benutzer/me/gs-dashboard',
-      );
-      await cockpit.goToDashBoard();
-      const dashboardResponse = await dashboardPromise;
-
-      const dashboardBody: FallDashboardItem[] | undefined =
-        await dashboardResponse.json();
-      gesuchId =
-        dashboardBody?.[0]?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
-      trancheId =
-        dashboardBody?.[0]?.ausbildungDashboardItems?.[0]?.gesuchs?.[0]
-          .currentTrancheId;
-
-      if (gesuchId) {
-        const response = await deleteGesuch(contexts.api, gesuchId);
-        if (response.status() >= 400) {
-          throw new Error(
-            `Failed to delete gesuch ${gesuchId}, see backend logs for more information.`,
-          );
-        }
-        await page.reload();
-      }
-
-      // extract gesuch new gesuch id
-      const requestPromise = page.waitForResponse((response) => {
-        const reposenUrl = response.url();
-        console.log('reposenUrl', reposenUrl);
-
-        return (
-          response.url().includes('/api/v1/gesuch/benutzer/me/gs-dashboard') &&
-          response.status() === 200 &&
-          response.request().method() === 'GET'
-        );
-      });
-
-      await cockpit.createNewStipendium(ausbildung);
-
-      const response = await requestPromise;
-      const body: FallDashboardItem[] | undefined = await response.json();
-      gesuchId = body?.[0].ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
-      trancheId =
-        body?.[0].ausbildungDashboardItems?.[0]?.gesuchs?.[0].currentTrancheId;
-      if (!gesuchId) {
-        throw new Error('Failed to create new gesuch');
-      }
-      cockpit.getGesuchEdit().click();
-
-      await use(cockpit);
-    },
-  });
-
-  test.beforeAll(async ({ playwright, baseURL, browser, storageState }) => {
-    contexts = await createTestContexts({
-      browser,
-      playwright,
-      storageState,
-      baseURL,
-    });
-  });
-
-  test.afterAll(async () => {
-    if (contexts) {
-      if (gesuchId) {
-        await deleteGesuch(contexts.api, gesuchId);
-      }
-      await contexts.dispose();
-    }
-  });
-
-  return {
-    getGesuchId: () => gesuchId,
-    getTrancheId: () => trancheId,
-    getContext: () => contexts,
-    test,
+export const setupGesuchWithApi: (
+  updateFn: (seed: string) => DeepNullable<GesuchFormularUpdate>,
+) => SetupFn =
+  (update) =>
+  async ({ contexts, gesuchId, trancheId, seed }) => {
+    await setGesuchApi(contexts.api, gesuchId, trancheId, update(seed));
   };
-};
-
-export const thisYear = format(new Date(), 'yyyy');
-export const specificMonth = (month: number) =>
-  `${month}.${format(new Date(), 'yyyy')}`;
-export const specificMonthPlusYears = (month: number, years: number) =>
-  `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
-export const specificYearsAgo = (years: number) =>
-  format(addYears(new Date(), -years), 'yyyy');
