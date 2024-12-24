@@ -141,169 +141,79 @@
           >
             <span class="material-symbols-rounded"> info </span>
           </button>
-        <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.person.identischerWohnsitz.label'"
-          [dialogMessageKey]="'shared.form.person.identischerWohnsitz.info'"
-          #identischerWohnsitzDialog="dvSharedUiInfoDialog"
-          class="d-none d-md-block col-md-6 col-xl-4"
-        ></div>
-      </div>
-      <!-- alternative civil residence -->
-      @if (!form.value.identischerZivilrechtlicherWohnsitz) {
-        <div class="row g-4 mt-1">
-          <div class="col-12 col-xl-8">
-            <mat-label class="mb-2">{{ 'shared.form.shared.alternative-civil-residence.title' | translate }}</mat-label>
-            <div class="row g-4 mt-1">
-              <!-- PLZ -->
-              <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3 mt-3">
-                <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
-                <input
-                  type="text"
-                  matInput
-                  [dvMaxLength]="'small'"
-                  formControlName="identischerZivilrechtlicherWohnsitzPLZ"
-                  data-testid="form-person-identischer-zivilrechlicher-wohnsitz-plz"
-                />
-                <mat-hint *dvZuvorHint="view.formChanges?.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
-                <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ 'shared.form.error.required' | translate }}
-                </mat-error>
-              </mat-form-field>
+          <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+          <div
+            dvSharedUiInfoDialog
+            [dialogTitleKey]="'shared.form.person.identischerWohnsitz.label'"
+            [dialogMessageKey]="'shared.form.person.identischerWohnsitz.info'"
+            #identischerWohnsitzDialog="dvSharedUiInfoDialog"
+            class="d-none d-md-block col-md-6 col-xl-4"
+          ></div>
+        </div>
+        <!-- alternative civil residence -->
+        @if (!form.value.identischerZivilrechtlicherWohnsitz) {
+          <div class="row g-4 mt-1">
+            <div class="col-12 col-xl-8">
+              <mat-label class="mb-2">{{
+                'shared.form.shared.alternative-civil-residence.title' | translate
+              }}</mat-label>
+              <div class="row g-4 mt-1">
+                <!-- PLZ -->
+                <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3 mt-3">
+                  <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    [dvMaxLength]="'small'"
+                    formControlName="identischerZivilrechtlicherWohnsitzPLZ"
+                    data-testid="form-person-identischer-zivilrechlicher-wohnsitz-plz"
+                  />
+                  <mat-hint *dvZuvorHint="view.formChanges?.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
+                  <mat-error *dvSharedUiFormMessageError="'required'">
+                    {{ 'shared.form.error.required' | translate }}
+                  </mat-error>
+                </mat-form-field>
 
-              <!-- Ort -->
-              <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-xl-9 mt-3">
-                <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
-                <input
-                  type="text"
-                  matInput
-                  dvMaxLength
-                  formControlName="identischerZivilrechtlicherWohnsitzOrt"
-                  data-testid="form-person-identischer-zivilrechlicher-wohnsitz-ort"
-                />
-                <mat-hint *dvZuvorHint="view.formChanges?.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
-                <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ 'shared.form.error.required' | translate }}
-                </mat-error>
-              </mat-form-field>
+                <!-- Ort -->
+                <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-xl-9 mt-3">
+                  <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    dvMaxLength
+                    formControlName="identischerZivilrechtlicherWohnsitzOrt"
+                    data-testid="form-person-identischer-zivilrechlicher-wohnsitz-ort"
+                  />
+                  <mat-hint *dvZuvorHint="view.formChanges?.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
+                  <mat-error *dvSharedUiFormMessageError="'required'">
+                    {{ 'shared.form.error.required' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
             </div>
           </div>
-        </div>
-      }
-      <!-- Weitere Angaben -->
-      <h3 class="pt-5 mb-4">
-        {{ 'shared.form.person.section.additional-information' | translate }}
-      </h3>
+        }
+        <!-- Weitere Angaben -->
+        <h3 class="pt-5 mb-4">
+          {{ 'shared.form.person.section.additional-information' | translate }}
+        </h3>
 
-      <div class="row g-4">
-        <!-- E-MAIL -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-          <mat-label>{{ 'shared.form.person.email.label' | translate }}</mat-label>
-          <input matInput dvMaxLength type="email" formControlName="email" data-testid="form-person-email" />
-          <mat-hint *dvZuvorHint="view.formChanges?.email"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'pattern'">
-            {{ 'shared.form.error.email' | translate }}
-          </mat-error>
-        </mat-form-field>
-        <button
-          type="button"
-          (click)="emailDialog.toggle()"
-          class="dv-icon-button dv-icon-button-md text-info mt-2"
-          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-        >
-          <span class="material-symbols-rounded"> info </span>
-        </button>
-        <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.person.email.label'"
-          [dialogMessageKey]="'shared.form.person.email.info'"
-          #emailDialog="dvSharedUiInfoDialog"
-          class="d-none d-md-block col-md-6 col-xl-4"
-        ></div>
-
-        <!-- TEL -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-          <mat-label>{{ 'shared.form.shared.phone.label' | translate }}</mat-label>
-          <input
-            type="text"
-            matInput
-            dvMaxLength
-            formControlName="telefonnummer"
-            data-testid="form-person-telefonnummer"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges?.telefonnummer"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'telefonnummer'">
-            {{ 'shared.form.error.telefonnummer' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="row g-4 mt-1">
-        <!-- GEBURTSDATUM -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-          <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
-
-          <input
-            matInput
-            [dvMaxLength]="'small'"
-            placeholder="dd.mm.yyyy"
-            formControlName="geburtsdatum"
-            data-testid="form-person-geburtsdatum"
-            (blur)="onGeburtsdatumBlur()"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
-
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-            {{ 'shared.form.error.dateFormat' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'minDate'">
-            {{ 'shared.form.error.minDatePast' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'maxDate'">
-            {{ 'shared.form.error.maxDatePast' | translate }}
-          </mat-error>
-        </mat-form-field>
-
-        <!-- ZIVILSTAND -->
-        <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>{{ 'shared.form.person.marital-status.label' | translate }}</mat-label>
-            <mat-select
-              formControlName="zivilstand"
-              data-testid="form-person-zivilstand"
-              [placeholder]="'shared.form.select.empty' | translate"
-            >
-              @for (z of zivilstandValues; track $index) {
-                <mat-option [value]="z" [attr.data-testid]="z">
-                  {{ 'shared.form.person.zivilstand.' + z | translate }}
-                </mat-option>
-              }
-            </mat-select>
-            <mat-hint
-              *dvZuvorHint="view.formChanges?.zivilstand | translateChange: 'shared.form.person.zivilstand.$VALUE'"
-            ></mat-hint>
+        <div class="row g-4">
+          <!-- E-MAIL -->
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+            <mat-label>{{ 'shared.form.person.email.label' | translate }}</mat-label>
+            <input matInput dvMaxLength type="email" formControlName="email" data-testid="form-person-email" />
+            <mat-hint *dvZuvorHint="view.formChanges?.email"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'pattern'">
+              {{ 'shared.form.error.email' | translate }}
+            </mat-error>
           </mat-form-field>
-
-          @if (zivilstandDocumentOptionsSig(); as options) {
-            <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-          }
           <button
             type="button"
-            (click)="zivilstandDialog.toggle()"
+            (click)="emailDialog.toggle()"
             class="dv-icon-button dv-icon-button-md text-info mt-2"
             [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
           >
@@ -312,369 +222,469 @@
           <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
           <div
             dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.zivilstand.infoTitle'"
-            [dialogMessageKey]="'shared.form.person.zivilstand.info'"
-            #zivilstandDialog="dvSharedUiInfoDialog"
+            [dialogTitleKey]="'shared.form.person.email.label'"
+            [dialogMessageKey]="'shared.form.person.email.info'"
+            #emailDialog="dvSharedUiInfoDialog"
             class="d-none d-md-block col-md-6 col-xl-4"
           ></div>
-        </div>
 
-        <!-- Info Konkubinat -->
-        @if (form.get('zivilstand')?.value === Zivilstand.LEDIG) {
-          <div class="col-12 col-md-6 col-xl-4">
-            <dv-shared-ui-info-container>
-              <div class="d-flex gap-3">
-                <span class="material-symbols-rounded text-info"> info </span>
-                <span>{{ 'shared.form.person.marital-status.ledig.info' | translate }}</span>
-              </div>
-            </dv-shared-ui-info-container>
-          </div>
-        }
-      </div>
-
-      <div class="row g-4 mt-1">
-        <!-- NATIONALITAET -->
-        <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-          <mat-form-field class="flex-grow-1" dvSharedUiFormField>
-            <mat-label>{{ 'shared.form.person.nationality.label' | translate }}</mat-label>
-            <mat-select
-              formControlName="nationalitaet"
-              data-testid="form-person-nationalitaet"
-              [placeholder]="'shared.form.select.empty' | translate"
-            >
-              @for (l of translatedLaender$ | async; track $index) {
-                <mat-option [value]="l.code" [attr.data-testid]="l.code">
-                  {{ l.text }}
-                </mat-option>
-              }
-            </mat-select>
-            <mat-hint
-              *dvZuvorHint="view.formChanges?.nationalitaet | translateChange: 'shared.country.$VALUE'"
-            ></mat-hint>
+          <!-- TEL -->
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+            <mat-label>{{ 'shared.form.shared.phone.label' | translate }}</mat-label>
+            <input
+              type="text"
+              matInput
+              dvMaxLength
+              formControlName="telefonnummer"
+              data-testid="form-person-telefonnummer"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges?.telefonnummer"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'telefonnummer'">
+              {{ 'shared.form.error.telefonnummer' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
 
-        <!-- NIEDERLASSUNGSSTATUS ODER HEIMATORT -->
-        @if (!hiddenFieldsSetSig().has(form.controls.niederlassungsstatus)) {
-          <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.person.niederlassungsstatus.label' | translate }}</mat-label>
+        <div class="row g-4 mt-1">
+          <!-- GEBURTSDATUM -->
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+            <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
 
+            <input
+              matInput
+              [dvMaxLength]="'small'"
+              placeholder="dd.mm.yyyy"
+              formControlName="geburtsdatum"
+              data-testid="form-person-geburtsdatum"
+              (blur)="onGeburtsdatumBlur()"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
+
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+              {{ 'shared.form.error.dateFormat' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'minDate'">
+              {{ 'shared.form.error.minDatePast' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'maxDate'">
+              {{ 'shared.form.error.maxDatePast' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- ZIVILSTAND -->
+          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ 'shared.form.person.marital-status.label' | translate }}</mat-label>
               <mat-select
-                formControlName="niederlassungsstatus"
-                data-testid="form-person-niederlassungsstatus"
+                formControlName="zivilstand"
+                data-testid="form-person-zivilstand"
                 [placeholder]="'shared.form.select.empty' | translate"
               >
-                @for (n of niederlassungsStatusValues; track $index) {
-                  <mat-option [value]="n" [attr.data-testid]="n">
-                    {{ 'shared.form.person.niederlassungsstatus.' + n | translate }}
+                @for (z of zivilstandValues; track $index) {
+                  <mat-option [value]="z" [attr.data-testid]="z">
+                    {{ 'shared.form.person.zivilstand.' + z | translate }}
                   </mat-option>
                 }
               </mat-select>
               <mat-hint
-                *dvZuvorHint="
-                  view.formChanges?.niederlassungsstatus
-                    | translateChange: 'shared.form.person.niederlassungsstatus.$VALUE'
-                "
+                *dvZuvorHint="view.formChanges?.zivilstand | translateChange: 'shared.form.person.zivilstand.$VALUE'"
               ></mat-hint>
-
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
             </mat-form-field>
 
+            @if (zivilstandDocumentOptionsSig(); as options) {
+              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+            }
             <button
               type="button"
+              (click)="zivilstandDialog.toggle()"
               class="dv-icon-button dv-icon-button-md text-info mt-2"
-              (click)="niederLassungInfoDialog.toggle()"
               [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
             >
               <span class="material-symbols-rounded"> info </span>
             </button>
-
-            <!-- Auslaenderausweis -->
-            @if (auslaenderausweisDocumentOptionsSig(); as options) {
-              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-            }
+            <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+            <div
+              dvSharedUiInfoDialog
+              [dialogTitleKey]="'shared.form.person.zivilstand.infoTitle'"
+              [dialogMessageKey]="'shared.form.person.zivilstand.info'"
+              #zivilstandDialog="dvSharedUiInfoDialog"
+              class="d-none d-md-block col-md-6 col-xl-4"
+            ></div>
           </div>
 
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
-            [dialogMessageKey]="'shared.form.person.niederlassungsstatus.info'"
-            #niederLassungInfoDialog="dvSharedUiInfoDialog"
-            class="d-none d-md-block col-md-6 col-xl-4"
-          ></div>
-        }
-        @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {
-          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.person.origin.label' | translate }}</mat-label>
-              <input type="text" matInput dvMaxLength formControlName="heimatort" data-testid="form-person-heimatort" />
-              <mat-hint *dvZuvorHint="view.formChanges?.heimatort"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-form-field>
-
-            @if (heimatortDocumentOptionsSig(); as options) {
-              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-            }
-          </div>
-          <button
-            type="button"
-            (click)="heimatortDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
-            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-          >
-            <span class="material-symbols-rounded"> info </span>
-          </button>
-          <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.heimatort.infoTitle'"
-            [dialogMessageKey]="'shared.form.person.file.heimatort.info'"
-            #heimatortDialog="dvSharedUiInfoDialog"
-            class="d-none d-md-block col-md-6 col-xl-4"
-          ></div>
-        }
-      </div>
-
-      <!-- ZUSTAENDIGER_KANTON -->
-      @if (!hiddenFieldsSetSig().has(form.controls.zustaendigerKanton)) {
-        <div class="row g-4 mt-1">
-          <div class="d-none-lg col-md-6 col-xl-4"></div>
-          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.person.zustaendigerKanton.label' | translate }}</mat-label>
-              <mat-select
-                formControlName="zustaendigerKanton"
-                data-testid="form-person-zustaendigerKanton"
-                [placeholder]="'shared.form.select.empty' | translate"
-              >
-                @for (kanton of zugstaendigerKantonValues; track $index) {
-                  <mat-option [value]="kanton" [attr.data-testid]="kanton">
-                    {{ 'shared.form.person.zustaendigerKanton.' + kanton | translate }}
-                  </mat-option>
-                }
-              </mat-select>
-              <mat-hint
-                *dvZuvorHint="
-                  view.formChanges?.zustaendigerKanton | translateChange: 'shared.form.person.zustaendigerKanton.$VALUE'
-                "
-              ></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-      }
-
-      <!-- EINREISEDATUM -->
-      @if (!hiddenFieldsSetSig().has(form.controls.einreisedatum)) {
-        <div class="row g-4 mt-1">
-          <div class="d-none-lg col-md-6 col-xl-4"></div>
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-            <mat-label>{{ 'shared.form.person.einreisedatum.label' | translate }}</mat-label>
-            <input
-              type="text"
-              matInput
-              [dvMaxLength]="'small'"
-              placeholder="dd.mm.yyyy"
-              formControlName="einreisedatum"
-              data-testid="form-person-einreisedatum"
-              (blur)="onEinreisedatumBlur()"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.einreisedatum | date: 'dd.MM.yyyy'"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-
-          @if (showEinreiseDatumWarningSig()) {
+          <!-- Info Konkubinat -->
+          @if (form.get('zivilstand')?.value === Zivilstand.LEDIG) {
             <div class="col-12 col-md-6 col-xl-4">
-              <dv-shared-ui-info-container [type]="'warning'">
+              <dv-shared-ui-info-container>
                 <div class="d-flex gap-3">
-                  <span class="material-symbols-rounded text-warning">warning</span>
-                  <span>{{ 'shared.form.person.einreisedatum.info' | translate }}</span>
+                  <span class="material-symbols-rounded text-info"> info </span>
+                  <span>{{ 'shared.form.person.marital-status.ledig.info' | translate }}</span>
                 </div>
               </dv-shared-ui-info-container>
             </div>
           }
         </div>
-      }
 
-      <div class="row g-4 mt-1">
-        <!-- Wohnsitz -->
-        <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>{{ 'shared.form.shared.wohnsitz.label' | translate }}</mat-label>
-            <mat-select
-              formControlName="wohnsitz"
-              data-testid="form-person-wohnsitz"
-              [placeholder]="'shared.form.select.empty' | translate"
-            >
-              @for (z of wohnsitzHelper.wohnsitzValuesSig(); track $index) {
-                <mat-option [value]="z" [attr.data-testid]="z">
-                  {{ 'shared.form.shared.wohnsitz.' + z | translate }}
-                </mat-option>
-              }
-            </mat-select>
-            <mat-hint
-              *dvZuvorHint="view.formChanges?.wohnsitz | translateChange: 'shared.form.shared.wohnsitz.$VALUE'"
-            ></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-          @if (wohnsitzBeiDocumentOptionsSig(); as options) {
-            <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-          }
-        </div>
-
-        <!-- VORMUNDSCHAFT -->
-        @if (form.controls.nationalitaet.value === nationalitaetCH) {
-          <div class="col-12 col-md-6 col-xl-4">
-            <div class="d-flex gap-2">
-              <mat-checkbox formControlName="vormundschaft" data-testid="form-person-vormundschaft">{{
-                'shared.form.person.guardianship.label' | translate
-              }}</mat-checkbox>
-              @if (vormundschaftDocumentOptionsSig(); as options) {
-                <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-              }
-            </div>
-            <dv-shared-ui-form-zuvor-hint
-              [changes]="view.formChanges?.vormundschaft | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
-            ></dv-shared-ui-form-zuvor-hint>
-          </div>
-        }
-      </div>
-
-      <!-- WOHNSITZ AUFTEILUNG -->
-      @if (wohnsitzHelper.showWohnsitzSplitterSig()) {
-        <div class="row g-4 my-2">
-          <div class="col-12 col-md-6 col-xl-4">
-            <dv-shared-ui-wohnsitz-splitter
-              [updateValidity]="updateValidity$ | async"
-              [controls]="form.controls"
-              [changes]="{
-                wohnsitzAnteilVater: view.formChanges?.wohnsitzAnteilVater,
-                wohnsitzAnteilMutter: view.formChanges?.wohnsitzAnteilMutter,
-              }"
-            ></dv-shared-ui-wohnsitz-splitter>
-          </div>
-        </div>
-      }
-
-      <div class="row g-4 mt-1">
-        <!-- Sozialhilfebeitraege -->
-
-        <mat-radio-group
-          class="col-12"
-          formControlName="sozialhilfebeitraege"
-          data-testid="form-person-sozialhilfeBeitraege"
-          dvSharedUiFormField
-        >
-          <label>{{ 'shared.form.person.social-security.label' | translate }}</label>
-          <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
-            <div class="d-flex flex-column">
-              <mat-radio-button data-testid="yes" [value]="true">{{
-                'shared.form.radio.yes' | translate
-              }}</mat-radio-button>
-              <mat-radio-button data-testid="no" [value]="false">{{
-                'shared.form.radio.no' | translate
-              }}</mat-radio-button>
-              <dv-shared-ui-form-zuvor-hint
-                [changes]="view.formChanges?.sozialhilfebeitraege | translateChange: 'shared.form.zuvor.radio.$VALUE'"
-              ></dv-shared-ui-form-zuvor-hint>
-            </div>
-
-            @if (sozialhilfebeitraegeDocumentOptionsSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1 ms-auto align-self-center"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
-            }
-          </div>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-radio-group>
-        <button
-          type="button"
-          (click)="emailDialog.toggle()"
-          class="dv-icon-button dv-icon-button-md text-info mt-2"
-          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-        >
-          <span class="material-symbols-rounded"> info </span>
-        </button>
-        <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.person.email.label'"
-          [dialogMessageKey]="'shared.form.person.email.info'"
-          #emailDialog="dvSharedUiInfoDialog"
-          class="d-none d-md-block col-md-6 col-xl-4"
-        ></div>
-      </div>
-
-      <div class="row g-4 mt-1">
-        <div class="col-12 col-md-6 col-xl-4">
-          <!-- KorrespondenzSprache -->
-          <label>{{ 'shared.form.person.korrespondenzSprache.label' | translate }}</label>
-          <mat-radio-group
-            class="d-flex flex-column"
-            formControlName="korrespondenzSprache"
-            data-testid="form-person-korrespondenzSprache"
-            dvSharedUiFormField
-          >
-            @for (s of spracheValues; track $index) {
-              <mat-radio-button [attr.data-testid]="s" [value]="s">{{
-                'shared.form.person.korrespondenzSprache.' + s | translate
-              }}</mat-radio-button>
-            }
-            <div class="group-errors">
+        <div class="row g-4 mt-1">
+          <!-- NATIONALITAET -->
+          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+            <mat-form-field class="flex-grow-1" dvSharedUiFormField>
+              <mat-label>{{ 'shared.form.person.nationality.label' | translate }}</mat-label>
+              <mat-select
+                formControlName="nationalitaet"
+                data-testid="form-person-nationalitaet"
+                [placeholder]="'shared.form.select.empty' | translate"
+              >
+                @for (l of translatedLaender$ | async; track $index) {
+                  <mat-option [value]="l.code" [attr.data-testid]="l.code">
+                    {{ l.text }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-hint
+                *dvZuvorHint="view.formChanges?.nationalitaet | translateChange: 'shared.country.$VALUE'"
+              ></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
               </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- NIEDERLASSUNGSSTATUS ODER HEIMATORT -->
+          @if (!hiddenFieldsSetSig().has(form.controls.niederlassungsstatus)) {
+            <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
+              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+                <mat-label>{{ 'shared.form.person.niederlassungsstatus.label' | translate }}</mat-label>
+
+                <mat-select
+                  formControlName="niederlassungsstatus"
+                  data-testid="form-person-niederlassungsstatus"
+                  [placeholder]="'shared.form.select.empty' | translate"
+                >
+                  @for (n of niederlassungsStatusValues; track $index) {
+                    <mat-option [value]="n" [attr.data-testid]="n">
+                      {{ 'shared.form.person.niederlassungsstatus.' + n | translate }}
+                    </mat-option>
+                  }
+                </mat-select>
+                <mat-hint
+                  *dvZuvorHint="
+                    view.formChanges?.niederlassungsstatus
+                      | translateChange: 'shared.form.person.niederlassungsstatus.$VALUE'
+                  "
+                ></mat-hint>
+
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ 'shared.form.error.required' | translate }}
+                </mat-error>
+              </mat-form-field>
+
+              <button
+                type="button"
+                class="dv-icon-button dv-icon-button-md text-info mt-2"
+                (click)="niederLassungInfoDialog.toggle()"
+                [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+              >
+                <span class="material-symbols-rounded"> info </span>
+              </button>
+
+              <!-- Auslaenderausweis -->
+              @if (auslaenderausweisDocumentOptionsSig(); as options) {
+                <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+              }
             </div>
-          </mat-radio-group>
-          <dv-shared-ui-form-zuvor-hint
-            [changes]="
-              view.formChanges?.korrespondenzSprache | translateChange: 'shared.form.person.korrespondenzSprache.$VALUE'
-            "
-          ></dv-shared-ui-form-zuvor-hint>
-        </div>
-      </div>
 
-      @if (appSettings.hasFormFeature('digitaleKommunikation')) {
-        <div class="row g-4 mt-1">
-          <!-- digitale Kommunikation -->
-          <mat-checkbox
-            disabled="true"
-            [checked]="view.benutzerEinstellungen.digitaleKommunikation"
-            data-testid="form-person-digitaleKommunikation"
-            >{{ 'shared.form.person.digital-communication.label' | translate }}</mat-checkbox
-          >
-        </div>
-      }
+            <div
+              dvSharedUiInfoDialog
+              [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
+              [dialogMessageKey]="'shared.form.person.niederlassungsstatus.info'"
+              #niederLassungInfoDialog="dvSharedUiInfoDialog"
+              class="d-none d-md-block col-md-6 col-xl-4"
+            ></div>
+          }
+          @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {
+            <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+                <mat-label>{{ 'shared.form.person.origin.label' | translate }}</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  dvMaxLength
+                  formControlName="heimatort"
+                  data-testid="form-person-heimatort"
+                />
+                <mat-hint *dvZuvorHint="view.formChanges?.heimatort"></mat-hint>
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ 'shared.form.error.required' | translate }}
+                </mat-error>
+              </mat-form-field>
 
-      <!-- Buttons -->
-      <dv-shared-ui-step-form-buttons>
-        @if (!view.readonly) {
-          <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
-            {{ 'shared.form.save-and-continue' | translate }}
-          </button>
-        } @else {
-          <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-next">
-            {{ 'shared.form.gonext' | translate }}
-          </button>
+              @if (heimatortDocumentOptionsSig(); as options) {
+                <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+              }
+            </div>
+            <button
+              type="button"
+              (click)="heimatortDialog.toggle()"
+              class="dv-icon-button dv-icon-button-md text-info mt-2"
+              [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+            >
+              <span class="material-symbols-rounded"> info </span>
+            </button>
+            <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+            <div
+              dvSharedUiInfoDialog
+              [dialogTitleKey]="'shared.form.person.heimatort.infoTitle'"
+              [dialogMessageKey]="'shared.form.person.file.heimatort.info'"
+              #heimatortDialog="dvSharedUiInfoDialog"
+              class="d-none d-md-block col-md-6 col-xl-4"
+            ></div>
+          }
+        </div>
+
+        <!-- ZUSTAENDIGER_KANTON -->
+        @if (!hiddenFieldsSetSig().has(form.controls.zustaendigerKanton)) {
+          <div class="row g-4 mt-1">
+            <div class="d-none-lg col-md-6 col-xl-4"></div>
+            <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+                <mat-label>{{ 'shared.form.person.zustaendigerKanton.label' | translate }}</mat-label>
+                <mat-select
+                  formControlName="zustaendigerKanton"
+                  data-testid="form-person-zustaendigerKanton"
+                  [placeholder]="'shared.form.select.empty' | translate"
+                >
+                  @for (kanton of zugstaendigerKantonValues; track $index) {
+                    <mat-option [value]="kanton" [attr.data-testid]="kanton">
+                      {{ 'shared.form.person.zustaendigerKanton.' + kanton | translate }}
+                    </mat-option>
+                  }
+                </mat-select>
+                <mat-hint
+                  *dvZuvorHint="
+                    view.formChanges?.zustaendigerKanton
+                      | translateChange: 'shared.form.person.zustaendigerKanton.$VALUE'
+                  "
+                ></mat-hint>
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ 'shared.form.error.required' | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
         }
-      </dv-shared-ui-step-form-buttons>
+
+        <!-- EINREISEDATUM -->
+        @if (!hiddenFieldsSetSig().has(form.controls.einreisedatum)) {
+          <div class="row g-4 mt-1">
+            <div class="d-none-lg col-md-6 col-xl-4"></div>
+            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+              <mat-label>{{ 'shared.form.person.einreisedatum.label' | translate }}</mat-label>
+              <input
+                type="text"
+                matInput
+                [dvMaxLength]="'small'"
+                placeholder="dd.mm.yyyy"
+                formControlName="einreisedatum"
+                data-testid="form-person-einreisedatum"
+                (blur)="onEinreisedatumBlur()"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.einreisedatum | date: 'dd.MM.yyyy'"></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+
+            @if (showEinreiseDatumWarningSig()) {
+              <div class="col-12 col-md-6 col-xl-4">
+                <dv-shared-ui-info-container [type]="'warning'">
+                  <div class="d-flex gap-3">
+                    <span class="material-symbols-rounded text-warning">warning</span>
+                    <span>{{ 'shared.form.person.einreisedatum.info' | translate }}</span>
+                  </div>
+                </dv-shared-ui-info-container>
+              </div>
+            }
+          </div>
+        }
+
+        <div class="row g-4 mt-1">
+          <!-- Wohnsitz -->
+          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ 'shared.form.shared.wohnsitz.label' | translate }}</mat-label>
+              <mat-select
+                formControlName="wohnsitz"
+                data-testid="form-person-wohnsitz"
+                [placeholder]="'shared.form.select.empty' | translate"
+              >
+                @for (z of wohnsitzHelper.wohnsitzValuesSig(); track $index) {
+                  <mat-option [value]="z" [attr.data-testid]="z">
+                    {{ 'shared.form.shared.wohnsitz.' + z | translate }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-hint
+                *dvZuvorHint="view.formChanges?.wohnsitz | translateChange: 'shared.form.shared.wohnsitz.$VALUE'"
+              ></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+            @if (wohnsitzBeiDocumentOptionsSig(); as options) {
+              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+            }
+          </div>
+
+          <!-- VORMUNDSCHAFT -->
+          @if (form.controls.nationalitaet.value === nationalitaetCH) {
+            <div class="col-12 col-md-6 col-xl-4">
+              <div class="d-flex gap-2">
+                <mat-checkbox formControlName="vormundschaft" data-testid="form-person-vormundschaft">{{
+                  'shared.form.person.guardianship.label' | translate
+                }}</mat-checkbox>
+                @if (vormundschaftDocumentOptionsSig(); as options) {
+                  <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+                }
+              </div>
+              <dv-shared-ui-form-zuvor-hint
+                [changes]="view.formChanges?.vormundschaft | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+              ></dv-shared-ui-form-zuvor-hint>
+            </div>
+          }
+        </div>
+
+        <!-- WOHNSITZ AUFTEILUNG -->
+        @if (wohnsitzHelper.showWohnsitzSplitterSig()) {
+          <div class="row g-4 my-2">
+            <div class="col-12 col-md-6 col-xl-4">
+              <dv-shared-ui-wohnsitz-splitter
+                [updateValidity]="updateValidity$ | async"
+                [controls]="form.controls"
+                [changes]="{
+                  wohnsitzAnteilVater: view.formChanges?.wohnsitzAnteilVater,
+                  wohnsitzAnteilMutter: view.formChanges?.wohnsitzAnteilMutter,
+                }"
+              ></dv-shared-ui-wohnsitz-splitter>
+            </div>
+          </div>
+        }
+
+        <div class="row g-4 mt-1">
+          <!-- Sozialhilfebeitraege -->
+
+          <mat-radio-group
+            class="col-12"
+            formControlName="sozialhilfebeitraege"
+            data-testid="form-person-sozialhilfeBeitraege"
+            dvSharedUiFormField
+          >
+            <label>{{ 'shared.form.person.social-security.label' | translate }}</label>
+            <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
+              <div class="d-flex flex-column">
+                <mat-radio-button data-testid="yes" [value]="true">{{
+                  'shared.form.radio.yes' | translate
+                }}</mat-radio-button>
+                <mat-radio-button data-testid="no" [value]="false">{{
+                  'shared.form.radio.no' | translate
+                }}</mat-radio-button>
+                <dv-shared-ui-form-zuvor-hint
+                  [changes]="view.formChanges?.sozialhilfebeitraege | translateChange: 'shared.form.zuvor.radio.$VALUE'"
+                ></dv-shared-ui-form-zuvor-hint>
+              </div>
+
+              @if (sozialhilfebeitraegeDocumentOptionsSig(); as options) {
+                <dv-shared-pattern-document-upload
+                  class="flex-shrink-1 ms-auto align-self-center"
+                  [optionsSig]="options"
+                ></dv-shared-pattern-document-upload>
+              }
+            </div>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-radio-group>
+          <button
+            type="button"
+            (click)="emailDialog.toggle()"
+            class="dv-icon-button dv-icon-button-md text-info mt-2"
+            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+          >
+            <span class="material-symbols-rounded"> info </span>
+          </button>
+          <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+          <div
+            dvSharedUiInfoDialog
+            [dialogTitleKey]="'shared.form.person.email.label'"
+            [dialogMessageKey]="'shared.form.person.email.info'"
+            #emailDialog="dvSharedUiInfoDialog"
+            class="d-none d-md-block col-md-6 col-xl-4"
+          ></div>
+        </div>
+
+        <div class="row g-4 mt-1">
+          <div class="col-12 col-md-6 col-xl-4">
+            <!-- KorrespondenzSprache -->
+            <label>{{ 'shared.form.person.korrespondenzSprache.label' | translate }}</label>
+            <mat-radio-group
+              class="d-flex flex-column"
+              formControlName="korrespondenzSprache"
+              data-testid="form-person-korrespondenzSprache"
+              dvSharedUiFormField
+            >
+              @for (s of spracheValues; track $index) {
+                <mat-radio-button [attr.data-testid]="s" [value]="s">{{
+                  'shared.form.person.korrespondenzSprache.' + s | translate
+                }}</mat-radio-button>
+              }
+              <div class="group-errors">
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ 'shared.form.error.required' | translate }}
+                </mat-error>
+              </div>
+            </mat-radio-group>
+            <dv-shared-ui-form-zuvor-hint
+              [changes]="
+                view.formChanges?.korrespondenzSprache
+                  | translateChange: 'shared.form.person.korrespondenzSprache.$VALUE'
+              "
+            ></dv-shared-ui-form-zuvor-hint>
+          </div>
+        </div>
+
+        @if (appSettings.hasFormFeature('digitaleKommunikation')) {
+          <div class="row g-4 mt-1">
+            <!-- digitale Kommunikation -->
+            <mat-checkbox
+              disabled="true"
+              [checked]="view.benutzerEinstellungen.digitaleKommunikation"
+              data-testid="form-person-digitaleKommunikation"
+              >{{ 'shared.form.person.digital-communication.label' | translate }}</mat-checkbox
+            >
+          </div>
+        }
+
+        <!-- Buttons -->
+        <dv-shared-ui-step-form-buttons>
+          @if (!view.readonly) {
+            <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+              {{ 'shared.form.save-and-continue' | translate }}
+            </button>
+          } @else {
+            <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-next">
+              {{ 'shared.form.gonext' | translate }}
+            </button>
+          }
+        </dv-shared-ui-step-form-buttons>
     </form>
   }
 </div>
