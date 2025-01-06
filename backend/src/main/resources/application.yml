@@ -161,6 +161,7 @@ quarkus:
   quarkus:
     log:
       sentry:
+        ~: 'false'
         debug: 'true'
     http:
       enable-compression: true
@@ -190,6 +191,9 @@ quarkus:
 
 '%test':
   quarkus:
+    log:
+      sentry:
+        ~: 'false'
     hibernate-orm:
       sql-load-script: 'db/test/init_test.sql'
       database:
