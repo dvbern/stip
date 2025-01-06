@@ -72,6 +72,24 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     @AllowAll
+    public Uni<Response> createCustomDokumentTyp(String type, String description, UUID id) {
+        return null;
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @AllowAll
+    @Override
+    public Uni<Response> createCustomGesuchDokument(
+        UUID customDokumentTypId,
+        UUID gesuchTrancheId,
+        FileUpload fileUpload
+    ) {
+        return null;
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    @AllowAll
     @Blocking
     public Uni<Response> createDokument(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
         return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
@@ -94,6 +112,25 @@ public class DokumentResourceImpl implements DokumentResource {
     @AllowAll
     public List<UnterschriftenblattDokumentDto> getUnterschriftenblaetterForGesuch(UUID gesuchId) {
         return unterschriftenblattService.getForGesuchAndType(gesuchId);
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @AllowAll
+    @Override
+    public void deleteCustomDokument(
+        UUID customDokumentTypId,
+        UUID dokumentId,
+        DokumentTyp dokumentTyp,
+        UUID gesuchTrancheId
+    ) {
+
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    @AllowAll
+    public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
+
     }
 
     @RolesAllowed(GESUCH_DELETE)
@@ -127,6 +164,20 @@ public class DokumentResourceImpl implements DokumentResource {
     @AllowAll
     public void gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @AllowAll
+    @Override
+    public String getCustomDokumentDownloadToken(UUID gesuchTrancheId, UUID customDokumentTypId, UUID dokumentId) {
+        return "";
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @AllowAll
+    @Override
+    public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId, UUID gesuchTrancheId) {
+        return null;
     }
 
     @Override

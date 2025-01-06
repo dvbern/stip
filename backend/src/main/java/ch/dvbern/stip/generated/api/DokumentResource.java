@@ -25,6 +25,18 @@ import jakarta.validation.Valid;
 public interface DokumentResource {
 
     @POST
+    @Path("/gesuchDokument/customGesuchDokument")
+    @Consumes({ "multipart/form-data" })
+    @Produces({ "text/plain" })
+    io.smallrye.mutiny.Uni<Response> createCustomDokumentTyp(@FormParam(value = "type")  String type,@FormParam(value = "description")  String description,@FormParam(value = "id")  UUID id);
+
+    @POST
+    @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}")
+    @Consumes({ "multipart/form-data" })
+    @Produces({ "text/plain" })
+    io.smallrye.mutiny.Uni<Response> createCustomGesuchDokument(@PathParam("customDokumentTypId") UUID customDokumentTypId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+
+    @POST
     @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
@@ -35,6 +47,16 @@ public interface DokumentResource {
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> createUnterschriftenblatt(@PathParam("unterschriftenblattTyp") ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp unterschriftenblattTyp,@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+
+    @DELETE
+    @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}/{dokumentId}")
+    @Produces({ "text/plain" })
+    void deleteCustomDokument(@PathParam("customDokumentTypId") UUID customDokumentTypId,@PathParam("dokumentId") UUID dokumentId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @DELETE
+    @Path("/gesuchDokument/customGesuchDokument/{customDokumentTypId}")
+    @Produces({ "text/plain" })
+    void deleteCustomDokumentTyp(@PathParam("customDokumentTypId") UUID customDokumentTypId);
 
     @DELETE
     @Path("/dokument/{dokumentId}")
@@ -56,6 +78,16 @@ public interface DokumentResource {
     @Path("/gesuchDokument/{gesuchDokumentId}/akzeptieren")
     @Produces({ "text/plain" })
     void gesuchDokumentAkzeptieren(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
+
+    @GET
+    @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}/{dokumentId}")
+    @Produces({ "text/plain" })
+    String getCustomDokumentDownloadToken(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@PathParam("customDokumentTypId") UUID customDokumentTypId,@PathParam("dokumentId") UUID dokumentId);
+
+    @GET
+    @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}")
+    @Produces({ "application/json", "text/plain" })
+    NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(@PathParam("customDokumentTypId") UUID customDokumentTypId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/dokument/{dokumentArt}/download")
