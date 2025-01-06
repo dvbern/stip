@@ -541,6 +541,51 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateAusbildung
       summary: Returniert die Ausbildung
+  '/gesuchDokument/customGesuchDokument':
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomDokumentTyp'
+        required: true
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createCustomDokumentTyp
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/gesuchDokument/customGesuchDokument/{customDokumentTypId}':
+    parameters:
+      - name: customDokumentTypId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '204':
+          description: |
+            Custom Dokument Typ deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteCustomDokumentTyp
+      summary: delete a customDokumentTyp
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}':
     get:
       tags:
@@ -603,6 +648,69 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createDokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: customDokumentTypId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableGesuchDokument'
+          description: Returns an Array of Dokumente for a given GesuchTrancheId and a CustomDokumentTyp
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getCustomGesuchDokumenteForTyp
+      summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren.
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+        required: true
+      tags:
+        - Dokument
+      parameters:
+        - name: customDokumentTypId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createCustomGesuchDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare':
     get:
@@ -1693,6 +1801,63 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
+  '/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}/{dokumentId}':
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: File returned
+      operationId: getCustomDokumentDownloadToken
+      summary: get Dokument Download Token
+    delete:
+      tags:
+        - Dokument
+      parameters:
+        - name: dokumentTyp
+          schema:
+            $ref: '#/components/schemas/DokumentTyp'
+          in: path
+          required: true
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: |
+            Dokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteCustomDokument
+      summary: deletes a Dokument
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+      - name: customDokumentTypId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
   '/gesuch/{gesuchTrancheId}/einreichen':
     patch:
       tags:
@@ -2590,6 +2755,18 @@ components:
           type: string
         redirectUri:
           type: string
+    CustomDokumentTyp:
+      type: object
+      required:
+        - type
+        - description
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        type:
+          type: string
+        description:
+          type: string
     Anrede:
       enum:
         - HERR
@@ -2770,7 +2947,6 @@ components:
     GesuchDokument:
       required:
         - id
-        - dokumentTyp
         - dokumente
         - status
       type: object
@@ -2779,6 +2955,8 @@ components:
           $ref: '#/components/schemas/UUID'
         dokumentTyp:
           $ref: '#/components/schemas/DokumentTyp'
+        customDokumentTyp:
+          $ref: '#/components/schemas/CustomDokumentTyp'
         dokumente:
           type: array
           items:
@@ -5041,7 +5219,7 @@ components:
           $ref: '#/components/schemas/LocalDate'
         notizTyp:
           $ref: '#/components/schemas/GesuchNotizTyp'
-        gesuchNummer: 
+        gesuchNummer:
           type: string
         antwort:
           type: string
