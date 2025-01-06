@@ -131,9 +131,9 @@ public interface GesuchResource {
     List<FallDashboardItemDto> getGsDashboard();
 
     @GET
-    @Path("/changes/{trancheId}")
+    @Path("/changes/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getInitialTrancheChangesByTrancheId(@PathParam("trancheId") UUID trancheId);
+    GesuchWithChangesDto getInitialTrancheChangesByGesuchId(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{aenderungId}/aenderung/sb/changes")

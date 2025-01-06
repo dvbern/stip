@@ -82,6 +82,7 @@ import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
+import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -646,18 +647,20 @@ public class GesuchService {
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
-    public GesuchWithChangesDto getChangesByTrancheId(UUID trancheId) {
-        var tranche = gesuchTrancheRepository.requireAenderungById(trancheId);
-        final var gesuch = tranche.getGesuch();
+    public GesuchWithChangesDto getChangesByGesuchId(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
 
         final var currentTrancheFromGesuchInStatusEingereicht =
-            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId());
+            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId);
 
         final var currentTrancheFromGesuchInStatusVerfuegt =
-            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuch.getId());
+            gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
+        if (currentTrancheFromGesuchInStatusVerfuegt.isEmpty()) {
+            throw new ForbiddenException();
+        }
 
         return gesuchMapperUtil.toWithChangesDto(
-            tranche.getGesuch(),
+            gesuch,
             // tranche to work with
             currentTrancheFromGesuchInStatusVerfuegt.orElse(null),
             // changes

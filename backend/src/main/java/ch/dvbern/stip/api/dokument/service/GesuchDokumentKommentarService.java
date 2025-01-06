@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -34,6 +35,32 @@ import lombok.RequiredArgsConstructor;
 public class GesuchDokumentKommentarService {
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentKommentarMapper gesuchDokumentKommentarMapper;
+
+    @Transactional
+    public void deleteForGesuchTrancheId(final UUID gesuchTrancheId) {
+        gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTrancheId);
+    }
+
+    @Transactional
+    public void copyKommentareFromTrancheToTranche(final GesuchTranche fromTranche, final GesuchTranche toTranche) {
+        final var dokumentKommentars = getAllKommentareForGesuchTrancheId(fromTranche.getId());
+        for (final var kommentar : dokumentKommentars) {
+            createKommentarFromTrancheAndExisting(toTranche, kommentar);
+        }
+    }
+
+    @Transactional
+    public List<GesuchDokumentKommentar> getAllKommentareForGesuchTrancheId(
+        final UUID gesuchTrancheId
+    ) {
+        final var gesuchDokumentKommentars =
+            gesuchDokumentKommentarRepository.getByGesuchTrancheId(gesuchTrancheId);
+        if (gesuchDokumentKommentars != null) {
+            return gesuchDokumentKommentars.stream()
+                .toList();
+        }
+        return List.of();
+    }
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getAllKommentareForGesuchTrancheIdAndDokumentTyp(
@@ -73,5 +100,18 @@ public class GesuchDokumentKommentarService {
             .setDokumentTyp(gesuchDokument.getDokumentTyp())
             .setKommentar(null);
         gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
+    }
+
+    public GesuchDokumentKommentar createKommentarFromTrancheAndExisting(
+        final GesuchTranche gesuchTranche,
+        final GesuchDokumentKommentar gesuchDokumentKommentar
+    ) {
+        final var kommentar = new GesuchDokumentKommentar()
+            .setGesuchTranche(gesuchTranche)
+            .setDokumentTyp(gesuchDokumentKommentar.getDokumentTyp())
+            .setKommentar(gesuchDokumentKommentar.getKommentar())
+            .setDokumentstatus(gesuchDokumentKommentar.getDokumentstatus());
+        gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
+        return kommentar;
     }
 }
