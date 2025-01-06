@@ -16,6 +16,8 @@
     <h3 class="pt-5">
       {{ 'shared.form.shared.section.einnahmen' | translate }}
     </h3>
+
+    <!-- Total Einkünfte-->
     <div class="row g-4 my-2">
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.totalEinkuenfte.label' | translate }}</mat-label>
@@ -45,7 +47,25 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+      <button
+        type="button"
+        (click)="totalEinkuenfteDialog.toggle()"
+        class="dv-icon-button dv-icon-button-md text-info mt-2"
+        [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+      >
+        <span class="material-symbols-rounded"> info </span>
+      </button>
+      <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.eltern-steuerdaten.totalEinkuenfte.infoTitle'"
+        [dialogMessageKey]="'shared.form.eltern-steuerdaten.totalEinkuenfte.info'"
+        #totalEinkuenfteDialog="dvSharedUiInfoDialog"
+        class="d-none d-md-block col-md-6 col-xl-4"
+      ></div>
     </div>
+
+    <!-- Arbeitsverhaeltnis-->
     <div class="row mt-1">
       <mat-radio-group
         class="col-12"
@@ -74,6 +94,8 @@
             | translateChange: 'shared.form.eltern-steuerdaten.arbeitsverhaeltnis.$VALUE'
         "
       ></dv-shared-ui-form-zuvor-hint>
+
+      <!-- Saeule 3a-->
     </div>
     @if (
       !hiddenFieldSet.valuesSig().has(form.controls.saeule3a) || !hiddenFieldSet.valuesSig().has(form.controls.saeule2)
@@ -113,6 +135,8 @@
         }
       </div>
     }
+
+    <!-- Kinderalimente-->
     <div class="row g-4 my-2">
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.kinderalimente.label' | translate }}</mat-label>
@@ -142,11 +166,29 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+      <button
+        type="button"
+        (click)="kinderalimenteDialog.toggle()"
+        class="dv-icon-button dv-icon-button-md text-info mt-2"
+        [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+      >
+        <span class="material-symbols-rounded"> info </span>
+      </button>
+      <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.eltern-steuerdaten.kinderalimente.infoTitle'"
+        [dialogMessageKey]="'shared.form.eltern-steuerdaten.kinderalimente.info'"
+        #kinderalimenteDialog="dvSharedUiInfoDialog"
+        class="d-none d-md-block col-md-6 col-xl-4"
+      ></div>
     </div>
 
     <h3 class="pt-5">
       {{ 'shared.form.shared.section.ausgaben' | translate }}
     </h3>
+
+    <!-- Steuern Kanton-Gemeinde-->
     <div class="row g-4 my-2">
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.steuernKantonGemeinde.label' | translate }}</mat-label>
@@ -177,6 +219,8 @@
         </mat-error>
       </mat-form-field>
     </div>
+
+    <!-- Fahrkosten-->
     <div class="row g-4 my-2">
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.fahrkosten.label' | translate }}</mat-label>
@@ -207,6 +251,8 @@
         </mat-error>
       </mat-form-field>
     </div>
+
+    <!-- Verpflegung-->
     <div class="row g-4 my-2">
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.verpflegung.label' | translate }}</mat-label>
@@ -237,6 +283,8 @@
         </mat-error>
       </mat-form-field>
     </div>
+
+    <!-- Steuerjahr-->
     @if (
       !hiddenFieldSet.valuesSig().has(form.controls.steuerjahr) ||
       !hiddenFieldSet.valuesSig().has(form.controls.veranlagungsCode)

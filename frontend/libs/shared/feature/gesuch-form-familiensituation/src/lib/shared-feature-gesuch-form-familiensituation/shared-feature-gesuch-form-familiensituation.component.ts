@@ -70,6 +70,7 @@ import {
   FamiliensituationFormStep,
   FamiliensituationFormSteps,
 } from './familiensituation-form-steps';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 
 type FamSitStepMeta = {
   [P in keyof FamiliensituationFormSteps]?: FamSitAnimationState;
@@ -99,6 +100,7 @@ const animationTime = 500;
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiInfoDialogDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-familiensituation.component.html',
   styleUrls: ['./shared-feature-gesuch-form-familiensituation.component.scss'],

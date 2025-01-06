@@ -72,6 +72,7 @@ import {
 import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-telefon-nummer';
 
 import { selectSharedFeatureGesuchFormElternView } from '../shared-feature-gesuch-form-eltern/shared-feature-gesuch-form-eltern.selector';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 
 const MAX_AGE_ADULT = 130;
 const MIN_AGE_ADULT = 10;
@@ -99,6 +100,7 @@ const MEDIUM_AGE_ADULT = 40;
     SharedUiFormReadonlyDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiMaxLengthDirective,
+    SharedUiInfoDialogDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-eltern-editor.component.scss'],

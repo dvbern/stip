@@ -30,6 +30,7 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from './shared-feature-ges
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from '../shared-feature-gesuch-form-lebenslauf-editor/shared-feature-gesuch-form-lebenslauf-editor.component';
 import { TimelineAddCommand } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline';
 import { TwoColumnTimelineComponent } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline.component';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 
 const AUSBILDUNGS_MONTH = 8;
 const MIN_EDUCATION_AGE = 16;
@@ -46,6 +47,7 @@ const MIN_EDUCATION_AGE = 16;
     SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
+    SharedUiInfoDialogDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf.component.html',
   styleUrls: ['./shared-feature-gesuch-form-lebenslauf.component.scss'],

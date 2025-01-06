@@ -124,6 +124,22 @@
                 </mat-error>
               </mat-form-field>
             </div>
+            <button
+              type="button"
+              (click)="gerichtlicheAlimentenregelungDialog.toggle()"
+              class="dv-icon-button dv-icon-button-md text-info mt-2"
+              [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+            >
+              <span class="material-symbols-rounded"> info </span>
+            </button>
+            <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+            <div
+              dvSharedUiInfoDialog
+              [dialogTitleKey]="'shared.form.person.gerichtliche-alimentenregelung.infoTitle'"
+              [dialogMessageKey]="'shared.form.person.gerichtliche-alimentenregelung.info'"
+              #gerichtlicheAlimentenregelungDialog="dvSharedUiInfoDialog"
+              class="d-none d-md-block col-md-6 col-xl-4"
+            ></div>
           }
           @if (
             !hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet) && form.value.gerichtlicheAlimentenregelung
@@ -187,6 +203,22 @@
                     'shared.form.familiensituation.elternteil-verstorben-unbekannt.verstorben' | translate
                   }}</mat-radio-button
                 >
+                <button
+                  type="button"
+                  (click)="elternteilVerstorbenUnbekanntDialog.toggle()"
+                  class="dv-icon-button dv-icon-button-md text-info mt-2"
+                  [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+                >
+                  <span class="material-symbols-rounded"> info </span>
+                </button>
+                <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+                <div
+                  dvSharedUiInfoDialog
+                  [dialogTitleKey]="'shared.form.familiensituation.elternteil-verstorben-unbekannt.infoTitle'"
+                  [dialogMessageKey]="'shared.form.familiensituation.elternteil-verstorben-unbekannt.info'"
+                  #elternteilVerstorbenUnbekanntDialog="dvSharedUiInfoDialog"
+                  class="d-none d-md-block col-md-6 col-xl-4"
+                ></div>
 
                 <mat-radio-button
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.UNBEKANNT"
@@ -325,6 +357,26 @@
                           | translate
                       }}</mat-radio-button
                     >
+                    <button
+                      type="button"
+                      (click)="fehlendeVaterschaftanerkennungDialog.toggle()"
+                      class="dv-icon-button dv-icon-button-md text-info mt-2"
+                      [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+                    >
+                      <span class="material-symbols-rounded"> info </span>
+                    </button>
+                    <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+                    <div
+                      dvSharedUiInfoDialog
+                      [dialogTitleKey]="
+                        'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.infoTitle'
+                      "
+                      [dialogMessageKey]="
+                        'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.info'
+                      "
+                      #fehlendeVaterschaftanerkennungDialog="dvSharedUiInfoDialog"
+                      class="d-none d-md-block col-md-6 col-xl-4"
+                    ></div>
                   </div>
                   @if (vaterUnbekanntDocumentSig(); as options) {
                     <dv-shared-pattern-document-upload
@@ -346,6 +398,22 @@
           ) {
             <ng-container [ngTemplateOutlet]="vaterWiederverheiratet"></ng-container>
           }
+          <button
+            type="button"
+            (click)="elternteilVerstorbenDialog.toggle()"
+            class="dv-icon-button dv-icon-button-md text-info mt-2"
+            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+          >
+            <span class="material-symbols-rounded"> info </span>
+          </button>
+          <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+          <div
+            dvSharedUiInfoDialog
+            [dialogTitleKey]="'shared.form.familiensituation.elternteil-verstorben-unbekannt.infoTitle'"
+            [dialogMessageKey]="'shared.form.familiensituation.elternteil-verstorben-unbekannt.info'"
+            #elternteilVerstorbenDialog="dvSharedUiInfoDialog"
+            class="d-none d-md-block col-md-6 col-xl-4"
+          ></div>
         </div>
 
         <!-- Elternteil Wiederverheiratet  -->

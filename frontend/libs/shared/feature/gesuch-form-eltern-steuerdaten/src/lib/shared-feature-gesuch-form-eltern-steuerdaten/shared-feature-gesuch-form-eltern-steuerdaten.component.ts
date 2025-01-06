@@ -50,6 +50,7 @@ import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
 import { selectSharedFeatureGesuchFormSteuerdatenView } from './shared-feature-gesuch-form-eltern-steuerdaten.selector';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 
 @Component({
   selector: 'lib-shared-feature-gesuch-form-eltern-steuerdaten',
@@ -71,6 +72,7 @@ import { selectSharedFeatureGesuchFormSteuerdatenView } from './shared-feature-g
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
+    SharedUiInfoDialogDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-steuerdaten.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
