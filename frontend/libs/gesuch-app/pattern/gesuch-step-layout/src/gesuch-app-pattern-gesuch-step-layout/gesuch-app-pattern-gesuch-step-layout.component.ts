@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   TranslateDirective,
@@ -39,7 +39,6 @@ import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
@@ -56,11 +55,9 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     TranslatePipe,
     MatMenuModule,
     SharedUiIconChipComponent,
-    SharedUiLanguageSelectorComponent,
     GesuchAppPatternMainLayoutComponent,
     SharedPatternAppHeaderPartsDirective,
     RouterLink,
-    RouterLinkActive,
   ],
   templateUrl: './gesuch-app-pattern-gesuch-step-layout.component.html',
   styleUrls: ['./gesuch-app-pattern-gesuch-step-layout.component.scss'],
