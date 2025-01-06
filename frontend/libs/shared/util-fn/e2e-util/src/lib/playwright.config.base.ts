@@ -3,9 +3,6 @@ import { defineConfig } from '@playwright/test';
 export const BEARER_COOKIE = 'access_cookie';
 export const REFRESH_COOKIE = 'refresh_cookie';
 
-export const GS_STORAGE_STATE = 'gs-storage-state.json';
-export const SB_STORAGE_STATE = 'sb-storage-state.json';
-
 const gsURL = process.env['E2E_BASEURL_GS'];
 const sbURL = process.env['E2E_BASEURL_SB'];
 export const getE2eUrls = () => {

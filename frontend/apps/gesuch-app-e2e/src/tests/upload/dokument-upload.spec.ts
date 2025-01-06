@@ -28,7 +28,7 @@ const { test } = initializeTest('GESUCHSTELLER', ausbildung);
 
 test.describe('Dokument upload', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  test('Person in Ausbildung', async ({ page, cockpit }) => {
+  test('Dokument upload', async ({ page, cockpit }) => {
     await expect(page.getByTestId('step-title')).toBeAttached();
     await page.getByTestId('step-nav-person').first().click();
     const person = new PersonPO(page);

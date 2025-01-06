@@ -34,9 +34,9 @@ const { test, getGesuchId } = initializeTest('GESUCHSTELLER', ausbildung);
 
 test.describe('Neues gesuch erstellen', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  test('Gesuch Testfall-2', async ({ page, cockpit: _ }, testInfo) => {
-    const seed = `${testInfo.title}-${testInfo.workerIndex}`;
+  test('Neues gesuch erstellen', async ({ page, cockpit: _ }, testInfo) => {
     test.slow();
+    const seed = `${testInfo.title}-${testInfo.workerIndex}`;
 
     // Step 1: Person ============================================================
     await expect(page.getByTestId('step-title')).toBeAttached();

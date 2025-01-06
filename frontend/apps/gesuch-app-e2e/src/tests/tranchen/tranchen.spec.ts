@@ -4,6 +4,7 @@ import {
   SmallImageFile,
   expectStepTitleToContainText,
   getE2eUrls,
+  specificMonth,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { initializeTest } from '../../initialize-test';
@@ -22,7 +23,7 @@ const { test, getGesuchId, getTrancheId } = initializeTest(
 
 test.describe('Tranche erstellen', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  test('Tranchen Test Data', async ({ page, cockpit: _ }) => {
+  test('Tranche erstellen', async ({ page, cockpit: _ }) => {
     test.slow();
 
     const urls = getE2eUrls();
@@ -95,7 +96,7 @@ test.describe('Tranche erstellen', () => {
     // aenderungen dialog
     await page
       .getByTestId('form-aenderung-melden-dialog-gueltig-ab')
-      .fill('01.01.2025');
+      .fill(`1.${specificMonth(11)}`);
     await page
       .getByTestId('form-aenderung-melden-dialog-kommentar')
       .fill('E2E Test ist Grund für Änderung');
