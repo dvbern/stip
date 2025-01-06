@@ -77,6 +77,12 @@ kstip:
   should-clear-database: false
 
 quarkus:
+  log:
+    sentry:
+      ~: 'true'
+      dsn: '${STIP_SENTRY_DSN}'
+      traces-sample-rate: 1.0
+      environment: '${KSTIP_ENVIRONMENT}'
   antivirus:
     clamav:
       enabled: true
@@ -153,6 +159,9 @@ quarkus:
 #   store-type: jdbc-tx
 '%dev':
   quarkus:
+    log:
+      sentry:
+        debug: 'true'
     http:
       enable-compression: true
       compress-media-types:
