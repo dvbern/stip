@@ -56,8 +56,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.HttpStatus;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @RequiredArgsConstructor
@@ -99,10 +99,10 @@ public class SapEndpointService {
 
     public Response getImportStatus(@Valid @Positive @NotNull BigDecimal deliveryId) {
         try {
-            return Response.status(HttpStatus.SC_OK).entity(getAndParseGetSAPImportStatusResponse(deliveryId)).build();
+            return Response.status(Status.OK).entity(getAndParseGetSAPImportStatusResponse(deliveryId)).build();
 
         } catch (WebApplicationException webApplicationException) {
-            return Response.status(HttpStatus.SC_BAD_REQUEST).build();
+            return Response.status(Status.BAD_REQUEST).build();
         }
     }
 
@@ -122,10 +122,10 @@ public class SapEndpointService {
                 xmlRequest
             );
         } catch (WebApplicationException webApplicationException) {
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
+            return Response.status(Status.BAD_REQUEST).entity(webApplicationException).build();
         }
         final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerReadResponse.class);
-        return Response.status(HttpStatus.SC_OK).entity(result).build();
+        return Response.status(Status.OK).entity(result).build();
     }
 
     /*
@@ -165,11 +165,11 @@ public class SapEndpointService {
                 xmlRequest
             );
         } catch (WebApplicationException webApplicationException) {
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
+            return Response.status(Status.BAD_REQUEST).entity(webApplicationException).build();
         }
 
         final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerCreateResponse.class);
-        return Response.status(HttpStatus.SC_OK).entity(result).build();
+        return Response.status(Status.OK).entity(result).build();
 
     }
 
@@ -211,11 +211,11 @@ public class SapEndpointService {
         try {
             xmlResponse = businessPartnerChangeClient.changeBusinessPartner(xmlRequest);
         } catch (WebApplicationException webApplicationException) {
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
+            return Response.status(Status.BAD_REQUEST).entity(webApplicationException).build();
         }
 
         final var result = SoapUtils.parseSoapResponse(xmlResponse, BusinessPartnerChangeResponse.class);
-        return Response.status(HttpStatus.SC_OK).entity(result).build();
+        return Response.status(Status.OK).entity(result).build();
     }
 
     /*
@@ -276,11 +276,11 @@ public class SapEndpointService {
         try {
             xmlResponse = vendorPostingCreateClient.createVendorPosting(xmlRequest);
         } catch (WebApplicationException webApplicationException) {
-            return Response.status(HttpStatus.SC_BAD_REQUEST).entity(webApplicationException).build();
+            return Response.status(Status.BAD_REQUEST).entity(webApplicationException).build();
         }
 
         final var result = SoapUtils.parseSoapResponse(xmlResponse, VendorPostingCreateResponse.class);
-        return Response.status(HttpStatus.SC_OK).entity(result).build();
+        return Response.status(Status.OK).entity(result).build();
     }
 
 }

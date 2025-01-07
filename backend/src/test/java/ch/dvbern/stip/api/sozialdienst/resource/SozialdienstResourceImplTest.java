@@ -28,9 +28,9 @@ import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
@@ -48,7 +48,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -80,7 +79,7 @@ class SozialdienstResourceImplTest {
         adresseDto.setHausnummer("1");
         adresseDto.setLand(LandDtoSpec.CH);
 
-        final var sozialdienstAdminCreateDto = new SozialdienstAdminCreateDtoSpec();
+        final var sozialdienstAdminCreateDto = new SozialdienstAdminDtoSpec();
         sozialdienstAdminCreateDto.setKeycloakId(UUID.randomUUID().toString());
         sozialdienstAdminCreateDto.setNachname("Muster");
         sozialdienstAdminCreateDto.setVorname("Max");
@@ -197,7 +196,7 @@ class SozialdienstResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
-            .as(SozialdienstAdminDtoSpec.class);
+            .as(SozialdienstBenutzerDtoSpec.class);
         assertTrue(updated.getNachname().contains("updated"));
         assertTrue(updated.getVorname().contains("updated"));
         checkSozialdienstAdminResponse(updated);
@@ -208,7 +207,7 @@ class SozialdienstResourceImplTest {
     @Test
     void replaceSozizialdienstAdminTest() {
         final var keykloakId = UUID.randomUUID().toString();
-        final var createSozialdienstDto = new SozialdienstAdminCreateDtoSpec();
+        final var createSozialdienstDto = new SozialdienstAdminDtoSpec();
         createSozialdienstDto.setVorname("replaced");
         createSozialdienstDto.setNachname("replaced");
         createSozialdienstDto.setEmail("replaced@test.com");
@@ -221,11 +220,11 @@ class SozialdienstResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
-            .as(SozialdienstAdminDtoSpec.class);;
+            .as(SozialdienstBenutzerDtoSpec.class);;
         assertTrue(replaced.getNachname().contains("replaced"));
         assertTrue(replaced.getVorname().contains("replaced"));
         assertTrue(replaced.getEmail().contains("replaced"));
-        assertEquals(replaced.getKeycloakId(), keykloakId);
+        // assertEquals(replaced.getKeycloakId(), keykloakId);
         checkSozialdienstAdminResponse(replaced);
 
     }
@@ -256,8 +255,7 @@ class SozialdienstResourceImplTest {
         assertNotNull(dtoSpec.getIban());
     }
 
-    private void checkSozialdienstAdminResponse(SozialdienstAdminDtoSpec dtoSpec) {
-        assertNotNull(dtoSpec.getKeycloakId());
+    private void checkSozialdienstAdminResponse(SozialdienstBenutzerDtoSpec dtoSpec) {
         assertNotNull(dtoSpec.getVorname());
         assertNotNull(dtoSpec.getNachname());
         assertNotNull(dtoSpec.getEmail());

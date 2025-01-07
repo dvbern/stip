@@ -18,9 +18,26 @@
 package ch.dvbern.stip.api.sozialdienst.repo;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.sozialdienst.entity.QSozialdienst;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
+import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class SozialdienstRepository implements BaseRepository<Sozialdienst> {
+    private final EntityManager entityManager;
+
+    public Sozialdienst getSozialdienstBySozialdienstAdmin(final SozialdienstBenutzer sozialdienstAdmin) {
+        final var sozialdienst = QSozialdienst.sozialdienst;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(sozialdienst)
+            .where(sozialdienst.sozialdienstAdmin.eq(sozialdienstAdmin))
+            .fetchOne();
+        // .fetchOne();
+    }
 }

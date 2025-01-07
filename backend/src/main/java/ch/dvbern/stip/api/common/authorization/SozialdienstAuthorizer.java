@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -24,4 +27,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class SozialdienstAuthorizer extends BaseAuthorizer {
+    private final BenutzerService benutzerService;
+    private final SozialdienstService sozialdienstService;
+
+    public Sozialdienst getSozialdienstOfSozialdienstAdmin() {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        return sozialdienstService.getSozialdienstOfSozialdienstAdmin(currentBenutzer);
+    }
 }

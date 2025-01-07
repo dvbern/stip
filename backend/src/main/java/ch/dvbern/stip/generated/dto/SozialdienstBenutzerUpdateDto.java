@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -13,39 +14,38 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("SozialdienstAdminCreate")
+@JsonTypeName("SozialdienstBenutzerUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class SozialdienstAdminCreateDto  implements Serializable {
-  private @Valid String keycloakId;
+public class SozialdienstBenutzerUpdateDto  implements Serializable {
+  private @Valid UUID id;
   private @Valid String vorname;
   private @Valid String nachname;
-  private @Valid String email;
 
   /**
    **/
-  public SozialdienstAdminCreateDto keycloakId(String keycloakId) {
-    this.keycloakId = keycloakId;
+  public SozialdienstBenutzerUpdateDto id(UUID id) {
+    this.id = id;
     return this;
   }
 
   
-  @JsonProperty("keycloakId")
+  @JsonProperty("id")
   @NotNull
-  public String getKeycloakId() {
-    return keycloakId;
+  public UUID getId() {
+    return id;
   }
 
-  @JsonProperty("keycloakId")
-  public void setKeycloakId(String keycloakId) {
-    this.keycloakId = keycloakId;
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
    **/
-  public SozialdienstAdminCreateDto vorname(String vorname) {
+  public SozialdienstBenutzerUpdateDto vorname(String vorname) {
     this.vorname = vorname;
     return this;
   }
@@ -64,7 +64,7 @@ public class SozialdienstAdminCreateDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstAdminCreateDto nachname(String nachname) {
+  public SozialdienstBenutzerUpdateDto nachname(String nachname) {
     this.nachname = nachname;
     return this;
   }
@@ -81,25 +81,6 @@ public class SozialdienstAdminCreateDto  implements Serializable {
     this.nachname = nachname;
   }
 
-  /**
-   **/
-  public SozialdienstAdminCreateDto email(String email) {
-    this.email = email;
-    return this;
-  }
-
-  
-  @JsonProperty("email")
-  @NotNull
-  public String getEmail() {
-    return email;
-  }
-
-  @JsonProperty("email")
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -109,27 +90,25 @@ public class SozialdienstAdminCreateDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SozialdienstAdminCreateDto sozialdienstAdminCreate = (SozialdienstAdminCreateDto) o;
-    return Objects.equals(this.keycloakId, sozialdienstAdminCreate.keycloakId) &&
-        Objects.equals(this.vorname, sozialdienstAdminCreate.vorname) &&
-        Objects.equals(this.nachname, sozialdienstAdminCreate.nachname) &&
-        Objects.equals(this.email, sozialdienstAdminCreate.email);
+    SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdate = (SozialdienstBenutzerUpdateDto) o;
+    return Objects.equals(this.id, sozialdienstBenutzerUpdate.id) &&
+        Objects.equals(this.vorname, sozialdienstBenutzerUpdate.vorname) &&
+        Objects.equals(this.nachname, sozialdienstBenutzerUpdate.nachname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(keycloakId, vorname, nachname, email);
+    return Objects.hash(id, vorname, nachname);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SozialdienstAdminCreateDto {\n");
+    sb.append("class SozialdienstBenutzerUpdateDto {\n");
     
-    sb.append("    keycloakId: ").append(toIndentedString(keycloakId)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("}");
     return sb.toString();
   }

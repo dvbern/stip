@@ -25,10 +25,14 @@ import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerMapper;
+import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
@@ -42,6 +46,8 @@ import lombok.RequiredArgsConstructor;
 public class SozialdienstResourceImpl implements SozialdienstResource {
 
     private final SozialdienstService sozialdienstService;
+    private final SozialdienstBenutzerService sozialdienstBenutzerService;
+    private final SozialdienstBenutzerMapper sozialdienstBenutzerMapper;
 
     private final SozialdienstAuthorizer sozialdienstAuthorizer;
 
@@ -76,11 +82,11 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public SozialdienstAdminDto replaceSozialdienstAdmin(
+    public SozialdienstBenutzerDto replaceSozialdienstAdmin(
         UUID sozialdienstId,
-        SozialdienstAdminCreateDto sozialdienstAdminCreateDto
+        SozialdienstAdminDto sozialdienstAdminDto
     ) {
-        return sozialdienstService.replaceSozialdienstAdmin(sozialdienstId, sozialdienstAdminCreateDto);
+        return sozialdienstService.replaceSozialdienstAdmin(sozialdienstId, sozialdienstAdminDto);
     }
 
     @AllowAll
@@ -93,11 +99,44 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public SozialdienstAdminDto updateSozialdienstAdmin(
+    public SozialdienstBenutzerDto updateSozialdienstAdmin(
         UUID sozialdienstId,
         SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto
     ) {
         final var sozialdienst = sozialdienstService.getSozialdienstById(sozialdienstId);
         return sozialdienstService.updateSozialdienstAdmin(sozialdienstAdminUpdateDto, sozialdienst);
+    }
+
+    @Override
+    public SozialdienstBenutzerDto createSozialdienstBenutzer(
+        SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
+    ) {
+        return sozialdienstBenutzerService.createSozialdienstBenutzer(
+            sozialdienstAuthorizer.getSozialdienstOfSozialdienstAdmin().getId(),
+            sozialdienstBenutzerCreateDto
+        );
+    }
+
+    @Override
+    public List<SozialdienstBenutzerDto> getSozialdienstBenutzer() {
+        return sozialdienstAuthorizer.getSozialdienstOfSozialdienstAdmin()
+            .getSozialdienstBenutzers()
+            .stream()
+            .map(
+                sozialdienstBenutzerMapper::toDto
+            )
+            .toList();
+    }
+
+    @Override
+    public SozialdienstBenutzerDto updateSozialdienstBenutzer(
+        SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdateDto
+    ) {
+        return sozialdienstBenutzerService.updateSozialdienstBenutzer(sozialdienstBenutzerUpdateDto);
+    }
+
+    @Override
+    public void deleteSozialdienstBenutzer(UUID sozialdienstBenutzerId) {
+        sozialdienstBenutzerService.deleteSozialdienstBenutzer(sozialdienstBenutzerId);
     }
 }
