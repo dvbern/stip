@@ -57,7 +57,7 @@ export const initializeTest = (
 
       // extract gesuch new gesuchid
       // @scph beofore this change the waitfor picket up on the request triggered by the page.reload()
-      // in case deleteGesuch. This is not the reccomended way, but it works.
+      // in case deleteGesuch was run here. This is not the reccomended way, but it works.
       const response = await page.waitForResponse((response) => {
         return (
           response.url().includes('/api/v1/gesuch/benutzer/me/gs-dashboard') &&

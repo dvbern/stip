@@ -16,8 +16,6 @@ import {
   deleteGesuch,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { CockpitPO } from './po/cockpit.po';
-
 export const setGesuchApi = async (
   apiContext: APIRequestContext,
   gesuchId: string,
@@ -98,16 +96,16 @@ export const getAusbildungsGangId = async (
 export const initializeTestByApi = (
   authType: E2eUser,
   ausbildung: AusbildungUpdate,
-  gesuchFormUpdate: (seed: string) => GesuchFormularUpdate,
+  gesuchFormUpdate: (seed: string) => DeepNullable<GesuchFormularUpdate>,
 ) => {
   let contexts: TestContexts;
   let gesuchId: string | undefined;
   let trancheId: string | undefined;
 
-  const test = createTest(authType).extend<{ cockpit: CockpitPO }>({
-    cockpit: async ({ page }, use, testInfo) => {
+  const test = createTest(authType).extend<{ apiStatus: number }>({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    apiStatus: async ({ page }, use, testInfo) => {
       const seed = `${testInfo.title}-${testInfo.workerIndex}`;
-      const cockpit = new CockpitPO(page);
 
       const exitingGesuchId = await getDashboard(contexts.api).then((body) => {
         return body?.[0].ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
@@ -154,14 +152,14 @@ export const initializeTestByApi = (
       }
 
       // set gesuch
-      await setGesuchApi(
+      const response = await setGesuchApi(
         contexts.api,
         gesuchId,
         trancheId,
         gesuchFormUpdate(seed),
       );
 
-      await use(cockpit);
+      await use(response.status());
     },
   });
 
