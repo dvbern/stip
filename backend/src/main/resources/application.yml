@@ -83,6 +83,7 @@ quarkus:
       dsn: '${STIP_SENTRY_DSN}'
       traces-sample-rate: 1.0
       environment: '${KSTIP_ENVIRONMENT}'
+      in-app-packages: 'ch.dvbern.stip.*'
   antivirus:
     clamav:
       enabled: true
