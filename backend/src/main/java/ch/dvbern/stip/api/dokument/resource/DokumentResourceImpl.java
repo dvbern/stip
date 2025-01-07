@@ -28,12 +28,14 @@ import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentArt;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
@@ -67,13 +69,14 @@ public class DokumentResourceImpl implements DokumentResource {
     private final ConfigService configService;
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
+    private final CustomDokumentTypService customDokumentTypService;
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
 
-    @RolesAllowed(GESUCH_UPDATE)
-    @Override
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @AllowAll
-    public Uni<Response> createCustomDokumentTyp(String type, String description, UUID id) {
-        return null;
+    @Override
+    public CustomDokumentTypDto createCustomDokumentTyp(CustomDokumentTypDto customDokumentTypDto) {
+        return customDokumentTypService.createCustomDokumentTyp(customDokumentTypDto);
     }
 
     @RolesAllowed(GESUCH_UPDATE)

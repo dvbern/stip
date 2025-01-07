@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
@@ -26,9 +27,9 @@ public interface DokumentResource {
 
     @POST
     @Path("/gesuchDokument/customGesuchDokument")
-    @Consumes({ "multipart/form-data" })
-    @Produces({ "text/plain" })
-    io.smallrye.mutiny.Uni<Response> createCustomDokumentTyp(@FormParam(value = "type")  String type,@FormParam(value = "description")  String description,@FormParam(value = "id")  UUID id);
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    CustomDokumentTypDto createCustomDokumentTyp(@Valid @NotNull CustomDokumentTypDto customDokumentTypDto);
 
     @POST
     @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}")

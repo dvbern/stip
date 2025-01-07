@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -56,6 +57,7 @@ import org.hibernate.envers.Audited;
 )
 @Getter
 @Setter
+@OneOfDocumentTypesRequiredConstraint
 public class GesuchDokument extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
@@ -67,16 +69,12 @@ public class GesuchDokument extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private DokumentTyp dokumentTyp;
 
-    @OneToOne
-    @JoinTable(
-        name = "custom_dokument_typ",
-        joinColumns = @JoinColumn(
-            name = "custom_dokument_typ",
-            referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "FK_custom_dokument_typ")
-        )
-    )
+    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
     @Nullable
+    @JoinColumn(
+        name = "custom_dokument_typ_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_custom_dokument_typ_id"),
+        nullable = true
+    )
     private CustomDokumentTyp customDokumentTyp;
 
     @NotNull

@@ -545,7 +545,7 @@ paths:
     post:
       requestBody:
         content:
-          multipart/form-data:
+          application/json:
             schema:
               $ref: '#/components/schemas/CustomDokumentTyp'
         required: true
@@ -553,6 +553,10 @@ paths:
         - Dokument
       responses:
         '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomDokumentTyp'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -561,7 +565,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createCustomDokumentTyp
-      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/gesuchDokument/customGesuchDokument/{customDokumentTypId}':
     parameters:
       - name: customDokumentTypId

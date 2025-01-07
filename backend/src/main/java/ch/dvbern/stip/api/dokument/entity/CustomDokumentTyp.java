@@ -35,7 +35,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Table(
     name = "custom_dokument_typ",
     indexes = {
-        @Index(name = "IX_gesuch_dokument_mandant", columnList = "mandant")
+        @Index(name = "IX_custom_gesuch_dokument_mandant", columnList = "mandant")
     }
 )
 @Getter
