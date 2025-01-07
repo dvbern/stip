@@ -255,9 +255,9 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public GesuchWithChangesDto getInitialTrancheChangesByTrancheId(UUID trancheId) {
-        gesuchTrancheAuthorizer.canReadInitialTrancheChanges(trancheId);
-        return gesuchService.getChangesByTrancheId(trancheId);
+    public GesuchWithChangesDto getInitialTrancheChangesByGesuchId(UUID gesuchId) {
+        gesuchAuthorizer.canRead(gesuchId);
+        return gesuchService.getChangesByGesuchId(gesuchId);
     }
 
     // TODO KSTIP-1247: Update which roles can do this

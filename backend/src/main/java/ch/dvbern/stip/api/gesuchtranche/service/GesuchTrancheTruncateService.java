@@ -22,6 +22,9 @@ import java.util.ArrayList;
 
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -39,6 +42,8 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 @RequiredArgsConstructor
 public class GesuchTrancheTruncateService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
+    private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final GesuchDokumentService gesuchDokumentService;
 
     void truncateExistingTranchen(final Gesuch gesuch, final GesuchTranche newTranche) {
         final var newTrancheRange = TrancheRange.from(newTranche);
@@ -59,28 +64,46 @@ public class GesuchTrancheTruncateService {
             final var existingTrancheRange = TrancheRange.from(existingTranche);
 
             final var overlaps = newTrancheRange.overlaps(existingTrancheRange);
-            if (overlaps == OverlapType.FULL || overlaps == OverlapType.EXACT) {
-                handleFull(existingTranche);
-            } else if (overlaps == OverlapType.LEFT || overlaps == OverlapType.LEFT_FULL) {
-                handleLeft(existingTranche, newTranche);
-            } else if (overlaps == OverlapType.RIGHT || overlaps == OverlapType.RIGHT_FULL) {
-                handleRight(existingTranche, newTranche);
-            } else if (overlaps == OverlapType.INSIDE) {
-                added.add(handleInside(existingTranche, newTranche));
+            switch (overlaps) {
+                case FULL, EXACT -> handleFull(existingTranche);
+                case LEFT, LEFT_FULL -> handleLeft(existingTranche, newTranche);
+                case RIGHT, RIGHT_FULL -> handleRight(existingTranche, newTranche);
+                case INSIDE -> {
+                    final var newNewTranche = handleInside(existingTranche, newTranche);
+                    added.add(newNewTranche);
+                }
+                case NONE -> {
+                    // No action
+                }
             }
         }
 
         gesuch.getGesuchTranchen().addAll(added);
 
         final var toRemove = new ArrayList<GesuchTranche>();
-        for (final var tranche : gesuch.getGesuchTranchen()) {
+        final var tranchenToCheck = new ArrayList<GesuchTranche>();
+        tranchenToCheck.addAll(
+            gesuch.getGesuchTranchen()
+                .stream()
+                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+                .toList()
+        );
+
+        for (final var tranche : tranchenToCheck) {
             if (tranche.getGueltigkeit().getMonths() <= 0) {
                 toRemove.add(tranche);
+                var gesuchDokuments = new ArrayList<GesuchDokument>();
+                gesuchDokuments.addAll(tranche.getGesuchDokuments());
+                for (var dokument : gesuchDokuments) {
+                    gesuchDokumentService.removeGesuchDokument(dokument);
+                    tranche.getGesuchDokuments().remove(dokument);
+                }
+
+                gesuchDokumentKommentarService.deleteForGesuchTrancheId(tranche.getId());
+                gesuch.getGesuchTranchen().remove(tranche);
                 gesuchTrancheRepository.delete(tranche);
             }
         }
-
-        gesuch.getGesuchTranchen().removeAll(toRemove);
     }
 
     /**
@@ -140,6 +163,7 @@ public class GesuchTrancheTruncateService {
                     .minusMonths(1)
                     .with(lastDayOfMonth())
             );
+        gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(existingTranche, newNewTranche);
 
         return newNewTranche;
     }

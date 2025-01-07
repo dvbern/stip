@@ -133,7 +133,7 @@ public final class GesuchGenerator {
             .setAusbildung(ausbildung)
             .setGesuchsperiode(
                 new Gesuchsperiode()
-                    .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2023))
+                    .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(LocalDate.now().getYear() - 1))
                     .setGesuchsperiodeStart(gueltigkeitsRange.getGueltigAb())
                     .setGesuchsperiodeStopp(gueltigkeitsRange.getGueltigBis())
             );

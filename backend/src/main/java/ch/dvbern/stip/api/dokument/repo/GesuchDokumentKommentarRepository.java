@@ -57,4 +57,16 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
             .orderBy(gesuchDokumentKommentar.timestampErstellt.desc())
             .fetch();
     }
+
+    public List<GesuchDokumentKommentar> getByGesuchTrancheId(
+        final UUID gesuchTrancheId
+    ) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuchDokumentKommentar)
+            .where(
+                gesuchDokumentKommentar.gesuchTranche.id.eq(gesuchTrancheId)
+            )
+            .orderBy(gesuchDokumentKommentar.timestampErstellt.desc())
+            .fetch();
+    }
 }
