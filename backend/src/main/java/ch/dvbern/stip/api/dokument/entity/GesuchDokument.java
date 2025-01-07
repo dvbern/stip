@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,6 +35,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -60,10 +62,22 @@ public class GesuchDokument extends AbstractMandantEntity {
     @JoinColumn(name = "gesuch_tranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_tranche_id"))
     private GesuchTranche gesuchTranche;
 
-    @NotNull
-    @Column(name = "dokument_typ", nullable = false)
+    @Nullable
+    @Column(name = "dokument_typ", nullable = true)
     @Enumerated(EnumType.STRING)
     private DokumentTyp dokumentTyp;
+
+    @OneToOne
+    @JoinTable(
+        name = "custom_dokument_typ",
+        joinColumns = @JoinColumn(
+            name = "custom_dokument_typ",
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "FK_custom_dokument_typ")
+        )
+    )
+    @Nullable
+    private CustomDokumentTyp customDokumentTyp;
 
     @NotNull
     @Column(name = "status", nullable = false)

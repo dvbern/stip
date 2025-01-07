@@ -1,0 +1,78 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736235553861-1">
+        <createTable tableName="custom_dokument_typ">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customdokumenttyp_id" type="UUID"/>
+            <column name="custom_dokument_typ" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="custom_dokument_typPK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736235553861-2">
+        <createTable tableName="custom_dokument_typ_aud">
+            <column name="custom_dokument_typ" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="custom_dokument_typ_audPK"/>
+            </column>
+            <column name="customdokumenttyp_id" type="UUID"/>
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="custom_dokument_typ_audPK"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(2000)"/>
+            <column name="type" type="VARCHAR(20)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736235553861-3">
+        <addUniqueConstraint columnNames="customdokumenttyp_id" constraintName="UC_CUSTOM_DOKUMENT_TYPCUSTOMDOKUMENTTYP_ID_COL" tableName="custom_dokument_typ"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736235553861-4">
+        <createIndex indexName="IX_gesuch_dokument_mandant" tableName="custom_dokument_typ">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736235553861-5">
+        <addForeignKeyConstraint baseColumnNames="rev,custom_dokument_typ" baseTableName="custom_dokument_typ_aud" constraintName="FK5ohf9s9hvv0wjdbr41fh2w9ej" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev,id" referencedTableName="gesuch_dokument_aud" validate="true"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736235553861-6">
+        <addForeignKeyConstraint baseColumnNames="customdokumenttyp_id" baseTableName="custom_dokument_typ" constraintName="FKelv3k9cyg8437v4femoeaxobu" deferrable="false" initiallyDeferred="false" referencedColumnNames="custom_dokument_typ" referencedTableName="custom_dokument_typ" validate="true"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736235553861-7">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="custom_dokument_typ_aud" constraintName="FKfrttrf3l1led7b8p7c0f3ry13" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736235553861-8">
+        <addForeignKeyConstraint baseColumnNames="custom_dokument_typ" baseTableName="custom_dokument_typ" constraintName="FKqu67cmkfwdxd4dmyuarc0vxne" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_dokument" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
