@@ -145,10 +145,6 @@ public interface GesuchResource {
     @Produces({ "application/json", "text/plain" })
     List<StatusprotokollEntryDto> getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);
 
-    @GET
-    @Path("/test-sentry")
-    void testSentry();
-
     @PATCH
     @Path("/{gesuchId}")
     @Consumes({ "application/json" })

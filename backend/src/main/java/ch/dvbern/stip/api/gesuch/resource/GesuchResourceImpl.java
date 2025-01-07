@@ -46,7 +46,6 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
-import io.sentry.Sentry;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -177,19 +176,6 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public List<FallDashboardItemDto> getGsDashboard() {
         return gesuchService.getFallDashboardItemDtos();
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @AllowAll
-    @Override
-    public void testSentry() {
-        try {
-            throw new Exception("Sentry test!");
-        } catch (Exception e) {
-            Sentry.captureException(e);
-        }
-
-        throw new RuntimeException("Sentry test without catch");
     }
 
     @RolesAllowed(GESUCH_READ)

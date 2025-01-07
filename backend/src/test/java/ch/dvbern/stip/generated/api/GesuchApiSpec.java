@@ -95,7 +95,6 @@ public class GesuchApiSpec {
                 getInitialTrancheChangesByGesuchId(),
                 getSbAenderungChanges(),
                 getStatusProtokoll(),
-                testSentry(),
                 updateGesuch()
         );
     }
@@ -186,10 +185,6 @@ public class GesuchApiSpec {
 
     public GetStatusProtokollOper getStatusProtokoll() {
         return new GetStatusProtokollOper(createReqSpec());
-    }
-
-    public TestSentryOper testSentry() {
-        return new TestSentryOper(createReqSpec());
     }
 
     public UpdateGesuchOper updateGesuch() {
@@ -1973,56 +1968,6 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetStatusProtokollOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
-     */
-    public static class TestSentryOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/test-sentry";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public TestSentryOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/test-sentry
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public TestSentryOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public TestSentryOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
