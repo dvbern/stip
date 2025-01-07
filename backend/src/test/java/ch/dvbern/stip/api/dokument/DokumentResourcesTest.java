@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
@@ -33,6 +34,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -175,5 +177,20 @@ class DokumentResourcesTest {
 
     private String readFileData() throws IOException {
         return Files.readString(new File(TEST_FILE_LOCATION).toPath());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(7)
+    void test_create_custom_gesuchdokument() {
+        CustomDokumentTypDtoSpec customDokumentTypDtoSpec = new CustomDokumentTypDtoSpec();
+        customDokumentTypDtoSpec.type("test").description("test description");
+        dokumentApiSpec.createCustomDokumentTyp()
+            .body(customDokumentTypDtoSpec)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+
     }
 }
