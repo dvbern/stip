@@ -1476,6 +1476,14 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteGesuch
       summary: delete a Gesuch
+  '/gesuch/test-sentry':
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: OK
+      operationId: testSentry
   '/gesuch/changes/{gesuchId}':
     parameters:
       - name: gesuchId

@@ -49,9 +49,7 @@ import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import io.sentry.Sentry;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -183,9 +181,8 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @AllowAll
-    @Path("/gesuch/test-sentry")
-    @GET
-    public String testSentry() {
+    @Override
+    public void testSentry() {
         try {
             throw new Exception("Sentry test!");
         } catch (Exception e) {
