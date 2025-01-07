@@ -118,14 +118,14 @@ public class UnterschriftenblattService {
     @Transactional
     public List<UnterschriftenblattDokumentTyp> getUnterschriftenblaetterToUpload(final Gesuch gesuch) {
         final var initialTranche = gesuchTrancheHistoryRepository
-            .getLatestWhereGesuchStatusChangedToEingereicht(gesuch.getId());
+            .getLatestWhereGesuchStatusChangedToVerfuegt(gesuch.getId());
 
         GesuchTranche toGetFor;
         if (initialTranche.isPresent()) {
             toGetFor = initialTranche.get();
         } else {
             if (gesuch.getGesuchTranchen().size() != 1) {
-                throw new IllegalStateException("There are more than 1 Tranchen but none has been Eingereicht");
+                throw new IllegalStateException("There are more than 1 Tranchen but none has been Verfuegt");
             }
 
             toGetFor = gesuch.getGesuchTranchen().get(0);
