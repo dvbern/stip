@@ -59,22 +59,6 @@
               </div>
             </div>
           </div>
-          <button
-            type="button"
-            (click)="taetigkeitsDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
-            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-          >
-            <span class="material-symbols-rounded"> info </span>
-          </button>
-          <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.lebenslauf.add.taetigkeit.short'"
-            [dialogMessageKey]="'shared.form.lebenslauf.item.name.taetigkeit.info'"
-            #taetigkeitsDialog="dvSharedUiInfoDialog"
-            class="d-none d-md-block col-md-6 col-xl-4"
-          ></div>
         </div>
       }
 

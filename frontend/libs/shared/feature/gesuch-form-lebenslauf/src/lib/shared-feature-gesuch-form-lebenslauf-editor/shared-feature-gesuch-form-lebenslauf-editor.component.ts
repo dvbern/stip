@@ -56,6 +56,7 @@ import {
 } from '@dv/shared/util/validator-date';
 
 import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-gesuch-form-lebenslauf/shared-feature-gesuch-form-lebenslauf.selector';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-editor',
@@ -74,6 +75,7 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
     MatCheckboxModule,
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
+    SharedUiInfoDialogDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-lebenslauf-editor.component.scss'],

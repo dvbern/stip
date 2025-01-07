@@ -67,34 +67,49 @@
           [@.disabled]="readonly"
         >
           <div class="row g-4 mt-3">
-            <mat-radio-group
-              formControlName="gerichtlicheAlimentenregelung"
-              data-testid="form-family-gerichtlicheAlimentenregelung"
-              class="col-12"
-            >
-              <label>{{ 'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | translate }}</label>
-              <div class="d-flex gap-2 flex-wrap justify-content-between">
-                <div class="d-flex flex-column">
-                  <mat-radio-button data-testid="yes" [value]="true">{{
-                    'shared.form.radio.yes' | translate
-                  }}</mat-radio-button>
+            <div class="d-flex align-content-center col-12 col-md-6 col-xl-4 flex-grow-1">
+              <mat-radio-group
+                formControlName="gerichtlicheAlimentenregelung"
+                data-testid="form-family-gerichtlicheAlimentenregelung"
+              >
+                <label>{{ 'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | translate }}</label>
+                <div class="d-flex gap-2 flex-wrap justify-content-between">
+                  <div class="d-flex flex-column">
+                    <mat-radio-button data-testid="yes" [value]="true">{{
+                      'shared.form.radio.yes' | translate
+                    }}</mat-radio-button>
 
-                  <mat-radio-button data-testid="no" [value]="false">{{
-                    'shared.form.radio.no' | translate
-                  }}</mat-radio-button>
+                    <mat-radio-button data-testid="no" [value]="false">{{
+                      'shared.form.radio.no' | translate
+                    }}</mat-radio-button>
+                  </div>
+
+                  @if (trennungsvereinbarungDocumentSig(); as options) {
+                    <dv-shared-pattern-document-upload
+                      class="flex-shrink-1 mt-2"
+                      [optionsSig]="options"
+                    ></dv-shared-pattern-document-upload>
+                  }
                 </div>
-
-                @if (trennungsvereinbarungDocumentSig(); as options) {
-                  <dv-shared-pattern-document-upload
-                    class="flex-shrink-1 mt-2"
-                    [optionsSig]="options"
-                  ></dv-shared-pattern-document-upload>
-                }
-              </div>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-radio-group>
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ 'shared.form.error.required' | translate }}
+                </mat-error>
+              </mat-radio-group>
+              <button
+                type="button"
+                (click)="gerichtlicheAlimentenregelungDialog.toggle()"
+                class="dv-icon-button dv-icon-button-md text-info mt-2"
+                [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+              >
+                <span class="material-symbols-rounded"> info </span>
+              </button>
+              <div
+                dvSharedUiInfoDialog
+                [dialogTitleKey]="'shared.form.person.gerichtliche-alimentenregelung.infoTitle'"
+                [dialogMessageKey]="'shared.form.person.gerichtliche-alimentenregelung.info'"
+                #gerichtlicheAlimentenregelungDialog="dvSharedUiInfoDialog"
+              ></div>
+            </div>
           </div>
           @if (!hiddenFieldsSetSig().has(form.controls.werZahltAlimente)) {
             <div class="row g-4 mt-3">
@@ -124,22 +139,6 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <button
-              type="button"
-              (click)="gerichtlicheAlimentenregelungDialog.toggle()"
-              class="dv-icon-button dv-icon-button-md text-info mt-2"
-              [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-            >
-              <span class="material-symbols-rounded"> info </span>
-            </button>
-            <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-            <div
-              dvSharedUiInfoDialog
-              [dialogTitleKey]="'shared.form.person.gerichtliche-alimentenregelung.infoTitle'"
-              [dialogMessageKey]="'shared.form.person.gerichtliche-alimentenregelung.info'"
-              #gerichtlicheAlimentenregelungDialog="dvSharedUiInfoDialog"
-              class="d-none d-md-block col-md-6 col-xl-4"
-            ></div>
           }
           @if (
             !hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet) && form.value.gerichtlicheAlimentenregelung

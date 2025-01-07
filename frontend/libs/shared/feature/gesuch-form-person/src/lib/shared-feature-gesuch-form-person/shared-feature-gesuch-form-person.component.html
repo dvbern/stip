@@ -16,7 +16,7 @@
       <div class="row g-4">
         <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>{{ 'shared.form.shared.social-insurance-number.label' | translate }}</mat-label>
+            <mat-label>{{ 'shared.form.person.sozialversicherungsnummer.label' | translate }}</mat-label>
             <input
               type="text"
               matInput
@@ -121,7 +121,7 @@
 
       <div class="row g-4 mt-1">
         <!-- Wohnsitz -->
-        <div class="col-12 col-md-12 col-xl-8 d-flex">
+        <div class="col-12 col-md-12 col-xl-8 d-flex align-items-center">
           <mat-checkbox
             formControlName="identischerZivilrechtlicherWohnsitz"
             data-testid="form-person-identischerZivilrechtlicherWohnsitz"
@@ -143,7 +143,6 @@
             <span class="material-symbols-rounded"> info </span>
           </button>
         </div>
-        <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
         <div
           dvSharedUiInfoDialog
           [dialogTitleKey]="'shared.form.person.identischerWohnsitz.label'"
@@ -305,20 +304,6 @@
           @if (zivilstandDocumentOptionsSig(); as options) {
             <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
           }
-          <button
-            type="button"
-            (click)="zivilstandDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
-            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-          >
-            <span class="material-symbols-rounded"> info </span>
-          </button>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.zivilstand.infoTitle'"
-            [dialogMessageKey]="'shared.form.person.zivilstand.info'"
-            #zivilstandDialog="dvSharedUiInfoDialog"
-          ></div>
         </div>
 
         <!-- Info Konkubinat -->
@@ -328,6 +313,15 @@
               <div class="d-flex gap-3">
                 <span class="material-symbols-rounded text-info"> info </span>
                 <span>{{ 'shared.form.person.marital-status.ledig.info' | translate }}</span>
+              </div>
+            </dv-shared-ui-info-container>
+          </div>
+        } @else {
+          <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
+            <dv-shared-ui-info-container [type]="'info'">
+              <div class="d-flex gap-3 align-content-center">
+                <span class="material-symbols-rounded text-info">warning</span>
+                <span>{{ 'shared.form.person.einreisedatum.info' | translate }}</span>
               </div>
             </dv-shared-ui-info-container>
           </div>
@@ -396,31 +390,21 @@
             >
               <span class="material-symbols-rounded"> info </span>
             </button>
+            <div
+              dvSharedUiInfoDialog
+              [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
+              [dialogMessageKey]="'shared.form.person.niederlassungsstatus.info'"
+              #niederLassungInfoDialog="dvSharedUiInfoDialog"
+            ></div>
 
             <!-- Auslaenderausweis -->
             @if (auslaenderausweisDocumentOptionsSig(); as options) {
               <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
             }
           </div>
-          <button
-            type="button"
-            (click)="niederLassungInfoDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
-            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-          >
-            <span class="material-symbols-rounded"> info </span>
-          </button>
-          <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
-            [dialogMessageKey]="'shared.form.person.niederlassungsstatus.info'"
-            #niederLassungInfoDialog="dvSharedUiInfoDialog"
-            class="d-none d-md-block col-md-6 col-xl-4"
-          ></div>
         }
         @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {
-          <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+          <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ 'shared.form.person.origin.label' | translate }}</mat-label>
               <input type="text" matInput dvMaxLength formControlName="heimatort" data-testid="form-person-heimatort" />
@@ -433,23 +417,21 @@
             @if (heimatortDocumentOptionsSig(); as options) {
               <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
             }
+            <button
+              type="button"
+              (click)="heimatortDialog.toggle()"
+              class="dv-icon-button dv-icon-button-md text-info mt-2"
+              [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+            >
+              <span class="material-symbols-rounded"> info </span>
+            </button>
+            <div
+              dvSharedUiInfoDialog
+              [dialogTitleKey]="'shared.form.person.heimatort.infoTitle'"
+              [dialogMessageKey]="'shared.form.person.heimatort.info'"
+              #heimatortDialog="dvSharedUiInfoDialog"
+            ></div>
           </div>
-          <button
-            type="button"
-            (click)="heimatortDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
-            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-          >
-            <span class="material-symbols-rounded"> info </span>
-          </button>
-          <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.heimatort.infoTitle'"
-            [dialogMessageKey]="'shared.form.person.file.heimatort.info'"
-            #heimatortDialog="dvSharedUiInfoDialog"
-            class="d-none d-md-block col-md-6 col-xl-4"
-          ></div>
         }
       </div>
 
@@ -548,7 +530,7 @@
 
         <!-- VORMUNDSCHAFT -->
         @if (form.controls.nationalitaet.value === nationalitaetCH) {
-          <div class="col-12 col-md-6 col-xl-4">
+          <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center">
             <div class="d-flex gap-2">
               <mat-checkbox formControlName="vormundschaft" data-testid="form-person-vormundschaft">{{
                 'shared.form.person.guardianship.label' | translate
@@ -556,27 +538,25 @@
               @if (vormundschaftDocumentOptionsSig(); as options) {
                 <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
               }
+              <dv-shared-ui-form-zuvor-hint
+                [changes]="view.formChanges?.vormundschaft | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+              ></dv-shared-ui-form-zuvor-hint>
+              <button
+                type="button"
+                (click)="ahvInfoDialog.toggle()"
+                class="dv-icon-button dv-icon-button-md text-info mt-2"
+                [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+              >
+                <span class="material-symbols-rounded"> info </span>
+              </button>
+              <div
+                dvSharedUiInfoDialog
+                [dialogTitleKey]="'shared.form.person.guardianship.label'"
+                [dialogMessageKey]="'shared.form.person.guardianship.info'"
+                #ahvInfoDialog="dvSharedUiInfoDialog"
+              ></div>
             </div>
-            <dv-shared-ui-form-zuvor-hint
-              [changes]="view.formChanges?.vormundschaft | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
-            ></dv-shared-ui-form-zuvor-hint>
           </div>
-          <button
-            type="button"
-            (click)="ahvInfoDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
-            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-          >
-            <span class="material-symbols-rounded"> info </span>
-          </button>
-          <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.guardianship.label'"
-            [dialogMessageKey]="'shared.form.person.guardianship.info'"
-            #ahvInfoDialog="dvSharedUiInfoDialog"
-            class="d-none d-md-block col-md-6 col-xl-4"
-          ></div>
         }
       </div>
 
@@ -605,7 +585,25 @@
           data-testid="form-person-sozialhilfeBeitraege"
           dvSharedUiFormField
         >
-          <label>{{ 'shared.form.person.social-security.label' | translate }}</label>
+          <div class="d-flex align-items-center">
+            <label>{{ 'shared.form.person.sozialhilfebeitraege.label' | translate }}</label>
+            <button
+              type="button"
+              (click)="emailDialog.toggle()"
+              class="dv-icon-button dv-icon-button-md text-info mt-2"
+              [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+            >
+              <span class="material-symbols-rounded"> info </span>
+            </button>
+
+            <div
+              dvSharedUiInfoDialog
+              [dialogTitleKey]="'shared.form.person.sozialhilfebeitraege.infoTitle'"
+              [dialogMessageKey]="'shared.form.person.sozialhilfebeitraege.info'"
+              #emailDialog="dvSharedUiInfoDialog"
+              class="d-none d-md-block col-md-6 col-xl-4"
+            ></div>
+          </div>
           <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
             <div class="d-flex flex-column">
               <mat-radio-button data-testid="yes" [value]="true">{{
@@ -630,22 +628,6 @@
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
         </mat-radio-group>
-        <button
-          type="button"
-          (click)="emailDialog.toggle()"
-          class="dv-icon-button dv-icon-button-md text-info mt-2"
-          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-        >
-          <span class="material-symbols-rounded"> info </span>
-        </button>
-        <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.person.email.label'"
-          [dialogMessageKey]="'shared.form.person.email.info'"
-          #emailDialog="dvSharedUiInfoDialog"
-          class="d-none d-md-block col-md-6 col-xl-4"
-        ></div>
       </div>
 
       <div class="row g-4 mt-1">
