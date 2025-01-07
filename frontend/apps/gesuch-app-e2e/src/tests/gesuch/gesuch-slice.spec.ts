@@ -173,7 +173,7 @@ test.describe('Neues gesuch erstellen', () => {
     await page.getByTestId('dialog-confirm').click();
     await freigabeResponse;
 
-    // Go to Berechnung (SB-App)
+    // Go to Berechnung (SB-App) ===================================================
     const urls = getE2eUrls();
     await page.goto(`${urls.sb}/verfuegung/${getGesuchId()}/zusammenfassung`);
 
@@ -187,8 +187,24 @@ test.describe('Neues gesuch erstellen', () => {
     await expect(
       page.getByTestId('berechnung-persoenlich-total'),
     ).toContainText("- 14'974");
+
     await expect(page.getByTestId('berechnung-familien-total')).toContainText(
       "- 55'492",
     );
+
+    // Go to Gesuch infos (SB-App) ===================================================
+    await page.getByTestId('sb-gesuch-header-infos-link').click();
+
+    await expect(page.getByTestId('step-title')).toContainText(
+      'Gesuchsverlauf',
+    );
+
+    await expect(
+      page.getByRole('cell', { name: 'Bereit für Bearbeitung' }),
+    ).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Eingereicht' })).toBeVisible();
+    await expect(
+      page.getByRole('cell', { name: 'Bearbeitung durch Gesuchsteller' }),
+    ).toBeVisible();
   });
 });
