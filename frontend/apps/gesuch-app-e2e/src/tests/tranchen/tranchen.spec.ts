@@ -15,6 +15,7 @@ import {
   gesuchFormularUpdateFn,
 } from '../../test-data/tranchen-test-data';
 
+// initialize the test with the user type and the gesuch-data to be used
 const { test, getGesuchId, getTrancheId } = initializeTest(
   'GESUCHSTELLER',
   ausbildungValues,
@@ -32,13 +33,12 @@ test.describe('Tranche erstellen', () => {
       '**/api/v1/gesuchtranche/*/requiredDokumente',
     );
 
+    // Upload all GS-Dokumente =================================================
     await page.goto(
       `${urls.gs}/gesuch/dokumente/${getGesuchId()}/tranche/${getTrancheId()}`,
     );
-
     await expectStepTitleToContainText('Dokumente', page);
     await requiredDokumenteResponse;
-
     const uploads = await page
       .locator('[data-testid^="button-document-upload"]')
       .all();
@@ -54,11 +54,10 @@ test.describe('Tranche erstellen', () => {
       await expect(page.getByTestId('file-input')).toHaveCount(0);
       await uploadCall;
     }
-
     await page.getByTestId('button-continue').click();
 
+    // Freigabe ===========================================================
     await expectStepTitleToContainText('Freigabe', page);
-
     await page.getByTestId('button-abschluss').click();
     const freigabeResponse = page.waitForResponse(
       '**/api/v1/gesuch/*/einreichen',
@@ -66,6 +65,7 @@ test.describe('Tranche erstellen', () => {
     await page.getByTestId('dialog-confirm').click();
     await freigabeResponse;
 
+    // Go to Berechnung (SB-App) ===============================================
     await page.goto(
       `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
     );
@@ -74,9 +74,9 @@ test.describe('Tranche erstellen', () => {
 
     await headerNav.elems.trancheMenu.click();
     await expect(headerNav.elems.trancheMenuItems).toHaveCount(1);
-
     await page.locator('.cdk-overlay-backdrop').click();
 
+    // set tranche to bearbeitung ===============================================
     await headerNav.elems.aktionMenu.click();
     await headerNav.elems
       .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
@@ -84,16 +84,16 @@ test.describe('Tranche erstellen', () => {
 
     // kommentar dialog
     await page.getByTestId('dialog-confirm').click();
-
     await headerNav.elems.aktionMenu.click();
     await headerNav.elems
       .getAktionStatusUebergangItem('SET_TO_BEARBEITUNG')
       .click();
 
+    // tranche erstellen ========================================================
     await headerNav.elems.aktionMenu.click();
     await headerNav.elems.aktionTrancheErstellen.click();
 
-    // aenderungen dialog
+    // Aenderungen erfassen dialog
     await page
       .getByTestId('form-aenderung-melden-dialog-gueltig-ab')
       .fill(`1.${specificMonth(11)}`);
@@ -101,8 +101,21 @@ test.describe('Tranche erstellen', () => {
       .getByTestId('form-aenderung-melden-dialog-kommentar')
       .fill('E2E Test ist Grund für Änderung');
     await page.getByTestId('dialog-confirm').click();
-
+    await expect(page.locator('.mdc-snackbar')).toContainText(
+      'Die Tranche wurde erfolgreich erstellt',
+    );
     await headerNav.elems.trancheMenu.click();
     await expect(headerNav.elems.trancheMenuItems).toHaveCount(2);
+
+    // tranche oeffnen ============================================================
+
+    await page.getByTestId('tranche-nav-menu-item-2').click();
+
+    await expect(page.getByRole('heading').nth(1)).toContainText('Tranche 2', {
+      ignoreCase: true,
+      timeout: 10000,
+    });
+
+    // end of test
   });
 });
