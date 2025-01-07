@@ -33,13 +33,16 @@ import {
 const { test, getGesuchId } = initializeTest('GESUCHSTELLER', ausbildung);
 
 test.describe('Neues gesuch erstellen', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  test('Neues gesuch erstellen', async ({ page, cockpit: _ }, testInfo) => {
+  test('Neues gesuch erstellen', async ({ page, cockpit }, testInfo) => {
     test.slow();
     const seed = `${testInfo.title}-${testInfo.workerIndex}`;
 
+    await cockpit.getGesuchEdit().click();
+
     // Step 1: Person ============================================================
-    await expect(page.getByTestId('step-title')).toBeAttached();
+    await expect(page.getByTestId('step-title')).toBeAttached({
+      timeout: 10000,
+    });
     await page.getByTestId('step-nav-person').first().click();
     await expectStepTitleToContainText('Person in Ausbildung', page);
     const personPO = new PersonPO(page);

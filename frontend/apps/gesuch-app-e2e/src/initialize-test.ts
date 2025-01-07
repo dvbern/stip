@@ -80,8 +80,6 @@ export const initializeTest = (
         await setupFn({ contexts, gesuchId, trancheId, seed });
       }
 
-      await cockpit.getGesuchEdit().click();
-
       await use(cockpit);
     },
   });

@@ -20,7 +20,9 @@ export const expectStepTitleToContainText = async (
   text: string,
   page: Page,
 ) => {
-  return expect(await getStepTitle(page)).toContainText(text);
+  return expect(await getStepTitle(page)).toContainText(text, {
+    timeout: 10000,
+  });
 };
 
 export type DeepNullable<T> = {

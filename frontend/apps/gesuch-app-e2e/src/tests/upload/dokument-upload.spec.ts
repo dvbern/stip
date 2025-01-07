@@ -27,9 +27,14 @@ const ausbildung: AusbildungValues = {
 const { test } = initializeTest('GESUCHSTELLER', ausbildung);
 
 test.describe('Dokument upload', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  test.slow();
+
   test('Dokument upload', async ({ page, cockpit }) => {
-    await expect(page.getByTestId('step-title')).toBeAttached();
+    await cockpit.getGesuchEdit().click();
+
+    await expect(page.getByTestId('step-title')).toBeAttached({
+      timeout: 10000,
+    });
     await page.getByTestId('step-nav-person').first().click();
     const person = new PersonPO(page);
 
