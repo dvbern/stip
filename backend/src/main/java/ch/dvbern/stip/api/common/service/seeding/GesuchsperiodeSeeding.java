@@ -40,45 +40,47 @@ public class GesuchsperiodeSeeding extends Seeder {
 
     @Override
     protected void doSeed() {
-        LOG.info("Seeding Gesuchsperiode");
-        Gesuchsjahr newJahr = null;
-        if (gesuchsperiodeRepository.count() == 0) {
-            newJahr = getJahrForSeeding();
-        }
-
-        if (newJahr == null) {
-            return;
-        }
-
-        int currentYear = newJahr.getTechnischesJahr();
-
-        final var newPerioden = List.of(
-            getPeriodeForSeeding(
-                "Herbst",
-                "Automne",
-                newJahr,
-                LocalDate.of(currentYear, 7, 1),
-                LocalDate.of(currentYear + 1, 6, 30),
-                LocalDate.of(currentYear, 7, 15),
-                LocalDate.of(currentYear + 1, 3, 31),
-                LocalDate.of(currentYear, 12, 31),
-                LocalDate.of(currentYear + 1, 3, 31)
-            ),
-            getPeriodeForSeeding(
-                "Frühling",
-                "Printemps",
-                newJahr,
-                LocalDate.of(currentYear, 1, 1),
-                LocalDate.of(currentYear, 12, 31),
-                LocalDate.of(currentYear, 1, 15),
-                LocalDate.of(currentYear, 9, 30),
-                LocalDate.of(currentYear, 6, 30),
-                LocalDate.of(currentYear, 9, 30)
-            )
+        LOG.info("Seeding Gesuchsperiode and Jahr");
+        final var yearsToSeed = List.of(
+            2024,
+            2025
         );
 
-        gesuchsjahrRepository.persistAndFlush(newJahr);
-        gesuchsperiodeRepository.persist(newPerioden);
+        for (final var yearToSeed : yearsToSeed) {
+            var gesuchsjahr = gesuchsjahrRepository.find("technischesJahr", yearToSeed).firstResult();
+            if (gesuchsjahr != null) {
+                continue;
+            }
+
+            gesuchsjahr = getJahrForSeeding(yearToSeed);
+            final var newPerioden = List.of(
+                getPeriodeForSeeding(
+                    "Herbst",
+                    "Automne",
+                    gesuchsjahr,
+                    LocalDate.of(yearToSeed, 7, 1),
+                    LocalDate.of(yearToSeed + 1, 6, 30),
+                    LocalDate.of(yearToSeed, 7, 15),
+                    LocalDate.of(yearToSeed + 1, 3, 31),
+                    LocalDate.of(yearToSeed, 12, 31),
+                    LocalDate.of(yearToSeed + 1, 3, 31)
+                ),
+                getPeriodeForSeeding(
+                    "Frühling",
+                    "Printemps",
+                    gesuchsjahr,
+                    LocalDate.of(yearToSeed, 1, 1),
+                    LocalDate.of(yearToSeed, 12, 31),
+                    LocalDate.of(yearToSeed, 1, 15),
+                    LocalDate.of(yearToSeed, 9, 30),
+                    LocalDate.of(yearToSeed, 6, 30),
+                    LocalDate.of(yearToSeed, 9, 30)
+                )
+            );
+
+            gesuchsjahrRepository.persistAndFlush(gesuchsjahr);
+            gesuchsperiodeRepository.persist(newPerioden);
+        }
     }
 
     @Override
@@ -86,14 +88,13 @@ public class GesuchsperiodeSeeding extends Seeder {
         return configService.getSeedOnProfile();
     }
 
-    Gesuchsjahr getJahrForSeeding() {
-        int currentYear = LocalDate.now().getYear();
-        String yearAsString = String.valueOf(currentYear);
-        String yearSuffix = yearAsString.substring(yearAsString.length() - 2, yearAsString.length());
+    Gesuchsjahr getJahrForSeeding(final int technischesJahr) {
+        // Technically this limits us to the 2nd millennium, but I hope this won't be used in the year 3000+
+        String yearSuffix = String.valueOf(technischesJahr - 2000);
         return new Gesuchsjahr()
             .setBezeichnungDe("Gesuchsjahr " + yearSuffix)
             .setBezeichnungFr("Année de la demande " + yearSuffix)
-            .setTechnischesJahr(currentYear)
+            .setTechnischesJahr(technischesJahr)
             .setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
     }
 
