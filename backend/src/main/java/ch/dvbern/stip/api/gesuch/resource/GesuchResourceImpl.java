@@ -102,6 +102,13 @@ public class GesuchResourceImpl implements GesuchResource {
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
+    public GesuchDto changeGesuchStatusToVersandbereit(UUID gesuchTrancheId) {
+        return null;
+    }
+
+    // TODO KSTIP-1247: roles allowed
+    @RolesAllowed({ ROLE_SACHBEARBEITER })
+    @Override
     public GesuchDto changeGesuchStatusToVerfuegt(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
