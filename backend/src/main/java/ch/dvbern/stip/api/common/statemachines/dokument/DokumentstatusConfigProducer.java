@@ -37,7 +37,8 @@ public class DokumentstatusConfigProducer {
             .permit(DokumentstatusChangeEvent.ABGELEHNT, Dokumentstatus.ABGELEHNT)
             .permit(DokumentstatusChangeEvent.AKZEPTIERT, Dokumentstatus.AKZEPTIERT);
 
-        config.configure(Dokumentstatus.ABGELEHNT);
+        config.configure(Dokumentstatus.ABGELEHNT)
+            .permit(DokumentstatusChangeEvent.AUSSTEHEND, Dokumentstatus.AUSSTEHEND);
         config.configure(Dokumentstatus.AKZEPTIERT);
 
         return config;
