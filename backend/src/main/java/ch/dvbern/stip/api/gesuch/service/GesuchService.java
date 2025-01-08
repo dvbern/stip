@@ -30,8 +30,10 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -39,7 +41,6 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -63,6 +64,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -92,11 +94,12 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
+
 @RequestScoped
 @RequiredArgsConstructor
 @Slf4j
 public class GesuchService {
-    private final GesuchHistoryRepository gesuchHistoryRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
@@ -127,6 +130,7 @@ public class GesuchService {
     private final AusbildungRepository ausbildungRepository;
     private final StipDecisionService stipDecisionService;
     private final StipDecisionTextRepository stipDecisionTextRepository;
+    private final UnterschriftenblattService unterschriftenblattService;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
@@ -605,6 +609,25 @@ public class GesuchService {
             GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
             new KommentarDto(decision.getTitleDe()),
             false
+        );
+    }
+
+    @Transactional
+    public void changeGesuchStatusToVersandbereit(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (!unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)) {
+            throw new CustomValidationsException(
+                "Required Unterschriftenblaetter are not uploaded",
+                new CustomConstraintViolation(
+                    VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
+                    "unterschriftenblaetter"
+                )
+            );
+        }
+
+        gesuchStatusService.triggerStateMachineEvent(
+            gesuch,
+            GesuchStatusChangeEvent.VERSANDBEREIT
         );
     }
 

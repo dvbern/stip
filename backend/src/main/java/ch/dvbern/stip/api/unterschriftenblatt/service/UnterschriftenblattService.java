@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.unterschriftenblatt.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -149,6 +150,17 @@ public class UnterschriftenblattService {
             })
             .filter(unterschriftenblattDokumentTyp -> !existingTypes.contains(unterschriftenblattDokumentTyp))
             .toList();
+    }
+
+    @Transactional
+    public boolean areRequiredUnterschriftenblaetterUploaded(final Gesuch gesuch) {
+        final var requiredUnterschriftenblaetter = new HashSet<>(getUnterschriftenblaetterToUpload(gesuch));
+
+        unterschriftenblattRepository
+            .requireForGesuch(gesuch.getId())
+            .forEach(present -> requiredUnterschriftenblaetter.remove(present.getDokumentTyp()));
+
+        return requiredUnterschriftenblaetter.isEmpty();
     }
 
     private Unterschriftenblatt createUnterschriftenblatt(
