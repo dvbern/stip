@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -34,12 +35,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RequiredDokumentService {
     private final Instance<RequiredDocumentProducer> requiredDocumentProducers;
+    private final Instance<RequiredCustomDocumentProducer> requiredCustomDocumentProducers;
 
+    // todo: implement same method for custom
     private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchFormular formular) {
         return formular
             .getTranche()
             .getGesuchDokuments();
     }
+    // todo: implement same method for custom
 
     private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
         return getExistingDokumentsForGesuch(formular)
@@ -48,6 +52,7 @@ public class RequiredDokumentService {
             .map(GesuchDokument::getDokumentTyp)
             .toList();
     }
+    // todo: implement same method for custom
 
     private Set<DokumentTyp> getRequiredDokumentTypesForGesuch(final GesuchFormular formular) {
         return requiredDocumentProducers
