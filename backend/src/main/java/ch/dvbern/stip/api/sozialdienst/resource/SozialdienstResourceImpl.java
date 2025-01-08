@@ -107,27 +107,28 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return sozialdienstService.updateSozialdienstAdmin(sozialdienstAdminUpdateDto, sozialdienst);
     }
 
+    @AllowAll
+    @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
     public SozialdienstBenutzerDto createSozialdienstBenutzer(
         SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
     ) {
         return sozialdienstBenutzerService.createSozialdienstBenutzer(
-            sozialdienstAuthorizer.getSozialdienstOfSozialdienstAdmin().getId(),
+            sozialdienstAuthorizer.getSozialdienstOfSozialdienstAdmin(),
             sozialdienstBenutzerCreateDto
         );
     }
 
+    @AllowAll
+    @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
     public List<SozialdienstBenutzerDto> getSozialdienstBenutzer() {
-        return sozialdienstAuthorizer.getSozialdienstOfSozialdienstAdmin()
-            .getSozialdienstBenutzers()
-            .stream()
-            .map(
-                sozialdienstBenutzerMapper::toDto
-            )
-            .toList();
+        return sozialdienstBenutzerService
+            .getSozialdienstBenutzers(sozialdienstAuthorizer.getSozialdienstOfSozialdienstAdmin());
     }
 
+    @AllowAll
+    @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
     public SozialdienstBenutzerDto updateSozialdienstBenutzer(
         SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdateDto
@@ -135,6 +136,8 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         return sozialdienstBenutzerService.updateSozialdienstBenutzer(sozialdienstBenutzerUpdateDto);
     }
 
+    @AllowAll
+    @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
     public void deleteSozialdienstBenutzer(UUID sozialdienstBenutzerId) {
         sozialdienstBenutzerService.deleteSozialdienstBenutzer(sozialdienstBenutzerId);

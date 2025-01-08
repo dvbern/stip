@@ -27,6 +27,7 @@ import javax.net.ssl.SSLContext;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
@@ -66,9 +67,17 @@ public class SozialdienstBenutzerService {
     private Keycloak keycloak = null;
 
     @PostConstruct
-    public void initKeycloak() throws NoSuchAlgorithmException {
+    public void setup() throws NoSuchAlgorithmException {
+        keycloak = initKeycloak();
+    }
+
+    public Keycloak initKeycloak() throws NoSuchAlgorithmException {
         final KeycloakAdminClientConfig config = keycloakAdminClientConfigRuntimeValue;
-        keycloak = KeycloakBuilder.builder()
+        if (config == null) {
+            return null;
+        }
+
+        return KeycloakBuilder.builder()
             .clientId(config.clientId)
             .clientSecret(config.clientSecret.orElse(null))
             .grantType(config.grantType.asString())
@@ -126,9 +135,18 @@ public class SozialdienstBenutzerService {
         sozialdienstBenutzerRepository.delete(sozialdienstAdmin);
     }
 
+    public List<SozialdienstBenutzerDto> getSozialdienstBenutzers(Sozialdienst sozialdienst) {
+        return sozialdienst.getSozialdienstBenutzers()
+            .stream()
+            .map(
+                sozialdienstBenutzerMapper::toDto
+            )
+            .toList();
+    }
+
     @Transactional
     public SozialdienstBenutzerDto createSozialdienstBenutzer(
-        final UUID sozialdienstId,
+        final Sozialdienst sozialdienst,
         final SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
     ) {
         var userRep = new UserRepresentation();
@@ -169,7 +187,9 @@ public class SozialdienstBenutzerService {
             sozialdienstBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
             sozialdienstBenutzer.setKeycloakId(keycloakUserId);
             sozialdienstBenutzerRepository.persistAndFlush(sozialdienstBenutzer);
-            sozialdienstRepository.requireById(sozialdienstId).getSozialdienstBenutzers().add(sozialdienstBenutzer);
+            sozialdienstRepository.requireById(sozialdienst.getId())
+                .getSozialdienstBenutzers()
+                .add(sozialdienstBenutzer);
             keycloakUserResource.executeActionsEmail(List.of(OidcConstants.REQUIRED_ACTION_UPDATE_PASSWORD));
             return sozialdienstBenutzerMapper.toDto(sozialdienstBenutzer);
         }
@@ -208,6 +228,10 @@ public class SozialdienstBenutzerService {
             if (response.getStatus() != Status.NO_CONTENT.getStatusCode()) {
                 throw new WebApplicationException(response);
             }
+            var sozialdienst =
+                sozialdienstBenutzerRepository.findSozialdienstBySozialdienstBenutzer(sozialdienstBenutzer)
+                    .orElseThrow(NotFoundException::new);
+            sozialdienst.getSozialdienstBenutzers().remove(sozialdienstBenutzer);
             sozialdienstBenutzerRepository.delete(sozialdienstBenutzer);
         }
     }

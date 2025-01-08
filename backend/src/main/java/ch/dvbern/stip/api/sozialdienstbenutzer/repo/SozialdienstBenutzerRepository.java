@@ -20,6 +20,8 @@ package ch.dvbern.stip.api.sozialdienstbenutzer.repo;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.sozialdienst.entity.QSozialdienst;
+import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.QSozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,11 +36,19 @@ public class SozialdienstBenutzerRepository implements BaseRepository<Sozialdien
 
     public Optional<SozialdienstBenutzer> findByKeycloakId(String keycloakId) {
         var queryFactory = new JPAQueryFactory(entityManager);
-        var sozialdienstAdmin = QSozialdienstBenutzer.sozialdienstBenutzer;
+        var sozialdienstBenutzer = QSozialdienstBenutzer.sozialdienstBenutzer;
         var query = queryFactory
-            .select(sozialdienstAdmin)
-            .from(sozialdienstAdmin)
-            .where(sozialdienstAdmin.keycloakId.eq(keycloakId));
+            .selectFrom(sozialdienstBenutzer)
+            .where(sozialdienstBenutzer.keycloakId.eq(keycloakId));
+        return query.stream().findFirst();
+    }
+
+    public Optional<Sozialdienst> findSozialdienstBySozialdienstBenutzer(SozialdienstBenutzer sozialdienstBenutzer) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var qSozialdienst = QSozialdienst.sozialdienst;
+        var query = queryFactory
+            .selectFrom(qSozialdienst)
+            .where(qSozialdienst.sozialdienstBenutzers.contains(sozialdienstBenutzer));
         return query.stream().findFirst();
     }
 }
