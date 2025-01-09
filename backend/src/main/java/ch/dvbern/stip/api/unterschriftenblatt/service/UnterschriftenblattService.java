@@ -29,6 +29,8 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
@@ -63,6 +65,7 @@ public class UnterschriftenblattService {
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final UnterschriftenblattMapper unterschriftenblattMapper;
+    private final GesuchStatusService gesuchStatusService;
 
     @Transactional
     public Uni<Response> getUploadUnterschriftenblattUni(
@@ -161,6 +164,16 @@ public class UnterschriftenblattService {
             .forEach(present -> requiredUnterschriftenblaetter.remove(present.getDokumentTyp()));
 
         return requiredUnterschriftenblaetter.isEmpty();
+    }
+
+    @Transactional
+    public void checkForUnterschriftenblaetterOnAllGesuche() {
+        final var gesuche = gesuchRepository.getAllWartenAufUnterschriftenblatt();
+        for (final var gesuch : gesuche) {
+            if (areRequiredUnterschriftenblaetterUploaded(gesuch)) {
+                gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+            }
+        }
     }
 
     private Unterschriftenblatt createUnterschriftenblatt(

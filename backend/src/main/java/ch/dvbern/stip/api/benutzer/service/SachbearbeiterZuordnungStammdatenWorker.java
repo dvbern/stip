@@ -84,8 +84,9 @@ public class SachbearbeiterZuordnungStammdatenWorker {
         executor.executeBlocking(() -> {
             try {
                 QuarkusTransaction.requiringNew().run(() -> {
-                    DataTenantResolver.setTenantId(tenantId);
-                    body.run();
+                    try (final var ignored = DataTenantResolver.setTenantId(tenantId)) {
+                        body.run();
+                    }
                 });
             } catch (Exception e) {
                 LOG.error(e.toString(), e);

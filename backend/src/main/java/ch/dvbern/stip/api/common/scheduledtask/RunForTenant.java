@@ -15,16 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.type;
+package ch.dvbern.stip.api.common.scheduledtask;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Getter
-@RequiredArgsConstructor
-public enum MandantIdentifier {
-    BERN("bern"),
-    GLOBAL("global");
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import jakarta.interceptor.InterceptorBinding;
 
-    private final String identifier;
+@InterceptorBinding
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+public @interface RunForTenant {
+    MandantIdentifier value();
 }

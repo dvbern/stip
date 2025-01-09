@@ -15,28 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.tenancy.service;
+package ch.dvbern.stip.api.common.scheduledtask;
 
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
-import io.quarkus.oidc.TenantResolver;
-import io.vertx.ext.web.RoutingContext;
-import jakarta.enterprise.context.ApplicationScoped;
+import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
+import jakarta.interceptor.AroundInvoke;
+import jakarta.interceptor.Interceptor;
+import jakarta.interceptor.InvocationContext;
 
-@ApplicationScoped
-public class OidcTenantResolver implements TenantResolver {
-
-    public static final String DEFAULT_TENANT_IDENTIFIER = MandantIdentifier.BERN.getIdentifier();
-    public static final String TENANT_IDENTIFIER_CONTEXT_NAME = "tenantId";
-
-    @Override
-    @SuppressWarnings("java:S1135")
-    public String resolve(RoutingContext context) {
-
-        final var tenant = DEFAULT_TENANT_IDENTIFIER;
-
-        // TODO KSTIP-781: resolve tenant based on request and implement a test for it and remove SupressWarning
-        context.put(TENANT_IDENTIFIER_CONTEXT_NAME, tenant);
-
-        return tenant;
+@Interceptor
+@RunForTenant(MandantIdentifier.BERN)
+public class RunForTenantInterceptor {
+    @AroundInvoke
+    Object aroundInvoke(final InvocationContext invocationContext) throws Throwable {
+        final var annotation = invocationContext.getMethod().getAnnotation(RunForTenant.class);
+        try (final var ignored = DataTenantResolver.setTenantId(annotation.value().getIdentifier())) {
+            return invocationContext.proceed();
+        }
     }
 }

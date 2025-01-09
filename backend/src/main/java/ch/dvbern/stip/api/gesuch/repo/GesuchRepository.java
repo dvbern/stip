@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.repo;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -201,5 +202,9 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);
+    }
+
+    public List<Gesuch> getAllWartenAufUnterschriftenblatt() {
+        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT).stream().toList();
     }
 }
