@@ -26,15 +26,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
-public abstract class SozialdienstBenutzerMapper {
+public interface SozialdienstBenutzerMapper {
 
-    public abstract SozialdienstBenutzer toEntity(SozialdienstBenutzerCreateDto createDto);
+    SozialdienstBenutzer toEntity(SozialdienstBenutzerCreateDto createDto);
 
-    public abstract SozialdienstBenutzer toEntity(SozialdienstBenutzerUpdateDto updateDto);
+    SozialdienstBenutzer toEntity(SozialdienstBenutzerUpdateDto updateDto);
 
-    public abstract SozialdienstBenutzerDto toDto(SozialdienstBenutzer sozialdienstBenutzer);
+    SozialdienstBenutzerDto toDto(SozialdienstBenutzer sozialdienstBenutzer);
 
-    public abstract SozialdienstBenutzer partialUpdate(
+    SozialdienstBenutzer partialUpdate(
         SozialdienstBenutzerUpdateDto updateDto,
         @MappingTarget SozialdienstBenutzer entity
     );
