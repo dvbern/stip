@@ -72,7 +72,7 @@ public class GesuchTrancheHistoryRepository {
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus
     ) {
-        return getLatestWhereStatusChangedTo(gesuchId, gesuchStatus).map(Gesuch::getCurrentGesuchTranche);
+        return getLatestWhereStatusChangedTo(gesuchId, gesuchStatus).flatMap(Gesuch::getCurrentGesuchTrancheOptional);
     }
 
     public Optional<GesuchTranche> findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(
@@ -83,18 +83,21 @@ public class GesuchTrancheHistoryRepository {
         final var historicGesuch = getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
 
         // Get the one that was created the furthest in the past, i.e. the first/ initial Tranche
-        return historicGesuch.orElseThrow()
-            .getGesuchTranchen()
-            .stream()
-            .min(Comparator.comparing(AbstractEntity::getTimestampErstellt));
+        return historicGesuch.flatMap(
+            gesuch -> gesuch.getGesuchTranchen()
+                .stream()
+                .min(Comparator.comparing(AbstractEntity::getTimestampErstellt))
+        );
     }
 
+    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
+    @SuppressWarnings("unchecked")
     private Optional<Gesuch> getLatestWhereStatusChangedTo(
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus
     ) {
         final var reader = AuditReaderFactory.get(em);
-        final var historicGesuch = reader
+        return reader
             .createQuery()
             .forRevisionsOfEntity(Gesuch.class, true, true)
             .add(AuditEntity.property("id").eq(gesuchId))
@@ -102,8 +105,8 @@ public class GesuchTrancheHistoryRepository {
             .add(AuditEntity.property("gesuchStatus").hasChanged())
             .addOrder(AuditEntity.revisionNumber().desc())
             .setMaxResults(1)
-            .getSingleResult();
-
-        return Optional.ofNullable((Gesuch) historicGesuch);
+            .getResultList()
+            .stream()
+            .findFirst();
     }
 }
