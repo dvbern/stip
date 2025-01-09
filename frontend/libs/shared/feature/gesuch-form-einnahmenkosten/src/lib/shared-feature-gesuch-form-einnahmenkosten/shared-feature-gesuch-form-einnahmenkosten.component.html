@@ -531,7 +531,23 @@
             data-testid="form-einnahmen-kosten-verdienstRealisiert"
             dvSharedUiFormField
           >
-            <mat-label>{{ 'shared.form.einnahmenkosten.verdienstRealisiert.label' | translate }}</mat-label>
+            <div class="d-flex align-items-center col-12 col-md-8 col-xl-4 flex-grow-1 gap-1">
+              <mat-label>{{ 'shared.form.einnahmenkosten.verdienstRealisiert.label' | translate }}</mat-label>
+              <button
+                type="button"
+                (click)="verdienstRealisiertDialog.toggle()"
+                class="dv-icon-button dv-icon-button-md text-info mt-2"
+                [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+              >
+                <span class="material-symbols-rounded"> info </span>
+              </button>
+              <div
+                dvSharedUiInfoDialog
+                [dialogTitleKey]="'shared.form.einnahmenkosten.verdienstRealisiert.label'"
+                [dialogMessageKey]="'shared.form.einnahmenkosten.verdienstRealisiert.info'"
+                #verdienstRealisiertDialog="dvSharedUiInfoDialog"
+              ></div>
+            </div>
             <div class="d-flex flex-wrap gap-2 col-12 col-md-6 col-xl-6 pe-md-3 justify-content-between">
               <div class="d-flex flex-column">
                 <mat-radio-button data-testid="yes" [value]="true">

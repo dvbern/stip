@@ -18,6 +18,7 @@ import { LebenslaufItemUpdate } from '@dv/shared/model/gesuch';
 import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -30,7 +31,6 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from './shared-feature-ges
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from '../shared-feature-gesuch-form-lebenslauf-editor/shared-feature-gesuch-form-lebenslauf-editor.component';
 import { TimelineAddCommand } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline';
 import { TwoColumnTimelineComponent } from '../shared-feature-gesuch-form-lebenslauf-visual/two-column-timeline.component';
-import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 
 const AUSBILDUNGS_MONTH = 8;
 const MIN_EDUCATION_AGE = 16;

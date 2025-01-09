@@ -18,30 +18,46 @@
       </h3>
       <!-- AHV -->
       <div class="row g-4 my-2">
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-          <mat-label>{{ 'shared.form.shared.social-insurance-number.label' | translate }}</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="sozialversicherungsnummer"
-            data-testid="form-partner-sozialversicherungsnummer"
-            placeholder="756.xxxx.xxxx.xx"
-            [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges?.sozialversicherungsnummer"></mat-hint>
-          <mat-error *dvSharedUiFormMessageInfo>
-            {{ 'shared.form.shared.social-insurance-number.info' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'ahv'">
-            {{ 'shared.form.error.ahv' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'notUniqueAhv'">
-            {{ 'shared.form.error.notUniqueAhv' | translate }}
-          </mat-error>
-        </mat-form-field>
+        <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
+          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <mat-label>{{ 'shared.form.shared.sozialversicherungsnummer.label' | translate }}</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="sozialversicherungsnummer"
+              data-testid="form-partner-sozialversicherungsnummer"
+              placeholder="756.xxxx.xxxx.xx"
+              [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges?.sozialversicherungsnummer"></mat-hint>
+            <mat-error *dvSharedUiFormMessageInfo>
+              {{ 'shared.form.shared.social-insurance-number.info' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'ahv'">
+              {{ 'shared.form.error.ahv' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'notUniqueAhv'">
+              {{ 'shared.form.error.notUniqueAhv' | translate }}
+            </mat-error>
+          </mat-form-field>
+          <button
+            type="button"
+            (click)="ahvInfoDialog.toggle()"
+            class="dv-icon-button dv-icon-button-md text-info mt-2"
+            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+          >
+            <span class="material-symbols-rounded"> info </span>
+          </button>
+          <div
+            dvSharedUiInfoDialog
+            [dialogTitleKey]="'shared.form.person.sozialversicherungsnummer.infoTitle'"
+            [dialogMessageKey]="'shared.form.person.sozialversicherungsnummer.info'"
+            #ahvInfoDialog="dvSharedUiInfoDialog"
+          ></div>
+        </div>
       </div>
       <div class="row g-4 my-2">
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
@@ -104,7 +120,7 @@
       </div>
       <div class="row g-4">
         <!-- AUSBILDUNG MIT EINKOMMEN ODER ERWERBSTÄTIG -->
-        <div class="col-12 col-xl-8">
+        <div class="col-12 col-md-12 col-xl-8 d-flex align-items-center flex-grow-1 gap-1">
           <mat-checkbox
             type="checkbox"
             formControlName="ausbildungMitEinkommenOderErwerbstaetig"
@@ -117,6 +133,20 @@
                 | translateChange: 'shared.form.zuvor.checkbox.$VALUE'
             "
           ></dv-shared-ui-form-zuvor-hint>
+          <button
+            type="button"
+            (click)="ausbildungEinkommenErwerbsDialog.toggle()"
+            class="dv-icon-button dv-icon-button-md text-info mt-2"
+            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+          >
+            <span class="material-symbols-rounded"> info </span>
+          </button>
+          <div
+            dvSharedUiInfoDialog
+            [dialogTitleKey]="'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.label'"
+            [dialogMessageKey]="'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.info'"
+            #ausbildungEinkommenErwerbsDialog="dvSharedUiInfoDialog"
+          ></div>
         </div>
       </div>
       @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {

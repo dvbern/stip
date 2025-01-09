@@ -52,6 +52,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   SharedUiPercentageSplitterComponent,
@@ -70,7 +71,6 @@ import {
   FamiliensituationFormStep,
   FamiliensituationFormSteps,
 } from './familiensituation-form-steps';
-import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 
 type FamSitStepMeta = {
   [P in keyof FamiliensituationFormSteps]?: FamSitAnimationState;

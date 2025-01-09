@@ -39,6 +39,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -56,7 +57,6 @@ import {
 } from '@dv/shared/util/validator-date';
 
 import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-gesuch-form-lebenslauf/shared-feature-gesuch-form-lebenslauf.selector';
-import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-editor',

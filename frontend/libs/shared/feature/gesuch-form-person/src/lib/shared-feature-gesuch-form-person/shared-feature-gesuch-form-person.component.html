@@ -12,11 +12,11 @@
       class="mt-4"
       (ngSubmit)="handleSave()"
     >
-      <!-- AHV -->
+      <!-- AHV Sozialversicherungsnummer -->
       <div class="row g-4">
         <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>{{ 'shared.form.person.sozialversicherungsnummer.label' | translate }}</mat-label>
+            <mat-label>{{ 'shared.form.shared.sozialversicherungsnummer.label' | translate }}</mat-label>
             <input
               type="text"
               matInput
@@ -121,7 +121,7 @@
 
       <div class="row g-4 mt-1">
         <!-- Wohnsitz -->
-        <div class="col-12 col-md-12 col-xl-8 d-flex align-items-center">
+        <div class="col-12 col-md-12 col-xl-8 d-flex align-items-center flex-grow-1 gap-1">
           <mat-checkbox
             formControlName="identischerZivilrechtlicherWohnsitz"
             data-testid="form-person-identischerZivilrechtlicherWohnsitz"
@@ -133,7 +133,6 @@
                 | translateChange: 'shared.form.zuvor.checkbox.$VALUE'
             "
           ></dv-shared-ui-form-zuvor-hint>
-
           <button
             type="button"
             (click)="identischerWohnsitzDialog.toggle()"
@@ -142,14 +141,14 @@
           >
             <span class="material-symbols-rounded"> info </span>
           </button>
+
+          <div
+            dvSharedUiInfoDialog
+            [dialogTitleKey]="'shared.form.person.identischerWohnsitz.label'"
+            [dialogMessageKey]="'shared.form.person.identischerWohnsitz.info'"
+            #identischerWohnsitzDialog="dvSharedUiInfoDialog"
+          ></div>
         </div>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.person.identischerWohnsitz.label'"
-          [dialogMessageKey]="'shared.form.person.identischerWohnsitz.info'"
-          #identischerWohnsitzDialog="dvSharedUiInfoDialog"
-          class="d-none d-md-block col-md-6 col-xl-4"
-        ></div>
       </div>
       <!-- alternative civil residence -->
       @if (!form.value.identischerZivilrechtlicherWohnsitz) {
@@ -585,22 +584,21 @@
           data-testid="form-person-sozialhilfeBeitraege"
           dvSharedUiFormField
         >
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center gap-1">
             <label>{{ 'shared.form.person.sozialhilfebeitraege.label' | translate }}</label>
             <button
               type="button"
-              (click)="emailDialog.toggle()"
+              (click)="sozialhilfebeitraegeDialog.toggle()"
               class="dv-icon-button dv-icon-button-md text-info mt-2"
               [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
             >
               <span class="material-symbols-rounded"> info </span>
             </button>
-
             <div
               dvSharedUiInfoDialog
               [dialogTitleKey]="'shared.form.person.sozialhilfebeitraege.infoTitle'"
               [dialogMessageKey]="'shared.form.person.sozialhilfebeitraege.info'"
-              #emailDialog="dvSharedUiInfoDialog"
+              #sozialhilfebeitraegeDialog="dvSharedUiInfoDialog"
               class="d-none d-md-block col-md-6 col-xl-4"
             ></div>
           </div>
