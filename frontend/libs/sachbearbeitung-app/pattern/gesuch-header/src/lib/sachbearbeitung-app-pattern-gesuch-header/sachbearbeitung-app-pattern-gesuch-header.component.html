@@ -17,7 +17,7 @@
       [matMenuTriggerFor]="gesuchMenu"
     >
       <i class="material-symbols-rounded text-white me-2">checklist</i>
-      <span>{{ 'sachbearbeitung-app.header.tranchenAuswahl' | translate }}</span>
+      <span>{{ 'shared.header.tranchenAuswahl' | translate }}</span>
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
     <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
@@ -32,7 +32,7 @@
           >
             <span>
               {{
-                'sachbearbeitung-app.header.tranche.item'
+                'shared.header.tranche.item'
                   | translate: { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }
               }}
               -
@@ -67,7 +67,7 @@
       [matMenuTriggerFor]="aenderungenMenu"
     >
       <i class="material-symbols-rounded text-white me-2">update</i>
-      <span>{{ 'sachbearbeitung-app.header.aenderungen' | translate }}</span>
+      <span>{{ 'shared.header.aenderungen' | translate }}</span>
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
     <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel mt-2 rounded col-12">
@@ -82,7 +82,7 @@
           >
             <span>
               {{
-                'sachbearbeitung-app.header.aenderung.item'
+                'shared.header.aenderung.item'
                   | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: aenderung.index + 1 }
               }}
               -
@@ -92,7 +92,7 @@
         }
         <div class="d-flex gap-2 align-items-center text-muted small">
           <hr class="flex-grow-1" />
-          {{ 'sachbearbeitung-app.header.aenderungen.akzeptierte' | translate }}
+          {{ 'shared.header.aenderungen.akzeptierte' | translate }}
           <hr class="flex-grow-1" />
         </div>
         @for (aenderung of aenderungen.byStatus.completed; track $index) {
@@ -105,7 +105,7 @@
           >
             <span>
               {{
-                'sachbearbeitung-app.header.aenderung.item'
+                'shared.header.aenderung.item'
                   | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: aenderung.index + 1 }
               }}
               -
@@ -117,7 +117,7 @@
         @if (initialTranche) {
           <div class="d-flex gap-2 align-items-center text-muted small">
             <hr class="flex-grow-1" />
-            {{ 'sachbearbeitung-app.header.aenderungen.initial' | translate }}
+            {{ 'shared.header.aenderungen.initial' | translate }}
             <hr class="flex-grow-1" />
           </div>
           <a
@@ -129,8 +129,7 @@
           >
             <span>
               {{
-                'sachbearbeitung-app.header.initialTranche.item'
-                  | translate: { date: initialTranche.gueltigAb | date: 'dd.MM.YYYY' }
+                'shared.header.initialTranche.item' | translate: { date: initialTranche.gueltigAb | date: 'dd.MM.YYYY' }
               }}
               -
               {{ initialTranche.gueltigBis | date: 'dd.MM.YYYY' }}

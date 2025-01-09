@@ -62,12 +62,52 @@
   <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
     <a
       routerLink="/"
-      class="btn btn-danger fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="gesuch-step-nav-dashboard"
     >
       <i class="material-symbols-rounded text-white me-2">dashboard</i>
       <span translate>shared.menu.dashboard</span>
     </a>
+
+    @let gesuchId = gesuchIdSig();
+    @let trancheId = trancheIdSig();
+    @let tranchen = gesuchAenderungStore.tranchenViewSig().list;
+    @if (gesuchId && trancheId && tranchen.length > 1) {
+      <!-- Gesuch -->
+      <button
+        type="button"
+        class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+        data-testid="gesuch-header-nav-tranche-auswahl"
+        [class.active]="isTrancheRouteSig()"
+        [matMenuTriggerFor]="gesuchMenu"
+      >
+        <i class="material-symbols-rounded text-white me-2">checklist</i>
+        <span>{{ 'shared.header.tranchenAuswahl' | translate }}</span>
+        <i class="material-symbols-rounded ms-2">expand_more</i>
+      </button>
+      <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
+        <div class="d-flex flex-column gap-2">
+          @for (tranche of tranchen; track $index) {
+            <a
+              [routerLink]="['/', 'gesuch', gesuchId, 'tranche', tranche.id]"
+              class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+              data-testid="gesuch-step-nav-overview"
+              mat-menu-item
+              [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
+            >
+              <span>
+                {{
+                  'shared.header.tranche.item'
+                    | translate: { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }
+                }}
+                -
+                {{ tranche.gueltigBis | date: 'MM.yyyy' }}
+              </span>
+            </a>
+          }
+        </div>
+      </mat-menu>
+    }
   </div>
 
   <div dvHeaderDesktopRight class="d-flex gap-4 align-items-center"></div>
