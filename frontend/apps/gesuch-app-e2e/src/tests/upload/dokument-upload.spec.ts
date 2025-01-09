@@ -3,8 +3,8 @@ import { expect } from '@playwright/test';
 import {
   SmallImageFile,
   selectMatRadio,
-  specificMonth,
   specificMonthPlusYears,
+  specificYearsAgo,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { initializeTest } from '../../initialize-test';
@@ -19,7 +19,7 @@ const ausbildung: AusbildungValues = {
   ausbildungsstaetteText: 'Universität Bern',
   ausbildungsgangText: 'Master',
   fachrichtung: 'Kunstgeschichte',
-  ausbildungBegin: specificMonth(9),
+  ausbildungBegin: `01.09.${specificYearsAgo(1)}`,
   ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
 };

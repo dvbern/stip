@@ -96,7 +96,7 @@ test.describe('Tranche erstellen', () => {
     // Aenderungen erfassen dialog
     await page
       .getByTestId('form-aenderung-melden-dialog-gueltig-ab')
-      .fill(`1.${specificMonth(11)}`);
+      .fill(`1.${specificMonth(1)}`);
     await page
       .getByTestId('form-aenderung-melden-dialog-kommentar')
       .fill('E2E Test ist Grund für Änderung');

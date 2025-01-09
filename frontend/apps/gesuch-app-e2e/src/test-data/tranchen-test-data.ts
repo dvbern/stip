@@ -1,30 +1,12 @@
-import {
-  AusbildungUpdate,
-  GesuchFormularUpdate,
-} from '@dv/shared/model/gesuch';
+import { GesuchFormularUpdate } from '@dv/shared/model/gesuch';
 import {
   DeepNullable,
   generateSVN,
-  specificMonth,
   specificMonthPlusYears,
   specificYearsAgo,
-  thisYear,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { AusbildungValues } from '../po/ausbildung.po';
-
-export const ausbildung: AusbildungUpdate = {
-  fallId: 'to-be-set',
-  ausbildungsort: 'E2E',
-  isAusbildungAusland: false,
-  besuchtBMS: false,
-  fachrichtung: 'E2E',
-  ausbildungNichtGefunden: false,
-  ausbildungBegin: specificMonth(9),
-  ausbildungEnd: specificMonthPlusYears(8, 3),
-  pensum: 'VOLLZEIT',
-  ausbildungsgangId: 'to-be-set',
-};
 
 export const ausbildungValues: AusbildungValues = {
   fallId: '',
@@ -34,7 +16,7 @@ export const ausbildungValues: AusbildungValues = {
   ausbildungsstaetteText: 'Universität Bern',
   ausbildungsgangText: 'Master',
   fachrichtung: 'Kunstgeschichte',
-  ausbildungBegin: specificMonth(9),
+  ausbildungBegin: `01.09.${specificYearsAgo(1)}`,
   ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
 };
@@ -103,7 +85,7 @@ export const gesuchFormularUpdateFn = (
   lebenslaufItems: [
     {
       von: `01.${specificYearsAgo(4)}`,
-      bis: `08.${thisYear}`,
+      bis: `08.${specificYearsAgo(1)}`,
       wohnsitz: 'AG',
       bildungsart: 'VORLEHRE',
       ausbildungAbgeschlossen: false,

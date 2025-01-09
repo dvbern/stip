@@ -12,10 +12,8 @@ import {
 } from '@dv/shared/model/gesuch';
 import {
   generateSVN,
-  specificMonth,
   specificMonthPlusYears,
   specificYearsAgo,
-  thisYear,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { AusbildungValues } from '../po/ausbildung.po';
@@ -28,7 +26,7 @@ export const ausbildung: AusbildungValues = {
   ausbildungsstaetteText: 'Universität Bern',
   ausbildungsgangText: 'Master',
   fachrichtung: 'Kunstgeschichte',
-  ausbildungBegin: specificMonth(9),
+  ausbildungBegin: `01.09.${specificYearsAgo(1)}`,
   ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
 };
@@ -75,7 +73,7 @@ export const taetigkeit: LebenslaufItem = {
   taetigkeitsart: 'ERWERBSTAETIGKEIT',
   taetigkeitsBeschreibung: 'Serviceangestellter',
   von: `01.${specificYearsAgo(4)}`,
-  bis: `08.${thisYear}`,
+  bis: `08.${specificYearsAgo(1)}`,
   wohnsitz: 'BE',
   id: '',
 };
