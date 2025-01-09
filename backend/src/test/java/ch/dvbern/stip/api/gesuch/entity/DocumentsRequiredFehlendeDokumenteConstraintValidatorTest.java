@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapper;
+import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapperImpl;
 import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.api.dokument.service.DokumentMapperImpl;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -37,7 +39,8 @@ import static org.hamcrest.Matchers.is;
 
 class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     DokumentMapper dokumentMapper = new DokumentMapperImpl();
-    GesuchDokumentMapper gesuchDokumentMapper = new GesuchDokumentMapperImpl(dokumentMapper);
+    CustomDocumentTypMapper customDocumentTypMapper = new CustomDocumentTypMapperImpl();
+    GesuchDokumentMapper gesuchDokumentMapper = new GesuchDokumentMapperImpl(dokumentMapper, customDocumentTypMapper);
     final GesuchService gesuchServiceMock = Mockito.mock(GesuchService.class);
 
     @Test

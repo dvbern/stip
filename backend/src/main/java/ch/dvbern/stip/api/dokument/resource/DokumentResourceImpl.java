@@ -35,11 +35,15 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
+import io.quarkus.security.ForbiddenException;
+import io.quarkus.security.UnauthorizedException;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.build.Jwt;
@@ -75,8 +79,11 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @AllowAll
     @Override
-    public CustomDokumentTypDto createCustomDokumentTyp(CustomDokumentTypDto customDokumentTypDto) {
-        return customDokumentTypService.createCustomDokumentTyp(customDokumentTypDto);
+    public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto customDokumentTypCreateDto) {
+        final var createdCustomDokumentTyp =
+            customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
+        return gesuchDokumentService
+            .createEmptyGesuchDokument(customDokumentTypCreateDto.getTrancheId(), createdCustomDokumentTyp.getId());
     }
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -87,7 +94,37 @@ public class DokumentResourceImpl implements DokumentResource {
         UUID gesuchTrancheId,
         FileUpload fileUpload
     ) {
-        return null;
+        // get custom from service
+        // service: upload document with custom type
+        if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
+            return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
+        }
+
+        if (!FileUtil.checkFileExtensionAllowed(fileUpload.uploadedFile(), configService.getAllowedMimeTypes())) {
+            return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
+        }
+
+        gesuchDokumentService.scanDokument(fileUpload);
+
+        String objectId = FileUtil.generateUUIDWithFileExtension(fileUpload.fileName());
+        return Uni.createFrom()
+            .completionStage(() -> gesuchDokumentService.getCreateDokumentFuture(objectId, fileUpload))
+            .onItem()
+            .invoke(
+                () -> gesuchDokumentService.uploadDokument(
+                    gesuchTrancheId,
+                    customDokumentTypId,
+                    fileUpload,
+                    objectId
+                )
+            )
+            .onItem()
+            .ignore()
+            .andSwitchTo(Uni.createFrom().item(Response.created(null).build()))
+            .onFailure()
+            .invoke(throwable -> LOG.error(throwable.getMessage()))
+            .onFailure()
+            .recoverWithItem(Response.serverError().build());
     }
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -117,23 +154,30 @@ public class DokumentResourceImpl implements DokumentResource {
         return unterschriftenblattService.getForGesuchAndType(gesuchId);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
-    @AllowAll
+    @RolesAllowed(GESUCH_DELETE)
     @Override
+    @AllowAll
+    @Blocking
     public void deleteCustomDokument(
         UUID customDokumentTypId,
         UUID dokumentId,
-        DokumentTyp dokumentTyp,
         UUID gesuchTrancheId
     ) {
-
+        // todo: rename param
+        // gesuchDokumentService.removeDokument(dokumentId);
+        gesuchDokumentService.removeDokument(gesuchTrancheId);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
     @AllowAll
+    @Blocking
     public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
-
+        if (gesuchDokumentService.customDokumentTypeContainsFiles(customDokumentTypId)) {
+            throw new ForbiddenException("Dem generischem Dokument sind noch Files angehänkt");
+        } else {
+            customDokumentTypService.deleteCustomDokumentTyp(customDokumentTypId);
+        }
     }
 
     @RolesAllowed(GESUCH_DELETE)
@@ -169,18 +213,18 @@ public class DokumentResourceImpl implements DokumentResource {
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 
-    @RolesAllowed(GESUCH_UPDATE)
-    @AllowAll
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
-    public String getCustomDokumentDownloadToken(UUID gesuchTrancheId, UUID customDokumentTypId, UUID dokumentId) {
-        return "";
+    @AllowAll
+    public List<CustomDokumentTypDto> getAllCustomDokumentTypes() {
+        return customDokumentTypService.getAllCustomDokumentTyps();
     }
 
     @RolesAllowed(GESUCH_UPDATE)
     @AllowAll
     @Override
     public NullableGesuchDokumentDto getCustomGesuchDokumenteForTyp(UUID customDokumentTypId, UUID gesuchTrancheId) {
-        return null;
+        return gesuchDokumentService.findGesuchDokumentForCustomTyp(gesuchTrancheId, customDokumentTypId);
     }
 
     @Override

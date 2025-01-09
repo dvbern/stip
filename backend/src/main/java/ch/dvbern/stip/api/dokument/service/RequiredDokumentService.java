@@ -19,11 +19,13 @@ package ch.dvbern.stip.api.dokument.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -37,19 +39,25 @@ public class RequiredDokumentService {
     private final Instance<RequiredDocumentProducer> requiredDocumentProducers;
     private final Instance<RequiredCustomDocumentProducer> requiredCustomDocumentProducers;
 
-    // todo: implement same method for custom
     private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchFormular formular) {
         return formular
             .getTranche()
             .getGesuchDokuments();
     }
-    // todo: implement same method for custom
 
     private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
         return getExistingDokumentsForGesuch(formular)
             .stream()
-            .filter(dokument -> !dokument.getDokumente().isEmpty())
+            .filter(dokument -> !dokument.getDokumente().isEmpty() && Objects.nonNull(dokument.getDokumentTyp()))
             .map(GesuchDokument::getDokumentTyp)
+            .toList();
+    }
+
+    private static List<CustomDokumentTyp> getExistingCustomDokumentTypesForGesuch(final GesuchFormular formular) {
+        return getExistingDokumentsForGesuch(formular)
+            .stream()
+            .filter(dokument -> !dokument.getDokumente().isEmpty() && Objects.nonNull(dokument.getCustomDokumentTyp()))
+            .map(GesuchDokument::getCustomDokumentTyp)
             .toList();
     }
     // todo: implement same method for custom
@@ -64,12 +72,37 @@ public class RequiredDokumentService {
             .collect(Collectors.toSet());
     }
 
+    private Set<CustomDokumentTyp> getRequiredCustomDokumentTypesForGesuch(final GesuchFormular formular) {
+        return requiredCustomDocumentProducers
+            .stream()
+            .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(formular))
+            .flatMap(
+                dokumentTypPair -> dokumentTypPair.getRight().stream()
+            )
+            .collect(Collectors.toSet());
+    }
+
     public List<DokumentTyp> getRequiredDokumentsForGesuchFormular(final GesuchFormular formular) {
         final var existingDokumentTypesHashSet = new HashSet<>(
             getExistingDokumentTypesForGesuch(formular)
         );
 
         final var requiredDokumentTypes = getRequiredDokumentTypesForGesuch(formular);
+
+        return requiredDokumentTypes
+            .stream()
+            .filter(
+                requiredDokumentType -> !existingDokumentTypesHashSet.contains(requiredDokumentType)
+            )
+            .toList();
+    }
+
+    public List<CustomDokumentTyp> getRequiredCustomDokumentsForGesuchFormular(final GesuchFormular formular) {
+        final var existingDokumentTypesHashSet = new HashSet<>(
+            getExistingCustomDokumentTypesForGesuch(formular)
+        );
+
+        final var requiredDokumentTypes = getRequiredCustomDokumentTypesForGesuch(formular);
 
         return requiredDokumentTypes
             .stream()

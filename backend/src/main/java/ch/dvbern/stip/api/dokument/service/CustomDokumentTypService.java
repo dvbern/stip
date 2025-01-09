@@ -17,7 +17,12 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import ch.dvbern.stip.api.dokument.repo.CustomDocumentTypRepository;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -32,9 +37,22 @@ public class CustomDokumentTypService {
     private final CustomDocumentTypMapper customDocumentTypMapper;
 
     @Transactional
-    public CustomDokumentTypDto createCustomDokumentTyp(CustomDokumentTypDto dto) {
+    public CustomDokumentTypDto createCustomDokumentTyp(CustomDokumentTypCreateDto dto) {
         final var customDokumentTyp = customDocumentTypMapper.toEntity(dto);
         customDocumentTypRepository.persistAndFlush(customDokumentTyp);
         return customDocumentTypMapper.toDto(customDokumentTyp);
+    }
+
+    @Transactional
+    public List<CustomDokumentTypDto> getAllCustomDokumentTyps() {
+        return customDocumentTypRepository.getAll()
+            .stream()
+            .map(customDocumentTypMapper::toDto)
+            .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
+        customDocumentTypRepository.deleteById(customDokumentTypId);
     }
 }

@@ -19,12 +19,13 @@ package ch.dvbern.stip.api.dokument.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import org.mapstruct.Mapper;
 
 @Mapper(config = MappingConfig.class)
 public interface CustomDocumentTypMapper {
-    CustomDokumentTyp toEntity(CustomDokumentTypDto dokumentTypDto);
+    CustomDokumentTyp toEntity(CustomDokumentTypCreateDto dokumentTypDto);
 
     CustomDokumentTypDto toDto(CustomDokumentTyp entity);
 }

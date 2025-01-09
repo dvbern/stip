@@ -84,4 +84,33 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             )
             .stream();
     }
+
+    public Optional<GesuchDokument> findByGesuchTrancheAndCustomDokumentType(
+        UUID gesuchTrancheId,
+        UUID customDokumentTypeId
+    ) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+        var query = queryFactory
+            .select(gesuchDokument)
+            .from(gesuchDokument)
+            .where(
+                gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
+                    .and(gesuchDokument.customDokumentTyp.id.eq(customDokumentTypeId))
+            );
+        return query.stream().findFirst();
+    }
+
+    public boolean containsDocuments(UUID customDokumentTypeId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+        var query = queryFactory
+            .select(gesuchDokument)
+            .from(gesuchDokument)
+            .where(
+                (gesuchDokument.customDokumentTyp.id.eq(customDokumentTypeId))
+                    .and(gesuchDokument.dokumente.isNotEmpty())
+            );
+        return query.stream().findAny().isPresent();
+    }
 }

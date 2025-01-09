@@ -32,8 +32,10 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapper;
 import ch.dvbern.stip.api.dokument.service.DokumenteToUploadMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -65,6 +67,7 @@ import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
@@ -105,6 +108,7 @@ public class GesuchTrancheService {
     private final GeschwisterMapper geschwisterMapper;
     private final KindMapper kindMapper;
     private final SteuerdatenMapper steuerdatenMapper;
+    private final CustomDocumentTypMapper customDocumentTypMapper;
     private final MailService mailService;
     private final NotificationService notificationService;
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
@@ -160,8 +164,17 @@ public class GesuchTrancheService {
         return getRequiredDokumentTypes(gesuchTrancheRepository.requireById(gesuchTranche));
     }
 
+    public List<CustomDokumentTypDto> getRequiredCustomDokumentTypes(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        return getRequiredCustomDokumentTypes(gesuchTranche).stream().map(customDocumentTypMapper::toDto).toList();
+    }
+
     public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche) {
         return requiredDokumentService.getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
+    }
+
+    public List<CustomDokumentTyp> getRequiredCustomDokumentTypes(final GesuchTranche gesuchTranche) {
+        return requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
     }
 
     @Transactional

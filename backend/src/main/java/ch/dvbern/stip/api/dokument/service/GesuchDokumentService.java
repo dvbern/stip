@@ -26,8 +26,10 @@ import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.CustomDocumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -39,6 +41,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
@@ -69,6 +72,7 @@ public class GesuchDokumentService {
     private final DokumentMapper dokumentMapper;
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final CustomDocumentTypRepository customDocumentTypRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final S3AsyncClient s3;
@@ -82,6 +86,25 @@ public class GesuchDokumentService {
         DokumentTyp dokumentTyp
     ) {
         return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchDokumentId, dokumentTyp);
+    }
+
+    @Transactional
+    public GesuchDokumentDto createEmptyGesuchDokument(
+        final UUID gesuchTrancheId,
+        final UUID customDokumentTypId
+    ) {
+        GesuchTranche gesuchTranche =
+            gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
+        GesuchDokument gesuchDokument =
+            gesuchDokumentRepository
+                .findByGesuchTrancheAndCustomDokumentType(gesuchTranche.getId(), customDokumentTypId)
+                .orElseGet(
+                    () -> createGesuchDokument(
+                        gesuchTranche,
+                        customDocumentTypRepository.requireById(customDokumentTypId)
+                    )
+                );
+        return gesuchDokumentMapper.toDto(gesuchDokument);
     }
 
     @Transactional
@@ -131,6 +154,54 @@ public class GesuchDokumentService {
         gesuchDokument.getDokumente().add(dokument);
 
         dokumentRepository.persist(dokument);
+    }
+
+    @Transactional
+    public DokumentDto uploadDokument(
+        final UUID gesuchTrancheId,
+        final UUID customDokumentTypId,
+        final FileUpload fileUpload,
+        final String objectId
+    ) {
+        GesuchTranche gesuchTranche =
+            gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
+        GesuchDokument gesuchDokument =
+            gesuchDokumentRepository
+                .findByGesuchTrancheAndCustomDokumentType(gesuchTranche.getId(), customDokumentTypId)
+                .orElseGet(
+                    () -> createGesuchDokument(
+                        gesuchTranche,
+                        customDocumentTypRepository.requireById(customDokumentTypId)
+                    )
+                );
+        Dokument dokument = new Dokument();
+        dokument.getGesuchDokumente().add(gesuchDokument);
+        gesuchDokument.getDokumente().add(dokument);
+        dokument.setFilename(fileUpload.fileName());
+        dokument.setObjectId(objectId);
+        dokument.setFilesize(String.valueOf(fileUpload.size()));
+        dokument.setFilepath(GESUCH_DOKUMENT_PATH);
+        dokumentRepository.persist(dokument);
+
+        return dokumentMapper.toDto(dokument);
+    }
+
+    @Transactional
+    public boolean customDokumentTypeContainsFiles(UUID customDokumentTypeId) {
+        return gesuchDokumentRepository.containsDocuments(customDokumentTypeId);
+    }
+
+    @Transactional
+    public NullableGesuchDokumentDto findGesuchDokumentForCustomTyp(
+        final UUID gesuchTrancheId,
+        final UUID customDokumentTypId
+    ) {
+        final var gesuchDokument =
+            gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, customDokumentTypId);
+
+        gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, customDokumentTypId);
+        final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
+        return new NullableGesuchDokumentDto(dto);
     }
 
     @Transactional
@@ -308,6 +379,16 @@ public class GesuchDokumentService {
     private GesuchDokument createGesuchDokument(final GesuchTranche gesuchTranche, final DokumentTyp dokumentTyp) {
         GesuchDokument gesuchDokument =
             new GesuchDokument().setGesuchTranche(gesuchTranche).setDokumentTyp(dokumentTyp);
+        gesuchDokumentRepository.persist(gesuchDokument);
+        return gesuchDokument;
+    }
+
+    private GesuchDokument createGesuchDokument(
+        final GesuchTranche gesuchTranche,
+        final CustomDokumentTyp customDokumentTyp
+    ) {
+        GesuchDokument gesuchDokument =
+            new GesuchDokument().setGesuchTranche(gesuchTranche).setCustomDokumentTyp(customDokumentTyp);
         gesuchDokumentRepository.persist(gesuchDokument);
         return gesuchDokument;
     }

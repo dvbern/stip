@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProd
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
+import ch.dvbern.stip.api.dokument.repo.CustomDocumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -205,9 +206,10 @@ class GesuchDokumentServiceTest {
     @Test
     void deleteAbgelehnteDokumenteForGesuchTest() {
         final var dokumentMapper = new DokumentMapperImpl();
+        final var customDokumentMapper = new CustomDocumentTypMapperImpl();
         // Arrange
         final var gsDokService = new GesuchDokumentServiceMock(
-            new GesuchDokumentMapperImpl(dokumentMapper),
+            new GesuchDokumentMapperImpl(dokumentMapper, customDokumentMapper),
             dokumentMapper,
             dokumentRepository,
             gesuchDokumentRepository,
@@ -221,6 +223,7 @@ class GesuchDokumentServiceTest {
                     gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl()
                 )
             ),
+            null,
             null
         );
 
@@ -262,13 +265,15 @@ class GesuchDokumentServiceTest {
         S3AsyncClient s3,
         ConfigService configService,
         DokumentstatusService dokumentstatusService,
-        Antivirus antivirus
+        Antivirus antivirus,
+        CustomDocumentTypRepository customDocumentTypRepository
         ) {
             super(
                 gesuchDokumentMapper,
                 dokumentMapper,
                 dokumentRepository,
                 gesuchDokumentRepository,
+                customDocumentTypRepository,
                 gesuchRepository,
                 gesuchTrancheRepository,
                 s3,
