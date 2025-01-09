@@ -180,6 +180,12 @@ quarkus:
       security-scheme: 'oauth2-implicit'
       security-scheme-name: 'auth-dev-bern'
       oauth2-implicit-authorization-url: '${STIP_OIDC_AUTH_SERVER}/realms/bern/protocol/openid-connect/auth'
+    keycloak:
+      admin-client:
+        server-url: ${keycloak.url}
+        grant-type: password
+        username: ${STIP_KEYCLOAK_ADMIN_USER}
+        password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
   kstip:
     pre-signed-request:
       issuer: 'https://stip.kibon.ch'
@@ -235,6 +241,12 @@ quarkus:
       clamav:
         host: '${STIP_CLAMAV_HOST}'
         port: '${STIP_CLAMAV_PORT:3310}'
+    keycloak:
+      admin-client:
+        server-url: ${keycloak.url}
+        grant-type: password
+        username: ${STIP_KEYCLOAK_ADMIN_USER}
+        password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
 
 mp:
   openapi:
