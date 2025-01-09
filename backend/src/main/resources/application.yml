@@ -214,8 +214,8 @@ quarkus:
       admin-client:
         server-url: ${keycloak.url}
         grant-type: password
-        username: ${STIP_KEYCLOAK_ADMIN_USER}
-        password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
+        username: "test"
+        password: "test"
   bucket:
     name: 'stip-usercontent-test'
   keycloak:
