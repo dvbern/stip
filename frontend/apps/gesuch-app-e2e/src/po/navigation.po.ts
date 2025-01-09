@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 
-export class NavigationPO {
+export class GSNavigationPO {
   public elems: {
     page: Page;
     navLinkDashboard: Locator;

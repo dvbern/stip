@@ -6,7 +6,7 @@
 >
   <span class="material-symbols-rounded">close</span>
 </button>
-<form [formGroup]="form" class="p-4" (ngSubmit)="confirm()">
+<form [formGroup]="form" data-testid="form-aenderung-melden-dialog-form" class="p-4" (ngSubmit)="confirm()">
   <h3 class="mb-3">{{ 'shared.dialog.gesuch-aenderung.title' | translate }}</h3>
   <div class="mb-5" [innerHTML]="'shared.dialog.gesuch-aenderung.text' | translate"></div>
   <div class="row">
@@ -20,6 +20,7 @@
           [min]="dialogData.minDate"
           [max]="dialogData.maxDate"
           formControlName="gueltigAb"
+          data-testid="form-aenderung-melden-dialog-gueltig-ab"
           [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | translate"
         />
         <mat-datepicker-toggle matSuffix [for]="vonPicker"></mat-datepicker-toggle>
@@ -49,6 +50,7 @@
           [min]="form.controls.gueltigAb.value ?? dialogData.minDate"
           [max]="dialogData.maxDate"
           formControlName="gueltigBis"
+          data-testid="form-aenderung-melden-dialog-gueltig-bis"
           [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | translate"
         />
         <mat-datepicker-toggle matSuffix [for]="bisPicker"></mat-datepicker-toggle>
@@ -73,6 +75,7 @@
         matInput
         [dvMaxLength]="'large'"
         formControlName="kommentar"
+        data-testid="form-aenderung-melden-dialog-kommentar"
         [placeholder]="'shared.dialog.gesuch-aenderung.comment.placeholder' | translate"
       ></textarea>
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -81,10 +84,10 @@
     </mat-form-field>
   </div>
   <div class="d-flex mt-4 justify-content-between">
-    <button type="button" class="btn btn-secondary" (click)="cancel()">
+    <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
       {{ 'shared.cancel' | translate }}
     </button>
-    <button type="submit" class="btn btn-primary ms-2">
+    <button type="submit" [disabled]="form.invalid" data-testid="dialog-confirm" class="btn btn-primary ms-2">
       {{ 'shared.form.save' | translate }}
     </button>
   </div>
