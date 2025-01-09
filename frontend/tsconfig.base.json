@@ -125,6 +125,7 @@
       "@dv/shared/model/language": ["libs/shared/model/language/src/index.ts"],
       "@dv/shared/model/lebenslauf": ["libs/shared/model/lebenslauf/src/index.ts"],
       "@dv/shared/model/permission-state": ["libs/shared/model/permission-state/src/index.ts"],
+      "@dv/shared/model/router": ["libs/shared/model/router/src/index.ts"],
       "@dv/shared/model/state-colors": ["libs/shared/model/state-colors/src/index.ts"],
       "@dv/shared/model/type-util": ["libs/shared/model/type-util/src/index.ts"],
       "@dv/shared/model/ui-constants": ["libs/shared/model/ui-constants/src/index.ts"],
