@@ -77,6 +77,8 @@ public class SozialdienstBenutzerService {
             return null;
         }
 
+        // TODO: When we upgrade to a quarkus version using hibernate 7 we will be able to use the newer keycloak
+        // admin client which will allow us to easily configure the truststore and secure the connection
         return KeycloakBuilder.builder()
             .clientId(config.clientId)
             .clientSecret(config.clientSecret.orElse(null))
@@ -86,16 +88,7 @@ public class SozialdienstBenutzerService {
             .realm(config.realm)
             .serverUrl(config.serverUrl.orElse(null))
             .scope(config.scope.orElse(null))
-            .resteasyClient(ClientBuilderWrapper.create(SSLContext.getDefault(), true).build()) // TODO: When we upgrade
-                                                                                                // to a quarkus version
-                                                                                                // using hibernate 7 we
-                                                                                                // will be able to use
-                                                                                                // the newer keycloak
-                                                                                                // admin client which
-                                                                                                // will allow us to
-                                                                                                // easily configure the
-                                                                                                // truststore and secure
-                                                                                                // this connection
+            .resteasyClient(ClientBuilderWrapper.create(SSLContext.getDefault(), true).build())
             .build();
     }
 

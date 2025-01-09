@@ -38,6 +38,5 @@ public class SozialdienstRepository implements BaseRepository<Sozialdienst> {
             .selectFrom(sozialdienst)
             .where(sozialdienst.sozialdienstAdmin.eq(sozialdienstAdmin))
             .fetchOne();
-        // .fetchOne();
     }
 }

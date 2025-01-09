@@ -23,8 +23,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstAdminMapper;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerMapper;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
@@ -42,8 +40,6 @@ public class SozialdienstService {
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
-    private final SozialdienstAdminMapper sozialdienstAdminMapper;
-    private final SozialdienstBenutzerMapper sozialdienstBenutzerMapper;
 
     public Sozialdienst getSozialdienstOfSozialdienstAdmin(Benutzer benutzer) {
         return sozialdienstRepository.getSozialdienstBySozialdienstAdmin(
