@@ -12,12 +12,12 @@
     <button
       type="button"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-header-nav-tranche-auswahl"
+      data-testid="sb-gesuch-header-tranche-nav-menu"
       [class.active]="isTrancheRouteSig()"
       [matMenuTriggerFor]="gesuchMenu"
     >
       <i class="material-symbols-rounded text-white me-2">checklist</i>
-      <span>{{ 'sachbearbeitung-app.header.tranchenAuswahl' | translate }}</span>
+      <span>{{ 'shared.header.tranchenAuswahl' | translate }}</span>
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
     <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
@@ -26,13 +26,12 @@
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'tranche', tranche.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="gesuch-step-nav-overview"
-            mat-menu-item
+            [attr.data-testid]="'tranche-nav-menu-item-' + ($index + 1)"
             [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
           >
             <span>
               {{
-                'sachbearbeitung-app.header.tranche.item'
+                'shared.header.tranche.item'
                   | translate: { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }
               }}
               -
@@ -48,7 +47,7 @@
       [routerLink]="['/', 'verfuegung', gesuchId]"
       routerLinkActive="active"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-header-nav-verfuegung"
+      data-testid="sb-gesuch-header-verfuegung-link"
       [class.disabled]="!gesuchPermissionsSig().canViewVerfuegung"
     >
       <i class="material-symbols-rounded text-white me-2">equal</i>
@@ -61,13 +60,13 @@
     <button
       type="button"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-header-nav-aenderungen"
+      data-testid="sb-gesuch-header-aenderungen-nav-menu"
       [class.active]="isAenderungRouteSig()"
       [disabled]="!aenderungen.hasAenderungen && !initialTranche"
       [matMenuTriggerFor]="aenderungenMenu"
     >
       <i class="material-symbols-rounded text-white me-2">update</i>
-      <span>{{ 'sachbearbeitung-app.header.aenderungen' | translate }}</span>
+      <span>{{ 'shared.header.aenderungen' | translate }}</span>
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
     <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel mt-2 rounded col-12">
@@ -76,13 +75,13 @@
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="gesuch-step-nav-overview"
+            data-testid="aenderungen-nav-menu-item"
             mat-menu-item
             [class.active]="trancheId === aenderung.id"
           >
             <span>
               {{
-                'sachbearbeitung-app.header.aenderung.item'
+                'shared.header.aenderung.item'
                   | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: aenderung.index + 1 }
               }}
               -
@@ -92,20 +91,20 @@
         }
         <div class="d-flex gap-2 align-items-center text-muted small">
           <hr class="flex-grow-1" />
-          {{ 'sachbearbeitung-app.header.aenderungen.akzeptierte' | translate }}
+          {{ 'shared.header.aenderungen.akzeptierte' | translate }}
           <hr class="flex-grow-1" />
         </div>
         @for (aenderung of aenderungen.byStatus.completed; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="gesuch-step-nav-overview"
+            data-testid="aenderungen-nav-menu-item"
             mat-menu-item
             [class.active]="trancheId === aenderung.id"
           >
             <span>
               {{
-                'sachbearbeitung-app.header.aenderung.item'
+                'shared.header.aenderung.item'
                   | translate: { date: aenderung.gueltigAb | date: 'dd.MM.YYYY', index: aenderung.index + 1 }
               }}
               -
@@ -117,20 +116,19 @@
         @if (initialTranche) {
           <div class="d-flex gap-2 align-items-center text-muted small">
             <hr class="flex-grow-1" />
-            {{ 'sachbearbeitung-app.header.aenderungen.initial' | translate }}
+            {{ 'shared.header.aenderungen.initial' | translate }}
             <hr class="flex-grow-1" />
           </div>
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'initial', initialTranche.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="gesuch-step-nav-overview"
+            data-testid="aenderungen-nav-menu-item"
             mat-menu-item
             [class.active]="isAenderungRouteSig() && trancheId === initialTranche.id"
           >
             <span>
               {{
-                'sachbearbeitung-app.header.initialTranche.item'
-                  | translate: { date: initialTranche.gueltigAb | date: 'dd.MM.YYYY' }
+                'shared.header.initialTranche.item' | translate: { date: initialTranche.gueltigAb | date: 'dd.MM.YYYY' }
               }}
               -
               {{ initialTranche.gueltigBis | date: 'dd.MM.YYYY' }}
@@ -144,7 +142,7 @@
     <a
       [routerLink]="['/', 'infos', gesuchId]"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-header-nav-infos"
+      data-testid="sb-gesuch-header-infos-link"
       [class.active]="isInfosRouteSig()"
     >
       <i class="material-symbols-rounded text-white me-2">info</i>
@@ -161,7 +159,7 @@
       <button
         type="button"
         class="btn btn-outline-primary fw-normal px-3 d-flex align-items-center shadow-none"
-        data-testid="gesuch-header-nav-aktion"
+        data-testid="sb-gesuch-header-aktion-menu"
         [class.active]="aktionTrigger.menuOpen"
         [disabled]="isLoadingSig()"
         #aktionTrigger="matMenuTrigger"
@@ -182,7 +180,7 @@
             <button
               type="button"
               class="btn fw-normal px-2 shadow-none"
-              data-testid="gesuch-header-nav-tranche-erstellen"
+              data-testid="aktion-tranche-erstellen"
               mat-menu-item
               (click)="createTranche()"
             >
@@ -202,7 +200,7 @@
           <button
             type="button"
             class="btn fw-normal px-2 shadow-none pe-auto"
-            [attr.data-testid]="'gesuch-header-nav-status-uebergang-item-' + uebergang.typ"
+            [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
             [disabled]="uebergang.disabledReason || !trancheId"
             [attr.title]="
               uebergang.disabledReason

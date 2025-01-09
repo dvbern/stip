@@ -12,15 +12,10 @@ import {
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
-import {
-  NavigationEnd,
-  Router,
-  RouterLink,
-  RouterLinkActive,
-} from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { filter, map } from 'rxjs';
+import { map } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
@@ -32,6 +27,7 @@ import {
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
+import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
@@ -255,9 +251,3 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       });
   }
 }
-
-const urlAfterNavigationEnd = (router: Router) =>
-  router.events.pipe(
-    filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-    map((event) => event.url),
-  );
