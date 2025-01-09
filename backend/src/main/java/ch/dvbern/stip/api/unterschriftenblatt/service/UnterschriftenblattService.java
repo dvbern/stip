@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
@@ -118,7 +119,7 @@ public class UnterschriftenblattService {
     @Transactional
     public List<UnterschriftenblattDokumentTyp> getUnterschriftenblaetterToUpload(final Gesuch gesuch) {
         final var initialTranche = gesuchTrancheHistoryRepository
-            .getLatestWhereGesuchStatusChangedToVerfuegt(gesuch.getId());
+            .findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
 
         GesuchTranche toGetFor;
         if (initialTranche.isPresent()) {
