@@ -21,11 +21,9 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
-import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerMapper;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
@@ -47,9 +45,6 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     private final SozialdienstService sozialdienstService;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
-    private final SozialdienstBenutzerMapper sozialdienstBenutzerMapper;
-
-    private final SozialdienstAuthorizer sozialdienstAuthorizer;
 
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
@@ -114,7 +109,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
     ) {
         return sozialdienstBenutzerService.createSozialdienstBenutzer(
-            sozialdienstAuthorizer.getSozialdienstOfSozialdienstAdmin(),
+            sozialdienstService.getSozialdienstOfCurrentSozialdienstAdmin(),
             sozialdienstBenutzerCreateDto
         );
     }
@@ -124,7 +119,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @Override
     public List<SozialdienstBenutzerDto> getSozialdienstBenutzer() {
         return sozialdienstBenutzerService
-            .getSozialdienstBenutzers(sozialdienstAuthorizer.getSozialdienstOfSozialdienstAdmin());
+            .getSozialdienstBenutzers(sozialdienstService.getSozialdienstOfCurrentSozialdienstAdmin());
     }
 
     @AllowAll

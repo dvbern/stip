@@ -21,10 +21,9 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstAdminMapper;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerMapper;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
@@ -39,11 +38,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestScoped
 public class SozialdienstService {
+    private final BenutzerService benutzerService;
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
-    private final SozialdienstAdminMapper sozialdienstAdminMapper;
-    private final SozialdienstBenutzerMapper sozialdienstBenutzerMapper;
+
+    public Sozialdienst getSozialdienstOfCurrentSozialdienstAdmin() {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        return getSozialdienstOfSozialdienstAdmin(currentBenutzer);
+    }
 
     public Sozialdienst getSozialdienstOfSozialdienstAdmin(Benutzer benutzer) {
         return sozialdienstRepository.getSozialdienstBySozialdienstAdmin(
@@ -54,8 +57,8 @@ public class SozialdienstService {
     @Transactional
     public SozialdienstDto createSozialdienst(SozialdienstCreateDto dto) {
         var sozialdienst = sozialdienstMapper.toEntity(dto);
-        final var adminDto = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto.getSozialdienstAdmin());
-        sozialdienst.setSozialdienstAdmin(sozialdienstBenutzerService.getSozialdienstBenutzerById(adminDto.getId()));
+        final var admin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto.getSozialdienstAdmin());
+        sozialdienst.setSozialdienstAdmin(sozialdienstBenutzerService.getSozialdienstBenutzerById(admin.getId()));
         sozialdienstRepository.persistAndFlush(sozialdienst);
         return sozialdienstMapper.toDto(sozialdienst);
     }

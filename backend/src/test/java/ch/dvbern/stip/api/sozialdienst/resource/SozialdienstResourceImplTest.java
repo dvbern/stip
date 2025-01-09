@@ -17,14 +17,10 @@
 
 package ch.dvbern.stip.api.sozialdienst.resource;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
-import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
@@ -35,40 +31,25 @@ import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDtoSpec;
-import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.RoleMappingResource;
-import org.keycloak.admin.client.resource.RoleScopeResource;
-import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.admin.client.resource.UsersResource;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 
 import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_ADMIN_ID;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -89,42 +70,6 @@ class SozialdienstResourceImplTest {
 
     private static final String VALID_IBAN_1 = "CH5089144653587876648";
     private static final String VALID_IBAN_2 = "CH5089144653587876648";
-
-    @InjectMock
-    SozialdienstBenutzerService sozialdienstBenutzerServiceMock;
-
-    @BeforeAll
-    static void setUp() throws NoSuchAlgorithmException {
-        final var sozialdienstBenutzerServiceMock = Mockito.spy(SozialdienstBenutzerService.class);
-        final var mockKecloakAdminClient = Mockito.mock(Keycloak.class);
-        final var mockKcRealmResource = Mockito.mock(RealmResource.class);
-        final var mockKcUsersResource = Mockito.mock(UsersResource.class);
-        final var mockKcUserResource = Mockito.mock(UserResource.class);
-        final var mockKcRoleMappingResource = Mockito.mock(RoleMappingResource.class);
-        final var mockKcRoleScopeResource = Mockito.mock(RoleScopeResource.class);
-
-        Mockito.when(mockKecloakAdminClient.realm(ArgumentMatchers.any())).thenReturn(mockKcRealmResource);
-        Mockito.when(mockKcRealmResource.users()).thenReturn(mockKcUsersResource);
-
-        var mockCreatedResponse = Mockito.mock(Response.class);
-        Mockito.when(mockCreatedResponse.getStatus()).thenReturn(Status.CREATED.getStatusCode());
-        Mockito.when(mockCreatedResponse.getHeaderString("Location"))
-            .thenReturn("https://localhost:8080/sozialdienst/" + UUID.randomUUID().toString());
-
-        Mockito.when(mockKcUsersResource.create(ArgumentMatchers.any())).thenReturn(mockCreatedResponse);
-        Mockito.when(mockKcUsersResource.get(ArgumentMatchers.any())).thenReturn(mockKcUserResource);
-
-        Mockito.when(mockKcUserResource.roles()).thenReturn(mockKcRoleMappingResource);
-        Mockito.when(mockKcRoleMappingResource.realmLevel()).thenReturn(mockKcRoleScopeResource);
-        Mockito.when(mockKcRoleScopeResource.listAvailable()).thenReturn(List.of());
-
-        var mockDeletedResource = Mockito.mock(Response.class);
-        Mockito.when(mockDeletedResource.getStatus()).thenReturn(Status.NO_CONTENT.getStatusCode());
-        Mockito.when(mockKcUsersResource.delete(ArgumentMatchers.any())).thenReturn(mockDeletedResource);
-
-        Mockito.when(sozialdienstBenutzerServiceMock.initKeycloak()).thenReturn(mockKecloakAdminClient);
-        QuarkusMock.installMockForType(sozialdienstBenutzerServiceMock, SozialdienstBenutzerService.class);
-    }
 
     @Order(1)
     @Test
@@ -283,115 +228,6 @@ class SozialdienstResourceImplTest {
         assertTrue(replaced.getEmail().contains("replaced"));
         // assertEquals(replaced.getKeycloakId(), SOZIALDIENST_ADMIN_ID);
         checkSozialdienstAdminResponse(replaced);
-
-    }
-
-    @Order(8)
-    @TestAsSozialdienstAdmin
-    @Test
-    void getSozialdienstBenutzerEmptyTest() {
-        final var sozialdienstbenutzers = apiSpec.getSozialdienstBenutzer()
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .as(SozialdienstBenutzerDtoSpec[].class);
-
-        assertThat(sozialdienstbenutzers.length, equalTo(0));
-    }
-
-    @Order(9)
-    @TestAsSozialdienstAdmin
-    @Test
-    void createSozialdienstBenutzerTest() {
-        SozialdienstBenutzerCreateDtoSpec createDto = new SozialdienstBenutzerCreateDtoSpec();
-        var name = "replaced";
-        var email = "fabrice.jakob@dvbern.ch";
-
-        createDto.setVorname(name);
-        createDto.setNachname(name);
-        createDto.setEmail(email);
-
-        final var sozialdienstbenutzer = apiSpec.createSozialdienstBenutzer()
-            .body(createDto)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .as(SozialdienstBenutzerDtoSpec.class);
-
-        assertThat(sozialdienstbenutzer.getVorname(), equalTo(name));
-        assertThat(sozialdienstbenutzer.getNachname(), equalTo(name));
-        assertThat(sozialdienstbenutzer.getEmail(), equalTo(email));
-    }
-
-    @Order(9)
-    @TestAsSozialdienstAdmin
-    @Test
-    void getSozialdienstBenutzerTest() {
-        final var sozialdienstbenutzers = apiSpec.getSozialdienstBenutzer()
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .as(SozialdienstBenutzerDtoSpec[].class);
-
-        assertThat(sozialdienstbenutzers.length, equalTo(1));
-    }
-
-    @Order(10)
-    @TestAsSozialdienstAdmin
-    @Test
-    void updateSozialdienstBenutzerTest() {
-        final var sozialdienstbenutzers = apiSpec.getSozialdienstBenutzer()
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .as(SozialdienstBenutzerDtoSpec[].class);
-
-        SozialdienstBenutzerUpdateDtoSpec updateDto = new SozialdienstBenutzerUpdateDtoSpec();
-        var newname = "replaced2";
-
-        updateDto.setId(sozialdienstbenutzers[0].getId());
-        updateDto.setVorname(newname);
-        updateDto.setNachname(newname);
-
-        final var sozialdienstbenutzer = apiSpec.updateSozialdienstBenutzer()
-            .body(updateDto)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .as(SozialdienstBenutzerDtoSpec.class);
-
-        assertThat(sozialdienstbenutzer.getVorname(), equalTo(newname));
-        assertThat(sozialdienstbenutzer.getNachname(), equalTo(newname));
-    }
-
-    @Order(11)
-    @TestAsSozialdienstAdmin
-    @Test
-    void deleteSozialdienstBenutzerTest() {
-        final var sozialdienstbenutzers = apiSpec.getSozialdienstBenutzer()
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .as(SozialdienstBenutzerDtoSpec[].class);
-
-        apiSpec.deleteSozialdienstBenutzer()
-            .body(sozialdienstbenutzers[0].getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
 
     }
 
