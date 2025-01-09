@@ -1,14 +1,15 @@
 import { expect } from '@playwright/test';
 
-import { SmallImageFile, selectMatRadio } from '@dv/shared/util-fn/e2e-util';
+import {
+  SmallImageFile,
+  selectMatRadio,
+  specificMonthPlusYears,
+  specificYearsAgo,
+} from '@dv/shared/util-fn/e2e-util';
 
+import { initializeTest } from '../../initialize-test';
 import { AusbildungValues } from '../../po/ausbildung.po';
 import { PersonPO } from '../../po/person.po';
-import {
-  initializeTest,
-  specificMonth,
-  specificMonthPlusYears,
-} from '../../utils';
 
 const ausbildung: AusbildungValues = {
   fallId: '',
@@ -18,7 +19,7 @@ const ausbildung: AusbildungValues = {
   ausbildungsstaetteText: 'Universität Bern',
   ausbildungsgangText: 'Master',
   fachrichtung: 'Kunstgeschichte',
-  ausbildungBegin: specificMonth(9),
+  ausbildungBegin: `01.09.${specificYearsAgo(1)}`,
   ausbildungEnd: specificMonthPlusYears(8, 3),
   pensum: 'VOLLZEIT',
 };
@@ -26,9 +27,14 @@ const ausbildung: AusbildungValues = {
 const { test } = initializeTest('GESUCHSTELLER', ausbildung);
 
 test.describe('Dokument upload', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  test('Person in Ausbildung', async ({ page, cockpit }) => {
-    await expect(page.getByTestId('step-title')).toBeAttached();
+  test.slow();
+
+  test('Dokument upload', async ({ page, cockpit }) => {
+    await cockpit.getGesuchEdit().click();
+
+    await expect(page.getByTestId('step-title')).toBeAttached({
+      timeout: 10000,
+    });
     await page.getByTestId('step-nav-person').first().click();
     const person = new PersonPO(page);
 
