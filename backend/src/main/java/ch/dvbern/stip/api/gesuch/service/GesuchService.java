@@ -620,13 +620,11 @@ public class GesuchService {
             configService.getCurrentDmnMinorVersion()
         );
 
-        if (stipendien.getBerechnung() <= 0) {
-            // Keine Stipendien, next Status = Verfuegt
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH);
-        } else {
-            // Yes Stipendien, next Status = In Freigabe
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.STIPENDIENANSPRUCH);
+        var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
+        if (stipendien.getBerechnung() > 0) {
+            status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
         }
+        gesuchStatusService.triggerStateMachineEvent(gesuch, status);
     }
 
     @Transactional
