@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.repo.CustomDocumentTypRepository;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
@@ -44,11 +45,16 @@ public class CustomDokumentTypService {
     }
 
     @Transactional
-    public List<CustomDokumentTypDto> getAllCustomDokumentTyps() {
+    public List<CustomDokumentTypDto> getAllCustomDokumentTypDtos() {
         return customDocumentTypRepository.getAll()
             .stream()
             .map(customDocumentTypMapper::toDto)
             .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<CustomDokumentTyp> getAllCustomDokumentTyps() {
+        return customDocumentTypRepository.getAll();
     }
 
     @Transactional

@@ -95,7 +95,6 @@ public class DokumentResourceImpl implements DokumentResource {
         FileUpload fileUpload
     ) {
         return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, gesuchTrancheId, fileUpload);
-
     }
 
     @RolesAllowed(GESUCH_UPDATE)
@@ -133,24 +132,6 @@ public class DokumentResourceImpl implements DokumentResource {
         unterschriftenblattService.removeDokument(dokumentId);
     }
 
-    /*
-     * @RolesAllowed(GESUCH_DELETE)
-     *
-     * @Override
-     *
-     * @AllowAll
-     *
-     * @Blocking
-     * public void deleteCustomDokument(
-     * UUID customDokumentTypId,
-     * UUID dokumentId,
-     * UUID gesuchTrancheId
-     * ) {
-     * // todo: rename param
-     * // gesuchDokumentService.removeDokument(dokumentId);
-     * gesuchDokumentService.removeDokument(gesuchTrancheId);
-     * }
-     */
     @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
     @AllowAll
@@ -192,7 +173,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @AllowAll
     public List<CustomDokumentTypDto> getAllCustomDokumentTypes() {
-        return customDokumentTypService.getAllCustomDokumentTyps();
+        return customDokumentTypService.getAllCustomDokumentTypDtos();
     }
 
     @RolesAllowed(GESUCH_UPDATE)

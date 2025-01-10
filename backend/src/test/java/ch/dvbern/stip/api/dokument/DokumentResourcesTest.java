@@ -322,7 +322,6 @@ class DokumentResourcesTest {
 
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)
-            // .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -346,15 +345,8 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(12)
     void test_delete_required_custom_gesuchdokuments() {
-        /*
-         * UUID customDokumentTypId,
-         * UUID dokumentId, //todo rename
-         * UUID gesuchTrancheId
-         */
         dokumentApiSpec.deleteDokument()
-            // .customDokumentTypIdPath(customDokumentId)
             .dokumentIdPath(dokumentId)
-            // .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .statusCode(Status.NO_CONTENT.getStatusCode());

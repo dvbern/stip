@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.dokument.entity;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.dokument.repo.CustomDocumentTypRepository;
+import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.util.RequiredCustomDocsUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,24 +28,23 @@ import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class CustomDocumentsRequiredDocumentProducerTest {
     private CustomDocumentsRequiredDocumentProducer producer;
-    private CustomDocumentTypRepository repository;
+    private CustomDokumentTypService service;
     private GesuchFormular gesuchFormular;
 
     @BeforeEach
     void setUp() {
-        repository = Mockito.mock(CustomDocumentTypRepository.class);
-        producer = new CustomDocumentsRequiredDocumentProducer(repository);
+        service = Mockito.mock(CustomDokumentTypService.class);
+        producer = new CustomDocumentsRequiredDocumentProducer(service);
         gesuchFormular = Mockito.mock(GesuchFormular.class);
     }
 
     @Test
     void noCustomDocumentsShouldBeRequiredTest(){
-        when(repository.requireById(any())).thenReturn(null);
+        when(service.getAllCustomDokumentTyps()).thenReturn(List.of());
         final var requiredCustomDocuments = producer.getRequiredDocuments(gesuchFormular);
         assertThat(requiredCustomDocuments.getValue().isEmpty(),is(true));
         assertThat(requiredCustomDocuments.getKey().equals(""),is(true));
@@ -55,7 +54,7 @@ class CustomDocumentsRequiredDocumentProducerTest {
     void customDocumentsShouldBeRequiredTest() {
         // todo: add unique constraint to name
         final var customDokumentTyp = new CustomDokumentTyp().setType("test").setDescription("description");
-        when(repository.getAll()).thenReturn(List.of(customDokumentTyp));
+        when(service.getAllCustomDokumentTyps()).thenReturn(List.of(customDokumentTyp));
         assertThat(producer.getRequiredDocuments(gesuchFormular).getKey().equals("custom-documents"), is(true));
         RequiredCustomDocsUtil.requiresOneAndType(producer.getRequiredDocuments(gesuchFormular), customDokumentTyp);
     }

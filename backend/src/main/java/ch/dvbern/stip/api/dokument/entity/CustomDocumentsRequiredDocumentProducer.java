@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentProducer;
-import ch.dvbern.stip.api.dokument.repo.CustomDocumentTypRepository;
+import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -31,15 +31,16 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class CustomDocumentsRequiredDocumentProducer implements RequiredCustomDocumentProducer {
-    private final CustomDocumentTypRepository customDocumentTypRepository;
+    private final CustomDokumentTypService customDokumentTypService;
 
     @Override
     public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        if (customDocumentTypRepository.getAll().isEmpty()) {
+        final var allCustomDokumentTyps = customDokumentTypService.getAllCustomDokumentTyps();
+        if (allCustomDokumentTyps.isEmpty()) {
             return ImmutablePair.of("", Set.of());
         }
         Set<CustomDokumentTyp> requiredDocuments = new HashSet<>();
-        customDocumentTypRepository.getAll().forEach(requiredDocuments::add);
+        allCustomDokumentTyps.forEach(requiredDocuments::add);
         return ImmutablePair.of("custom-documents", requiredDocuments);
     }
 }
