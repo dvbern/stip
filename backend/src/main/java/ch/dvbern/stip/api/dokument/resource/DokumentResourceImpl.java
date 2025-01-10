@@ -138,9 +138,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @AllowAll
     @Blocking
-    public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
-        // todo: wirklich alle gesuch duchforsten? nicht lieber customDokumentTyp Liste pro Gesuch machen?
-        // customGesuchDokumentTypAuthorizer.canDelete();
+    public void deleteCustomDokumentTyp(UUID gesuchId, UUID customDokumentTypId) {
+        customGesuchDokumentTypAuthorizer.canDelete(gesuchId);
         if (gesuchDokumentService.customDokumentTypeContainsFiles(customDokumentTypId)) {
             throw new ForbiddenException("Dem generischem Dokument sind noch Files angehänkt");
         } else {

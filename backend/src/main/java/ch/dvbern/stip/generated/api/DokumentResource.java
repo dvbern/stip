@@ -52,9 +52,9 @@ public interface DokumentResource {
     io.smallrye.mutiny.Uni<Response> createUnterschriftenblatt(@PathParam("unterschriftenblattTyp") ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp unterschriftenblattTyp,@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
     @DELETE
-    @Path("/gesuchDokument/customGesuchDokument/{customDokumentTypId}")
+    @Path("/gesuchDokument/customGesuchDokument/{gesuchId}/{customDokumentTypId}")
     @Produces({ "text/plain" })
-    void deleteCustomDokumentTyp(@PathParam("customDokumentTypId") UUID customDokumentTypId);
+    void deleteCustomDokumentTyp(@PathParam("gesuchId") UUID gesuchId,@PathParam("customDokumentTypId") UUID customDokumentTypId);
 
     @DELETE
     @Path("/dokument/{dokumentId}")

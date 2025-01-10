@@ -497,12 +497,13 @@ public class DokumentApiSpec {
      * delete a customDokumentTyp
      * 
      *
+     * @see #gesuchIdPath  (required)
      * @see #customDokumentTypIdPath  (required)
      */
     public static class DeleteCustomDokumentTypOper implements Oper {
 
         public static final Method REQ_METHOD = DELETE;
-        public static final String REQ_URI = "/gesuchDokument/customGesuchDokument/{customDokumentTypId}";
+        public static final String REQ_URI = "/gesuchDokument/customGesuchDokument/{gesuchId}/{customDokumentTypId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -514,7 +515,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * DELETE /gesuchDokument/customGesuchDokument/{customDokumentTypId}
+         * DELETE /gesuchDokument/customGesuchDokument/{gesuchId}/{customDokumentTypId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -522,6 +523,17 @@ public class DokumentApiSpec {
         @Override
         public <T> T execute(Function<Response, T> handler) {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteCustomDokumentTypOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
         }
 
         public static final String CUSTOM_DOKUMENT_TYP_ID_PATH = "customDokumentTypId";
