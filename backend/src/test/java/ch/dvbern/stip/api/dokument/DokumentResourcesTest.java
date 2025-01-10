@@ -291,6 +291,7 @@ class DokumentResourcesTest {
             .statusCode(Status.FORBIDDEN.getStatusCode());
 
         final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -367,6 +368,7 @@ class DokumentResourcesTest {
             .statusCode(Status.NO_CONTENT.getStatusCode());
 
         final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()

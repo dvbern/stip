@@ -170,7 +170,7 @@ public class DokumentApiSpec {
     public static class CreateCustomDokumentTypOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuchDokument/customGesuchDokument";
+        public static final String REQ_URI = "/gesuchDokument/customGesuchDokuments/";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -183,7 +183,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * POST /gesuchDokument/customGesuchDokument
+         * POST /gesuchDokument/customGesuchDokuments/
          * @param handler handler
          * @param <T> type
          * @return type
@@ -194,7 +194,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * POST /gesuchDokument/customGesuchDokument
+         * POST /gesuchDokument/customGesuchDokuments/
          * @param handler handler
          * @return GesuchDokumentDtoSpec
          */
@@ -818,12 +818,13 @@ public class DokumentApiSpec {
      * 
      * 
      *
+     * @see #gesuchTrancheIdPath  (required)
      * return List&lt;CustomDokumentTypDtoSpec&gt;
      */
     public static class GetAllCustomDokumentTypesOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchDokument/customGesuchDokument";
+        public static final String REQ_URI = "/gesuchDokument/customGesuchDokuments/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -835,7 +836,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuchDokument/customGesuchDokument
+         * GET /gesuchDokument/customGesuchDokuments/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -846,13 +847,24 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /gesuchDokument/customGesuchDokument
+         * GET /gesuchDokument/customGesuchDokuments/{gesuchTrancheId}
          * @param handler handler
          * @return List&lt;CustomDokumentTypDtoSpec&gt;
          */
         public List<CustomDokumentTypDtoSpec> executeAs(Function<Response, Response> handler) {
             TypeRef<List<CustomDokumentTypDtoSpec>> type = new TypeRef<List<CustomDokumentTypDtoSpec>>(){};
             return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GetAllCustomDokumentTypesOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
         }
 
         /**

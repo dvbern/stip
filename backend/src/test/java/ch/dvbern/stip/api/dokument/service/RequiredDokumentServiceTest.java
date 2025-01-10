@@ -97,7 +97,7 @@ class RequiredDokumentServiceTest {
 
     static class MockCustomDocumentProducer implements RequiredCustomDocumentProducer {
         @Override
-        public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+        public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
             return ImmutablePair
                 .of("custom-mock", Set.of(new CustomDokumentTyp().setType("mock").setDescription("description")));
         }

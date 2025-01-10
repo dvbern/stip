@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
@@ -74,6 +75,7 @@ public class DokumentResourceImpl implements DokumentResource {
     private final BenutzerService benutzerService;
     private final CustomDokumentTypService customDokumentTypService;
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
+    private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
 
     @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @AllowAll
@@ -137,6 +139,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @AllowAll
     @Blocking
     public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
+        // todo: wirklich alle gesuch duchforsten? nicht lieber customDokumentTyp Liste pro Gesuch machen?
+        // customGesuchDokumentTypAuthorizer.canDelete();
         if (gesuchDokumentService.customDokumentTypeContainsFiles(customDokumentTypId)) {
             throw new ForbiddenException("Dem generischem Dokument sind noch Files angehänkt");
         } else {
@@ -172,8 +176,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @Override
     @AllowAll
-    public List<CustomDokumentTypDto> getAllCustomDokumentTypes() {
-        return customDokumentTypService.getAllCustomDokumentTypDtos();
+    public List<CustomDokumentTypDto> getAllCustomDokumentTypes(UUID gesuchTrancheId) {
+        return customDokumentTypService.getAllCustomDokumentTypDtosOfTranche(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)

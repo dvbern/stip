@@ -22,7 +22,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentProducer;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -34,8 +34,9 @@ public class CustomDocumentsRequiredDocumentProducer implements RequiredCustomDo
     private final CustomDokumentTypService customDokumentTypService;
 
     @Override
-    public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        final var allCustomDokumentTyps = customDokumentTypService.getAllCustomDokumentTyps();
+    public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
+        final var allCustomDokumentTyps =
+            customDokumentTypService.getAllCustomDokumentTypsOfTranche(tranche.getId());
         if (allCustomDokumentTyps.isEmpty()) {
             return ImmutablePair.of("", Set.of());
         }

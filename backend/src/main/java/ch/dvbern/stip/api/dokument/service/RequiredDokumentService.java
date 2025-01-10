@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,11 @@ public class RequiredDokumentService {
             .getGesuchDokuments();
     }
 
+    private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchTranche tranche) {
+        return tranche
+            .getGesuchDokuments();
+    }
+
     private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
         return getExistingDokumentsForGesuch(formular)
             .stream()
@@ -53,8 +59,8 @@ public class RequiredDokumentService {
             .toList();
     }
 
-    private static List<CustomDokumentTyp> getExistingCustomDokumentTypesForGesuch(final GesuchFormular formular) {
-        return getExistingDokumentsForGesuch(formular)
+    private static List<CustomDokumentTyp> getExistingCustomDokumentTypesForGesuch(final GesuchTranche tranche) {
+        return getExistingDokumentsForGesuch(tranche)
             .stream()
             .filter(dokument -> !dokument.getDokumente().isEmpty() && Objects.nonNull(dokument.getCustomDokumentTyp()))
             .map(GesuchDokument::getCustomDokumentTyp)
@@ -72,10 +78,10 @@ public class RequiredDokumentService {
             .collect(Collectors.toSet());
     }
 
-    private Set<CustomDokumentTyp> getRequiredCustomDokumentTypesForGesuch(final GesuchFormular formular) {
+    private Set<CustomDokumentTyp> getRequiredCustomDokumentTypesForGesuch(final GesuchTranche tranche) {
         return requiredCustomDocumentProducers
             .stream()
-            .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(formular))
+            .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(tranche))
             .flatMap(
                 dokumentTypPair -> dokumentTypPair.getRight().stream()
             )
@@ -97,12 +103,12 @@ public class RequiredDokumentService {
             .toList();
     }
 
-    public List<CustomDokumentTyp> getRequiredCustomDokumentsForGesuchFormular(final GesuchFormular formular) {
+    public List<CustomDokumentTyp> getRequiredCustomDokumentsForGesuchFormular(final GesuchTranche tranche) {
         final var existingDokumentTypesHashSet = new HashSet<>(
-            getExistingCustomDokumentTypesForGesuch(formular)
+            getExistingCustomDokumentTypesForGesuch(tranche)
         );
 
-        final var requiredDokumentTypes = getRequiredCustomDokumentTypesForGesuch(formular);
+        final var requiredDokumentTypes = getRequiredCustomDokumentTypesForGesuch(tranche);
 
         return requiredDokumentTypes
             .stream()

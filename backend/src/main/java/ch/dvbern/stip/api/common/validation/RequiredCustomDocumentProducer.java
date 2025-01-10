@@ -20,9 +20,9 @@ package ch.dvbern.stip.api.common.validation;
 import java.util.Set;
 
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import org.apache.commons.lang3.tuple.Pair;
 
 public interface RequiredCustomDocumentProducer {
-    Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchFormular formular);
+    Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche);
 }
