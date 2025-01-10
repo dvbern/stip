@@ -26,15 +26,7 @@ import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
-import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
-import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
-import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
-import ch.dvbern.stip.generated.dto.KommentarDto;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.generated.dto.*;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +59,14 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         return gesuchTrancheService.getAllTranchenAndInitalTrancheForGesuch(gesuchId);
     }
 
+
+      @RolesAllowed(GESUCH_READ)
+      public List<CustomDokumentTypDto> getCustomDocumentsToUpload(UUID gesuchTrancheId) {
+      gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
+     return gesuchTrancheService.getRequiredCustomDokumentTypes(gesuchTrancheId);
+}
+
+
     @RolesAllowed(GESUCH_UPDATE)
     @Override
     public GesuchTrancheDto createGesuchTrancheCopy(
@@ -92,13 +92,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     public List<GesuchDokumentDto> getGesuchDokumente(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
         return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTranche(gesuchTrancheId);
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public List<CustomDokumentTypDto> getRequiredCustomGesuchDokumentTyp(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.getRequiredCustomDokumentTypes(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_READ)

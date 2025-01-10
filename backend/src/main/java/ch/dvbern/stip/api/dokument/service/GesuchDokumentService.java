@@ -40,6 +40,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
@@ -105,6 +106,28 @@ public class GesuchDokumentService {
                     )
                 );
         return gesuchDokumentMapper.toDto(gesuchDokument);
+    }
+
+    @Transactional
+    public Uni<Response> getUploadCustomDokumentUni(
+        final UUID customDokumentTypId,
+        final UUID gesuchTrancheId,
+        final FileUpload fileUpload
+    ) {
+        return DokumentUploadUtil.validateScanUploadDokument(
+            fileUpload,
+            s3,
+            configService,
+            antivirus,
+            GESUCH_DOKUMENT_PATH,
+            objectId -> uploadDokument(
+                gesuchTrancheId,
+                customDokumentTypId,
+                fileUpload,
+                objectId
+            ),
+            throwable -> LOG.error(throwable.getMessage())
+        );
     }
 
     @Transactional

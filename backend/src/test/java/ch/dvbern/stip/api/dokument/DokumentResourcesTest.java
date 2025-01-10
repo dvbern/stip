@@ -34,11 +34,10 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
+import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
@@ -77,7 +76,6 @@ import static org.hamcrest.Matchers.notNullValue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DokumentResourcesTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-    public final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
 
@@ -229,7 +227,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(7)
     void test_get_required_custom_gesuchdokuments() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getRequiredCustomGesuchDokumentTyp()
+        final var requiredDocuments = gesuchTrancheApiSpec.getCustomDocumentsToUpload()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -267,7 +265,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(9)
     void test_get_required_custom_gesuchdokuments_should_not_appear() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getRequiredCustomGesuchDokumentTyp()
+        final var requiredDocuments = gesuchTrancheApiSpec.getCustomDocumentsToUpload()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -324,7 +322,7 @@ class DokumentResourcesTest {
 
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)
-            .gesuchTrancheIdPath(gesuchTrancheId)
+            // .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -334,6 +332,7 @@ class DokumentResourcesTest {
 
         dokumentApiSpec.getDokument()
             .tokenQuery(token)
+            .dokumentArtPath(DokumentArtDtoSpec.GESUCH_DOKUMENT)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -352,10 +351,10 @@ class DokumentResourcesTest {
          * UUID dokumentId, //todo rename
          * UUID gesuchTrancheId
          */
-        dokumentApiSpec.deleteCustomDokument()
-            .customDokumentTypIdPath(customDokumentId)
+        dokumentApiSpec.deleteDokument()
+            // .customDokumentTypIdPath(customDokumentId)
             .dokumentIdPath(dokumentId)
-            .gesuchTrancheIdPath(gesuchTrancheId)
+            // .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .statusCode(Status.NO_CONTENT.getStatusCode());
@@ -393,7 +392,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(14)
     void test_get_required_custom_gesuchdokuments_should_be_empty() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getRequiredCustomGesuchDokumentTyp()
+        final var requiredDocuments = gesuchTrancheApiSpec.getCustomDocumentsToUpload()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()

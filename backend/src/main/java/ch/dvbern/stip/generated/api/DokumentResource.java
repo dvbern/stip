@@ -1,8 +1,10 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import java.util.UUID;
@@ -29,7 +31,7 @@ public interface DokumentResource {
     @Path("/gesuchDokument/customGesuchDokument")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    CustomDokumentTypDto createCustomDokumentTyp(@Valid @NotNull CustomDokumentTypDto customDokumentTypDto);
+    GesuchDokumentDto createCustomDokumentTyp(@Valid @NotNull CustomDokumentTypCreateDto customDokumentTypCreateDto);
 
     @POST
     @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}")
@@ -48,11 +50,6 @@ public interface DokumentResource {
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> createUnterschriftenblatt(@PathParam("unterschriftenblattTyp") ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp unterschriftenblattTyp,@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
-
-    @DELETE
-    @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}/{dokumentId}")
-    @Produces({ "text/plain" })
-    void deleteCustomDokument(@PathParam("customDokumentTypId") UUID customDokumentTypId,@PathParam("dokumentId") UUID dokumentId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @DELETE
     @Path("/gesuchDokument/customGesuchDokument/{customDokumentTypId}")
@@ -81,9 +78,9 @@ public interface DokumentResource {
     void gesuchDokumentAkzeptieren(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
 
     @GET
-    @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}/{dokumentId}")
-    @Produces({ "text/plain" })
-    String getCustomDokumentDownloadToken(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@PathParam("customDokumentTypId") UUID customDokumentTypId,@PathParam("dokumentId") UUID dokumentId);
+    @Path("/gesuchDokument/customGesuchDokument")
+    @Produces({ "application/json", "text/plain" })
+    List<CustomDokumentTypDto> getAllCustomDokumentTypes();
 
     @GET
     @Path("/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}")
