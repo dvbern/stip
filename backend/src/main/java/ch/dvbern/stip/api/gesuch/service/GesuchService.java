@@ -610,6 +610,25 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSENDET);
     }
 
+    @Transactional(TxType.REQUIRES_NEW)
+    public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+            gesuch,
+            configService.getCurrentDmnMajorVersion(),
+            configService.getCurrentDmnMinorVersion()
+        );
+
+        if (stipendien.getBerechnung() <= 0) {
+            // Keine Stipendien, next Status = Verfuegt
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH);
+        } else {
+            // Yes Stipendien, next Status = In Freigabe
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.STIPENDIENANSPRUCH);
+        }
+    }
+
     @Transactional
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
