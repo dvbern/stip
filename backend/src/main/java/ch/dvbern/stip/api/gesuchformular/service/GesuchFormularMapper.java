@@ -346,7 +346,23 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetFieldIf(
             () -> true,
             "Delete not required Unterschriftenblaetter",
-            () -> unterschriftenblattService.deleteNotRequiredForGesuch(targetFormular.getTranche().getGesuch())
+            () -> {
+                final var tranche = targetFormular.getTranche();
+                if (tranche == null) {
+                    return;
+                }
+
+                final var gesuch = tranche.getGesuch();
+                if (gesuch == null) {
+                    return;
+                }
+
+                if (gesuch.getId() == null) {
+                    return;
+                }
+
+                unterschriftenblattService.deleteNotRequiredForGesuch(gesuch);
+            }
         );
     }
 
