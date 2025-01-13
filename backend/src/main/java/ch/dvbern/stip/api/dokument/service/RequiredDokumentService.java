@@ -17,12 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -33,6 +27,12 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -66,7 +66,6 @@ public class RequiredDokumentService {
             .map(GesuchDokument::getCustomDokumentTyp)
             .toList();
     }
-    // todo: implement same method for custom
 
     private Set<DokumentTyp> getRequiredDokumentTypesForGesuch(final GesuchFormular formular) {
         return requiredDocumentProducers
