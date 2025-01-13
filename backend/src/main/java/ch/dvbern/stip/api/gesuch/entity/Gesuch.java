@@ -181,6 +181,10 @@ public class Gesuch extends AbstractMandantEntity {
         return getAllTranchenValidOnDate(LocalDate.now()).orElseThrow();
     }
 
+    public Optional<GesuchTranche> getCurrentGesuchTrancheOptional() {
+        return getAllTranchenValidOnDate(LocalDate.now());
+    }
+
     public Optional<GesuchTranche> getNewestGesuchTranche() {
         if (gesuchTranchen.isEmpty()) {
             return Optional.empty();

@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
@@ -29,6 +30,7 @@ import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 @Singleton
 @RequiredArgsConstructor
@@ -42,16 +44,38 @@ public class GesuchsperiodeSeeding extends Seeder {
     protected void doSeed() {
         LOG.info("Seeding Gesuchsperiode and Jahr");
         final var yearsToSeed = List.of(
+<<<<<<< HEAD
             2024,
             2025
         );
 
         for (final var yearToSeed : yearsToSeed) {
+=======
+            ImmutablePair.of(
+                2024,
+                List.of(
+                    ImmutablePair.of(Season.SPRING, GueltigkeitStatus.ARCHIVIERT),
+                    ImmutablePair.of(Season.FALL, GueltigkeitStatus.PUBLIZIERT)
+                )
+            ),
+            ImmutablePair.of(
+                2025,
+                List.of(
+                    ImmutablePair.of(Season.SPRING, GueltigkeitStatus.PUBLIZIERT),
+                    ImmutablePair.of(Season.FALL, GueltigkeitStatus.ENTWURF)
+                )
+            )
+        );
+
+        for (final var toSeed : yearsToSeed) {
+            final var yearToSeed = toSeed.getLeft();
+>>>>>>> feature/KSTIP-1465
             var gesuchsjahr = gesuchsjahrRepository.find("technischesJahr", yearToSeed).firstResult();
             if (gesuchsjahr != null) {
                 continue;
             }
 
+<<<<<<< HEAD
             gesuchsjahr = getJahrForSeeding(yearToSeed);
             final var newPerioden = List.of(
                 getPeriodeForSeeding(
@@ -77,6 +101,38 @@ public class GesuchsperiodeSeeding extends Seeder {
                     LocalDate.of(yearToSeed, 9, 30)
                 )
             );
+=======
+            final var newPerioden = new ArrayList<Gesuchsperiode>();
+            gesuchsjahr = getJahrForSeeding(yearToSeed);
+            for (final var periodeToSeed : toSeed.getRight()) {
+                newPerioden.add(switch (periodeToSeed.getLeft()) {
+                    case SPRING -> getPeriodeForSeeding(
+                        "Frühling",
+                        "Printemps",
+                        gesuchsjahr,
+                        periodeToSeed.getRight(),
+                        LocalDate.of(yearToSeed, 1, 1),
+                        LocalDate.of(yearToSeed, 12, 31),
+                        LocalDate.of(yearToSeed, 1, 15),
+                        LocalDate.of(yearToSeed, 9, 30),
+                        LocalDate.of(yearToSeed, 6, 30),
+                        LocalDate.of(yearToSeed, 9, 30)
+                    );
+                    case FALL -> getPeriodeForSeeding(
+                        "Herbst",
+                        "Automne",
+                        gesuchsjahr,
+                        periodeToSeed.getRight(),
+                        LocalDate.of(yearToSeed, 7, 1),
+                        LocalDate.of(yearToSeed + 1, 6, 30),
+                        LocalDate.of(yearToSeed, 7, 15),
+                        LocalDate.of(yearToSeed + 1, 3, 31),
+                        LocalDate.of(yearToSeed, 12, 31),
+                        LocalDate.of(yearToSeed + 1, 3, 31)
+                    );
+                });
+            }
+>>>>>>> feature/KSTIP-1465
 
             gesuchsjahrRepository.persistAndFlush(gesuchsjahr);
             gesuchsperiodeRepository.persist(newPerioden);
@@ -102,6 +158,7 @@ public class GesuchsperiodeSeeding extends Seeder {
         final String prefixDe,
         final String prefixFr,
         final Gesuchsjahr jahr,
+        final GueltigkeitStatus gueltigkeitStatus,
         final LocalDate from,
         final LocalDate to,
         final LocalDate aufschaltterminStart,
@@ -154,7 +211,7 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setWohnkostenPersoenlich3pers(16260)
             .setWohnkostenPersoenlich4pers(19932)
             .setWohnkostenPersoenlich5pluspers(25260)
-            .setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT)
+            .setGueltigkeitStatus(gueltigkeitStatus)
             .setPreisProMahlzeit(10)
             .setMaxSaeule3a(7056)
             .setAnzahlWochenLehre(47)
@@ -164,5 +221,10 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setReduzierungDesGrundbedarfs(2838)
             .setZweiterAuszahlungsterminMonat(6)
             .setZweiterAuszahlungsterminTag(1);
+    }
+
+    private enum Season {
+        SPRING,
+        FALL
     }
 }
