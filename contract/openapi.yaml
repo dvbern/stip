@@ -541,7 +541,13 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateAusbildung
       summary: Returniert die Ausbildung
-  '/gesuchDokument/customGesuchDokument':
+  '/gesuchDokument/customGesuchDokuments/{gesuchTrancheId}':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     get:
       tags:
         - Dokument
@@ -561,6 +567,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getAllCustomDokumentTypes
+  '/gesuchDokument/customGesuchDokuments/':
     post:
       requestBody:
         content:
@@ -584,8 +591,13 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createCustomDokumentTyp
-  '/gesuchDokument/customGesuchDokument/{customDokumentTypId}':
+  '/gesuchDokument/customGesuchDokument/{gesuchId}/{customDokumentTypId}':
     parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
       - name: customDokumentTypId
         schema:
           $ref: '#/components/schemas/UUID'

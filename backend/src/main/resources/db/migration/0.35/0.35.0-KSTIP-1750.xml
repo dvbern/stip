@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="anna-lea.fuhrer (generated)" id="1736265146236-1">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-3">
         <createTable tableName="custom_dokument_typ">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="custom_dokument_typPK"/>
@@ -29,7 +29,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1736265146236-2">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-4">
         <createTable tableName="custom_dokument_typ_aud">
             <column name="id" type="UUID">
                 <constraints nullable="false"/>
@@ -47,31 +47,40 @@
             <column name="type" type="VARCHAR(20)"/>
         </createTable>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1736265146236-3">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-5">
         <addColumn tableName="gesuch_dokument">
             <column name="custom_dokument_typ_id" type="uuid"/>
         </addColumn>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1736265146236-4">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-6">
         <addColumn tableName="gesuch_dokument_aud">
             <column name="custom_dokument_typ_id" type="uuid"/>
         </addColumn>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1736265146236-5">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-7">
         <addPrimaryKey columnNames="rev, id" constraintName="custom_dokument_typ_audPK" tableName="custom_dokument_typ_aud"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1736265146236-6">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-8">
         <addUniqueConstraint columnNames="custom_dokument_typ_id" constraintName="UC_GESUCH_DOKUMENTCUSTOM_DOKUMENT_TYP_ID_COL" tableName="gesuch_dokument"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1736265146236-7">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-9">
+        <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-10">
         <createIndex indexName="IX_custom_gesuch_dokument_mandant" tableName="custom_dokument_typ">
             <column name="mandant"/>
         </createIndex>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1736265146236-8">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-11">
         <addForeignKeyConstraint baseColumnNames="custom_dokument_typ_id" baseTableName="gesuch_dokument" constraintName="FK_gesuch_dokument_custom_dokument_typ_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="custom_dokument_typ" validate="true"/>
     </changeSet>
-    <changeSet author="anna-lea.fuhrer (generated)" id="1736265146236-9">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-12">
         <addForeignKeyConstraint baseColumnNames="rev" baseTableName="custom_dokument_typ_aud" constraintName="FKfrttrf3l1led7b8p7c0f3ry13" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-1">
+        <dropUniqueConstraint constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1736526769667-2">
+        <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
     </changeSet>
 </databaseChangeLog>

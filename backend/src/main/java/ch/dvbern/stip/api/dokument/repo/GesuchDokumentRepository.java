@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.dokument.repo;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -99,6 +100,19 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
                     .and(gesuchDokument.customDokumentTyp.id.eq(customDokumentTypeId))
             );
         return query.stream().findFirst();
+    }
+
+    public List<GesuchDokument> findAllOfTypeCustomByGesuchTrancheId(UUID gesuchTrancheId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+        var query = queryFactory
+            .select(gesuchDokument)
+            .from(gesuchDokument)
+            .where(
+                gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
+                    .and(gesuchDokument.customDokumentTyp.id.isNotNull())
+            );
+        return query.stream().toList();
     }
 
     public boolean containsDocuments(UUID customDokumentTypeId) {

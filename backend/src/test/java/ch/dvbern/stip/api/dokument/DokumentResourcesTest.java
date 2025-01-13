@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -39,6 +40,8 @@ import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -87,6 +90,7 @@ class DokumentResourcesTest {
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private UUID gesuchId;
+    private GesuchDtoSpec gesuch;
     private UUID gesuchTrancheId;
     private UUID dokumentId;
     private UUID customDokumentId;
@@ -95,7 +99,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(1)
     void test_prepare_gesuch_for_dokument() {
-        final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
     }
@@ -284,6 +288,7 @@ class DokumentResourcesTest {
     @Order(10)
     void test_delete_required_custom_gesuchdokument_typ_should_fail() {
         dokumentApiSpec.deleteCustomDokumentTyp()
+            .gesuchIdPath(gesuchId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -291,6 +296,7 @@ class DokumentResourcesTest {
             .statusCode(Status.FORBIDDEN.getStatusCode());
 
         final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -352,14 +358,67 @@ class DokumentResourcesTest {
             .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
+    // gesuch is still in wrong status for the operation -> should fail
+    @Test
+    @TestAsSachbearbeiter
+    @Order(13)
+    void test_delete_required_custom_gesuchdokument_should_still_fail() {
+        dokumentApiSpec.deleteCustomDokumentTyp()
+            .gesuchIdPath(gesuchId)
+            .customDokumentTypIdPath(customDokumentId)
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
+    }
+
+    // for the next tests, gesuch
+    // should be in state IN_BEARBEITUNG_SB
+    @Test
+    @TestAsGesuchsteller
+    @Order(14)
+    void fillGesuch() {
+        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(15)
+    void gesuchEinreichen() {
+        gesuchApiSpec.gesuchEinreichen()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(16)
+    void gesuchStatusChangeToInBearbeitungSB() {
+        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+    }
+
     // testAsSB
     // delete custom
     // b: no files -> ok
     @Test
     @TestAsSachbearbeiter
-    @Order(13)
+    @Order(17)
     void test_delete_required_custom_gesuchdokument_should_success() {
         dokumentApiSpec.deleteCustomDokumentTyp()
+            .gesuchIdPath(gesuchId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -367,6 +426,7 @@ class DokumentResourcesTest {
             .statusCode(Status.NO_CONTENT.getStatusCode());
 
         final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
@@ -382,7 +442,7 @@ class DokumentResourcesTest {
     // upload
     @Test
     @TestAsGesuchsteller
-    @Order(14)
+    @Order(18)
     void test_get_required_custom_gesuchdokuments_should_be_empty() {
         final var requiredDocuments = gesuchTrancheApiSpec.getCustomDocumentsToUpload()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -397,7 +457,7 @@ class DokumentResourcesTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsAdmin
     @Order(99)
     void test_delete_gesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);

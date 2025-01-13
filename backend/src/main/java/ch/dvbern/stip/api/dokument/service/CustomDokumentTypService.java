@@ -19,10 +19,11 @@ package ch.dvbern.stip.api.dokument.service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDocumentTypRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -36,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomDokumentTypService {
     private final CustomDocumentTypRepository customDocumentTypRepository;
     private final CustomDocumentTypMapper customDocumentTypMapper;
+    private final GesuchDokumentRepository gesuchDokumentRepository;
 
     @Transactional
     public CustomDokumentTypDto createCustomDokumentTyp(CustomDokumentTypCreateDto dto) {
@@ -45,20 +47,25 @@ public class CustomDokumentTypService {
     }
 
     @Transactional
-    public List<CustomDokumentTypDto> getAllCustomDokumentTypDtos() {
-        return customDocumentTypRepository.getAll()
+    public List<CustomDokumentTypDto> getAllCustomDokumentTypDtosOfTranche(UUID gesuchTrancheId) {
+        return getAllCustomDokumentTypsOfTranche(gesuchTrancheId)
             .stream()
             .map(customDocumentTypMapper::toDto)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Transactional
-    public List<CustomDokumentTyp> getAllCustomDokumentTyps() {
-        return customDocumentTypRepository.getAll();
+    public List<CustomDokumentTyp> getAllCustomDokumentTypsOfTranche(UUID gesuchTrancheId) {
+        final var gesuchDokuments = findByCustomDokumentTypId(gesuchTrancheId);
+        return gesuchDokuments.stream().map(GesuchDokument::getCustomDokumentTyp).toList();
     }
 
     @Transactional
     public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
         customDocumentTypRepository.deleteById(customDokumentTypId);
+    }
+
+    private List<GesuchDokument> findByCustomDokumentTypId(UUID gesuchTrancheId) {
+        return gesuchDokumentRepository.findAllOfTypeCustomByGesuchTrancheId(gesuchTrancheId);
     }
 }

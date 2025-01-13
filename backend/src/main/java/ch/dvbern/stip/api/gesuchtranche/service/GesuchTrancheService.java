@@ -174,7 +174,7 @@ public class GesuchTrancheService {
     }
 
     public List<CustomDokumentTyp> getRequiredCustomDokumentTypes(final GesuchTranche gesuchTranche) {
-        return requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
+        return requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(gesuchTranche);
     }
 
     @Transactional
