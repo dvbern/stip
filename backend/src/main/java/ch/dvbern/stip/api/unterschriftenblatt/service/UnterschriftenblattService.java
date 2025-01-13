@@ -17,11 +17,12 @@
 
 package ch.dvbern.stip.api.unterschriftenblatt.service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
@@ -29,6 +30,7 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
@@ -68,6 +70,7 @@ public class UnterschriftenblattService {
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final UnterschriftenblattMapper unterschriftenblattMapper;
     private final GesuchStatusService gesuchStatusService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Transactional
     public Uni<Response> getUploadUnterschriftenblattUni(
@@ -171,16 +174,20 @@ public class UnterschriftenblattService {
     @Transactional
     public void checkForUnterschriftenblaetterOnAllGesuche() {
         final var gesuche = gesuchRepository.getAllWartenAufUnterschriftenblatt();
-        final var gesucheToTransition = new ArrayList<Gesuch>();
-        for (final var gesuch : gesuche) {
-            if (areRequiredUnterschriftenblaetterUploaded(gesuch)) {
-                gesucheToTransition.add(gesuch);
-            }
-        }
 
-        if (!gesucheToTransition.isEmpty()) {
+        // This is the list of historic Gesuche, select the actual ones
+        final var changedSevenDaysAgo = new HashSet<>(
+            gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(
+                gesuche.stream().map(AbstractEntity::getId).toList(),
+                Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+                LocalDateTime.now().minusDays(7)
+            ).map(AbstractEntity::getId).toList()
+        );
+
+        final var toUpdate = gesuche.stream().filter(gesuch -> changedSevenDaysAgo.contains(gesuch.getId())).toList();
+        if (!toUpdate.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
-                gesucheToTransition,
+                toUpdate,
                 GesuchStatusChangeEvent.VERSANDBEREIT
             );
         }
