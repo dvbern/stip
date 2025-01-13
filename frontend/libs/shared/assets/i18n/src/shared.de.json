@@ -153,6 +153,13 @@
   "shared.dokumente.file.unterschriftenblatt.GEMEINSAM": "Unterschriftenblatt gemeinsam",
   "shared.dokumente.file.unterschriftenblatt.MUTTER": "Unterschriftenblatt Mutter",
   "shared.dokumente.file.unterschriftenblatt.VATER": "Unterschriftenblatt Vater",
+  "shared.dokumente.createCustomDokumentTyp": "Generisches Dokument hinzufügen",
+  "shared.dokumente.createCustomDokumentTyp.dialog.title": "Generischen Dokument erstellen",
+  "shared.dokumente.createCustomDokumentTyp.dialog.message": "Der Gesuchsteller wird im anschluss aufgefordert, das Dokument hochzuladen.",
+  "shared.dokumente.createCustomDokumentTyp.dialog.name.label": "Name des Dokuments",
+  "shared.dokumente.createCustomDokumentTyp.dialog.kommentar.label": "Kommentar",
+  "shared.dokumente.createCustomDokumentTyp.dialog.kommentar.placeholder": "Beschreibung für das Dokuments eingeben...",
+  "shared.dokumente.createCustomDokumentTyp.dialog.create": "Erstellen",
 
   "shared.nachrichten.title": "Nachrichten",
   "shared.nachricht.title": "Nachricht",

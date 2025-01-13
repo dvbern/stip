@@ -42,6 +42,7 @@ import {
 } from '@dv/shared/util/gesuch';
 
 import { AdditionalDokumenteComponent } from './components/additional-dokumente/additional-dokumente.component';
+import { CreateCustomDokumentDialogComponent } from './components/create-custom-dokument-dialog/create-custom-dokument-dialog.component';
 import { RequiredDokumenteComponent } from './components/required-dokumente/required-dokumente.component';
 
 @Component({
@@ -230,6 +231,29 @@ export class SharedFeatureGesuchDokumenteComponent {
         },
       });
     }
+  }
+
+  createCustomDokumentTyp() {
+    CreateCustomDokumentDialogComponent.open(this.dialog)
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          const { trancheId } = this.gesuchViewSig();
+          if (trancheId) {
+            this.dokumentsStore.createCustomDokumentTyp$({
+              trancheId,
+              type: result.name,
+              description: result.kommentar,
+              // onSuccess: () => {
+              //   this.dokumentsStore.getDokumenteAndRequired$({
+              //     gesuchTrancheId: trancheId,
+              //   });
+              // },
+            });
+          }
+        }
+      });
   }
 
   handleContinue() {

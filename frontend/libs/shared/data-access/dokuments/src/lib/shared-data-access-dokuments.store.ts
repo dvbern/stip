@@ -343,6 +343,8 @@ export class DokumentsStore extends signalStore(
             documentsToUpload: success(documentsToUpload),
           }));
         },
+        // @scph dieses errorhandling verhindert nicht ein canceling der subscription wenn ein error innerhalb
+        // vom combineLatest passiert. Wie koennen wir das beheben?
         error: (error) => {
           patchState(this, () => ({
             dokuments: failure(error),
@@ -413,6 +415,50 @@ export class DokumentsStore extends signalStore(
             ),
           ),
       ),
+    ),
+  );
+
+  createCustomDokumentTyp$ = rxMethod<{
+    trancheId: string;
+    type: string;
+    description: string;
+  }>(
+    pipe(
+      switchMap(({ trancheId, type, description }) =>
+        this.dokumentService.createCustomDokumentTyp$({
+          customDokumentTypCreate: {
+            description,
+            trancheId,
+            type,
+          },
+        }),
+      ),
+      tapResponse({
+        next: () => {
+          this.globalNotificationStore.createSuccessNotification({
+            messageKey: 'shared.dokumente.custom.success',
+          });
+        },
+        error: () => undefined,
+      }),
+    ),
+  );
+
+  deleteCustomDokumentTyp$ = rxMethod<{
+    customDokumentTypId: string;
+  }>(
+    pipe(
+      switchMap(({ customDokumentTypId }) =>
+        this.dokumentService.deleteCustomDokumentTyp$({ customDokumentTypId }),
+      ),
+      tapResponse({
+        next: () => {
+          this.globalNotificationStore.createSuccessNotification({
+            messageKey: 'shared.dokumente.custom.delete.success',
+          });
+        },
+        error: () => undefined,
+      }),
     ),
   );
 }

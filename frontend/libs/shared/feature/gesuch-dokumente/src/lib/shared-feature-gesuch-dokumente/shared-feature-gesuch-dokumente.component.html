@@ -32,6 +32,16 @@
         {{ 'shared.dokumente.uebermitteln' | translate }}
       </button>
     }
+
+    <!-- create custom document button -->
+    <button
+      type="button"
+      class="btn btn-primary ml-2"
+      (click)="createCustomDokumentTyp()"
+      data-testid="dokumente-button-createCustomDokumentTyp"
+    >
+      {{ 'shared.dokumente.createCustomDokumentTyp' | translate }}
+    </button>
   </div>
 
   <!-- Buttons -->

@@ -153,6 +153,13 @@
   "shared.dokumente.file.unterschriftenblatt.GEMEINSAM": "Feuille de signatures commune",
   "shared.dokumente.file.unterschriftenblatt.MUTTER": "Feuille de signatures de la mère",
   "shared.dokumente.file.unterschriftenblatt.VATER": "Feuille de signatures du père",
+  "shared.dokumente.createCustomDokumentTyp": "Ajouter un document générique",
+  "shared.dokumente.createCustomDokumentTyp.dialog.title": "Créer un document générique",
+  "shared.dokumente.createCustomDokumentTyp.dialog.message": "Le demandeur sera ensuite invité à télécharger le document.",
+  "shared.dokumente.createCustomDokumentTyp.dialog.name.label": "Nom du document",
+  "shared.dokumente.createCustomDokumentTyp.dialog.kommentar.label": "Commentaire",
+  "shared.dokumente.createCustomDokumentTyp.dialog.kommentar.placeholder": "Entrez une description pour le document...",
+  "shared.dokumente.createCustomDokumentTyp.dialog.create": "Créer",
 
   "shared.nachrichten.title": "Messages",
   "shared.nachricht.title": "Message",

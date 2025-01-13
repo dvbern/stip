@@ -1,0 +1,49 @@
+<section class="d-flex flex-column position-relative p-4 rounded">
+  <button
+    type="button"
+    (click)="cancel()"
+    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+
+  <h1 class="title h5 mb-4 d-flex">
+    {{ 'shared.dokumente.createCustomDokumentTyp.dialog.title' | translate }}
+  </h1>
+  <p class="content mb-0" [innerHTML]="'shared.dokumente.createCustomDokumentTyp.dialog.message' | translate"></p>
+
+  <form [formGroup]="form" class="mt-4" novalidate>
+    <mat-form-field dvSharedUiFormField class="col-12">
+      <mat-label>{{ 'shared.dokumente.createCustomDokumentTyp.dialog.name.label' | translate }}</mat-label>
+      <input type="text" matInput dvMaxLength formControlName="name" data-testid="create-custom-dokument-dialog-name" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field dvSharedUiFormField class="col-12 mt-4">
+      <mat-label>{{ 'shared.dokumente.createCustomDokumentTyp.dialog.kommentar.label' | translate }}</mat-label>
+      <textarea
+        rows="4"
+        matInput
+        [dvMaxLength]="'large'"
+        formControlName="kommentar"
+        data-testid="create-custom-dokument-dialog-kommentar"
+        [placeholder]="'shared.dokumente.createCustomDokumentTyp.dialog.kommentar.placeholder' | translate"
+      ></textarea>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="d-flex mt-4 justify-content-between">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        {{ 'shared.cancel' | translate }}
+      </button>
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary ms-2" (click)="confirm()">
+        {{ 'shared.dokumente.createCustomDokumentTyp.dialog.create' | translate }}
+      </button>
+    </div>
+  </form>
+</section>

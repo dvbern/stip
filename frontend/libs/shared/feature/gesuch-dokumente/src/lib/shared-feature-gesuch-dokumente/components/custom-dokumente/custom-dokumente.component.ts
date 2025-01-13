@@ -3,11 +3,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { SharedModelTableAdditionalDokument } from '@dv/shared/model/dokument';
 import {
   UnterschriftenblattDokument,
@@ -21,7 +23,7 @@ import {
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
 @Component({
-  selector: 'dv-additional-dokumente',
+  selector: 'dv-custom-dokumente',
   standalone: true,
   imports: [
     CommonModule,
@@ -30,10 +32,11 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
     TypeSafeMatCellDefDirective,
     SharedPatternDocumentUploadComponent,
   ],
-  templateUrl: './additional-dokumente.component.html',
+  templateUrl: './custom-dokumente.component.html',
+  styleUrl: './custom-dokumente.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdditionalDokumenteComponent {
+export class CustomDokumenteComponent {
   dokumenteViewSig = input.required<{
     gesuchId: string | undefined;
     allowTypes: string | undefined;
@@ -43,6 +46,7 @@ export class AdditionalDokumenteComponent {
     readonly: boolean;
     requiredDocumentTypes: UnterschriftenblattDokumentTyp[];
   }>();
+  public dokumentsStore = inject(DokumentsStore);
 
   displayedColumns = ['spacer', 'documentName', 'actions'];
 
@@ -94,6 +98,10 @@ export class AdditionalDokumenteComponent {
     ];
     return new MatTableDataSource<SharedModelTableAdditionalDokument>(list);
   });
+
+  deleteCustomDokumentTyp() {
+    // this.dokumentsStore.deleteCustomDokumentTyp(dokumentTyp);
+  }
 
   trackByFn(_index: number, item: SharedModelTableAdditionalDokument) {
     return item.dokumentTyp;
