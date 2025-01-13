@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.stipdecision.decider;
 
-import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import lombok.RequiredArgsConstructor;

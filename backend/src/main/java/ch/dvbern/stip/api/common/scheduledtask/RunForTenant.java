@@ -31,5 +31,5 @@ import jakarta.interceptor.InterceptorBinding;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface RunForTenant {
-    MandantIdentifier value();
+    MandantIdentifier value() default MandantIdentifier.GLOBAL;
 }

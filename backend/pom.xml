@@ -662,7 +662,7 @@
                   <apiNameSuffix>Resource</apiNameSuffix>
                   <generateSupportingFiles>false</generateSupportingFiles>
                   <schemaMappings>FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
-                    Gesuchstatus=ch.dvbern.stip.api.gesuch.type.Gesuchstatus,
+                    Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
                     Anrede=ch.dvbern.stip.api.common.type.Anrede,
                     Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
                     Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
