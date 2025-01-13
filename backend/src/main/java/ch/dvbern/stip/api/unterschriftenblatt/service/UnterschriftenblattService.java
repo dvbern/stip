@@ -158,13 +158,7 @@ public class UnterschriftenblattService {
         final var existing = unterschriftenblattRepository.findByGesuchAndDokumentTyps(gesuch.getId(), required);
 
         final var existingSet = existing.map(Unterschriftenblatt::getDokumentTyp).collect(Collectors.toSet());
-        for (final var typ : required) {
-            if (!existingSet.contains(typ)) {
-                return false;
-            }
-        }
-
-        return true;
+        return existingSet.containsAll(required);
     }
 
     private Unterschriftenblatt createUnterschriftenblatt(
