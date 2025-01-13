@@ -17,14 +17,13 @@
 
 package ch.dvbern.stip.api.common.scheduledtask;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
 import jakarta.interceptor.AroundInvoke;
 import jakarta.interceptor.Interceptor;
 import jakarta.interceptor.InvocationContext;
 
 @Interceptor
-@RunForTenant(MandantIdentifier.BERN)
+@RunForTenant
 public class RunForTenantInterceptor {
     @AroundInvoke
     Object aroundInvoke(final InvocationContext invocationContext) throws Throwable {

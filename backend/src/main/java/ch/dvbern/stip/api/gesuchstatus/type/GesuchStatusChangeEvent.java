@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.type;
+package ch.dvbern.stip.api.gesuchstatus;
 
 import lombok.Getter;
 
