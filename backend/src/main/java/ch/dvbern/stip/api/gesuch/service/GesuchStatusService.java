@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
@@ -71,6 +72,22 @@ public class GesuchStatusService {
         if (kommentarDto != null && sendNotificationIfPossible) {
             MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
             notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
+        }
+    }
+
+    public void bulkTriggerStateMachineEvent(
+        final List<Gesuch> gesuche,
+        final GesuchStatusChangeEvent event
+    ) {
+        for (final Gesuch gesuch : gesuche) {
+            StateMachineUtil.addExit(
+                config,
+                transition -> validationService.validateGesuchForStatus(gesuch, transition.getDestination()),
+                Gesuchstatus.values()
+            );
+
+            final var sm = createStateMachine(gesuch, null);
+            sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
         }
     }
 

@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.unterschriftenblatt.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -170,10 +171,18 @@ public class UnterschriftenblattService {
     @Transactional
     public void checkForUnterschriftenblaetterOnAllGesuche() {
         final var gesuche = gesuchRepository.getAllWartenAufUnterschriftenblatt();
+        final var gesucheToTransition = new ArrayList<Gesuch>();
         for (final var gesuch : gesuche) {
             if (areRequiredUnterschriftenblaetterUploaded(gesuch)) {
-                gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+                gesucheToTransition.add(gesuch);
             }
+        }
+
+        if (!gesucheToTransition.isEmpty()) {
+            gesuchStatusService.bulkTriggerStateMachineEvent(
+                gesucheToTransition,
+                GesuchStatusChangeEvent.VERSANDBEREIT
+            );
         }
     }
 

@@ -65,7 +65,7 @@ kstip:
     featurekey: 'ortschaftenverzeichnis_plz_2056.csv.zip'
     hashkey: 'checksum:multihash'
   unterschriftenblatt:
-    cron: '0 0/1 * 1/1 * ? *' # Fire every minute
+    cron: '0 0 9 1/1 * ? *' # Fires daily at 09:00
   welcome-mail:
     kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
     kc-path: '${STIP_WELCOME_MAIL_PATH}'

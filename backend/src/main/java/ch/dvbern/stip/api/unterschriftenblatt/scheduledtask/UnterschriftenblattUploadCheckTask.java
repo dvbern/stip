@@ -39,7 +39,7 @@ public class UnterschriftenblattUploadCheckTask {
     public void run() {
         try {
             LOG.info("Checking Unterschriftenblaetter for Bern");
-
+            unterschriftenblattService.checkForUnterschriftenblaetterOnAllGesuche();
             LOG.info("Done checking Unterschriftenblaetter for Bern");
         } catch (Throwable e) {
             LOG.error(e.toString(), e);
