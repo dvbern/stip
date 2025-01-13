@@ -44,13 +44,6 @@ public class GesuchsperiodeSeeding extends Seeder {
     protected void doSeed() {
         LOG.info("Seeding Gesuchsperiode and Jahr");
         final var yearsToSeed = List.of(
-<<<<<<< HEAD
-            2024,
-            2025
-        );
-
-        for (final var yearToSeed : yearsToSeed) {
-=======
             ImmutablePair.of(
                 2024,
                 List.of(
@@ -69,39 +62,11 @@ public class GesuchsperiodeSeeding extends Seeder {
 
         for (final var toSeed : yearsToSeed) {
             final var yearToSeed = toSeed.getLeft();
->>>>>>> feature/KSTIP-1465
             var gesuchsjahr = gesuchsjahrRepository.find("technischesJahr", yearToSeed).firstResult();
             if (gesuchsjahr != null) {
                 continue;
             }
 
-<<<<<<< HEAD
-            gesuchsjahr = getJahrForSeeding(yearToSeed);
-            final var newPerioden = List.of(
-                getPeriodeForSeeding(
-                    "Herbst",
-                    "Automne",
-                    gesuchsjahr,
-                    LocalDate.of(yearToSeed, 7, 1),
-                    LocalDate.of(yearToSeed + 1, 6, 30),
-                    LocalDate.of(yearToSeed, 7, 15),
-                    LocalDate.of(yearToSeed + 1, 3, 31),
-                    LocalDate.of(yearToSeed, 12, 31),
-                    LocalDate.of(yearToSeed + 1, 3, 31)
-                ),
-                getPeriodeForSeeding(
-                    "Frühling",
-                    "Printemps",
-                    gesuchsjahr,
-                    LocalDate.of(yearToSeed, 1, 1),
-                    LocalDate.of(yearToSeed, 12, 31),
-                    LocalDate.of(yearToSeed, 1, 15),
-                    LocalDate.of(yearToSeed, 9, 30),
-                    LocalDate.of(yearToSeed, 6, 30),
-                    LocalDate.of(yearToSeed, 9, 30)
-                )
-            );
-=======
             final var newPerioden = new ArrayList<Gesuchsperiode>();
             gesuchsjahr = getJahrForSeeding(yearToSeed);
             for (final var periodeToSeed : toSeed.getRight()) {
@@ -132,7 +97,6 @@ public class GesuchsperiodeSeeding extends Seeder {
                     );
                 });
             }
->>>>>>> feature/KSTIP-1465
 
             gesuchsjahrRepository.persistAndFlush(gesuchsjahr);
             gesuchsperiodeRepository.persist(newPerioden);
