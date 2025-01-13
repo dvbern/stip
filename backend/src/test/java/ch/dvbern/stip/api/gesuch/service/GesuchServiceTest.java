@@ -1291,8 +1291,8 @@ class GesuchServiceTest {
             .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
         assertEquals(
-            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus(),
-            Gesuchstatus.KEIN_STIPENDIENANSPRUCH
+            Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
     }
 
@@ -1305,8 +1305,8 @@ class GesuchServiceTest {
             .thenReturn(new BerechnungsresultatDto().berechnung(1).year(Year.now().getValue()));
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
         assertEquals(
-            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus(),
-            Gesuchstatus.STIPENDIENANSPRUCH
+            Gesuchstatus.STIPENDIENANSPRUCH,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
     }
 
