@@ -43,6 +43,7 @@
     <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
     <spotless.version>2.43.0</spotless.version>
     <spotless.eclipse.version>4.29</spotless.eclipse.version>
+    <itext.version>9.0.0</itext.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -332,6 +333,17 @@
       <groupId>com.sun.xml.messaging.saaj</groupId>
       <artifactId>saaj-impl</artifactId>
       <version>3.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>itext-core</artifactId>
+      <version>${itext.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>bouncy-castle-adapter</artifactId>
+      <version>${itext.version}</version>
     </dependency>
   </dependencies>
   <build>
