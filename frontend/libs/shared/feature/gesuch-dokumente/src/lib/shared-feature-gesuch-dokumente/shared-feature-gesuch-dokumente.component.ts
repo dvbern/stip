@@ -82,8 +82,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       unterschriftenblaetter: dokuments,
       permissions: gesuchPermissions,
       readonly,
-      showList:
-        !readonly && (dokuments.length > 0 || requiredDocumentTypes.length > 0),
+      showList: dokuments.length > 0 || requiredDocumentTypes.length > 0,
       requiredDocumentTypes,
     };
   });
@@ -185,7 +184,7 @@ export class SharedFeatureGesuchDokumenteComponent {
             gesuchDokumentId: result.id,
             dokumentTyp: document.dokumentTyp,
             afterSuccess: () => {
-              this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
+              this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
             },
           });
         }
