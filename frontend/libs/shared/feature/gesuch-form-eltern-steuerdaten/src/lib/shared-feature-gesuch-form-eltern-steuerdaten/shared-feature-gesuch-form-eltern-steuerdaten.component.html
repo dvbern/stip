@@ -42,12 +42,6 @@
         >
           <span class="material-symbols-rounded"> info </span>
         </button>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.eltern-steuerdaten.totalEinkuenfte.infoTitle'"
-          [dialogMessageKey]="'shared.form.eltern-steuerdaten.totalEinkuenfte.info'"
-          #totalEinkuenfteDialog="dvSharedUiInfoDialog"
-        ></div>
       </div>
 
       <!-- Eigenmietwert-->
@@ -65,6 +59,13 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.eltern-steuerdaten.totalEinkuenfte.infoTitle'"
+        [dialogMessageKey]="'shared.form.eltern-steuerdaten.totalEinkuenfte.info'"
+        #totalEinkuenfteDialog="dvSharedUiInfoDialog"
+        class="d-none d-xl-block col-md-6 col-xl-4"
+      ></div>
     </div>
 
     <!-- Arbeitsverhaeltnis-->
@@ -163,12 +164,6 @@
         >
           <span class="material-symbols-rounded"> info </span>
         </button>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.eltern-steuerdaten.kinderalimente.infoTitle'"
-          [dialogMessageKey]="'shared.form.eltern-steuerdaten.kinderalimente.info'"
-          #kinderalimenteDialog="dvSharedUiInfoDialog"
-        ></div>
       </div>
       <!-- Vermögen-->
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
@@ -185,6 +180,13 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.eltern-steuerdaten.kinderalimente.infoTitle'"
+        [dialogMessageKey]="'shared.form.eltern-steuerdaten.kinderalimente.info'"
+        #kinderalimenteDialog="dvSharedUiInfoDialog"
+        class="d-none d-xl-block col-md-6 col-xl-4"
+      ></div>
     </div>
 
     <h3 class="pt-5">
@@ -210,7 +212,7 @@
         </mat-form-field>
         <button
           type="button"
-          (click)="kinderalimenteDialog.toggle()"
+          (click)="steuernKantonGemeindeDialog.toggle()"
           class="dv-icon-button dv-icon-button-md text-info mt-2"
           [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
         >
@@ -218,9 +220,9 @@
         </button>
         <div
           dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.eltern-steuerdaten.kinderalimente.infoTitle'"
-          [dialogMessageKey]="'shared.form.eltern-steuerdaten.kinderalimente.info'"
-          #kinderalimenteDialog="dvSharedUiInfoDialog"
+          [dialogTitleKey]="'shared.form.eltern-steuerdaten.steuernKantonGemeinde.label'"
+          [dialogMessageKey]="'shared.form.eltern-steuerdaten.steuernKantonGemeinde.info'"
+          #steuernKantonGemeindeDialog="dvSharedUiInfoDialog"
         ></div>
       </div>
 
@@ -242,17 +244,18 @@
         </mat-form-field>
         <button
           type="button"
-          (click)="kinderalimenteDialog.toggle()"
+          (click)="steuernBundDialog.toggle()"
           class="dv-icon-button dv-icon-button-md text-info mt-2"
           [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
         >
           <span class="material-symbols-rounded"> info </span>
         </button>
+
         <div
           dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.eltern-steuerdaten.kinderalimente.infoTitle'"
-          [dialogMessageKey]="'shared.form.eltern-steuerdaten.kinderalimente.info'"
-          #kinderalimenteDialog="dvSharedUiInfoDialog"
+          [dialogTitleKey]="'shared.form.eltern-steuerdaten.steuernBund.label'"
+          [dialogMessageKey]="'shared.form.eltern-steuerdaten.steuernBund.info'"
+          #steuernBundDialog="dvSharedUiInfoDialog"
         ></div>
       </div>
     </div>

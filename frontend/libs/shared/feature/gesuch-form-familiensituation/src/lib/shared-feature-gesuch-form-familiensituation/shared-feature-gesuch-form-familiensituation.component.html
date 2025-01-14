@@ -201,6 +201,7 @@
                   [dialogTitleKey]="'shared.form.familiensituation.elternteil-verstorben-unbekannt.infoTitle'"
                   [dialogMessageKey]="'shared.form.familiensituation.elternteil-verstorben-unbekannt.info'"
                   #elternteilVerstorbenUnbekanntDialog="dvSharedUiInfoDialog"
+                  class="d-flex d-md-block col-12 col-md-6 col-xl-4"
                 ></div>
               </div>
               <mat-radio-group
@@ -358,23 +359,25 @@
                       <button
                         type="button"
                         (click)="fehlendeAnerkennungDialog.toggle()"
-                        class="dv-icon-button dv-icon-button-md text-info mt-2"
+                        class="dv-icon-button dv-icon-button-md text-info"
                         [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
                       >
                         <span class="material-symbols-rounded"> info </span>
                       </button>
-                      <div
-                        dvSharedUiInfoDialog
-                        [dialogTitleKey]="
-                          'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.infoTitle'
-                        "
-                        [dialogMessageKey]="
-                          'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.info'
-                        "
-                        #fehlendeAnerkennungDialog="dvSharedUiInfoDialog"
-                      ></div>
                     </div>
                   </div>
+                  <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+                  <div
+                    dvSharedUiInfoDialog
+                    [dialogTitleKey]="
+                      'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.infoTitle'
+                    "
+                    [dialogMessageKey]="
+                      'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.info'
+                    "
+                    #fehlendeAnerkennungDialog="dvSharedUiInfoDialog"
+                    class="d-none d-md-block col-md-6 col-xl-4"
+                  ></div>
                   @if (vaterUnbekanntDocumentSig(); as options) {
                     <dv-shared-pattern-document-upload
                       class="flex-shrink-1 mt-2"
