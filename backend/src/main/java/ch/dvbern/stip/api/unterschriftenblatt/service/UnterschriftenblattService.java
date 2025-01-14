@@ -177,8 +177,9 @@ public class UnterschriftenblattService {
         final var allTypes = EnumSet.allOf(UnterschriftenblattDokumentTyp.class);
         getRequiredUnterschriftenblaetter(gesuch).forEach(allTypes::remove);
 
-        final var toDelete =unterschriftenblattRepository
-            .findByGesuchAndDokumentTypes(gesuch.getId(), allTypes.stream().toList()).toList();
+        final var toDelete = unterschriftenblattRepository
+            .findByGesuchAndDokumentTypes(gesuch.getId(), allTypes.stream().toList())
+            .toList();
         final var toRemoveFromS3 = new ArrayList<String>();
 
         for (final var unterschriftenblatt : toDelete) {
