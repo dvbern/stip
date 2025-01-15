@@ -28,6 +28,8 @@ public class RunForTenantInterceptor {
     @AroundInvoke
     Object aroundInvoke(final InvocationContext invocationContext) throws Throwable {
         final var annotation = invocationContext.getMethod().getAnnotation(RunForTenant.class);
+
+        // ignored because it's reset in the finalizer of the returned ExplicitTenantIdScope as such unused
         try (final var ignored = DataTenantResolver.setTenantId(annotation.value().getIdentifier())) {
             return invocationContext.proceed();
         }
