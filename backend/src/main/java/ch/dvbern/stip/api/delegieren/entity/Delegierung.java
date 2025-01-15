@@ -25,6 +25,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
@@ -45,9 +46,10 @@ import org.hibernate.envers.Audited;
 @Setter
 public class Delegierung extends AbstractMandantEntity {
     @NotNull
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(
         name = "sozialdienst_id",
+        referencedColumnName = "id",
         foreignKey = @ForeignKey(name = "FK_delegierung_sozialdienst_id"),
         nullable = false
     )

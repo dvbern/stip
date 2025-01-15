@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="fuju (generated)" id="1736930901815-1">
+    <changeSet author="fuju (generated)" id="1736944172520-1">
         <createTable tableName="delegierung">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="delegierungPK"/>
@@ -29,7 +29,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-2">
+    <changeSet author="fuju (generated)" id="1736944172520-2">
         <createTable tableName="delegierung_aud">
             <column name="id" type="UUID">
                 <constraints nullable="false"/>
@@ -47,7 +47,7 @@
             <column name="sozialdienst_id" type="UUID"/>
         </createTable>
     </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-3">
+    <changeSet author="fuju (generated)" id="1736944172520-3">
         <createTable tableName="sozialdienst_aud">
             <column name="id" type="UUID">
                 <constraints nullable="false"/>
@@ -67,33 +67,47 @@
             <column name="sozialdienst_admin_id" type="UUID"/>
         </createTable>
     </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-4">
+    <changeSet author="fuju (generated)" id="1736944172520-4">
+        <createTable tableName="sozialdienst_sozialdienstbenutzer_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="sozialdienst_sozialdienstbenutzer_audPK"/>
+            </column>
+            <column name="sozialdienst_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="sozialdienst_sozialdienstbenutzer_audPK"/>
+            </column>
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="sozialdienst_sozialdienstbenutzer_audPK"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736944172520-5">
         <addPrimaryKey columnNames="rev, id" constraintName="delegierung_audPK" tableName="delegierung_aud"/>
     </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-5">
+    <changeSet author="fuju (generated)" id="1736944172520-6">
         <addPrimaryKey columnNames="rev, id" constraintName="sozialdienst_audPK" tableName="sozialdienst_aud"/>
     </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-6">
+    <changeSet author="fuju (generated)" id="1736944172520-7">
         <addUniqueConstraint columnNames="delegiertes_gesuch_id" constraintName="UC_DELEGIERUNGDELEGIERTES_GESUCH_ID_COL" tableName="delegierung"/>
     </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-7">
-        <addUniqueConstraint columnNames="sozialdienst_id" constraintName="UC_DELEGIERUNGSOZIALDIENST_ID_COL" tableName="delegierung"/>
-    </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-8">
+    <changeSet author="fuju (generated)" id="1736944172520-8">
         <createIndex indexName="IX_delegierung_mandant" tableName="delegierung">
             <column name="mandant"/>
         </createIndex>
     </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-9">
+    <changeSet author="fuju (generated)" id="1736944172520-9">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="sozialdienst_sozialdienstbenutzer_aud" constraintName="FK1k1e8y52diwcq08j8yj96n2cu" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736944172520-10">
         <addForeignKeyConstraint baseColumnNames="rev" baseTableName="sozialdienst_aud" constraintName="FK1yi8k102jlq2aw0fm7m3prjh5" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
     </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-10">
+    <changeSet author="fuju (generated)" id="1736944172520-11">
         <addForeignKeyConstraint baseColumnNames="delegiertes_gesuch_id" baseTableName="delegierung" constraintName="FK_delegierung_gesuch_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
     </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-11">
+    <changeSet author="fuju (generated)" id="1736944172520-12">
         <addForeignKeyConstraint baseColumnNames="sozialdienst_id" baseTableName="delegierung" constraintName="FK_delegierung_sozialdienst_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sozialdienst" validate="true"/>
     </changeSet>
-    <changeSet author="fuju (generated)" id="1736930901815-12">
+    <changeSet author="fuju (generated)" id="1736944172520-13">
         <addForeignKeyConstraint baseColumnNames="rev" baseTableName="delegierung_aud" constraintName="FKmlpvx1geuvywya5m29qrbpvhc" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
     </changeSet>
 </databaseChangeLog>

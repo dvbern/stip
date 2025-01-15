@@ -21,11 +21,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import javax.net.ssl.SSLContext;
 
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
+import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
@@ -49,6 +51,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.keycloak.admin.client.ClientBuilderWrapper;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -58,6 +61,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 @RequiredArgsConstructor
 @Slf4j
 public class SozialdienstBenutzerService {
+    private final JsonWebToken jsonWebToken;
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstAdminMapper sozialdienstAdminMapper;
@@ -93,6 +97,16 @@ public class SozialdienstBenutzerService {
             .scope(config.scope.orElse(null))
             .resteasyClient(ClientBuilderWrapper.create(SSLContext.getDefault(), true).build())
             .build();
+    }
+
+    public Optional<SozialdienstBenutzer> getCurrentSozialdienstBenutzer() {
+        final var keycloakId = jsonWebToken.getSubject();
+
+        if (keycloakId == null) {
+            throw AppFailureMessage.missingSubject().create();
+        }
+
+        return sozialdienstBenutzerRepository.findByKeycloakId(keycloakId);
     }
 
     @Transactional

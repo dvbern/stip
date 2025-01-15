@@ -34,8 +34,8 @@ import lombok.RequiredArgsConstructor;
 @Authorizer
 public class SozialdienstAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
-    public final SozialdienstRepository sozialdienstRepository;
-    public final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
+    private final SozialdienstRepository sozialdienstRepository;
+    private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
 
     @Transactional
     public void canUpdateSozialdienstBenutzer(final UUID sozialdienstBenutzerToUpdateID) {

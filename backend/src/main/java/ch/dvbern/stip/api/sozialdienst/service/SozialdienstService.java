@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
@@ -42,6 +43,7 @@ public class SozialdienstService {
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
+    private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
 
     public Sozialdienst getSozialdienstOfCurrentSozialdienstAdmin() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
@@ -110,5 +112,14 @@ public class SozialdienstService {
         final var newSozialdienstAdmin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto);
         sozialdienst.setSozialdienstAdmin(newSozialdienstAdmin);
         return sozialdienstBenutzerService.getSozialdienstBenutzerDtoById(newSozialdienstAdmin.getId());
+    }
+
+    @Transactional
+    public boolean isCurrentBenutzerMitarbeiterOfSozialdienst(final UUID sozialdienstId) {
+        final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer();
+        return currentBenutzer.map(benutzer -> {
+            final var sozialdienstOfBenutzer = sozialdienstRepository.getSozialdienstBySozialdienstAdmin(benutzer);
+            return sozialdienstOfBenutzer.getId().equals(sozialdienstId);
+        }).orElse(false);
     }
 }

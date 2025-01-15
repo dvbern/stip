@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import io.quarkus.security.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -76,6 +77,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
         gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         final var fallRepository = Mockito.mock(FallRepository.class);
         final var gesuchStatusService = Mockito.mock(GesuchStatusService.class);
+        final var sozialdienstService = Mockito.mock(SozialdienstService.class);
 
         gesuch = new Gesuch()
             .setAusbildung(
@@ -87,7 +89,12 @@ class GesuchAuthorizerCanGetBerechnungTest {
             );
         final var fall = new Fall().setGesuchsteller(currentBenutzer);
         authorizer = new GesuchAuthorizer(
-            benutzerService, gesuchRepository, gesuchTrancheRepository, gesuchStatusService, fallRepository
+            benutzerService,
+            gesuchRepository,
+            gesuchTrancheRepository,
+            gesuchStatusService,
+            fallRepository,
+            sozialdienstService
         );
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);

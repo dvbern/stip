@@ -116,7 +116,8 @@ class SozialdienstBenutzerServiceTest {
     @Test
     void init() throws NoSuchAlgorithmException {
         sozialdienstBenutzerService = new SozialdienstBenutzerService(
-            sozialdienstBenutzerRepository, sozialdienstRepository, sozialdienstAdminMapper, sozialdienstBenutzerMapper,
+            null, sozialdienstBenutzerRepository, sozialdienstRepository, sozialdienstAdminMapper,
+            sozialdienstBenutzerMapper,
             mailService, tenantService, keycloakAdminClientConfigRuntimeValue
         );
 

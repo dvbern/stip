@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.authorization;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.BooleanSupplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
@@ -28,6 +29,7 @@ import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,6 +45,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchStatusService gesuchStatusService;
     private final FallRepository fallRepository;
+    private final SozialdienstService sozialdienstService;
 
     @Transactional
     public void canGetBerechnung(final UUID gesuchID) {
@@ -91,9 +94,24 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final BooleanSupplier benutzerCanEditInStatusOrAenderung =
+            () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung;
+
+        if (gesuch.getDelegierung() != null) {
+            if (
+                !sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(
+                    gesuch.getDelegierung().getSozialdienst().getId()
+                ) ||
+                benutzerCanEditInStatusOrAenderung.getAsBoolean()
+            ) {
+                throw new UnauthorizedException();
+            }
+        }
+
         if (
             AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
-            (gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung)
+            benutzerCanEditInStatusOrAenderung.getAsBoolean()
         ) {
             return;
         }
