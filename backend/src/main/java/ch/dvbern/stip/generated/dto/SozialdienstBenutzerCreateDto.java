@@ -13,39 +13,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("SozialdienstAdminCreate")
+@JsonTypeName("SozialdienstBenutzerCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class SozialdienstAdminCreateDto  implements Serializable {
-  private @Valid String keycloakId;
+public class SozialdienstBenutzerCreateDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String email;
+  private @Valid String redirectUri;
 
   /**
    **/
-  public SozialdienstAdminCreateDto keycloakId(String keycloakId) {
-    this.keycloakId = keycloakId;
-    return this;
-  }
-
-  
-  @JsonProperty("keycloakId")
-  @NotNull
-  public String getKeycloakId() {
-    return keycloakId;
-  }
-
-  @JsonProperty("keycloakId")
-  public void setKeycloakId(String keycloakId) {
-    this.keycloakId = keycloakId;
-  }
-
-  /**
-   **/
-  public SozialdienstAdminCreateDto vorname(String vorname) {
+  public SozialdienstBenutzerCreateDto vorname(String vorname) {
     this.vorname = vorname;
     return this;
   }
@@ -64,7 +45,7 @@ public class SozialdienstAdminCreateDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstAdminCreateDto nachname(String nachname) {
+  public SozialdienstBenutzerCreateDto nachname(String nachname) {
     this.nachname = nachname;
     return this;
   }
@@ -83,7 +64,7 @@ public class SozialdienstAdminCreateDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstAdminCreateDto email(String email) {
+  public SozialdienstBenutzerCreateDto email(String email) {
     this.email = email;
     return this;
   }
@@ -100,6 +81,25 @@ public class SozialdienstAdminCreateDto  implements Serializable {
     this.email = email;
   }
 
+  /**
+   **/
+  public SozialdienstBenutzerCreateDto redirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
+    return this;
+  }
+
+  
+  @JsonProperty("redirectUri")
+  @NotNull
+  public String getRedirectUri() {
+    return redirectUri;
+  }
+
+  @JsonProperty("redirectUri")
+  public void setRedirectUri(String redirectUri) {
+    this.redirectUri = redirectUri;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -109,27 +109,27 @@ public class SozialdienstAdminCreateDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SozialdienstAdminCreateDto sozialdienstAdminCreate = (SozialdienstAdminCreateDto) o;
-    return Objects.equals(this.keycloakId, sozialdienstAdminCreate.keycloakId) &&
-        Objects.equals(this.vorname, sozialdienstAdminCreate.vorname) &&
-        Objects.equals(this.nachname, sozialdienstAdminCreate.nachname) &&
-        Objects.equals(this.email, sozialdienstAdminCreate.email);
+    SozialdienstBenutzerCreateDto sozialdienstBenutzerCreate = (SozialdienstBenutzerCreateDto) o;
+    return Objects.equals(this.vorname, sozialdienstBenutzerCreate.vorname) &&
+        Objects.equals(this.nachname, sozialdienstBenutzerCreate.nachname) &&
+        Objects.equals(this.email, sozialdienstBenutzerCreate.email) &&
+        Objects.equals(this.redirectUri, sozialdienstBenutzerCreate.redirectUri);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(keycloakId, vorname, nachname, email);
+    return Objects.hash(vorname, nachname, email, redirectUri);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SozialdienstAdminCreateDto {\n");
+    sb.append("class SozialdienstBenutzerCreateDto {\n");
     
-    sb.append("    keycloakId: ").append(toIndentedString(keycloakId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("}");
     return sb.toString();
   }

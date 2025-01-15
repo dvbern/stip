@@ -15,22 +15,25 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.sozialdienst.service;
+package ch.dvbern.stip.api.sozialdienstbenutzer.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstAdminMapper;
-import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
-import ch.dvbern.stip.generated.dto.SozialdienstDto;
-import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
+import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class, uses = { SozialdienstAdminMapper.class })
-public interface SozialdienstMapper {
-    Sozialdienst toEntity(SozialdienstCreateDto dto);
+@Mapper(config = MappingConfig.class)
+public abstract class SozialdienstAdminMapper {
+    public abstract SozialdienstBenutzer toEntity(SozialdienstAdminDto createDto);
 
-    SozialdienstDto toDto(Sozialdienst entity);
+    public abstract SozialdienstBenutzer toEntity(SozialdienstAdminUpdateDto updateDto);
 
-    Sozialdienst partialUpdate(SozialdienstUpdateDto dto, @MappingTarget Sozialdienst entity);
+    public abstract SozialdienstAdminDto toDto(SozialdienstBenutzer sozialdienstBenutzer);
+
+    public abstract SozialdienstBenutzer partialUpdate(
+        SozialdienstAdminUpdateDto updateDto,
+        @MappingTarget SozialdienstBenutzer entity
+    );
 }

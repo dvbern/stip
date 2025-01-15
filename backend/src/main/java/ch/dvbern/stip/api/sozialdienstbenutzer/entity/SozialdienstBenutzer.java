@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.sozialdienstadmin.entity;
+package ch.dvbern.stip.api.sozialdienstbenutzer.entity;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import jakarta.annotation.Nullable;
@@ -35,7 +35,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Getter
 @Setter
 @Entity
-public class SozialdienstAdmin extends Benutzer {
+public class SozialdienstBenutzer extends Benutzer {
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Pattern(regexp = EMAIL_VALIDATION_PATTERN, message = VALIDATION_EMAIL_MESSAGE)
