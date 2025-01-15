@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.AllowAll;
+import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -45,6 +46,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     private final SozialdienstService sozialdienstService;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
+    private final SozialdienstAuthorizer sozialdienstAuthorizer;
 
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
@@ -122,19 +124,19 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
             .getSozialdienstBenutzers(sozialdienstService.getSozialdienstOfCurrentSozialdienstAdmin());
     }
 
-    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
     public SozialdienstBenutzerDto updateSozialdienstBenutzer(
         SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdateDto
     ) {
+        sozialdienstAuthorizer.canUpdateSozialdienstBenutzer(sozialdienstBenutzerUpdateDto.getId());
         return sozialdienstBenutzerService.updateSozialdienstBenutzer(sozialdienstBenutzerUpdateDto);
     }
 
-    @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
     public void deleteSozialdienstBenutzer(UUID sozialdienstBenutzerId) {
+        sozialdienstAuthorizer.canUpdateSozialdienstBenutzer(sozialdienstBenutzerId);
         sozialdienstBenutzerService.deleteSozialdienstBenutzer(sozialdienstBenutzerId);
     }
 }

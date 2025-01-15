@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstAdminMapper;
@@ -98,6 +99,9 @@ class SozialdienstBenutzerServiceTest {
     TenantService tenantService;
 
     @Inject
+    MailService mailService;
+
+    @Inject
     KeycloakAdminClientConfig keycloakAdminClientConfigRuntimeValue;
 
     SozialdienstBenutzerService sozialdienstBenutzerService;
@@ -113,7 +117,7 @@ class SozialdienstBenutzerServiceTest {
     void init() throws NoSuchAlgorithmException {
         sozialdienstBenutzerService = new SozialdienstBenutzerService(
             sozialdienstBenutzerRepository, sozialdienstRepository, sozialdienstAdminMapper, sozialdienstBenutzerMapper,
-            tenantService, keycloakAdminClientConfigRuntimeValue
+            mailService, tenantService, keycloakAdminClientConfigRuntimeValue
         );
 
         sozialdienstBenutzerServiceMock = Mockito.spy(sozialdienstBenutzerService);
@@ -199,6 +203,7 @@ class SozialdienstBenutzerServiceTest {
         createDto.setVorname(name);
         createDto.setNachname(name);
         createDto.setEmail(email);
+        createDto.setRedirectUri("");
 
         var sozialdienstbenutzer = sozialdienstBenutzerServiceMock
             .createSozialdienstBenutzer(sozialdienstRepository.requireById(sozialdienstDto.getId()), createDto);

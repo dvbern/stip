@@ -27,6 +27,7 @@ import javax.net.ssl.SSLContext;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
@@ -37,6 +38,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
+import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.keycloak.admin.client.common.KeycloakAdminClientConfig;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
@@ -60,6 +62,7 @@ public class SozialdienstBenutzerService {
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstAdminMapper sozialdienstAdminMapper;
     private final SozialdienstBenutzerMapper sozialdienstBenutzerMapper;
+    private final MailService mailService;
     private final TenantService tenantService;
 
     private final KeycloakAdminClientConfig keycloakAdminClientConfigRuntimeValue;
@@ -175,7 +178,7 @@ public class SozialdienstBenutzerService {
                     .toList()
             );
             keycloakUserResource.roles().realmLevel().add(rolesToAddList);
-            final var sozialdienstBenutzer = sozialdienstBenutzerMapper.toEntity(sozialdienstBenutzerCreateDto);;
+            final var sozialdienstBenutzer = sozialdienstBenutzerMapper.toEntity(sozialdienstBenutzerCreateDto);
             sozialdienstBenutzer.setBenutzerStatus(BenutzerStatus.AKTIV);
             sozialdienstBenutzer.setBenutzereinstellungen(new Benutzereinstellungen());
             sozialdienstBenutzer.setKeycloakId(keycloakUserId);
@@ -183,7 +186,14 @@ public class SozialdienstBenutzerService {
             sozialdienstRepository.requireById(sozialdienst.getId())
                 .getSozialdienstBenutzers()
                 .add(sozialdienstBenutzer);
-            keycloakUserResource.executeActionsEmail(List.of(OidcConstants.REQUIRED_ACTION_UPDATE_PASSWORD));
+            WelcomeMailDto welcomeMailDto = new WelcomeMailDto();
+            welcomeMailDto.setName(sozialdienstBenutzer.getNachname());
+            welcomeMailDto.setVorname(sozialdienstBenutzer.getVorname());
+            welcomeMailDto.setEmail(sozialdienstBenutzer.getEmail());
+            welcomeMailDto.setRedirectUri(sozialdienstBenutzerCreateDto.getRedirectUri());
+            mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
+            // keycloakUserResource.executeActionsEmail(List.of(OidcConstants.REQUIRED_ACTION_UPDATE_PASSWORD));
+
             return sozialdienstBenutzerMapper.toDto(sozialdienstBenutzer);
         }
     }
