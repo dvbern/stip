@@ -1349,7 +1349,7 @@ paths:
       tags:
       - Delegieren
       responses:
-        200:
+        204:
           description: Das Gesuch wurde erfolgreich dem Sozialdienst delegiert
         401:
           $ref: '#/components/responses/Unauthorized'
