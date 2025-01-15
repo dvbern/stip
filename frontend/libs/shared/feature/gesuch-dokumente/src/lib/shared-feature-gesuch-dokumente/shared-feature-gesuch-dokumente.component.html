@@ -1,15 +1,22 @@
 @let gesuch = gesuchViewSig();
-@let additonalDokumente = additionalDokumenteViewSig();
 @let standardDokumente = standardDokumenteViewSig();
 @let dokumentsToUpload = dokumentsStore.documentsToUpload().data;
+
 @if (gesuch.loading) {
   <dv-shared-ui-loading data-testid="dokumente-loading"></dv-shared-ui-loading>
 }
-@if (additonalDokumente.showList) {
-  <div class="tw-dv-table">
-    <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente"></dv-additional-dokumente>
-  </div>
-}
+
+<!-- unterschriftenblaetter -->
+<div *dvIfSachbearbeiter>
+  @let additonalDokumente = additionalDokumenteViewSig();
+  @if (additonalDokumente.showList) {
+    <div class="tw-dv-table">
+      <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente"></dv-additional-dokumente>
+    </div>
+  }
+</div>
+
+<!-- gesuchDokumente -->
 @if (standardDokumente) {
   <div class="tw-dv-table">
     <dv-required-dokumente
