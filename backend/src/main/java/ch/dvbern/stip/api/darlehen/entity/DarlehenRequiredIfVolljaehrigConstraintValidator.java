@@ -29,6 +29,7 @@ public class DarlehenRequiredIfVolljaehrigConstraintValidator
     @Override
     public boolean isValid(GesuchFormular value, ConstraintValidatorContext context) {
         final var isNotVolljaehrig = !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(value);
-        return isNotVolljaehrig ? (Objects.isNull(value.getDarlehen())) : true;
+        // not volljaehrig -> darlehen has to be null, else: darlehen must NOT be null
+        return isNotVolljaehrig ? (Objects.isNull(value.getDarlehen())) : Objects.nonNull(value.getDarlehen());
     }
 }
