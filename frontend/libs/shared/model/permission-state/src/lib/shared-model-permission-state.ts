@@ -66,25 +66,25 @@ const sb = 'sachbearbeitung-app' satisfies AppType;
  * * Format is: { [Gesuchstatus]: { [AppType]: 'WV  ' | 'W   ' | ..., ... other AppTypes } }
  */
 export const permissionTableByAppType = {
-  IN_BEARBEITUNG_GS /**                */: { [gs]: 'W  F ', [sb]: '     ' },
+  IN_BEARBEITUNG_GS /**                */: { [gs]: 'W  F ', [sb]: '    U' },
   EINGEREICHT /**                      */: { [gs]: '     ', [sb]: '    U' },
   BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '     ', [sb]: ' V  U' },
   IN_BEARBEITUNG_SB /**                */: { [gs]: '     ', [sb]: 'WV  U' },
   IN_FREIGABE /**                      */: { [gs]: '     ', [sb]: ' V  U' },
   ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '     ', [sb]: 'WV  U' },
-  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '     ', [sb]: '     ' },
+  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '     ', [sb]: '    U' },
   FEHLENDE_DOKUMENTE /**               */: { [gs]: '  DF ', [sb]: '    U' },
   GESUCH_ABGELEHNT /**                 */: { [gs]: '     ', [sb]: ' V  U' },
   JURISTISCHE_ABKLAERUNG /**           */: { [gs]: '     ', [sb]: ' V  U' },
-  KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: '     ', [sb]: ' V  U' },
+  KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: '     ', [sb]: ' V   ' },
   NICHT_ANSPRUCHSBERECHTIGT /**        */: { [gs]: '     ', [sb]: ' V  U' },
   NICHT_BEITRAGSBERECHTIGT /**         */: { [gs]: '     ', [sb]: ' V  U' },
-  STIPENDIENANSPRUCH /**               */: { [gs]: '     ', [sb]: ' V  U' },
+  STIPENDIENANSPRUCH /**               */: { [gs]: '     ', [sb]: ' V   ' },
   WARTEN_AUF_UNTERSCHRIFTENBLATT /**   */: { [gs]: '     ', [sb]: ' V  U' },
   VERSANDBEREIT /**                    */: { [gs]: '     ', [sb]: ' V   ' },
-  VERFUEGT /**                         */: { [gs]: '     ', [sb]: ' V   ' },
+  VERFUEGT /**                         */: { [gs]: '     ', [sb]: ' V  U' },
   VERSENDET /**                        */: { [gs]: '     ', [sb]: ' V   ' },
-  NEGATIVE_VERFUEGUNG /**              */: { [gs]: '     ', [sb]: '     ' },
+  NEGATIVE_VERFUEGUNG /**              */: { [gs]: '     ', [sb]: '    U' },
 } as const satisfies Record<Gesuchstatus, Record<AppType, PermissionFlags>>;
 
 /**

@@ -51,15 +51,15 @@ public class UnterschriftenblattRepository implements BaseRepository<Unterschrif
             .findFirst();
     }
 
-    public Stream<Unterschriftenblatt> findByGesuchAndDokumentTyps(
+    public Stream<Unterschriftenblatt> findByGesuchAndDokumentTypes(
         final UUID gesuchId,
-        final List<UnterschriftenblattDokumentTyp> dokumentTyps
+        final List<UnterschriftenblattDokumentTyp> dokumentTypes
     ) {
         final var queryFactory = new JPAQueryFactory(entityManager);
         final var unterschriftenblatt = QUnterschriftenblatt.unterschriftenblatt;
         return queryFactory
             .selectFrom(unterschriftenblatt)
-            .where(unterschriftenblatt.gesuch.id.eq(gesuchId).and(unterschriftenblatt.dokumentTyp.in(dokumentTyps)))
+            .where(unterschriftenblatt.gesuch.id.eq(gesuchId).and(unterschriftenblatt.dokumentTyp.in(dokumentTypes)))
             .stream();
     }
 
