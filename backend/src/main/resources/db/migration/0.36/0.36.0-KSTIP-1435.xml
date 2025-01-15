@@ -1,0 +1,99 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="fuju (generated)" id="1736930901815-1">
+        <createTable tableName="delegierung">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="delegierungPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delegiertes_gesuch_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sozialdienst_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-2">
+        <createTable tableName="delegierung_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="delegiertes_gesuch_id" type="UUID"/>
+            <column name="sozialdienst_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-3">
+        <createTable tableName="sozialdienst_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="iban" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="adresse_id" type="UUID"/>
+            <column name="sozialdienst_admin_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-4">
+        <addPrimaryKey columnNames="rev, id" constraintName="delegierung_audPK" tableName="delegierung_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-5">
+        <addPrimaryKey columnNames="rev, id" constraintName="sozialdienst_audPK" tableName="sozialdienst_aud"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-6">
+        <addUniqueConstraint columnNames="delegiertes_gesuch_id" constraintName="UC_DELEGIERUNGDELEGIERTES_GESUCH_ID_COL" tableName="delegierung"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-7">
+        <addUniqueConstraint columnNames="sozialdienst_id" constraintName="UC_DELEGIERUNGSOZIALDIENST_ID_COL" tableName="delegierung"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-8">
+        <createIndex indexName="IX_delegierung_mandant" tableName="delegierung">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-9">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="sozialdienst_aud" constraintName="FK1yi8k102jlq2aw0fm7m3prjh5" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-10">
+        <addForeignKeyConstraint baseColumnNames="delegiertes_gesuch_id" baseTableName="delegierung" constraintName="FK_delegierung_gesuch_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-11">
+        <addForeignKeyConstraint baseColumnNames="sozialdienst_id" baseTableName="delegierung" constraintName="FK_delegierung_sozialdienst_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="sozialdienst" validate="true"/>
+    </changeSet>
+    <changeSet author="fuju (generated)" id="1736930901815-12">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="delegierung_aud" constraintName="FKmlpvx1geuvywya5m29qrbpvhc" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

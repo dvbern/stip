@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -48,6 +49,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -118,6 +120,10 @@ public class Gesuch extends AbstractMandantEntity {
     @Nullable
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private @Valid List<GesuchNotiz> notizen = new ArrayList<>();
+
+    @Nullable
+    @OneToOne(mappedBy = "delegiertesGesuch")
+    private Delegierung delegierung;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinFormula(value = """
