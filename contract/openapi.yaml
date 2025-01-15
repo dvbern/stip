@@ -3146,6 +3146,13 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
+        delegierung:
+          $ref: '#/components/schemas/Delegierung'
+    Delegierung:
+      type: object
+      properties:
+        sozialdienst:
+          $ref: '#/components/schemas/SozialdienstSlim'
     GesuchInfo:
       required:
         - id
