@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.DelegierungDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -33,6 +34,7 @@ public class GesuchDto  implements Serializable {
   private @Valid LocalDate aenderungsdatum;
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
   private @Valid String bearbeiter;
+  private @Valid DelegierungDto delegierung;
 
   /**
    **/
@@ -224,6 +226,24 @@ public class GesuchDto  implements Serializable {
     this.bearbeiter = bearbeiter;
   }
 
+  /**
+   **/
+  public GesuchDto delegierung(DelegierungDto delegierung) {
+    this.delegierung = delegierung;
+    return this;
+  }
+
+  
+  @JsonProperty("delegierung")
+  public DelegierungDto getDelegierung() {
+    return delegierung;
+  }
+
+  @JsonProperty("delegierung")
+  public void setDelegierung(DelegierungDto delegierung) {
+    this.delegierung = delegierung;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -243,12 +263,13 @@ public class GesuchDto  implements Serializable {
         Objects.equals(this.id, gesuch.id) &&
         Objects.equals(this.aenderungsdatum, gesuch.aenderungsdatum) &&
         Objects.equals(this.gesuchTrancheToWorkWith, gesuch.gesuchTrancheToWorkWith) &&
-        Objects.equals(this.bearbeiter, gesuch.bearbeiter);
+        Objects.equals(this.bearbeiter, gesuch.bearbeiter) &&
+        Objects.equals(this.delegierung, gesuch.delegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, delegierung);
   }
 
   @Override
@@ -266,6 +287,7 @@ public class GesuchDto  implements Serializable {
     sb.append("    aenderungsdatum: ").append(toIndentedString(aenderungsdatum)).append("\n");
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
+    sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

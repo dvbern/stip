@@ -17,10 +17,36 @@
 
 package ch.dvbern.stip.api.delegieren.service;
 
+import java.util.UUID;
+
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
+import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
 @RequiredArgsConstructor
 public class DelegierenService {
+    private final DelegierungRepository delegierungRepository;
+    private final GesuchRepository gesuchRepository;
+    private final SozialdienstRepository sozialdienstRepository;
+
+    @Transactional
+    public void delegateGesuch(final UUID gesuchId, final UUID sozialdienstId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.getDelegierung() != null) {
+            throw new BadRequestException();
+        }
+
+        final var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
+        final var newDelegierung = new Delegierung()
+            .setDelegiertesGesuch(gesuch)
+            .setSozialdienst(sozialdienst);
+
+        delegierungRepository.persist(newDelegierung);
+    }
 }
