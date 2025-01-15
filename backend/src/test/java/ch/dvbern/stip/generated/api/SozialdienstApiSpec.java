@@ -20,6 +20,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDtoSpec;
 import java.util.UUID;
 
@@ -69,6 +70,7 @@ public class SozialdienstApiSpec {
                 deleteSozialdienst(),
                 deleteSozialdienstBenutzer(),
                 getAllSozialdienste(),
+                getAllSozialdiensteSlim(),
                 getSozialdienst(),
                 getSozialdienstBenutzer(),
                 replaceSozialdienstAdmin(),
@@ -96,6 +98,10 @@ public class SozialdienstApiSpec {
 
     public GetAllSozialdiensteOper getAllSozialdienste() {
         return new GetAllSozialdiensteOper(createReqSpec());
+    }
+
+    public GetAllSozialdiensteSlimOper getAllSozialdiensteSlim() {
+        return new GetAllSozialdiensteSlimOper(createReqSpec());
     }
 
     public GetSozialdienstOper getSozialdienst() {
@@ -467,6 +473,67 @@ public class SozialdienstApiSpec {
          * @return operation
          */
         public GetAllSozialdiensteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * return List&lt;SozialdienstSlimDtoSpec&gt;
+     */
+    public static class GetAllSozialdiensteSlimOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/sozialdienst/gs";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllSozialdiensteSlimOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /sozialdienst/gs
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /sozialdienst/gs
+         * @param handler handler
+         * @return List&lt;SozialdienstSlimDtoSpec&gt;
+         */
+        public List<SozialdienstSlimDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<SozialdienstSlimDtoSpec>> type = new TypeRef<List<SozialdienstSlimDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllSozialdiensteSlimOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllSozialdiensteSlimOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

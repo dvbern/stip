@@ -54,6 +54,9 @@ public class ApiClient {
     public ConfigurationApiSpec _configuration() {
         return ConfigurationApiSpec._configuration(config.reqSpecSupplier);
     }
+    public DelegierenApiSpec delegieren() {
+        return DelegierenApiSpec.delegieren(config.reqSpecSupplier);
+    }
     public DokumentApiSpec dokument() {
         return DokumentApiSpec.dokument(config.reqSpecSupplier);
     }

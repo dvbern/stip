@@ -7,6 +7,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
+import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import java.util.UUID;
 
@@ -52,6 +53,11 @@ public interface SozialdienstResource {
     @GET
     @Produces({ "application/json", "text/plain" })
     List<SozialdienstDto> getAllSozialdienste();
+
+    @GET
+    @Path("/gs")
+    @Produces({ "application/json", "text/plain" })
+    List<SozialdienstSlimDto> getAllSozialdiensteSlim();
 
     @GET
     @Path("/{sozialdienstId}")
