@@ -99,13 +99,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung;
 
         if (gesuch.getDelegierung() != null) {
-            if (
-                !sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(
-                    gesuch.getDelegierung().getSozialdienst().getId()
-                ) ||
-                benutzerCanEditInStatusOrAenderung.getAsBoolean()
-            ) {
-                throw new UnauthorizedException();
+            final var isMitarbeiter = sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(
+                gesuch.getDelegierung().getSozialdienst().getId()
+            );
+
+            if (isMitarbeiter && benutzerCanEditInStatusOrAenderung.getAsBoolean()) {
+                return;
             }
         }
 

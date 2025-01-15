@@ -118,7 +118,7 @@ public class SozialdienstService {
     public boolean isCurrentBenutzerMitarbeiterOfSozialdienst(final UUID sozialdienstId) {
         final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer();
         return currentBenutzer.map(benutzer -> {
-            final var sozialdienstOfBenutzer = sozialdienstRepository.getSozialdienstBySozialdienstAdmin(benutzer);
+            final var sozialdienstOfBenutzer = sozialdienstRepository.getSozialdienstByBenutzer(benutzer);
             return sozialdienstOfBenutzer.getId().equals(sozialdienstId);
         }).orElse(false);
     }

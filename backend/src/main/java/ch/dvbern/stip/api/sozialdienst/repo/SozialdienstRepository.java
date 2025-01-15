@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -38,5 +39,16 @@ public class SozialdienstRepository implements BaseRepository<Sozialdienst> {
             .selectFrom(sozialdienst)
             .where(sozialdienst.sozialdienstAdmin.eq(sozialdienstAdmin))
             .fetchOne();
+    }
+
+    public Sozialdienst getSozialdienstByBenutzer(final SozialdienstBenutzer benutzer) {
+        final var sozialdienst = QSozialdienst.sozialdienst;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(sozialdienst)
+            .where(sozialdienst.sozialdienstBenutzers.contains(benutzer))
+            .stream()
+            .findFirst()
+            .orElseThrow(NotFoundException::new);
     }
 }
