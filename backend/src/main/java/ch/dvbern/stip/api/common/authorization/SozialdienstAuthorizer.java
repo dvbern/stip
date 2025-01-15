@@ -39,19 +39,19 @@ public class SozialdienstAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canUpdateSozialdienstBenutzer(final UUID sozialdienstBenutzerToUpdateID) {
-        final var sozialdienstBenutzerToUpdate =
-            sozialdienstBenutzerRepository.findById(sozialdienstBenutzerToUpdateID);
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (isAdmin(currentBenutzer)) {
             return;
         }
-        final var sozialdienstOfUser =
-            sozialdienstBenutzerRepository.findSozialdienstBySozialdienstBenutzer(sozialdienstBenutzerToUpdate)
-                .orElseThrow(NotFoundException::new);
-        final var sozialdienstAdmin = sozialdienstBenutzerRepository.findByKeycloakId(currentBenutzer.getKeycloakId())
-            .orElseThrow(
-                NotFoundException::new
-            );
+
+        final var sozialdienstBenutzerToUpdate =
+            sozialdienstBenutzerRepository.findById(sozialdienstBenutzerToUpdateID);
+        final var sozialdienstOfUser = sozialdienstBenutzerRepository
+            .findSozialdienstBySozialdienstBenutzer(sozialdienstBenutzerToUpdate)
+            .orElseThrow(NotFoundException::new);
+        final var sozialdienstAdmin = sozialdienstBenutzerRepository
+            .findByKeycloakId(currentBenutzer.getKeycloakId())
+            .orElseThrow(NotFoundException::new);
         final var sozialdienstOfAdmin = sozialdienstRepository.getSozialdienstBySozialdienstAdmin(sozialdienstAdmin);
 
         if (!Objects.equals(sozialdienstOfUser.getId(), sozialdienstOfAdmin.getId())) {
