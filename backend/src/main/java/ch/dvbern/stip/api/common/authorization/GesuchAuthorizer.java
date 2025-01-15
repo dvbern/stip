@@ -103,8 +103,8 @@ public class GesuchAuthorizer extends BaseAuthorizer {
                 gesuch.getDelegierung().getSozialdienst().getId()
             );
 
-            if (isMitarbeiter && benutzerCanEditInStatusOrAenderung.getAsBoolean()) {
-                return;
+            if (!isMitarbeiter || !benutzerCanEditInStatusOrAenderung.getAsBoolean()) {
+                throw new UnauthorizedException();
             }
         }
 
