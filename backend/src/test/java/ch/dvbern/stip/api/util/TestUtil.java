@@ -61,6 +61,7 @@ import ch.dvbern.stip.generated.api.AusbildungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.Oper;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
@@ -376,6 +377,25 @@ public class TestUtil {
         baseGesuch.getGesuchsperiode().setEinreichefristReduziert(LocalDate.now().plusMonths(1));
         baseGesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(1));
         return baseGesuch;
+    }
+
+    public static ValidatableResponse executeAndAssert(final Oper operation) {
+        return executeAndAssert(operation, Response.Status.OK.getStatusCode());
+    }
+
+    public static ValidatableResponse executeAndAssert(final Oper operation, final int expectedStatusCode) {
+        return operation.execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(expectedStatusCode);
+    }
+
+    public static <T> T executeAndExtract(Class<T> clazz, final Oper operation) {
+        return executeAndExtract(clazz, operation, Response.Status.OK.getStatusCode());
+    }
+
+    public static <T> T executeAndExtract(Class<T> clazz, final Oper operation, final int expectedStatusCode) {
+        return executeAndAssert(operation, expectedStatusCode).extract().body().as(clazz);
     }
 
     public static Gesuch getGesuchForBerechnung(final UUID trancheUuid) {

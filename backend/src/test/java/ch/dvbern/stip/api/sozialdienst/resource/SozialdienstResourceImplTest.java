@@ -18,21 +18,20 @@
 package ch.dvbern.stip.api.sozialdienst.resource;
 
 import java.util.Arrays;
-import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
+import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstAdminCreateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstCreateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
-import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
-import ch.dvbern.stip.generated.dto.LandDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDtoSpec;
@@ -68,40 +67,20 @@ class SozialdienstResourceImplTest {
     public SozialdienstDtoSpec dtoSpec;
     public SozialdienstDto dto;
 
-    private static final String VALID_IBAN_1 = "CH5089144653587876648";
     private static final String VALID_IBAN_2 = "CH5089144653587876648";
 
     @Order(1)
     @Test
     @TestAsAdmin
     void createSozialdienst() {
-        var adresseDto = new AdresseDtoSpec();
-        adresseDto.setStrasse("Musterstrasse");
-        adresseDto.setPlz("12345");
-        adresseDto.setOrt("Musterort");
-        adresseDto.setHausnummer("1");
-        adresseDto.setLand(LandDtoSpec.CH);
+        final var adresse = AdresseSpecModel.adresseDtoSpec();
+        final var admin = SozialdienstAdminCreateDtoSpecModel.sozialdienstAdminCreateDtoSpec();
+        final var sozialdienst = SozialdienstCreateDtoSpecModel.sozialdienstCreateDtoSpec(admin, adresse);
 
-        final var sozialdienstAdminCreateDto = new SozialdienstAdminDtoSpec();
-        sozialdienstAdminCreateDto.setKeycloakId(UUID.randomUUID().toString());
-        sozialdienstAdminCreateDto.setNachname("Muster");
-        sozialdienstAdminCreateDto.setVorname("Max");
-        sozialdienstAdminCreateDto.setEmail(ADMIN_EMAIL);
-
-        final var createDto = new SozialdienstCreateDtoSpec()
-            .adresse(adresseDto)
-            .name("Muster Sozialdienst")
-            .iban(VALID_IBAN_1)
-            .sozialdienstAdmin(sozialdienstAdminCreateDto);
-
-        dtoSpec = apiSpec.createSozialdienst()
-            .body(createDto)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .as(SozialdienstDtoSpec.class);
+        dtoSpec = TestUtil.executeAndExtract(
+            SozialdienstDtoSpec.class,
+            apiSpec.createSozialdienst().body(sozialdienst)
+        );
 
         assertThat(dtoSpec.getSozialdienstAdmin(), notNullValue());
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
