@@ -164,16 +164,15 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   dokumentAblehnen(document: SharedModelTableGesuchDokument) {
     const { trancheId: gesuchTrancheId } = this.gesuchViewSig();
-
-    if (!gesuchTrancheId) return;
+    const gesuchDokumentId =
+      document.dokumentOptions.dokument.gesuchDokument?.id;
+    if (!gesuchTrancheId || !gesuchDokumentId) return;
 
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
       SharedModelGesuchDokument,
       RejectDokument
-    >(SharedUiRejectDokumentComponent, {
-      data: document.dokumentOptions.dokument,
-    });
+    >(SharedUiRejectDokumentComponent);
 
     dialogRef
       .afterClosed()
@@ -183,7 +182,7 @@ export class SharedFeatureGesuchDokumenteComponent {
           this.dokumentsStore.gesuchDokumentAblehnen$({
             gesuchTrancheId: gesuchTrancheId,
             kommentar: result.kommentar,
-            gesuchDokumentId: result.gesuchDokumentId,
+            gesuchDokumentId,
             dokumentTyp: document.dokumentTyp,
             afterSuccess: () => {
               this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
