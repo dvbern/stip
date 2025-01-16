@@ -1838,7 +1838,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBerechnungForGesuch
       summary: Berechnet und holt die Berechnung für ein Gesuch
-  '/gesuch/{gesuchId}/berechnungsblatt':
+  '/gesuch/{gesuchId}/berechnungsblatt/token':
     parameters:
       - name: gesuchId
         schema:
@@ -1851,11 +1851,10 @@ paths:
       responses:
         '200':
           content:
-            application/octet-stream:
+            text/plain:
               schema:
-                format: binary
                 type: string
-          description: Berechnungsblatt File returned
+          description: File returned
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1866,9 +1865,29 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
+      operationId: getBerechnungsblattDownloadToken
+      summary: get Berechnungsblatt Download Token
+  '/gesuch/berechnungsblatt':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Berechnungsblatt File returned
       operationId: getBerechnungsBlattForGesuch
       summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
-      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren':
     get:
       tags:

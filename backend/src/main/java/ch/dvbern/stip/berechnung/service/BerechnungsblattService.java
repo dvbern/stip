@@ -19,6 +19,7 @@ package ch.dvbern.stip.berechnung.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Locale;
 
@@ -116,10 +117,27 @@ public class BerechnungsblattService {
                     translator
                 );
 
-            persoenlichesBudgetTable
-                .addCell(
-                    getDefaultParagraphTranslated("stip.berechnung.persoenlich.total", translator).setFont(pdfFontBold)
+            var persoenlichTotalCell = new Cell();
+            persoenlichTotalCell.add(
+                getDefaultParagraphTranslated("stip.berechnung.persoenlich.total", translator).setFont(pdfFontBold)
+            );
+            if (
+                !(tranchenBerechnungsResultat.getBerechnungsanteilKinder() != null
+                && tranchenBerechnungsResultat.getBerechnungsanteilKinder().compareTo(BigDecimal.ONE) == 0)
+            ) {
+                persoenlichTotalCell.add(
+                    getDefaultParagraphSmall(
+                        translator.translate(
+                            "stip.berechnung.persoenlich.geteilteBerechnung",
+                            "berechnungsanteilKinder",
+                            tranchenBerechnungsResultat.getBerechnungsanteilKinder()
+                        )
+                    )
                 );
+            }
+            persoenlichesBudgetTable.addCell(persoenlichTotalCell);
+
+            // tranchenBerechnungsResultat.getBerechnungsanteilKinder()
             persoenlichesBudgetTable.addCell(
                 getDefaultParagraphNumber(
                     tranchenBerechnungsResultat.getBerechnung().toString()
