@@ -4,6 +4,7 @@ import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import java.io.File;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
@@ -108,8 +109,8 @@ public interface GesuchResource {
 
     @GET
     @Path("/{gesuchId}/berechnungsblatt/token")
-    @Produces({ "text/plain", "application/json" })
-    String getBerechnungsblattDownloadToken(@PathParam("gesuchId") UUID gesuchId);
+    @Produces({ "application/json", "text/plain" })
+    FileDownloadTokenDto getBerechnungsblattDownloadToken(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/{gesuchTrancheId}")

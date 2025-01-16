@@ -45,6 +45,7 @@ import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
@@ -314,18 +315,21 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @RolesAllowed(GESUCH_READ)
     @Override
-    public String getBerechnungsblattDownloadToken(UUID gesuchId) {
+    public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         gesuchAuthorizer.canGetBerechnung(gesuchId);
 
-        return Jwt
-            .claims()
-            .upn(benutzerService.getCurrentBenutzername())
-            .claim(DokumentDownloadConstants.GESUCH_ID_CLAIM, gesuchId.toString())
-            .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
-            .issuer(configService.getIssuer())
-            .jws()
-            .signWithSecret(configService.getSecret());
+        return new FileDownloadTokenDto()
+            .token(
+                Jwt
+                    .claims()
+                    .upn(benutzerService.getCurrentBenutzername())
+                    .claim(DokumentDownloadConstants.GESUCH_ID_CLAIM, gesuchId.toString())
+                    .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
+                    .issuer(configService.getIssuer())
+                    .jws()
+                    .signWithSecret(configService.getSecret())
+            );
     }
 
     @RolesAllowed(GESUCH_READ)

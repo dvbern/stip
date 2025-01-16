@@ -17,6 +17,7 @@ import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDtoSpec;
 import java.io.File;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchInfoDtoSpec;
@@ -1260,7 +1261,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
-     * return String
+     * return FileDownloadTokenDtoSpec
      */
     public static class GetBerechnungsblattDownloadTokenOper implements Oper {
 
@@ -1290,10 +1291,10 @@ public class GesuchApiSpec {
         /**
          * GET /gesuch/{gesuchId}/berechnungsblatt/token
          * @param handler handler
-         * @return String
+         * @return FileDownloadTokenDtoSpec
          */
-        public String executeAs(Function<Response, Response> handler) {
-            TypeRef<String> type = new TypeRef<String>(){};
+        public FileDownloadTokenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FileDownloadTokenDtoSpec> type = new TypeRef<FileDownloadTokenDtoSpec>(){};
             return execute(handler).as(type);
         }
 

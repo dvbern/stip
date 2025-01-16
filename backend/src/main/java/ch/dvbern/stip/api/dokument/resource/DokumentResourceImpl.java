@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
@@ -171,20 +172,23 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    public String getDokumentDownloadToken(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
+    public FileDownloadTokenDto getDokumentDownloadToken(UUID gesuchId, DokumentTyp dokumentTyp, UUID dokumentId) {
         if (gesuchDokumentService.findDokument(dokumentId).isEmpty()) {
             throw new NotFoundException();
         }
 
-        return Jwt
-            .claims()
-            .upn(benutzerService.getCurrentBenutzername())
-            .claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM, dokumentId.toString())
-            .claim(DokumentDownloadConstants.GESUCH_ID_CLAIM, gesuchId.toString())
-            .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
-            .issuer(configService.getIssuer())
-            .jws()
-            .signWithSecret(configService.getSecret());
+        return new FileDownloadTokenDto()
+            .token(
+                Jwt
+                    .claims()
+                    .upn(benutzerService.getCurrentBenutzername())
+                    .claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM, dokumentId.toString())
+                    .claim(DokumentDownloadConstants.GESUCH_ID_CLAIM, gesuchId.toString())
+                    .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
+                    .issuer(configService.getIssuer())
+                    .jws()
+                    .signWithSecret(configService.getSecret())
+            );
     }
 
     @RolesAllowed(GESUCH_READ)
