@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.delegieren.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -58,9 +58,9 @@ public class Delegierung extends AbstractMandantEntity {
     @NotNull
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "delegiertes_gesuch_id",
-        foreignKey = @ForeignKey(name = "FK_delegierung_gesuch_id"),
+        name = "delegierter_fall_id",
+        foreignKey = @ForeignKey(name = "FK_delegierung_fall_id"),
         nullable = false
     )
-    private @Valid Gesuch delegiertesGesuch;
+    private @Valid Fall delegierterFall;
 }

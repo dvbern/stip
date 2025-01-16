@@ -37,14 +37,14 @@ public class DelegierenService {
 
     @Transactional
     public void delegateGesuch(final UUID gesuchId, final UUID sozialdienstId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuch.getDelegierung() != null) {
+        final var fall = gesuchRepository.requireById(gesuchId).getAusbildung().getFall();
+        if (fall.getDelegierung() != null) {
             throw new BadRequestException();
         }
 
         final var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
         final var newDelegierung = new Delegierung()
-            .setDelegiertesGesuch(gesuch)
+            .setDelegierterFall(fall)
             .setSozialdienst(sozialdienst);
 
         delegierungRepository.persist(newDelegierung);

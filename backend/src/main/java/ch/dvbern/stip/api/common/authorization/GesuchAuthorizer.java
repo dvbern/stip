@@ -98,9 +98,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         final BooleanSupplier benutzerCanEditInStatusOrAenderung =
             () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung;
 
-        if (gesuch.getDelegierung() != null) {
+        final var delegierung = gesuch.getAusbildung().getFall().getDelegierung();
+        if (delegierung != null) {
             final var isMitarbeiter = sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(
-                gesuch.getDelegierung().getSozialdienst().getId()
+                delegierung.getSozialdienst().getId()
             );
 
             if (!isMitarbeiter || !benutzerCanEditInStatusOrAenderung.getAsBoolean()) {

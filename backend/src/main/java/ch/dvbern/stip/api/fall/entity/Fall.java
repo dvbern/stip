@@ -22,6 +22,7 @@ import java.util.Set;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -76,4 +77,8 @@ public class Fall extends AbstractMandantEntity {
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
     private Set<Ausbildung> ausbildungs;
+
+    @Nullable
+    @OneToOne(mappedBy = "delegierterFall")
+    private Delegierung delegierung;
 }
