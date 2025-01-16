@@ -16,7 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -47,7 +47,7 @@ public class SozialdienstCreateDtoSpec {
   private AdresseDtoSpec adresse;
 
   public static final String JSON_PROPERTY_SOZIALDIENST_ADMIN = "sozialdienstAdmin";
-  private SozialdienstAdminCreateDtoSpec sozialdienstAdmin;
+  private SozialdienstAdminDtoSpec sozialdienstAdmin;
 
   public SozialdienstCreateDtoSpec() {
   }
@@ -130,7 +130,7 @@ public class SozialdienstCreateDtoSpec {
   }
 
 
-  public SozialdienstCreateDtoSpec sozialdienstAdmin(SozialdienstAdminCreateDtoSpec sozialdienstAdmin) {
+  public SozialdienstCreateDtoSpec sozialdienstAdmin(SozialdienstAdminDtoSpec sozialdienstAdmin) {
     
     this.sozialdienstAdmin = sozialdienstAdmin;
     return this;
@@ -144,14 +144,14 @@ public class SozialdienstCreateDtoSpec {
   @JsonProperty(JSON_PROPERTY_SOZIALDIENST_ADMIN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public SozialdienstAdminCreateDtoSpec getSozialdienstAdmin() {
+  public SozialdienstAdminDtoSpec getSozialdienstAdmin() {
     return sozialdienstAdmin;
   }
 
 
   @JsonProperty(JSON_PROPERTY_SOZIALDIENST_ADMIN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialdienstAdmin(SozialdienstAdminCreateDtoSpec sozialdienstAdmin) {
+  public void setSozialdienstAdmin(SozialdienstAdminDtoSpec sozialdienstAdmin) {
     this.sozialdienstAdmin = sozialdienstAdmin;
   }
 

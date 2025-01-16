@@ -41,6 +41,11 @@ public class GesuchsperiodeSeeding extends Seeder {
     private final ConfigService configService;
 
     @Override
+    public int getPriority() {
+        return 100;
+    }
+
+    @Override
     protected void doSeed() {
         LOG.info("Seeding Gesuchsperiode and Jahr");
         final var yearsToSeed = List.of(

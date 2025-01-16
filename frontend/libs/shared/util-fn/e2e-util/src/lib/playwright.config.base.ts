@@ -3,9 +3,6 @@ import { defineConfig } from '@playwright/test';
 export const BEARER_COOKIE = 'access_cookie';
 export const REFRESH_COOKIE = 'refresh_cookie';
 
-export const GS_STORAGE_STATE = 'gs-storage-state.json';
-export const SB_STORAGE_STATE = 'sb-storage-state.json';
-
 const gsURL = process.env['E2E_BASEURL_GS'];
 const sbURL = process.env['E2E_BASEURL_SB'];
 export const getE2eUrls = () => {
@@ -36,7 +33,7 @@ export interface KeycloakResponse {
  * 3. Add the user to the Keycloak realm https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/admin/master/console/
  * 4. Add the user to the environment variables in the CI configuration https://gitlab.dvbern.ch/stip/stip/-/settings/ci_cd -> Variables
  */
-export type E2eUser = `GESUCHSTELLER` | 'SACHBEARBEITER' | 'ADMIN';
+export type E2eUser = 'GESUCHSTELLER' | 'SACHBEARBEITER' | 'ADMIN';
 
 /**
  * Some default configuration for e2e tests
