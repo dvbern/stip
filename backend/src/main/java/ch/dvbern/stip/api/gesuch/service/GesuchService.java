@@ -64,6 +64,7 @@ import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
@@ -89,6 +90,8 @@ import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.ResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -112,6 +115,7 @@ public class GesuchService {
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
+    private final BerechnungsblattService berechnungsblattService;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final GesuchTrancheService gesuchTrancheService;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
@@ -645,6 +649,34 @@ public class GesuchService {
     public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+    }
+
+    public Response getBerechnungsblattResponse(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+        var byteStream = berechnungsblattService.getBerechnungsblattFromGesuch(
+            gesuch,
+            gesuch.getNewestGesuchTranche()
+                .orElseThrow(NotFoundException::new)
+                .getGesuchFormular()
+                .getPersonInAusbildung()
+                .getKorrespondenzSprache()
+                .getLocale()
+        );
+
+        GesuchFormular gesuchFormularToUse =
+            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new).getGesuchFormular();
+
+        String filename = String.format(
+            "%s_%s_%s.pdf",
+            gesuchFormularToUse.getPersonInAusbildung().getVorname(),
+            gesuchFormularToUse.getPersonInAusbildung().getNachname(),
+            gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr()
+        );
+
+        ResponseBuilder response = Response.ok(byteStream.toByteArray());
+        response.header("Content-Disposition", "attachment;filename=" + filename);
+        response.header("Content-Type", "application/octet-stream");
+        return response.build();
     }
 
     public GesuchWithChangesDto getChangesByGesuchId(UUID gesuchId) {

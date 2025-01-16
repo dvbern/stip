@@ -46,9 +46,12 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -251,6 +254,19 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.canRead(gesuchId);
         gesuchAuthorizer.canGetBerechnung(gesuchId);
         return gesuchService.getBerechnungsresultat(gesuchId);
+    }
+
+    @Blocking
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public Uni<Response> getBerechnungsBlattForGesuch(UUID gesuchId) {
+        gesuchAuthorizer.canRead(gesuchId);
+        gesuchAuthorizer.canGetBerechnung(gesuchId);
+
+        var response = gesuchService.getBerechnungsblattResponse(gesuchId);
+
+        Uni<Response> re = Uni.createFrom().item(response);
+        return re;
     }
 
     @RolesAllowed(GESUCH_READ)

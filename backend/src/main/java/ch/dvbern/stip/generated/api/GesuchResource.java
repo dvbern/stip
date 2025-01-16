@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
+import java.io.File;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
@@ -99,6 +100,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}/berechnung")
     @Produces({ "application/json", "text/plain" })
     BerechnungsresultatDto getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchId}/berechnungsblatt")
+    @Produces({ "application/octet-stream", "application/json", "text/plain" })
+    io.smallrye.mutiny.Uni<Response> getBerechnungsBlattForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/{gesuchTrancheId}")

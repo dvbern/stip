@@ -1838,6 +1838,37 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBerechnungForGesuch
       summary: Berechnet und holt die Berechnung für ein Gesuch
+  '/gesuch/{gesuchId}/berechnungsblatt':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Berechnungsblatt File returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBerechnungsBlattForGesuch
+      summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren':
     get:
       tags:
