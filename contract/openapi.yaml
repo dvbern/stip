@@ -1341,10 +1341,10 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: deleteSozialdienstBenutzer
-  /delegieren/{gesuchId}/{fallId}:
+  /delegieren/{fallId}/{sozialdienstId}:
     parameters:
-      - $ref: '#/components/parameters/gesuchId'
       - $ref: '#/components/parameters/fallId'
+      - $ref: '#/components/parameters/sozialdienstId'
     post:
       tags:
       - Delegieren
