@@ -102,9 +102,14 @@ public interface GesuchResource {
     BerechnungsresultatDto getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/berechnungsblatt")
-    @Produces({ "application/octet-stream", "application/json", "text/plain" })
-    io.smallrye.mutiny.Uni<Response> getBerechnungsBlattForGesuch(@PathParam("gesuchId") UUID gesuchId);
+    @Path("/berechnungsblatt")
+    @Produces({ "application/octet-stream" })
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getBerechnungsBlattForGesuch(@QueryParam("token") @NotNull   String token);
+
+    @GET
+    @Path("/{gesuchId}/berechnungsblatt/token")
+    @Produces({ "text/plain", "application/json" })
+    String getBerechnungsblattDownloadToken(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/{gesuchTrancheId}")

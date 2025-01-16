@@ -88,6 +88,7 @@ public class GesuchApiSpec {
                 gesuchZurueckweisen(),
                 getBerechnungForGesuch(),
                 getBerechnungsBlattForGesuch(),
+                getBerechnungsblattDownloadToken(),
                 getGesuch(),
                 getGesuchInfo(),
                 getGesucheGs(),
@@ -155,6 +156,10 @@ public class GesuchApiSpec {
 
     public GetBerechnungsBlattForGesuchOper getBerechnungsBlattForGesuch() {
         return new GetBerechnungsBlattForGesuchOper(createReqSpec());
+    }
+
+    public GetBerechnungsblattDownloadTokenOper getBerechnungsblattDownloadToken() {
+        return new GetBerechnungsblattDownloadTokenOper(createReqSpec());
     }
 
     public GetGesuchOper getGesuch() {
@@ -1181,25 +1186,25 @@ public class GesuchApiSpec {
      * Berechnet und generiert das Berechnungsblatt für ein Gesuch
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #tokenQuery  (required)
      * return File
      */
     public static class GetBerechnungsBlattForGesuchOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/berechnungsblatt";
+        public static final String REQ_URI = "/gesuch/berechnungsblatt";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
         public GetBerechnungsBlattForGesuchOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/octet-stream");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/{gesuchId}/berechnungsblatt
+         * GET /gesuch/berechnungsblatt
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1210,7 +1215,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/berechnungsblatt
+         * GET /gesuch/berechnungsblatt
          * @param handler handler
          * @return File
          */
@@ -1219,14 +1224,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String TOKEN_QUERY = "token";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param token (String)  (required)
          * @return operation
          */
-        public GetBerechnungsBlattForGesuchOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetBerechnungsBlattForGesuchOper tokenQuery(Object... token) {
+            reqSpec.addQueryParam(TOKEN_QUERY, token);
             return this;
         }
 
@@ -1246,6 +1251,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetBerechnungsBlattForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * get Berechnungsblatt Download Token
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return String
+     */
+    public static class GetBerechnungsblattDownloadTokenOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/berechnungsblatt/token";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetBerechnungsblattDownloadTokenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/berechnungsblatt/token
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/berechnungsblatt/token
+         * @param handler handler
+         * @return String
+         */
+        public String executeAs(Function<Response, Response> handler) {
+            TypeRef<String> type = new TypeRef<String>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetBerechnungsblattDownloadTokenOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetBerechnungsblattDownloadTokenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetBerechnungsblattDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

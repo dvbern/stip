@@ -56,26 +56,24 @@ import lombok.extern.slf4j.Slf4j;
 public class BerechnungsblattService {
     private final BerechnungService berechnungService;
 
-    private static final PdfFont FONT;
-    private static final PdfFont FONT_BOLD;
+    private static final String FONT = StandardFonts.HELVETICA;
+    private static final String FONT_BOLD = StandardFonts.HELVETICA_BOLD;
+
+    PdfFont pdfFont = null;
+    PdfFont pdfFontBold = null;
 
     private static final int FONT_SIZE = 11;
     private static final int FONT_SIZE_SMALL = 9;
-
-    static {
-        try {
-            FONT = PdfFontFactory.createFont(StandardFonts.HELVETICA);
-            FONT_BOLD = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-    }
 
     private static final PageSize PAGE_SIZE = PageSize.A4;
 
     private static final UnitValue[] TABLE_WIDTH_PERCENTAGES = UnitValue.createPercentArray(new float[] { 85, 15 });
 
-    public ByteArrayOutputStream getBerechnungsblattFromGesuch(final Gesuch gesuch, final Locale locale) {
+    public ByteArrayOutputStream getBerechnungsblattFromGesuch(final Gesuch gesuch, final Locale locale)
+    throws IOException {
+        pdfFont = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+        pdfFontBold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+
         TL translator = TLProducer.defaultBundle()
             .forAppLanguage(
                 AppLanguages.fromLocale(locale)
@@ -108,7 +106,7 @@ public class BerechnungsblattService {
                         translator.translate("stip.berechnung.persoenlich.title"),
                         tranchenBerechnungsResultat.getNameGesuchsteller()
                     )
-                ).setFont(FONT_BOLD)
+                ).setFont(pdfFontBold)
             );
 
             Table persoenlichesBudgetTable =
@@ -120,12 +118,12 @@ public class BerechnungsblattService {
 
             persoenlichesBudgetTable
                 .addCell(
-                    getDefaultParagraphTranslated("stip.berechnung.persoenlich.total", translator).setFont(FONT_BOLD)
+                    getDefaultParagraphTranslated("stip.berechnung.persoenlich.total", translator).setFont(pdfFontBold)
                 );
             persoenlichesBudgetTable.addCell(
                 getDefaultParagraphNumber(
                     tranchenBerechnungsResultat.getBerechnung().toString()
-                ).setFont(FONT_BOLD)
+                ).setFont(pdfFontBold)
             );
 
             document.add(persoenlichesBudgetTable);
@@ -154,7 +152,7 @@ public class BerechnungsblattService {
                             translator.translate("stip.berechnung.familien.title"),
                             budgetTypText
                         )
-                    ).setFont(FONT_BOLD)
+                    ).setFont(pdfFontBold)
                 );
                 Table familienBudgetTable = getFamilienBudgetTable(
                     fammilienBudgetResultat,
@@ -168,10 +166,11 @@ public class BerechnungsblattService {
 
         document.close();
         pdfDocument.close();
+        writer.close();
         return out;
     }
 
-    private static Paragraph getHeaderParagraph(LocalDate trancheVon, LocalDate trancheBis, TL tl) {
+    private Paragraph getHeaderParagraph(LocalDate trancheVon, LocalDate trancheBis, TL tl) {
         Paragraph paragraph = new Paragraph(
             String.format(
                 "%s. %s: %s, %s: %s %s: %d",
@@ -187,7 +186,7 @@ public class BerechnungsblattService {
                 )
             )
         );
-        paragraph.setFont(FONT)
+        paragraph.setFont(pdfFont)
             .setFontSize(10)
             .setHorizontalAlignment(HorizontalAlignment.LEFT)
             .setFixedPosition(
@@ -200,35 +199,35 @@ public class BerechnungsblattService {
         return paragraph;
     }
 
-    private static Cell getDefaultParagraphCellTranslatedWithInfo(final String key, final TL tl) {
+    private Cell getDefaultParagraphCellTranslatedWithInfo(final String key, final TL tl) {
         var cell = new Cell();
         cell.add(getDefaultParagraphTranslated(key, tl));
         cell.add(getDefaultParagraphTranslatedSmall(key + ".info", tl));
         return cell;
     }
 
-    private static Paragraph getDefaultParagraphTranslated(final String key, final TL tl) {
+    private Paragraph getDefaultParagraphTranslated(final String key, final TL tl) {
         return getDefaultParagraph(tl.translate(key));
     }
 
-    private static Paragraph getDefaultParagraphTranslatedSmall(final String key, final TL tl) {
+    private Paragraph getDefaultParagraphTranslatedSmall(final String key, final TL tl) {
         return getDefaultParagraphSmall(tl.translate(key));
     }
 
-    private static Paragraph getDefaultParagraphNumber(final String text) {
+    private Paragraph getDefaultParagraphNumber(final String text) {
         return getDefaultParagraph(text).setTextAlignment(TextAlignment.RIGHT);
 
     }
 
-    private static Paragraph getDefaultParagraphSmall(final String text) {
-        return new Paragraph(text).setFont(FONT).setFontSize(FONT_SIZE_SMALL).setFontColor(ColorConstants.GRAY);
+    private Paragraph getDefaultParagraphSmall(final String text) {
+        return new Paragraph(text).setFont(pdfFont).setFontSize(FONT_SIZE_SMALL).setFontColor(ColorConstants.GRAY);
     }
 
-    private static Paragraph getDefaultParagraph(final String text) {
-        return new Paragraph(text).setFont(FONT).setFontSize(FONT_SIZE);
+    private Paragraph getDefaultParagraph(final String text) {
+        return new Paragraph(text).setFont(pdfFont).setFontSize(FONT_SIZE);
     }
 
-    private static Table getPersoenlichesBudgetTable(
+    private Table getPersoenlichesBudgetTable(
         final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat,
         final BerechnungsStammdatenDto berechnungsStammdaten,
         final TL tl
@@ -244,7 +243,7 @@ public class BerechnungsblattService {
         return persoenlichesBudgetTable;
     }
 
-    private static void addPersoenlichesBudgetEinnahmenToTable(
+    private void addPersoenlichesBudgetEinnahmenToTable(
         final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat,
         final BerechnungsStammdatenDto berechnungsStammdaten,
         Table persoenlichesBudgetTable,
@@ -252,7 +251,7 @@ public class BerechnungsblattService {
     ) {
         // Einnahmen
         persoenlichesBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.title", tl).setFont(FONT_BOLD)
+            getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.title", tl).setFont(pdfFontBold)
         );
         persoenlichesBudgetTable.addCell(new Paragraph(""));
         persoenlichesBudgetTable.addCell(
@@ -350,23 +349,23 @@ public class BerechnungsblattService {
             )
         );
         persoenlichesBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.total", tl).setFont(FONT_BOLD)
+            getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.total", tl).setFont(pdfFontBold)
         );
         persoenlichesBudgetTable.addCell(
             getDefaultParagraphNumber(
                 persoenlichesBudgetresultat.getEinnahmenPersoenlichesBudget().toString()
-            ).setFont(FONT_BOLD)
+            ).setFont(pdfFontBold)
         );
     }
 
-    private static void addPersoenlichesBudgetKostenToTable(
+    private void addPersoenlichesBudgetKostenToTable(
         final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat,
         Table persoenlichesBudgetTable,
         TL tl
     ) {
         // Kosten
         persoenlichesBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.title", tl).setFont(FONT_BOLD)
+            getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.title", tl).setFont(pdfFontBold)
         );
         persoenlichesBudgetTable.addCell(new Paragraph(""));
 
@@ -474,7 +473,6 @@ public class BerechnungsblattService {
         persoenlichesBudgetTable
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.bundessteuern", tl));
         persoenlichesBudgetTable.addCell(getDefaultParagraphNumber("0")); // TODO: Bundessteuern
-
         persoenlichesBudgetTable.addCell(
             getDefaultParagraphCellTranslatedWithInfo(
                 "stip.berechnung.persoenlich.kosten.anteilLebenshaltungskosten",
@@ -485,16 +483,16 @@ public class BerechnungsblattService {
             .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getAnteilLebenshaltungskosten().toString()));
 
         persoenlichesBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.total", tl).setFont(FONT_BOLD)
+            getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.total", tl).setFont(pdfFontBold)
         );
         persoenlichesBudgetTable.addCell(
             getDefaultParagraphNumber(
                 persoenlichesBudgetresultat.getAusgabenPersoenlichesBudget().toString()
-            ).setFont(FONT_BOLD)
+            ).setFont(pdfFontBold)
         );
     }
 
-    private static Table getFamilienBudgetTable(
+    private Table getFamilienBudgetTable(
         final FamilienBudgetresultatDto familienBudgetresultat,
         final BerechnungsStammdatenDto berechnungsStammdaten,
         final TL tl
@@ -505,7 +503,7 @@ public class BerechnungsblattService {
         return familienBudgetTable;
     }
 
-    private static void addFamilienBudgetEinnahmenToTable(
+    private void addFamilienBudgetEinnahmenToTable(
         final FamilienBudgetresultatDto familienBudgetResultat,
         final BerechnungsStammdatenDto berechnungsStammdaten,
         Table familienBudgetTable,
@@ -513,7 +511,7 @@ public class BerechnungsblattService {
     ) {
         // Einnahmen
         familienBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.title", tl).setFont(FONT_BOLD)
+            getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.title", tl).setFont(pdfFontBold)
         );
         familienBudgetTable.addCell(new Paragraph(""));
         familienBudgetTable
@@ -578,22 +576,22 @@ public class BerechnungsblattService {
             .addCell(getDefaultParagraphNumber(familienBudgetResultat.getAnrechenbaresVermoegen().toString()));
 
         familienBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.totalEinkuenfte", tl).setFont(FONT_BOLD)
+            getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.totalEinkuenfte", tl).setFont(pdfFontBold)
         );
         familienBudgetTable.addCell(
             getDefaultParagraphNumber(
                 familienBudgetResultat.getTotalEinkuenfte().toString()
-            ).setFont(FONT_BOLD)
+            ).setFont(pdfFontBold)
         );
     }
 
-    private static void addFamilienBudgetKostenToTable(
+    private void addFamilienBudgetKostenToTable(
         final FamilienBudgetresultatDto familienBudgetResultat,
         Table familienBudgetTable,
         TL tl
     ) {
         familienBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.familien.kosten.title", tl).setFont(FONT_BOLD)
+            getDefaultParagraphTranslated("stip.berechnung.familien.kosten.title", tl).setFont(pdfFontBold)
         );
         familienBudgetTable.addCell(new Paragraph(""));
         familienBudgetTable.addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.grundbedarf", tl));
@@ -634,12 +632,12 @@ public class BerechnungsblattService {
         familienBudgetTable
             .addCell(getDefaultParagraphNumber(familienBudgetResultat.getEssenskostenPerson2().toString()));
         familienBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.familien.kosten.total", tl).setFont(FONT_BOLD)
+            getDefaultParagraphTranslated("stip.berechnung.familien.kosten.total", tl).setFont(pdfFontBold)
         );
         familienBudgetTable.addCell(
             getDefaultParagraphNumber(
                 familienBudgetResultat.getAusgabenFamilienbudget().toString()
-            ).setFont(FONT_BOLD)
+            ).setFont(pdfFontBold)
         );
     }
 }

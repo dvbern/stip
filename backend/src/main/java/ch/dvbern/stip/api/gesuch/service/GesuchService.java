@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,8 +92,6 @@ import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.ResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -651,9 +651,9 @@ public class GesuchService {
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
-    public Response getBerechnungsblattResponse(final UUID gesuchId) {
+    public ByteArrayOutputStream getBerechnungsblattByteStream(final UUID gesuchId) throws IOException {
         final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
-        var byteStream = berechnungsblattService.getBerechnungsblattFromGesuch(
+        return berechnungsblattService.getBerechnungsblattFromGesuch(
             gesuch,
             gesuch.getNewestGesuchTranche()
                 .orElseThrow(NotFoundException::new)
@@ -662,21 +662,18 @@ public class GesuchService {
                 .getKorrespondenzSprache()
                 .getLocale()
         );
+    }
 
+    public String getBerechnungsblattFileName(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
         GesuchFormular gesuchFormularToUse =
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new).getGesuchFormular();
-
-        String filename = String.format(
+        return String.format(
             "%s_%s_%s.pdf",
             gesuchFormularToUse.getPersonInAusbildung().getVorname(),
             gesuchFormularToUse.getPersonInAusbildung().getNachname(),
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr()
         );
-
-        ResponseBuilder response = Response.ok(byteStream.toByteArray());
-        response.header("Content-Disposition", "attachment;filename=" + filename);
-        response.header("Content-Type", "application/octet-stream");
-        return response.build();
     }
 
     public GesuchWithChangesDto getChangesByGesuchId(UUID gesuchId) {

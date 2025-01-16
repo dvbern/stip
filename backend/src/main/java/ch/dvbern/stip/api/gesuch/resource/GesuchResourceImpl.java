@@ -17,14 +17,21 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -46,14 +53,22 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
+import io.quarkus.security.UnauthorizedException;
 import io.smallrye.common.annotation.Blocking;
+import io.smallrye.jwt.auth.principal.JWTParser;
+import io.smallrye.jwt.auth.principal.ParseException;
+import io.smallrye.jwt.build.Jwt;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.jboss.resteasy.reactive.RestMulti;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
@@ -74,6 +89,9 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchAuthorizer gesuchAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
     private final GesuchMapperUtil gesuchMapperUtil;
+    private final ConfigService configService;
+    private final JWTParser jwtParser;
+    private final BenutzerService benutzerService;
 
     @RolesAllowed(GESUCH_UPDATE)
     @Override
@@ -256,17 +274,58 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchService.getBerechnungsresultat(gesuchId);
     }
 
+    @Override
+    @AllowAll
     @Blocking
+    public RestMulti<Buffer> getBerechnungsBlattForGesuch(String token) {
+        JsonWebToken jwt;
+        try {
+            jwt = jwtParser.verify(token, configService.getSecret());
+        } catch (ParseException e) {
+            throw new UnauthorizedException();
+        }
+
+        final var gesuchId = UUID.fromString(
+            (String) jwt.claim(DokumentDownloadConstants.GESUCH_ID_CLAIM)
+                .orElseThrow(BadRequestException::new)
+        );
+
+        ByteArrayOutputStream byteStream = null;
+        try {
+            byteStream = gesuchService.getBerechnungsblattByteStream(gesuchId);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        ByteArrayOutputStream finalByteStream = byteStream;
+        return RestMulti.fromUniResponse(
+            Uni.createFrom().item(finalByteStream),
+            response -> Multi.createFrom()
+                .items(response)
+                .map(byteArrayOutputStream -> Buffer.buffer(byteArrayOutputStream.toByteArray())),
+            response -> Map.of(
+                "Content-Disposition",
+                List.of("attachment;filename=" + gesuchService.getBerechnungsblattFileName(gesuchId)),
+                "Content-Type",
+                List.of("application/octet-stream")
+            )
+        );
+    }
+
     @RolesAllowed(GESUCH_READ)
     @Override
-    public Uni<Response> getBerechnungsBlattForGesuch(UUID gesuchId) {
+    public String getBerechnungsblattDownloadToken(UUID gesuchId) {
         gesuchAuthorizer.canRead(gesuchId);
         gesuchAuthorizer.canGetBerechnung(gesuchId);
 
-        var response = gesuchService.getBerechnungsblattResponse(gesuchId);
-
-        Uni<Response> re = Uni.createFrom().item(response);
-        return re;
+        return Jwt
+            .claims()
+            .upn(benutzerService.getCurrentBenutzername())
+            .claim(DokumentDownloadConstants.GESUCH_ID_CLAIM, gesuchId.toString())
+            .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
+            .issuer(configService.getIssuer())
+            .jws()
+            .signWithSecret(configService.getSecret());
     }
 
     @RolesAllowed(GESUCH_READ)
