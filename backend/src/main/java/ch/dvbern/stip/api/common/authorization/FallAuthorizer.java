@@ -21,7 +21,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -33,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class FallAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final FallRepository fallRepository;
+    private final SozialdienstService sozialdienstService;
 
     @Transactional
     public void canRead(final UUID fallId) {
@@ -43,8 +46,12 @@ public class FallAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        // Gesuchsteller can only read their own Fall
         final var fall = fallRepository.requireById(fallId);
+        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(fall, sozialdienstService)) {
+            return;
+        }
+
+        // Gesuchsteller can only read their own Fall
         if (Objects.equals(fall.getGesuchsteller().getId(), currentBenutzer.getId())) {
             return;
         }

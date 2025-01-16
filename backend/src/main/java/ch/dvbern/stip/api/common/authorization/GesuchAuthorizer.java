@@ -64,8 +64,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        // Gesuchsteller can only read their own Gesuch
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(gesuch, sozialdienstService)) {
+            return;
+        }
+
+        // Gesuchsteller can only read their own Gesuch
         if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
             return;
         }
@@ -98,18 +102,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         final BooleanSupplier benutzerCanEditInStatusOrAenderung =
             () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung;
 
-        final var delegierung = gesuch.getAusbildung().getFall().getDelegierung();
-        if (delegierung != null) {
-            final var isMitarbeiter = sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(
-                delegierung.getSozialdienst().getId()
-            );
-
-            if (!isMitarbeiter || !benutzerCanEditInStatusOrAenderung.getAsBoolean()) {
-                throw new UnauthorizedException();
-            }
-        }
-
         if (
+            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(gesuch, sozialdienstService)
+            && benutzerCanEditInStatusOrAenderung.getAsBoolean()
+        ) {
+            return;
+        } else if (
             AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
             benutzerCanEditInStatusOrAenderung.getAsBoolean()
         ) {
@@ -129,7 +127,13 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         // TODO KSTIP-1057: Check if Gesuchsteller can delete their Gesuch
         final var gesuch = gesuchRepository.requireById(gesuchId);
+
         if (
+            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(gesuch, sozialdienstService)
+            && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
+        ) {
+            return;
+        } else if (
             isGesuchstellerAndNotAdmin(currentBenutzer) &&
             AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
             gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
@@ -149,7 +153,9 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        if (Objects.equals(currentBenutzer.getId(), fall.get().getGesuchsteller().getId())) {
+        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(fall.get(), sozialdienstService)) {
+            return;
+        } else if (Objects.equals(currentBenutzer.getId(), fall.get().getGesuchsteller().getId())) {
             return;
         }
 
@@ -166,7 +172,9 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        if (isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(gesuch, sozialdienstService)) {
+            return;
+        } else if (isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
             return;
         }
 

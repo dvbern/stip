@@ -24,8 +24,9 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.gesuch.service.GesuchStatusService;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,7 +40,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final GesuchStatusService gesuchStatusService;
     private final AusbildungRepository ausbildungRepository;
-    private final FallRepository fallRepository;
+    private final SozialdienstService sozialdienstService;
 
     private boolean isGesuchstellerOfAusbildung(final Benutzer currentBenutzer, final Ausbildung ausbildung) {
         return Objects.equals(
@@ -63,10 +64,14 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         }
 
         final var ausbildung = ausbildungRepository.requireById(ausbildungId);
+        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(ausbildung, sozialdienstService)) {
+            return;
+        }
 
         if (isGesuchstellerOfAusbildung(currentBenutzer, ausbildung)) {
             return;
         }
+
         throw new UnauthorizedException();
     }
 

@@ -19,9 +19,11 @@ package ch.dvbern.stip.api.common.authorization.util;
 
 import java.util.Objects;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -37,6 +39,34 @@ public class AuthorizerUtil {
         return Objects.equals(
             fall.getGesuchsteller().getId(),
             currentBenutzer.getId()
+        );
+    }
+
+    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiter(
+        final Gesuch gesuch,
+        final SozialdienstService sozialdienstService
+    ) {
+        return hasDelegierungAndIsCurrentBenutzerMitarbeiter(gesuch.getAusbildung(), sozialdienstService);
+    }
+
+    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiter(
+        final Ausbildung ausbildung,
+        final SozialdienstService sozialdienstService
+    ) {
+        return hasDelegierungAndIsCurrentBenutzerMitarbeiter(ausbildung.getFall(), sozialdienstService);
+    }
+
+    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiter(
+        final Fall fall,
+        final SozialdienstService sozialdienstService
+    ) {
+        final var delegierung = fall.getDelegierung();
+        if (delegierung == null) {
+            return false;
+        }
+
+        return sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(
+            delegierung.getSozialdienst().getId()
         );
     }
 }
