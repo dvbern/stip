@@ -1341,10 +1341,10 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: deleteSozialdienstBenutzer
-  /delegieren/{gesuchId}/{sozialdienstId}:
+  /delegieren/{gesuchId}/{fallId}:
     parameters:
       - $ref: '#/components/parameters/gesuchId'
-      - $ref: '#/components/parameters/sozialdienstId'
+      - $ref: '#/components/parameters/fallId'
     post:
       tags:
       - Delegieren
@@ -1359,7 +1359,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchDelegieren
+      operationId: fallDelegieren
   /stammdaten/land:
     get:
       tags:
@@ -5369,6 +5369,13 @@ components:
         $ref: '#/components/schemas/UUID'
       in: path
       required: true
+    fallId:
+      name: fallId
+      in: path
+      required: true
+      description: Die ID vom Gesuch
+      schema:
+        $ref: '#/components/schemas/UUID'
 
 security:
   - auth-uat-bern: []
