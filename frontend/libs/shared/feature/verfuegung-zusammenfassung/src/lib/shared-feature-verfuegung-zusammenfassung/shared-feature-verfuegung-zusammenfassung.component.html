@@ -16,9 +16,9 @@
 
     <div class="border-bottom border-1 mt-4"></div>
 
-    <mat-card-content class="p-5">
+    <mat-card-content class="p-5 !tw-flex tw-gap-5">
       @if (zusammenfassung.totalBetragStipendium > 0) {
-        <div class="accept p-4 rounded-4 fs-3 fw-bold" data-testid="zusammenfassung-resultat">
+        <div class="accept p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen' | translate }}
         </div>
       } @else {
@@ -26,6 +26,7 @@
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt' | translate }}
         </div>
       }
+      <button class="btn" type="button" (click)="downloadVerfuegung()">download</button>
     </mat-card-content>
   </mat-card>
 
