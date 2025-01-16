@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -29,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   SozialdienstSlimDtoSpec.JSON_PROPERTY_ID,
-  SozialdienstSlimDtoSpec.JSON_PROPERTY_NAME
+  SozialdienstSlimDtoSpec.JSON_PROPERTY_NAME,
+  SozialdienstSlimDtoSpec.JSON_PROPERTY_ADRESSE
 })
 @JsonTypeName("SozialdienstSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -39,6 +41,9 @@ public class SozialdienstSlimDtoSpec {
 
   public static final String JSON_PROPERTY_NAME = "name";
   private String name;
+
+  public static final String JSON_PROPERTY_ADRESSE = "adresse";
+  private AdresseDtoSpec adresse;
 
   public SozialdienstSlimDtoSpec() {
   }
@@ -94,6 +99,32 @@ public class SozialdienstSlimDtoSpec {
     this.name = name;
   }
 
+
+  public SozialdienstSlimDtoSpec adresse(AdresseDtoSpec adresse) {
+    
+    this.adresse = adresse;
+    return this;
+  }
+
+   /**
+   * Get adresse
+   * @return adresse
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public AdresseDtoSpec getAdresse() {
+    return adresse;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAdresse(AdresseDtoSpec adresse) {
+    this.adresse = adresse;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -104,12 +135,13 @@ public class SozialdienstSlimDtoSpec {
     }
     SozialdienstSlimDtoSpec sozialdienstSlim = (SozialdienstSlimDtoSpec) o;
     return Objects.equals(this.id, sozialdienstSlim.id) &&
-        Objects.equals(this.name, sozialdienstSlim.name);
+        Objects.equals(this.name, sozialdienstSlim.name) &&
+        Objects.equals(this.adresse, sozialdienstSlim.adresse);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name);
+    return Objects.hash(id, name, adresse);
   }
 
   @Override
@@ -118,6 +150,7 @@ public class SozialdienstSlimDtoSpec {
     sb.append("class SozialdienstSlimDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("}");
     return sb.toString();
   }

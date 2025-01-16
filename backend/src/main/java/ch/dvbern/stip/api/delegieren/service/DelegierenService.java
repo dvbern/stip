@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -32,12 +32,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DelegierenService {
     private final DelegierungRepository delegierungRepository;
-    private final GesuchRepository gesuchRepository;
+    private final FallRepository fallRepository;
     private final SozialdienstRepository sozialdienstRepository;
 
     @Transactional
-    public void delegateGesuch(final UUID gesuchId, final UUID sozialdienstId) {
-        final var fall = gesuchRepository.requireById(gesuchId).getAusbildung().getFall();
+    public void delegateFall(final UUID fallId, final UUID sozialdienstId) {
+        final var fall = fallRepository.requireById(fallId);
         if (fall.getDelegierung() != null) {
             throw new BadRequestException();
         }

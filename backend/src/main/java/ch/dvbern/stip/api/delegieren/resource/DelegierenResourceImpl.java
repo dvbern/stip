@@ -37,8 +37,8 @@ public class DelegierenResourceImpl implements DelegierenResource {
 
     @RolesAllowed({ OidcPermissions.GESUCH_UPDATE })
     @Override
-    public void gesuchDelegieren(UUID gesuchId, UUID sozialdienstId) {
-        delegierenAuthorizer.canDelegate(gesuchId);
-        delegierenService.delegateGesuch(gesuchId, sozialdienstId);
+    public void fallDelegieren(UUID fallId, UUID sozialdienstId) {
+        delegierenAuthorizer.canDelegate(fallId);
+        delegierenService.delegateFall(fallId, sozialdienstId);
     }
 }

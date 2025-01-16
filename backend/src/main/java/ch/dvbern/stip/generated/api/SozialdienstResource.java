@@ -36,7 +36,7 @@ public interface SozialdienstResource {
     @POST
     @Path("/benutzer")
     @Consumes({ "application/json" })
-    @Produces({ "application/json", "text/plain" })
+    @Produces({ "application/json" })
     SozialdienstBenutzerDto createSozialdienstBenutzer(@Valid SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto);
 
     @DELETE

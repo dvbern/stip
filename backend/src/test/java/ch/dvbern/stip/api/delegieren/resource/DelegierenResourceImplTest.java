@@ -33,7 +33,7 @@ import ch.dvbern.stip.generated.api.DelegierenApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -63,7 +63,7 @@ class DelegierenResourceImplTest {
     private final DelegierenApiSpec delegierenApiSpec = DelegierenApiSpec.delegieren(RequestSpecUtil.quarkusSpec());
 
     private SozialdienstDtoSpec sozialdienst;
-    private GesuchDtoSpec gesuch;
+    private FallDtoSpec fall;
 
     @Test
     @Order(1)
@@ -84,7 +84,8 @@ class DelegierenResourceImplTest {
     @Order(2)
     @TestAsGesuchsteller
     void createGesuch() {
-        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        fall = TestUtil.getFall(fallApiSpec).orElseThrow(() -> new RuntimeException("Failed to create/ get fall"));
     }
 
     @Test
@@ -92,8 +93,8 @@ class DelegierenResourceImplTest {
     @TestAsGesuchsteller2
     void delegateNotOwnGesuchFails() {
         TestUtil.executeAndAssert(
-            delegierenApiSpec.gesuchDelegieren()
-                .gesuchIdPath(gesuch.getId())
+            delegierenApiSpec.fallDelegieren()
+                .fallIdPath(fall.getId())
                 .sozialdienstIdPath(sozialdienst.getId()),
             Response.Status.UNAUTHORIZED.getStatusCode()
         );
@@ -104,8 +105,8 @@ class DelegierenResourceImplTest {
     @TestAsGesuchsteller
     void delegateGesuch() {
         TestUtil.executeAndAssert(
-            delegierenApiSpec.gesuchDelegieren()
-                .gesuchIdPath(gesuch.getId())
+            delegierenApiSpec.fallDelegieren()
+                .fallIdPath(fall.getId())
                 .sozialdienstIdPath(sozialdienst.getId()),
             Response.Status.NO_CONTENT.getStatusCode()
         );

@@ -24,6 +24,7 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -165,7 +166,7 @@ public class TestUtil {
         }
     }
 
-    public static FallDtoSpec getOrCreateFall(final FallApiSpec fallApiSpec) {
+    public static Optional<FallDtoSpec> getFall(final FallApiSpec fallApiSpec) {
         final var response = fallApiSpec.getFallForGs()
             .execute(PEEK_IF_ENV_SET)
             .then()
@@ -173,21 +174,25 @@ public class TestUtil {
             .statusCode(Status.OK.getStatusCode());
 
         var stringBody = response.extract().body().asString();
-        FallDtoSpec fall;
         if (stringBody == null || stringBody.isEmpty()) {
-            fall = fallApiSpec.createFallForGs()
+            return Optional.empty();
+        }
+
+        return Optional.of(response.extract().body().as(FallDtoSpec.class));
+    }
+
+    public static FallDtoSpec getOrCreateFall(final FallApiSpec fallApiSpec) {
+        final var fall = getFall(fallApiSpec);
+        return fall.orElseGet(
+            () -> fallApiSpec.createFallForGs()
                 .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
                 .assertThat()
                 .statusCode(Status.OK.getStatusCode())
                 .extract()
                 .body()
-                .as(FallDtoSpec.class);
-        } else {
-            fall = response.extract().body().as(FallDtoSpec.class);
-        }
-
-        return fall;
+                .as(FallDtoSpec.class)
+        );
     }
 
     public static AusbildungDtoSpec createAusbildung(final AusbildungApiSpec ausbildungApiSpec, final UUID fallId) {

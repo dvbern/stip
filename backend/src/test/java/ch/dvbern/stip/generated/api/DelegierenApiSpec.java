@@ -56,12 +56,12 @@ public class DelegierenApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                gesuchDelegieren()
+                fallDelegieren()
         );
     }
 
-    public GesuchDelegierenOper gesuchDelegieren() {
-        return new GesuchDelegierenOper(createReqSpec());
+    public FallDelegierenOper fallDelegieren() {
+        return new FallDelegierenOper(createReqSpec());
     }
 
     /**
@@ -78,25 +78,25 @@ public class DelegierenApiSpec {
      * 
      * 
      *
-     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #fallIdPath Die ID vom Gesuch (required)
      * @see #sozialdienstIdPath  (required)
      */
-    public static class GesuchDelegierenOper implements Oper {
+    public static class FallDelegierenOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/delegieren/{gesuchId}/{sozialdienstId}";
+        public static final String REQ_URI = "/delegieren/{fallId}/{sozialdienstId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GesuchDelegierenOper(RequestSpecBuilder reqSpec) {
+        public FallDelegierenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * POST /delegieren/{gesuchId}/{sozialdienstId}
+         * POST /delegieren/{fallId}/{sozialdienstId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -106,14 +106,14 @@ public class DelegierenApiSpec {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String FALL_ID_PATH = "fallId";
 
         /**
-         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @param fallId (UUID) Die ID vom Gesuch (required)
          * @return operation
          */
-        public GesuchDelegierenOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public FallDelegierenOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
 
@@ -123,7 +123,7 @@ public class DelegierenApiSpec {
          * @param sozialdienstId (UUID)  (required)
          * @return operation
          */
-        public GesuchDelegierenOper sozialdienstIdPath(Object sozialdienstId) {
+        public FallDelegierenOper sozialdienstIdPath(Object sozialdienstId) {
             reqSpec.addPathParam(SOZIALDIENST_ID_PATH, sozialdienstId);
             return this;
         }
@@ -133,7 +133,7 @@ public class DelegierenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GesuchDelegierenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public FallDelegierenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -143,7 +143,7 @@ public class DelegierenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GesuchDelegierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public FallDelegierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

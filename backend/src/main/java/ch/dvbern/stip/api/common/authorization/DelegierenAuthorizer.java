@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
-import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -32,17 +32,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DelegierenAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
-    private final GesuchRepository gesuchRepository;
+    private final FallRepository fallRepository;
 
     @Transactional
-    public void canDelegate(final UUID gesuchId) {
+    public void canDelegate(final UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (!isGesuchsteller(currentBenutzer)) {
             throw new UnauthorizedException();
         }
 
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (!AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
+        final var fall = fallRepository.requireById(fallId);
+        if (!AuthorizerUtil.isGesuchstellerOfFall(currentBenutzer, fall)) {
             throw new UnauthorizedException();
         }
     }

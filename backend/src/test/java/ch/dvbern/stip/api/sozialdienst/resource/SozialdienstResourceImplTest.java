@@ -31,7 +31,6 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDtoSpec;
@@ -178,7 +177,7 @@ class SozialdienstResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
-            .as(SozialdienstBenutzerDtoSpec.class);
+            .as(SozialdienstAdminDtoSpec.class);
         assertTrue(updated.getNachname().contains("updated"));
         assertTrue(updated.getVorname().contains("updated"));
         checkSozialdienstAdminResponse(updated);
@@ -201,13 +200,11 @@ class SozialdienstResourceImplTest {
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
-            .as(SozialdienstBenutzerDtoSpec.class);;
+            .as(SozialdienstAdminDtoSpec.class);
         assertTrue(replaced.getNachname().contains("replaced"));
         assertTrue(replaced.getVorname().contains("replaced"));
         assertTrue(replaced.getEmail().contains("replaced"));
-        // assertEquals(replaced.getKeycloakId(), SOZIALDIENST_ADMIN_ID);
         checkSozialdienstAdminResponse(replaced);
-
     }
 
     @Order(99)
@@ -236,7 +233,7 @@ class SozialdienstResourceImplTest {
         assertNotNull(dtoSpec.getIban());
     }
 
-    private void checkSozialdienstAdminResponse(SozialdienstBenutzerDtoSpec dtoSpec) {
+    private void checkSozialdienstAdminResponse(SozialdienstAdminDtoSpec dtoSpec) {
         assertNotNull(dtoSpec.getVorname());
         assertNotNull(dtoSpec.getNachname());
         assertNotNull(dtoSpec.getEmail());

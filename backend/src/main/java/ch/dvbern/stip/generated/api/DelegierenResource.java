@@ -15,11 +15,11 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/delegieren/{gesuchId}/{sozialdienstId}")
+@Path("/delegieren/{fallId}/{sozialdienstId}")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface DelegierenResource {
 
     @POST
     @Produces({ "text/plain" })
-    void gesuchDelegieren(@PathParam("gesuchId") UUID gesuchId,@PathParam("sozialdienstId") UUID sozialdienstId);
+    void fallDelegieren(@PathParam("fallId") UUID fallId,@PathParam("sozialdienstId") UUID sozialdienstId);
 }
