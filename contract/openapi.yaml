@@ -4696,7 +4696,7 @@ components:
             iban:
               type: string
             sozialdienstAdmin:
-              $ref: '#/components/schemas/SozialdienstAdmin'
+              $ref: '#/components/schemas/SozialdienstBenutzer'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
