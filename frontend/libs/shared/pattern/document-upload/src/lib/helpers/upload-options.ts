@@ -147,7 +147,7 @@ export function createUploadOptionsFactory<
       const trancheId = view().trancheId;
       const allowTypes = view().allowTypes;
       const readonly = !(
-        permissions.canUploadMissingDocuments || permissions.canWrite
+        permissions.canUploadDocuments || permissions.canWrite
       );
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
@@ -207,6 +207,7 @@ export function createGesuchDokumentOptions(options: {
 
 export function createAdditionalDokumentOptions(options: {
   gesuchId: string;
+  trancheId: string;
   allowTypes: string;
   dokumentTyp: UnterschriftenblattDokumentTyp;
   gesuchDokument?: UnterschriftenblattDokument;
@@ -217,6 +218,7 @@ export function createAdditionalDokumentOptions(options: {
 }): DokumentOptions {
   const {
     gesuchId,
+    trancheId,
     allowTypes,
     dokumentTyp,
     gesuchDokument,
@@ -233,6 +235,7 @@ export function createAdditionalDokumentOptions(options: {
     dokument: {
       dokumentTyp,
       gesuchId,
+      trancheId,
       art: 'UNTERSCHRIFTENBLATT',
       gesuchDokument,
     },

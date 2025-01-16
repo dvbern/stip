@@ -96,7 +96,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
           this.dokumentsStore.gesuchDokumentAblehnen$({
             gesuchTrancheId: dokumentModel.trancheId,
             dokumentTyp: dokumentModel.dokumentTyp,
-            gesuchDokumentId: result.id,
+            gesuchDokumentId: result.gesuchDokumentId,
             kommentar: result.kommentar,
             afterSuccess: () => {
               this.reloadDokumente();

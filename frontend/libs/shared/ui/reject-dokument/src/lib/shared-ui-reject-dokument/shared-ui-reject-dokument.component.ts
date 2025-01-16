@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { GesuchDokument } from '@dv/shared/model/gesuch';
+import { SharedModelGesuchDokument } from '@dv/shared/model/dokument';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -18,7 +18,7 @@ import {
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 
 export interface RejectDokument {
-  id: string;
+  gesuchDokumentId: string;
   kommentar: string;
 }
 
@@ -40,7 +40,7 @@ export interface RejectDokument {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiRejectDokumentComponent {
-  public gesuchDokument = inject<GesuchDokument>(MAT_DIALOG_DATA);
+  private data = inject<SharedModelGesuchDokument>(MAT_DIALOG_DATA);
   private dialogRef =
     inject<MatDialogRef<SharedUiRejectDokumentComponent, RejectDokument>>(
       MatDialogRef,
@@ -57,11 +57,12 @@ export class SharedUiRejectDokumentComponent {
 
   rejectDocument() {
     this.form.markAllAsTouched();
-    const id = this.gesuchDokument.id;
+    const gesuchDokumentId = this.data.gesuchDokument?.id;
     const kommentar = this.form.value.kommentar;
 
-    if (!id || !kommentar) throw new Error('Id or Kommentar is missing');
+    if (!gesuchDokumentId || !kommentar)
+      throw new Error('Id or Kommentar is missing');
 
-    this.dialogRef.close({ id, kommentar });
+    this.dialogRef.close({ gesuchDokumentId, kommentar });
   }
 }

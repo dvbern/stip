@@ -92,6 +92,16 @@ export class SharedPatternDocumentUploadComponent implements OnInit {
             });
           }
         }
+
+        if (dokument.art === 'UNTERSCHRIFTENBLATT') {
+          this.dokumentsStore.getAdditionalDokumente$({
+            gesuchId: dokument.gesuchId,
+          });
+
+          this.dokumentsStore.getDokumenteAndRequired$({
+            gesuchTrancheId: dokument.trancheId,
+          });
+        }
       });
   }
 
