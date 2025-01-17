@@ -21,6 +21,7 @@ import {
   getE2eUrls,
 } from '@dv/shared/util-fn/e2e-util';
 
+import { initializeTest } from '../../initialize-test';
 import { AusbildungPO, AusbildungValues } from '../../po/ausbildung.po';
 import { AuszahlungPO } from '../../po/auszahlung.po';
 import { EinnahmenKostenPO } from '../../po/einnahmen-kosten.po';
@@ -32,7 +33,6 @@ import { LebenslaufPO } from '../../po/lebenslauf.po';
 import { PartnerPO } from '../../po/partner.po';
 import { PersonPO } from '../../po/person.po';
 import { SteuerdatenPO } from '../../po/steuerdaten.po';
-import { initializeTest } from '../../utils';
 
 const thisYear = format(new Date(), 'yyyy');
 const specificMonth = (month: number) =>

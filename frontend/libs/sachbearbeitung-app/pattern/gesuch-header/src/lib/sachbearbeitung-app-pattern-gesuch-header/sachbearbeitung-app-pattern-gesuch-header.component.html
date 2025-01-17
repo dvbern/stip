@@ -12,7 +12,7 @@
     <button
       type="button"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-header-nav-tranche-auswahl"
+      data-testid="sb-gesuch-header-tranche-nav-menu"
       [class.active]="isTrancheRouteSig()"
       [matMenuTriggerFor]="gesuchMenu"
     >
@@ -26,8 +26,7 @@
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'tranche', tranche.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="gesuch-step-nav-overview"
-            mat-menu-item
+            [attr.data-testid]="'tranche-nav-menu-item-' + ($index + 1)"
             [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
           >
             <span>
@@ -48,7 +47,7 @@
       [routerLink]="['/', 'verfuegung', gesuchId]"
       routerLinkActive="active"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-header-nav-verfuegung"
+      data-testid="sb-gesuch-header-verfuegung-link"
       [class.disabled]="!gesuchPermissionsSig().canViewVerfuegung"
     >
       <i class="material-symbols-rounded text-white me-2">equal</i>
@@ -61,7 +60,7 @@
     <button
       type="button"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-header-nav-aenderungen"
+      data-testid="sb-gesuch-header-aenderungen-nav-menu"
       [class.active]="isAenderungRouteSig()"
       [disabled]="!aenderungen.hasAenderungen && !initialTranche"
       [matMenuTriggerFor]="aenderungenMenu"
@@ -76,7 +75,7 @@
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="gesuch-step-nav-overview"
+            data-testid="aenderungen-nav-menu-item"
             mat-menu-item
             [class.active]="trancheId === aenderung.id"
           >
@@ -99,7 +98,7 @@
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="gesuch-step-nav-overview"
+            data-testid="aenderungen-nav-menu-item"
             mat-menu-item
             [class.active]="trancheId === aenderung.id"
           >
@@ -123,7 +122,7 @@
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'initial', initialTranche.id]"
             class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="gesuch-step-nav-overview"
+            data-testid="aenderungen-nav-menu-item"
             mat-menu-item
             [class.active]="isAenderungRouteSig() && trancheId === initialTranche.id"
           >
@@ -143,7 +142,7 @@
     <a
       [routerLink]="['/', 'infos', gesuchId]"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-      data-testid="gesuch-header-nav-infos"
+      data-testid="sb-gesuch-header-infos-link"
       [class.active]="isInfosRouteSig()"
     >
       <i class="material-symbols-rounded text-white me-2">info</i>
@@ -160,7 +159,7 @@
       <button
         type="button"
         class="btn btn-outline-primary fw-normal px-3 d-flex align-items-center shadow-none"
-        data-testid="gesuch-header-nav-aktion"
+        data-testid="sb-gesuch-header-aktion-menu"
         [class.active]="aktionTrigger.menuOpen"
         [disabled]="isLoadingSig()"
         #aktionTrigger="matMenuTrigger"
@@ -181,7 +180,7 @@
             <button
               type="button"
               class="btn fw-normal px-2 shadow-none"
-              data-testid="gesuch-header-nav-tranche-erstellen"
+              data-testid="aktion-tranche-erstellen"
               mat-menu-item
               (click)="createTranche()"
             >
@@ -201,7 +200,7 @@
           <button
             type="button"
             class="btn fw-normal px-2 shadow-none pe-auto"
-            [attr.data-testid]="'gesuch-header-nav-status-uebergang-item-' + uebergang.typ"
+            [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
             [disabled]="uebergang.disabledReason || !trancheId"
             [attr.title]="
               uebergang.disabledReason

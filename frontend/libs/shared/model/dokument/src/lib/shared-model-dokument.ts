@@ -22,6 +22,7 @@ export type SharedModelAdditionalGesuchDokument = {
   art: Extends<DokumentArt, 'UNTERSCHRIFTENBLATT'>;
   dokumentTyp: UnterschriftenblattDokumentTyp;
   gesuchId: string;
+  trancheId: string;
   gesuchDokument?: UnterschriftenblattDokument;
 };
 
@@ -95,7 +96,7 @@ export const isUploadable = (
   switch (dokumentModel.art) {
     case 'GESUCH_DOKUMENT': {
       return (
-        appType !== 'sachbearbeitung-app' &&
+        permission.canUploadDocuments &&
         dokumentModel.gesuchDokument?.status !== 'AKZEPTIERT'
       );
     }

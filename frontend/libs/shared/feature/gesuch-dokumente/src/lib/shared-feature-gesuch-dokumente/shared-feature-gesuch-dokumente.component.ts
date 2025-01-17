@@ -71,13 +71,14 @@ export class SharedFeatureGesuchDokumenteComponent {
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   additionalDokumenteViewSig = computed(() => {
-    const { allowTypes, gesuchId, gesuchPermissions } = this.gesuchViewSig();
+    const { allowTypes, gesuchId, gesuchPermissions, trancheId, readonly } =
+      this.gesuchViewSig();
     const { dokuments, requiredDocumentTypes } =
       this.dokumentsStore.additionalDokumenteViewSig();
-    const readonly = !gesuchPermissions.canUploadUnterschriftenblatt;
 
     return {
       gesuchId,
+      trancheId,
       allowTypes,
       unterschriftenblaetter: dokuments,
       permissions: gesuchPermissions,
@@ -118,6 +119,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   DokumentStatus = Dokumentstatus;
 
+  // inform the GS that documents are missing (or declined)
   canSendMissingDocumentsSig = computed(() => {
     const hasAbgelehnteDokuments =
       this.dokumentsStore.hasAbgelehnteDokumentsSig();
@@ -162,16 +164,15 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   dokumentAblehnen(document: SharedModelTableGesuchDokument) {
     const { trancheId: gesuchTrancheId } = this.gesuchViewSig();
-
-    if (!gesuchTrancheId) return;
+    const gesuchDokumentId =
+      document.dokumentOptions.dokument.gesuchDokument?.id;
+    if (!gesuchTrancheId || !gesuchDokumentId) return;
 
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
       SharedModelGesuchDokument,
       RejectDokument
-    >(SharedUiRejectDokumentComponent, {
-      data: document.dokumentOptions.dokument,
-    });
+    >(SharedUiRejectDokumentComponent);
 
     dialogRef
       .afterClosed()
@@ -181,7 +182,7 @@ export class SharedFeatureGesuchDokumenteComponent {
           this.dokumentsStore.gesuchDokumentAblehnen$({
             gesuchTrancheId: gesuchTrancheId,
             kommentar: result.kommentar,
-            gesuchDokumentId: result.id,
+            gesuchDokumentId,
             dokumentTyp: document.dokumentTyp,
             afterSuccess: () => {
               this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
