@@ -5,7 +5,7 @@ import { capitalized } from '@dv/shared/model/type-util';
 const Permissions = {
   W: { index: 0, name: 'write' },
   V: { index: 1, name: 'viewVerfuegung' },
-  D: { index: 2, name: 'uploadMissingDocuments' },
+  D: { index: 2, name: 'uploadDocuments' },
   F: { index: 3, name: 'freigeben' },
   U: { index: 4, name: 'uploadUnterschriftenblatt' },
 } as const;
@@ -18,7 +18,7 @@ type P<T extends PermissionFlag> = T | ' ';
  *
  * * `W` - Write
  * * `V` - Verfuegung einsehen
- * * `D` - Fehlende Dokumente hochladen
+ * * `D` - Dokumente hochladen
  * * `F` - Freigeben
  * * `U` - Unterschriftenblatt hochladen
  */
@@ -38,7 +38,7 @@ const hasPermission = (p: PermissionFlags, perm: keyof typeof Permissions) =>
  * getPermissions('WV  ') === {
  *   canWrite: true,
  *   canViewVerfuegung: true,
- *   canUploadMissingDocuments: false,
+ *   canUploadDocuments: false,
  *   canFreigeben: false,
  *   canUploadUnterschriftenblatt: false
  * }
@@ -66,7 +66,7 @@ const sb = 'sachbearbeitung-app' satisfies AppType;
  * * Format is: { [Gesuchstatus]: { [AppType]: 'WV  ' | 'W   ' | ..., ... other AppTypes } }
  */
 export const permissionTableByAppType = {
-  IN_BEARBEITUNG_GS /**                */: { [gs]: 'W  F ', [sb]: '    U' },
+  IN_BEARBEITUNG_GS /**                */: { [gs]: 'W DF ', [sb]: '    U' },
   EINGEREICHT /**                      */: { [gs]: '     ', [sb]: '    U' },
   BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '     ', [sb]: ' V  U' },
   IN_BEARBEITUNG_SB /**                */: { [gs]: '     ', [sb]: 'WV  U' },

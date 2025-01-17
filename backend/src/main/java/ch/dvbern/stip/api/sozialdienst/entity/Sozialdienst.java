@@ -17,16 +17,21 @@
 
 package ch.dvbern.stip.api.sozialdienst.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.IbanConstraint;
-import ch.dvbern.stip.api.sozialdienstadmin.entity.SozialdienstAdmin;
+import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -67,5 +72,10 @@ public class Sozialdienst extends AbstractMandantEntity {
     @JoinColumn(
         name = "sozialdienst_admin_id", foreignKey = @ForeignKey(name = "FK_sozialdienst_sozialdienst_admin_id")
     )
-    private SozialdienstAdmin sozialdienstAdmin;
+    private SozialdienstBenutzer sozialdienstAdmin;
+
+    @NotNull
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "sozialdienst_id", referencedColumnName = "id")
+    private List<SozialdienstBenutzer> sozialdienstBenutzers = new ArrayList<>();
 }

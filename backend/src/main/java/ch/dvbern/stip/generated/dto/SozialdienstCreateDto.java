@@ -1,7 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AdresseDto;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -24,7 +24,7 @@ public class SozialdienstCreateDto  implements Serializable {
   private @Valid String name;
   private @Valid String iban;
   private @Valid AdresseDto adresse;
-  private @Valid SozialdienstAdminCreateDto sozialdienstAdmin;
+  private @Valid SozialdienstAdminDto sozialdienstAdmin;
 
   /**
    **/
@@ -85,7 +85,7 @@ public class SozialdienstCreateDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstCreateDto sozialdienstAdmin(SozialdienstAdminCreateDto sozialdienstAdmin) {
+  public SozialdienstCreateDto sozialdienstAdmin(SozialdienstAdminDto sozialdienstAdmin) {
     this.sozialdienstAdmin = sozialdienstAdmin;
     return this;
   }
@@ -93,12 +93,12 @@ public class SozialdienstCreateDto  implements Serializable {
   
   @JsonProperty("sozialdienstAdmin")
   @NotNull
-  public SozialdienstAdminCreateDto getSozialdienstAdmin() {
+  public SozialdienstAdminDto getSozialdienstAdmin() {
     return sozialdienstAdmin;
   }
 
   @JsonProperty("sozialdienstAdmin")
-  public void setSozialdienstAdmin(SozialdienstAdminCreateDto sozialdienstAdmin) {
+  public void setSozialdienstAdmin(SozialdienstAdminDto sozialdienstAdmin) {
     this.sozialdienstAdmin = sozialdienstAdmin;
   }
 

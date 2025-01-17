@@ -1,8 +1,7 @@
-import { addYears, format } from 'date-fns';
-
 import { FallDashboardItem } from '@dv/shared/model/gesuch';
 import {
   E2eUser,
+  SetupFn,
   TestContexts,
   createTest,
   createTestContexts,
@@ -20,12 +19,13 @@ import { CockpitPO } from './po/cockpit.po';
 export const initializeTest = (
   authType: E2eUser,
   ausbildung: AusbildungValues,
+  setupFn?: SetupFn,
 ) => {
   let contexts: TestContexts;
   let gesuchId: string | undefined;
   let trancheId: string | undefined;
   const test = createTest(authType).extend<{ cockpit: CockpitPO }>({
-    cockpit: async ({ page }, use) => {
+    cockpit: async ({ page }, use, testInfo) => {
       const cockpit = new CockpitPO(page);
 
       // delete if existing gesuch
@@ -42,6 +42,7 @@ export const initializeTest = (
       trancheId =
         dashboardBody?.[0]?.ausbildungDashboardItems?.[0]?.gesuchs?.[0]
           .currentTrancheId;
+
       if (gesuchId) {
         const response = await deleteGesuch(contexts.api, gesuchId);
         if (response.status() >= 400) {
@@ -52,8 +53,12 @@ export const initializeTest = (
         await page.reload();
       }
 
-      // extract gesuch new gesuch id
-      const requestPromise = page.waitForResponse((response) => {
+      await cockpit.createNewStipendium(ausbildung);
+
+      // extract gesuch new gesuchid
+      // @scph beofore this change the waitfor picket up on the request triggered by the page.reload()
+      // in case deleteGesuch was run here. This is not the reccomended way, but it works.
+      const response = await page.waitForResponse((response) => {
         return (
           response.url().includes('/api/v1/gesuch/benutzer/me/gs-dashboard') &&
           response.status() === 200 &&
@@ -61,17 +66,19 @@ export const initializeTest = (
         );
       });
 
-      await cockpit.createNewStipendium(ausbildung);
-
-      const response = await requestPromise;
       const body: FallDashboardItem[] | undefined = await response.json();
       gesuchId = body?.[0].ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
       trancheId =
         body?.[0].ausbildungDashboardItems?.[0]?.gesuchs?.[0].currentTrancheId;
-      if (!gesuchId) {
+
+      if (!gesuchId || !trancheId) {
         throw new Error('Failed to create new gesuch');
       }
-      cockpit.getGesuchEdit().click();
+
+      if (setupFn) {
+        const seed = `${testInfo.title}-${testInfo.workerIndex}`;
+        await setupFn({ contexts, gesuchId, trancheId, seed });
+      }
 
       await use(cockpit);
     },
@@ -102,11 +109,3 @@ export const initializeTest = (
     test,
   };
 };
-
-export const thisYear = format(new Date(), 'yyyy');
-export const specificMonth = (month: number) =>
-  `${month}.${format(new Date(), 'yyyy')}`;
-export const specificMonthPlusYears = (month: number, years: number) =>
-  `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
-export const specificYearsAgo = (years: number) =>
-  format(addYears(new Date(), -years), 'yyyy');

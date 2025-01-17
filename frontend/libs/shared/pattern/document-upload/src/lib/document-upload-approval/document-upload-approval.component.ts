@@ -13,8 +13,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
-import { UploadView } from '@dv/shared/model/dokument';
-import { GesuchDokument } from '@dv/shared/model/gesuch';
+import {
+  SharedModelGesuchDokument,
+  UploadView,
+} from '@dv/shared/model/dokument';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
@@ -79,14 +81,19 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
 
   dokumentAblehnen() {
     const { dokumentModel, hasEntries } = this.uploadViewSig();
-    if (!hasEntries || dokumentModel.art === 'UNTERSCHRIFTENBLATT') return;
+    const gesuchDokumentId = this.dokumentsStore.dokumentViewSig()?.id;
+    if (
+      !gesuchDokumentId ||
+      !hasEntries ||
+      dokumentModel.art === 'UNTERSCHRIFTENBLATT'
+    )
+      return;
+
     const dialogRef = this.dialog.open<
       SharedUiRejectDokumentComponent,
-      GesuchDokument,
+      SharedModelGesuchDokument,
       RejectDokument
-    >(SharedUiRejectDokumentComponent, {
-      data: this.dokumentsStore.dokumentViewSig(),
-    });
+    >(SharedUiRejectDokumentComponent);
 
     dialogRef
       .afterClosed()
@@ -96,7 +103,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
           this.dokumentsStore.gesuchDokumentAblehnen$({
             gesuchTrancheId: dokumentModel.trancheId,
             dokumentTyp: dokumentModel.dokumentTyp,
-            gesuchDokumentId: result.id,
+            gesuchDokumentId,
             kommentar: result.kommentar,
             afterSuccess: () => {
               this.reloadDokumente();
