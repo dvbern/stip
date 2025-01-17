@@ -1590,9 +1590,20 @@ paths:
       responses:
         '200':
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: File returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
           description: File returned
       operationId: getDokumentDownloadToken
       summary: get Dokument Download Token
@@ -1851,9 +1862,9 @@ paths:
       responses:
         '200':
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/FileDownloadToken'
           description: File returned
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -4330,6 +4341,13 @@ components:
         - AKTIV
         - ABGEBROCHEN
         - ABGESCHLOSSEN
+    FileDownloadToken:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS
