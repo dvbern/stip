@@ -73,6 +73,7 @@ import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -138,6 +139,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchRepository gesuchRepository;
+
+    @InjectMock
+    UnterschriftenblattService unterschriftenblattService;
 
     @Inject
     GesuchTrancheService gesuchTrancheService;
@@ -1243,6 +1247,32 @@ class GesuchServiceTest {
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
         assertEquals(
             Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @Test
+    void changeGesuchstatusCheckUnterschriftenblattToVersandbereit() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(unterschriftenblattService.requiredUnterschriftenblaetterExist(any())).thenReturn(true);
+
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.VERSANDBEREIT,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @Test
+    void changeGesuchstatusCheckUnterschriftenblattToWartenAufUnterschriftenblatt() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(unterschriftenblattService.requiredUnterschriftenblaetterExist(any())).thenReturn(false);
+
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
             gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
     }

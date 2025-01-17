@@ -23,6 +23,7 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
@@ -168,6 +169,15 @@ public class UnterschriftenblattService {
                 GesuchStatusChangeEvent.VERSANDBEREIT
             );
         }
+    }
+
+    @Transactional
+    public boolean requiredUnterschriftenblaetterExist(final Gesuch gesuch) {
+        final var required = getUnterschriftenblaetterToUpload(gesuch);
+        final var existing = unterschriftenblattRepository.findByGesuchAndDokumentTypes(gesuch.getId(), required);
+
+        final var existingSet = existing.map(Unterschriftenblatt::getDokumentTyp).collect(Collectors.toSet());
+        return existingSet.containsAll(required);
     }
 
     private Unterschriftenblatt createUnterschriftenblatt(

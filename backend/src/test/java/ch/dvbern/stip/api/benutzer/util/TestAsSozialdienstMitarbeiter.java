@@ -22,6 +22,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
@@ -33,7 +34,7 @@ import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_MITARBEITER_ID;
 @TestSecurity(
     user = "sozialdienst_mitarbeiter",
     roles = {
-        "Sozialdienst_Mitarbeiter"
+        OidcConstants.ROLE_SOZIALDIENST_MITARBEITER
     }
 )
 @OidcSecurity(

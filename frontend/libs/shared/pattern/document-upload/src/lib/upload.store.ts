@@ -142,6 +142,7 @@ export class UploadStore {
                           gesuchDokument,
                           dokumentTyp: dokument.dokumentTyp,
                           gesuchId: dokument.gesuchId,
+                          trancheId: dokument.trancheId,
                         }) satisfies SharedModelAdditionalGesuchDokument,
                     ),
                   );

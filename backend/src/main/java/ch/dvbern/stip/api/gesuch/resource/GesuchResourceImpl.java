@@ -118,6 +118,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchStatusToVerfuegt(gesuchId);
+        gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
@@ -287,6 +288,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.bearbeitungAbschliessen(gesuchId);
+        gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 

@@ -42,6 +42,8 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -587,6 +589,23 @@ public class GesuchService {
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
+    }
+
+    @Transactional
+    public void gesuchStatusCheckUnterschriftenblatt(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.getGesuchStatus() != Gesuchstatus.VERFUEGT) {
+            return;
+        }
+
+        if (unterschriftenblattService.requiredUnterschriftenblaetterExist(gesuch)) {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+        } else {
+            gesuchStatusService.triggerStateMachineEvent(
+                gesuch,
+                GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT
+            );
+        }
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import {
   PlaywrightWorkerArgs,
   expect,
 } from '@playwright/test';
+import { addYears, format } from 'date-fns';
 import seedRandom from 'seedrandom';
 
 import { BEARER_COOKIE } from './playwright.config.base';
@@ -19,7 +20,13 @@ export const expectStepTitleToContainText = async (
   text: string,
   page: Page,
 ) => {
-  return expect(await getStepTitle(page)).toContainText(text);
+  return expect(await getStepTitle(page)).toContainText(text, {
+    timeout: 10000,
+  });
+};
+
+export type DeepNullable<T> = {
+  [K in keyof T]: DeepNullable<T[K]> | null;
 };
 
 export const handleCheckbox = async (
@@ -169,3 +176,18 @@ const ssnFormatter = (ssn: number[]) => {
     ssnString.slice(11, 13).join('');
   return formattedSSN;
 };
+
+export const thisYear = format(new Date(), 'yyyy');
+export const specificMonth = (month: number) =>
+  `${month}.${format(new Date(), 'yyyy')}`;
+export const specificMonthPlusYears = (month: number, years: number) =>
+  `${month}.${format(addYears(new Date(), years), 'yyyy')}`;
+export const specificYearsAgo = (years: number) =>
+  format(addYears(new Date(), -years), 'yyyy');
+
+export type SetupFn = (args: {
+  contexts: TestContexts;
+  seed: string;
+  gesuchId: string;
+  trancheId: string;
+}) => Promise<void>;

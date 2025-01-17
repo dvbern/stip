@@ -56,7 +56,7 @@
         {{ 'shared.form.gonext' | translate }}
       </button>
     }
-    @if (gesuch.gesuchPermissions.canUploadMissingDocuments) {
+    @if (gesuch.gesuchPermissions.canUploadDocuments && gesuch.gesuch?.gesuchStatus === 'FEHLENDE_DOKUMENTE') {
       <button
         type="button"
         class="btn btn-primary"

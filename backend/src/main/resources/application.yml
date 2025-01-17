@@ -79,6 +79,13 @@ kstip:
   should-clear-database: false
 
 quarkus:
+  log:
+    sentry:
+      ~: 'true'
+      dsn: '${STIP_SENTRY_DSN}'
+      traces-sample-rate: 1.0
+      environment: '${KSTIP_ENVIRONMENT}'
+      in-app-packages: 'ch.dvbern.stip.*'
   antivirus:
     clamav:
       enabled: true
@@ -137,6 +144,12 @@ quarkus:
   keycloak:
     devservices:
       enabled: false
+    admin-client:
+      server-url: ${keycloak.url}
+      grant-type: password
+      username: ${STIP_KEYCLOAK_ADMIN_USER}
+      password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
+
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
   rest-client:
@@ -155,6 +168,10 @@ quarkus:
 #   store-type: jdbc-tx
 '%dev':
   quarkus:
+    log:
+      sentry:
+        ~: 'false'
+        debug: 'true'
     http:
       enable-compression: true
       compress-media-types:
@@ -176,6 +193,12 @@ quarkus:
       security-scheme: 'oauth2-implicit'
       security-scheme-name: 'auth-dev-bern'
       oauth2-implicit-authorization-url: '${STIP_OIDC_AUTH_SERVER}/realms/bern/protocol/openid-connect/auth'
+    keycloak:
+      admin-client:
+        server-url: ${keycloak.url}
+        grant-type: password
+        username: ${STIP_KEYCLOAK_ADMIN_USER}
+        password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
   kstip:
     pre-signed-request:
       issuer: 'https://stip.kibon.ch'
@@ -183,6 +206,9 @@ quarkus:
 
 '%test':
   quarkus:
+    log:
+      sentry:
+        ~: 'false'
     hibernate-orm:
       sql-load-script: 'db/test/init_test.sql'
       database:
@@ -200,6 +226,12 @@ quarkus:
         region: 'eu-central-2'
       devservices:
         buckets: '${bucket.name}'
+    keycloak:
+      admin-client:
+        server-url: ${keycloak.url}
+        grant-type: password
+        username: "test"
+        password: "test"
   bucket:
     name: 'stip-usercontent-test'
   keycloak:
@@ -225,6 +257,12 @@ quarkus:
       clamav:
         host: '${STIP_CLAMAV_HOST}'
         port: '${STIP_CLAMAV_PORT:3310}'
+    keycloak:
+      admin-client:
+        server-url: ${keycloak.url}
+        grant-type: password
+        username: ${STIP_KEYCLOAK_ADMIN_USER}
+        password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
 
 mp:
   openapi:
