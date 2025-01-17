@@ -136,6 +136,7 @@
   "shared.dokumente.fehlendeDokumenteEinreichen": "Dokumente übermitteln",
   "shared.dokumente.fehlendeDokumenteEinreichen.success": "Die Dokumente wurden erfolgreich übermittelt",
   "shared.dokumente.table.requiredDocuments": "Benötigtes Dokument",
+  "shared.dokumente.table.additionalDocuments": "Zusätzliche Dokumente",
   "shared.dokumente.table.formStep": "Schritt",
   "shared.dokumente.table.filename": "Dateiname",
   "shared.dokumente.table.actions": "Aktionen",
@@ -149,6 +150,9 @@
   "shared.dokumente.dokumentStatus.NO_DOCUMENT": "Kein Dokument",
   "shared.dokumente.dokumentStatus.action.accept": "Bestätigen",
   "shared.dokumente.dokumentStatus.action.reject": "Ablehnen",
+  "shared.dokumente.file.unterschriftenblatt.GEMEINSAM": "Unterschriftenblatt gemeinsam",
+  "shared.dokumente.file.unterschriftenblatt.MUTTER": "Unterschriftenblatt Mutter",
+  "shared.dokumente.file.unterschriftenblatt.VATER": "Unterschriftenblatt Vater",
 
   "shared.nachrichten.title": "Nachrichten",
   "shared.nachricht.title": "Nachricht",

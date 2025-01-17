@@ -9,11 +9,13 @@ import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   DokumentService,
   DokumentTyp,
+  DokumenteToUpload,
   Dokumentstatus,
   GesuchDokument,
   GesuchDokumentKommentar,
   GesuchService,
   GesuchTrancheService,
+  UnterschriftenblattDokument,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -26,20 +28,23 @@ import {
   handleApiResponse,
   initial,
   isSuccess,
+  mapData,
   pending,
   success,
 } from '@dv/shared/util/remote-data';
 
 type DokumentsState = {
+  additionalDokumente: CachedRemoteData<UnterschriftenblattDokument[]>;
   dokuments: CachedRemoteData<GesuchDokument[]>;
-  requiredDocumentTypes: CachedRemoteData<DokumentTyp[]>;
+  documentsToUpload: CachedRemoteData<DokumenteToUpload>;
   gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
   dokument: CachedRemoteData<GesuchDokument>;
 };
 
 const initialState: DokumentsState = {
+  additionalDokumente: initial(),
   dokuments: initial(),
-  requiredDocumentTypes: initial(),
+  documentsToUpload: initial(),
   gesuchDokumentKommentare: initial(),
   dokument: initial(),
 };
@@ -60,7 +65,7 @@ export class DokumentsStore extends signalStore(
     return {
       dokuments,
       requiredDocumentTypes:
-        fromCachedDataSig(this.requiredDocumentTypes)?.filter(
+        fromCachedDataSig(this.documentsToUpload)?.required?.filter(
           // A document can already be uploaded but later on get rejected. In this case the document list would contain
           // both the empty gesuch dokument and a gesuch dokument typ of the rejected document. So we need to filter
           // them out
@@ -69,9 +74,19 @@ export class DokumentsStore extends signalStore(
     };
   });
 
+  additionalDokumenteViewSig = computed(() => {
+    const dokuments = fromCachedDataSig(this.additionalDokumente) ?? [];
+    return {
+      dokuments,
+      requiredDocumentTypes:
+        fromCachedDataSig(this.documentsToUpload)?.unterschriftenblaetter ?? [],
+    };
+  });
+
   kommentareViewSig = computed(() => {
-    return (
-      this.gesuchDokumentKommentare.data()?.filter((k) => k.kommentar) ?? []
+    return mapData(
+      this.gesuchDokumentKommentare(),
+      (data) => data.filter((k) => k.kommentar) ?? [],
     );
   });
 
@@ -272,7 +287,7 @@ export class DokumentsStore extends signalStore(
       tap(() => {
         patchState(this, (state) => ({
           dokuments: cachedPending(state.dokuments),
-          requiredDocumentTypes: cachedPending(state.requiredDocumentTypes),
+          documentsToUpload: cachedPending(state.documentsToUpload),
         }));
       }),
       switchMap(({ trancheId, onSuccess }) =>
@@ -289,8 +304,8 @@ export class DokumentsStore extends signalStore(
               error: (error) => {
                 patchState(this, (state) => ({
                   dokuments: cachedFailure(state.dokuments, error),
-                  requiredDocumentTypes: cachedFailure(
-                    state.requiredDocumentTypes,
+                  documentsToUpload: cachedFailure(
+                    state.documentsToUpload,
                     error,
                   ),
                 }));
@@ -309,36 +324,36 @@ export class DokumentsStore extends signalStore(
       tap(({ ignoreCache }) => {
         patchState(this, (state) => ({
           dokuments: ignoreCache ? pending() : cachedPending(state.dokuments),
-          requiredDocumentTypes: cachedPending(state.requiredDocumentTypes),
+          documentsToUpload: cachedPending(state.documentsToUpload),
         }));
       }),
       switchMap(({ gesuchTrancheId }) =>
         combineLatest([
           this.trancheService.getGesuchDokumente$({ gesuchTrancheId }),
-          this.trancheService.getRequiredGesuchDokumentTyp$({
+          this.trancheService.getDocumentsToUpload$({
             gesuchTrancheId,
           }),
         ]),
       ),
       tapResponse({
-        next: ([dokuments, requiredDocumentTypes]) => {
+        next: ([dokuments, documentsToUpload]) => {
           patchState(this, () => ({
             // Patch both lists at the same time to avoid unecessary rerenders
             dokuments: success(dokuments),
-            requiredDocumentTypes: success(requiredDocumentTypes),
+            documentsToUpload: success(documentsToUpload),
           }));
         },
         error: (error) => {
           patchState(this, () => ({
             dokuments: failure(error),
-            requiredDocumentTypes: failure(error),
+            documentsToUpload: failure(error),
           }));
         },
       }),
       catchRemoteDataError((error) => {
         patchState(this, () => ({
           dokuments: failure(error),
-          requiredDocumentTypes: failure(error),
+          documentsToUpload: failure(error),
         }));
       }),
     ),
@@ -361,19 +376,40 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
+  getAdditionalDokumente$ = rxMethod<{
+    gesuchId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          additionalDokumente: cachedPending(state.additionalDokumente),
+        }));
+      }),
+      switchMap(({ gesuchId }) =>
+        this.dokumentService
+          .getUnterschriftenblaetterForGesuch$({ gesuchId })
+          .pipe(
+            handleApiResponse((additionalDokumente) =>
+              patchState(this, { additionalDokumente }),
+            ),
+          ),
+      ),
+    ),
+  );
+
   getRequiredDocumentTypes$ = rxMethod<string>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          requiredDocumentTypes: cachedPending(state.requiredDocumentTypes),
+          documentsToUpload: cachedPending(state.documentsToUpload),
         }));
       }),
       switchMap((gesuchTrancheId) =>
         this.trancheService
-          .getRequiredGesuchDokumentTyp$({ gesuchTrancheId })
+          .getDocumentsToUpload$({ gesuchTrancheId })
           .pipe(
-            handleApiResponse((requiredDocumentTypes) =>
-              patchState(this, { requiredDocumentTypes }),
+            handleApiResponse((documentsToUpload) =>
+              patchState(this, { documentsToUpload }),
             ),
           ),
       ),

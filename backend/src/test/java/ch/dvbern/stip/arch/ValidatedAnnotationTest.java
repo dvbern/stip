@@ -29,6 +29,8 @@ class ValidatedAnnotationTest {
         final var rule = classes()
             .that()
             .resideInAnyPackage("..resource..")
+            .and()
+            .areNotAnonymousClasses()
             .should()
             .beAnnotatedWith(Validated.class);
 

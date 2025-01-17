@@ -683,6 +683,76 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: gesuchDokumentAblehnen
+  '/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}':
+    post:
+      tags:
+        - Dokument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UnterschriftenblattCreate'
+      parameters:
+        - $ref: '#/components/parameters/unterschriftenblattTyp'
+        - $ref: '#/components/parameters/gesuchId'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createUnterschriftenblatt
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/unterschriftenblatt/{gesuchId}':
+     get:
+      tags:
+        - Dokument
+      parameters:
+        - $ref: '#/components/parameters/gesuchId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnterschriftenblattDokument'
+          description: Returns an Array of Unterschriftenblaetter
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getUnterschriftenblaetterForGesuch
+  '/unterschriftenblatt/dokument/{dokumentId}':
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteUnterschriftenblattDokument
+      summary: deletes a Dokument
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
   '/fall/sb':
     get:
       tags:
@@ -1655,12 +1725,17 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
-  '/dokument/download':
+  '/dokument/{dokumentArt}/download':
     parameters:
       - name: token
         schema:
           type: string
         in: query
+        required: true
+      - name: dokumentArt
+        schema:
+          $ref: '#/components/schemas/DokumentArt'
+        in: path
         required: true
     get:
       tags:
@@ -1676,7 +1751,7 @@ paths:
       operationId: getDokument
       summary: get Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-  '/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}':
+  '/dokument/{dokumentId}':
     get:
       tags:
         - Dokument
@@ -1692,21 +1767,9 @@ paths:
     delete:
       tags:
         - Dokument
-      parameters:
-        - name: dokumentTyp
-          schema:
-            $ref: '#/components/schemas/DokumentTyp'
-          in: path
-          required: true
-        - name: gesuchTrancheId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
       responses:
         '200':
-          description: |
-            Dokument deleted
+          description: Dokument deleted
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1718,16 +1781,6 @@ paths:
       operationId: deleteDokument
       summary: deletes a Dokument
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-      - name: dokumentTyp
-        schema:
-          $ref: '#/components/schemas/DokumentTyp'
-        in: path
-        required: true
       - name: dokumentId
         schema:
           $ref: '#/components/schemas/UUID'
@@ -2340,7 +2393,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchDokument
-  '/gesuchtranche/{gesuchTrancheId}/requiredDokumente':
+  '/gesuchtranche/{gesuchTrancheId}/dokumenteToUpload':
     parameters:
       - name: gesuchTrancheId
         schema:
@@ -2352,20 +2405,18 @@ paths:
         - GesuchTranche
       responses:
         '200':
-          description: Required DokumentTyp returned
+          description: Returns the documents that are to be uploaded
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DokumentTyp'
+                $ref: '#/components/schemas/DokumenteToUpload'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getRequiredGesuchDokumentTyp
+      operationId: getDocumentsToUpload
   '/gesuchtranche/{gesuchId}':
     parameters:
       - name: gesuchId
@@ -2687,6 +2738,17 @@ components:
         - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
         - DARLEHEN_BELEGE_ANSCHAFFUNGEN
       type: string
+    DokumentArt:
+      enum:
+        - GESUCH_DOKUMENT
+        - UNTERSCHRIFTENBLATT
+      type: string
+    UnterschriftenblattDokumentTyp:
+      type: string
+      enum:
+        - GEMEINSAM
+        - MUTTER
+        - VATER
     ElternAbwesenheitsGrund:
       enum:
         - VERSTORBEN
@@ -2816,6 +2878,22 @@ components:
             $ref: '#/components/schemas/Dokument'
         status:
           $ref: '#/components/schemas/Dokumentstatus'
+    UnterschriftenblattDokument:
+      required:
+        - id
+        - dokumentTyp
+        - dokumente
+        - status
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        dokumentTyp:
+          $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
     Dokument:
       required:
         - id
@@ -2892,6 +2970,13 @@ components:
         technischesJahr:
           type: integer
     DokumentCreate:
+      required:
+        - fileUpload
+      type: object
+      properties:
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
+    UnterschriftenblattCreate:
       required:
         - fileUpload
       type: object
@@ -5212,6 +5297,18 @@ components:
       properties:
         decisionId:
           $ref: '#/components/schemas/UUID'
+    DokumenteToUpload:
+      type: object
+      properties:
+        required:
+          type: array
+          items:
+            $ref: '#/components/schemas/DokumentTyp'
+        unterschriftenblaetter:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'        
+
   responses:
     Unauthorized:
       content:
@@ -5325,6 +5422,12 @@ components:
       required: true
       schema:
         type: integer
+    unterschriftenblattTyp:
+      name: unterschriftenblattTyp
+      schema:
+        $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+      in: path
+      required: true
 
 security:
   - auth-uat-bern: []

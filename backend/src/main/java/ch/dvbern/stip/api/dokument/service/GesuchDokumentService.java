@@ -17,19 +17,14 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
-import ch.dvbern.stip.api.common.exception.AppFailureMessage;
-import ch.dvbern.stip.api.common.exception.AppValidationMessage;
+import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
+import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
+import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -43,13 +38,12 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
-import io.quarkiverse.antivirus.runtime.AntivirusScanResult;
 import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -58,21 +52,9 @@ import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
+import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.core.async.AsyncRequestBody;
-import software.amazon.awssdk.core.async.AsyncResponseTransformer;
-import software.amazon.awssdk.core.async.ResponsePublisher;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
-import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
-import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
-import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
@@ -82,6 +64,7 @@ import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 @RequiredArgsConstructor
 public class GesuchDokumentService {
     private static final String GESUCH_DOKUMENT_PATH = "gesuch/";
+
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final DokumentMapper dokumentMapper;
     private final DokumentRepository dokumentRepository;
@@ -102,29 +85,52 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public DokumentDto uploadDokument(
+    public Uni<Response> getUploadDokumentUni(
+        final DokumentTyp dokumentTyp,
+        final UUID gesuchTrancheId,
+        final FileUpload fileUpload
+    ) {
+        return DokumentUploadUtil.validateScanUploadDokument(
+            fileUpload,
+            s3,
+            configService,
+            antivirus,
+            GESUCH_DOKUMENT_PATH,
+            objectId -> uploadDokument(
+                gesuchTrancheId,
+                dokumentTyp,
+                fileUpload,
+                objectId
+            ),
+            throwable -> LOG.error(throwable.getMessage())
+        );
+    }
+
+    @Transactional
+    public void uploadDokument(
         final UUID gesuchTrancheId,
         final DokumentTyp dokumentTyp,
         final FileUpload fileUpload,
         final String objectId
     ) {
-        GesuchTranche gesuchTranche =
-            gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
-        GesuchDokument gesuchDokument =
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTranche.getId(), dokumentTyp)
-                .orElseGet(
-                    () -> createGesuchDokument(gesuchTranche, dokumentTyp)
-                );
-        Dokument dokument = new Dokument();
+        final var gesuchTranche = gesuchTrancheRepository
+            .findByIdOptional(gesuchTrancheId)
+            .orElseThrow(NotFoundException::new);
+
+        final var gesuchDokument = gesuchDokumentRepository
+            .findByGesuchTrancheAndDokumentType(gesuchTranche.getId(), dokumentTyp)
+            .orElseGet(() -> createGesuchDokument(gesuchTranche, dokumentTyp));
+
+        final var dokument = new Dokument()
+            .setFilename(fileUpload.fileName())
+            .setFilesize(String.valueOf(fileUpload.size()))
+            .setFilepath(GESUCH_DOKUMENT_PATH)
+            .setObjectId(objectId);
+
         dokument.getGesuchDokumente().add(gesuchDokument);
         gesuchDokument.getDokumente().add(dokument);
-        dokument.setFilename(fileUpload.fileName());
-        dokument.setObjectId(objectId);
-        dokument.setFilesize(String.valueOf(fileUpload.size()));
-        dokument.setFilepath(GESUCH_DOKUMENT_PATH);
-        dokumentRepository.persist(dokument);
 
-        return dokumentMapper.toDto(dokument);
+        dokumentRepository.persist(dokument);
     }
 
     @Transactional
@@ -136,13 +142,6 @@ public class GesuchDokumentService {
             gesuchDokumentRepository.findByGesuchTrancheAndDokumentType(gesuchTrancheId, dokumentTyp);
         final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
-    }
-
-    @Transactional
-    public Optional<DokumentDto> findDokument(final UUID dokumentId) {
-        Objects.requireNonNull(dokumentId, "id muss gesetzt sein");
-        Dokument dokument = dokumentRepository.findById(dokumentId);
-        return Optional.ofNullable(dokumentMapper.toDto(dokument));
     }
 
     public void removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
@@ -192,32 +191,14 @@ public class GesuchDokumentService {
         );
     }
 
-    public CompletableFuture<DeleteObjectsResponse> deleteDokumentsFromS3Blocking(final List<String> objectIds) {
-        return s3.deleteObjects(
-            buildDeleteObjectsRequest(
-                configService.getBucketName(),
-                objectIds
-            )
-        );
-    }
-
-    private DeleteObjectsRequest buildDeleteObjectsRequest(final String bucketName, final List<String> objectIds) {
-        final var objectIdentifiers = objectIds.stream()
-            .map(
-                objectKey -> ObjectIdentifier.builder().key(GESUCH_DOKUMENT_PATH + objectKey).build()
-            )
-            .toList();
-        return DeleteObjectsRequest.builder()
-            .bucket(bucketName)
-            .delete(deleteObjectContainer -> deleteObjectContainer.objects(objectIdentifiers))
-            .build();
-    }
-
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {
-        Uni.createFrom()
-            .item(deleteDokumentsFromS3Blocking(objectIds))
-            .await()
-            .indefinitely();
+        DokumentDeleteUtil.executeDeleteDokumentsFromS3(
+            s3,
+            configService.getBucketName(),
+            objectIds.stream()
+                .map(objectId -> GESUCH_DOKUMENT_PATH + objectId)
+                .toList()
+        );
     }
 
     @Transactional
@@ -304,89 +285,20 @@ public class GesuchDokumentService {
         executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
     }
 
-    public void scanDokument(final FileUpload fileUpload) {
-        try (
-            final ByteArrayInputStream inputStream = new ByteArrayInputStream(
-                IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile())).readAllBytes()
-            )
-        ) {
-            // scan the file and check the results
-            List<AntivirusScanResult> results = antivirus.scan(fileUpload.fileName(), inputStream);
-            for (AntivirusScanResult result : results) {
-                if (result.getStatus() != Response.Status.OK.getStatusCode()) {
-                    LOG.warn(
-                        "bad signature detected in file={} message={}",
-                        fileUpload.fileName(),
-                        result.getMessage()
-                    );
-                    throw AppValidationMessage.badSignatureDetectedInUpload().create();
-                }
-            }
+    public RestMulti<Buffer> getDokument(final UUID dokumentId) {
+        final var dokument = dokumentRepository.requireById(dokumentId);
 
-            inputStream.reset();
-        } catch (IOException e) {
-            LOG.error("could not scan document", e);
-            throw AppFailureMessage.internalError("could not scan file upload").create();
-        }
-    }
-
-    public CompletableFuture<PutObjectResponse> getCreateDokumentFuture(
-        final String objectId,
-        final FileUpload fileUpload
-    ) {
-        return s3.putObject(
-            buildPutRequest(
-                fileUpload,
-                configService.getBucketName(),
-                objectId
-            ),
-            AsyncRequestBody.fromFile(fileUpload.uploadedFile())
+        return DokumentDownloadUtil.getDokument(
+            s3,
+            configService.getBucketName(),
+            dokument.getObjectId(),
+            GESUCH_DOKUMENT_PATH,
+            dokument.getFilename()
         );
     }
 
-    private PutObjectRequest buildPutRequest(
-        final FileUpload fileUpload,
-        final String bucketName,
-        final String objectId
-    ) {
-        return PutObjectRequest.builder()
-            .bucket(bucketName)
-            .key(GESUCH_DOKUMENT_PATH + objectId)
-            .contentType(fileUpload.contentType())
-            .build();
-    }
-
-    public CompletableFuture<ResponsePublisher<GetObjectResponse>> getGetDokumentFuture(final String objectId) {
-        return s3.getObject(
-            buildGetRequest(
-                configService.getBucketName(),
-                objectId
-            ),
-            AsyncResponseTransformer.toPublisher()
-        );
-    }
-
-    private GetObjectRequest buildGetRequest(final String bucketName, final String objectKey) {
-        return GetObjectRequest.builder()
-            .bucket(bucketName)
-            .key(GESUCH_DOKUMENT_PATH + objectKey)
-            .build();
-    }
-
-    public CompletableFuture<DeleteObjectResponse> getDeleteDokumentFuture(final String objectId) {
-        return s3.deleteObject(
-            buildDeleteObjectRequest(
-                configService.getBucketName(),
-                objectId
-            )
-        );
-    }
-
-    private DeleteObjectRequest buildDeleteObjectRequest(final String bucketName, final String objectKey) {
-        return DeleteObjectRequest.builder()
-            .bucket(bucketName)
-            .key(GESUCH_DOKUMENT_PATH + objectKey)
-            .build();
+    public void checkIfDokumentExists(final UUID dokumentId) {
+        dokumentRepository.requireById(dokumentId);
     }
 
     private GesuchDokument createGesuchDokument(final GesuchTranche gesuchTranche, final DokumentTyp dokumentTyp) {
