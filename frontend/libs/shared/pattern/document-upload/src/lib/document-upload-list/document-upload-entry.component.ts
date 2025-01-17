@@ -43,7 +43,7 @@ export class SharedPatternDocumentUploadEntryComponent {
   downloadLinkSig = computed(() => {
     const document = this.documentViewSig();
     const upload = this.uploadViewSig();
-    return `/download/${upload.trancheId}/${upload.type}/${document.file.id}`;
+    return `/download/${upload.trancheId}/dokument/${upload.type}/${document.file.id}`;
   });
   checkForRemove$ = new EventEmitter<void>();
   @Output() cancelUpload = new EventEmitter<{ dokumentId: string }>();

@@ -56,26 +56,4 @@ export class SharedFeatureVerfuegungZusammenfassungComponent {
       { allowSignalWrites: true },
     );
   }
-
-  downloadVerfuegung() {
-    const gesuchId = this.gesuchIdSig();
-    console.log('gesuchID?', { gesuchId });
-    if (!gesuchId) {
-      return;
-    }
-
-    console.log('gesuchID', { gesuchId });
-    this.dokumentService
-      .getDokumentDownloadToken$({
-        dokumentId: '0324d4da-80c9-40ce-b8a3-474f1e23bb8c',
-        dokumentTyp: 'PERSON_MIETVERTRAG',
-        gesuchTrancheId: '0078e2bf-13e9-4eb4-9bd7-d2043daec832',
-      })
-      .subscribe((data) => console.log('data1:', { data }));
-    this.gesuchService
-      .getBerechnungsBlattForGesuch$({
-        gesuchId,
-      })
-      .subscribe((data) => console.log('data2:', { data }));
-  }
 }
