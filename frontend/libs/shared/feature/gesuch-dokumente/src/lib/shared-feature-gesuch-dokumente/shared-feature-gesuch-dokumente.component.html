@@ -13,6 +13,21 @@
     <div class="tw-dv-table">
       <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente"></dv-additional-dokumente>
     </div>
+
+    @if (additonalDokumente.showList && gesuch.gesuch?.gesuchStatus === 'WARTEN_AUF_UNTERSCHRIFTENBLATT') {
+      <div class="tw-mt-6 tw-flex">
+        <!-- button sendMissingDocuments -->
+        <button
+          type="button"
+          class="btn btn-primary ml-auto"
+          (click)="setToAdditionalDokumenteErhalten()"
+          data-testid="dokumente-button-setToAdditionalDokumenteErhalten"
+          [disabled]="!canSetToAdditionalDokumenteErhaltenSig()"
+        >
+          {{ 'shared.dokumente.setToAdditionalDokumenteErhalten' | translate }}
+        </button>
+      </div>
+    }
   }
 </div>
 
