@@ -589,7 +589,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getAllCustomDokumentTypes
-  '/gesuchDokument/customGesuchDokuments/':
+  '/gesuchDokument/customGesuchDokument/':
     post:
       requestBody:
         content:

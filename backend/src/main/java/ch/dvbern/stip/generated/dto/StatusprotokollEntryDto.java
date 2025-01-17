@@ -1,13 +1,15 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
-
+import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * Eintrag von dem Statusprotokoll
@@ -20,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StatusprotokollEntryDto  implements Serializable {
   private @Valid java.time.LocalDateTime timestamp;
-  private @Valid Gesuchstatus status;
+  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus status;
   private @Valid String benutzer;
   private @Valid String kommentar;
 
@@ -32,7 +34,7 @@ public class StatusprotokollEntryDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("timestamp")
   public java.time.LocalDateTime getTimestamp() {
     return timestamp;
@@ -45,19 +47,19 @@ public class StatusprotokollEntryDto  implements Serializable {
 
   /**
    **/
-  public StatusprotokollEntryDto status(Gesuchstatus status) {
+  public StatusprotokollEntryDto status(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus status) {
     this.status = status;
     return this;
   }
 
-
+  
   @JsonProperty("status")
-  public Gesuchstatus getStatus() {
+  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getStatus() {
     return status;
   }
 
   @JsonProperty("status")
-  public void setStatus(Gesuchstatus status) {
+  public void setStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus status) {
     this.status = status;
   }
 
@@ -69,7 +71,7 @@ public class StatusprotokollEntryDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("benutzer")
   public String getBenutzer() {
     return benutzer;
@@ -88,7 +90,7 @@ public class StatusprotokollEntryDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("kommentar")
   public String getKommentar() {
     return kommentar;
@@ -124,7 +126,7 @@ public class StatusprotokollEntryDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class StatusprotokollEntryDto {\n");
-
+    
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");

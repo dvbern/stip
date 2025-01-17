@@ -28,7 +28,7 @@ import jakarta.validation.Valid;
 public interface DokumentResource {
 
     @POST
-    @Path("/gesuchDokument/customGesuchDokuments/")
+    @Path("/gesuchDokument/customGesuchDokument/")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchDokumentDto createCustomDokumentTyp(@Valid @NotNull CustomDokumentTypCreateDto customDokumentTypCreateDto);

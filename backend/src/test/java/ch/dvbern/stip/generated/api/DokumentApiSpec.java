@@ -170,7 +170,7 @@ public class DokumentApiSpec {
     public static class CreateCustomDokumentTypOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/gesuchDokument/customGesuchDokuments/";
+        public static final String REQ_URI = "/gesuchDokument/customGesuchDokument/";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -183,7 +183,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * POST /gesuchDokument/customGesuchDokuments/
+         * POST /gesuchDokument/customGesuchDokument/
          * @param handler handler
          * @param <T> type
          * @return type
@@ -194,7 +194,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * POST /gesuchDokument/customGesuchDokuments/
+         * POST /gesuchDokument/customGesuchDokument/
          * @param handler handler
          * @return GesuchDokumentDtoSpec
          */
