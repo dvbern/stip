@@ -364,8 +364,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           this.formUtils.invalidateControlIfValidationFails(
             this.form,
             ['wohnsitz'],
-            this.einreichenStore.validationViewSig().invalidFormularProps
-              .specialValidationErrors,
+            untracked(this.einreichenStore.validationViewSig)
+              .invalidFormularProps.specialValidationErrors,
             (value) =>
               this.wohnsitzHelper
                 .wohnsitzValuesSig()
