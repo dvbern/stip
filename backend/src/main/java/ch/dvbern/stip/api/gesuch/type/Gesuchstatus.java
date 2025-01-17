@@ -81,7 +81,9 @@ public enum Gesuchstatus {
             Gesuchstatus.VERFUEGT,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
             Gesuchstatus.VERSANDBEREIT,
-            Gesuchstatus.VERSENDET
+            Gesuchstatus.VERSENDET,
+            Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
+            Gesuchstatus.STIPENDIENANSPRUCH
         )
     );
 
