@@ -15,19 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.service;
+package ch.dvbern.stip.api.common.scheduledtask;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public final class GesuchStatusChangeEventTrigger extends TriggerWithParameters1<Gesuch, GesuchStatusChangeEvent> {
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import jakarta.interceptor.InterceptorBinding;
 
-    private GesuchStatusChangeEventTrigger(GesuchStatusChangeEvent underlyingTrigger) {
-        super(underlyingTrigger, Gesuch.class);
-    }
-
-    public static GesuchStatusChangeEventTrigger createTrigger(GesuchStatusChangeEvent event) {
-        return new GesuchStatusChangeEventTrigger(event);
-    }
+@InterceptorBinding
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+public @interface RunForTenant {
+    MandantIdentifier value() default MandantIdentifier.GLOBAL;
 }

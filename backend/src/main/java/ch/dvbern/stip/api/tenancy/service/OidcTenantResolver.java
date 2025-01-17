@@ -25,7 +25,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class OidcTenantResolver implements TenantResolver {
 
-    public static final String DEFAULT_TENANT_IDENTIFIER = MandantIdentifier.BERN.name().toLowerCase();
+    public static final String DEFAULT_TENANT_IDENTIFIER = MandantIdentifier.BERN.getIdentifier();
     public static final String TENANT_IDENTIFIER_CONTEXT_NAME = "tenantId";
 
     @Override

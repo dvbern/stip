@@ -36,6 +36,7 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 export class AdditionalDokumenteComponent {
   dokumenteViewSig = input.required<{
     gesuchId: string | undefined;
+    trancheId: string | undefined;
     allowTypes: string | undefined;
     unterschriftenblaetter: UnterschriftenblattDokument[];
     singleUpload?: boolean;
@@ -49,6 +50,7 @@ export class AdditionalDokumenteComponent {
   dokumenteDataSourceSig = computed(() => {
     const {
       gesuchId,
+      trancheId,
       unterschriftenblaetter,
       allowTypes,
       permissions,
@@ -57,7 +59,7 @@ export class AdditionalDokumenteComponent {
       requiredDocumentTypes,
     } = this.dokumenteViewSig();
 
-    if (!gesuchId || !allowTypes) {
+    if (!gesuchId || !trancheId || !allowTypes) {
       return new MatTableDataSource<SharedModelTableAdditionalDokument>([]);
     }
 
@@ -68,6 +70,7 @@ export class AdditionalDokumenteComponent {
           gesuchDokument,
           dokumentOptions: createAdditionalDokumentOptions({
             gesuchId,
+            trancheId,
             dokumentTyp: gesuchDokument.dokumentTyp,
             allowTypes,
             gesuchDokument,
@@ -84,6 +87,7 @@ export class AdditionalDokumenteComponent {
         dokumentTyp: dokumentTyp,
         dokumentOptions: createAdditionalDokumentOptions({
           gesuchId,
+          trancheId,
           allowTypes,
           dokumentTyp,
           permissions,

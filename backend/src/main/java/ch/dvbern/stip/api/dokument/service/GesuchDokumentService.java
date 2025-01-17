@@ -37,7 +37,7 @@ import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.generated.dto.DokumentDto;

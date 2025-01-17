@@ -17,10 +17,13 @@
 
 package ch.dvbern.stip.api.gesuch.repo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +51,25 @@ public class GesuchHistoryRepository {
             .toList();
 
         return revisions;
+    }
+
+    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
+    @SuppressWarnings("unchecked")
+    public Stream<Gesuch> getWhereStatusChangeHappenedBefore(
+        final List<UUID> ids,
+        final Gesuchstatus gesuchstatus,
+        final LocalDateTime dueDate
+    ) {
+        final var reader = AuditReaderFactory.get(entityManager);
+        return reader
+            .createQuery()
+            .forRevisionsOfEntity(Gesuch.class, true, true)
+            .add(AuditEntity.property("id").in(ids))
+            .add(AuditEntity.property("gesuchStatus").eq(gesuchstatus))
+            .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .add(AuditEntity.property("gesuchStatusAenderungDatum").lt(dueDate))
+            .setMaxResults(1)
+            .getResultList()
+            .stream();
     }
 }

@@ -17,6 +17,14 @@
 
 package ch.dvbern.stip.api.common.type;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum MandantIdentifier {
-    BERN
+    BERN("bern"),
+    GLOBAL("global");
+
+    private final String identifier;
 }

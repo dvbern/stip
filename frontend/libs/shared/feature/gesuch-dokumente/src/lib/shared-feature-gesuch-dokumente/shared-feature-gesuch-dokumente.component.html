@@ -1,15 +1,37 @@
 @let gesuch = gesuchViewSig();
-@let additonalDokumente = additionalDokumenteViewSig();
 @let standardDokumente = standardDokumenteViewSig();
 @let dokumentsToUpload = dokumentsStore.documentsToUpload().data;
+
 @if (gesuch.loading) {
   <dv-shared-ui-loading data-testid="dokumente-loading"></dv-shared-ui-loading>
 }
-@if (additonalDokumente.showList) {
-  <div class="tw-dv-table">
-    <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente"></dv-additional-dokumente>
-  </div>
-}
+
+<!-- unterschriftenblaetter -->
+<div *dvIfSachbearbeiter>
+  @let additonalDokumente = additionalDokumenteViewSig();
+  @if (additonalDokumente.showList) {
+    <div class="tw-dv-table">
+      <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente"></dv-additional-dokumente>
+    </div>
+
+    @if (additonalDokumente.showList && gesuch.gesuch?.gesuchStatus === 'WARTEN_AUF_UNTERSCHRIFTENBLATT') {
+      <div class="tw-mt-6 tw-flex">
+        <!-- button sendMissingDocuments -->
+        <button
+          type="button"
+          class="btn btn-primary ml-auto"
+          (click)="setToAdditionalDokumenteErhalten()"
+          data-testid="dokumente-button-setToAdditionalDokumenteErhalten"
+          [disabled]="!canSetToAdditionalDokumenteErhaltenSig()"
+        >
+          {{ 'shared.dokumente.setToAdditionalDokumenteErhalten' | translate }}
+        </button>
+      </div>
+    }
+  }
+</div>
+
+<!-- gesuchDokumente -->
 @if (standardDokumente) {
   <div class="tw-dv-table">
     <dv-required-dokumente
@@ -59,7 +81,7 @@
         {{ 'shared.form.gonext' | translate }}
       </button>
     }
-    @if (gesuch.gesuchPermissions.canUploadMissingDocuments) {
+    @if (gesuch.gesuchPermissions.canUploadDocuments && gesuch.gesuch?.gesuchStatus === 'FEHLENDE_DOKUMENTE') {
       <button
         type="button"
         class="btn btn-primary"

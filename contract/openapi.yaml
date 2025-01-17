@@ -282,6 +282,28 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToNegativeVerfuegung
+  /gesuch/status/unterschriftenblatt-erhalten/{gesuchTrancheId}:
+    parameters:
+      - $ref: '#/components/parameters/gesuchTrancheId'
+    post:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToVersandbereit
   '/gesuch/{gesuchId}/notiz/all':
     parameters:
       - name: gesuchId
@@ -1369,7 +1391,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SozialdienstAdmin'
+                $ref: '#/components/schemas/SozialdienstBenutzer'
           description: Updates data of a Sozialdienst admin
         401:
           $ref: '#/components/responses/Unauthorized'
@@ -1394,13 +1416,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SozialdienstAdminCreate'
+              $ref: '#/components/schemas/SozialdienstAdmin'
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SozialdienstAdmin'
+                $ref: '#/components/schemas/SozialdienstBenutzer'
           description: Replaces a Sozialdienst admin by a new one
         401:
           $ref: '#/components/responses/Unauthorized'
@@ -1419,6 +1441,8 @@ paths:
         in: path
         required: true
     delete:
+      tags:
+        - Sozialdienst
       responses:
         200:
           content:
@@ -1436,9 +1460,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteSozialdienst
       summary: Delete a Sozialdienst by Id
+    get:
       tags:
         - Sozialdienst
-    get:
       responses:
         200:
           content:
@@ -1456,8 +1480,99 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getSozialdienst
       summary: Get a Sozialdienst by Id
+  /sozialdienst/benutzer:
+    get:
       tags:
         - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns all SozialdienstBenutzers of the Sozialdienst of the logged in SozialdienstAdmin
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getSozialdienstBenutzer
+    post:
+      description: create a new SozialdienstBenutzer that is assigned to the Sozialdienst of the currently logged in SozialdienstAdmin
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerCreate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns the created SozialdienstBenutzer
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: createSozialdienstBenutzer
+    patch:
+      description: update an exisitng SozialdienstBenutzer
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerUpdate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns the updated SozialdienstBenutzer
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienstBenutzer
+    delete:
+      description: update an exisitng SozialdienstBenutzer
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UUID'
+      responses:
+        200:
+          description: Returns on successfull delete
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteSozialdienstBenutzer
   /stammdaten/land:
     get:
       tags:
@@ -4728,7 +4843,48 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-    SozialdienstAdminCreate:
+    SozialdienstBenutzerBase:
+      required:
+        - vorname
+        - nachname
+        - email
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+        email:
+          type: string
+    SozialdienstBenutzerCreate:
+      required:
+        - redirectUri
+      properties:
+        redirectUri:
+          type: string
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstBenutzerBase'
+    SozialdienstBenutzer:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstBenutzerBase'
+    SozialdienstBenutzerUpdate:
+      required:
+        - id
+        - vorname
+        - nachname
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        vorname:
+          type: string
+        nachname:
+          type: string
+    SozialdienstAdmin:
       required:
         - keycloakId
         - vorname
@@ -4743,10 +4899,10 @@ components:
           type: string
         email:
           type: string
-    SozialdienstAdmin:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/SozialdienstAdminCreate'
+    # SozialdienstAdmin:
+    #   type: object
+    #   allOf:
+    #     - $ref: '#/components/schemas/SozialdienstAdmin'
     SozialdienstAdminUpdate:
       required:
         - vorname
@@ -4770,7 +4926,7 @@ components:
         adresse:
           $ref: '#/components/schemas/Adresse'
         sozialdienstAdmin:
-          $ref: '#/components/schemas/SozialdienstAdminCreate'
+          $ref: '#/components/schemas/SozialdienstAdmin'
     SozialdienstUpdate:
       required:
         - id
@@ -4803,7 +4959,7 @@ components:
         iban:
           type: string
         sozialdienstAdmin:
-          $ref: '#/components/schemas/SozialdienstAdmin'
+          $ref: '#/components/schemas/SozialdienstBenutzer'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -5413,6 +5569,13 @@ components:
       in: path
       required: true
       description: Die ID vom Gesuch
+      schema:
+        $ref: '#/components/schemas/UUID'
+    gesuchTrancheId:
+      name: gesuchTrancheId
+      in: path
+      required: true
+      description: Die ID von der GesuchTranche
       schema:
         $ref: '#/components/schemas/UUID'
     sortOrder:

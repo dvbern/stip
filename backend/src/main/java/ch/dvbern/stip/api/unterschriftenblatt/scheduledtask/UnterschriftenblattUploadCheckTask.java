@@ -15,46 +15,34 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.plz.service;
+package ch.dvbern.stip.api.unterschriftenblatt.scheduledtask;
 
-import java.io.IOException;
-
-import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
-import com.opencsv.exceptions.CsvException;
-import io.quarkus.runtime.Startup;
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import io.quarkus.scheduler.Scheduled;
-import jakarta.inject.Singleton;
+import io.quarkus.scheduler.Scheduled.ConcurrentExecution;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
-@Singleton
 @Slf4j
-public class PlzDataFetchScheduledTask {
-    private final PlzDataFetchService plzDataFetchService;
+@ApplicationScoped
+@RequiredArgsConstructor
+public class UnterschriftenblattUploadCheckTask {
+    private final UnterschriftenblattService unterschriftenblattService;
 
     @Transactional
-    @Scheduled(cron = "{kstip.plzdata.cron}")
+    @Scheduled(cron = "{kstip.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
+    @RunForTenant(MandantIdentifier.BERN)
     public void run() {
         try {
-            LOG.info("Fetching PLZ data from scheduled task");
-            DataTenantResolver.setTenantId("none");
-            try {
-                plzDataFetchService.fetchData();
-            } catch (IOException | CsvException e) {
-                LOG.error(e.toString(), e);
-            } finally {
-                DataTenantResolver.setTenantId(null);
-                LOG.info("Done Fetching PLZ data");
-            }
-        } catch (Exception e) {
+            LOG.info("Checking Unterschriftenblaetter for Bern");
+            unterschriftenblattService.checkForUnterschriftenblaetterOnAllGesuche();
+            LOG.info("Done checking Unterschriftenblaetter for Bern");
+        } catch (Throwable e) {
             LOG.error(e.toString(), e);
         }
-    }
-
-    @Startup
-    public void runAtStartup() {
-        run();
     }
 }

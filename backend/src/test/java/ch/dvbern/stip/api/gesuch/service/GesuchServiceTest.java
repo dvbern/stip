@@ -52,15 +52,16 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpe
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.entity.Notification;
@@ -72,6 +73,7 @@ import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -137,6 +139,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchRepository gesuchRepository;
+
+    @InjectMock
+    UnterschriftenblattService unterschriftenblattService;
 
     @Inject
     GesuchTrancheService gesuchTrancheService;
@@ -1242,6 +1247,32 @@ class GesuchServiceTest {
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuch.getId()));
         assertEquals(
             Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @Test
+    void changeGesuchstatusCheckUnterschriftenblattToVersandbereit() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(unterschriftenblattService.requiredUnterschriftenblaetterExist(any())).thenReturn(true);
+
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.VERSANDBEREIT,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @Test
+    void changeGesuchstatusCheckUnterschriftenblattToWartenAufUnterschriftenblatt() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(unterschriftenblattService.requiredUnterschriftenblaetterExist(any())).thenReturn(false);
+
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
             gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
     }

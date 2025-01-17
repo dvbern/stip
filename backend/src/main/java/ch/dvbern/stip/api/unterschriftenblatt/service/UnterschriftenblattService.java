@@ -17,9 +17,16 @@
 
 package ch.dvbern.stip.api.unterschriftenblatt.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
@@ -27,8 +34,11 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
@@ -63,6 +73,8 @@ public class UnterschriftenblattService {
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final UnterschriftenblattMapper unterschriftenblattMapper;
+    private final GesuchStatusService gesuchStatusService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Transactional
     public Uni<Response> getUploadUnterschriftenblattUni(
@@ -118,38 +130,54 @@ public class UnterschriftenblattService {
 
     @Transactional
     public List<UnterschriftenblattDokumentTyp> getUnterschriftenblaetterToUpload(final Gesuch gesuch) {
-        final var initialTranche = gesuchTrancheHistoryRepository
-            .findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
-
-        GesuchTranche toGetFor;
-        if (initialTranche.isPresent()) {
-            toGetFor = initialTranche.get();
-        } else {
-            if (gesuch.getGesuchTranchen().size() != 1) {
-                throw new IllegalStateException("There are more than 1 Tranchen but none has been Verfuegt");
-            }
-
-            toGetFor = gesuch.getGesuchTranchen().get(0);
-        }
-
-        final var famsit = toGetFor.getGesuchFormular().getFamiliensituation();
-        if (famsit == null) {
-            return List.of();
-        }
-
         final var existingTypes =
             gesuch.getUnterschriftenblaetter().stream().map(Unterschriftenblatt::getDokumentTyp).toList();
 
-        return steuerdatenTabBerechnungsService
-            .calculateTabs(famsit)
-            .stream()
-            .map(steuerdatenTyp -> switch (steuerdatenTyp) {
-                case FAMILIE -> UnterschriftenblattDokumentTyp.GEMEINSAM;
-                case VATER -> UnterschriftenblattDokumentTyp.VATER;
-                case MUTTER -> UnterschriftenblattDokumentTyp.MUTTER;
-            })
+        return getRequiredUnterschriftenblaetter(gesuch)
             .filter(unterschriftenblattDokumentTyp -> !existingTypes.contains(unterschriftenblattDokumentTyp))
             .toList();
+    }
+
+    @Transactional
+    public boolean areRequiredUnterschriftenblaetterUploaded(final Gesuch gesuch) {
+        final var requiredUnterschriftenblaetter = new HashSet<>(getUnterschriftenblaetterToUpload(gesuch));
+
+        unterschriftenblattRepository
+            .requireForGesuch(gesuch.getId())
+            .forEach(present -> requiredUnterschriftenblaetter.remove(present.getDokumentTyp()));
+
+        return requiredUnterschriftenblaetter.isEmpty();
+    }
+
+    @Transactional
+    public void checkForUnterschriftenblaetterOnAllGesuche() {
+        final var gesuche = gesuchRepository.getAllWartenAufUnterschriftenblatt();
+
+        // This is the list of historic Gesuche, select the actual ones
+        final var changedSevenDaysAgo = new HashSet<>(
+            gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(
+                gesuche.stream().map(AbstractEntity::getId).toList(),
+                Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+                LocalDateTime.now().minusDays(7)
+            ).map(AbstractEntity::getId).toList()
+        );
+
+        final var toUpdate = gesuche.stream().filter(gesuch -> changedSevenDaysAgo.contains(gesuch.getId())).toList();
+        if (!toUpdate.isEmpty()) {
+            gesuchStatusService.bulkTriggerStateMachineEvent(
+                toUpdate,
+                GesuchStatusChangeEvent.VERSANDBEREIT
+            );
+        }
+    }
+
+    @Transactional
+    public boolean requiredUnterschriftenblaetterExist(final Gesuch gesuch) {
+        final var required = getUnterschriftenblaetterToUpload(gesuch);
+        final var existing = unterschriftenblattRepository.findByGesuchAndDokumentTypes(gesuch.getId(), required);
+
+        final var existingSet = existing.map(Unterschriftenblatt::getDokumentTyp).collect(Collectors.toSet());
+        return existingSet.containsAll(required);
     }
 
     private Unterschriftenblatt createUnterschriftenblatt(
@@ -193,5 +221,59 @@ public class UnterschriftenblattService {
             UNTERSCHRIFTENBLATT_DOKUMENT_PATH,
             dokument.getFilename()
         );
+    }
+
+    @Transactional
+    public void deleteNotRequiredForGesuch(final Gesuch gesuch) {
+        final var allTypes = EnumSet.allOf(UnterschriftenblattDokumentTyp.class);
+        getRequiredUnterschriftenblaetter(gesuch).forEach(allTypes::remove);
+
+        final var toDelete = unterschriftenblattRepository
+            .findByGesuchAndDokumentTypes(gesuch.getId(), allTypes.stream().toList())
+            .toList();
+        final var toRemoveFromS3 = new ArrayList<String>();
+
+        for (final var unterschriftenblatt : toDelete) {
+            toRemoveFromS3.addAll(unterschriftenblatt.getDokumente().stream().map(Dokument::getObjectId).toList());
+            gesuch.getUnterschriftenblaetter().remove(unterschriftenblatt);
+            unterschriftenblatt.setGesuch(null);
+            unterschriftenblattRepository.delete(unterschriftenblatt);
+        }
+
+        DokumentDeleteUtil.executeDeleteDokumentsFromS3(
+            s3,
+            configService.getBucketName(),
+            toRemoveFromS3
+        );
+    }
+
+    private Stream<UnterschriftenblattDokumentTyp> getRequiredUnterschriftenblaetter(final Gesuch gesuch) {
+        final var initialTranche = gesuchTrancheHistoryRepository
+            .findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
+
+        GesuchTranche toGetFor;
+        if (initialTranche.isPresent()) {
+            toGetFor = initialTranche.get();
+        } else {
+            if (gesuch.getGesuchTranchen().size() != 1) {
+                throw new IllegalStateException("There are more than 1 Tranchen but none has been Verfuegt");
+            }
+
+            toGetFor = gesuch.getGesuchTranchen().get(0);
+        }
+
+        final var famsit = toGetFor.getGesuchFormular().getFamiliensituation();
+        if (famsit == null) {
+            return Stream.of();
+        }
+
+        return steuerdatenTabBerechnungsService
+            .calculateTabs(famsit)
+            .stream()
+            .map(steuerdatenTyp -> switch (steuerdatenTyp) {
+                case FAMILIE -> UnterschriftenblattDokumentTyp.GEMEINSAM;
+                case VATER -> UnterschriftenblattDokumentTyp.VATER;
+                case MUTTER -> UnterschriftenblattDokumentTyp.MUTTER;
+            });
     }
 }

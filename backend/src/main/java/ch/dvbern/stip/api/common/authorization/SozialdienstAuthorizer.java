@@ -17,11 +17,45 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
+import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 @Authorizer
 public class SozialdienstAuthorizer extends BaseAuthorizer {
+    private final BenutzerService benutzerService;
+    public final SozialdienstRepository sozialdienstRepository;
+    public final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
+
+    @Transactional
+    public void canUpdateSozialdienstBenutzer(final UUID sozialdienstBenutzerToUpdateID) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (isAdmin(currentBenutzer)) {
+            return;
+        }
+
+        final var sozialdienstBenutzerToUpdate =
+            sozialdienstBenutzerRepository.findById(sozialdienstBenutzerToUpdateID);
+        final var sozialdienstOfUser = sozialdienstBenutzerRepository
+            .findSozialdienstBySozialdienstBenutzer(sozialdienstBenutzerToUpdate)
+            .orElseThrow(NotFoundException::new);
+        final var sozialdienstAdmin = sozialdienstBenutzerRepository
+            .findByKeycloakId(currentBenutzer.getKeycloakId())
+            .orElseThrow(NotFoundException::new);
+        final var sozialdienstOfAdmin = sozialdienstRepository.getSozialdienstBySozialdienstAdmin(sozialdienstAdmin);
+
+        if (!Objects.equals(sozialdienstOfUser.getId(), sozialdienstOfAdmin.getId())) {
+            throw new UnauthorizedException();
+        }
+    }
 }

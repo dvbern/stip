@@ -78,6 +78,7 @@ public class GesuchApiSpec {
                 changeGesuchStatusToInBearbeitung(),
                 changeGesuchStatusToNegativeVerfuegung(),
                 changeGesuchStatusToVerfuegt(),
+                changeGesuchStatusToVersandbereit(),
                 changeGesuchStatusToVersendet(),
                 createGesuch(),
                 deleteGesuch(),
@@ -117,6 +118,10 @@ public class GesuchApiSpec {
 
     public ChangeGesuchStatusToVerfuegtOper changeGesuchStatusToVerfuegt() {
         return new ChangeGesuchStatusToVerfuegtOper(createReqSpec());
+    }
+
+    public ChangeGesuchStatusToVersandbereitOper changeGesuchStatusToVersandbereit() {
+        return new ChangeGesuchStatusToVersandbereitOper(createReqSpec());
     }
 
     public ChangeGesuchStatusToVersendetOper changeGesuchStatusToVersendet() {
@@ -584,6 +589,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public ChangeGesuchStatusToVerfuegtOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchTrancheIdPath Die ID von der GesuchTranche (required)
+     * return GesuchDtoSpec
+     */
+    public static class ChangeGesuchStatusToVersandbereitOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/status/unterschriftenblatt-erhalten/{gesuchTrancheId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeGesuchStatusToVersandbereitOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/status/unterschriftenblatt-erhalten/{gesuchTrancheId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/status/unterschriftenblatt-erhalten/{gesuchTrancheId}
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID) Die ID von der GesuchTranche (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToVersandbereitOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToVersandbereitOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToVersandbereitOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

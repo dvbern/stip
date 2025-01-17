@@ -160,6 +160,7 @@
   "shared.dokumente.createCustomDokumentTyp.dialog.kommentar.label": "Kommentar",
   "shared.dokumente.createCustomDokumentTyp.dialog.kommentar.placeholder": "Beschreibung für das Dokuments eingeben...",
   "shared.dokumente.createCustomDokumentTyp.dialog.create": "Erstellen",
+  "shared.dokumente.setToAdditionalDokumenteErhalten": "Unterschriftenblatt erhalten",
 
   "shared.nachrichten.title": "Nachrichten",
   "shared.nachricht.title": "Nachricht",

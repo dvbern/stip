@@ -18,7 +18,6 @@ import {
   isUploadable,
 } from '@dv/shared/model/dokument';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
-import { SharedUiIfGesuchstellerDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUtilDocumentMergerService } from '@dv/shared/util/document-merger';
 
 import { DocumentUploadApprovalComponent } from '../document-upload-approval/document-upload-approval.component';
@@ -34,7 +33,6 @@ import { UploadStore } from '../upload.store';
     MatFormFieldModule,
     SharedUiDropFileComponent,
     SharedPatternDocumentUploadListComponent,
-    SharedUiIfGesuchstellerDirective,
     DocumentUploadApprovalComponent,
   ],
   templateUrl: './document-upload-dialog.component.html',
@@ -63,18 +61,13 @@ export class SharedPatternDocumentUploadDialogComponent {
   }));
 
   showUplaodSig = computed(() => {
-    const { options, store } = this.data;
+    const { options } = this.data;
 
-    if (
-      options.readonly &&
-      isUploadable(this.config.appType, options.dokument, options.permissions)
-    ) {
-      return false;
-    }
-    if (!options.singleUpload) {
-      return true;
-    }
-    return !store.hasEntriesSig() || store.isLoading();
+    return isUploadable(
+      this.config.appType,
+      options.dokument,
+      options.permissions,
+    );
   });
 
   // @HostBinding('class') class = 'p-4 p-md-5';

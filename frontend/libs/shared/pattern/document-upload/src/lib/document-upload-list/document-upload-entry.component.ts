@@ -53,7 +53,7 @@ export class SharedPatternDocumentUploadEntryComponent {
     const dokument = this.documentViewSig();
     return getDownloadLink(dokumentModel.art, dokument);
   });
-  isUploadableSig = computed(() => {
+  isDeletableSig = computed(() => {
     const { dokumentModel, permissions } = this.uploadViewSig();
     return isUploadable(this.config.appType, dokumentModel, permissions);
   });
