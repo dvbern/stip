@@ -19,6 +19,10 @@ package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.Rolle;
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -35,18 +39,38 @@ import static org.mockito.Mockito.when;
 class CustomGesuchDokumentTypAuthorizerTest {
     private CustomGesuchDokumentTypAuthorizer authorizer;
     private GesuchRepository gesuchRepository;
+    private BenutzerService benutzerService;
+    private Benutzer currentBenutzer;
+
     private Gesuch gesuch;
 
     @BeforeEach
     void setUp() {
+        UUID currentBenutzerId = UUID.randomUUID();
         gesuch = new Gesuch();
         gesuchRepository = Mockito.mock(GesuchRepository.class);
-        authorizer = new CustomGesuchDokumentTypAuthorizer(gesuchRepository);
+        benutzerService = Mockito.mock(BenutzerService.class);
+        currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
+        currentBenutzer.setId(currentBenutzerId);
+        authorizer = new CustomGesuchDokumentTypAuthorizer(gesuchRepository, benutzerService);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
+
+    }
+
+    @Test
+    void canDeleteShouldFailAsGS() {
+        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
+        assertThrows(ForbiddenException.class, () -> {
+            authorizer.canDelete(UUID.randomUUID());
+        });
     }
 
     @Test
     void canDeleteShouldFail() {
+        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
+
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         assertThrows(ForbiddenException.class, () -> {
             authorizer.canDelete(UUID.randomUUID());
@@ -55,6 +79,8 @@ class CustomGesuchDokumentTypAuthorizerTest {
 
     @Test
     void canDeleteShouldSuccess() {
+        currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
+
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         assertDoesNotThrow(() -> {
             authorizer.canDelete(UUID.randomUUID());

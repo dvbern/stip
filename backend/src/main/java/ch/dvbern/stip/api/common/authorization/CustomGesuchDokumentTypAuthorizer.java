@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import io.quarkus.security.ForbiddenException;
@@ -31,11 +32,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final GesuchRepository gesuchRepository;
+    private final BenutzerService benutzerService;
 
     @Transactional
     public void canDelete(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (!gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)) {
+        if (
+            !gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)
+            || !isAdminOrSb(benutzerService.getCurrentBenutzer())
+        ) {
             throw new ForbiddenException();
         }
     }
