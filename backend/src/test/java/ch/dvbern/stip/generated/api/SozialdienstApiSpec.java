@@ -70,7 +70,7 @@ public class SozialdienstApiSpec {
                 deleteSozialdienst(),
                 deleteSozialdienstBenutzer(),
                 getAllSozialdienste(),
-                getAllSozialdiensteSlim(),
+                getAllSozialdiensteForDelegation(),
                 getSozialdienst(),
                 getSozialdienstBenutzer(),
                 replaceSozialdienstAdmin(),
@@ -100,8 +100,8 @@ public class SozialdienstApiSpec {
         return new GetAllSozialdiensteOper(createReqSpec());
     }
 
-    public GetAllSozialdiensteSlimOper getAllSozialdiensteSlim() {
-        return new GetAllSozialdiensteSlimOper(createReqSpec());
+    public GetAllSozialdiensteForDelegationOper getAllSozialdiensteForDelegation() {
+        return new GetAllSozialdiensteForDelegationOper(createReqSpec());
     }
 
     public GetSozialdienstOper getSozialdienst() {
@@ -483,22 +483,22 @@ public class SozialdienstApiSpec {
      *
      * return List&lt;SozialdienstSlimDtoSpec&gt;
      */
-    public static class GetAllSozialdiensteSlimOper implements Oper {
+    public static class GetAllSozialdiensteForDelegationOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/sozialdienst/gs";
+        public static final String REQ_URI = "/sozialdienst/delegation";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetAllSozialdiensteSlimOper(RequestSpecBuilder reqSpec) {
+        public GetAllSozialdiensteForDelegationOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /sozialdienst/gs
+         * GET /sozialdienst/delegation
          * @param handler handler
          * @param <T> type
          * @return type
@@ -509,7 +509,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * GET /sozialdienst/gs
+         * GET /sozialdienst/delegation
          * @param handler handler
          * @return List&lt;SozialdienstSlimDtoSpec&gt;
          */
@@ -523,7 +523,7 @@ public class SozialdienstApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetAllSozialdiensteSlimOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetAllSozialdiensteForDelegationOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -533,7 +533,7 @@ public class SozialdienstApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetAllSozialdiensteSlimOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetAllSozialdiensteForDelegationOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

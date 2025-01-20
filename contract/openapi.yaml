@@ -1137,7 +1137,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllSozialdienste
       summary: Returns all Sozialdienste
-  /sozialdienst/gs:
+  /sozialdienst/delegation:
     get:
       tags:
         - Sozialdienst
@@ -1158,7 +1158,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/ServerError'
-      operationId: getAllSozialdiensteSlim
+      operationId: getAllSozialdiensteForDelegation
   /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin:
     parameters:
       - $ref: '#/components/parameters/sozialdienstId'

@@ -74,8 +74,8 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @AllowAll
     @RolesAllowed({ OidcPermissions.STAMMDATEN_READ })
     @Override
-    public List<SozialdienstSlimDto> getAllSozialdiensteSlim() {
-        return sozialdienstService.getAllSozialdienstSlim();
+    public List<SozialdienstSlimDto> getAllSozialdiensteForDelegation() {
+        return sozialdienstService.getAllSozialdiensteForDelegation();
     }
 
     @AllowAll

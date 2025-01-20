@@ -78,9 +78,9 @@ public class SozialdienstService {
     }
 
     @Transactional
-    public List<SozialdienstSlimDto> getAllSozialdienstSlim() {
-        final var entities = sozialdienstRepository.findAll();
-        return entities.stream().map(sozialdienstMapper::toSlimDto).toList();
+    public List<SozialdienstSlimDto> getAllSozialdiensteForDelegation() {
+        final var entities = sozialdienstRepository.getSozialdiensteWithMitarbeiter();
+        return entities.map(sozialdienstMapper::toSlimDto).toList();
     }
 
     @Transactional

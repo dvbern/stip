@@ -55,9 +55,9 @@ public interface SozialdienstResource {
     List<SozialdienstDto> getAllSozialdienste();
 
     @GET
-    @Path("/gs")
+    @Path("/delegation")
     @Produces({ "application/json", "text/plain" })
-    List<SozialdienstSlimDto> getAllSozialdiensteSlim();
+    List<SozialdienstSlimDto> getAllSozialdiensteForDelegation();
 
     @GET
     @Path("/{sozialdienstId}")

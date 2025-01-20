@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.sozialdienst.repo;
 
+import java.util.stream.Stream;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.sozialdienst.entity.QSozialdienst;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
@@ -50,5 +52,14 @@ public class SozialdienstRepository implements BaseRepository<Sozialdienst> {
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);
+    }
+
+    public Stream<Sozialdienst> getSozialdiensteWithMitarbeiter() {
+        final var sozialdienst = QSozialdienst.sozialdienst;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(sozialdienst)
+            .where(sozialdienst.sozialdienstBenutzers.isNotEmpty())
+            .stream();
     }
 }
