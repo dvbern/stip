@@ -208,7 +208,6 @@ class DokumentResourcesTest {
         // get newly created type
         // check if empty dokument has been created
         // dokumentstatus: ausstehend
-        // todo: check if a new (empty, no files) GesuchDokument has been created
         assertThat(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getType(), is("test"));
         assertThat(createdGesuchDokumentWithCustomType.getDokumente().isEmpty(), is(true));
         customDokumentId = createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId();
