@@ -40,7 +40,6 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
@@ -180,7 +179,7 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public DokumentDto uploadDokument(
+    public void uploadDokument(
         final UUID gesuchTrancheId,
         final UUID customDokumentTypId,
         final FileUpload fileUpload,
@@ -205,8 +204,6 @@ public class GesuchDokumentService {
         dokument.setFilesize(String.valueOf(fileUpload.size()));
         dokument.setFilepath(GESUCH_DOKUMENT_PATH);
         dokumentRepository.persist(dokument);
-
-        return dokumentMapper.toDto(dokument);
     }
 
     @Transactional
