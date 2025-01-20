@@ -24,7 +24,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
-import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -87,26 +86,16 @@ class RequiredDokumentServiceTest {
         );
     }
 
-    static class MockDocumentProducer implements RequiredDocumentProducer {
+    static class MockDocumentProducer extends RequiredDocumentProducer {
         @Override
         public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
             return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
         }
-
-        @Override
-        public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
-            return ImmutablePair.of("", Set.of());
-        }
     }
 
-    static class MockEmptyDocumentProducer implements RequiredDocumentProducer {
+    static class MockEmptyDocumentProducer extends RequiredDocumentProducer {
         @Override
         public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-            return ImmutablePair.of("", Set.of());
-        }
-
-        @Override
-        public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
             return ImmutablePair.of("", Set.of());
         }
     }

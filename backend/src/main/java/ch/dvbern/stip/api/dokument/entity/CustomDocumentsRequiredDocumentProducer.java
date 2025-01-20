@@ -32,7 +32,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class CustomDocumentsRequiredDocumentProducer implements RequiredDocumentProducer {
+public class CustomDocumentsRequiredDocumentProducer extends RequiredDocumentProducer {
     private final CustomDokumentTypService customDokumentTypService;
 
     @Override

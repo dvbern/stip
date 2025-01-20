@@ -22,16 +22,14 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
-import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class GeschwisterRequiredDocumentsProducer implements RequiredDocumentProducer {
+public class GeschwisterRequiredDocumentsProducer extends RequiredDocumentProducer {
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         final var geschwister = formular.getGeschwisters();
@@ -50,10 +48,5 @@ public class GeschwisterRequiredDocumentsProducer implements RequiredDocumentPro
         }
 
         return ImmutablePair.of("geschwisters", requiredDocs);
-    }
-
-    @Override
-    public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
-        return ImmutablePair.of("", Set.of());
     }
 }
