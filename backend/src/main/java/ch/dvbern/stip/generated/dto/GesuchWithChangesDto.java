@@ -30,7 +30,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid String fallNummer;
   private @Valid UUID ausbildungId;
   private @Valid GesuchsperiodeDto gesuchsperiode;
-  private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
+  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
   private @Valid String gesuchNummer;
   private @Valid UUID id;
   private @Valid LocalDate aenderungsdatum;
@@ -116,7 +116,7 @@ public class GesuchWithChangesDto  implements Serializable {
 
   /**
    **/
-  public GesuchWithChangesDto gesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+  public GesuchWithChangesDto gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
     return this;
   }
@@ -124,12 +124,12 @@ public class GesuchWithChangesDto  implements Serializable {
   
   @JsonProperty("gesuchStatus")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getGesuchStatus() {
+  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
   @JsonProperty("gesuchStatus")
-  public void setGesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+  public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 

@@ -15,16 +15,4 @@ export const sharedFeatureDownloadRoutes: Route[] = [
       },
     ],
   },
-  {
-    path: ':id/:type/:dokumentTyp/:dokumentId',
-    pathMatch: 'prefix',
-    providers: [],
-    children: [
-      {
-        path: '',
-        component: SharedFeatureDownloadComponent,
-        title: 'shared.file.download.message',
-      },
-    ],
-  },
 ];

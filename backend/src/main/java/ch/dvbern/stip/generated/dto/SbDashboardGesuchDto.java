@@ -28,7 +28,7 @@ public class SbDashboardGesuchDto  implements Serializable {
   private @Valid String piaNachname;
   private @Valid String piaVorname;
   private @Valid LocalDate piaGeburtsdatum;
-  private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
+  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
   private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus;
   private @Valid String bearbeiter;
   private @Valid LocalDate letzteAktivitaet;
@@ -168,7 +168,7 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   /**
    **/
-  public SbDashboardGesuchDto gesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+  public SbDashboardGesuchDto gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
     return this;
   }
@@ -176,12 +176,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   
   @JsonProperty("gesuchStatus")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getGesuchStatus() {
+  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
   @JsonProperty("gesuchStatus")
-  public void setGesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+  public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 

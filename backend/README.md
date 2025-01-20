@@ -87,6 +87,12 @@ userPassword=""
 for i in `seq 1 50`; do createAndConfigUsr ${userNamePrefix}${i} $userPassword; done
 ```
 
+## ClamAV fails on non-x86/ amd64 platforms
+
+The ClamAV image (clamav/clamav) used by Quarkus for its dev service in our backend only has a x86_64 image, and Testcontainers refuses to pull an image that is not native to the platform. To "fix" the problem you have to manually pull the image, like
+
+    docker pull --platform linux/amd64 clamav/clamav:latest
+
 ## Contributing Guidelines
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the process for submitting pull requests to us.

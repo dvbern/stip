@@ -13,9 +13,11 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDtoSpec;
@@ -63,12 +65,16 @@ public class SozialdienstApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createSozialdienst(),
+                createSozialdienstBenutzer(),
                 deleteSozialdienst(),
+                deleteSozialdienstBenutzer(),
                 getAllSozialdienste(),
                 getSozialdienst(),
+                getSozialdienstBenutzer(),
                 replaceSozialdienstAdmin(),
                 updateSozialdienst(),
-                updateSozialdienstAdmin()
+                updateSozialdienstAdmin(),
+                updateSozialdienstBenutzer()
         );
     }
 
@@ -76,8 +82,16 @@ public class SozialdienstApiSpec {
         return new CreateSozialdienstOper(createReqSpec());
     }
 
+    public CreateSozialdienstBenutzerOper createSozialdienstBenutzer() {
+        return new CreateSozialdienstBenutzerOper(createReqSpec());
+    }
+
     public DeleteSozialdienstOper deleteSozialdienst() {
         return new DeleteSozialdienstOper(createReqSpec());
+    }
+
+    public DeleteSozialdienstBenutzerOper deleteSozialdienstBenutzer() {
+        return new DeleteSozialdienstBenutzerOper(createReqSpec());
     }
 
     public GetAllSozialdiensteOper getAllSozialdienste() {
@@ -86,6 +100,10 @@ public class SozialdienstApiSpec {
 
     public GetSozialdienstOper getSozialdienst() {
         return new GetSozialdienstOper(createReqSpec());
+    }
+
+    public GetSozialdienstBenutzerOper getSozialdienstBenutzer() {
+        return new GetSozialdienstBenutzerOper(createReqSpec());
     }
 
     public ReplaceSozialdienstAdminOper replaceSozialdienstAdmin() {
@@ -98,6 +116,10 @@ public class SozialdienstApiSpec {
 
     public UpdateSozialdienstAdminOper updateSozialdienstAdmin() {
         return new UpdateSozialdienstAdminOper(createReqSpec());
+    }
+
+    public UpdateSozialdienstBenutzerOper updateSozialdienstBenutzer() {
+        return new UpdateSozialdienstBenutzerOper(createReqSpec());
     }
 
     /**
@@ -183,6 +205,78 @@ public class SozialdienstApiSpec {
         }
     }
     /**
+     * 
+     * create a new SozialdienstBenutzer that is assigned to the Sozialdienst of the currently logged in SozialdienstAdmin
+     *
+     * @see #body  (optional)
+     * return SozialdienstBenutzerDtoSpec
+     */
+    public static class CreateSozialdienstBenutzerOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/sozialdienst/benutzer";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateSozialdienstBenutzerOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /sozialdienst/benutzer
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /sozialdienst/benutzer
+         * @param handler handler
+         * @return SozialdienstBenutzerDtoSpec
+         */
+        public SozialdienstBenutzerDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SozialdienstBenutzerDtoSpec> type = new TypeRef<SozialdienstBenutzerDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param sozialdienstBenutzerCreateDtoSpec (SozialdienstBenutzerCreateDtoSpec)  (optional)
+         * @return operation
+         */
+        public CreateSozialdienstBenutzerOper body(SozialdienstBenutzerCreateDtoSpec sozialdienstBenutzerCreateDtoSpec) {
+            reqSpec.setBody(sozialdienstBenutzerCreateDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateSozialdienstBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateSozialdienstBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Delete a Sozialdienst by Id
      * 
      *
@@ -251,6 +345,67 @@ public class SozialdienstApiSpec {
          * @return operation
          */
         public DeleteSozialdienstOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * update an exisitng SozialdienstBenutzer
+     *
+     * @see #body  (optional)
+     */
+    public static class DeleteSozialdienstBenutzerOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/sozialdienst/benutzer";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteSozialdienstBenutzerOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /sozialdienst/benutzer
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param body (UUID)  (optional)
+         * @return operation
+         */
+        public DeleteSozialdienstBenutzerOper body(UUID body) {
+            reqSpec.setBody(body);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteSozialdienstBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteSozialdienstBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -393,9 +548,70 @@ public class SozialdienstApiSpec {
      * 
      * 
      *
+     * return List&lt;SozialdienstBenutzerDtoSpec&gt;
+     */
+    public static class GetSozialdienstBenutzerOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/sozialdienst/benutzer";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetSozialdienstBenutzerOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /sozialdienst/benutzer
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /sozialdienst/benutzer
+         * @param handler handler
+         * @return List&lt;SozialdienstBenutzerDtoSpec&gt;
+         */
+        public List<SozialdienstBenutzerDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<SozialdienstBenutzerDtoSpec>> type = new TypeRef<List<SozialdienstBenutzerDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetSozialdienstBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetSozialdienstBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
      * @see #sozialdienstIdPath  (required)
      * @see #body  (optional)
-     * return SozialdienstAdminDtoSpec
+     * return SozialdienstBenutzerDtoSpec
      */
     public static class ReplaceSozialdienstAdminOper implements Oper {
 
@@ -426,19 +642,19 @@ public class SozialdienstApiSpec {
         /**
          * PATCH /sozialdienst/{sozialdienstId}/replaceSozialdienstAdmin
          * @param handler handler
-         * @return SozialdienstAdminDtoSpec
+         * @return SozialdienstBenutzerDtoSpec
          */
-        public SozialdienstAdminDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<SozialdienstAdminDtoSpec> type = new TypeRef<SozialdienstAdminDtoSpec>(){};
+        public SozialdienstBenutzerDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SozialdienstBenutzerDtoSpec> type = new TypeRef<SozialdienstBenutzerDtoSpec>(){};
             return execute(handler).as(type);
         }
 
          /**
-         * @param sozialdienstAdminCreateDtoSpec (SozialdienstAdminCreateDtoSpec)  (optional)
+         * @param sozialdienstAdminDtoSpec (SozialdienstAdminDtoSpec)  (optional)
          * @return operation
          */
-        public ReplaceSozialdienstAdminOper body(SozialdienstAdminCreateDtoSpec sozialdienstAdminCreateDtoSpec) {
-            reqSpec.setBody(sozialdienstAdminCreateDtoSpec);
+        public ReplaceSozialdienstAdminOper body(SozialdienstAdminDtoSpec sozialdienstAdminDtoSpec) {
+            reqSpec.setBody(sozialdienstAdminDtoSpec);
             return this;
         }
 
@@ -551,7 +767,7 @@ public class SozialdienstApiSpec {
      *
      * @see #sozialdienstIdPath  (required)
      * @see #body  (optional)
-     * return SozialdienstAdminDtoSpec
+     * return SozialdienstBenutzerDtoSpec
      */
     public static class UpdateSozialdienstAdminOper implements Oper {
 
@@ -582,10 +798,10 @@ public class SozialdienstApiSpec {
         /**
          * PATCH /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin
          * @param handler handler
-         * @return SozialdienstAdminDtoSpec
+         * @return SozialdienstBenutzerDtoSpec
          */
-        public SozialdienstAdminDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<SozialdienstAdminDtoSpec> type = new TypeRef<SozialdienstAdminDtoSpec>(){};
+        public SozialdienstBenutzerDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SozialdienstBenutzerDtoSpec> type = new TypeRef<SozialdienstBenutzerDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -625,6 +841,78 @@ public class SozialdienstApiSpec {
          * @return operation
          */
         public UpdateSozialdienstAdminOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * update an exisitng SozialdienstBenutzer
+     *
+     * @see #body  (optional)
+     * return SozialdienstBenutzerDtoSpec
+     */
+    public static class UpdateSozialdienstBenutzerOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/sozialdienst/benutzer";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UpdateSozialdienstBenutzerOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /sozialdienst/benutzer
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /sozialdienst/benutzer
+         * @param handler handler
+         * @return SozialdienstBenutzerDtoSpec
+         */
+        public SozialdienstBenutzerDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SozialdienstBenutzerDtoSpec> type = new TypeRef<SozialdienstBenutzerDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param sozialdienstBenutzerUpdateDtoSpec (SozialdienstBenutzerUpdateDtoSpec)  (optional)
+         * @return operation
+         */
+        public UpdateSozialdienstBenutzerOper body(SozialdienstBenutzerUpdateDtoSpec sozialdienstBenutzerUpdateDtoSpec) {
+            reqSpec.setBody(sozialdienstBenutzerUpdateDtoSpec);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UpdateSozialdienstBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UpdateSozialdienstBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -1,8 +1,10 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
@@ -30,10 +32,22 @@ public interface SozialdienstResource {
     @Produces({ "application/json", "text/plain" })
     SozialdienstDto createSozialdienst(@Valid SozialdienstCreateDto sozialdienstCreateDto);
 
+    @POST
+    @Path("/benutzer")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    SozialdienstBenutzerDto createSozialdienstBenutzer(@Valid SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto);
+
     @DELETE
     @Path("/{sozialdienstId}")
     @Produces({ "application/json", "text/plain" })
     SozialdienstDto deleteSozialdienst(@PathParam("sozialdienstId") UUID sozialdienstId);
+
+    @DELETE
+    @Path("/benutzer")
+    @Consumes({ "application/json" })
+    @Produces({ "text/plain" })
+    void deleteSozialdienstBenutzer(@Valid UUID body);
 
     @GET
     @Produces({ "application/json", "text/plain" })
@@ -44,11 +58,16 @@ public interface SozialdienstResource {
     @Produces({ "application/json", "text/plain" })
     SozialdienstDto getSozialdienst(@PathParam("sozialdienstId") UUID sozialdienstId);
 
+    @GET
+    @Path("/benutzer")
+    @Produces({ "application/json", "text/plain" })
+    List<SozialdienstBenutzerDto> getSozialdienstBenutzer();
+
     @PATCH
     @Path("/{sozialdienstId}/replaceSozialdienstAdmin")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    SozialdienstAdminDto replaceSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminCreateDto sozialdienstAdminCreateDto);
+    SozialdienstBenutzerDto replaceSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminDto sozialdienstAdminDto);
 
     @PATCH
     @Consumes({ "application/json" })
@@ -59,5 +78,11 @@ public interface SozialdienstResource {
     @Path("/{sozialdienstId}/updateSozialdienstAdmin")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    SozialdienstAdminDto updateSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto);
+    SozialdienstBenutzerDto updateSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto);
+
+    @PATCH
+    @Path("/benutzer")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    SozialdienstBenutzerDto updateSozialdienstBenutzer(@Valid SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdateDto);
 }

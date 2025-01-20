@@ -32,8 +32,10 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -41,9 +43,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -52,6 +52,9 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -65,6 +68,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
@@ -95,11 +99,12 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
+
 @RequestScoped
 @RequiredArgsConstructor
 @Slf4j
 public class GesuchService {
-    private final GesuchHistoryRepository gesuchHistoryRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
@@ -131,6 +136,7 @@ public class GesuchService {
     private final AusbildungRepository ausbildungRepository;
     private final StipDecisionService stipDecisionService;
     private final StipDecisionTextRepository stipDecisionTextRepository;
+    private final UnterschriftenblattService unterschriftenblattService;
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
@@ -589,9 +595,43 @@ public class GesuchService {
     }
 
     @Transactional
+    public void gesuchStatusCheckUnterschriftenblatt(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.getGesuchStatus() != Gesuchstatus.VERFUEGT) {
+            return;
+        }
+
+        if (unterschriftenblattService.requiredUnterschriftenblaetterExist(gesuch)) {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+        } else {
+            gesuchStatusService.triggerStateMachineEvent(
+                gesuch,
+                GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT
+            );
+        }
+    }
+
+    @Transactional
     public void gesuchStatusToVersendet(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSENDET);
+    }
+
+    @Transactional(TxType.REQUIRES_NEW)
+    public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+            gesuch,
+            configService.getCurrentDmnMajorVersion(),
+            configService.getCurrentDmnMinorVersion()
+        );
+
+        var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
+        if (stipendien.getBerechnung() > 0) {
+            status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
+        }
+        gesuchStatusService.triggerStateMachineEvent(gesuch, status);
     }
 
     @Transactional
@@ -609,6 +649,25 @@ public class GesuchService {
             GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
             new KommentarDto(decision.getTitleDe()),
             false
+        );
+    }
+
+    @Transactional
+    public void changeGesuchStatusToVersandbereit(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (!unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)) {
+            throw new CustomValidationsException(
+                "Required Unterschriftenblaetter are not uploaded",
+                new CustomConstraintViolation(
+                    VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
+                    "unterschriftenblaetter"
+                )
+            );
+        }
+
+        gesuchStatusService.triggerStateMachineEvent(
+            gesuch,
+            GesuchStatusChangeEvent.VERSANDBEREIT
         );
     }
 

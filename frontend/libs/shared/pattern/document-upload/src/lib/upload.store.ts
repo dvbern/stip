@@ -19,8 +19,11 @@ import {
   DokumentListView,
   DokumentOptions,
   DokumentState,
+  SharedModelAdditionalGesuchDokument,
+  SharedModelStandardGesuchDokument,
 } from '@dv/shared/model/dokument';
 import { Dokument, DokumentService } from '@dv/shared/model/gesuch';
+import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import { noGlobalErrorsIf, shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
@@ -39,7 +42,7 @@ import {
 @Injectable()
 export class UploadStore {
   readonly state = signalState<DokumentState>({
-    gesuchDokument: undefined,
+    dokumentModel: undefined,
     dokuments: [],
     errorKey: undefined,
   });
@@ -66,9 +69,9 @@ export class UploadStore {
    * The documents in the state, enriched with a state and a theme
    */
   dokumentListView = computed<DokumentListView>(() => {
-    const { gesuchDokument, dokuments } = this.state();
+    const { dokumentModel, dokuments } = this.state();
     return {
-      gesuchDokument,
+      dokumentModel,
       dokuments: dokuments.map((document) => {
         const state = checkDocumentState(document);
 
@@ -101,10 +104,52 @@ export class UploadStore {
     this.loadDocuments$
       .pipe(
         exhaustMap((options) =>
-          this.documentService.getGesuchDokumenteForTyp$({
-            ...options,
-            gesuchTrancheId: options.trancheId,
-          }),
+          (() => {
+            const dokument = options.dokument;
+            switch (dokument.art) {
+              case 'GESUCH_DOKUMENT': {
+                return this.documentService
+                  .getGesuchDokumenteForTyp$({
+                    dokumentTyp: dokument.dokumentTyp,
+                    gesuchTrancheId: dokument.trancheId,
+                  })
+                  .pipe(
+                    map(
+                      ({ value }) =>
+                        ({
+                          art: 'GESUCH_DOKUMENT',
+                          gesuchDokument: value,
+                          dokumentTyp: dokument.dokumentTyp,
+                          trancheId: dokument.trancheId,
+                        }) satisfies SharedModelStandardGesuchDokument,
+                    ),
+                  );
+              }
+              case 'UNTERSCHRIFTENBLATT':
+                return this.documentService
+                  .getUnterschriftenblaetterForGesuch$({
+                    gesuchId: dokument.gesuchId,
+                  })
+                  .pipe(
+                    map((list) =>
+                      list.find((d) => d.dokumentTyp === dokument.dokumentTyp),
+                    ),
+                    filter(isDefined),
+                    map(
+                      (gesuchDokument) =>
+                        ({
+                          art: 'UNTERSCHRIFTENBLATT',
+                          gesuchDokument,
+                          dokumentTyp: dokument.dokumentTyp,
+                          gesuchId: dokument.gesuchId,
+                          trancheId: dokument.trancheId,
+                        }) satisfies SharedModelAdditionalGesuchDokument,
+                    ),
+                  );
+              default:
+                assertUnreachable(dokument);
+            }
+          })(),
         ),
         takeUntilDestroyed(),
       )
@@ -112,11 +157,11 @@ export class UploadStore {
         error: () => {
           patchState(this.state, createGenericError());
         },
-        next: ({ value }) =>
+        next: (dokumentModel) =>
           patchState(this.state, {
-            gesuchDokument: value,
+            dokumentModel,
             dokuments: [
-              ...(value?.dokumente.map((file) => ({
+              ...(dokumentModel.gesuchDokument?.dokumente.map((file) => ({
                 file,
                 progress: 100,
               })) ?? []),
@@ -131,23 +176,38 @@ export class UploadStore {
           const dokumentToDelete = this.state
             .dokuments()
             .find((d) => d.file.id === action.dokumentId);
-          return dokumentToDelete?.isTemporary
-            ? // If the document is temporary, just remove it from the state
-              of(action)
-            : this.documentService
-                .deleteDokument$(
-                  { ...action, gesuchTrancheId: action.trancheId },
-                  undefined,
-                  undefined,
-                  {
-                    // Ignore http errors if the upload is already in error state
-                    context: shouldIgnoreErrorsIf(!!dokumentToDelete?.error),
-                  },
-                )
-                .pipe(
-                  map(() => action),
-                  tap(() => this.documentChangedSig.set({ hasChanged: true })),
+          if (dokumentToDelete?.isTemporary) {
+            return of(action);
+          }
+          const deleteCallParams = [
+            {
+              dokumentId: action.dokumentId,
+            },
+            undefined,
+            undefined,
+            {
+              // Ignore http errors if the upload is already in error state
+              context: shouldIgnoreErrorsIf(!!dokumentToDelete?.error),
+            },
+          ] as const;
+          const serviceCall$ = (() => {
+            switch (action.dokument.art) {
+              case 'GESUCH_DOKUMENT':
+                return this.documentService.deleteDokument$(
+                  ...deleteCallParams,
                 );
+              case 'UNTERSCHRIFTENBLATT':
+                return this.documentService.deleteUnterschriftenblattDokument$(
+                  ...deleteCallParams,
+                );
+              default:
+                assertUnreachable(action.dokument);
+            }
+          })();
+          return serviceCall$.pipe(
+            map(() => action),
+            tap(() => this.documentChangedSig.set({ hasChanged: true })),
+          );
         }),
         takeUntilDestroyed(),
       )
@@ -298,17 +358,42 @@ export class UploadStore {
       take(1),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
+    const dokument = action.dokument;
+    const serviceDefaultParams = [
+      'events',
+      undefined,
+      {
+        context: noGlobalErrorsIf(true),
+      },
+    ] as const;
 
-    const upload$ = this.documentService
-      .createDokument$(
-        { ...action, gesuchTrancheId: action.trancheId },
-        'events',
-        undefined,
-        {
-          context: noGlobalErrorsIf(true),
-        },
-      )
-      .pipe(shareReplay({ bufferSize: 1, refCount: true }));
+    const uploadByType = () => {
+      switch (dokument.art) {
+        case 'GESUCH_DOKUMENT':
+          return this.documentService.createDokument$(
+            {
+              ...action,
+              gesuchTrancheId: dokument.trancheId,
+              dokumentTyp: dokument.dokumentTyp,
+            },
+            ...serviceDefaultParams,
+          );
+        case 'UNTERSCHRIFTENBLATT':
+          return this.documentService.createUnterschriftenblatt$(
+            {
+              ...action,
+              gesuchId: dokument.gesuchId,
+              unterschriftenblattTyp: dokument.dokumentTyp,
+            },
+            ...serviceDefaultParams,
+          );
+        default:
+          assertUnreachable(dokument);
+      }
+    };
+    const upload$ = uploadByType().pipe(
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
 
     // Merge the upload stream with a fake progress stream
     const uploading$ = merge(

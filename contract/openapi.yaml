@@ -282,6 +282,28 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToNegativeVerfuegung
+  /gesuch/status/unterschriftenblatt-erhalten/{gesuchTrancheId}:
+    parameters:
+      - $ref: '#/components/parameters/gesuchTrancheId'
+    post:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToVersandbereit
   '/gesuch/{gesuchId}/notiz/all':
     parameters:
       - name: gesuchId
@@ -683,6 +705,76 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: gesuchDokumentAblehnen
+  '/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}':
+    post:
+      tags:
+        - Dokument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UnterschriftenblattCreate'
+      parameters:
+        - $ref: '#/components/parameters/unterschriftenblattTyp'
+        - $ref: '#/components/parameters/gesuchId'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createUnterschriftenblatt
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/unterschriftenblatt/{gesuchId}':
+     get:
+      tags:
+        - Dokument
+      parameters:
+        - $ref: '#/components/parameters/gesuchId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnterschriftenblattDokument'
+          description: Returns an Array of Unterschriftenblaetter
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getUnterschriftenblaetterForGesuch
+  '/unterschriftenblatt/dokument/{dokumentId}':
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteUnterschriftenblattDokument
+      summary: deletes a Dokument
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
   '/fall/sb':
     get:
       tags:
@@ -1157,7 +1249,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SozialdienstAdmin'
+                $ref: '#/components/schemas/SozialdienstBenutzer'
           description: Updates data of a Sozialdienst admin
         401:
           $ref: '#/components/responses/Unauthorized'
@@ -1182,13 +1274,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SozialdienstAdminCreate'
+              $ref: '#/components/schemas/SozialdienstAdmin'
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SozialdienstAdmin'
+                $ref: '#/components/schemas/SozialdienstBenutzer'
           description: Replaces a Sozialdienst admin by a new one
         401:
           $ref: '#/components/responses/Unauthorized'
@@ -1207,6 +1299,8 @@ paths:
         in: path
         required: true
     delete:
+      tags:
+        - Sozialdienst
       responses:
         200:
           content:
@@ -1224,9 +1318,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteSozialdienst
       summary: Delete a Sozialdienst by Id
+    get:
       tags:
         - Sozialdienst
-    get:
       responses:
         200:
           content:
@@ -1244,8 +1338,99 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getSozialdienst
       summary: Get a Sozialdienst by Id
+  /sozialdienst/benutzer:
+    get:
       tags:
         - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns all SozialdienstBenutzers of the Sozialdienst of the logged in SozialdienstAdmin
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getSozialdienstBenutzer
+    post:
+      description: create a new SozialdienstBenutzer that is assigned to the Sozialdienst of the currently logged in SozialdienstAdmin
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerCreate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns the created SozialdienstBenutzer
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: createSozialdienstBenutzer
+    patch:
+      description: update an exisitng SozialdienstBenutzer
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerUpdate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns the updated SozialdienstBenutzer
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: updateSozialdienstBenutzer
+    delete:
+      description: update an exisitng SozialdienstBenutzer
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UUID'
+      responses:
+        200:
+          description: Returns on successfull delete
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteSozialdienstBenutzer
   /stammdaten/land:
     get:
       tags:
@@ -1562,12 +1747,17 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
-  '/dokument/download':
+  '/dokument/{dokumentArt}/download':
     parameters:
       - name: token
         schema:
           type: string
         in: query
+        required: true
+      - name: dokumentArt
+        schema:
+          $ref: '#/components/schemas/DokumentArt'
+        in: path
         required: true
     get:
       tags:
@@ -1583,7 +1773,7 @@ paths:
       operationId: getDokument
       summary: get Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-  '/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}':
+  '/dokument/{dokumentId}':
     get:
       tags:
         - Dokument
@@ -1610,21 +1800,9 @@ paths:
     delete:
       tags:
         - Dokument
-      parameters:
-        - name: dokumentTyp
-          schema:
-            $ref: '#/components/schemas/DokumentTyp'
-          in: path
-          required: true
-        - name: gesuchTrancheId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
       responses:
         '200':
-          description: |
-            Dokument deleted
+          description: Dokument deleted
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1636,16 +1814,6 @@ paths:
       operationId: deleteDokument
       summary: deletes a Dokument
     parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-      - name: dokumentTyp
-        schema:
-          $ref: '#/components/schemas/DokumentTyp'
-        in: path
-        required: true
       - name: dokumentId
         schema:
           $ref: '#/components/schemas/UUID'
@@ -2308,7 +2476,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchDokument
-  '/gesuchtranche/{gesuchTrancheId}/requiredDokumente':
+  '/gesuchtranche/{gesuchTrancheId}/dokumenteToUpload':
     parameters:
       - name: gesuchTrancheId
         schema:
@@ -2320,20 +2488,18 @@ paths:
         - GesuchTranche
       responses:
         '200':
-          description: Required DokumentTyp returned
+          description: Returns the documents that are to be uploaded
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DokumentTyp'
+                $ref: '#/components/schemas/DokumenteToUpload'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getRequiredGesuchDokumentTyp
+      operationId: getDocumentsToUpload
   '/gesuchtranche/{gesuchId}':
     parameters:
       - name: gesuchId
@@ -2655,6 +2821,17 @@ components:
         - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
         - DARLEHEN_BELEGE_ANSCHAFFUNGEN
       type: string
+    DokumentArt:
+      enum:
+        - GESUCH_DOKUMENT
+        - UNTERSCHRIFTENBLATT
+      type: string
+    UnterschriftenblattDokumentTyp:
+      type: string
+      enum:
+        - GEMEINSAM
+        - MUTTER
+        - VATER
     ElternAbwesenheitsGrund:
       enum:
         - VERSTORBEN
@@ -2784,6 +2961,22 @@ components:
             $ref: '#/components/schemas/Dokument'
         status:
           $ref: '#/components/schemas/Dokumentstatus'
+    UnterschriftenblattDokument:
+      required:
+        - id
+        - dokumentTyp
+        - dokumente
+        - status
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        dokumentTyp:
+          $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
     Dokument:
       required:
         - id
@@ -2860,6 +3053,13 @@ components:
         technischesJahr:
           type: integer
     DokumentCreate:
+      required:
+        - fileUpload
+      type: object
+      properties:
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
+    UnterschriftenblattCreate:
       required:
         - fileUpload
       type: object
@@ -4517,7 +4717,48 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-    SozialdienstAdminCreate:
+    SozialdienstBenutzerBase:
+      required:
+        - vorname
+        - nachname
+        - email
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+        email:
+          type: string
+    SozialdienstBenutzerCreate:
+      required:
+        - redirectUri
+      properties:
+        redirectUri:
+          type: string
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstBenutzerBase'
+    SozialdienstBenutzer:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+      allOf:
+        - $ref: '#/components/schemas/SozialdienstBenutzerBase'
+    SozialdienstBenutzerUpdate:
+      required:
+        - id
+        - vorname
+        - nachname
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        vorname:
+          type: string
+        nachname:
+          type: string
+    SozialdienstAdmin:
       required:
         - keycloakId
         - vorname
@@ -4532,10 +4773,10 @@ components:
           type: string
         email:
           type: string
-    SozialdienstAdmin:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/SozialdienstAdminCreate'
+    # SozialdienstAdmin:
+    #   type: object
+    #   allOf:
+    #     - $ref: '#/components/schemas/SozialdienstAdmin'
     SozialdienstAdminUpdate:
       required:
         - vorname
@@ -4559,7 +4800,7 @@ components:
         adresse:
           $ref: '#/components/schemas/Adresse'
         sozialdienstAdmin:
-          $ref: '#/components/schemas/SozialdienstAdminCreate'
+          $ref: '#/components/schemas/SozialdienstAdmin'
     SozialdienstUpdate:
       required:
         - id
@@ -4592,7 +4833,7 @@ components:
         iban:
           type: string
         sozialdienstAdmin:
-          $ref: '#/components/schemas/SozialdienstAdmin'
+          $ref: '#/components/schemas/SozialdienstBenutzer'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -5146,6 +5387,18 @@ components:
       properties:
         decisionId:
           $ref: '#/components/schemas/UUID'
+    DokumenteToUpload:
+      type: object
+      properties:
+        required:
+          type: array
+          items:
+            $ref: '#/components/schemas/DokumentTyp'
+        unterschriftenblaetter:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'        
+
   responses:
     Unauthorized:
       content:
@@ -5191,6 +5444,13 @@ components:
       in: path
       required: true
       description: Die ID vom Gesuch
+      schema:
+        $ref: '#/components/schemas/UUID'
+    gesuchTrancheId:
+      name: gesuchTrancheId
+      in: path
+      required: true
+      description: Die ID von der GesuchTranche
       schema:
         $ref: '#/components/schemas/UUID'
     sortOrder:
@@ -5259,6 +5519,12 @@ components:
       required: true
       schema:
         type: integer
+    unterschriftenblattTyp:
+      name: unterschriftenblattTyp
+      schema:
+        $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+      in: path
+      required: true
 
 security:
   - auth-uat-bern: []

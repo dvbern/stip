@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchInfoDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String gesuchNummer;
-  private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
+  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
 
@@ -67,7 +67,7 @@ public class GesuchInfoDto  implements Serializable {
 
   /**
    **/
-  public GesuchInfoDto gesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+  public GesuchInfoDto gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
     return this;
   }
@@ -75,12 +75,12 @@ public class GesuchInfoDto  implements Serializable {
   
   @JsonProperty("gesuchStatus")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getGesuchStatus() {
+  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
   @JsonProperty("gesuchStatus")
-  public void setGesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+  public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 

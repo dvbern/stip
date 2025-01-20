@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
@@ -99,11 +100,11 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
         return gesuchTrancheService.getGesuchDokument(gesuchTrancheId, dokumentTyp);
     }
 
-    @RolesAllowed(GESUCH_READ)
     @Override
-    public List<DokumentTyp> getRequiredGesuchDokumentTyp(UUID gesuchTrancheId) {
+    @RolesAllowed(GESUCH_READ)
+    public DokumenteToUploadDto getDocumentsToUpload(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canRead(gesuchTrancheId);
-        return gesuchTrancheService.getRequiredDokumentTypes(gesuchTrancheId);
+        return gesuchTrancheService.getDokumenteToUpload(gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_READ)

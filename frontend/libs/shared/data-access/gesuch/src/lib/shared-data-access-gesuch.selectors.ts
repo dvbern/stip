@@ -13,6 +13,7 @@ import {
   SharedModelGesuchFormularPropsSteuerdatenSteps,
   SteuerdatenTyp,
   TRANCHE_TYPE_INITIAL,
+  TrancheSetting,
 } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
@@ -129,7 +130,7 @@ export const selectSharedDataAccessGesuchTrancheSettingsView = createSelector(
 const createTrancheSetting = (
   gesuchUrlTyp: GesuchUrlType | null,
   gesuchTranche: GesuchTranche | undefined,
-) => {
+): TrancheSetting | null => {
   return gesuchTranche && gesuchUrlTyp
     ? ({
         type: gesuchTranche.typ,

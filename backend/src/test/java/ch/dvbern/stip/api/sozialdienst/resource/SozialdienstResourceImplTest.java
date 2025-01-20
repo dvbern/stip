@@ -25,19 +25,19 @@ import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.LandDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.response.ResponseBody;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +48,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.assertEquals;
+import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_ADMIN_ID;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -80,7 +82,7 @@ class SozialdienstResourceImplTest {
         adresseDto.setHausnummer("1");
         adresseDto.setLand(LandDtoSpec.CH);
 
-        final var sozialdienstAdminCreateDto = new SozialdienstAdminCreateDtoSpec();
+        final var sozialdienstAdminCreateDto = new SozialdienstAdminDtoSpec();
         sozialdienstAdminCreateDto.setKeycloakId(UUID.randomUUID().toString());
         sozialdienstAdminCreateDto.setNachname("Muster");
         sozialdienstAdminCreateDto.setVorname("Max");
@@ -94,14 +96,14 @@ class SozialdienstResourceImplTest {
 
         dtoSpec = apiSpec.createSozialdienst()
             .body(createDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .as(SozialdienstDtoSpec.class);
 
-        assertNotNull(dtoSpec.getSozialdienstAdmin());
+        assertThat(dtoSpec.getSozialdienstAdmin(), notNullValue());
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
         checkSozialdienstResponse(dtoSpec);
         checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
@@ -113,13 +115,13 @@ class SozialdienstResourceImplTest {
     void getSozialdienstById() {
         dtoSpec = apiSpec.getSozialdienst()
             .sozialdienstIdPath(dtoSpec.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .as(SozialdienstDtoSpec.class);
-        assertNotNull(dtoSpec.getSozialdienstAdmin());
+        assertThat(dtoSpec.getSozialdienstAdmin(), notNullValue());
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
         checkSozialdienstResponse(dtoSpec);
         checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
@@ -132,14 +134,14 @@ class SozialdienstResourceImplTest {
     void getSozialdienste() {
         dtoSpec = Arrays.stream(
             apiSpec.getAllSozialdienste()
-                .execute(ResponseBody::prettyPeek)
+                .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
                 .assertThat()
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract()
                 .as(SozialdienstDtoSpec[].class)
         ).toList().get(0);
-        assertNotNull(dtoSpec.getSozialdienstAdmin());
+        assertThat(dtoSpec.getSozialdienstAdmin(), notNullValue());
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
         checkSozialdienstResponse(dtoSpec);
         checkSozialdienstAdminResponse(dtoSpec.getSozialdienstAdmin());
@@ -162,20 +164,20 @@ class SozialdienstResourceImplTest {
 
         apiSpec.updateSozialdienst()
             .body(updateDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
         final var updated = apiSpec.getSozialdienst()
             .sozialdienstIdPath(dtoSpec.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .as(SozialdienstDtoSpec.class);
-        assertNotNull(updated.getSozialdienstAdmin());
+        assertThat(updated.getSozialdienstAdmin(), notNullValue());
         assertTrue(updated.getName().contains("updated"));
         assertTrue(updated.getAdresse().getStrasse().contains("updated"));
         checkSozialdienstResponse(updated);
@@ -185,65 +187,64 @@ class SozialdienstResourceImplTest {
     @Order(5)
     @TestAsAdmin
     @Test
-    void updateSozizialdienstAdminTest() {
+    void updateSozialdienstAdminTest() {
         final var updateSozialdienstDto = new SozialdienstAdminUpdateDtoSpec();
         updateSozialdienstDto.setVorname("updated");
         updateSozialdienstDto.setNachname("updated");
         final var updated = apiSpec.updateSozialdienstAdmin()
             .sozialdienstIdPath(dtoSpec.getId())
             .body(updateSozialdienstDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
-            .as(SozialdienstAdminDtoSpec.class);
+            .as(SozialdienstBenutzerDtoSpec.class);
         assertTrue(updated.getNachname().contains("updated"));
         assertTrue(updated.getVorname().contains("updated"));
         checkSozialdienstAdminResponse(updated);
     }
 
-    @Order(5)
+    @Order(6)
     @TestAsAdmin
     @Test
-    void replaceSozizialdienstAdminTest() {
-        final var keykloakId = UUID.randomUUID().toString();
-        final var createSozialdienstDto = new SozialdienstAdminCreateDtoSpec();
+    void replaceSozialdienstAdminTest() {
+        final var createSozialdienstDto = new SozialdienstAdminDtoSpec();
         createSozialdienstDto.setVorname("replaced");
         createSozialdienstDto.setNachname("replaced");
         createSozialdienstDto.setEmail("replaced@test.com");
-        createSozialdienstDto.setKeycloakId(keykloakId);
+        createSozialdienstDto.setKeycloakId(SOZIALDIENST_ADMIN_ID);
         final var replaced = apiSpec.replaceSozialdienstAdmin()
             .sozialdienstIdPath(dtoSpec.getId())
             .body(createSozialdienstDto)
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
-            .as(SozialdienstAdminDtoSpec.class);;
+            .as(SozialdienstBenutzerDtoSpec.class);;
         assertTrue(replaced.getNachname().contains("replaced"));
         assertTrue(replaced.getVorname().contains("replaced"));
         assertTrue(replaced.getEmail().contains("replaced"));
-        assertEquals(replaced.getKeycloakId(), keykloakId);
+        // assertEquals(replaced.getKeycloakId(), SOZIALDIENST_ADMIN_ID);
         checkSozialdienstAdminResponse(replaced);
 
     }
 
-    @Order(7)
+    @Order(99)
     @TestAsAdmin
     @Test
     void deleteSozialdienst() {
         apiSpec.deleteSozialdienst()
             .sozialdienstIdPath(dtoSpec.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
         apiSpec.getSozialdienst()
             .sozialdienstIdPath(dtoSpec.getId())
-            .execute(ResponseBody::prettyPeek)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.NOT_FOUND.getStatusCode());
@@ -256,8 +257,7 @@ class SozialdienstResourceImplTest {
         assertNotNull(dtoSpec.getIban());
     }
 
-    private void checkSozialdienstAdminResponse(SozialdienstAdminDtoSpec dtoSpec) {
-        assertNotNull(dtoSpec.getKeycloakId());
+    private void checkSozialdienstAdminResponse(SozialdienstBenutzerDtoSpec dtoSpec) {
         assertNotNull(dtoSpec.getVorname());
         assertNotNull(dtoSpec.getNachname());
         assertNotNull(dtoSpec.getEmail());

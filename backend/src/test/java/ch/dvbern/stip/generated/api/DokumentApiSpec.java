@@ -13,6 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
@@ -20,6 +21,8 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
 import java.util.ArrayList;
@@ -64,13 +67,16 @@ public class DokumentApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createDokument(),
+                createUnterschriftenblatt(),
                 deleteDokument(),
+                deleteUnterschriftenblattDokument(),
                 gesuchDokumentAblehnen(),
                 gesuchDokumentAkzeptieren(),
                 getDokument(),
                 getDokumentDownloadToken(),
                 getGesuchDokumentKommentare(),
-                getGesuchDokumenteForTyp()
+                getGesuchDokumenteForTyp(),
+                getUnterschriftenblaetterForGesuch()
         );
     }
 
@@ -78,8 +84,16 @@ public class DokumentApiSpec {
         return new CreateDokumentOper(createReqSpec());
     }
 
+    public CreateUnterschriftenblattOper createUnterschriftenblatt() {
+        return new CreateUnterschriftenblattOper(createReqSpec());
+    }
+
     public DeleteDokumentOper deleteDokument() {
         return new DeleteDokumentOper(createReqSpec());
+    }
+
+    public DeleteUnterschriftenblattDokumentOper deleteUnterschriftenblattDokument() {
+        return new DeleteUnterschriftenblattDokumentOper(createReqSpec());
     }
 
     public GesuchDokumentAblehnenOper gesuchDokumentAblehnen() {
@@ -104,6 +118,10 @@ public class DokumentApiSpec {
 
     public GetGesuchDokumenteForTypOper getGesuchDokumenteForTyp() {
         return new GetGesuchDokumenteForTypOper(createReqSpec());
+    }
+
+    public GetUnterschriftenblaetterForGesuchOper getUnterschriftenblaetterForGesuch() {
+        return new GetUnterschriftenblaetterForGesuchOper(createReqSpec());
     }
 
     /**
@@ -204,17 +222,102 @@ public class DokumentApiSpec {
         }
     }
     /**
+     * 
+     * 
+     *
+     * @see #unterschriftenblattTypPath  (required)
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #fileUploadMultiPart  (required)
+     */
+    public static class CreateUnterschriftenblattOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateUnterschriftenblattOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("multipart/form-data");
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String UNTERSCHRIFTENBLATT_TYP_PATH = "unterschriftenblattTyp";
+
+        /**
+         * @param unterschriftenblattTyp (UnterschriftenblattDokumentTypDtoSpec)  (required)
+         * @return operation
+         */
+        public CreateUnterschriftenblattOper unterschriftenblattTypPath(Object unterschriftenblattTyp) {
+            reqSpec.addPathParam(UNTERSCHRIFTENBLATT_TYP_PATH, unterschriftenblattTyp);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public CreateUnterschriftenblattOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+         /**
+         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
+         * @see #reqSpec for customise
+         * @param fileUpload (File)  (required)
+         * @return operation
+         */
+         public CreateUnterschriftenblattOper fileUploadMultiPart(File fileUpload) {
+            reqSpec.addMultiPart(fileUpload);
+            return this;
+         }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateUnterschriftenblattOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateUnterschriftenblattOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * deletes a Dokument
      * 
      *
      * @see #dokumentIdPath  (required)
-     * @see #dokumentTypPath  (required)
-     * @see #gesuchTrancheIdPath  (required)
      */
     public static class DeleteDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = DELETE;
-        public static final String REQ_URI = "/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}";
+        public static final String REQ_URI = "/dokument/{dokumentId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -226,7 +329,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * DELETE /dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}
+         * DELETE /dokument/{dokumentId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -247,28 +350,6 @@ public class DokumentApiSpec {
             return this;
         }
 
-        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
-
-        /**
-         * @param dokumentTyp (DokumentTypDtoSpec)  (required)
-         * @return operation
-         */
-        public DeleteDokumentOper dokumentTypPath(Object dokumentTyp) {
-            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
-            return this;
-        }
-
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
-
-        /**
-         * @param gesuchTrancheId (UUID)  (required)
-         * @return operation
-         */
-        public DeleteDokumentOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
-            return this;
-        }
-
         /**
          * Customize request specification
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
@@ -285,6 +366,68 @@ public class DokumentApiSpec {
          * @return operation
          */
         public DeleteDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * deletes a Dokument
+     * 
+     *
+     * @see #dokumentIdPath  (required)
+     */
+    public static class DeleteUnterschriftenblattDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/unterschriftenblatt/dokument/{dokumentId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteUnterschriftenblattDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /unterschriftenblatt/dokument/{dokumentId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String DOKUMENT_ID_PATH = "dokumentId";
+
+        /**
+         * @param dokumentId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteUnterschriftenblattDokumentOper dokumentIdPath(Object dokumentId) {
+            reqSpec.addPathParam(DOKUMENT_ID_PATH, dokumentId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteUnterschriftenblattDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteUnterschriftenblattDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -429,12 +572,13 @@ public class DokumentApiSpec {
      * 
      *
      * @see #tokenQuery  (required)
+     * @see #dokumentArtPath  (required)
      * return File
      */
     public static class GetDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/dokument/download";
+        public static final String REQ_URI = "/dokument/{dokumentArt}/download";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -446,7 +590,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/download
+         * GET /dokument/{dokumentArt}/download
          * @param handler handler
          * @param <T> type
          * @return type
@@ -457,13 +601,24 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/download
+         * GET /dokument/{dokumentArt}/download
          * @param handler handler
          * @return File
          */
         public File executeAs(Function<Response, Response> handler) {
             TypeRef<File> type = new TypeRef<File>(){};
             return execute(handler).as(type);
+        }
+
+        public static final String DOKUMENT_ART_PATH = "dokumentArt";
+
+        /**
+         * @param dokumentArt (DokumentArtDtoSpec)  (required)
+         * @return operation
+         */
+        public GetDokumentOper dokumentArtPath(Object dokumentArt) {
+            reqSpec.addPathParam(DOKUMENT_ART_PATH, dokumentArt);
+            return this;
         }
 
         public static final String TOKEN_QUERY = "token";
@@ -501,15 +656,13 @@ public class DokumentApiSpec {
      * get Dokument Download Token
      * 
      *
-     * @see #gesuchTrancheIdPath  (required)
-     * @see #dokumentTypPath  (required)
      * @see #dokumentIdPath  (required)
      * return FileDownloadTokenDtoSpec
      */
     public static class GetDokumentDownloadTokenOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}";
+        public static final String REQ_URI = "/dokument/{dokumentId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -521,7 +674,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}
+         * GET /dokument/{dokumentId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -532,35 +685,13 @@ public class DokumentApiSpec {
         }
 
         /**
-         * GET /dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}
+         * GET /dokument/{dokumentId}
          * @param handler handler
          * @return FileDownloadTokenDtoSpec
          */
         public FileDownloadTokenDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<FileDownloadTokenDtoSpec> type = new TypeRef<FileDownloadTokenDtoSpec>(){};
             return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
-
-        /**
-         * @param gesuchTrancheId (UUID)  (required)
-         * @return operation
-         */
-        public GetDokumentDownloadTokenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
-            return this;
-        }
-
-        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
-
-        /**
-         * @param dokumentTyp (DokumentTypDtoSpec)  (required)
-         * @return operation
-         */
-        public GetDokumentDownloadTokenOper dokumentTypPath(Object dokumentTyp) {
-            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
-            return this;
         }
 
         public static final String DOKUMENT_ID_PATH = "dokumentId";
@@ -760,6 +891,79 @@ public class DokumentApiSpec {
          * @return operation
          */
         public GetGesuchDokumenteForTypOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * return List&lt;UnterschriftenblattDokumentDtoSpec&gt;
+     */
+    public static class GetUnterschriftenblaetterForGesuchOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/unterschriftenblatt/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetUnterschriftenblaetterForGesuchOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /unterschriftenblatt/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /unterschriftenblatt/{gesuchId}
+         * @param handler handler
+         * @return List&lt;UnterschriftenblattDokumentDtoSpec&gt;
+         */
+        public List<UnterschriftenblattDokumentDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<UnterschriftenblattDokumentDtoSpec>> type = new TypeRef<List<UnterschriftenblattDokumentDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public GetUnterschriftenblaetterForGesuchOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetUnterschriftenblaetterForGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetUnterschriftenblaetterForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

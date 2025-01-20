@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class StatusprotokollEntryDto  implements Serializable {
   private @Valid java.time.LocalDateTime timestamp;
-  private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus status;
+  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus status;
   private @Valid String benutzer;
   private @Valid String kommentar;
 
@@ -47,19 +47,19 @@ public class StatusprotokollEntryDto  implements Serializable {
 
   /**
    **/
-  public StatusprotokollEntryDto status(ch.dvbern.stip.api.gesuch.type.Gesuchstatus status) {
+  public StatusprotokollEntryDto status(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus status) {
     this.status = status;
     return this;
   }
 
   
   @JsonProperty("status")
-  public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getStatus() {
+  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getStatus() {
     return status;
   }
 
   @JsonProperty("status")
-  public void setStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus status) {
+  public void setStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus status) {
     this.status = status;
   }
 

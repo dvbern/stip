@@ -23,7 +23,7 @@ describe('DokumentsStore', () => {
       error: undefined,
       type: 'initial',
     });
-    expect(store.requiredDocumentTypes()).toEqual({
+    expect(store.documentsToUpload()).toEqual({
       data: undefined,
       error: undefined,
       type: 'initial',

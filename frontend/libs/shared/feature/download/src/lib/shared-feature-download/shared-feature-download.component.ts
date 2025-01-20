@@ -12,23 +12,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, exhaustMap, filter, map, take, tap } from 'rxjs';
 
 import {
+  DokumentArt,
   DokumentService,
-  DokumentTyp,
   GesuchService,
 } from '@dv/shared/model/gesuch';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
-type DownloadOptions =
-  | {
-      type: 'berechnungsblatt';
-      gesuchId: string;
-    }
-  | {
-      type: 'dokument';
-      gesuchTrancheId: string;
-      dokumentId: string;
-      dokumentTyp: DokumentTyp;
-    };
+type DownloadType = 'berechnungsblatt' | 'dokument';
 
 @Component({
   selector: 'dv-shared-feature-download',
@@ -38,12 +28,11 @@ type DownloadOptions =
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureDownloadComponent implements OnInit {
-  id = input.required<string>({ alias: 'id' });
-  typeSig = input.required<DownloadOptions['type']>({ alias: 'type' });
-  dokumentTyp = input<DokumentTyp | undefined>(undefined, {
-    alias: 'dokumentTyp',
+  idSig = input.required<string>({ alias: 'id' });
+  typeSig = input.required<DownloadType>({ alias: 'type' });
+  dokumentArtSig = input<DokumentArt | undefined>(undefined, {
+    alias: 'dokumentArt',
   });
-  dokumentIdSig = input<string | undefined>(undefined, { alias: 'dokumentId' });
 
   private gesuchService = inject(GesuchService);
   private dokumentService = inject(DokumentService);
@@ -54,17 +43,11 @@ export class SharedFeatureDownloadComponent implements OnInit {
     'd-flex flex-column position-absolute top-0 bottom-0 start-0 end-0 p-5';
 
   ngOnInit() {
-    const downloadOptions = getDownloadOptions(
-      this.typeSig(),
-      this.id(),
-      this.dokumentIdSig(),
-      this.dokumentTyp(),
-    );
-
-    if (this.dcmnt && downloadOptions) {
+    if (this.dcmnt) {
       const dcmnt = this.dcmnt;
       getDownloadObservable$(
-        downloadOptions,
+        this.typeSig(),
+        this.idSig(),
         this.dokumentService,
         this.gesuchService,
       )
@@ -95,52 +78,26 @@ const getBerechnungsblattDownloadPath = (token: string) => {
   return `/api/v1/gesuch/berechnungsblatt?token=${token}`;
 };
 
-const getDownloadOptions = (
-  type: DownloadOptions['type'],
-  id: string,
-  dokumentId?: string,
-  dokumentTyp?: DokumentTyp,
-): DownloadOptions | null => {
-  switch (type) {
-    case 'berechnungsblatt':
-      return {
-        type: 'berechnungsblatt',
-        gesuchId: id,
-      };
-    case 'dokument':
-      if (!dokumentId || !dokumentTyp) {
-        return null;
-      }
-      return {
-        type: 'dokument',
-        gesuchTrancheId: id,
-        dokumentId,
-        dokumentTyp,
-      };
-  }
-};
-
 const getDownloadObservable$ = (
-  downloadOptions: DownloadOptions,
+  type: DownloadType,
+  id: string,
   dokumentService: DokumentService,
   gesuchService: GesuchService,
 ) => {
-  switch (downloadOptions.type) {
+  switch (type) {
     case 'berechnungsblatt': {
       return gesuchService
         .getBerechnungsblattDownloadToken$({
-          gesuchId: downloadOptions.gesuchId,
+          gesuchId: id,
         })
         .pipe(map(({ token }) => getBerechnungsblattDownloadPath(token)));
     }
     case 'dokument': {
       return dokumentService
         .getDokumentDownloadToken$({
-          gesuchTrancheId: downloadOptions.gesuchTrancheId,
-          dokumentId: downloadOptions.dokumentId,
-          dokumentTyp: downloadOptions.dokumentTyp,
+          dokumentId: id,
         })
-        .pipe(map((token) => getDocumentDownloadPath(token)));
+        .pipe(map(({ token }) => getDocumentDownloadPath(token)));
     }
   }
 };

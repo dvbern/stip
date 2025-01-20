@@ -1,24 +1,57 @@
-import { Dokument, DokumentTyp, GesuchDokument } from '@dv/shared/model/gesuch';
+import { AppType } from '@dv/shared/model/config';
+import {
+  Dokument,
+  DokumentArt,
+  DokumentTyp,
+  GesuchDokument,
+  UnterschriftenblattDokument,
+  UnterschriftenblattDokumentTyp,
+} from '@dv/shared/model/gesuch';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { PermissionMap } from '@dv/shared/model/permission-state';
+import { Extends } from '@dv/shared/model/type-util';
 
-export interface SharedModelTableDokument {
-  formStep: SharedModelGesuchFormStep;
-  titleKey: string;
-  dokumentTyp: string;
+export type SharedModelStandardGesuchDokument = {
+  art: Extends<DokumentArt, 'GESUCH_DOKUMENT'>;
+  dokumentTyp: DokumentTyp;
+  trancheId: string;
   gesuchDokument?: GesuchDokument;
-  documentOptions: DokumentOptions;
-}
+};
+
+export type SharedModelAdditionalGesuchDokument = {
+  art: Extends<DokumentArt, 'UNTERSCHRIFTENBLATT'>;
+  dokumentTyp: UnterschriftenblattDokumentTyp;
+  gesuchId: string;
+  trancheId: string;
+  gesuchDokument?: UnterschriftenblattDokument;
+};
+
+export type SharedModelGesuchDokument =
+  | SharedModelStandardGesuchDokument
+  | SharedModelAdditionalGesuchDokument;
 
 export interface DokumentOptions {
+  permissions: PermissionMap;
   singleUpload: boolean;
   titleKey: string;
-  trancheId: string;
   allowTypes: string;
-  dokumentTyp: DokumentTyp;
-  gesuchDokument?: GesuchDokument;
-  initialDocuments?: Dokument[];
+  dokument: SharedModelGesuchDokument;
+  initialDokumente?: Dokument[];
   readonly: boolean;
 }
+
+export interface SharedModelTableGesuchDokument {
+  formStep: SharedModelGesuchFormStep;
+  dokumentTyp: DokumentTyp;
+  gesuchDokument?: GesuchDokument;
+  dokumentOptions: DokumentOptions;
+}
+
+export type SharedModelTableAdditionalDokument = {
+  dokumentTyp: UnterschriftenblattDokumentTyp;
+  gesuchDokument?: UnterschriftenblattDokument;
+  dokumentOptions: DokumentOptions;
+};
 
 export interface DokumentUpload {
   file: Dokument;
@@ -36,22 +69,43 @@ export interface DokumentView extends DokumentUpload {
 }
 
 export interface DokumentListView {
-  gesuchDokument?: GesuchDokument;
+  gesuchDokument?: SharedModelGesuchDokument;
   dokuments: DokumentView[];
 }
 
 export interface DokumentState {
-  gesuchDokument?: GesuchDokument;
+  dokumentModel?: SharedModelGesuchDokument;
   dokuments: DokumentUpload[];
   errorKey?: string;
 }
 
 export interface UploadView {
-  trancheId: string;
-  type: DokumentTyp;
   readonly: boolean;
-  gesuchDokument?: GesuchDokument;
-  initialDocuments?: Dokument[];
+  permissions: PermissionMap;
+  dokumentModel: SharedModelGesuchDokument;
+  initialDokuments?: Dokument[];
   hasEntries: boolean;
   isSachbearbeitungApp: boolean;
 }
+
+export const isUploadable = (
+  appType: AppType,
+  dokumentModel: SharedModelGesuchDokument,
+  permission: PermissionMap,
+) => {
+  switch (dokumentModel.art) {
+    case 'GESUCH_DOKUMENT': {
+      return (
+        permission.canUploadDocuments &&
+        dokumentModel.gesuchDokument?.status !== 'AKZEPTIERT'
+      );
+    }
+    case 'UNTERSCHRIFTENBLATT': {
+      return permission.canUploadUnterschriftenblatt;
+    }
+  }
+};
+
+export const getDownloadLink = (dokument: DokumentView) => {
+  return `/download/${dokument.file.id}/dokument`;
+};

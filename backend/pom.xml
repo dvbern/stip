@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.dvbern.oss.stip</groupId>
   <artifactId>stip-api</artifactId>
   <version>${revision}</version>
   <properties>
-    <revision>local</revision>
     <archunit.version>1.0.1</archunit.version>
     <assertj.version>3.24.2</assertj.version>
     <checkerframework.version>3.19.0</checkerframework.version>
@@ -25,7 +24,11 @@
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.6.4</quarkus.platform.version>
+    <quarkiverse.sentry.version>2.0.7</quarkiverse.sentry.version>
     <querydsl.version>5.0.0</querydsl.version>
+    <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
+    <rest-assured.version>4.5.1</rest-assured.version>
+    <revision>local</revision>
     <savoirtech.json-comparator.version>1.1.1</savoirtech.json-comparator.version>
     <skipITs>true</skipITs>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
@@ -36,8 +39,6 @@
     </sonar.exclusions>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
-    <rest-assured.version>4.5.1</rest-assured.version>
-    <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
     <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
     <kie.version>8.41.0.Final</kie.version>
     <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
@@ -132,6 +133,11 @@
       <artifactId>quarkus-smallrye-jwt</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkiverse.loggingsentry</groupId>
+      <artifactId>quarkus-logging-sentry</artifactId>
+      <version>${quarkiverse.sentry.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct</artifactId>
       <version>${mapstruct.version}</version>
@@ -224,6 +230,10 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-keycloak-admin-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
@@ -235,8 +245,8 @@
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
-      <scope>test</scope>
       <version>${rest-assured.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
@@ -322,13 +332,11 @@
       <artifactId>kie-dmn-core</artifactId>
       <version>${kie.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/jakarta.xml.soap/jakarta.xml.soap-api -->
     <dependency>
       <groupId>jakarta.xml.soap</groupId>
       <artifactId>jakarta.xml.soap-api</artifactId>
       <version>3.0.1</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/com.sun.xml.messaging.saaj/saaj-impl -->
     <dependency>
       <groupId>com.sun.xml.messaging.saaj</groupId>
       <artifactId>saaj-impl</artifactId>
@@ -446,22 +454,10 @@
           </execution>
         </executions>
       </plugin>
-      <!-- <editor-fold desc="liquibase-maven-plugin: diff" defaultstate="collapsed">-->
       <plugin>
         <groupId>org.liquibase</groupId>
         <artifactId>liquibase-maven-plugin</artifactId>
         <version>${liquibase-maven-plugin.version}</version>
-        <configuration>
-          <changeLogFile>src/main/resources/db/migration/changelog.xml</changeLogFile>
-          <diffChangeLogFile>src/main/resources/db/migration/XXXXX_diffchange.xml</diffChangeLogFile>
-          <outputChangeLogFile>src/main/resources/db/migration/XXXXX_genchange.xml</outputChangeLogFile>
-          <propertyFile>liquibase.properties</propertyFile>
-          <!-- Old state -->
-          <driver>org.postgresql.Driver</driver>
-
-          <!-- Target state -->
-          <referenceUrl>hibernate:ejb3:LiquibasePU</referenceUrl>
-        </configuration>
         <dependencies>
           <dependency>
             <groupId>io.quarkus</groupId>
@@ -484,10 +480,15 @@
             <version>${quarkus.platform.version}</version>
           </dependency>
         </dependencies>
+        <configuration>
+          <changeLogFile>src/main/resources/db/migration/changelog.xml</changeLogFile>
+          <diffChangeLogFile>src/main/resources/db/migration/XXXXX_diffchange.xml</diffChangeLogFile>
+          <outputChangeLogFile>src/main/resources/db/migration/XXXXX_genchange.xml</outputChangeLogFile>
+          <propertyFile>liquibase.properties</propertyFile>
+          <driver>org.postgresql.Driver</driver>
+          <referenceUrl>hibernate:ejb3:LiquibasePU</referenceUrl>
+        </configuration>
       </plugin>
-      <!-- </editor-fold> -->
-
-      <!-- <editor-fold desc="spotless-maven-plugin" defaultstate="collapsed">-->
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
@@ -505,36 +506,27 @@
             <excludes>
               <include>src/**/generated/**/*.*</include>
             </excludes>
-            
-            <!-- It is currently not possible to replace star imports with non-start, so the only thing we can ndo is remove them -->
             <replaceRegex>
               <name>Remove wildcard imports</name>
               <searchRegex>import\s+(?:static\s+)?[^\*\s]+\*;(\r\n|\r|\n)</searchRegex>
               <replacement>$1</replacement>
             </replaceRegex>
-            
-            <!-- Apply Cleanthat before formatting as it may break existing formatting -->
             <cleanthat />
-            
             <eclipse>
               <version>${spotless.eclipse.version}</version>
               <file>${project.basedir}/stip-codestyle.xml</file>
             </eclipse>
-            
             <trimTrailingWhitespace />
-            
             <importOrder>
               <order>java,,\#</order>
             </importOrder>
             <removeUnusedImports />
-
             <licenseHeader>
               <file>${project.basedir}/LICENSE_HEADER.txt</file>
             </licenseHeader>
           </java>
         </configuration>
       </plugin>
-      <!-- </editor-fold> -->
     </plugins>
   </build>
   <profiles>
@@ -586,8 +578,6 @@
         <defaultGoal>generate-sources</defaultGoal>
         <plugins>
           <plugin>
-            <!-- Wir generieren die Files nicht in den target ordner, daher muessen die 
-                        directories manuell beim clean geloescht werden -->
             <artifactId>maven-clean-plugin</artifactId>
             <version>3.2.0</version>
             <configuration>
@@ -624,10 +614,8 @@
                   <overwrite>true</overwrite>
                 </configuration>
               </execution>
-              <!-- This copies only the relevant java classed of the the generated rest-assured client -->
               <execution>
                 <id>copy-openapi-rest-assured-classes-to-project</id>
-                <!-- note that this is run AFTER the client is generated through openapi in the generate-rest-assured-test-client execution -->
                 <phase>process-test-resources</phase>
                 <goals>
                   <goal>copy-resources</goal>
@@ -658,9 +646,7 @@
                   <goal>generate</goal>
                 </goals>
                 <configuration>
-                  <openapiNormalizer>
-                    REFACTOR_ALLOF_WITH_PROPERTIES_ONLY=true
-                  </openapiNormalizer>
+                  <openapiNormalizer>REFACTOR_ALLOF_WITH_PROPERTIES_ONLY=true</openapiNormalizer>
                   <inputSpec>${contract.path}</inputSpec>
                   <generatorName>jaxrs-spec</generatorName>
                   <library>quarkus</library>
@@ -674,7 +660,7 @@
                   <apiNameSuffix>Resource</apiNameSuffix>
                   <generateSupportingFiles>false</generateSupportingFiles>
                   <schemaMappings>FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
-                    Gesuchstatus=ch.dvbern.stip.api.gesuch.type.Gesuchstatus,
+                    Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
                     Anrede=ch.dvbern.stip.api.common.type.Anrede,
                     Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
                     Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
@@ -702,7 +688,9 @@
                     SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
                     AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
                     StipDecision=ch.dvbern.stip.api.common.type.StipDecision,
-                    GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp
+                    GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp,
+                    UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
+                    DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
@@ -720,8 +708,7 @@
                     <returnResponse>false</returnResponse>
                     <additionalModelTypeAnnotations>@lombok.NoArgsConstructor
                       @lombok.AllArgsConstructor
-                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
-                    </additionalModelTypeAnnotations>
+                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)</additionalModelTypeAnnotations>
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
                     <useTags>true</useTags>
                   </configOptions>
