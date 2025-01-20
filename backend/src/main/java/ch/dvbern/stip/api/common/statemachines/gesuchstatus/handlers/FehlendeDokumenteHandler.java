@@ -43,11 +43,6 @@ public class FehlendeDokumenteHandler implements GesuchStatusStateChangeHandler 
 
     @Override
     public void handle(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Gesuch gesuch) {
-        /*
-         * KSTIP-1750: do not delete the GesuchDokument (in state ABGELEHNT) anymore,
-         * but only the attached files
-         */
-        // gesuchDokumentService.deleteAbgelehnteDokumenteForGesuch(gesuch);
         gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
