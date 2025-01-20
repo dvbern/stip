@@ -64,7 +64,7 @@ public class CustomDokumentTypService {
 
     @Transactional
     public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
-        if (gesuchDokumentService.customDokumentTypeContainsFiles(customDokumentTypId)) {
+        if (gesuchDokumentService.customDokumentHasGesuchDokuments(customDokumentTypId)) {
             throw new ForbiddenException("Dem generischem Dokument sind noch Files angehänkt");
         } else {
             customDocumentTypRepository.deleteById(customDokumentTypId);
