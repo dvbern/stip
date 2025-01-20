@@ -319,11 +319,6 @@ public class GesuchDokumentService {
             gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
         }
         if (dokument.getGesuchDokumente().isEmpty()) {
-            /*
-             * KSTIP-1750: do not delete the GesuchDokument (in state ABGELEHNT) anymore,
-             * but only the attached files
-             */
-            // dokumentRepository.delete(dokument);
             executeDeleteDokumentsFromS3(List.of(dokumentObjectId));
         }
     }
