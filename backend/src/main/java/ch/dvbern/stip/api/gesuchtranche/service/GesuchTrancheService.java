@@ -32,7 +32,6 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
-import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapper;
@@ -166,15 +165,14 @@ public class GesuchTrancheService {
 
     public List<CustomDokumentTypDto> getRequiredCustomDokumentTypes(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        return getRequiredCustomDokumentTypes(gesuchTranche).stream().map(customDocumentTypMapper::toDto).toList();
+        return requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(gesuchTranche)
+            .stream()
+            .map(customDocumentTypMapper::toDto)
+            .toList();
     }
 
     public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche) {
         return requiredDokumentService.getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
-    }
-
-    public List<CustomDokumentTyp> getRequiredCustomDokumentTypes(final GesuchTranche gesuchTranche) {
-        return requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(gesuchTranche);
     }
 
     @Transactional
