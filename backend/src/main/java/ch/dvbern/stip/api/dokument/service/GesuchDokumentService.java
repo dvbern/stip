@@ -29,7 +29,7 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.repo.CustomDocumentTypRepository;
+import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -73,7 +73,7 @@ public class GesuchDokumentService {
     private final DokumentMapper dokumentMapper;
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
-    private final CustomDocumentTypRepository customDocumentTypRepository;
+    private final CustomDokumentTypRepository customDocumentTypRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final S3AsyncClient s3;

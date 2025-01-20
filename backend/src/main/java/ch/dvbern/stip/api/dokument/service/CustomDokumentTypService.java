@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.repo.CustomDocumentTypRepository;
+import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestScoped
 @RequiredArgsConstructor
 public class CustomDokumentTypService {
-    private final CustomDocumentTypRepository customDocumentTypRepository;
+    private final CustomDokumentTypRepository customDocumentTypRepository;
     private final CustomDocumentTypMapper customDocumentTypMapper;
     private final GesuchDokumentRepository gesuchDokumentRepository;
 

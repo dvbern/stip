@@ -30,7 +30,7 @@ import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProd
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
-import ch.dvbern.stip.api.dokument.repo.CustomDocumentTypRepository;
+import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -266,7 +266,7 @@ class GesuchDokumentServiceTest {
         ConfigService configService,
         DokumentstatusService dokumentstatusService,
         Antivirus antivirus,
-        CustomDocumentTypRepository customDocumentTypRepository
+        CustomDokumentTypRepository customDocumentTypRepository
         ) {
             super(
                 gesuchDokumentMapper,

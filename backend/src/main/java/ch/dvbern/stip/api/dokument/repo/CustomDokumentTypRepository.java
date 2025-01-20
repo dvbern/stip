@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class CustomDocumentTypRepository implements BaseRepository<CustomDokumentTyp> {
+public class CustomDokumentTypRepository implements BaseRepository<CustomDokumentTyp> {
     public List<CustomDokumentTyp> getAll() {
         return findAll().stream().toList();
     }
