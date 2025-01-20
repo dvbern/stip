@@ -40,8 +40,7 @@ public class CustomDocumentsRequiredDocumentProducer implements RequiredCustomDo
         if (allCustomDokumentTyps.isEmpty()) {
             return ImmutablePair.of("", Set.of());
         }
-        Set<CustomDokumentTyp> requiredDocuments = new HashSet<>();
-        allCustomDokumentTyps.forEach(requiredDocuments::add);
+        Set<CustomDokumentTyp> requiredDocuments = new HashSet<>(allCustomDokumentTyps);
         return ImmutablePair.of("custom-documents", requiredDocuments);
     }
 }
