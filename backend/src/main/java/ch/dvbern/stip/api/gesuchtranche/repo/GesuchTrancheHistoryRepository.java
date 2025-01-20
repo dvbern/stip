@@ -17,12 +17,13 @@
 
 package ch.dvbern.stip.api.gesuchtranche.repo;
 
-import java.util.List;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -67,26 +68,45 @@ public class GesuchTrancheHistoryRepository {
         return findCurrentGesuchTrancheOfGesuchInStatus(gesuchId, Gesuchstatus.EINGEREICHT);
     }
 
-    @SuppressWarnings("unchecked")
-    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
     private Optional<GesuchTranche> findCurrentGesuchTrancheOfGesuchInStatus(
         final UUID gesuchId,
-        Gesuchstatus gesuchStatus
+        final Gesuchstatus gesuchStatus
+    ) {
+        return getLatestWhereStatusChangedTo(gesuchId, gesuchStatus).flatMap(Gesuch::getCurrentGesuchTrancheOptional);
+    }
+
+    public Optional<GesuchTranche> findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(
+        final UUID gesuchId,
+        final Gesuchstatus gesuchStatus
+    ) {
+        // The GesuchTranchen attached to this here are the revision that they were at the historic moment in time
+        final var historicGesuch = getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
+
+        // Get the one that was created the furthest in the past, i.e. the first/ initial Tranche
+        return historicGesuch.flatMap(
+            gesuch -> gesuch.getGesuchTranchen()
+                .stream()
+                .min(Comparator.comparing(AbstractEntity::getTimestampErstellt))
+        );
+    }
+
+    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
+    @SuppressWarnings("unchecked")
+    private Optional<Gesuch> getLatestWhereStatusChangedTo(
+        final UUID gesuchId,
+        final Gesuchstatus gesuchStatus
     ) {
         final var reader = AuditReaderFactory.get(em);
-        final List<Gesuch> resultList = reader
+        return reader
             .createQuery()
             .forRevisionsOfEntity(Gesuch.class, true, true)
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
-            // todo KSTIP-1594: is this join really required?
-            // .traverseRelation("gesuchTranchen", JoinType.INNER, "g")
-            // .up()
-            .addOrder(AuditEntity.revisionNumber().asc())
+            .addOrder(AuditEntity.revisionNumber().desc())
             .setMaxResults(1)
-            .getResultList();
-        return resultList.stream().findFirst().map(Gesuch::getCurrentGesuchTranche);
+            .getResultList()
+            .stream()
+            .findFirst();
     }
-
 }

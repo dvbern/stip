@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.DokumenteToUploadMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -45,9 +46,9 @@ import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -61,8 +62,10 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
+import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
@@ -104,6 +107,8 @@ public class GesuchTrancheService {
     private final SteuerdatenMapper steuerdatenMapper;
     private final MailService mailService;
     private final NotificationService notificationService;
+    private final DokumenteToUploadMapper dokumenteToUploadMapper;
+    private final UnterschriftenblattService unterschriftenblattService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
 
     public GesuchTranche getGesuchTranche(final UUID gesuchTrancheId) {
@@ -140,9 +145,19 @@ public class GesuchTrancheService {
         );
     }
 
-    public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTrancheId) {
+    @Transactional
+    public DokumenteToUploadDto getDokumenteToUpload(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        return getRequiredDokumentTypes(gesuchTranche);
+
+        final var required = getRequiredDokumentTypes(gesuchTranche);
+        final var unterschriftenblaetter = unterschriftenblattService
+            .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
+
+        return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter);
+    }
+
+    public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTranche) {
+        return getRequiredDokumentTypes(gesuchTrancheRepository.requireById(gesuchTranche));
     }
 
     public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche) {
@@ -219,7 +234,14 @@ public class GesuchTrancheService {
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         // TODO KSTIP-1631: change to state STIPENDIENANSPRUCH or KEIN_STIPENDIENANSPRUCH
-        final var allowedStates = Set.of(Gesuchstatus.IN_FREIGABE, Gesuchstatus.VERFUEGT);
+        final var allowedStates = Set.of(
+            Gesuchstatus.IN_FREIGABE,
+            Gesuchstatus.VERFUEGT,
+            Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            Gesuchstatus.VERSANDBEREIT,
+            Gesuchstatus.VERSENDET
+        );
+
         if (!allowedStates.contains(gesuch.getGesuchStatus())) {
             throw new IllegalStateException("Create aenderung not allowed in current gesuch status");
         }

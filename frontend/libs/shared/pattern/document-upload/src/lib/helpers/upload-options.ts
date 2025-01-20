@@ -1,7 +1,13 @@
 import { Signal, computed } from '@angular/core';
 
 import { DokumentOptions } from '@dv/shared/model/dokument';
-import { Dokument, DokumentTyp, GesuchDokument } from '@dv/shared/model/gesuch';
+import {
+  Dokument,
+  DokumentTyp,
+  GesuchDokument,
+  UnterschriftenblattDokument,
+  UnterschriftenblattDokumentTyp,
+} from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
 
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
@@ -141,31 +147,36 @@ export function createUploadOptionsFactory<
       const trancheId = view().trancheId;
       const allowTypes = view().allowTypes;
       const readonly = !(
-        permissions.canUploadMissingDocuments || permissions.canWrite
+        permissions.canUploadDocuments || permissions.canWrite
       );
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
-        ? {
+        ? ({
+            permissions,
             allowTypes,
             titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-            dokumentTyp,
+            dokument: {
+              trancheId,
+              dokumentTyp,
+              art: 'GESUCH_DOKUMENT',
+            },
             singleUpload: options?.singleUpload ?? false,
-            trancheId,
-            initialDocuments: options?.initialDocuments,
+            initialDokumente: options?.initialDocuments,
             readonly,
-          }
+          } satisfies DokumentOptions)
         : null;
     });
   };
 }
 
-export function createDocumentOptions(options: {
+export function createGesuchDokumentOptions(options: {
   trancheId: string;
   allowTypes: string;
   dokumentTyp: DokumentTyp;
   gesuchDokument?: GesuchDokument;
   initialDocuments?: Dokument[];
   singleUpload?: boolean;
+  permissions: PermissionMap;
   readonly: boolean;
 }): DokumentOptions {
   const {
@@ -175,16 +186,60 @@ export function createDocumentOptions(options: {
     gesuchDokument,
     initialDocuments,
     singleUpload,
+    permissions,
     readonly,
   } = options;
   return {
     allowTypes,
+    permissions,
     titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-    dokumentTyp,
     singleUpload: singleUpload ?? false,
+    dokument: {
+      dokumentTyp,
+      trancheId,
+      gesuchDokument,
+      art: 'GESUCH_DOKUMENT',
+    },
+    initialDokumente: initialDocuments,
+    readonly,
+  };
+}
+
+export function createAdditionalDokumentOptions(options: {
+  gesuchId: string;
+  trancheId: string;
+  allowTypes: string;
+  dokumentTyp: UnterschriftenblattDokumentTyp;
+  gesuchDokument?: UnterschriftenblattDokument;
+  initialDocuments?: Dokument[];
+  singleUpload?: boolean;
+  permissions: PermissionMap;
+  readonly: boolean;
+}): DokumentOptions {
+  const {
+    gesuchId,
     trancheId,
+    allowTypes,
+    dokumentTyp,
     gesuchDokument,
     initialDocuments,
+    singleUpload,
+    permissions,
+    readonly,
+  } = options;
+  return {
+    allowTypes,
+    permissions,
+    titleKey: `shared.dokumente.file.unterschriftenblatt.${dokumentTyp}`,
+    singleUpload: singleUpload ?? false,
+    dokument: {
+      dokumentTyp,
+      gesuchId,
+      trancheId,
+      art: 'UNTERSCHRIFTENBLATT',
+      gesuchDokument,
+    },
+    initialDokumente: initialDocuments,
     readonly,
   };
 }

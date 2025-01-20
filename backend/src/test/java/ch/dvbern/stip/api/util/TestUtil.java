@@ -66,6 +66,7 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
@@ -313,6 +314,20 @@ public class TestUtil {
             .then()
             .assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());
+    }
+
+    public static ValidatableResponse uploadUnterschriftenblatt(
+        final DokumentApiSpec dokumentApiSpec,
+        final UUID gesuchId,
+        final UnterschriftenblattDokumentTypDtoSpec unterschriftenblattDokumentTyp,
+        final File file
+    ) {
+        return dokumentApiSpec.createUnterschriftenblatt()
+            .gesuchIdPath(gesuchId)
+            .unterschriftenblattTypPath(unterschriftenblattDokumentTyp)
+            .reqSpec(req -> req.addMultiPart("fileUpload", file, "image/png"))
+            .execute(PEEK_IF_ENV_SET)
+            .then();
     }
 
     public static Gesuch getBaseGesuchForBerechnung(final UUID trancheUuid) {

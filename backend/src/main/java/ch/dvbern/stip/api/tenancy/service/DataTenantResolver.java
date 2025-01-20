@@ -39,12 +39,8 @@ public class DataTenantResolver implements TenantResolver {
 
     private final Instance<RoutingContext> context;
 
-    public static void setTenantId(String tenantId) {
-        if (tenantId == null) {
-            EXPLICIT_TENANT_ID.remove();
-        } else {
-            EXPLICIT_TENANT_ID.set(tenantId);
-        }
+    public static ExplicitTenantIdScope setTenantId(final String tenantId) {
+        return new ExplicitTenantIdScope(EXPLICIT_TENANT_ID, tenantId);
     }
 
     @Override

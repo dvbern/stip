@@ -1,54 +1,54 @@
 @let dokumentRd = dokumentsStore.dokument();
 
-@if (dokumentRd | rdIsPendingWithoutCache) {
-  <dv-shared-ui-loading style="height: 39px" type="icon"></dv-shared-ui-loading>
-}
-
-@if (dokumentRd.data?.id) {
-  <div class="d-flex justify-content-between">
-    @switch (dokumentRd.data?.status) {
-      @case ('AUSSTEHEND') {
-        @if (!uploadViewSig().readonly) {
-          <button (click)="dokumentAblehnen()" type="button" class="btn btn-danger d-flex align-items-center gap-1">
-            <i class="material-symbols-rounded fs-4">close</i>
-            <span>
-              {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
-            </span>
-          </button>
-          <button
-            (click)="dokumentAkzeptieren()"
-            type="button"
-            class="btn btn-success text-white d-flex align-items-center gap-1"
-          >
-            <i class="material-symbols-rounded fs-4">check</i>
-            <span>
-              {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
-            </span>
-          </button>
-        } @else {
-          <dv-shared-ui-icon-badge type="warning" class="status ms-auto">
-            {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
-          </dv-shared-ui-icon-badge>
+@if (uploadViewSig().dokumentModel.art === 'GESUCH_DOKUMENT') {
+  @if (dokumentRd | rdIsPendingWithoutCache) {
+    <dv-shared-ui-loading style="height: 39px" type="icon"></dv-shared-ui-loading>
+  } @else {
+    @if (dokumentRd.data?.id) {
+      <div class="d-flex justify-content-between">
+        @switch (dokumentRd.data?.status) {
+          @case ('AUSSTEHEND') {
+            @if (!uploadViewSig().readonly) {
+              <button (click)="dokumentAblehnen()" type="button" class="btn btn-danger d-flex align-items-center gap-1">
+                <i class="material-symbols-rounded fs-4">close</i>
+                <span>
+                  {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
+                </span>
+              </button>
+              <button
+                (click)="dokumentAkzeptieren()"
+                type="button"
+                class="btn btn-success text-white d-flex align-items-center gap-1"
+              >
+                <i class="material-symbols-rounded fs-4">check</i>
+                <span>
+                  {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
+                </span>
+              </button>
+            } @else {
+              <dv-shared-ui-icon-badge type="warning" class="status ms-auto">
+                {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
+              </dv-shared-ui-icon-badge>
+            }
+          }
+          @case ('AKZEPTIERT') {
+            <dv-shared-ui-icon-badge type="success" class="status ms-auto">
+              {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+            </dv-shared-ui-icon-badge>
+          }
+          @case ('ABGELEHNT') {
+            <dv-shared-ui-icon-badge type="danger" class="status ms-auto">
+              {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+            </dv-shared-ui-icon-badge>
+          }
         }
-      }
-      @case ('AKZEPTIERT') {
-        <dv-shared-ui-icon-badge type="success" class="status ms-auto">
-          {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+      </div>
+    } @else {
+      <div class="d-flex">
+        <dv-shared-ui-icon-badge type="warning" class="status ms-auto">
+          {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
         </dv-shared-ui-icon-badge>
-      }
-      @case ('ABGELEHNT') {
-        <dv-shared-ui-icon-badge type="danger" class="status ms-auto">
-          {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
-        </dv-shared-ui-icon-badge>
-      }
+      </div>
     }
-  </div>
-}
-
-@if (isInitial(dokumentRd)) {
-  <div class="d-flex">
-    <dv-shared-ui-icon-badge type="warning" class="status ms-auto">
-      {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
-    </dv-shared-ui-icon-badge>
-  </div>
+  }
 }

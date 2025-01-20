@@ -15,7 +15,13 @@ import { RouterLink } from '@angular/router';
 import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { Observable, filter, map, switchMap } from 'rxjs';
 
-import { DokumentView, UploadView } from '@dv/shared/model/dokument';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import {
+  DokumentView,
+  UploadView,
+  getDownloadLink,
+  isUploadable,
+} from '@dv/shared/model/dokument';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { FilesizePipe } from '@dv/shared/ui/filesize-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -40,10 +46,16 @@ export class SharedPatternDocumentUploadEntryComponent {
   uploadViewSig = input.required<UploadView>();
   documentViewSig = input.required<DokumentView>();
   loadingSig = input.required<boolean>();
+
+  private config = inject(SharedModelCompileTimeConfig);
   downloadLinkSig = computed(() => {
-    const document = this.documentViewSig();
-    const upload = this.uploadViewSig();
-    return `/download/${upload.trancheId}/${upload.type}/${document.file.id}`;
+    const { dokumentModel } = this.uploadViewSig();
+    const dokument = this.documentViewSig();
+    return getDownloadLink(dokumentModel.art, dokument);
+  });
+  isDeletableSig = computed(() => {
+    const { dokumentModel, permissions } = this.uploadViewSig();
+    return isUploadable(this.config.appType, dokumentModel, permissions);
   });
   checkForRemove$ = new EventEmitter<void>();
   @Output() cancelUpload = new EventEmitter<{ dokumentId: string }>();

@@ -27,8 +27,8 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpStatus;
 
 @Slf4j
 @RequestScoped
@@ -46,8 +46,8 @@ public class SapAuszahlungService {
             // update/sync busniesspartner
             final var response =
                 sapEndpointService.changeBusinessPartner(auszahlung, auszahlung.getSapBusinessPartnerId(), deliveryId);
-            if (response.getStatus() != HttpStatus.SC_OK) {
-                throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            if (response.getStatus() != Status.OK.getStatusCode()) {
+                throw new WebApplicationException(Status.BAD_REQUEST);
             } else {
                 SAPUtils.logAsWarningIfNoAction(response);
             }
@@ -78,14 +78,14 @@ public class SapAuszahlungService {
         if (businessPartnerId != null) {
             // createVendorPosting
             final var response = sapEndpointService.createVendorPosting(auszahlung, businessPartnerId, deliveryId);
-            if (response.getStatus() != HttpStatus.SC_OK) {
+            if (response.getStatus() != Status.OK.getStatusCode()) {
                 throw new WebApplicationException(Response.Status.BAD_REQUEST);
             } else {
                 SAPUtils.logAsWarningIfNoAction(response);
             }
             return sapEndpointService.getImportStatus(deliveryId);
         } else {
-            return Response.status(HttpStatus.SC_BAD_REQUEST)
+            return Response.status(Status.BAD_REQUEST)
                 .entity("No vendor posting could be created due to problems")
                 .build();
         }

@@ -5,6 +5,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -29,10 +30,21 @@ public interface DokumentResource {
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> createDokument(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
-    @DELETE
-    @Path("/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}")
+    @POST
+    @Path("/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}")
+    @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
-    void deleteDokument(@PathParam("dokumentId") UUID dokumentId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    io.smallrye.mutiny.Uni<Response> createUnterschriftenblatt(@PathParam("unterschriftenblattTyp") ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp unterschriftenblattTyp,@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+
+    @DELETE
+    @Path("/dokument/{dokumentId}")
+    @Produces({ "text/plain" })
+    void deleteDokument(@PathParam("dokumentId") UUID dokumentId);
+
+    @DELETE
+    @Path("/unterschriftenblatt/dokument/{dokumentId}")
+    @Produces({ "text/plain" })
+    void deleteUnterschriftenblattDokument(@PathParam("dokumentId") UUID dokumentId);
 
     @PATCH
     @Path("/gesuchDokument/{gesuchDokumentId}/ablehnen")
@@ -46,14 +58,14 @@ public interface DokumentResource {
     void gesuchDokumentAkzeptieren(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
 
     @GET
-    @Path("/dokument/download")
+    @Path("/dokument/{dokumentArt}/download")
     @Produces({ "application/octet-stream" })
-    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDokument(@QueryParam("token") @NotNull   String token);
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDokument(@QueryParam("token") @NotNull   String token,@PathParam("dokumentArt") ch.dvbern.stip.api.dokument.type.DokumentArt dokumentArt);
 
     @GET
-    @Path("/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}")
+    @Path("/dokument/{dokumentId}")
     @Produces({ "text/plain" })
-    String getDokumentDownloadToken(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("dokumentId") UUID dokumentId);
+    String getDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
     @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare")
@@ -64,4 +76,9 @@ public interface DokumentResource {
     @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}")
     @Produces({ "application/json", "text/plain" })
     NullableGesuchDokumentDto getGesuchDokumenteForTyp(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/unterschriftenblatt/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    List<UnterschriftenblattDokumentDto> getUnterschriftenblaetterForGesuch(@PathParam("gesuchId") UUID gesuchId);
 }

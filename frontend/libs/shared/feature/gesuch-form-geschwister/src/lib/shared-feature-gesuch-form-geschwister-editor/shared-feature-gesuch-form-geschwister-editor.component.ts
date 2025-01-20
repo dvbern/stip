@@ -9,6 +9,7 @@ import {
   effect,
   inject,
   input,
+  untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -192,7 +193,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
         this.formUtils.invalidateControlIfValidationFails(
           this.form,
           ['wohnsitz'],
-          this.einreichenStore.validationViewSig().invalidFormularProps
+          untracked(this.einreichenStore.validationViewSig).invalidFormularProps
             .specialValidationErrors,
           (value) =>
             this.wohnsitzHelper.wohnsitzValuesSig().includes(value as Wohnsitz),

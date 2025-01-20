@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -9,11 +10,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-
 
 @JsonTypeName("SbDashboardGesuch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -28,7 +24,7 @@ public class SbDashboardGesuchDto  implements Serializable {
   private @Valid String piaNachname;
   private @Valid String piaVorname;
   private @Valid LocalDate piaGeburtsdatum;
-  private @Valid ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus;
+  private @Valid Gesuchstatus gesuchStatus;
   private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus;
   private @Valid String bearbeiter;
   private @Valid LocalDate letzteAktivitaet;
@@ -40,7 +36,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -59,7 +55,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchTrancheId")
   @NotNull
   public UUID getGesuchTrancheId() {
@@ -78,7 +74,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("fallNummer")
   @NotNull
   public String getFallNummer() {
@@ -97,7 +93,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("typ")
   @NotNull
   public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
@@ -116,7 +112,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("piaNachname")
   @NotNull
   public String getPiaNachname() {
@@ -135,7 +131,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("piaVorname")
   @NotNull
   public String getPiaVorname() {
@@ -154,7 +150,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("piaGeburtsdatum")
   @NotNull
   public LocalDate getPiaGeburtsdatum() {
@@ -168,20 +164,20 @@ public class SbDashboardGesuchDto  implements Serializable {
 
   /**
    **/
-  public SbDashboardGesuchDto gesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+  public SbDashboardGesuchDto gesuchStatus(Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
     return this;
   }
 
-  
+
   @JsonProperty("gesuchStatus")
   @NotNull
-  public ch.dvbern.stip.api.gesuch.type.Gesuchstatus getGesuchStatus() {
+  public Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
   @JsonProperty("gesuchStatus")
-  public void setGesuchStatus(ch.dvbern.stip.api.gesuch.type.Gesuchstatus gesuchStatus) {
+  public void setGesuchStatus(Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 
@@ -192,7 +188,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("trancheStatus")
   @NotNull
   public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus getTrancheStatus() {
@@ -211,7 +207,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bearbeiter")
   @NotNull
   public String getBearbeiter() {
@@ -230,7 +226,7 @@ public class SbDashboardGesuchDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("letzteAktivitaet")
   @NotNull
   public LocalDate getLetzteAktivitaet() {
@@ -274,7 +270,7 @@ public class SbDashboardGesuchDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SbDashboardGesuchDto {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");

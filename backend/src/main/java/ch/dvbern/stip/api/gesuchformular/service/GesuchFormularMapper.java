@@ -50,6 +50,7 @@ import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
@@ -89,6 +90,9 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
 
     @Inject
     GesuchDokumentService gesuchDokumentService;
+
+    @Inject
+    UnterschriftenblattService unterschriftenblattService;
 
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
@@ -260,6 +264,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final @MappingTarget GesuchFormular targetFormular
     ) {
         resetDarlehen(targetFormular);
+        resetUnterschriftenblaetter(targetFormular);
     }
 
     @AfterMapping
@@ -334,6 +339,30 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             () -> !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(targetFormular),
             "Set Darlehen to null because pia is not volljaehrig",
             () -> targetFormular.setDarlehen(null)
+        );
+    }
+
+    void resetUnterschriftenblaetter(final GesuchFormular targetFormular) {
+        resetFieldIf(
+            () -> true,
+            "Delete not required Unterschriftenblaetter",
+            () -> {
+                final var tranche = targetFormular.getTranche();
+                if (tranche == null) {
+                    return;
+                }
+
+                final var gesuch = tranche.getGesuch();
+                if (gesuch == null) {
+                    return;
+                }
+
+                if (gesuch.getId() == null) {
+                    return;
+                }
+
+                unterschriftenblattService.deleteNotRequiredForGesuch(gesuch);
+            }
         );
     }
 

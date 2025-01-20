@@ -29,13 +29,14 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
+import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -150,6 +151,9 @@ public class Gesuch extends AbstractMandantEntity {
     @NotAudited
     private GesuchTranche aenderungZuUeberpruefen;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
+    private List<Unterschriftenblatt> unterschriftenblaetter = new ArrayList<>();
+
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
             .filter(t -> t.getId().equals(id))
@@ -175,6 +179,10 @@ public class Gesuch extends AbstractMandantEntity {
 
     public GesuchTranche getCurrentGesuchTranche() {
         return getAllTranchenValidOnDate(LocalDate.now()).orElseThrow();
+    }
+
+    public Optional<GesuchTranche> getCurrentGesuchTrancheOptional() {
+        return getAllTranchenValidOnDate(LocalDate.now());
     }
 
     public Optional<GesuchTranche> getNewestGesuchTranche() {
