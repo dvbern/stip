@@ -20,6 +20,7 @@ package ch.dvbern.stip.berechnung.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
 
@@ -28,6 +29,7 @@ import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
@@ -63,8 +65,10 @@ public class BerechnungsblattService {
     PdfFont pdfFont = null;
     PdfFont pdfFontBold = null;
 
-    private static final int FONT_SIZE = 11;
-    private static final int FONT_SIZE_SMALL = 9;
+    private static final int FONT_SIZE = 10;
+    private static final int FONT_SIZE_SMALL = 8;
+
+    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(new Locale("de", "CH"));
 
     private static final PageSize PAGE_SIZE = PageSize.A4;
 
@@ -92,12 +96,13 @@ public class BerechnungsblattService {
             }
             firstTranche = false;
 
-            document.add(
-                getHeaderParagraph(
-                    tranchenBerechnungsResultat.getGueltigAb(),
-                    tranchenBerechnungsResultat.getGueltigBis(),
-                    translator
-                )
+            addHeaderParagraph(
+                document,
+                gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung(),
+                "stip.berechnung.persoenlich.title",
+                tranchenBerechnungsResultat.getGueltigAb(),
+                tranchenBerechnungsResultat.getGueltigBis(),
+                translator
             );
 
             document.add(
@@ -110,12 +115,23 @@ public class BerechnungsblattService {
                 ).setFont(pdfFontBold)
             );
 
-            Table persoenlichesBudgetTable =
-                getPersoenlichesBudgetTable(
+            Table persoenlichesBudgetTableEinnahmen = getPersoenlichesBudgetTableEinnahmen(
+                tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
+                tranchenBerechnungsResultat.getBerechnungsStammdaten(),
+                translator
+            );
+
+            document.add(persoenlichesBudgetTableEinnahmen);
+            document.add(getNewLineParagraph());
+
+            Table persoenlichesBudgetTableKosten =
+                getPersoenlichesBudgetTableKosten(
                     tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
-                    tranchenBerechnungsResultat.getBerechnungsStammdaten(),
                     translator
                 );
+
+            document.add(persoenlichesBudgetTableKosten);
+            document.add(getNewLineParagraph());
 
             var persoenlichTotalCell = new Cell();
             persoenlichTotalCell.add(
@@ -132,29 +148,34 @@ public class BerechnungsblattService {
                             "berechnungsanteilKinder",
                             tranchenBerechnungsResultat.getBerechnungsanteilKinder()
                         )
-                    )
+                    ).setFontColor(ColorConstants.WHITE)
                 );
             }
-            persoenlichesBudgetTable.addCell(persoenlichTotalCell);
 
-            // tranchenBerechnungsResultat.getBerechnungsanteilKinder()
-            persoenlichesBudgetTable.addCell(
+            Table persoenlichesBudgetTableTotal = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+            persoenlichesBudgetTableTotal.addCell(persoenlichTotalCell).setBackgroundColor(ColorConstants.GRAY);
+
+            persoenlichesBudgetTableTotal.addCell(
                 getDefaultParagraphNumber(
-                    tranchenBerechnungsResultat.getBerechnung().toString()
-                ).setFont(pdfFontBold)
+                    tranchenBerechnungsResultat.getBerechnung()
+                ).setFont(pdfFontBold).setBackgroundColor(ColorConstants.GRAY)
             );
 
-            document.add(persoenlichesBudgetTable);
+            document.add(persoenlichesBudgetTableTotal);
+            document.add(getNewLineParagraph());
+
+            addFooterParagraph(document, translator);
 
             for (var fammilienBudgetResultat : tranchenBerechnungsResultat.getFamilienBudgetresultate()) {
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
-                document.add(
-                    getHeaderParagraph(
-                        tranchenBerechnungsResultat.getGueltigAb(),
-                        tranchenBerechnungsResultat.getGueltigBis(),
-                        translator
-                    )
+                addHeaderParagraph(
+                    document,
+                    gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung(),
+                    "stip.berechnung.familien.title",
+                    tranchenBerechnungsResultat.getGueltigAb(),
+                    tranchenBerechnungsResultat.getGueltigBis(),
+                    translator
                 );
 
                 var budgetTypText = switch (fammilienBudgetResultat.getFamilienBudgetTyp()) {
@@ -172,13 +193,24 @@ public class BerechnungsblattService {
                         )
                     ).setFont(pdfFontBold)
                 );
-                Table familienBudgetTable = getFamilienBudgetTable(
+
+                Table familienBudgetTableEinnahmen = getFamilienBudgetTableEinnahmen(
                     fammilienBudgetResultat,
                     tranchenBerechnungsResultat.getBerechnungsStammdaten(),
                     translator
                 );
 
-                document.add(familienBudgetTable);
+                document.add(familienBudgetTableEinnahmen);
+                document.add(getNewLineParagraph());
+
+                Table familienBudgetTableKosten = getFamilienBudgetTableKosten(
+                    fammilienBudgetResultat,
+                    translator
+                );
+
+                document.add(familienBudgetTableKosten);
+                document.add(getNewLineParagraph());
+                addFooterParagraph(document, translator);
             }
         }
 
@@ -188,11 +220,54 @@ public class BerechnungsblattService {
         return out;
     }
 
-    private Paragraph getHeaderParagraph(LocalDate trancheVon, LocalDate trancheBis, TL tl) {
-        Paragraph paragraph = new Paragraph(
+    private void addHeaderParagraph(
+        Document document,
+        PersonInAusbildung pia,
+        String budgetTypeKey,
+        LocalDate trancheVon,
+        LocalDate trancheBis,
+        TL tl
+    ) {
+
+        int HEADER_MARGIN_HORIZONTAL = (int) document.getLeftMargin();
+        Paragraph line1Paragraph = new Paragraph(
+            String.format("%s %s %s", tl.translate(budgetTypeKey), pia.getVorname(), pia.getNachname())
+        )
+            .setFont(pdfFontBold)
+            .setFontSize(10)
+            .setHorizontalAlignment(HorizontalAlignment.LEFT)
+            .setFixedPosition(
+                HEADER_MARGIN_HORIZONTAL,
+                PAGE_SIZE.getHeight() - 25,
+                PAGE_SIZE.getWidth() - HEADER_MARGIN_HORIZONTAL * 2
+            )
+            .setTextAlignment(TextAlignment.LEFT);
+
+        document.add(line1Paragraph);
+
+        Paragraph line2Part1Paragraph = new Paragraph(
             String.format(
-                "%s. %s: %s, %s: %s %s: %d",
-                tl.translate("stip.berechnung.berechnungsdetails"),
+                "%s %s, AHV Nr.: %s, %s",
+                pia.getNachname(),
+                pia.getVorname(),
+                pia.getSozialversicherungsnummer(),
+                pia.getGeburtsdatum().toString()
+            )
+        ).setFont(pdfFont)
+            .setFontSize(10)
+            .setHorizontalAlignment(HorizontalAlignment.LEFT)
+            .setFixedPosition(
+                HEADER_MARGIN_HORIZONTAL,
+                PAGE_SIZE.getHeight() - 35,
+                PAGE_SIZE.getWidth() - HEADER_MARGIN_HORIZONTAL * 2
+            )
+            .setTextAlignment(TextAlignment.LEFT);
+
+        document.add(line2Part1Paragraph);
+
+        Paragraph line2Part2Paragraph = new Paragraph(
+            String.format(
+                "%s: %s, %s: %s, %s: %d",
                 tl.translate("stip.berechnung.von"),
                 trancheVon.toString(),
                 tl.translate("stip.berechnung.bis"),
@@ -203,18 +278,48 @@ public class BerechnungsblattService {
                     trancheBis
                 )
             )
-        );
-        paragraph.setFont(pdfFont)
+        ).setFont(pdfFont)
             .setFontSize(10)
             .setHorizontalAlignment(HorizontalAlignment.LEFT)
             .setFixedPosition(
-                0,
-                PAGE_SIZE.getHeight() - 25,
-                PAGE_SIZE.getWidth()
+                HEADER_MARGIN_HORIZONTAL,
+                PAGE_SIZE.getHeight() - 35,
+                PAGE_SIZE.getWidth() - HEADER_MARGIN_HORIZONTAL * 2
             )
-            .setTextAlignment(TextAlignment.CENTER);
+            .setTextAlignment(TextAlignment.RIGHT);
 
-        return paragraph;
+        document.add(line2Part2Paragraph);
+    }
+
+    private void addFooterParagraph(
+        Document document,
+        TL tl
+    ) {
+        int FOOTER_MARGIN_HORIZONTAL = (int) document.getLeftMargin();
+        document.add(
+            new Paragraph(tl.translate("stip.berechnung.footer.info"))
+                .setFont(pdfFont)
+                .setFontSize(7)
+                .setHorizontalAlignment(HorizontalAlignment.LEFT)
+                .setFixedPosition(
+                    FOOTER_MARGIN_HORIZONTAL,
+                    40,
+                    PAGE_SIZE.getWidth() - FOOTER_MARGIN_HORIZONTAL * 2
+                )
+                .setTextAlignment(TextAlignment.LEFT)
+        );
+        document.add(
+            new Paragraph(tl.translate("stip.berechnung.footer.kosten"))
+                .setFont(pdfFont)
+                .setFontSize(7)
+                .setHorizontalAlignment(HorizontalAlignment.LEFT)
+                .setFixedPosition(
+                    FOOTER_MARGIN_HORIZONTAL,
+                    15,
+                    PAGE_SIZE.getWidth() - FOOTER_MARGIN_HORIZONTAL * 2
+                )
+                .setTextAlignment(TextAlignment.LEFT)
+        );
     }
 
     private Cell getDefaultParagraphCellTranslatedWithInfo(final String key, final TL tl) {
@@ -232,8 +337,8 @@ public class BerechnungsblattService {
         return getDefaultParagraphSmall(tl.translate(key));
     }
 
-    private Paragraph getDefaultParagraphNumber(final String text) {
-        return getDefaultParagraph(text).setTextAlignment(TextAlignment.RIGHT);
+    private Paragraph getDefaultParagraphNumber(final Number number) {
+        return getDefaultParagraph(NUMBER_FORMAT.format(number)).setTextAlignment(TextAlignment.RIGHT);
 
     }
 
@@ -245,89 +350,101 @@ public class BerechnungsblattService {
         return new Paragraph(text).setFont(pdfFont).setFontSize(FONT_SIZE);
     }
 
-    private Table getPersoenlichesBudgetTable(
+    private Paragraph getNewLineParagraph() {
+        return new Paragraph("");
+    }
+
+    private Table getPersoenlichesBudgetTableEinnahmen(
         final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat,
         final BerechnungsStammdatenDto berechnungsStammdaten,
         final TL tl
     ) {
-        Table persoenlichesBudgetTable = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+        Table persoenlichesBudgetTableEinnahmen = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
         addPersoenlichesBudgetEinnahmenToTable(
             persoenlichesBudgetresultat,
             berechnungsStammdaten,
-            persoenlichesBudgetTable,
+            persoenlichesBudgetTableEinnahmen,
             tl
         );
-        addPersoenlichesBudgetKostenToTable(persoenlichesBudgetresultat, persoenlichesBudgetTable, tl);
-        return persoenlichesBudgetTable;
+        return persoenlichesBudgetTableEinnahmen;
+    }
+
+    private Table getPersoenlichesBudgetTableKosten(
+        final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat,
+        final TL tl
+    ) {
+        Table persoenlichesBudgetTableKosten = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+        addPersoenlichesBudgetKostenToTable(persoenlichesBudgetresultat, persoenlichesBudgetTableKosten, tl);
+        return persoenlichesBudgetTableKosten;
     }
 
     private void addPersoenlichesBudgetEinnahmenToTable(
         final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat,
         final BerechnungsStammdatenDto berechnungsStammdaten,
-        Table persoenlichesBudgetTable,
+        Table persoenlichesBudgetTableEinnahmen,
         TL tl
     ) {
         // Einnahmen
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.title", tl).setFont(pdfFontBold)
         );
-        persoenlichesBudgetTable.addCell(new Paragraph(""));
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(new Paragraph(""));
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphCellTranslatedWithInfo("stip.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen", tl)
         );
 
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getEinkommen().toString()
+                persoenlichesBudgetresultat.getEinkommen()
             )
         );
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableEinnahmen
             .addCell(
                 getDefaultParagraphCellTranslatedWithInfo("stip.berechnung.persoenlich.einnahmen.eoLeistungen", tl)
             );
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getLeistungenEO().toString()
+                persoenlichesBudgetresultat.getLeistungenEO()
             )
         );
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableEinnahmen
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.alimente", tl));
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getAlimente().toString()
+                persoenlichesBudgetresultat.getAlimente()
             )
         );
 
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableEinnahmen
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.unterhaltsbeitraege", tl));
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getRente().toString()
+                persoenlichesBudgetresultat.getRente()
             )
         );
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.kinderUndAusbildungszulagen", tl)
         );
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
                 persoenlichesBudgetresultat
                     .getKinderAusbildungszulagen()
-                    .toString()
+
             )
         );
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableEinnahmen
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.ergaenzungsleistungen", tl));
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getErgaenzungsleistungen().toString()
+                persoenlichesBudgetresultat.getErgaenzungsleistungen()
             )
         );
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitution", tl)
         );
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getGemeindeInstitutionen().toString()
+                persoenlichesBudgetresultat.getGemeindeInstitutionen()
             )
         );
 
@@ -345,69 +462,75 @@ public class BerechnungsblattService {
                 )
             )
         );
-        persoenlichesBudgetTable.addCell(anrechenbaresVermoegenCell);
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(anrechenbaresVermoegenCell);
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getAnrechenbaresVermoegen().toString()
+                persoenlichesBudgetresultat.getAnrechenbaresVermoegen()
             )
         );
 
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableEinnahmen
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.elterlicheLeistung", tl));
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getAnteilFamilienbudget().toString()
+                persoenlichesBudgetresultat.getAnteilFamilienbudget()
             )
         );
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableEinnahmen
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.einkommenPartner", tl));
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getEinkommenPartner().toString()
+                persoenlichesBudgetresultat.getEinkommenPartner()
             )
         );
-        persoenlichesBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.total", tl).setFont(pdfFontBold)
-        );
-        persoenlichesBudgetTable.addCell(
+
+        var persoenlichEinnahmenTitleTotalCell = new Cell();
+        persoenlichEinnahmenTitleTotalCell
+            .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.total", tl).setFont(pdfFontBold))
+            .setBackgroundColor(ColorConstants.GRAY);
+        persoenlichesBudgetTableEinnahmen.addCell(persoenlichEinnahmenTitleTotalCell);
+
+        var persoenlichEinnahmenTotalCell = new Cell();
+        persoenlichEinnahmenTotalCell.add(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getEinnahmenPersoenlichesBudget().toString()
+                persoenlichesBudgetresultat.getEinnahmenPersoenlichesBudget()
             ).setFont(pdfFontBold)
-        );
+        ).setBackgroundColor(ColorConstants.GRAY);
+        persoenlichesBudgetTableEinnahmen.addCell(persoenlichEinnahmenTotalCell);
     }
 
     private void addPersoenlichesBudgetKostenToTable(
         final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat,
-        Table persoenlichesBudgetTable,
+        Table persoenlichesBudgetTableKosten,
         TL tl
     ) {
         // Kosten
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableKosten.addCell(
             getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.title", tl).setFont(pdfFontBold)
         );
-        persoenlichesBudgetTable.addCell(new Paragraph(""));
+        persoenlichesBudgetTableKosten.addCell(new Paragraph(""));
 
         var mehrkostenVerpflegungCell = new Cell();
         mehrkostenVerpflegungCell
             .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.mehrkostenVerpflegung", tl));
         mehrkostenVerpflegungCell
             .add(getDefaultParagraphTranslatedSmall("stip.berechnung.persoenlich.kosten.nurElternWohnend.info", tl));
-        persoenlichesBudgetTable.addCell(mehrkostenVerpflegungCell);
-        persoenlichesBudgetTable
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getVerpflegung().toString()));
+        persoenlichesBudgetTableKosten.addCell(mehrkostenVerpflegungCell);
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getVerpflegung()));
 
         var fahrkostenCell = new Cell();
         fahrkostenCell.add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.fahrkosten", tl));
         fahrkostenCell
             .add(getDefaultParagraphTranslatedSmall("stip.berechnung.persoenlich.kosten.nurElternWohnend.info", tl));
-        persoenlichesBudgetTable.addCell(fahrkostenCell);
+        persoenlichesBudgetTableKosten.addCell(fahrkostenCell);
 
-        persoenlichesBudgetTable
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getFahrkosten().toString()));
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getFahrkosten()));
+        persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.ausbildungskosten", tl));
-        persoenlichesBudgetTable
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getAusbildungskosten().toString()));
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getAusbildungskosten()));
 
         var grundbedarfPersonenCell = new Cell();
         grundbedarfPersonenCell.add(
@@ -422,9 +545,9 @@ public class BerechnungsblattService {
         grundbedarfPersonenCell.add(
             getDefaultParagraphTranslatedSmall("stip.berechnung.persoenlich.kosten.nurEigenerHaushalt.info", tl)
         );
-        persoenlichesBudgetTable.addCell(grundbedarfPersonenCell);
-        persoenlichesBudgetTable
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getGrundbedarf().toString()));
+        persoenlichesBudgetTableKosten.addCell(grundbedarfPersonenCell);
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getGrundbedarf()));
 
         var wohnkostenPersonenCell = new Cell();
         wohnkostenPersonenCell.add(
@@ -439,9 +562,9 @@ public class BerechnungsblattService {
         wohnkostenPersonenCell.add(
             getDefaultParagraphTranslatedSmall("stip.berechnung.persoenlich.kosten.nurEigenerHaushalt.info", tl)
         );
-        persoenlichesBudgetTable.addCell(wohnkostenPersonenCell);
-        persoenlichesBudgetTable
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getWohnkosten().toString()));
+        persoenlichesBudgetTableKosten.addCell(wohnkostenPersonenCell);
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getWohnkosten()));
 
         var medizinischeGrundversorgungPersonenCell = new Cell();
         medizinischeGrundversorgungPersonenCell.add(
@@ -456,10 +579,10 @@ public class BerechnungsblattService {
         medizinischeGrundversorgungPersonenCell.add(
             getDefaultParagraphTranslatedSmall("stip.berechnung.persoenlich.kosten.nurEigenerHaushalt.info", tl)
         );
-        persoenlichesBudgetTable.addCell(medizinischeGrundversorgungPersonenCell);
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableKosten.addCell(medizinischeGrundversorgungPersonenCell);
+        persoenlichesBudgetTableKosten
             .addCell(
-                getDefaultParagraphNumber(persoenlichesBudgetresultat.getMedizinischeGrundversorgung().toString())
+                getDefaultParagraphNumber(persoenlichesBudgetresultat.getMedizinischeGrundversorgung())
             );
 
         var fahrkostenPartnerCell = new Cell();
@@ -467,80 +590,101 @@ public class BerechnungsblattService {
             .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.fahrkostenPartner", tl));
         fahrkostenPartnerCell
             .add(getDefaultParagraphTranslatedSmall("stip.berechnung.persoenlich.kosten.nurErwerbstaetig.info", tl));
-        persoenlichesBudgetTable.addCell(fahrkostenPartnerCell);
-        persoenlichesBudgetTable
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getFahrkostenPartner().toString()));
+        persoenlichesBudgetTableKosten.addCell(fahrkostenPartnerCell);
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getFahrkostenPartner()));
 
         var verpflegungPartnerCell = new Cell();
         verpflegungPartnerCell
             .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.verpflegungPartner", tl));
         verpflegungPartnerCell
             .add(getDefaultParagraphTranslatedSmall("stip.berechnung.persoenlich.kosten.nurErwerbstaetig.info", tl));
-        persoenlichesBudgetTable.addCell(verpflegungPartnerCell);
-        persoenlichesBudgetTable
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getVerpflegungPartner().toString()));
+        persoenlichesBudgetTableKosten.addCell(verpflegungPartnerCell);
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getVerpflegungPartner()));
 
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.betreuungskostenKinder", tl));
-        persoenlichesBudgetTable
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getFremdbetreuung().toString()));
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getFremdbetreuung()));
+        persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.kantonsGemeindesteuern", tl));
-        persoenlichesBudgetTable
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getSteuernKantonGemeinde().toString()));
-        persoenlichesBudgetTable
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getSteuernKantonGemeinde()));
+        persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.bundessteuern", tl));
-        persoenlichesBudgetTable.addCell(getDefaultParagraphNumber("0")); // TODO: Bundessteuern
-        persoenlichesBudgetTable.addCell(
+        persoenlichesBudgetTableKosten.addCell(getDefaultParagraphNumber(0)); // TODO: Bundessteuern
+        persoenlichesBudgetTableKosten.addCell(
             getDefaultParagraphCellTranslatedWithInfo(
                 "stip.berechnung.persoenlich.kosten.anteilLebenshaltungskosten",
                 tl
             )
         );
-        persoenlichesBudgetTable
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getAnteilLebenshaltungskosten().toString()));
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getAnteilLebenshaltungskosten()));
 
-        persoenlichesBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.total", tl).setFont(pdfFontBold)
-        );
-        persoenlichesBudgetTable.addCell(
+        var persoenlichKostenTitleTotalCell = new Cell();
+        persoenlichKostenTitleTotalCell
+            .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.total", tl).setFont(pdfFontBold))
+            .setBackgroundColor(ColorConstants.GRAY);
+        persoenlichesBudgetTableKosten.addCell(persoenlichKostenTitleTotalCell);
+
+        var persoenlichKostenTotalCell = new Cell();
+        persoenlichKostenTotalCell.add(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getAusgabenPersoenlichesBudget().toString()
+                persoenlichesBudgetresultat.getAusgabenPersoenlichesBudget()
             ).setFont(pdfFontBold)
-        );
+        ).setBackgroundColor(ColorConstants.GRAY);
+        persoenlichesBudgetTableKosten.addCell(persoenlichKostenTotalCell);
     }
 
-    private Table getFamilienBudgetTable(
+    private Table getFamilienBudgetTableEinnahmen(
         final FamilienBudgetresultatDto familienBudgetresultat,
         final BerechnungsStammdatenDto berechnungsStammdaten,
         final TL tl
     ) {
-        Table familienBudgetTable = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
-        addFamilienBudgetEinnahmenToTable(familienBudgetresultat, berechnungsStammdaten, familienBudgetTable, tl);
-        addFamilienBudgetKostenToTable(familienBudgetresultat, familienBudgetTable, tl);
-        return familienBudgetTable;
+        Table familienBudgetTableEinnahmen = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+        addFamilienBudgetEinnahmenToTable(
+            familienBudgetresultat,
+            berechnungsStammdaten,
+            familienBudgetTableEinnahmen,
+            tl
+        );
+        return familienBudgetTableEinnahmen;
+    }
+
+    private Table getFamilienBudgetTableKosten(
+        final FamilienBudgetresultatDto familienBudgetresultat,
+        final TL tl
+    ) {
+        Table familienBudgetTableKosten = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+        addFamilienBudgetKostenToTable(familienBudgetresultat, familienBudgetTableKosten, tl);
+        return familienBudgetTableKosten;
     }
 
     private void addFamilienBudgetEinnahmenToTable(
         final FamilienBudgetresultatDto familienBudgetResultat,
         final BerechnungsStammdatenDto berechnungsStammdaten,
-        Table familienBudgetTable,
+        Table familienBudgetTableEinnahmen,
         TL tl
     ) {
         // Einnahmen
-        familienBudgetTable.addCell(
+        familienBudgetTableEinnahmen.addCell(
             getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.title", tl).setFont(pdfFontBold)
         );
-        familienBudgetTable.addCell(new Paragraph(""));
-        familienBudgetTable
+        familienBudgetTableEinnahmen.addCell(new Paragraph(""));
+        familienBudgetTableEinnahmen
             .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.ergaenzungsleistungen", tl));
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getErgaenzungsleistungen().toString()));
-        familienBudgetTable.addCell(getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.mietwert", tl));
-        familienBudgetTable.addCell(getDefaultParagraphNumber(familienBudgetResultat.getEigenmietwert().toString()));
-        familienBudgetTable
+        familienBudgetTableEinnahmen
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getErgaenzungsleistungen()));
+        familienBudgetTableEinnahmen
+            .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.mietwert", tl));
+        familienBudgetTableEinnahmen
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getEigenmietwert()));
+        familienBudgetTableEinnahmen
             .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.kinderalimente", tl));
-        familienBudgetTable.addCell(getDefaultParagraphNumber(familienBudgetResultat.getAlimente().toString()));
+        familienBudgetTableEinnahmen
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getAlimente()));
 
         var beitraegeSaule3aCell = new Cell();
         beitraegeSaule3aCell
@@ -554,24 +698,25 @@ public class BerechnungsblattService {
                 )
             )
         );
-        familienBudgetTable.addCell(beitraegeSaule3aCell);
-        familienBudgetTable.addCell(getDefaultParagraphNumber(familienBudgetResultat.getSaeule3a().toString()));
+        familienBudgetTableEinnahmen.addCell(beitraegeSaule3aCell);
+        familienBudgetTableEinnahmen
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getSaeule3a()));
 
-        familienBudgetTable
+        familienBudgetTableEinnahmen
             .addCell(
                 getDefaultParagraphCellTranslatedWithInfo("stip.berechnung.familien.einnahmen.beitraegeSaule2", tl)
             );
-        familienBudgetTable.addCell(getDefaultParagraphNumber(familienBudgetResultat.getSaeule2().toString()));
+        familienBudgetTableEinnahmen.addCell(getDefaultParagraphNumber(familienBudgetResultat.getSaeule2()));
 
-        familienBudgetTable
+        familienBudgetTableEinnahmen
             .addCell(
                 getDefaultParagraphCellTranslatedWithInfo(
                     "stip.berechnung.familien.einnahmen.einkommensfreibeitrag",
                     tl
                 )
             );
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(berechnungsStammdaten.getEinkommensfreibetrag().toString()));
+        familienBudgetTableEinnahmen
+            .addCell(getDefaultParagraphNumber(berechnungsStammdaten.getEinkommensfreibetrag()));
 
         var anrechenbaresVermoegenCell = new Cell();
         anrechenbaresVermoegenCell
@@ -589,73 +734,94 @@ public class BerechnungsblattService {
                 )
             )
         );
-        familienBudgetTable.addCell(anrechenbaresVermoegenCell);
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getAnrechenbaresVermoegen().toString()));
+        familienBudgetTableEinnahmen.addCell(anrechenbaresVermoegenCell);
+        familienBudgetTableEinnahmen
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getAnrechenbaresVermoegen()));
 
-        familienBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.totalEinkuenfte", tl).setFont(pdfFontBold)
-        );
-        familienBudgetTable.addCell(
+        var persoenlichKostenTitleTotalCell = new Cell();
+        persoenlichKostenTitleTotalCell
+            .add(
+                getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.totalEinkuenfte", tl)
+                    .setFont(pdfFontBold)
+            )
+            .setBackgroundColor(ColorConstants.GRAY);
+        familienBudgetTableEinnahmen.addCell(persoenlichKostenTitleTotalCell);
+
+        var persoenlichKostenTotalCell = new Cell();
+        persoenlichKostenTotalCell.add(
             getDefaultParagraphNumber(
-                familienBudgetResultat.getTotalEinkuenfte().toString()
+                familienBudgetResultat.getTotalEinkuenfte()
             ).setFont(pdfFontBold)
-        );
+        ).setBackgroundColor(ColorConstants.GRAY);
+        familienBudgetTableEinnahmen.addCell(persoenlichKostenTotalCell);
     }
 
     private void addFamilienBudgetKostenToTable(
         final FamilienBudgetresultatDto familienBudgetResultat,
-        Table familienBudgetTable,
+        Table familienBudgetTableKosten,
         TL tl
     ) {
-        familienBudgetTable.addCell(
+        familienBudgetTableKosten.addCell(
             getDefaultParagraphTranslated("stip.berechnung.familien.kosten.title", tl).setFont(pdfFontBold)
         );
-        familienBudgetTable.addCell(new Paragraph(""));
-        familienBudgetTable.addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.grundbedarf", tl));
-        familienBudgetTable.addCell(getDefaultParagraphNumber(familienBudgetResultat.getGrundbedarf().toString()));
-        familienBudgetTable.addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.wohnkosten", tl));
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getEffektiveWohnkosten().toString()));
-        familienBudgetTable
+        familienBudgetTableKosten.addCell(new Paragraph(""));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.grundbedarf", tl));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getGrundbedarf()));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.wohnkosten", tl));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getEffektiveWohnkosten()));
+        familienBudgetTableKosten
             .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.medizinischeGrundversorgung", tl));
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getMedizinischeGrundversorgung().toString()));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getMedizinischeGrundversorgung()));
 
-        familienBudgetTable
+        familienBudgetTableKosten
             .addCell(
                 getDefaultParagraphCellTranslatedWithInfo("stip.berechnung.familien.kosten.integrationszulage", tl)
             );
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getIntegrationszulage().toString()));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getIntegrationszulage()));
 
-        familienBudgetTable
+        familienBudgetTableKosten
             .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.kantonsGemeindesteuern", tl));
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getSteuernKantonGemeinde().toString()));
-        familienBudgetTable.addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.bundessteuern", tl));
-        familienBudgetTable.addCell(getDefaultParagraphNumber(familienBudgetResultat.getSteuernBund().toString()));
-        familienBudgetTable.addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.fahrkosten", tl));
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getFahrkostenPerson1().toString()));
-        familienBudgetTable
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getSteuernKantonGemeinde()));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.bundessteuern", tl));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getSteuernBund()));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.fahrkosten", tl));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getFahrkostenPerson1()));
+        familienBudgetTableKosten
             .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.fahrkostenPartner", tl));
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getFahrkostenPerson2().toString()));
-        familienBudgetTable.addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.verpflegung", tl));
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getEssenskostenPerson1().toString()));
-        familienBudgetTable
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getFahrkostenPerson2()));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.verpflegung", tl));
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getEssenskostenPerson1()));
+        familienBudgetTableKosten
             .addCell(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.verpflegungPartner", tl));
-        familienBudgetTable
-            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getEssenskostenPerson2().toString()));
-        familienBudgetTable.addCell(
-            getDefaultParagraphTranslated("stip.berechnung.familien.kosten.total", tl).setFont(pdfFontBold)
-        );
-        familienBudgetTable.addCell(
+        familienBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(familienBudgetResultat.getEssenskostenPerson2()));
+
+        var persoenlichKostenTitleTotalCell = new Cell();
+        persoenlichKostenTitleTotalCell
+            .add(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.total", tl).setFont(pdfFontBold))
+            .setBackgroundColor(ColorConstants.GRAY);
+        familienBudgetTableKosten.addCell(persoenlichKostenTitleTotalCell);
+
+        var persoenlichKostenTotalCell = new Cell();
+        persoenlichKostenTotalCell.add(
             getDefaultParagraphNumber(
-                familienBudgetResultat.getAusgabenFamilienbudget().toString()
+                familienBudgetResultat.getTotalEinkuenfte()
             ).setFont(pdfFontBold)
-        );
+        ).setBackgroundColor(ColorConstants.GRAY);
+        familienBudgetTableKosten.addCell(persoenlichKostenTotalCell);
     }
 }
