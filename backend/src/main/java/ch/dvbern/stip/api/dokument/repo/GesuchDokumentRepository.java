@@ -115,7 +115,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         return query.stream().toList();
     }
 
-    public boolean containsDocuments(UUID customDokumentTypeId) {
+    public boolean customDokumentHasGesuchDokuments(UUID customDokumentTypeId) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory

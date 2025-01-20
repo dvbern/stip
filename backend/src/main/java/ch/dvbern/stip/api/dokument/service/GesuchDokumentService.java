@@ -211,7 +211,7 @@ public class GesuchDokumentService {
 
     @Transactional
     public boolean customDokumentTypeContainsFiles(UUID customDokumentTypeId) {
-        return gesuchDokumentRepository.containsDocuments(customDokumentTypeId);
+        return gesuchDokumentRepository.customDokumentHasGesuchDokuments(customDokumentTypeId);
     }
 
     @Transactional
