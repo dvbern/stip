@@ -186,9 +186,9 @@ public class GesuchDokumentService {
         final FileUpload fileUpload,
         final String objectId
     ) {
-        GesuchTranche gesuchTranche =
+        final GesuchTranche gesuchTranche =
             gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
-        GesuchDokument gesuchDokument =
+        final GesuchDokument gesuchDokument =
             gesuchDokumentRepository
                 .findByGesuchTrancheAndCustomDokumentType(gesuchTranche.getId(), customDokumentTypId)
                 .orElseGet(
