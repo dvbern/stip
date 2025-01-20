@@ -534,12 +534,13 @@ public class BerechnungsblattService {
         persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getAusbildungskosten()));
 
+        final String noPersonenTranslationReplaceKey = "anzahl";
         var grundbedarfPersonenCell = new Cell();
         grundbedarfPersonenCell.add(
             getDefaultParagraph(
                 tl.translate(
                     "stip.berechnung.persoenlich.kosten.grundbedarfPersonen",
-                    "anzahl",
+                    noPersonenTranslationReplaceKey,
                     persoenlichesBudgetresultat.getAnzahlPersonenImHaushalt()
                 )
             )
@@ -556,7 +557,7 @@ public class BerechnungsblattService {
             getDefaultParagraph(
                 tl.translate(
                     "stip.berechnung.persoenlich.kosten.wohnkostenPersonen",
-                    "anzahl",
+                    noPersonenTranslationReplaceKey,
                     persoenlichesBudgetresultat.getAnzahlPersonenImHaushalt()
                 )
             )
@@ -573,7 +574,7 @@ public class BerechnungsblattService {
             getDefaultParagraph(
                 tl.translate(
                     "stip.berechnung.persoenlich.kosten.medizinischeGrundversorgungPersonen",
-                    "anzahl",
+                    noPersonenTranslationReplaceKey,
                     persoenlichesBudgetresultat.getAnzahlPersonenImHaushalt()
                 )
             )

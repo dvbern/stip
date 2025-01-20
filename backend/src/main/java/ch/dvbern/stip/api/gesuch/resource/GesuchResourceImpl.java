@@ -295,7 +295,7 @@ public class GesuchResourceImpl implements GesuchResource {
         try {
             byteStream = gesuchService.getBerechnungsblattByteStream(gesuchId);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); // TODO KSTIP-????: Handle with different exception
         }
 
         ByteArrayOutputStream finalByteStream = byteStream;
