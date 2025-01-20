@@ -114,19 +114,18 @@ public class SozialdienstBenutzerService {
         return sozialdienstBenutzerRepository.requireById(id);
     }
 
-    @Transactional
-    public SozialdienstBenutzerDto getSozialdienstBenutzerDtoById(UUID id) {
-        return sozialdienstBenutzerMapper.toDto(getSozialdienstBenutzerById(id));
+    public SozialdienstAdminDto getSozialdienstAdminDtoById(final UUID id) {
+        return sozialdienstAdminMapper.toDto(getSozialdienstBenutzerById(id));
     }
 
     @Transactional
-    public SozialdienstBenutzerDto updateSozialdienstAdminBenutzer(
+    public SozialdienstAdminDto updateSozialdienstAdminBenutzer(
         final UUID sozialdienstAdminId,
         SozialdienstAdminUpdateDto dto
     ) {
         var sozialdienstAdmin = sozialdienstBenutzerRepository.requireById(sozialdienstAdminId);
         sozialdienstAdminMapper.partialUpdate(dto, sozialdienstAdmin);
-        return sozialdienstBenutzerMapper.toDto(sozialdienstAdmin);
+        return sozialdienstAdminMapper.toDto(sozialdienstAdmin);
     }
 
     @Transactional

@@ -88,7 +88,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public SozialdienstBenutzerDto replaceSozialdienstAdmin(
+    public SozialdienstAdminDto replaceSozialdienstAdmin(
         UUID sozialdienstId,
         SozialdienstAdminDto sozialdienstAdminDto
     ) {
@@ -105,7 +105,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @AllowAll
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
-    public SozialdienstBenutzerDto updateSozialdienstAdmin(
+    public SozialdienstAdminDto updateSozialdienstAdmin(
         UUID sozialdienstId,
         SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto
     ) {

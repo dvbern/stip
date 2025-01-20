@@ -73,7 +73,7 @@ public interface SozialdienstResource {
     @Path("/{sozialdienstId}/replaceSozialdienstAdmin")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    SozialdienstBenutzerDto replaceSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminDto sozialdienstAdminDto);
+    SozialdienstAdminDto replaceSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminDto sozialdienstAdminDto);
 
     @PATCH
     @Consumes({ "application/json" })
@@ -84,7 +84,7 @@ public interface SozialdienstResource {
     @Path("/{sozialdienstId}/updateSozialdienstAdmin")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    SozialdienstBenutzerDto updateSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto);
+    SozialdienstAdminDto updateSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto);
 
     @PATCH
     @Path("/benutzer")
