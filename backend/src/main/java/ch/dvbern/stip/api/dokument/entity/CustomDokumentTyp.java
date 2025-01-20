@@ -44,6 +44,7 @@ public class CustomDokumentTyp extends AbstractMandantEntity {
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "type", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String type;
+
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     @Column(name = "description", nullable = false, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String description;
