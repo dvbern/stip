@@ -129,6 +129,20 @@ export class SharedFeatureGesuchDokumenteComponent {
     return hasAbgelehnteDokuments && isInCorrectState;
   });
 
+  // set the gesuch status to from "WARTEN_AUF_UNTERSCHRIFTENBLATT" to "VERSANDBEREIT"
+  canSetToAdditionalDokumenteErhaltenSig = computed(() => {
+    const { gesuchPermissions } = this.gesuchViewSig();
+    const { unterschriftenblaetter, requiredDocumentTypes } =
+      this.additionalDokumenteViewSig();
+
+    const hasUnterschriftenblatt =
+      requiredDocumentTypes.length === 0 && unterschriftenblaetter.length > 0;
+
+    return (
+      gesuchPermissions.canUploadUnterschriftenblatt && hasUnterschriftenblatt
+    );
+  });
+
   constructor() {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
       .pipe(takeUntilDestroyed())
@@ -230,6 +244,18 @@ export class SharedFeatureGesuchDokumenteComponent {
         },
       });
     }
+  }
+
+  setToAdditionalDokumenteErhalten() {
+    const { trancheId: gesuchTrancheId } = this.gesuchViewSig();
+    if (!gesuchTrancheId) return;
+
+    this.dokumentsStore.setToAdditionalDokumenteErhalten$({
+      gesuchTrancheId,
+      onSuccess: () => {
+        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+      },
+    });
   }
 
   handleContinue() {

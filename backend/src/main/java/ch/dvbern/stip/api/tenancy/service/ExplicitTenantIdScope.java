@@ -15,13 +15,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.tenancy.service;
 
-import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenantInterceptor;
+import lombok.RequiredArgsConstructor;
 
-public interface GesuchStatusStateChangeHandler
-    extends StateChangeHandler<Gesuchstatus, GesuchStatusChangeEvent, Gesuch> {
+/**
+ * Represent a code block that runs for an explicitly defined tenant.
+ * Must be used inside a try-with-resource statement to properly work.
+ * Primarily designed for the {@link RunForTenant} interceptor/ {@link RunForTenantInterceptor}.
+ */
+@RequiredArgsConstructor
+public class ExplicitTenantIdScope implements AutoCloseable {
+    private final ThreadLocal<String> explicitTenantId;
+
+    @Override
+    public void close() {
+        explicitTenantId.remove();
+    }
 }

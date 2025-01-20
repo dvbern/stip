@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.repo;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -24,9 +25,9 @@ import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
@@ -201,5 +202,9 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);
+    }
+
+    public List<Gesuch> getAllWartenAufUnterschriftenblatt() {
+        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT).stream().toList();
     }
 }

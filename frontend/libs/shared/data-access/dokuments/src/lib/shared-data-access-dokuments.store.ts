@@ -279,6 +279,31 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
+  setToAdditionalDokumenteErhalten$ = rxMethod<{
+    gesuchTrancheId: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      switchMap(({ gesuchTrancheId, onSuccess }) => {
+        return this.gesuchService
+          .changeGesuchStatusToVersandbereit$({
+            gesuchTrancheId,
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                onSuccess();
+              },
+              error: () => undefined,
+            }),
+            catchError(() => {
+              return EMPTY;
+            }),
+          );
+      }),
+    ),
+  );
+
   fehlendeDokumenteEinreichen$ = rxMethod<{
     trancheId: string;
     onSuccess: () => void;

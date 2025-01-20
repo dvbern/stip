@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.common.statemachines;
 
 import ch.dvbern.stip.api.common.statemachines.gesuchstatus.GesuchStatusConfigProducer;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

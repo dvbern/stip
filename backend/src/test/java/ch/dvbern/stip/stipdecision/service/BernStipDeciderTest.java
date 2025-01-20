@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;

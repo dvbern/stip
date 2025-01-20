@@ -15,10 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.service;
+package ch.dvbern.stip.api.gesuchstatus.service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
@@ -28,8 +29,9 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
@@ -71,6 +73,22 @@ public class GesuchStatusService {
         if (kommentarDto != null && sendNotificationIfPossible) {
             MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
             notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
+        }
+    }
+
+    public void bulkTriggerStateMachineEvent(
+        final List<Gesuch> gesuche,
+        final GesuchStatusChangeEvent event
+    ) {
+        for (final Gesuch gesuch : gesuche) {
+            StateMachineUtil.addExit(
+                config,
+                transition -> validationService.validateGesuchForStatus(gesuch, transition.getDestination()),
+                Gesuchstatus.values()
+            );
+
+            final var sm = createStateMachine(gesuch, null);
+            sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
         }
     }
 

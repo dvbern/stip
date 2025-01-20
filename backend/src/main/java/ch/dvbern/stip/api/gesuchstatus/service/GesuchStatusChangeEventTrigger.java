@@ -15,13 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
+package ch.dvbern.stip.api.gesuchstatus.service;
 
-import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 
-public interface GesuchStatusStateChangeHandler
-    extends StateChangeHandler<Gesuchstatus, GesuchStatusChangeEvent, Gesuch> {
+public final class GesuchStatusChangeEventTrigger extends TriggerWithParameters1<Gesuch, GesuchStatusChangeEvent> {
+
+    private GesuchStatusChangeEventTrigger(GesuchStatusChangeEvent underlyingTrigger) {
+        super(underlyingTrigger, Gesuch.class);
+    }
+
+    public static GesuchStatusChangeEventTrigger createTrigger(GesuchStatusChangeEvent event) {
+        return new GesuchStatusChangeEventTrigger(event);
+    }
 }

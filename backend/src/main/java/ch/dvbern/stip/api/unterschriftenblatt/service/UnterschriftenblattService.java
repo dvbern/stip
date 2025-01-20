@@ -17,13 +17,16 @@
 
 package ch.dvbern.stip.api.unterschriftenblatt.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
@@ -31,8 +34,11 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
@@ -67,6 +73,8 @@ public class UnterschriftenblattService {
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final UnterschriftenblattMapper unterschriftenblattMapper;
+    private final GesuchStatusService gesuchStatusService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Transactional
     public Uni<Response> getUploadUnterschriftenblattUni(
@@ -130,6 +138,40 @@ public class UnterschriftenblattService {
             .toList();
     }
 
+    @Transactional
+    public boolean areRequiredUnterschriftenblaetterUploaded(final Gesuch gesuch) {
+        final var requiredUnterschriftenblaetter = new HashSet<>(getUnterschriftenblaetterToUpload(gesuch));
+
+        unterschriftenblattRepository
+            .requireForGesuch(gesuch.getId())
+            .forEach(present -> requiredUnterschriftenblaetter.remove(present.getDokumentTyp()));
+
+        return requiredUnterschriftenblaetter.isEmpty();
+    }
+
+    @Transactional
+    public void checkForUnterschriftenblaetterOnAllGesuche() {
+        final var gesuche = gesuchRepository.getAllWartenAufUnterschriftenblatt();
+
+        // This is the list of historic Gesuche, select the actual ones
+        final var changedSevenDaysAgo = new HashSet<>(
+            gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(
+                gesuche.stream().map(AbstractEntity::getId).toList(),
+                Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+                LocalDateTime.now().minusDays(7)
+            ).map(AbstractEntity::getId).toList()
+        );
+
+        final var toUpdate = gesuche.stream().filter(gesuch -> changedSevenDaysAgo.contains(gesuch.getId())).toList();
+        if (!toUpdate.isEmpty()) {
+            gesuchStatusService.bulkTriggerStateMachineEvent(
+                toUpdate,
+                GesuchStatusChangeEvent.VERSANDBEREIT
+            );
+        }
+    }
+
+    @Transactional
     public boolean requiredUnterschriftenblaetterExist(final Gesuch gesuch) {
         final var required = getUnterschriftenblaetterToUpload(gesuch);
         final var existing = unterschriftenblattRepository.findByGesuchAndDokumentTypes(gesuch.getId(), required);
