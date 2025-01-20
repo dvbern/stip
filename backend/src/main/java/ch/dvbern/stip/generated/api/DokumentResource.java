@@ -6,6 +6,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import java.util.UUID;
+import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -53,7 +54,7 @@ public interface DokumentResource {
 
     @GET
     @Path("/dokument/{gesuchTrancheId}/{dokumentTyp}/{dokumentId}")
-    @Produces({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
     FileDownloadTokenDto getDokumentDownloadToken(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("dokumentId") UUID dokumentId);
 
     @GET

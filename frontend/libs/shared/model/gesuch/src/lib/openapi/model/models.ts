@@ -50,6 +50,7 @@ export * from './fallDashboardItem';
 export * from './familienBudgetresultat';
 export * from './familiensituation';
 export * from './familiensituationUpdate';
+export * from './fileDownloadToken';
 export * from './geschwister';
 export * from './geschwisterUpdate';
 export * from './gesuch';

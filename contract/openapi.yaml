@@ -1594,6 +1594,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/FileDownloadToken'
           description: File returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: File returned
       operationId: getDokumentDownloadToken
       summary: get Dokument Download Token
     delete:
@@ -4330,6 +4341,13 @@ components:
         - AKTIV
         - ABGEBROCHEN
         - ABGESCHLOSSEN
+    FileDownloadToken:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS
@@ -5006,7 +5024,7 @@ components:
           $ref: '#/components/schemas/LocalDate'
         notizTyp:
           $ref: '#/components/schemas/GesuchNotizTyp'
-        gesuchNummer: 
+        gesuchNummer:
           type: string
         antwort:
           type: string
@@ -5128,13 +5146,6 @@ components:
       properties:
         decisionId:
           $ref: '#/components/schemas/UUID'
-    FileDownloadToken:
-      type: object
-      required:
-        - token
-      properties:
-        token:
-          type: string
   responses:
     Unauthorized:
       content:

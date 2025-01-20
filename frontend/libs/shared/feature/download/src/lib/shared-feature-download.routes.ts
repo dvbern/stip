@@ -4,9 +4,27 @@ import { SharedFeatureDownloadComponent } from './shared-feature-download/shared
 
 export const sharedFeatureDownloadRoutes: Route[] = [
   {
-    path: ':gesuchTrancheId/:type/:dokumentId',
+    path: ':id/:type',
     pathMatch: 'prefix',
     providers: [],
-    children: [{ path: '', component: SharedFeatureDownloadComponent }],
+    children: [
+      {
+        path: '',
+        component: SharedFeatureDownloadComponent,
+        title: 'shared.file.download.message',
+      },
+    ],
+  },
+  {
+    path: ':id/:type/:dokumentTyp/:dokumentId',
+    pathMatch: 'prefix',
+    providers: [],
+    children: [
+      {
+        path: '',
+        component: SharedFeatureDownloadComponent,
+        title: 'shared.file.download.message',
+      },
+    ],
   },
 ];
