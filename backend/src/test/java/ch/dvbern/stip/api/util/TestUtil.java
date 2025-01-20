@@ -316,6 +316,24 @@ public class TestUtil {
             .statusCode(Response.Status.CREATED.getStatusCode());
     }
 
+    public static void uploadCustomDokumentFile(
+        DokumentApiSpec dokumentApiSpec,
+        UUID gesuchTrancheId,
+        UUID customDokumentTypId,
+        File file
+    ) {
+        dokumentApiSpec.createCustomGesuchDokument()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .customDokumentTypIdPath(customDokumentTypId)
+            .reqSpec(req -> {
+                req.addMultiPart("fileUpload", file, "image/png");
+            })
+            .execute(PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.CREATED.getStatusCode());
+    }
+
     public static ValidatableResponse uploadUnterschriftenblatt(
         final DokumentApiSpec dokumentApiSpec,
         final UUID gesuchId,

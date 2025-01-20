@@ -250,16 +250,7 @@ class DokumentResourcesTest {
     void test_upload_custom_gesuchdokuments() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
         File file = new File(TEST_CUSTOM_FILE_LOCATION);
-        dokumentApiSpec.createCustomGesuchDokument();
-        given()
-            .pathParam("gesuchTrancheId", gesuchTrancheId)
-            .pathParam("customDokumentTypId", customDokumentId)
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA)
-            .multiPart("fileUpload", file)
-            .when()
-            .post("/api/v1" + DokumentApiSpec.CreateCustomGesuchDokumentOper.REQ_URI)
-            .then()
-            .statusCode(Status.CREATED.getStatusCode());
+        TestUtil.uploadCustomDokumentFile(dokumentApiSpec, gesuchTrancheId, customDokumentId, file);
     }
 
     // testAsGS
