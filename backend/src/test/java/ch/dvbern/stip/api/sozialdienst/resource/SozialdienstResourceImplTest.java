@@ -119,7 +119,7 @@ class SozialdienstResourceImplTest {
                 .statusCode(Response.Status.OK.getStatusCode())
                 .extract()
                 .as(SozialdienstDtoSpec[].class)
-        ).toList().get(0);
+        ).filter(sozialdienst -> sozialdienst.getId().equals(dtoSpec.getId())).findFirst().get();
         assertThat(dtoSpec.getSozialdienstAdmin(), notNullValue());
         assertTrue(dtoSpec.getSozialdienstAdmin().getEmail().contains(ADMIN_EMAIL));
         checkSozialdienstResponse(dtoSpec);
