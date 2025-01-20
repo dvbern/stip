@@ -30,6 +30,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
+import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -74,6 +75,12 @@ public class SozialdienstService {
     public List<SozialdienstDto> getAllSozialdienst() {
         final var entities = sozialdienstRepository.findAll();
         return entities.stream().map(sozialdienstMapper::toDto).toList();
+    }
+
+    @Transactional
+    public List<SozialdienstSlimDto> getAllSozialdienstSlim() {
+        final var entities = sozialdienstRepository.findAll();
+        return entities.stream().map(sozialdienstMapper::toSlimDto).toList();
     }
 
     @Transactional
