@@ -23,6 +23,7 @@ import java.util.Set;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -46,5 +47,10 @@ public class DokumentsRequiredDocumentProducer implements RequiredDocumentProduc
         }
 
         return ImmutablePair.of("dokuments", requiredDocs);
+    }
+
+    @Override
+    public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
+        return ImmutablePair.of("", Set.of());
     }
 }

@@ -20,9 +20,11 @@ package ch.dvbern.stip.api.eltern.entity;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -45,5 +47,10 @@ public class MutterRequiredDocumentsProducer implements RequiredDocumentProducer
             .findFirst()
             .orElse(null);
         return ImmutablePair.of("elterns", producer.getForElternteil(mutter, formular.getFamiliensituation()));
+    }
+
+    @Override
+    public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
+        return ImmutablePair.of("", Set.of());
     }
 }

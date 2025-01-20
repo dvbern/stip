@@ -23,7 +23,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -38,7 +37,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RequiredDokumentService {
     private final Instance<RequiredDocumentProducer> requiredDocumentProducers;
-    private final Instance<RequiredCustomDocumentProducer> requiredCustomDocumentProducers;
 
     private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchFormular formular) {
         return formular
@@ -78,7 +76,7 @@ public class RequiredDokumentService {
     }
 
     private Set<CustomDokumentTyp> getRequiredCustomDokumentTypesForGesuch(final GesuchTranche tranche) {
-        return requiredCustomDocumentProducers
+        return requiredDocumentProducers
             .stream()
             .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(tranche))
             .flatMap(

@@ -23,8 +23,10 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.plz.service.PlzService;
@@ -86,6 +88,11 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
         }
 
         return ImmutablePair.of("personInAusbildung", requiredDocs);
+    }
+
+    @Override
+    public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
+        return ImmutablePair.of("", Set.of());
     }
 
     // Returns whether both parents live abroad or not

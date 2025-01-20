@@ -21,8 +21,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -86,6 +88,11 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
         }
 
         return ImmutablePair.of("einnahmenKosten", requiredDocs);
+    }
+
+    @Override
+    public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
+        return ImmutablePair.of("", Set.of());
     }
 
     private boolean greaterThanZero(final Integer base) {
