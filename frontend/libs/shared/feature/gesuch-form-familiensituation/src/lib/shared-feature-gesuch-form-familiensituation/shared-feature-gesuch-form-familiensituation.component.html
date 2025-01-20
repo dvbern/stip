@@ -168,7 +168,7 @@
               formControlName="elternteilUnbekanntVerstorben"
               data-testid="form-family-elternteilUnbekanntVerstorben"
               dvSharedUiFormField
-              class="d-flex flex-column"
+              class="d-flex flex-column col-12"
             >
               <label>{{ 'shared.form.familiensituation.elternteil-verstorben-unbekannt.label' | translate }}</label>
               <mat-radio-button data-testid="yes" [value]="true">{{
@@ -186,30 +186,26 @@
           </div>
           @if (!hiddenFieldsSetSig().has(form.controls.mutterUnbekanntVerstorben)) {
             <div class="row g-4 mt-3">
-              <div class="d-flex align-items-center col-12 col-md-6 col-xl-4 flex-grow-1">
-                <span class="me-2">{{ 'shared.form.familiensituation.elternteil-verstorben.label' | translate }}</span>
-                <button
-                  type="button"
-                  (click)="elternteilVerstorbenUnbekanntDialog.toggle()"
-                  class="dv-icon-button dv-icon-button-md text-info mt-2"
-                  [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-                >
-                  <span class="material-symbols-rounded"> info </span>
-                </button>
-                <div
-                  dvSharedUiInfoDialog
-                  [dialogTitleKey]="'shared.form.familiensituation.elternteil-verstorben-unbekannt.infoTitle'"
-                  [dialogMessageKey]="'shared.form.familiensituation.elternteil-verstorben-unbekannt.info'"
-                  #elternteilVerstorbenUnbekanntDialog="dvSharedUiInfoDialog"
-                  class="d-flex d-md-block col-12 col-md-6 col-xl-4"
-                ></div>
-              </div>
               <mat-radio-group
                 formControlName="mutterUnbekanntVerstorben"
                 data-testid="form-family-mutterUnbekanntVerstorben"
                 dvSharedUiFormField
-                class="d-flex flex-column"
+                class="col-12 col-md-8 col-xl-4 d-flex flex-column"
               >
+                <div class="align-items-center flex-grow-1">
+                  <span class="me-2">{{
+                    'shared.form.familiensituation.elternteil-verstorben.label' | translate
+                  }}</span>
+                  <button
+                    type="button"
+                    (click)="elternteilVerstorbenUnbekanntDialog.toggle()"
+                    class="dv-icon-button dv-icon-button-md text-info mt-2"
+                    [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+                  >
+                    <span class="material-symbols-rounded"> info </span>
+                  </button>
+                </div>
+
                 <label>{{ 'shared.form.familiensituation.mutter' | translate }}</label>
                 <mat-radio-button
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.VERSTORBEN"
@@ -239,6 +235,14 @@
                   {{ 'shared.form.error.required' | translate }}
                 </mat-error>
               </mat-radio-group>
+
+              <div
+                dvSharedUiInfoDialog
+                [dialogTitleKey]="'shared.form.familiensituation.elternteil-verstorben-unbekannt.infoTitle'"
+                [dialogMessageKey]="'shared.form.familiensituation.elternteil-verstorben-unbekannt.info'"
+                #elternteilVerstorbenUnbekanntDialog="dvSharedUiInfoDialog"
+                class="d-flex d-md-block col-12 col-md-4 col-xl-4"
+              ></div>
             </div>
           }
           @if (!hiddenFieldsSetSig().has(form.controls.mutterUnbekanntGrund)) {
