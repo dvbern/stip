@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
+import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,7 @@ public class CustomDokumentTypService {
     private final CustomDokumentTypRepository customDocumentTypRepository;
     private final CustomDocumentTypMapper customDocumentTypMapper;
     private final GesuchDokumentRepository gesuchDokumentRepository;
+    private final GesuchDokumentService gesuchDokumentService;
 
     @Transactional
     public CustomDokumentTypDto createCustomDokumentTyp(CustomDokumentTypCreateDto dto) {
@@ -62,7 +64,11 @@ public class CustomDokumentTypService {
 
     @Transactional
     public void deleteCustomDokumentTyp(UUID customDokumentTypId) {
-        customDocumentTypRepository.deleteById(customDokumentTypId);
+        if (gesuchDokumentService.customDokumentTypeContainsFiles(customDokumentTypId)) {
+            throw new ForbiddenException("Dem generischem Dokument sind noch Files angehänkt");
+        } else {
+            customDocumentTypRepository.deleteById(customDokumentTypId);
+        }
     }
 
     private List<GesuchDokument> findByCustomDokumentTypId(UUID gesuchTrancheId) {

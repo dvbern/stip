@@ -43,7 +43,6 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
-import io.quarkus.security.ForbiddenException;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.build.Jwt;
@@ -140,11 +139,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     public void deleteCustomDokumentTyp(UUID gesuchId, UUID customDokumentTypId) {
         customGesuchDokumentTypAuthorizer.canDelete(gesuchId);
-        if (gesuchDokumentService.customDokumentTypeContainsFiles(customDokumentTypId)) {
-            throw new ForbiddenException("Dem generischem Dokument sind noch Files angehänkt");
-        } else {
-            customDokumentTypService.deleteCustomDokumentTyp(customDokumentTypId);
-        }
+        customDokumentTypService.deleteCustomDokumentTyp(customDokumentTypId);
     }
 
     @RolesAllowed(GESUCH_DELETE)
