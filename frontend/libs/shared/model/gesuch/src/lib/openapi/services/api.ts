@@ -10,6 +10,8 @@ export * from './bildungskategorie.service';
 // import { BildungskategorieService } from './bildungskategorie.service';
 export * from './configuration.service';
 // import { ConfigurationService } from './configuration.service';
+export * from './delegieren.service';
+// import { DelegierenService } from './delegieren.service';
 export * from './dokument.service';
 // import { DokumentService } from './dokument.service';
 export * from './fall.service';
@@ -39,4 +41,4 @@ export * from './stipDecision.service';
 export * from './tenant.service';
 // import { TenantService } from './tenant.service';
 // Do not generate the constant as accidental use of this prevents tree-shaking.
-// export const APIS = [AusbildungService, AusbildungsgangService, AusbildungsstaetteService, BenutzerService, BildungskategorieService, ConfigurationService, DokumentService, FallService, GesuchService, GesuchNotizService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, MailService, NotificationService, PlzService, SozialdienstService, StammdatenService, StipDecisionService, TenantService];
+// export const APIS = [AusbildungService, AusbildungsgangService, AusbildungsstaetteService, BenutzerService, BildungskategorieService, ConfigurationService, DelegierenService, DokumentService, FallService, GesuchService, GesuchNotizService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, MailService, NotificationService, PlzService, SozialdienstService, StammdatenService, StipDecisionService, TenantService];

@@ -45,7 +45,7 @@
 
         <!-- side column -->
         <div class="tw-flex tw-flex-col tw-gap-8 lg:tw-mb-8">
-          @let sozialdienste = sozialdienstStore.sozialdienste().data;
+          @let sozialdienste = sozialdienstStore.availableSozialdienste().data;
           @if (sozialdienste && sozialdienste.length > 0) {
             <!-- SOZIALDIENST DELEGIEREN -->
             <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
@@ -76,7 +76,11 @@
                   }
                 </div>
                 @if (sozialdienst.value) {
-                  <button type="button" (click)="delegiereSozialdienst(sozialdienst.value)" class="btn btn-primary">
+                  <button
+                    type="button"
+                    (click)="delegiereSozialdienst(fall.id, sozialdienst.value)"
+                    class="btn btn-primary"
+                  >
                     {{ 'gesuch-app.dashboard.gesuch.delegieren' | translate }}
                   </button>
                 }

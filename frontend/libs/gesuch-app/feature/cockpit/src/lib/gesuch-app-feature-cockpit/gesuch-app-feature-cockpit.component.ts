@@ -93,7 +93,7 @@ export class GesuchAppFeatureCockpitComponent {
 
   constructor() {
     this.fallStore.loadCurrentFall$();
-    this.sozialdienstStore.loadAllSozialdienste$();
+    this.sozialdienstStore.loadAvailableSozialdienste$();
 
     effect(
       () => {
@@ -218,7 +218,7 @@ export class GesuchAppFeatureCockpitComponent {
       });
   }
 
-  delegiereSozialdienst(sozialdienst: Sozialdienst) {
+  delegiereSozialdienst(fallId: string, sozialdienst: Sozialdienst) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'gesuch-app.dashboard.gesuch.delegieren',
       message: 'gesuch-app.dashboard.gesuch.delegieren.message',
@@ -227,7 +227,10 @@ export class GesuchAppFeatureCockpitComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          // TODO KSTIP-1435: Implement
+          this.sozialdienstStore.fallDelegieren$({
+            sozialdienstId: sozialdienst.id,
+            fallId,
+          });
         }
       });
   }

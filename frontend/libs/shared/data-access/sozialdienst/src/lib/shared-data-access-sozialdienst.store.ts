@@ -16,11 +16,14 @@ import {
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelBenutzerApi } from '@dv/shared/model/benutzer';
 import {
+  DelegierenService,
+  Delegierung,
   Sozialdienst,
   SozialdienstAdmin,
   SozialdienstAdminUpdate,
   SozialdienstCreate,
   SozialdienstService,
+  SozialdienstSlim,
   SozialdienstUpdate,
 } from '@dv/shared/model/gesuch';
 import { KeycloakHttpService } from '@dv/shared/util/keycloak-http';
@@ -36,12 +39,16 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type SozialdienstState = {
+  delegierung: RemoteData<Delegierung>;
   sozialdienste: CachedRemoteData<Sozialdienst[]>;
+  availableSozialdienste: CachedRemoteData<SozialdienstSlim[]>;
   sozialdienst: RemoteData<Sozialdienst>;
 };
 
 const initialState: SozialdienstState = {
+  delegierung: initial(),
   sozialdienste: initial(),
+  availableSozialdienste: initial(),
   sozialdienst: initial(),
 };
 
@@ -52,6 +59,7 @@ export class SozialdienstStore extends signalStore(
   withDevtools('SozialdienstStore'),
 ) {
   private sozialdienstService = inject(SozialdienstService);
+  private delegierenService = inject(DelegierenService);
   private keycloak = inject(KeycloakHttpService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
@@ -72,6 +80,25 @@ export class SozialdienstStore extends signalStore(
           .pipe(
             handleApiResponse((sozialdienste) =>
               patchState(this, { sozialdienste }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  loadAvailableSozialdienste$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienste: cachedPending(state.sozialdienste),
+        }));
+      }),
+      switchMap(() =>
+        this.sozialdienstService
+          .getAllSozialdiensteForDelegation$()
+          .pipe(
+            handleApiResponse((availableSozialdienste) =>
+              patchState(this, { availableSozialdienste }),
             ),
           ),
       ),
@@ -372,6 +399,31 @@ export class SozialdienstStore extends signalStore(
         this.loadAllSozialdienste$();
         return throwError(() => error);
       }),
+    ),
+  );
+
+  fallDelegieren$ = rxMethod<{
+    fallId: string;
+    sozialdienstId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, {
+          delegierung: pending(),
+        });
+      }),
+      exhaustMap(({ fallId, sozialdienstId }) =>
+        this.delegierenService
+          .fallDelegieren$({
+            fallId,
+            sozialdienstId,
+          })
+          .pipe(
+            handleApiResponse((delegierung) =>
+              patchState(this, { delegierung }),
+            ),
+          ),
+      ),
     ),
   );
 }

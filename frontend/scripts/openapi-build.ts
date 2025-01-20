@@ -166,6 +166,7 @@ async function sleep(msec: number) {
     'Benutzer',
     'Bildungskategorie',
     'Configuration',
+    'Delegieren',
     'Dokument',
     'Fall',
     'Gesuch',
