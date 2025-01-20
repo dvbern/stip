@@ -62,9 +62,6 @@ public class BerechnungsblattService {
     private static final String FONT = StandardFonts.HELVETICA;
     private static final String FONT_BOLD = StandardFonts.HELVETICA_BOLD;
 
-    PdfFont pdfFont = null;
-    PdfFont pdfFontBold = null;
-
     private static final int FONT_SIZE = 10;
     private static final int FONT_SIZE_SMALL = 8;
 
@@ -73,6 +70,9 @@ public class BerechnungsblattService {
     private static final PageSize PAGE_SIZE = PageSize.A4;
 
     private static final UnitValue[] TABLE_WIDTH_PERCENTAGES = UnitValue.createPercentArray(new float[] { 85, 15 });
+
+    PdfFont pdfFont = null;
+    PdfFont pdfFontBold = null;
 
     public ByteArrayOutputStream getBerechnungsblattFromGesuch(final Gesuch gesuch, final Locale locale)
     throws IOException {
@@ -222,7 +222,7 @@ public class BerechnungsblattService {
         TL tl
     ) {
 
-        int HEADER_MARGIN_HORIZONTAL = (int) document.getLeftMargin();
+        float leftMargin = document.getLeftMargin();
         Paragraph line1Paragraph = new Paragraph(
             budgetTypeText
         )
@@ -230,9 +230,9 @@ public class BerechnungsblattService {
             .setFontSize(10)
             .setHorizontalAlignment(HorizontalAlignment.LEFT)
             .setFixedPosition(
-                HEADER_MARGIN_HORIZONTAL,
+                leftMargin,
                 PAGE_SIZE.getHeight() - 25,
-                PAGE_SIZE.getWidth() - HEADER_MARGIN_HORIZONTAL * 2
+                PAGE_SIZE.getWidth() - leftMargin * 2
             )
             .setTextAlignment(TextAlignment.LEFT);
 
@@ -250,9 +250,9 @@ public class BerechnungsblattService {
             .setFontSize(10)
             .setHorizontalAlignment(HorizontalAlignment.LEFT)
             .setFixedPosition(
-                HEADER_MARGIN_HORIZONTAL,
+                leftMargin,
                 PAGE_SIZE.getHeight() - 40,
-                PAGE_SIZE.getWidth() - HEADER_MARGIN_HORIZONTAL * 2
+                PAGE_SIZE.getWidth() - leftMargin * 2
             )
             .setTextAlignment(TextAlignment.LEFT);
 
@@ -275,9 +275,9 @@ public class BerechnungsblattService {
             .setFontSize(10)
             .setHorizontalAlignment(HorizontalAlignment.LEFT)
             .setFixedPosition(
-                HEADER_MARGIN_HORIZONTAL,
+                leftMargin,
                 PAGE_SIZE.getHeight() - 40,
-                PAGE_SIZE.getWidth() - HEADER_MARGIN_HORIZONTAL * 2
+                PAGE_SIZE.getWidth() - leftMargin * 2
             )
             .setTextAlignment(TextAlignment.RIGHT);
 
@@ -289,16 +289,16 @@ public class BerechnungsblattService {
         int verticalOffset,
         TL tl
     ) {
-        int FOOTER_MARGIN_HORIZONTAL = (int) document.getLeftMargin();
+        float leftMargin = document.getLeftMargin();
         document.add(
             new Paragraph(tl.translate("stip.berechnung.footer.info"))
                 .setFont(pdfFont)
                 .setFontSize(7)
                 .setHorizontalAlignment(HorizontalAlignment.LEFT)
                 .setFixedPosition(
-                    FOOTER_MARGIN_HORIZONTAL,
+                    leftMargin,
                     verticalOffset,
-                    PAGE_SIZE.getWidth() - FOOTER_MARGIN_HORIZONTAL * 2
+                    PAGE_SIZE.getWidth() - leftMargin * 2
                 )
                 .setTextAlignment(TextAlignment.LEFT)
         );
@@ -309,16 +309,16 @@ public class BerechnungsblattService {
         int verticalOffset,
         TL tl
     ) {
-        int FOOTER_MARGIN_HORIZONTAL = (int) document.getLeftMargin();
+        float leftMargin = document.getLeftMargin();
         document.add(
             new Paragraph(tl.translate("stip.berechnung.footer.kosten"))
                 .setFont(pdfFont)
                 .setFontSize(7)
                 .setHorizontalAlignment(HorizontalAlignment.LEFT)
                 .setFixedPosition(
-                    FOOTER_MARGIN_HORIZONTAL,
+                    leftMargin,
                     verticalOffset,
-                    PAGE_SIZE.getWidth() - FOOTER_MARGIN_HORIZONTAL * 2
+                    PAGE_SIZE.getWidth() - leftMargin * 2
                 )
                 .setTextAlignment(TextAlignment.LEFT)
         );

@@ -647,12 +647,12 @@ public class GesuchService {
     }
 
     public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
-        final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
     public ByteArrayOutputStream getBerechnungsblattByteStream(final UUID gesuchId) throws IOException {
-        final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungsblattService.getBerechnungsblattFromGesuch(
             gesuch,
             gesuch.getNewestGesuchTranche()
@@ -665,7 +665,7 @@ public class GesuchService {
     }
 
     public String getBerechnungsblattFileName(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
         GesuchFormular gesuchFormularToUse =
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new).getGesuchFormular();
         return String.format(
