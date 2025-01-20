@@ -136,15 +136,12 @@ export class SharedFeatureGesuchDokumenteComponent {
     const { unterschriftenblaetter, requiredDocumentTypes } =
       this.additionalDokumenteViewSig();
 
-    if (!gesuchPermissions.canUploadUnterschriftenblatt) return false;
-    if (
-      requiredDocumentTypes.length !== 0 ||
-      unterschriftenblaetter.length === 0
-    ) {
-      return false;
-    }
+    const hasUnterschriftenblatt =
+      requiredDocumentTypes.length === 0 && unterschriftenblaetter.length > 0;
 
-    return true;
+    return (
+      gesuchPermissions.canUploadUnterschriftenblatt && hasUnterschriftenblatt
+    );
   });
 
   constructor() {

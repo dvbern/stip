@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -78,7 +79,9 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
+import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.api.NotificationResource;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -151,6 +154,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchValidatorService gesuchValidatorService;
+
+    @InjectMock
+    BerechnungService berechnungService;
 
     @Inject
     GesuchTrancheValidatorService gesuchTrancheValidatorService;
@@ -1279,6 +1285,34 @@ class GesuchServiceTest {
 
     @TestAsSachbearbeiter
     @Test
+    void changeGesuchstatusFromVersendetToKeinStipendienanspruch() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+            .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void changeGesuchstatusFromVersendetToStipendienanspruch() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+            .thenReturn(new BerechnungsresultatDto().berechnung(1).year(Year.now().getValue()));
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.STIPENDIENANSPRUCH,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @TestAsSachbearbeiter
+    @Test
     @Description("It should be possible to change Gesuchstatus from IN_FREIGABE to VERFUEGT")
     void changeGesuchstatus_from_InFreigabe_to_VerfuegtTest() {
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_FREIGABE);
@@ -1312,7 +1346,6 @@ class GesuchServiceTest {
     void changeGesuchstatus_from_Versandbereit_to_VersendetTest() {
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSANDBEREIT);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVersendet(gesuch.getId()));
         assertEquals(
             Gesuchstatus.VERSENDET,

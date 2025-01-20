@@ -9,14 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Adresse } from './adresse';
-import { SozialdienstBenutzer } from './sozialdienstBenutzer';
 
-export interface Sozialdienst { 
+export interface SozialdienstBenutzerUpdate { 
     id: string;
-    name: string;
-    adresse: Adresse;
-    iban: string;
-    sozialdienstAdmin: SozialdienstBenutzer;
+    vorname: string;
+    nachname: string;
 }
 

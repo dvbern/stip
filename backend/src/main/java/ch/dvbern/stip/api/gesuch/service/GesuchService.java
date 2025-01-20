@@ -613,6 +613,23 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSENDET);
     }
 
+    @Transactional(TxType.REQUIRES_NEW)
+    public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+            gesuch,
+            configService.getCurrentDmnMajorVersion(),
+            configService.getCurrentDmnMinorVersion()
+        );
+
+        var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
+        if (stipendien.getBerechnung() > 0) {
+            status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
+        }
+        gesuchStatusService.triggerStateMachineEvent(gesuch, status);
+    }
+
     @Transactional
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);

@@ -40,8 +40,7 @@ public class DataTenantResolver implements TenantResolver {
     private final Instance<RoutingContext> context;
 
     public static ExplicitTenantIdScope setTenantId(final String tenantId) {
-        EXPLICIT_TENANT_ID.set(tenantId);
-        return new ExplicitTenantIdScope(EXPLICIT_TENANT_ID);
+        return new ExplicitTenantIdScope(EXPLICIT_TENANT_ID, tenantId);
     }
 
     @Override

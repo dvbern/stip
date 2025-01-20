@@ -20,8 +20,10 @@ import { Observable }                                        from 'rxjs';
 
 import { Sozialdienst } from '../model/sozialdienst';
 import { SozialdienstAdmin } from '../model/sozialdienstAdmin';
-import { SozialdienstAdminCreate } from '../model/sozialdienstAdminCreate';
 import { SozialdienstAdminUpdate } from '../model/sozialdienstAdminUpdate';
+import { SozialdienstBenutzer } from '../model/sozialdienstBenutzer';
+import { SozialdienstBenutzerCreate } from '../model/sozialdienstBenutzerCreate';
+import { SozialdienstBenutzerUpdate } from '../model/sozialdienstBenutzerUpdate';
 import { SozialdienstCreate } from '../model/sozialdienstCreate';
 import { SozialdienstUpdate } from '../model/sozialdienstUpdate';
 
@@ -33,8 +35,16 @@ export interface SozialdienstServiceCreateSozialdienstRequestParams {
     sozialdienstCreate?: SozialdienstCreate;
 }
 
+export interface SozialdienstServiceCreateSozialdienstBenutzerRequestParams {
+    sozialdienstBenutzerCreate?: SozialdienstBenutzerCreate;
+}
+
 export interface SozialdienstServiceDeleteSozialdienstRequestParams {
     sozialdienstId: string;
+}
+
+export interface SozialdienstServiceDeleteSozialdienstBenutzerRequestParams {
+    body?: string;
 }
 
 export interface SozialdienstServiceGetSozialdienstRequestParams {
@@ -43,7 +53,7 @@ export interface SozialdienstServiceGetSozialdienstRequestParams {
 
 export interface SozialdienstServiceReplaceSozialdienstAdminRequestParams {
     sozialdienstId: string;
-    sozialdienstAdminCreate?: SozialdienstAdminCreate;
+    sozialdienstAdmin?: SozialdienstAdmin;
 }
 
 export interface SozialdienstServiceUpdateSozialdienstRequestParams {
@@ -53,6 +63,10 @@ export interface SozialdienstServiceUpdateSozialdienstRequestParams {
 export interface SozialdienstServiceUpdateSozialdienstAdminRequestParams {
     sozialdienstId: string;
     sozialdienstAdminUpdate?: SozialdienstAdminUpdate;
+}
+
+export interface SozialdienstServiceUpdateSozialdienstBenutzerRequestParams {
+    sozialdienstBenutzerUpdate?: SozialdienstBenutzerUpdate;
 }
 
 
@@ -200,6 +214,86 @@ export class SozialdienstService {
     }
 
     /**
+     * create a new SozialdienstBenutzer that is assigned to the Sozialdienst of the currently logged in SozialdienstAdmin
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public createSozialdienstBenutzer$(requestParameters: SozialdienstServiceCreateSozialdienstBenutzerRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<SozialdienstBenutzer>;
+     public createSozialdienstBenutzer$(requestParameters: SozialdienstServiceCreateSozialdienstBenutzerRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<SozialdienstBenutzer>>;
+     public createSozialdienstBenutzer$(requestParameters: SozialdienstServiceCreateSozialdienstBenutzerRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<SozialdienstBenutzer>>;
+     public createSozialdienstBenutzer$(requestParameters: SozialdienstServiceCreateSozialdienstBenutzerRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const sozialdienstBenutzerCreate = requestParameters.sozialdienstBenutzerCreate;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/sozialdienst/benutzer`;
+        return this.httpClient.request<SozialdienstBenutzer>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: sozialdienstBenutzerCreate,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Delete a Sozialdienst by Id
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -263,6 +357,85 @@ export class SozialdienstService {
         return this.httpClient.request<Sozialdienst>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * update an exisitng SozialdienstBenutzer
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public deleteSozialdienstBenutzer$(requestParameters: SozialdienstServiceDeleteSozialdienstBenutzerRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public deleteSozialdienstBenutzer$(requestParameters: SozialdienstServiceDeleteSozialdienstBenutzerRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public deleteSozialdienstBenutzer$(requestParameters: SozialdienstServiceDeleteSozialdienstBenutzerRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public deleteSozialdienstBenutzer$(requestParameters: SozialdienstServiceDeleteSozialdienstBenutzerRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const body = requestParameters.body;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/sozialdienst/benutzer`;
+        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: body,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -414,19 +587,86 @@ export class SozialdienstService {
     }
 
     /**
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getSozialdienstBenutzer$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<SozialdienstBenutzer>>;
+     public getSozialdienstBenutzer$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<SozialdienstBenutzer>>>;
+     public getSozialdienstBenutzer$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<SozialdienstBenutzer>>>;
+     public getSozialdienstBenutzer$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/sozialdienst/benutzer`;
+        return this.httpClient.request<Array<SozialdienstBenutzer>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public replaceSozialdienstAdmin$(requestParameters: SozialdienstServiceReplaceSozialdienstAdminRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<SozialdienstAdmin>;
-     public replaceSozialdienstAdmin$(requestParameters: SozialdienstServiceReplaceSozialdienstAdminRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<SozialdienstAdmin>>;
-     public replaceSozialdienstAdmin$(requestParameters: SozialdienstServiceReplaceSozialdienstAdminRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<SozialdienstAdmin>>;
+     public replaceSozialdienstAdmin$(requestParameters: SozialdienstServiceReplaceSozialdienstAdminRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<SozialdienstBenutzer>;
+     public replaceSozialdienstAdmin$(requestParameters: SozialdienstServiceReplaceSozialdienstAdminRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<SozialdienstBenutzer>>;
+     public replaceSozialdienstAdmin$(requestParameters: SozialdienstServiceReplaceSozialdienstAdminRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<SozialdienstBenutzer>>;
      public replaceSozialdienstAdmin$(requestParameters: SozialdienstServiceReplaceSozialdienstAdminRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const sozialdienstId = requestParameters.sozialdienstId;
         if (sozialdienstId === null || sozialdienstId === undefined) {
             throw new Error('Required parameter sozialdienstId was null or undefined when calling replaceSozialdienstAdmin$.');
         }
-        const sozialdienstAdminCreate = requestParameters.sozialdienstAdminCreate;
+        const sozialdienstAdmin = requestParameters.sozialdienstAdmin;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -483,10 +723,10 @@ export class SozialdienstService {
         }
 
         const localVarPath = `/sozialdienst/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/replaceSozialdienstAdmin`;
-        return this.httpClient.request<SozialdienstAdmin>('patch', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<SozialdienstBenutzer>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: sozialdienstAdminCreate,
+                body: sozialdienstAdmin,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -581,9 +821,9 @@ export class SozialdienstService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public updateSozialdienstAdmin$(requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<SozialdienstAdmin>;
-     public updateSozialdienstAdmin$(requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<SozialdienstAdmin>>;
-     public updateSozialdienstAdmin$(requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<SozialdienstAdmin>>;
+     public updateSozialdienstAdmin$(requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<SozialdienstBenutzer>;
+     public updateSozialdienstAdmin$(requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<SozialdienstBenutzer>>;
+     public updateSozialdienstAdmin$(requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<SozialdienstBenutzer>>;
      public updateSozialdienstAdmin$(requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const sozialdienstId = requestParameters.sozialdienstId;
         if (sozialdienstId === null || sozialdienstId === undefined) {
@@ -646,10 +886,90 @@ export class SozialdienstService {
         }
 
         const localVarPath = `/sozialdienst/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/updateSozialdienstAdmin`;
-        return this.httpClient.request<SozialdienstAdmin>('patch', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<SozialdienstBenutzer>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: sozialdienstAdminUpdate,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * update an exisitng SozialdienstBenutzer
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public updateSozialdienstBenutzer$(requestParameters: SozialdienstServiceUpdateSozialdienstBenutzerRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<SozialdienstBenutzer>;
+     public updateSozialdienstBenutzer$(requestParameters: SozialdienstServiceUpdateSozialdienstBenutzerRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<SozialdienstBenutzer>>;
+     public updateSozialdienstBenutzer$(requestParameters: SozialdienstServiceUpdateSozialdienstBenutzerRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<SozialdienstBenutzer>>;
+     public updateSozialdienstBenutzer$(requestParameters: SozialdienstServiceUpdateSozialdienstBenutzerRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const sozialdienstBenutzerUpdate = requestParameters.sozialdienstBenutzerUpdate;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/sozialdienst/benutzer`;
+        return this.httpClient.request<SozialdienstBenutzer>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: sozialdienstBenutzerUpdate,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
