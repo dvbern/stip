@@ -61,7 +61,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.util.TestConstants.TEST_CUSTOM_FILE_LOCATION;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_FILE_LOCATION;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_XML_FILE_LOCATION;
 import static io.restassured.RestAssured.given;
@@ -249,7 +248,7 @@ class DokumentResourcesTest {
     @Order(8)
     void test_upload_custom_gesuchdokuments() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        File file = new File(TEST_CUSTOM_FILE_LOCATION);
+        File file = new File(TEST_FILE_LOCATION);
         TestUtil.uploadCustomDokumentFile(dokumentApiSpec, gesuchTrancheId, customDokumentId, file);
     }
 
