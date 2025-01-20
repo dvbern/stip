@@ -889,7 +889,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="dokument_typ" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="gesuch_id" type="UUID">
                 <constraints nullable="false"/>
