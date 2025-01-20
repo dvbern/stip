@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -52,15 +53,16 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpe
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuch.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.entity.Notification;
@@ -72,11 +74,14 @@ import ch.dvbern.stip.api.stammdaten.type.Land;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
+import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.api.NotificationResource;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -138,6 +143,9 @@ class GesuchServiceTest {
     @InjectMock
     GesuchRepository gesuchRepository;
 
+    @InjectMock
+    UnterschriftenblattService unterschriftenblattService;
+
     @Inject
     GesuchTrancheService gesuchTrancheService;
 
@@ -146,6 +154,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchValidatorService gesuchValidatorService;
+
+    @InjectMock
+    BerechnungService berechnungService;
 
     @Inject
     GesuchTrancheValidatorService gesuchTrancheValidatorService;
@@ -1246,6 +1257,60 @@ class GesuchServiceTest {
         );
     }
 
+    @Test
+    void changeGesuchstatusCheckUnterschriftenblattToVersandbereit() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(unterschriftenblattService.requiredUnterschriftenblaetterExist(any())).thenReturn(true);
+
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.VERSANDBEREIT,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @Test
+    void changeGesuchstatusCheckUnterschriftenblattToWartenAufUnterschriftenblatt() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(unterschriftenblattService.requiredUnterschriftenblaetterExist(any())).thenReturn(false);
+
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void changeGesuchstatusFromVersendetToKeinStipendienanspruch() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+            .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void changeGesuchstatusFromVersendetToStipendienanspruch() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+            .thenReturn(new BerechnungsresultatDto().berechnung(1).year(Year.now().getValue()));
+        assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
+        assertEquals(
+            Gesuchstatus.STIPENDIENANSPRUCH,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
     @TestAsSachbearbeiter
     @Test
     @Description("It should be possible to change Gesuchstatus from IN_FREIGABE to VERFUEGT")
@@ -1281,7 +1346,6 @@ class GesuchServiceTest {
     void changeGesuchstatus_from_Versandbereit_to_VersendetTest() {
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSANDBEREIT);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVersendet(gesuch.getId()));
         assertEquals(
             Gesuchstatus.VERSENDET,

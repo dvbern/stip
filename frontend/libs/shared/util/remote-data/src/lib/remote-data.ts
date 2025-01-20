@@ -282,6 +282,23 @@ export function fromCachedDataSig<T>(cachedRd: {
 }
 
 /**
+ * A helper function which maps the data of a cached remote data object to a new data object.
+ * If the cached remote data object is in the success state, the data is mapped.
+ *
+ * @example
+ * const mappedData = mapDataSig(cachedData, (data) => ({ ...data, newField: 'value' }));
+ */
+export function mapData<T, R>(
+  cachedRd: RemoteData<T>,
+  mapper: (data: T) => R,
+): RemoteData<R> {
+  if (isSuccess(cachedRd)) {
+    return success(mapper(cachedRd.data));
+  }
+  return cachedRd;
+}
+
+/**
  * Transforms a cached remote data object to a shared model error object if it is in the failure state.
  */
 export function transformErrorSig(

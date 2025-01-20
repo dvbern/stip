@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.type;
+package ch.dvbern.stip.api.gesuchstatus.type;
 
 import java.util.Collections;
 import java.util.EnumSet;
@@ -81,7 +81,36 @@ public enum Gesuchstatus {
             Gesuchstatus.VERFUEGT,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
             Gesuchstatus.VERSANDBEREIT,
-            Gesuchstatus.VERSENDET
+            Gesuchstatus.VERSENDET,
+            Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
+            Gesuchstatus.STIPENDIENANSPRUCH
+        )
+    );
+
+    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN = Collections.unmodifiableSet(
+        EnumSet.of(
+            VERFUEGT,
+            VERSANDBEREIT,
+            VERSENDET,
+            WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            STIPENDIENANSPRUCH
+        )
+    );
+
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT = Collections.unmodifiableSet(
+        EnumSet.of(
+            ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+            ANSPRUCH_MANUELL_PRUEFEN,
+            NICHT_ANSPRUCHSBERECHTIGT,
+            BEREIT_FUER_BEARBEITUNG,
+            NEGATIVE_VERFUEGUNG,
+            IN_BEARBEITUNG_SB,
+            JURISTISCHE_ABKLAERUNG,
+            FEHLENDE_DOKUMENTE,
+            IN_FREIGABE,
+            VERFUEGT,
+            WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            VERSANDBEREIT
         )
     );
 

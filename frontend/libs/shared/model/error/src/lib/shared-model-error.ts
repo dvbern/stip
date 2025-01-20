@@ -6,8 +6,7 @@ import {
   ValidationWarning as DvValidationWarning,
   ValidationReport,
 } from '@dv/shared/model/gesuch';
-
-type Extends<T, U extends T> = T extends U ? T : never;
+import { Extends } from '@dv/shared/model/type-util';
 
 export const GENERIC_REQUIRED_ERROR =
   '{jakarta.validation.constraints.NotNull.message}';

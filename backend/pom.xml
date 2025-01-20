@@ -646,7 +646,7 @@
                   <apiNameSuffix>Resource</apiNameSuffix>
                   <generateSupportingFiles>false</generateSupportingFiles>
                   <schemaMappings>FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
-                    Gesuchstatus=ch.dvbern.stip.api.gesuch.type.Gesuchstatus,
+                    Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
                     Anrede=ch.dvbern.stip.api.common.type.Anrede,
                     Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
                     Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
@@ -674,7 +674,10 @@
                     SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
                     AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
                     StipDecision=ch.dvbern.stip.api.common.type.StipDecision,
-                    GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp</schemaMappings>
+                    GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp,
+                    UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
+                    DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt
+                  </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
                   <configOptions>

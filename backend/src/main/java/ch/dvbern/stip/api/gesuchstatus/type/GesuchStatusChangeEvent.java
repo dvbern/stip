@@ -15,19 +15,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.service;
+package ch.dvbern.stip.api.gesuchstatus.type;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.type.GesuchStatusChangeEvent;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import lombok.Getter;
 
-public final class GesuchStatusChangeEventTrigger extends TriggerWithParameters1<Gesuch, GesuchStatusChangeEvent> {
-
-    private GesuchStatusChangeEventTrigger(GesuchStatusChangeEvent underlyingTrigger) {
-        super(underlyingTrigger, Gesuch.class);
-    }
-
-    public static GesuchStatusChangeEventTrigger createTrigger(GesuchStatusChangeEvent event) {
-        return new GesuchStatusChangeEventTrigger(event);
-    }
+@Getter
+public enum GesuchStatusChangeEvent {
+    ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+    VERFUEGT,
+    VERSANDBEREIT,
+    VERSENDET,
+    WARTEN_AUF_UNTERSCHRIFTENBLATT,
+    IN_BEARBEITUNG_SB,
+    IN_FREIGABE,
+    IN_BEARBEITUNG_GS,
+    ANSPRUCH_MANUELL_PRUEFEN,
+    BEREIT_FUER_BEARBEITUNG,
+    EINGEREICHT,
+    JURISTISCHE_ABKLAERUNG,
+    FEHLENDE_DOKUMENTE,
+    NICHT_ANSPRUCHSBERECHTIGT,
+    KEIN_STIPENDIENANSPRUCH,
+    NICHT_BEITRAGSBERECHTIGT,
+    STIPENDIENANSPRUCH,
+    GESUCH_ABGELEHNT,
+    NEGATIVE_VERFUEGUNG
 }

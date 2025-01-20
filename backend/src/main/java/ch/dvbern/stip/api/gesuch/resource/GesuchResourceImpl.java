@@ -102,11 +102,23 @@ public class GesuchResourceImpl implements GesuchResource {
     // TODO KSTIP-1247: roles allowed
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @Override
+    public GesuchDto changeGesuchStatusToVersandbereit(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.canUpdate(gesuchId);
+        gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+    }
+
+    // TODO KSTIP-1247: roles allowed
+    @RolesAllowed({ ROLE_SACHBEARBEITER })
+    @Override
     public GesuchDto changeGesuchStatusToVerfuegt(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchStatusToVerfuegt(gesuchId);
+        gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
@@ -118,6 +130,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.gesuchStatusToVersendet(gesuchId);
+        gesuchService.gesuchStatusToStipendienanspruch(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
@@ -276,6 +289,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.canUpdate(gesuchId);
         gesuchService.bearbeitungAbschliessen(gesuchId);
+        gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
