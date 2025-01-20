@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerReposito
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
@@ -98,25 +99,26 @@ public class SozialdienstService {
     }
 
     @Transactional
-    public SozialdienstAdminDto updateSozialdienstAdmin(
+    public SozialdienstBenutzerDto updateSozialdienstAdmin(
         SozialdienstAdminUpdateDto dto,
         SozialdienstDto sozialdienstDto
     ) {
         final var sozialdienst = sozialdienstRepository.requireById(sozialdienstDto.getId());
         var sozialdienstAdmin =
             sozialdienstBenutzerService.getSozialdienstBenutzerById(sozialdienst.getSozialdienstAdmin().getId());
-        return sozialdienstBenutzerService.updateSozialdienstAdminBenutzer(sozialdienstAdmin.getId(), dto);
+        var responseDto = sozialdienstBenutzerService.updateSozialdienstAdminBenutzer(sozialdienstAdmin.getId(), dto);
+        return responseDto;
     }
 
     @Transactional
-    public SozialdienstAdminDto replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminDto dto) {
+    public SozialdienstBenutzerDto replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminDto dto) {
         var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
         final var benutzerToDelete = sozialdienst.getSozialdienstAdmin();
         sozialdienstBenutzerService.deleteSozialdienstAdminBenutzer(benutzerToDelete.getKeycloakId());
 
         final var newSozialdienstAdmin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto);
         sozialdienst.setSozialdienstAdmin(newSozialdienstAdmin);
-        return sozialdienstBenutzerService.getSozialdienstAdminDtoById(newSozialdienstAdmin.getId());
+        return sozialdienstBenutzerService.getSozialdienstBenutzerDtoById(newSozialdienstAdmin.getId());
     }
 
     @Transactional

@@ -678,7 +678,7 @@ public class SozialdienstApiSpec {
      *
      * @see #sozialdienstIdPath  (required)
      * @see #body  (optional)
-     * return SozialdienstAdminDtoSpec
+     * return SozialdienstBenutzerDtoSpec
      */
     public static class ReplaceSozialdienstAdminOper implements Oper {
 
@@ -709,10 +709,10 @@ public class SozialdienstApiSpec {
         /**
          * PATCH /sozialdienst/{sozialdienstId}/replaceSozialdienstAdmin
          * @param handler handler
-         * @return SozialdienstAdminDtoSpec
+         * @return SozialdienstBenutzerDtoSpec
          */
-        public SozialdienstAdminDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<SozialdienstAdminDtoSpec> type = new TypeRef<SozialdienstAdminDtoSpec>(){};
+        public SozialdienstBenutzerDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SozialdienstBenutzerDtoSpec> type = new TypeRef<SozialdienstBenutzerDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -834,7 +834,7 @@ public class SozialdienstApiSpec {
      *
      * @see #sozialdienstIdPath  (required)
      * @see #body  (optional)
-     * return SozialdienstAdminDtoSpec
+     * return SozialdienstBenutzerDtoSpec
      */
     public static class UpdateSozialdienstAdminOper implements Oper {
 
@@ -865,10 +865,10 @@ public class SozialdienstApiSpec {
         /**
          * PATCH /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin
          * @param handler handler
-         * @return SozialdienstAdminDtoSpec
+         * @return SozialdienstBenutzerDtoSpec
          */
-        public SozialdienstAdminDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<SozialdienstAdminDtoSpec> type = new TypeRef<SozialdienstAdminDtoSpec>(){};
+        public SozialdienstBenutzerDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SozialdienstBenutzerDtoSpec> type = new TypeRef<SozialdienstBenutzerDtoSpec>(){};
             return execute(handler).as(type);
         }
 
