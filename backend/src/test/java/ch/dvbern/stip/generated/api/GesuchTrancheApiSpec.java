@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
@@ -75,7 +74,6 @@ public class GesuchTrancheApiSpec {
                 deleteAenderung(),
                 gesuchTrancheEinreichenValidieren(),
                 getAllTranchenForGesuch(),
-                getCustomDocumentsToUpload(),
                 getDocumentsToUpload(),
                 getGesuchDokument(),
                 getGesuchDokumente(),
@@ -117,10 +115,6 @@ public class GesuchTrancheApiSpec {
 
     public GetAllTranchenForGesuchOper getAllTranchenForGesuch() {
         return new GetAllTranchenForGesuchOper(createReqSpec());
-    }
-
-    public GetCustomDocumentsToUploadOper getCustomDocumentsToUpload() {
-        return new GetCustomDocumentsToUploadOper(createReqSpec());
     }
 
     public GetDocumentsToUploadOper getDocumentsToUpload() {
@@ -813,79 +807,6 @@ public class GesuchTrancheApiSpec {
          * @return operation
          */
         public GetAllTranchenForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
-     * @see #gesuchTrancheIdPath  (required)
-     * return List&lt;CustomDokumentTypDtoSpec&gt;
-     */
-    public static class GetCustomDocumentsToUploadOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchtranche/{gesuchTrancheId}/requiredCustomDokumente";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetCustomDocumentsToUploadOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuchtranche/{gesuchTrancheId}/requiredCustomDokumente
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuchtranche/{gesuchTrancheId}/requiredCustomDokumente
-         * @param handler handler
-         * @return List&lt;CustomDokumentTypDtoSpec&gt;
-         */
-        public List<CustomDokumentTypDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<CustomDokumentTypDtoSpec>> type = new TypeRef<List<CustomDokumentTypDtoSpec>>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
-
-        /**
-         * @param gesuchTrancheId (UUID)  (required)
-         * @return operation
-         */
-        public GetCustomDocumentsToUploadOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetCustomDocumentsToUploadOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetCustomDocumentsToUploadOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

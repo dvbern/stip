@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,9 +23,44 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class DokumenteToUploadDto  implements Serializable {
+  private @Valid List<CustomDokumentTypDto> customDokumentTyps;
   private @Valid List<ch.dvbern.stip.api.dokument.type.DokumentTyp> required;
   private @Valid List<ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp> unterschriftenblaetter;
 
+  /**
+   **/
+  public DokumenteToUploadDto customDokumentTyps(List<CustomDokumentTypDto> customDokumentTyps) {
+    this.customDokumentTyps = customDokumentTyps;
+    return this;
+  }
+
+  
+  @JsonProperty("customDokumentTyps")
+  public List<CustomDokumentTypDto> getCustomDokumentTyps() {
+    return customDokumentTyps;
+  }
+
+  @JsonProperty("customDokumentTyps")
+  public void setCustomDokumentTyps(List<CustomDokumentTypDto> customDokumentTyps) {
+    this.customDokumentTyps = customDokumentTyps;
+  }
+
+  public DokumenteToUploadDto addCustomDokumentTypsItem(CustomDokumentTypDto customDokumentTypsItem) {
+    if (this.customDokumentTyps == null) {
+      this.customDokumentTyps = new ArrayList<>();
+    }
+
+    this.customDokumentTyps.add(customDokumentTypsItem);
+    return this;
+  }
+
+  public DokumenteToUploadDto removeCustomDokumentTypsItem(CustomDokumentTypDto customDokumentTypsItem) {
+    if (customDokumentTypsItem != null && this.customDokumentTyps != null) {
+      this.customDokumentTyps.remove(customDokumentTypsItem);
+    }
+
+    return this;
+  }
   /**
    **/
   public DokumenteToUploadDto required(List<ch.dvbern.stip.api.dokument.type.DokumentTyp> required) {
@@ -103,13 +139,14 @@ public class DokumenteToUploadDto  implements Serializable {
       return false;
     }
     DokumenteToUploadDto dokumenteToUpload = (DokumenteToUploadDto) o;
-    return Objects.equals(this.required, dokumenteToUpload.required) &&
+    return Objects.equals(this.customDokumentTyps, dokumenteToUpload.customDokumentTyps) &&
+        Objects.equals(this.required, dokumenteToUpload.required) &&
         Objects.equals(this.unterschriftenblaetter, dokumenteToUpload.unterschriftenblaetter);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(required, unterschriftenblaetter);
+    return Objects.hash(customDokumentTyps, required, unterschriftenblaetter);
   }
 
   @Override
@@ -117,6 +154,7 @@ public class DokumenteToUploadDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class DokumenteToUploadDto {\n");
     
+    sb.append("    customDokumentTyps: ").append(toIndentedString(customDokumentTyps)).append("\n");
     sb.append("    required: ").append(toIndentedString(required)).append("\n");
     sb.append("    unterschriftenblaetter: ").append(toIndentedString(unterschriftenblaetter)).append("\n");
     sb.append("}");

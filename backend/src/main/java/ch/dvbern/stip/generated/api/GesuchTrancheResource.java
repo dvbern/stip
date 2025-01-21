@@ -2,7 +2,6 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
@@ -75,11 +74,6 @@ public interface GesuchTrancheResource {
     @Path("/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     GesuchTrancheListDto getAllTranchenForGesuch(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
-    @Path("/{gesuchTrancheId}/requiredCustomDokumente")
-    @Produces({ "application/json", "text/plain" })
-    List<CustomDokumentTypDto> getCustomDocumentsToUpload(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{gesuchTrancheId}/dokumenteToUpload")

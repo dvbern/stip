@@ -2581,32 +2581,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getDocumentsToUpload
-  '/gesuchtranche/{gesuchTrancheId}/requiredCustomDokumente':
-    parameters:
-      - name: gesuchTrancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          description: Returns the custom documents that are to be uploaded
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CustomDokumentTyp'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getCustomDocumentsToUpload
   '/gesuchtranche/{gesuchId}':
     parameters:
       - name: gesuchId
@@ -2876,6 +2850,7 @@ components:
     CustomDokumentTyp:
       type: object
       required:
+        - id
         - type
         - description
       properties:
@@ -5516,6 +5491,10 @@ components:
     DokumenteToUpload:
       type: object
       properties:
+        customDokumentTyps:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomDokumentTyp'
         required:
           type: array
           items:
