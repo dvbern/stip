@@ -40,6 +40,7 @@
   "sachbearbeitung-app.admin.option.euEftaLaender": "EU/EFTA Länder",
   "sachbearbeitung-app.admin.option.benutzerverwaltung": "Benutzerverwaltung",
   "sachbearbeitung-app.admin.option.sozialdienst": "Sozialdienste",
+  "sachbearbeitung-app.admin.option.sozialdienstBenutzer": "Sozialdienst-Mitarbeiter",
 
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Übersicht aller Buchstaben-Zuteilungen",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Sachbearbeiter",

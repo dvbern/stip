@@ -40,6 +40,7 @@
   "sachbearbeitung-app.admin.option.euEftaLaender": "Pays de l'UE/AELE",
   "sachbearbeitung-app.admin.option.benutzerverwaltung": "Gestion des utilisateurs",
   "sachbearbeitung-app.admin.option.sozialdienst": "Service social",
+  "sachbearbeitung-app.admin.option.sozialdienstBenutzer": "Employés du service social",
 
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Aperçu de la distribution des lettres",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Gestionnaire",

@@ -23,27 +23,23 @@
     <ng-template #navigation>
       <div class="sidenav p-4">
         @for (option of options; track $index) {
-          <ng-container
-            *ngIf="{
-              active: route.isActive(option.route, false),
-            } as stepRoute"
+          @let isActive = route.isActive(option.route, false);
+          <a
+            *dvHasRoles="option.allowedRoles"
+            type="button"
+            class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
+            [class.btn-light]="!isActive"
+            [class.shadow-none]="!isActive"
+            (click)="navClicked.emit({ value: true })"
+            [routerLink]="['/', 'administration', option.route]"
+            routerLinkActive="active"
+            [attr.data-testid]="'option-nav-' + option.route"
           >
-            <a
-              type="button"
-              class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
-              [class.btn-light]="!stepRoute.active"
-              [class.shadow-none]="!stepRoute.active"
-              (click)="navClicked.emit({ value: true })"
-              [routerLink]="['/', 'administration', option.route]"
-              routerLinkActive="active"
-              [attr.data-testid]="'option-nav-' + option.route"
-            >
-              <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
-              <span class="text-start">
-                {{ option.translationKey | translate }}
-              </span>
-            </a>
-          </ng-container>
+            <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
+            <span class="text-start">
+              {{ option.translationKey | translate }}
+            </span>
+          </a>
         }
       </div>
     </ng-template>

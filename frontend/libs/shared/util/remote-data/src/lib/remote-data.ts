@@ -282,11 +282,11 @@ export function fromCachedDataSig<T>(cachedRd: {
 }
 
 /**
- * A helper function which maps the data of a cached remote data object to a new data object.
- * If the cached remote data object is in the success state, the data is mapped.
+ * A helper function which maps the data of a remote data object to a new data object.
+ * If the remote data object is in the success state, the data is mapped.
  *
  * @example
- * const mappedData = mapDataSig(cachedData, (data) => ({ ...data, newField: 'value' }));
+ * const mappedData = mapData(cachedData, (data) => ({ ...data, newField: 'value' }));
  */
 export function mapData<T, R>(
   cachedRd: RemoteData<T>,
@@ -296,6 +296,28 @@ export function mapData<T, R>(
     return success(mapper(cachedRd.data));
   }
   return cachedRd;
+}
+
+/**
+ * A helper function which maps the data of a cached remote data object to a new data object.
+ *
+ * @example
+ * const mappedData = mapCachedData(cachedData, (data) => ({ ...data, newField: 'value' }));
+ */
+export function mapCachedData<T, R>(
+  cachedRd: CachedRemoteData<T>,
+  mapper: (data: T) => R,
+): CachedRemoteData<R> {
+  if (isSuccess(cachedRd)) {
+    return success(mapper(cachedRd.data));
+  }
+  if (isInitial(cachedRd)) {
+    return cachedRd;
+  }
+  return {
+    ...cachedRd,
+    data: cachedRd.data ? mapper(cachedRd.data) : undefined,
+  };
 }
 
 /**
