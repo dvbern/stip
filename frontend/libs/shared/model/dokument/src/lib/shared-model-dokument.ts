@@ -1,5 +1,6 @@
 import { AppType } from '@dv/shared/model/config';
 import {
+  CustomDokumentTyp,
   Dokument,
   DokumentArt,
   DokumentTyp,
@@ -26,9 +27,18 @@ export type SharedModelAdditionalGesuchDokument = {
   gesuchDokument?: UnterschriftenblattDokument;
 };
 
+export type SharedModelCustomGesuchDokument = {
+  art: Extends<DokumentArt, 'CUSTOM_DOKUMENT'>;
+  dokumentTyp: CustomDokumentTyp;
+  gesuchId: string;
+  trancheId: string;
+  gesuchDokument?: GesuchDokument;
+};
+
 export type SharedModelGesuchDokument =
   | SharedModelStandardGesuchDokument
-  | SharedModelAdditionalGesuchDokument;
+  | SharedModelAdditionalGesuchDokument
+  | SharedModelCustomGesuchDokument;
 
 export interface DokumentOptions {
   permissions: PermissionMap;
@@ -43,6 +53,12 @@ export interface DokumentOptions {
 export interface SharedModelTableGesuchDokument {
   formStep: SharedModelGesuchFormStep;
   dokumentTyp: DokumentTyp;
+  gesuchDokument?: GesuchDokument;
+  dokumentOptions: DokumentOptions;
+}
+
+export interface SharedModelTableCustomDokument {
+  dokumentTyp?: CustomDokumentTyp;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;
 }
@@ -99,6 +115,9 @@ export const isUploadable = (
         permission.canUploadDocuments &&
         dokumentModel.gesuchDokument?.status !== 'AKZEPTIERT'
       );
+    }
+    case 'CUSTOM_DOKUMENT': {
+      return permission.canUploadDocuments;
     }
     case 'UNTERSCHRIFTENBLATT': {
       return permission.canUploadUnterschriftenblatt;

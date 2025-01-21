@@ -35,6 +35,9 @@ import {
 
 type DokumentsState = {
   additionalDokumente: CachedRemoteData<UnterschriftenblattDokument[]>;
+  /**
+   * Contains all the uploaded required and custom documents
+   */
   dokuments: CachedRemoteData<GesuchDokument[]>;
   documentsToUpload: CachedRemoteData<DokumenteToUpload>;
   gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
@@ -61,7 +64,10 @@ export class DokumentsStore extends signalStore(
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   dokumenteViewSig = computed(() => {
-    const dokuments = fromCachedDataSig(this.dokuments) ?? [];
+    const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
+      (d) => d.dokumentTyp,
+    );
+
     return {
       dokuments,
       requiredDocumentTypes:
@@ -71,6 +77,17 @@ export class DokumentsStore extends signalStore(
           // them out
           (required) => !dokuments.map((d) => d.dokumentTyp).includes(required),
         ) ?? [],
+    };
+  });
+
+  customDokumenteViewSig = computed(() => {
+    const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
+      (d) => d.customDokumentTyp,
+    );
+
+    return {
+      dokuments,
+      requiredDocumentTypes: [],
     };
   });
 
@@ -118,6 +135,21 @@ export class DokumentsStore extends signalStore(
       false
     );
   });
+
+  // todo: finish or revmove!
+  getAllCustomDokumentTypes$ = rxMethod<{ gesuchTrancheId: string }>(
+    pipe(
+      // tap(() => {
+      //   patchState(this, (state) => ({
+      //     dokuments: cachedPending(state.dokuments),
+      //   }));
+      // }),
+      switchMap(({ gesuchTrancheId }) =>
+        this.dokumentService.getAllCustomDokumentTypes$({ gesuchTrancheId }),
+      ),
+      // handleApiResponse((dokuments) => patchState(this, { dokuments })),
+    ),
+  );
 
   getGesuchDokument$ = rxMethod<{
     trancheId: string;
@@ -447,43 +479,57 @@ export class DokumentsStore extends signalStore(
     trancheId: string;
     type: string;
     description: string;
+    onSuccess: () => void;
   }>(
     pipe(
-      switchMap(({ trancheId, type, description }) =>
-        this.dokumentService.createCustomDokumentTyp$({
-          customDokumentTypCreate: {
-            description,
-            trancheId,
-            type,
-          },
-        }),
+      switchMap(({ trancheId, type, description, onSuccess }) =>
+        this.dokumentService
+          .createCustomDokumentTyp$({
+            customDokumentTypCreate: {
+              description,
+              trancheId,
+              type,
+            },
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.custom.create.success',
+                });
+                onSuccess();
+              },
+              error: () => undefined,
+            }),
+          ),
       ),
-      tapResponse({
-        next: () => {
-          this.globalNotificationStore.createSuccessNotification({
-            messageKey: 'shared.dokumente.custom.success',
-          });
-        },
-        error: () => undefined,
-      }),
     ),
   );
 
   deleteCustomDokumentTyp$ = rxMethod<{
+    gesuchId: string;
     customDokumentTypId: string;
+    onSuccess: () => void;
   }>(
     pipe(
-      switchMap(({ customDokumentTypId }) =>
-        this.dokumentService.deleteCustomDokumentTyp$({ customDokumentTypId }),
+      switchMap(({ gesuchId, customDokumentTypId, onSuccess }) =>
+        this.dokumentService
+          .deleteCustomDokumentTyp$({
+            gesuchId,
+            customDokumentTypId,
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.custom.delete.success',
+                });
+                onSuccess();
+              },
+              error: () => undefined,
+            }),
+          ),
       ),
-      tapResponse({
-        next: () => {
-          this.globalNotificationStore.createSuccessNotification({
-            messageKey: 'shared.dokumente.custom.delete.success',
-          });
-        },
-        error: () => undefined,
-      }),
     ),
   );
 }

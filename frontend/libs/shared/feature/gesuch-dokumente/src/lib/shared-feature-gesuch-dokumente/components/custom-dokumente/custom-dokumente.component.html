@@ -1,7 +1,7 @@
 <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>
   <caption class="cdk-visually-hidden">
     {{
-      'shared.dokumente.table.description' | translate
+      'shared.dokumente.custom.table.description' | translate
     }}
   </caption>
 
@@ -14,11 +14,11 @@
   <!-- required document -->
   <ng-container matColumnDef="documentName">
     <th mat-header-cell *matHeaderCellDef class="tw-min-w-96">
-      {{ 'shared.dokumente.table.additionalDocuments' | translate }}
+      {{ 'shared.dokumente.table.documentName' | translate }}
     </th>
     <td mat-cell class="tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
       <div class="tw-py-3">
-        {{ dokument.dokumentOptions.titleKey | translate }}
+        {{ dokument.dokumentOptions.titleKey }}
       </div>
     </td>
   </ng-container>

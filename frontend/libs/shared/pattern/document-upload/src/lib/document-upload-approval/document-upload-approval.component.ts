@@ -24,10 +24,7 @@ import {
   RejectDokument,
   SharedUiRejectDokumentComponent,
 } from '@dv/shared/ui/reject-dokument';
-import {
-  SharedUiRdIsPendingPipe,
-  SharedUiRdIsPendingWithoutCachePipe,
-} from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 import { isInitial } from '@dv/shared/util/remote-data';
 
 @Component({
@@ -38,7 +35,6 @@ import { isInitial } from '@dv/shared/util/remote-data';
     SharedUiIconBadgeComponent,
     SharedUiPrefixAppTypePipe,
     SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiRdIsPendingPipe,
     SharedUiLoadingComponent,
     TranslatePipe,
   ],
@@ -56,7 +52,8 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     const { dokumentModel, hasEntries } = this.uploadViewSig();
-    if (!hasEntries || dokumentModel.art === 'UNTERSCHRIFTENBLATT') return;
+    if (!hasEntries || dokumentModel.art !== 'GESUCH_DOKUMENT') return;
+    // why is this needed?
     this.dokumentsStore.getGesuchDokument$({
       trancheId: dokumentModel.trancheId,
       dokumentTyp: dokumentModel.dokumentTyp,
@@ -85,7 +82,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
     if (
       !gesuchDokumentId ||
       !hasEntries ||
-      dokumentModel.art === 'UNTERSCHRIFTENBLATT'
+      dokumentModel.art !== 'GESUCH_DOKUMENT'
     )
       return;
 
@@ -116,7 +113,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   private reloadDokumente() {
     const { dokumentModel, hasEntries, initialDokuments } =
       this.uploadViewSig();
-    if (!hasEntries || dokumentModel.art === 'UNTERSCHRIFTENBLATT') return;
+    if (!hasEntries || dokumentModel.art !== 'GESUCH_DOKUMENT') return;
 
     if (initialDokuments) {
       this.dokumentsStore.getDokumenteAndRequired$({

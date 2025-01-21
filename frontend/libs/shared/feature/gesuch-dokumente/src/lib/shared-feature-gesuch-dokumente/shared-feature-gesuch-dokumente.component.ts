@@ -43,6 +43,7 @@ import {
 
 import { AdditionalDokumenteComponent } from './components/additional-dokumente/additional-dokumente.component';
 import { CreateCustomDokumentDialogComponent } from './components/create-custom-dokument-dialog/create-custom-dokument-dialog.component';
+import { CustomDokumenteComponent } from './components/custom-dokumente/custom-dokumente.component';
 import { RequiredDokumenteComponent } from './components/required-dokumente/required-dokumente.component';
 
 @Component({
@@ -54,6 +55,7 @@ import { RequiredDokumenteComponent } from './components/required-dokumente/requ
     MatTableModule,
     RequiredDokumenteComponent,
     AdditionalDokumenteComponent,
+    CustomDokumenteComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedUiIfGesuchstellerDirective,
@@ -118,6 +120,37 @@ export class SharedFeatureGesuchDokumenteComponent {
     };
   });
 
+  customDokumenteViewSig = computed(() => {
+    const {
+      allowTypes,
+      gesuchId,
+      gesuchPermissions,
+      trancheSetting,
+      trancheId,
+      readonly,
+      config: { isSachbearbeitungApp },
+    } = this.gesuchViewSig();
+
+    const { dokuments, requiredDocumentTypes } =
+      this.dokumentsStore.customDokumenteViewSig();
+
+    const kommentare = this.dokumentsStore.kommentareViewSig();
+
+    return {
+      gesuchId,
+      trancheId,
+      permissions: gesuchPermissions,
+      trancheSetting: trancheSetting ?? undefined,
+      isSachbearbeitungApp,
+      allowTypes,
+      dokuments,
+      kommentare,
+      requiredDocumentTypes,
+      readonly,
+      showList: dokuments.length > 0 || requiredDocumentTypes.length > 0,
+    };
+  });
+
   DokumentStatus = Dokumentstatus;
 
   // inform the GS that documents are missing (or declined)
@@ -128,6 +161,13 @@ export class SharedFeatureGesuchDokumenteComponent {
       this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
 
     return hasAbgelehnteDokuments && isInCorrectState;
+  });
+
+  canCreateCustomDokumentTypSig = computed(() => {
+    const isInCorrectState =
+      this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
+
+    return isInCorrectState;
   });
 
   // set the gesuch status to from "WARTEN_AUF_UNTERSCHRIFTENBLATT" to "VERSANDBEREIT"
@@ -207,6 +247,16 @@ export class SharedFeatureGesuchDokumenteComponent {
       });
   }
 
+  getAllCustomDokumentTypes() {
+    const trancheId = this.gesuchViewSig().trancheId;
+
+    if (!trancheId) return;
+
+    this.dokumentsStore.getAllCustomDokumentTypes$({
+      gesuchTrancheId: trancheId,
+    });
+  }
+
   getGesuchDokumentKommentare(dokument: SharedModelTableGesuchDokument) {
     const { trancheId } = this.gesuchViewSig();
     if (!trancheId) return;
@@ -271,11 +321,11 @@ export class SharedFeatureGesuchDokumenteComponent {
               trancheId,
               type: result.name,
               description: result.kommentar,
-              // onSuccess: () => {
-              //   this.dokumentsStore.getDokumenteAndRequired$({
-              //     gesuchTrancheId: trancheId,
-              //   });
-              // },
+              onSuccess: () => {
+                this.dokumentsStore.getDokumenteAndRequired$({
+                  gesuchTrancheId: trancheId,
+                });
+              },
             });
           }
         }

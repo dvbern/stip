@@ -57,6 +57,7 @@ export interface DokumentServiceCreateUnterschriftenblattRequestParams {
 }
 
 export interface DokumentServiceDeleteCustomDokumentTypRequestParams {
+    gesuchId: string;
     customDokumentTypId: string;
 }
 
@@ -75,6 +76,10 @@ export interface DokumentServiceGesuchDokumentAblehnenRequestParams {
 
 export interface DokumentServiceGesuchDokumentAkzeptierenRequestParams {
     gesuchDokumentId: string;
+}
+
+export interface DokumentServiceGetAllCustomDokumentTypesRequestParams {
+    gesuchTrancheId: string;
 }
 
 export interface DokumentServiceGetCustomGesuchDokumenteForTypRequestParams {
@@ -251,7 +256,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/customGesuchDokument`;
+        const localVarPath = `/gesuchDokument/customGesuchDokument/`;
         return this.httpClient.request<GesuchDokument>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -581,6 +586,10 @@ export class DokumentService {
      public deleteCustomDokumentTyp$(requestParameters: DokumentServiceDeleteCustomDokumentTypRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
      public deleteCustomDokumentTyp$(requestParameters: DokumentServiceDeleteCustomDokumentTypRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
      public deleteCustomDokumentTyp$(requestParameters: DokumentServiceDeleteCustomDokumentTypRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling deleteCustomDokumentTyp$.');
+        }
         const customDokumentTypId = requestParameters.customDokumentTypId;
         if (customDokumentTypId === null || customDokumentTypId === undefined) {
             throw new Error('Required parameter customDokumentTypId was null or undefined when calling deleteCustomDokumentTyp$.');
@@ -630,7 +639,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/customGesuchDokument/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuchDokument/customGesuchDokument/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -941,13 +950,18 @@ export class DokumentService {
     }
 
     /**
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getAllCustomDokumentTypes$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<CustomDokumentTyp>>;
-     public getAllCustomDokumentTypes$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<CustomDokumentTyp>>>;
-     public getAllCustomDokumentTypes$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<CustomDokumentTyp>>>;
-     public getAllCustomDokumentTypes$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getAllCustomDokumentTypes$(requestParameters: DokumentServiceGetAllCustomDokumentTypesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<CustomDokumentTyp>>;
+     public getAllCustomDokumentTypes$(requestParameters: DokumentServiceGetAllCustomDokumentTypesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<CustomDokumentTyp>>>;
+     public getAllCustomDokumentTypes$(requestParameters: DokumentServiceGetAllCustomDokumentTypesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<CustomDokumentTyp>>>;
+     public getAllCustomDokumentTypes$(requestParameters: DokumentServiceGetAllCustomDokumentTypesRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getAllCustomDokumentTypes$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -994,7 +1008,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/customGesuchDokument`;
+        const localVarPath = `/gesuchDokument/customGesuchDokuments/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Array<CustomDokumentTyp>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

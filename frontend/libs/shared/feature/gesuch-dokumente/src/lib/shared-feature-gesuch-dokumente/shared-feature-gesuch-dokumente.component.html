@@ -1,5 +1,6 @@
 @let gesuch = gesuchViewSig();
 @let standardDokumente = standardDokumenteViewSig();
+@let customDokumente = customDokumenteViewSig();
 @let dokumentsToUpload = dokumentsStore.documentsToUpload().data;
 
 @if (gesuch.loading) {
@@ -54,15 +55,35 @@
         {{ 'shared.dokumente.uebermitteln' | translate }}
       </button>
     }
+  </div>
 
+  <!-- customDokumente -->
+  @if (customDokumente.showList) {
+    <div class="tw-dv-table">
+      <dv-custom-dokumente [dokumenteViewSig]="customDokumente"></dv-custom-dokumente>
+    </div>
+  }
+
+  <div class="tw-mt-6 tw-flex" *dvIfSachbearbeiter>
     <!-- create custom document button -->
+    @if (canCreateCustomDokumentTypSig()) {
+      <button
+        type="button"
+        class="btn btn-primary ml-2"
+        (click)="createCustomDokumentTyp()"
+        data-testid="dokumente-button-createCustomDokumentTyp"
+      >
+        {{ 'shared.dokumente.createCustomDokumentTyp' | translate }}
+      </button>
+    }
+    <!-- test button for getAllCustomDokumentTypes$ -->
     <button
       type="button"
       class="btn btn-primary ml-2"
-      (click)="createCustomDokumentTyp()"
-      data-testid="dokumente-button-createCustomDokumentTyp"
+      (click)="getAllCustomDokumentTypes()"
+      data-testid="dokumente-button-getAllCustomDokumentTypes"
     >
-      {{ 'shared.dokumente.createCustomDokumentTyp' | translate }}
+      getAllCustomDokumentTypes
     </button>
   </div>
 

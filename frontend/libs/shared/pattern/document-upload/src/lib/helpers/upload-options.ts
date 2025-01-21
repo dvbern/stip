@@ -2,6 +2,7 @@ import { Signal, computed } from '@angular/core';
 
 import { DokumentOptions } from '@dv/shared/model/dokument';
 import {
+  CustomDokumentTyp,
   Dokument,
   DokumentTyp,
   GesuchDokument,
@@ -238,6 +239,45 @@ export function createAdditionalDokumentOptions(options: {
       trancheId,
       art: 'UNTERSCHRIFTENBLATT',
       gesuchDokument,
+    },
+    initialDokumente: initialDocuments,
+    readonly,
+  };
+}
+
+export function createCustomDokumentOptions(options: {
+  gesuchId: string;
+  trancheId: string;
+  allowTypes: string;
+  dokumentTyp: CustomDokumentTyp;
+  gesuchDokument?: GesuchDokument;
+  initialDocuments?: Dokument[];
+  singleUpload?: boolean;
+  permissions: PermissionMap;
+  readonly: boolean;
+}): DokumentOptions {
+  const {
+    gesuchId,
+    trancheId,
+    allowTypes,
+    dokumentTyp,
+    gesuchDokument,
+    initialDocuments,
+    singleUpload,
+    permissions,
+    readonly,
+  } = options;
+  return {
+    allowTypes,
+    permissions,
+    titleKey: dokumentTyp.type,
+    singleUpload: singleUpload ?? false,
+    dokument: {
+      dokumentTyp,
+      gesuchId,
+      trancheId,
+      gesuchDokument,
+      art: 'CUSTOM_DOKUMENT',
     },
     initialDokumente: initialDocuments,
     readonly,
