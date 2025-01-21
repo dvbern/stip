@@ -108,7 +108,7 @@ const createDownloadOptions = (
 };
 
 const getDocumentDownloadPath = (token: string, dokumentArt: DokumentArt) => {
-  return `/api/v1/dokument//${dokumentArt}/download?token=${token}`;
+  return `/api/v1/dokument/${dokumentArt}/download?token=${token}`;
 };
 
 const getBerechnungsblattDownloadPath = (token: string) => {
