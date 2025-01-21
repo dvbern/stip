@@ -2932,6 +2932,7 @@ components:
       enum:
         - GESUCH_DOKUMENT
         - UNTERSCHRIFTENBLATT
+        - CUSTOM_DOKUMENT
       type: string
     UnterschriftenblattDokumentTyp:
       type: string

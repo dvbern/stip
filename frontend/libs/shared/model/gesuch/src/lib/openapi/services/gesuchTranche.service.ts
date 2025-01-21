@@ -20,7 +20,6 @@ import { Observable }                                        from 'rxjs';
 
 import { CreateAenderungsantragRequest } from '../model/createAenderungsantragRequest';
 import { CreateGesuchTrancheRequest } from '../model/createGesuchTrancheRequest';
-import { CustomDokumentTyp } from '../model/customDokumentTyp';
 import { DokumentTyp } from '../model/dokumentTyp';
 import { DokumenteToUpload } from '../model/dokumenteToUpload';
 import { GesuchDokument } from '../model/gesuchDokument';
@@ -75,10 +74,6 @@ export interface GesuchTrancheServiceGesuchTrancheEinreichenValidierenRequestPar
 
 export interface GesuchTrancheServiceGetAllTranchenForGesuchRequestParams {
     gesuchId: string;
-}
-
-export interface GesuchTrancheServiceGetCustomDocumentsToUploadRequestParams {
-    gesuchTrancheId: string;
 }
 
 export interface GesuchTrancheServiceGetDocumentsToUploadRequestParams {
@@ -837,78 +832,6 @@ export class GesuchTrancheService {
 
         const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<GesuchTrancheList>('get', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: <any>observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-     public getCustomDocumentsToUpload$(requestParameters: GesuchTrancheServiceGetCustomDocumentsToUploadRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<CustomDokumentTyp>>;
-     public getCustomDocumentsToUpload$(requestParameters: GesuchTrancheServiceGetCustomDocumentsToUploadRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<CustomDokumentTyp>>>;
-     public getCustomDocumentsToUpload$(requestParameters: GesuchTrancheServiceGetCustomDocumentsToUploadRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<CustomDokumentTyp>>>;
-     public getCustomDocumentsToUpload$(requestParameters: GesuchTrancheServiceGetCustomDocumentsToUploadRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchTrancheId = requestParameters.gesuchTrancheId;
-        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getCustomDocumentsToUpload$.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarCredential: string | undefined;
-        // authentication (auth-uat-bern) required
-        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
-        if (localVarCredential) {
-            // using credentials
-        }
-
-        // authentication (auth-dev-bern) required
-        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
-        if (localVarCredential) {
-            // using credentials
-        }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                'application/json',
-                'text/plain'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/requiredCustomDokumente`;
-        return this.httpClient.request<Array<CustomDokumentTyp>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

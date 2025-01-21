@@ -64,6 +64,7 @@ export class DokumentsStore extends signalStore(
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   dokumenteViewSig = computed(() => {
+    // only show standard documents
     const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
       (d) => d.dokumentTyp,
     );
@@ -81,13 +82,18 @@ export class DokumentsStore extends signalStore(
   });
 
   customDokumenteViewSig = computed(() => {
+    // only show custom documents
     const dokuments = (fromCachedDataSig(this.dokuments) ?? []).filter(
       (d) => d.customDokumentTyp,
     );
 
     return {
       dokuments,
-      requiredDocumentTypes: [],
+      requiredDocumentTypes:
+        fromCachedDataSig(this.documentsToUpload)?.customDokumentTyps?.filter(
+          (required) =>
+            !dokuments.map((d) => d.customDokumentTyp).includes(required),
+        ) ?? [],
     };
   });
 
