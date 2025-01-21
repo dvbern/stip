@@ -4,6 +4,18 @@ import { SharedFeatureDownloadComponent } from './shared-feature-download/shared
 
 export const sharedFeatureDownloadRoutes: Route[] = [
   {
+    path: ':id/:type/:dokumentArt',
+    pathMatch: 'prefix',
+    providers: [],
+    children: [
+      {
+        path: '',
+        component: SharedFeatureDownloadComponent,
+        title: 'shared.file.download.message',
+      },
+    ],
+  },
+  {
     path: ':id/:type',
     pathMatch: 'prefix',
     providers: [],

@@ -50,7 +50,8 @@ export class SharedPatternDocumentUploadEntryComponent {
   private config = inject(SharedModelCompileTimeConfig);
   downloadLinkSig = computed(() => {
     const dokument = this.documentViewSig();
-    return getDownloadLink(dokument);
+    const upload = this.uploadViewSig();
+    return getDownloadLink(dokument.file.id, upload.dokumentModel.art);
   });
   isDeletableSig = computed(() => {
     const { dokumentModel, permissions } = this.uploadViewSig();

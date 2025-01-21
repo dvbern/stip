@@ -16,9 +16,20 @@ import {
   DokumentService,
   GesuchService,
 } from '@dv/shared/model/gesuch';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
-type DownloadType = 'berechnungsblatt' | 'dokument';
+type DownloadOptions =
+  | {
+      type: 'berechnungsblatt';
+      id: string;
+    }
+  | {
+      type: 'dokument';
+      id: string;
+      dokumentArt: DokumentArt;
+    };
+type DownloadType = DownloadOptions['type'];
 
 @Component({
   selector: 'dv-shared-feature-download',
@@ -43,11 +54,19 @@ export class SharedFeatureDownloadComponent implements OnInit {
     'd-flex flex-column position-absolute top-0 bottom-0 start-0 end-0 p-5';
 
   ngOnInit() {
+    const downloadOptions = createDownloadOptions(
+      this.typeSig(),
+      this.idSig(),
+      this.dokumentArtSig(),
+    );
+    if (!downloadOptions) {
+      console.error('Invalid download options', downloadOptions);
+      return;
+    }
     if (this.dcmnt) {
       const dcmnt = this.dcmnt;
       getDownloadObservable$(
-        this.typeSig(),
-        this.idSig(),
+        downloadOptions,
         this.dokumentService,
         this.gesuchService,
       )
@@ -70,8 +89,26 @@ export class SharedFeatureDownloadComponent implements OnInit {
   }
 }
 
-const getDocumentDownloadPath = (token: string) => {
-  return `/api/v1/dokument/download?token=${token}`;
+const createDownloadOptions = (
+  type: DownloadType,
+  id: string,
+  dokumentArt?: DokumentArt,
+) => {
+  switch (type) {
+    case 'berechnungsblatt': {
+      return { type, id };
+    }
+    case 'dokument': {
+      return dokumentArt ? { type, id, dokumentArt } : null;
+    }
+    default: {
+      assertUnreachable(type);
+    }
+  }
+};
+
+const getDocumentDownloadPath = (token: string, dokumentArt: DokumentArt) => {
+  return `/api/v1/dokument//${dokumentArt}/download?token=${token}`;
 };
 
 const getBerechnungsblattDownloadPath = (token: string) => {
@@ -79,11 +116,11 @@ const getBerechnungsblattDownloadPath = (token: string) => {
 };
 
 const getDownloadObservable$ = (
-  type: DownloadType,
-  id: string,
+  downloadOptions: DownloadOptions,
   dokumentService: DokumentService,
   gesuchService: GesuchService,
 ) => {
+  const { type, id } = downloadOptions;
   switch (type) {
     case 'berechnungsblatt': {
       return gesuchService
@@ -97,7 +134,14 @@ const getDownloadObservable$ = (
         .getDokumentDownloadToken$({
           dokumentId: id,
         })
-        .pipe(map(({ token }) => getDocumentDownloadPath(token)));
+        .pipe(
+          map(({ token }) =>
+            getDocumentDownloadPath(token, downloadOptions.dokumentArt),
+          ),
+        );
+    }
+    default: {
+      assertUnreachable(type);
     }
   }
 };
