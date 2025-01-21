@@ -37,7 +37,7 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
             model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             model.setIdentischerZivilrechtlicherWohnsitz(false);
             model.setNationalitaet(LandDtoSpec.CH);
-            model.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
+            model.setWohnsitz(WohnsitzDtoSpec.EIGENER_HAUSHALT);
             model.setNiederlassungsstatus(null);
             model.setEmail("valid@mailbucket.dvbern.ch");
             model.setSozialversicherungsnummer(AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG);

@@ -233,13 +233,9 @@ public class GesuchTrancheService {
         final CreateAenderungsantragRequestDto aenderungsantragCreateDto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        // TODO KSTIP-1631: change to state STIPENDIENANSPRUCH or KEIN_STIPENDIENANSPRUCH
         final var allowedStates = Set.of(
-            Gesuchstatus.IN_FREIGABE,
-            Gesuchstatus.VERFUEGT,
-            Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            Gesuchstatus.VERSANDBEREIT,
-            Gesuchstatus.VERSENDET
+            Gesuchstatus.STIPENDIENANSPRUCH,
+            Gesuchstatus.KEIN_STIPENDIENANSPRUCH
         );
 
         if (!allowedStates.contains(gesuch.getGesuchStatus())) {
