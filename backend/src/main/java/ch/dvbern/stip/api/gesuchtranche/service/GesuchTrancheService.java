@@ -163,7 +163,6 @@ public class GesuchTrancheService {
         return getRequiredDokumentTypes(gesuchTrancheRepository.requireById(gesuchTranche));
     }
 
-    // todo: remove endpoint
     public List<CustomDokumentTyp> getRequiredCustomDokumentTypes(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         return requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(gesuchTranche)
