@@ -44,6 +44,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
+import com.mchange.io.FileUtils;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
@@ -62,6 +63,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static ch.dvbern.stip.api.util.TestConstants.TEST_FILE_LOCATION;
+import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_XML_FILE_LOCATION;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -249,7 +251,7 @@ class DokumentResourcesTest {
     @Order(8)
     void test_upload_custom_gesuchdokuments() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        File file = new File(TEST_FILE_LOCATION);
+        File file = new File(TEST_PNG_FILE_LOCATION);
         TestUtil.uploadCustomDokumentFile(dokumentApiSpec, gesuchTrancheId, customDokumentId, file);
     }
 
@@ -327,14 +329,18 @@ class DokumentResourcesTest {
             .extract()
             .asString();
 
-        dokumentApiSpec.getDokument()
+        final var actualFileContent = dokumentApiSpec.getDokument()
             .tokenQuery(token)
             .dokumentArtPath(DokumentArtDtoSpec.GESUCH_DOKUMENT)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
-            .body(equalTo(readFileData()));
+            .extract()
+            .asString();
+
+        final var expectedFileContent = readPngFileData();
+        assertThat(expectedFileContent, is(actualFileContent));
     }
 
     // testAsGS
@@ -457,5 +463,9 @@ class DokumentResourcesTest {
 
     private String readFileData() throws IOException {
         return Files.readString(new File(TEST_FILE_LOCATION).toPath());
+    }
+
+    private String readPngFileData() throws IOException {
+        return FileUtils.getContentsAsString(new File(TEST_PNG_FILE_LOCATION));
     }
 }
