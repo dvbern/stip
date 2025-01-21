@@ -29,7 +29,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class DarlehenRequiredDocumentsProducer implements RequiredDocumentProducer {
+public class DarlehenRequiredDocumentsProducer extends RequiredDocumentProducer {
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         if (

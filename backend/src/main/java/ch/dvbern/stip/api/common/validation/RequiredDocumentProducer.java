@@ -19,10 +19,17 @@ package ch.dvbern.stip.api.common.validation;
 
 import java.util.Set;
 
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-public interface RequiredDocumentProducer {
-    Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular);
+public abstract class RequiredDocumentProducer {
+    public abstract Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular);
+
+    public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
+        return ImmutablePair.of("", Set.of());
+    }
 }

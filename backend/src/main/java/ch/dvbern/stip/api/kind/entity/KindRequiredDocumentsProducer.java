@@ -30,7 +30,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class KindRequiredDocumentsProducer implements RequiredDocumentProducer {
+public class KindRequiredDocumentsProducer extends RequiredDocumentProducer {
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         final var kinds = formular.getKinds();

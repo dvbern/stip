@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapper;
@@ -66,7 +67,6 @@ import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
-import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
@@ -155,19 +155,19 @@ public class GesuchTrancheService {
         final var required = getRequiredDokumentTypes(gesuchTranche);
         final var unterschriftenblaetter = unterschriftenblattService
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
-
-        return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter);
+        final var customRequired = getRequiredCustomDokumentTypes(gesuchTrancheId);
+        return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
     }
 
     public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTranche) {
         return getRequiredDokumentTypes(gesuchTrancheRepository.requireById(gesuchTranche));
     }
 
-    public List<CustomDokumentTypDto> getRequiredCustomDokumentTypes(final UUID gesuchTrancheId) {
+    // todo: remove endpoint
+    public List<CustomDokumentTyp> getRequiredCustomDokumentTypes(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         return requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(gesuchTranche)
             .stream()
-            .map(customDocumentTypMapper::toDto)
             .toList();
     }
 

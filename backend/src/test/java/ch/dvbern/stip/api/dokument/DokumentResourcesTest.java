@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.dokument;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
@@ -39,6 +38,7 @@ import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
@@ -229,7 +229,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(7)
     void test_get_required_custom_gesuchdokuments() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getCustomDocumentsToUpload()
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -237,8 +237,9 @@ class DokumentResourcesTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(CustomDokumentTypDto[].class);
-        assertThat(Arrays.stream(requiredDocuments).toList().isEmpty(), is(false));
+            .as(DokumenteToUploadDto.class);
+        final var result = requiredDocuments.getCustomDokumentTyps();
+        assertThat(result.size(), is(greaterThan(0)));
     }
 
     // testAsGS
@@ -258,7 +259,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(9)
     void test_get_required_custom_gesuchdokuments_should_not_appear() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getCustomDocumentsToUpload()
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -266,8 +267,9 @@ class DokumentResourcesTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(CustomDokumentTypDto[].class);
-        assertThat(Arrays.stream(requiredDocuments).toList().isEmpty(), is(true));
+            .as(DokumenteToUploadDto.class);
+        final var result = requiredDocuments.getCustomDokumentTyps();
+        assertThat(result.size(), is(0));
     }
 
     // testAsSB
@@ -293,6 +295,7 @@ class DokumentResourcesTest {
             .extract()
             .body()
             .as(CustomDokumentTypDto[].class);
+
         assertThat(customDocumentTypes.length, is(greaterThan(0)));
     }
 
@@ -433,7 +436,7 @@ class DokumentResourcesTest {
     @TestAsGesuchsteller
     @Order(18)
     void test_get_required_custom_gesuchdokuments_should_be_empty() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getCustomDocumentsToUpload()
+        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -441,8 +444,8 @@ class DokumentResourcesTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(CustomDokumentTypDto[].class);
-        assertThat(Arrays.stream(requiredDocuments).toList().isEmpty(), is(true));
+            .as(DokumenteToUploadDto.class);
+        assertThat(requiredDocuments.getCustomDokumentTyps().size(), is(0));
     }
 
     @Test

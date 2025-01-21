@@ -36,7 +36,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocumentProducer {
+public class PersonInAusbildungRequiredDocumentsProducer extends RequiredDocumentProducer {
     private final PlzService plzService;
 
     private final Map<Niederlassungsstatus, DokumentTyp> niederlassungsstatusMap = Map.of(

@@ -30,7 +30,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class MutterRequiredDocumentsProducer implements RequiredDocumentProducer {
+public class MutterRequiredDocumentsProducer extends RequiredDocumentProducer {
     private final ElternRequiredDocumentsProducer producer;
 
     @Override

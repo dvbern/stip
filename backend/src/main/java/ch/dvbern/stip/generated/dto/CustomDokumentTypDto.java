@@ -20,9 +20,28 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class CustomDokumentTypDto  implements Serializable {
+  private @Valid UUID id;
   private @Valid String type;
   private @Valid String description;
-  private @Valid UUID id;
+
+  /**
+   **/
+  public CustomDokumentTypDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  @NotNull
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   /**
    **/
@@ -62,24 +81,6 @@ public class CustomDokumentTypDto  implements Serializable {
     this.description = description;
   }
 
-  /**
-   **/
-  public CustomDokumentTypDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -90,14 +91,14 @@ public class CustomDokumentTypDto  implements Serializable {
       return false;
     }
     CustomDokumentTypDto customDokumentTyp = (CustomDokumentTypDto) o;
-    return Objects.equals(this.type, customDokumentTyp.type) &&
-        Objects.equals(this.description, customDokumentTyp.description) &&
-        Objects.equals(this.id, customDokumentTyp.id);
+    return Objects.equals(this.id, customDokumentTyp.id) &&
+        Objects.equals(this.type, customDokumentTyp.type) &&
+        Objects.equals(this.description, customDokumentTyp.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, description, id);
+    return Objects.hash(id, type, description);
   }
 
   @Override
@@ -105,9 +106,9 @@ public class CustomDokumentTypDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class CustomDokumentTypDto {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

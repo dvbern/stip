@@ -29,7 +29,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class FamiliensituationRequiredDocumentsProducer implements RequiredDocumentProducer {
+public class FamiliensituationRequiredDocumentsProducer extends RequiredDocumentProducer {
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         final var famsit = formular.getFamiliensituation();

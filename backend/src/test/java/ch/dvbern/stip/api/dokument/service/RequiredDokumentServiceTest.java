@@ -23,9 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
-import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -46,7 +44,7 @@ class RequiredDokumentServiceTest {
     @Test
     void getRequiredDokumentsForGesuchFormularTest() {
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())), new MockCustomInstance()
+            new MockInstance(List.of(new MockDocumentProducer()))
         );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
@@ -57,7 +55,7 @@ class RequiredDokumentServiceTest {
     @Test
     void getEmptyListTest() {
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockEmptyDocumentProducer())), new MockCustomInstance()
+            new MockInstance(List.of(new MockEmptyDocumentProducer()))
         );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
@@ -67,7 +65,7 @@ class RequiredDokumentServiceTest {
     @Test
     void noExistingTest() {
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())), new MockCustomInstance()
+            new MockInstance(List.of(new MockDocumentProducer()))
         );
         final var requiredDocuments = service
             .getRequiredDokumentsForGesuchFormular(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));
@@ -88,83 +86,17 @@ class RequiredDokumentServiceTest {
         );
     }
 
-    static class MockDocumentProducer implements RequiredDocumentProducer {
+    static class MockDocumentProducer extends RequiredDocumentProducer {
         @Override
         public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
             return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG));
         }
     }
 
-    static class MockCustomDocumentProducer implements RequiredCustomDocumentProducer {
-        @Override
-        public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
-            return ImmutablePair
-                .of("custom-mock", Set.of(new CustomDokumentTyp().setType("mock").setDescription("description")));
-        }
-    }
-
-    static class MockEmptyDocumentProducer implements RequiredDocumentProducer {
+    static class MockEmptyDocumentProducer extends RequiredDocumentProducer {
         @Override
         public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
             return ImmutablePair.of("", Set.of());
-        }
-    }
-
-    static class MockCustomInstance implements Instance<RequiredCustomDocumentProducer> {
-        @Override
-        public Instance<RequiredCustomDocumentProducer> select(Annotation... qualifiers) {
-            return null;
-        }
-
-        @Override
-        public <U extends RequiredCustomDocumentProducer> Instance<U> select(
-            Class<U> subtype,
-            Annotation... qualifiers
-        ) {
-            return null;
-        }
-
-        @Override
-        public <U extends RequiredCustomDocumentProducer> Instance<U> select(
-            TypeLiteral<U> subtype,
-            Annotation... qualifiers
-        ) {
-            return null;
-        }
-
-        @Override
-        public boolean isUnsatisfied() {
-            return false;
-        }
-
-        @Override
-        public boolean isAmbiguous() {
-            return false;
-        }
-
-        @Override
-        public void destroy(RequiredCustomDocumentProducer instance) {
-
-        }
-
-        @Override
-        public Handle<RequiredCustomDocumentProducer> getHandle() {
-            return null;
-        }
-
-        @Override
-        public Iterable<? extends Handle<RequiredCustomDocumentProducer>> handles() {
-            return null;
-        }
-
-        @Override
-        public RequiredCustomDocumentProducer get() {
-            return null;
-        }
-
-        @Override
-        public @NotNull Iterator<RequiredCustomDocumentProducer> iterator() {
-            return null;
         }
     }
 

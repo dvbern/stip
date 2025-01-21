@@ -28,7 +28,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumentProducer {
+public class EinnahmenKostenRequiredDocumentsProducer extends RequiredDocumentProducer {
 
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
