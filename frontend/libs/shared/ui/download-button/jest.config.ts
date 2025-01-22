@@ -1,11 +1,10 @@
 import { swcAngularJestTransformer } from '@jscutlery/swc-angular';
 
-/* eslint-disable */
 export default {
-  displayName: 'shared-feature-download',
+  displayName: 'shared-ui-download-button',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/feature/download',
+  coverageDirectory: '../../../../coverage/libs/shared/ui/download-button',
   transform: {
     '^.+\\.(ts|mjs|js)$': swcAngularJestTransformer(),
     '^.+\\.(html)$': [

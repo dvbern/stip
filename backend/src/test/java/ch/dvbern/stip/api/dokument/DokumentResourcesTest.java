@@ -39,6 +39,7 @@ import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
@@ -164,9 +165,10 @@ class DokumentResourcesTest {
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
+            .statusCode(Status.OK.getStatusCode())
             .extract()
-            .asString();
+            .as(FileDownloadTokenDtoSpec.class)
+            .getToken();
 
         dokumentApiSpec.getDokument()
             .tokenQuery(token)

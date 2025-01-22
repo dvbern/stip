@@ -22,12 +22,14 @@ import { CustomDokumentTyp } from '../model/customDokumentTyp';
 import { CustomDokumentTypCreate } from '../model/customDokumentTypCreate';
 import { DokumentArt } from '../model/dokumentArt';
 import { DokumentTyp } from '../model/dokumentTyp';
+import { FileDownloadToken } from '../model/fileDownloadToken';
 import { GesuchDokument } from '../model/gesuchDokument';
 import { GesuchDokumentAblehnenRequest } from '../model/gesuchDokumentAblehnenRequest';
 import { GesuchDokumentKommentar } from '../model/gesuchDokumentKommentar';
 import { NullableGesuchDokument } from '../model/nullableGesuchDokument';
 import { UnterschriftenblattDokument } from '../model/unterschriftenblattDokument';
 import { UnterschriftenblattDokumentTyp } from '../model/unterschriftenblattDokumentTyp';
+import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -1176,10 +1178,10 @@ export class DokumentService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<string>;
-     public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<string>>;
-     public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<string>>;
-     public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+     public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
+     public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
+     public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
+     public getDokumentDownloadToken$(requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const dokumentId = requestParameters.dokumentId;
         if (dokumentId === null || dokumentId === undefined) {
             throw new Error('Required parameter dokumentId was null or undefined when calling getDokumentDownloadToken$.');
@@ -1204,6 +1206,7 @@ export class DokumentService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'application/json',
                 'text/plain'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
@@ -1230,7 +1233,7 @@ export class DokumentService {
         }
 
         const localVarPath = `/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<string>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<FileDownloadToken>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

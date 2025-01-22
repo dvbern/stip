@@ -26,13 +26,6 @@ export const appRoutes: Route[] = [
             (m) => m.gesuchAppFeatureGesuchFormRoutes,
           ),
       },
-      {
-        path: 'download',
-        loadChildren: () =>
-          import('@dv/shared/feature/download').then(
-            (m) => m.sharedFeatureDownloadRoutes,
-          ),
-      },
     ],
   },
 ];
