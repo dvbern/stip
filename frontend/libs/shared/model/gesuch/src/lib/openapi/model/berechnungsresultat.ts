@@ -24,5 +24,9 @@ export interface Berechnungsresultat {
      * Resultate der Berechnung für die Tranchen des Gesuchs
      */
     tranchenBerechnungsresultate: Array<TranchenBerechnungsresultat>;
+    /**
+     * Der Faktor (12 / eigentliche Dauer) falls eine verminderte Berechnung stattfand
+     */
+    verminderteBerechnungsFaktor?: number;
 }
 

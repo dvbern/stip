@@ -13,7 +13,10 @@
     </dl>
     <div class="row">
       <div class="col-12">
-        <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">
+        <dv-berechnungs-card
+          [berechnungSig]="berechnung.persoenlich"
+          [verminderteBerechnungFaktor]="berechnung.verminderteBerechnungFaktor"
+        >
           <dv-persoenliche-einnahmen
             class="d-flex flex-column gap-3 ps-4"
             [einnahmenSig]="berechnung.persoenlich.einnahmen"

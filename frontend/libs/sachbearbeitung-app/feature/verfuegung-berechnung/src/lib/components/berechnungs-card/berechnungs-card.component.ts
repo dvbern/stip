@@ -115,11 +115,26 @@ import { Berechnung } from '../../../models';
                 <div
                   class="mat-expansion-panel-header-title d-flex h4 mb-0 me-0 grid ps-4 justify-content-between fs-3 w-100"
                 >
-                  {{
-                    'sachbearbeitung-app.verfuegung.berechnung.' +
-                      berechnung.typ +
-                      '.total' | translate
-                  }}
+                  <div>
+                    {{
+                      'sachbearbeitung-app.verfuegung.berechnung.' +
+                        berechnung.typ +
+                        '.total' | translate
+                    }}
+                    @if (verminderteBerechnungFaktor()) {
+                      <div class="text-muted h6">
+                        {{
+                          'sachbearbeitung-app.verfuegung.zusammenfassung.totalVermindert'
+                            | translate
+                              : {
+                                  factor:
+                                    (100 * verminderteBerechnungFaktor()!
+                                    | number: '2.0-0'),
+                                }
+                        }}
+                      </div>
+                    }
+                  </div>
                   <span
                     class="text-nowrap"
                     [attr.data-testid]="
@@ -138,4 +153,5 @@ import { Berechnung } from '../../../models';
 })
 export class BerechnungsCardComponent {
   berechnungSig = input.required<Berechnung>();
+  verminderteBerechnungFaktor = input<number>();
 }
