@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
@@ -38,7 +38,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 public class DocumentsRequiredConstraintValidator
     implements ConstraintValidator<DocumentsRequiredConstraint, GesuchFormular> {
     @Inject
-    Instance<RequiredDocumentProducer> producers;
+    Instance<RequiredDocumentsProducer> producers;
 
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {

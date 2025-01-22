@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -32,7 +32,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ElternRequiredDocumentsProducerTest {
-    private List<RequiredDocumentProducer> producers;
+    private List<RequiredDocumentsProducer> producers;
     private GesuchFormular formular;
 
     @BeforeEach

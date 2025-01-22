@@ -20,10 +20,8 @@ package ch.dvbern.stip.api.dokument.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -32,22 +30,16 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class CustomDocumentsRequiredDocumentProducer extends RequiredDocumentProducer {
+public class CustomDocumentsRequiredDocumentProducer implements RequiredCustomDocumentsProducer {
     private final CustomDokumentTypService customDokumentTypService;
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        return ImmutablePair.of("", Set.of());
-    }
-
-    @Override
     public Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(GesuchTranche tranche) {
-        final var allCustomDokumentTyps =
-            customDokumentTypService.getAllCustomDokumentTypsOfTranche(tranche.getId());
+        final var allCustomDokumentTyps = customDokumentTypService.getAllCustomDokumentTypsOfTranche(tranche.getId());
         if (allCustomDokumentTyps.isEmpty()) {
             return ImmutablePair.of("", Set.of());
         }
-        Set<CustomDokumentTyp> requiredDocuments = new HashSet<>(allCustomDokumentTyps);
-        return ImmutablePair.of("custom-documents", requiredDocuments);
+
+        return ImmutablePair.of("custom-documents", new HashSet<>(allCustomDokumentTyps));
     }
 }

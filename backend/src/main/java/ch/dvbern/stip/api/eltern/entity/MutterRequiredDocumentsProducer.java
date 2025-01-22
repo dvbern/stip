@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.eltern.entity;
 
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -30,7 +30,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class MutterRequiredDocumentsProducer extends RequiredDocumentProducer {
+public class MutterRequiredDocumentsProducer implements RequiredDocumentsProducer {
     private final ElternRequiredDocumentsProducer producer;
 
     @Override

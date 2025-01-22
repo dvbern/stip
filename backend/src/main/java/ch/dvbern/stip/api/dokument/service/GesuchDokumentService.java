@@ -119,7 +119,7 @@ public class GesuchDokumentService {
             configService,
             antivirus,
             GESUCH_DOKUMENT_PATH,
-            objectId -> uploadDokument(
+            objectId -> uploadCustomDokument(
                 gesuchTrancheId,
                 customDokumentTypId,
                 fileUpload,
@@ -179,15 +179,15 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public void uploadDokument(
+    public void uploadCustomDokument(
         final UUID gesuchTrancheId,
         final UUID customDokumentTypId,
         final FileUpload fileUpload,
         final String objectId
     ) {
-        final GesuchTranche gesuchTranche =
+        final var gesuchTranche =
             gesuchTrancheRepository.findByIdOptional(gesuchTrancheId).orElseThrow(NotFoundException::new);
-        final GesuchDokument gesuchDokument =
+        final var gesuchDokument =
             gesuchDokumentRepository
                 .findByGesuchTrancheAndCustomDokumentType(gesuchTranche.getId(), customDokumentTypId)
                 .orElseGet(
@@ -196,7 +196,7 @@ public class GesuchDokumentService {
                         customDocumentTypRepository.requireById(customDokumentTypId)
                     )
                 );
-        Dokument dokument = new Dokument();
+        final var dokument = new Dokument();
         dokument.getGesuchDokumente().add(gesuchDokument);
         gesuchDokument.getDokumente().add(dokument);
         dokument.setFilename(fileUpload.fileName());

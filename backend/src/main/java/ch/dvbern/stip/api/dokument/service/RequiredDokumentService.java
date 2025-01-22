@@ -23,7 +23,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentProducer;
+import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -36,7 +37,8 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class RequiredDokumentService {
-    private final Instance<RequiredDocumentProducer> requiredDocumentProducers;
+    private final Instance<RequiredDocumentsProducer> requiredDocumentProducers;
+    private final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers;
 
     private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchFormular formular) {
         return formular
@@ -45,8 +47,7 @@ public class RequiredDokumentService {
     }
 
     private static List<GesuchDokument> getExistingDokumentsForGesuch(final GesuchTranche tranche) {
-        return tranche
-            .getGesuchDokuments();
+        return tranche.getGesuchDokuments();
     }
 
     private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
@@ -76,7 +77,7 @@ public class RequiredDokumentService {
     }
 
     private Set<CustomDokumentTyp> getRequiredCustomDokumentTypesForGesuch(final GesuchTranche tranche) {
-        return requiredDocumentProducers
+        return requiredCustomDocumentProducers
             .stream()
             .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(tranche))
             .flatMap(
