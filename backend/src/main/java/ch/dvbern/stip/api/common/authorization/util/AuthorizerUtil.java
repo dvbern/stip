@@ -42,21 +42,21 @@ public class AuthorizerUtil {
         );
     }
 
-    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiter(
+    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
         final Gesuch gesuch,
         final SozialdienstService sozialdienstService
     ) {
-        return hasDelegierungAndIsCurrentBenutzerMitarbeiter(gesuch.getAusbildung(), sozialdienstService);
+        return hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch.getAusbildung(), sozialdienstService);
     }
 
-    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiter(
+    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
         final Ausbildung ausbildung,
         final SozialdienstService sozialdienstService
     ) {
-        return hasDelegierungAndIsCurrentBenutzerMitarbeiter(ausbildung.getFall(), sozialdienstService);
+        return hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(ausbildung.getFall(), sozialdienstService);
     }
 
-    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiter(
+    public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
         final Fall fall,
         final SozialdienstService sozialdienstService
     ) {

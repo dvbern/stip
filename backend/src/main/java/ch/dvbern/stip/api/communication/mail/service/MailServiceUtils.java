@@ -28,11 +28,11 @@ import lombok.experimental.UtilityClass;
 public class MailServiceUtils {
     public void sendStandardNotificationEmailForGesuch(final MailService mailService, final Gesuch gesuch) {
         final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
-        mailService.sendStandardNotificationEmail(
+        mailService.sendStandardNotificationEmails(
             pia.getNachname(),
             pia.getVorname(),
-            pia.getEmail(),
-            AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale())
+            AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale()),
+            gatherRecipients(gesuch)
         );
     }
 

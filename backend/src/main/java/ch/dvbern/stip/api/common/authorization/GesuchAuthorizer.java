@@ -65,7 +65,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(gesuch, sozialdienstService)) {
+        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)) {
             return;
         }
 
@@ -103,7 +103,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung;
 
         if (
-            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(gesuch, sozialdienstService)
+            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
             && benutzerCanEditInStatusOrAenderung.getAsBoolean()
         ) {
             return;
@@ -129,7 +129,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
         if (
-            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(gesuch, sozialdienstService)
+            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
             && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
         ) {
             return;
@@ -153,7 +153,9 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(fall.get(), sozialdienstService)) {
+        if (
+            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall.get(), sozialdienstService)
+        ) {
             return;
         } else if (Objects.equals(currentBenutzer.getId(), fall.get().getGesuchsteller().getId())) {
             return;
@@ -172,7 +174,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(gesuch, sozialdienstService)) {
+        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)) {
             return;
         } else if (isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
             return;

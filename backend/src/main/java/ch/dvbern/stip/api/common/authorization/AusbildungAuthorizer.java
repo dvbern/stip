@@ -64,7 +64,9 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         }
 
         final var ausbildung = ausbildungRepository.requireById(ausbildungId);
-        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(ausbildung, sozialdienstService)) {
+        if (
+            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(ausbildung, sozialdienstService)
+        ) {
             return;
         }
 

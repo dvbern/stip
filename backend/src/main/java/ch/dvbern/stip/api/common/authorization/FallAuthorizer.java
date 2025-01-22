@@ -47,7 +47,7 @@ public class FallAuthorizer extends BaseAuthorizer {
         }
 
         final var fall = fallRepository.requireById(fallId);
-        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiter(fall, sozialdienstService)) {
+        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall, sozialdienstService)) {
             return;
         }
 
