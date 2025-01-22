@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +29,7 @@ public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer year;
   private @Valid Integer berechnung;
   private @Valid List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
+  private @Valid BigDecimal verminderteBerechnungsFaktor;
 
   /**
    **/
@@ -104,6 +106,25 @@ public class BerechnungsresultatDto  implements Serializable {
 
     return this;
   }
+  /**
+   * Der Faktor (12 / eigentliche Dauer) falls eine verminderte Berechnung stattfand
+   **/
+  public BerechnungsresultatDto verminderteBerechnungsFaktor(BigDecimal verminderteBerechnungsFaktor) {
+    this.verminderteBerechnungsFaktor = verminderteBerechnungsFaktor;
+    return this;
+  }
+
+  
+  @JsonProperty("verminderteBerechnungsFaktor")
+  public BigDecimal getVerminderteBerechnungsFaktor() {
+    return verminderteBerechnungsFaktor;
+  }
+
+  @JsonProperty("verminderteBerechnungsFaktor")
+  public void setVerminderteBerechnungsFaktor(BigDecimal verminderteBerechnungsFaktor) {
+    this.verminderteBerechnungsFaktor = verminderteBerechnungsFaktor;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -116,12 +137,13 @@ public class BerechnungsresultatDto  implements Serializable {
     BerechnungsresultatDto berechnungsresultat = (BerechnungsresultatDto) o;
     return Objects.equals(this.year, berechnungsresultat.year) &&
         Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
-        Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate);
+        Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
+        Objects.equals(this.verminderteBerechnungsFaktor, berechnungsresultat.verminderteBerechnungsFaktor);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnung, tranchenBerechnungsresultate);
+    return Objects.hash(year, berechnung, tranchenBerechnungsresultate, verminderteBerechnungsFaktor);
   }
 
   @Override
@@ -132,6 +154,7 @@ public class BerechnungsresultatDto  implements Serializable {
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
+    sb.append("    verminderteBerechnungsFaktor: ").append(toIndentedString(verminderteBerechnungsFaktor)).append("\n");
     sb.append("}");
     return sb.toString();
   }
