@@ -69,84 +69,74 @@ import { Berechnung } from '../../../models';
             </dv-berechnungs-expansion-panel>
           </mat-accordion>
           <div class="mat-accordion full-width">
-            <div
-              class="mat-expansion-panel-header h-auto pe-none d-flex flex-column py-4"
-            >
-              @if (
-                berechnung.typ === 'persoenlich' &&
-                berechnung.geteilteBerechnung
-              ) {
-                <div
-                  class="mat-expansion-panel-header-title d-flex h4 mb-2 me-0 grid ps-4 justify-content-between fs-3 w-100"
+            @if (
+              berechnung.typ === 'persoenlich' && berechnung.geteilteBerechnung
+            ) {
+              <div
+                class="mat-expansion-panel-header-title d-flex h4 mb-2 me-0 grid ps-4 justify-content-between fs-3 w-100"
+              >
+                {{
+                  'sachbearbeitung-app.verfuegung.berechnung.' +
+                    berechnung.typ +
+                    '.total' | translate
+                }}
+                <span
+                  class="text-nowrap"
+                  [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'"
+                  >{{ berechnung.total | formatChfNegative }}</span
                 >
+              </div>
+              <div
+                class="mat-expansion-panel-header-title text-muted mb-0 me-0 grid ps-4 justify-content-between fs-4 w-100"
+              >
+                {{
+                  'sachbearbeitung-app.verfuegung.berechnung.' +
+                    berechnung.typ +
+                    '.geteilteBerechnung'
+                    | translate: berechnung.geteilteBerechnung
+                }}
+                <span
+                  class="text-nowrap"
+                  [attr.data-testid]="
+                    'berechnung-' + berechnung.typ + '-geteilteBerechnung'
+                  "
+                  >{{
+                    berechnung.geteilteBerechnung.anteil | formatChfNegative
+                  }}</span
+                >
+              </div>
+            }
+          </div>
+        </mat-card-content>
+        <mat-card-footer class="px-3 py-4">
+          <div class="d-flex justify-content-between fs-3 h4">
+            <div>
+              {{
+                'sachbearbeitung-app.verfuegung.berechnung.' +
+                  berechnung.typ +
+                  '.total' | translate
+              }}
+              @if (verminderteBerechnungFaktor()) {
+                <div class="text-muted h6">
                   {{
-                    'sachbearbeitung-app.verfuegung.berechnung.' +
-                      berechnung.typ +
-                      '.total' | translate
+                    'sachbearbeitung-app.verfuegung.zusammenfassung.totalVermindert'
+                      | translate
+                        : {
+                            factor:
+                              (100 * verminderteBerechnungFaktor()!
+                              | number: '2.0-0'),
+                          }
                   }}
-                  <span
-                    class="text-nowrap"
-                    [attr.data-testid]="
-                      'berechnung-' + berechnung.typ + '-total'
-                    "
-                    >{{ berechnung.total | formatChfNegative }}</span
-                  >
-                </div>
-                <div
-                  class="mat-expansion-panel-header-title text-muted mb-0 me-0 grid ps-4 justify-content-between fs-4 w-100"
-                >
-                  {{
-                    'sachbearbeitung-app.verfuegung.berechnung.' +
-                      berechnung.typ +
-                      '.geteilteBerechnung'
-                      | translate: berechnung.geteilteBerechnung
-                  }}
-                  <span
-                    class="text-nowrap"
-                    [attr.data-testid]="
-                      'berechnung-' + berechnung.typ + '-geteilteBerechnung'
-                    "
-                    >{{
-                      berechnung.geteilteBerechnung.anteil | formatChfNegative
-                    }}</span
-                  >
-                </div>
-              } @else {
-                <div
-                  class="mat-expansion-panel-header-title d-flex h4 mb-0 me-0 grid ps-4 justify-content-between fs-3 w-100"
-                >
-                  <div>
-                    {{
-                      'sachbearbeitung-app.verfuegung.berechnung.' +
-                        berechnung.typ +
-                        '.total' | translate
-                    }}
-                    @if (verminderteBerechnungFaktor()) {
-                      <div class="text-muted h6">
-                        {{
-                          'sachbearbeitung-app.verfuegung.zusammenfassung.totalVermindert'
-                            | translate
-                              : {
-                                  factor:
-                                    (100 * verminderteBerechnungFaktor()!
-                                    | number: '2.0-0'),
-                                }
-                        }}
-                      </div>
-                    }
-                  </div>
-                  <span
-                    class="text-nowrap"
-                    [attr.data-testid]="
-                      'berechnung-' + berechnung.typ + '-total'
-                    "
-                    >{{ berechnung.total | formatChfNegative }}</span
-                  >
                 </div>
               }
             </div>
+            <span
+              class="text-nowrap"
+              [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'"
+              >{{ berechnung.total | formatChfNegative }}</span
+            >
           </div>
-        </mat-card-content>
+        </mat-card-footer>
       </mat-card>
     }
   `,
