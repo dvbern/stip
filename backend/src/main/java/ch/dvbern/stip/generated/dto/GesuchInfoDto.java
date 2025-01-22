@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -10,6 +9,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("GesuchInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -19,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class GesuchInfoDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String gesuchNummer;
-  private @Valid Gesuchstatus gesuchStatus;
+  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
 
@@ -30,7 +34,7 @@ public class GesuchInfoDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -49,7 +53,7 @@ public class GesuchInfoDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchNummer")
   @NotNull
   public String getGesuchNummer() {
@@ -63,20 +67,20 @@ public class GesuchInfoDto  implements Serializable {
 
   /**
    **/
-  public GesuchInfoDto gesuchStatus(Gesuchstatus gesuchStatus) {
+  public GesuchInfoDto gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
     return this;
   }
 
-
+  
   @JsonProperty("gesuchStatus")
   @NotNull
-  public Gesuchstatus getGesuchStatus() {
+  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
   @JsonProperty("gesuchStatus")
-  public void setGesuchStatus(Gesuchstatus gesuchStatus) {
+  public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 
@@ -87,7 +91,7 @@ public class GesuchInfoDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("startDate")
   @NotNull
   public LocalDate getStartDate() {
@@ -106,7 +110,7 @@ public class GesuchInfoDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("endDate")
   @NotNull
   public LocalDate getEndDate() {
@@ -144,7 +148,7 @@ public class GesuchInfoDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchInfoDto {\n");
-
+    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");

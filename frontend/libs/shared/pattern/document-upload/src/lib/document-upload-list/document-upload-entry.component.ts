@@ -19,10 +19,10 @@ import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentView,
   UploadView,
-  getDownloadLink,
   isUploadable,
 } from '@dv/shared/model/dokument';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { FilesizePipe } from '@dv/shared/ui/filesize-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
@@ -34,6 +34,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
     TranslatePipe,
     TranslateDirective,
     SharedUiIconChipComponent,
+    SharedUiDownloadButtonDirective,
     MatProgressBarModule,
     RouterLink,
     FilesizePipe,
@@ -48,11 +49,6 @@ export class SharedPatternDocumentUploadEntryComponent {
   loadingSig = input.required<boolean>();
 
   private config = inject(SharedModelCompileTimeConfig);
-  downloadLinkSig = computed(() => {
-    const { dokumentModel } = this.uploadViewSig();
-    const dokument = this.documentViewSig();
-    return getDownloadLink(dokumentModel.art, dokument);
-  });
   isDeletableSig = computed(() => {
     const { dokumentModel, permissions } = this.uploadViewSig();
     return isUploadable(this.config.appType, dokumentModel, permissions);

@@ -102,14 +102,6 @@ export const appRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureInfosRoutes,
           ),
       },
-      {
-        path: 'download',
-        canActivate: [hasBenutzer],
-        loadChildren: () =>
-          import('@dv/shared/feature/download').then(
-            (m) => m.sharedFeatureDownloadRoutes,
-          ),
-      },
     ],
   },
 ];

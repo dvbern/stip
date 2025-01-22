@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +70,7 @@ import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
@@ -117,6 +120,7 @@ public class GesuchService {
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
+    private final BerechnungsblattService berechnungsblattService;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final GesuchTrancheService gesuchTrancheService;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
@@ -702,8 +706,33 @@ public class GesuchService {
     }
 
     public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
-        final var gesuch = gesuchRepository.findByIdOptional(gesuchId).orElseThrow(NotFoundException::new);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+    }
+
+    public ByteArrayOutputStream getBerechnungsblattByteStream(final UUID gesuchId) throws IOException {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return berechnungsblattService.getBerechnungsblattFromGesuch(
+            gesuch,
+            gesuch.getNewestGesuchTranche()
+                .orElseThrow(NotFoundException::new)
+                .getGesuchFormular()
+                .getPersonInAusbildung()
+                .getKorrespondenzSprache()
+                .getLocale()
+        );
+    }
+
+    public String getBerechnungsblattFileName(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        GesuchFormular gesuchFormularToUse =
+            gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new).getGesuchFormular();
+        return String.format(
+            "%s_%s_%s.pdf",
+            gesuchFormularToUse.getPersonInAusbildung().getVorname(),
+            gesuchFormularToUse.getPersonInAusbildung().getNachname(),
+            gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr()
+        );
     }
 
     public GesuchWithChangesDto getChangesByGesuchId(UUID gesuchId) {
