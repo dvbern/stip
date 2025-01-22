@@ -13,6 +13,7 @@ import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { DokumentService, GesuchService } from '@dv/shared/model/gesuch';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -30,6 +31,7 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     SharedUiIconChipComponent,
     SharedUiFormatChfPipe,
     SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiDownloadButtonDirective,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-verfuegung-zusammenfassung.component.html',

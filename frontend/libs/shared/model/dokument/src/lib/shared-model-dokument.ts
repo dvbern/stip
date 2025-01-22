@@ -105,7 +105,3 @@ export const isUploadable = (
     }
   }
 };
-
-export const getDownloadLink = (fileId: string, dokumentArt: DokumentArt) => {
-  return `/download/${fileId}/dokument/${dokumentArt}`;
-};
