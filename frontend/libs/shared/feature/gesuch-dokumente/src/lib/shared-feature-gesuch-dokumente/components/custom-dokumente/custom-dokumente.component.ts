@@ -4,18 +4,30 @@ import {
   Component,
   computed,
   input,
+  output,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedModelTableCustomDokument } from '@dv/shared/model/dokument';
-import { CustomDokumentTyp, GesuchDokument } from '@dv/shared/model/gesuch';
+import {
+  CustomDokumentTyp,
+  Dokumentstatus,
+  GesuchDokument,
+  GesuchDokumentKommentar,
+} from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
 import {
   SharedPatternDocumentUploadComponent,
   createCustomDokumentOptions,
 } from '@dv/shared/pattern/document-upload';
+import { detailExpand } from '@dv/shared/ui/animations';
+import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
+import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import { RemoteData } from '@dv/shared/util/remote-data';
 
 @Component({
   selector: 'dv-custom-dokumente',
@@ -26,9 +38,14 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
     MatTableModule,
     TypeSafeMatCellDefDirective,
     SharedPatternDocumentUploadComponent,
+    SharedUiLoadingComponent,
+    SharedUiIconBadgeComponent,
+    SharedUiRdIsPendingPipe,
+    SharedUiPrefixAppTypePipe,
   ],
   templateUrl: './custom-dokumente.component.html',
   styleUrl: './custom-dokumente.component.scss',
+  animations: [detailExpand],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomDokumenteComponent {
@@ -39,11 +56,28 @@ export class CustomDokumenteComponent {
     dokuments: GesuchDokument[];
     singleUpload?: boolean;
     permissions: PermissionMap;
+    isSachbearbeitungApp: boolean;
     requiredDocumentTypes: CustomDokumentTyp[];
+    kommentare: RemoteData<GesuchDokumentKommentar[]>;
     readonly: boolean;
   }>();
 
-  displayedColumns = ['spacer', 'documentName', 'actions'];
+  getGesuchDokumentKommentare = output<SharedModelTableCustomDokument>();
+  deleteCustomDokumentTyp = output<SharedModelTableCustomDokument>();
+  dokumentAkzeptieren = output<SharedModelTableCustomDokument>();
+  dokumentAblehnen = output<SharedModelTableCustomDokument>();
+
+  detailColumns = ['kommentar'];
+  displayedColumns = [
+    'expander',
+    'documentName',
+    'description',
+    'status',
+    'actions',
+  ];
+
+  DokumentStatus = Dokumentstatus;
+  expandedRowId: string | null = null;
 
   dokumenteDataSourceSig = computed(() => {
     const {
@@ -100,8 +134,13 @@ export class CustomDokumenteComponent {
     return new MatTableDataSource<SharedModelTableCustomDokument>(list);
   });
 
-  deleteCustomDokumentTyp() {
-    // this.dokumentsStore.deleteCustomDokumentTyp(dokumentTyp);
+  expandRow(dokument: SharedModelTableCustomDokument) {
+    if (this.expandedRowId === dokument.dokumentTyp.id) {
+      this.expandedRowId = null;
+    } else {
+      this.expandedRowId = dokument.dokumentTyp.id;
+      this.getGesuchDokumentKommentare.emit(dokument);
+    }
   }
 
   trackByFn(_index: number, item: SharedModelTableCustomDokument) {

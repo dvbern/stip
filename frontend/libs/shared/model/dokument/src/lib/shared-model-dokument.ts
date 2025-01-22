@@ -50,7 +50,7 @@ export interface DokumentOptions {
   readonly: boolean;
 }
 
-export interface SharedModelTableGesuchDokument {
+export interface SharedModelTableRequiredDokument {
   formStep: SharedModelGesuchFormStep;
   dokumentTyp: DokumentTyp;
   gesuchDokument?: GesuchDokument;
@@ -58,7 +58,7 @@ export interface SharedModelTableGesuchDokument {
 }
 
 export interface SharedModelTableCustomDokument {
-  dokumentTyp?: CustomDokumentTyp;
+  dokumentTyp: CustomDokumentTyp;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;
 }

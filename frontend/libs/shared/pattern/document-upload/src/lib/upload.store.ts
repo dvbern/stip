@@ -129,8 +129,7 @@ export class UploadStore {
               case 'CUSTOM_DOKUMENT':
                 return this.documentService
                   .getCustomGesuchDokumenteForTyp$({
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    customDokumentTypId: dokument.dokumentTyp.id!,
+                    customDokumentTypId: dokument.dokumentTyp.id,
                     gesuchTrancheId: dokument.trancheId,
                   })
                   .pipe(
@@ -404,8 +403,7 @@ export class UploadStore {
             {
               ...action,
               gesuchTrancheId: dokument.trancheId,
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              customDokumentTypId: dokument.dokumentTyp.id!,
+              customDokumentTypId: dokument.dokumentTyp.id,
             },
             ...serviceDefaultParams,
           );

@@ -92,7 +92,7 @@ export class DokumentsStore extends signalStore(
       requiredDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.customDokumentTyps?.filter(
           (required) =>
-            !dokuments.map((d) => d.customDokumentTyp).includes(required),
+            !dokuments.map((d) => d.customDokumentTyp?.id === required.id),
         ) ?? [],
     };
   });

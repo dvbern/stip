@@ -11,7 +11,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { SharedModelTableGesuchDokument } from '@dv/shared/model/dokument';
+import { SharedModelTableRequiredDokument } from '@dv/shared/model/dokument';
 import {
   DokumentTyp,
   Dokumentstatus,
@@ -73,10 +73,9 @@ export class RequiredDokumenteComponent {
     requiredDocumentTypes: DokumentTyp[];
     readonly: boolean;
   }>();
-  getGesuchDokumentKommentare = output<SharedModelTableGesuchDokument>();
-  fehlendeDokumenteUebermitteln = output<SharedModelTableGesuchDokument>();
-  dokumentAkzeptieren = output<SharedModelTableGesuchDokument>();
-  dokumentAblehnen = output<SharedModelTableGesuchDokument>();
+  getGesuchDokumentKommentare = output<SharedModelTableRequiredDokument>();
+  dokumentAkzeptieren = output<SharedModelTableRequiredDokument>();
+  dokumentAblehnen = output<SharedModelTableRequiredDokument>();
 
   detailColumns = ['kommentar'];
   displayedColumns = [
@@ -104,10 +103,10 @@ export class RequiredDokumenteComponent {
     } = this.dokumenteViewSig();
 
     if (!trancheId || !allowTypes) {
-      return new MatTableDataSource<SharedModelTableGesuchDokument>([]);
+      return new MatTableDataSource<SharedModelTableRequiredDokument>([]);
     }
 
-    const uploadedDocuments: SharedModelTableGesuchDokument[] = dokuments.map(
+    const uploadedDocuments: SharedModelTableRequiredDokument[] = dokuments.map(
       (gesuchDokument) => {
         const dokumentTyp = gesuchDokument.dokumentTyp;
 
@@ -137,7 +136,7 @@ export class RequiredDokumenteComponent {
       },
     );
 
-    const missingDocuments: SharedModelTableGesuchDokument[] =
+    const missingDocuments: SharedModelTableRequiredDokument[] =
       requiredDocumentTypes.map((dokumentTyp) => {
         const formStep = getFormStepByDocumentType(dokumentTyp);
 
@@ -158,7 +157,7 @@ export class RequiredDokumenteComponent {
         };
       });
 
-    return new MatTableDataSource<SharedModelTableGesuchDokument>(
+    return new MatTableDataSource<SharedModelTableRequiredDokument>(
       [...uploadedDocuments, ...missingDocuments]
         .sort((a, b) =>
           this.stepManager.compareStepsByFlow(
@@ -184,11 +183,11 @@ export class RequiredDokumenteComponent {
     );
   });
 
-  trackByFn(_index: number, item: SharedModelTableGesuchDokument) {
+  trackByFn(_index: number, item: SharedModelTableRequiredDokument) {
     return item.dokumentTyp;
   }
 
-  expandRow(dokument: SharedModelTableGesuchDokument) {
+  expandRow(dokument: SharedModelTableRequiredDokument) {
     if (this.expandedRowId === dokument.dokumentTyp) {
       this.expandedRowId = null;
     } else {

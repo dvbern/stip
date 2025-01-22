@@ -8,12 +8,10 @@
 }
 
 <!-- unterschriftenblaetter -->
-<div *dvIfSachbearbeiter>
+<div class="tw-mt-6" *dvIfSachbearbeiter>
   @let additonalDokumente = additionalDokumenteViewSig();
   @if (additonalDokumente.showList) {
-    <div class="tw-dv-table">
-      <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente"></dv-additional-dokumente>
-    </div>
+    <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente"></dv-additional-dokumente>
 
     @if (additonalDokumente.showList && gesuch.gesuch?.gesuchStatus === 'WARTEN_AUF_UNTERSCHRIFTENBLATT') {
       <div class="tw-mt-6 tw-flex">
@@ -34,13 +32,12 @@
 
 <!-- gesuchDokumente -->
 @if (standardDokumente) {
-  <div class="tw-dv-table">
-    <dv-required-dokumente
-      [dokumenteViewSig]="standardDokumente"
-      (dokumentAblehnen)="dokumentAblehnen($event)"
-      (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
-    ></dv-required-dokumente>
-  </div>
+  <dv-required-dokumente
+    class="tw-mt-6"
+    [dokumenteViewSig]="standardDokumente"
+    (dokumentAblehnen)="dokumentAblehnen($event)"
+    (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
+  ></dv-required-dokumente>
 
   <div class="tw-mt-6 tw-flex" *dvIfSachbearbeiter>
     @if (canSendMissingDocumentsSig()) {
@@ -59,9 +56,12 @@
 
   <!-- customDokumente -->
   @if (customDokumente.showList) {
-    <div class="tw-dv-table">
-      <dv-custom-dokumente [dokumenteViewSig]="customDokumente"></dv-custom-dokumente>
-    </div>
+    <dv-custom-dokumente
+      class="tw-mt-6"
+      [dokumenteViewSig]="customDokumente"
+      (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
+      (deleteCustomDokumentTyp)="deleteCustomDokumentTyp($event)"
+    ></dv-custom-dokumente>
   }
 
   <div class="tw-mt-6 tw-flex" *dvIfSachbearbeiter>

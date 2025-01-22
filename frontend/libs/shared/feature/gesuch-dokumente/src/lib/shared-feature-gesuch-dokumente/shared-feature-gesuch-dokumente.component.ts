@@ -21,7 +21,8 @@ import {
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import {
   SharedModelGesuchDokument,
-  SharedModelTableGesuchDokument,
+  SharedModelTableCustomDokument,
+  SharedModelTableRequiredDokument,
 } from '@dv/shared/model/dokument';
 import { DokumentTyp, Dokumentstatus } from '@dv/shared/model/gesuch';
 import { DOKUMENTE } from '@dv/shared/model/gesuch-form';
@@ -204,7 +205,9 @@ export class SharedFeatureGesuchDokumenteComponent {
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
-  dokumentAkzeptieren(dokument: SharedModelTableGesuchDokument) {
+  dokumentAkzeptieren(
+    dokument: SharedModelTableRequiredDokument | SharedModelTableCustomDokument,
+  ) {
     const gesuchTrancheId = this.gesuchViewSig().trancheId;
 
     if (!dokument?.gesuchDokument?.id || !gesuchTrancheId) return;
@@ -217,7 +220,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     });
   }
 
-  dokumentAblehnen(document: SharedModelTableGesuchDokument) {
+  dokumentAblehnen(document: SharedModelTableRequiredDokument) {
     const { trancheId: gesuchTrancheId } = this.gesuchViewSig();
     const gesuchDokumentId =
       document.dokumentOptions.dokument.gesuchDokument?.id;
@@ -257,7 +260,9 @@ export class SharedFeatureGesuchDokumenteComponent {
     });
   }
 
-  getGesuchDokumentKommentare(dokument: SharedModelTableGesuchDokument) {
+  getGesuchDokumentKommentare(
+    dokument: SharedModelTableRequiredDokument | SharedModelTableCustomDokument,
+  ) {
     const { trancheId } = this.gesuchViewSig();
     if (!trancheId) return;
 
@@ -265,6 +270,11 @@ export class SharedFeatureGesuchDokumenteComponent {
       dokumentTyp: dokument.gesuchDokument?.dokumentTyp as DokumentTyp,
       gesuchTrancheId: trancheId,
     });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  deleteCustomDokumentTyp(dokument: SharedModelTableCustomDokument) {
+    // to be implemented
   }
 
   fehlendeDokumenteEinreichen() {
