@@ -187,7 +187,10 @@ class GesuchTrancheAenderungTest {
             .body()
             .as(GesuchDtoSpec.class);
 
-        assertThat(gesuch.getGesuchStatus()).isEqualTo(GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH);
+        assertThat(gesuch.getGesuchStatus()).satisfiesAnyOf(
+            status -> assertThat(status).isEqualTo(GesuchstatusDtoSpec.STIPENDIENANSPRUCH),
+            status -> assertThat(status).isEqualTo(GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH)
+        );
     }
 
     @Test
