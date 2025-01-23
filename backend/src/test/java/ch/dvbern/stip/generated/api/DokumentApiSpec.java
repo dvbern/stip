@@ -16,12 +16,14 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.DokumentArtDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import java.io.File;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -655,7 +657,7 @@ public class DokumentApiSpec {
      * 
      *
      * @see #dokumentIdPath  (required)
-     * return String
+     * return FileDownloadTokenDtoSpec
      */
     public static class GetDokumentDownloadTokenOper implements Oper {
 
@@ -667,7 +669,7 @@ public class DokumentApiSpec {
 
         public GetDokumentDownloadTokenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -685,10 +687,10 @@ public class DokumentApiSpec {
         /**
          * GET /dokument/{dokumentId}
          * @param handler handler
-         * @return String
+         * @return FileDownloadTokenDtoSpec
          */
-        public String executeAs(Function<Response, Response> handler) {
-            TypeRef<String> type = new TypeRef<String>(){};
+        public FileDownloadTokenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FileDownloadTokenDtoSpec> type = new TypeRef<FileDownloadTokenDtoSpec>(){};
             return execute(handler).as(type);
         }
 
