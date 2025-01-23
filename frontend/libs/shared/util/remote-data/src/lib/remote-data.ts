@@ -320,6 +320,15 @@ export function mapCachedData<T, R>(
   };
 }
 
+export function optimisticCachedPending<T1, T2 extends Partial<T1>>(
+  previousRd: CachedRemoteData<T1>,
+  newData: T2,
+): CachedRemoteData<T1> {
+  return cachedPending(
+    mapCachedData(previousRd, (data) => ({ ...data, ...newData })),
+  );
+}
+
 /**
  * Transforms a cached remote data object to a shared model error object if it is in the failure state.
  */

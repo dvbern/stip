@@ -22,6 +22,7 @@ import {
   SozialdienstAdminUpdate,
   SozialdienstBenutzer,
   SozialdienstBenutzerCreate,
+  SozialdienstBenutzerUpdate,
   SozialdienstCreate,
   SozialdienstService,
   SozialdienstUpdate,
@@ -36,6 +37,7 @@ import {
   handleApiResponse,
   initial,
   mapCachedData,
+  optimisticCachedPending,
   pending,
   success,
 } from '@dv/shared/util/remote-data';
@@ -466,12 +468,15 @@ export class SozialdienstStore extends signalStore(
   );
 
   updateSozialdienstBenutzer$ = rxMethod<{
-    sozialdienstBenutzerUpdate: SozialdienstBenutzer;
+    sozialdienstBenutzerUpdate: SozialdienstBenutzerUpdate;
   }>(
     pipe(
-      tap(() => {
+      tap(({ sozialdienstBenutzerUpdate }) => {
         patchState(this, (state) => ({
-          sozialdienstBenutzer: cachedPending(state.sozialdienstBenutzer),
+          sozialdienstBenutzer: optimisticCachedPending(
+            state.sozialdienstBenutzer,
+            sozialdienstBenutzerUpdate,
+          ),
         }));
       }),
       exhaustMap((sozialdienstBenutzerUpdate) =>

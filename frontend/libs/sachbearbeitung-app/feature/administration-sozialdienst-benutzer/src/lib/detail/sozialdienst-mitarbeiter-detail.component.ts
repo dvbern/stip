@@ -81,6 +81,7 @@ export class SozialdienstMitarbeiterDetailComponent
         return;
       }
 
+      this.form.controls.email.disable();
       this.form.patchValue(benutzer.data);
     });
   }
@@ -122,11 +123,11 @@ export class SozialdienstMitarbeiterDetailComponent
     const values = convertTempFormToRealValues(this.form, [
       'nachname',
       'vorname',
-      'email',
     ]);
     this.store.updateSozialdienstBenutzer$({
       sozialdienstBenutzerUpdate: {
-        ...values,
+        nachname: values.nachname,
+        vorname: values.vorname,
         id,
       },
     });
