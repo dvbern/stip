@@ -64,7 +64,7 @@
         [dialogTitleKey]="'shared.form.eltern-steuerdaten.totalEinkuenfte.infoTitle'"
         [dialogMessageKey]="'shared.form.eltern-steuerdaten.totalEinkuenfte.info'"
         #totalEinkuenfteDialog="dvSharedUiInfoDialog"
-        class="d-none d-xl-block col-md-6 col-xl-4"
+        class="d-none d-xl-block col-xl-4"
       ></div>
     </div>
 
@@ -185,7 +185,7 @@
         [dialogTitleKey]="'shared.form.eltern-steuerdaten.kinderalimente.infoTitle'"
         [dialogMessageKey]="'shared.form.eltern-steuerdaten.kinderalimente.info'"
         #kinderalimenteDialog="dvSharedUiInfoDialog"
-        class="d-none d-xl-block col-md-6 col-xl-4"
+        class="d-none d-xl-block col-xl-4"
       ></div>
     </div>
 
@@ -195,7 +195,7 @@
 
     <!-- Steuern Kanton-Gemeinde-->
     <div class="row g-4 my-2">
-      <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
+      <div class="d-flex col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.eltern-steuerdaten.steuernKantonGemeinde.label' | translate }}</mat-label>
           <input
@@ -218,16 +218,10 @@
         >
           <span class="material-symbols-rounded"> info </span>
         </button>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.eltern-steuerdaten.steuernKantonGemeinde.label'"
-          [dialogMessageKey]="'shared.form.eltern-steuerdaten.steuernKantonGemeinde.info'"
-          #steuernKantonGemeindeDialog="dvSharedUiInfoDialog"
-        ></div>
       </div>
 
       <!-- Steuern Bund-->
-      <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
+      <div class="d-flex col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.eltern-steuerdaten.steuernBund.label' | translate }}</mat-label>
           <input
@@ -250,7 +244,15 @@
         >
           <span class="material-symbols-rounded"> info </span>
         </button>
+      </div>
 
+      <div class="d-none d-xl-block col-xl-4">
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.eltern-steuerdaten.steuernKantonGemeinde.label'"
+          [dialogMessageKey]="'shared.form.eltern-steuerdaten.steuernKantonGemeinde.info'"
+          #steuernKantonGemeindeDialog="dvSharedUiInfoDialog"
+        ></div>
         <div
           dvSharedUiInfoDialog
           [dialogTitleKey]="'shared.form.eltern-steuerdaten.steuernBund.label'"
@@ -313,18 +315,12 @@
         </mat-form-field>
         <button
           type="button"
-          (click)="emailDialog.toggle()"
+          (click)="verpflegungInfo.toggle()"
           class="dv-icon-button dv-icon-button-md text-info mt-2"
           [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
         >
           <span class="material-symbols-rounded"> info </span>
         </button>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.person.email.label'"
-          [dialogMessageKey]="'shared.form.person.email.info'"
-          #emailDialog="dvSharedUiInfoDialog"
-        ></div>
       </div>
 
       <!-- Verpflegung Partner:in-->
@@ -342,6 +338,14 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.eltern-steuerdaten.verpflegung.label'"
+        [dialogMessageKey]="'shared.form.eltern-steuerdaten.verpflegung.info'"
+        #verpflegungInfo="dvSharedUiInfoDialog"
+        class="d-none d-xl-block col-xl-4"
+      ></div>
     </div>
 
     <!-- Steuerjahr-->

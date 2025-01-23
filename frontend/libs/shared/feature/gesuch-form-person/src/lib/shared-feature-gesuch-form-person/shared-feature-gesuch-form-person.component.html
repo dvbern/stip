@@ -122,17 +122,19 @@
       <div class="row g-4 mt-1">
         <!-- Wohnsitz -->
         <div class="col-12 col-md-6 col-xl-4 d-flex align-items-center flex-grow-1 gap-1">
-          <mat-checkbox
-            formControlName="identischerZivilrechtlicherWohnsitz"
-            data-testid="form-person-identischerZivilrechtlicherWohnsitz"
-            >{{ 'shared.form.shared.identical-civil-residence.label' | translate }}</mat-checkbox
-          >
-          <dv-shared-ui-form-zuvor-hint
-            [changes]="
-              view.formChanges?.identischerZivilrechtlicherWohnsitz
-                | translateChange: 'shared.form.zuvor.checkbox.$VALUE'
-            "
-          ></dv-shared-ui-form-zuvor-hint>
+          <div>
+            <mat-checkbox
+              formControlName="identischerZivilrechtlicherWohnsitz"
+              data-testid="form-person-identischerZivilrechtlicherWohnsitz"
+              >{{ 'shared.form.shared.identical-civil-residence.label' | translate }}</mat-checkbox
+            >
+            <dv-shared-ui-form-zuvor-hint
+              [changes]="
+                view.formChanges?.identischerZivilrechtlicherWohnsitz
+                  | translateChange: 'shared.form.zuvor.checkbox.$VALUE'
+              "
+            ></dv-shared-ui-form-zuvor-hint>
+          </div>
           <button
             type="button"
             (click)="identischerWohnsitzDialog.toggle()"
