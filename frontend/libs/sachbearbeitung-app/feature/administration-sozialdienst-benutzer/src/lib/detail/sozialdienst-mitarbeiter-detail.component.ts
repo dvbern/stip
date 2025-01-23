@@ -88,7 +88,6 @@ export class SozialdienstMitarbeiterDetailComponent
 
   ngOnInit() {
     const id = this.idSig();
-    console.log('id', id);
     if (isDefined(id)) {
       this.store.loadSozialdienstBenutzer$({
         sozialdienstBenutzerId: id,
