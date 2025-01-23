@@ -1,6 +1,8 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.generated.dto.GesuchDashboardItemMissingDocumentsDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -10,6 +12,11 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
 
 @JsonTypeName("GesuchDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -18,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GesuchDashboardItemDto  implements Serializable {
   private @Valid GesuchsperiodeDto gesuchsperiode;
-  private @Valid Gesuchstatus gesuchStatus;
+  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
   private @Valid UUID id;
   private @Valid UUID currentTrancheId;
   private @Valid LocalDate startDate;
@@ -33,7 +40,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("gesuchsperiode")
   @NotNull
   public GesuchsperiodeDto getGesuchsperiode() {
@@ -47,20 +54,20 @@ public class GesuchDashboardItemDto  implements Serializable {
 
   /**
    **/
-  public GesuchDashboardItemDto gesuchStatus(Gesuchstatus gesuchStatus) {
+  public GesuchDashboardItemDto gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
     return this;
   }
 
-
+  
   @JsonProperty("gesuchStatus")
   @NotNull
-  public Gesuchstatus getGesuchStatus() {
+  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
   @JsonProperty("gesuchStatus")
-  public void setGesuchStatus(Gesuchstatus gesuchStatus) {
+  public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 
@@ -71,7 +78,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -90,7 +97,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("currentTrancheId")
   @NotNull
   public UUID getCurrentTrancheId() {
@@ -109,7 +116,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("startDate")
   @NotNull
   public LocalDate getStartDate() {
@@ -128,7 +135,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("endDate")
   @NotNull
   public LocalDate getEndDate() {
@@ -147,7 +154,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("offeneAenderung")
   public GesuchTrancheSlimDto getOffeneAenderung() {
     return offeneAenderung;
@@ -165,7 +172,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("missingDocuments")
   public GesuchDashboardItemMissingDocumentsDto getMissingDocuments() {
     return missingDocuments;
@@ -205,7 +212,7 @@ public class GesuchDashboardItemDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDashboardItemDto {\n");
-
+    
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
