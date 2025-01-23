@@ -1,4 +1,5 @@
 import { Injectable, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -25,6 +26,7 @@ import {
   SozialdienstService,
   SozialdienstUpdate,
 } from '@dv/shared/model/gesuch';
+import { handleUnauthorized } from '@dv/shared/util/http';
 import { KeycloakHttpService } from '@dv/shared/util/keycloak-http';
 import {
   CachedRemoteData,
@@ -62,6 +64,7 @@ export class SozialdienstStore extends signalStore(
   withState(initialState),
   withDevtools('SozialdienstStore'),
 ) {
+  private router = inject(Router);
   private sozialdienstService = inject(SozialdienstService);
   private keycloak = inject(KeycloakHttpService);
   private globalNotificationStore = inject(GlobalNotificationStore);
@@ -438,7 +441,21 @@ export class SozialdienstStore extends signalStore(
       }),
       switchMap(({ sozialdienstBenutzerId }) =>
         this.sozialdienstService
-          .getSozialdienstBenutzer$({ sozialdienstBenutzerId })
+          .getSozialdienstBenutzer$(
+            { sozialdienstBenutzerId },
+            undefined,
+            undefined,
+            {
+              context: handleUnauthorized((error) => {
+                this.globalNotificationStore.createNotification({
+                  type: 'ERROR_PERMANENT',
+                  messageKey: 'shared.genericError.unauthorized',
+                  content: error,
+                });
+                this.router.navigate(['/'], { replaceUrl: true });
+              }),
+            },
+          )
           .pipe(
             handleApiResponse((benutzer) =>
               patchState(this, { sozialdienstBenutzer: benutzer }),
