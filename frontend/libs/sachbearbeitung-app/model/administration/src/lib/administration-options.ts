@@ -73,7 +73,7 @@ export const OPTION_SOZIALDIENST_BENUTZER: AdminOption = {
   translationKey: 'sachbearbeitung-app.admin.option.sozialdienstBenutzer',
   titleTranslationKey:
     'sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview',
-  iconSymbolName: 'interpreter_mode',
+  iconSymbolName: 'people',
   allowedRoles: ['Sozialdienst-Admin'],
 };
 

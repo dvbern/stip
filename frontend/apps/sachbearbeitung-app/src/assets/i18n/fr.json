@@ -40,7 +40,7 @@
   "sachbearbeitung-app.admin.option.euEftaLaender": "Pays de l'UE/AELE",
   "sachbearbeitung-app.admin.option.benutzerverwaltung": "Gestion des utilisateurs",
   "sachbearbeitung-app.admin.option.sozialdienst": "Service social",
-  "sachbearbeitung-app.admin.option.sozialdienstBenutzer": "Employés du service social",
+  "sachbearbeitung-app.admin.option.sozialdienstBenutzer": "Gestion des utilisateurs",
 
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Aperçu de la distribution des lettres",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Gestionnaire",
@@ -254,7 +254,7 @@
   "sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt": "L'administrateur du service social a été remplacé avec succès",
   "sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder": "Filtrer...",
 
-  "sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview": "Employés du service social",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview": "Gestion des utilisateurs",
   "sachbearbeitung-app.admin.sozialdienstBenutzer.create": "- Créer",
   "sachbearbeitung-app.admin.sozialdienstBenutzer.edit": "- Modifier",
   "sachbearbeitung-app.admin.sozialdienstBenutzer.nachname.label": "Nom",
