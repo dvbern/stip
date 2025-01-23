@@ -120,6 +120,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @RolesAllowed({ OidcConstants.ROLE_SOZIALDIENST_ADMIN })
     @Override
     public SozialdienstBenutzerDto getSozialdienstBenutzer(UUID sozialdienstBenutzerId) {
+        sozialdienstAuthorizer.canUpdateSozialdienstBenutzer(sozialdienstBenutzerId);
         return sozialdienstBenutzerService
             .getSozialdienstBenutzerDtoById(sozialdienstBenutzerId);
     }
