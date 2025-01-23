@@ -99,7 +99,7 @@ export interface DokumentServiceGetDokumentDownloadTokenRequestParams {
 }
 
 export interface DokumentServiceGetGesuchDokumentKommentareRequestParams {
-    dokumentTyp: DokumentTyp;
+    gesuchDokumentId: string;
     gesuchTrancheId: string;
 }
 
@@ -1255,9 +1255,9 @@ export class DokumentService {
      public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokumentKommentar>>>;
      public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokumentKommentar>>>;
      public getGesuchDokumentKommentare$(requestParameters: DokumentServiceGetGesuchDokumentKommentareRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const dokumentTyp = requestParameters.dokumentTyp;
-        if (dokumentTyp === null || dokumentTyp === undefined) {
-            throw new Error('Required parameter dokumentTyp was null or undefined when calling getGesuchDokumentKommentare$.');
+        const gesuchDokumentId = requestParameters.gesuchDokumentId;
+        if (gesuchDokumentId === null || gesuchDokumentId === undefined) {
+            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling getGesuchDokumentKommentare$.');
         }
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
@@ -1309,7 +1309,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}/kommentare`;
+        const localVarPath = `/gesuchDokument/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/kommentare`;
         return this.httpClient.request<Array<GesuchDokumentKommentar>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

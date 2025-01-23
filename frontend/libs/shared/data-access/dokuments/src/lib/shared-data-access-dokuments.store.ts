@@ -186,7 +186,7 @@ export class DokumentsStore extends signalStore(
   );
 
   getGesuchDokumentKommentare$ = rxMethod<{
-    dokumentTyp: DokumentTyp;
+    gesuchDokumentId: string;
     gesuchTrancheId: string;
   }>(
     pipe(
@@ -213,20 +213,14 @@ export class DokumentsStore extends signalStore(
   }>(
     pipe(
       switchMap(
-        ({
-          gesuchTrancheId,
-          gesuchDokumentId,
-          dokumentTyp,
-          kommentar,
-          afterSuccess,
-        }) =>
+        ({ gesuchTrancheId, gesuchDokumentId, kommentar, afterSuccess }) =>
           this.dokumentService
             .gesuchDokumentAblehnen$({
               gesuchDokumentId,
               gesuchDokumentAblehnenRequest: {
                 kommentar: {
                   kommentar,
-                  dokumentTyp,
+                  gesuchDokumentId,
                   gesuchTrancheId,
                 },
               },

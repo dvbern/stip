@@ -24,7 +24,7 @@ import {
   SharedModelTableCustomDokument,
   SharedModelTableRequiredDokument,
 } from '@dv/shared/model/dokument';
-import { DokumentTyp, Dokumentstatus } from '@dv/shared/model/gesuch';
+import { Dokumentstatus } from '@dv/shared/model/gesuch';
 import { DOKUMENTE } from '@dv/shared/model/gesuch-form';
 import {
   SharedUiIfGesuchstellerDirective,
@@ -264,10 +264,11 @@ export class SharedFeatureGesuchDokumenteComponent {
     dokument: SharedModelTableRequiredDokument | SharedModelTableCustomDokument,
   ) {
     const { trancheId } = this.gesuchViewSig();
-    if (!trancheId) return;
+    const gesuchDokumentId = dokument.gesuchDokument?.id;
+    if (!trancheId || !gesuchDokumentId) return;
 
     this.dokumentsStore.getGesuchDokumentKommentare$({
-      dokumentTyp: dokument.gesuchDokument?.dokumentTyp as DokumentTyp,
+      gesuchDokumentId: gesuchDokumentId,
       gesuchTrancheId: trancheId,
     });
   }
