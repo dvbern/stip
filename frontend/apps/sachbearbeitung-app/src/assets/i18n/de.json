@@ -254,6 +254,17 @@
   "sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt": "Sozialdienst Admin wurde erfolgreich ersetzt",
   "sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder": "Filtern...",
 
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview": "Sozialdienst Benutzer",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.create": "Erstellen",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.edit": "Bearbeiten",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.nachname.label": "Name",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.vorname.label": "Vorname",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.email.label": "E-Mail",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.erstellt": "Sozialdienst Arbeiter wurde erfolgreich erfasst",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.aktualisiert": "Sozialdienst Arbeiter wurde erfolgreich aktualisiert",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.confirmDelete.title": "Sozialdienst Arbeiter löschen",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.confirmDelete.text": "Wollen Sie den Sozialdienst Arbeiter \"{{ name }}\" wirklich löschen?",
+
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",

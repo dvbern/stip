@@ -129,3 +129,11 @@ export const CHILD_OPTION_SOZIALDIENST = (
   titleTranslationKey,
   parentRoute: OPTION_SOZIALDIENST.route,
 });
+
+export const OPTION_SOZIALDIENST_BENUTZER_DETAIL: ChildAdminOption = {
+  type: 'CHILD',
+  parentRoute: OPTION_SOZIALDIENST.route,
+  route: 'sozialdienst-benutzer',
+  titleTranslationKey:
+    'sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview',
+};

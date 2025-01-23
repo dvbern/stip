@@ -254,6 +254,17 @@
   "sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt": "L'administrateur du service social a été remplacé avec succès",
   "sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder": "Filtrer...",
 
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview": "Employés du service social",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.create": "- Créer",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.edit": "- Modifier",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.nachname.label": "Nom",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.vorname.label": "Prénom",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.email.label": "E-Mail",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.erstellt": "L'employé du service social a été créé avec succès",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.aktualisiert": "L'employé du service social a été mis à jour avec succès",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.confirmDelete.title": "Supprimer l'employé du service social",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.confirmDelete.text": "Voulez-vous vraiment supprimer l'employé du service social \"{{ name }}\" ?",
+
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Calcul {{ index }}{{ type }} à la tranche {{ index }}",

@@ -20,6 +20,7 @@ import {
   SozialdienstAdmin,
   SozialdienstAdminUpdate,
   SozialdienstBenutzer,
+  SozialdienstBenutzerCreate,
   SozialdienstCreate,
   SozialdienstService,
   SozialdienstUpdate,
@@ -40,13 +41,19 @@ import {
 type SozialdienstState = {
   sozialdienste: CachedRemoteData<Sozialdienst[]>;
   sozialdienst: RemoteData<Sozialdienst>;
-  sozialdienstBenutzers: CachedRemoteData<SozialdienstBenutzer[]>;
+  sozialdienstBenutzerList: CachedRemoteData<SozialdienstBenutzer[]>;
+  sozialdienstBenutzer: CachedRemoteData<SozialdienstBenutzer>;
 };
 
 const initialState: SozialdienstState = {
   sozialdienste: initial(),
   sozialdienst: initial(),
-  sozialdienstBenutzers: initial(),
+  sozialdienstBenutzerList: initial(),
+  sozialdienstBenutzer: initial(),
+};
+
+export type SozialdienstBenutzerViewEntry = SozialdienstBenutzer & {
+  name: string;
 };
 
 @Injectable()
@@ -60,13 +67,16 @@ export class SozialdienstStore extends signalStore(
   private globalNotificationStore = inject(GlobalNotificationStore);
 
   sozialdienstBenutzersView = computed(() => {
-    const benutzers = this.sozialdienstBenutzers();
+    const benutzers = this.sozialdienstBenutzerList();
 
     return mapCachedData(benutzers, (data) =>
-      data.map((benutzer) => ({
-        ...benutzer,
-        name: `${benutzer.vorname} ${benutzer.nachname}`,
-      })),
+      data.map(
+        (benutzer) =>
+          ({
+            ...benutzer,
+            name: `${benutzer.vorname} ${benutzer.nachname}`,
+          }) satisfies SozialdienstBenutzerViewEntry,
+      ),
     );
   });
 
@@ -390,36 +400,135 @@ export class SozialdienstStore extends signalStore(
     ),
   );
 
-  loadSozialdienstBenutzer$ = rxMethod<void>(
+  loadSozialdienstBenutzerList$ = rxMethod<void>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          sozialdienstBenutzers: cachedPending(state.sozialdienstBenutzers),
+          sozialdienstBenutzerList: cachedPending(
+            state.sozialdienstBenutzerList,
+          ),
         }));
       }),
       switchMap(() =>
-        this.sozialdienstService.getSozialdienstBenutzer$().pipe(
+        this.sozialdienstService.getSozialdienstBenutzerList$().pipe(
           handleApiResponse((benutzer) => {
-            patchState(this, { sozialdienstBenutzers: benutzer });
+            patchState(this, { sozialdienstBenutzerList: benutzer });
           }),
         ),
       ),
     ),
   );
 
-  deleteSozialdienstBenutzer$ = rxMethod<{ benutzerId: string }>(
+  resetSozialdienstBenutzerCache = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          sozialdienstBenutzer: initial(),
+        }));
+      }),
+    ),
+  );
+
+  loadSozialdienstBenutzer$ = rxMethod<{ sozialdienstBenutzerId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          sozialdienstBenutzers: cachedPending(state.sozialdienstBenutzers),
+          sozialdienstBenutzer: cachedPending(state.sozialdienstBenutzer),
         }));
       }),
-      switchMap(({ benutzerId }) =>
+      switchMap(({ sozialdienstBenutzerId }) =>
         this.sozialdienstService
-          .deleteSozialdienstBenutzer$({ body: benutzerId })
+          .getSozialdienstBenutzer$({ sozialdienstBenutzerId })
+          .pipe(
+            handleApiResponse((benutzer) =>
+              patchState(this, { sozialdienstBenutzer: benutzer }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  updateSozialdienstBenutzer$ = rxMethod<{
+    sozialdienstBenutzerUpdate: SozialdienstBenutzer;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienstBenutzer: cachedPending(state.sozialdienstBenutzer),
+        }));
+      }),
+      exhaustMap((sozialdienstBenutzerUpdate) =>
+        this.sozialdienstService
+          .updateSozialdienstBenutzer$(sozialdienstBenutzerUpdate)
+          .pipe(
+            handleApiResponse(
+              (sozialdienstBenutzer) => {
+                patchState(this, { sozialdienstBenutzer });
+              },
+              {
+                onSuccess: () => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.admin.sozialdienstBenutzer.aktualisiert',
+                  });
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  createSozialdienstBenutzer$ = rxMethod<{
+    sozialdienstBenutzerCreate: SozialdienstBenutzerCreate;
+    onAfterSave?: (sozialdienstId: string) => void;
+  }>(
+    pipe(
+      tap(({ sozialdienstBenutzerCreate }) => {
+        patchState(this, () => ({
+          sozialdienstBenutzer: cachedPending(
+            success({ id: 'new', ...sozialdienstBenutzerCreate }),
+          ),
+        }));
+      }),
+      exhaustMap(({ sozialdienstBenutzerCreate, onAfterSave }) =>
+        this.sozialdienstService
+          .createSozialdienstBenutzer$({ sozialdienstBenutzerCreate })
+          .pipe(
+            handleApiResponse(
+              (sozialdienstBenutzer) => {
+                patchState(this, { sozialdienstBenutzer });
+              },
+              {
+                onSuccess: (sozialdienstBenutzer) => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.admin.sozialdienstBenutzer.erstellt',
+                  });
+                  onAfterSave?.(sozialdienstBenutzer.id);
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  deleteSozialdienstBenutzer$ = rxMethod<{ sozialdienstBenutzerId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienstBenutzerList: cachedPending(
+            state.sozialdienstBenutzerList,
+          ),
+        }));
+      }),
+      switchMap(({ sozialdienstBenutzerId }) =>
+        this.sozialdienstService
+          .deleteSozialdienstBenutzer$({ sozialdienstBenutzerId })
           .pipe(
             handleApiResponse(() => {
-              this.loadSozialdienstBenutzer$();
+              this.loadSozialdienstBenutzerList$();
             }),
           ),
       ),

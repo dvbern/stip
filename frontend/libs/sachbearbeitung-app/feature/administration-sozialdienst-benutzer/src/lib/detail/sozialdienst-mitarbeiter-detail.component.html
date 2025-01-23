@@ -1,1 +1,81 @@
-detail
+<ng-template dvHeaderSuffix>
+  @if (store.sozialdienstBenutzer(); as view) {
+    {{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.' + modeSig() | translate }}
+  }
+</ng-template>
+
+<form [formGroup]="form" data-testid="form-benutzerverwaltung-form" novalidate class="mt-4" (ngSubmit)="handleSubmit()">
+  @if (store.sozialdienstBenutzer() | rdIsPendingWithoutCache) {
+    <dv-shared-ui-loading></dv-shared-ui-loading>
+  } @else {
+    <div class="row g-4">
+      <!-- Name -->
+      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.nachname.label' | translate }}</mat-label>
+          <input
+            formControlName="nachname"
+            data-testid="form-benutzerverwaltung-nachname"
+            matInput
+            dvMaxLength
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Vorname -->
+      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.vorname.label' | translate }}</mat-label>
+          <input
+            formControlName="vorname"
+            data-testid="form-benutzerverwaltung-vorname"
+            matInput
+            dvMaxLength
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row g-4 mt-1">
+      <!-- E-Mail Adresse -->
+      <div
+        class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4"
+        [class.readonly]="form.controls.email.disabled"
+      >
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>
+            {{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.email.label' | translate }}
+          </mat-label>
+          <input
+            data-testid="form-benutzerverwaltung-email"
+            formControlName="email"
+            matInput
+            dvMaxLength
+            type="email"
+            (blur)="trimEmail()"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+          <mat-error *dvSharedUiFormMessageError="'pattern'">
+            {{ 'shared.form.error.email' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    @if (!form.disabled) {
+      <dv-shared-ui-form-save
+        class="mt-4"
+        [disabled]="form.invalid || form.pristine"
+        [loading]="store.sozialdienstBenutzer() | rdIsPending"
+      ></dv-shared-ui-form-save>
+    }
+  }
+</form>

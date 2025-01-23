@@ -69,7 +69,7 @@
               } @else {
                 <a
                   [routerLink]="option.parentRoute"
-                  class="btn btn-link text-decoration-none fw-normal px-2 d-flex align-items-center shadow-none"
+                  class="btn btn-link text-decoration-none fw-normal p-2 d-flex align-items-center shadow-none tw-mr-2 tw-border-none"
                   data-testid="gesuch-step-nav-overview"
                 >
                   <i class="material-symbols-rounded text-black me-2">arrow_back</i>
@@ -78,8 +78,8 @@
 
               <h2 class="fw-bold m-0" data-testid="step-title">
                 {{ option.titleTranslationKey | translate }}
+                <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
               </h2>
-              <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
             </div>
           }
 

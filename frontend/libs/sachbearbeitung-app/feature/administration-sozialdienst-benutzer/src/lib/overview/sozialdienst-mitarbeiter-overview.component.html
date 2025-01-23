@@ -4,93 +4,135 @@
 } @else {
   @if (benutzerListDataSourceSig(); as benutzerListSource) {
     <div class="tw-dv-table" [class.opacity-50]="benutzers | rdIsPending">
-      <table mat-table [dataSource]="benutzerListSource" matSort>
-        <caption class="cdk-visually-hidden">
-          {{
-            'sachbearbeitung-app.admin.benutzerverwaltung.overview.description' | translate
-          }}
-        </caption>
+      <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
+        <table mat-table [dataSource]="benutzerListSource" matSort>
+          <caption class="cdk-visually-hidden">
+            {{
+              'sachbearbeitung-app.admin.benutzerverwaltung.overview.description' | translate
+            }}
+          </caption>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.benutzerverwaltung.name.label' | translate }}
-          </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let benutzer; dataSource: benutzerListSource"
-            class="tw-max-w-32 tw-truncate"
-            [dvTruncateTooltip]="'a'"
-          >
-            {{ benutzer.name }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | translate }}
-          </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let benutzer; dataSource: benutzerListSource"
-            class="tw-max-w-32 tw-truncate"
-            [dvTruncateTooltip]="benutzer.email"
-          >
-            {{ benutzer.email }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>
-            <a
-              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
-              [routerLink]="['.', 'create']"
-              class="btn btn-outline-primary btn-sm"
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-60 tw-whitespace-nowrap">
+              <label class="pe-none" for="fallNummer">{{
+                'sachbearbeitung-app.admin.benutzerverwaltung.name.label' | translate
+              }}</label>
+              <div class="tw-relative tw-flex">
+                <mat-form-field>
+                  <input
+                    id="fallNummer"
+                    matInput
+                    [dvMaxLength]="'small'"
+                    class="tw-w-full"
+                    formControlName="name"
+                    data-testid="cockpit-filter-fall"
+                    (click)="$event.stopPropagation()"
+                  />
+                </mat-form-field>
+                <dv-shared-ui-clear-button
+                  class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                  (clear)="filterForm.controls.name.reset()"
+                  [valueSig]="filterForm.controls.name.value"
+                ></dv-shared-ui-clear-button>
+              </div>
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let benutzer; dataSource: benutzerListSource"
+              class="tw-max-w-32 tw-truncate"
+              [dvTruncateTooltip]="'a'"
             >
-              <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
-            </a>
-          </th>
-          <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource">
-            <div class="d-flex justify-content-end gap-2">
-              <a
-                [routerLink]="['.', 'edit', benutzer.id]"
-                class="btn btn-link"
-                [attr.aria-label]="'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeiten' | translate"
-              >
-                <i class="material-symbols-rounded fs-5">edit</i>
-              </a>
-              <button
-                type="button"
-                class="btn btn-link"
-                [attr.aria-label]="'sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen' | translate"
-                (click)="deleteBenutzer(benutzer)"
-              >
-                <i class="material-symbols-rounded fs-5">delete</i>
-              </button>
-            </div>
-          </td>
-        </ng-container>
+              {{ benutzer.name }}
+            </td>
+          </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
-        <tr mat-row *matRowDef="let benutzer; columns: displayedColumns"></tr>
-        <tr class="mat-mdc-row" *matNoDataRow>
-          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
-            {{ 'shared.table.noData' | translate }}
-          </td>
-        </tr>
-      </table>
-      <mat-paginator
-        [pageSizeOptions]="[10, 20, 50]"
-        pageSize="10"
-        [length]="benutzerListSource.data.length"
-        showFirstLastButtons
-      >
-      </mat-paginator>
-      @if (benutzers | rdIsPending) {
-        <dv-shared-ui-loading
-          class="position-absolute top-50 start-50 translate-middle"
-          [type]="'compact'"
-        ></dv-shared-ui-loading>
-      }
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-whitespace-nowrap">
+              <label class="pe-none" for="fallNummer">{{
+                'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | translate
+              }}</label>
+              <div class="tw-relative tw-flex">
+                <mat-form-field>
+                  <input
+                    id="fallNummer"
+                    matInput
+                    [dvMaxLength]="'small'"
+                    class="tw-w-full"
+                    formControlName="email"
+                    data-testid="cockpit-filter-fall"
+                    (click)="$event.stopPropagation()"
+                  />
+                </mat-form-field>
+                <dv-shared-ui-clear-button
+                  class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                  (clear)="filterForm.controls.email.reset()"
+                  [valueSig]="filterForm.controls.email.value"
+                ></dv-shared-ui-clear-button>
+              </div>
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let benutzer; dataSource: benutzerListSource"
+              class="tw-max-w-32 tw-truncate"
+              [dvTruncateTooltip]="benutzer.email"
+            >
+              {{ benutzer.email }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>
+              <a
+                [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+                [routerLink]="['.', 'create']"
+                class="btn btn-outline-primary btn-sm"
+              >
+                <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
+              </a>
+            </th>
+            <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource">
+              <div class="d-flex justify-content-end gap-2">
+                <a
+                  [routerLink]="['.', 'edit', benutzer.id]"
+                  class="btn btn-link"
+                  [attr.aria-label]="'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeiten' | translate"
+                >
+                  <i class="material-symbols-rounded fs-5">edit</i>
+                </a>
+                <button
+                  type="button"
+                  class="btn btn-link"
+                  [attr.aria-label]="'sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen' | translate"
+                  (click)="deleteBenutzer(benutzer)"
+                >
+                  <i class="material-symbols-rounded fs-5">delete</i>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
+          <tr mat-row *matRowDef="let benutzer; columns: displayedColumns"></tr>
+          <tr class="mat-mdc-row" *matNoDataRow>
+            <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+              {{ 'shared.table.noData' | translate }}
+            </td>
+          </tr>
+        </table>
+        <mat-paginator
+          [pageSizeOptions]="[10, 20, 50]"
+          pageSize="10"
+          [length]="benutzerListSource.data.length"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+        @if (benutzers | rdIsPending) {
+          <dv-shared-ui-loading
+            class="position-absolute top-50 start-50 translate-middle"
+            [type]="'compact'"
+          ></dv-shared-ui-loading>
+        }
+      </form>
     </div>
   }
 }
