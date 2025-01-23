@@ -176,9 +176,9 @@ class GesuchDokumentServiceTest {
     @TestAsSachbearbeiter
     @Test
     void getKommentareWhenNoEntriesExist(){
-        when(gesuchDokumentKommentarRepository.getByTypAndGesuchTrancheId(any(), any())).thenReturn(null);
-        assertDoesNotThrow(() -> {gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID(), DokumentTyp.EK_VERMOEGEN);});
-        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID(), DokumentTyp.EK_VERMOEGEN).size(), notNullValue());
+        when(gesuchDokumentKommentarRepository.getByGesuchDokumentIdAndGesuchTrancheId(any(), any())).thenReturn(null);
+        assertDoesNotThrow(() -> {gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID(), UUID.randomUUID());});
+        assertThat(gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(UUID.randomUUID(), UUID.randomUUID()).size(), notNullValue());
     }
 
     @TestAsSachbearbeiter

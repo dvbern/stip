@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.annotation.Nullable;
@@ -31,6 +30,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -60,9 +60,12 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     private GesuchTranche gesuchTranche;
 
     @NotNull
-    @Column(name = "dokument_typ", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private DokumentTyp dokumentTyp;
+    @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(
+        name = "gesuch_dokument_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_id"),
+        nullable = false
+    )
+    private GesuchDokument gesuchDokument;
 
     @NotNull
     @Column(name = "dokumentstatus")

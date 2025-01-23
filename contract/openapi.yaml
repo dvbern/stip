@@ -768,14 +768,14 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createCustomGesuchDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-  '/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare':
+  '/gesuchDokument/{gesuchTrancheId}/{gesuchDokumentId}/kommentare':
     get:
       tags:
         - Dokument
       parameters:
-        - name: dokumentTyp
+        - name: gesuchDokumentId
           schema:
-            $ref: '#/components/schemas/DokumentTyp'
+            $ref: '#/components/schemas/UUID'
           in: path
           required: true
         - name: gesuchTrancheId
@@ -5032,12 +5032,12 @@ components:
       type: object
       required:
         - gesuchTrancheId
-        - dokumentTyp
+        - gesuchDokumentId
       properties:
         gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
-        dokumentTyp:
-          $ref: '#/components/schemas/DokumentTyp'
+        gesuchDokumentId:
+          $ref: '#/components/schemas/UUID'
         dokumentStatus:
           $ref: '#/components/schemas/Dokumentstatus'
         kommentar:

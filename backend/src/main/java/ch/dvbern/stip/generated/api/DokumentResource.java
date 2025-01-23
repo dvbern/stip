@@ -100,9 +100,9 @@ public interface DokumentResource {
     FileDownloadTokenDto getDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
-    @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}/kommentare")
+    @Path("/gesuchDokument/{gesuchTrancheId}/{gesuchDokumentId}/kommentare")
     @Produces({ "application/json", "text/plain" })
-    List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(@PathParam("gesuchDokumentId") UUID gesuchDokumentId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/gesuchDokument/{gesuchTrancheId}/{dokumentTyp}")

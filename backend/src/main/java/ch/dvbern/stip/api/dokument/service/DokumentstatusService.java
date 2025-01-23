@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
@@ -38,9 +37,10 @@ public class DokumentstatusService {
 
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareByGesuchAndType(
         UUID gesuchTrancheId,
-        DokumentTyp dokumentTyp
+        UUID gesuchDokumentId
     ) {
-        return dokumentKommentarService.getAllKommentareForGesuchTrancheIdAndDokumentTyp(gesuchTrancheId, dokumentTyp);
+        return dokumentKommentarService
+            .getAllKommentareForGesuchTrancheIdAndDokumentTyp(gesuchTrancheId, gesuchDokumentId);
     }
 
     public void triggerStatusChange(final GesuchDokument gesuchDokument, final DokumentstatusChangeEvent event) {

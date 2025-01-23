@@ -25,7 +25,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -52,7 +51,8 @@ class DokumentResourceImplTest {
     @BeforeEach
     void setUp() {
         GesuchDokumentKommentar kommentar = new GesuchDokumentKommentar();
-        when(dokumentKommentarRepository.getByTypAndGesuchTrancheId(any(), any())).thenReturn(List.of(kommentar));
+        when(dokumentKommentarRepository.getByGesuchDokumentIdAndGesuchTrancheId(any(), any()))
+            .thenReturn(List.of(kommentar));
     }
 
     @Test
@@ -60,7 +60,7 @@ class DokumentResourceImplTest {
     // Gesuchsteller should be able to read all comments of a gesuch document
     void resourceShouldReturnCommentsOfADokument() {
         assertNotNull(
-            dokumentResource.getGesuchDokumentKommentare(DokumentTyp.EK_VERDIENST, UUID.randomUUID())
+            dokumentResource.getGesuchDokumentKommentare(UUID.randomUUID(), UUID.randomUUID())
         );
     }
 

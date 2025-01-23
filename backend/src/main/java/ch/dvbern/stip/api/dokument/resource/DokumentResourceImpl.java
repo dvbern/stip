@@ -216,8 +216,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(DokumentTyp dokumentTyp, UUID gesuchId) {
-        return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchId, dokumentTyp);
+    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentare(UUID gesuchDokumentId, UUID gesuchTrancheId) {
+        return gesuchDokumentService.getGesuchDokumentKommentarsByGesuchDokumentId(gesuchTrancheId, gesuchDokumentId);
     }
 
     @RolesAllowed(GESUCH_READ)

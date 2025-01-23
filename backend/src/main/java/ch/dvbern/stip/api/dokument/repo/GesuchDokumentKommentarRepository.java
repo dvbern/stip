@@ -23,7 +23,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.entity.QGesuchDokumentKommentar;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -44,15 +43,15 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
             .execute();
     }
 
-    public List<GesuchDokumentKommentar> getByTypAndGesuchTrancheId(
-        final DokumentTyp dokumentTyp,
+    public List<GesuchDokumentKommentar> getByGesuchDokumentIdAndGesuchTrancheId(
+        final UUID gesuchDokumentId,
         final UUID gesuchTrancheId
     ) {
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuchDokumentKommentar)
             .where(
                 gesuchDokumentKommentar.gesuchTranche.id.eq(gesuchTrancheId)
-                    .and(gesuchDokumentKommentar.dokumentTyp.eq(dokumentTyp))
+                    .and(gesuchDokumentKommentar.gesuchDokument.id.eq(gesuchDokumentId))
             )
             .orderBy(gesuchDokumentKommentar.timestampErstellt.desc())
             .fetch();

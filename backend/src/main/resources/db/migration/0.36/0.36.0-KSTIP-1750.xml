@@ -1,0 +1,27 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1737622376498-1">
+        <addColumn tableName="gesuch_dokument_kommentar">
+            <column name="gesuch_dokument_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1737622376498-2">
+        <addColumn tableName="gesuch_dokument_kommentar_aud">
+            <column name="gesuch_dokument_id" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1737622376498-3">
+        <addUniqueConstraint columnNames="gesuch_dokument_id" constraintName="UC_GESUCH_DOKUMENT_KOMMENTARGESUCH_DOKUMENT_ID_COL" tableName="gesuch_dokument_kommentar"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1737622376498-4">
+        <addForeignKeyConstraint baseColumnNames="gesuch_dokument_id" baseTableName="gesuch_dokument_kommentar" constraintName="FK_gesuch_dokument_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_dokument" validate="true"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1737622376498-5">
+        <dropColumn columnName="dokument_typ" tableName="gesuch_dokument_kommentar"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1737622376498-6">
+        <dropColumn columnName="dokument_typ" tableName="gesuch_dokument_kommentar_aud"/>
+    </changeSet>
+</databaseChangeLog>

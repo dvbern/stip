@@ -82,10 +82,10 @@ public class GesuchDokumentService {
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(
-        UUID gesuchDokumentId,
-        DokumentTyp dokumentTyp
+        UUID gesuchTrancheId,
+        UUID gesuchDokumentId
     ) {
-        return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchDokumentId, dokumentTyp);
+        return dokumentstatusService.getGesuchDokumentKommentareByGesuchAndType(gesuchTrancheId, gesuchDokumentId);
     }
 
     @Transactional
