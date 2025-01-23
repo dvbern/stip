@@ -1,8 +1,33 @@
+import { isDefined } from './shared-model-type-util-guard';
+
 export type Modify<T, R> = Omit<T, keyof R> & R;
 export type ModifyList<T, R> =
   T extends Array<infer U> ? Array<Modify<U, R>> : never;
 export type Extends<T, U extends T> = T extends U ? T : never;
 
+/**
+ * Asserts that a value was exhausted
+ *
+ * @example
+ * // All switch cases are handled
+ * switch (value) { // value: 'a' | 'b'
+ *   case 'a':
+ *     return 1;
+ *   case 'b':
+ *     return 2;
+ *   default:
+ *     return assertUnreachable(value);
+ * }
+ */
 export function assertUnreachable(unreachable: never): never {
   throw new Error('Not all cases were handled: ' + unreachable);
 }
+
+/**
+ * A type guard that checks if all properties of a type are defined
+ */
+export const ifPropsAreDefined = <T extends Record<string, unknown>>(
+  value: Partial<T>,
+): value is { [K in keyof T]: Exclude<T[K], null | undefined> } => {
+  return Object.values(value).every(isDefined);
+};
