@@ -29,7 +29,6 @@ import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partn
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { AppType } from '@dv/shared/model/config';
-import { SharedModelError } from '@dv/shared/model/error';
 import {
   GesuchFormularUpdate,
   GesuchService,
@@ -135,7 +134,7 @@ export const loadGesuch = createEffect(
           context: noGlobalErrorsIf(
             true,
             handleNotFoundAndUnauthorized(
-              (error: SharedModelError) => {
+              (error) => {
                 globalNotifications.createNotification({
                   type: 'ERROR_PERMANENT',
                   messageKey:
@@ -144,10 +143,10 @@ export const loadGesuch = createEffect(
                 });
                 router.navigate(['/'], { replaceUrl: true });
               },
-              (error: SharedModelError) => {
+              (error) => {
                 globalNotifications.createNotification({
                   type: 'ERROR_PERMANENT',
-                  messageKey: 'shared.genericError.gesuch-unauthorized',
+                  messageKey: 'shared.genericError.unauthorized',
                   content: error,
                 });
                 router.navigate(['/'], { replaceUrl: true });

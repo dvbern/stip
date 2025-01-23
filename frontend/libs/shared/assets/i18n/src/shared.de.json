@@ -27,7 +27,7 @@
   "shared.genericError.general": "Es ist ein Fehler aufgetreten.",
   "shared.genericError.forbidden": "Sie haben keine Berechtigung für diese Aktion.",
   "shared.genericError.gesuch-not-found-redirection": "Der Antrag wurde nicht gefunden<br/>Sie wurden zur Übersichtsseite weitergeleitet",
-  "shared.genericError.gesuch-unauthorized": "Sie haben keine Berechtigung für diese Daten",
+  "shared.genericError.unauthorized": "Sie haben keine Berechtigung für diese Daten",
   "shared.datepicker.month.1": "Jan",
   "shared.datepicker.month.2": "Feb",
   "shared.datepicker.month.3": "Mär",

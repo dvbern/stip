@@ -27,7 +27,7 @@
   "shared.genericError.general": "Une erreur est survenue.",
   "shared.genericError.forbidden": "Vous n'êtes pas autorisé à accéder à cette page.",
   "shared.genericError.gesuch-not-found-redirection": "La demande n'a pas été trouvée<br/>Vous avez été redirigé vers la page d'accueil",
-  "shared.genericError.gesuch-unauthorized": "Vous n'êtes pas autorisé à accéder à cet infomation",
+  "shared.genericError.unauthorized": "Vous n'êtes pas autorisé à accéder à cet infomation",
   "shared.datepicker.month.1": "Jan",
   "shared.datepicker.month.2": "Fev",
   "shared.datepicker.month.3": "Mar",
