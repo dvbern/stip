@@ -53,12 +53,10 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
 
   dokumenteRouteSig = computed(() => {
     const { gesuchId, trancheSetting } = this.gesuchViewSig();
-    return [
-      '/gesuch',
-      'dokumente',
-      gesuchId,
-      ...(trancheSetting?.routesSuffix ?? []),
-    ];
+    if (!gesuchId || !trancheSetting) {
+      return null;
+    }
+    return ['/gesuch', 'dokumente', gesuchId, ...trancheSetting.routesSuffix];
   });
 
   constructor() {

@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
@@ -144,17 +145,20 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(GESUCH_READ)
     @Override
     @AllowAll
-    public String getDokumentDownloadToken(UUID dokumentId) {
+    public FileDownloadTokenDto getDokumentDownloadToken(UUID dokumentId) {
         gesuchDokumentService.checkIfDokumentExists(dokumentId);
 
-        return Jwt
-            .claims()
-            .upn(benutzerService.getCurrentBenutzername())
-            .claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM, dokumentId.toString())
-            .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
-            .issuer(configService.getIssuer())
-            .jws()
-            .signWithSecret(configService.getSecret());
+        return new FileDownloadTokenDto()
+            .token(
+                Jwt
+                    .claims()
+                    .upn(benutzerService.getCurrentBenutzername())
+                    .claim(DokumentDownloadConstants.DOKUMENT_ID_CLAIM, dokumentId.toString())
+                    .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
+                    .issuer(configService.getIssuer())
+                    .jws()
+                    .signWithSecret(configService.getSecret())
+            );
     }
 
     @RolesAllowed(GESUCH_READ)

@@ -202,4 +202,11 @@ export class GesuchStore extends signalStore(
       ),
     ),
   } satisfies Record<StatusUebergang, unknown>;
+
+  /**
+   * Set the gesuchInfo in the store, for example when the gesuch was updated outside of this store.
+   */
+  setGesuchInfo(gesuchInfo: GesuchInfo) {
+    patchState(this, () => ({ gesuchInfo: success(gesuchInfo) }));
+  }
 }

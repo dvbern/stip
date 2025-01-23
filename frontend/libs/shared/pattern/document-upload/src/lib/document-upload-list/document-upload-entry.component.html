@@ -1,4 +1,6 @@
-@if (documentViewSig(); as document) {
+@let upload = uploadViewSig();
+@let document = documentViewSig();
+@if (document && upload) {
   <dv-shared-ui-icon-chip
     class="me-2 mt-1 fs-5 reverse"
     [class.spin]="document.state === 'uploading'"
@@ -22,15 +24,13 @@
           <span class="material-symbols-rounded align-middle">clear</span>
         </button>
       } @else {
-        <a
-          class="text-truncate filename fs-7"
-          [href]="downloadLinkSig()"
-          target="_blank"
-          [title]="document.file.filename"
-          [attr.data-testid]="'document-download-' + document.file.filename"
+        <button
+          type="button"
+          class="btn btn-link text-truncate filename fs-7 tw-flex tw-p-0 tw-no-underline"
+          [dvDownloadButton]="{ type: 'dokument', id: document.file.id, dokumentArt: upload.dokumentModel.art }"
         >
           <span class="material-symbols-rounded align-middle text-muted">download</span>
-        </a>
+        </button>
         <button
           type="button"
           class="dv-icon-button flex-shrink-0 delete-icon ms-2"

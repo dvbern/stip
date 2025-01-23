@@ -1780,9 +1780,20 @@ paths:
       responses:
         '200':
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: File returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
           description: File returned
       operationId: getDokumentDownloadToken
       summary: get Dokument Download Token
@@ -2006,6 +2017,56 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBerechnungForGesuch
       summary: Berechnet und holt die Berechnung für ein Gesuch
+  '/gesuch/{gesuchId}/berechnungsblatt/token':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: File returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBerechnungsblattDownloadToken
+      summary: get Berechnungsblatt Download Token
+  '/gesuch/berechnungsblatt':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Berechnungsblatt File returned
+      operationId: getBerechnungsBlattForGesuch
+      summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren':
     get:
       tags:
@@ -4480,6 +4541,13 @@ components:
         - AKTIV
         - ABGEBROCHEN
         - ABGESCHLOSSEN
+    FileDownloadToken:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS
@@ -5197,7 +5265,7 @@ components:
           $ref: '#/components/schemas/LocalDate'
         notizTyp:
           $ref: '#/components/schemas/GesuchNotizTyp'
-        gesuchNummer: 
+        gesuchNummer:
           type: string
         antwort:
           type: string

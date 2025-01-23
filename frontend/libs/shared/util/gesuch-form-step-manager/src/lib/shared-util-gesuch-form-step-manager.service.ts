@@ -67,7 +67,7 @@ export class SharedUtilGesuchFormStepManagerService {
   getNextStepOf(
     stepsFlow: SharedModelGesuchFormStep[],
     step: SharedModelGesuchFormStep,
-    gesuch: SharedModelGesuch | null,
+    gesuch: SharedModelGesuch,
   ): SharedModelGesuchFormStep {
     const currentIndex = findStepIndex(step, stepsFlow);
 

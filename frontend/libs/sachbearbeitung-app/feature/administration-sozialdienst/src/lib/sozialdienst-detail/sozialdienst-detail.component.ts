@@ -176,7 +176,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
         ...addressFormValues,
       },
       sozialdienstAdmin: {
-        keycloakId: sozialdienst.sozialdienstAdmin.keycloakId,
+        id: sozialdienst.sozialdienstAdmin.id,
         ...sozialdienstAdminFormValues,
       },
     };
@@ -222,7 +222,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
   replaceSozialdienstAdmin() {
     const sozialdienstId = this.idSig();
     const sozialdienstAdminId =
-      this.store.sozialdienst().data?.sozialdienstAdmin?.keycloakId;
+      this.store.sozialdienst().data?.sozialdienstAdmin?.id;
 
     if (!sozialdienstAdminId || !sozialdienstId) return;
 
