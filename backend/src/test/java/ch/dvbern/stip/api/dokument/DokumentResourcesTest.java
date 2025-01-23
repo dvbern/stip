@@ -321,16 +321,17 @@ class DokumentResourcesTest {
 
         assertThat(dokumentDtoList.size(), is(1));
 
-        dokumentId = dokumentDtoList.get(dokumentDtoList.size() - 1).getId();
+        dokumentId = dokumentDtoList.get(0).getId();
 
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
+            .statusCode(Status.OK.getStatusCode())
             .extract()
-            .asString();
+            .as(FileDownloadTokenDtoSpec.class)
+            .getToken();
 
         final var actualFileContent = dokumentApiSpec.getDokument()
             .tokenQuery(token)
