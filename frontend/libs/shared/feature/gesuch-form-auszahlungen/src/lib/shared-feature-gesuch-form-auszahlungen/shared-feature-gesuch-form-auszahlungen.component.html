@@ -129,14 +129,15 @@
           >
             <span class="material-symbols-rounded"> info </span>
           </button>
-
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.auszahlung.iban.label'"
-            [dialogMessageKey]="'shared.form.auszahlung.iban.info'"
-            #ibanDialog="dvSharedUiInfoDialog"
-          ></div>
         </div>
+        <div class="d-none d-xl-block col-xl-4"></div>
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.auszahlung.iban.label'"
+          [dialogMessageKey]="'shared.form.auszahlung.iban.info'"
+          #ibanDialog="dvSharedUiInfoDialog"
+          class="d-none d-xl-block col-xl-4"
+        ></div>
       </div>
 
       <!-- Buttons -->

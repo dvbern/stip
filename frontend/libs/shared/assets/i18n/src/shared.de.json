@@ -313,8 +313,9 @@
   "shared.form.person.identischerWohnsitz.label": "Identischer zivilrechtlicher Wohnsitz",
   "shared.form.person.identischerWohnsitz.info": "Wenn Ihr zivilrechtlicher Wohnsitz mit der oben angegebenen Wohnadresse übereinstimmt, markieren Sie die Checkbox. Falls dies nicht der Fall ist, lassen Sie das Feld frei.\n\nErklärung: Der zivilrechtliche Wohnsitz ist der Ort, an dem Sie dauerhaft leben möchten und Ihre offiziellen Dokumente hinterlegt sind.",
   "shared.form.person.origin.label": "Heimatort",
-  "shared.form.person.marital-status.label": "Zivilstand",
-  "shared.form.person.marital-status.ledig.info": "Sofern Sie sich seit 5 Jahre oder länger in einer Beziehung befinden, wählen Sie bitte \"Konkubinat\" aus.",
+  "shared.form.person.zivilstand.label": "Zivilstand",
+  "shared.form.person.zivilstand.ledig.info": "Sofern Sie sich seit 5 Jahre oder länger in einer Beziehung befinden, wählen Sie bitte \"Konkubinat\" aus.",
+  "shared.form.person.zivilstand.konkubinat.info": "Konkubinat bedeutet: Unverheiratete Paare, die zusammenleben, entweder seit mindestens 5 Jahren oder mit einem gemeinsamen Kind im selben Haushalt. Sie werden wie verheiratete Auszubildende behandelt.",
   "shared.form.person.guardianship.label": "Es besteht eine umfassende Beistandschaft",
   "shared.form.person.guardianship.info": "Wenn Sie von einer Beiständin oder einem Beistand vertreten werden, markieren Sie bitte die Checkbox.\n\nErklärung: Bei einer umfassenden Beistandschaft übernimmt die Beiständin oder der Beistand alle Angelegenheiten der Personensorge, Vermögenssorge und des Rechtsverkehrs. Die betroffene Person ist in diesem Fall nicht mehr handlungsfähig.",
   "shared.form.person.vermoegenVorjahr.label": "Vermögen per 31.12. des Vorjahrs",
@@ -437,7 +438,6 @@
   "shared.form.eltern.wohnkosten.info": "Die Wohnkosten der Eltern (Vater und/oder Mutter) sind zwingend zu belegen (Kopie Mietvertrag oder Kopie Hypothekarzinsabrechnung des Vorjahres).",
   "shared.form.eltern.ausweisbFluechtling.infoTitle": "Hat Ihr Elternteil einen Ausweis B oder ist er Flüchtling?",
   "shared.form.eltern.ausweisbFluechtling.info": "Wenn dieser Elternteil eine Aufenthaltsbewilligung B (Permis B) besitzt oder Flüchtling ist, markieren Sie bitte «Ja».",
-
 
   "shared.eltern-steuer.title.FAMILIE": "Steuerdaten für Familie",
   "shared.eltern-steuer.title.MUTTER": "Steuerdaten für Mutter",

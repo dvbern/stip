@@ -45,19 +45,21 @@
           </mat-form-field>
           <button
             type="button"
-            (click)="ahvInfoDialog.toggle()"
+            (click)="ahvPartnerInfoDialog.toggle()"
             class="dv-icon-button dv-icon-button-md text-info mt-2"
             [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
           >
             <span class="material-symbols-rounded"> info </span>
           </button>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.sozialversicherungsnummer.infoTitle'"
-            [dialogMessageKey]="'shared.form.person.sozialversicherungsnummer.info'"
-            #ahvInfoDialog="dvSharedUiInfoDialog"
-          ></div>
         </div>
+        <div class="d-none d-xl-block col-xl-4"></div>
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.person.sozialversicherungsnummer.infoTitle'"
+          [dialogMessageKey]="'shared.form.person.sozialversicherungsnummer.info'"
+          #ahvPartnerInfoDialog="dvSharedUiInfoDialog"
+          class="d-none d-xl-block col-xl-4"
+        ></div>
       </div>
       <div class="row g-4 my-2">
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
@@ -120,7 +122,7 @@
       </div>
       <div class="row g-4">
         <!-- AUSBILDUNG MIT EINKOMMEN ODER ERWERBSTÄTIG -->
-        <div class="col-12 col-md-12 col-xl-8 d-flex align-items-center flex-grow-1 gap-1">
+        <div class="col-12 col-xl-4 col-md-6 d-flex align-items-center flex-grow-1 gap-2">
           <mat-checkbox
             type="checkbox"
             formControlName="ausbildungMitEinkommenOderErwerbstaetig"
@@ -141,13 +143,15 @@
           >
             <span class="material-symbols-rounded"> info </span>
           </button>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.label'"
-            [dialogMessageKey]="'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.info'"
-            #ausbildungEinkommenErwerbsDialog="dvSharedUiInfoDialog"
-          ></div>
         </div>
+        <div class="d-none d-xl-block col-xl-4"></div>
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.label'"
+          [dialogMessageKey]="'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.info'"
+          #ausbildungEinkommenErwerbsDialog="dvSharedUiInfoDialog"
+          class="d-none d-xl-block col-xl-4"
+        ></div>
       </div>
       @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
         <div class="row g-4 my-2">

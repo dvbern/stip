@@ -526,12 +526,12 @@
         <div class="row g-4">
           <!-- VERDIENST_REALISIERT -->
           <mat-radio-group
-            class="col-12"
+            class="col-12 col-md-6"
             formControlName="verdienstRealisiert"
             data-testid="form-einnahmen-kosten-verdienstRealisiert"
             dvSharedUiFormField
           >
-            <div class="d-flex align-items-center col-12 col-md-8 col-xl-4 flex-grow-1 gap-1">
+            <div class="d-flex align-items-center flex-grow-1 gap-1">
               <mat-label>{{ 'shared.form.einnahmenkosten.verdienstRealisiert.label' | translate }}</mat-label>
               <button
                 type="button"
@@ -541,14 +541,8 @@
               >
                 <span class="material-symbols-rounded"> info </span>
               </button>
-              <div
-                dvSharedUiInfoDialog
-                [dialogTitleKey]="'shared.form.einnahmenkosten.verdienstRealisiert.label'"
-                [dialogMessageKey]="'shared.form.einnahmenkosten.verdienstRealisiert.info'"
-                #verdienstRealisiertDialog="dvSharedUiInfoDialog"
-              ></div>
             </div>
-            <div class="d-flex flex-wrap gap-2 col-12 col-md-6 col-xl-6 pe-md-3 justify-content-between">
+            <div class="d-flex flex-wrap gap-2 pe-md-3 justify-content-between">
               <div class="d-flex flex-column">
                 <mat-radio-button data-testid="yes" [value]="true">
                   {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
@@ -571,6 +565,13 @@
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
           </mat-radio-group>
+          <div
+            dvSharedUiInfoDialog
+            [dialogTitleKey]="'shared.form.einnahmenkosten.verdienstRealisiert.label'"
+            [dialogMessageKey]="'shared.form.einnahmenkosten.verdienstRealisiert.info'"
+            #verdienstRealisiertDialog="dvSharedUiInfoDialog"
+            class="d-none d-xl-block col-xl-6"
+          ></div>
         </div>
       }
 

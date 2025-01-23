@@ -1,6 +1,5 @@
 <form
   [formGroup]="form"
-  xmlns="http://www.w3.org/1999/html"
   [dvSharedUiFormReadonly]="viewSig().readonly"
   (gotReenabledSig)="gotReenabled$.next({})"
   data-testid="form-lebenslauf-form"
@@ -95,7 +94,7 @@
       </mat-form-field>
 
       <!-- Tätigkeits Beschreibung -->
-      <div class="d-flex align-conten-center col-12 col-md-6 col-xl-4">
+      <div class="d-flex col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.lebenslauf.item.name.taetigkeit' | translate }}</mat-label>
           <input
@@ -117,13 +116,14 @@
         >
           <span class="material-symbols-rounded"> info </span>
         </button>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.lebenslauf.taetigkeit.infoTitle'"
-          [dialogMessageKey]="'shared.form.lebenslauf.taetigkeit.info'"
-          #taetigkeitsInfoDialog="dvSharedUiInfoDialog"
-        ></div>
       </div>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.lebenslauf.taetigkeit.infoTitle'"
+        [dialogMessageKey]="'shared.form.lebenslauf.taetigkeit.info'"
+        #taetigkeitsInfoDialog="dvSharedUiInfoDialog"
+        class="col-12 col-md-6 col-xl-4"
+      ></div>
     </div>
   }
 

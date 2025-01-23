@@ -248,7 +248,7 @@
   "shared.form.shared.lastname.label": "Nom",
   "shared.form.shared.firstname.label": "Prénom",
   "shared.form.shared.andere.label": "Autres",
-   "shared.form.shared.address.co.label": "C/O Address",
+  "shared.form.shared.address.co.label": "C/O Address",
   "shared.form.shared.address.street.label": "Rue",
   "shared.form.shared.address.number.label": "Nr.",
   "shared.form.shared.address.zipcode.label": "Code postal",
@@ -313,8 +313,9 @@
   "shared.form.person.identischerWohnsitz.label": "Identical with civil residence",
   "shared.form.person.identischerWohnsitz.info": "Le domicile civil correspond-il à l’adresse de résidence que vous avez indiquée ci-dessus ? Si oui, la case correspondante doit être cochée. Si non, veuillez décocher la case correspondante.\n\nExplication : Le domicile civil est le lieu où une personne séjourne avec l’intention de s’y établir durablement et où elle a déposé ses papiers.",
   "shared.form.person.origin.label": "Origin",
-  "shared.form.person.marital-status.label": "Marital status",
-  "shared.form.person.marital-status.ledig.info": "If you have been in a relationship for 5 years or longer, please select \"Concubinage\".",
+  "shared.form.person.zivilstand.label": "État civil",
+  "shared.form.person.zivilstand.ledig.info": "Si vous êtes en couple depuis 5 ans ou plus, veuillez sélectionner \"Concubinage\".",
+  "shared.form.person.zivilstand.konkubinat.info": "Définition de «concubinage» : couple non marié qui forme une union de fait depuis au moins cinq ans ou qui a un enfant commun qui vit sous le même toit. Les personnes vivant en concubinage sont considérées comme des personnes en formation mariées.",
   "shared.form.person.guardianship.label": "Il y a une curatelle de portée générale",
   "shared.form.person.guardianship.info": "Si vous être représenté·e par une curatrice ou un curateur, veuillez cocher cette case.\n\nExplication: La curatelle de portée générale couvre tous les domaines de l’assistance personnelle, de la gestion du patrimoine et des rapports juridiques avec des tiers. La curatrice ou le curateur prend des décisions au nom de la personne concernée et la représente dans tous ces domaines. La personne concernée ne peut pas exercer ses droits civils.",
   "shared.form.person.vermoegenVorjahr.label": "Fortune au 31.12. de l'année précédente",
@@ -437,7 +438,6 @@
   "shared.form.eltern.wohnkosten.info": "Un document attestant des frais de logement des parents (père et/ou mère) doit impérativement être fourni (copie du contrat de bail ou copie du décompte des intérêts hypothécaires de l’année précédente).",
   "shared.form.eltern.ausweisbFluechtling.infoTitle": "Votre parent a-t-il un permis B ou est-il réfugié ?",
   "shared.form.eltern.ausweisbFluechtling.info": "Si votre père/mère est titulaire de l’autorisation de séjour B (ou permis B) ou a le statut de réfugié·e, veuillez cocher «oui».",
-
 
   "shared.eltern-steuer.title.FAMILIE": "Données fiscales pour la famille",
   "shared.eltern-steuer.title.MUTTER": "Données fiscales pour la mère",
