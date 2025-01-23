@@ -85,7 +85,7 @@
         <div>
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
           @if (zusammenfassung.verminderteBerechnungFaktor) {
-            <div class="text-muted h6">
+            <div class="text-muted h6 tw-mt-1 tw-font-normal">
               {{
                 'sachbearbeitung-app.verfuegung.zusammenfassung.totalVermindert'
                   | translate: { factor: (100 * zusammenfassung.verminderteBerechnungFaktor | number: '2.0-0') }

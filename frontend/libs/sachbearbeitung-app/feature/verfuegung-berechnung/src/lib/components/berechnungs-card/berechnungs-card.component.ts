@@ -117,7 +117,7 @@ import { Berechnung } from '../../../models';
                   '.total' | translate
               }}
               @if (verminderteBerechnungFaktor()) {
-                <div class="text-muted h6">
+                <div class="text-muted h6 tw-mt-1 tw-font-normal">
                   {{
                     'sachbearbeitung-app.verfuegung.zusammenfassung.totalVermindert'
                       | translate
