@@ -23,7 +23,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -37,7 +37,7 @@ import org.hibernate.envers.query.AuditEntity;
 @RequiredArgsConstructor
 public class GesuchTrancheHistoryRepository {
     private final EntityManager em;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
+    private final GesuchHistoryService gesuchHistoryService;
 
     public GesuchTranche getInitialRevision(final UUID gesuchTrancheId) {
         final var reader = AuditReaderFactory.get(em);
@@ -74,7 +74,7 @@ public class GesuchTrancheHistoryRepository {
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus
     ) {
-        return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus)
+        return gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus)
             .flatMap(Gesuch::getCurrentGesuchTrancheOptional);
     }
 
@@ -83,7 +83,7 @@ public class GesuchTrancheHistoryRepository {
         final Gesuchstatus gesuchStatus
     ) {
         // The GesuchTranchen attached to this here are the revision that they were at the historic moment in time
-        final var historicGesuch = gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
+        final var historicGesuch = gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
 
         // Get the one that was created the furthest in the past, i.e. the first/ initial Tranche
         return historicGesuch.flatMap(

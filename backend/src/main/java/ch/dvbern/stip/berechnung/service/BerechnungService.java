@@ -308,13 +308,13 @@ public class BerechnungService {
             for (final var berechnungsresultat : trancheBerechnungsresultate) {
                 int berechnung;
                 if (actualDuration != null) {
-                    berechnung = (berechnungsresultat.getBerechnung() / 12) * actualDuration;
+                    berechnung = berechnungsresultat.getBerechnung() * actualDuration / 12;
                 } else {
                     berechnung = berechnungsresultat.getBerechnung();
                 }
 
                 berechnungsresultat.setBerechnung(
-                    (berechnung / 12) * monthsValid
+                    berechnung * monthsValid / 12
                 );
             }
             berechnungsresultate.addAll(trancheBerechnungsresultate);
@@ -549,8 +549,8 @@ public class BerechnungService {
         return new BerechnungResult(stipendien.intValue(), result.getDecisionResults(), listener.decisionNodeList);
     }
 
-    // TODO KSTIP-1852: unit test this
     boolean wasEingereichtAfterDueDate(final Gesuch gesuch, final LocalDateTime eingereicht) {
+        // TODO KSTIP-1852: unit test this
         // TODO KSTIP-998: Use new einreichedatum instead of envers query here
         final var einreichefrist = gesuch.getGesuchsperiode().getEinreichefristNormal();
 
