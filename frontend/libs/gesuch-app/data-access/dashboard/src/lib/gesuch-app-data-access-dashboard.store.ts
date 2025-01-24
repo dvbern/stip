@@ -86,6 +86,10 @@ export class DashboardStore extends signalStore(
                 isErstgesuch,
                 canEdit,
                 canDelete: canEdit && hasMoreThanOneGesuche,
+                canCreateAenderung:
+                  (gesuch.gesuchStatus == 'STIPENDIENANSPRUCH' ||
+                    gesuch.gesuchStatus == 'KEIN_STIPENDIENANSPRUCH') &&
+                  !gesuch.offeneAenderung,
                 einreichefristAbgelaufen,
                 reduzierterBeitrag,
                 einreichefristDays,

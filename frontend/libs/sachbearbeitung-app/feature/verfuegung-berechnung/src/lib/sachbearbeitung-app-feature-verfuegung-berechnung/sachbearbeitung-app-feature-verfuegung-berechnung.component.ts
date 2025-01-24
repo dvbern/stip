@@ -69,6 +69,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   berechnungenSig = computed(() => {
     const index = this.indexSig();
     const view = this.berechnungStore.berechnungZusammenfassungViewSig();
+
     if (view.loading || view.berechnungsresultate.length === 0) {
       return { loading: view.loading, list: [] };
     }

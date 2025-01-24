@@ -12,8 +12,6 @@
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <contract.path>${project.basedir}/../contract/openapi.yaml</contract.path>
     <contract.version>1.24.0</contract.version>
-    <kie.version>8.41.0.Final</kie.version>
-    <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
     <lombok.version>1.18.28</lombok.version>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <maven.compiler.release>17</maven.compiler.release>
@@ -23,7 +21,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus-amazon-services.version>2.3.0</quarkus-amazon-services.version>
-    <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.6.4</quarkus.platform.version>
@@ -34,14 +31,20 @@
     <revision>local</revision>
     <savoirtech.json-comparator.version>1.1.1</savoirtech.json-comparator.version>
     <skipITs>true</skipITs>
-    <sonar.exclusions>file:**/generated/**,
-      file:**/.mvn/**,
-      file:**/.quarkus/**</sonar.exclusions>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
-    <spotless.eclipse.version>4.29</spotless.eclipse.version>
-    <spotless.version>2.43.0</spotless.version>
+    <sonar.exclusions>
+      file:**/generated/**,
+      file:**/.mvn/**,
+      file:**/.quarkus/**
+    </sonar.exclusions>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <testcontainers.version>1.18.3</testcontainers.version>
+    <liquibase-maven-plugin.version>4.27.0</liquibase-maven-plugin.version>
+    <kie.version>8.41.0.Final</kie.version>
+    <quarkus-antivirus.version>1.0.1</quarkus-antivirus.version>
+    <spotless.version>2.43.0</spotless.version>
+    <spotless.eclipse.version>4.29</spotless.eclipse.version>
+    <itext.version>9.0.0</itext.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -338,6 +341,17 @@
       <groupId>com.sun.xml.messaging.saaj</groupId>
       <artifactId>saaj-impl</artifactId>
       <version>3.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>itext-core</artifactId>
+      <version>${itext.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>bouncy-castle-adapter</artifactId>
+      <version>${itext.version}</version>
     </dependency>
   </dependencies>
   <build>
