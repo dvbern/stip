@@ -2748,9 +2748,9 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getNotificationsForCurrentUser
       summary: Gets all notifications for the User
-  /buchhaltung/{fallId}:
+  /buchhaltung/{gesuchId}:
     parameters:
-      - $ref: '#/components/parameters/fallId'
+      - $ref: '#/components/parameters/gesuchId'
     get:
       tags:
         - Buchhaltung
@@ -2762,7 +2762,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/BuchhaltungEntry'
-          description: Returns all buchhaltungsentrys for the given fallId
+          description: Returns all buchhaltungsentrys of a Fall with the given gesuchId
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
