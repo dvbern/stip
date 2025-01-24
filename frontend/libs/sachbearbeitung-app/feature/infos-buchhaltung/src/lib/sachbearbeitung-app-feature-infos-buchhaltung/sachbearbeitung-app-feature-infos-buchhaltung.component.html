@@ -1,0 +1,153 @@
+@if (buchhaltungStore.buchhaltung() | rdIsPendingWithoutCache) {
+  <dv-shared-ui-loading></dv-shared-ui-loading>
+} @else {
+  <form [formGroup]="form" class="tw-dv-form-grid" (ngSubmit)="createBuchhaltungsKorrektur()">
+    <mat-form-field>
+      <mat-label>{{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur' | translate }}</mat-label>
+      <input matInput [maskito]="maskitoNumber" formControlName="betrag" />
+    </mat-form-field>
+    <div>
+      <button type="submit" class="btn btn-primary tw-grow-0">{{ 'shared.create' | translate }}</button>
+    </div>
+  </form>
+  @if (buchhaltungDataSourceSig(); as buchhaltungDataSource) {
+    <div class="tw-dv-table" [class.opacity-50]="buchhaltungStore.buchhaltung() | rdIsPending">
+      <table mat-table [dataSource]="buchhaltungDataSource" matSort class="tw-w-full tw-table-fixed">
+        <caption class="cdk-visually-hidden">
+          {{
+            'sachbearbeitung-app.infos.buchhaltung.title' | translate
+          }}
+        </caption>
+
+        <ng-container matColumnDef="datum">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.datum' | translate }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+            class="tw-w-32 tw-whitespace-nowrap"
+          >
+            {{ buchhaltung.entry.timestampErstellt | date: 'dd.MM.yyyy' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stipendienbetrag">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag' | translate }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+            class="tw-whitespace-nowrap !tw-text-right"
+          >
+            {{ buchhaltung.entry.stipendienBetrag | formatChf }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="auszahlung">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-28">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.auszahlung' | translate }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+            class="tw-whitespace-nowrap !tw-text-right"
+          >
+            {{ buchhaltung.entry.auszahlung | formatChf }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rueckforderung">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-28">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.rueckforderung' | translate }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+            class="tw-whitespace-nowrap !tw-text-right"
+          >
+            {{ buchhaltung.entry.rueckforderung | formatChf }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="saldo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldo' | translate }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+            class="tw-whitespace-nowrap !tw-text-right"
+          >
+            {{ buchhaltung.entry.saldo | formatChf }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.comment' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
+            {{ buchhaltung.entry.comment }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="link">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-40">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.link' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
+            @if (buchhaltung.entry.verfuegungId) {
+              <button
+                type="button"
+                class="btn btn-link text-truncate tw-flex tw-p-0 !tw-underline"
+                [dvDownloadButton]="{ type: 'berechnungsblatt', id: 'TBD' }"
+              >
+                TBD
+              </button>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="separator">
+          <td mat-cell *matCellDef [colSpan]="displayedColumns.length"></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
+        <tr
+          mat-row
+          *dvMatRowDef="let buchhaltung; columns: displayedColumns; dataSource: buchhaltungDataSource"
+          [ngClass]="{
+            '!tw-bg-[--dv-blue-bg-subtle]': buchhaltung.type === 'manuell',
+            '!tw-bg-[--dv-green-bg-subtle]': buchhaltung.type === 'auszahlung',
+            '!tw-bg-[--dv-yellow-bg-subtle]': buchhaltung.type === 'verfuegung',
+          }"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let separator; columns: ['separator']; when: isStartOfNewGesuch"
+          class="!tw-h-4 !tw-bg-[--dv-red-bg-subtle]"
+        ></tr>
+        <tr class="mat-mdc-row" *matNoDataRow>
+          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+            {{ 'shared.table.noData' | translate }}
+          </td>
+        </tr>
+      </table>
+      <mat-paginator
+        [pageSizeOptions]="[10, 20, 50]"
+        pageSize="20"
+        [length]="buchhaltungDataSource.data.length"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+      @if (buchhaltungStore.buchhaltung() | rdIsPending) {
+        <dv-shared-ui-loading
+          class="position-absolute top-50 start-50 translate-middle"
+          [type]="'compact'"
+        ></dv-shared-ui-loading>
+      }
+    </div>
+  }
+}
