@@ -17,8 +17,8 @@
       {{ 'shared.form.shared.section.einnahmen' | translate }}
     </h3>
 
-    <!-- Total Einkünfte-->
     <div class="row g-4 my-2">
+      <!-- Total Einkünfte-->
       <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.eltern-steuerdaten.totalEinkuenfte.label' | translate }}</mat-label>
@@ -68,8 +68,8 @@
       ></div>
     </div>
 
-    <!-- Arbeitsverhaeltnis-->
     <div class="row mt-1">
+      <!-- Arbeitsverhaeltnis-->
       <mat-radio-group
         class="col-12"
         formControlName="arbeitsverhaeltnis"
@@ -97,13 +97,13 @@
             | translateChange: 'shared.form.eltern-steuerdaten.arbeitsverhaeltnis.$VALUE'
         "
       ></dv-shared-ui-form-zuvor-hint>
-
-      <!-- Saeule 3a-->
     </div>
+
     @if (
       !hiddenFieldSet.valuesSig().has(form.controls.saeule3a) || !hiddenFieldSet.valuesSig().has(form.controls.saeule2)
     ) {
       <div class="row g-4 my-2">
+        <!-- Saeule 3a-->
         @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule3a)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule3a.label' | translate }}</mat-label>
@@ -120,6 +120,7 @@
             </mat-error>
           </mat-form-field>
         }
+        <!-- Saeule 2-->
         @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule2)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule2.label' | translate }}</mat-label>
@@ -139,8 +140,8 @@
       </div>
     }
 
-    <!-- Kinderalimente-->
     <div class="row g-4 my-2">
+      <!-- Kinderalimente-->
       <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.eltern-steuerdaten.kinderalimente.label' | translate }}</mat-label>
@@ -193,8 +194,8 @@
       {{ 'shared.form.shared.section.ausgaben' | translate }}
     </h3>
 
-    <!-- Steuern Kanton-Gemeinde-->
     <div class="row g-4 my-2">
+      <!-- Steuern Kanton-Gemeinde-->
       <div class="d-flex col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.eltern-steuerdaten.steuernKantonGemeinde.label' | translate }}</mat-label>
@@ -262,8 +263,8 @@
       </div>
     </div>
 
-    <!-- Fahrkosten-->
     <div class="row g-4 my-2">
+      <!-- Fahrkosten-->
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.fahrkosten.label' | translate }}</mat-label>
         <input
@@ -296,8 +297,8 @@
       </mat-form-field>
     </div>
 
-    <!-- Verpflegung-->
     <div class="row g-4 my-2">
+      <!-- Verpflegung-->
       <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.eltern-steuerdaten.verpflegung.label' | translate }}</mat-label>
@@ -348,12 +349,12 @@
       ></div>
     </div>
 
-    <!-- Steuerjahr-->
     @if (
       !hiddenFieldSet.valuesSig().has(form.controls.steuerjahr) ||
       !hiddenFieldSet.valuesSig().has(form.controls.veranlagungsCode)
     ) {
       <div class="row g-4 my-2">
+        <!-- Steuerjahr-->
         @if (!hiddenFieldSet.valuesSig().has(form.controls.steuerjahr)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.steuerjahr.label' | translate }}</mat-label>
@@ -376,6 +377,7 @@
             </mat-error>
           </mat-form-field>
         }
+        <!-- VeranlagungsCode-->
         @if (!hiddenFieldSet.valuesSig().has(form.controls.veranlagungsCode)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.veranlagungscode.label' | translate }}</mat-label>
