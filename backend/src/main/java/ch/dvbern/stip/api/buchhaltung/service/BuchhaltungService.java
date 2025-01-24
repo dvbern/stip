@@ -46,10 +46,14 @@ public class BuchhaltungService {
 
     @Transactional
     public BuchhaltungEntryDto createBuchhaltungSaldokorrekturForFall(
-        final UUID fallId,
+        final UUID gesuchId,
         final BuchhaltungSaldokorrekturDto buchhaltungSaldokorrekturDto
     ) {
-        return createBuchhaltungSaldokorrekturForFall(fallRepository.requireById(fallId), buchhaltungSaldokorrekturDto);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return createBuchhaltungSaldokorrekturForFall(
+            fallRepository.requireById(gesuch.getAusbildung().getFall().getId()),
+            buchhaltungSaldokorrekturDto
+        );
     }
 
     @Transactional
@@ -122,7 +126,8 @@ public class BuchhaltungService {
         return buchhaltungRepository.findAllForFallId(fallId);
     }
 
-    public Stream<BuchhaltungEntryDto> getAllDtoForFallId(final UUID fallId) {
-        return getAllForFallId(fallId).map(buchhaltungMapper::toDto);
+    public Stream<BuchhaltungEntryDto> getAllDtoForGesuchId(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return getAllForFallId(gesuch.getAusbildung().getFall().getId()).map(buchhaltungMapper::toDto);
     }
 }

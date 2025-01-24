@@ -17,16 +17,16 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/buchhaltung/{fallId}")
+@Path("/buchhaltung/{gesuchId}")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface BuchhaltungResource {
 
     @POST
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    BuchhaltungEntryDto createBuchhaltungSaldokorrektur(@PathParam("fallId") UUID fallId,@Valid @NotNull BuchhaltungSaldokorrekturDto buchhaltungSaldokorrekturDto);
+    BuchhaltungEntryDto createBuchhaltungSaldokorrektur(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull BuchhaltungSaldokorrekturDto buchhaltungSaldokorrekturDto);
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    List<BuchhaltungEntryDto> getBuchhaltungEntrys(@PathParam("fallId") UUID fallId);
+    List<BuchhaltungEntryDto> getBuchhaltungEntrys(@PathParam("gesuchId") UUID gesuchId);
 }

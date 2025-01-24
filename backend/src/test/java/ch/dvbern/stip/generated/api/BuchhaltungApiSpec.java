@@ -85,14 +85,14 @@ public class BuchhaltungApiSpec {
      * Create a buchhaltungsentry from a saldokorrektur
      * 
      *
-     * @see #fallIdPath Die ID vom Fall (required)
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
      * @see #body  (required)
      * return BuchhaltungEntryDtoSpec
      */
     public static class CreateBuchhaltungSaldokorrekturOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/buchhaltung/{fallId}";
+        public static final String REQ_URI = "/buchhaltung/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -105,7 +105,7 @@ public class BuchhaltungApiSpec {
         }
 
         /**
-         * POST /buchhaltung/{fallId}
+         * POST /buchhaltung/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -116,7 +116,7 @@ public class BuchhaltungApiSpec {
         }
 
         /**
-         * POST /buchhaltung/{fallId}
+         * POST /buchhaltung/{gesuchId}
          * @param handler handler
          * @return BuchhaltungEntryDtoSpec
          */
@@ -134,14 +134,14 @@ public class BuchhaltungApiSpec {
             return this;
         }
 
-        public static final String FALL_ID_PATH = "fallId";
+        public static final String GESUCH_ID_PATH = "gesuchId";
 
         /**
-         * @param fallId (UUID) Die ID vom Fall (required)
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
          * @return operation
          */
-        public CreateBuchhaltungSaldokorrekturOper fallIdPath(Object fallId) {
-            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+        public CreateBuchhaltungSaldokorrekturOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 
@@ -169,13 +169,13 @@ public class BuchhaltungApiSpec {
      * Gets all buchhaltungsentrys
      * 
      *
-     * @see #fallIdPath Die ID vom Fall (required)
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
      * return List&lt;BuchhaltungEntryDtoSpec&gt;
      */
     public static class GetBuchhaltungEntrysOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/buchhaltung/{fallId}";
+        public static final String REQ_URI = "/buchhaltung/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -187,7 +187,7 @@ public class BuchhaltungApiSpec {
         }
 
         /**
-         * GET /buchhaltung/{fallId}
+         * GET /buchhaltung/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -198,7 +198,7 @@ public class BuchhaltungApiSpec {
         }
 
         /**
-         * GET /buchhaltung/{fallId}
+         * GET /buchhaltung/{gesuchId}
          * @param handler handler
          * @return List&lt;BuchhaltungEntryDtoSpec&gt;
          */
@@ -207,14 +207,14 @@ public class BuchhaltungApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String FALL_ID_PATH = "fallId";
+        public static final String GESUCH_ID_PATH = "gesuchId";
 
         /**
-         * @param fallId (UUID) Die ID vom Fall (required)
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
          * @return operation
          */
-        public GetBuchhaltungEntrysOper fallIdPath(Object fallId) {
-            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+        public GetBuchhaltungEntrysOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 

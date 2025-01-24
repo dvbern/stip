@@ -42,16 +42,16 @@ public class BuchhaltungResourceImpl implements BuchhaltungResource {
     @AllowAll
     @Override
     public BuchhaltungEntryDto createBuchhaltungSaldokorrektur(
-        UUID fallId,
+        UUID gesuchId,
         BuchhaltungSaldokorrekturDto buchhaltungSaldokorrekturDto
     ) {
-        return buchhaltungService.createBuchhaltungSaldokorrekturForFall(fallId, buchhaltungSaldokorrekturDto);
+        return buchhaltungService.createBuchhaltungSaldokorrekturForFall(gesuchId, buchhaltungSaldokorrekturDto);
     }
 
     @RolesAllowed({ ROLE_SACHBEARBEITER })
     @AllowAll
     @Override
-    public List<BuchhaltungEntryDto> getBuchhaltungEntrys(UUID fallId) {
-        return buchhaltungService.getAllDtoForFallId(fallId).toList();
+    public List<BuchhaltungEntryDto> getBuchhaltungEntrys(UUID gesuchId) {
+        return buchhaltungService.getAllDtoForGesuchId(gesuchId).toList();
     }
 }
