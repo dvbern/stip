@@ -139,7 +139,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @AllowAll
     @Blocking
     public void deleteCustomDokumentTyp(UUID gesuchId, UUID customDokumentTypId) {
-        customGesuchDokumentTypAuthorizer.canDelete(gesuchId);
+        customGesuchDokumentTypAuthorizer.canDeleteTyp(gesuchId);
         customDokumentTypService.deleteCustomDokumentTyp(customDokumentTypId);
     }
 
@@ -148,6 +148,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @AllowAll
     @Blocking
     public void deleteDokument(UUID dokumentId) {
+        customGesuchDokumentTypAuthorizer.canDeleteDokument(dokumentId);
         gesuchDokumentService.removeDokument(dokumentId);
     }
 

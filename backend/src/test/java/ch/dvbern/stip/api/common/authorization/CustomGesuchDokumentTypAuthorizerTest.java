@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -39,6 +40,7 @@ import static org.mockito.Mockito.when;
 class CustomGesuchDokumentTypAuthorizerTest {
     private CustomGesuchDokumentTypAuthorizer authorizer;
     private GesuchRepository gesuchRepository;
+    private DokumentRepository dokumentRepository;
     private BenutzerService benutzerService;
     private Benutzer currentBenutzer;
 
@@ -49,41 +51,43 @@ class CustomGesuchDokumentTypAuthorizerTest {
         UUID currentBenutzerId = UUID.randomUUID();
         gesuch = new Gesuch();
         gesuchRepository = Mockito.mock(GesuchRepository.class);
+        dokumentRepository = Mockito.mock(DokumentRepository.class);
         benutzerService = Mockito.mock(BenutzerService.class);
         currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         currentBenutzer.setId(currentBenutzerId);
-        authorizer = new CustomGesuchDokumentTypAuthorizer(gesuchRepository, benutzerService);
+        authorizer = new CustomGesuchDokumentTypAuthorizer(dokumentRepository, gesuchRepository, benutzerService);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
 
     }
 
     @Test
-    void canDeleteShouldFailAsGS() {
+    void canDeleteTypShouldFailAsGS() {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         assertThrows(ForbiddenException.class, () -> {
-            authorizer.canDelete(UUID.randomUUID());
+            authorizer.canDeleteTyp(UUID.randomUUID());
         });
     }
 
     @Test
-    void canDeleteShouldFail() {
+    void canDeleteTypShouldFail() {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         assertThrows(ForbiddenException.class, () -> {
-            authorizer.canDelete(UUID.randomUUID());
+            authorizer.canDeleteTyp(UUID.randomUUID());
         });
     }
 
     @Test
-    void canDeleteShouldSuccess() {
+    void canDeleteTypShouldSuccess() {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
 
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
         assertDoesNotThrow(() -> {
-            authorizer.canDelete(UUID.randomUUID());
+            authorizer.canDeleteTyp(UUID.randomUUID());
         });
     }
+
 }

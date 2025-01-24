@@ -17,29 +17,47 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Authorizer
 @ApplicationScoped
 @RequiredArgsConstructor
 public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
+    private final DokumentRepository dokumentRepository;
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
 
     @Transactional
-    public void canDelete(final UUID gesuchId) {
+    public void canDeleteTyp(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (
             !gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)
             || !isAdminOrSb(benutzerService.getCurrentBenutzer())
+        ) {
+            throw new ForbiddenException();
+        }
+    }
+
+    @Transactional
+    public void canDeleteDokument(final UUID dokumentId) {
+        final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
+        final var isCustomDokument =
+            dokument.getGesuchDokumente().stream().anyMatch(x -> Objects.nonNull(x.getCustomDokumentTyp()));
+
+        if (
+            isAdminOrSb(benutzerService.getCurrentBenutzer())
+            && isCustomDokument
         ) {
             throw new ForbiddenException();
         }

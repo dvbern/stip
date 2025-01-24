@@ -311,6 +311,7 @@ public class GesuchDokumentService {
     public void removeDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
+
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
             gesuchDokument.getDokumente().remove(dokument);
             gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());

@@ -67,6 +67,12 @@ public class CustomDokumentTypService {
         if (gesuchDokumentService.customDokumentHasGesuchDokuments(customDokumentTypId)) {
             throw new ForbiddenException("Dem generischem Dokument sind noch Files angehaenkt");
         } else {
+            // clear all references to gesuchdokkument
+            final var gesuchDokumenteOfCustomType =
+                gesuchDokumentRepository.findAllByCustomDokumentTypeId(customDokumentTypId);
+            gesuchDokumenteOfCustomType.forEach(z -> {
+                gesuchDokumentRepository.deleteById(z.getId());
+            });
             customDocumentTypRepository.deleteById(customDokumentTypId);
         }
     }
