@@ -80,7 +80,7 @@ public class Buchhaltung extends AbstractMandantEntity {
     @Column(name = "comment", length = DB_DEFAULT_STRING_MAX_LENGTH)
     private String comment;
 
-    @ManyToOne()
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(
         name = "gesuch_id",
         foreignKey = @ForeignKey(name = "FK_buchhaltung_gesuch")

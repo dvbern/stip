@@ -57,21 +57,20 @@ public class BuchhaltungService {
         final Fall fall,
         final BuchhaltungSaldokorrekturDto buchhaltungSaldokorrekturDto
     ) {
-        var buchhaltungEntry = new Buchhaltung();
-        var firstEntryOptional = fall.getBuchhaltungs()
+        final var firstEntrySaldo = fall.getBuchhaltungs()
             .stream()
-            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt));
+            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
+            .map(Buchhaltung::getSaldo)
+            .orElse(0);
 
-        if (firstEntryOptional.isPresent()) {
-            buchhaltungEntry.setSaldo(firstEntryOptional.get().getSaldo() + buchhaltungSaldokorrekturDto.getBetrag());
-        } else {
-            buchhaltungEntry.setSaldo(buchhaltungSaldokorrekturDto.getBetrag());
-        }
-        buchhaltungEntry.setBetrag(buchhaltungSaldokorrekturDto.getBetrag());
-        buchhaltungEntry.setComment(buchhaltungSaldokorrekturDto.getComment());
-        buchhaltungEntry.setBuchhaltungType(BuchhaltungType.SALDOAENDERUNG);
-        buchhaltungEntry.setFall(fall);
-        buchhaltungEntry.setGesuch(gesuchRepository.requireById(buchhaltungSaldokorrekturDto.getGesuchId()));
+        final var buchhaltungEntry = new Buchhaltung()
+            .setSaldo(firstEntrySaldo + buchhaltungSaldokorrekturDto.getBetrag())
+            .setBetrag(buchhaltungSaldokorrekturDto.getBetrag())
+            .setComment(buchhaltungSaldokorrekturDto.getComment())
+            .setBuchhaltungType(BuchhaltungType.SALDOAENDERUNG)
+            .setFall(fall)
+            .setGesuch(gesuchRepository.requireById(buchhaltungSaldokorrekturDto.getGesuchId()));
+
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
         fall.getBuchhaltungs().add(buchhaltungEntry);
         return buchhaltungMapper.toDto(buchhaltungEntry);
@@ -98,24 +97,22 @@ public class BuchhaltungService {
         final Integer sapDeliveryId,
         final SapStatus sapStatus
     ) {
-        var buchhaltungEntry = new Buchhaltung();
-        buchhaltungEntry.setBuchhaltungType(buchhaltungType);
-        buchhaltungEntry.setBetrag(betrag);
-
-        var firstEntryOptional = fall.getBuchhaltungs()
+        final var firstEntrySaldo = fall.getBuchhaltungs()
             .stream()
-            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt));
+            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
+            .map(Buchhaltung::getSaldo)
+            .orElse(0);
 
-        if (firstEntryOptional.isPresent()) {
-            buchhaltungEntry.setSaldo(firstEntryOptional.get().getSaldo() + betrag);
-        } else {
-            buchhaltungEntry.setSaldo(betrag);
-        }
-        buchhaltungEntry.setSapDeliveryId(sapDeliveryId);
-        buchhaltungEntry.setSapStatus(sapStatus);
-        buchhaltungEntry.setComment(comment);
-        buchhaltungEntry.setGesuch(gesuch);
-        buchhaltungEntry.setFall(fall);
+        final var buchhaltungEntry = new Buchhaltung()
+            .setBuchhaltungType(buchhaltungType)
+            .setBetrag(betrag)
+            .setSaldo(firstEntrySaldo + betrag)
+            .setSapDeliveryId(sapDeliveryId)
+            .setSapStatus(sapStatus)
+            .setComment(comment)
+            .setGesuch(gesuch)
+            .setFall(fall);
+
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
         fall.getBuchhaltungs().add(buchhaltungEntry);
         return buchhaltungMapper.toDto(buchhaltungEntry);
