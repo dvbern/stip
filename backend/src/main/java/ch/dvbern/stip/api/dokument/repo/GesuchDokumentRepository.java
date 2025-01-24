@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.dokument.repo;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -66,8 +67,9 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
     public void dropGesuchDokumentIfNoDokumente(final UUID gesuchDokumentId) {
         final var gesuchDokument = requireById(gesuchDokumentId);
         final var hasNoDokuments = gesuchDokument.getDokumente().isEmpty();
+        final var isCustomGesuchDokument = Objects.nonNull(gesuchDokument.getCustomDokumentTyp());
 
-        if (hasNoDokuments) {
+        if (hasNoDokuments && !isCustomGesuchDokument) {
             gesuchDokument.getGesuchTranche().getGesuchDokuments().remove(gesuchDokument);
             deleteById(gesuchDokumentId);
         }
