@@ -156,12 +156,13 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   // inform the GS that documents are missing (or declined)
   canSendMissingDocumentsSig = computed(() => {
-    const hasAbgelehnteDokuments =
-      this.dokumentsStore.hasAbgelehnteDokumentsSig();
+    const hasDokumenteToUebermitteln =
+      this.dokumentsStore.hasDokumenteToUebermittelnSig();
+
     const isInCorrectState =
       this.gesuchViewSig().gesuch?.gesuchStatus === 'IN_BEARBEITUNG_SB';
 
-    return hasAbgelehnteDokuments && isInCorrectState;
+    return hasDokumenteToUebermitteln && isInCorrectState;
   });
 
   canCreateCustomDokumentTypSig = computed(() => {
@@ -273,9 +274,20 @@ export class SharedFeatureGesuchDokumenteComponent {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   deleteCustomDokumentTyp(dokument: SharedModelTableCustomDokument) {
-    // to be implemented
+    const { gesuchId, trancheId } = this.gesuchViewSig();
+
+    if (!gesuchId || !trancheId) return;
+
+    this.dokumentsStore.deleteCustomDokumentTyp$({
+      customDokumentTypId: dokument.dokumentTyp.id,
+      gesuchId,
+      onSuccess: () => {
+        this.dokumentsStore.getDokumenteAndRequired$({
+          gesuchTrancheId: trancheId,
+        });
+      },
+    });
   }
 
   fehlendeDokumenteEinreichen() {

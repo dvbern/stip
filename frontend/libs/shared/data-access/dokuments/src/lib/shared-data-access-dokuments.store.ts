@@ -125,18 +125,31 @@ export class DokumentsStore extends signalStore(
       false
     );
   });
-  hasAbgelehnteDokumentsSig = computed(() => {
-    return (
+  hasDokumenteToUebermittelnSig = computed(() => {
+    const abgelehnteDokumente =
       this.dokuments
         .data()
         ?.some((dokument) => dokument.status === Dokumentstatus.ABGELEHNT) ??
-      false
-    );
+      false;
+
+    const newCustomDokumentTypes = this.dokuments
+      .data()
+      ?.filter(
+        (dokument) =>
+          dokument.customDokumentTyp && dokument.status === 'AUSSTEHEND',
+      );
+
+    return abgelehnteDokumente || newCustomDokumentTypes;
   });
   hasAusstehendeDokumentsSig = computed(() => {
     return (
       this.dokuments
         .data()
+        // Filter out custom dokument types that have no documents
+        ?.filter(
+          (dokument) =>
+            !(dokument.customDokumentTyp && dokument.dokumente.length === 0),
+        )
         ?.some((dokument) => dokument.status === Dokumentstatus.AUSSTEHEND) ??
       false
     );

@@ -62,7 +62,7 @@
       <td mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-flex tw-gap-2">
           @if (dokument?.gesuchDokument?.id) {
-            @if (view.isSachbearbeitungApp && !view.readonly) {
+            @if (view.isSachbearbeitungApp && !view.readonly && dokument?.gesuchDokument?.dokumente?.length) {
               @switch (dokument?.gesuchDokument?.status) {
                 @case ('AUSSTEHEND') {
                   <button
@@ -130,6 +130,18 @@
       <th [title]="'shared.dokumente.table.actions' | translate" mat-header-cell *matHeaderCellDef></th>
       <td mat-cell class="tw-w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-flex tw-justify-end">
+          <!-- delete custom documentType -->
+          @if (view.isSachbearbeitungApp && !view.readonly) {
+            <button
+              type="button"
+              class="dv-icon-button flex-shrink-0 delete-icon ms-2"
+              [attr.aria-label]="'shared.form.delete' | translate"
+              [disabled]="dokument?.gesuchDokument?.dokumente?.length"
+              (click)="deleteCustomDokumentTyp.emit(dokument); $event.stopPropagation()"
+            >
+              <span class="material-symbols-rounded align-middle text-muted fs-3">delete</span>
+            </button>
+          }
           <dv-shared-pattern-document-upload
             class="tw-max-h-11"
             (click)="$event.stopPropagation()"
