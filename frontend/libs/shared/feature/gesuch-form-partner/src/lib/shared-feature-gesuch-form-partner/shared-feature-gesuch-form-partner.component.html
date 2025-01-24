@@ -30,9 +30,6 @@
               [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
             />
             <mat-hint *dvZuvorHint="view.formChanges?.sozialversicherungsnummer"></mat-hint>
-            <mat-error *dvSharedUiFormMessageInfo>
-              {{ 'shared.form.shared.social-insurance-number.info' | translate }}
-            </mat-error>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
@@ -55,8 +52,8 @@
         <div class="d-none d-xl-block col-xl-4"></div>
         <div
           dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.person.sozialversicherungsnummer.infoTitle'"
-          [dialogMessageKey]="'shared.form.person.sozialversicherungsnummer.info'"
+          [dialogTitleKey]="'shared.form.partner.sozialversicherungsnummer.infoTitle'"
+          [dialogMessageKey]="'shared.form.partner.sozialversicherungsnummer.info'"
           #ahvPartnerInfoDialog="dvSharedUiInfoDialog"
           class="d-none d-xl-block col-xl-4"
         ></div>
