@@ -86,6 +86,7 @@ public class GesuchDokumentKommentarService {
         if (gesuchDokumentKommentarDto == null) {
             createEmptyKommentarForGesuchDokument(gesuchDokument);
         } else {
+            kommentar.setGesuchDokument(gesuchDokument);
             kommentar.setGesuchTranche(gesuchDokument.getGesuchTranche());
             kommentar.setDokumentstatus(gesuchDokument.getStatus());
             gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
