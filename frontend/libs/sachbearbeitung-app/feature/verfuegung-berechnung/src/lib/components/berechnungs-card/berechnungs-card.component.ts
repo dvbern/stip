@@ -110,24 +110,11 @@ import { Berechnung } from '../../../models';
         </mat-card-content>
         <mat-card-footer class="px-3 py-4">
           <div class="d-flex justify-content-between fs-3 h4">
-            <div>
-              {{
-                'sachbearbeitung-app.verfuegung.berechnung.' +
-                  berechnung.typ +
-                  '.total' | translate
-              }}
-              @if (verminderteBerechnungMonate()) {
-                <div class="text-muted h6 tw-mt-1 tw-font-normal">
-                  {{
-                    'sachbearbeitung-app.verfuegung.zusammenfassung.totalVermindert'
-                      | translate
-                        : {
-                            months: verminderteBerechnungMonate()!,
-                          }
-                  }}
-                </div>
-              }
-            </div>
+            {{
+              'sachbearbeitung-app.verfuegung.berechnung.' +
+                berechnung.typ +
+                '.total' | translate
+            }}
             <span
               class="text-nowrap"
               [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'"
@@ -141,5 +128,4 @@ import { Berechnung } from '../../../models';
 })
 export class BerechnungsCardComponent {
   berechnungSig = input.required<Berechnung>();
-  verminderteBerechnungMonate = input<number>();
 }
