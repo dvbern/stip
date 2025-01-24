@@ -4864,9 +4864,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TranchenBerechnungsresultat'
-        verminderteBerechnungsFaktor:
-          description: 'Der Faktor (12 / eigentliche Dauer) falls eine verminderte Berechnung stattfand'
-          type: number
+        verminderteBerechnungMonate:
+          description: 'Die Anzahl von Monaten für welche die Berechnung stattfand'
+          type: integer
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:

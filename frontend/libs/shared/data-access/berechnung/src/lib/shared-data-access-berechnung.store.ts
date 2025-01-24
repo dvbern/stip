@@ -40,7 +40,7 @@ export class BerechnungStore extends signalStore(
       year: number;
       totalBetragStipendium: number;
       berechnungsresultate: Record<string, TranchenBerechnungsresultat[]>;
-      verminderteBerechnungFaktor?: number;
+      verminderteBerechnungMonate?: number;
     } = {
       year: berechnungRd.data?.year ?? 0,
       totalBetragStipendium: 0,
@@ -59,8 +59,8 @@ export class BerechnungStore extends signalStore(
 
     if (berechnungRd.data) {
       byTrancheId.totalBetragStipendium = berechnungRd.data?.berechnung;
-      byTrancheId.verminderteBerechnungFaktor =
-        berechnungRd.data?.verminderteBerechnungsFaktor;
+      byTrancheId.verminderteBerechnungMonate =
+        berechnungRd.data?.verminderteBerechnungMonate;
     }
 
     return {

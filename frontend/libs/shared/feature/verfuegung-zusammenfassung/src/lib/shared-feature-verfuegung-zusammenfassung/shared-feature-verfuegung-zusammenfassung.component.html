@@ -33,7 +33,7 @@
   <mat-card class="rounded-4 mb-4">
     <mat-card-header>
       <mat-card-title>
-        @if (zusammenfassung.verminderteBerechnungFaktor) {
+        @if (zusammenfassung.verminderteBerechnungMonate) {
           <div class="text-muted mb-1">
             {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle' | translate }}
           </div>
@@ -84,11 +84,11 @@
       <div class="d-flex justify-content-between fs-3 h4">
         <div>
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
-          @if (zusammenfassung.verminderteBerechnungFaktor) {
+          @if (zusammenfassung.verminderteBerechnungMonate) {
             <div class="text-muted h6 tw-mt-1 tw-font-normal">
               {{
                 'sachbearbeitung-app.verfuegung.zusammenfassung.totalVermindert'
-                  | translate: { factor: (100 * zusammenfassung.verminderteBerechnungFaktor | number: '2.0-0') }
+                  | translate: { months: zusammenfassung.verminderteBerechnungMonate }
               }}
             </div>
           }

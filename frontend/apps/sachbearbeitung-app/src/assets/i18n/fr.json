@@ -380,7 +380,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Montant total de la bourse",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total de calcul {{ index }}{{ type }} à la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}{{ type }}",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.totalVermindert": "Basé sur un calcul réduit de {{ factor }}%",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalVermindert": "Basé sur un calcul réduit de {{ months }} mois",
 
   "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Manquant",
 

@@ -25,8 +25,8 @@ export interface Berechnungsresultat {
      */
     tranchenBerechnungsresultate: Array<TranchenBerechnungsresultat>;
     /**
-     * Der Faktor (12 / eigentliche Dauer) falls eine verminderte Berechnung stattfand
+     * Die Anzahl von Monaten für welche die Berechnung stattfand
      */
-    verminderteBerechnungsFaktor?: number;
+    verminderteBerechnungMonate?: number;
 }
 

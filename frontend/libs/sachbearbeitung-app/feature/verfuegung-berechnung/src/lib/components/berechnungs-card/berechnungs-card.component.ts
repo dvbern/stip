@@ -116,15 +116,13 @@ import { Berechnung } from '../../../models';
                   berechnung.typ +
                   '.total' | translate
               }}
-              @if (verminderteBerechnungFaktor()) {
+              @if (verminderteBerechnungMonate()) {
                 <div class="text-muted h6 tw-mt-1 tw-font-normal">
                   {{
                     'sachbearbeitung-app.verfuegung.zusammenfassung.totalVermindert'
                       | translate
                         : {
-                            factor:
-                              (100 * verminderteBerechnungFaktor()!
-                              | number: '2.0-0'),
+                            months: verminderteBerechnungMonate()!,
                           }
                   }}
                 </div>
@@ -143,5 +141,5 @@ import { Berechnung } from '../../../models';
 })
 export class BerechnungsCardComponent {
   berechnungSig = input.required<Berechnung>();
-  verminderteBerechnungFaktor = input<number>();
+  verminderteBerechnungMonate = input<number>();
 }

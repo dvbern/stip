@@ -330,7 +330,7 @@ public class BerechnungService {
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
             berechnungsresultat,
             berechnungsresultate,
-            actualDuration == null ? null : BigDecimal.valueOf(actualDuration / 12f)
+            actualDuration
         );
     }
 

@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BerechnungsresultatDtoSpec.JSON_PROPERTY_YEAR,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_VERMINDERTE_BERECHNUNGS_FAKTOR
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE
 })
 @JsonTypeName("Berechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -49,8 +48,8 @@ public class BerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE = "tranchenBerechnungsresultate";
   private List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate;
 
-  public static final String JSON_PROPERTY_VERMINDERTE_BERECHNUNGS_FAKTOR = "verminderteBerechnungsFaktor";
-  private BigDecimal verminderteBerechnungsFaktor;
+  public static final String JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE = "verminderteBerechnungMonate";
+  private Integer verminderteBerechnungMonate;
 
   public BerechnungsresultatDtoSpec() {
   }
@@ -141,29 +140,29 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  public BerechnungsresultatDtoSpec verminderteBerechnungsFaktor(BigDecimal verminderteBerechnungsFaktor) {
+  public BerechnungsresultatDtoSpec verminderteBerechnungMonate(Integer verminderteBerechnungMonate) {
     
-    this.verminderteBerechnungsFaktor = verminderteBerechnungsFaktor;
+    this.verminderteBerechnungMonate = verminderteBerechnungMonate;
     return this;
   }
 
    /**
-   * Der Faktor (12 / eigentliche Dauer) falls eine verminderte Berechnung stattfand
-   * @return verminderteBerechnungsFaktor
+   * Die Anzahl von Monaten für welche die Berechnung stattfand
+   * @return verminderteBerechnungMonate
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERMINDERTE_BERECHNUNGS_FAKTOR)
+  @JsonProperty(JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getVerminderteBerechnungsFaktor() {
-    return verminderteBerechnungsFaktor;
+  public Integer getVerminderteBerechnungMonate() {
+    return verminderteBerechnungMonate;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERMINDERTE_BERECHNUNGS_FAKTOR)
+  @JsonProperty(JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVerminderteBerechnungsFaktor(BigDecimal verminderteBerechnungsFaktor) {
-    this.verminderteBerechnungsFaktor = verminderteBerechnungsFaktor;
+  public void setVerminderteBerechnungMonate(Integer verminderteBerechnungMonate) {
+    this.verminderteBerechnungMonate = verminderteBerechnungMonate;
   }
 
   @Override
@@ -178,12 +177,12 @@ public class BerechnungsresultatDtoSpec {
     return Objects.equals(this.year, berechnungsresultat.year) &&
         Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
-        Objects.equals(this.verminderteBerechnungsFaktor, berechnungsresultat.verminderteBerechnungsFaktor);
+        Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnung, tranchenBerechnungsresultate, verminderteBerechnungsFaktor);
+    return Objects.hash(year, berechnung, tranchenBerechnungsresultate, verminderteBerechnungMonate);
   }
 
   @Override
@@ -193,7 +192,7 @@ public class BerechnungsresultatDtoSpec {
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
-    sb.append("    verminderteBerechnungsFaktor: ").append(toIndentedString(verminderteBerechnungsFaktor)).append("\n");
+    sb.append("    verminderteBerechnungMonate: ").append(toIndentedString(verminderteBerechnungMonate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

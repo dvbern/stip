@@ -94,7 +94,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         // Add 2 days as date-fns differenceInMonths does have issues with february
         // 2024-07-01 to 2025-03-01 should be 8 months but is 7, with 2025-03-02 it is 8 months
         monate: differenceInMonths(addDays(gueltigBis, 2), gueltigAb),
-        verminderteBerechnungFaktor: view.verminderteBerechnungFaktor,
+        verminderteBerechnungMonate: view.verminderteBerechnungMonate,
         persoenlich: {
           typ: 'persoenlich' as const,
           name: nameGesuchsteller,
