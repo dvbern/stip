@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { RouterLink } from '@angular/router';
 import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { Observable, filter, map, switchMap } from 'rxjs';
 
@@ -36,7 +35,6 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
     SharedUiIconChipComponent,
     SharedUiDownloadButtonDirective,
     MatProgressBarModule,
-    RouterLink,
     FilesizePipe,
   ],
   templateUrl: './document-upload-entry.component.html',

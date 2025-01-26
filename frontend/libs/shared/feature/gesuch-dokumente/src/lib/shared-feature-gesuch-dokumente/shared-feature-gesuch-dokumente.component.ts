@@ -155,6 +155,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   DokumentStatus = Dokumentstatus;
 
   // inform the GS that documents are missing (or declined)
+  // if true, the button is shown
   canSendMissingDocumentsSig = computed(() => {
     const hasDokumenteToUebermitteln =
       this.dokumentsStore.hasDokumenteToUebermittelnSig();
@@ -221,7 +222,9 @@ export class SharedFeatureGesuchDokumenteComponent {
     });
   }
 
-  dokumentAblehnen(document: SharedModelTableRequiredDokument) {
+  dokumentAblehnen(
+    document: SharedModelTableRequiredDokument | SharedModelTableCustomDokument,
+  ) {
     const { trancheId: gesuchTrancheId } = this.gesuchViewSig();
     const gesuchDokumentId =
       document.dokumentOptions.dokument.gesuchDokument?.id;
@@ -242,7 +245,6 @@ export class SharedFeatureGesuchDokumenteComponent {
             gesuchTrancheId: gesuchTrancheId,
             kommentar: result.kommentar,
             gesuchDokumentId,
-            dokumentTyp: document.dokumentTyp,
             afterSuccess: () => {
               this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
             },

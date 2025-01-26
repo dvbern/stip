@@ -126,20 +126,22 @@ export class DokumentsStore extends signalStore(
     );
   });
   hasDokumenteToUebermittelnSig = computed(() => {
-    const abgelehnteDokumente =
+    const hasAbgelehnteDokumente =
       this.dokuments
         .data()
         ?.some((dokument) => dokument.status === Dokumentstatus.ABGELEHNT) ??
       false;
 
-    const newCustomDokumentTypes = this.dokuments
-      .data()
-      ?.filter(
-        (dokument) =>
-          dokument.customDokumentTyp && dokument.status === 'AUSSTEHEND',
-      );
+    // hier koennte man auch einen weiteren status verwenden
+    const newCustomDokumentTypes =
+      this.dokuments
+        .data()
+        ?.filter(
+          (dokument) =>
+            dokument.customDokumentTyp && dokument.status === 'AUSSTEHEND',
+        ) ?? [];
 
-    return abgelehnteDokumente || newCustomDokumentTypes;
+    return hasAbgelehnteDokumente || newCustomDokumentTypes?.length > 0;
   });
   hasAusstehendeDokumentsSig = computed(() => {
     return (
@@ -220,7 +222,6 @@ export class DokumentsStore extends signalStore(
   gesuchDokumentAblehnen$ = rxMethod<{
     gesuchTrancheId: string;
     gesuchDokumentId: string;
-    dokumentTyp: DokumentTyp;
     kommentar: string;
     afterSuccess?: () => void;
   }>(
@@ -508,7 +509,8 @@ export class DokumentsStore extends signalStore(
             tapResponse({
               next: () => {
                 this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'shared.dokumente.custom.create.success',
+                  messageKey:
+                    'shared.dokumente.createCustomDokumentTyp.success',
                 });
                 onSuccess();
               },
@@ -535,7 +537,8 @@ export class DokumentsStore extends signalStore(
             tapResponse({
               next: () => {
                 this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'shared.dokumente.custom.delete.success',
+                  messageKey:
+                    'shared.dokumente.deleteCustomDokumentTyp.success',
                 });
                 onSuccess();
               },
