@@ -20,7 +20,7 @@
     <div class="tw-flex tw-w-full tw-gap-2">
       @if (!form.value['ausbildungNichtGefunden']) {
         <!-- STAETTE -->
-        <mat-form-field dvSharedUiFormField class="tw-grow">
+        <mat-form-field dvSharedUiFormField class="tw-w-full">
           <mat-label>
             {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
           </mat-label>
@@ -57,7 +57,7 @@
         </mat-form-field>
       } @else {
         <!-- Alternative STAETTE -->
-        <mat-form-field dvSharedUiFormField>
+        <mat-form-field dvSharedUiFormField class="tw-w-full">
           <mat-label>
             {{ 'shared.form.ausbildung.ausbildungsstaette.label' | translate }}
           </mat-label>
@@ -89,8 +89,9 @@
       dvSharedUiInfoDialog
       [dialogTitleKey]="'shared.form.ausbildung.ausbildungsstaette.label'"
       [dialogMessageKey]="'shared.form.ausbildung.ausbildungsstaette.info'"
+      [forceDialogPosition]="!!fallIdSig()"
       #ausbildungsstaetteInfoDialog="dvSharedUiInfoDialog"
-      class="tw-col-start-3"
+      class="xl:tw-col-start-3"
     ></div>
 
     <!-- GANG -->
@@ -164,17 +165,19 @@
       </button>
     </div>
 
-    <div class="tw-col-start-3">
+    <div class="xl:tw-col-start-3">
       <div
         dvSharedUiInfoDialog
         [dialogTitleKey]="'shared.form.ausbildung.ausbildungsgang.label'"
         [dialogMessageKey]="'shared.form.ausbildung.ausbildungsgang.info'"
+        [forceDialogPosition]="!!fallIdSig()"
         #ausbildungsgangInfoDialog="dvSharedUiInfoDialog"
       ></div>
       <div
         dvSharedUiInfoDialog
         [dialogTitleKey]="'shared.form.ausbildung.fachrichtung.label'"
         [dialogMessageKey]="'shared.form.ausbildung.fachrichtung.info'"
+        [forceDialogPosition]="!!fallIdSig()"
         #fachrichtungInfoDialog="dvSharedUiInfoDialog"
       ></div>
     </div>

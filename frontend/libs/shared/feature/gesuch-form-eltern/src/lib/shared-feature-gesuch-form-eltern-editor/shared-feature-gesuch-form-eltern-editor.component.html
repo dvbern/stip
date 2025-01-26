@@ -127,37 +127,39 @@
     <div class="row g-4 mt-1">
       <div class="col-12 col-xl-8">
         <label class="mb-2">{{ 'shared.form.shared.alternative-civil-residence.title' | translate }}</label>
-        <!-- PLZ -->
-        <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3">
-          <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
-          <input
-            matInput
-            [dvMaxLength]="'small'"
-            type="text"
-            formControlName="identischerZivilrechtlicherWohnsitzPLZ"
-            data-testid="form-eltern-identischerZivilrechtlicherWohnsitzPLZ"
-          />
-          <mat-hint *dvZuvorHint="changes?.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
+        <div class="row g-4 mt-1">
+          <!-- PLZ -->
+          <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3">
+            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
+            <input
+              matInput
+              [dvMaxLength]="'small'"
+              type="text"
+              formControlName="identischerZivilrechtlicherWohnsitzPLZ"
+              data-testid="form-eltern-identischerZivilrechtlicherWohnsitzPLZ"
+            />
+            <mat-hint *dvZuvorHint="changes?.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
 
-        <!-- Ort -->
-        <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-xl-9">
-          <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
-          <input
-            matInput
-            dvMaxLength
-            type="text"
-            formControlName="identischerZivilrechtlicherWohnsitzOrt"
-            data-testid="form-eltern-identischerZivilrechtlicherWohnsitzOrt"
-          />
-          <mat-hint *dvZuvorHint="changes?.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
+          <!-- Ort -->
+          <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-xl-9">
+            <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
+            <input
+              matInput
+              dvMaxLength
+              type="text"
+              formControlName="identischerZivilrechtlicherWohnsitzOrt"
+              data-testid="form-eltern-identischerZivilrechtlicherWohnsitzOrt"
+            />
+            <mat-hint *dvZuvorHint="changes?.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
     </div>
   }
@@ -199,7 +201,7 @@
     </div>
 
     <!-- Wohnkosten-->
-    <div class="col-12 col-md-6 col-xl-4 d-flex">
+    <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
       <mat-form-field dvSharedUiFormField class="flex-grow-1">
         <mat-label>{{ 'shared.form.shared.wohnkosten.label' | translate }}</mat-label>
         <input
