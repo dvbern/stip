@@ -18,6 +18,7 @@ import { LebenslaufItemUpdate } from '@dv/shared/model/gesuch';
 import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -46,6 +47,7 @@ const MIN_EDUCATION_AGE = 16;
     SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
+    SharedUiInfoDialogDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf.component.html',
   styleUrls: ['./shared-feature-gesuch-form-lebenslauf.component.scss'],

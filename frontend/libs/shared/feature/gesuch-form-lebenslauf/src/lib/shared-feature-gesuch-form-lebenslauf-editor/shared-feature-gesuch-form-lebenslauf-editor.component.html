@@ -94,19 +94,36 @@
       </mat-form-field>
 
       <!-- Tätigkeits Beschreibung -->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>{{ 'shared.form.lebenslauf.item.name.taetigkeit' | translate }}</mat-label>
-        <input
-          matInput
-          dvMaxLength
-          formControlName="taetigkeitsBeschreibung"
-          data-testid="lebenslauf-editor-taetigkeitsBeschreibung"
-          type="text"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+      <div class="d-flex col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.lebenslauf.item.name.taetigkeit' | translate }}</mat-label>
+          <input
+            matInput
+            dvMaxLength
+            formControlName="taetigkeitsBeschreibung"
+            data-testid="lebenslauf-editor-taetigkeitsBeschreibung"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <button
+          type="button"
+          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          (click)="taetigkeitsInfoDialog.toggle()"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+        >
+          <span class="material-symbols-rounded"> info </span>
+        </button>
+      </div>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.lebenslauf.taetigkeit.infoTitle'"
+        [dialogMessageKey]="'shared.form.lebenslauf.taetigkeit.info'"
+        #taetigkeitsInfoDialog="dvSharedUiInfoDialog"
+        class="col-12 col-md-6 col-xl-4"
+      ></div>
     </div>
   }
 

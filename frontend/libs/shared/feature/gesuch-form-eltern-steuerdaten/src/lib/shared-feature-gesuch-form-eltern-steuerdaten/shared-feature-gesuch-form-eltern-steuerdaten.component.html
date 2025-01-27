@@ -16,21 +16,35 @@
     <h3 class="pt-5">
       {{ 'shared.form.shared.section.einnahmen' | translate }}
     </h3>
+
     <div class="row g-4 my-2">
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>{{ 'shared.form.eltern-steuerdaten.totalEinkuenfte.label' | translate }}</mat-label>
-        <input
-          formControlName="totalEinkuenfte"
-          data-testid="form-eltern-steuerdaten.totalEinkuenfte"
-          matInput
-          [maskito]="maskitoNumber"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes?.totalEinkuenfte"></mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+      <!-- Total Einkünfte-->
+      <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.eltern-steuerdaten.totalEinkuenfte.label' | translate }}</mat-label>
+          <input
+            formControlName="totalEinkuenfte"
+            data-testid="form-eltern-steuerdaten.totalEinkuenfte"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-hint *dvZuvorHint="changes?.totalEinkuenfte"></mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <button
+          type="button"
+          (click)="totalEinkuenfteDialog.toggle()"
+          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+        >
+          <span class="material-symbols-rounded"> info </span>
+        </button>
+      </div>
+
+      <!-- Eigenmietwert-->
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.eigenmietwert.label' | translate }}</mat-label>
         <input
@@ -45,8 +59,17 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.eltern-steuerdaten.totalEinkuenfte.infoTitle'"
+        [dialogMessageKey]="'shared.form.eltern-steuerdaten.totalEinkuenfte.info'"
+        #totalEinkuenfteDialog="dvSharedUiInfoDialog"
+        class="d-none d-xl-block col-xl-4"
+      ></div>
     </div>
+
     <div class="row mt-1">
+      <!-- Arbeitsverhaeltnis-->
       <mat-radio-group
         class="col-12"
         formControlName="arbeitsverhaeltnis"
@@ -75,10 +98,12 @@
         "
       ></dv-shared-ui-form-zuvor-hint>
     </div>
+
     @if (
       !hiddenFieldSet.valuesSig().has(form.controls.saeule3a) || !hiddenFieldSet.valuesSig().has(form.controls.saeule2)
     ) {
       <div class="row g-4 my-2">
+        <!-- Saeule 3a-->
         @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule3a)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule3a.label' | translate }}</mat-label>
@@ -95,6 +120,7 @@
             </mat-error>
           </mat-form-field>
         }
+        <!-- Saeule 2-->
         @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule2)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule2.label' | translate }}</mat-label>
@@ -113,21 +139,34 @@
         }
       </div>
     }
+
     <div class="row g-4 my-2">
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>{{ 'shared.form.eltern-steuerdaten.kinderalimente.label' | translate }}</mat-label>
-        <input
-          formControlName="kinderalimente"
-          data-testid="form-eltern-steuerdaten.kinderalimente"
-          matInput
-          [maskito]="maskitoNumber"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes?.kinderalimente"></mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+      <!-- Kinderalimente-->
+      <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.eltern-steuerdaten.kinderalimente.label' | translate }}</mat-label>
+          <input
+            formControlName="kinderalimente"
+            data-testid="form-eltern-steuerdaten.kinderalimente"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-hint *dvZuvorHint="changes?.kinderalimente"></mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <button
+          type="button"
+          (click)="kinderalimenteDialog.toggle()"
+          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+        >
+          <span class="material-symbols-rounded"> info </span>
+        </button>
+      </div>
+      <!-- Vermögen-->
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.vermoegen.label' | translate }}</mat-label>
         <input
@@ -142,42 +181,90 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.eltern-steuerdaten.kinderalimente.infoTitle'"
+        [dialogMessageKey]="'shared.form.eltern-steuerdaten.kinderalimente.info'"
+        #kinderalimenteDialog="dvSharedUiInfoDialog"
+        class="d-none d-xl-block col-xl-4"
+      ></div>
     </div>
 
     <h3 class="pt-5">
       {{ 'shared.form.shared.section.ausgaben' | translate }}
     </h3>
+
     <div class="row g-4 my-2">
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>{{ 'shared.form.eltern-steuerdaten.steuernKantonGemeinde.label' | translate }}</mat-label>
-        <input
-          formControlName="steuernKantonGemeinde"
-          data-testid="form-eltern-steuerdaten.steuernKantonGemeinde"
-          matInput
-          [maskito]="maskitoNumber"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes?.steuernKantonGemeinde"></mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>{{ 'shared.form.eltern-steuerdaten.steuernBund.label' | translate }}</mat-label>
-        <input
-          formControlName="steuernBund"
-          data-testid="form-eltern-steuerdaten.steuernBund"
-          matInput
-          [maskito]="maskitoNumber"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes?.steuernBund"></mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+      <!-- Steuern Kanton-Gemeinde-->
+      <div class="d-flex col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.eltern-steuerdaten.steuernKantonGemeinde.label' | translate }}</mat-label>
+          <input
+            formControlName="steuernKantonGemeinde"
+            data-testid="form-eltern-steuerdaten.steuernKantonGemeinde"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-hint *dvZuvorHint="changes?.steuernKantonGemeinde"></mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <button
+          type="button"
+          (click)="steuernKantonGemeindeDialog.toggle()"
+          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+        >
+          <span class="material-symbols-rounded"> info </span>
+        </button>
+      </div>
+
+      <!-- Steuern Bund-->
+      <div class="d-flex col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.eltern-steuerdaten.steuernBund.label' | translate }}</mat-label>
+          <input
+            formControlName="steuernBund"
+            data-testid="form-eltern-steuerdaten.steuernBund"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-hint *dvZuvorHint="changes?.steuernBund"></mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <button
+          type="button"
+          (click)="steuernBundDialog.toggle()"
+          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+        >
+          <span class="material-symbols-rounded"> info </span>
+        </button>
+      </div>
+
+      <div class="d-none d-xl-block col-xl-4">
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.eltern-steuerdaten.steuernKantonGemeinde.label'"
+          [dialogMessageKey]="'shared.form.eltern-steuerdaten.steuernKantonGemeinde.info'"
+          #steuernKantonGemeindeDialog="dvSharedUiInfoDialog"
+        ></div>
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.eltern-steuerdaten.steuernBund.label'"
+          [dialogMessageKey]="'shared.form.eltern-steuerdaten.steuernBund.info'"
+          #steuernBundDialog="dvSharedUiInfoDialog"
+        ></div>
+      </div>
     </div>
+
     <div class="row g-4 my-2">
+      <!-- Fahrkosten-->
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.fahrkosten.label' | translate }}</mat-label>
         <input
@@ -192,6 +279,8 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+
+      <!-- Fahrkosten Partner:in-->
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.fahrkostenPartner.label' | translate }}</mat-label>
         <input
@@ -207,21 +296,35 @@
         </mat-error>
       </mat-form-field>
     </div>
+
     <div class="row g-4 my-2">
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>{{ 'shared.form.eltern-steuerdaten.verpflegung.label' | translate }}</mat-label>
-        <input
-          formControlName="verpflegung"
-          data-testid="form-eltern-steuerdaten.verpflegung"
-          matInput
-          [maskito]="maskitoNumber"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes?.verpflegung"></mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
-        </mat-error>
-      </mat-form-field>
+      <!-- Verpflegung-->
+      <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.eltern-steuerdaten.verpflegung.label' | translate }}</mat-label>
+          <input
+            formControlName="verpflegung"
+            data-testid="form-eltern-steuerdaten.verpflegung"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-hint *dvZuvorHint="changes?.verpflegung"></mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <button
+          type="button"
+          (click)="verpflegungInfo.toggle()"
+          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+        >
+          <span class="material-symbols-rounded"> info </span>
+        </button>
+      </div>
+
+      <!-- Verpflegung Partner:in-->
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.verpflegungPartner.label' | translate }}</mat-label>
         <input
@@ -236,12 +339,22 @@
           {{ 'shared.form.error.required' | translate }}
         </mat-error>
       </mat-form-field>
+
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.eltern-steuerdaten.verpflegung.label'"
+        [dialogMessageKey]="'shared.form.eltern-steuerdaten.verpflegung.info'"
+        #verpflegungInfo="dvSharedUiInfoDialog"
+        class="d-none d-xl-block col-xl-4"
+      ></div>
     </div>
+
     @if (
       !hiddenFieldSet.valuesSig().has(form.controls.steuerjahr) ||
       !hiddenFieldSet.valuesSig().has(form.controls.veranlagungsCode)
     ) {
       <div class="row g-4 my-2">
+        <!-- Steuerjahr-->
         @if (!hiddenFieldSet.valuesSig().has(form.controls.steuerjahr)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.steuerjahr.label' | translate }}</mat-label>
@@ -264,6 +377,7 @@
             </mat-error>
           </mat-form-field>
         }
+        <!-- VeranlagungsCode-->
         @if (!hiddenFieldSet.valuesSig().has(form.controls.veranlagungsCode)) {
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.veranlagungscode.label' | translate }}</mat-label>

@@ -30,6 +30,7 @@ import {
 export class SharedUiInfoDialogDirective implements OnDestroy {
   @Input({ required: true }) dialogTitleKey = '';
   @Input({ required: true }) dialogMessageKey = '';
+  @Input() forceDialogPosition = false;
 
   containerRef = inject(ViewContainerRef);
   dialog = inject(MatDialog);
@@ -61,7 +62,9 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
   }
 
   openDialog() {
-    const isColumnar = window.innerWidth >= DVBreakpoints.XL;
+    const isColumnar = this.forceDialogPosition
+      ? false
+      : window.innerWidth >= DVBreakpoints.XL;
 
     let dialogConfig: MatDialogConfig<InfoDialogData> = {
       data: {

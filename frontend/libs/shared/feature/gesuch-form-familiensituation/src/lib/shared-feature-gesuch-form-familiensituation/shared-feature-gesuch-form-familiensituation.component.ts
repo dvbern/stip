@@ -52,6 +52,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   SharedUiPercentageSplitterComponent,
@@ -99,6 +100,7 @@ const animationTime = 500;
     SharedUiLoadingComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiInfoDialogDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-familiensituation.component.html',
   styleUrls: ['./shared-feature-gesuch-form-familiensituation.component.scss'],

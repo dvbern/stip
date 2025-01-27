@@ -1,18 +1,18 @@
-<section class="d-flex flex-column position-relative p-4 rounded">
+<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-4">
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
     [attr.aria-label]="'shared.close' | translate"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="title h5 mb-4 d-flex">
+  <h1 class="title tw-mb-4 tw-flex tw-text-lg xl:tw-pr-5">
     <span class="text-info material-symbols-rounded me-2">info</span>
     {{ dialogData.titleKey | translate }}
   </h1>
   <p class="content" [innerHTML]="dialogData.messageKey | translate"></p>
-  <button (click)="close()" type="button" class="btn btn-outline-primary align-self-center mt-auto">
+  <button (click)="close()" type="button" class="btn btn-outline-primary tw-mt-auto tw-self-center">
     {{ 'shared.close' | translate }}
   </button>
 </section>

@@ -99,27 +99,45 @@
 
       <div class="row g-4 my-2">
         <!-- IBAN -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-          <mat-label>{{ 'shared.form.auszahlung.iban.label' | translate }}</mat-label>
-          <span matTextPrefix>CH</span>
-          <input
-            data-testid="form-auszahlung-iban"
-            matInput
-            type="text"
-            [formControlName]="'iban'"
-            [maskito]="MASK_IBAN"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges?.iban"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'invalidIBAN'">
-            {{ 'shared.form.error.invalidIBAN' | translate }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'qrIBAN'">
-            {{ 'shared.form.error.invalidIBAN' | translate }}
-          </mat-error>
-        </mat-form-field>
+        <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-1">
+          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <mat-label>{{ 'shared.form.auszahlung.iban.label' | translate }}</mat-label>
+            <span matTextPrefix>CH</span>
+            <input
+              data-testid="form-auszahlung-iban"
+              matInput
+              type="text"
+              [formControlName]="'iban'"
+              [maskito]="MASK_IBAN"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges?.iban"></mat-hint>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'invalidIBAN'">
+              {{ 'shared.form.error.invalidIBAN' | translate }}
+            </mat-error>
+            <mat-error *dvSharedUiFormMessageError="'qrIBAN'">
+              {{ 'shared.form.error.invalidIBAN' | translate }}
+            </mat-error>
+          </mat-form-field>
+          <button
+            type="button"
+            (click)="ibanDialog.toggle()"
+            class="dv-icon-button dv-icon-button-md text-info mt-2"
+            [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+          >
+            <span class="material-symbols-rounded"> info </span>
+          </button>
+        </div>
+        <div class="d-none d-xl-block col-xl-4"></div>
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.auszahlung.iban.label'"
+          [dialogMessageKey]="'shared.form.auszahlung.iban.info'"
+          #ibanDialog="dvSharedUiInfoDialog"
+          class="d-none d-xl-block col-xl-4"
+        ></div>
       </div>
 
       <!-- Buttons -->
