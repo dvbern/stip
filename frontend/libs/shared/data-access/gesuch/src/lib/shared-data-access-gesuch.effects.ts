@@ -7,6 +7,7 @@ import {
   catchError,
   combineLatestWith,
   concatMap,
+  filter,
   map,
   switchMap,
   tap,
@@ -37,6 +38,7 @@ import {
   SharedModelGesuchFormular,
 } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
+import { ifPropsAreDefined, isDefined } from '@dv/shared/model/type-util';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import {
   handleNotFoundAndUnauthorized,
@@ -343,7 +345,13 @@ export const redirectToGesuchFormNextStep = createEffect(
       ),
       withLatestFrom(
         store.select(selectSharedDataAccessGesuchStepsView),
-        store.select(selectSharedDataAccessGesuchsView),
+        store.select(selectSharedDataAccessGesuchsView).pipe(
+          map(({ gesuch, trancheSetting }) => ({
+            gesuch,
+            trancheSetting,
+          })),
+          filter(ifPropsAreDefined),
+        ),
       ),
       tap(
         ([
@@ -357,7 +365,7 @@ export const redirectToGesuchFormNextStep = createEffect(
               .getNextStepOf(stepFlowSig, origin, gesuch)
               .route.split('/'),
             id,
-            ...(trancheSetting?.routesSuffix ?? []),
+            ...trancheSetting.routesSuffix,
           ]);
         },
       ),
@@ -374,13 +382,18 @@ export const refreshGesuchFormStep = createEffect(
   ) => {
     return actions$.pipe(
       ofType(SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess),
-      withLatestFrom(store.select(selectSharedDataAccessGesuchsView)),
-      tap(([{ id, origin }, { trancheSetting }]) => {
+      withLatestFrom(
+        store.select(selectSharedDataAccessGesuchsView).pipe(
+          map(({ trancheSetting }) => trancheSetting),
+          filter(isDefined),
+        ),
+      ),
+      tap(([{ id, origin }, trancheSetting]) => {
         router.navigate([
           'gesuch',
           origin.route,
           id,
-          ...(trancheSetting?.routesSuffix ?? []),
+          ...trancheSetting.routesSuffix,
         ]);
       }),
     );

@@ -116,11 +116,15 @@ export const selectSharedDataAccessGesuchTrancheSettingsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   ({ tranchenChanges }, state) => {
     const currentForm = state.gesuchFormular ?? state.cache.gesuchFormular;
-    const gesuchTranche = state.gesuch?.gesuchTrancheToWorkWith;
+    const cachedGesuch = state.gesuch ?? state.cache.gesuch;
 
     return {
-      trancheSetting: createTrancheSetting(state.trancheTyp, gesuchTranche),
-      cachedGesuchId: state.cache.gesuchId,
+      trancheSetting: createTrancheSetting(
+        state.trancheTyp,
+        cachedGesuch?.gesuchTrancheToWorkWith,
+      ),
+      cachedGesuch,
+      cachedGesuchId: cachedGesuch?.id ?? null,
       cachedGesuchFormular: currentForm,
       tranchenChanges,
     };
