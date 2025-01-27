@@ -40,7 +40,11 @@ export class BerechnungStore extends signalStore(
       year: number;
       totalBetragStipendium: number;
       berechnungsresultate: Record<string, TranchenBerechnungsresultat[]>;
-      verminderteBerechnungMonate?: number;
+      verminderteBerechnung?: {
+        monate: number;
+        unreducedTotal: number;
+        reducePercentage: number;
+      };
     } = {
       year: berechnungRd.data?.year ?? 0,
       totalBetragStipendium: 0,
@@ -59,8 +63,17 @@ export class BerechnungStore extends signalStore(
 
     if (berechnungRd.data) {
       byTrancheId.totalBetragStipendium = berechnungRd.data?.berechnung;
-      byTrancheId.verminderteBerechnungMonate =
+      const verminderteBerechnungMonate =
         berechnungRd.data?.verminderteBerechnungMonate;
+      if (verminderteBerechnungMonate) {
+        byTrancheId.verminderteBerechnung = {
+          monate: verminderteBerechnungMonate,
+          unreducedTotal:
+            (byTrancheId.totalBetragStipendium * 12) /
+            verminderteBerechnungMonate,
+          reducePercentage: 100 - (100 * verminderteBerechnungMonate) / 12,
+        };
+      }
     }
 
     return {

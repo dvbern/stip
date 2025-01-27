@@ -68,45 +68,6 @@ import { Berechnung } from '../../../models';
               ></ng-content>
             </dv-berechnungs-expansion-panel>
           </mat-accordion>
-          <div class="mat-accordion full-width">
-            @if (
-              berechnung.typ === 'persoenlich' && berechnung.geteilteBerechnung
-            ) {
-              <div
-                class="mat-expansion-panel-header-title d-flex h4 mb-2 me-0 grid ps-4 justify-content-between fs-3 w-100"
-              >
-                {{
-                  'sachbearbeitung-app.verfuegung.berechnung.' +
-                    berechnung.typ +
-                    '.total' | translate
-                }}
-                <span
-                  class="text-nowrap"
-                  [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'"
-                  >{{ berechnung.total | formatChfNegative }}</span
-                >
-              </div>
-              <div
-                class="mat-expansion-panel-header-title text-muted mb-0 me-0 grid ps-4 justify-content-between fs-4 w-100"
-              >
-                {{
-                  'sachbearbeitung-app.verfuegung.berechnung.' +
-                    berechnung.typ +
-                    '.geteilteBerechnung'
-                    | translate: berechnung.geteilteBerechnung
-                }}
-                <span
-                  class="text-nowrap"
-                  [attr.data-testid]="
-                    'berechnung-' + berechnung.typ + '-geteilteBerechnung'
-                  "
-                  >{{
-                    berechnung.geteilteBerechnung.anteil | formatChfNegative
-                  }}</span
-                >
-              </div>
-            }
-          </div>
         </mat-card-content>
         <mat-card-footer class="px-3 py-4">
           <div class="d-flex justify-content-between fs-3 h4">
@@ -121,6 +82,29 @@ import { Berechnung } from '../../../models';
               >{{ berechnung.total | formatChfNegative }}</span
             >
           </div>
+          @if (
+            berechnung.typ === 'persoenlich' && berechnung.geteilteBerechnung
+          ) {
+            <div
+              class="mat-expansion-panel-header-title text-muted mb-0 me-0 grid justify-content-between fs-4 w-100"
+            >
+              {{
+                'sachbearbeitung-app.verfuegung.berechnung.' +
+                  berechnung.typ +
+                  '.geteilteBerechnung'
+                  | translate: berechnung.geteilteBerechnung
+              }}
+              <span
+                class="text-nowrap"
+                [attr.data-testid]="
+                  'berechnung-' + berechnung.typ + '-geteilteBerechnung'
+                "
+                >{{
+                  berechnung.geteilteBerechnung.anteil | formatChfNegative
+                }}</span
+              >
+            </div>
+          }
         </mat-card-footer>
       </mat-card>
     }

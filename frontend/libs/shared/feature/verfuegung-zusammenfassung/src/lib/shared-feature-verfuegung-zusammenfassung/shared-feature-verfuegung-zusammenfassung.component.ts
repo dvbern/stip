@@ -12,7 +12,10 @@ import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
-import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
+import {
+  SharedUiFormatChfNegativePipe,
+  SharedUiFormatChfPipe,
+} from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
@@ -28,6 +31,7 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     RouterLink,
     SharedUiIconChipComponent,
     SharedUiFormatChfPipe,
+    SharedUiFormatChfNegativePipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
     DecimalPipe,
