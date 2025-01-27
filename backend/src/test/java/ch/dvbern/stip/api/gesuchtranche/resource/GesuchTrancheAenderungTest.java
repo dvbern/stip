@@ -37,6 +37,8 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
@@ -138,6 +140,15 @@ class GesuchTrancheAenderungTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
+
+        // Upload Unterschriftenblatt to "skip" Verfuegt state
+        TestUtil.uploadUnterschriftenblatt(
+            dokumentApiSpec,
+            gesuch.getId(),
+            UnterschriftenblattDokumentTypDtoSpec.GEMEINSAM,
+            TestUtil.getTestPng()
+        );
+
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -155,8 +166,36 @@ class GesuchTrancheAenderungTest {
     }
 
     @Test
+    @Order(8)
+    @TestAsSachbearbeiter
+    void changeToFinalState() {
+        gesuchApiSpec.changeGesuchStatusToVersendet()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+
+        gesuch = gesuchApiSpec.getGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+
+        assertThat(gesuch.getGesuchStatus()).satisfiesAnyOf(
+            status -> assertThat(status).isEqualTo(GesuchstatusDtoSpec.STIPENDIENANSPRUCH),
+            status -> assertThat(status).isEqualTo(GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH)
+        );
+    }
+
+    @Test
     @TestAsGesuchsteller
-    @Order(7)
+    @Order(9)
     void createFirstAenderungsantrag() {
         createAenderungsanstrag()
             .then()
@@ -166,21 +205,13 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(8)
+    @Order(10)
     @Description("Only one (open: NOT in State ABGELEHNT|AKZEPTIIERT) Aenderungsantrag should be allowed")
     void createSecondAenderungsantragFails() {
         createAenderungsanstrag()
             .then()
             .assertThat()
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
-    }
-
-    @Test
-    @TestAsAdmin
-    @Order(99)
-    @AlwaysRun
-    void deleteGesuch() {
-        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 
     io.restassured.response.Response createAenderungsanstrag() {
@@ -196,7 +227,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(8)
+    @Order(11)
     @Description("Test setup for: The another GS must not be able do delete a Aenderung'")
     void setupnextTest() {
         gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
@@ -212,7 +243,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller2
-    @Order(9)
+    @Order(12)
     @Description("The another GS must not be able do delete a Aenderung'")
     void deleteAenderungByOtherUserTest() {
         final var aenderung = gesuchtranchen.getTranchen()
@@ -232,7 +263,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(10)
+    @Order(13)
     @Description("The GS should be able do delete a Aenderung, if it is in State 'In Bearbeitung GS'")
     void deleteAenderungTest() {
         var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
@@ -270,7 +301,7 @@ class GesuchTrancheAenderungTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(11)
+    @Order(14)
     @Description("It should not be possible to delete a Tranche when a Aenderung should be deleted")
     void deleteAenderungShouldFailTest() {
         final var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuch()
@@ -293,4 +324,12 @@ class GesuchTrancheAenderungTest {
             .statusCode(Response.Status.UNAUTHORIZED.getStatusCode());
     }
     // todo KSTIP-KSTIP-1158: a Aenderung should be accepted/denied by an SB
+
+    @Test
+    @TestAsAdmin
+    @Order(99)
+    @AlwaysRun
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+    }
 }
