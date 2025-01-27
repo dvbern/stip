@@ -5487,14 +5487,11 @@ components:
       required:
         - betrag
         - comment
-        - gesuchId
       properties:
         betrag:
           type: integer
         comment:
           type: string
-        gesuchId:
-          $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:

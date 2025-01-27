@@ -51,16 +51,17 @@ public class BuchhaltungService {
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return createBuchhaltungSaldokorrekturForFall(
-            fallRepository.requireById(gesuch.getAusbildung().getFall().getId()),
+            gesuch,
             buchhaltungSaldokorrekturDto
         );
     }
 
     @Transactional
     public BuchhaltungEntryDto createBuchhaltungSaldokorrekturForFall(
-        final Fall fall,
+        final Gesuch gesuch,
         final BuchhaltungSaldokorrekturDto buchhaltungSaldokorrekturDto
     ) {
+        final Fall fall = fallRepository.requireById(gesuch.getAusbildung().getFall().getId());
         final var firstEntrySaldo = fall.getBuchhaltungs()
             .stream()
             .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
@@ -73,7 +74,7 @@ public class BuchhaltungService {
             .setComment(buchhaltungSaldokorrekturDto.getComment())
             .setBuchhaltungType(BuchhaltungType.SALDOAENDERUNG)
             .setFall(fall)
-            .setGesuch(gesuchRepository.requireById(buchhaltungSaldokorrekturDto.getGesuchId()));
+            .setGesuch(gesuch);
 
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
         fall.getBuchhaltungs().add(buchhaltungEntry);

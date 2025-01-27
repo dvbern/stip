@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -22,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BuchhaltungSaldokorrekturDto  implements Serializable {
   private @Valid Integer betrag;
   private @Valid String comment;
-  private @Valid UUID gesuchId;
 
   /**
    **/
@@ -62,25 +60,6 @@ public class BuchhaltungSaldokorrekturDto  implements Serializable {
     this.comment = comment;
   }
 
-  /**
-   **/
-  public BuchhaltungSaldokorrekturDto gesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
-    return this;
-  }
-
-  
-  @JsonProperty("gesuchId")
-  @NotNull
-  public UUID getGesuchId() {
-    return gesuchId;
-  }
-
-  @JsonProperty("gesuchId")
-  public void setGesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -92,13 +71,12 @@ public class BuchhaltungSaldokorrekturDto  implements Serializable {
     }
     BuchhaltungSaldokorrekturDto buchhaltungSaldokorrektur = (BuchhaltungSaldokorrekturDto) o;
     return Objects.equals(this.betrag, buchhaltungSaldokorrektur.betrag) &&
-        Objects.equals(this.comment, buchhaltungSaldokorrektur.comment) &&
-        Objects.equals(this.gesuchId, buchhaltungSaldokorrektur.gesuchId);
+        Objects.equals(this.comment, buchhaltungSaldokorrektur.comment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(betrag, comment, gesuchId);
+    return Objects.hash(betrag, comment);
   }
 
   @Override
@@ -108,7 +86,6 @@ public class BuchhaltungSaldokorrekturDto  implements Serializable {
     
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
-    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

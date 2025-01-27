@@ -140,7 +140,6 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
       buchhaltungSaldokorrektur: {
         betrag: fromFormatedNumber(betrag),
         comment: 'Foobar',
-        gesuchId,
       },
       gesuchId,
     });

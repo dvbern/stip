@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -29,8 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   BuchhaltungSaldokorrekturDtoSpec.JSON_PROPERTY_BETRAG,
-  BuchhaltungSaldokorrekturDtoSpec.JSON_PROPERTY_COMMENT,
-  BuchhaltungSaldokorrekturDtoSpec.JSON_PROPERTY_GESUCH_ID
+  BuchhaltungSaldokorrekturDtoSpec.JSON_PROPERTY_COMMENT
 })
 @JsonTypeName("BuchhaltungSaldokorrektur")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -40,9 +38,6 @@ public class BuchhaltungSaldokorrekturDtoSpec {
 
   public static final String JSON_PROPERTY_COMMENT = "comment";
   private String comment;
-
-  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
-  private UUID gesuchId;
 
   public BuchhaltungSaldokorrekturDtoSpec() {
   }
@@ -98,32 +93,6 @@ public class BuchhaltungSaldokorrekturDtoSpec {
     this.comment = comment;
   }
 
-
-  public BuchhaltungSaldokorrekturDtoSpec gesuchId(UUID gesuchId) {
-    
-    this.gesuchId = gesuchId;
-    return this;
-  }
-
-   /**
-   * Get gesuchId
-   * @return gesuchId
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getGesuchId() {
-    return gesuchId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -134,13 +103,12 @@ public class BuchhaltungSaldokorrekturDtoSpec {
     }
     BuchhaltungSaldokorrekturDtoSpec buchhaltungSaldokorrektur = (BuchhaltungSaldokorrekturDtoSpec) o;
     return Objects.equals(this.betrag, buchhaltungSaldokorrektur.betrag) &&
-        Objects.equals(this.comment, buchhaltungSaldokorrektur.comment) &&
-        Objects.equals(this.gesuchId, buchhaltungSaldokorrektur.gesuchId);
+        Objects.equals(this.comment, buchhaltungSaldokorrektur.comment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(betrag, comment, gesuchId);
+    return Objects.hash(betrag, comment);
   }
 
   @Override
@@ -149,7 +117,6 @@ public class BuchhaltungSaldokorrekturDtoSpec {
     sb.append("class BuchhaltungSaldokorrekturDtoSpec {\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
-    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

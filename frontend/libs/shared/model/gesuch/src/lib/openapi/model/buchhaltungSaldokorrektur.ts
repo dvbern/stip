@@ -13,6 +13,5 @@
 export interface BuchhaltungSaldokorrektur { 
     betrag: number;
     comment: string;
-    gesuchId: string;
 }
 

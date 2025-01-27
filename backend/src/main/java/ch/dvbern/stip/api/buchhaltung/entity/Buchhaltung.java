@@ -80,7 +80,7 @@ public class Buchhaltung extends AbstractMandantEntity {
     @Column(name = "comment", length = DB_DEFAULT_STRING_MAX_LENGTH)
     private String comment;
 
-    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(
         name = "gesuch_id",
         foreignKey = @ForeignKey(name = "FK_buchhaltung_gesuch")
@@ -88,7 +88,7 @@ public class Buchhaltung extends AbstractMandantEntity {
     private Gesuch gesuch;
 
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "fall_id", foreignKey = @ForeignKey(name = "FK_buchhaltung_fall_id"))
     private Fall fall;
 }
