@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -19,10 +20,14 @@ import {
   Sozialdienst,
   SozialdienstAdmin,
   SozialdienstAdminUpdate,
+  SozialdienstBenutzer,
+  SozialdienstBenutzerCreate,
+  SozialdienstBenutzerUpdate,
   SozialdienstCreate,
   SozialdienstService,
   SozialdienstUpdate,
 } from '@dv/shared/model/gesuch';
+import { handleUnauthorized } from '@dv/shared/util/http';
 import { KeycloakHttpService } from '@dv/shared/util/keycloak-http';
 import {
   CachedRemoteData,
@@ -31,6 +36,8 @@ import {
   failure,
   handleApiResponse,
   initial,
+  mapCachedData,
+  optimisticCachedPending,
   pending,
   success,
 } from '@dv/shared/util/remote-data';
@@ -38,11 +45,19 @@ import {
 type SozialdienstState = {
   sozialdienste: CachedRemoteData<Sozialdienst[]>;
   sozialdienst: RemoteData<Sozialdienst>;
+  sozialdienstBenutzerList: CachedRemoteData<SozialdienstBenutzer[]>;
+  sozialdienstBenutzer: CachedRemoteData<SozialdienstBenutzer>;
 };
 
 const initialState: SozialdienstState = {
   sozialdienste: initial(),
   sozialdienst: initial(),
+  sozialdienstBenutzerList: initial(),
+  sozialdienstBenutzer: initial(),
+};
+
+export type SozialdienstBenutzerViewEntry = SozialdienstBenutzer & {
+  name: string;
 };
 
 @Injectable()
@@ -51,9 +66,24 @@ export class SozialdienstStore extends signalStore(
   withState(initialState),
   withDevtools('SozialdienstStore'),
 ) {
+  private router = inject(Router);
   private sozialdienstService = inject(SozialdienstService);
   private keycloak = inject(KeycloakHttpService);
   private globalNotificationStore = inject(GlobalNotificationStore);
+
+  sozialdienstBenutzersView = computed(() => {
+    const benutzers = this.sozialdienstBenutzerList();
+
+    return mapCachedData(benutzers, (data) =>
+      data.map(
+        (benutzer) =>
+          ({
+            ...benutzer,
+            name: `${benutzer.vorname} ${benutzer.nachname}`,
+          }) satisfies SozialdienstBenutzerViewEntry,
+      ),
+    );
+  });
 
   resetSozialdienst() {
     patchState(this, { sozialdienst: initial() });
@@ -372,6 +402,158 @@ export class SozialdienstStore extends signalStore(
         this.loadAllSozialdienste$();
         return throwError(() => error);
       }),
+    ),
+  );
+
+  loadSozialdienstBenutzerList$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienstBenutzerList: cachedPending(
+            state.sozialdienstBenutzerList,
+          ),
+        }));
+      }),
+      switchMap(() =>
+        this.sozialdienstService.getSozialdienstBenutzerList$().pipe(
+          handleApiResponse((benutzer) => {
+            patchState(this, { sozialdienstBenutzerList: benutzer });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  resetSozialdienstBenutzerCache = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          sozialdienstBenutzer: initial(),
+        }));
+      }),
+    ),
+  );
+
+  loadSozialdienstBenutzer$ = rxMethod<{ sozialdienstBenutzerId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienstBenutzer: cachedPending(state.sozialdienstBenutzer),
+        }));
+      }),
+      switchMap(({ sozialdienstBenutzerId }) =>
+        this.sozialdienstService
+          .getSozialdienstBenutzer$(
+            { sozialdienstBenutzerId },
+            undefined,
+            undefined,
+            {
+              context: handleUnauthorized((error) => {
+                this.globalNotificationStore.createNotification({
+                  type: 'ERROR_PERMANENT',
+                  messageKey: 'shared.genericError.unauthorized',
+                  content: error,
+                });
+                this.router.navigate(['/'], { replaceUrl: true });
+              }),
+            },
+          )
+          .pipe(
+            handleApiResponse((benutzer) =>
+              patchState(this, { sozialdienstBenutzer: benutzer }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  updateSozialdienstBenutzer$ = rxMethod<{
+    sozialdienstBenutzerUpdate: SozialdienstBenutzerUpdate;
+  }>(
+    pipe(
+      tap(({ sozialdienstBenutzerUpdate }) => {
+        patchState(this, (state) => ({
+          sozialdienstBenutzer: optimisticCachedPending(
+            state.sozialdienstBenutzer,
+            sozialdienstBenutzerUpdate,
+          ),
+        }));
+      }),
+      exhaustMap((sozialdienstBenutzerUpdate) =>
+        this.sozialdienstService
+          .updateSozialdienstBenutzer$(sozialdienstBenutzerUpdate)
+          .pipe(
+            handleApiResponse(
+              (sozialdienstBenutzer) => {
+                patchState(this, { sozialdienstBenutzer });
+              },
+              {
+                onSuccess: () => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.admin.sozialdienstBenutzer.aktualisiert',
+                  });
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  createSozialdienstBenutzer$ = rxMethod<{
+    sozialdienstBenutzerCreate: SozialdienstBenutzerCreate;
+    onAfterSave?: (sozialdienstId: string) => void;
+  }>(
+    pipe(
+      tap(({ sozialdienstBenutzerCreate }) => {
+        patchState(this, () => ({
+          sozialdienstBenutzer: cachedPending(
+            success({ id: 'new', ...sozialdienstBenutzerCreate }),
+          ),
+        }));
+      }),
+      exhaustMap(({ sozialdienstBenutzerCreate, onAfterSave }) =>
+        this.sozialdienstService
+          .createSozialdienstBenutzer$({ sozialdienstBenutzerCreate })
+          .pipe(
+            handleApiResponse(
+              (sozialdienstBenutzer) => {
+                patchState(this, { sozialdienstBenutzer });
+              },
+              {
+                onSuccess: (sozialdienstBenutzer) => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.admin.sozialdienstBenutzer.erstellt',
+                  });
+                  onAfterSave?.(sozialdienstBenutzer.id);
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  deleteSozialdienstBenutzer$ = rxMethod<{ sozialdienstBenutzerId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienstBenutzerList: cachedPending(
+            state.sozialdienstBenutzerList,
+          ),
+        }));
+      }),
+      switchMap(({ sozialdienstBenutzerId }) =>
+        this.sozialdienstService
+          .deleteSozialdienstBenutzer$({ sozialdienstBenutzerId })
+          .pipe(
+            handleApiResponse(() => {
+              this.loadSozialdienstBenutzerList$();
+            }),
+          ),
+      ),
     ),
   );
 }

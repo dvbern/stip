@@ -21,6 +21,7 @@ import {
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiSearchComponent } from '@dv/shared/ui/search';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
@@ -38,6 +39,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
+    SharedUiHasRolesDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-pattern-administration-layout.component.html',

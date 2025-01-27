@@ -5,15 +5,15 @@ import { map, switchMap } from 'rxjs';
 
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { PermissionStore } from '@dv/shared/global/permission';
-import { BenutzerVerwaltungRole } from '@dv/shared/model/benutzer';
+import { PermissionStore, RolesMap } from '@dv/shared/global/permission';
+import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchService } from '@dv/shared/model/gesuch';
 import {
   Permission,
   getGesuchPermissions,
 } from '@dv/shared/model/permission-state';
-import { capitalized } from '@dv/shared/model/type-util';
+import { capitalized, isDefined } from '@dv/shared/model/type-util';
 
 export const isAllowedTo =
   (permission: Permission): CanActivateFn =>
@@ -46,14 +46,33 @@ export const isAllowedTo =
   };
 
 export const hasRoles =
-  (roles: BenutzerVerwaltungRole[], redirectUrl = '/'): CanActivateFn =>
+  (roles: AvailableBenutzerRole[], redirectUrl?: string): CanActivateFn =>
   () => {
     const permissionStore = inject(PermissionStore);
-    const notification = inject(GlobalNotificationStore);
 
-    const roleMap = permissionStore.permissionsMapSig();
-    return roles.some((role) => roleMap?.[role])
-      ? true
-      : (notification.handleForbiddenError(),
-        new RedirectCommand(inject(Router).parseUrl(redirectUrl)));
+    const roleMap = permissionStore.rolesMapSig();
+    if (!isDefined(roleMap)) {
+      return false;
+    }
+    if (roles.some((role) => roleMap?.[role])) {
+      return true;
+    }
+    return failSafeSozialdienstAdmin(roleMap) || handleForbidden(redirectUrl);
   };
+
+const failSafeSozialdienstAdmin = (rolesMap: RolesMap) => {
+  return rolesMap['Sozialdienst-Admin']
+    ? new RedirectCommand(
+        inject(Router).parseUrl('/administration/sozialdienst-benutzer'),
+      )
+    : false;
+};
+
+const handleForbidden = (redirectUrl = '/') => {
+  const notification = inject(GlobalNotificationStore);
+
+  return (
+    notification.handleForbiddenError(),
+    new RedirectCommand(inject(Router).parseUrl(redirectUrl))
+  );
+};

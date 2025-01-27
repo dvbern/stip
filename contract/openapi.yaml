@@ -1359,7 +1359,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/ServerError'
-      operationId: getSozialdienstBenutzer
+      operationId: getSozialdienstBenutzerList
     post:
       description: create a new SozialdienstBenutzer that is assigned to the Sozialdienst of the currently logged in SozialdienstAdmin
       tags:
@@ -1410,15 +1410,36 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: updateSozialdienstBenutzer
+  /sozialdienst/benutzer/{sozialdienstBenutzerId}:
+    parameters:
+      - name: sozialdienstBenutzerId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns the Sozialdienst Benutzer with the given ID
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getSozialdienstBenutzer
     delete:
       description: update an exisitng SozialdienstBenutzer
       tags:
         - Sozialdienst
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UUID'
       responses:
         200:
           description: Returns on successfull delete

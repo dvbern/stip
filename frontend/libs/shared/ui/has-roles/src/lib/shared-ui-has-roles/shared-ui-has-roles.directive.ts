@@ -8,14 +8,14 @@ import {
 } from '@angular/core';
 
 import { PermissionStore } from '@dv/shared/global/permission';
-import { BenutzerVerwaltungRole } from '@dv/shared/model/benutzer';
+import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
 
 @Directive({
   selector: '[dvHasRoles]',
   standalone: true,
 })
 export class SharedUiHasRolesDirective {
-  rolesSig = input.required<BenutzerVerwaltungRole[]>({ alias: 'dvHasRoles' });
+  rolesSig = input.required<AvailableBenutzerRole[]>({ alias: 'dvHasRoles' });
   elseTemplateRefSig = input<TemplateRef<unknown> | null>(null, {
     alias: 'dvHasRolesElse',
   });
@@ -26,7 +26,7 @@ export class SharedUiHasRolesDirective {
 
   constructor() {
     effect(() => {
-      const roleMap = this.permissionStore.permissionsMapSig();
+      const roleMap = this.permissionStore.rolesMapSig();
       const roles = this.rolesSig();
       const elseTemplateRef = this.elseTemplateRefSig();
 

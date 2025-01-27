@@ -71,6 +71,7 @@ public class SozialdienstApiSpec {
                 getAllSozialdienste(),
                 getSozialdienst(),
                 getSozialdienstBenutzer(),
+                getSozialdienstBenutzerList(),
                 replaceSozialdienstAdmin(),
                 updateSozialdienst(),
                 updateSozialdienstAdmin(),
@@ -104,6 +105,10 @@ public class SozialdienstApiSpec {
 
     public GetSozialdienstBenutzerOper getSozialdienstBenutzer() {
         return new GetSozialdienstBenutzerOper(createReqSpec());
+    }
+
+    public GetSozialdienstBenutzerListOper getSozialdienstBenutzerList() {
+        return new GetSozialdienstBenutzerListOper(createReqSpec());
     }
 
     public ReplaceSozialdienstAdminOper replaceSozialdienstAdmin() {
@@ -353,25 +358,24 @@ public class SozialdienstApiSpec {
      * 
      * update an exisitng SozialdienstBenutzer
      *
-     * @see #body  (optional)
+     * @see #sozialdienstBenutzerIdPath  (required)
      */
     public static class DeleteSozialdienstBenutzerOper implements Oper {
 
         public static final Method REQ_METHOD = DELETE;
-        public static final String REQ_URI = "/sozialdienst/benutzer";
+        public static final String REQ_URI = "/sozialdienst/benutzer/{sozialdienstBenutzerId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
         public DeleteSozialdienstBenutzerOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setContentType("application/json");
             reqSpec.setAccept("text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * DELETE /sozialdienst/benutzer
+         * DELETE /sozialdienst/benutzer/{sozialdienstBenutzerId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -381,12 +385,14 @@ public class SozialdienstApiSpec {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
         }
 
-         /**
-         * @param body (UUID)  (optional)
+        public static final String SOZIALDIENST_BENUTZER_ID_PATH = "sozialdienstBenutzerId";
+
+        /**
+         * @param sozialdienstBenutzerId (UUID)  (required)
          * @return operation
          */
-        public DeleteSozialdienstBenutzerOper body(UUID body) {
-            reqSpec.setBody(body);
+        public DeleteSozialdienstBenutzerOper sozialdienstBenutzerIdPath(Object sozialdienstBenutzerId) {
+            reqSpec.addPathParam(SOZIALDIENST_BENUTZER_ID_PATH, sozialdienstBenutzerId);
             return this;
         }
 
@@ -548,9 +554,82 @@ public class SozialdienstApiSpec {
      * 
      * 
      *
-     * return List&lt;SozialdienstBenutzerDtoSpec&gt;
+     * @see #sozialdienstBenutzerIdPath  (required)
+     * return SozialdienstBenutzerDtoSpec
      */
     public static class GetSozialdienstBenutzerOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/sozialdienst/benutzer/{sozialdienstBenutzerId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetSozialdienstBenutzerOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /sozialdienst/benutzer/{sozialdienstBenutzerId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /sozialdienst/benutzer/{sozialdienstBenutzerId}
+         * @param handler handler
+         * @return SozialdienstBenutzerDtoSpec
+         */
+        public SozialdienstBenutzerDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SozialdienstBenutzerDtoSpec> type = new TypeRef<SozialdienstBenutzerDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String SOZIALDIENST_BENUTZER_ID_PATH = "sozialdienstBenutzerId";
+
+        /**
+         * @param sozialdienstBenutzerId (UUID)  (required)
+         * @return operation
+         */
+        public GetSozialdienstBenutzerOper sozialdienstBenutzerIdPath(Object sozialdienstBenutzerId) {
+            reqSpec.addPathParam(SOZIALDIENST_BENUTZER_ID_PATH, sozialdienstBenutzerId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetSozialdienstBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetSozialdienstBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * return List&lt;SozialdienstBenutzerDtoSpec&gt;
+     */
+    public static class GetSozialdienstBenutzerListOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/sozialdienst/benutzer";
@@ -558,7 +637,7 @@ public class SozialdienstApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetSozialdienstBenutzerOper(RequestSpecBuilder reqSpec) {
+        public GetSozialdienstBenutzerListOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -590,7 +669,7 @@ public class SozialdienstApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetSozialdienstBenutzerOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetSozialdienstBenutzerListOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -600,7 +679,7 @@ public class SozialdienstApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetSozialdienstBenutzerOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetSozialdienstBenutzerListOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
