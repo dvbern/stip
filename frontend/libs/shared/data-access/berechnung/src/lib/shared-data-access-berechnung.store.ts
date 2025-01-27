@@ -67,7 +67,7 @@ export class BerechnungStore extends signalStore(
         berechnungRd.data?.verminderteBerechnungMonate;
       if (verminderteBerechnungMonate) {
         byTrancheId.verminderteBerechnung = {
-          monate: verminderteBerechnungMonate,
+          monate: 12 - verminderteBerechnungMonate,
           unreducedTotal:
             (byTrancheId.totalBetragStipendium * 12) /
             verminderteBerechnungMonate,
