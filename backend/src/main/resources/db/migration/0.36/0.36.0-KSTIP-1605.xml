@@ -1,0 +1,88 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="jafa (generated)" id="1737558705632-3">
+        <createTable tableName="buchhaltung">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="buchhaltungPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="buchhaltung_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="VARCHAR(2200)"/>
+          <column name="betrag" type="INTEGER">
+            <constraints nullable="false"/>
+          </column>
+            <column name="saldo" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sap_delivery_id" type="INTEGER"/>
+            <column name="sap_status" type="VARCHAR(255)"/>
+            <column name="fall_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuch_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1737558705632-4">
+        <createTable tableName="buchhaltung_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="buchhaltung_type" type="VARCHAR(255)"/>
+            <column name="comment" type="VARCHAR(2200)"/>
+            <column name="betrag" type="INTEGER"/>
+            <column name="saldo" type="INTEGER"/>
+            <column name="sap_delivery_id" type="INTEGER"/>
+            <column name="sap_status" type="VARCHAR(255)"/>
+            <column name="fall_id" type="UUID"/>
+            <column name="gesuch_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1737558705632-5">
+        <addPrimaryKey columnNames="rev, id" constraintName="buchhaltung_audPK" tableName="buchhaltung_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1737558705632-7">
+        <createIndex indexName="IX_buchhaltung_gesuch_id" tableName="buchhaltung">
+            <column name="gesuch_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1737558705632-8">
+        <createIndex indexName="IX_buchhaltung_mandant" tableName="buchhaltung">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1737558705632-9">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="buchhaltung_aud" constraintName="FK21fg0htbndiepn84d7bfm7er3" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1737558705632-10">
+        <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="buchhaltung" constraintName="FK_buchhaltung_fall_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fall" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1737558705632-11">
+        <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="buchhaltung" constraintName="FK_buchhaltung_gesuch" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

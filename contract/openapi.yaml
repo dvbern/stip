@@ -2769,6 +2769,57 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getNotificationsForCurrentUser
       summary: Gets all notifications for the User
+  /buchhaltung/{gesuchId}:
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    get:
+      tags:
+        - Buchhaltung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BuchhaltungEntry'
+          description: Returns all buchhaltungsentrys of a Fall with the given gesuchId
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBuchhaltungEntrys
+      summary: Gets all buchhaltungsentrys
+    post:
+      tags:
+        - Buchhaltung
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuchhaltungSaldokorrektur'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuchhaltungEntry'
+          description: Create a buchhaltungsentry from a saldokorrektur
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createBuchhaltungSaldokorrektur
+      summary: Create a buchhaltungsentry from a saldokorrektur
 components:
   schemas:
     WelcomeMail:
@@ -5418,8 +5469,50 @@ components:
         unterschriftenblaetter:
           type: array
           items:
-            $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'        
-
+            $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+    SapStatus:
+      enum:
+        - SUCCESS
+        - FAILURE
+        - IN_PROGRESS
+    BuchhaltungEntry:
+      type: object
+      required:
+        - timestampErstellt
+        - saldo
+        - comment
+      properties:
+        timestampErstellt:
+          type: string
+          format: date-time
+        stipendienBetrag:
+          type: integer
+        auszahlung:
+          type: integer
+        rueckforderung:
+          type: integer
+        saldo:
+          type: integer
+        sapId:
+          type: integer
+        sapStatus:
+          $ref: '#/components/schemas/SapStatus'
+        comment:
+          type: string
+        verfuegungId:
+          $ref: '#/components/schemas/UUID'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+    BuchhaltungSaldokorrektur:
+      type: object
+      required:
+        - betrag
+        - comment
+      properties:
+        betrag:
+          type: integer
+        comment:
+          type: string
   responses:
     Unauthorized:
       content:
@@ -5472,6 +5565,13 @@ components:
       in: path
       required: true
       description: Die ID von der GesuchTranche
+      schema:
+        $ref: '#/components/schemas/UUID'
+    fallId:
+      name: fallId
+      in: path
+      required: true
+      description: Die ID vom Fall
       schema:
         $ref: '#/components/schemas/UUID'
     sortOrder:
