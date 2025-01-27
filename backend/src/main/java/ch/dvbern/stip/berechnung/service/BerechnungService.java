@@ -590,9 +590,8 @@ public class BerechnungService {
 
     // TODO KSTIP-1852: unit test this
     int getActualDuration(final Gesuch gesuch, final LocalDateTime eingereicht) {
-        final var lastTranche = gesuch.getGesuchTranchen()
-            .stream()
-            .min(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
+        final var lastTranche = gesuch.getTranchenTranchen()
+            .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
             .orElseThrow(NotFoundException::new);
 
         final var roundedEingereicht = DateUtil.roundToStartOrEnd(
