@@ -27,7 +27,7 @@
           <a
             *dvHasRoles="option.allowedRoles"
             type="button"
-            class="btn btn-nav btn-warning mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
+            class="btn btn-nav mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
             [class.btn-light]="!isActive"
             [class.shadow-none]="!isActive"
             (click)="navClicked.emit({ value: true })"
