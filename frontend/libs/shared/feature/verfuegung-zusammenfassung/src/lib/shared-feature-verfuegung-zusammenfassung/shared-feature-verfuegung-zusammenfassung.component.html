@@ -42,7 +42,13 @@
   <mat-card class="rounded-4 mb-4">
     <mat-card-header>
       <mat-card-title>
-        <div class="text-muted mb-1">{{ 'sachbearbeitung-app.verfuegung.zusammenfassung.subtitle' | translate }}</div>
+        @if (zusammenfassung.verminderteBerechnung) {
+          <div class="text-muted mb-1">
+            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle' | translate }}
+          </div>
+        } @else {
+          <div class="text-muted mb-1">{{ 'sachbearbeitung-app.verfuegung.zusammenfassung.subtitle' | translate }}</div>
+        }
         <h3 class="mb-0 fs-4">
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.title' | translate }}
         </h3>
@@ -60,6 +66,9 @@
                 'sachbearbeitung-app.verfuegung.zusammenfassung.item.total'
                   | translate: { index: berechnungsIndex + 1, type: teilBerechnung.type }
               }}
+              {{ 'shared.label.von' | translate }} {{ teilBerechnung.gueltigAb | date: 'MM.yyyy' }}
+              {{ 'shared.label.bis' | translate }}
+              {{ teilBerechnung.gueltigBis | date: 'MM.yyyy' }}
             </span>
             <div class="">{{ teilBerechnung.berechnung | formatChf }}</div>
           </div>
@@ -84,6 +93,19 @@
       <div class="d-flex justify-content-between fs-3 h4">
         <div>
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
+          @if (zusammenfassung.verminderteBerechnung) {
+            <div class="text-muted h6 tw-mt-1 tw-font-normal">
+              {{
+                'sachbearbeitung-app.verfuegung.zusammenfassung.vermindert.total.info'
+                  | translate
+                    : {
+                        months: zusammenfassung.verminderteBerechnung.monate,
+                        unreducedTotal: zusammenfassung.verminderteBerechnung.unreducedTotal | formatChfNegative,
+                        reducePercentage: zusammenfassung.verminderteBerechnung.reducePercentage | number: '2.0-0',
+                      }
+              }}
+            </div>
+          }
         </div>
         <div>
           {{ zusammenfassung.totalBetragStipendium | formatChf }}

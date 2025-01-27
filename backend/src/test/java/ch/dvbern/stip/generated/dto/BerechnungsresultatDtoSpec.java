@@ -33,7 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   BerechnungsresultatDtoSpec.JSON_PROPERTY_YEAR,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE
 })
 @JsonTypeName("Berechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -46,6 +47,9 @@ public class BerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE = "tranchenBerechnungsresultate";
   private List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate;
+
+  public static final String JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE = "verminderteBerechnungMonate";
+  private Integer verminderteBerechnungMonate;
 
   public BerechnungsresultatDtoSpec() {
   }
@@ -135,6 +139,32 @@ public class BerechnungsresultatDtoSpec {
     this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
   }
 
+
+  public BerechnungsresultatDtoSpec verminderteBerechnungMonate(Integer verminderteBerechnungMonate) {
+    
+    this.verminderteBerechnungMonate = verminderteBerechnungMonate;
+    return this;
+  }
+
+   /**
+   * Die Anzahl von Monaten für welche die Berechnung stattfand
+   * @return verminderteBerechnungMonate
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getVerminderteBerechnungMonate() {
+    return verminderteBerechnungMonate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVerminderteBerechnungMonate(Integer verminderteBerechnungMonate) {
+    this.verminderteBerechnungMonate = verminderteBerechnungMonate;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -146,12 +176,13 @@ public class BerechnungsresultatDtoSpec {
     BerechnungsresultatDtoSpec berechnungsresultat = (BerechnungsresultatDtoSpec) o;
     return Objects.equals(this.year, berechnungsresultat.year) &&
         Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
-        Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate);
+        Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
+        Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnung, tranchenBerechnungsresultate);
+    return Objects.hash(year, berechnung, tranchenBerechnungsresultate, verminderteBerechnungMonate);
   }
 
   @Override
@@ -161,6 +192,7 @@ public class BerechnungsresultatDtoSpec {
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
+    sb.append("    verminderteBerechnungMonate: ").append(toIndentedString(verminderteBerechnungMonate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

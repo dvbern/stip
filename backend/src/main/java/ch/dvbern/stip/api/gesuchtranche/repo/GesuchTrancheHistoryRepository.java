@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -36,6 +37,7 @@ import org.hibernate.envers.query.AuditEntity;
 @RequiredArgsConstructor
 public class GesuchTrancheHistoryRepository {
     private final EntityManager em;
+    private final GesuchHistoryService gesuchHistoryService;
 
     public GesuchTranche getInitialRevision(final UUID gesuchTrancheId) {
         final var reader = AuditReaderFactory.get(em);
@@ -72,7 +74,8 @@ public class GesuchTrancheHistoryRepository {
         final UUID gesuchId,
         final Gesuchstatus gesuchStatus
     ) {
-        return getLatestWhereStatusChangedTo(gesuchId, gesuchStatus).flatMap(Gesuch::getCurrentGesuchTrancheOptional);
+        return gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus)
+            .flatMap(Gesuch::getCurrentGesuchTrancheOptional);
     }
 
     public Optional<GesuchTranche> findOldestHistoricTrancheOfGesuchWhereStatusChangedTo(
@@ -80,7 +83,7 @@ public class GesuchTrancheHistoryRepository {
         final Gesuchstatus gesuchStatus
     ) {
         // The GesuchTranchen attached to this here are the revision that they were at the historic moment in time
-        final var historicGesuch = getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
+        final var historicGesuch = gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
 
         // Get the one that was created the furthest in the past, i.e. the first/ initial Tranche
         return historicGesuch.flatMap(
@@ -88,25 +91,5 @@ public class GesuchTrancheHistoryRepository {
                 .stream()
                 .min(Comparator.comparing(AbstractEntity::getTimestampErstellt))
         );
-    }
-
-    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
-    @SuppressWarnings("unchecked")
-    private Optional<Gesuch> getLatestWhereStatusChangedTo(
-        final UUID gesuchId,
-        final Gesuchstatus gesuchStatus
-    ) {
-        final var reader = AuditReaderFactory.get(em);
-        return reader
-            .createQuery()
-            .forRevisionsOfEntity(Gesuch.class, true, true)
-            .add(AuditEntity.property("id").eq(gesuchId))
-            .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
-            .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntity.revisionNumber().desc())
-            .setMaxResults(1)
-            .getResultList()
-            .stream()
-            .findFirst();
     }
 }

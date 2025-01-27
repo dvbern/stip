@@ -8,6 +8,11 @@ export type PersoenlicheBerechnung = {
     berechnungsanteilKinder: number;
     anteil: number;
   } | null;
+  verminderteBerechnung?: {
+    monate: number;
+    unreducedTotal: number;
+    reducePercentage: number;
+  };
   einnahmen: {
     total: number;
     anzahlPersonenImHaushalt: number;

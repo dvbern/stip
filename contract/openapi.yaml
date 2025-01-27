@@ -5004,6 +5004,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TranchenBerechnungsresultat'
+        verminderteBerechnungMonate:
+          description: 'Die Anzahl von Monaten für welche die Berechnung stattfand'
+          type: integer
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:

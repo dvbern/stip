@@ -24,5 +24,9 @@ export interface Berechnungsresultat {
      * Resultate der Berechnung für die Tranchen des Gesuchs
      */
     tranchenBerechnungsresultate: Array<TranchenBerechnungsresultat>;
+    /**
+     * Die Anzahl von Monaten für welche die Berechnung stattfand
+     */
+    verminderteBerechnungMonate?: number;
 }
 

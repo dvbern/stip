@@ -20,6 +20,8 @@ package ch.dvbern.stip.berechnung.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +34,10 @@ import java.util.Objects;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -56,6 +60,7 @@ import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kie.api.io.Resource;
@@ -79,6 +84,7 @@ public class BerechnungService {
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final DMNService dmnService;
     private final TenantService tenantService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     private PersoenlichesBudgetresultatDto persoenlichesBudgetresultatFromRequest(
         final DmnRequest berechnungRequest,
@@ -285,6 +291,11 @@ public class BerechnungService {
             )
             .toList();
 
+        final var eingereicht = gesuchHistoryRepository.requireLatestEingereicht(gesuch.getId());
+        final var actualDuration = wasEingereichtAfterDueDate(gesuch, eingereicht.getTimestampMutiert())
+            ? getActualDuration(gesuch, eingereicht.getTimestampMutiert())
+            : null;
+
         List<TranchenBerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
         for (final var gesuchTranche : gesuchTranchen) {
             final var trancheBerechnungsresultate = getBerechnungsresultatFromGesuchTranche(
@@ -298,8 +309,15 @@ public class BerechnungService {
                 gesuchTranche.getGueltigkeit().getGueltigBis()
             );
             for (final var berechnungsresultat : trancheBerechnungsresultate) {
+                int berechnung;
+                if (actualDuration != null) {
+                    berechnung = berechnungsresultat.getBerechnung() * actualDuration / 12;
+                } else {
+                    berechnung = berechnungsresultat.getBerechnung();
+                }
+
                 berechnungsresultat.setBerechnung(
-                    (berechnungsresultat.getBerechnung() * monthsValid / 12)
+                    berechnung * monthsValid / 12
                 );
             }
             berechnungsresultate.addAll(trancheBerechnungsresultate);
@@ -314,7 +332,8 @@ public class BerechnungService {
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
             berechnungsresultat,
-            berechnungsresultate
+            berechnungsresultate,
+            actualDuration
         );
     }
 
@@ -546,5 +565,30 @@ public class BerechnungService {
         }
 
         return new BerechnungResult(stipendien.intValue(), result.getDecisionResults(), listener.decisionNodeList);
+    }
+
+    boolean wasEingereichtAfterDueDate(final Gesuch gesuch, final LocalDateTime eingereicht) {
+        // TODO KSTIP-1852: unit test this
+        // TODO KSTIP-998: Use new einreichedatum instead of envers query here
+        final var einreichefrist = gesuch.getGesuchsperiode().getEinreichefristNormal();
+
+        return eingereicht.isAfter(einreichefrist.atTime(LocalTime.MAX));
+    }
+
+    // TODO KSTIP-1852: unit test this
+    int getActualDuration(final Gesuch gesuch, final LocalDateTime eingereicht) {
+        final var lastTranche = gesuch.getGesuchTranchen()
+            .stream()
+            .min(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
+            .orElseThrow(NotFoundException::new);
+
+        final var roundedEingereicht = DateUtil.roundToStartOrEnd(
+            eingereicht.toLocalDate(),
+            14,
+            true,
+            false
+        );
+
+        return DateUtil.getMonthsBetween(roundedEingereicht, lastTranche.getGueltigkeit().getGueltigBis());
     }
 }

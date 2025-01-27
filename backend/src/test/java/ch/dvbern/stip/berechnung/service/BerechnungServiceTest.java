@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -51,6 +52,7 @@ import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
+import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +60,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -272,6 +275,11 @@ class BerechnungServiceTest {
             )
         );
 
+        var gesuchHistoryRepositoryMock = Mockito.mock(GesuchHistoryRepository.class);
+        Mockito.when(gesuchHistoryRepositoryMock.requireLatestEingereicht(Mockito.any())).thenReturn(gesuch);
+        QuarkusMock.installMockForType(gesuchHistoryRepositoryMock, GesuchHistoryRepository.class);
+
+        gesuch.setTimestampMutiert(gesuch.getGesuchsperiode().getEinreichefristReduziert().minusDays(1).atStartOfDay());
         // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
@@ -383,6 +391,11 @@ class BerechnungServiceTest {
                     .setGeburtsdatum(LocalDate.now().minusDays(1).minusYears(27))
             )
         );
+
+        var gesuchHistoryRepositoryMock = Mockito.mock(GesuchHistoryRepository.class);
+        Mockito.when(gesuchHistoryRepositoryMock.requireLatestEingereicht(Mockito.any())).thenReturn(gesuch);
+        QuarkusMock.installMockForType(gesuchHistoryRepositoryMock, GesuchHistoryRepository.class);
+        gesuch.setTimestampMutiert(gesuch.getGesuchsperiode().getEinreichefristReduziert().minusDays(1).atStartOfDay());
 
         // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
@@ -546,6 +559,11 @@ class BerechnungServiceTest {
             )
         );
 
+        var gesuchHistoryRepositoryMock = Mockito.mock(GesuchHistoryRepository.class);
+        Mockito.when(gesuchHistoryRepositoryMock.requireLatestEingereicht(Mockito.any())).thenReturn(gesuch);
+        QuarkusMock.installMockForType(gesuchHistoryRepositoryMock, GesuchHistoryRepository.class);
+        gesuch.setTimestampMutiert(gesuch.getGesuchsperiode().getEinreichefristReduziert().minusDays(1).atStartOfDay());
+
         // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
@@ -693,6 +711,11 @@ class BerechnungServiceTest {
             )
         );
 
+        var gesuchHistoryRepositoryMock = Mockito.mock(GesuchHistoryRepository.class);
+        Mockito.when(gesuchHistoryRepositoryMock.requireLatestEingereicht(Mockito.any())).thenReturn(gesuch);
+        QuarkusMock.installMockForType(gesuchHistoryRepositoryMock, GesuchHistoryRepository.class);
+        gesuch.setTimestampMutiert(gesuch.getGesuchsperiode().getEinreichefristReduziert().minusDays(1).atStartOfDay());
+
         // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
@@ -829,6 +852,11 @@ class BerechnungServiceTest {
                 kind2
             )
         );
+
+        var gesuchHistoryRepositoryMock = Mockito.mock(GesuchHistoryRepository.class);
+        Mockito.when(gesuchHistoryRepositoryMock.requireLatestEingereicht(Mockito.any())).thenReturn(gesuch);
+        QuarkusMock.installMockForType(gesuchHistoryRepositoryMock, GesuchHistoryRepository.class);
+        gesuch.setTimestampMutiert(gesuch.getGesuchsperiode().getEinreichefristReduziert().minusDays(1).atStartOfDay());
 
         // Act
         final var berechnungsresultatDtos = berechnungService.getBerechnungsresultatFromGesuchTranche(
@@ -991,6 +1019,11 @@ class BerechnungServiceTest {
                 kind1
             )
         );
+
+        var gesuchHistoryRepositoryMock = Mockito.mock(GesuchHistoryRepository.class);
+        Mockito.when(gesuchHistoryRepositoryMock.requireLatestEingereicht(Mockito.any())).thenReturn(gesuch);
+        QuarkusMock.installMockForType(gesuchHistoryRepositoryMock, GesuchHistoryRepository.class);
+        gesuch.setTimestampMutiert(gesuch.getGesuchsperiode().getEinreichefristReduziert().minusDays(1).atStartOfDay());
 
         // Act
         final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuchTranche(
