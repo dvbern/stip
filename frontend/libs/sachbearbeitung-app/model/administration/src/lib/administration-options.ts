@@ -1,9 +1,12 @@
+import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
+
 export type AdminOption = {
   type: 'PARENT';
   route: string;
   translationKey: string;
   titleTranslationKey: string;
   iconSymbolName: string;
+  allowedRoles: AvailableBenutzerRole[];
 };
 
 export const OPTION_AUSBILDUNGSSTAETTE: AdminOption = {
@@ -13,6 +16,7 @@ export const OPTION_AUSBILDUNGSSTAETTE: AdminOption = {
   titleTranslationKey:
     'sachbearbeitung-app.admin.ausbildungsstaette.route.overview',
   iconSymbolName: 'school',
+  allowedRoles: ['Admin'],
 };
 
 export const OPTION_BUCHSTABEN_ZUTEILUNG: AdminOption = {
@@ -22,6 +26,7 @@ export const OPTION_BUCHSTABEN_ZUTEILUNG: AdminOption = {
   titleTranslationKey:
     'sachbearbeitung-app.admin.buchstabenZuteilung.route.overview',
   iconSymbolName: 'sort_by_alpha',
+  allowedRoles: ['Admin'],
 };
 
 export const OPTION_GESUCHSPERIODEN: AdminOption = {
@@ -31,6 +36,7 @@ export const OPTION_GESUCHSPERIODEN: AdminOption = {
   titleTranslationKey:
     'sachbearbeitung-app.admin.gesuchsperiode.route.overview',
   iconSymbolName: 'format_indent_increase',
+  allowedRoles: ['Admin'],
 };
 
 export const OPTION_EU_EFTA_LAENDER: AdminOption = {
@@ -39,6 +45,7 @@ export const OPTION_EU_EFTA_LAENDER: AdminOption = {
   translationKey: 'sachbearbeitung-app.admin.option.euEftaLaender',
   titleTranslationKey: 'sachbearbeitung-app.admin.euEftaLaender.route.overview',
   iconSymbolName: 'public',
+  allowedRoles: ['Admin'],
 };
 
 export const OPTION_BENUTZERVERWALTUNG: AdminOption = {
@@ -48,6 +55,7 @@ export const OPTION_BENUTZERVERWALTUNG: AdminOption = {
   titleTranslationKey:
     'sachbearbeitung-app.admin.benutzerverwaltung.route.overview',
   iconSymbolName: 'people',
+  allowedRoles: ['Admin'],
 };
 
 export const OPTION_SOZIALDIENST: AdminOption = {
@@ -56,6 +64,17 @@ export const OPTION_SOZIALDIENST: AdminOption = {
   translationKey: 'sachbearbeitung-app.admin.option.sozialdienst',
   titleTranslationKey: 'sachbearbeitung-app.admin.sozialdienst.route.overview',
   iconSymbolName: 'supervisor_account',
+  allowedRoles: ['Admin'],
+};
+
+export const OPTION_SOZIALDIENST_BENUTZER: AdminOption = {
+  type: 'PARENT',
+  route: 'sozialdienst-benutzer',
+  translationKey: 'sachbearbeitung-app.admin.option.sozialdienstBenutzer',
+  titleTranslationKey:
+    'sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview',
+  iconSymbolName: 'people',
+  allowedRoles: ['Sozialdienst-Admin'],
 };
 
 export const AdminOptions = [
@@ -65,6 +84,7 @@ export const AdminOptions = [
   OPTION_EU_EFTA_LAENDER,
   OPTION_BENUTZERVERWALTUNG,
   OPTION_SOZIALDIENST,
+  OPTION_SOZIALDIENST_BENUTZER,
 ];
 
 export type ChildAdminOption = {
@@ -109,3 +129,11 @@ export const CHILD_OPTION_SOZIALDIENST = (
   titleTranslationKey,
   parentRoute: OPTION_SOZIALDIENST.route,
 });
+
+export const OPTION_SOZIALDIENST_BENUTZER_DETAIL: ChildAdminOption = {
+  type: 'CHILD',
+  parentRoute: OPTION_SOZIALDIENST.route,
+  route: 'sozialdienst-benutzer',
+  titleTranslationKey:
+    'sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview',
+};

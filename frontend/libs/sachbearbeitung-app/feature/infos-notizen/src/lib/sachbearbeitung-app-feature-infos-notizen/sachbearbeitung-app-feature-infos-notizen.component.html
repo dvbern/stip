@@ -83,7 +83,7 @@
       <!-- Actions -->
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef class="tw-w-32">
-          @if (permissionStore.permissionsMapSig()?.Sachbearbeiter) {
+          @if (permissionStore.rolesMapSig()?.Sachbearbeiter) {
             <button
               type="button"
               class="btn btn-outline-dark btn-sm p-2 d-inline-flex lh-1 align-items-center"
@@ -129,9 +129,7 @@
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
           <div class="tw-flex tw-h-[53px] tw-items-center tw-justify-end tw-gap-1">
-            @if (
-              notiz.notizTyp === 'JURISTISCHE_NOTIZ' && permissionStore.permissionsMapSig()?.Jurist && !notiz.antwort
-            ) {
+            @if (notiz.notizTyp === 'JURISTISCHE_NOTIZ' && permissionStore.rolesMapSig()?.Jurist && !notiz.antwort) {
               <button
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"
@@ -151,7 +149,7 @@
               </button>
             }
 
-            @if (notiz.notizTyp === 'GESUCH_NOTIZ' && permissionStore.permissionsMapSig()?.Sachbearbeiter) {
+            @if (notiz.notizTyp === 'GESUCH_NOTIZ' && permissionStore.rolesMapSig()?.Sachbearbeiter) {
               <button
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"

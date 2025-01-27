@@ -12,6 +12,8 @@ import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import { DokumentService, GesuchService } from '@dv/shared/model/gesuch';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import {
   SharedUiFormatChfNegativePipe,
   SharedUiFormatChfPipe,
@@ -33,6 +35,7 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     SharedUiFormatChfPipe,
     SharedUiFormatChfNegativePipe,
     SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiDownloadButtonDirective,
     SharedUiLoadingComponent,
     DecimalPipe,
   ],
@@ -42,6 +45,8 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
 })
 export class SharedFeatureVerfuegungZusammenfassungComponent {
   berechnungStore = inject(BerechnungStore);
+  gesuchService = inject(GesuchService);
+  dokumentService = inject(DokumentService);
   store = inject(Store);
   gesuchIdSig = this.store.selectSignal(selectRouteId);
 

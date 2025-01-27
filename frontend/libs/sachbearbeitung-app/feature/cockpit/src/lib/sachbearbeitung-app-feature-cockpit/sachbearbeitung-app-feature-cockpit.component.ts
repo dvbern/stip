@@ -51,7 +51,7 @@ import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { BenutzerVerwaltungRole } from '@dv/shared/model/benutzer';
+import { BenutzerRole } from '@dv/shared/model/benutzer';
 import {
   GesuchFilter,
   GesuchServiceGetGesucheSbRequestParams,
@@ -228,7 +228,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
   quickFilters: {
     typ: GesuchFilter;
     icon: string;
-    roles: BenutzerVerwaltungRole[];
+    roles: BenutzerRole[];
   }[] = [
     {
       typ: 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE',
@@ -259,7 +259,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
     this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
   availableQuickFiltersSig = computed(() => {
-    const roles = this.permissionStore.permissionsMapSig();
+    const roles = this.permissionStore.rolesMapSig();
 
     return this.quickFilters.filter((filter) =>
       filter.roles.some((role) => roles?.[role]),

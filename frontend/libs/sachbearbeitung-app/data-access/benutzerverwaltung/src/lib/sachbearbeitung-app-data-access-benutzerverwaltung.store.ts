@@ -18,7 +18,7 @@ import {
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
-  BENUTZER_VERWALTUNG_ROLES,
+  BENUTZER_ROLES,
   SharedModelBenutzer,
   SharedModelBenutzerApi,
   SharedModelBenutzerWithRoles,
@@ -84,7 +84,7 @@ export class BenutzerverwaltungStore extends signalStore(
         // sadly Keycloak does not support loading all users and their roles in one request
         // so we load the user list for every known role and merge them afterwards
         forkJoin(
-          Object.values(BENUTZER_VERWALTUNG_ROLES).map((role) => {
+          Object.values(BENUTZER_ROLES).map((role) => {
             return this.keycloak.loadBenutzersWithRole$(role);
           }),
         ),

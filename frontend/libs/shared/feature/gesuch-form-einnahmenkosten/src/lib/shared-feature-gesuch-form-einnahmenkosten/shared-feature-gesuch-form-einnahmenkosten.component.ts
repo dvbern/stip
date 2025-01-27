@@ -48,6 +48,7 @@ import {
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -94,6 +95,7 @@ import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-featu
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
+    SharedUiInfoDialogDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-einnahmenkosten.component.html',
   styleUrl: './shared-feature-gesuch-form-einnahmenkosten.component.scss',

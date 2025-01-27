@@ -50,6 +50,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
@@ -90,6 +91,7 @@ const KnownErrorKeys = {
     MatCheckboxModule,
     MatAutocompleteModule,
     MatSelectModule,
+    SharedUiInfoDialogDirective,
     SharedUiFormReadonlyDirective,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,

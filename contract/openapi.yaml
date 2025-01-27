@@ -1359,7 +1359,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/ServerError'
-      operationId: getSozialdienstBenutzer
+      operationId: getSozialdienstBenutzerList
     post:
       description: create a new SozialdienstBenutzer that is assigned to the Sozialdienst of the currently logged in SozialdienstAdmin
       tags:
@@ -1410,15 +1410,36 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: updateSozialdienstBenutzer
+  /sozialdienst/benutzer/{sozialdienstBenutzerId}:
+    parameters:
+      - name: sozialdienstBenutzerId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SozialdienstBenutzer'
+          description: Returns the Sozialdienst Benutzer with the given ID
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: getSozialdienstBenutzer
     delete:
       description: update an exisitng SozialdienstBenutzer
       tags:
         - Sozialdienst
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UUID'
       responses:
         200:
           description: Returns on successfull delete
@@ -1780,9 +1801,20 @@ paths:
       responses:
         '200':
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: File returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
           description: File returned
       operationId: getDokumentDownloadToken
       summary: get Dokument Download Token
@@ -2006,6 +2038,56 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBerechnungForGesuch
       summary: Berechnet und holt die Berechnung für ein Gesuch
+  '/gesuch/{gesuchId}/berechnungsblatt/token':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: File returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBerechnungsblattDownloadToken
+      summary: get Berechnungsblatt Download Token
+  '/gesuch/berechnungsblatt':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Berechnungsblatt File returned
+      operationId: getBerechnungsBlattForGesuch
+      summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren':
     get:
       tags:
@@ -2687,6 +2769,57 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getNotificationsForCurrentUser
       summary: Gets all notifications for the User
+  /buchhaltung/{gesuchId}:
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    get:
+      tags:
+        - Buchhaltung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BuchhaltungEntry'
+          description: Returns all buchhaltungsentrys of a Fall with the given gesuchId
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBuchhaltungEntrys
+      summary: Gets all buchhaltungsentrys
+    post:
+      tags:
+        - Buchhaltung
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuchhaltungSaldokorrektur'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuchhaltungEntry'
+          description: Create a buchhaltungsentry from a saldokorrektur
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createBuchhaltungSaldokorrektur
+      summary: Create a buchhaltungsentry from a saldokorrektur
 components:
   schemas:
     WelcomeMail:
@@ -4480,6 +4613,13 @@ components:
         - AKTIV
         - ABGEBROCHEN
         - ABGESCHLOSSEN
+    FileDownloadToken:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS
@@ -5200,7 +5340,7 @@ components:
           $ref: '#/components/schemas/LocalDate'
         notizTyp:
           $ref: '#/components/schemas/GesuchNotizTyp'
-        gesuchNummer: 
+        gesuchNummer:
           type: string
         antwort:
           type: string
@@ -5332,8 +5472,50 @@ components:
         unterschriftenblaetter:
           type: array
           items:
-            $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'        
-
+            $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
+    SapStatus:
+      enum:
+        - SUCCESS
+        - FAILURE
+        - IN_PROGRESS
+    BuchhaltungEntry:
+      type: object
+      required:
+        - timestampErstellt
+        - saldo
+        - comment
+      properties:
+        timestampErstellt:
+          type: string
+          format: date-time
+        stipendienBetrag:
+          type: integer
+        auszahlung:
+          type: integer
+        rueckforderung:
+          type: integer
+        saldo:
+          type: integer
+        sapId:
+          type: integer
+        sapStatus:
+          $ref: '#/components/schemas/SapStatus'
+        comment:
+          type: string
+        verfuegungId:
+          $ref: '#/components/schemas/UUID'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+    BuchhaltungSaldokorrektur:
+      type: object
+      required:
+        - betrag
+        - comment
+      properties:
+        betrag:
+          type: integer
+        comment:
+          type: string
   responses:
     Unauthorized:
       content:
@@ -5386,6 +5568,13 @@ components:
       in: path
       required: true
       description: Die ID von der GesuchTranche
+      schema:
+        $ref: '#/components/schemas/UUID'
+    fallId:
+      name: fallId
+      in: path
+      required: true
+      description: Die ID vom Fall
       schema:
         $ref: '#/components/schemas/UUID'
     sortOrder:

@@ -151,7 +151,8 @@
 
     @let statusUebergaenge = statusUebergaengeOptionsSig();
     @let availableTrancheInteraction = availableTrancheInteractionSig();
-    @if (statusUebergaenge.isNotEmpty || availableTrancheInteraction) {
+
+    @if (isTrancheRouteSig()) {
       <!-- Separator -->
       <div class="my-1 text-body-tertiary vr"></div>
 
@@ -161,7 +162,7 @@
         class="btn btn-outline-primary fw-normal px-3 d-flex align-items-center shadow-none"
         data-testid="sb-gesuch-header-aktion-menu"
         [class.active]="aktionTrigger.menuOpen"
-        [disabled]="isLoadingSig()"
+        [disabled]="!(statusUebergaenge.isNotEmpty || availableTrancheInteraction || isLoadingSig())"
         #aktionTrigger="matMenuTrigger"
         [matMenuTriggerFor]="aktionMenu"
       >
@@ -169,55 +170,54 @@
         <span>{{ 'sachbearbeitung-app.header.aktion' | translate }}</span>
         <i class="material-symbols-rounded ms-2">expand_more</i>
       </button>
-    }
+      <!-- Aktion Menu -->
+      <mat-menu #aktionMenu="matMenu" class="header-menu-panel mt-2 rounded">
+        <div class="d-flex flex-column gap-2">
+          @switch (availableTrancheInteraction) {
+            @case ('CREATE_TRANCHE') {
+              <!-- Tranche erstellen -->
+              <button
+                type="button"
+                class="btn fw-normal px-2 shadow-none"
+                data-testid="aktion-tranche-erstellen"
+                mat-menu-item
+                (click)="createTranche()"
+              >
+                <div class="d-flex gap-2 align-items-center">
+                  <i class="material-symbols-rounded">add_circle</i>
+                  <span>{{ 'sachbearbeitung-app.header.tranche.erstellen' | translate }}</span>
+                </div>
+              </button>
+            }
+          }
 
-    <!-- Aktion Menu -->
-    <mat-menu #aktionMenu="matMenu" class="header-menu-panel mt-2 rounded">
-      <div class="d-flex flex-column gap-2">
-        @switch (availableTrancheInteraction) {
-          @case ('CREATE_TRANCHE') {
-            <!-- Tranche erstellen -->
+          @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
+            <hr class="my-1" />
+          }
+
+          @for (uebergang of statusUebergaenge.list; track $index) {
             <button
               type="button"
-              class="btn fw-normal px-2 shadow-none"
-              data-testid="aktion-tranche-erstellen"
+              class="btn fw-normal px-2 shadow-none pe-auto"
+              [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
+              [disabled]="uebergang.disabledReason || !trancheId"
+              [attr.title]="
+                uebergang.disabledReason
+                  ? ('sachbearbeitung-app.header.status-uebergang.disabled-reason.' + uebergang.disabledReason
+                    | translate)
+                  : null
+              "
               mat-menu-item
-              (click)="createTranche()"
+              (click)="setStatusUebergang(uebergang.typ, trancheId)"
             >
               <div class="d-flex gap-2 align-items-center">
-                <i class="material-symbols-rounded">add_circle</i>
-                <span>{{ 'sachbearbeitung-app.header.tranche.erstellen' | translate }}</span>
+                <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
+                <span>{{ 'sachbearbeitung-app.header.status-uebergang.' + uebergang.titleKey | translate }}</span>
               </div>
             </button>
           }
-        }
-
-        @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
-          <hr class="my-1" />
-        }
-
-        @for (uebergang of statusUebergaenge.list; track $index) {
-          <button
-            type="button"
-            class="btn fw-normal px-2 shadow-none pe-auto"
-            [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
-            [disabled]="uebergang.disabledReason || !trancheId"
-            [attr.title]="
-              uebergang.disabledReason
-                ? ('sachbearbeitung-app.header.status-uebergang.disabled-reason.' + uebergang.disabledReason
-                  | translate)
-                : null
-            "
-            mat-menu-item
-            (click)="setStatusUebergang(uebergang.typ, trancheId)"
-          >
-            <div class="d-flex gap-2 align-items-center">
-              <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
-              <span>{{ 'sachbearbeitung-app.header.status-uebergang.' + uebergang.titleKey | translate }}</span>
-            </div>
-          </button>
-        }
-      </div>
-    </mat-menu>
+        </div>
+      </mat-menu>
+    }
   </div>
 </dv-shared-pattern-app-header>

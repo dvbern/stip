@@ -75,12 +75,6 @@ export const sharedDataAccessGesuchsFeature = createFeature({
       (state): State => ({
         ...state,
         gesuchs: [],
-        // Allow cached gesuchFormular to be used if gesuchFormular is null
-        // (e.g. while navigating between steps and the navbar shouldn't be updated)
-        cache: {
-          ...state.cache,
-          gesuchFormular: null,
-        },
       }),
     ),
 

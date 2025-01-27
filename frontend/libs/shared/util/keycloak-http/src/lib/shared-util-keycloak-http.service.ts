@@ -15,7 +15,7 @@ import {
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
-  BenutzerVerwaltungRole,
+  BenutzerRole,
   KeycloakUserCreate,
   SharedModelBenutzerApi,
   SharedModelBenutzerList,
@@ -243,7 +243,7 @@ export class KeycloakHttpService {
       .pipe(this.interceptError('loeschen'));
   }
 
-  loadBenutzersWithRole$(role: BenutzerVerwaltungRole) {
+  loadBenutzersWithRole$(role: BenutzerRole) {
     return this.http
       .get<SharedModelBenutzerList>(
         `${this.oauthParams.url}/admin/realms/${this.oauthParams.realm}/roles/${role}/users`,

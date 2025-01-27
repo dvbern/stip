@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +64,8 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kie.api.io.Resource;
+import org.kie.dmn.api.core.DMNDecisionResult;
+import org.kie.dmn.api.core.DMNDecisionResult.DecisionEvaluationStatus;
 import org.kie.dmn.api.core.event.AfterEvaluateDecisionEvent;
 import org.kie.dmn.core.api.event.DefaultDMNRuntimeEventListener;
 
@@ -533,14 +536,29 @@ public class BerechnungService {
 
         final var listener = new DefaultDMNRuntimeEventListener() {
             final List<AfterEvaluateDecisionEvent> decisionNodeList = new ArrayList<>();
+            final List<DMNDecisionResult> unsuccessfulResults = new ArrayList<>();
 
             @Override
             public void afterEvaluateDecision(AfterEvaluateDecisionEvent event) {
                 decisionNodeList.add(event);
+                event.getResult()
+                    .getDecisionResults()
+                    .stream()
+                    .filter(
+                        decisionResult -> decisionResult.getEvaluationStatus() != DecisionEvaluationStatus.SUCCEEDED
+                    )
+                    .forEach(unsuccessfulResults::add);
             }
         };
 
         final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request), listener);
+        if (!listener.unsuccessfulResults.isEmpty()) {
+            LOG.warn(
+                "DMN evaluation had decision results that did not succeed: {}",
+                Arrays.toString(listener.unsuccessfulResults.toArray())
+            );
+        }
+
         final var stipendien = (BigDecimal) result.getDecisionResultByName(STIPENDIUM_DECISION_NAME).getResult();
         if (stipendien == null) {
             throw new AppErrorException("Result of Stipendienberechnung was null!");

@@ -15,7 +15,10 @@ export const appRoutes: Route[] = [
     path: '',
     canActivate: [
       hasBenutzer,
-      hasRoles(['Admin', 'Jurist', 'Sachbearbeiter'], '/unauthorized'),
+      hasRoles(
+        ['Admin', 'Jurist', 'Sachbearbeiter', 'Sozialdienst-Admin'],
+        '/unauthorized',
+      ),
     ],
     children: [
       {
@@ -43,7 +46,7 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'administration',
-        canActivate: [hasBenutzer, hasRoles(['Admin'])],
+        canActivate: [hasBenutzer, hasRoles(['Admin', 'Sozialdienst-Admin'])],
         title: 'sachbearbeitung-app.admin.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/administration').then(
@@ -56,7 +59,10 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'sachbearbeitung-app-feature-cockpit',
-        canActivate: [hasBenutzer],
+        canActivate: [
+          hasBenutzer,
+          hasRoles(['Sachbearbeiter'], '/administration'),
+        ],
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/cockpit').then(
@@ -100,14 +106,6 @@ export const appRoutes: Route[] = [
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/infos').then(
             (m) => m.sachbearbeitungAppFeatureInfosRoutes,
-          ),
-      },
-      {
-        path: 'download',
-        canActivate: [hasBenutzer],
-        loadChildren: () =>
-          import('@dv/shared/feature/download').then(
-            (m) => m.sharedFeatureDownloadRoutes,
           ),
       },
     ],
