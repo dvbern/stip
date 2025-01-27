@@ -36,10 +36,8 @@ public abstract class BuchhaltungMapper {
 
     @Named("getStipendienBetrag")
     Integer getStipendienBetrag(Buchhaltung buchhaltung) {
-        if (buchhaltung.getBuchhaltungType() == BuchhaltungType.SALDOAENDERUNG) {
-            if (buchhaltung.getBetrag() > 0) {
-                return buchhaltung.getBetrag();
-            }
+        if (buchhaltung.getBuchhaltungType() == BuchhaltungType.SALDOAENDERUNG && buchhaltung.getBetrag() > 0) {
+            return buchhaltung.getBetrag();
         }
         return null;
     }
@@ -54,10 +52,8 @@ public abstract class BuchhaltungMapper {
 
     @Named("getRueckforderung")
     Integer getRueckforderung(Buchhaltung buchhaltung) {
-        if (buchhaltung.getBuchhaltungType() == BuchhaltungType.SALDOAENDERUNG) {
-            if (buchhaltung.getBetrag() < 0) {
-                return buchhaltung.getBetrag();
-            }
+        if (buchhaltung.getBuchhaltungType() == BuchhaltungType.SALDOAENDERUNG && buchhaltung.getBetrag() < 0) {
+            return buchhaltung.getBetrag();
         }
         return null;
     }
