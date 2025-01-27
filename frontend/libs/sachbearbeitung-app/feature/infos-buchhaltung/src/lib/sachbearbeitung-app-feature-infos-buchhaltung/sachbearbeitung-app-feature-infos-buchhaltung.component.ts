@@ -7,18 +7,12 @@ import {
   inject,
   viewChild,
 } from '@angular/core';
-import {
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -26,6 +20,7 @@ import {
   BuchhaltungEntryView,
   BuchhaltungStore,
 } from '@dv/sachbearbeitung-app/data-access/buchhaltung';
+import { SachbearbeitungAppDialogCreateBuchhaltungsKorrekturComponent } from '@dv/sachbearbeitung-app/dialog/create-buchhaltungs-korrektur';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
@@ -38,11 +33,6 @@ import {
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
-import { convertTempFormToRealValues } from '@dv/shared/util/form';
-import {
-  fromFormatedNumber,
-  maskitoNumber,
-} from '@dv/shared/util/maskito-util';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-buchhaltung',
@@ -50,12 +40,9 @@ import {
   imports: [
     CommonModule,
     TranslatePipe,
-    ReactiveFormsModule,
     RouterLink,
-    MaskitoDirective,
-    MatFormFieldModule,
-    MatInputModule,
     MatTableModule,
+    MatTooltipModule,
     MatPaginatorModule,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
@@ -70,15 +57,11 @@ import {
   providers: [BuchhaltungStore],
 })
 export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
-  private formBuilder = inject(NonNullableFormBuilder);
   private store = inject(Store);
+  private dialog = inject(MatDialog);
   private gesuchIdSig = this.store.selectSignal(selectRouteId);
 
   buchhaltungStore = inject(BuchhaltungStore);
-  maskitoNumber = maskitoNumber;
-  form = this.formBuilder.group({
-    betrag: [<string | null>null, [Validators.required]],
-  });
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
   displayedColumns = [
@@ -130,18 +113,22 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
   createBuchhaltungsKorrektur() {
     const gesuchId = this.gesuchIdSig();
 
-    if (!gesuchId || this.form.invalid) {
+    if (!gesuchId) {
       return;
     }
 
-    const { betrag } = convertTempFormToRealValues(this.form, ['betrag']);
-
-    this.buchhaltungStore.createBuchhaltungsKorrektur$({
-      buchhaltungSaldokorrektur: {
-        betrag: fromFormatedNumber(betrag),
-        comment: 'Foobar',
-      },
-      gesuchId,
-    });
+    SachbearbeitungAppDialogCreateBuchhaltungsKorrekturComponent.open(
+      this.dialog,
+    )
+      .afterClosed()
+      .subscribe((korrektur) => {
+        if (!korrektur) {
+          return;
+        }
+        this.buchhaltungStore.createBuchhaltungsKorrektur$({
+          buchhaltungSaldokorrektur: korrektur,
+          gesuchId,
+        });
+      });
   }
 }

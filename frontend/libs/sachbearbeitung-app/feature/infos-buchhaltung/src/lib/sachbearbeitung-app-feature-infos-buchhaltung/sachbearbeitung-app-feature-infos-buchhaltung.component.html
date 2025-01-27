@@ -1,16 +1,12 @@
 @if (buchhaltungStore.buchhaltung() | rdIsPendingWithoutCache) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
-  <form [formGroup]="form" class="tw-dv-form-grid" (ngSubmit)="createBuchhaltungsKorrektur()">
-    <mat-form-field>
-      <mat-label>{{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur' | translate }}</mat-label>
-      <input matInput [maskito]="maskitoNumber" formControlName="betrag" />
-    </mat-form-field>
-    <div>
-      <button type="submit" class="btn btn-primary tw-grow-0">{{ 'shared.create' | translate }}</button>
-    </div>
-  </form>
   @if (buchhaltungDataSourceSig(); as buchhaltungDataSource) {
+    <div class="tw-flex tw-w-full tw-justify-end">
+      <button type="button" (click)="createBuchhaltungsKorrektur()" class="btn btn-outline-primary">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | translate }}
+      </button>
+    </div>
     <div class="tw-dv-table" [class.opacity-50]="buchhaltungStore.buchhaltung() | rdIsPending">
       <table mat-table [dataSource]="buchhaltungDataSource" matSort class="tw-w-full tw-table-fixed">
         <caption class="cdk-visually-hidden">
@@ -78,14 +74,14 @@
           <td
             mat-cell
             *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw-whitespace-nowrap !tw-text-right"
+            class="tw-whitespace-nowrap !tw-text-right tw-font-bold"
           >
             {{ buchhaltung.entry.saldo | formatChf }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="comment">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-full">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.comment' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
@@ -94,7 +90,7 @@
         </ng-container>
 
         <ng-container matColumnDef="link">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-40">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-40 tw-whitespace-nowrap">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.link' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">

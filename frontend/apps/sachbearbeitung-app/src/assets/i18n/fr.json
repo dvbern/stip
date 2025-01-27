@@ -269,7 +269,9 @@
   "sachbearbeitung-app.infos.beschwerden": "Plaintes",
 
   "sachbearbeitung-app.infos.buchhaltung.title": "Comptabilité",
-  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur": "Correction manuelle de la balance",
+  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title": "Correction du solde",
+  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.betrag": "Montant",
+  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.comment": "Remarque",
   "sachbearbeitung-app.infos.buchhaltung.table.datum": "Date",
   "sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag": "Montant de la bourse",
   "sachbearbeitung-app.infos.buchhaltung.table.auszahlung": "Paiement",

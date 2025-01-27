@@ -52,10 +52,10 @@ export class BuchhaltungStore extends signalStore(
         previousEntry && previousEntry.gesuchId !== entry.gesuchId;
       return [
         ...acc,
+        ...(isStartOfNewGesuch
+          ? [{ type: 'gesuchStart' as const, entry }]
+          : []),
         {
-          ...(isStartOfNewGesuch
-            ? [{ type: 'gesuchStart' as const, entry }]
-            : []),
           type: getBuchungsType(entry),
           entry,
         },

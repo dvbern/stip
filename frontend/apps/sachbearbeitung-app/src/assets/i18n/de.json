@@ -269,7 +269,9 @@
   "sachbearbeitung-app.infos.beschwerden": "Beschwerden",
 
   "sachbearbeitung-app.infos.buchhaltung.title": "Buchhaltung",
-  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur": "Manuelle Saldo Korrektur",
+  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title": "Saldo manuell korrigieren",
+  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.betrag": "Betrag",
+  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.comment": "Bemerkung",
   "sachbearbeitung-app.infos.buchhaltung.table.datum": "Datum",
   "sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag": "Stipendienbetrag",
   "sachbearbeitung-app.infos.buchhaltung.table.auszahlung": "Auszahlung",
