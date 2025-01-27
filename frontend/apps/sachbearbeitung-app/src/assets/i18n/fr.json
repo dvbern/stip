@@ -255,8 +255,8 @@
   "sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder": "Filtrer...",
 
   "sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview": "Gestion des utilisateurs",
-  "sachbearbeitung-app.admin.sozialdienstBenutzer.create": "- Créer",
-  "sachbearbeitung-app.admin.sozialdienstBenutzer.edit": "- Modifier",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.create": "Créer",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.edit": "Modifier",
   "sachbearbeitung-app.admin.sozialdienstBenutzer.nachname.label": "Nom",
   "sachbearbeitung-app.admin.sozialdienstBenutzer.vorname.label": "Prénom",
   "sachbearbeitung-app.admin.sozialdienstBenutzer.email.label": "E-Mail",
