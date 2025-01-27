@@ -552,10 +552,23 @@ public class BerechnungService {
         };
 
         final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request), listener);
-        if (!listener.unsuccessfulResults.isEmpty()) {
+        if (
+            listener.unsuccessfulResults.stream()
+                .noneMatch(
+                    dmnDecisionResult -> dmnDecisionResult
+                        .getEvaluationStatus() != DecisionEvaluationStatus.SUCCEEDED
+                )
+        ) {
             LOG.warn(
                 "DMN evaluation had decision results that did not succeed: {}",
-                Arrays.toString(listener.unsuccessfulResults.toArray())
+                Arrays.toString(
+                    listener.unsuccessfulResults.stream()
+                        .filter(
+                            dmnDecisionResult -> dmnDecisionResult
+                                .getEvaluationStatus() != DecisionEvaluationStatus.SUCCEEDED
+                        )
+                        .toArray()
+                )
             );
         }
 
