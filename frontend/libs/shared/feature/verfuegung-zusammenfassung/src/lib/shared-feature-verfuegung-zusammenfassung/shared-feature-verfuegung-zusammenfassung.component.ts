@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -30,6 +30,7 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     SharedUiFormatChfPipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
+    DecimalPipe,
   ],
   templateUrl: './shared-feature-verfuegung-zusammenfassung.component.html',
   styleUrl: './shared-feature-verfuegung-zusammenfassung.component.scss',
