@@ -581,7 +581,6 @@ public class BerechnungService {
     }
 
     boolean wasEingereichtAfterDueDate(final Gesuch gesuch, final LocalDateTime eingereicht) {
-        // TODO KSTIP-1852: unit test this
         // TODO KSTIP-998: Use new einreichedatum instead of envers query here
         final var einreichefrist = gesuch.getGesuchsperiode().getEinreichefristNormal();
 
