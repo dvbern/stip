@@ -16,6 +16,7 @@ export interface BuchhaltungEntry {
     stipendienBetrag?: number;
     auszahlung?: number;
     rueckforderung?: number;
+    saldoAenderung?: number;
     saldo: number;
     sapId?: number;
     sapStatus?: SapStatus;

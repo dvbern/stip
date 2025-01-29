@@ -81,28 +81,44 @@
         </ng-container>
 
         <ng-container matColumnDef="comment">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-full">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-[30ch]">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.comment' | translate }}
           </th>
-          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
+          <td
+            mat-cell
+            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+            class="tw-max-w-[30ch] tw-whitespace-nowrap"
+            [dvTruncateTooltip]="buchhaltung.entry.comment"
+          >
             {{ buchhaltung.entry.comment }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="link">
+        <ng-container matColumnDef="info">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-40 tw-whitespace-nowrap">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.link' | translate }}
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.info' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
-            @if (buchhaltung.entry.verfuegungId) {
+            <div class="gap-1 tw-flex">
               <button
                 type="button"
-                class="btn btn-link text-truncate tw-flex tw-p-0 !tw-underline"
-                [dvDownloadButton]="{ type: 'berechnungsblatt', id: 'TBD' }"
+                (click)="showDetails(buchhaltung.entry)"
+                class="dv-icon-button dv-icon-button-md text-info"
+                [matTooltip]="'sachbearbeitung-app.infos.buchhaltung.table.moreInfo' | translate"
               >
-                TBD
+                <span class="material-symbols-rounded">info</span>
               </button>
-            }
+              @if (buchhaltung.entry.verfuegungId) {
+                <button
+                  type="button"
+                  class="btn btn-outline-primary fs-7 tw-p-4 tw-text-sm"
+                  [dvDownloadButton]="{ type: 'berechnungsblatt', id: 'TBD' }"
+                  [matTooltip]="'shared.dokumente.table.download' | translate"
+                >
+                  <span class="material-symbols-rounded tw-align-middle">download</span>
+                </button>
+              }
+            </div>
           </td>
         </ng-container>
 

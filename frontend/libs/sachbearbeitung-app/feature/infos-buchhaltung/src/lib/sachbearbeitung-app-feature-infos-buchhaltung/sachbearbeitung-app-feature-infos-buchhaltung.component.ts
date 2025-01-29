@@ -20,8 +20,10 @@ import {
   BuchhaltungEntryView,
   BuchhaltungStore,
 } from '@dv/sachbearbeitung-app/data-access/buchhaltung';
+import { SachbearbeitungAppDialogBuchhaltungInfoComponent } from '@dv/sachbearbeitung-app/dialog/buchhaltung-info';
 import { SachbearbeitungAppDialogCreateBuchhaltungsKorrekturComponent } from '@dv/sachbearbeitung-app/dialog/create-buchhaltungs-korrektur';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import { BuchhaltungEntry } from '@dv/shared/model/gesuch';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -33,6 +35,7 @@ import {
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-buchhaltung',
@@ -48,6 +51,7 @@ import {
     SharedUiRdIsPendingPipe,
     SharedUiFormatChfPipe,
     SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiTruncateTooltipDirective,
     SharedUiDownloadButtonDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
@@ -71,7 +75,7 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
     'rueckforderung',
     'saldo',
     'comment',
-    'link',
+    'info',
   ];
   buchhaltungDataSourceSig = computed(() => {
     const buchhaltungEntries =
@@ -130,5 +134,9 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
           gesuchId,
         });
       });
+  }
+
+  showDetails(entry: BuchhaltungEntry) {
+    SachbearbeitungAppDialogBuchhaltungInfoComponent.open(this.dialog, entry);
   }
 }
