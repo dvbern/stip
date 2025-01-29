@@ -18,6 +18,8 @@
 package ch.dvbern.stip.api.buchhaltung.service;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -44,6 +46,14 @@ public class BuchhaltungService {
     private final GesuchRepository gesuchRepository;
     private final FallRepository fallRepository;
 
+    private int getLastEntrySaldo(List<Buchhaltung> buchhaltungList) {
+        return buchhaltungList
+            .stream()
+            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
+            .map(Buchhaltung::getSaldo)
+            .orElse(0);
+    }
+
     @Transactional
     public BuchhaltungEntryDto createBuchhaltungSaldokorrekturForFall(
         final UUID gesuchId,
@@ -62,14 +72,10 @@ public class BuchhaltungService {
         final BuchhaltungSaldokorrekturDto buchhaltungSaldokorrekturDto
     ) {
         final Fall fall = fallRepository.requireById(gesuch.getAusbildung().getFall().getId());
-        final var firstEntrySaldo = fall.getBuchhaltungs()
-            .stream()
-            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
-            .map(Buchhaltung::getSaldo)
-            .orElse(0);
+        final var lastEntrySaldo = getLastEntrySaldo(fall.getBuchhaltungs());
 
         final var buchhaltungEntry = new Buchhaltung()
-            .setSaldo(firstEntrySaldo + buchhaltungSaldokorrekturDto.getBetrag())
+            .setSaldo(lastEntrySaldo + buchhaltungSaldokorrekturDto.getBetrag())
             .setBetrag(buchhaltungSaldokorrekturDto.getBetrag())
             .setComment(buchhaltungSaldokorrekturDto.getComment())
             .setBuchhaltungType(BuchhaltungType.SALDOAENDERUNG)
@@ -102,16 +108,12 @@ public class BuchhaltungService {
         final Integer sapDeliveryId,
         final SapStatus sapStatus
     ) {
-        final var firstEntrySaldo = fall.getBuchhaltungs()
-            .stream()
-            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
-            .map(Buchhaltung::getSaldo)
-            .orElse(0);
+        final var lastEntrySaldo = getLastEntrySaldo(fall.getBuchhaltungs());
 
         final var buchhaltungEntry = new Buchhaltung()
             .setBuchhaltungType(buchhaltungType)
             .setBetrag(betrag)
-            .setSaldo(firstEntrySaldo + betrag)
+            .setSaldo(lastEntrySaldo + betrag)
             .setSapDeliveryId(sapDeliveryId)
             .setSapStatus(sapStatus)
             .setComment(comment)
@@ -120,6 +122,46 @@ public class BuchhaltungService {
 
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
         fall.getBuchhaltungs().add(buchhaltungEntry);
+        return buchhaltungMapper.toDto(buchhaltungEntry);
+    }
+
+    public Optional<Buchhaltung> getLastEntryStipendiumOpt(final UUID gesuchId) {
+        return buchhaltungRepository.findStipendiumsEntrysForGesuch(gesuchId)
+            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt));
+    }
+
+    // TODO: KSTIP-1622: Unittest this -> resourcetest
+    @Transactional
+    public BuchhaltungEntryDto createStipendiumBuchhaltungEntry(
+        final Gesuch gesuch,
+        final Integer stipendiumBetrag,
+        final String comment
+    ) {
+        final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
+
+        final var lastEntryStipendiumOpt = getLastEntryStipendiumOpt(gesuch.getId());
+
+        int betrag = 0;
+        if (lastEntryStipendiumOpt.isPresent()) {
+            final var lastEntryStipendium = lastEntryStipendiumOpt.get();
+            final int lastStipendiumBetrag =
+                lastEntryStipendium.getStipendium() != null
+                    ? lastEntryStipendium.getStipendium()
+                    : 0;
+            betrag = stipendiumBetrag - lastStipendiumBetrag;
+        }
+
+        final var buchhaltungEntry = new Buchhaltung()
+            .setBuchhaltungType(BuchhaltungType.STIPENDIUM)
+            .setBetrag(betrag)
+            .setSaldo(lastEntrySaldo + betrag)
+            .setStipendium(stipendiumBetrag)
+            .setComment(comment)
+            .setGesuch(gesuch)
+            .setFall(gesuch.getAusbildung().getFall());
+
+        buchhaltungRepository.persistAndFlush(buchhaltungEntry);
+        gesuch.getAusbildung().getFall().getBuchhaltungs().add(buchhaltungEntry);
         return buchhaltungMapper.toDto(buchhaltungEntry);
     }
 

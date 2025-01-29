@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_STIPENDIEN_BETRAG,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_AUSZAHLUNG,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_RUECKFORDERUNG,
+  BuchhaltungEntryDtoSpec.JSON_PROPERTY_SALDO_AENDERUNG,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_SALDO,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_SAP_ID,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_SAP_STATUS,
@@ -54,6 +55,9 @@ public class BuchhaltungEntryDtoSpec {
 
   public static final String JSON_PROPERTY_RUECKFORDERUNG = "rueckforderung";
   private Integer rueckforderung;
+
+  public static final String JSON_PROPERTY_SALDO_AENDERUNG = "saldoAenderung";
+  private Integer saldoAenderung;
 
   public static final String JSON_PROPERTY_SALDO = "saldo";
   private Integer saldo;
@@ -177,6 +181,32 @@ public class BuchhaltungEntryDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setRueckforderung(Integer rueckforderung) {
     this.rueckforderung = rueckforderung;
+  }
+
+
+  public BuchhaltungEntryDtoSpec saldoAenderung(Integer saldoAenderung) {
+    
+    this.saldoAenderung = saldoAenderung;
+    return this;
+  }
+
+   /**
+   * Get saldoAenderung
+   * @return saldoAenderung
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SALDO_AENDERUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getSaldoAenderung() {
+    return saldoAenderung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SALDO_AENDERUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSaldoAenderung(Integer saldoAenderung) {
+    this.saldoAenderung = saldoAenderung;
   }
 
 
@@ -348,6 +378,7 @@ public class BuchhaltungEntryDtoSpec {
         Objects.equals(this.stipendienBetrag, buchhaltungEntry.stipendienBetrag) &&
         Objects.equals(this.auszahlung, buchhaltungEntry.auszahlung) &&
         Objects.equals(this.rueckforderung, buchhaltungEntry.rueckforderung) &&
+        Objects.equals(this.saldoAenderung, buchhaltungEntry.saldoAenderung) &&
         Objects.equals(this.saldo, buchhaltungEntry.saldo) &&
         Objects.equals(this.sapId, buchhaltungEntry.sapId) &&
         Objects.equals(this.sapStatus, buchhaltungEntry.sapStatus) &&
@@ -358,7 +389,7 @@ public class BuchhaltungEntryDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestampErstellt, stipendienBetrag, auszahlung, rueckforderung, saldo, sapId, sapStatus, comment, verfuegungId, gesuchId);
+    return Objects.hash(timestampErstellt, stipendienBetrag, auszahlung, rueckforderung, saldoAenderung, saldo, sapId, sapStatus, comment, verfuegungId, gesuchId);
   }
 
   @Override
@@ -369,6 +400,7 @@ public class BuchhaltungEntryDtoSpec {
     sb.append("    stipendienBetrag: ").append(toIndentedString(stipendienBetrag)).append("\n");
     sb.append("    auszahlung: ").append(toIndentedString(auszahlung)).append("\n");
     sb.append("    rueckforderung: ").append(toIndentedString(rueckforderung)).append("\n");
+    sb.append("    saldoAenderung: ").append(toIndentedString(saldoAenderung)).append("\n");
     sb.append("    saldo: ").append(toIndentedString(saldo)).append("\n");
     sb.append("    sapId: ").append(toIndentedString(sapId)).append("\n");
     sb.append("    sapStatus: ").append(toIndentedString(sapStatus)).append("\n");

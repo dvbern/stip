@@ -26,6 +26,7 @@ public class BuchhaltungEntryDto  implements Serializable {
   private @Valid Integer stipendienBetrag;
   private @Valid Integer auszahlung;
   private @Valid Integer rueckforderung;
+  private @Valid Integer saldoAenderung;
   private @Valid Integer sapId;
   private @Valid ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
   private @Valid UUID verfuegungId;
@@ -144,6 +145,24 @@ public class BuchhaltungEntryDto  implements Serializable {
 
   /**
    **/
+  public BuchhaltungEntryDto saldoAenderung(Integer saldoAenderung) {
+    this.saldoAenderung = saldoAenderung;
+    return this;
+  }
+
+  
+  @JsonProperty("saldoAenderung")
+  public Integer getSaldoAenderung() {
+    return saldoAenderung;
+  }
+
+  @JsonProperty("saldoAenderung")
+  public void setSaldoAenderung(Integer saldoAenderung) {
+    this.saldoAenderung = saldoAenderung;
+  }
+
+  /**
+   **/
   public BuchhaltungEntryDto sapId(Integer sapId) {
     this.sapId = sapId;
     return this;
@@ -230,6 +249,7 @@ public class BuchhaltungEntryDto  implements Serializable {
         Objects.equals(this.stipendienBetrag, buchhaltungEntry.stipendienBetrag) &&
         Objects.equals(this.auszahlung, buchhaltungEntry.auszahlung) &&
         Objects.equals(this.rueckforderung, buchhaltungEntry.rueckforderung) &&
+        Objects.equals(this.saldoAenderung, buchhaltungEntry.saldoAenderung) &&
         Objects.equals(this.sapId, buchhaltungEntry.sapId) &&
         Objects.equals(this.sapStatus, buchhaltungEntry.sapStatus) &&
         Objects.equals(this.verfuegungId, buchhaltungEntry.verfuegungId) &&
@@ -238,7 +258,7 @@ public class BuchhaltungEntryDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestampErstellt, saldo, comment, stipendienBetrag, auszahlung, rueckforderung, sapId, sapStatus, verfuegungId, gesuchId);
+    return Objects.hash(timestampErstellt, saldo, comment, stipendienBetrag, auszahlung, rueckforderung, saldoAenderung, sapId, sapStatus, verfuegungId, gesuchId);
   }
 
   @Override
@@ -252,6 +272,7 @@ public class BuchhaltungEntryDto  implements Serializable {
     sb.append("    stipendienBetrag: ").append(toIndentedString(stipendienBetrag)).append("\n");
     sb.append("    auszahlung: ").append(toIndentedString(auszahlung)).append("\n");
     sb.append("    rueckforderung: ").append(toIndentedString(rueckforderung)).append("\n");
+    sb.append("    saldoAenderung: ").append(toIndentedString(saldoAenderung)).append("\n");
     sb.append("    sapId: ").append(toIndentedString(sapId)).append("\n");
     sb.append("    sapStatus: ").append(toIndentedString(sapStatus)).append("\n");
     sb.append("    verfuegungId: ").append(toIndentedString(verfuegungId)).append("\n");
