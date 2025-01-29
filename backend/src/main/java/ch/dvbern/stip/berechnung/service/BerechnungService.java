@@ -325,7 +325,7 @@ public class BerechnungService {
 
         int berechnungsresultat =
             -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnung).sum();
-        if (berechnungsresultat < -gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
+        if (berechnungsresultat < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
             berechnungsresultat = 0;
         }
 
