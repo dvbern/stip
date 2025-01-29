@@ -69,7 +69,9 @@ class BerechnungServiceTest {
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         final var currentGesuchTranche = gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
         currentGesuchTranche
-            .setGueltigkeit(new DateRange().setGueltigBis(LocalDate.now().plusMonths(4).withDayOfMonth(1)));
+            .setGueltigkeit(
+                new DateRange().setGueltigBis(LocalDate.now().plusMonths(monthsToBeBetween - 2).withDayOfMonth(1))
+            );
         gesuch.setGesuchTranchen(
             List.of(
                 currentGesuchTranche,
@@ -81,7 +83,9 @@ class BerechnungServiceTest {
                             )
                     )
                     .setTyp(GesuchTrancheTyp.TRANCHE)
-                    .setGueltigkeit(new DateRange().setGueltigBis(LocalDate.now().plusMonths(7).withDayOfMonth(1)))
+                    .setGueltigkeit(
+                        new DateRange().setGueltigBis(LocalDate.now().plusMonths(monthsToBeBetween).withDayOfMonth(1))
+                    )
                     .setId(UUID.randomUUID()),
                 (GesuchTranche) new GesuchTranche()
                     .setGesuchFormular(
@@ -91,7 +95,23 @@ class BerechnungServiceTest {
                             )
                     )
                     .setTyp(GesuchTrancheTyp.AENDERUNG)
-                    .setGueltigkeit(new DateRange().setGueltigBis(LocalDate.now().plusMonths(3).withDayOfMonth(1)))
+                    .setGueltigkeit(
+                        new DateRange()
+                            .setGueltigBis(LocalDate.now().plusMonths(monthsToBeBetween - 4).withDayOfMonth(1))
+                    )
+                    .setId(UUID.randomUUID()),
+                (GesuchTranche) new GesuchTranche()
+                    .setGesuchFormular(
+                        new GesuchFormular()
+                            .setPersonInAusbildung(
+                                new PersonInAusbildung()
+                            )
+                    )
+                    .setTyp(GesuchTrancheTyp.AENDERUNG)
+                    .setGueltigkeit(
+                        new DateRange()
+                            .setGueltigBis(LocalDate.now().plusMonths(monthsToBeBetween + 2).withDayOfMonth(1))
+                    )
                     .setId(UUID.randomUUID())
             )
         );
@@ -107,7 +127,9 @@ class BerechnungServiceTest {
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         final var currentGesuchTranche = gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
         currentGesuchTranche
-            .setGueltigkeit(new DateRange().setGueltigBis(LocalDate.now().plusMonths(4).withDayOfMonth(1)));
+            .setGueltigkeit(
+                new DateRange().setGueltigBis(LocalDate.now().plusMonths(monthsToBeBetween - 2).withDayOfMonth(1))
+            );
         gesuch.setGesuchTranchen(
             List.of(
                 currentGesuchTranche,
@@ -119,7 +141,9 @@ class BerechnungServiceTest {
                             )
                     )
                     .setTyp(GesuchTrancheTyp.TRANCHE)
-                    .setGueltigkeit(new DateRange().setGueltigBis(LocalDate.now().plusMonths(7).withDayOfMonth(1)))
+                    .setGueltigkeit(
+                        new DateRange().setGueltigBis(LocalDate.now().plusMonths(monthsToBeBetween).withDayOfMonth(1))
+                    )
                     .setId(UUID.randomUUID()),
                 (GesuchTranche) new GesuchTranche()
                     .setGesuchFormular(
@@ -129,7 +153,23 @@ class BerechnungServiceTest {
                             )
                     )
                     .setTyp(GesuchTrancheTyp.AENDERUNG)
-                    .setGueltigkeit(new DateRange().setGueltigBis(LocalDate.now().plusMonths(3).withDayOfMonth(1)))
+                    .setGueltigkeit(
+                        new DateRange()
+                            .setGueltigBis(LocalDate.now().plusMonths(monthsToBeBetween - 4).withDayOfMonth(1))
+                    )
+                    .setId(UUID.randomUUID()),
+                (GesuchTranche) new GesuchTranche()
+                    .setGesuchFormular(
+                        new GesuchFormular()
+                            .setPersonInAusbildung(
+                                new PersonInAusbildung()
+                            )
+                    )
+                    .setTyp(GesuchTrancheTyp.AENDERUNG)
+                    .setGueltigkeit(
+                        new DateRange()
+                            .setGueltigBis(LocalDate.now().plusMonths(monthsToBeBetween + 2).withDayOfMonth(1))
+                    )
                     .setId(UUID.randomUUID())
             )
         );

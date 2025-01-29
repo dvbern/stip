@@ -587,7 +587,6 @@ public class BerechnungService {
         return eingereicht.isAfter(einreichefrist.atTime(LocalTime.MAX));
     }
 
-    // TODO KSTIP-1852: unit test this
     int getActualDuration(final Gesuch gesuch, final LocalDateTime eingereicht) {
         final var lastTranche = gesuch.getTranchenTranchen()
             .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
