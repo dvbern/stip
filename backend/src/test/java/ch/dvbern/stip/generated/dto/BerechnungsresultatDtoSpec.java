@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   BerechnungsresultatDtoSpec.JSON_PROPERTY_YEAR,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_REDUZIERT,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE
 })
@@ -44,6 +45,9 @@ public class BerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_BERECHNUNG = "berechnung";
   private Integer berechnung;
+
+  public static final String JSON_PROPERTY_BERECHNUNG_REDUZIERT = "berechnungReduziert";
+  private Integer berechnungReduziert;
 
   public static final String JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE = "tranchenBerechnungsresultate";
   private List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate;
@@ -103,6 +107,32 @@ public class BerechnungsresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBerechnung(Integer berechnung) {
     this.berechnung = berechnung;
+  }
+
+
+  public BerechnungsresultatDtoSpec berechnungReduziert(Integer berechnungReduziert) {
+    
+    this.berechnungReduziert = berechnungReduziert;
+    return this;
+  }
+
+   /**
+   * Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens
+   * @return berechnungReduziert
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG_REDUZIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getBerechnungReduziert() {
+    return berechnungReduziert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG_REDUZIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBerechnungReduziert(Integer berechnungReduziert) {
+    this.berechnungReduziert = berechnungReduziert;
   }
 
 
@@ -176,13 +206,14 @@ public class BerechnungsresultatDtoSpec {
     BerechnungsresultatDtoSpec berechnungsresultat = (BerechnungsresultatDtoSpec) o;
     return Objects.equals(this.year, berechnungsresultat.year) &&
         Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
+        Objects.equals(this.berechnungReduziert, berechnungsresultat.berechnungReduziert) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
         Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnung, tranchenBerechnungsresultate, verminderteBerechnungMonate);
+    return Objects.hash(year, berechnung, berechnungReduziert, tranchenBerechnungsresultate, verminderteBerechnungMonate);
   }
 
   @Override
@@ -191,6 +222,7 @@ public class BerechnungsresultatDtoSpec {
     sb.append("class BerechnungsresultatDtoSpec {\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
+    sb.append("    berechnungReduziert: ").append(toIndentedString(berechnungReduziert)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("    verminderteBerechnungMonate: ").append(toIndentedString(verminderteBerechnungMonate)).append("\n");
     sb.append("}");

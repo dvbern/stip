@@ -18,9 +18,15 @@
 
     <mat-card-content class="p-5 !tw-flex tw-items-center tw-gap-5">
       @if (zusammenfassung.totalBetragStipendium > 0) {
-        <div class="accept p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
-          {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen' | translate }}
-        </div>
+        @if (zusammenfassung.verminderteBerechnung) {
+          <div class="accept p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
+            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.vermindert' | translate }}
+          </div>
+        } @else {
+          <div class="accept p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
+            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen' | translate }}
+          </div>
+        }
       } @else {
         <div class="reject p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt' | translate }}
@@ -90,7 +96,49 @@
     <div class="border-bottom border-1 mt-4"></div>
 
     <mat-card-footer class="px-3 py-4">
-      <div class="d-flex justify-content-between fs-4 h4">
+      @if (zusammenfassung.verminderteBerechnung) {
+        <div class="d-flex justify-content-between fs-5 h4">
+          <div>
+            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
+          </div>
+          <div>
+            {{ zusammenfassung.totalBetragStipendium | formatChf }}
+          </div>
+        </div>
+        <div class="d-flex text-muted justify-content-between fs-5 h6">
+          <div>
+            {{
+              'sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag'
+                | translate
+                  : {
+                      months: zusammenfassung.verminderteBerechnung.monate,
+                      reducePercentage: zusammenfassung.verminderteBerechnung.reducePercentage | number: '2.0-0',
+                    }
+            }}
+          </div>
+          <div>
+            {{ zusammenfassung.verminderteBerechnung.reduktionsBetrag | formatChfNegative }}
+          </div>
+        </div>
+        <div class="d-flex justify-content-between fs-4 h4">
+          <div>
+            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.effektiverBetragStipendium' | translate }}
+          </div>
+          <div>
+            {{ zusammenfassung.verminderteBerechnung.berechnungReduziert | formatChf }}
+          </div>
+        </div>
+      } @else {
+        <div class="d-flex justify-content-between fs-4 h4">
+          <div>
+            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
+          </div>
+          <div>
+            {{ zusammenfassung.totalBetragStipendium | formatChf }}
+          </div>
+        </div>
+      }
+      <!-- <div class="d-flex justify-content-between fs-4 h4">
         <div>
           {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
           @if (zusammenfassung.verminderteBerechnung) {
@@ -110,7 +158,7 @@
         <div>
           {{ zusammenfassung.totalBetragStipendium | formatChf }}
         </div>
-      </div>
+      </div> -->
     </mat-card-footer>
   </mat-card>
 }
