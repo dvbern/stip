@@ -4,7 +4,13 @@
   }
 </ng-template>
 
-<form [formGroup]="form" data-testid="form-benutzerverwaltung-form" novalidate class="mt-4" (ngSubmit)="handleSubmit()">
+<form
+  [formGroup]="form"
+  data-testid="form-sozialdienst-mitarbeiter-form"
+  novalidate
+  class="mt-4"
+  (ngSubmit)="handleSubmit()"
+>
   @if (store.sozialdienstBenutzer() | rdIsPendingWithoutCache) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
@@ -15,7 +21,7 @@
           <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.nachname.label' | translate }}</mat-label>
           <input
             formControlName="nachname"
-            data-testid="form-benutzerverwaltung-nachname"
+            data-testid="form-sozialdienst-mitarbeiter-nachname"
             matInput
             dvMaxLength
             type="text"
@@ -31,7 +37,7 @@
           <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.vorname.label' | translate }}</mat-label>
           <input
             formControlName="vorname"
-            data-testid="form-benutzerverwaltung-vorname"
+            data-testid="form-sozialdienst-mitarbeiter-vorname"
             matInput
             dvMaxLength
             type="text"
@@ -53,7 +59,7 @@
             {{ 'sachbearbeitung-app.admin.sozialdienstBenutzer.email.label' | translate }}
           </mat-label>
           <input
-            data-testid="form-benutzerverwaltung-email"
+            data-testid="form-sozialdienst-mitarbeiter-email"
             formControlName="email"
             matInput
             dvMaxLength
