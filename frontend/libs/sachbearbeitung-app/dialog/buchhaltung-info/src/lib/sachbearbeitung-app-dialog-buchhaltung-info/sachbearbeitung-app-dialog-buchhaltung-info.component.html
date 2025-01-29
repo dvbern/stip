@@ -36,12 +36,10 @@
       <dd class="tw-font-semibold">{{ dialogData.rueckforderung | formatChf }}</dd>
     }
 
-    @if (dialogData.saldoAenderung) {
-      <dt class="tw-whitespace-nowrap tw-font-normal">
-        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.salodannderung' | translate }}
-      </dt>
-      <dd class="tw-font-semibold">{{ dialogData.saldoAenderung | formatChf }}</dd>
-    }
+    <dt class="tw-whitespace-nowrap tw-font-normal">
+      {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.salodannderung' | translate }}
+    </dt>
+    <dd class="tw-font-semibold">{{ dialogData.saldoAenderung | formatChf }}</dd>
 
     <dt class="tw-whitespace-nowrap tw-font-normal">
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.saldo' | translate }}

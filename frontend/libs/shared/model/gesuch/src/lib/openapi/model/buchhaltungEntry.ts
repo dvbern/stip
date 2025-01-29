@@ -9,14 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BuchhaltungType } from './buchhaltungType';
 import { SapStatus } from './sapStatus';
 
 export interface BuchhaltungEntry { 
     timestampErstellt: string;
+    buchhaltungType: BuchhaltungType;
     stipendienBetrag?: number;
     auszahlung?: number;
     rueckforderung?: number;
-    saldoAenderung?: number;
+    saldoAenderung: number;
     saldo: number;
     sapId?: number;
     sapStatus?: SapStatus;

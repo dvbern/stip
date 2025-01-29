@@ -131,9 +131,9 @@
           mat-row
           *dvMatRowDef="let buchhaltung; columns: displayedColumns; dataSource: buchhaltungDataSource"
           [ngClass]="{
-            '!tw-bg-[--dv-blue-bg-subtle]': buchhaltung.type === 'manuell',
-            '!tw-bg-[--dv-green-bg-subtle]': buchhaltung.type === 'auszahlung',
-            '!tw-bg-[--dv-yellow-bg-subtle]': buchhaltung.type === 'verfuegung',
+            '!tw-bg-[--dv-blue-bg-subtle]': buchhaltung.entry.buchhaltungType === 'SALDOAENDERUNG',
+            '!tw-bg-[--dv-green-bg-subtle]': buchhaltung.entry.buchhaltungType === 'AUSZAHLUNG',
+            '!tw-bg-[--dv-yellow-bg-subtle]': buchhaltung.entry.buchhaltungType === 'STIPENDIUM',
           }"
         ></tr>
         <tr

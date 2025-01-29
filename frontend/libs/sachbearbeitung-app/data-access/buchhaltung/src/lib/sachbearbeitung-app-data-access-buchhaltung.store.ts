@@ -17,9 +17,8 @@ import {
   initial,
 } from '@dv/shared/util/remote-data';
 
-export type BuchungsType = 'manuell' | 'verfuegung' | 'auszahlung';
 export type BuchhaltungEntryView =
-  | { type: BuchungsType; entry: BuchhaltungEntry }
+  | { type: 'entry'; entry: BuchhaltungEntry }
   | { type: 'gesuchStart'; entry: BuchhaltungEntry };
 
 type BuchhaltungState = {
@@ -56,7 +55,7 @@ export class BuchhaltungStore extends signalStore(
           ? [{ type: 'gesuchStart' as const, entry }]
           : []),
         {
-          type: getBuchungsType(entry),
+          type: 'entry' as const,
           entry,
         },
       ];
@@ -83,23 +82,29 @@ export class BuchhaltungStore extends signalStore(
                 [
                   // TODO (KSTIP-1622): Remove once real data is available
                   {
+                    buchhaltungType: 'SALDOAENDERUNG',
                     timestampErstellt: new Date('2024-10-31').toISOString(),
                     gesuchId: 'gesuch-1',
                     comment: 'Manuelle Saldokorrektur',
+                    saldoAenderung: -1250,
                     saldo: -1250,
                   },
                   {
+                    buchhaltungType: 'STIPENDIUM',
                     timestampErstellt: new Date('2024-11-05').toISOString(),
                     gesuchId: 'gesuch-1',
                     comment: 'Verfügung Erstgesuch',
                     stipendienBetrag: 10000,
+                    saldoAenderung: 10000,
                     saldo: 8750,
                     verfuegungId: 'verfuegung-1',
                   },
                   {
+                    buchhaltungType: 'AUSZAHLUNG',
                     timestampErstellt: new Date('2024-11-07').toISOString(),
                     gesuchId: 'gesuch-1',
                     comment: 'Auszahlung',
+                    saldoAenderung: -3750,
                     saldo: 5000,
                     auszahlung: 3750,
                   },
@@ -149,13 +154,3 @@ export class BuchhaltungStore extends signalStore(
     ),
   );
 }
-
-const getBuchungsType = (buchungEntry: BuchhaltungEntry): BuchungsType => {
-  if (buchungEntry.verfuegungId) {
-    return 'verfuegung';
-  }
-  if (buchungEntry.auszahlung) {
-    return 'auszahlung';
-  }
-  return 'manuell';
-};
