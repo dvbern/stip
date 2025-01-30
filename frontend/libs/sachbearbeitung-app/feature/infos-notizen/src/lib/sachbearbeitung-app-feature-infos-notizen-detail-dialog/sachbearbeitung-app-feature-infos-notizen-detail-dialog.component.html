@@ -23,8 +23,8 @@
     @if (dialogData.notiz?.id) {
       <!-- betreff -->
       <div class="tw-flex tw-gap-2">
-        <div>{{ 'shared.form.notizen.betreff.label' | translate }}:</div>
-        <div class="tw-font-semibold">{{ dialogData.notiz?.betreff }}</div>
+        <div class="tw-font-semibold">{{ 'shared.form.notizen.betreff.label' | translate }}:</div>
+        <div>{{ dialogData.notiz?.betreff }}</div>
       </div>
 
       <hr class="tw-my-8" />
@@ -33,23 +33,21 @@
 
       <!-- text -->
       <div class="tw-w-full">
-        <div class="tw-font-semibold">
-          {{ dialogData.notiz?.text }}
-        </div>
+        {{ dialogData.notiz?.text }}
       </div>
 
       <hr class="tw-my-8" />
 
       @if (dialogData.notiz?.antwort) {
-        <dl class="tw-grid tw-grid-cols-[max-content_1fr] tw-gap-x-2 tw-pl-0">
-          <dt class="tw-font-normal">{{ 'shared.form.notizen.datumMutiert.label' | translate }}:</dt>
-          <dd class="tw-font-semibold">{{ dialogData.notiz?.timestampMutiert | date: 'dd.MM.yyyy' }}</dd>
-          <dt class="tw-font-normal">{{ 'shared.form.notizen.userMutiert.label' | translate }}:</dt>
-          <dd class="tw-font-semibold">{{ dialogData.notiz?.userMutiert }}</dd>
+        <dl class="tw-grid tw-grid-cols-[max-content_1fr] tw-gap-x-4 tw-pl-0">
+          <dt class="tw-font-semibold">{{ 'shared.form.notizen.datumMutiert.label' | translate }}:</dt>
+          <dd class="tw-font-normal">{{ dialogData.notiz?.timestampMutiert | date: 'dd.MM.yyyy' }}</dd>
+          <dt class="tw-font-semibold">{{ 'shared.form.notizen.userMutiert.label' | translate }}:</dt>
+          <dd class="tw-font-normal">{{ dialogData.notiz?.userMutiert }}</dd>
         </dl>
 
         <div class="tw-w-full">
-          <div class="tw-font-semibold">{{ dialogData.notiz?.antwort }}</div>
+          <div class="tw-font-normal">{{ dialogData.notiz?.antwort }}</div>
         </div>
       } @else if (userIsJurist) {
         <mat-form-field dvSharedUiFormField class="tw-w-full">
@@ -69,7 +67,7 @@
         </mat-form-field>
       } @else {
         <div class="tw-w-full">
-          <div class="tw-font-semibold">
+          <div class="tw-font-normal">
             {{ 'sachbearbeitung-app.infos.juristischeNotiz.unbeantwortet' | translate }}
           </div>
         </div>
@@ -130,16 +128,16 @@
   </ng-template>
 
   <ng-template #datumUserErstellt>
-    <dl class="tw-grid tw-grid-cols-[min-content_1fr] tw-gap-x-2 tw-pl-0">
+    <dl class="tw-grid tw-grid-cols-[min-content_1fr] tw-gap-x-4 tw-pl-0">
       <!-- gesuchNummer -->
-      <dt class="tw-font-normal">{{ 'shared.form.notizen.gesuchNummer.label' | translate }}:</dt>
-      <dd class="tw-font-semibold">{{ dialogData.notiz?.gesuchNummer }}</dd>
+      <dt class="tw-font-semibold">{{ 'shared.form.notizen.gesuchNummer.label' | translate }}:</dt>
+      <dd class="tw-font-normal">{{ dialogData.notiz?.gesuchNummer }}</dd>
       <!-- datumErstellt -->
-      <dt class="tw-font-normal">{{ 'shared.form.notizen.datumErstellt.label' | translate }}:</dt>
-      <dd class="tw-font-semibold">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>
+      <dt class="tw-font-semibold">{{ 'shared.form.notizen.datumErstellt.label' | translate }}:</dt>
+      <dd class="tw-font-normal">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>
       <!-- userErstellt -->
-      <dt class="tw-font-normal">{{ 'shared.form.notizen.userErstellt.label' | translate }}:</dt>
-      <dd class="tw-font-semibold">{{ dialogData.notiz?.userErstellt }}</dd>
+      <dt class="tw-font-semibold">{{ 'shared.form.notizen.userErstellt.label' | translate }}:</dt>
+      <dd class="tw-font-normal">{{ dialogData.notiz?.userErstellt }}</dd>
     </dl>
   </ng-template>
 </form>
