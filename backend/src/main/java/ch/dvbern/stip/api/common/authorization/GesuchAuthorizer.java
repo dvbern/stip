@@ -65,12 +65,13 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)) {
-            return;
-        }
+        final BooleanSupplier isMitarbeiter = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+
+        final BooleanSupplier isGesuchsteller = () -> AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch);
 
         // Gesuchsteller can only read their own Gesuch
-        if (AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
+        if (isMitarbeiter.getAsBoolean() || isGesuchsteller.getAsBoolean()) {
             return;
         }
 
@@ -102,15 +103,15 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         final BooleanSupplier benutzerCanEditInStatusOrAenderung =
             () -> gesuchStatusService.benutzerCanEdit(currentBenutzer, gesuch.getGesuchStatus()) || aenderung;
 
-        if (
-            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-            && benutzerCanEditInStatusOrAenderung.getAsBoolean()
-        ) {
-            return;
-        } else if (
-            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
-            benutzerCanEditInStatusOrAenderung.getAsBoolean()
-        ) {
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
+        && benutzerCanEditInStatusOrAenderung.getAsBoolean();
+
+        final BooleanSupplier isGesuchstellerAndCanEdit =
+            () -> AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)
+            && benutzerCanEditInStatusOrAenderung.getAsBoolean();
+
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
         }
 
@@ -128,16 +129,15 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         // TODO KSTIP-1057: Check if Gesuchsteller can delete their Gesuch
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        if (
-            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
-            && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
-        ) {
-            return;
-        } else if (
-            isGesuchstellerAndNotAdmin(currentBenutzer) &&
-            AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch) &&
-            gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS
-        ) {
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)
+        && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
+
+        final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchstellerAndNotAdmin(currentBenutzer)
+        && AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)
+        && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
+
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
         }
 
@@ -153,11 +153,13 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        if (
-            AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall.get(), sozialdienstService)
-        ) {
-            return;
-        } else if (Objects.equals(currentBenutzer.getId(), fall.get().getGesuchsteller().getId())) {
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(fall.get(), sozialdienstService);
+
+        final BooleanSupplier isGesuchstellerAndCanEdit =
+            () -> Objects.equals(currentBenutzer.getId(), fall.get().getGesuchsteller().getId());
+
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
         }
 
@@ -174,9 +176,13 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        if (AuthorizerUtil.hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService)) {
-            return;
-        } else if (isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+        final BooleanSupplier isMitarbeiterAndCanEdit = () -> AuthorizerUtil
+            .hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(gesuch, sozialdienstService);
+
+        final BooleanSupplier isGesuchstellerAndCanEdit =
+            () -> isSachbearbeiter(currentBenutzer) && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB;
+
+        if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
             return;
         }
 
