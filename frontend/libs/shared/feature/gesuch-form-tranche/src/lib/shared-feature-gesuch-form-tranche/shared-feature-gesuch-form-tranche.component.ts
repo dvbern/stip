@@ -39,7 +39,10 @@ import {
   getLatestGesuchIdFromGesuch$,
   getLatestTrancheIdFromGesuchOnUpdate$,
 } from '@dv/shared/util/gesuch';
-import { formatBackendLocalDate } from '@dv/shared/util/validator-date';
+import {
+  formatBackendLocalDate,
+  parseBackendLocalDateAndPrint,
+} from '@dv/shared/util/validator-date';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 
@@ -89,6 +92,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
     von: [''],
     bis: [''],
     bemerkung: [''],
+    einreichedatum: [''],
   });
 
   currentTrancheNumberSig = computed(() => {
@@ -166,6 +170,10 @@ export class SharedFeatureGesuchFormTrancheComponent {
           von: formatBackendLocalDate(tranche.gueltigAb, language),
           bis: formatBackendLocalDate(tranche.gueltigBis, language),
           bemerkung: tranche.comment ?? defaultComment,
+          einreichedatum: parseBackendLocalDateAndPrint(
+            gesuch?.einreichedatum,
+            language,
+          ),
         });
       },
       { allowSignalWrites: true },
