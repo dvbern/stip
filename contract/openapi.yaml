@@ -4366,6 +4366,7 @@ components:
         - gesuchsjahr
         - ausbKosten_SekII
         - ausbKosten_Tertiaer
+        - fristNachreichenDokumente
       type: object
       properties:
         id:
@@ -4393,6 +4394,8 @@ components:
         ausbKosten_SekII:
           type: integer
         ausbKosten_Tertiaer:
+          type: integer
+        fristNachreichenDokumente:
           type: integer
     GesuchsperiodeCreate:
       type: object
@@ -4455,6 +4458,7 @@ components:
         - limiteAlterAntragsstellerHalbierungElternbeitrag
         - zweiterAuszahlungsterminMonat
         - zweiterAuszahlungsterminTag
+        - fristNachreichenDokumente
       properties:
         bezeichnungDe:
           type: string
@@ -4569,6 +4573,8 @@ components:
         zweiterAuszahlungsterminMonat:
           type: integer
         zweiterAuszahlungsterminTag:
+          type: integer
+        fristNachreichenDokumente:
           type: integer
     AusbildungsstaetteUpdate:
       required:

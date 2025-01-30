@@ -82,7 +82,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE
 })
 @JsonTypeName("GesuchsperiodeWithDaten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -245,6 +246,9 @@ public class GesuchsperiodeWithDatenDtoSpec {
 
   public static final String JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG = "zweiterAuszahlungsterminTag";
   private Integer zweiterAuszahlungsterminTag;
+
+  public static final String JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE = "fristNachreichenDokumente";
+  private Integer fristNachreichenDokumente;
 
   public GesuchsperiodeWithDatenDtoSpec() {
   }
@@ -1626,6 +1630,32 @@ public class GesuchsperiodeWithDatenDtoSpec {
     this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
   }
 
+
+  public GesuchsperiodeWithDatenDtoSpec fristNachreichenDokumente(Integer fristNachreichenDokumente) {
+    
+    this.fristNachreichenDokumente = fristNachreichenDokumente;
+    return this;
+  }
+
+   /**
+   * Get fristNachreichenDokumente
+   * @return fristNachreichenDokumente
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getFristNachreichenDokumente() {
+    return fristNachreichenDokumente;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFristNachreichenDokumente(Integer fristNachreichenDokumente) {
+    this.fristNachreichenDokumente = fristNachreichenDokumente;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -1687,12 +1717,13 @@ public class GesuchsperiodeWithDatenDtoSpec {
         Objects.equals(this.reduzierungDesGrundbedarfs, gesuchsperiodeWithDaten.reduzierungDesGrundbedarfs) &&
         Objects.equals(this.limiteAlterAntragsstellerHalbierungElternbeitrag, gesuchsperiodeWithDaten.limiteAlterAntragsstellerHalbierungElternbeitrag) &&
         Objects.equals(this.zweiterAuszahlungsterminMonat, gesuchsperiodeWithDaten.zweiterAuszahlungsterminMonat) &&
-        Objects.equals(this.zweiterAuszahlungsterminTag, gesuchsperiodeWithDaten.zweiterAuszahlungsterminTag);
+        Objects.equals(this.zweiterAuszahlungsterminTag, gesuchsperiodeWithDaten.zweiterAuszahlungsterminTag) &&
+        Objects.equals(this.fristNachreichenDokumente, gesuchsperiodeWithDaten.fristNachreichenDokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigkeitStatus, bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag);
+    return Objects.hash(id, gueltigkeitStatus, bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0018, jugendlicheErwachsene1925, erwachsene2699, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente);
   }
 
   @Override
@@ -1752,6 +1783,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
     sb.append("    limiteAlterAntragsstellerHalbierungElternbeitrag: ").append(toIndentedString(limiteAlterAntragsstellerHalbierungElternbeitrag)).append("\n");
     sb.append("    zweiterAuszahlungsterminMonat: ").append(toIndentedString(zweiterAuszahlungsterminMonat)).append("\n");
     sb.append("    zweiterAuszahlungsterminTag: ").append(toIndentedString(zweiterAuszahlungsterminTag)).append("\n");
+    sb.append("    fristNachreichenDokumente: ").append(toIndentedString(fristNachreichenDokumente)).append("\n");
     sb.append("}");
     return sb.toString();
   }

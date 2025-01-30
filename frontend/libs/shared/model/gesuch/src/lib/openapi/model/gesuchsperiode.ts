@@ -26,6 +26,7 @@ export interface Gesuchsperiode {
     gesuchsjahr: Gesuchsjahr;
     ausbKosten_SekII: number;
     ausbKosten_Tertiaer: number;
+    fristNachreichenDokumente: number;
 }
 
 
