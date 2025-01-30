@@ -4458,6 +4458,7 @@ components:
         - limiteAlterAntragsstellerHalbierungElternbeitrag
         - zweiterAuszahlungsterminMonat
         - zweiterAuszahlungsterminTag
+        - fristNachreichenDokumente
       properties:
         bezeichnungDe:
           type: string
@@ -4572,6 +4573,8 @@ components:
         zweiterAuszahlungsterminMonat:
           type: integer
         zweiterAuszahlungsterminTag:
+          type: integer
+        fristNachreichenDokumente:
           type: integer
     AusbildungsstaetteUpdate:
       required:
