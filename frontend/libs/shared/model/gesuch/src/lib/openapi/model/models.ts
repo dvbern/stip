@@ -32,6 +32,7 @@ export * from './bildungskategorie';
 export * from './bildungsstufe';
 export * from './buchhaltungEntry';
 export * from './buchhaltungSaldokorrektur';
+export * from './buchhaltungType';
 export * from './createAenderungsantragRequest';
 export * from './createGesuchTrancheRequest';
 export * from './darlehen';

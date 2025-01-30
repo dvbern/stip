@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectSpy;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -53,11 +54,13 @@ class BuchhaltungServiceTest {
     @Inject
     FallRepository fallRepository;
 
-    @Inject
+    @InjectSpy
     BuchhaltungService buchhaltungService;
 
+    Gesuch gesuch;
+
     private Fall getOrInitFall() {
-        Gesuch gesuch = GesuchGenerator.initGesuch();
+        gesuch = GesuchGenerator.initGesuch();
         benutzerService.getOrCreateAndUpdateCurrentBenutzer();
 
         final var fallOpt = fallRepository.getFallForGesuchsteller(benutzerService.getCurrentBenutzer().getId());
@@ -132,5 +135,4 @@ class BuchhaltungServiceTest {
         assertThat(buchhaltungs.get(buchhaltungs.size() - 1).getSaldo(), is(betrag * 2));
         assertThat(buchhaltungs.get(buchhaltungs.size() - 1).getComment(), equalTo(testComment));
     }
-
 }

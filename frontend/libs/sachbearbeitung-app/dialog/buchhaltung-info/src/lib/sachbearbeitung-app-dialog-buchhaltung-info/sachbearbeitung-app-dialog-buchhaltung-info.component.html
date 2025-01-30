@@ -1,0 +1,79 @@
+<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-12">
+  <button
+    type="button"
+    (click)="close()"
+    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
+    [attr.aria-label]="'shared.close' | translate"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+  <h1 class="tw-mb-8 tw-text-xl">
+    {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.title' | translate }}
+  </h1>
+  <dl class="tw-grid tw-grid-cols-[min-content_2fr] tw-gap-x-4 tw-pl-0">
+    <dt class="tw-whitespace-nowrap tw-font-semibold">
+      {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.datum' | translate }}
+    </dt>
+    <dd class="tw-font-normal">{{ dialogData.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
+    @if (dialogData.stipendienBetrag) {
+      <dt class="tw-whitespace-nowrap tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.stipendienbetrag' | translate }}
+      </dt>
+      <dd class="tw-font-normal">{{ dialogData.stipendienBetrag | formatChf }}</dd>
+    }
+
+    @if (dialogData.auszahlung) {
+      <dt class="tw-whitespace-nowrap tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.auszahlung' | translate }}
+      </dt>
+      <dd class="tw-font-normal">{{ dialogData.auszahlung | formatChf }}</dd>
+    }
+
+    @if (dialogData.rueckforderung) {
+      <dt class="tw-whitespace-nowrap tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.rueckforderung' | translate }}
+      </dt>
+      <dd class="tw-font-normal">{{ dialogData.rueckforderung | formatChf }}</dd>
+    }
+
+    <dt class="tw-whitespace-nowrap tw-font-semibold">
+      {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.salodannderung' | translate }}
+    </dt>
+    <dd class="tw-font-normal">{{ dialogData.saldoAenderung | formatChf }}</dd>
+
+    <dt class="tw-whitespace-nowrap tw-font-semibold">
+      {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.saldo' | translate }}
+    </dt>
+    <dd class="tw-font-normal">{{ dialogData.saldo | formatChf }}</dd>
+
+    @if (dialogData.sapId) {
+      <dt class="tw-whitespace-nowrap tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId' | translate }}
+      </dt>
+      <dd class="tw-font-normal">{{ dialogData.sapId }}</dd>
+    }
+
+    @if (dialogData.sapStatus) {
+      <dt class="tw-whitespace-nowrap tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapStatus' | translate }}
+      </dt>
+      <dd class="tw-font-normal">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + dialogData.sapStatus | translate }}
+      </dd>
+    }
+
+    <dt class="tw-mt-4 tw-whitespace-nowrap tw-font-semibold">
+      {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.bemerkung' | translate }}
+    </dt>
+    <dd
+      class="tw-col-span-2 tw-col-start-1 tw-mt-1 tw-max-w-[520px] tw-whitespace-pre-wrap tw-break-words tw-font-normal"
+      [innerText]="dialogData.comment"
+    ></dd>
+  </dl>
+
+  <div class="tw-mt-10 tw-flex tw-justify-end">
+    <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-ok">
+      {{ 'shared.close' | translate }}
+    </button>
+  </div>
+</section>

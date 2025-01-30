@@ -5490,21 +5490,32 @@ components:
         - SUCCESS
         - FAILURE
         - IN_PROGRESS
+    BuchhaltungType:
+      enum:
+        - SALDOAENDERUNG
+        - AUSZAHLUNG
+        - STIPENDIUM
     BuchhaltungEntry:
       type: object
       required:
         - timestampErstellt
+        - buchhaltungType
+        - saldoAenderung
         - saldo
         - comment
       properties:
         timestampErstellt:
           type: string
           format: date-time
+        buchhaltungType:
+          $ref: '#/components/schemas/BuchhaltungType'
         stipendienBetrag:
           type: integer
         auszahlung:
           type: integer
         rueckforderung:
+          type: integer
+        saldoAenderung:
           type: integer
         saldo:
           type: integer
