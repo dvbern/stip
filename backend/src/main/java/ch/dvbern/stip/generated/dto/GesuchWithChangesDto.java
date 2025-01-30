@@ -36,6 +36,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid LocalDate aenderungsdatum;
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
   private @Valid String bearbeiter;
+  private @Valid String einreichedatum;
   private @Valid List<GesuchTrancheDto> changes;
 
   /**
@@ -230,6 +231,24 @@ public class GesuchWithChangesDto  implements Serializable {
 
   /**
    **/
+  public GesuchWithChangesDto einreichedatum(String einreichedatum) {
+    this.einreichedatum = einreichedatum;
+    return this;
+  }
+
+  
+  @JsonProperty("einreichedatum")
+  public String getEinreichedatum() {
+    return einreichedatum;
+  }
+
+  @JsonProperty("einreichedatum")
+  public void setEinreichedatum(String einreichedatum) {
+    this.einreichedatum = einreichedatum;
+  }
+
+  /**
+   **/
   public GesuchWithChangesDto changes(List<GesuchTrancheDto> changes) {
     this.changes = changes;
     return this;
@@ -282,12 +301,13 @@ public class GesuchWithChangesDto  implements Serializable {
         Objects.equals(this.aenderungsdatum, gesuchWithChanges.aenderungsdatum) &&
         Objects.equals(this.gesuchTrancheToWorkWith, gesuchWithChanges.gesuchTrancheToWorkWith) &&
         Objects.equals(this.bearbeiter, gesuchWithChanges.bearbeiter) &&
+        Objects.equals(this.einreichedatum, gesuchWithChanges.einreichedatum) &&
         Objects.equals(this.changes, gesuchWithChanges.changes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, changes);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, einreichedatum, changes);
   }
 
   @Override
@@ -305,6 +325,7 @@ public class GesuchWithChangesDto  implements Serializable {
     sb.append("    aenderungsdatum: ").append(toIndentedString(aenderungsdatum)).append("\n");
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
+    sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
     sb.append("}");
     return sb.toString();
