@@ -111,7 +111,7 @@ export class EinreichenStore extends signalStore(
     const { gesuch, trancheTyp, gesuchId } = this.cachedGesuchViewSig();
     const { compileTimeConfig } = this.sharedDataAccessConfigSig();
 
-    const routesSuffix = trancheSetting?.routesSuffix ?? [];
+    const routesSuffix = trancheSetting?.routesSuffix;
     const error = validationReport
       ? sharedUtilFnErrorTransformer({ error: validationReport })
       : undefined;
@@ -128,12 +128,14 @@ export class EinreichenStore extends signalStore(
             SPECIAL_VALIDATION_ERRORS[error.messageTemplate](error);
           return {
             ...specialError,
-            stepRoute: [
-              '/gesuch',
-              specialError.step.route,
-              gesuch?.id,
-              ...routesSuffix,
-            ],
+            stepRoute: routesSuffix
+              ? [
+                  '/gesuch',
+                  specialError.step.route,
+                  gesuch?.id,
+                  ...routesSuffix,
+                ]
+              : null,
           };
         }),
       invalidFormularSteps: transformValidationReportToFormSteps(
@@ -289,7 +291,7 @@ const transformValidationReportToFormSteps = (
   routeSuffix?: readonly string[],
   report?: ValidationReport,
   currentForm?: SharedModelGesuchFormular | null,
-): (SharedModelGesuchFormStep & { routes: (string | null)[] })[] => {
+): (SharedModelGesuchFormStep & { routeParts: string[] | null })[] => {
   if (!report || !gesuchId) {
     return [];
   }
@@ -343,13 +345,9 @@ const transformValidationReportToFormSteps = (
     .map((step) => {
       return {
         ...step,
-        routes: [
-          '/',
-          'gesuch',
-          ...step.route.split('/'),
-          gesuchId,
-          ...(routeSuffix ?? []),
-        ],
+        routeParts: routeSuffix
+          ? ['/', 'gesuch', ...step.route.split('/'), gesuchId, ...routeSuffix]
+          : null,
       };
     });
 };

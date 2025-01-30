@@ -72,6 +72,13 @@ export const handleNotFound = (
   return context.set(HANDLE_NOT_FOUND, handler);
 };
 
+export const handleUnauthorized = (
+  unauthorizedHandler: (error: SharedModelError) => void,
+  context: HttpContext = new HttpContext(),
+) => {
+  return context.set(HANDLE_UNAUTHORIZED, unauthorizedHandler);
+};
+
 export const handleNotFoundAndUnauthorized = (
   notFoundHandler: (error: SharedModelError) => void,
   unauthorizedHandler: (error: SharedModelError) => void,

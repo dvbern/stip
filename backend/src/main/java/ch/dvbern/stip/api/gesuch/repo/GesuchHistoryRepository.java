@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuch.repo;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -26,6 +27,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
@@ -71,5 +73,29 @@ public class GesuchHistoryRepository {
             .setMaxResults(1)
             .getResultList()
             .stream();
+    }
+
+    public Gesuch requireLatestEingereicht(final UUID gesuchId) {
+        return getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT).orElseThrow(NotFoundException::new);
+    }
+
+    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
+    @SuppressWarnings("unchecked")
+    public Optional<Gesuch> getLatestWhereStatusChangedTo(
+        final UUID gesuchId,
+        final Gesuchstatus gesuchStatus
+    ) {
+        final var reader = AuditReaderFactory.get(entityManager);
+        return reader
+            .createQuery()
+            .forRevisionsOfEntity(Gesuch.class, true, true)
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
+            .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .addOrder(AuditEntity.revisionNumber().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
     }
 }

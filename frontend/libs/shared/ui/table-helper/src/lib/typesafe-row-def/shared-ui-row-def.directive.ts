@@ -1,7 +1,9 @@
 import { CdkRowDef } from '@angular/cdk/table';
-import { Directive, Input } from '@angular/core';
+import { Directive, Input, Predicate, input } from '@angular/core';
 import { MatRowDef, MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
+
+import { isDefined } from '@dv/shared/model/type-util';
 
 /**
  * Row definition for the mat-table that has a type-safe dataSource input for type inference
@@ -24,13 +26,27 @@ export class TypeSafeMatRowDefDirective<T> extends MatRowDef<T> {
     | T[]
     | Observable<T[]>
     | MatTableDataSource<T>;
-  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input({ alias: 'dvMatRowDefColumns' }) override columns!: string[];
+  onlyIfFnSig = input<Predicate<T> | undefined>(undefined, { alias: 'onlyIf' });
 
   static ngTemplateContextGuard<T>(
-    _: TypeSafeMatRowDefDirective<T>,
+    directive: TypeSafeMatRowDefDirective<T>,
     ctx: unknown,
   ): ctx is { $implicit: T; index: number } {
-    return true;
+    if (!isCorrectContext<T>(ctx)) {
+      return false;
+    }
+    return directive.onlyIfFnSig()?.(ctx.$implicit) ?? true;
   }
 }
+
+const isCorrectContext = <T>(
+  ctx: unknown,
+): ctx is { $implicit: T; index: number } => {
+  return (
+    isDefined(ctx) &&
+    typeof ctx === 'object' &&
+    '$implicit' in ctx &&
+    'index' in ctx
+  );
+};

@@ -40,6 +40,7 @@
   "sachbearbeitung-app.admin.option.euEftaLaender": "EU/EFTA Länder",
   "sachbearbeitung-app.admin.option.benutzerverwaltung": "Benutzerverwaltung",
   "sachbearbeitung-app.admin.option.sozialdienst": "Sozialdienste",
+  "sachbearbeitung-app.admin.option.sozialdienstBenutzer": "Benutzerverwaltung",
 
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Übersicht aller Buchstaben-Zuteilungen",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Sachbearbeiter",
@@ -253,6 +254,17 @@
   "sachbearbeitung-app.admin.sozialdienst.sozialdienstAdminErsetzt": "Sozialdienst Admin wurde erfolgreich ersetzt",
   "sachbearbeitung-app.admin.sozialdienst.name.filter.placeholder": "Filtern...",
 
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.route.overview": "Benutzerverwaltung",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.create": "Erstellen",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.edit": "Bearbeiten",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.nachname.label": "Name",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.vorname.label": "Vorname",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.email.label": "E-Mail",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.erstellt": "Sozialdienst Arbeiter wurde erfolgreich erfasst",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.aktualisiert": "Sozialdienst Arbeiter wurde erfolgreich aktualisiert",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.confirmDelete.title": "Sozialdienst Arbeiter löschen",
+  "sachbearbeitung-app.admin.sozialdienstBenutzer.confirmDelete.text": "Wollen Sie den Sozialdienst Arbeiter \"{{ name }}\" wirklich löschen?",
+
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
@@ -267,6 +279,19 @@
   "sachbearbeitung-app.infos.buchhaltung": "Buchhaltung",
   "sachbearbeitung-app.infos.darlehen": "Darlehen",
   "sachbearbeitung-app.infos.beschwerden": "Beschwerden",
+
+  "sachbearbeitung-app.infos.buchhaltung.title": "Buchhaltung",
+  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title": "Saldo manuell korrigieren",
+  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.betrag": "Betrag",
+  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.comment": "Bemerkung",
+  "sachbearbeitung-app.infos.buchhaltung.table.datum": "Datum",
+  "sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag": "Stipendienbetrag",
+  "sachbearbeitung-app.infos.buchhaltung.table.auszahlung": "Auszahlung",
+  "sachbearbeitung-app.infos.buchhaltung.table.rueckforderung": "Rückforderung",
+  "sachbearbeitung-app.infos.buchhaltung.table.saldo": "Saldo",
+  "sachbearbeitung-app.infos.buchhaltung.table.comment": "Bemerkung",
+  "sachbearbeitung-app.infos.buchhaltung.table.link": "Link zur Verfügung",
+  "sachbearbeitung-app.infos.buchhaltung.notification.buchhaltungSaldokorrekturSuccess": "Saldokorrektur wurde erfolgreich erstellt",
 
   "sachbearbeitung-app.infos.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.infos.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
@@ -376,9 +401,11 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt": "Resultat: Stipendium abgelehnt",
   "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Details der Berechnung",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle": "Details der verminderten Berechnung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Stipendium Betrag",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}{{ type }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.vermindert.total.info": "Augrund des zuspäteinrechens des Gesuchs, {{ months }} Monate nach Ausbildungsbegin, wurde das Stipendium von {{ unreducedTotal }}.-- um {{ reducePercentage }}% gekürzt.",
 
   "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Ausstehend",
 

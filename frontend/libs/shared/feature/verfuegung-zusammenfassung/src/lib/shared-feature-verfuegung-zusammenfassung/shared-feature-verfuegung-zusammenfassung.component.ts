@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,7 +12,12 @@ import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
-import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
+import { DokumentService, GesuchService } from '@dv/shared/model/gesuch';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
+import {
+  SharedUiFormatChfNegativePipe,
+  SharedUiFormatChfPipe,
+} from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
@@ -28,8 +33,11 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     RouterLink,
     SharedUiIconChipComponent,
     SharedUiFormatChfPipe,
+    SharedUiFormatChfNegativePipe,
     SharedUiRdIsPendingWithoutCachePipe,
+    SharedUiDownloadButtonDirective,
     SharedUiLoadingComponent,
+    DecimalPipe,
   ],
   templateUrl: './shared-feature-verfuegung-zusammenfassung.component.html',
   styleUrl: './shared-feature-verfuegung-zusammenfassung.component.scss',
@@ -37,6 +45,8 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
 })
 export class SharedFeatureVerfuegungZusammenfassungComponent {
   berechnungStore = inject(BerechnungStore);
+  gesuchService = inject(GesuchService);
+  dokumentService = inject(DokumentService);
   store = inject(Store);
   gesuchIdSig = this.store.selectSignal(selectRouteId);
 

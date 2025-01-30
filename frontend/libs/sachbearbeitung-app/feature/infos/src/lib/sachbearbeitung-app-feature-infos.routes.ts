@@ -29,7 +29,10 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
       },
       {
         path: BUCHHALTUNG_ROUTE.route + '/:id',
-        component: SharedUiCommingSoonComponent,
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/infos-buchhaltung').then(
+            (m) => m.sachbearbeitungAppFeatureInfosBuchhaltungRoutes,
+          ),
       },
       {
         path: DARLEHEN_ROUTE.route + '/:id',

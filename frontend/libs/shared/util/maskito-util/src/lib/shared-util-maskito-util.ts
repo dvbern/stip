@@ -31,6 +31,10 @@ export const maskitoPercent = {
   ],
 } satisfies MaskitoOptions;
 
+export const maskitoNumberWithNegative = maskitoNumberOptionsGenerator({
+  thousandSeparator: NUMBER_THOUSAND_SEPARATOR,
+});
+
 export const maskitoNumber = maskitoNumberOptionsGenerator({
   min: 0,
   thousandSeparator: NUMBER_THOUSAND_SEPARATOR,
@@ -69,7 +73,9 @@ export function fromFormatedNumber(
     return null;
   }
   return formatedNumber != null
-    ? +formatedNumber.replaceAll(NUMBER_THOUSAND_SEPARATOR, '')
+    ? +formatedNumber
+        .replaceAll(NUMBER_THOUSAND_SEPARATOR, '')
+        .replaceAll('−', '-')
     : formatedNumber;
 }
 

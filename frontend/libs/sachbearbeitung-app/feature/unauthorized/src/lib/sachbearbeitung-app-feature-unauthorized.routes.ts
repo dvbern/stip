@@ -6,6 +6,7 @@ export const sachbearbeitungAppFeatureUnauthorizedRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
+    title: 'sachbearbeitung-app.unauthorized.title',
     children: [
       { path: '', component: SachbearbeitungAppFeatureUnauthorizedComponent },
     ],

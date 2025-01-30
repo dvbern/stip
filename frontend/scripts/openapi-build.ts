@@ -23,6 +23,35 @@ import path from 'node:path';
 const yaml = '../contract/openapi.yaml';
 const dependencies = require('../package.json').dependencies;
 
+// Add more APIs as you go
+// Keep in mind: there is one file generated per OpenAPI-@Tag,
+// Names are CamelCase versions from OpenAPIConst Tags
+const generatedApis = [
+  'Ausbildung',
+  'Ausbildungsgang',
+  'Ausbildungsstaette',
+  'Benutzer',
+  'Bildungskategorie',
+  'Buchhaltung',
+  'Configuration',
+  'Delegieren',
+  'Dokument',
+  'Fall',
+  'Gesuch',
+  'GesuchNotiz',
+  'Gesuchsjahr',
+  'Gesuchsperiode',
+  'GesuchTranche',
+  'Mail',
+  'Notification',
+  'Plz',
+  'Sozialdienst',
+  'SozialdienstAdmin',
+  'Stammdaten',
+  'StipDecision',
+  'Tenant',
+];
+
 const ngVersion = dependencies['@angular/core'].replace(/[^0-9.]/, '');
 console['log']('ngVersion', ngVersion);
 
@@ -155,34 +184,6 @@ async function sleep(msec: number) {
   const generatorPath = 'tmp/generated';
   const apiPath = path.join(generatorPath, 'api');
   const modelsPath = path.join(generatorPath, 'model');
-
-  // add more APIs as you go
-  // Keep in mind: there is one file generated per OpenAPI-@Tag,
-  // Names are CamelCase versions from OpenAPIConst Tags
-  const generatedApis = [
-    'Ausbildung',
-    'Ausbildungsgang',
-    'Ausbildungsstaette',
-    'Benutzer',
-    'Bildungskategorie',
-    'Configuration',
-    'Delegieren',
-    'Dokument',
-    'Fall',
-    'Gesuch',
-    'GesuchNotiz',
-    'Gesuchsjahr',
-    'Gesuchsperiode',
-    'GesuchTranche',
-    'Mail',
-    'Notification',
-    'Plz',
-    'Sozialdienst',
-    'SozialdienstAdmin',
-    'Stammdaten',
-    'StipDecision',
-    'Tenant',
-  ];
 
   await generateOpenApi(generatorPath, generatedApis);
 

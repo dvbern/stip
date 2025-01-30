@@ -17,10 +17,13 @@
 
 package ch.dvbern.stip.api.fall.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
@@ -77,6 +80,9 @@ public class Fall extends AbstractMandantEntity {
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
     private Set<Ausbildung> ausbildungs;
+
+    @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
+    private List<Buchhaltung> buchhaltungs = new ArrayList<>();
 
     @Nullable
     @OneToOne(mappedBy = "delegierterFall")

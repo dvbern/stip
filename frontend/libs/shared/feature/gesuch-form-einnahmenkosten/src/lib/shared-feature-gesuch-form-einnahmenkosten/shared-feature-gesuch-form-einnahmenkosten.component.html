@@ -526,13 +526,23 @@
         <div class="row g-4">
           <!-- VERDIENST_REALISIERT -->
           <mat-radio-group
-            class="col-12"
+            class="col-12 col-md-6"
             formControlName="verdienstRealisiert"
             data-testid="form-einnahmen-kosten-verdienstRealisiert"
             dvSharedUiFormField
           >
-            <mat-label>{{ 'shared.form.einnahmenkosten.verdienstRealisiert.label' | translate }}</mat-label>
-            <div class="d-flex flex-wrap gap-2 col-12 col-md-6 col-xl-6 pe-md-3 justify-content-between">
+            <div class="d-flex align-items-center flex-grow-1 gap-1">
+              <mat-label>{{ 'shared.form.einnahmenkosten.verdienstRealisiert.label' | translate }}</mat-label>
+              <button
+                type="button"
+                (click)="verdienstRealisiertDialog.toggle()"
+                class="dv-icon-button dv-icon-button-md text-info mt-2"
+                [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+              >
+                <span class="material-symbols-rounded"> info </span>
+              </button>
+            </div>
+            <div class="d-flex flex-wrap gap-2 pe-md-3 justify-content-between">
               <div class="d-flex flex-column">
                 <mat-radio-button data-testid="yes" [value]="true">
                   {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
@@ -555,6 +565,13 @@
               {{ 'shared.form.error.required' | translate }}
             </mat-error>
           </mat-radio-group>
+          <div
+            dvSharedUiInfoDialog
+            [dialogTitleKey]="'shared.form.einnahmenkosten.verdienstRealisiert.label'"
+            [dialogMessageKey]="'shared.form.einnahmenkosten.verdienstRealisiert.info'"
+            #verdienstRealisiertDialog="dvSharedUiInfoDialog"
+            class="d-none d-xl-block col-xl-6"
+          ></div>
         </div>
       }
 

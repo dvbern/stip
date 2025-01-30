@@ -688,18 +688,18 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
+        final var pia = gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+
+        pia.setWohnsitz(Wohnsitz.FAMILIE);
+        pia.setWohnsitzAnteilMutter(null);
+        pia.setWohnsitzAnteilVater(null);
+
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setWohnsitz(Wohnsitz.FAMILIE);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setWohnsitzAnteilMutter(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setWohnsitzAnteilVater(null);
+            .getEinnahmenKosten()
+            .setAuswaertigeMittagessenProWoche(1);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
@@ -728,6 +728,11 @@ class GesuchServiceTest {
         pia.setWohnsitz(Wohnsitz.MUTTER_VATER);
         pia.setWohnsitzAnteilVater(BigDecimal.valueOf(50));
         pia.setWohnsitzAnteilMutter(BigDecimal.valueOf(50));
+
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAuswaertigeMittagessenProWoche(1);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);

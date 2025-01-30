@@ -51,6 +51,9 @@ public class ApiClient {
     public BildungskategorieApiSpec bildungskategorie() {
         return BildungskategorieApiSpec.bildungskategorie(config.reqSpecSupplier);
     }
+    public BuchhaltungApiSpec buchhaltung() {
+        return BuchhaltungApiSpec.buchhaltung(config.reqSpecSupplier);
+    }
     public ConfigurationApiSpec _configuration() {
         return ConfigurationApiSpec._configuration(config.reqSpecSupplier);
     }

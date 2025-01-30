@@ -15,7 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { map } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
@@ -23,12 +23,14 @@ import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
   selectRouteId,
   selectRouteTrancheId,
+  selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { GesuchInfo } from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
-import { assertUnreachable } from '@dv/shared/model/type-util';
+import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
@@ -74,6 +76,22 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   private hasAcceptedAllDocumentsSig =
     this.dokumentsStore.hasAcceptedAllDokumentsSig;
+  private otherGesuchInfoSourceSig = toSignal(
+    this.store.select(selectSharedDataAccessGesuchCache).pipe(
+      map(({ gesuch }) => gesuch),
+      filter(isDefined),
+      map(
+        (gesuch) =>
+          ({
+            id: gesuch.id,
+            startDate: gesuch.gesuchTrancheToWorkWith.gueltigAb,
+            endDate: gesuch.gesuchTrancheToWorkWith.gueltigBis,
+            gesuchStatus: gesuch.gesuchStatus,
+            gesuchNummer: gesuch.gesuchNummer,
+          }) satisfies GesuchInfo,
+      ),
+    ),
+  );
 
   isTrancheRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
@@ -123,6 +141,17 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         const gesuchTrancheId = this.gesuchTrancheIdSig();
         if (gesuchTrancheId) {
           this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
+    effect(
+      () => {
+        const gesuchInfo = this.otherGesuchInfoSourceSig();
+
+        if (gesuchInfo) {
+          this.gesuchStore.setGesuchInfo(gesuchInfo);
         }
       },
       { allowSignalWrites: true },

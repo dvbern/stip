@@ -374,6 +374,8 @@ public class TestUtil {
                 .setErwachsene2699(5400)
                 .setJugendlicheErwachsene1925(4600)
                 .setKinder0018(1400)
+                .setEinreichefristNormal(LocalDate.now().plusMonths(5))
+                .setEinreichefristReduziert(LocalDate.now().plusMonths(5))
         )
             .setGesuchTranchen(
                 List.of(
