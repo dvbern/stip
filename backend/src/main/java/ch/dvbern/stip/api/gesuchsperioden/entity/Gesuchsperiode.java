@@ -221,4 +221,8 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     @Column(name = "zweiter_auszahlungstermin_tag", nullable = false)
     private Integer zweiterAuszahlungsterminTag;
 
+    @NotNull
+    @Min(0)
+    @Column(name = "frist_nachreichen_dokumente", nullable = false)
+    private Integer fristNachreichenDokumente;
 }

@@ -45,8 +45,14 @@
     <input readonly type="text" matInput formControlName="fallnummer" data-testid="form-tranche-fallnummer" />
   </mat-form-field>
 
-  <!-- Gesuchsperiode -->
+  <!-- Einreichedatum -->
   <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ 'shared.form.tranche.einreichedatum.label' | translate }}</mat-label>
+    <input readonly type="text" matInput formControlName="einreichedatum" data-testid="form-tranche-einreichedatum" />
+  </mat-form-field>
+
+  <!-- Gesuchsperiode -->
+  <mat-form-field dvSharedUiFormField class="tw-col-start-1">
     <mat-label>{{ 'shared.form.tranche.gesuchsperiode.label' | translate }} </mat-label>
 
     <input readonly type="text" matInput formControlName="gesuchsperiode" data-testid="form-tranche-gesuchsperiode" />

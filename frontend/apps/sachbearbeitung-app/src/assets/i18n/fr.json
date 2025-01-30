@@ -229,6 +229,7 @@
   "sachbearbeitung-app.admin.gesuchsperiode.confirmDelete.gesuchsjahr.text": "Voulez-vous vraiment supprimer l'année de formation \"{{ bezeichnungFr }}\" ?",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Il doit y avoir une année de formation publiée liée.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "L'année de formation liée n'est pas encore publiée.",
+  "sachbearbeitung-app.admin.gesuchsperiode.fristNachreichenDokumente.label": "Délai de remise des documents",
 
   "sachbearbeitung-app.admin.sozialdienst.route.overview": "Service social",
   "sachbearbeitung-app.admin.sozialdienst.name.label": "Nom du service social",
