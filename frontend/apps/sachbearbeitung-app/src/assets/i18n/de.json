@@ -304,6 +304,10 @@
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.bemerkung": "Bemerkung:",
   "sachbearbeitung-app.infos.buchhaltung.notification.buchhaltungSaldokorrekturSuccess": "Saldokorrektur wurde erfolgreich erstellt",
 
+  "sachbearbeitung-app.infos.buchhaltung.sapStatus.SUCCESS": "Erfolgreich",
+  "sachbearbeitung-app.infos.buchhaltung.sapStatus.FAILURE": "Fehlgeschlagen",
+  "sachbearbeitung-app.infos.buchhaltung.sapStatus.IN_PROGRESS": "In Bearbeitung",
+
   "sachbearbeitung-app.infos.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.infos.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
   "sachbearbeitung-app.infos.protokoll.table.datum": "Datum",

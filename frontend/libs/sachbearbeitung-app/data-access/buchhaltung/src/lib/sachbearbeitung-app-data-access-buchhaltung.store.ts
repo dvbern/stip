@@ -107,6 +107,8 @@ export class BuchhaltungStore extends signalStore(
                     saldoAenderung: -3750,
                     saldo: 5000,
                     auszahlung: 3750,
+                    sapId: 123,
+                    sapStatus: 'IN_PROGRESS',
                   },
                   ...(buchhaltungEntries ?? []),
                 ] satisfies BuchhaltungEntry[],
