@@ -33,7 +33,11 @@ export interface KeycloakResponse {
  * 3. Add the user to the Keycloak realm https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/admin/master/console/
  * 4. Add the user to the environment variables in the CI configuration https://gitlab.dvbern.ch/stip/stip/-/settings/ci_cd -> Variables
  */
-export type E2eUser = 'GESUCHSTELLER' | 'SACHBEARBEITER' | 'ADMIN';
+export type E2eUser =
+  | 'GESUCHSTELLER'
+  | 'SACHBEARBEITER'
+  | 'ADMIN'
+  | 'SOZIALDIENST_ADMIN';
 
 /**
  * Some default configuration for e2e tests

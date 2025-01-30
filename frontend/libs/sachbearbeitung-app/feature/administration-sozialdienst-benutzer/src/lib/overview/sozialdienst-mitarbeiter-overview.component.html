@@ -20,12 +20,11 @@
               <div class="tw-relative tw-flex">
                 <mat-form-field>
                   <input
-                    id="fallNummer"
                     matInput
                     [dvMaxLength]="'small'"
                     class="tw-w-full"
                     formControlName="name"
-                    data-testid="cockpit-filter-fall"
+                    data-testid="sozialdienst-mitarbeiter-filter-name"
                     (click)="$event.stopPropagation()"
                   />
                 </mat-form-field>
@@ -54,12 +53,11 @@
               <div class="tw-relative tw-flex">
                 <mat-form-field>
                   <input
-                    id="fallNummer"
                     matInput
                     [dvMaxLength]="'small'"
                     class="tw-w-full"
                     formControlName="email"
-                    data-testid="cockpit-filter-fall"
+                    data-testid="sozialdienst-mitarbeiter-filter-email"
                     (click)="$event.stopPropagation()"
                   />
                 </mat-form-field>
@@ -86,6 +84,7 @@
                 [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
                 [routerLink]="['.', 'create']"
                 class="btn btn-outline-primary btn-sm"
+                data-testid="sozialdienst-mitarbeiter-create"
               >
                 <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
               </a>
@@ -96,6 +95,7 @@
                   [routerLink]="['.', 'edit', benutzer.id]"
                   class="btn btn-link"
                   [attr.aria-label]="'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeiten' | translate"
+                  data-testid="sozialdienst-mitarbeiter-edit"
                 >
                   <i class="material-symbols-rounded fs-5">edit</i>
                 </a>
@@ -104,6 +104,7 @@
                   class="btn btn-link"
                   [attr.aria-label]="'sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen' | translate"
                   (click)="deleteBenutzer(benutzer)"
+                  data-testid="sozialdienst-mitarbeiter-delete"
                 >
                   <i class="material-symbols-rounded fs-5">delete</i>
                 </button>
