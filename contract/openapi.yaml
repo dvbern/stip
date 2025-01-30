@@ -4366,6 +4366,7 @@ components:
         - gesuchsjahr
         - ausbKosten_SekII
         - ausbKosten_Tertiaer
+        - fristNachreichenDokumente
       type: object
       properties:
         id:
@@ -4393,6 +4394,8 @@ components:
         ausbKosten_SekII:
           type: integer
         ausbKosten_Tertiaer:
+          type: integer
+        fristNachreichenDokumente:
           type: integer
     GesuchsperiodeCreate:
       type: object
