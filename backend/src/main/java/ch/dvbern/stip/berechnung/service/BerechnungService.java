@@ -309,15 +309,8 @@ public class BerechnungService {
                 gesuchTranche.getGueltigkeit().getGueltigBis()
             );
             for (final var berechnungsresultat : trancheBerechnungsresultate) {
-                int berechnung;
-                if (actualDuration != null) {
-                    berechnung = berechnungsresultat.getBerechnung() * actualDuration / 12;
-                } else {
-                    berechnung = berechnungsresultat.getBerechnung();
-                }
-
                 berechnungsresultat.setBerechnung(
-                    berechnung * monthsValid / 12
+                    berechnungsresultat.getBerechnung() * monthsValid / 12
                 );
             }
             berechnungsresultate.addAll(trancheBerechnungsresultate);
@@ -329,10 +322,14 @@ public class BerechnungService {
             berechnungsresultat = 0;
         }
 
+        Integer berechnungsresultatReduziert =
+            actualDuration != null ? berechnungsresultat * actualDuration / 12 : null;
+
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
             berechnungsresultat,
             berechnungsresultate,
+            berechnungsresultatReduziert,
             actualDuration
         );
     }

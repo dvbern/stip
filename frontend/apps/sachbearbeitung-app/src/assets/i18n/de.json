@@ -398,14 +398,16 @@
 
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title": "Resultat",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen": "Resultat: Stipendium gewährt",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.vermindert": "Resultat: Stipendium gewährt (vermindert)",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt": "Resultat: Stipendium abgelehnt",
   "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Details der Berechnung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle": "Details der verminderten Berechnung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Stipendium Betrag",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Abzug ({{ reducePercentage }}%) wegen verspäteter Einreichung des Stipendiumantrags, {{ months }} Monate nach Ausbildungsbegin.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.effektiverBetragStipendium": "Effektiver Betrag",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}{{ type }}",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.vermindert.total.info": "Augrund des zuspäteinrechens des Gesuchs, {{ months }} Monate nach Ausbildungsbegin, wurde das Stipendium von {{ unreducedTotal }}.-- um {{ reducePercentage }}% gekürzt.",
 
   "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Ausstehend",
 
