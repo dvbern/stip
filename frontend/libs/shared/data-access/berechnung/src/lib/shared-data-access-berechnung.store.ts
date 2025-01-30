@@ -73,7 +73,7 @@ export class BerechnungStore extends signalStore(
           reduktionsBetrag: -(
             byTrancheId.totalBetragStipendium - berechnungReduziert
           ),
-          berechnungReduziert: berechnungReduziert,
+          berechnungReduziert,
           reducePercentage: 100 - (100 * verminderteBerechnungMonate) / 12,
         };
       }
