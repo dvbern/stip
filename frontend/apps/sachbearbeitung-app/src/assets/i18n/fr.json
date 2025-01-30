@@ -416,7 +416,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Montant total de la bourse",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total de calcul {{ index }}{{ type }} à la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}{{ type }}",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.vermindert.total.info": "En raison du retard de la demande de {{ months }} mois, la bourse de {{ unreducedTotal }}.-- a été réduite d'un {{ reducePercentage }}%.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.vermindert.total.info": "En raison du retard de la demande, {{ months }} mois après le début de la formation, la bourse de {{ unreducedTotal }}.-- a été réduite d'un {{ reducePercentage }}%.",
 
   "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Manquant",
 

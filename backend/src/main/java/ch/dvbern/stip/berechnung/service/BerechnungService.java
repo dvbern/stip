@@ -325,7 +325,7 @@ public class BerechnungService {
 
         int berechnungsresultat =
             -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnung).sum();
-        if (berechnungsresultat < -gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
+        if (berechnungsresultat < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
             berechnungsresultat = 0;
         }
 
@@ -581,18 +581,15 @@ public class BerechnungService {
     }
 
     boolean wasEingereichtAfterDueDate(final Gesuch gesuch, final LocalDateTime eingereicht) {
-        // TODO KSTIP-1852: unit test this
         // TODO KSTIP-998: Use new einreichedatum instead of envers query here
         final var einreichefrist = gesuch.getGesuchsperiode().getEinreichefristNormal();
 
         return eingereicht.isAfter(einreichefrist.atTime(LocalTime.MAX));
     }
 
-    // TODO KSTIP-1852: unit test this
     int getActualDuration(final Gesuch gesuch, final LocalDateTime eingereicht) {
-        final var lastTranche = gesuch.getGesuchTranchen()
-            .stream()
-            .min(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
+        final var lastTranche = gesuch.getTranchenTranchen()
+            .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
             .orElseThrow(NotFoundException::new);
 
         final var roundedEingereicht = DateUtil.roundToStartOrEnd(

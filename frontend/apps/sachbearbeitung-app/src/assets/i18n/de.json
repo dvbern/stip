@@ -416,7 +416,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Stipendium Betrag",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Gesamtbetrag Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}{{ type }}",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.vermindert.total.info": "Augrund des zuspäteinrechens des Gesuchs um {{ months }} Monate, wurde das Stipendium von {{ unreducedTotal }}.-- um {{ reducePercentage }}% gekürzt.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.vermindert.total.info": "Augrund des zuspäteinrechens des Gesuchs, {{ months }} Monate nach Ausbildungsbegin, wurde das Stipendium von {{ unreducedTotal }}.-- um {{ reducePercentage }}% gekürzt.",
 
   "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Ausstehend",
 
