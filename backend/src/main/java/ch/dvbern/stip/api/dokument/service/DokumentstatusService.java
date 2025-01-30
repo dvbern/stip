@@ -43,6 +43,14 @@ public class DokumentstatusService {
             .getAllKommentareForGesuchTrancheIdAndDokumentTyp(gesuchTrancheId, gesuchDokumentId);
     }
 
+    public void triggerStatusChangeNoComment(
+        final GesuchDokument gesuchDokument,
+        final DokumentstatusChangeEvent event
+    ) {
+        final var sm = createStateMachine(gesuchDokument);
+        sm.fire(DokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
+    }
+
     public void triggerStatusChange(final GesuchDokument gesuchDokument, final DokumentstatusChangeEvent event) {
         final var sm = createStateMachine(gesuchDokument);
         sm.fire(DokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);

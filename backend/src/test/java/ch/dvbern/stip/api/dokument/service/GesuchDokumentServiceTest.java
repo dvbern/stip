@@ -36,7 +36,6 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -204,7 +203,7 @@ class GesuchDokumentServiceTest {
     }
 
     @Test
-    void deleteAbgelehnteDokumenteForGesuchTest() {
+    void deleteFilesOfAbgelehnteDokumenteForGesuchTest() {
         final var dokumentMapper = new DokumentMapperImpl();
         final var customDokumentMapper = new CustomDocumentTypMapperImpl();
         // Arrange
@@ -224,6 +223,7 @@ class GesuchDokumentServiceTest {
                 )
             ),
             null,
+            null,
             null
         );
 
@@ -242,16 +242,21 @@ class GesuchDokumentServiceTest {
         );
 
         // Act
-        gsDokService.deleteAbgelehnteDokumenteForGesuch(new Gesuch());
+        var docs = new ArrayList<GesuchDokument>();
+        docs.add(new GesuchDokument());
+        gsDokService.deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(docs);
 
         // Assert
-        assertThat(gesuchDokumente.size(), is(1));
+        assertThat(gesuchDokumente.size(), is(2));
         final var abgelehntesGesuchDokument = gesuchDokumente
             .values()
             .stream()
             .filter(x -> x.getStatus() == Dokumentstatus.ABGELEHNT)
             .findFirst();
-        assertThat(abgelehntesGesuchDokument.isEmpty(), is(true));
+        // denied GesuchDokuments will not be deleted anymore
+        assertThat(abgelehntesGesuchDokument.isEmpty(), is(false));
+        // instead, all attached files will be deleted
+        assertThat(abgelehntesGesuchDokument.get().getDokumente().isEmpty(), is(true));
     }
 
     private static class GesuchDokumentServiceMock extends GesuchDokumentService {
@@ -266,7 +271,8 @@ class GesuchDokumentServiceTest {
         ConfigService configService,
         DokumentstatusService dokumentstatusService,
         Antivirus antivirus,
-        CustomDokumentTypRepository customDocumentTypRepository
+        CustomDokumentTypRepository customDocumentTypRepository,
+        GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository
         ) {
             super(
                 gesuchDokumentMapper,
@@ -279,7 +285,8 @@ class GesuchDokumentServiceTest {
                 s3,
                 configService,
                 dokumentstatusService,
-                antivirus
+                antivirus,
+                gesuchDokumentKommentarRepository
             );
         }
 

@@ -638,6 +638,7 @@ public class GesuchService {
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+        gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuch);
     }
 
     @Transactional

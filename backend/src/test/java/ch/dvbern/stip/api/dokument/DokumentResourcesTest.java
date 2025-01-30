@@ -207,7 +207,6 @@ class DokumentResourcesTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-
             .as(GesuchDokumentDto.class);
         // get newly created type
         // check if empty dokument has been created

@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -53,7 +54,10 @@ public class RequiredDokumentService {
     private static List<DokumentTyp> getExistingDokumentTypesForGesuch(final GesuchFormular formular) {
         return getExistingDokumentsForGesuch(formular)
             .stream()
-            .filter(dokument -> !dokument.getDokumente().isEmpty() && Objects.nonNull(dokument.getDokumentTyp()))
+            .filter(
+                dokument -> !dokument.getDokumente().isEmpty()
+                && Objects.nonNull(dokument.getDokumentTyp())
+            )
             .map(GesuchDokument::getDokumentTyp)
             .toList();
     }
@@ -64,6 +68,16 @@ public class RequiredDokumentService {
             .filter(dokument -> !dokument.getDokumente().isEmpty() && Objects.nonNull(dokument.getCustomDokumentTyp()))
             .map(GesuchDokument::getCustomDokumentTyp)
             .toList();
+    }
+
+    private Set<DokumentTyp> getNotAcceptedDokumentTypesForGesuch(final GesuchFormular formular) {
+        return getExistingDokumentsForGesuch(formular).stream()
+            .filter(
+                gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT)
+                && Objects.isNull(gesuchDokument.getCustomDokumentTyp())
+            )
+            .map(gesuchDokument -> gesuchDokument.getDokumentTyp())
+            .collect(Collectors.toSet());
     }
 
     private Set<DokumentTyp> getRequiredDokumentTypesForGesuch(final GesuchFormular formular) {
@@ -92,11 +106,14 @@ public class RequiredDokumentService {
         );
 
         final var requiredDokumentTypes = getRequiredDokumentTypesForGesuch(formular);
+        final var notAcceptedDokumentTypes =
+            getNotAcceptedDokumentTypesForGesuch(formular);
 
         return requiredDokumentTypes
             .stream()
             .filter(
                 requiredDokumentType -> !existingDokumentTypesHashSet.contains(requiredDokumentType)
+                || notAcceptedDokumentTypes.contains(requiredDokumentType)
             )
             .toList();
     }

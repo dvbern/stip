@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
@@ -79,6 +80,7 @@ public class GesuchDokumentService {
     private final ConfigService configService;
     private final DokumentstatusService dokumentstatusService;
     private final Antivirus antivirus;
+    private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
 
     @Transactional
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentarsByGesuchDokumentId(
@@ -219,7 +221,7 @@ public class GesuchDokumentService {
         final var gesuchDokument =
             gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, customDokumentTypId);
 
-        gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, customDokumentTypId);
+        // gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, customDokumentTypId);
         final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
     }
@@ -239,12 +241,15 @@ public class GesuchDokumentService {
         gesuchRepository.requireById(gesuchId)
             .getGesuchTranchen()
             .forEach(
-                gesuchTranche -> removeAllDokumentsForGesuchTranche(gesuchTranche.getId())
+                gesuchTranche -> {
+                    removeAllDokumentsForGesuchTranche(gesuchTranche.getId());
+                }
             );
     }
 
     @Transactional(TxType.REQUIRES_NEW)
     public void removeAllDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
+        gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTrancheId);
         gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
             .forEach(
                 gesuchDokument -> removeGesuchDokument(gesuchDokument.getId())
@@ -263,7 +268,6 @@ public class GesuchDokumentService {
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-
         gesuchstatusIsNotOrElseThrow(gesuchDokument.getGesuchTranche().getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB);
         dokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
@@ -350,15 +354,25 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public void deleteAbgelehnteDokumenteForGesuch(final Gesuch gesuch) {
-        // Query for these instead of iterating "in memory" because gesuchDokumente are lazy loaded
+    public void setAbgelehnteDokumenteToAusstehendForGesuch(final Gesuch gesuch) {
+        // Query for these instead of iterating "in memory" because abgelehnteGesuchDokumente are lazy loaded
         // and this results in only loading the ones we need instead of all
-        final var gesuchDokumente = gesuchDokumentRepository
+        final var abgelehnteGesuchDokumente = gesuchDokumentRepository
             .getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT)
+            // .filter(gesuchDokument -> Objects.isNull(gesuchDokument.getCustomDokumentTyp()))
             .toList();
 
+        deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(abgelehnteGesuchDokumente);
+        for (var gesuchdokument : abgelehnteGesuchDokumente) {
+            dokumentstatusService.triggerStatusChangeNoComment(gesuchdokument, DokumentstatusChangeEvent.AUSSTEHEND);
+        }
+    }
+
+    public void deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(List<GesuchDokument> abgelehnteGesuchDokumente) {
+        // Query for these instead of iterating "in memory" because filteredGesuchDokumente are lazy loaded
+        // and this results in only loading the ones we need instead of all
         final var dokumenteToDeleteFromS3 = new ArrayList<String>();
-        for (var gesuchdokument : gesuchDokumente) {
+        for (var gesuchdokument : abgelehnteGesuchDokumente) {
             final var dokumentList = gesuchdokument.getDokumente().stream().toList();
             for (var dokument : dokumentList) {
                 dokument.getGesuchDokumente().remove(gesuchdokument);
@@ -370,7 +384,6 @@ public class GesuchDokumentService {
                     dokumentRepository.delete(dokument);
                 }
             }
-            gesuchDokumentRepository.delete(gesuchdokument);
         }
 
         executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);

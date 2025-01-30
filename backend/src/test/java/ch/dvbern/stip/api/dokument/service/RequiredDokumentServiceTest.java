@@ -65,7 +65,7 @@ class RequiredDokumentServiceTest {
     }
 
     @Test
-    void noExistingTest() {
+    void oneExistingTest() {
         final var service = new RequiredDokumentService(
             new MockInstance(List.of(new MockDocumentProducer())),
             null
@@ -73,7 +73,7 @@ class RequiredDokumentServiceTest {
         final var requiredDocuments = service
             .getRequiredDokumentsForGesuchFormular(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));
 
-        assertThat(requiredDocuments.size(), is(0));
+        assertThat(requiredDocuments.size(), is(1));
     }
 
     private GesuchFormular initFormular(final List<DokumentTyp> existingTypes) {

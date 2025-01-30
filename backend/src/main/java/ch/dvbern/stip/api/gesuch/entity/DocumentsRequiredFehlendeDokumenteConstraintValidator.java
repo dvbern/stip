@@ -17,8 +17,13 @@
 
 package ch.dvbern.stip.api.gesuch.entity;
 
+import java.util.List;
+import java.util.Objects;
+
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -31,14 +36,25 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
 
     @Override
     public boolean isValid(Gesuch gesuch, ConstraintValidatorContext context) {
-        var anyAusstehend = false;
-        var anyAbgelehnt = false;
-
         final var gesuchDokumentDtos = gesuchService.getGesuchDokumenteForGesuch(gesuch.getId());
         if (gesuchDokumentDtos.isEmpty()) {
             return true;
         }
 
+        if (gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+            final var nonCustomGesuchDokumente =
+                gesuchDokumentDtos.stream()
+                    .filter(gesuchDokumentDto -> Objects.isNull(gesuchDokumentDto.getCustomDokumentTyp()))
+                    .toList();
+            return isAnyGesuchdokumentAbgelehntOrAusstehend(nonCustomGesuchDokumente);
+        }
+
+        return isAnyGesuchdokumentAbgelehntOrAusstehend(gesuchDokumentDtos);
+    }
+
+    private boolean isAnyGesuchdokumentAbgelehntOrAusstehend(final List<GesuchDokumentDto> gesuchDokumentDtos) {
+        var anyAusstehend = false;
+        var anyAbgelehnt = false;
         for (final var gesuchDokumentDto : gesuchDokumentDtos) {
             if (gesuchDokumentDto.getStatus() == Dokumentstatus.AUSSTEHEND) {
                 anyAusstehend = true;
@@ -49,8 +65,6 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
                 anyAbgelehnt = true;
             }
         }
-
-        // Only return true if none are ausstehen and at least 1 is abgelehnt
         return !anyAusstehend && anyAbgelehnt;
     }
 }
