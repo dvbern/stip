@@ -223,6 +223,25 @@
       </div>
 
       <div class="row g-4 mt-1">
+        <!-- Frist Nachreichen von Dokumenten -->
+        <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+          <mat-label>{{
+            'sachbearbeitung-app.admin.gesuchsperiode.fristNachreichenDokumente.label' | translate
+          }}</mat-label>
+          <input
+            formControlName="fristNachreichenDokumente"
+            data-testid="form-gesuchsperiode-frist-nachreichen-dokumente"
+            matInput
+            [maskito]="maskitoNumber"
+            type="text"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="row g-4 mt-1">
         <!-- Zweiter Auszahlungstermin Monat-->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{

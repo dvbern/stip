@@ -229,6 +229,7 @@
   "sachbearbeitung-app.admin.gesuchsperiode.confirmDelete.gesuchsjahr.text": "Wollen Sie das Ausbildungsjahr \"{{ bezeichnungDe }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Es muss ein publiziertes Ausbildungsjahr vorhanden verknüpft sein.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "Das verknüpfte Ausbildungsjahr ist noch nicht publiziert.",
+  "sachbearbeitung-app.admin.gesuchsperiode.fristNachreichenDokumente.label": "Dokumente nachreichen frist",
 
   "sachbearbeitung-app.admin.sozialdienst.route.overview": "Sozialdienste",
   "sachbearbeitung-app.admin.sozialdienst.name.label": "Name Sozialdienst",
