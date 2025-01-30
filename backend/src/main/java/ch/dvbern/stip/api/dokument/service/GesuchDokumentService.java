@@ -296,13 +296,18 @@ public class GesuchDokumentService {
         );
     }
 
+    private void dropGesuchDokumentIfNoDokumente(GesuchDokument gesuchDokument) {
+        gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
+        gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
+    }
+
     @Transactional
     public String deleteDokument(final UUID dokumentId) {
         Dokument dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
         final var dokumentObjectId = dokument.getObjectId();
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
             gesuchDokument.getDokumente().remove(dokument);
-            gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
+            dropGesuchDokumentIfNoDokumente(gesuchDokument);
         }
         if (dokument.getGesuchDokumente().isEmpty()) {
             dokumentRepository.delete(dokument);
@@ -318,7 +323,7 @@ public class GesuchDokumentService {
 
         for (final var gesuchDokument : dokument.getGesuchDokumente()) {
             gesuchDokument.getDokumente().remove(dokument);
-            gesuchDokumentRepository.dropGesuchDokumentIfNoDokumente(gesuchDokument.getId());
+            dropGesuchDokumentIfNoDokumente(gesuchDokument);
         }
         if (dokument.getGesuchDokumente().isEmpty()) {
             executeDeleteDokumentsFromS3(List.of(dokumentObjectId));

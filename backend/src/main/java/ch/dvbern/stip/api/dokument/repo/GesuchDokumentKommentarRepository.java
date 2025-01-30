@@ -36,6 +36,14 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
     private static QGesuchDokumentKommentar gesuchDokumentKommentar = QGesuchDokumentKommentar.gesuchDokumentKommentar;
 
     @Transactional
+    public void deleteAllByGesuchDokumentId(UUID gesuchDokumentId) {
+        new JPAQueryFactory(entityManager)
+            .delete(gesuchDokumentKommentar)
+            .where(gesuchDokumentKommentar.gesuchDokument.id.eq(gesuchDokumentId))
+            .execute();
+    }
+
+    @Transactional
     public void deleteAllForGesuchTranche(final UUID gesuchTrancheId) {
         new JPAQueryFactory(entityManager)
             .delete(gesuchDokumentKommentar)
