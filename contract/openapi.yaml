@@ -3365,6 +3365,9 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
+        einreichedatum:
+          format: dateTime
+          type: string
     GesuchInfo:
       required:
         - id
