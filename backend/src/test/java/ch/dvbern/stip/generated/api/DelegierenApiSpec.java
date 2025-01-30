@@ -78,7 +78,7 @@ public class DelegierenApiSpec {
      * 
      * 
      *
-     * @see #fallIdPath Die ID vom Gesuch (required)
+     * @see #fallIdPath Die ID vom Fall (required)
      * @see #sozialdienstIdPath  (required)
      */
     public static class FallDelegierenOper implements Oper {
@@ -109,7 +109,7 @@ public class DelegierenApiSpec {
         public static final String FALL_ID_PATH = "fallId";
 
         /**
-         * @param fallId (UUID) Die ID vom Gesuch (required)
+         * @param fallId (UUID) Die ID vom Fall (required)
          * @return operation
          */
         public FallDelegierenOper fallIdPath(Object fallId) {

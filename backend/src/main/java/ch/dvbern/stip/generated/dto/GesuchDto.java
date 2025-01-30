@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.DelegierungDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -232,7 +233,7 @@ public class GesuchDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("delegierung")
   public DelegierungDto getDelegierung() {
     return delegierung;

@@ -3429,6 +3429,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Notification'
+        delegierung:
+          $ref: '#/components/schemas/Delegierung'
     AusbildungDashboardItem:
       type: object
       properties:
