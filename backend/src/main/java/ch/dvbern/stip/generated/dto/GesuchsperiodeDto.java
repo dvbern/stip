@@ -36,6 +36,7 @@ public class GesuchsperiodeDto  implements Serializable {
   private @Valid GesuchsjahrDto gesuchsjahr;
   private @Valid Integer ausbKostenSekII;
   private @Valid Integer ausbKostenTertiaer;
+  private @Valid Integer fristNachreichenDokumente;
 
   /**
    **/
@@ -284,6 +285,25 @@ public class GesuchsperiodeDto  implements Serializable {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
   }
 
+  /**
+   **/
+  public GesuchsperiodeDto fristNachreichenDokumente(Integer fristNachreichenDokumente) {
+    this.fristNachreichenDokumente = fristNachreichenDokumente;
+    return this;
+  }
+
+  
+  @JsonProperty("fristNachreichenDokumente")
+  @NotNull
+  public Integer getFristNachreichenDokumente() {
+    return fristNachreichenDokumente;
+  }
+
+  @JsonProperty("fristNachreichenDokumente")
+  public void setFristNachreichenDokumente(Integer fristNachreichenDokumente) {
+    this.fristNachreichenDokumente = fristNachreichenDokumente;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -306,12 +326,13 @@ public class GesuchsperiodeDto  implements Serializable {
         Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert) &&
         Objects.equals(this.gesuchsjahr, gesuchsperiode.gesuchsjahr) &&
         Objects.equals(this.ausbKostenSekII, gesuchsperiode.ausbKostenSekII) &&
-        Objects.equals(this.ausbKostenTertiaer, gesuchsperiode.ausbKostenTertiaer);
+        Objects.equals(this.ausbKostenTertiaer, gesuchsperiode.ausbKostenTertiaer) &&
+        Objects.equals(this.fristNachreichenDokumente, gesuchsperiode.fristNachreichenDokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, gesuchsjahr, ausbKostenSekII, ausbKostenTertiaer);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, gesuchsjahr, ausbKostenSekII, ausbKostenTertiaer, fristNachreichenDokumente);
   }
 
   @Override
@@ -332,6 +353,7 @@ public class GesuchsperiodeDto  implements Serializable {
     sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
     sb.append("    ausbKostenSekII: ").append(toIndentedString(ausbKostenSekII)).append("\n");
     sb.append("    ausbKostenTertiaer: ").append(toIndentedString(ausbKostenTertiaer)).append("\n");
+    sb.append("    fristNachreichenDokumente: ").append(toIndentedString(fristNachreichenDokumente)).append("\n");
     sb.append("}");
     return sb.toString();
   }
