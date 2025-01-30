@@ -541,20 +541,14 @@ public class BerechnungService {
             @Override
             public void afterEvaluateDecision(AfterEvaluateDecisionEvent event) {
                 decisionNodeList.add(event);
-                event.getResult()
-                    .getDecisionResults()
-                    .stream()
-                    .filter(
-                        decisionResult -> decisionResult.getEvaluationStatus() != DecisionEvaluationStatus.SUCCEEDED
-                    )
-                    .forEach(unsuccessfulResults::add);
+                unsuccessfulResults.addAll(event.getResult().getDecisionResults());
             }
         };
 
         final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request), listener);
         if (
             listener.unsuccessfulResults.stream()
-                .noneMatch(
+                .anyMatch(
                     dmnDecisionResult -> dmnDecisionResult
                         .getEvaluationStatus() != DecisionEvaluationStatus.SUCCEEDED
                 )
