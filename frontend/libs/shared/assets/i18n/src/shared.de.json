@@ -280,7 +280,7 @@
   "shared.form.tranche.gesuchsperiode.semester.fruehling": "Frühling {{ year }}",
   "shared.form.tranche.einreichefrist.label": "Einreichefrist",
   "shared.form.tranche.sachbearbeiter.label": "Sachbearbeiter",
-  "shared.form.tranche.einreichedatum.label": "Einreichedatum",
+  "shared.form.tranche.einreichedatum.label": "Einreichedatum des Gesuchs",
   "shared.form.tranche.von.label": "Von",
   "shared.form.tranche.bis.label": "Bis",
   "shared.form.tranche.bemerkung.label": "Bemerkung",
