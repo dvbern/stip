@@ -280,6 +280,7 @@
   "shared.form.tranche.gesuchsperiode.semester.fruehling": "Printemps {{ year }}",
   "shared.form.tranche.einreichefrist.label": "Délai de soumission",
   "shared.form.tranche.sachbearbeiter.label": "Gestionnaire de dossier",
+  "shared.form.tranche.einreichedatum.label": "Date de dépôt de la demande",
   "shared.form.tranche.von.label": "De",
   "shared.form.tranche.bis.label": "Jusqu'à",
   "shared.form.tranche.bemerkung.label": "Commentaire",

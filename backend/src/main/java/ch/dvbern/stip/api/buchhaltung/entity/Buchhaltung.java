@@ -67,6 +67,10 @@ public class Buchhaltung extends AbstractMandantEntity {
     private Integer saldo;
 
     @Nullable
+    @Column(name = "stipendium")
+    private Integer stipendium;
+
+    @Nullable
     @Column(name = "sap_delivery_id")
     private Integer sapDeliveryId;
 

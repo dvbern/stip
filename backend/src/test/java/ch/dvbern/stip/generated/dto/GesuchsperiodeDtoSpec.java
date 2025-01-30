@@ -43,7 +43,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeDtoSpec.JSON_PROPERTY_EINREICHEFRIST_REDUZIERT,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_GESUCHSJAHR,
   GesuchsperiodeDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I,
-  GesuchsperiodeDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_TERTIAER
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_AUSB_KOSTEN_TERTIAER,
+  GesuchsperiodeDtoSpec.JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE
 })
 @JsonTypeName("Gesuchsperiode")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -86,6 +87,9 @@ public class GesuchsperiodeDtoSpec {
 
   public static final String JSON_PROPERTY_AUSB_KOSTEN_TERTIAER = "ausbKosten_Tertiaer";
   private Integer ausbKostenTertiaer;
+
+  public static final String JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE = "fristNachreichenDokumente";
+  private Integer fristNachreichenDokumente;
 
   public GesuchsperiodeDtoSpec() {
   }
@@ -427,6 +431,32 @@ public class GesuchsperiodeDtoSpec {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
   }
 
+
+  public GesuchsperiodeDtoSpec fristNachreichenDokumente(Integer fristNachreichenDokumente) {
+    
+    this.fristNachreichenDokumente = fristNachreichenDokumente;
+    return this;
+  }
+
+   /**
+   * Get fristNachreichenDokumente
+   * @return fristNachreichenDokumente
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getFristNachreichenDokumente() {
+    return fristNachreichenDokumente;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFristNachreichenDokumente(Integer fristNachreichenDokumente) {
+    this.fristNachreichenDokumente = fristNachreichenDokumente;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -448,12 +478,13 @@ public class GesuchsperiodeDtoSpec {
         Objects.equals(this.einreichefristReduziert, gesuchsperiode.einreichefristReduziert) &&
         Objects.equals(this.gesuchsjahr, gesuchsperiode.gesuchsjahr) &&
         Objects.equals(this.ausbKostenSekII, gesuchsperiode.ausbKostenSekII) &&
-        Objects.equals(this.ausbKostenTertiaer, gesuchsperiode.ausbKostenTertiaer);
+        Objects.equals(this.ausbKostenTertiaer, gesuchsperiode.ausbKostenTertiaer) &&
+        Objects.equals(this.fristNachreichenDokumente, gesuchsperiode.fristNachreichenDokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, gesuchsjahr, ausbKostenSekII, ausbKostenTertiaer);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, gueltigkeitStatus, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, aufschaltterminStopp, einreichefristNormal, einreichefristReduziert, gesuchsjahr, ausbKostenSekII, ausbKostenTertiaer, fristNachreichenDokumente);
   }
 
   @Override
@@ -473,6 +504,7 @@ public class GesuchsperiodeDtoSpec {
     sb.append("    gesuchsjahr: ").append(toIndentedString(gesuchsjahr)).append("\n");
     sb.append("    ausbKostenSekII: ").append(toIndentedString(ausbKostenSekII)).append("\n");
     sb.append("    ausbKostenTertiaer: ").append(toIndentedString(ausbKostenTertiaer)).append("\n");
+    sb.append("    fristNachreichenDokumente: ").append(toIndentedString(fristNachreichenDokumente)).append("\n");
     sb.append("}");
     return sb.toString();
   }

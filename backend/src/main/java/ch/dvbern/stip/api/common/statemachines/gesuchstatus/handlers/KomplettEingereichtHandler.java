@@ -17,10 +17,11 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
+import java.time.LocalDateTime;
+
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -35,10 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class KomplettEingereichtHandler implements GesuchStatusStateChangeHandler {
     private final MailService mailService;
-
     private final NotificationService notificationService;
-
-    private final GesuchStatusService gesuchStatusService;
 
     @Override
     public boolean handles(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition) {
@@ -53,5 +51,7 @@ public class KomplettEingereichtHandler implements GesuchStatusStateChangeHandle
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
+
+        gesuch.setEinreichedatum(LocalDateTime.now());
     }
 }

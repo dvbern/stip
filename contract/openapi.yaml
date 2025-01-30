@@ -3386,6 +3386,9 @@ components:
           type: string
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
+        einreichedatum:
+          format: dateTime
+          type: string
         delegierung:
           $ref: '#/components/schemas/Delegierung'
     Delegierung:
@@ -4396,6 +4399,7 @@ components:
         - gesuchsjahr
         - ausbKosten_SekII
         - ausbKosten_Tertiaer
+        - fristNachreichenDokumente
       type: object
       properties:
         id:
@@ -4423,6 +4427,8 @@ components:
         ausbKosten_SekII:
           type: integer
         ausbKosten_Tertiaer:
+          type: integer
+        fristNachreichenDokumente:
           type: integer
     GesuchsperiodeCreate:
       type: object
@@ -4485,6 +4491,7 @@ components:
         - limiteAlterAntragsstellerHalbierungElternbeitrag
         - zweiterAuszahlungsterminMonat
         - zweiterAuszahlungsterminTag
+        - fristNachreichenDokumente
       properties:
         bezeichnungDe:
           type: string
@@ -4599,6 +4606,8 @@ components:
         zweiterAuszahlungsterminMonat:
           type: integer
         zweiterAuszahlungsterminTag:
+          type: integer
+        fristNachreichenDokumente:
           type: integer
     AusbildungsstaetteUpdate:
       required:
@@ -5038,6 +5047,9 @@ components:
           type: integer
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für das Gesuch'
+          type: integer
+        berechnungReduziert:
+          description: 'Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens'
           type: integer
         tranchenBerechnungsresultate:
           description: 'Resultate der Berechnung für die Tranchen des Gesuchs'
@@ -5518,21 +5530,32 @@ components:
         - SUCCESS
         - FAILURE
         - IN_PROGRESS
+    BuchhaltungType:
+      enum:
+        - SALDOAENDERUNG
+        - AUSZAHLUNG
+        - STIPENDIUM
     BuchhaltungEntry:
       type: object
       required:
         - timestampErstellt
+        - buchhaltungType
+        - saldoAenderung
         - saldo
         - comment
       properties:
         timestampErstellt:
           type: string
           format: date-time
+        buchhaltungType:
+          $ref: '#/components/schemas/BuchhaltungType'
         stipendienBetrag:
           type: integer
         auszahlung:
           type: integer
         rueckforderung:
+          type: integer
+        saldoAenderung:
           type: integer
         saldo:
           type: integer

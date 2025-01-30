@@ -28,6 +28,7 @@ export interface GesuchWithChanges {
      */
     bearbeiter?: string;
     gesuchTrancheToWorkWith: GesuchTranche;
+    einreichedatum?: string;
     delegierung?: Delegierung;
     changes?: Array<GesuchTranche>;
 }

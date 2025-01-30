@@ -22,8 +22,8 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.entity.QBuchhaltung;
+import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.fall.entity.QFall;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -36,12 +36,23 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
 
     public Stream<Buchhaltung> findAllForFallId(final UUID fallId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
-        final var fall = QFall.fall;
         final var buchhaltung = QBuchhaltung.buchhaltung;
 
         final var query = queryFactory
             .selectFrom(buchhaltung)
-            .where(fall.id.eq(fallId))
+            .where(buchhaltung.fall.id.eq(fallId))
+            .orderBy(buchhaltung.timestampErstellt.asc());
+        return query.stream();
+    }
+
+    public Stream<Buchhaltung> findStipendiumsEntrysForGesuch(final UUID gesuchId) {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var buchhaltung = QBuchhaltung.buchhaltung;
+
+        final var query = queryFactory
+            .selectFrom(buchhaltung)
+            .where(buchhaltung.gesuch.id.eq(gesuchId))
+            .where(buchhaltung.buchhaltungType.eq(BuchhaltungType.STIPENDIUM))
             .orderBy(buchhaltung.timestampErstellt.asc());
         return query.stream();
     }

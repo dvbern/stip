@@ -34,6 +34,7 @@ public class GesuchDto  implements Serializable {
   private @Valid LocalDate aenderungsdatum;
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
   private @Valid String bearbeiter;
+  private @Valid String einreichedatum;
   private @Valid DelegierungDto delegierung;
 
   /**
@@ -228,6 +229,24 @@ public class GesuchDto  implements Serializable {
 
   /**
    **/
+  public GesuchDto einreichedatum(String einreichedatum) {
+    this.einreichedatum = einreichedatum;
+    return this;
+  }
+
+  
+  @JsonProperty("einreichedatum")
+  public String getEinreichedatum() {
+    return einreichedatum;
+  }
+
+  @JsonProperty("einreichedatum")
+  public void setEinreichedatum(String einreichedatum) {
+    this.einreichedatum = einreichedatum;
+  }
+
+  /**
+   **/
   public GesuchDto delegierung(DelegierungDto delegierung) {
     this.delegierung = delegierung;
     return this;
@@ -264,12 +283,13 @@ public class GesuchDto  implements Serializable {
         Objects.equals(this.aenderungsdatum, gesuch.aenderungsdatum) &&
         Objects.equals(this.gesuchTrancheToWorkWith, gesuch.gesuchTrancheToWorkWith) &&
         Objects.equals(this.bearbeiter, gesuch.bearbeiter) &&
+        Objects.equals(this.einreichedatum, gesuch.einreichedatum) &&
         Objects.equals(this.delegierung, gesuch.delegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, delegierung);
+    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, bearbeiter, einreichedatum, delegierung);
   }
 
   @Override
@@ -287,6 +307,7 @@ public class GesuchDto  implements Serializable {
     sb.append("    aenderungsdatum: ").append(toIndentedString(aenderungsdatum)).append("\n");
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
+    sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("}");
     return sb.toString();

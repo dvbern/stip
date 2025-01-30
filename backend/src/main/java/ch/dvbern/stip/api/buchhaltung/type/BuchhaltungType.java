@@ -19,5 +19,6 @@ package ch.dvbern.stip.api.buchhaltung.type;
 
 public enum BuchhaltungType {
     SALDOAENDERUNG,
-    AUSZAHLUNG
+    AUSZAHLUNG,
+    STIPENDIUM,
 }

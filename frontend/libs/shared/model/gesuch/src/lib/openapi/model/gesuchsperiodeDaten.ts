@@ -80,5 +80,6 @@ export interface GesuchsperiodeDaten {
     limiteAlterAntragsstellerHalbierungElternbeitrag: number;
     zweiterAuszahlungsterminMonat: number;
     zweiterAuszahlungsterminTag: number;
+    fristNachreichenDokumente: number;
 }
 

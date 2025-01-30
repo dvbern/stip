@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BuchhaltungEntryDto  implements Serializable {
   private @Valid java.time.LocalDateTime timestampErstellt;
+  private @Valid ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType buchhaltungType;
+  private @Valid Integer saldoAenderung;
   private @Valid Integer saldo;
   private @Valid String comment;
   private @Valid Integer stipendienBetrag;
@@ -48,6 +50,44 @@ public class BuchhaltungEntryDto  implements Serializable {
   @JsonProperty("timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
+  }
+
+  /**
+   **/
+  public BuchhaltungEntryDto buchhaltungType(ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType buchhaltungType) {
+    this.buchhaltungType = buchhaltungType;
+    return this;
+  }
+
+  
+  @JsonProperty("buchhaltungType")
+  @NotNull
+  public ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType getBuchhaltungType() {
+    return buchhaltungType;
+  }
+
+  @JsonProperty("buchhaltungType")
+  public void setBuchhaltungType(ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType buchhaltungType) {
+    this.buchhaltungType = buchhaltungType;
+  }
+
+  /**
+   **/
+  public BuchhaltungEntryDto saldoAenderung(Integer saldoAenderung) {
+    this.saldoAenderung = saldoAenderung;
+    return this;
+  }
+
+  
+  @JsonProperty("saldoAenderung")
+  @NotNull
+  public Integer getSaldoAenderung() {
+    return saldoAenderung;
+  }
+
+  @JsonProperty("saldoAenderung")
+  public void setSaldoAenderung(Integer saldoAenderung) {
+    this.saldoAenderung = saldoAenderung;
   }
 
   /**
@@ -225,6 +265,8 @@ public class BuchhaltungEntryDto  implements Serializable {
     }
     BuchhaltungEntryDto buchhaltungEntry = (BuchhaltungEntryDto) o;
     return Objects.equals(this.timestampErstellt, buchhaltungEntry.timestampErstellt) &&
+        Objects.equals(this.buchhaltungType, buchhaltungEntry.buchhaltungType) &&
+        Objects.equals(this.saldoAenderung, buchhaltungEntry.saldoAenderung) &&
         Objects.equals(this.saldo, buchhaltungEntry.saldo) &&
         Objects.equals(this.comment, buchhaltungEntry.comment) &&
         Objects.equals(this.stipendienBetrag, buchhaltungEntry.stipendienBetrag) &&
@@ -238,7 +280,7 @@ public class BuchhaltungEntryDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestampErstellt, saldo, comment, stipendienBetrag, auszahlung, rueckforderung, sapId, sapStatus, verfuegungId, gesuchId);
+    return Objects.hash(timestampErstellt, buchhaltungType, saldoAenderung, saldo, comment, stipendienBetrag, auszahlung, rueckforderung, sapId, sapStatus, verfuegungId, gesuchId);
   }
 
   @Override
@@ -247,6 +289,8 @@ public class BuchhaltungEntryDto  implements Serializable {
     sb.append("class BuchhaltungEntryDto {\n");
     
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    buchhaltungType: ").append(toIndentedString(buchhaltungType)).append("\n");
+    sb.append("    saldoAenderung: ").append(toIndentedString(saldoAenderung)).append("\n");
     sb.append("    saldo: ").append(toIndentedString(saldo)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    stipendienBetrag: ").append(toIndentedString(stipendienBetrag)).append("\n");
