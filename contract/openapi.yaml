@@ -4999,6 +4999,9 @@ components:
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für das Gesuch'
           type: integer
+        berechnungReduziert:
+          description: 'Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens'
+          type: integer
         tranchenBerechnungsresultate:
           description: 'Resultate der Berechnung für die Tranchen des Gesuchs'
           type: array

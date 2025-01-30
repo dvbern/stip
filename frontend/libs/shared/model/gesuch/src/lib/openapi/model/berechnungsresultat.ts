@@ -21,6 +21,10 @@ export interface Berechnungsresultat {
      */
     berechnung: number;
     /**
+     * Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens
+     */
+    berechnungReduziert?: number;
+    /**
      * Resultate der Berechnung für die Tranchen des Gesuchs
      */
     tranchenBerechnungsresultate: Array<TranchenBerechnungsresultat>;

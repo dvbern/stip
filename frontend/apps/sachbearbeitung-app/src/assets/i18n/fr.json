@@ -413,14 +413,16 @@
 
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title": "Résultat",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen": "Résultat : Bourse accordée",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.vermindert": "Resultat: Bourse accordée (réduit)",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt": "Résultat : Bourse refusée",
   "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Résumé",
   "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Détails du calcul",
   "sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle": "Détails du calcul réduit",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Montant total de la bourse",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Déduction ({{ reducePercentage }}%) pour dépôt tardif de la demande de bourse, {{ months }} mois après le début de la formation.",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.effektiverBetragStipendium": "Montant effective",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total de calcul {{ index }}{{ type }} à la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}{{ type }}",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.vermindert.total.info": "En raison du retard de la demande, {{ months }} mois après le début de la formation, la bourse de {{ unreducedTotal }}.-- a été réduite d'un {{ reducePercentage }}%.",
 
   "sachbearbeitung-app.dokumente.dokumentStatus.AUSSTEHEND": "Manquant",
 
