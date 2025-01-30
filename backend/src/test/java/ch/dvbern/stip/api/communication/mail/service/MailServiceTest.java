@@ -238,12 +238,13 @@ class MailServiceTest {
 
     @Test
     void sendStandardNotificationEmailsEmptyRecipient() {
+        final var recipients = List.<String>of();
         assertThatThrownBy(
             () -> mailService.sendStandardNotificationEmails(
                 "Test",
                 "GS",
                 AppLanguages.DE,
-                List.of()
+                recipients
             )
         ).isInstanceOf(IllegalArgumentException.class);
     }
