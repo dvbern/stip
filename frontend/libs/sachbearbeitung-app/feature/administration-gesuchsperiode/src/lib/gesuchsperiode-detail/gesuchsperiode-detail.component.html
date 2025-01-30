@@ -232,8 +232,8 @@
             formControlName="fristNachreichenDokumente"
             data-testid="form-gesuchsperiode-frist-nachreichen-dokumente"
             matInput
-            [maskito]="maskitoNumber"
-            type="text"
+            type="number"
+            min="0"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
