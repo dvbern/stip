@@ -291,9 +291,12 @@ public class BerechnungService {
             )
             .toList();
 
-        final var eingereicht = gesuchHistoryRepository.requireLatestEingereicht(gesuch.getId());
-        final var actualDuration = wasEingereichtAfterDueDate(gesuch, eingereicht.getTimestampMutiert())
-            ? getActualDuration(gesuch, eingereicht.getTimestampMutiert())
+        if (gesuch.getEinreichedatum() == null) {
+            throw new IllegalStateException("Berechnen of a Gesuch which has no Einreichedatum is not allowed");
+        }
+
+        final var actualDuration = wasEingereichtAfterDueDate(gesuch, gesuch.getEinreichedatum())
+            ? getActualDuration(gesuch, gesuch.getEinreichedatum())
             : null;
 
         List<TranchenBerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());

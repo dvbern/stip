@@ -27,6 +27,7 @@ export interface GesuchWithChanges {
      */
     bearbeiter?: string;
     gesuchTrancheToWorkWith: GesuchTranche;
+    einreichedatum?: string;
     changes?: Array<GesuchTranche>;
 }
 
