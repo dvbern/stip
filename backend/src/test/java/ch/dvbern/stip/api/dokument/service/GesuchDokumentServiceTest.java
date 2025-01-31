@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
