@@ -94,6 +94,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void canUpdate(final UUID gesuchId, final boolean aenderung) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
+        // TODO KSTIP-1967: Authorizer aktualisieren
         if (isAdminOrSb(currentBenutzer)) {
             return;
         }
