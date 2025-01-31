@@ -130,9 +130,7 @@
               {{ 'gesuch-app.dashboard.gesuch.open' | translate }}
             </a>
 
-            @if (
-              (gesuch.gesuchStatus === 'IN_FREIGABE' || gesuch.gesuchStatus === 'VERFUEGT') && !gesuch.offeneAenderung
-            ) {
+            @if (gesuch.canCreateAenderung) {
               <button
                 type="button"
                 class="btn btn-outline-primary"

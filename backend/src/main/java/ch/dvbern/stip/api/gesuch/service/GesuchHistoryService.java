@@ -18,9 +18,12 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +37,12 @@ public class GesuchHistoryService {
     public List<StatusprotokollEntryDto> getStatusprotokoll(final UUID gesuchId) {
         final var revisions = gesuchHistoryRepository.getStatusHistory(gesuchId);
         return revisions.stream().map(statusprotokollMapper::toDto).toList();
+    }
+
+    public Optional<Gesuch> getLatestWhereStatusChangedTo(
+        final UUID gesuchId,
+        final Gesuchstatus gesuchStatus
+    ) {
+        return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
     }
 }

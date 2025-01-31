@@ -690,7 +690,9 @@
                     StipDecision=ch.dvbern.stip.api.common.type.StipDecision,
                     GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp,
                     UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
-                    DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt
+                    DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt,
+                    SapStatus=ch.dvbern.stip.api.buchhaltung.type.SapStatus,
+                    BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

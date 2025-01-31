@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.util;
 import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -386,6 +387,8 @@ public class TestUtil {
                 .setErwachsene2699(5400)
                 .setJugendlicheErwachsene1925(4600)
                 .setKinder0018(1400)
+                .setEinreichefristNormal(LocalDate.now().plusMonths(5))
+                .setEinreichefristReduziert(LocalDate.now().plusMonths(5))
         )
             .setGesuchTranchen(
                 List.of(
@@ -398,7 +401,9 @@ public class TestUtil {
                         )
                         .setId(trancheUuid)
                 )
-            );
+            )
+            .setEinreichedatum(LocalDateTime.now().plusMonths(5));
+
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setTranche(gesuch.getNewestGesuchTranche().get());
         gesuch.getNewestGesuchTranche().get().setGesuch(gesuch);
         return gesuch;

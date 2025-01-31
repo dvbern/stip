@@ -20,8 +20,11 @@ package ch.dvbern.stip.berechnung.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +34,10 @@ import java.util.Objects;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -55,9 +60,12 @@ import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kie.api.io.Resource;
+import org.kie.dmn.api.core.DMNDecisionResult;
+import org.kie.dmn.api.core.DMNDecisionResult.DecisionEvaluationStatus;
 import org.kie.dmn.api.core.event.AfterEvaluateDecisionEvent;
 import org.kie.dmn.core.api.event.DefaultDMNRuntimeEventListener;
 
@@ -76,6 +84,7 @@ public class BerechnungService {
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final DMNService dmnService;
     private final TenantService tenantService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     private PersoenlichesBudgetresultatDto persoenlichesBudgetresultatFromRequest(
         final DmnRequest berechnungRequest,
@@ -282,6 +291,14 @@ public class BerechnungService {
             )
             .toList();
 
+        if (gesuch.getEinreichedatum() == null) {
+            throw new IllegalStateException("Berechnen of a Gesuch which has no Einreichedatum is not allowed");
+        }
+
+        final var actualDuration = wasEingereichtAfterDueDate(gesuch, gesuch.getEinreichedatum())
+            ? getActualDuration(gesuch, gesuch.getEinreichedatum())
+            : null;
+
         List<TranchenBerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
         for (final var gesuchTranche : gesuchTranchen) {
             final var trancheBerechnungsresultate = getBerechnungsresultatFromGesuchTranche(
@@ -296,7 +313,7 @@ public class BerechnungService {
             );
             for (final var berechnungsresultat : trancheBerechnungsresultate) {
                 berechnungsresultat.setBerechnung(
-                    (berechnungsresultat.getBerechnung() * monthsValid / 12)
+                    berechnungsresultat.getBerechnung() * monthsValid / 12
                 );
             }
             berechnungsresultate.addAll(trancheBerechnungsresultate);
@@ -304,14 +321,19 @@ public class BerechnungService {
 
         int berechnungsresultat =
             -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnung).sum();
-        if (berechnungsresultat < -gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
+        if (berechnungsresultat < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
             berechnungsresultat = 0;
         }
+
+        Integer berechnungsresultatReduziert =
+            actualDuration != null ? berechnungsresultat * actualDuration / 12 : null;
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
             berechnungsresultat,
-            berechnungsresultate
+            berechnungsresultate,
+            berechnungsresultatReduziert,
+            actualDuration
         );
     }
 
@@ -514,19 +536,63 @@ public class BerechnungService {
 
         final var listener = new DefaultDMNRuntimeEventListener() {
             final List<AfterEvaluateDecisionEvent> decisionNodeList = new ArrayList<>();
+            final List<DMNDecisionResult> unsuccessfulResults = new ArrayList<>();
 
             @Override
             public void afterEvaluateDecision(AfterEvaluateDecisionEvent event) {
                 decisionNodeList.add(event);
+                unsuccessfulResults.addAll(event.getResult().getDecisionResults());
             }
         };
 
         final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request), listener);
+        if (
+            listener.unsuccessfulResults.stream()
+                .anyMatch(
+                    dmnDecisionResult -> dmnDecisionResult
+                        .getEvaluationStatus() != DecisionEvaluationStatus.SUCCEEDED
+                )
+        ) {
+            LOG.warn(
+                "DMN evaluation had decision results that did not succeed: {}",
+                Arrays.toString(
+                    listener.unsuccessfulResults.stream()
+                        .filter(
+                            dmnDecisionResult -> dmnDecisionResult
+                                .getEvaluationStatus() != DecisionEvaluationStatus.SUCCEEDED
+                        )
+                        .toArray()
+                )
+            );
+        }
+
         final var stipendien = (BigDecimal) result.getDecisionResultByName(STIPENDIUM_DECISION_NAME).getResult();
         if (stipendien == null) {
             throw new AppErrorException("Result of Stipendienberechnung was null!");
         }
 
         return new BerechnungResult(stipendien.intValue(), result.getDecisionResults(), listener.decisionNodeList);
+    }
+
+    boolean wasEingereichtAfterDueDate(final Gesuch gesuch, final LocalDateTime eingereicht) {
+        // TODO KSTIP-998: Use new einreichedatum instead of envers query here
+        final var einreichefrist = gesuch.getGesuchsperiode().getEinreichefristNormal();
+
+        return eingereicht.isAfter(einreichefrist.atTime(LocalTime.MAX));
+    }
+
+    int getActualDuration(final Gesuch gesuch, final LocalDateTime eingereicht) {
+        final var lastTranche = gesuch.getTranchenTranchen()
+            .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
+            .orElseThrow(NotFoundException::new);
+
+        final var roundedEingereicht = DateUtil.roundToStartOrEnd(
+            eingereicht.toLocalDate(),
+            14,
+            true,
+            false
+        );
+
+        return DateUtil.getMonthsBetween(roundedEingereicht, lastTranche.getGueltigkeit().getGueltigBis());
     }
 }

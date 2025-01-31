@@ -27,6 +27,7 @@ export interface Gesuch {
      */
     bearbeiter?: string;
     gesuchTrancheToWorkWith: GesuchTranche;
+    einreichedatum?: string;
 }
 
 

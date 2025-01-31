@@ -107,6 +107,10 @@ const handleUnknownHttpError = (
         if (unauthorizedHandler) {
           unauthorizedHandler(error);
         } else {
+          // Redirect to the login page and use the root URL as the redirect URI
+          // to prevent the user being redirected back to the login page after a successful login
+          // because of another unhandled 401 error
+          oauth.redirectUri = location.origin + '/';
           oauth.logOut();
         }
         return handledError(EMPTY);

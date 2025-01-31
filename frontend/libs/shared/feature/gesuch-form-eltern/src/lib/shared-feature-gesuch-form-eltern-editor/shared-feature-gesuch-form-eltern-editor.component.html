@@ -16,7 +16,7 @@
     <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
       <mat-form-field dvSharedUiFormField class="flex-grow-1">
         <mat-label>
-          {{ 'shared.form.shared.social-insurance-number.label' | translate }}
+          {{ 'shared.form.shared.sozialversicherungsnummer.label' | translate }}
           @if (!svnIsRequiredSig()) {
             {{ 'shared.form.einnahmenkosten.optional.label' | translate }}
           }
@@ -39,7 +39,24 @@
           {{ 'shared.form.error.notUniqueAhv' | translate }}
         </mat-error>
       </mat-form-field>
+
+      <button
+        type="button"
+        (click)="sozialversicherungsnummerDialog.toggle()"
+        class="dv-icon-button dv-icon-button-md text-info mt-2"
+        [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+      >
+        <span class="material-symbols-rounded"> info </span>
+      </button>
     </div>
+    <div class="d-none d-xl-block col-xl-4"></div>
+    <div
+      dvSharedUiInfoDialog
+      [dialogTitleKey]="'shared.form.eltern.sozialversicherungsnummer.infoTitle'"
+      [dialogMessageKey]="'shared.form.eltern.sozialversicherungsnummer.info'"
+      #sozialversicherungsnummerDialog="dvSharedUiInfoDialog"
+      class="d-none d-xl-block col-xl-4"
+    ></div>
   </div>
 
   <div class="row g-4 my-2">
@@ -72,24 +89,45 @@
   </div>
 
   <div class="row g-4">
-    <div class="col-12 col-xl-8">
-      <mat-checkbox
-        type="checkbox"
-        formControlName="identischerZivilrechtlicherWohnsitz"
-        data-testid="form-eltern-identischerZivilrechtlicherWohnsitz"
-        >{{ 'shared.form.shared.identical-civil-residence.label' | translate }}</mat-checkbox
+    <div class="col-12 col-xl-4 col-md-6 flex-grow-1 d-flex align-items-center gap-1">
+      <div>
+        <mat-checkbox
+          type="checkbox"
+          formControlName="identischerZivilrechtlicherWohnsitz"
+          data-testid="form-eltern-identischerZivilrechtlicherWohnsitz"
+          >{{ 'shared.form.shared.identical-civil-residence.label' | translate }}</mat-checkbox
+        >
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="
+            changes?.identischerZivilrechtlicherWohnsitz | translateChange: 'shared.form.zuvor.checkbox.$VALUE'
+          "
+        ></dv-shared-ui-form-zuvor-hint>
+      </div>
+
+      <button
+        type="button"
+        (click)="identischerZivilrechtlicherWohnsitzDialog.toggle()"
+        class="dv-icon-button dv-icon-button-md text-info"
+        [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
       >
-      <dv-shared-ui-form-zuvor-hint
-        [changes]="changes?.identischerZivilrechtlicherWohnsitz | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
-      ></dv-shared-ui-form-zuvor-hint>
+        <span class="material-symbols-rounded"> info </span>
+      </button>
     </div>
+    <div class="d-none d-xl-block col-xl-4"></div>
+    <div
+      dvSharedUiInfoDialog
+      [dialogTitleKey]="'shared.form.eltern.identischerZivilrechtlicherWohnsitz.infoTitle'"
+      [dialogMessageKey]="'shared.form.eltern.identischerZivilrechtlicherWohnsitz.info'"
+      #identischerZivilrechtlicherWohnsitzDialog="dvSharedUiInfoDialog"
+      class="d-none d-xl-block col-xl-4"
+    ></div>
   </div>
   <!-- alternative civil residence -->
   @if (!form.value.identischerZivilrechtlicherWohnsitz) {
     <div class="row g-4 mt-1">
       <div class="col-12 col-xl-8">
         <label class="mb-2">{{ 'shared.form.shared.alternative-civil-residence.title' | translate }}</label>
-        <div class="row g-4">
+        <div class="row g-4 mt-1">
           <!-- PLZ -->
           <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3">
             <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
@@ -127,9 +165,10 @@
   }
 
   <h3 class="pt-5">{{ 'shared.weiterangaben' | translate }}</h3>
+
   <div class="row g-4 my-2">
     <!-- Ergaenzungsleistungen-->
-    <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+    <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-2">
       <mat-form-field dvSharedUiFormField class="flex-grow-1">
         <mat-label>{{ 'shared.form.eltern.ergaenzungsleistungen.label' | translate }}</mat-label>
         <input
@@ -146,13 +185,19 @@
       </mat-form-field>
 
       @if (ergaenzungsleistungenDocumentSig(); as options) {
-        <div class="d-flex gap-2 align-items-center">
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        </div>
+        <dv-shared-pattern-document-upload
+          class="flex-shrink-1"
+          [optionsSig]="options"
+        ></dv-shared-pattern-document-upload>
       }
+      <button
+        type="button"
+        (click)="ergaenzungsleistungenDialog.toggle()"
+        class="dv-icon-button dv-icon-button-md text-info mt-2"
+        [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+      >
+        <span class="material-symbols-rounded"> info </span>
+      </button>
     </div>
 
     <!-- Wohnkosten-->
@@ -180,6 +225,29 @@
           ></dv-shared-pattern-document-upload>
         </div>
       }
+
+      <button
+        type="button"
+        (click)="wohnkostenDialog.toggle()"
+        class="dv-icon-button dv-icon-button-md text-info mt-2"
+        [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+      >
+        <span class="material-symbols-rounded"> info </span>
+      </button>
+    </div>
+    <div class="d-none d-xl-block col-xl-4">
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.eltern.ergaenzungsleistungen.infoTitle'"
+        [dialogMessageKey]="'shared.form.eltern.ergaenzungsleistungen.info'"
+        #ergaenzungsleistungenDialog="dvSharedUiInfoDialog"
+      ></div>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.eltern.wohnkosten.infoTitle'"
+        [dialogMessageKey]="'shared.form.eltern.wohnkosten.info'"
+        #wohnkostenDialog="dvSharedUiInfoDialog"
+      ></div>
     </div>
   </div>
 
@@ -230,12 +298,23 @@
   <div class="row g-4 my-2">
     <!-- Sozialhilfebeitraege-->
     <mat-radio-group
-      class="flex-grow-1"
+      class="col-12 col-md-6 col-xl-4"
       formControlName="sozialhilfebeitraege"
       data-testid="form-eltern-sozialhilfebeitraege"
       dvSharedUiFormField
     >
-      <label>{{ 'shared.form.eltern.sozialhilfebeitraege.label' | translate }}</label>
+      <div class="d-flex align-items-center gap-2 col-12">
+        <label>{{ 'shared.form.eltern.sozialhilfebeitraege.label' | translate }}</label>
+        <button
+          type="button"
+          (click)="sozialhilfebeitraegeDialog.toggle()"
+          class="dv-icon-button dv-icon-button-md text-info"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+        >
+          <span class="material-symbols-rounded"> info </span>
+        </button>
+      </div>
+
       <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
         <div class="d-flex flex-column">
           <mat-radio-button data-testid="yes" [value]="true">{{
@@ -246,7 +325,6 @@
             [changes]="changes?.sozialhilfebeitraege | translateChange: 'shared.form.zuvor.radio.$VALUE'"
           ></dv-shared-ui-form-zuvor-hint>
         </div>
-
         @if (sozialhilfeDocumentSig(); as options) {
           <dv-shared-pattern-document-upload
             class="flex-shrink-1 ms-auto align-self-center"
@@ -254,30 +332,47 @@
           ></dv-shared-pattern-document-upload>
         }
       </div>
+
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-radio-group>
+    <div class="d-none d-xl-block col-xl-4"></div>
+    <div
+      dvSharedUiInfoDialog
+      [dialogTitleKey]="'shared.form.eltern.sozialhilfebeitraege.infoTitle'"
+      [dialogMessageKey]="'shared.form.eltern.sozialhilfebeitraege.info'"
+      #sozialhilfebeitraegeDialog="dvSharedUiInfoDialog"
+      class="d-none d-xl-block col-xl-4"
+    ></div>
+  </div>
 
+  <div class="row g-4 my-2">
     <!-- Ausweis B-->
     <mat-radio-group
       formControlName="ausweisbFluechtling"
       data-testid="form-eltern-ausweisFluechtling"
       dvSharedUiFormField
-      class="col-12"
+      class="col-12 col-md-6 col-xl-4"
     >
-      <label>{{
-        'shared.form.eltern.ausweisbFluechtling.' +
-          (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') +
-          '.label' | translate
-      }}</label>
-      <div class="d-flex gap-2 flex-wrap col-12 col-md-6 col-xl-4 pe-md-3 justify-content-between">
-        <div class="d-flex flex-column">
-          <mat-radio-button data-testid="yes" [value]="true">{{
-            'shared.form.radio.yes' | translate
-          }}</mat-radio-button>
-          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
-        </div>
+      <div class="d-flex align-items-center pe-md-3 gap-2">
+        <label>{{
+          'shared.form.eltern.ausweisbFluechtling.' +
+            (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') +
+            '.label' | translate
+        }}</label>
+        <button
+          type="button"
+          (click)="ausweisbFluechtlingDialog.toggle()"
+          class="dv-icon-button dv-icon-button-md text-info"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+        >
+          <span class="material-symbols-rounded"> info </span>
+        </button>
+      </div>
+      <div class="d-flex flex-column">
+        <mat-radio-button data-testid="yes" [value]="true">{{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
+        <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
       </div>
       <dv-shared-ui-form-zuvor-hint
         [changes]="changes?.ausweisbFluechtling | translateChange: 'shared.form.zuvor.radio.$VALUE'"
@@ -286,6 +381,15 @@
         {{ 'shared.form.error.required' | translate }}
       </mat-error>
     </mat-radio-group>
+    <div class="d-none d-xl-block col-md-6 col-xl-4"></div>
+
+    <div
+      dvSharedUiInfoDialog
+      [dialogTitleKey]="'shared.form.eltern.ausweisbFluechtling.infoTitle'"
+      [dialogMessageKey]="'shared.form.eltern.ausweisbFluechtling.info'"
+      #ausweisbFluechtlingDialog="dvSharedUiInfoDialog"
+      class="d-none d-xl-block col-md-6 col-xl-4"
+    ></div>
   </div>
 
   <!-- Buttons -->

@@ -67,13 +67,13 @@ const sb = 'sachbearbeitung-app' satisfies AppType;
  */
 export const permissionTableByAppType = {
   IN_BEARBEITUNG_GS /**                */: { [gs]: 'W DF ', [sb]: '    U' },
-  EINGEREICHT /**                      */: { [gs]: '     ', [sb]: '    U' },
+  EINGEREICHT /**                      */: { [gs]: '     ', [sb]: ' V  U' },
   BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '     ', [sb]: ' V  U' },
   IN_BEARBEITUNG_SB /**                */: { [gs]: '  D  ', [sb]: 'WVD U' },
   IN_FREIGABE /**                      */: { [gs]: '     ', [sb]: ' V  U' },
   ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '     ', [sb]: 'WV  U' },
-  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '     ', [sb]: '    U' },
-  FEHLENDE_DOKUMENTE /**               */: { [gs]: '  DF ', [sb]: '    U' },
+  ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '     ', [sb]: ' V  U' },
+  FEHLENDE_DOKUMENTE /**               */: { [gs]: '  DF ', [sb]: ' V  U' },
   GESUCH_ABGELEHNT /**                 */: { [gs]: '     ', [sb]: ' V  U' },
   JURISTISCHE_ABKLAERUNG /**           */: { [gs]: '     ', [sb]: ' V  U' },
   KEIN_STIPENDIENANSPRUCH /**          */: { [gs]: '     ', [sb]: ' V   ' },
@@ -84,7 +84,7 @@ export const permissionTableByAppType = {
   VERSANDBEREIT /**                    */: { [gs]: '     ', [sb]: ' V   ' },
   VERFUEGT /**                         */: { [gs]: '     ', [sb]: ' V  U' },
   VERSENDET /**                        */: { [gs]: '     ', [sb]: ' V   ' },
-  NEGATIVE_VERFUEGUNG /**              */: { [gs]: '     ', [sb]: '    U' },
+  NEGATIVE_VERFUEGUNG /**              */: { [gs]: '     ', [sb]: ' V  U' },
 } as const satisfies Record<Gesuchstatus, Record<AppType, PermissionFlags>>;
 
 /**

@@ -3,10 +3,12 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { OAuthService } from 'angular-oauth2-oidc';
 
-import { BenutzerVerwaltungRole } from '@dv/shared/model/benutzer';
+import { AvailableBenutzerRole, BenutzerRole } from '@dv/shared/model/benutzer';
+
+export type RolesMap = Record<AvailableBenutzerRole, true | undefined>;
 
 type PermissionState = {
-  userRoles: BenutzerVerwaltungRole[] | null;
+  userRoles: BenutzerRole[] | null;
 };
 
 const initialState: PermissionState = {
@@ -21,16 +23,13 @@ export class PermissionStore extends signalStore(
 ) {
   authService = inject(OAuthService);
 
-  permissionsMapSig = computed(() => {
+  rolesMapSig = computed(() => {
     const userRoles = this.userRoles();
 
-    return userRoles?.reduce(
-      (acc, role) => {
-        acc[role] = true;
-        return acc;
-      },
-      {} as Record<BenutzerVerwaltungRole, true | undefined>,
-    );
+    return userRoles?.reduce((acc, role) => {
+      acc[role] = true;
+      return acc;
+    }, {} as RolesMap);
   });
 
   constructor() {

@@ -44,10 +44,9 @@ public interface SozialdienstResource {
     SozialdienstDto deleteSozialdienst(@PathParam("sozialdienstId") UUID sozialdienstId);
 
     @DELETE
-    @Path("/benutzer")
-    @Consumes({ "application/json" })
+    @Path("/benutzer/{sozialdienstBenutzerId}")
     @Produces({ "text/plain" })
-    void deleteSozialdienstBenutzer(@Valid UUID body);
+    void deleteSozialdienstBenutzer(@PathParam("sozialdienstBenutzerId") UUID sozialdienstBenutzerId);
 
     @GET
     @Produces({ "application/json", "text/plain" })
@@ -59,9 +58,14 @@ public interface SozialdienstResource {
     SozialdienstDto getSozialdienst(@PathParam("sozialdienstId") UUID sozialdienstId);
 
     @GET
+    @Path("/benutzer/{sozialdienstBenutzerId}")
+    @Produces({ "application/json", "text/plain" })
+    SozialdienstBenutzerDto getSozialdienstBenutzer(@PathParam("sozialdienstBenutzerId") UUID sozialdienstBenutzerId);
+
+    @GET
     @Path("/benutzer")
     @Produces({ "application/json", "text/plain" })
-    List<SozialdienstBenutzerDto> getSozialdienstBenutzer();
+    List<SozialdienstBenutzerDto> getSozialdienstBenutzerList();
 
     @PATCH
     @Path("/{sozialdienstId}/replaceSozialdienstAdmin")

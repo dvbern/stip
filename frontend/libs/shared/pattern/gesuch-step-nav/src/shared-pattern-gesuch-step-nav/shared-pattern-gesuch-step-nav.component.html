@@ -5,7 +5,8 @@
     [class.shadow-none]="!step.isActive"
     [class.active]="step.isActive"
     [class.disabled]="step.disabled"
-    [routerLink]="step.routes"
+    [class.tw-pointer-events-none]="!step.route"
+    [routerLink]="step.route ?? '#'"
     [attr.data-testid]="'step-nav-' + step.route"
     (click)="navClicked.emit({})"
   >

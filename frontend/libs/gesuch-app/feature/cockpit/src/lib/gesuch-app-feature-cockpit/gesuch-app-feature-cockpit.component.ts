@@ -92,6 +92,7 @@ export class GesuchAppFeatureCockpitComponent {
   private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
 
   constructor() {
+    this.store.dispatch(SharedDataAccessGesuchEvents.reset());
     this.fallStore.loadCurrentFall$();
     this.sozialdienstStore.loadAllSozialdienste$();
 

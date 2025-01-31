@@ -154,6 +154,10 @@ public class Gesuch extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private List<Unterschriftenblatt> unterschriftenblaetter = new ArrayList<>();
 
+    @Nullable
+    @Column(name = "einreichedatum")
+    private LocalDateTime einreichedatum;
+
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
             .filter(t -> t.getId().equals(id))

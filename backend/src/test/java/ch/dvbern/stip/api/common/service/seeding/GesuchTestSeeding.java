@@ -127,7 +127,8 @@ public class GesuchTestSeeding extends Seeder {
             .setLimiteAlterAntragsstellerHalbierungElternbeitrag(25)
             .setReduzierungDesGrundbedarfs(2754)
             .setZweiterAuszahlungsterminMonat(6)
-            .setZweiterAuszahlungsterminTag(1);
+            .setZweiterAuszahlungsterminTag(1)
+            .setFristNachreichenDokumente(30);
     }
 
     private static LocalDate getGesuchsperiodeStart() {

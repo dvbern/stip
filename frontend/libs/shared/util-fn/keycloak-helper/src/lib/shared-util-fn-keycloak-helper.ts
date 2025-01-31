@@ -1,7 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 
 import {
-  BenutzerVerwaltungRole,
+  BenutzerRole,
   SharedModelBenutzer,
   SharedModelBenutzerApi,
   SharedModelBenutzerRole,
@@ -28,9 +28,7 @@ export const hasLocationHeader = (
   return response.headers.has('Location');
 };
 
-export const roleToStateColor = (
-  role: BenutzerVerwaltungRole,
-): SharedModelState => {
+export const roleToStateColor = (role: BenutzerRole): SharedModelState => {
   switch (role) {
     case 'Sachbearbeiter':
       return 'info';
