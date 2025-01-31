@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class EinreichedatumAendernRequestDto  implements Serializable {
   private @Valid java.time.LocalDateTime newEinreichedatum;
+  private @Valid String betreff;
+  private @Valid String text;
 
   /**
    **/
@@ -40,6 +42,42 @@ public class EinreichedatumAendernRequestDto  implements Serializable {
     this.newEinreichedatum = newEinreichedatum;
   }
 
+  /**
+   **/
+  public EinreichedatumAendernRequestDto betreff(String betreff) {
+    this.betreff = betreff;
+    return this;
+  }
+
+  
+  @JsonProperty("betreff")
+  public String getBetreff() {
+    return betreff;
+  }
+
+  @JsonProperty("betreff")
+  public void setBetreff(String betreff) {
+    this.betreff = betreff;
+  }
+
+  /**
+   **/
+  public EinreichedatumAendernRequestDto text(String text) {
+    this.text = text;
+    return this;
+  }
+
+  
+  @JsonProperty("text")
+  public String getText() {
+    return text;
+  }
+
+  @JsonProperty("text")
+  public void setText(String text) {
+    this.text = text;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -50,12 +88,14 @@ public class EinreichedatumAendernRequestDto  implements Serializable {
       return false;
     }
     EinreichedatumAendernRequestDto einreichedatumAendernRequest = (EinreichedatumAendernRequestDto) o;
-    return Objects.equals(this.newEinreichedatum, einreichedatumAendernRequest.newEinreichedatum);
+    return Objects.equals(this.newEinreichedatum, einreichedatumAendernRequest.newEinreichedatum) &&
+        Objects.equals(this.betreff, einreichedatumAendernRequest.betreff) &&
+        Objects.equals(this.text, einreichedatumAendernRequest.text);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(newEinreichedatum);
+    return Objects.hash(newEinreichedatum, betreff, text);
   }
 
   @Override
@@ -64,6 +104,8 @@ public class EinreichedatumAendernRequestDto  implements Serializable {
     sb.append("class EinreichedatumAendernRequestDto {\n");
     
     sb.append("    newEinreichedatum: ").append(toIndentedString(newEinreichedatum)).append("\n");
+    sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
+    sb.append("    text: ").append(toIndentedString(text)).append("\n");
     sb.append("}");
     return sb.toString();
   }

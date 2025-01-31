@@ -27,13 +27,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * EinreichedatumAendernRequestDtoSpec
  */
 @JsonPropertyOrder({
-  EinreichedatumAendernRequestDtoSpec.JSON_PROPERTY_NEW_EINREICHEDATUM
+  EinreichedatumAendernRequestDtoSpec.JSON_PROPERTY_NEW_EINREICHEDATUM,
+  EinreichedatumAendernRequestDtoSpec.JSON_PROPERTY_BETREFF,
+  EinreichedatumAendernRequestDtoSpec.JSON_PROPERTY_TEXT
 })
 @JsonTypeName("EinreichedatumAendernRequest")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class EinreichedatumAendernRequestDtoSpec {
   public static final String JSON_PROPERTY_NEW_EINREICHEDATUM = "newEinreichedatum";
   private String newEinreichedatum;
+
+  public static final String JSON_PROPERTY_BETREFF = "betreff";
+  private String betreff;
+
+  public static final String JSON_PROPERTY_TEXT = "text";
+  private String text;
 
   public EinreichedatumAendernRequestDtoSpec() {
   }
@@ -63,6 +71,58 @@ public class EinreichedatumAendernRequestDtoSpec {
     this.newEinreichedatum = newEinreichedatum;
   }
 
+
+  public EinreichedatumAendernRequestDtoSpec betreff(String betreff) {
+    
+    this.betreff = betreff;
+    return this;
+  }
+
+   /**
+   * Get betreff
+   * @return betreff
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BETREFF)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getBetreff() {
+    return betreff;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BETREFF)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBetreff(String betreff) {
+    this.betreff = betreff;
+  }
+
+
+  public EinreichedatumAendernRequestDtoSpec text(String text) {
+    
+    this.text = text;
+    return this;
+  }
+
+   /**
+   * Get text
+   * @return text
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getText() {
+    return text;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TEXT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setText(String text) {
+    this.text = text;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -72,12 +132,14 @@ public class EinreichedatumAendernRequestDtoSpec {
       return false;
     }
     EinreichedatumAendernRequestDtoSpec einreichedatumAendernRequest = (EinreichedatumAendernRequestDtoSpec) o;
-    return Objects.equals(this.newEinreichedatum, einreichedatumAendernRequest.newEinreichedatum);
+    return Objects.equals(this.newEinreichedatum, einreichedatumAendernRequest.newEinreichedatum) &&
+        Objects.equals(this.betreff, einreichedatumAendernRequest.betreff) &&
+        Objects.equals(this.text, einreichedatumAendernRequest.text);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(newEinreichedatum);
+    return Objects.hash(newEinreichedatum, betreff, text);
   }
 
   @Override
@@ -85,6 +147,8 @@ public class EinreichedatumAendernRequestDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class EinreichedatumAendernRequestDtoSpec {\n");
     sb.append("    newEinreichedatum: ").append(toIndentedString(newEinreichedatum)).append("\n");
+    sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
+    sb.append("    text: ").append(toIndentedString(text)).append("\n");
     sb.append("}");
     return sb.toString();
   }
