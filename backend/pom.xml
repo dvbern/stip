@@ -751,6 +751,7 @@
                   </configOptions>
                   <typeMappings>
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
+                    <typeMapping>dateTime=java.time.LocalDateTime</typeMapping>
                   </typeMappings>
                 </configuration>
               </execution>
