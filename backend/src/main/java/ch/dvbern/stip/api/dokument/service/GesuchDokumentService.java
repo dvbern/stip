@@ -221,7 +221,6 @@ public class GesuchDokumentService {
         final var gesuchDokument =
             gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, customDokumentTypId);
 
-        // gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, customDokumentTypId);
         final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
     }
@@ -240,11 +239,7 @@ public class GesuchDokumentService {
     public void removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
         gesuchRepository.requireById(gesuchId)
             .getGesuchTranchen()
-            .forEach(
-                gesuchTranche -> {
-                    removeAllDokumentsForGesuchTranche(gesuchTranche.getId());
-                }
-            );
+            .forEach(gesuchTranche -> removeAllDokumentsForGesuchTranche(gesuchTranche.getId()));
     }
 
     @Transactional(TxType.REQUIRES_NEW)
@@ -364,7 +359,6 @@ public class GesuchDokumentService {
         // and this results in only loading the ones we need instead of all
         final var abgelehnteGesuchDokumente = gesuchDokumentRepository
             .getAllForGesuchInStatus(gesuch, Dokumentstatus.ABGELEHNT)
-            // .filter(gesuchDokument -> Objects.isNull(gesuchDokument.getCustomDokumentTyp()))
             .toList();
 
         deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(abgelehnteGesuchDokumente);
