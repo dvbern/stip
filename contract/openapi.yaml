@@ -465,6 +465,31 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: deleteNotiz
       summary: delete a Notiz of a Gesuch with the given Notiz-Id
+  '/gesuch/{gesuchId}/einreichedatum':
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EinreichedatumAendernRequest'
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Aendert das Einreichedatum des Gesuch manuell
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: einreichedatumManuellAendern
   /stip-decision/all:
     get:
       tags:
@@ -5539,6 +5564,14 @@ components:
           type: integer
         comment:
           type: string
+    EinreichedatumAendernRequest:
+      type: object
+      required:
+        - newEinreichedatum
+      properties:
+        newEinreichedatum:
+          type: string
+          format: date
   responses:
     Unauthorized:
       content:
