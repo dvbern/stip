@@ -5572,6 +5572,10 @@ components:
         newEinreichedatum:
           type: string
           format: dateTime
+        betreff:
+          type: string
+        text:
+          type: string
   responses:
     Unauthorized:
       content:
