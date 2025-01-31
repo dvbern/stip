@@ -1463,13 +1463,72 @@ class GesuchServiceTest {
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
 
-        // Mockito.doNothing().when(gesuchDokumentService).deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(any());
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
+    }
 
-        // act/assert
-        // alle betroffenen dokumente sind ausstehend
-        int x = 0;
+    @Description("gesuchFehlendeDokumenteUebermitteln should also handle custom documents in state AUSSTEHEND")
+    @Test
+    @TestAsSachbearbeiter
+    void gesuchFehlendeDokumenteEinreichenAlsoHandlesGenericMissingDocumentsAllOthersAccepted() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
 
+        /*
+         * Setup:
+         * a gesuch in state IN_BEARBEITUNG_SB
+         * a customGesuchDokumentTyp
+         * one gesuchDokument in state AKZEPTIERT
+         * one cusotm gesuchDokument in state AUSSTEHEND
+         *
+         * Expected:
+         * method call should not fail, no exception thrown
+         */
+
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+
+        // ad a "normal" gesuch document
+        GesuchDokument gesuchDokument = new GesuchDokument();
+        gesuchDokument.setGesuchTranche(gesuch.getCurrentGesuchTranche());
+        gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
+        // gesuchDokument.setDokumente(List.of(new Dokument()));
+        gesuchDokument.setId(UUID.randomUUID());
+        gesuchDokument.setStatus(Dokumentstatus.AKZEPTIERT);
+
+        // add custom document
+        CustomDokumentTyp customDokument = new CustomDokumentTyp();
+        customDokument.setId(UUID.randomUUID());
+        customDokument.setType("test");
+        customDokument.setDescription("test");
+        GesuchDokument customGesuchDokument = new GesuchDokument();
+        customGesuchDokument.setId(UUID.randomUUID());
+        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument.setCustomDokumentTyp(customDokument);
+        customGesuchDokument.setGesuchTranche(gesuch.getCurrentGesuchTranche());
+
+        // add gesuchdokumente to gesuch
+        gesuch.getCurrentGesuchTranche().getGesuchDokuments().add(customGesuchDokument);
+        gesuch.getCurrentGesuchTranche().getGesuchDokuments().add(gesuchDokument);
+
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AKZEPTIERT))
+            .thenReturn(Stream.of(gesuchDokument));
+        when(gesuchDokumentRepository.getAllForGesuchInStatus(gesuch, Dokumentstatus.AUSSTEHEND))
+            .thenReturn(Stream.of(customGesuchDokument));
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
+        Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
+
+        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
     }
 
     @TestAsGesuchsteller

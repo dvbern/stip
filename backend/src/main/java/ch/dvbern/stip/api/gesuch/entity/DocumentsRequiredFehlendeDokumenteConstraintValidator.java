@@ -42,11 +42,14 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
         }
 
         if (gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
+            // custom gesuch dokumente are in state AUSSTEHEND and are treated separately - thats why they are excluded
+            // in this check
             final var nonCustomGesuchDokumente =
                 gesuchDokumentDtos.stream()
                     .filter(gesuchDokumentDto -> Objects.isNull(gesuchDokumentDto.getCustomDokumentTyp()))
                     .toList();
-            return isAnyGesuchdokumentAbgelehntOrAusstehend(nonCustomGesuchDokumente);
+            // check if any document is unprocessed by SB
+            return !isAnyAusstehend(nonCustomGesuchDokumente);
         }
 
         return isAnyGesuchdokumentAbgelehntOrAusstehend(gesuchDokumentDtos);
@@ -66,5 +69,10 @@ public class DocumentsRequiredFehlendeDokumenteConstraintValidator
             }
         }
         return !anyAusstehend && anyAbgelehnt;
+    }
+
+    private boolean isAnyAusstehend(final List<GesuchDokumentDto> gesuchDokumentDtos) {
+        return gesuchDokumentDtos.stream()
+            .anyMatch(gesuchDokumentDto -> gesuchDokumentDto.getStatus() == Dokumentstatus.AUSSTEHEND);
     }
 }
