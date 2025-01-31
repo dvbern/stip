@@ -104,4 +104,20 @@ public class DateUtil {
     public boolean afterOrEqual(final LocalDate left, final LocalDate right) {
         return left.isAfter(right) || left.isEqual(right);
     }
+
+    public boolean between(final LocalDate left, final LocalDate right, final LocalDate date, final boolean inclusive) {
+        if (inclusive) {
+            return betweenInclusive(left, right, date);
+        } else {
+            return betweenExclusive(left, right, date);
+        }
+    }
+
+    private boolean betweenInclusive(final LocalDate left, final LocalDate right, final LocalDate date) {
+        return beforeOrEqual(left, date) && afterOrEqual(right, date);
+    }
+
+    private boolean betweenExclusive(final LocalDate left, final LocalDate right, final LocalDate date) {
+        return left.isBefore(date) && right.isAfter(date);
+    }
 }

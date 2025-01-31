@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWork
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
@@ -96,6 +97,7 @@ import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -807,7 +809,22 @@ public class GesuchService {
         final EinreichedatumAendernRequestDto dto
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final var gesuchsperiode = gesuch.getGesuchsperiode();
+        final var newEinreichedatum = dto.getNewEinreichedatum();
+        final var between = DateUtil.between(
+            gesuchsperiode.getGesuchsperiodeStart(),
+            gesuchsperiode.getGesuchsperiodeStopp(),
+            newEinreichedatum.toLocalDate(),
+            true
+        );
+
+        if (!between) {
+            throw new BadRequestException("New einreichedatum is outside of the Gesuchsperiode");
+        }
+
         gesuch.setEinreichedatum(dto.getNewEinreichedatum());
+        gesuchNotizService.createGesuchNotiz(gesuch, dto.getBetreff(), dto.getText());
 
         return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
