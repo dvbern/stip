@@ -397,6 +397,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     public GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.canUpdate(gesuchTrancheId);
+        gesuchTrancheAuthorizer.canFehlendeDokumenteEinreichen(gesuchTrancheId);
         return gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
     }
 }

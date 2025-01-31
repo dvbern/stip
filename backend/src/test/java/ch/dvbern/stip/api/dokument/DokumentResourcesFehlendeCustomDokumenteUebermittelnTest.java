@@ -470,6 +470,12 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     @TestAsGesuchsteller
     @Order(25)
     void reupload_dokumente() {
+        gesuchApiSpec.gesuchTrancheFehlendeDokumenteEinreichen()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
         reupload_abgelehnte_dokumente();
     }
 
