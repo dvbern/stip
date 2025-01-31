@@ -254,7 +254,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
          * Both the denied & the newly added custom document should:
          * be in state "AUSSTEHEND"
          * not contain any attached files
-         * todo: gesuch should be in state "FEHLENDE_DOKUMENTE"
          */
         var dok = dokumentApiSpec.getGesuchDokumenteForTyp()
             .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
@@ -319,7 +318,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             file
         );
         gesuchApiSpec.gesuchTrancheFehlendeDokumenteEinreichen()
-            // gesuchApiSpec.gesuchFehlendeDokumenteUebermitteln()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -351,15 +349,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .as(NullableGesuchDokumentDto.class);
         assertThat(customDok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
         assertThat(customDok.getValue().getDokumente().size(), is(greaterThan(0)));
-
-        var x = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuch.getId())
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchDtoSpec.class);
     }
 
     @Test
@@ -375,15 +364,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-        var x = gesuchApiSpec.getGesuch()
-            .gesuchIdPath(gesuch.getId())
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchDtoSpec.class);
-
         assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
 
@@ -392,116 +372,96 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
      * SB executes "fehlende Dokumente übermitteln"
      * operation should not fail
      * both files should be in state "AUSSTHEND" and not contain any files
-     * why is gesuchstatus IN_BEARBEITUNG_GS?
-     *
      */
-    /*
-     * @Test
-     *
-     * @TestAsSachbearbeiter
-     *
-     * @Order(24)
-     * void deny_reuploaded_dokumente_of_both_categories() {
-     * var dok = dokumentApiSpec.getGesuchDokumenteForTyp()
-     * .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
-     * .gesuchTrancheIdPath(gesuchTrancheId)
-     * .execute(TestUtil.PEEK_IF_ENV_SET)
-     * .then()
-     * .assertThat()
-     * .statusCode(Status.OK.getStatusCode())
-     * .extract()
-     * .body()
-     * .as(NullableGesuchDokumentDto.class);
-     *
-     * var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
-     * .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-     * .gesuchTrancheIdPath(gesuchTrancheId)
-     * .execute(TestUtil.PEEK_IF_ENV_SET)
-     * .then()
-     * .assertThat()
-     * .statusCode(Status.OK.getStatusCode())
-     * .extract()
-     * .body()
-     * .as(NullableGesuchDokumentDto.class);
-     *
-     * var gesuchDokumentAblehnenRequest = new GesuchDokumentAblehnenRequestDtoSpec();
-     * var kommentar = new GesuchDokumentKommentarDtoSpec();
-     * kommentar.setKommentar("test");
-     * kommentar.setGesuchDokumentId(dok.getValue().getId());
-     * kommentar.setGesuchTrancheId(gesuchTrancheId);
-     * gesuchDokumentAblehnenRequest.setKommentar(kommentar);
-     *
-     * // deny a "normal" gesuchdokument
-     * dokumentApiSpec.gesuchDokumentAblehnen()
-     * .gesuchDokumentIdPath(dok.getValue().getId())
-     * .body(gesuchDokumentAblehnenRequest)
-     * .execute(TestUtil.PEEK_IF_ENV_SET)
-     * .then()
-     * .assertThat()
-     * .statusCode(Status.NO_CONTENT.getStatusCode());
-     *
-     * var customGesuchDokumentAblehnenRequest = new GesuchDokumentAblehnenRequestDtoSpec();
-     * var customKommentar = new GesuchDokumentKommentarDtoSpec();
-     * customKommentar.setKommentar("test");
-     * customKommentar.setGesuchDokumentId(customDok.getValue().getId());
-     * customKommentar.setGesuchTrancheId(gesuchTrancheId);
-     * customGesuchDokumentAblehnenRequest.setKommentar(kommentar);
-     *
-     * // deny a custom gesuchdokument
-     *
-     * dokumentApiSpec.gesuchDokumentAblehnen()
-     * .gesuchDokumentIdPath(dok.getValue().getId())
-     * .body(customGesuchDokumentAblehnenRequest)
-     * .execute(TestUtil.PEEK_IF_ENV_SET)
-     * .then()
-     * .assertThat()
-     * .statusCode(Status.NO_CONTENT.getStatusCode());
-     *
-     * // send missing files to GS
-     * gesuchApiSpec.gesuchFehlendeDokumenteUebermitteln()
-     * .gesuchTrancheIdPath(gesuchTrancheId)
-     * .execute(TestUtil.PEEK_IF_ENV_SET)
-     * .then()
-     * .assertThat()
-     * .statusCode(Status.OK.getStatusCode());
-     * var x = gesuchApiSpec.getGesuch()
-     * .gesuchIdPath(gesuch.getId())
-     * .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-     * .execute(TestUtil.PEEK_IF_ENV_SET)
-     * .then()
-     * .extract()
-     * .body()
-     * .as(GesuchDtoSpec.class);
-     *
-     * // check that both gesuchdokuments are in correct state & do not contain files
-     * dok = dokumentApiSpec.getGesuchDokumenteForTyp()
-     * .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
-     * .gesuchTrancheIdPath(gesuchTrancheId)
-     * .execute(TestUtil.PEEK_IF_ENV_SET)
-     * .then()
-     * .assertThat()
-     * .statusCode(Status.OK.getStatusCode())
-     * .extract()
-     * .body()
-     * .as(NullableGesuchDokumentDto.class);
-     * assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
-     * assertThat(dok.getValue().getDokumente().size(), is(greaterThan(0)));
-     *
-     * customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
-     * .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
-     * .gesuchTrancheIdPath(gesuchTrancheId)
-     * .execute(TestUtil.PEEK_IF_ENV_SET)
-     * .then()
-     * .assertThat()
-     * .statusCode(Status.OK.getStatusCode())
-     * .extract()
-     * .body()
-     * .as(NullableGesuchDokumentDto.class);
-     * assertThat(customDok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
-     * assertThat(customDok.getValue().getDokumente().size(), is(greaterThan(0)));
-     * }
-     *
-     */
+    @Test
+    @TestAsSachbearbeiter
+    @Order(24)
+    void deny_reuploaded_dokumente_of_both_categories() {
+        var dok = dokumentApiSpec.getGesuchDokumenteForTyp()
+            .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDto.class);
+        var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+            .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDto.class);
+        var gesuchDokumentAblehnenRequest = new GesuchDokumentAblehnenRequestDtoSpec();
+        var kommentar = new GesuchDokumentKommentarDtoSpec();
+        kommentar.setKommentar("test");
+        kommentar.setGesuchDokumentId(dok.getValue().getId());
+        kommentar.setGesuchTrancheId(gesuchTrancheId);
+        gesuchDokumentAblehnenRequest.setKommentar(kommentar);
+
+        // deny a "normal" gesuchdokument
+        dokumentApiSpec.gesuchDokumentAblehnen()
+            .gesuchDokumentIdPath(dok.getValue().getId())
+            .body(gesuchDokumentAblehnenRequest)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+        var customGesuchDokumentAblehnenRequest = new GesuchDokumentAblehnenRequestDtoSpec();
+        var customKommentar = new GesuchDokumentKommentarDtoSpec();
+        customKommentar.setKommentar("test");
+        customKommentar.setGesuchDokumentId(customDok.getValue().getId());
+        customKommentar.setGesuchTrancheId(gesuchTrancheId);
+        customGesuchDokumentAblehnenRequest.setKommentar(kommentar);
+        // deny a custom gesuchdokument
+        dokumentApiSpec.gesuchDokumentAblehnen()
+            .gesuchDokumentIdPath(customDok.getValue().getId())
+            .body(customGesuchDokumentAblehnenRequest)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+        // send missing files to GS
+        gesuchApiSpec.gesuchFehlendeDokumenteUebermitteln()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+
+        // check that both gesuchdokuments are in correct state & do not contain files
+        dok = dokumentApiSpec.getGesuchDokumenteForTyp()
+            .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDto.class);
+
+        assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
+        assertThat(dok.getValue().getDokumente(), is(empty()));
+
+        customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+            .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDto.class);
+        assertThat(customDok.getValue().getStatus(), is(Dokumentstatus.AUSSTEHEND));
+        assertThat(customDok.getValue().getDokumente(), is(empty()));
+    }
 
     /*
      * GS re-uploads required/denied files
@@ -509,7 +469,16 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     @Test
     @TestAsGesuchsteller
     @Order(25)
-    void reupload_dokumente() {}
+    void reupload_dokumente() {
+        reupload_abgelehnte_dokumente();
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(26)
+    void reset_to_in_bearbeitung_sb() {
+        setToInBearbeitungSB();
+    }
 
     /*
      * SB accepts all files
@@ -517,8 +486,79 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
      */
     @Test
     @TestAsSachbearbeiter
-    @Order(26)
-    void accept_reuploaded_dokumente_of_both_categories() {}
+    @Order(27)
+    void accept_reuploaded_dokumente_of_both_categories() {
+        var dok = dokumentApiSpec.getGesuchDokumenteForTyp()
+            .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDto.class);
+        var customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+            .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDto.class);
+        var gesuchDokumentAblehnenRequest = new GesuchDokumentAblehnenRequestDtoSpec();
+        var kommentar = new GesuchDokumentKommentarDtoSpec();
+        kommentar.setKommentar("test");
+        kommentar.setGesuchDokumentId(dok.getValue().getId());
+        kommentar.setGesuchTrancheId(gesuchTrancheId);
+        gesuchDokumentAblehnenRequest.setKommentar(kommentar);
+
+        // accept a "normal" gesuchdokument
+        dokumentApiSpec.gesuchDokumentAkzeptieren()
+            .gesuchDokumentIdPath(dok.getValue().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        // accept a custom gesuchdokument
+        dokumentApiSpec.gesuchDokumentAkzeptieren()
+            .gesuchDokumentIdPath(customDok.getValue().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        // check that both gesuchdokuments are in correct state & do contain files
+        dok = dokumentApiSpec.getGesuchDokumenteForTyp()
+            .dokumentTypPath(DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDto.class);
+
+        assertThat(dok.getValue().getStatus(), is(Dokumentstatus.AKZEPTIERT));
+        assertThat(dok.getValue().getDokumente().size(), is(greaterThan(0)));
+
+        customDok = dokumentApiSpec.getCustomGesuchDokumenteForTyp()
+            .customDokumentTypIdPath(createdGesuchDokumentWithCustomType.getCustomDokumentTyp().getId())
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NullableGesuchDokumentDto.class);
+        assertThat(customDok.getValue().getStatus(), is(Dokumentstatus.AKZEPTIERT));
+        assertThat(customDok.getValue().getDokumente().size(), is(greaterThan(0)));
+    }
 
     @Test
     @TestAsAdmin
