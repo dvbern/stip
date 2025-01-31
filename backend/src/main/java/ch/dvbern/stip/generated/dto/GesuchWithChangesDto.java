@@ -36,7 +36,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid LocalDate aenderungsdatum;
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
   private @Valid String bearbeiter;
-  private @Valid String einreichedatum;
+  private @Valid java.time.LocalDateTime einreichedatum;
   private @Valid List<GesuchTrancheDto> changes;
 
   /**
@@ -231,19 +231,19 @@ public class GesuchWithChangesDto  implements Serializable {
 
   /**
    **/
-  public GesuchWithChangesDto einreichedatum(String einreichedatum) {
+  public GesuchWithChangesDto einreichedatum(java.time.LocalDateTime einreichedatum) {
     this.einreichedatum = einreichedatum;
     return this;
   }
 
   
   @JsonProperty("einreichedatum")
-  public String getEinreichedatum() {
+  public java.time.LocalDateTime getEinreichedatum() {
     return einreichedatum;
   }
 
   @JsonProperty("einreichedatum")
-  public void setEinreichedatum(String einreichedatum) {
+  public void setEinreichedatum(java.time.LocalDateTime einreichedatum) {
     this.einreichedatum = einreichedatum;
   }
 

@@ -73,6 +73,7 @@ import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -798,5 +799,16 @@ public class GesuchService {
         }
 
         return notiz;
+    }
+
+    @Transactional
+    public GesuchDto einreichedatumManuellAendern(
+        final UUID gesuchId,
+        final EinreichedatumAendernRequestDto dto
+    ) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuch.setEinreichedatum(dto.getNewEinreichedatum());
+
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 }

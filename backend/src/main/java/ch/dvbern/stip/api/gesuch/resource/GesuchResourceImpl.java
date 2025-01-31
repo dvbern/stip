@@ -179,7 +179,7 @@ public class GesuchResourceImpl implements GesuchResource {
         EinreichedatumAendernRequestDto einreichedatumAendernRequestDto
     ) {
         gesuchAuthorizer.canUpdateEinreichedatum(gesuchId);
-        return null;
+        return gesuchService.einreichedatumManuellAendern(gesuchId, einreichedatumAendernRequestDto);
     }
 
     @RolesAllowed(GESUCH_UPDATE)

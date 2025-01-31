@@ -5571,7 +5571,7 @@ components:
       properties:
         newEinreichedatum:
           type: string
-          format: date
+          format: dateTime
   responses:
     Unauthorized:
       content:

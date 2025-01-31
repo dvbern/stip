@@ -45,4 +45,8 @@ public class GesuchHistoryService {
     ) {
         return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
     }
+
+    public boolean wasEingereicht(final UUID gesuchId) {
+        return getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.VERFUEGT).isPresent();
+    }
 }
