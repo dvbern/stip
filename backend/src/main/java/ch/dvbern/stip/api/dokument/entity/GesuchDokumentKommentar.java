@@ -30,7 +30,6 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -60,7 +59,7 @@ public class GesuchDokumentKommentar extends AbstractMandantEntity {
     private GesuchTranche gesuchTranche;
 
     @NotNull
-    @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(
         name = "gesuch_dokument_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_id"),
         nullable = false
