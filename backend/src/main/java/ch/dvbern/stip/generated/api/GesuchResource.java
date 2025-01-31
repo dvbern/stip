@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
@@ -80,6 +81,12 @@ public interface GesuchResource {
     @Path("/{gesuchId}")
     @Produces({ "text/plain" })
     void deleteGesuch(@PathParam("gesuchId") UUID gesuchId);
+
+    @PATCH
+    @Path("/{gesuchId}/einreichedatum")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto einreichedatumManuellAendern(@PathParam("gesuchId") UUID gesuchId,@Valid EinreichedatumAendernRequestDto einreichedatumAendernRequestDto);
 
     @PATCH
     @Path("/{gesuchTrancheId}/einreichen")

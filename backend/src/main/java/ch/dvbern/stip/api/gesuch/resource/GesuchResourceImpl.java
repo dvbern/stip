@@ -44,6 +44,7 @@ import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -169,6 +170,16 @@ public class GesuchResourceImpl implements GesuchResource {
     public void deleteGesuch(UUID gesuchId) {
         gesuchAuthorizer.canDelete(gesuchId);
         gesuchService.deleteGesuch(gesuchId);
+    }
+
+    @RolesAllowed(GESUCH_UPDATE)
+    @Override
+    public GesuchDto einreichedatumManuellAendern(
+        UUID gesuchId,
+        EinreichedatumAendernRequestDto einreichedatumAendernRequestDto
+    ) {
+        gesuchAuthorizer.canUpdateEinreichedatum(gesuchId);
+        return null;
     }
 
     @RolesAllowed(GESUCH_UPDATE)

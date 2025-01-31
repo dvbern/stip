@@ -154,4 +154,9 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
         throw new UnauthorizedException();
     }
+
+    @Transactional
+    public void canUpdateEinreichedatum(final UUID gesuchId) {
+        throw new UnauthorizedException();
+    }
 }
