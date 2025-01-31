@@ -111,7 +111,7 @@
         class="btn btn-primary"
         (click)="fehlendeDokumenteEinreichen()"
         data-testid="button-save"
-        [disabled]="(dokumente | rdIsPending) || missingDocuments > 0"
+        [disabled]="(dokumente | rdIsPending) || missingDocuments === 0"
       >
         {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | translate }}
       </button>
