@@ -76,7 +76,7 @@ public class RequiredDokumentService {
                 gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT)
                 && Objects.isNull(gesuchDokument.getCustomDokumentTyp())
             )
-            .map(gesuchDokument -> gesuchDokument.getDokumentTyp())
+            .map(GesuchDokument::getDokumentTyp)
             .collect(Collectors.toSet());
     }
 

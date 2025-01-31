@@ -107,10 +107,8 @@ class CustomGesuchDokumentTypAuthorizerTest {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
         when(dokumentRepository.findByIdOptional(any())).thenReturn(Optional.of(dokument));
 
-        assertThrows(ForbiddenException.class, () -> {
-            authorizer.canDeleteDokument(UUID.randomUUID());
-        });
-
+        final var idToCheck = UUID.randomUUID();
+        assertThrows(ForbiddenException.class, () -> authorizer.canDeleteDokument(idToCheck));
     }
 
     @Test

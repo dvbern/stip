@@ -70,9 +70,9 @@ public class CustomDokumentTypService {
             // clear all references to gesuchdokkument
             final var gesuchDokumenteOfCustomType =
                 gesuchDokumentRepository.findAllByCustomDokumentTypeId(customDokumentTypId);
-            gesuchDokumenteOfCustomType.forEach(z -> {
-                gesuchDokumentRepository.deleteById(z.getId());
-            });
+            gesuchDokumenteOfCustomType.forEach(
+                gesuchDokument -> gesuchDokumentRepository.deleteById(gesuchDokument.getId())
+            );
             customDocumentTypRepository.deleteById(customDokumentTypId);
         }
     }
