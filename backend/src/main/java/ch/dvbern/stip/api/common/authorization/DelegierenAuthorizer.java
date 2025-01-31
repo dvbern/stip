@@ -42,7 +42,7 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
         }
 
         final var fall = fallRepository.requireById(fallId);
-        if (!AuthorizerUtil.isGesuchstellerOfFall(currentBenutzer, fall)) {
+        if (!AuthorizerUtil.isGesuchstellerOfFallWithoutDelegierung(currentBenutzer, fall)) {
             throw new UnauthorizedException();
         }
     }

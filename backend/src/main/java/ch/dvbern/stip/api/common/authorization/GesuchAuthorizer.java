@@ -109,7 +109,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         && benutzerCanEditInStatusOrAenderung.getAsBoolean();
 
         final BooleanSupplier isGesuchstellerAndCanEdit =
-            () -> AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)
+            () -> AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
             && benutzerCanEditInStatusOrAenderung.getAsBoolean();
 
         if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {
@@ -135,7 +135,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
 
         final BooleanSupplier isGesuchstellerAndCanEdit = () -> isGesuchstellerAndNotAdmin(currentBenutzer)
-        && AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)
+        && AuthorizerUtil.isGesuchstellerOfGesuchWithoutDelegierung(currentBenutzer, gesuch)
         && gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
 
         if (isMitarbeiterAndCanEdit.getAsBoolean() || isGesuchstellerAndCanEdit.getAsBoolean()) {

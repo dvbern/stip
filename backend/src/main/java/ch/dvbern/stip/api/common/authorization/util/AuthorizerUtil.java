@@ -28,6 +28,17 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class AuthorizerUtil {
+    public boolean isGesuchstellerOfGesuchWithoutDelegierung(final Benutzer currentBenutzer, final Gesuch gesuch) {
+        return isGesuchstellerOfFallWithoutDelegierung(
+            currentBenutzer,
+            gesuch.getAusbildung().getFall()
+        );
+    }
+
+    public boolean isGesuchstellerOfFallWithoutDelegierung(final Benutzer currentBenutzer, final Fall fall) {
+        return isGesuchstellerOfFall(currentBenutzer, fall) && fall.getDelegierung() == null;
+    }
+
     public boolean isGesuchstellerOfGesuch(final Benutzer currentBenutzer, final Gesuch gesuch) {
         return isGesuchstellerOfFall(
             currentBenutzer,
@@ -39,7 +50,7 @@ public class AuthorizerUtil {
         return Objects.equals(
             fall.getGesuchsteller().getId(),
             currentBenutzer.getId()
-        ) && fall.getDelegierung() == null;
+        );
     }
 
     public boolean hasDelegierungAndIsCurrentBenutzerMitarbeiterOfSozialdienst(
