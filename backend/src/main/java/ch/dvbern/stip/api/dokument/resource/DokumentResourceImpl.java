@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -88,14 +89,14 @@ public class DokumentResourceImpl implements DokumentResource {
     }
 
     @Blocking
-    @RolesAllowed(GESUCH_UPDATE)
-    @AllowAll
+    @RolesAllowed(OidcConstants.ROLE_GESUCHSTELLER)
     @Override
     public Uni<Response> createCustomGesuchDokument(
         UUID customDokumentTypId,
         UUID gesuchTrancheId,
         FileUpload fileUpload
     ) {
+        customGesuchDokumentTypAuthorizer.canUpload(gesuchTrancheId);
         return gesuchDokumentService.getUploadCustomDokumentUni(customDokumentTypId, gesuchTrancheId, fileUpload);
     }
 

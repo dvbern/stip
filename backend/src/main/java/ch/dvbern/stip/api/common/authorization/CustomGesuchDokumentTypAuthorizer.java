@@ -21,9 +21,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -36,7 +38,18 @@ import lombok.RequiredArgsConstructor;
 public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final DokumentRepository dokumentRepository;
     private final GesuchRepository gesuchRepository;
+    private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BenutzerService benutzerService;
+
+    @Transactional
+    public void canUpload(final UUID gesuchTrancheId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        if (!AuthorizerUtil.isGesuchstellerOfGesuch(currentBenutzer, gesuch)) {
+            throw new ForbiddenException();
+        }
+    }
 
     @Transactional
     public void canDeleteTyp(final UUID gesuchId, final UUID gesuchDokumentTypId) {

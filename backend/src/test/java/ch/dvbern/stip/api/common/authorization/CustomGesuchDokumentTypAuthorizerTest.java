@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.util.TestUtil;
 import io.quarkus.security.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +48,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
     private CustomGesuchDokumentTypAuthorizer authorizer;
     private GesuchRepository gesuchRepository;
     private DokumentRepository dokumentRepository;
+    private GesuchTrancheRepository gesuchTrancheRepository;
     private BenutzerService benutzerService;
     private Benutzer currentBenutzer;
 
@@ -61,7 +63,9 @@ class CustomGesuchDokumentTypAuthorizerTest {
         benutzerService = Mockito.mock(BenutzerService.class);
         currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         currentBenutzer.setId(currentBenutzerId);
-        authorizer = new CustomGesuchDokumentTypAuthorizer(dokumentRepository, gesuchRepository, benutzerService);
+        authorizer = new CustomGesuchDokumentTypAuthorizer(
+            dokumentRepository, gesuchRepository, gesuchTrancheRepository, benutzerService
+        );
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
 
