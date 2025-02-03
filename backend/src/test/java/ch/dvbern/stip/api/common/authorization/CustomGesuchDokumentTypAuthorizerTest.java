@@ -68,7 +68,6 @@ class CustomGesuchDokumentTypAuthorizerTest {
         );
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
-
     }
 
     @Test
