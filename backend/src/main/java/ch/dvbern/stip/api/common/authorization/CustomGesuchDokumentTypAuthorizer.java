@@ -39,11 +39,24 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
 
     @Transactional
-    public void canDeleteTyp(final UUID gesuchId) {
+    public void canDeleteTyp(final UUID gesuchId, final UUID gesuchDokumentTypId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        final var customGesuchDokument = gesuch.getCurrentGesuchTranche()
+            .getGesuchDokuments()
+            .stream()
+            .filter(gesuchDokument -> gesuchDokument.getCustomDokumentTyp() != null)
+            .toList()
+            .stream()
+            .filter(customDok -> customDok.getCustomDokumentTyp().getId().equals(gesuchDokumentTypId))
+            .findFirst()
+            .orElseThrow();
+
         if (
             !gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)
             || !isAdminOrSb(benutzerService.getCurrentBenutzer())
+            || (!customGesuchDokument.getDokumente().isEmpty()
+            && gesuch.getGesuchStatus().equals(Gesuchstatus.FEHLENDE_DOKUMENTE))
         ) {
             throw new ForbiddenException();
         }

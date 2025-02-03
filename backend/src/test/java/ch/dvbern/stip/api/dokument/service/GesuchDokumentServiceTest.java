@@ -26,8 +26,11 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
 import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
@@ -36,12 +39,14 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
@@ -62,7 +67,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -81,11 +86,17 @@ class GesuchDokumentServiceTest {
     @InjectMock
     DokumentRepository dokumentRepository;
 
+    @InjectMock
+    GesuchRepository gesuchRepository;
+
     @Inject
     GesuchDokumentService gesuchDokumentService;
 
     @Inject
     BenutzerService benutzerService;
+
+    @Inject
+    CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
 
     private final UUID id = UUID.randomUUID();
 
@@ -198,7 +209,7 @@ class GesuchDokumentServiceTest {
         gesuchDokumentService.gesuchDokumentAkzeptieren(mockedDokument.getId());
 
         // Assert
-        assertEquals(null, comment.getKommentar());
+        assertNull(comment.getKommentar());
         assertThat(comment.getDokumentstatus(), is(Dokumentstatus.AKZEPTIERT));
     }
 
@@ -257,6 +268,47 @@ class GesuchDokumentServiceTest {
         assertThat(abgelehntesGesuchDokument.isEmpty(), is(false));
         // instead, all attached files will be deleted
         assertThat(abgelehntesGesuchDokument.get().getDokumente().isEmpty(), is(true));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    void sbShouldNotBeAbleToDeleteNonEmptyAndSentCustomDokumentTyp() {
+        /*
+         * Setup:
+         * SB has added a custom dokument type
+         * GS has attached 1 file
+         *
+         * Expected:
+         * SB should not be able to delete that Custom Dokument Type
+         */
+
+        // Arrange
+        CustomDokumentTyp customDokumentTyp = new CustomDokumentTyp();
+        customDokumentTyp.setId(UUID.randomUUID());
+        customDokumentTyp.setDescription("test");
+        customDokumentTyp.setType("test");
+
+        Gesuch gesuch = TestUtil.setupGesuchWithCustomDokument();
+        GesuchDokument customGesuchDokument = gesuch.getCurrentGesuchTranche().getGesuchDokuments().get(0);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        // Act
+        assertDoesNotThrow(
+            () -> customGesuchDokumentTypAuthorizer
+                .canDeleteTyp(gesuch.getId(), customGesuchDokument.getCustomDokumentTyp().getId())
+        );
+        customGesuchDokument.getDokumente().add(new Dokument());
+        assertDoesNotThrow(
+            () -> customGesuchDokumentTypAuthorizer
+                .canDeleteTyp(gesuch.getId(), customGesuchDokument.getCustomDokumentTyp().getId())
+        );
+        gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
+        assertThrows(
+            ForbiddenException.class,
+            () -> customGesuchDokumentTypAuthorizer
+                .canDeleteTyp(gesuch.getId(), customGesuchDokument.getCustomDokumentTyp().getId())
+        );
     }
 
     private static class GesuchDokumentServiceMock extends GesuchDokumentService {

@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -40,6 +41,9 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.bildungskategorie.entity.Bildungskategorie;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -51,6 +55,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
@@ -540,5 +545,28 @@ public class TestUtil {
         );
 
         return baseGesuch;
+    }
+
+    public static GesuchDokument setupCustomGesuchDokument() {
+        CustomDokumentTyp customDokumentTyp = new CustomDokumentTyp();
+        customDokumentTyp.setId(UUID.randomUUID());
+        customDokumentTyp.setDescription("test");
+        customDokumentTyp.setType("test");
+
+        var customGesuchDokument = new GesuchDokument();
+        customGesuchDokument.setId(UUID.randomUUID());
+        customGesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND)
+            .setDokumente(new ArrayList<>())
+            .setCustomDokumentTyp(customDokumentTyp);
+        return customGesuchDokument;
+    }
+
+    public static Gesuch setupGesuchWithCustomDokument() {
+        GesuchTranche gesuchTranche = new GesuchTranche();
+        gesuchTranche.setGesuchDokuments(List.of(setupCustomGesuchDokument()));
+        Gesuch gesuch = new Gesuch();
+        gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.setGesuchTranchen(List.of(gesuchTranche));
+        return gesuch;
     }
 }
