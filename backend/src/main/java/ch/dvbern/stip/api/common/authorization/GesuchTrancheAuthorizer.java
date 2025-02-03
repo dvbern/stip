@@ -117,12 +117,10 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         if (
             gesuchTranche.getGesuchDokuments()
                 .stream()
-                .filter(
+                .anyMatch(
                     gesuchDokument -> gesuchDokument.getStatus().equals(Dokumentstatus.AUSSTEHEND)
                     && gesuchDokument.getDokumente().isEmpty()
                 )
-                .findAny()
-                .isPresent()
         ) {
             throw new ForbiddenException();
         }
