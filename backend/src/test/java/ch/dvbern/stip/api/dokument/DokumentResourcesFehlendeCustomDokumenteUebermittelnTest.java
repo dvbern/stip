@@ -285,7 +285,8 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     /*
      * GS re-uploads required/denied files
      * GS executes "fehlende Dokumente einreichen"
-     * both files should still be in state "AUSSTHEND", but should contain files
+     * both files should still be in state "AUSSTHEND", but should contain files.
+     * Also, it should be made sure that all GesuchDokuments contain at least 1 file
      *
      */
     @Test
@@ -311,6 +312,15 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
             file
         );
+
+        // a file in custom dokument is still missing - 403 (Forbidden) should occur
+        gesuchApiSpec.gesuchTrancheFehlendeDokumenteEinreichen()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.FORBIDDEN.getStatusCode());
+
         TestUtil.uploadCustomDokumentFile(
             dokumentApiSpec,
             gesuchTrancheId,
