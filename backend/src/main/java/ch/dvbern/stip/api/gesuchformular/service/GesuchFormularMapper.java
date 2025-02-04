@@ -265,6 +265,19 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     ) {
         resetDarlehen(targetFormular);
         resetUnterschriftenblaetter(targetFormular);
+        /*
+         * resetFieldIf(
+         * () -> (
+         * !GesuchFormularCalculationUtil
+         * .isDateOfBirthGreaterThanOrEquals18(newFormular.getPersonInAusbildung().getGeburtsdatum())),
+         * "Reset Vermoegen if Person in Ausbildung is < 18 years old",
+         * () -> {
+         * // newFormular.getEinnahmenKosten().setVermoegen(null);
+         * targetFormular.getEinnahmenKosten().setVermoegen(null);
+         * }
+         * );
+         *
+         */
     }
 
     @AfterMapping
@@ -328,6 +341,16 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 if (ek != null && newFormular.getKinds().isEmpty()) {
                     ek.setBetreuungskostenKinder(null);
                 }
+            }
+        );
+
+        resetFieldIf(
+            () -> (newFormular.getEinnahmenKosten() != null &&
+            !GesuchFormularCalculationUtil
+                .isPersonInAusbildungVolljaehrig(newFormular)),
+            "Reset Vermoegen if Person in Ausbildung is < 18 years old",
+            () -> {
+                newFormular.getEinnahmenKosten().setVermoegen(null);
             }
         );
     }
