@@ -63,6 +63,11 @@ describe('selectSharedDataAccessGesuchsView', () => {
       { gesuch: state.gesuch, gesuchFormular: state.gesuchFormular },
       state.isEditingAenderung,
       state.trancheTyp,
+      {
+        rolesMap: {},
+        currentBenutzerRd: initial(),
+        lastFetchTs: null,
+      },
     );
     expect(result.loading).toBeFalsy();
   });

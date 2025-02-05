@@ -26,6 +26,7 @@ import {
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchInfo } from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
@@ -67,6 +68,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private dialog = inject(MatDialog);
   private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
+  private permissionStore = inject(PermissionStore);
   private config = inject(SharedModelCompileTimeConfig);
   gesuchAenderungStore = inject(GesuchAenderungStore);
 
@@ -105,10 +107,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   );
   gesuchPermissionsSig = computed(() => {
     const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
+    const rolesMap = this.permissionStore.rolesMapSig();
     if (!gesuchStatus) {
       return {};
     }
-    return getGesuchPermissions({ gesuchStatus }, this.config.appType);
+    return getGesuchPermissions(
+      { gesuchStatus },
+      this.config.appType,
+      rolesMap,
+    );
   });
   isLoadingSig = computed(() => {
     return isPending(this.gesuchStore.gesuchInfo());

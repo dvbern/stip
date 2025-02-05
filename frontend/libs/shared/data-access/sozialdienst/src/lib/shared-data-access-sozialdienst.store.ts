@@ -435,6 +435,7 @@ export class SozialdienstStore extends signalStore(
   fallDelegieren$ = rxMethod<{
     fallId: string;
     sozialdienstId: string;
+    onSuccess?: () => void;
   }>(
     pipe(
       tap(() => {
@@ -442,15 +443,18 @@ export class SozialdienstStore extends signalStore(
           delegierung: pending(),
         });
       }),
-      exhaustMap(({ fallId, sozialdienstId }) =>
+      exhaustMap(({ fallId, sozialdienstId, onSuccess }) =>
         this.delegierenService
           .fallDelegieren$({
             fallId,
             sozialdienstId,
           })
           .pipe(
-            handleApiResponse((delegierung) =>
-              patchState(this, { delegierung }),
+            handleApiResponse(
+              (delegierung) => patchState(this, { delegierung }),
+              {
+                onSuccess,
+              },
             ),
           ),
       ),

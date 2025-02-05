@@ -1,5 +1,6 @@
 import { differenceInYears } from 'date-fns';
 
+import { RolesMap } from '@dv/shared/model/benutzer';
 import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
@@ -233,9 +234,10 @@ export const isStepDisabled = (
   step: SharedModelGesuchFormStep,
   gesuch: SharedModelGesuch | null,
   appType: AppType,
+  rolesMap: RolesMap,
 ) => {
   const formular = gesuch?.gesuchTrancheToWorkWith.gesuchFormular ?? null;
-  const gesuchPermissions = getGesuchPermissions(gesuch, appType);
+  const gesuchPermissions = getGesuchPermissions(gesuch, appType, rolesMap);
   const readonly = !gesuchPermissions?.canWrite;
 
   switch (step) {

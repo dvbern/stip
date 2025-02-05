@@ -21,6 +21,7 @@ import {
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelGesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
@@ -65,6 +66,7 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
+  private permissionStore = inject(PermissionStore);
 
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
@@ -74,10 +76,12 @@ export class SachbearbeitungAppPatternGesuchStepLayoutComponent {
   stepsSig = computed(() => {
     const { gesuch } = this.cacheViewSig().cache;
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
+    const rolesMap = this.permissionStore.rolesMapSig();
     const steps = this.stepsViewSig().steps;
     const validatedSteps = this.stepManager.getValidatedSteps(
       steps,
       gesuch,
+      rolesMap,
       invalidFormularProps.validations,
     );
     return validatedSteps;

@@ -30,7 +30,7 @@ export class SharedUiHasRolesDirective {
       const roles = this.rolesSig();
       const elseTemplateRef = this.elseTemplateRefSig();
 
-      if (roles.some((role) => roleMap?.[role])) {
+      if (roles.some((role) => roleMap[role])) {
         if (!this.viewRef.length) {
           this.viewRef.createEmbeddedView(this.templateRef);
         }

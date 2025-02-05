@@ -36,6 +36,7 @@ import {
   Sozialdienst,
 } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
+import { compareById } from '@dv/shared/model/type-util';
 import { SharedUiAenderungMeldenDialogComponent } from '@dv/shared/ui/aenderung-melden-dialog';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
@@ -75,6 +76,7 @@ export class GesuchAppFeatureCockpitComponent {
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
+  @Input({ required: true }) tranche?: GesuchTrancheSlim;
   fallStore = inject(FallStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
@@ -84,7 +86,6 @@ export class GesuchAppFeatureCockpitComponent {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
-  @Input({ required: true }) tranche?: GesuchTrancheSlim;
 
   private gotNewFallSig = computed(() => {
     return this.fallStore.currentFallViewSig()?.id;
@@ -116,6 +117,8 @@ export class GesuchAppFeatureCockpitComponent {
       { allowSignalWrites: true },
     );
   }
+
+  compareById = compareById;
 
   createAusbildung(fallId: string) {
     GesuchAppDialogCreateAusbildungComponent.open(
@@ -231,6 +234,9 @@ export class GesuchAppFeatureCockpitComponent {
           this.sozialdienstStore.fallDelegieren$({
             sozialdienstId: sozialdienst.id,
             fallId,
+            onSuccess: () => {
+              this.dashboardStore.loadDashboard$();
+            },
           });
         }
       });

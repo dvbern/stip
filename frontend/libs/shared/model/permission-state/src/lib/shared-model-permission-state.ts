@@ -1,5 +1,10 @@
+import { RolesMap } from '@dv/shared/model/benutzer';
 import { AppType } from '@dv/shared/model/config';
-import { GesuchTrancheStatus, Gesuchstatus } from '@dv/shared/model/gesuch';
+import {
+  Delegierung,
+  GesuchTrancheStatus,
+  Gesuchstatus,
+} from '@dv/shared/model/gesuch';
 import { capitalized } from '@dv/shared/model/type-util';
 
 const Permissions = {
@@ -107,13 +112,31 @@ export const trancheReadWritestatusByAppType = {
  * Get the permissions for the gesuch based on the status and the app type
  */
 export const getGesuchPermissions = (
-  gesuch: { gesuchStatus: Gesuchstatus } | null,
+  gesuch: {
+    gesuchStatus: Gesuchstatus;
+    delegierung?: Delegierung;
+  } | null,
   appType: AppType | undefined,
+  rolesMap: RolesMap,
 ): PermissionMap => {
   if (!gesuch || !appType) return {};
 
   const state = permissionTableByAppType[gesuch.gesuchStatus][appType];
-  return getPermissions(state);
+  const permissions = { ...getPermissions(state) };
+
+  // The gesuch is not writable in the gesuch-app if the user is not a sozialdienst-mitarbeiter
+  // when the geusuch is delegated
+  if (
+    !canCurrentlyUpdateGesuch(
+      permissions,
+      appType,
+      rolesMap,
+      gesuch.delegierung,
+    )
+  ) {
+    permissions.canWrite = false;
+  }
+  return permissions;
 };
 
 /**
@@ -130,4 +153,33 @@ export const getTranchePermissions = (
       appType
     ];
   return getPermissions(state);
+};
+
+/**
+ * Special gesuch update check for the gesuch-app
+ *
+ * Currently it applies a check if the current user is allowed to update the gesuch
+ * depending on if it is delegated and the user roles of the current user.
+ */
+export const canCurrentlyUpdateGesuch = (
+  permissions: PermissionMap,
+  appType: AppType,
+  rolesMap: RolesMap,
+  delegierung: Delegierung | undefined,
+) => {
+  // Only apply special rules for the gesuch-app
+  if (appType !== 'gesuch-app') {
+    return !!permissions.canWrite;
+  }
+  // If the gesuch is not writable anyway, return false
+  if (!permissions.canWrite) {
+    return false;
+  }
+
+  return (
+    // OK if it is not delegated and current user is not a sozialdienst-mitarbeiter
+    (!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] !== true) ||
+    // OK if it is delegated and current user is a sozialdienst-mitarbeiter
+    (!!delegierung && rolesMap['Sozialdienst-Mitarbeiter'] === true)
+  );
 };

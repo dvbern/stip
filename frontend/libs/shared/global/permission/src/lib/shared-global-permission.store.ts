@@ -1,14 +1,14 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
+import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 
-import { AvailableBenutzerRole, BenutzerRole } from '@dv/shared/model/benutzer';
-
-export type RolesMap = Record<AvailableBenutzerRole, true | undefined>;
+import { SharedDataAccessBenutzerApiEvents } from '@dv/shared/data-access/benutzer';
+import { AvailableBenutzerRole, RolesMap } from '@dv/shared/model/benutzer';
 
 type PermissionState = {
-  userRoles: BenutzerRole[] | null;
+  userRoles: AvailableBenutzerRole[] | null;
 };
 
 const initialState: PermissionState = {
@@ -21,15 +21,18 @@ export class PermissionStore extends signalStore(
   withState(initialState),
   withDevtools('PermissionStore'),
 ) {
-  authService = inject(OAuthService);
+  private authService = inject(OAuthService);
+  private store = inject(Store);
 
   rolesMapSig = computed(() => {
     const userRoles = this.userRoles();
 
-    return userRoles?.reduce((acc, role) => {
-      acc[role] = true;
-      return acc;
-    }, {} as RolesMap);
+    return (
+      userRoles?.reduce((acc, role) => {
+        acc[role] = true;
+        return acc;
+      }, {} as RolesMap) ?? {}
+    );
   });
 
   constructor() {
@@ -44,6 +47,11 @@ export class PermissionStore extends signalStore(
     if (payload?.['realm_access']['roles']) {
       const userRoles = payload['realm_access']['roles'];
       patchState(this, { userRoles });
+      this.store.dispatch(
+        SharedDataAccessBenutzerApiEvents.setRolesMap({
+          rolesMap: this.rolesMapSig(),
+        }),
+      );
     }
   }
 }

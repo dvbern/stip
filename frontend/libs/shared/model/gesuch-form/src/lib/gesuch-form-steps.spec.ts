@@ -71,6 +71,9 @@ describe('GesuchFormSteps', () => {
             },
           } as SharedModelGesuch,
           'gesuch-app',
+          {
+            Gesuchsteller: true,
+          },
         ),
       ).toBe(state);
     },
@@ -93,6 +96,9 @@ describe('GesuchFormSteps', () => {
             },
           } as SharedModelGesuch,
           'gesuch-app',
+          {
+            Gesuchsteller: true,
+          },
         ),
       ).toBe(state);
     },

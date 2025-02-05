@@ -5,12 +5,18 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { differenceInDays, endOfDay, format, isAfter } from 'date-fns';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { PermissionStore } from '@dv/shared/global/permission';
 import {
   SharedModelGsAusbildungView,
   SharedModelGsDashboardView,
   SharedModelGsGesuchView,
 } from '@dv/shared/model/ausbildung';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { FallDashboardItem, GesuchService } from '@dv/shared/model/gesuch';
+import {
+  canCurrentlyUpdateGesuch,
+  getGesuchPermissions,
+} from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   cachedPending,
@@ -34,11 +40,14 @@ export class DashboardStore extends signalStore(
   withDevtools('DashboardStore'),
 ) {
   private gesuchService = inject(GesuchService);
+  private appType = inject(SharedModelCompileTimeConfig).appType;
+  private permissionStore = inject(PermissionStore);
 
   dashboardViewSig = computed<SharedModelGsDashboardView[] | undefined>(() => {
     const fallDashboardItems = this.dashboard.data();
     const activeAusbildungen: SharedModelGsAusbildungView[] = [];
     const inactiveAusbildungen: SharedModelGsAusbildungView[] = [];
+    const rolesMap = this.permissionStore.rolesMapSig();
 
     fallDashboardItems?.forEach((item) =>
       item.ausbildungDashboardItems?.forEach(({ gesuchs, ...ausbildung }) => {
@@ -79,6 +88,11 @@ export class DashboardStore extends signalStore(
                 ),
               ].join('/');
               const canEdit = gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS';
+              const permissions = getGesuchPermissions(
+                gesuch,
+                this.appType,
+                rolesMap,
+              );
 
               return {
                 ...gesuch,
@@ -89,7 +103,13 @@ export class DashboardStore extends signalStore(
                 canCreateAenderung:
                   (gesuch.gesuchStatus == 'STIPENDIENANSPRUCH' ||
                     gesuch.gesuchStatus == 'KEIN_STIPENDIENANSPRUCH') &&
-                  !gesuch.offeneAenderung,
+                  !gesuch.offeneAenderung &&
+                  canCurrentlyUpdateGesuch(
+                    permissions,
+                    this.appType,
+                    rolesMap,
+                    item.delegierung,
+                  ),
                 einreichefristAbgelaufen,
                 reduzierterBeitrag,
                 einreichefristDays,
@@ -114,6 +134,7 @@ export class DashboardStore extends signalStore(
 
     return fallDashboardItems?.map((item) => ({
       fall: item.fall,
+      delegierung: item.delegierung,
       notifications: item.notifications,
       hasActiveAusbildungen: true,
       activeAusbildungen,

@@ -5,8 +5,8 @@ import { map, switchMap } from 'rxjs';
 
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { PermissionStore, RolesMap } from '@dv/shared/global/permission';
-import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
+import { PermissionStore } from '@dv/shared/global/permission';
+import { AvailableBenutzerRole, RolesMap } from '@dv/shared/model/benutzer';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchService } from '@dv/shared/model/gesuch';
 import {
@@ -30,17 +30,15 @@ export const isAllowedTo =
           return [false];
         }
 
-        return gesuchService
-          .getGesuchInfo$({ gesuchId })
-          .pipe(
-            map(({ gesuchStatus }) =>
-              getGesuchPermissions({ gesuchStatus }, config.appType)[
-                `can${capitalized(permission)}`
-              ]
-                ? true
-                : new RedirectCommand(router.parseUrl('/')),
-            ),
-          );
+        return gesuchService.getGesuchInfo$({ gesuchId }).pipe(
+          map(({ gesuchStatus }) =>
+            getGesuchPermissions({ gesuchStatus }, config.appType, {
+              Gesuchsteller: true,
+            })[`can${capitalized(permission)}`]
+              ? true
+              : new RedirectCommand(router.parseUrl('/')),
+          ),
+        );
       }),
     );
   };

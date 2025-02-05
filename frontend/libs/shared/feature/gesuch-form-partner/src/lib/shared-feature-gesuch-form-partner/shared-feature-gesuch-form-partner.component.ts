@@ -28,6 +28,7 @@ import { switchMap } from 'rxjs/operators';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDataAccessStammdatenApiEvents } from '@dv/shared/data-access/stammdaten';
 import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partner';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentTyp,
@@ -106,6 +107,7 @@ const MEDIUM_AGE_ADULT = 30;
 export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   private elementRef = inject(ElementRef);
   private store = inject(Store);
+  private permissionStore = inject(PermissionStore);
   private appType = inject(SharedModelCompileTimeConfig).appType;
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
@@ -224,10 +226,11 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     effect(
       () => {
         const { gesuch, gesuchFormular } = this.viewSig();
+        const rolesMap = this.permissionStore.rolesMapSig();
         if (
           gesuch &&
           gesuchFormular &&
-          isStepDisabled(PARTNER, gesuch, this.appType)
+          isStepDisabled(PARTNER, gesuch, this.appType, rolesMap)
         ) {
           this.store.dispatch(
             SharedEventGesuchFormPartner.nextStepTriggered({
