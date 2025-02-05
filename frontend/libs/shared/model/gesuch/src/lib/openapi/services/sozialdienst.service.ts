@@ -19,7 +19,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Sozialdienst } from '../model/sozialdienst';
-import { SozialdienstAdmin } from '../model/sozialdienstAdmin';
+import { SozialdienstAdminCreate } from '../model/sozialdienstAdminCreate';
 import { SozialdienstAdminUpdate } from '../model/sozialdienstAdminUpdate';
 import { SozialdienstBenutzer } from '../model/sozialdienstBenutzer';
 import { SozialdienstBenutzerCreate } from '../model/sozialdienstBenutzerCreate';
@@ -58,7 +58,7 @@ export interface SozialdienstServiceGetSozialdienstBenutzerRequestParams {
 
 export interface SozialdienstServiceReplaceSozialdienstAdminRequestParams {
     sozialdienstId: string;
-    sozialdienstAdmin?: SozialdienstAdmin;
+    sozialdienstAdminCreate?: SozialdienstAdminCreate;
 }
 
 export interface SozialdienstServiceUpdateSozialdienstRequestParams {
@@ -802,7 +802,7 @@ export class SozialdienstService {
         if (sozialdienstId === null || sozialdienstId === undefined) {
             throw new Error('Required parameter sozialdienstId was null or undefined when calling replaceSozialdienstAdmin$.');
         }
-        const sozialdienstAdmin = requestParameters.sozialdienstAdmin;
+        const sozialdienstAdminCreate = requestParameters.sozialdienstAdminCreate;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -862,7 +862,7 @@ export class SozialdienstService {
         return this.httpClient.request<SozialdienstBenutzer>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: sozialdienstAdmin,
+                body: sozialdienstAdminCreate,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

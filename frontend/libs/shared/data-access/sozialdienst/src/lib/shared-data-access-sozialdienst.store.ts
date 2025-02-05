@@ -156,7 +156,7 @@ export class SozialdienstStore extends signalStore(
 
   createSozialdienst$ = rxMethod<{
     sozialdienstCreate: Omit<SozialdienstCreate, 'sozialdienstAdmin'> & {
-      sozialdienstAdmin: Omit<SozialdienstAdmin, 'keycloakId'>;
+      sozialdienstAdmin: Omit<SozialdienstAdmin, 'keycloakId' | 'id'>;
     };
     onAfterSave?: (sozialdienstId: string) => void;
   }>(
@@ -256,7 +256,7 @@ export class SozialdienstStore extends signalStore(
       }),
       exhaustMap(({ sozialdienst }) => {
         const userUpdate: SharedModelBenutzerApi = {
-          id: sozialdienst.sozialdienstAdmin.id,
+          id: sozialdienst.sozialdienstAdmin.keycloakId,
           email: sozialdienst.sozialdienstAdmin.email,
           firstName: sozialdienst.sozialdienstAdmin.nachname,
           lastName: sozialdienst.sozialdienstAdmin.vorname,
@@ -346,7 +346,7 @@ export class SozialdienstStore extends signalStore(
 
                 return this.sozialdienstService.replaceSozialdienstAdmin$({
                   sozialdienstId,
-                  sozialdienstAdmin: {
+                  sozialdienstAdminCreate: {
                     nachname: user.lastName,
                     vorname: user.firstName,
                     email: user.email,

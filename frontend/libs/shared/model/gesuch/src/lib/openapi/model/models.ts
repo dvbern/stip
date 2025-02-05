@@ -128,6 +128,7 @@ export * from './sbDashboardGesuch';
 export * from './sortOrder';
 export * from './sozialdienst';
 export * from './sozialdienstAdmin';
+export * from './sozialdienstAdminCreate';
 export * from './sozialdienstAdminUpdate';
 export * from './sozialdienstAllOf';
 export * from './sozialdienstBenutzer';

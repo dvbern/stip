@@ -10,12 +10,12 @@
  * Do not edit the class manually.
  */
 import { Adresse } from './adresse';
-import { SozialdienstAdmin } from './sozialdienstAdmin';
+import { SozialdienstAdminCreate } from './sozialdienstAdminCreate';
 
 export interface SozialdienstCreate { 
     name: string;
     iban: string;
     adresse: Adresse;
-    sozialdienstAdmin: SozialdienstAdmin;
+    sozialdienstAdmin: SozialdienstAdminCreate;
 }
 

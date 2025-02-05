@@ -182,6 +182,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
       },
       sozialdienstAdmin: {
         ...sozialdienstAdminFormValues,
+        keycloakId: sozialdienst.sozialdienstAdmin.keycloakId,
         id: sozialdienst.sozialdienstAdmin.id,
       },
     };
@@ -226,21 +227,21 @@ export class SozialdienstDetailComponent implements OnDestroy {
 
   replaceSozialdienstAdmin() {
     const sozialdienstId = this.idSig();
-    // const sozialdienstAdminId =
-    //   this.store.sozialdienst().data?.sozialdienstAdmin?.keycloakId;
+    const sozialdienstAdminId =
+      this.store.sozialdienst().data?.sozialdienstAdmin?.keycloakId;
 
-    if (!sozialdienstId) return;
+    if (!sozialdienstId || !sozialdienstAdminId) return;
 
     ReplaceSozialdienstAdminDialogComponent.open(this.dialog)
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         if (result) {
-          // this.store.replaceSozialdienstAdmin$({
-          //   sozialdienstId,
-          //   existingSozialdienstAdminKeycloakId: sozialdienstAdminId,
-          //   newUser: result,
-          // });
+          this.store.replaceSozialdienstAdmin$({
+            sozialdienstId,
+            existingSozialdienstAdminKeycloakId: sozialdienstAdminId,
+            newUser: result,
+          });
         }
       });
   }
