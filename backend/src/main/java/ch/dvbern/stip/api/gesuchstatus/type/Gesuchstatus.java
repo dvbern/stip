@@ -59,6 +59,22 @@ public enum Gesuchstatus {
             )
         );
 
+    public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_VIEW_CHANGES =
+        Collections.unmodifiableSet(
+            EnumSet.of(
+                EINGEREICHT,
+                BEREIT_FUER_BEARBEITUNG,
+                IN_FREIGABE,
+                JURISTISCHE_ABKLAERUNG,
+                NICHT_ANSPRUCHSBERECHTIGT,
+                ANSPRUCH_MANUELL_PRUEFEN,
+                ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+                FEHLENDE_DOKUMENTE,
+                NEGATIVE_VERFUEGUNG,
+                IN_BEARBEITUNG_SB
+            )
+        );
+
     public static final Set<Gesuchstatus> ADMIN_CAN_EDIT =
         Collections.unmodifiableSet(
             EnumSet.allOf(Gesuchstatus.class)

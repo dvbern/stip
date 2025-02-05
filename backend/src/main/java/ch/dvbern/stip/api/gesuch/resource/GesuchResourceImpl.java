@@ -65,12 +65,12 @@ import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
 
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_CREATE;
@@ -191,13 +191,6 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
-    }
-
-    @RolesAllowed(GESUCH_READ)
-    @Override
-    public GesuchDto getGesuch(UUID gesuchId, UUID gesuchTrancheId) {
-        gesuchAuthorizer.canRead(gesuchId);
-        return gesuchService.findGesuchWithTranche(gesuchId, gesuchTrancheId).orElseThrow(NotFoundException::new);
     }
 
     @Override
@@ -343,6 +336,30 @@ public class GesuchResourceImpl implements GesuchResource {
                     .jws()
                     .signWithSecret(configService.getSecret())
             );
+    }
+
+    /*
+     *
+     * @RolesAllowed(GESUCH_READ)
+     *
+     * @Override
+     * public GesuchWithChangesDto getGesuch(UUID gesuchId, UUID gesuchTrancheId) {
+     * gesuchAuthorizer.canRead(gesuchId);
+     * return gesuchService.findGesuchWithTranche(gesuchId);
+     * }
+     */
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @AllowAll
+    @Override
+    public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
+        return gesuchService.getGesuchSB(gesuchId);
+    }
+
+    @RolesAllowed(GESUCH_READ)
+    @Override
+    public GesuchDto getGesuchGS(UUID gesuchId, UUID gesuchTrancheId) {
+        gesuchAuthorizer.canRead(gesuchId);
+        return gesuchService.getGesuchGS(gesuchId);
     }
 
     @RolesAllowed(GESUCH_READ)

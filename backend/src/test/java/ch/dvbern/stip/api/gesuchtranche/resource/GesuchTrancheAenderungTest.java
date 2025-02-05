@@ -176,7 +176,7 @@ class GesuchTrancheAenderungTest {
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
-        gesuch = gesuchApiSpec.getGesuch()
+        var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -185,9 +185,9 @@ class GesuchTrancheAenderungTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
 
-        assertThat(gesuch.getGesuchStatus()).satisfiesAnyOf(
+        assertThat(gesuchWithChanges.getGesuchStatus()).satisfiesAnyOf(
             status -> assertThat(status).isEqualTo(GesuchstatusDtoSpec.STIPENDIENANSPRUCH),
             status -> assertThat(status).isEqualTo(GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH)
         );

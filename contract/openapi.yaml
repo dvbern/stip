@@ -1709,7 +1709,39 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getInitialTrancheChangesByGesuchId
       summary: Returns the inital tranche changes by GesuchId
-  '/gesuch/{gesuchId}/{gesuchTrancheId}':
+  '/gesuch/{gesuchId}/gs/{gesuchTrancheId}':
+        parameters:
+          - name: gesuchId
+            schema:
+              $ref: '#/components/schemas/UUID'
+            in: path
+            required: true
+          - name: gesuchTrancheId
+            schema:
+              $ref: '#/components/schemas/UUID'
+            in: path
+            required: true
+        get:
+          tags:
+            - Gesuch
+          responses:
+            '200':
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Gesuch'
+              description: OK
+            '401':
+              $ref: '#/components/responses/Unauthorized'
+            '403':
+              $ref: '#/components/responses/Forbidden'
+            '404':
+              $ref: '#/components/responses/NotFound'
+            '500':
+              $ref: '#/components/responses/ServerError'
+          operationId: getGesuchGS
+          summary: Returns the Gesuch with the given Id
+  '/gesuch/{gesuchId}/sb/{gesuchTrancheId}':
     parameters:
       - name: gesuchId
         schema:
@@ -1729,7 +1761,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1739,7 +1771,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGesuch
+      operationId: getGesuchSB
       summary: Returns the Gesuch with the given Id
   '/gesuch/{gesuchId}/info':
     parameters:

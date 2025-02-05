@@ -50,7 +50,6 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
@@ -145,7 +144,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(3)
     void gesuchTrancheCreated() {
-        final var gesuch = gesuchApiSpec.getGesuch()
+        final var gesuch = gesuchApiSpec.getGesuchGS()
             .gesuchIdPath(gesuchId)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
@@ -443,13 +442,13 @@ class GesuchFillFormularTest {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
     }
 
-    private GesuchDtoSpec patchAndValidate() {
+    private GesuchWithChangesDtoSpec patchAndValidate() {
         final var returnedGesuch = patchGesuch();
         validatePage();
         return returnedGesuch;
     }
 
-    private GesuchDtoSpec patchGesuch() {
+    private GesuchWithChangesDtoSpec patchGesuch() {
         final var gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
         gesuchUpdateDtoSpec.setGesuchTrancheToWorkWith(trancheUpdateDtoSpec);
 
@@ -461,14 +460,14 @@ class GesuchFillFormularTest {
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
-        return gesuchApiSpec.getGesuch()
+        return gesuchApiSpec.getGesuchGS()
             .gesuchIdPath(gesuchId)
             .gesuchTrancheIdPath(trancheUpdateDtoSpec.getId())
             .execute(ResponseBody::prettyPeek)
             .then()
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
     }
 
     private void validatePage() {

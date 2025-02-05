@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -43,6 +44,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
@@ -136,17 +138,115 @@ public class GesuchService {
     private final AusbildungRepository ausbildungRepository;
     private final StipDecisionService stipDecisionService;
     private final StipDecisionTextRepository stipDecisionTextRepository;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
     private final UnterschriftenblattService unterschriftenblattService;
 
     @Transactional
-    public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
-        return gesuchRepository.findByIdOptional(gesuchId)
-            .map(
-                gesuch -> gesuchMapperUtil.mapWithTranche(
-                    gesuch,
-                    gesuch.getGesuchTrancheById(gesuchTrancheId).orElseThrow(NotFoundException::new)
-                )
-            );
+    public GesuchDto getGesuchGS(UUID gesuchId) {
+        // todo: gesuchTrancheToWorkWith not null!
+        final var actualGesuch = gesuchRepository.requireById(gesuchId);
+        // bis eingereicht: aktuelles gesuch
+        if (Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(actualGesuch.getGesuchStatus())) {
+            // eingereichtes gesuch
+            final var gesuchInStatusEingereicht = gesuchHistoryRepository.getStatusHistory(gesuchId)
+                .stream()
+                .filter(gesuch -> gesuch.getGesuchStatus().equals(Gesuchstatus.EINGEREICHT))
+                .findFirst()
+                .orElseThrow();
+            // reset fallId & fallNr, because both may be null
+            resetFallDetails(gesuchInStatusEingereicht, actualGesuch);
+
+            return gesuchMapper.toDto(gesuchInStatusEingereicht);
+        } else {
+            // atkuelles gesuch
+            return gesuchMapper.toDto(actualGesuch);
+        }
+        // eingereicht bis verfügt: eingereichtes gesuch
+        // fehlende dokumente: aktuelles gesuch
+        // ab verfügt: wieder aktuelles gesuch
+    }
+
+    private void resetFallDetails(Gesuch gesuchInStatusEingereicht, Gesuch actualGesuch) {
+        if (Objects.isNull(gesuchInStatusEingereicht.getAusbildung().getFall().getFallNummer())) {
+            gesuchInStatusEingereicht.getAusbildung()
+                .getFall()
+                .setFallNummer(actualGesuch.getAusbildung().getFall().getFallNummer());
+        }
+        if (Objects.isNull(gesuchInStatusEingereicht.getAusbildung().getFall().getId())) {
+            gesuchInStatusEingereicht.getAusbildung().getFall().setId(actualGesuch.getAusbildung().getFall().getId());
+        }
+    }
+
+    @Transactional
+    public GesuchWithChangesDto getGesuchSB(UUID gesuchId) {
+        final var actualGesuch = gesuchRepository.requireById(gesuchId);
+        Optional<GesuchTranche> changes = Optional.empty();
+        if (Gesuchstatus.SACHBEARBEITER_CAN_VIEW_CHANGES.contains(actualGesuch.getGesuchStatus())) {
+            changes = gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId);
+        }
+        // bis eingereicht: changes: empty/null
+        // ab eingereicht bis verfügt: tranche: db, changes: envers changedToEingereicht
+        // ab verfügt: changes: empty/null
+        return gesuchMapperUtil.toWithChangesDto(
+            actualGesuch,
+            actualGesuch.getCurrentGesuchTranche(),
+            changes.orElse(null)
+        );
+    }
+
+    // todo: remove
+    @Transactional
+    public GesuchWithChangesDto findGesuchWithTranche(final UUID gesuchId) {
+        final var actualGesuch = gesuchRepository.requireById(gesuchId);
+        Gesuch gesuchtoWorkWith;
+        GesuchTranche gesuchTrancheToWorkWith;
+        Optional<GesuchTranche> changes;
+
+        /*
+         * When SB makes changes, these should not be visible for the GS -> query envers for actual tranche
+         * * gesuchToWorkWith: envers query (snapshot in state EINGEREICHT)
+         * * gesuchTrancheToWorkWith: envers query (snapshot in state EINGEREICHT)
+         * * changes: empty
+         */
+
+        if (actualGesuch.getGesuchStatus() != Gesuchstatus.VERFUEGT) {
+            // work with data from envers
+            final var gesuchInBearbeitungGS = gesuchHistoryRepository.getStatusHistory(gesuchId)
+                .stream()
+                .filter(g -> g.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_GS))
+                .findFirst()
+                .orElse(null);
+            gesuchtoWorkWith = gesuchHistoryRepository.getStatusHistory(gesuchId)
+                .stream()
+                .filter(g -> g.getGesuchStatus().equals(Gesuchstatus.EINGEREICHT))
+                .findFirst()
+                .orElse(gesuchInBearbeitungGS);
+
+            // if not yet eingereicht, the current values of gesuchtranche are returned
+            gesuchTrancheToWorkWith =
+                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId)
+                    .orElse(actualGesuch.getCurrentGesuchTranche());
+
+            // set fall details, in case that the envers result did not contain it...
+            gesuchtoWorkWith.getAusbildung().setFall(actualGesuch.getAusbildung().getFall());
+
+            // no changes visible
+            changes = Optional.empty();
+        } else {
+            // work with actual data
+            gesuchtoWorkWith = actualGesuch;
+            gesuchTrancheToWorkWith =
+                actualGesuch.getCurrentGesuchTranche();
+
+            // changes are visible
+            changes = gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
+        }
+
+        return gesuchMapperUtil.toWithChangesDto(
+            gesuchtoWorkWith,
+            gesuchTrancheToWorkWith,
+            changes.orElse(null)
+        );
     }
 
     @Transactional
