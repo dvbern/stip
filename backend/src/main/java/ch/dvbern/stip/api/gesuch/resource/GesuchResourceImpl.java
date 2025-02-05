@@ -338,16 +338,6 @@ public class GesuchResourceImpl implements GesuchResource {
             );
     }
 
-    /*
-     *
-     * @RolesAllowed(GESUCH_READ)
-     *
-     * @Override
-     * public GesuchWithChangesDto getGesuch(UUID gesuchId, UUID gesuchTrancheId) {
-     * gesuchAuthorizer.canRead(gesuchId);
-     * return gesuchService.findGesuchWithTranche(gesuchId);
-     * }
-     */
     @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
     @AllowAll
     @Override

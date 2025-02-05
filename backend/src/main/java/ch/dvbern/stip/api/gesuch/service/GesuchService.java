@@ -194,61 +194,6 @@ public class GesuchService {
         );
     }
 
-    // todo: remove
-    @Transactional
-    public GesuchWithChangesDto findGesuchWithTranche(final UUID gesuchId) {
-        final var actualGesuch = gesuchRepository.requireById(gesuchId);
-        Gesuch gesuchtoWorkWith;
-        GesuchTranche gesuchTrancheToWorkWith;
-        Optional<GesuchTranche> changes;
-
-        /*
-         * When SB makes changes, these should not be visible for the GS -> query envers for actual tranche
-         * * gesuchToWorkWith: envers query (snapshot in state EINGEREICHT)
-         * * gesuchTrancheToWorkWith: envers query (snapshot in state EINGEREICHT)
-         * * changes: empty
-         */
-
-        if (actualGesuch.getGesuchStatus() != Gesuchstatus.VERFUEGT) {
-            // work with data from envers
-            final var gesuchInBearbeitungGS = gesuchHistoryRepository.getStatusHistory(gesuchId)
-                .stream()
-                .filter(g -> g.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_GS))
-                .findFirst()
-                .orElse(null);
-            gesuchtoWorkWith = gesuchHistoryRepository.getStatusHistory(gesuchId)
-                .stream()
-                .filter(g -> g.getGesuchStatus().equals(Gesuchstatus.EINGEREICHT))
-                .findFirst()
-                .orElse(gesuchInBearbeitungGS);
-
-            // if not yet eingereicht, the current values of gesuchtranche are returned
-            gesuchTrancheToWorkWith =
-                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId)
-                    .orElse(actualGesuch.getCurrentGesuchTranche());
-
-            // set fall details, in case that the envers result did not contain it...
-            gesuchtoWorkWith.getAusbildung().setFall(actualGesuch.getAusbildung().getFall());
-
-            // no changes visible
-            changes = Optional.empty();
-        } else {
-            // work with actual data
-            gesuchtoWorkWith = actualGesuch;
-            gesuchTrancheToWorkWith =
-                actualGesuch.getCurrentGesuchTranche();
-
-            // changes are visible
-            changes = gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId);
-        }
-
-        return gesuchMapperUtil.toWithChangesDto(
-            gesuchtoWorkWith,
-            gesuchTrancheToWorkWith,
-            changes.orElse(null)
-        );
-    }
-
     @Transactional
     public void setAndValidateEinnahmenkostenUpdateLegality(
         final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
