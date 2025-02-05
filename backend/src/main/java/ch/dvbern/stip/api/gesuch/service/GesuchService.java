@@ -143,11 +143,9 @@ public class GesuchService {
 
     @Transactional
     public GesuchDto getGesuchGS(UUID gesuchId) {
-        // todo: gesuchTrancheToWorkWith not null!
         final var actualGesuch = gesuchRepository.requireById(gesuchId);
-        // bis eingereicht: aktuelles gesuch
         if (Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(actualGesuch.getGesuchStatus())) {
-            // eingereichtes gesuch
+            // eingereichtes gesuch (query envers)
             final var gesuchInStatusEingereicht = gesuchHistoryRepository.getStatusHistory(gesuchId)
                 .stream()
                 .filter(gesuch -> gesuch.getGesuchStatus().equals(Gesuchstatus.EINGEREICHT))
@@ -155,15 +153,11 @@ public class GesuchService {
                 .orElseThrow();
             // reset fallId & fallNr, because both may be null
             resetFallDetails(gesuchInStatusEingereicht, actualGesuch);
-
             return gesuchMapper.toDto(gesuchInStatusEingereicht);
         } else {
             // atkuelles gesuch
             return gesuchMapper.toDto(actualGesuch);
         }
-        // eingereicht bis verfügt: eingereichtes gesuch
-        // fehlende dokumente: aktuelles gesuch
-        // ab verfügt: wieder aktuelles gesuch
     }
 
     private void resetFallDetails(Gesuch gesuchInStatusEingereicht, Gesuch actualGesuch) {
