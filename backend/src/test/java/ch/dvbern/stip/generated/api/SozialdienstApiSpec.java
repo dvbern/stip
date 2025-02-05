@@ -13,7 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
@@ -796,11 +796,11 @@ public class SozialdienstApiSpec {
         }
 
          /**
-         * @param sozialdienstAdminDtoSpec (SozialdienstAdminDtoSpec)  (optional)
+         * @param sozialdienstAdminCreateDtoSpec (SozialdienstAdminCreateDtoSpec)  (optional)
          * @return operation
          */
-        public ReplaceSozialdienstAdminOper body(SozialdienstAdminDtoSpec sozialdienstAdminDtoSpec) {
-            reqSpec.setBody(sozialdienstAdminDtoSpec);
+        public ReplaceSozialdienstAdminOper body(SozialdienstAdminCreateDtoSpec sozialdienstAdminCreateDtoSpec) {
+            reqSpec.setBody(sozialdienstAdminCreateDtoSpec);
             return this;
         }
 

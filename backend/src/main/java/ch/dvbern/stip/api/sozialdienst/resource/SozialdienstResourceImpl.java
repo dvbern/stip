@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
@@ -90,9 +90,9 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @Override
     public SozialdienstBenutzerDto replaceSozialdienstAdmin(
         UUID sozialdienstId,
-        SozialdienstAdminDto sozialdienstAdminDto
+        SozialdienstAdminCreateDto sozialdienstAdminCreateDto
     ) {
-        return sozialdienstService.replaceSozialdienstAdmin(sozialdienstId, sozialdienstAdminDto);
+        return sozialdienstService.replaceSozialdienstAdmin(sozialdienstId, sozialdienstAdminCreateDto);
     }
 
     @AllowAll

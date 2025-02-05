@@ -20,13 +20,13 @@ package ch.dvbern.stip.api.generator.api.model.sozialdienst;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDtoSpec;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class SozialdienstAdminCreateDtoSpecModel {
-    public SozialdienstAdminDtoSpec sozialdienstAdminCreateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(SozialdienstAdminDtoSpec::new, model -> {
+    public SozialdienstAdminCreateDtoSpec sozialdienstAdminCreateDtoSpec() {
+        return TestUtil.createUpdateDtoSpec(SozialdienstAdminCreateDtoSpec::new, model -> {
             model.setKeycloakId(UUID.randomUUID().toString());
             model.setNachname("Muster");
             model.setVorname("Max");

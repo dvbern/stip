@@ -1288,7 +1288,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SozialdienstAdmin'
+              $ref: '#/components/schemas/SozialdienstAdminCreate'
       responses:
         200:
           content:
@@ -4869,7 +4869,7 @@ components:
           type: string
         nachname:
           type: string
-    SozialdienstAdmin:
+    SozialdienstAdminCreate:
       required:
         - keycloakId
         - vorname
@@ -4884,10 +4884,24 @@ components:
           type: string
         email:
           type: string
-    # SozialdienstAdmin:
-    #   type: object
-    #   allOf:
-    #     - $ref: '#/components/schemas/SozialdienstAdmin'
+    SozialdienstAdmin:
+      required:
+        - id
+        - keycloakId
+        - vorname
+        - nachname
+        - email
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        keycloakId:
+          type: string
+        vorname:
+          type: string
+        nachname:
+          type: string
+        email:
+          type: string
     SozialdienstAdminUpdate:
       required:
         - vorname
@@ -4911,7 +4925,7 @@ components:
         adresse:
           $ref: '#/components/schemas/Adresse'
         sozialdienstAdmin:
-          $ref: '#/components/schemas/SozialdienstAdmin'
+          $ref: '#/components/schemas/SozialdienstAdminCreate'
     SozialdienstUpdate:
       required:
         - id
@@ -4954,7 +4968,7 @@ components:
             iban:
               type: string
             sozialdienstAdmin:
-              $ref: '#/components/schemas/SozialdienstBenutzer'
+              $ref: '#/components/schemas/SozialdienstAdmin'
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
