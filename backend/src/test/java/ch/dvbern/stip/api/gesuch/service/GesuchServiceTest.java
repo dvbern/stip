@@ -40,6 +40,7 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -52,6 +53,7 @@ import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -144,6 +146,9 @@ class GesuchServiceTest {
     GesuchRepository gesuchRepository;
 
     @InjectMock
+    GesuchHistoryRepository gesuchHistoryRepository;
+
+    @InjectMock
     UnterschriftenblattService unterschriftenblattService;
 
     @Inject
@@ -174,6 +179,8 @@ class GesuchServiceTest {
     static final String TENANT_ID = "bern";
     @Inject
     NotificationResource notificationResource;
+    @Inject
+    GesuchDokumentService gesuchDokumentService;
 
     @BeforeAll
     static void setup() {
@@ -1451,6 +1458,69 @@ class GesuchServiceTest {
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.FEHLENDE_DOKUMENTE));
         gesuchService.gesuchFehlendeDokumenteEinreichen(gesuch.getGesuchTranchen().get(0).getId());
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    @Description("getGesuchGS should contain possible changes / current Gesuch when in status FEHLENDE_DOKUMENTE")
+    void getGesuchGSShouldReturnActualGesuchWhenInStatusFehlendeDokumente() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.FEHLENDE_DOKUMENTE);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB)
+            )
+        );
+
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getId());
+        // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
+        assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    @Description("getGesuchGS should contain possible changes / current Gesuch when in status VERFUEGT")
+    void getGesuchGSShouldReturnActualGesuchWhenInStatusVerfuegt() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.FEHLENDE_DOKUMENTE),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB)
+            )
+        );
+
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getId());
+        // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
+        assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {

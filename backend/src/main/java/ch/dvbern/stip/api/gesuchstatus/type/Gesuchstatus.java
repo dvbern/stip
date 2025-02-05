@@ -59,6 +59,9 @@ public enum Gesuchstatus {
             )
         );
 
+    /*
+     * Alle Gesuchstatus zwischen eingereicht bis verfügt
+     */
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_VIEW_CHANGES =
         Collections.unmodifiableSet(
             EnumSet.of(

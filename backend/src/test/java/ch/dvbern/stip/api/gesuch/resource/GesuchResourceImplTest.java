@@ -49,6 +49,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -85,6 +86,21 @@ class GesuchResourceImplTest {
     @Order(2)
     void fillGesuch() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(3)
+    void checkSBReceivesEmptyChanges() {
+        gesuchWithChanges = gesuchApiSpec.getGesuchSB()
+            .gesuchIdPath(gesuch.getId())
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(ResponseBody::prettyPeek)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        assertThat(gesuchWithChanges.getChanges().size(), is(0));
     }
 
     @Test
@@ -164,6 +180,7 @@ class GesuchResourceImplTest {
             gesuchWithChanges.getChanges().get(0).getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
             is(ekBeforeUpdate.getWohnkosten())
         );
+        assertThat(gesuchWithChanges.getChanges().size(), is(greaterThan(0)));
     }
     /*
      * Gesuch is in state IN_BEARBEITUNG_SB.
