@@ -228,7 +228,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
-     * return GesuchDtoSpec
+     * return GesuchWithChangesDtoSpec
      */
     public static class BearbeitungAbschliessenOper implements Oper {
 
@@ -258,10 +258,10 @@ public class GesuchApiSpec {
         /**
          * PATCH /gesuch/{gesuchTrancheId}/bearbeitungAbschliessen
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchWithChangesDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -385,7 +385,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
-     * return GesuchDtoSpec
+     * return GesuchWithChangesDtoSpec
      */
     public static class ChangeGesuchStatusToInBearbeitungOper implements Oper {
 
@@ -415,10 +415,10 @@ public class GesuchApiSpec {
         /**
          * POST /gesuch/status/in-bearbeitung/{gesuchTrancheId}
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchWithChangesDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -1115,7 +1115,7 @@ public class GesuchApiSpec {
      *
      * @see #gesuchTrancheIdPath  (required)
      * @see #body  (optional)
-     * return GesuchDtoSpec
+     * return GesuchWithChangesDtoSpec
      */
     public static class GesuchZurueckweisenOper implements Oper {
 
@@ -1146,10 +1146,10 @@ public class GesuchApiSpec {
         /**
          * PATCH /gesuch/{gesuchTrancheId}/gesuchZurueckweisen
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchWithChangesDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
             return execute(handler).as(type);
         }
 

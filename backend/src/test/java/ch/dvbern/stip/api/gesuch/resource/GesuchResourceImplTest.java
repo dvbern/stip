@@ -119,7 +119,7 @@ class GesuchResourceImplTest {
     @TestAsSachbearbeiter
     @Order(5)
     void setStatusInBearbeitungSb() {
-        gesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+        gesuchWithChanges = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -127,7 +127,7 @@ class GesuchResourceImplTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDtoSpec.class);
+            .as(GesuchWithChangesDtoSpec.class);
     }
 
     // make some changes to Gesuch
@@ -135,18 +135,20 @@ class GesuchResourceImplTest {
     @TestAsSachbearbeiter
     @Order(6)
     void updateGesuch() {
-        gesuchId = gesuch.getId();
-        trancheId = gesuch.getGesuchTrancheToWorkWith().getId();
-        ekBeforeUpdate = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
+        gesuchId = gesuchWithChanges.getId();
+        trancheId = gesuchWithChanges.getGesuchTrancheToWorkWith().getId();
+        ekBeforeUpdate = gesuchWithChanges.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
         var piaUpdate = GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung()
             .getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getPersonInAusbildung();
         piaUpdate
-            .setAdresse(gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse());
+            .setAdresse(
+                gesuchWithChanges.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse()
+            );
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(piaUpdate);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuchWithChanges.getGesuchTrancheToWorkWith().getId());
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()

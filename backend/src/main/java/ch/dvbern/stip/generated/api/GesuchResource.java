@@ -37,7 +37,7 @@ public interface GesuchResource {
     @PATCH
     @Path("/{gesuchTrancheId}/bearbeitungAbschliessen")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto bearbeitungAbschliessen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchWithChangesDto bearbeitungAbschliessen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
     @Path("/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
@@ -48,7 +48,7 @@ public interface GesuchResource {
     @POST
     @Path("/status/in-bearbeitung/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchWithChangesDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
     @Path("/status/negative-verfuegung/{gesuchTrancheId}")
@@ -100,7 +100,7 @@ public interface GesuchResource {
     @Path("/{gesuchTrancheId}/gesuchZurueckweisen")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto gesuchZurueckweisen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
+    GesuchWithChangesDto gesuchZurueckweisen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @GET
     @Path("/{gesuchId}/berechnung")

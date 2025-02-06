@@ -155,7 +155,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1968,7 +1968,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Bearbeitung des Gesuch Abschliessen
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -2000,7 +2000,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Gesuch zurueckweisen and GS
         '400':
           $ref: '#/components/responses/BadRequest'
