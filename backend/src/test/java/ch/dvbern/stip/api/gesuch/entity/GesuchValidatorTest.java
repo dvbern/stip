@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -672,6 +673,7 @@ class GesuchValidatorTest {
     private Gesuch prepareDummyGesuch() {
         Gesuch gesuch = new Gesuch();
         GesuchTranche gesuchTranche = new GesuchTranche().setGesuchFormular(new GesuchFormular());
+        gesuchTranche.setId(UUID.randomUUID());
         gesuch.getGesuchTranchen().add(gesuchTranche);
         gesuch.setAusbildung(new Ausbildung().setFall(new Fall()));
         gesuch.setGesuchsperiode(new Gesuchsperiode());

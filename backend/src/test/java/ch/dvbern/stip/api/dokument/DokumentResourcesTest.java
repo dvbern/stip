@@ -373,18 +373,35 @@ class DokumentResourcesTest {
             .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
+    @Test
+    @TestAsAdmin
+    @Order(14)
+    void delete_gesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
+    }
+
     // for the next tests, gesuch
     // should be in state IN_BEARBEITUNG_SB
+
     @Test
     @TestAsGesuchsteller
-    @Order(14)
+    @Order(15)
+    void reset() {
+        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        gesuchId = gesuch.getId();
+        gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(16)
     void fillGesuch() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(15)
+    @Order(17)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -396,7 +413,7 @@ class DokumentResourcesTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(16)
+    @Order(18)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -416,8 +433,11 @@ class DokumentResourcesTest {
     // b: no files -> ok
     @Test
     @TestAsSachbearbeiter
-    @Order(17)
+    @Order(19)
     void test_delete_required_custom_gesuchdokument_should_success() {
+        // first, prepare a new custom gesuch dokument type
+        test_create_custom_gesuchdokument();
+
         dokumentApiSpec.deleteCustomDokumentTyp()
             .gesuchIdPath(gesuchId)
             .customDokumentTypIdPath(customDokumentId)
@@ -443,7 +463,7 @@ class DokumentResourcesTest {
     // upload
     @Test
     @TestAsGesuchsteller
-    @Order(18)
+    @Order(20)
     void test_get_required_custom_gesuchdokuments_should_be_empty() {
         final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
             .gesuchTrancheIdPath(gesuchTrancheId)
