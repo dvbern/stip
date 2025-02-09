@@ -54,7 +54,6 @@ export class CustomDokumenteComponent {
     gesuchId: string | undefined;
     allowTypes: string | undefined;
     dokuments: GesuchDokument[];
-    singleUpload?: boolean;
     permissions: PermissionMap;
     isSachbearbeitungApp: boolean;
     requiredDocumentTypes: CustomDokumentTyp[];
@@ -86,8 +85,6 @@ export class CustomDokumenteComponent {
       allowTypes,
       permissions,
       dokuments,
-      readonly,
-      singleUpload,
       requiredDocumentTypes,
     } = this.dokumenteViewSig();
 
@@ -110,9 +107,7 @@ export class CustomDokumenteComponent {
           allowTypes,
           gesuchDokument,
           permissions,
-          readonly,
           initialDocuments: gesuchDokument.dokumente,
-          singleUpload,
         }),
       } satisfies SharedModelTableCustomDokument;
     });
@@ -126,8 +121,6 @@ export class CustomDokumenteComponent {
           allowTypes,
           dokumentTyp,
           permissions,
-          readonly,
-          singleUpload,
         }),
       })),
     ];

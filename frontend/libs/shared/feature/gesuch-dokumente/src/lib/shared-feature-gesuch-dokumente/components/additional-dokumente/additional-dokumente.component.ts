@@ -39,7 +39,6 @@ export class AdditionalDokumenteComponent {
     trancheId: string | undefined;
     allowTypes: string | undefined;
     unterschriftenblaetter: UnterschriftenblattDokument[];
-    singleUpload?: boolean;
     permissions: PermissionMap;
     readonly: boolean;
     requiredDocumentTypes: UnterschriftenblattDokumentTyp[];
@@ -54,8 +53,6 @@ export class AdditionalDokumenteComponent {
       unterschriftenblaetter,
       allowTypes,
       permissions,
-      readonly,
-      singleUpload,
       requiredDocumentTypes,
     } = this.dokumenteViewSig();
 
@@ -75,9 +72,7 @@ export class AdditionalDokumenteComponent {
             allowTypes,
             gesuchDokument,
             permissions,
-            readonly,
             initialDocuments: gesuchDokument?.dokumente,
-            singleUpload,
           }),
         }) satisfies SharedModelTableAdditionalDokument,
     );
@@ -91,8 +86,6 @@ export class AdditionalDokumenteComponent {
           allowTypes,
           dokumentTyp,
           permissions,
-          readonly,
-          singleUpload,
         }),
       })),
     ];
