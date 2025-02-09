@@ -137,7 +137,6 @@ export class DokumentsStore extends signalStore(
         ?.some((dokument) => dokument.status === Dokumentstatus.ABGELEHNT) ??
       false;
 
-    // hier koennte man auch einen weiteren status verwenden
     const newCustomDokumentTypes =
       this.dokuments
         .data()
@@ -235,43 +234,42 @@ export class DokumentsStore extends signalStore(
     gesuchTrancheId: string;
     gesuchDokumentId: string;
     kommentar: string;
-    afterSuccess?: () => void;
+    onSuccess?: () => void;
   }>(
     pipe(
-      switchMap(
-        ({ gesuchTrancheId, gesuchDokumentId, kommentar, afterSuccess }) =>
-          this.dokumentService
-            .gesuchDokumentAblehnen$({
-              gesuchDokumentId,
-              gesuchDokumentAblehnenRequest: {
-                kommentar: {
-                  kommentar,
-                  gesuchDokumentId,
-                  gesuchTrancheId,
-                },
+      switchMap(({ gesuchTrancheId, gesuchDokumentId, kommentar, onSuccess }) =>
+        this.dokumentService
+          .gesuchDokumentAblehnen$({
+            gesuchDokumentId,
+            gesuchDokumentAblehnenRequest: {
+              kommentar: {
+                kommentar,
+                gesuchDokumentId,
+                gesuchTrancheId,
               },
-            })
-            .pipe(
-              tapResponse({
-                next: () => {
-                  this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'shared.dokumente.reject.success',
-                  });
-                  afterSuccess?.();
-                },
-                error: () => undefined,
-              }),
-            ),
+            },
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.reject.success',
+                });
+                onSuccess?.();
+              },
+              error: () => undefined,
+            }),
+          ),
       ),
     ),
   );
 
   gesuchDokumentAkzeptieren$ = rxMethod<{
     gesuchDokumentId: string;
-    afterSuccess?: () => void;
+    onSuccess?: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchDokumentId, afterSuccess }) =>
+      switchMap(({ gesuchDokumentId, onSuccess }) =>
         this.dokumentService
           .gesuchDokumentAkzeptieren$({
             gesuchDokumentId,
@@ -282,7 +280,7 @@ export class DokumentsStore extends signalStore(
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey: 'shared.dokumente.accept.success',
                 });
-                afterSuccess?.();
+                onSuccess?.();
               },
               error: () => undefined,
             }),

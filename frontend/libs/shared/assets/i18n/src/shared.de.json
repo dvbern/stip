@@ -163,6 +163,8 @@
   "shared.dokumente.createCustomDokumentTyp.dialog.kommentar.placeholder": "Beschreibung für das Dokuments eingeben...",
   "shared.dokumente.createCustomDokumentTyp.dialog.create": "Erstellen",
   "shared.dokumente.createCustomDokumentTyp.success": "Generisches Dokument erstellt",
+  "shared.dokumente.deleteCustomDokumentTyp.title": "Generisches Dokument löschen",
+  "shared.dokumente.deleteCustomDokumentTyp.message": "Sind Sie sicher, dass Sie dieses generische Dokument löschen möchten?",
   "shared.dokumente.deleteCustomDokumentTyp.success": "Generisches Dokument gelöscht",
   "shared.dokumente.setToAdditionalDokumenteErhalten": "Unterschriftenblatt erhalten",
 

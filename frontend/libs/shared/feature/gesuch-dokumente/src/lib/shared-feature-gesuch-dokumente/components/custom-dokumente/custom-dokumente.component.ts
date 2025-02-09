@@ -7,6 +7,7 @@ import {
   output,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedModelTableCustomDokument } from '@dv/shared/model/dokument';
@@ -42,6 +43,7 @@ import { RemoteData } from '@dv/shared/util/remote-data';
     SharedUiIconBadgeComponent,
     SharedUiRdIsPendingPipe,
     SharedUiPrefixAppTypePipe,
+    MatTooltipModule,
   ],
   templateUrl: './custom-dokumente.component.html',
   styleUrl: './custom-dokumente.component.scss',

@@ -24,12 +24,6 @@ import { DocumentUploadApprovalComponent } from '../document-upload-approval/doc
 import { SharedPatternDocumentUploadListComponent } from '../document-upload-list/document-upload-list.component';
 import { UploadStore } from '../upload.store';
 
-// export function isStandartDokument(
-//   dokument: SharedModelGesuchDokument,
-// ): dokument is SharedModelStandardGesuchDokument {
-//   return dokument.art === 'GESUCH_DOKUMENT';
-// }
-
 @Component({
   selector: 'dv-shared-pattern-document-upload-dialog',
   standalone: true,

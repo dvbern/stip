@@ -163,6 +163,8 @@
   "shared.dokumente.createCustomDokumentTyp.dialog.kommentar.placeholder": "Entrez une description pour le document...",
   "shared.dokumente.createCustomDokumentTyp.dialog.create": "Créer",
   "shared.dokumente.createCustomDokumentTyp.success": "Document générique créé",
+  "shared.dokumente.deleteCustomDokumentTyp.title": "Supprimer un document générique",
+  "shared.dokumente.deleteCustomDokumentTyp.message": "Êtes-vous sûr de vouloir supprimer ce document générique?",
   "shared.dokumente.deleteCustomDokumentTyp.success": "Document générique supprimé",
   "shared.dokumente.setToAdditionalDokumenteErhalten": "Feuille de signatures reçue",
 
