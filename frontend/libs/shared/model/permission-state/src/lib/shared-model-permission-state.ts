@@ -69,7 +69,7 @@ export const permissionTableByAppType = {
   IN_BEARBEITUNG_GS /**                */: { [gs]: 'W DF ', [sb]: '    U' },
   EINGEREICHT /**                      */: { [gs]: '     ', [sb]: ' V  U' },
   BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: '     ', [sb]: ' V  U' },
-  IN_BEARBEITUNG_SB /**                */: { [gs]: '  D  ', [sb]: 'WVD U' },
+  IN_BEARBEITUNG_SB /**                */: { [gs]: '     ', [sb]: 'WV  U' },
   IN_FREIGABE /**                      */: { [gs]: '     ', [sb]: ' V  U' },
   ABKLAERUNG_DURCH_RECHSTABTEILUNG /** */: { [gs]: '     ', [sb]: 'WV  U' },
   ANSPRUCH_MANUELL_PRUEFEN /**         */: { [gs]: '     ', [sb]: ' V  U' },

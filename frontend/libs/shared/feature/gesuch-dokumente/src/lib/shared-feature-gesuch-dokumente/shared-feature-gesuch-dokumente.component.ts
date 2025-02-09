@@ -91,6 +91,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       requiredDocumentTypes,
     };
   });
+
   standardDokumenteViewSig = computed(() => {
     const {
       allowTypes,
@@ -156,7 +157,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   // inform the GS that documents are missing (or declined)
   // if true, the button is shown
-  canSendMissingDocumentsSig = computed(() => {
+  canSBSendMissingDocumentsSig = computed(() => {
     const hasDokumenteToUebermitteln =
       this.dokumentsStore.hasDokumenteToUebermittelnSig();
 
@@ -251,16 +252,6 @@ export class SharedFeatureGesuchDokumenteComponent {
           });
         }
       });
-  }
-
-  getAllCustomDokumentTypes() {
-    const trancheId = this.gesuchViewSig().trancheId;
-
-    if (!trancheId) return;
-
-    this.dokumentsStore.getAllCustomDokumentTypes$({
-      gesuchTrancheId: trancheId,
-    });
   }
 
   getGesuchDokumentKommentare(

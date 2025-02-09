@@ -37,7 +37,7 @@
       </th>
       <td mat-cell class="tw-min-w-40" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-py-3">
-          {{ dokument.dokumentOptions.titleKey }}
+          {{ dokument.dokumentTyp.type }}
         </div>
       </td>
     </ng-container>
@@ -105,9 +105,18 @@
                   </dv-shared-ui-icon-badge>
                 }
                 @case ('AUSSTEHEND') {
-                  <dv-shared-ui-icon-badge [type]="view.isSachbearbeitungApp ? 'warning' : 'info'" class="tw-min-w-32">
-                    {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
-                  </dv-shared-ui-icon-badge>
+                  @if (dokument?.gesuchDokument?.dokumente?.length) {
+                    <dv-shared-ui-icon-badge
+                      [type]="view.isSachbearbeitungApp ? 'warning' : 'info'"
+                      class="tw-min-w-32"
+                    >
+                      {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
+                    </dv-shared-ui-icon-badge>
+                  } @else {
+                    <dv-shared-ui-icon-badge type="warning" class="tw-min-w-32">
+                      {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
+                    </dv-shared-ui-icon-badge>
+                  }
                 }
                 @case ('ABGELEHNT') {
                   <dv-shared-ui-icon-badge type="danger" class="tw-min-w-32">
