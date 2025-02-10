@@ -17,14 +17,21 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
@@ -40,25 +47,68 @@ public class DocumentsRequiredConstraintValidator
     @Inject
     Instance<RequiredDocumentsProducer> producers;
 
+    @Inject
+    Instance<RequiredCustomDocumentsProducer> customProducers;
+
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
         final var requiredDocs = producers.stream().map(x -> x.getRequiredDocuments(formular)).toList();
         final var dokumenteOfType = getRequiredDokumentTypes(formular);
 
-        final var filtered = requiredDocs.stream()
+        var filtered = requiredDocs.stream()
             .filter(x -> x.getRight().stream().anyMatch(y -> !dokumenteOfType.contains(y)))
             .map(Pair::getLeft)
             .toList();
+        Set<String> allFiltered = new HashSet<>(filtered);
 
-        if (!filtered.isEmpty()) {
+        final var customFiltered = getMissingCustomDocumentTypesByType(formular.getTranche());
+        allFiltered.addAll(customFiltered);
+
+        if (!allFiltered.isEmpty()) {
             return GesuchValidatorUtil.addProperties(
                 context,
                 VALIDATION_DOCUMENTS_REQUIRED_MESSAGE,
-                filtered
+                allFiltered
             );
         }
 
         return true;
+    }
+
+    private List<String> getMissingCustomDocumentTypesByType(GesuchTranche tranche) {
+        List<String> result = new ArrayList<>();
+        final var required = getRequiredCustomDokumentTypes(tranche);
+        final var existingByCustomDokumentTypId =
+            getExistingGesuchDokumentsOfCustomDokumentType(tranche.getGesuchFormular()).stream()
+                .map(x -> x.getId())
+                .toList();
+
+        required.forEach(req -> {
+            if (!existingByCustomDokumentTypId.contains(req.getId())) {
+                result.add(req.getType());
+            }
+        });
+        return result;
+    }
+
+    private List<CustomDokumentTyp> getRequiredCustomDokumentTypes(GesuchTranche tranche) {
+        ArrayList<CustomDokumentTyp> customDokumentTypes = new ArrayList<>();
+        customProducers.stream()
+            .map(producer -> producer.getRequiredDocuments(tranche))
+            .forEach(x -> customDokumentTypes.addAll(x.getValue()));
+        return customDokumentTypes;
+    }
+
+    private List<CustomDokumentTyp> getExistingGesuchDokumentsOfCustomDokumentType(GesuchFormular formular) {
+        return formular.getTranche()
+            .getGesuchDokuments()
+            .stream()
+            .filter(
+                gesuchDokument -> Objects.nonNull(gesuchDokument.getCustomDokumentTyp())
+                && !gesuchDokument.getDokumente().isEmpty()
+            )
+            .map(GesuchDokument::getCustomDokumentTyp)
+            .toList();
     }
 
     private Set<DokumentTyp> getRequiredDokumentTypes(GesuchFormular formular) {
