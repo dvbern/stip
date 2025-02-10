@@ -139,8 +139,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @AllowAll
     @Blocking
-    public void deleteCustomDokumentTyp(UUID gesuchId, UUID customDokumentTypId) {
-        customGesuchDokumentTypAuthorizer.canDeleteTyp(gesuchId, customDokumentTypId);
+    public void deleteCustomDokumentTyp(UUID gesuchTrancheId, UUID customDokumentTypId) {
+        customGesuchDokumentTypAuthorizer.canDeleteTyp(gesuchTrancheId, customDokumentTypId);
         customDokumentTypService.deleteCustomDokumentTyp(customDokumentTypId);
     }
 

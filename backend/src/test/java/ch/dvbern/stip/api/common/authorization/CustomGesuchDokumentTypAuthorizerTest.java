@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -48,6 +49,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
     private CustomGesuchDokumentTypAuthorizer authorizer;
     private GesuchRepository gesuchRepository;
     private DokumentRepository dokumentRepository;
+    private GesuchDokumentRepository gesuchDokumentRepository;
     private GesuchTrancheRepository gesuchTrancheRepository;
     private BenutzerService benutzerService;
     private Benutzer currentBenutzer;
@@ -63,10 +65,18 @@ class CustomGesuchDokumentTypAuthorizerTest {
         benutzerService = Mockito.mock(BenutzerService.class);
         currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         currentBenutzer.setId(currentBenutzerId);
+        gesuchDokumentRepository = Mockito.mock(GesuchDokumentRepository.class);
+        gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         authorizer = new CustomGesuchDokumentTypAuthorizer(
-            dokumentRepository, gesuchRepository, gesuchTrancheRepository, benutzerService
+            dokumentRepository, gesuchDokumentRepository, gesuchRepository, gesuchTrancheRepository, benutzerService
         );
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        var gesuchDok = new GesuchDokument();
+        gesuchDok.setDokumente(List.of());
+        when(gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(any(), any()))
+            .thenReturn(Optional.of(gesuchDok));
         when(benutzerService.getCurrentBenutzer()).thenReturn(currentBenutzer);
     }
 

@@ -613,9 +613,9 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createCustomDokumentTyp
-  '/gesuchDokument/customGesuchDokument/{gesuchId}/{customDokumentTypId}':
+  '/gesuchDokument/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}':
     parameters:
-      - name: gesuchId
+      - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path

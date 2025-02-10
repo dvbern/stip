@@ -499,13 +499,13 @@ public class DokumentApiSpec {
      * delete a customDokumentTyp
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #gesuchTrancheIdPath  (required)
      * @see #customDokumentTypIdPath  (required)
      */
     public static class DeleteCustomDokumentTypOper implements Oper {
 
         public static final Method REQ_METHOD = DELETE;
-        public static final String REQ_URI = "/gesuchDokument/customGesuchDokument/{gesuchId}/{customDokumentTypId}";
+        public static final String REQ_URI = "/gesuchDokument/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -517,7 +517,7 @@ public class DokumentApiSpec {
         }
 
         /**
-         * DELETE /gesuchDokument/customGesuchDokument/{gesuchId}/{customDokumentTypId}
+         * DELETE /gesuchDokument/customGesuchDokument/{gesuchTrancheId}/{customDokumentTypId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -527,14 +527,14 @@ public class DokumentApiSpec {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public DeleteCustomDokumentTypOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public DeleteCustomDokumentTypOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
 
