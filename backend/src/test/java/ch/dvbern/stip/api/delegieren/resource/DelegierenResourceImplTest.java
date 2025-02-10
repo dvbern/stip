@@ -20,6 +20,8 @@ package ch.dvbern.stip.api.delegieren.resource;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
+import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstAdminCreateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstCreateDtoSpecModel;
@@ -38,6 +40,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +65,9 @@ class DelegierenResourceImplTest {
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final DelegierenApiSpec delegierenApiSpec = DelegierenApiSpec.delegieren(RequestSpecUtil.quarkusSpec());
+
+    private final FallRepository fallRepository;
+    private final DelegierungRepository delegierungRepository;
 
     private SozialdienstDtoSpec sozialdienst;
     private GesuchDtoSpec gesuch;
@@ -117,7 +123,13 @@ class DelegierenResourceImplTest {
     @Test
     @Order(99)
     @TestAsAdmin
+    @Transactional
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
+        final var dbFall = fallRepository.requireById(fall.getId());
+        final var dbDelegierung = dbFall.getDelegierung();
+        dbFall.setDelegierung(null);
+
+        delegierungRepository.delete(dbDelegierung);
     }
 }
