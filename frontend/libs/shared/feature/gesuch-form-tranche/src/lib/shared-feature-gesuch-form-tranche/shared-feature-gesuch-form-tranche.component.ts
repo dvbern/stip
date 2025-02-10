@@ -27,6 +27,8 @@ import {
   GesuchAenderungStore,
 } from '@dv/shared/data-access/gesuch-aenderung';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/einreichedatum-aendern';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
@@ -71,6 +73,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private dialog = inject(MatDialog);
   private translate = inject(TranslateService);
   private formBuilder = inject(NonNullableFormBuilder);
+  private isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
   private defaultCommentSig = toSignal(
     this.translate.stream('shared.form.tranche.bemerkung.initialgesuch'),
   );
@@ -115,12 +118,30 @@ export class SharedFeatureGesuchFormTrancheComponent {
     return index >= 0 ? index + 1 : '…';
   });
 
+  currentGesuchSig = computed(
+    () => {
+      const { gesuch } = this.viewSig();
+      return { status: gesuch?.gesuchStatus, gesuchId: gesuch?.id };
+    },
+    { equal: (a, b) => a.status === b.status && a.gesuchId === b.gesuchId },
+  );
+
   constructor() {
     getLatestGesuchIdFromGesuch$(this.viewSig)
       .pipe(takeUntilDestroyed())
       .subscribe((gesuchId) => {
         this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
       });
+
+    effect(
+      () => {
+        const { gesuchId } = this.currentGesuchSig();
+        if (gesuchId && this.isSbApp) {
+          this.einreichenStore.checkEinreichedatumAendern$({ gesuchId });
+        }
+      },
+      { allowSignalWrites: true },
+    );
 
     effect(
       () => {
@@ -187,6 +208,26 @@ export class SharedFeatureGesuchFormTrancheComponent {
         this.einreichenStore.validateEinreichen$({
           gesuchTrancheId,
         });
+      });
+  }
+
+  changeEinreichedatum(
+    gesuchId: string,
+    einreichedatum: string,
+    minDate: string,
+  ) {
+    SharedDialogEinreichedatumAendernComponent.open(this.dialog, {
+      einreichedatum,
+      minDate,
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.einreichenStore.einreichedatumManuellAendern$({
+            gesuchId,
+            change: result,
+          });
+        }
       });
   }
 

@@ -123,6 +123,8 @@
   "shared.dialog.gesuch-aenderung.ABGELEHNT.success": "Le changement a été rejeté avec succès",
   "shared.dialog.gesuch-aenderung.MANUELLE_AENDERUNG.success": "Les ajustements du changement doivent maintenant être effectués manuellement",
   "shared.dialog.gesuch.tranche.create.success": "La tranche a été créée avec succès",
+  "shared.dialog.einreichedatum-aendern.title": "Changer la date de soumission",
+  "shared.dialog.einreichedatum-aendern.einreichedatum.label": "Nouvelle date de soumission",
   "shared.dokumente.title": "Documents",
   "shared.dokumente.reject.title": "Rejeter un document",
   "shared.dokumente.reject.message": "Pour rejeter un document, vous devez fournir une raison.",

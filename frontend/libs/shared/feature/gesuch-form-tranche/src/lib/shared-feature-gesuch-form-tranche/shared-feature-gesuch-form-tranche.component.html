@@ -1,4 +1,6 @@
-@let tranche = viewSig().tranche;
+@let view = viewSig();
+@let tranche = view.tranche;
+@let gesuchId = view.gesuchId;
 
 <ng-template dvHeaderSuffix>
   <h2 class="tw-font-bold">
@@ -14,8 +16,8 @@
   <!-- Status -->
   <mat-form-field dvSharedUiFormField>
     <mat-label>
-      @if (viewSig().isEditingAenderung) {
-        {{ 'shared.form.tranche.status.label.' + viewSig().tranche?.typ | translate }}
+      @if (view.isEditingAenderung) {
+        {{ 'shared.form.tranche.status.label.' + tranche?.typ | translate }}
       } @else {
         {{ 'shared.form.tranche.status.label.GESUCH' | translate }}
       }
@@ -46,10 +48,24 @@
   </mat-form-field>
 
   <!-- Einreichedatum -->
-  <mat-form-field dvSharedUiFormField>
-    <mat-label>{{ 'shared.form.tranche.einreichedatum.label' | translate }}</mat-label>
-    <input readonly type="text" matInput formControlName="einreichedatum" data-testid="form-tranche-einreichedatum" />
-  </mat-form-field>
+  <div class="tw-flex tw-gap-2">
+    <mat-form-field dvSharedUiFormField class="tw-grow">
+      <mat-label>{{ 'shared.form.tranche.einreichedatum.label' | translate }}</mat-label>
+      <input readonly type="text" matInput formControlName="einreichedatum" data-testid="form-tranche-einreichedatum" />
+    </mat-form-field>
+    @let einreichedatum = view.gesuch?.einreichedatum;
+    @let minDate = view.gesuch?.gesuchTrancheToWorkWith?.gueltigAb;
+    @let canAendern = einreichenStore.einreichedatumAendernStatus().data?.canAendern;
+    @if (gesuchId && einreichedatum && minDate && canAendern) {
+      <button
+        type="button"
+        class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"
+        (click)="changeEinreichedatum(gesuchId, einreichedatum, minDate)"
+      >
+        <i class="material-symbols-rounded tw-text-3xl/none">calendar_month</i>
+      </button>
+    }
+  </div>
 
   <!-- Gesuchsperiode -->
   <mat-form-field dvSharedUiFormField class="tw-col-start-1">
@@ -101,7 +117,6 @@
 
 <ng-container *dvIfSachbearbeiter>
   <div class="tw-mt-8">
-    @let gesuchId = viewSig().gesuchId;
     @let abschlussPhase = einreichenStore.einreichenViewSig().abschlussPhase;
     @let specialValidationErrors = einreichenStore.einreichenViewSig().specialValidationErrors;
     @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
@@ -147,9 +162,7 @@
                   <span class="text-danger material-symbols-rounded">error</span>
                   <div class="ms-3">
                     <span [innerHTML]="error.validationErrorKey | translate"></span>
-                    &nbsp;<a [routerLink]="['/gesuch', error.step.route, viewSig().gesuchId]">{{
-                      error.linkKey | translate
-                    }}</a>
+                    &nbsp;<a [routerLink]="['/gesuch', error.step.route, gesuchId]">{{ error.linkKey | translate }}</a>
                   </div>
                 </div>
               }
