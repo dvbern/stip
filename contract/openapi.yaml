@@ -468,6 +468,23 @@ paths:
   '/gesuch/{gesuchId}/einreichedatum':
     parameters:
       - $ref: '#/components/parameters/gesuchId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EinreichedatumStatus'
+          description: Aendert das Einreichedatum des Gesuch manuell
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: canEinreichedatumAendern
     patch:
       requestBody:
         content:
@@ -5576,6 +5593,13 @@ components:
           type: string
         text:
           type: string
+    EinreichedatumStatus:
+      type: object
+      required:
+        - canAendern
+      properties:
+        canAendern:
+          type: boolean
   responses:
     Unauthorized:
       content:
