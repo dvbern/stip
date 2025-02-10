@@ -126,14 +126,7 @@ export const getGesuchPermissions = (
 
   // The gesuch is not writable in the gesuch-app if the user is not a sozialdienst-mitarbeiter
   // when the geusuch is delegated
-  if (
-    !canCurrentlyUpdateGesuch(
-      permissions,
-      appType,
-      rolesMap,
-      gesuch.delegierung,
-    )
-  ) {
+  if (!canCurrentlyEdit(permissions, appType, rolesMap, gesuch.delegierung)) {
     permissions.canWrite = false;
   }
   return permissions;
@@ -161,7 +154,7 @@ export const getTranchePermissions = (
  * Currently it applies a check if the current user is allowed to update the gesuch
  * depending on if it is delegated and the user roles of the current user.
  */
-export const canCurrentlyUpdateGesuch = (
+export const canCurrentlyEdit = (
   permissions: PermissionMap,
   appType: AppType,
   rolesMap: RolesMap,

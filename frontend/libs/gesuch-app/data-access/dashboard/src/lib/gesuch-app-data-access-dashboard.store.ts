@@ -14,7 +14,7 @@ import {
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { FallDashboardItem, GesuchService } from '@dv/shared/model/gesuch';
 import {
-  canCurrentlyUpdateGesuch,
+  canCurrentlyEdit,
   getGesuchPermissions,
 } from '@dv/shared/model/permission-state';
 import {
@@ -87,29 +87,33 @@ export class DashboardStore extends signalStore(
                   'yy',
                 ),
               ].join('/');
-              const canEdit = gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS';
               const permissions = getGesuchPermissions(
                 gesuch,
                 this.appType,
                 rolesMap,
               );
+              const canCurrentlyEditGesuch = canCurrentlyEdit(
+                permissions,
+                this.appType,
+                rolesMap,
+                item.delegierung,
+              );
+              const canEdit =
+                gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS' &&
+                canCurrentlyEditGesuch;
 
               return {
                 ...gesuch,
                 isActive: ausbildung.status === 'AKTIV' && isLastGesuch,
                 isErstgesuch,
                 canEdit,
-                canDelete: canEdit && hasMoreThanOneGesuche,
+                canDelete:
+                  canEdit && hasMoreThanOneGesuche && canCurrentlyEditGesuch,
                 canCreateAenderung:
                   (gesuch.gesuchStatus == 'STIPENDIENANSPRUCH' ||
                     gesuch.gesuchStatus == 'KEIN_STIPENDIENANSPRUCH') &&
                   !gesuch.offeneAenderung &&
-                  canCurrentlyUpdateGesuch(
-                    permissions,
-                    this.appType,
-                    rolesMap,
-                    item.delegierung,
-                  ),
+                  canCurrentlyEditGesuch,
                 einreichefristAbgelaufen,
                 reduzierterBeitrag,
                 einreichefristDays,
@@ -117,14 +121,21 @@ export class DashboardStore extends signalStore(
               } satisfies SharedModelGsGesuchView;
             }) ?? []);
 
+        const canEditAusbildung =
+          !hasMoreThanOneGesuche &&
+          filteredGesuchs[0]?.gesuchStatus === 'IN_BEARBEITUNG_GS';
+        const canCurrentlyEditAusbildung = canCurrentlyEdit(
+          { canWrite: canEditAusbildung },
+          this.appType,
+          rolesMap,
+          item.delegierung,
+        );
         (ausbildung.status !== 'AKTIV'
           ? inactiveAusbildungen
           : activeAusbildungen
         ).push({
           ...ausbildung,
-          canDelete:
-            !hasMoreThanOneGesuche &&
-            filteredGesuchs[0]?.gesuchStatus === 'IN_BEARBEITUNG_GS',
+          canDelete: canEditAusbildung && canCurrentlyEditAusbildung,
           ausbildungBegin: dateFromMonthYearString(ausbildung.ausbildungBegin),
           ausbildungEnd: dateFromMonthYearString(ausbildung.ausbildungEnd),
           gesuchs: filteredGesuchs,
