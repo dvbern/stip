@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.resource;
 
-import java.time.Duration;
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AllowAll;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
@@ -57,6 +53,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
@@ -191,8 +191,7 @@ public class DokumentResourceImpl implements DokumentResource {
         final var dokumentId = DokumentDownloadUtil.getDokumentId(jwtParser, token, configService.getSecret());
 
         return switch (dokumentArt) {
-            case GESUCH_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
-            case CUSTOM_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
+            case GESUCH_DOKUMENT, CUSTOM_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
             case UNTERSCHRIFTENBLATT -> unterschriftenblattService.getDokument(dokumentId);
         };
     }
