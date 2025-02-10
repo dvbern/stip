@@ -192,6 +192,7 @@ public class DokumentResourceImpl implements DokumentResource {
 
         return switch (dokumentArt) {
             case GESUCH_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
+            case CUSTOM_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
             case UNTERSCHRIFTENBLATT -> unterschriftenblattService.getDokument(dokumentId);
         };
     }
