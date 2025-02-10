@@ -44,7 +44,7 @@ test.describe('Dokument upload', () => {
       .getByTestId('button-document-upload-PERSON_SOZIALHILFEBUDGET')
       .click();
     await page.getByTestId('file-input').setInputFiles(SmallImageFile);
-    await expect(page.getByTestId('document-download-small.png')).toBeEnabled();
+    await expect(page.getByTestId('download-button').first()).toBeEnabled();
     await page.keyboard.press('Escape');
   });
 });
