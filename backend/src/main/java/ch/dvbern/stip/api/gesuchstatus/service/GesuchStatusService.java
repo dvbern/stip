@@ -30,7 +30,7 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchHistoryService;
+import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
@@ -115,7 +115,7 @@ public class GesuchStatusService {
     }
 
     public boolean canChangeEinreichedatum(final UUID gesuchId, final Gesuchstatus gesuchstatus) {
-        return gesuchstatus == Gesuchstatus.IN_BEARBEITUNG_SB && !gesuchHistoryService.wasEingereicht(gesuchId);
+        return gesuchstatus == Gesuchstatus.IN_BEARBEITUNG_SB && !gesuchHistoryService.wasVerfuegt(gesuchId);
     }
 
     public boolean canUploadUnterschriftenblatt(final Benutzer benutzer, final Gesuchstatus gesuchstatus) {

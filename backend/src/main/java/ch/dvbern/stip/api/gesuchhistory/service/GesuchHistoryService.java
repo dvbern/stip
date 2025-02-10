@@ -15,14 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.service;
+package ch.dvbern.stip.api.gesuchhistory.service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -46,7 +46,7 @@ public class GesuchHistoryService {
         return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
     }
 
-    public boolean wasEingereicht(final UUID gesuchId) {
+    public boolean wasVerfuegt(final UUID gesuchId) {
         return getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.VERFUEGT).isPresent();
     }
 }
