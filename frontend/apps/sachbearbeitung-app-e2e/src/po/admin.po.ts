@@ -141,7 +141,9 @@ export class AdminPO {
     },
     save: async () => {
       const createSuccessPromise = this.page.waitForResponse(
-        '**/api/v1/sozialdienst',
+        (response) =>
+          response.request().method() === 'POST' &&
+          response.url().includes('/api/v1/sozialdienst'),
       );
       await this.elems.sozialdienst.saveButton.click();
       await createSuccessPromise;
