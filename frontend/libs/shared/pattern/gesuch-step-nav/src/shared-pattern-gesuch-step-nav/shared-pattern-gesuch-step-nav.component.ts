@@ -47,6 +47,7 @@ export class SharedPatternGesuchStepNavComponent {
     return this.stepsSig()?.map((step) => ({
       ...step,
       hasChanges: stepHasChanges(tranchenChanges, step),
+      name: step.route,
       route: trancheSetting
         ? [
             '/',

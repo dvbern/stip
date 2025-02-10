@@ -27,6 +27,7 @@
         <button
           type="button"
           class="btn btn-link text-truncate filename fs-7 tw-flex tw-p-0 tw-no-underline"
+          data-testid="download-button"
           [dvDownloadButton]="{ type: 'dokument', id: document.file.id, dokumentArt: upload.dokumentModel.art }"
         >
           <span class="material-symbols-rounded align-middle text-muted">download</span>

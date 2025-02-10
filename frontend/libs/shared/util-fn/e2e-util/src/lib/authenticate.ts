@@ -18,7 +18,10 @@ export * from '@playwright/test';
  *
  * @see https://playwright.dev/docs/auth#moderate-one-account-per-parallel-worker
  */
-export const createTest = (authType: E2eUser) => {
+export const createTest = (
+  authType: E2eUser,
+  options?: { contextPerTest?: boolean },
+) => {
   const test = baseTest.extend<object, { workerStorageState: string }>({
     contextOptions: async ({ baseURL }, use) => {
       await use({
@@ -35,9 +38,10 @@ export const createTest = (authType: E2eUser) => {
       async ({ browser }, use, workerInfo) => {
         // Use parallelIndex as a unique identifier for each worker.
         const id = test.info().parallelIndex + 1;
+        const testName = test.info().testId;
         const fileName = path.resolve(
           test.info().project.outputDir,
-          `.auth/${id}.json`,
+          `.auth/${id}${options?.contextPerTest ? `_${testName}` : ''}.json`,
         );
 
         if (fs.existsSync(fileName)) {
