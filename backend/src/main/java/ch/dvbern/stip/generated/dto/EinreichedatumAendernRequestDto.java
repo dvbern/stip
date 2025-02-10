@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -19,13 +20,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class EinreichedatumAendernRequestDto  implements Serializable {
-  private @Valid java.time.LocalDateTime newEinreichedatum;
+  private @Valid LocalDate newEinreichedatum;
   private @Valid String betreff;
   private @Valid String text;
 
   /**
    **/
-  public EinreichedatumAendernRequestDto newEinreichedatum(java.time.LocalDateTime newEinreichedatum) {
+  public EinreichedatumAendernRequestDto newEinreichedatum(LocalDate newEinreichedatum) {
     this.newEinreichedatum = newEinreichedatum;
     return this;
   }
@@ -33,12 +34,12 @@ public class EinreichedatumAendernRequestDto  implements Serializable {
   
   @JsonProperty("newEinreichedatum")
   @NotNull
-  public java.time.LocalDateTime getNewEinreichedatum() {
+  public LocalDate getNewEinreichedatum() {
     return newEinreichedatum;
   }
 
   @JsonProperty("newEinreichedatum")
-  public void setNewEinreichedatum(java.time.LocalDateTime newEinreichedatum) {
+  public void setNewEinreichedatum(LocalDate newEinreichedatum) {
     this.newEinreichedatum = newEinreichedatum;
   }
 

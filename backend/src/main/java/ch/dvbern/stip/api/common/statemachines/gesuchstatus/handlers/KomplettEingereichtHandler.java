@@ -17,8 +17,9 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchstatus.handlers;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -52,6 +53,8 @@ public class KomplettEingereichtHandler implements GesuchStatusStateChangeHandle
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
 
-        gesuch.setEinreichedatum(LocalDateTime.now());
+        // Ensure that we don't rely on the timezone of the server to be Europe/Zurich
+        final var todayInZuerich = ZonedDateTime.now(DateUtil.ZUERICH_ZONE).toLocalDate();
+        gesuch.setEinreichedatum(todayInZuerich);
     }
 }

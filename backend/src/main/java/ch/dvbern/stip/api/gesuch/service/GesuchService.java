@@ -815,7 +815,7 @@ public class GesuchService {
         final var between = DateUtil.between(
             gesuchsperiode.getGesuchsperiodeStart(),
             gesuchsperiode.getGesuchsperiodeStopp(),
-            newEinreichedatum.toLocalDate(),
+            newEinreichedatum,
             true
         );
 

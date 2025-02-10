@@ -78,7 +78,7 @@ public class GesuchDtoSpec {
   private GesuchTrancheDtoSpec gesuchTrancheToWorkWith;
 
   public static final String JSON_PROPERTY_EINREICHEDATUM = "einreichedatum";
-  private java.time.LocalDateTime einreichedatum;
+  private LocalDate einreichedatum;
 
   public GesuchDtoSpec() {
   }
@@ -343,7 +343,7 @@ public class GesuchDtoSpec {
   }
 
 
-  public GesuchDtoSpec einreichedatum(java.time.LocalDateTime einreichedatum) {
+  public GesuchDtoSpec einreichedatum(LocalDate einreichedatum) {
     
     this.einreichedatum = einreichedatum;
     return this;
@@ -357,14 +357,14 @@ public class GesuchDtoSpec {
   @JsonProperty(JSON_PROPERTY_EINREICHEDATUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public java.time.LocalDateTime getEinreichedatum() {
+  public LocalDate getEinreichedatum() {
     return einreichedatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_EINREICHEDATUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEinreichedatum(java.time.LocalDateTime einreichedatum) {
+  public void setEinreichedatum(LocalDate einreichedatum) {
     this.einreichedatum = einreichedatum;
   }
 

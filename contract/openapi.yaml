@@ -3391,7 +3391,7 @@ components:
         gesuchTrancheToWorkWith:
           $ref: '#/components/schemas/GesuchTranche'
         einreichedatum:
-          format: dateTime
+          format: date
           type: string
     GesuchInfo:
       required:
@@ -5571,7 +5571,7 @@ components:
       properties:
         newEinreichedatum:
           type: string
-          format: dateTime
+          format: date
         betreff:
           type: string
         text:

@@ -33,7 +33,7 @@ public class GesuchDto  implements Serializable {
   private @Valid LocalDate aenderungsdatum;
   private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
   private @Valid String bearbeiter;
-  private @Valid java.time.LocalDateTime einreichedatum;
+  private @Valid LocalDate einreichedatum;
 
   /**
    **/
@@ -227,19 +227,19 @@ public class GesuchDto  implements Serializable {
 
   /**
    **/
-  public GesuchDto einreichedatum(java.time.LocalDateTime einreichedatum) {
+  public GesuchDto einreichedatum(LocalDate einreichedatum) {
     this.einreichedatum = einreichedatum;
     return this;
   }
 
   
   @JsonProperty("einreichedatum")
-  public java.time.LocalDateTime getEinreichedatum() {
+  public LocalDate getEinreichedatum() {
     return einreichedatum;
   }
 
   @JsonProperty("einreichedatum")
-  public void setEinreichedatum(java.time.LocalDateTime einreichedatum) {
+  public void setEinreichedatum(LocalDate einreichedatum) {
     this.einreichedatum = einreichedatum;
   }
 

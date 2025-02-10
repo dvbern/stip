@@ -156,7 +156,7 @@ public class Gesuch extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "einreichedatum")
-    private LocalDateTime einreichedatum;
+    private LocalDate einreichedatum;
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()

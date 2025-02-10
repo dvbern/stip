@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -67,7 +67,7 @@ class EinreichedatumAendernTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchNotizApiSpec gesuchNotizApiSpec = GesuchNotizApiSpec.gesuchNotiz(RequestSpecUtil.quarkusSpec());
 
-    private LocalDateTime oldEinreichedatum;
+    private LocalDate oldEinreichedatum;
     private GesuchDtoSpec gesuch;
 
     @Test
@@ -112,7 +112,7 @@ class EinreichedatumAendernTest {
             .gesuchIdPath(gesuch.getId())
             .body(
                 new EinreichedatumAendernRequestDtoSpec()
-                    .newEinreichedatum(LocalDateTime.of(2025, 1, 31, 10, 10))
+                    .newEinreichedatum(LocalDate.of(2025, 1, 31))
                     .text("Test notizen Text")
                     .betreff("Test betreff Text")
             )
@@ -149,7 +149,7 @@ class EinreichedatumAendernTest {
             .gesuchIdPath(gesuch.getId())
             .body(
                 new EinreichedatumAendernRequestDtoSpec()
-                    .newEinreichedatum(LocalDateTime.of(2000, 1, 31, 10, 10))
+                    .newEinreichedatum(LocalDate.of(2000, 1, 31))
                     .text("Test notizen Text")
                     .betreff("Test betreff Text")
             )
@@ -167,7 +167,7 @@ class EinreichedatumAendernTest {
             .gesuchIdPath(gesuch.getId())
             .body(
                 new EinreichedatumAendernRequestDtoSpec()
-                    .newEinreichedatum(LocalDateTime.of(2025, 1, 31, 10, 10))
+                    .newEinreichedatum(LocalDate.of(2025, 1, 31))
                     .text("Test notizen Text")
                     .betreff("Test betreff Text")
             )

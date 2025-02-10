@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -35,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class EinreichedatumAendernRequestDtoSpec {
   public static final String JSON_PROPERTY_NEW_EINREICHEDATUM = "newEinreichedatum";
-  private java.time.LocalDateTime newEinreichedatum;
+  private LocalDate newEinreichedatum;
 
   public static final String JSON_PROPERTY_BETREFF = "betreff";
   private String betreff;
@@ -46,7 +47,7 @@ public class EinreichedatumAendernRequestDtoSpec {
   public EinreichedatumAendernRequestDtoSpec() {
   }
 
-  public EinreichedatumAendernRequestDtoSpec newEinreichedatum(java.time.LocalDateTime newEinreichedatum) {
+  public EinreichedatumAendernRequestDtoSpec newEinreichedatum(LocalDate newEinreichedatum) {
     
     this.newEinreichedatum = newEinreichedatum;
     return this;
@@ -60,14 +61,14 @@ public class EinreichedatumAendernRequestDtoSpec {
   @JsonProperty(JSON_PROPERTY_NEW_EINREICHEDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public java.time.LocalDateTime getNewEinreichedatum() {
+  public LocalDate getNewEinreichedatum() {
     return newEinreichedatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_NEW_EINREICHEDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNewEinreichedatum(java.time.LocalDateTime newEinreichedatum) {
+  public void setNewEinreichedatum(LocalDate newEinreichedatum) {
     this.newEinreichedatum = newEinreichedatum;
   }
 
