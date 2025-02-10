@@ -20,10 +20,12 @@ package ch.dvbern.stip.api.gesuch.resource;
 import java.time.LocalDate;
 import java.util.Arrays;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
+import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -197,5 +199,13 @@ class EinreichedatumAendernTest {
             .as(GesuchNotizDtoSpec[].class);
 
         assertThat(Arrays.asList(notizen), is(not(empty())));
+    }
+
+    @Test
+    @TestAsAdmin
+    @Order(99)
+    @AlwaysRun
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 }
