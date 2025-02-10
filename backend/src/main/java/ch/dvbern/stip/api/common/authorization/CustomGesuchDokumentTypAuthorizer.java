@@ -60,11 +60,14 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
             gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, gesuchDokumentTypId)
                 .orElseThrow();
 
+        final var isNotBeingEditedBySB = !gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)
+        || !isAdminOrSb(benutzerService.getCurrentBenutzer());
+        final var fehlendeDokumenteUebermitteltToGS = gesuch.getGesuchStatus().equals(Gesuchstatus.FEHLENDE_DOKUMENTE);
+        final var filesAttached = !customGesuchDokument.getDokumente().isEmpty();
+
         if (
-            !gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)
-            || !isAdminOrSb(benutzerService.getCurrentBenutzer())
-            || (!customGesuchDokument.getDokumente().isEmpty()
-            && gesuch.getGesuchStatus().equals(Gesuchstatus.FEHLENDE_DOKUMENTE))
+            isNotBeingEditedBySB
+            || fehlendeDokumenteUebermitteltToGS && filesAttached
         ) {
             throw new ForbiddenException();
         }
