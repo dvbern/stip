@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { isDefined } from '@dv/shared/model/type-util';
 import { toFormatedNumber } from '@dv/shared/util/maskito-util';
 
 type Value = string | number | undefined;
@@ -20,7 +21,7 @@ type Value = string | number | undefined;
 })
 export class SharedUiFormatChfPipe implements PipeTransform {
   transform(value: Value, addNegativeSign = true): string {
-    if (value === undefined) {
+    if (!isDefined(value)) {
       return '';
     }
     if (addNegativeSign && +value > 0) {

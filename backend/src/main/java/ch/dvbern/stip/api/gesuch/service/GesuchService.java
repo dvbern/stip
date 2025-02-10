@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -137,6 +138,11 @@ public class GesuchService {
     private final StipDecisionService stipDecisionService;
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final UnterschriftenblattService unterschriftenblattService;
+    private final BuchhaltungService buchhaltungService;
+
+    public Gesuch getGesuchById(final UUID gesuchId) {
+        return gesuchRepository.requireById(gesuchId);
+    }
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
@@ -477,6 +483,7 @@ public class GesuchService {
         preventUpdateVonGesuchIfReadOnly(gesuch);
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
+        buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
         gesuch.getGesuchTranchen()
             .forEach(
                 gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
