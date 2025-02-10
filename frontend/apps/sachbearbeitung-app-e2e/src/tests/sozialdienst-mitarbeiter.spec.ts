@@ -6,7 +6,7 @@ import { AdminPO } from '../po/admin.po';
 
 const E2E_TEST_SOZIALDIENST_MITARBEITER = 'e2e-test-soz-mitarbeiter';
 
-const test = createTest('SOZIALDIENST_ADMIN');
+const test = createTest('SOZIALDIENST_ADMIN', { contextPerTest: true });
 
 test.describe('Sachbearbeiter App: Sozialdienst-Mitarbeiter', () => {
   test('Sozialdienst mitarbeiter erstellen, bearbeiten und löschen', async ({
