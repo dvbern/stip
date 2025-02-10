@@ -52,10 +52,9 @@ public class VerfuegtHandler implements GesuchStatusStateChangeHandler {
             configService.getCurrentDmnMinorVersion()
         );
 
-        int berechnungsresultat = stipendien.getBerechnung();
-        if (stipendien.getBerechnungReduziert() != null) {
-            berechnungsresultat = stipendien.getBerechnungReduziert();
-        }
+        final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
+            ? stipendien.getBerechnungReduziert()
+            : stipendien.getBerechnung();
 
         if (berechnungsresultat > 0) {
             buchhaltungService.createStipendiumBuchhaltungEntry(
