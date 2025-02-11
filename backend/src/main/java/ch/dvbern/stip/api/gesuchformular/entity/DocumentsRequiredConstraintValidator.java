@@ -79,15 +79,6 @@ public class DocumentsRequiredConstraintValidator
         return true;
     }
 
-    private Set<GesuchDokument> getRequiredCustomDocumentTypes(GesuchFormular formular) {
-        final var customGesuchDokumente = formular.getTranche()
-            .getGesuchDokuments()
-            .stream()
-            .filter(x -> Objects.nonNull(x.getCustomDokumentTyp()) && x.getDokumente().isEmpty())
-            .collect(Collectors.toSet());
-        return new HashSet<>(customGesuchDokumente);
-    }
-
     private Set<DokumentTyp> getRequiredDokumentTypes(GesuchFormular formular) {
         final Function<String, Set<DokumentTyp>> logAndReturn = path -> {
             LOG.error(
@@ -114,7 +105,7 @@ public class DocumentsRequiredConstraintValidator
         }
 
         return gesuchDokumente.stream()
-            .filter(x -> Objects.isNull(x.getCustomDokumentTyp()))
+            .filter(gesuchDokument -> Objects.isNull(gesuchDokument.getCustomDokumentTyp()))
             .map(GesuchDokument::getDokumentTyp)
             .collect(Collectors.toSet());
     }
