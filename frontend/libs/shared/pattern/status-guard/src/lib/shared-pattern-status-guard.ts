@@ -45,32 +45,39 @@ export const isAllowedTo =
 
 export const hasRoles =
   (roles: AvailableBenutzerRole[], redirectUrl?: string): CanActivateFn =>
-  () => {
+  async () => {
     const permissionStore = inject(PermissionStore);
+    const router = inject(Router);
+    const notification = inject(GlobalNotificationStore);
 
-    const roleMap = permissionStore.rolesMapSig();
+    const roleMap = await permissionStore.getRolesMap();
     if (!isDefined(roleMap)) {
       return false;
     }
     if (roles.some((role) => roleMap?.[role])) {
       return true;
     }
-    return failSafeSozialdienstAdmin(roleMap) || handleForbidden(redirectUrl);
+    return (
+      failSafeSozialdienstAdmin(roleMap, router) ||
+      handleForbidden(redirectUrl, notification, router)
+    );
   };
 
-const failSafeSozialdienstAdmin = (rolesMap: RolesMap) => {
+const failSafeSozialdienstAdmin = (rolesMap: RolesMap, router: Router) => {
   return rolesMap['Sozialdienst-Admin']
     ? new RedirectCommand(
-        inject(Router).parseUrl('/administration/sozialdienst-benutzer'),
+        router.parseUrl('/administration/sozialdienst-benutzer'),
       )
     : false;
 };
 
-const handleForbidden = (redirectUrl = '/') => {
-  const notification = inject(GlobalNotificationStore);
-
+const handleForbidden = (
+  redirectUrl = '/',
+  notification: GlobalNotificationStore,
+  router: Router,
+) => {
   return (
     notification.handleForbiddenError(),
-    new RedirectCommand(inject(Router).parseUrl(redirectUrl))
+    new RedirectCommand(router.parseUrl(redirectUrl))
   );
 };

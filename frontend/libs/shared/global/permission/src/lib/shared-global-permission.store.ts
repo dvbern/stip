@@ -1,11 +1,14 @@
 import { Injectable, computed, inject } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { filter, firstValueFrom, take } from 'rxjs';
 
 import { SharedDataAccessBenutzerApiEvents } from '@dv/shared/data-access/benutzer';
 import { AvailableBenutzerRole, RolesMap } from '@dv/shared/model/benutzer';
+import { isDefined } from '@dv/shared/model/type-util';
 
 type PermissionState = {
   userRoles: AvailableBenutzerRole[] | null;
@@ -35,9 +38,28 @@ export class PermissionStore extends signalStore(
     );
   });
 
+  /**
+   * Waitt for the roles map to be available and return it.
+   */
+  getRolesMap(): Promise<RolesMap> {
+    return firstValueFrom(
+      toObservable(this.rolesMapSig).pipe(filter(isDefined), take(1)),
+    );
+  }
+
   constructor() {
     super();
-    this.setUserRoles();
+
+    if (this.authService.getAccessToken()) {
+      this.setUserRoles();
+    } else {
+      this.authService.events
+        .pipe(
+          filter((event) => event.type === 'token_received'),
+          take(1),
+        )
+        .subscribe(() => this.setUserRoles());
+    }
   }
 
   setUserRoles(): void {
