@@ -52,6 +52,7 @@ import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -99,6 +100,7 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
@@ -142,6 +144,9 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchRepository gesuchRepository;
+
+    @InjectMock
+    GesuchHistoryRepository gesuchHistoryRepository;
 
     @InjectMock
     UnterschriftenblattService unterschriftenblattService;
@@ -1454,6 +1459,43 @@ class GesuchServiceTest {
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.FEHLENDE_DOKUMENTE));
         gesuchService.gesuchFehlendeDokumenteEinreichen(gesuch.getGesuchTranchen().get(0).getId());
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    @Description("Check that gesuch is moved to state IN_BEARBEITUNG_GS when the frist is done")
+    void checkForFehlendeDokumenteOnAllGesucheTest() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchRepository.getAllFehlendeDokumente()).thenReturn(List.of(gesuch));
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
+        Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
+        var gesuchTrancheValidatorServiceMock = Mockito.mock(GesuchTrancheValidatorService.class);
+
+        Mockito.doNothing().when(gesuchTrancheValidatorServiceMock).validateGesuchTrancheForEinreichen(any());
+        QuarkusMock.installMockForType(gesuchTrancheValidatorServiceMock, GesuchTrancheValidatorService.class);
+
+        gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
+        when(
+            gesuchHistoryRepository
+                .getWhereStatusChangeHappenedBefore(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE), any())
+        )
+            .thenReturn(Stream.of(gesuch));
+
+        gesuchService.checkForFehlendeDokumenteOnAllGesuche();
+        assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {

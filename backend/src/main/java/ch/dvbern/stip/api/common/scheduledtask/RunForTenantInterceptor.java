@@ -17,21 +17,36 @@
 
 package ch.dvbern.stip.api.common.scheduledtask;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
+import io.quarkus.narayana.jta.QuarkusTransaction;
+import jakarta.annotation.Priority;
 import jakarta.interceptor.AroundInvoke;
 import jakarta.interceptor.Interceptor;
 import jakarta.interceptor.InvocationContext;
+import lombok.extern.slf4j.Slf4j;
 
-@Interceptor
+@Slf4j
 @RunForTenant
+@Interceptor
+@Priority(Interceptor.Priority.PLATFORM_AFTER + 10)
 public class RunForTenantInterceptor {
     @AroundInvoke
-    Object aroundInvoke(final InvocationContext invocationContext) throws Exception {
+    public Object aroundInvoke(final InvocationContext invocationContext) throws Exception {
         final var annotation = invocationContext.getMethod().getAnnotation(RunForTenant.class);
 
+        AtomicReference<Object> proceed = new AtomicReference<>();
+
         // ignored because it's reset in the finalizer of the returned ExplicitTenantIdScope as such unused
-        try (final var ignored = DataTenantResolver.setTenantId(annotation.value().getIdentifier())) {
-            return invocationContext.proceed();
+        QuarkusTransaction.requiringNew().run(() -> {
+            try (final var ignored = DataTenantResolver.setTenantId(annotation.value().getIdentifier())) {
+                proceed.set(invocationContext.proceed());
+            } catch (Exception e) {
+                LOG.error(e.getMessage(), e);
+            }
         }
+        );
+        return proceed;
     }
 }

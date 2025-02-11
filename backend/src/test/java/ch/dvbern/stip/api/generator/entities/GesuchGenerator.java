@@ -136,6 +136,7 @@ public final class GesuchGenerator {
                     .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(LocalDate.now().getYear() - 1))
                     .setGesuchsperiodeStart(gueltigkeitsRange.getGueltigAb())
                     .setGesuchsperiodeStopp(gueltigkeitsRange.getGueltigBis())
+                    .setFristNachreichenDokumente(30)
             );
         gesuch.getGesuchTranchen()
             .add(
