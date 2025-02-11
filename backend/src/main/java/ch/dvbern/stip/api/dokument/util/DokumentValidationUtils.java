@@ -18,8 +18,10 @@
 package ch.dvbern.stip.api.dokument.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -55,11 +57,10 @@ public class DokumentValidationUtils {
         Instance<RequiredCustomDocumentsProducer> customProducers,
         GesuchTranche tranche
     ) {
-        ArrayList<CustomDokumentTyp> customDokumentTypes = new ArrayList<>();
-        customProducers.stream()
-            .map(producer -> producer.getRequiredDocuments(tranche))
-            .forEach(requiredCustomDok -> customDokumentTypes.addAll(requiredCustomDok.getValue()));
-        return customDokumentTypes;
+        return customProducers.stream()
+            .map(producer -> producer.getRequiredDocuments(tranche).getValue())
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
     }
 
     public List<CustomDokumentTyp> getExistingGesuchDokumentsOfCustomDokumentType(GesuchFormular formular) {
