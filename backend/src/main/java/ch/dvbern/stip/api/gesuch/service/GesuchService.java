@@ -37,6 +37,7 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
@@ -76,6 +77,7 @@ import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
+import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -834,5 +836,17 @@ public class GesuchService {
         gesuchNotizService.createGesuchNotiz(gesuch, dto.getBetreff(), dto.getText());
 
         return gesuchMapperUtil.mapWithNewestTranche(gesuch);
+    }
+
+    public EinreichedatumStatusDto canUpdateEinreichedatum(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return new EinreichedatumStatusDto(canUpdateEinreichedatum(gesuch));
+    }
+
+    public boolean canUpdateEinreichedatum(final Gesuch gesuch) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
+        && gesuchStatusService.canChangeEinreichedatum(gesuch.getId(), gesuch.getGesuchStatus());
     }
 }

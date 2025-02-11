@@ -174,16 +174,10 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @RolesAllowed(GESUCH_READ)
+    @AllowAll
     @Override
     public EinreichedatumStatusDto canEinreichedatumAendern(UUID gesuchId) {
-        final var einreichedatumStatusDto = new EinreichedatumStatusDto();
-        try {
-            gesuchAuthorizer.canUpdateEinreichedatum(gesuchId);
-            einreichedatumStatusDto.setCanAendern(true);
-        } catch (UnauthorizedException exception) {
-            einreichedatumStatusDto.setCanAendern(false);
-        }
-        return einreichedatumStatusDto;
+        return gesuchService.canUpdateEinreichedatum(gesuchId);
     }
 
     @RolesAllowed(GESUCH_UPDATE)
