@@ -8,6 +8,12 @@
     </button>
   </h4>
 
+  @if (data.options.descriptionKey) {
+    <div>
+      {{ data.options.descriptionKey | translate }}
+    </div>
+  }
+
   @if (showUplaodSig()) {
     <dv-shared-ui-drop-file
       class="p-3 bg-white d-flex align-items-center flex-column rounded-top-3 shadow border border-2 mt-4"

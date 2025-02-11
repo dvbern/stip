@@ -249,7 +249,8 @@ export function createCustomDokumentOptions(options: {
   return {
     allowTypes,
     permissions,
-    titleKey: dokumentTyp.description,
+    titleKey: dokumentTyp.type,
+    descriptionKey: dokumentTyp.description,
     dokument: {
       dokumentTyp,
       gesuchId,

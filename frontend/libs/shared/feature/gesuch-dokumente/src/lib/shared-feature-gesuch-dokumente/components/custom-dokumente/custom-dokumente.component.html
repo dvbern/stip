@@ -154,7 +154,11 @@
       (click)="expandRow(dokument)"
     ></tr>
     <tr mat-row class="detail-row" *matRowDef="let dokument; columns: detailColumns"></tr>
-  </table>
 
-  <pre>{{ dokumenteViewSig().requiredDocumentTypes }}</pre>
+    <tr class="mat-mdc-row" *matNoDataRow>
+      <td class="mat-mdc-cell tw-px-3 tw-text-center" [colSpan]="displayedColumns.length">
+        {{ 'shared.dokumente.table.noData' | translate }}
+      </td>
+    </tr>
+  </table>
 </div>
