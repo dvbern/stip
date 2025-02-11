@@ -1336,6 +1336,9 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         doNothing().when(gesuchValidatorService).validateGesuchForStatus(any(), any());
 
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+            .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
         assertEquals(
             Gesuchstatus.VERFUEGT,

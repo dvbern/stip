@@ -42,7 +42,6 @@ import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import com.mchange.io.FileUtils;
@@ -283,7 +282,7 @@ class DokumentResourcesTest {
     @Order(10)
     void test_delete_required_custom_gesuchdokument_typ_should_fail() {
         dokumentApiSpec.deleteCustomDokumentTyp()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -365,96 +364,12 @@ class DokumentResourcesTest {
     @Order(13)
     void test_delete_required_custom_gesuchdokument_should_still_fail() {
         dokumentApiSpec.deleteCustomDokumentTyp()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
             .assertThat()
             .statusCode(Status.FORBIDDEN.getStatusCode());
-    }
-
-    // for the next tests, gesuch
-    // should be in state IN_BEARBEITUNG_SB
-    @Test
-    @TestAsGesuchsteller
-    @Order(14)
-    void fillGesuch() {
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(15)
-    void gesuchEinreichen() {
-        gesuchApiSpec.gesuchEinreichen()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
-    }
-
-    @Test
-    @TestAsSachbearbeiter
-    @Order(16)
-    void gesuchStatusChangeToInBearbeitungSB() {
-        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchDtoSpec.class);
-
-        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
-    }
-
-    // testAsSB
-    // delete custom
-    // b: no files -> ok
-    @Test
-    @TestAsSachbearbeiter
-    @Order(17)
-    void test_delete_required_custom_gesuchdokument_should_success() {
-        dokumentApiSpec.deleteCustomDokumentTyp()
-            .gesuchIdPath(gesuchId)
-            .customDokumentTypIdPath(customDokumentId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
-
-        final var customDocumentTypes = dokumentApiSpec.getAllCustomDokumentTypes()
-            .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(CustomDokumentTypDto[].class);
-        assertThat(customDocumentTypes.length, is(0));
-    }
-
-    // testAsGS
-    // new document should appear in required documents
-    // upload
-    @Test
-    @TestAsGesuchsteller
-    @Order(18)
-    void test_get_required_custom_gesuchdokuments_should_be_empty() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
-            .gesuchTrancheIdPath(gesuchTrancheId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(DokumenteToUploadDto.class);
-        assertThat(requiredDocuments.getCustomDokumentTyps().size(), is(0));
     }
 
     @Test

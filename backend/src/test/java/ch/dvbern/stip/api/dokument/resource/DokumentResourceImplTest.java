@@ -17,14 +17,26 @@
 
 package ch.dvbern.stip.api.dokument.resource;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
+import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
+import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
+import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.generated.api.DokumentResource;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -32,6 +44,7 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -47,6 +60,10 @@ class DokumentResourceImplTest {
     GesuchDokumentKommentarRepository dokumentKommentarRepository;
     @InjectMock
     GesuchDokumentService gesuchDokumentService;
+    @Inject
+    GesuchFormularService gesuchFormularService;
+    @InjectMock
+    CustomDokumentTypService customDokumentTypService;
 
     @BeforeEach
     void setUp() {
@@ -96,5 +113,61 @@ class DokumentResourceImplTest {
     void sbShouldBeAbleToAcceptDocumentTest() {
         doNothing().when(gesuchDokumentService).gesuchDokumentAkzeptieren(any());
         assertDoesNotThrow(() -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null));
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    void testPageValidationForAusstehendeCustomGesuchDokument() {
+        // arrange
+        var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
+        var tranche = gesuch.getGesuchTranchen().get(0);
+        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
+
+        CustomDokumentTyp customDokumentTyp1 = new CustomDokumentTyp();
+        customDokumentTyp1.setId(UUID.randomUUID());
+        customDokumentTyp1.setType("test1");
+        CustomDokumentTyp customDokumentTyp2 = new CustomDokumentTyp();
+        customDokumentTyp2.setId(UUID.randomUUID());
+        customDokumentTyp2.setType("test2");
+        when(customDokumentTypService.getAllCustomDokumentTypsOfTranche(any()))
+            .thenReturn(List.of(customDokumentTyp1, customDokumentTyp2));
+
+        List<GesuchDokument> dokuments = new ArrayList<>();
+
+        GesuchDokument customGesuchDokument1 = new GesuchDokument();
+        customGesuchDokument1.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument1.setDokumente(List.of(new Dokument()));
+        customGesuchDokument1.setCustomDokumentTyp(customDokumentTyp1);
+
+        GesuchDokument customGesuchDokument2 = new GesuchDokument();
+        customGesuchDokument2.setStatus(Dokumentstatus.AUSSTEHEND);
+        customGesuchDokument2.setDokumente(List.of());
+        customGesuchDokument2.setCustomDokumentTyp(customDokumentTyp2);
+
+        Arrays.stream(DokumentTyp.values()).toList().forEach(dokumentType -> {
+            var gesuchDokument = new GesuchDokument();
+            gesuchDokument.setStatus(Dokumentstatus.AUSSTEHEND);
+            gesuchDokument.setDokumentTyp(dokumentType);
+            gesuchDokument.setDokumente(List.of(new Dokument()));
+            dokuments.add(gesuchDokument);
+        });
+
+        dokuments.add(customGesuchDokument1);
+        dokuments.add(customGesuchDokument2);
+        dokuments.forEach(dok -> dok.setGesuchTranche(tranche));
+        tranche.getGesuchDokuments().addAll(dokuments);
+
+        // act
+        final var violations1 =
+            gesuchFormularService.validatePages(tranche.getGesuchFormular());
+
+        customGesuchDokument2.setDokumente(List.of(new Dokument()));
+
+        final var violations2 =
+            gesuchFormularService.validatePages(tranche.getGesuchFormular());
+
+        // assert
+        assertNotNull(violations1.getValidationWarnings());
+        assertThat(violations2.getValidationWarnings().isEmpty()).isTrue();
     }
 }

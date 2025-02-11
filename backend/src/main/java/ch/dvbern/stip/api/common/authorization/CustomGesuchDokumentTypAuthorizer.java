@@ -23,6 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     private final DokumentRepository dokumentRepository;
+    private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BenutzerService benutzerService;
@@ -52,24 +54,20 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canDeleteTyp(final UUID gesuchId, final UUID gesuchDokumentTypId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public void canDeleteTyp(final UUID gesuchTrancheId, final UUID gesuchDokumentTypId) {
+        final var gesuch = gesuchTrancheRepository.requireById(gesuchTrancheId).getGesuch();
+        final var customGesuchDokument =
+            gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(gesuchTrancheId, gesuchDokumentTypId)
+                .orElseThrow();
 
-        final var customGesuchDokument = gesuch.getCurrentGesuchTranche()
-            .getGesuchDokuments()
-            .stream()
-            .filter(gesuchDokument -> gesuchDokument.getCustomDokumentTyp() != null)
-            .toList()
-            .stream()
-            .filter(customDok -> customDok.getCustomDokumentTyp().getId().equals(gesuchDokumentTypId))
-            .findFirst()
-            .orElseThrow();
+        final var isNotBeingEditedBySB = !gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)
+        || !isAdminOrSb(benutzerService.getCurrentBenutzer());
+        final var fehlendeDokumenteUebermitteltToGS = gesuch.getGesuchStatus().equals(Gesuchstatus.FEHLENDE_DOKUMENTE);
+        final var filesAttached = !customGesuchDokument.getDokumente().isEmpty();
 
         if (
-            !gesuch.getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)
-            || !isAdminOrSb(benutzerService.getCurrentBenutzer())
-            || (!customGesuchDokument.getDokumente().isEmpty()
-            && gesuch.getGesuchStatus().equals(Gesuchstatus.FEHLENDE_DOKUMENTE))
+            isNotBeingEditedBySB
+            || fehlendeDokumenteUebermitteltToGS && filesAttached
         ) {
             throw new ForbiddenException();
         }

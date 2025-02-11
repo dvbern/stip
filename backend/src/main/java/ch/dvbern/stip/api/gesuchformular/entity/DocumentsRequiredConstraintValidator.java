@@ -17,13 +17,16 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.util.DokumentValidationUtils;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
@@ -40,21 +43,29 @@ public class DocumentsRequiredConstraintValidator
     @Inject
     Instance<RequiredDocumentsProducer> producers;
 
+    @Inject
+    Instance<RequiredCustomDocumentsProducer> customProducers;
+
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
-        final var requiredDocs = producers.stream().map(x -> x.getRequiredDocuments(formular)).toList();
+        final var requiredDocs = producers.stream().map(producer -> producer.getRequiredDocuments(formular)).toList();
         final var dokumenteOfType = getRequiredDokumentTypes(formular);
 
-        final var filtered = requiredDocs.stream()
-            .filter(x -> x.getRight().stream().anyMatch(y -> !dokumenteOfType.contains(y)))
+        var filtered = requiredDocs.stream()
+            .filter(doc -> doc.getRight().stream().anyMatch(dokumentTyp -> !dokumenteOfType.contains(dokumentTyp)))
             .map(Pair::getLeft)
             .toList();
+        Set<String> allFiltered = new HashSet<>(filtered);
 
-        if (!filtered.isEmpty()) {
+        final var customFiltered =
+            DokumentValidationUtils.getMissingCustomDocumentTypesByType(customProducers, formular.getTranche());
+        allFiltered.addAll(customFiltered);
+
+        if (!allFiltered.isEmpty()) {
             return GesuchValidatorUtil.addProperties(
                 context,
                 VALIDATION_DOCUMENTS_REQUIRED_MESSAGE,
-                filtered
+                allFiltered
             );
         }
 

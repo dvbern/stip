@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchformular.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -64,10 +65,12 @@ class GesuchFormularServiceTest {
     @Test
     void pageValidation() {
         final var gesuch = new Gesuch();
-        final var gesuchTranche = new GesuchTranche();
+        var gesuchTranche = new GesuchTranche();
+        gesuchTranche.setId(UUID.randomUUID());
         final var gesuchFormular = new GesuchFormular();
         gesuchTranche.setGesuch(gesuch);
         gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
+        gesuchTranche.setGesuchFormular(gesuchFormular);
         gesuchFormular.setTranche(gesuchTranche);
         var reportDto = gesuchFormularService.validatePages(gesuchFormular);
         assertThat(reportDto.getValidationErrors(), Matchers.is(empty()));

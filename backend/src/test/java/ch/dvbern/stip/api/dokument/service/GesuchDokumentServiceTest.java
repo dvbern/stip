@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -94,6 +95,9 @@ class GesuchDokumentServiceTest {
 
     @Inject
     BenutzerService benutzerService;
+
+    @InjectMock
+    GesuchTrancheRepository gesuchTrancheRepository;
 
     @Inject
     CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
@@ -289,25 +293,32 @@ class GesuchDokumentServiceTest {
         customDokumentTyp.setType("test");
 
         Gesuch gesuch = TestUtil.setupGesuchWithCustomDokument();
+        gesuch.getGesuchTranchen().get(0).setGesuch(gesuch);
         GesuchDokument customGesuchDokument = gesuch.getCurrentGesuchTranche().getGesuchDokuments().get(0);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchDokumentRepository.findByGesuchTrancheAndCustomDokumentType(any(), any()))
+            .thenReturn(Optional.of(customGesuchDokument));
+
+        final UUID gesuchTrancheId = UUID.randomUUID();
+        gesuch.getGesuchTranchen().get(0).setId(gesuchTrancheId);
 
         // Act
         assertDoesNotThrow(
             () -> customGesuchDokumentTypAuthorizer
-                .canDeleteTyp(gesuch.getId(), customGesuchDokument.getCustomDokumentTyp().getId())
+                .canDeleteTyp(gesuchTrancheId, customGesuchDokument.getCustomDokumentTyp().getId())
         );
         customGesuchDokument.getDokumente().add(new Dokument());
         assertDoesNotThrow(
             () -> customGesuchDokumentTypAuthorizer
-                .canDeleteTyp(gesuch.getId(), customGesuchDokument.getCustomDokumentTyp().getId())
+                .canDeleteTyp(gesuchTrancheId, customGesuchDokument.getCustomDokumentTyp().getId())
         );
         gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
         assertThrows(
             ForbiddenException.class,
             () -> customGesuchDokumentTypAuthorizer
-                .canDeleteTyp(gesuch.getId(), customGesuchDokument.getCustomDokumentTyp().getId())
+                .canDeleteTyp(gesuchTrancheId, customGesuchDokument.getCustomDokumentTyp().getId())
         );
     }
 
