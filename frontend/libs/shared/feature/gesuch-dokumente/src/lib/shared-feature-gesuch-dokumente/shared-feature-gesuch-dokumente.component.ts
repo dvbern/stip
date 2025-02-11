@@ -22,7 +22,7 @@ import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import {
   SharedModelGesuchDokument,
   SharedModelTableCustomDokument,
-  SharedModelTableRequiredDokument,
+  SharedModelTableDokument,
 } from '@dv/shared/model/dokument';
 import { Dokumentstatus } from '@dv/shared/model/gesuch';
 import { DOKUMENTE } from '@dv/shared/model/gesuch-form';
@@ -150,7 +150,10 @@ export class SharedFeatureGesuchDokumenteComponent {
       kommentare,
       requiredDocumentTypes,
       readonly,
-      showList: dokuments.length > 0 || requiredDocumentTypes.length > 0,
+      showList:
+        dokuments.length > 0 ||
+        requiredDocumentTypes.length > 0 ||
+        isSachbearbeitungApp,
     };
   });
 
@@ -209,9 +212,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     this.store.dispatch(SharedEventGesuchDokumente.init());
   }
 
-  dokumentAkzeptieren(
-    dokument: SharedModelTableRequiredDokument | SharedModelTableCustomDokument,
-  ) {
+  dokumentAkzeptieren(dokument: SharedModelTableDokument) {
     const gesuchTrancheId = this.gesuchViewSig().trancheId;
 
     if (!dokument?.gesuchDokument?.id || !gesuchTrancheId) return;
@@ -224,9 +225,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     });
   }
 
-  dokumentAblehnen(
-    document: SharedModelTableRequiredDokument | SharedModelTableCustomDokument,
-  ) {
+  dokumentAblehnen(document: SharedModelTableDokument) {
     const { trancheId: gesuchTrancheId } = this.gesuchViewSig();
     const gesuchDokumentId =
       document.dokumentOptions.dokument.gesuchDokument?.id;
@@ -255,9 +254,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       });
   }
 
-  getGesuchDokumentKommentare(
-    dokument: SharedModelTableRequiredDokument | SharedModelTableCustomDokument,
-  ) {
+  getGesuchDokumentKommentare(dokument: SharedModelTableDokument) {
     const { trancheId } = this.gesuchViewSig();
     const gesuchDokumentId = dokument.gesuchDokument?.id;
     if (!trancheId || !gesuchDokumentId) return;

@@ -40,6 +40,10 @@ export type SharedModelGesuchDokument =
   | SharedModelAdditionalGesuchDokument
   | SharedModelCustomGesuchDokument;
 
+export type SharedModelTableDokument =
+  | SharedModelTableRequiredDokument
+  | SharedModelTableCustomDokument;
+
 export interface DokumentOptions {
   permissions: PermissionMap;
   titleKey: string;

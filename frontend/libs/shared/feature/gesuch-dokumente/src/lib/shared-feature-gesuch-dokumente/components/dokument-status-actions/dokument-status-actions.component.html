@@ -1,0 +1,71 @@
+@let dokument = dokumentSig();
+@let view = viewSig();
+
+<div class="tw-flex tw-gap-2">
+  @if (dokument?.gesuchDokument?.id) {
+    @if (view.isSachbearbeitungApp && !view.readonly && dokument?.gesuchDokument?.dokumente?.length) {
+      @switch (dokument?.gesuchDokument?.status) {
+        @case ('AUSSTEHEND') {
+          <button
+            (click)="dokumentAkzeptieren.emit(dokument); $event.stopPropagation()"
+            type="button"
+            class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
+          >
+            <i class="material-symbols-rounded tw-text-xl/none">check</i>
+            <span>
+              {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
+            </span>
+          </button>
+          <button
+            (click)="dokumentAblehnen.emit(dokument); $event.stopPropagation()"
+            type="button"
+            class="btn table-btn btn-danger d-flex align-items-center gap-1"
+          >
+            <i class="material-symbols-rounded tw-text-xl/none">close</i>
+            <span>
+              {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
+            </span>
+          </button>
+        }
+        @case ('AKZEPTIERT') {
+          <dv-shared-ui-icon-badge type="success" class="tw-min-w-32">
+            {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+          </dv-shared-ui-icon-badge>
+        }
+        @case ('ABGELEHNT') {
+          <dv-shared-ui-icon-badge type="danger" class="tw-min-w-32">
+            {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+          </dv-shared-ui-icon-badge>
+        }
+      }
+    } @else {
+      @switch (dokument?.gesuchDokument?.status) {
+        @case ('AKZEPTIERT') {
+          <dv-shared-ui-icon-badge type="success" class="tw-min-w-32">
+            {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+          </dv-shared-ui-icon-badge>
+        }
+        @case ('AUSSTEHEND') {
+          @if (dokument?.gesuchDokument?.dokumente?.length) {
+            <dv-shared-ui-icon-badge [type]="view.isSachbearbeitungApp ? 'warning' : 'info'" class="tw-min-w-32">
+              {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
+            </dv-shared-ui-icon-badge>
+          } @else {
+            <dv-shared-ui-icon-badge type="warning" class="tw-min-w-32">
+              {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
+            </dv-shared-ui-icon-badge>
+          }
+        }
+        @case ('ABGELEHNT') {
+          <dv-shared-ui-icon-badge type="danger" class="tw-min-w-32">
+            {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+          </dv-shared-ui-icon-badge>
+        }
+      }
+    }
+  } @else {
+    <dv-shared-ui-icon-badge type="warning" class="tw-min-w-32">
+      {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
+    </dv-shared-ui-icon-badge>
+  }
+</div>

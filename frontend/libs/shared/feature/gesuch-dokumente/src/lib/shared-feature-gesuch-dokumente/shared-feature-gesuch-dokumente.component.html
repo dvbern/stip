@@ -38,72 +38,60 @@
     (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
     (getGesuchDokumentKommentare)="getGesuchDokumentKommentare($event)"
   ></dv-required-dokumente>
-
-  <div class="tw-mt-6 tw-flex" *dvIfSachbearbeiter>
-    @if (canSBSendMissingDocumentsSig()) {
-      <!-- button sendMissingDocuments -->
-      <button
-        type="button"
-        class="btn btn-primary ml-auto"
-        (click)="fehlendeDokumenteUebermitteln()"
-        data-testid="dokumente-button-sendMissingDocuments"
-        [disabled]="dokumentsStore.hasSBAusstehendeDokumentsSig()"
-      >
-        {{ 'shared.dokumente.uebermitteln' | translate }}
-      </button>
-    }
-  </div>
-
-  <!-- customDokumente -->
-  @if (customDokumente.showList) {
-    <dv-custom-dokumente
-      class="tw-mt-6"
-      [dokumenteViewSig]="customDokumente"
-      (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
-      (dokumentAblehnen)="dokumentAblehnen($event)"
-      (deleteCustomDokumentTyp)="deleteCustomDokumentTyp($event)"
-      (getGesuchDokumentKommentare)="getGesuchDokumentKommentare($event)"
-    ></dv-custom-dokumente>
-  }
-
-  <div class="tw-mt-6 tw-flex" *dvIfSachbearbeiter>
-    <!-- create custom document button -->
-    @if (canCreateCustomDokumentTypSig()) {
-      <button
-        type="button"
-        class="btn btn-primary ml-2"
-        (click)="createCustomDokumentTyp()"
-        data-testid="dokumente-button-createCustomDokumentTyp"
-      >
-        {{ 'shared.dokumente.createCustomDokumentTyp' | translate }}
-      </button>
-    }
-  </div>
-
-  <dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
-    @let dokumente = dokumentsStore.dokuments();
-    <!-- @let missingDocuments = dokumentsToUpload?.required?.length ?? 0; -->
-    @if (gesuch.gesuchPermissions.canFreigeben) {
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="handleContinue()"
-        data-testid="button-continue"
-        [disabled]="dokumente | rdIsPending"
-      >
-        {{ 'shared.form.gonext' | translate }}
-      </button>
-    }
-    @if (gesuch.gesuchPermissions.canUploadDocuments && gesuch.gesuch?.gesuchStatus === 'FEHLENDE_DOKUMENTE') {
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="fehlendeDokumenteEinreichen()"
-        data-testid="button-save"
-        [disabled]="(dokumente | rdIsPending) || dokumentsStore.hasGSAussstehendeDokumentsSig()"
-      >
-        {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | translate }}
-      </button>
-    }
-  </dv-shared-ui-step-form-buttons>
 }
+
+<!-- customDokumente -->
+@if (customDokumente.showList) {
+  <dv-custom-dokumente
+    class="tw-mt-6"
+    [dokumenteViewSig]="customDokumente"
+    [canCreateCustomDokumentTypSig]="canCreateCustomDokumentTypSig()"
+    (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
+    (dokumentAblehnen)="dokumentAblehnen($event)"
+    (deleteCustomDokumentTyp)="deleteCustomDokumentTyp($event)"
+    (getGesuchDokumentKommentare)="getGesuchDokumentKommentare($event)"
+    (createCustomDokumentTyp)="createCustomDokumentTyp()"
+  ></dv-custom-dokumente>
+}
+
+<div class="tw-mt-6 tw-flex" *dvIfSachbearbeiter>
+  @if (canSBSendMissingDocumentsSig()) {
+    <!-- button sendMissingDocuments -->
+    <button
+      type="button"
+      class="btn btn-primary ml-auto"
+      (click)="fehlendeDokumenteUebermitteln()"
+      data-testid="dokumente-button-sendMissingDocuments"
+      [disabled]="dokumentsStore.hasSBAusstehendeDokumentsSig()"
+    >
+      {{ 'shared.dokumente.uebermitteln' | translate }}
+    </button>
+  }
+</div>
+
+<dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
+  @let dokumente = dokumentsStore.dokuments();
+  <!-- @let missingDocuments = dokumentsToUpload?.required?.length ?? 0; -->
+  @if (gesuch.gesuchPermissions.canFreigeben) {
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="handleContinue()"
+      data-testid="button-continue"
+      [disabled]="dokumente | rdIsPending"
+    >
+      {{ 'shared.form.gonext' | translate }}
+    </button>
+  }
+  @if (gesuch.gesuchPermissions.canUploadDocuments && gesuch.gesuch?.gesuchStatus === 'FEHLENDE_DOKUMENTE') {
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="fehlendeDokumenteEinreichen()"
+      data-testid="button-save"
+      [disabled]="(dokumente | rdIsPending) || dokumentsStore.hasGSAussstehendeDokumentsSig()"
+    >
+      {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | translate }}
+    </button>
+  }
+</dv-shared-ui-step-form-buttons>

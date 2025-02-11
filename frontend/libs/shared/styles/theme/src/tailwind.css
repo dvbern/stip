@@ -9,7 +9,7 @@
 
 @layer components {
   .dv-table {
-    @apply tw-mt-6 tw-overflow-hidden tw-rounded-xl tw-bg-white tw-pb-6 tw-shadow-sm;
+    @apply tw-mt-6 tw-overflow-y-auto tw-rounded-xl tw-bg-white tw-pb-6 tw-shadow-sm;
   }
 
   .dv-form-grid {

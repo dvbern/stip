@@ -11,7 +11,10 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { SharedModelTableRequiredDokument } from '@dv/shared/model/dokument';
+import {
+  SharedModelTableDokument,
+  SharedModelTableRequiredDokument,
+} from '@dv/shared/model/dokument';
 import {
   DokumentTyp,
   Dokumentstatus,
@@ -30,13 +33,13 @@ import {
   createGesuchDokumentOptions,
 } from '@dv/shared/pattern/document-upload';
 import { detailExpand } from '@dv/shared/ui/animations';
-import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { RemoteData } from '@dv/shared/util/remote-data';
+
+import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokument-status-actions.component';
 
 @Component({
   selector: 'dv-required-dokumente',
@@ -49,9 +52,8 @@ import { RemoteData } from '@dv/shared/util/remote-data';
     TypeSafeMatCellDefDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiLoadingComponent,
-    SharedUiIconBadgeComponent,
     SharedUiRdIsPendingPipe,
-    SharedUiPrefixAppTypePipe,
+    DokumentStatusActionsComponent,
   ],
   templateUrl: './required-dokumente.component.html',
   styleUrl: './required-dokumente.component.scss',
@@ -74,8 +76,8 @@ export class RequiredDokumenteComponent {
     readonly: boolean;
   }>();
   getGesuchDokumentKommentare = output<SharedModelTableRequiredDokument>();
-  dokumentAkzeptieren = output<SharedModelTableRequiredDokument>();
-  dokumentAblehnen = output<SharedModelTableRequiredDokument>();
+  dokumentAkzeptieren = output<SharedModelTableDokument>();
+  dokumentAblehnen = output<SharedModelTableDokument>();
 
   detailColumns = ['kommentar'];
   displayedColumns = [
