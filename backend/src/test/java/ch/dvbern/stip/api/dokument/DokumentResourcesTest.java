@@ -283,7 +283,7 @@ class DokumentResourcesTest {
     @Order(10)
     void test_delete_required_custom_gesuchdokument_typ_should_fail() {
         dokumentApiSpec.deleteCustomDokumentTyp()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -365,7 +365,7 @@ class DokumentResourcesTest {
     @Order(13)
     void test_delete_required_custom_gesuchdokument_should_still_fail() {
         dokumentApiSpec.deleteCustomDokumentTyp()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -439,7 +439,7 @@ class DokumentResourcesTest {
         test_create_custom_gesuchdokument();
 
         dokumentApiSpec.deleteCustomDokumentTyp()
-            .gesuchIdPath(gesuchId)
+            .gesuchTrancheIdPath(gesuchTrancheId)
             .customDokumentTypIdPath(customDokumentId)
             .execute(ResponseBody::prettyPeek)
             .then()

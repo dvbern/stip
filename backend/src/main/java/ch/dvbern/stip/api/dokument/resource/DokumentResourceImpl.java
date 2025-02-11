@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
-import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -89,7 +88,7 @@ public class DokumentResourceImpl implements DokumentResource {
     }
 
     @Blocking
-    @RolesAllowed(OidcConstants.ROLE_GESUCHSTELLER)
+    @RolesAllowed(GESUCH_UPDATE)
     @Override
     public Uni<Response> createCustomGesuchDokument(
         UUID customDokumentTypId,
@@ -139,8 +138,8 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @AllowAll
     @Blocking
-    public void deleteCustomDokumentTyp(UUID gesuchId, UUID customDokumentTypId) {
-        customGesuchDokumentTypAuthorizer.canDeleteTyp(gesuchId, customDokumentTypId);
+    public void deleteCustomDokumentTyp(UUID gesuchTrancheId, UUID customDokumentTypId) {
+        customGesuchDokumentTypAuthorizer.canDeleteTyp(gesuchTrancheId, customDokumentTypId);
         customDokumentTypService.deleteCustomDokumentTyp(customDokumentTypId);
     }
 
@@ -191,7 +190,7 @@ public class DokumentResourceImpl implements DokumentResource {
         final var dokumentId = DokumentDownloadUtil.getDokumentId(jwtParser, token, configService.getSecret());
 
         return switch (dokumentArt) {
-            case GESUCH_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
+            case GESUCH_DOKUMENT, CUSTOM_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
             case UNTERSCHRIFTENBLATT -> unterschriftenblattService.getDokument(dokumentId);
         };
     }

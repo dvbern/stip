@@ -13,6 +13,7 @@ const urls = getE2eUrls();
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
   ...baseConfig,
+  workers: 1,
   use: {
     ...baseConfig.use,
     baseURL: urls.sb,

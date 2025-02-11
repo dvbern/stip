@@ -99,7 +99,6 @@ export class RequiredDokumenteComponent {
       stepsFlow,
       dokuments,
       requiredDocumentTypes,
-      readonly,
     } = this.dokumenteViewSig();
 
     if (!trancheId || !allowTypes) {
@@ -121,7 +120,6 @@ export class RequiredDokumenteComponent {
           dokumentTyp,
           gesuchDokument,
           initialDocuments: gesuchDokument.dokumente,
-          readonly,
         });
 
         const formStep = getFormStepByDocumentType(dokumentTyp);
@@ -146,7 +144,6 @@ export class RequiredDokumenteComponent {
           allowTypes,
           dokumentTyp,
           initialDocuments: [],
-          readonly,
         });
 
         return {

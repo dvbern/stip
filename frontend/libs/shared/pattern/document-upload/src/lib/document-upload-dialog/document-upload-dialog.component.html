@@ -30,7 +30,7 @@
           tabindex="-1"
           data-testid="file-input"
           [attr.accept]="data.options.allowTypes"
-          [attr.multiple]="data.options.singleUpload ? null : 'multiple'"
+          [attr.multiple]="'multiple'"
           [disabled]="data.store.isLoading()"
           (change)="handleFilInputEvent($event.target)"
         />

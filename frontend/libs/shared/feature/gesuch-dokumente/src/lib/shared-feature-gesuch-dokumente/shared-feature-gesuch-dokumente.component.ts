@@ -26,6 +26,7 @@ import {
 } from '@dv/shared/model/dokument';
 import { Dokumentstatus } from '@dv/shared/model/gesuch';
 import { DOKUMENTE } from '@dv/shared/model/gesuch-form';
+import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
   SharedUiIfGesuchstellerDirective,
   SharedUiIfSachbearbeiterDirective,
@@ -91,6 +92,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       requiredDocumentTypes,
     };
   });
+
   standardDokumenteViewSig = computed(() => {
     const {
       allowTypes,
@@ -156,7 +158,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
   // inform the GS that documents are missing (or declined)
   // if true, the button is shown
-  canSendMissingDocumentsSig = computed(() => {
+  canSBSendMissingDocumentsSig = computed(() => {
     const hasDokumenteToUebermitteln =
       this.dokumentsStore.hasDokumenteToUebermittelnSig();
 
@@ -216,7 +218,7 @@ export class SharedFeatureGesuchDokumenteComponent {
 
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: dokument?.gesuchDokument.id,
-      afterSuccess: () => {
+      onSuccess: () => {
         this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
       },
     });
@@ -245,22 +247,12 @@ export class SharedFeatureGesuchDokumenteComponent {
             gesuchTrancheId: gesuchTrancheId,
             kommentar: result.kommentar,
             gesuchDokumentId,
-            afterSuccess: () => {
-              this.dokumentsStore.getGesuchDokumente$({ gesuchTrancheId });
+            onSuccess: () => {
+              this.dokumentsStore.getDokumenteAndRequired$({ gesuchTrancheId });
             },
           });
         }
       });
-  }
-
-  getAllCustomDokumentTypes() {
-    const trancheId = this.gesuchViewSig().trancheId;
-
-    if (!trancheId) return;
-
-    this.dokumentsStore.getAllCustomDokumentTypes$({
-      gesuchTrancheId: trancheId,
-    });
   }
 
   getGesuchDokumentKommentare(
@@ -281,15 +273,25 @@ export class SharedFeatureGesuchDokumenteComponent {
 
     if (!gesuchId || !trancheId) return;
 
-    this.dokumentsStore.deleteCustomDokumentTyp$({
-      customDokumentTypId: dokument.dokumentTyp.id,
-      gesuchId,
-      onSuccess: () => {
-        this.dokumentsStore.getDokumenteAndRequired$({
-          gesuchTrancheId: trancheId,
-        });
-      },
-    });
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'shared.dokumente.deleteCustomDokumentTyp.title',
+      message: 'shared.dokumente.deleteCustomDokumentTyp.message',
+    })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          this.dokumentsStore.deleteCustomDokumentTyp$({
+            customDokumentTypId: dokument.dokumentTyp.id,
+            gesuchId,
+            onSuccess: () => {
+              this.dokumentsStore.getDokumenteAndRequired$({
+                gesuchTrancheId: trancheId,
+              });
+            },
+          });
+        }
+      });
   }
 
   fehlendeDokumenteEinreichen() {

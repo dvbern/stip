@@ -91,6 +91,9 @@ export class DokumentsStore extends signalStore(
       dokuments,
       requiredDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.customDokumentTyps?.filter(
+          // A document can already be uploaded but later on get rejected. In this case the document list would contain
+          // both the empty gesuch dokument and a gesuch dokument typ of the rejected document. So we need to filter
+          // them out
           (required) =>
             !dokuments.map((d) => d.customDokumentTyp?.id === required.id),
         ) ?? [],
@@ -125,6 +128,8 @@ export class DokumentsStore extends signalStore(
       false
     );
   });
+
+  // has abgelehnte dokumente or new custom dokument types for SB to send to GS
   hasDokumenteToUebermittelnSig = computed(() => {
     const hasAbgelehnteDokumente =
       this.dokuments
@@ -132,7 +137,6 @@ export class DokumentsStore extends signalStore(
         ?.some((dokument) => dokument.status === Dokumentstatus.ABGELEHNT) ??
       false;
 
-    // hier koennte man auch einen weiteren status verwenden
     const newCustomDokumentTypes =
       this.dokuments
         .data()
@@ -143,7 +147,9 @@ export class DokumentsStore extends signalStore(
 
     return hasAbgelehnteDokumente || newCustomDokumentTypes?.length > 0;
   });
-  hasAusstehendeDokumentsSig = computed(() => {
+
+  // SB has dokuments that have not been rejected or accepted by SB
+  hasSBAusstehendeDokumentsSig = computed(() => {
     return (
       this.dokuments
         .data()
@@ -157,20 +163,25 @@ export class DokumentsStore extends signalStore(
     );
   });
 
-  // todo: finish or revmove!
-  getAllCustomDokumentTypes$ = rxMethod<{ gesuchTrancheId: string }>(
-    pipe(
-      // tap(() => {
-      //   patchState(this, (state) => ({
-      //     dokuments: cachedPending(state.dokuments),
-      //   }));
-      // }),
-      switchMap(({ gesuchTrancheId }) =>
-        this.dokumentService.getAllCustomDokumentTypes$({ gesuchTrancheId }),
-      ),
-      // handleApiResponse((dokuments) => patchState(this, { dokuments })),
-    ),
-  );
+  // GS has not reuploaded all rejected documents
+  hasGSAussstehendeDokumentsSig = computed(() => {
+    // covers all custom dokument types that have no documents
+    const hasDokumenteWithoutDocuments = this.dokuments
+      .data()
+      ?.some((dokument) => dokument.dokumente.length === 0);
+
+    // Check if there are required dokumente that have not been uploaded
+    // necessary, since the required aussstehende dokumente will not be in the dokuments list, but show up in the documentsToUpload list
+    const hasRequiredDokumenteWithoutDokument =
+      this.documentsToUpload().data?.required?.some(
+        (dokumentTyp) =>
+          !this.dokuments
+            .data()
+            ?.some((dokument) => dokument.dokumentTyp === dokumentTyp),
+      );
+
+    return hasDokumenteWithoutDocuments || hasRequiredDokumenteWithoutDokument;
+  });
 
   getGesuchDokument$ = rxMethod<{
     trancheId: string;
@@ -223,43 +234,42 @@ export class DokumentsStore extends signalStore(
     gesuchTrancheId: string;
     gesuchDokumentId: string;
     kommentar: string;
-    afterSuccess?: () => void;
+    onSuccess?: () => void;
   }>(
     pipe(
-      switchMap(
-        ({ gesuchTrancheId, gesuchDokumentId, kommentar, afterSuccess }) =>
-          this.dokumentService
-            .gesuchDokumentAblehnen$({
-              gesuchDokumentId,
-              gesuchDokumentAblehnenRequest: {
-                kommentar: {
-                  kommentar,
-                  gesuchDokumentId,
-                  gesuchTrancheId,
-                },
+      switchMap(({ gesuchTrancheId, gesuchDokumentId, kommentar, onSuccess }) =>
+        this.dokumentService
+          .gesuchDokumentAblehnen$({
+            gesuchDokumentId,
+            gesuchDokumentAblehnenRequest: {
+              kommentar: {
+                kommentar,
+                gesuchDokumentId,
+                gesuchTrancheId,
               },
-            })
-            .pipe(
-              tapResponse({
-                next: () => {
-                  this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'shared.dokumente.reject.success',
-                  });
-                  afterSuccess?.();
-                },
-                error: () => undefined,
-              }),
-            ),
+            },
+          })
+          .pipe(
+            tapResponse({
+              next: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.dokumente.reject.success',
+                });
+                onSuccess?.();
+              },
+              error: () => undefined,
+            }),
+          ),
       ),
     ),
   );
 
   gesuchDokumentAkzeptieren$ = rxMethod<{
     gesuchDokumentId: string;
-    afterSuccess?: () => void;
+    onSuccess?: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchDokumentId, afterSuccess }) =>
+      switchMap(({ gesuchDokumentId, onSuccess }) =>
         this.dokumentService
           .gesuchDokumentAkzeptieren$({
             gesuchDokumentId,
@@ -270,7 +280,7 @@ export class DokumentsStore extends signalStore(
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey: 'shared.dokumente.accept.success',
                 });
-                afterSuccess?.();
+                onSuccess?.();
               },
               error: () => undefined,
             }),

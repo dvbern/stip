@@ -120,6 +120,7 @@ class GesuchValidatorTest {
         personInAusbildung.setWohnsitz(Wohnsitz.MUTTER_VATER);
         Gesuch gesuch = prepareDummyGesuch();
         GesuchTranche gesuchTranche = gesuch.getGesuchTranchen().get(0);
+        gesuchTranche.setId(UUID.randomUUID());
         gesuchTranche.getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         gesuchTranche.getGesuchFormular().setTranche(gesuchTranche);
         assertAllMessagesPresent(constraintMessages, gesuch);

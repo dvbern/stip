@@ -42,12 +42,10 @@ export type SharedModelGesuchDokument =
 
 export interface DokumentOptions {
   permissions: PermissionMap;
-  singleUpload: boolean;
   titleKey: string;
   allowTypes: string;
   dokument: SharedModelGesuchDokument;
   initialDokumente?: Dokument[];
-  readonly: boolean;
 }
 
 export interface SharedModelTableRequiredDokument {
@@ -79,7 +77,7 @@ export interface DokumentUpload {
 export interface DokumentView extends DokumentUpload {
   state: 'uploading' | 'done' | 'error';
   theme:
-    | { icon: 'warning'; type: 'warn'; color: 'warn' }
+    | { icon: 'warning'; type: 'danger'; color: 'warn' }
     | { icon: 'sync'; type: 'info'; color: 'info' }
     | { icon: 'check'; type: 'success'; color: 'success' };
 }
@@ -96,7 +94,6 @@ export interface DokumentState {
 }
 
 export interface UploadView {
-  readonly: boolean;
   permissions: PermissionMap;
   dokumentModel: SharedModelGesuchDokument;
   initialDokuments?: Dokument[];

@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.util.DokumentValidationUtils;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.inject.Instance;
@@ -49,40 +50,29 @@ public class DocumentsRequiredConstraintValidator
 
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
-        final var requiredDocs = producers.stream().map(x -> x.getRequiredDocuments(formular)).toList();
-        final var customRequiredDocTypes =
-            customProducers.stream()
-                .map(x -> x.getRequiredDocuments(formular.getTranche()))
-                .filter(x -> !x.getKey().isEmpty())
-                .toList();
+        final var requiredDocs = producers.stream().map(producer -> producer.getRequiredDocuments(formular)).toList();
         final var dokumenteOfType = getRequiredDokumentTypes(formular);
-        final var customDokumenteOfType =
-            new HashSet<>(getRequiredCustomDocumentTypes(formular));
-        final var filtered = requiredDocs.stream()
-            .filter(x -> x.getRight().stream().anyMatch(y -> !dokumenteOfType.contains(y)))
+        var filtered = requiredDocs.stream()
+            .filter(doc -> doc.getRight().stream().anyMatch(dokumentTyp -> !dokumenteOfType.contains(dokumentTyp)))
             .map(Pair::getLeft)
             .toList();
+        Set<String> allFiltered = new HashSet<>(filtered);
 
-        final var customFiltered = customRequiredDocTypes.stream()
-            .filter(
-                x -> x.getRight()
-                    .stream()
-                    .anyMatch(
-                        y -> customDokumenteOfType.stream()
-                            .anyMatch(z -> z.getCustomDokumentTyp().getId().equals(y.getId()))
-                    )
-            )
-            .map(Pair::getLeft)
-            .toList();
+        final var customFiltered =
+            DokumentValidationUtils.getMissingCustomDocumentTypesByType(customProducers, formular.getTranche());
+        allFiltered.addAll(customFiltered);
+
+        final var isNOTBeingEditedBySB =
+            formular.getTranche().getGesuch().getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB;
 
         if (
-            formular.getTranche().getGesuch().getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB
-            && (!filtered.isEmpty() || !customFiltered.isEmpty())
+            !allFiltered.isEmpty()
+            && isNOTBeingEditedBySB
         ) {
             return GesuchValidatorUtil.addProperties(
                 context,
                 VALIDATION_DOCUMENTS_REQUIRED_MESSAGE,
-                filtered
+                allFiltered
             );
         }
 

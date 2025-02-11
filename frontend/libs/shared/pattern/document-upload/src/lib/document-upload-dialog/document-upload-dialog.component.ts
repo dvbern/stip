@@ -24,12 +24,6 @@ import { DocumentUploadApprovalComponent } from '../document-upload-approval/doc
 import { SharedPatternDocumentUploadListComponent } from '../document-upload-list/document-upload-list.component';
 import { UploadStore } from '../upload.store';
 
-// export function isStandartDokument(
-//   dokument: SharedModelGesuchDokument,
-// ): dokument is SharedModelStandardGesuchDokument {
-//   return dokument.art === 'GESUCH_DOKUMENT';
-// }
-
 @Component({
   selector: 'dv-shared-pattern-document-upload-dialog',
   standalone: true,
@@ -59,7 +53,6 @@ export class SharedPatternDocumentUploadDialogComponent {
   uploadViewSig = computed<UploadView>(() => ({
     type: this.data.options.dokument.art,
     permissions: this.data.options.permissions,
-    readonly: this.data.options.readonly,
     dokumentModel: this.data.dokumentModel,
     initialDokuments: this.data.options.initialDokumente,
     hasEntries: this.data.store.hasEntriesSig(),
@@ -99,10 +92,7 @@ export class SharedPatternDocumentUploadDialogComponent {
   }
 
   handleMultipleDocumentsAdded(documents: File[]) {
-    const files = this.data.options.singleUpload
-      ? documents.slice(0, 1)
-      : documents;
-    this.newDocuments$.next(files);
+    this.newDocuments$.next(documents);
   }
 
   handleFilInputEvent(target: EventTarget | null) {

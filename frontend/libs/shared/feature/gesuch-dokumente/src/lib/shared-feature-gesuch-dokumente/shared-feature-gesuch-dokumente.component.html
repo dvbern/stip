@@ -1,7 +1,6 @@
 @let gesuch = gesuchViewSig();
 @let standardDokumente = standardDokumenteViewSig();
 @let customDokumente = customDokumenteViewSig();
-@let dokumentsToUpload = dokumentsStore.documentsToUpload().data;
 
 @if (gesuch.loading) {
   <dv-shared-ui-loading data-testid="dokumente-loading"></dv-shared-ui-loading>
@@ -41,14 +40,14 @@
   ></dv-required-dokumente>
 
   <div class="tw-mt-6 tw-flex" *dvIfSachbearbeiter>
-    @if (canSendMissingDocumentsSig()) {
+    @if (canSBSendMissingDocumentsSig()) {
       <!-- button sendMissingDocuments -->
       <button
         type="button"
         class="btn btn-primary ml-auto"
         (click)="fehlendeDokumenteUebermitteln()"
         data-testid="dokumente-button-sendMissingDocuments"
-        [disabled]="dokumentsStore.hasAusstehendeDokumentsSig()"
+        [disabled]="dokumentsStore.hasSBAusstehendeDokumentsSig()"
       >
         {{ 'shared.dokumente.uebermitteln' | translate }}
       </button>
@@ -79,21 +78,11 @@
         {{ 'shared.dokumente.createCustomDokumentTyp' | translate }}
       </button>
     }
-    <!-- test button for getAllCustomDokumentTypes$ -->
-    <!-- <button
-      type="button"
-      class="btn btn-primary ml-2"
-      (click)="getAllCustomDokumentTypes()"
-      data-testid="dokumente-button-getAllCustomDokumentTypes"
-    >
-      getAllCustomDokumentTypes
-    </button> -->
   </div>
 
-  <!-- Buttons -->
   <dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
     @let dokumente = dokumentsStore.dokuments();
-    @let missingDocuments = dokumentsToUpload?.required?.length ?? 0;
+    <!-- @let missingDocuments = dokumentsToUpload?.required?.length ?? 0; -->
     @if (gesuch.gesuchPermissions.canFreigeben) {
       <button
         type="button"
@@ -111,7 +100,7 @@
         class="btn btn-primary"
         (click)="fehlendeDokumenteEinreichen()"
         data-testid="button-save"
-        [disabled]="(dokumente | rdIsPending) || missingDocuments === 0"
+        [disabled]="(dokumente | rdIsPending) || dokumentsStore.hasGSAussstehendeDokumentsSig()"
       >
         {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | translate }}
       </button>

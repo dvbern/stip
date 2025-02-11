@@ -53,7 +53,6 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     const { dokumentModel, hasEntries } = this.uploadViewSig();
     if (!hasEntries || dokumentModel.art !== 'GESUCH_DOKUMENT') return;
-    // why is this needed?
     this.dokumentsStore.getGesuchDokument$({
       trancheId: dokumentModel.trancheId,
       dokumentTyp: dokumentModel.dokumentTyp,
@@ -70,7 +69,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
 
     this.dokumentsStore.gesuchDokumentAkzeptieren$({
       gesuchDokumentId: dokumentId,
-      afterSuccess: () => {
+      onSuccess: () => {
         this.reloadDokumente();
       },
     });
@@ -101,7 +100,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
             gesuchTrancheId: dokumentModel.trancheId,
             gesuchDokumentId,
             kommentar: result.kommentar,
-            afterSuccess: () => {
+            onSuccess: () => {
               this.reloadDokumente();
             },
           });
