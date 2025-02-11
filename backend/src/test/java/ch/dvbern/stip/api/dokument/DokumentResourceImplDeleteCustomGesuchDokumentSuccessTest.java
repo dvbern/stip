@@ -59,7 +59,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DokumentResourcesCustomFilesTest {
+public class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
@@ -74,13 +74,12 @@ public class DokumentResourcesCustomFilesTest {
     private UUID gesuchId;
     private GesuchDtoSpec gesuch;
     private UUID gesuchTrancheId;
-    private UUID dokumentId;
     private UUID customDokumentId;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
-    void test_prepare_gesuch_for_dokument() {
+    void prepare_gesuch_for_dokument() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
@@ -90,14 +89,14 @@ public class DokumentResourcesCustomFilesTest {
     // should be in state IN_BEARBEITUNG_SB
     @Test
     @TestAsGesuchsteller
-    @Order(14)
+    @Order(2)
     void fillGesuch() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(15)
+    @Order(3)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichen()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -109,7 +108,7 @@ public class DokumentResourcesCustomFilesTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(16)
+    @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -126,7 +125,7 @@ public class DokumentResourcesCustomFilesTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(17)
+    @Order(5)
     void test_create_custom_gesuchdokument() {
         CustomDokumentTypCreateDtoSpec customDokumentTypCreateDtoSpec = new CustomDokumentTypCreateDtoSpec();
         customDokumentTypCreateDtoSpec.setType("test");
@@ -165,7 +164,7 @@ public class DokumentResourcesCustomFilesTest {
     // b: no files -> ok
     @Test
     @TestAsSachbearbeiter
-    @Order(18)
+    @Order(6)
     void test_delete_required_custom_gesuchdokument_should_success() {
         dokumentApiSpec.deleteCustomDokumentTyp()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -192,7 +191,7 @@ public class DokumentResourcesCustomFilesTest {
     // upload
     @Test
     @TestAsGesuchsteller
-    @Order(19)
+    @Order(7)
     void test_get_required_custom_gesuchdokuments_should_be_empty() {
         final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUpload()
             .gesuchTrancheIdPath(gesuchTrancheId)
