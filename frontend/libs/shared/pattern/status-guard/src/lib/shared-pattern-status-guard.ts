@@ -72,12 +72,12 @@ const failSafeSozialdienstAdmin = (rolesMap: RolesMap, router: Router) => {
 };
 
 const handleForbidden = (
-  redirectUrl = '/',
+  redirectUrl: string | undefined,
   notification: GlobalNotificationStore,
   router: Router,
 ) => {
   return (
     notification.handleForbiddenError(),
-    new RedirectCommand(router.parseUrl(redirectUrl))
+    new RedirectCommand(router.parseUrl(redirectUrl ?? '/'))
   );
 };
