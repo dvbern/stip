@@ -32,10 +32,10 @@
 
     <!-- required document -->
     <ng-container matColumnDef="documentName">
-      <th mat-header-cell *matHeaderCellDef class="tw-min-w-40">
+      <th mat-header-cell *matHeaderCellDef class="tw-min-w-52">
         {{ 'shared.dokumente.table.documentName' | translate }}
       </th>
-      <td mat-cell class="tw-min-w-40" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+      <td mat-cell class="tw-min-w-52" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-py-3">
           {{ dokument.dokumentTyp.type }}
         </div>

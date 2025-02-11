@@ -8,6 +8,7 @@ import {
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedModelTableDokument } from '@dv/shared/model/dokument';
+import { Gesuchstatus } from '@dv/shared/model/gesuch';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
 import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
 
@@ -28,6 +29,7 @@ export class DokumentStatusActionsComponent {
   viewSig = input.required<{
     isSachbearbeitungApp: boolean;
     readonly: boolean;
+    gesuchStatus?: Gesuchstatus;
   }>();
 
   dokumentAkzeptieren = output<SharedModelTableDokument>();
