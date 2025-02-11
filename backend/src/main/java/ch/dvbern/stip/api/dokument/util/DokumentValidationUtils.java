@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -28,6 +24,10 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @UtilityClass
 public class DokumentValidationUtils {
@@ -40,7 +40,7 @@ public class DokumentValidationUtils {
         final var existingByCustomDokumentTypId =
             DokumentValidationUtils.getExistingGesuchDokumentsOfCustomDokumentType(tranche.getGesuchFormular())
                 .stream()
-                .map(x -> x.getId())
+                .map(customDokumentTyp -> customDokumentTyp.getId())
                 .toList();
 
         required.forEach(req -> {
@@ -58,7 +58,7 @@ public class DokumentValidationUtils {
         ArrayList<CustomDokumentTyp> customDokumentTypes = new ArrayList<>();
         customProducers.stream()
             .map(producer -> producer.getRequiredDocuments(tranche))
-            .forEach(x -> customDokumentTypes.addAll(x.getValue()));
+            .forEach(requiredCustomDok -> customDokumentTypes.addAll(requiredCustomDok.getValue()));
         return customDokumentTypes;
     }
 
