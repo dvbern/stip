@@ -43,6 +43,7 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -1524,6 +1525,78 @@ class GesuchServiceTest {
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getId());
         // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
         assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
+    }
+
+    /*
+     * Gesuch is in state IN_BEARBEITUNG_SB.
+     * GS receives Tranche of state when Gesuch was in state EINGEREICHT.
+     * the changes made to the tranche by SB (previous step) should not be visible
+     * changes is empty
+     * current gesuchtranche : state of eingereicht
+     */
+    @Test
+    @Description("GS should receive data of gesuch in state eingereicht when in bearbeitung by SB")
+    void checkGSReceivesTrancheInStateEingereicht() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            new Benutzer()
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+
+        final int initialWohnkostenValue = 10;
+        final int editedWohnkostenValue = 77;
+
+        Gesuch eingereichtesGesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        eingereichtesGesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(initialWohnkostenValue);
+        eingereichtesGesuch.getAusbildung().setFall(fall);
+
+        Gesuch gesuchInBearbeitungSB = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        gesuchInBearbeitungSB.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .setEinnahmenKosten(new EinnahmenKosten());
+        gesuchInBearbeitungSB.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWohnkosten(editedWohnkostenValue);
+        gesuchInBearbeitungSB.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
+        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
+            List.of(
+                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
+                eingereichtesGesuch,
+                gesuchInBearbeitungSB
+            )
+        );
+
+        final var gesuchGS = gesuchService.getGesuchGS(gesuchInBearbeitungSB.getId());
+        assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
+        assertThat(
+            gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
+            is(initialWohnkostenValue)
+        );
+
+        final var gesuchSB = gesuchService.getGesuchSB(gesuchInBearbeitungSB.getId());
+        assertThat(gesuchSB.getGesuchStatus(), is(gesuchInBearbeitungSB.getGesuchStatus()));
+        assertThat(
+            gesuchSB.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
+            is(editedWohnkostenValue)
+        );
+
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {

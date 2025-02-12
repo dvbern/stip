@@ -36,7 +36,6 @@ import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -183,33 +182,6 @@ class GesuchResourceImplTest {
             is(ekBeforeUpdate.getWohnkosten())
         );
         assertThat(gesuchWithChanges.getChanges().size(), is(greaterThan(0)));
-    }
-    /*
-     * Gesuch is in state IN_BEARBEITUNG_SB.
-     * GS receives Tranche of state when Gesuch was in state EINGEREICHT.
-     * the changes made to the tranche by SB (previous step) should not be visible
-     * changes is empty
-     * current gesuchtranche : state of eingereicht
-     */
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(8)
-    void checkGSReceivesTrancheInStateEingereicht() {
-        gesuch = gesuchApiSpec.getGesuchGS()
-            .gesuchIdPath(gesuchId)
-            .gesuchTrancheIdPath(trancheId)
-            .execute(ResponseBody::prettyPeek)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchDtoSpec.class);
-        // in the tranche to work with, the previously set value (set by SB) should not be visible to GS
-        assertThat(
-            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
-            is(ekBeforeUpdate.getWohnkosten())
-        );
-        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.EINGEREICHT));
     }
 
     @Test
