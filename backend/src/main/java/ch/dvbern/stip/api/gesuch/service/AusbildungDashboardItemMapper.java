@@ -93,7 +93,7 @@ public abstract class AusbildungDashboardItemMapper {
             .map(
                 tranche -> ImmutablePair.of(
                     tranche.getId(),
-                    gesuchTrancheService.getRequiredDokumentTypes(tranche.getId()).size()
+                    gesuchTrancheService.getAllRequiredDokumentTypes(tranche.getId()).size()
                 )
             )
             .filter(pair -> pair.getRight() > 0)
@@ -101,4 +101,5 @@ public abstract class AusbildungDashboardItemMapper {
 
         return gesuchDashboardItemMapper.toDto(gesuch, offeneAenderung, missingDocumentsTrancheIdAndCount);
     }
+
 }

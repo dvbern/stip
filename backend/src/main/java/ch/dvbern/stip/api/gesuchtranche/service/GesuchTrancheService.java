@@ -158,6 +158,16 @@ public class GesuchTrancheService {
         return dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
     }
 
+    public List<String> getAllRequiredDokumentTypes(final UUID gesuchTrancheId) {
+        var allRequired = new ArrayList<String>();
+        final var requiredDokumentTypes = getRequiredDokumentTypes(gesuchTrancheId);
+        final var requiredCustomDokumentTypes = getRequiredCustomDokumentTypes(gesuchTrancheId);
+        allRequired.addAll(requiredDokumentTypes.stream().map(dok -> dok.toString()).collect(Collectors.toList()));
+        allRequired
+            .addAll(requiredCustomDokumentTypes.stream().map(custom -> custom.getType()).collect(Collectors.toList()));
+        return allRequired;
+    }
+
     public List<DokumentTyp> getRequiredDokumentTypes(final UUID gesuchTranche) {
         return getRequiredDokumentTypes(gesuchTrancheRepository.requireById(gesuchTranche));
     }

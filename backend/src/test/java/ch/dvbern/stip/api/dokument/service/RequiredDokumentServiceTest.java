@@ -73,7 +73,7 @@ class RequiredDokumentServiceTest {
         final var requiredDocuments = service
             .getRequiredDokumentsForGesuchFormular(initFormular(List.of(DokumentTyp.AUSZAHLUNG_ABTRETUNGSERKLAERUNG)));
 
-        assertThat(requiredDocuments.size(), is(1));
+        assertThat(requiredDocuments.size(), is(0));
     }
 
     private GesuchFormular initFormular(final List<DokumentTyp> existingTypes) {
