@@ -215,10 +215,12 @@ export class SharedFeatureGesuchFormTrancheComponent {
     gesuchId: string,
     einreichedatum: string,
     minDate: string,
+    maxDate: string,
   ) {
     SharedDialogEinreichedatumAendernComponent.open(this.dialog, {
       einreichedatum,
       minDate,
+      maxDate,
     })
       .afterClosed()
       .subscribe((result) => {
