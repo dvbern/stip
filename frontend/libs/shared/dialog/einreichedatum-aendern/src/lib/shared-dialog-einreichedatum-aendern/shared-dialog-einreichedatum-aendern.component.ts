@@ -20,6 +20,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 export interface EinreichedatumAendernDialogData {
   minDate: string;
+  maxDate: string;
   einreichedatum: string;
 }
 
@@ -56,7 +57,6 @@ export class SharedDialogEinreichedatumAendernComponent {
   form = this.formBuilder.group({
     einreichedatum: [this.dialogData.einreichedatum],
   });
-  maxDate = new Date().toISOString();
 
   static open(dialog: MatDialog, data: EinreichedatumAendernDialogData) {
     return dialog.open<

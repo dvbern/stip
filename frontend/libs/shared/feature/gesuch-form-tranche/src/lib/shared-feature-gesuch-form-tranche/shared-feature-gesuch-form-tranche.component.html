@@ -54,13 +54,14 @@
       <input readonly type="text" matInput formControlName="einreichedatum" data-testid="form-tranche-einreichedatum" />
     </mat-form-field>
     @let einreichedatum = view.gesuch?.einreichedatum;
-    @let minDate = view.gesuch?.gesuchTrancheToWorkWith?.gueltigAb;
+    @let minDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStart;
+    @let maxDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStopp;
     @let canAendern = einreichenStore.einreichedatumAendernStatus().data?.canAendern;
     @if (gesuchId && einreichedatum && minDate && canAendern) {
       <button
         type="button"
         class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"
-        (click)="changeEinreichedatum(gesuchId, einreichedatum, minDate)"
+        (click)="changeEinreichedatum(gesuchId, einreichedatum, minDate, maxDate)"
       >
         <i class="material-symbols-rounded tw-text-3xl/none">calendar_month</i>
       </button>
