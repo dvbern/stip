@@ -59,7 +59,7 @@ export interface DokumentServiceCreateUnterschriftenblattRequestParams {
 }
 
 export interface DokumentServiceDeleteCustomDokumentTypRequestParams {
-    gesuchId: string;
+    gesuchTrancheId: string;
     customDokumentTypId: string;
 }
 
@@ -588,9 +588,9 @@ export class DokumentService {
      public deleteCustomDokumentTyp$(requestParameters: DokumentServiceDeleteCustomDokumentTypRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
      public deleteCustomDokumentTyp$(requestParameters: DokumentServiceDeleteCustomDokumentTypRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
      public deleteCustomDokumentTyp$(requestParameters: DokumentServiceDeleteCustomDokumentTypRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling deleteCustomDokumentTyp$.');
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling deleteCustomDokumentTyp$.');
         }
         const customDokumentTypId = requestParameters.customDokumentTypId;
         if (customDokumentTypId === null || customDokumentTypId === undefined) {
@@ -641,7 +641,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/customGesuchDokument/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuchDokument/customGesuchDokument/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

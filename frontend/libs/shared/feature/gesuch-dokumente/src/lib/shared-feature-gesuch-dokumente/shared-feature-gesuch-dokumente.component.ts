@@ -284,7 +284,7 @@ export class SharedFeatureGesuchDokumenteComponent {
         if (result) {
           this.dokumentsStore.deleteCustomDokumentTyp$({
             customDokumentTypId: dokument.dokumentTyp.id,
-            gesuchId,
+            gesuchTrancheId: trancheId,
             onSuccess: () => {
               this.dokumentsStore.getDokumenteAndRequired$({
                 gesuchTrancheId: trancheId,
