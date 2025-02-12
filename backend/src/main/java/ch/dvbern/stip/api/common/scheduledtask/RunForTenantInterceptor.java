@@ -45,8 +45,8 @@ public class RunForTenantInterceptor {
             } catch (Exception e) {
                 LOG.error(e.getMessage(), e);
             }
-        }
-        );
+        });
+
         return proceed;
     }
 }
