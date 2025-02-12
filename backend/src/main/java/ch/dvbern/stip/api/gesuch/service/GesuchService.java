@@ -838,11 +838,13 @@ public class GesuchService {
         return gesuchMapperUtil.mapWithNewestTranche(gesuch);
     }
 
+    @Transactional
     public EinreichedatumStatusDto canUpdateEinreichedatum(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return new EinreichedatumStatusDto(canUpdateEinreichedatum(gesuch));
     }
 
+    @Transactional
     public boolean canUpdateEinreichedatum(final Gesuch gesuch) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
