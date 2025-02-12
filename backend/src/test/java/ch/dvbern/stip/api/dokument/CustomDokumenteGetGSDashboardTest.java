@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.dokument;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
@@ -42,7 +39,6 @@ import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
-import com.mchange.io.FileUtils;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
@@ -54,8 +50,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.util.TestConstants.TEST_FILE_LOCATION;
-import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -223,13 +217,5 @@ class CustomDokumenteGetGSDashboardTest {
     @Order(99)
     void test_delete_gesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
-    }
-
-    private String readFileData() throws IOException {
-        return Files.readString(new File(TEST_FILE_LOCATION).toPath());
-    }
-
-    private String readPngFileData() throws IOException {
-        return FileUtils.getContentsAsString(new File(TEST_PNG_FILE_LOCATION));
     }
 }
