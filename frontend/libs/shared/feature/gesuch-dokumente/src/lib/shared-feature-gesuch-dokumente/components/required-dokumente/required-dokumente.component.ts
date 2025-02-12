@@ -20,6 +20,7 @@ import {
   Dokumentstatus,
   GesuchDokument,
   GesuchDokumentKommentar,
+  Gesuchstatus,
   TrancheSetting,
 } from '@dv/shared/model/gesuch';
 import {
@@ -74,6 +75,7 @@ export class RequiredDokumenteComponent {
     kommentare: RemoteData<GesuchDokumentKommentar[]>;
     requiredDocumentTypes: DokumentTyp[];
     readonly: boolean;
+    gesuchStatus?: Gesuchstatus;
   }>();
   getGesuchDokumentKommentare = output<SharedModelTableRequiredDokument>();
   dokumentAkzeptieren = output<SharedModelTableDokument>();

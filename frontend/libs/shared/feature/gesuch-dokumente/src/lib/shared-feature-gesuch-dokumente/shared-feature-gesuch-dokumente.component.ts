@@ -102,6 +102,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       trancheId,
       readonly,
       config: { isSachbearbeitungApp },
+      gesuch,
     } = this.gesuchViewSig();
     const { dokuments, requiredDocumentTypes } =
       this.dokumentsStore.dokumenteViewSig();
@@ -120,6 +121,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       kommentare,
       requiredDocumentTypes,
       readonly,
+      gesuchStatus: gesuch?.gesuchStatus,
     };
   });
 
@@ -131,6 +133,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       trancheSetting,
       trancheId,
       readonly,
+      gesuch,
       config: { isSachbearbeitungApp },
     } = this.gesuchViewSig();
 
@@ -150,6 +153,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       kommentare,
       requiredDocumentTypes,
       readonly,
+      gesuchStatus: gesuch?.gesuchStatus,
       showList:
         dokuments.length > 0 ||
         requiredDocumentTypes.length > 0 ||

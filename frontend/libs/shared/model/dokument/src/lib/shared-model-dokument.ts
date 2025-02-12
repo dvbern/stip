@@ -47,6 +47,7 @@ export type SharedModelTableDokument =
 export interface DokumentOptions {
   permissions: PermissionMap;
   titleKey: string;
+  descriptionKey?: string;
   allowTypes: string;
   dokument: SharedModelGesuchDokument;
   initialDokumente?: Dokument[];

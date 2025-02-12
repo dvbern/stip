@@ -147,6 +147,7 @@
   "shared.dokumente.table.upload": "Hochladen",
   "shared.dokumente.table.status": "Status",
   "shared.dokumente.table.noComment": "Kein Kommentar vorhanden",
+  "shared.dokumente.table.noData": "Keine Dokumente vorhanden",
   "shared.dokumente.dokumentStatus.AKZEPTIERT": "Akzeptiert",
   "shared.dokumente.dokumentStatus.ABGELEHNT": "Abgelehnt",
   "shared.dokumente.dokumentStatus.NO_DOCUMENT": "Kein Dokument",

@@ -147,6 +147,7 @@
   "shared.dokumente.table.upload": "Télécharger",
   "shared.dokumente.table.status": "Status",
   "shared.dokumente.table.noComment": "Aucun commentaire n'a été ajouté",
+  "shared.dokumente.table.noData": "Aucune document disponible",
   "shared.dokumente.dokumentStatus.AKZEPTIERT": "Valide",
   "shared.dokumente.dokumentStatus.ABGELEHNT": "Rejeté",
   "shared.dokumente.dokumentStatus.NO_DOCUMENT": "Aucun document",
