@@ -138,12 +138,14 @@ export class DokumentsStore extends signalStore(
       false;
 
     const newCustomDokumentTypes =
-      this.dokuments
-        .data()
-        ?.filter(
-          (dokument) =>
-            dokument.customDokumentTyp && dokument.status === 'AUSSTEHEND',
-        ) ?? [];
+      this.dokuments.data()?.filter((dokument) => {
+        const hasFiles = dokument.dokumente.length > 0;
+        return (
+          dokument.customDokumentTyp &&
+          ((hasFiles && dokument.status === 'ABGELEHNT') ||
+            (!hasFiles && dokument.status === 'AUSSTEHEND'))
+        );
+      }) ?? [];
 
     return hasAbgelehnteDokumente || newCustomDokumentTypes?.length > 0;
   });
@@ -532,15 +534,15 @@ export class DokumentsStore extends signalStore(
   );
 
   deleteCustomDokumentTyp$ = rxMethod<{
-    gesuchId: string;
+    gesuchTrancheId: string;
     customDokumentTypId: string;
     onSuccess: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchId, customDokumentTypId, onSuccess }) =>
+      switchMap(({ gesuchTrancheId, customDokumentTypId, onSuccess }) =>
         this.dokumentService
           .deleteCustomDokumentTyp$({
-            gesuchId,
+            gesuchTrancheId,
             customDokumentTypId,
           })
           .pipe(
