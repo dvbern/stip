@@ -44,9 +44,10 @@ import static org.wildfly.common.Assert.assertTrue;
 @QuarkusTest
 class DocumentsRequiredConstraintValidatorTest {
     @InjectMock
-    private CustomDokumentTypService customDokumentTypService;
+    CustomDokumentTypService customDokumentTypService;
+
     @Inject
-    private DocumentsRequiredConstraintValidator constraintValidator;
+    DocumentsRequiredConstraintValidator constraintValidator;
 
     private Gesuch gesuch;
     private GesuchFormular formular;

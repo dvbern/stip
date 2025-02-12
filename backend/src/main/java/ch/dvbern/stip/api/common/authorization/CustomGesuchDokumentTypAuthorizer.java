@@ -66,8 +66,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
         final var filesAttached = !customGesuchDokument.getDokumente().isEmpty();
 
         if (
-            isNotBeingEditedBySB
-            || fehlendeDokumenteUebermitteltToGS && filesAttached
+            isNotBeingEditedBySB || fehlendeDokumenteUebermitteltToGS && filesAttached
         ) {
             throw new ForbiddenException();
         }
