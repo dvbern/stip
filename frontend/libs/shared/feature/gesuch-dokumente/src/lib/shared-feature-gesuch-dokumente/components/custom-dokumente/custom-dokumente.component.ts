@@ -94,6 +94,8 @@ export class CustomDokumenteComponent {
       permissions,
       dokuments,
       requiredDocumentTypes,
+      isSachbearbeitungApp,
+      readonly,
     } = this.dokumenteViewSig();
 
     if (!gesuchId || !allowTypes || !trancheId) {
@@ -105,9 +107,13 @@ export class CustomDokumenteComponent {
         throw new Error('Custom Dokument Typ missing');
       }
 
+      const hasFiles = gesuchDokument.dokumente.length > 0;
+      const canDelete = isSachbearbeitungApp && !hasFiles && !readonly;
       return {
         dokumentTyp: gesuchDokument.customDokumentTyp,
         gesuchDokument,
+        canDelete,
+        showUpload: hasFiles || !isSachbearbeitungApp,
         dokumentOptions: createCustomDokumentOptions({
           gesuchId,
           trancheId,
@@ -123,6 +129,8 @@ export class CustomDokumenteComponent {
       ...uploadedDokuments,
       ...requiredDocumentTypes.map((dokumentTyp) => ({
         dokumentTyp: dokumentTyp,
+        canDelete: false,
+        showUpload: !isSachbearbeitungApp,
         dokumentOptions: createCustomDokumentOptions({
           gesuchId,
           trancheId,

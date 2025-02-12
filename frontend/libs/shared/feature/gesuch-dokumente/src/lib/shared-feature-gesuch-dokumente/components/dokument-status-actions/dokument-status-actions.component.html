@@ -28,12 +28,12 @@
           </button>
         }
         @case ('AKZEPTIERT') {
-          <dv-shared-ui-icon-badge type="success" class="tw-min-w-32">
+          <dv-shared-ui-icon-badge type="success" class="tw-min-w-[138px]">
             {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
           </dv-shared-ui-icon-badge>
         }
         @case ('ABGELEHNT') {
-          <dv-shared-ui-icon-badge type="danger" class="tw-min-w-32">
+          <dv-shared-ui-icon-badge type="danger" class="tw-min-w-[138px]">
             {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
           </dv-shared-ui-icon-badge>
         }
@@ -41,7 +41,7 @@
     } @else {
       @switch (dokument?.gesuchDokument?.status) {
         @case ('AKZEPTIERT') {
-          <dv-shared-ui-icon-badge type="success" class="tw-min-w-32">
+          <dv-shared-ui-icon-badge type="success" class="tw-min-w-[138px]">
             {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
           </dv-shared-ui-icon-badge>
         }
@@ -51,29 +51,29 @@
               !view.isSachbearbeitungApp &&
               (view.gesuchStatus === 'FEHLENDE_DOKUMENTE' || view.gesuchStatus === 'IN_BEARBEITUNG_GS')
             ) {
-              <dv-shared-ui-icon-badge type="info" class="tw-min-w-32">
+              <dv-shared-ui-icon-badge type="info" class="tw-min-w-[138px]">
                 {{ 'gesuch-app.dokumente.dokumentStatus.DOKUMENT_VORHANDEN' | translate }}
               </dv-shared-ui-icon-badge>
             } @else {
-              <dv-shared-ui-icon-badge [type]="view.isSachbearbeitungApp ? 'warning' : 'info'" class="tw-min-w-32">
+              <dv-shared-ui-icon-badge [type]="view.isSachbearbeitungApp ? 'warning' : 'info'" class="tw-min-w-[138px]">
                 {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
               </dv-shared-ui-icon-badge>
             }
           } @else {
-            <dv-shared-ui-icon-badge type="warning" class="tw-min-w-32">
+            <dv-shared-ui-icon-badge type="warning" class="tw-min-w-[138px]">
               {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
             </dv-shared-ui-icon-badge>
           }
         }
         @case ('ABGELEHNT') {
-          <dv-shared-ui-icon-badge type="danger" class="tw-min-w-32">
+          <dv-shared-ui-icon-badge type="danger" class="tw-min-w-[138px]">
             {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
           </dv-shared-ui-icon-badge>
         }
       }
     }
   } @else {
-    <dv-shared-ui-icon-badge type="warning" class="tw-min-w-32">
+    <dv-shared-ui-icon-badge type="warning" class="tw-min-w-[138px]">
       {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
     </dv-shared-ui-icon-badge>
   }

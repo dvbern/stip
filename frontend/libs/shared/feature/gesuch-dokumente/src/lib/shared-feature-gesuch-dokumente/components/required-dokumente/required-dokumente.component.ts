@@ -172,13 +172,15 @@ export class RequiredDokumenteComponent {
           ...dokument,
           formStep: {
             ...dokument.formStep,
-            routes: [
-              '/',
-              'gesuch',
-              ...dokument.formStep.route.split('/'),
-              gesuchId,
-              ...(trancheSetting?.routesSuffix ?? []),
-            ],
+            routes: gesuchId
+              ? [
+                  '/',
+                  'gesuch',
+                  ...dokument.formStep.route.split('/'),
+                  gesuchId,
+                  ...(trancheSetting?.routesSuffix ?? []),
+                ]
+              : undefined,
           },
         })),
     );

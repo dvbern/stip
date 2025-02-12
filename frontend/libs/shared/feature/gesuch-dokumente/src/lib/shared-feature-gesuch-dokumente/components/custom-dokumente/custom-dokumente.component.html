@@ -87,23 +87,24 @@
       <td mat-cell class="tw-w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-flex tw-justify-end">
           <!-- delete custom documentType -->
-          @if (view.isSachbearbeitungApp && !view.readonly) {
+          @if (dokument.canDelete) {
             <button
               type="button"
               class="dv-icon-button flex-shrink-0 delete-icon ms-2"
               [attr.aria-label]="'shared.form.delete' | translate"
               [matTooltip]="'shared.dokumente.deleteCustomDokumentTyp.title' | translate"
-              [disabled]="dokument?.gesuchDokument?.dokumente?.length"
               (click)="deleteCustomDokumentTyp.emit(dokument); $event.stopPropagation()"
             >
-              <span class="material-symbols-rounded align-middle text-muted fs-3">delete</span>
+              <span class="material-symbols-rounded align-middle text-muted tw-text-3xl/none">delete</span>
             </button>
           }
-          <dv-shared-pattern-document-upload
-            class="tw-max-h-11"
-            (click)="$event.stopPropagation()"
-            [optionsSig]="dokument.dokumentOptions"
-          ></dv-shared-pattern-document-upload>
+          @if (dokument.showUpload) {
+            <dv-shared-pattern-document-upload
+              class="tw-max-h-11"
+              (click)="$event.stopPropagation()"
+              [optionsSig]="dokument.dokumentOptions"
+            ></dv-shared-pattern-document-upload>
+          }
         </div>
       </td>
     </ng-container>

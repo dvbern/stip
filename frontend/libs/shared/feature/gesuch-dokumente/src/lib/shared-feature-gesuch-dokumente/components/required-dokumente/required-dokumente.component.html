@@ -48,9 +48,11 @@
         {{ 'shared.dokumente.table.formStep' | translate }}
       </th>
       <td class="tw-text-nowrap" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-        <a [routerLink]="dokument.formStep.route">
-          {{ dokument.formStep.translationKey | translate }}
-        </a>
+        @if (dokument.formStep.routes; as routes) {
+          <a [routerLink]="routes">
+            {{ dokument.formStep.translationKey | translate }}
+          </a>
+        }
       </td>
     </ng-container>
 
