@@ -28,6 +28,9 @@ import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.i18n.translations.TL;
+import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -130,19 +133,32 @@ public class BuchhaltungService {
             .max(Comparator.comparing(AbstractEntity::getTimestampErstellt));
     }
 
-    // TODO: KSTIP-1622: Unittest this -> resourcetest
     @Transactional
     public BuchhaltungEntryDto createStipendiumBuchhaltungEntry(
         final Gesuch gesuch,
-        final Integer stipendiumBetrag,
-        final String comment
+        final Integer stipendiumBetrag
     ) {
+        final var language = AppLanguages.fromLocale(
+            gesuch.getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getPersonInAusbildung()
+                .getKorrespondenzSprache()
+                .getLocale()
+        );
+        final TL translator = TLProducer.defaultBundle().forAppLanguage(language);
+
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 
         final var lastEntryStipendiumOpt = getLastEntryStipendiumOpt(gesuch.getId());
 
-        int betrag = 0;
+        String comment = translator.translate("stip.verfuegung.buchhaltung.erstgesuch");
+        if (gesuch.getAusbildung().getGesuchs().size() > 1) {
+            comment = translator.translate("stip.verfuegung.buchhaltung.folgegesuch");
+        }
+
+        int betrag = stipendiumBetrag;
         if (lastEntryStipendiumOpt.isPresent()) {
+            comment = translator.translate("stip.verfuegung.buchhaltung.aenderung");
             final var lastEntryStipendium = lastEntryStipendiumOpt.get();
             final int lastStipendiumBetrag =
                 lastEntryStipendium.getStipendium() != null
@@ -172,5 +188,14 @@ public class BuchhaltungService {
     public Stream<BuchhaltungEntryDto> getAllDtoForGesuchId(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return getAllForFallId(gesuch.getAusbildung().getFall().getId()).map(buchhaltungMapper::toDto);
+    }
+
+    @Transactional
+    public void deleteBuchhaltungsForGesuch(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var buchhaltungs = getAllForFallId(gesuch.getAusbildung().getFall().getId());
+        for (var buchhaltung : buchhaltungs.toList()) {
+            buchhaltungRepository.delete(buchhaltung);
+        }
     }
 }
