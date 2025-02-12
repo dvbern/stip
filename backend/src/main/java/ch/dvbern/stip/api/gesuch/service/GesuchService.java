@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -154,26 +153,15 @@ public class GesuchService {
             // eingereichtes gesuch (query envers)
             final var gesuchInStatusEingereicht = gesuchHistoryRepository.getStatusHistory(gesuchId)
                 .stream()
-                .filter(gesuch -> gesuch.getGesuchStatus().equals(Gesuchstatus.EINGEREICHT))
+                .filter(
+                    gesuch -> gesuch.getGesuchStatus().equals(Gesuchstatus.EINGEREICHT)
+                )
                 .findFirst()
                 .orElseThrow();
-            // reset fallId & fallNr, because both may be null
-            resetFallDetails(gesuchInStatusEingereicht, actualGesuch);
             return gesuchMapper.toDto(gesuchInStatusEingereicht);
         } else {
             // atkuelles gesuch
             return gesuchMapper.toDto(actualGesuch);
-        }
-    }
-
-    private void resetFallDetails(Gesuch gesuchInStatusEingereicht, Gesuch actualGesuch) {
-        if (Objects.isNull(gesuchInStatusEingereicht.getAusbildung().getFall().getFallNummer())) {
-            gesuchInStatusEingereicht.getAusbildung()
-                .getFall()
-                .setFallNummer(actualGesuch.getAusbildung().getFall().getFallNummer());
-        }
-        if (Objects.isNull(gesuchInStatusEingereicht.getAusbildung().getFall().getId())) {
-            gesuchInStatusEingereicht.getAusbildung().getFall().setId(actualGesuch.getAusbildung().getFall().getId());
         }
     }
 
