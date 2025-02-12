@@ -168,6 +168,6 @@ class DokumentResourceImplTest {
 
         // assert
         assertNotNull(violations1.getValidationWarnings());
-        assertThat(violations2.getValidationWarnings().isEmpty()).isTrue();
+        assertThat(violations2.getValidationWarnings()).isEmpty();
     }
 }

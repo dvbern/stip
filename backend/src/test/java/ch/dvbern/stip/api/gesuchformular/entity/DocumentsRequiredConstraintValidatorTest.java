@@ -54,7 +54,7 @@ class DocumentsRequiredConstraintValidatorTest {
 
     @Test
     @Description("IN_BEARBEITUNG_SB: Validation should not fail when all required documents are present")
-    public void validationShoudWorkWithAllDocuments_InBearbeitungSB() {
+    void validationShoudWorkWithAllDocuments_InBearbeitungSB() {
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
         formular = gesuch.getGesuchTranchen().get(0).getGesuchFormular();
 
@@ -77,7 +77,7 @@ class DocumentsRequiredConstraintValidatorTest {
      */
     @Description("IN_BEARBEITUNG_SB: Validation should not fail when some required documents are missing")
     @Test
-    public void validationShoudWorkWithMissingDocuments_InBearbeitungSB() {
+    void validationShoudWorkWithMissingDocuments_InBearbeitungSB() {
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
         formular = gesuch.getGesuchTranchen().get(0).getGesuchFormular();
 
@@ -109,7 +109,7 @@ class DocumentsRequiredConstraintValidatorTest {
 
     @Test
     @Description("IN_BEARBEITUNG_GS: Validation should not fail when all required documents are present")
-    public void validationShoudWorkWithAllDocuments_InBearbeitungGS() {
+    void validationShoudWorkWithAllDocuments_InBearbeitungGS() {
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
         formular = gesuch.getGesuchTranchen().get(0).getGesuchFormular();
 
@@ -126,7 +126,7 @@ class DocumentsRequiredConstraintValidatorTest {
 
     @Description("IN_BEARBEITUNG_GS: Validation should fail when some required documents are missing")
     @Test
-    public void validationShoudWorkWithMissingDocuments_InBearbeitungGS() {
+    void validationShoudWorkWithMissingDocuments_InBearbeitungGS() {
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
         formular = gesuch.getGesuchTranchen().get(0).getGesuchFormular();
 
@@ -146,7 +146,7 @@ class DocumentsRequiredConstraintValidatorTest {
 
     @Description("IN_BEARBEITUNG_GS: Validation should fail when some required custom documents are missing")
     @Test
-    public void validationShoudWorkWithMissingCustomDocuments_InBearbeitungGS() {
+    void validationShoudWorkWithMissingCustomDocuments_InBearbeitungGS() {
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
         formular = gesuch.getGesuchTranchen().get(0).getGesuchFormular();
 
@@ -172,5 +172,4 @@ class DocumentsRequiredConstraintValidatorTest {
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().add(customGesuchDokument);
         assertFalse(constraintValidator.isValid(formular, null));
     }
-
 }
