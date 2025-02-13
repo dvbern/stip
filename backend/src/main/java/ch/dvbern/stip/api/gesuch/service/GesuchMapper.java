@@ -69,7 +69,7 @@ public abstract class GesuchMapper {
     @Named("getFullNameOfSachbearbeiter")
     String getFullNameOfSachbearbeiter(Gesuch gesuch) {
         final var zuordnung = gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung();
-        if (zuordnung == null || zuordnung.getSachbearbeiter() == null) {
+        if (zuordnung == null) {
             return "";
         }
 
