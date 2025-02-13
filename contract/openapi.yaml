@@ -187,7 +187,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1914,7 +1914,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Gesuch'
+                $ref: '#/components/schemas/GesuchWithChanges'
           description: Fehlende Dokumente übermittelt
         '400':
           $ref: '#/components/responses/BadRequest'

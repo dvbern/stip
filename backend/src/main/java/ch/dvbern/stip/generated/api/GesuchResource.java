@@ -43,7 +43,7 @@ public interface GesuchResource {
     @Path("/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
+    GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @POST
     @Path("/status/in-bearbeitung/{gesuchTrancheId}")
@@ -89,7 +89,7 @@ public interface GesuchResource {
     @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchId}/{gesuchTrancheId}/fehlendeDokumenteEinreichen")

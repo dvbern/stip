@@ -302,7 +302,7 @@ public class GesuchApiSpec {
      *
      * @see #gesuchTrancheIdPath  (required)
      * @see #body  (optional)
-     * return GesuchDtoSpec
+     * return GesuchWithChangesDtoSpec
      */
     public static class ChangeGesuchStatusToBereitFuerBearbeitungOper implements Oper {
 
@@ -333,10 +333,10 @@ public class GesuchApiSpec {
         /**
          * POST /gesuch/status/bereit-fuer-bearbeitung/{gesuchTrancheId}
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchWithChangesDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -968,7 +968,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
-     * return GesuchDtoSpec
+     * return GesuchWithChangesDtoSpec
      */
     public static class GesuchFehlendeDokumenteUebermittelnOper implements Oper {
 
@@ -998,10 +998,10 @@ public class GesuchApiSpec {
         /**
          * PATCH /gesuch/{gesuchTrancheId}/fehlendeDokumente
          * @param handler handler
-         * @return GesuchDtoSpec
+         * @return GesuchWithChangesDtoSpec
          */
-        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
             return execute(handler).as(type);
         }
 
