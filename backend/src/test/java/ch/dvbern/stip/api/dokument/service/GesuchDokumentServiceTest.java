@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
-import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -232,7 +231,6 @@ class GesuchDokumentServiceTest {
             null,
             null,
             new DokumentstatusService(
-                new DokumentstatusConfigProducer().createStateMachineConfig(),
                 new GesuchDokumentKommentarService(
                     gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl()
                 )
