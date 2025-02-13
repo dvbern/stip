@@ -1,0 +1,7 @@
+{anrede} {nachname}
+
+Die Einreichefrist für das nachreichen der benötigten Dokumente ist abgelaufen. Das Gesuch ist jetzt wieder bei ihnen und gilt als Nicht-Eingereicht. Sie können, wenn es die Einreichefristen erlauben, das Gesuch nochmals einreichen.
+
+Freundliche Grüsse
+
+{sbVorname} {sbNachname}

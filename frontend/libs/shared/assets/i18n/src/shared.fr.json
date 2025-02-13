@@ -180,6 +180,7 @@
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE_EINREICHEN": "Les documents manquants ont été transmis",
   "shared.nachrichten.type.AENDERUNG_ABGELEHNT": "Changement rejeté",
   "shared.nachrichten.type.GESUCH_STATUS_CHANGE_WITH_COMMENT": "Changement de statut avec commentaire",
+  "shared.nachrichten.type.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT": "Documents manquants non soumis",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",

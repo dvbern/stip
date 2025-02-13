@@ -23,22 +23,25 @@ import java.util.stream.Collectors;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
+import ch.dvbern.stip.api.common.statemachines.gesuchtranche.GesuchTrancheStatusConfigProducer;
+import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheStatusStateChangeHandler;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
-import com.github.oxo42.stateless4j.StateMachineConfig;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.inject.Instance;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchTrancheStatusService {
-    private final StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config;
     private final GesuchTrancheValidatorService validatorService;
+
+    private final Instance<GesuchTrancheStatusStateChangeHandler> handlers;
 
     @Transactional
     public void triggerStateMachineEvent(
@@ -89,6 +92,8 @@ public class GesuchTrancheStatusService {
     StateMachine<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachine(
         final GesuchTranche gesuchTranche
     ) {
+        var config = GesuchTrancheStatusConfigProducer.createStateMachineConfig(handlers);
+
         StateMachineUtil.addExit(
             config,
             transition -> validatorService.validateGesuchTrancheForStatus(gesuchTranche, transition.getDestination()),

@@ -15,23 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.scheduledtask;
+package ch.dvbern.stip.arch;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
+import ch.dvbern.stip.arch.util.ArchTestUtil;
+import io.quarkus.scheduler.Scheduled;
+import org.junit.jupiter.api.Test;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
-import jakarta.enterprise.util.Nonbinding;
-import jakarta.interceptor.InterceptorBinding;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 
-@InterceptorBinding
-@Target({ ElementType.TYPE, ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited
-public @interface RunForTenant {
-    @Nonbinding
-    MandantIdentifier value() default MandantIdentifier.GLOBAL;
+class RunForTenantAnnotationTest {
+    @Test
+    void test_run_for_tenant_annotation_only_with_scheduled() {
+        var rule = methods().that().areAnnotatedWith(RunForTenant.class).should().beAnnotatedWith(Scheduled.class);
+
+        rule.check(ArchTestUtil.APP_CLASSES);
+    }
 }

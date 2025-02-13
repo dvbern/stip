@@ -20,19 +20,18 @@ package ch.dvbern.stip.api.dokument.service;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.Dokumentstatus;
 import ch.dvbern.stip.api.dokument.type.DokumentstatusChangeEvent;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
-import com.github.oxo42.stateless4j.StateMachineConfig;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DokumentstatusService {
-    private final StateMachineConfig<Dokumentstatus, DokumentstatusChangeEvent> config;
     private final GesuchDokumentKommentarService dokumentKommentarService;
 
     public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareByGesuchAndType(
@@ -74,6 +73,7 @@ public class DokumentstatusService {
     private StateMachine<Dokumentstatus, DokumentstatusChangeEvent> createStateMachine(
         final GesuchDokument gesuchDokument
     ) {
+        var config = DokumentstatusConfigProducer.createStateMachineConfig();
         return new StateMachine<>(
             gesuchDokument.getStatus(),
             gesuchDokument::getStatus,
