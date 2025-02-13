@@ -57,7 +57,7 @@
     @let minDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStart;
     @let maxDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStopp;
     @let canAendern = einreichenStore.einreichedatumAendernStatus().data?.canAendern;
-    @if (gesuchId && einreichedatum && minDate && canAendern) {
+    @if (gesuchId && einreichedatum && minDate && maxDate && canAendern) {
       <button
         type="button"
         class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"
