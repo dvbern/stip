@@ -47,8 +47,7 @@ class GesuchStatusStateMachineTest {
     @Test
     void failsWithoutGesuchAsParameter() {
         final var gesuch = new Gesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-        final var config =
-            new GesuchStatusConfigProducer(new InstanceMock(new ArrayList<>())).createStateMachineConfig();
+        final var config = GesuchStatusConfigProducer.createStateMachineConfig(new InstanceMock(new ArrayList<>()));
         final var sm = new StateMachine<>(
             gesuch.getGesuchStatus(),
             gesuch::getGesuchStatus,
@@ -74,7 +73,7 @@ class GesuchStatusStateMachineTest {
         });
 
         final var gesuch = new Gesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-        final var config = new GesuchStatusConfigProducer(instance).createStateMachineConfig();
+        final var config = GesuchStatusConfigProducer.createStateMachineConfig(instance);
         final var sm = new StateMachine<>(
             gesuch.getGesuchStatus(),
             gesuch::getGesuchStatus,
@@ -107,7 +106,7 @@ class GesuchStatusStateMachineTest {
         });
 
         final var gesuch = new Gesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
-        final var config = new GesuchStatusConfigProducer(instance).createStateMachineConfig();
+        final var config = GesuchStatusConfigProducer.createStateMachineConfig(instance);
         final var sm = new StateMachine<>(
             gesuch.getGesuchStatus(),
             gesuch::getGesuchStatus,

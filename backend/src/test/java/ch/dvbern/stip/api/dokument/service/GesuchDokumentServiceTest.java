@@ -26,7 +26,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
-import ch.dvbern.stip.api.common.statemachines.dokument.DokumentstatusConfigProducer;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
@@ -216,7 +215,6 @@ class GesuchDokumentServiceTest {
             null,
             null,
             new DokumentstatusService(
-                new DokumentstatusConfigProducer().createStateMachineConfig(),
                 new GesuchDokumentKommentarService(
                     gesuchDokumentKommentarRepository, new GesuchDokumentKommentarMapperImpl()
                 )
