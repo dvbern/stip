@@ -169,7 +169,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchWithChangesDto getGesuchSB(UUID gesuchId) {
+    public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
         final var actualGesuch = gesuchRepository.requireById(gesuchId);
         Optional<GesuchTranche> changes = Optional.empty();
         if (Gesuchstatus.SACHBEARBEITER_CAN_VIEW_CHANGES.contains(actualGesuch.getGesuchStatus())) {
@@ -180,7 +180,7 @@ public class GesuchService {
         // ab verfügt: changes: empty/null
         return gesuchMapperUtil.toWithChangesDto(
             actualGesuch,
-            actualGesuch.getCurrentGesuchTranche(),
+            gesuchTrancheRepository.requireById(gesuchTrancheId),
             changes.orElse(null)
         );
     }

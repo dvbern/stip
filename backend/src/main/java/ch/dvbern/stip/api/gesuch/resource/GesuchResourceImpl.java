@@ -342,7 +342,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @AllowAll
     @Override
     public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
-        return gesuchService.getGesuchSB(gesuchId);
+        return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
     @RolesAllowed(GESUCH_READ)

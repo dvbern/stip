@@ -1588,7 +1588,6 @@ class GesuchServiceTest {
         );
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
             .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
-
         final var gesuchGS = gesuchService
             .getGesuchGS(gesuchInBearbeitungSB.getId(), gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
         assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
@@ -1597,7 +1596,9 @@ class GesuchServiceTest {
             is(initialWohnkostenValue)
         );
 
-        final var gesuchSB = gesuchService.getGesuchSB(gesuchInBearbeitungSB.getId());
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
+        final var gesuchSB = gesuchService
+            .getGesuchSB(gesuchInBearbeitungSB.getId(), gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
         assertThat(gesuchSB.getGesuchStatus(), is(gesuchInBearbeitungSB.getGesuchStatus()));
         assertThat(
             gesuchSB.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
