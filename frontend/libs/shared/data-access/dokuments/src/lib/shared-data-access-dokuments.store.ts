@@ -305,6 +305,7 @@ export class DokumentsStore extends signalStore(
   );
 
   fehlendeDokumenteEinreichen$ = rxMethod<{
+    gesuchId: string;
     trancheId: string;
     onSuccess: () => void;
   }>(
@@ -315,9 +316,10 @@ export class DokumentsStore extends signalStore(
           documentsToUpload: cachedPending(state.documentsToUpload),
         }));
       }),
-      switchMap(({ trancheId, onSuccess }) =>
+      switchMap(({ gesuchId, trancheId, onSuccess }) =>
         this.gesuchService
           .gesuchTrancheFehlendeDokumenteEinreichen$({
+            gesuchId,
             gesuchTrancheId: trancheId,
           })
           .pipe(

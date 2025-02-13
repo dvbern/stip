@@ -108,6 +108,7 @@ export class GesuchAppFeatureGesuchFormAbschlussComponent implements OnInit {
 
     if (gesuchId && trancheId) {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
+        gesuchId,
         trancheId,
         onSuccess: () => {
           // Reload gesuch because the status has changed
