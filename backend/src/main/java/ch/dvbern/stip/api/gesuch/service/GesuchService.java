@@ -151,17 +151,17 @@ public class GesuchService {
         final var actualGesuch = gesuchRepository.requireById(gesuchId);
         if (Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(actualGesuch.getGesuchStatus())) {
             // eingereichtes gesuch (query envers)
-            final var gesuchInStatusEingereicht = gesuchHistoryRepository.getStatusHistory(gesuchId)
+            var gesuchInStatusEingereicht = gesuchHistoryRepository.getStatusHistory(gesuchId)
                 .stream()
                 .filter(
                     gesuch -> gesuch.getGesuchStatus().equals(Gesuchstatus.EINGEREICHT)
                 )
                 .findFirst()
                 .orElseThrow();
-            return gesuchMapper.toDto(gesuchInStatusEingereicht);
+            return gesuchMapperUtil.mapWithNewestTranche(gesuchInStatusEingereicht);
         } else {
             // atkuelles gesuch
-            return gesuchMapper.toDto(actualGesuch);
+            return gesuchMapperUtil.mapWithNewestTranche(actualGesuch);
         }
     }
 
