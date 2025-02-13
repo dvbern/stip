@@ -339,6 +339,16 @@
   "sachbearbeitung-app.infos.notiz.delete.title": "Notiz löschen",
   "sachbearbeitung-app.infos.notiz.delete.text": "Wollen Sie die Notiz wirklich löschen?",
 
+  "sachbearbeitung-app.infos.admin": "Admin",
+  "sachbearbeitung-app.infos.admin.table.timestamp": "Datum",
+  "sachbearbeitung-app.infos.admin.table.user": "Benutzer",
+  "sachbearbeitung-app.infos.admin.table.kommentar": "Kommentar",
+  "sachbearbeitung-app.infos.admin.verfuegungen": "Verschickte Verfügungen",
+  "sachbearbeitung-app.infos.admin.verfuegung.table.verfuegung": "Verfügung als PDF",
+  "sachbearbeitung-app.infos.admin.gesuch-abbrechen": "Gesuch abbrechen",
+  "sachbearbeitung-app.infos.admin.gesuch-unterbrechen": "Gesuch unterbrechen",
+  "sachbearbeitung-app.infos.admin.gesuch-beenden": "Gesuch beenden",
+
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Persönliches Budget",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.title": "Einnahmen",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total": "Totaler Betrag der persönlichen Einnahmen",
