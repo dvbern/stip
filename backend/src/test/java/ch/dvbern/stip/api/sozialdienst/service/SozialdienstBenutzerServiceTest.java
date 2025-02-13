@@ -36,7 +36,7 @@ import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.AdresseDto;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
@@ -169,7 +169,7 @@ class SozialdienstBenutzerServiceTest {
         sdAdresse.setLand(Land.CH);
         sozialdienstCreateDto.setAdresse(sdAdresse);
 
-        var sozialdienstAdminDto = new SozialdienstAdminCreateDto();
+        var sozialdienstAdminDto = new SozialdienstAdminDto();
         sozialdienstAdminDto.setKeycloakId(UUID.randomUUID().toString());
         sozialdienstAdminDto.setVorname("a");
         sozialdienstAdminDto.setNachname("b");

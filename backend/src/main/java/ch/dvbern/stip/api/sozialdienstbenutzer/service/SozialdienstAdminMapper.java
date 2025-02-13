@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.sozialdienstbenutzer.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import org.mapstruct.Mapper;
@@ -28,8 +27,6 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MappingConfig.class)
 public abstract class SozialdienstAdminMapper {
     public abstract SozialdienstBenutzer toEntity(SozialdienstAdminDto createDto);
-
-    public abstract SozialdienstBenutzer toEntity(SozialdienstAdminCreateDto createDto);
 
     public abstract SozialdienstBenutzer toEntity(SozialdienstAdminUpdateDto updateDto);
 

@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -20,30 +19,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class SozialdienstAdminDto  implements Serializable {
-  private @Valid UUID id;
   private @Valid String keycloakId;
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String email;
-
-  /**
-   **/
-  public SozialdienstAdminDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
-  }
 
   /**
    **/
@@ -131,8 +110,7 @@ public class SozialdienstAdminDto  implements Serializable {
       return false;
     }
     SozialdienstAdminDto sozialdienstAdmin = (SozialdienstAdminDto) o;
-    return Objects.equals(this.id, sozialdienstAdmin.id) &&
-        Objects.equals(this.keycloakId, sozialdienstAdmin.keycloakId) &&
+    return Objects.equals(this.keycloakId, sozialdienstAdmin.keycloakId) &&
         Objects.equals(this.vorname, sozialdienstAdmin.vorname) &&
         Objects.equals(this.nachname, sozialdienstAdmin.nachname) &&
         Objects.equals(this.email, sozialdienstAdmin.email);
@@ -140,7 +118,7 @@ public class SozialdienstAdminDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, keycloakId, vorname, nachname, email);
+    return Objects.hash(keycloakId, vorname, nachname, email);
   }
 
   @Override
@@ -148,7 +126,6 @@ public class SozialdienstAdminDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstAdminDto {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    keycloakId: ").append(toIndentedString(keycloakId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");

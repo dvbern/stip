@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
@@ -111,7 +111,7 @@ public class SozialdienstService {
     }
 
     @Transactional
-    public SozialdienstBenutzerDto replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminCreateDto dto) {
+    public SozialdienstBenutzerDto replaceSozialdienstAdmin(UUID sozialdienstId, SozialdienstAdminDto dto) {
         var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
         final var benutzerToDelete = sozialdienst.getSozialdienstAdmin();
         sozialdienstBenutzerService.deleteSozialdienstAdminBenutzer(benutzerToDelete.getKeycloakId());

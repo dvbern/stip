@@ -35,7 +35,7 @@ import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminCreateDto;
+import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
@@ -130,7 +130,7 @@ public class SozialdienstBenutzerService {
     }
 
     @Transactional
-    public SozialdienstBenutzer createSozialdienstAdminBenutzer(SozialdienstAdminCreateDto dto) {
+    public SozialdienstBenutzer createSozialdienstAdminBenutzer(SozialdienstAdminDto dto) {
         final var sozialdienstAdmin = sozialdienstAdminMapper.toEntity(dto);
         sozialdienstAdmin.setBenutzereinstellungen(new Benutzereinstellungen());
         sozialdienstAdmin.setBenutzerStatus(BenutzerStatus.AKTIV);
