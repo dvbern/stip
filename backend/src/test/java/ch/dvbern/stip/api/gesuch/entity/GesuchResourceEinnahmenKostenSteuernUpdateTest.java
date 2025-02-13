@@ -68,7 +68,6 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
 
     void createTranche() {
         gesuch = gesuchApiSpec.getGesuchGS()
-            .gesuchIdPath(gesuchId)
             .gesuchTrancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -123,7 +122,6 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
         gesuch = gesuchApiSpec.getGesuchGS()
-            .gesuchIdPath(gesuchId)
             .gesuchTrancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()

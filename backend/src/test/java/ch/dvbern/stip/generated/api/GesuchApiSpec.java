@@ -1428,14 +1428,13 @@ public class GesuchApiSpec {
      * Returns the Gesuch with the given Id
      * 
      *
-     * @see #gesuchIdPath  (required)
      * @see #gesuchTrancheIdPath  (required)
      * return GesuchDtoSpec
      */
     public static class GetGesuchGSOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/gs/{gesuchTrancheId}";
+        public static final String REQ_URI = "/gesuch/gs/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1447,7 +1446,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/gs/{gesuchTrancheId}
+         * GET /gesuch/gs/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1458,24 +1457,13 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/gs/{gesuchTrancheId}
+         * GET /gesuch/gs/{gesuchTrancheId}
          * @param handler handler
          * @return GesuchDtoSpec
          */
         public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
             return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID)  (required)
-         * @return operation
-         */
-        public GetGesuchGSOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
         }
 
         public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
@@ -1586,14 +1574,13 @@ public class GesuchApiSpec {
      * Returns the Gesuch with the given Id
      * 
      *
-     * @see #gesuchIdPath  (required)
      * @see #gesuchTrancheIdPath  (required)
      * return GesuchWithChangesDtoSpec
      */
     public static class GetGesuchSBOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/sb/{gesuchTrancheId}";
+        public static final String REQ_URI = "/gesuch/sb/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1605,7 +1592,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/sb/{gesuchTrancheId}
+         * GET /gesuch/sb/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1616,24 +1603,13 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/sb/{gesuchTrancheId}
+         * GET /gesuch/sb/{gesuchTrancheId}
          * @param handler handler
          * @return GesuchWithChangesDtoSpec
          */
         public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
             return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID)  (required)
-         * @return operation
-         */
-        public GetGesuchSBOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
         }
 
         public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";

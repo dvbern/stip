@@ -1709,13 +1709,8 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getInitialTrancheChangesByGesuchId
       summary: Returns the inital tranche changes by GesuchId
-  '/gesuch/{gesuchId}/gs/{gesuchTrancheId}':
+  '/gesuch/gs/{gesuchTrancheId}':
         parameters:
-          - name: gesuchId
-            schema:
-              $ref: '#/components/schemas/UUID'
-            in: path
-            required: true
           - name: gesuchTrancheId
             schema:
               $ref: '#/components/schemas/UUID'
@@ -1741,13 +1736,8 @@ paths:
               $ref: '#/components/responses/ServerError'
           operationId: getGesuchGS
           summary: Returns the Gesuch with the given Id
-  '/gesuch/{gesuchId}/sb/{gesuchTrancheId}':
+  '/gesuch/sb/{gesuchTrancheId}':
     parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
       - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'

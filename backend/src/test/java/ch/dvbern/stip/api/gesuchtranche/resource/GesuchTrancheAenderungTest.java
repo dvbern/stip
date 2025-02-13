@@ -177,7 +177,6 @@ class GesuchTrancheAenderungTest {
             .statusCode(Response.Status.OK.getStatusCode());
 
         var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
-            .gesuchIdPath(gesuch.getId())
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

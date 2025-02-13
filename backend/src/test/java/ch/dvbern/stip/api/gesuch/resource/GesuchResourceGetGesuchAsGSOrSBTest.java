@@ -92,7 +92,6 @@ class GesuchResourceGetGesuchAsGSOrSBTest {
     @Order(3)
     void checkSBReceivesEmptyChanges() {
         gesuchWithChanges = gesuchApiSpec.getGesuchSB()
-            .gesuchIdPath(gesuch.getId())
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -166,7 +165,6 @@ class GesuchResourceGetGesuchAsGSOrSBTest {
     @Order(7)
     void checkSBReceivesCurrentStateOfTranche() {
         gesuchWithChanges = gesuchApiSpec.getGesuchSB()
-            .gesuchIdPath(gesuchId)
             .gesuchTrancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()

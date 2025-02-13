@@ -145,7 +145,6 @@ class GesuchFillFormularTest {
     @Order(3)
     void gesuchTrancheCreated() {
         final var gesuch = gesuchApiSpec.getGesuchGS()
-            .gesuchIdPath(gesuchId)
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -461,7 +460,6 @@ class GesuchFillFormularTest {
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
 
         return gesuchApiSpec.getGesuchGS()
-            .gesuchIdPath(gesuchId)
             .gesuchTrancheIdPath(trancheUpdateDtoSpec.getId())
             .execute(ResponseBody::prettyPeek)
             .then()

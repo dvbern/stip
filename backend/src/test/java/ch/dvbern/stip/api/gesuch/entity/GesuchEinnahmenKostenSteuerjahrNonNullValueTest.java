@@ -74,7 +74,6 @@ class GesuchEinnahmenKostenSteuerjahrNonNullValueTest {
     @Order(2)
     void gesuchTrancheCreated() {
         gesuch = gesuchApiSpec.getGesuchGS()
-            .gesuchIdPath(gesuchId)
             .gesuchTrancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()
@@ -102,7 +101,6 @@ class GesuchEinnahmenKostenSteuerjahrNonNullValueTest {
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
         gesuch = gesuchApiSpec.getGesuchGS()
-            .gesuchIdPath(gesuchId)
             .gesuchTrancheIdPath(trancheId)
             .execute(ResponseBody::prettyPeek)
             .then()

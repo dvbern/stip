@@ -118,9 +118,9 @@ public interface GesuchResource {
     FileDownloadTokenDto getBerechnungsblattDownloadToken(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/gs/{gesuchTrancheId}")
+    @Path("/gs/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto getGesuchGS(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto getGesuchGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{gesuchId}/info")
@@ -128,9 +128,9 @@ public interface GesuchResource {
     GesuchInfoDto getGesuchInfo(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/sb/{gesuchTrancheId}")
+    @Path("/sb/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getGesuchSB(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchWithChangesDto getGesuchSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/benutzer/me/gs")
