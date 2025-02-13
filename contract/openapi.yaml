@@ -477,7 +477,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EinreichedatumStatus'
-          description: Aendert das Einreichedatum des Gesuch manuell
+          description: Check ob einreichedatumManuellAendern aufrufbar ist oder nicht
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
