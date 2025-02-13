@@ -70,7 +70,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_GESUCHSTELLER;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GESUCH_CREATE;
@@ -338,10 +337,11 @@ public class GesuchResourceImpl implements GesuchResource {
             );
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @RolesAllowed(GESUCH_READ)
     @AllowAll
     @Override
     public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
+        gesuchAuthorizer.canReadChanges(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 

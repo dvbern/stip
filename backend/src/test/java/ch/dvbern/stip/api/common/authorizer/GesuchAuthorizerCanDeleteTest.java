@@ -47,6 +47,8 @@ import static org.mockito.Mockito.when;
 class GesuchAuthorizerCanDeleteTest {
     private BenutzerService benutzerService;
     private Benutzer currentBenutzer;
+    private Benutzer sbBenutzer;
+    private Benutzer adminBenutzer;
     private Gesuch gesuch;
     private GesuchAuthorizer authorizer;
 
@@ -60,6 +62,14 @@ class GesuchAuthorizerCanDeleteTest {
         currentBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER));
         currentBenutzer.setId(currentBenutzerId);
+
+        sbBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
+        sbBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
+        sbBenutzer.setId(UUID.randomUUID());
+
+        adminBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
+        adminBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
+        adminBenutzer.setId(UUID.randomUUID());
 
         final var gesuchTranche_inBearbeitungGS = new GesuchTranche()
             .setGesuch(gesuch)
@@ -104,6 +114,24 @@ class GesuchAuthorizerCanDeleteTest {
         final var uuid = UUID.randomUUID();
         // assert
         assertDoesNotThrow(() -> authorizer.canUpdate(uuid));
+    }
+
+    @Test
+    void canReadChangesTest() {
+        // arrange
+        final var uuid = UUID.randomUUID();
+        assertThrows(UnauthorizedException.class, () -> authorizer.canReadChanges(uuid));
+
+        when(benutzerService.getCurrentBenutzer()).thenReturn(sbBenutzer);
+
+        // assert
+        assertDoesNotThrow(() -> authorizer.canReadChanges(uuid));
+
+        // arrange
+        when(benutzerService.getCurrentBenutzer()).thenReturn(adminBenutzer);
+
+        // assert
+        assertDoesNotThrow(() -> authorizer.canReadChanges(uuid));
     }
 
     @Test
