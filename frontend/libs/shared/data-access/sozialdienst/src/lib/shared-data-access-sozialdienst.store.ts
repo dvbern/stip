@@ -4,7 +4,6 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
-  EMPTY,
   catchError,
   exhaustMap,
   map,
@@ -15,7 +14,6 @@ import {
 } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { SharedModelBenutzerApi } from '@dv/shared/model/benutzer';
 import {
   DelegierenService,
   Delegierung,
@@ -239,7 +237,8 @@ export class SozialdienstStore extends signalStore(
             ),
             catchError((error) => {
               patchState(this, { sozialdienst: failure(error) });
-              return EMPTY;
+
+              return throwError(() => error);
             }),
           );
       }),
@@ -254,13 +253,6 @@ export class SozialdienstStore extends signalStore(
         });
       }),
       exhaustMap(({ sozialdienst }) => {
-        const userUpdate: SharedModelBenutzerApi = {
-          id: sozialdienst.sozialdienstAdmin.id,
-          email: sozialdienst.sozialdienstAdmin.email,
-          firstName: sozialdienst.sozialdienstAdmin.nachname,
-          lastName: sozialdienst.sozialdienstAdmin.vorname,
-        };
-
         const sozialdienstUpdate: SozialdienstUpdate = {
           adresse: sozialdienst.adresse,
           iban: sozialdienst.iban,
@@ -274,46 +266,45 @@ export class SozialdienstStore extends signalStore(
           vorname: sozialdienst.sozialdienstAdmin.vorname,
         };
 
-        return this.keycloak.updateUser$(userUpdate).pipe(
-          switchMap(() => {
-            return this.sozialdienstService.updateSozialdienstAdmin$({
-              sozialdienstBenutzerUpdate,
-            });
-          }),
-          switchMap(() =>
-            this.sozialdienstService
-              .updateSozialdienst$({
-                sozialdienstUpdate,
-              })
-              .pipe(
-                handleApiResponse(
-                  (sozialdienst) => {
-                    patchState(this, { sozialdienst });
-                  },
-                  {
-                    onSuccess: () => {
-                      this.globalNotificationStore.createSuccessNotification({
-                        messageKey:
-                          'sachbearbeitung-app.admin.sozialdienst.sozialdienstAktualisiert',
-                      });
+        return this.sozialdienstService
+          .updateSozialdienstAdmin$({
+            sozialdienstBenutzerUpdate,
+          })
+          .pipe(
+            switchMap(() =>
+              this.sozialdienstService
+                .updateSozialdienst$({
+                  sozialdienstUpdate,
+                })
+                .pipe(
+                  handleApiResponse(
+                    (sozialdienst) => {
+                      patchState(this, { sozialdienst });
                     },
-                    onFailure: () => {
-                      this.loadSozialdienst$({
-                        sozialdienstId: sozialdienst.id,
-                      });
+                    {
+                      onSuccess: () => {
+                        this.globalNotificationStore.createSuccessNotification({
+                          messageKey:
+                            'sachbearbeitung-app.admin.sozialdienst.sozialdienstAktualisiert',
+                        });
+                      },
+                      onFailure: () => {
+                        this.loadSozialdienst$({
+                          sozialdienstId: sozialdienst.id,
+                        });
+                      },
                     },
-                  },
+                  ),
                 ),
-              ),
-          ),
-          catchError(() => {
-            this.loadSozialdienst$({
-              sozialdienstId: sozialdienst.id,
-            });
+            ),
+            catchError((error) => {
+              this.loadSozialdienst$({
+                sozialdienstId: sozialdienst.id,
+              });
 
-            return EMPTY;
-          }),
-        );
+              return throwError(() => error);
+            }),
+          );
       }),
     ),
   );
@@ -372,10 +363,10 @@ export class SozialdienstStore extends signalStore(
                   }),
                 ),
             ),
-            catchError(() => {
+            catchError((error) => {
               this.loadSozialdienst$({ sozialdienstId });
 
-              return EMPTY;
+              return throwError(() => error);
             }),
           );
       }),
