@@ -52,6 +52,8 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenSteuerjahrInPastOrCurrentConstraint;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
+import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
+import ch.dvbern.stip.api.steuererklaerung.validation.SteuererklaerungPageValidation;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -289,4 +291,9 @@ public class GesuchFormular extends AbstractMandantEntity {
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @HasPageValidation(SteuerdatenPageValidation.class)
     private @Valid Set<Steuerdaten> steuerdaten = new LinkedHashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
+    @HasPageValidation(SteuererklaerungPageValidation.class)
+    private @Valid Set<Steuererklaerung> steuererklaerung = new LinkedHashSet<>();
 }

@@ -32,7 +32,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoS
 import ch.dvbern.stip.api.generator.api.model.gesuch.GeschwisterUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
-import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.SteuererklaerungUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -248,9 +248,10 @@ class GesuchFillFormularTest {
     @Test
     @TestAsGesuchsteller
     @Order(9)
-    void addSteuerdaten() {
-        final var steuerdaten = SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
-        currentFormular.setSteuerdaten(List.of(steuerdaten));
+    void addSteuererklaerung() {
+        final var steuererklaerung =
+            SteuererklaerungUpdateTabsDtoSpecModel.steuererklaerungDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
+        currentFormular.setSteuererklaerung(List.of(steuererklaerung));
         patchAndValidate();
     }
 

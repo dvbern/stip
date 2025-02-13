@@ -62,6 +62,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
+import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
@@ -105,6 +106,7 @@ public class GesuchTrancheService {
     private final GeschwisterMapper geschwisterMapper;
     private final KindMapper kindMapper;
     private final SteuerdatenMapper steuerdatenMapper;
+    private final SteuererklaerungMapper steuererklaerungMapper;
     private final MailService mailService;
     private final NotificationService notificationService;
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
@@ -366,10 +368,16 @@ public class GesuchTrancheService {
             gesuchFormularUpdateDto.getKinds().add(kindMapper.toUpdateDto(kind).id(null));
         }
 
-        gesuchFormularUpdateDto.setSteuerdaten(new ArrayList<>(List.of()));
-        for (final var steuerdaten : lastFreigegebenFormular.getSteuerdaten()) {
-            gesuchFormularUpdateDto.getSteuerdaten().add(steuerdatenMapper.toUpdateDto(steuerdaten).id(null));
+        gesuchFormularUpdateDto.setSteuererklaerung(new ArrayList<>(List.of()));
+        for (final var steuererklaerung : lastFreigegebenFormular.getSteuererklaerung()) {
+            gesuchFormularUpdateDto.getSteuererklaerung()
+                .add(steuererklaerungMapper.toUpdateDto(steuererklaerung).id(null));
         }
+
+        // gesuchFormularUpdateDto.setSteuerdaten(new ArrayList<>(List.of()));
+        // for (final var steuerdaten : lastFreigegebenFormular.getSteuerdaten()) {
+        // gesuchFormularUpdateDto.getSteuerdaten().add(steuerdatenMapper.toUpdateDto(steuerdaten).id(null));
+        // }
 
         gesuchTrancheMapper.partialUpdate(gesuchTrancheUpdateDto, aenderung);
         if (aenderung.getGesuchFormular().getPartner() != null) {

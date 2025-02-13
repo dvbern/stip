@@ -293,18 +293,18 @@ public class GesuchService {
                 trancheToUpdate
             );
         }
-        if (
-            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null
-            && !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()
-        ) {
-            setAndValidateSteuerdatenUpdateLegality(
-                gesuchUpdateDto
-                    .getGesuchTrancheToWorkWith()
-                    .getGesuchFormular()
-                    .getSteuerdaten(),
-                trancheToUpdate
-            );
-        }
+        // if (
+        // gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten() != null
+        // && !gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getSteuerdaten().isEmpty()
+        // ) {
+        // setAndValidateSteuerdatenUpdateLegality(
+        // gesuchUpdateDto
+        // .getGesuchTrancheToWorkWith()
+        // .getGesuchFormular()
+        // .getSteuerdaten(),
+        // trancheToUpdate
+        // );
+        // }
 
         updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
 

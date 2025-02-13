@@ -60,9 +60,9 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapperImpl;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapperImpl;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
@@ -75,7 +75,7 @@ import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -458,12 +458,12 @@ class GesuchFormularMapperTest {
         final var updateFamsit = new FamiliensituationUpdateDto();
         updateFamsit.setElternVerheiratetZusammen(true);
 
-        final var updateTab = new SteuerdatenUpdateDto();
+        final var updateTab = new SteuererklaerungUpdateDto();
         updateTab.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
         // This needs to be this verbose as List.of creates an immutable list
         // This also needs to be a mutable list since List.removeAll(...)
         // will throw an exception even if no items are to be removed
-        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {
+        final List<SteuererklaerungUpdateDto> updateSteuererklaerung = new ArrayList<>() {
             {
                 add(updateTab);
             }
@@ -471,7 +471,7 @@ class GesuchFormularMapperTest {
 
         final var updateFormular = new GesuchFormularUpdateDto();
         updateFormular.setFamiliensituation(updateFamsit);
-        updateFormular.setSteuerdaten(updateSteuerdaten);
+        updateFormular.setSteuererklaerung(updateSteuererklaerung);
 
         final var mapper = createMapper();
 
@@ -483,9 +483,9 @@ class GesuchFormularMapperTest {
             );
 
         // Assert
-        assertThat(targetFormular.getSteuerdaten().size(), is(1));
+        assertThat(targetFormular.getSteuererklaerung().size(), is(1));
         assertThat(
-            targetFormular.getSteuerdaten().stream().findFirst().get().getSteuerdatenTyp(),
+            targetFormular.getSteuererklaerung().stream().findFirst().get().getSteuerdatenTyp(),
             is(SteuerdatenTyp.FAMILIE)
         );
     }
@@ -496,10 +496,10 @@ class GesuchFormularMapperTest {
         final var updateFamsit = new FamiliensituationUpdateDto();
         updateFamsit.setElternVerheiratetZusammen(true);
 
-        final var updateTab = new SteuerdatenUpdateDto();
+        final var updateTab = new SteuererklaerungUpdateDto();
         updateTab.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
         // This needs to be this verbose as List.of creates an immutable list
-        final List<SteuerdatenUpdateDto> updateSteuerdaten = new ArrayList<>() {
+        final List<SteuererklaerungUpdateDto> updateSteuererklaerung = new ArrayList<>() {
             {
                 add(updateTab);
             }
@@ -507,7 +507,7 @@ class GesuchFormularMapperTest {
 
         final var updateFormular = new GesuchFormularUpdateDto();
         updateFormular.setFamiliensituation(updateFamsit);
-        updateFormular.setSteuerdaten(updateSteuerdaten);
+        updateFormular.setSteuererklaerung(updateSteuererklaerung);
 
         final var mapper = createMapper();
 
@@ -527,7 +527,7 @@ class GesuchFormularMapperTest {
         targetFormular = mapper.partialUpdate(updateFormular, targetFormular);
 
         // Assert
-        assertThat(targetFormular.getSteuerdaten().size(), is(0));
+        assertThat(targetFormular.getSteuererklaerung().size(), is(0));
     }
 
     @Test
@@ -727,7 +727,7 @@ class GesuchFormularMapperTest {
             new ElternMapperImpl(),
             new KindMapperImpl(),
             new EinnahmenKostenMapperImpl(),
-            new SteuerdatenMapperImpl(),
+            new SteuererklaerungMapperImpl(),
             new DarlehenMapperImpl()
         );
 

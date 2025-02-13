@@ -279,6 +279,10 @@ public class TestUtil {
         return ThreadLocalRandom.current().nextInt(lower, upper);
     }
 
+    public static boolean getRandomBoolean() {
+        return ThreadLocalRandom.current().nextBoolean();
+    }
+
     public static BigDecimal getRandomBigDecimal() {
         return getRandomBigDecimal(100, 10_000);
     }

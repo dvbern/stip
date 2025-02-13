@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenUpdateDtoSpec;
 
@@ -58,13 +57,13 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
         return list;
     }
 
-    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecSteuerdaten() {
-        return TestUtil.createUpdateDtoSpec(
-            GesuchFormularUpdateDtoSpec::new,
-            (model) -> {
-                model.setSteuerdaten(steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
-                model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
-            }
-        );
-    }
+    // public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecSteuerdaten() {
+    // return TestUtil.createUpdateDtoSpec(
+    // GesuchFormularUpdateDtoSpec::new,
+    // (model) -> {
+    // model.setSteuerdaten(steuerdatenDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE));
+    // model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpec());
+    // }
+    // );
+    // }
 }
