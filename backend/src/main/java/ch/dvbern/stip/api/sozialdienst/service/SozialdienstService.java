@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
-import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
@@ -43,7 +42,6 @@ public class SozialdienstService {
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
-    private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
 
     public Sozialdienst getSozialdienstOfCurrentSozialdienstAdmin() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();

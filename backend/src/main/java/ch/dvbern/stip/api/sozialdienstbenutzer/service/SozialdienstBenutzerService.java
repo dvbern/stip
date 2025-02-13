@@ -227,9 +227,16 @@ public class SozialdienstBenutzerService {
             if (response.getStatus() != Status.NO_CONTENT.getStatusCode()) {
                 throw new WebApplicationException(response);
             }
-            var sozialdienst =
-                sozialdienstBenutzerRepository.findSozialdienstBySozialdienstBenutzer(sozialdienstBenutzer)
-                    .orElseThrow(NotFoundException::new);
+            var sozialdienstOpt =
+                sozialdienstBenutzerRepository.findSozialdienstBySozialdienstBenutzer(sozialdienstBenutzer);
+            if (!sozialdienstOpt.isPresent()) {
+                sozialdienstOpt =
+                    sozialdienstBenutzerRepository.findSozialdienstBySozialdienstAdmin(sozialdienstBenutzer);
+            }
+            if (!sozialdienstOpt.isPresent()) {
+                throw new NotFoundException();
+            }
+            var sozialdienst = sozialdienstOpt.get();
             sozialdienst.getSozialdienstBenutzers().remove(sozialdienstBenutzer);
             sozialdienstBenutzerRepository.delete(sozialdienstBenutzer);
         }

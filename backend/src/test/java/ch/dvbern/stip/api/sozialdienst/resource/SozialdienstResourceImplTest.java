@@ -160,30 +160,6 @@ class SozialdienstResourceImplTest {
         checkSozialdienstAdminResponse(updated.getSozialdienstAdmin());
     }
 
-    // @Order(5)
-    // @TestAsAdmin
-    // @Test
-    // void replaceSozialdienstAdminTest() {
-    // final var createSozialdienstDto = new SozialdienstAdminDtoSpec();
-    // createSozialdienstDto.setVorname("replaced");
-    // createSozialdienstDto.setNachname("replaced");
-    // createSozialdienstDto.setEmail("replaced@test.com");
-    // createSozialdienstDto.setKeycloakId(SOZIALDIENST_ADMIN_ID);
-    // final var replaced = apiSpec.replaceSozialdienstAdmin()
-    // .sozialdienstIdPath(dtoSpec.getId())
-    // .body(createSozialdienstDto)
-    // .execute(TestUtil.PEEK_IF_ENV_SET)
-    // .then()
-    // .assertThat()
-    // .statusCode(Response.Status.OK.getStatusCode())
-    // .extract()
-    // .as(SozialdienstBenutzerDtoSpec.class);
-    // assertTrue(replaced.getNachname().contains("replaced"));
-    // assertTrue(replaced.getVorname().contains("replaced"));
-    // assertTrue(replaced.getEmail().contains("replaced"));
-    // checkSozialdienstAdminResponse(replaced);
-    // }
-
     @Order(99)
     @TestAsAdmin
     @Test

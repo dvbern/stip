@@ -21,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
@@ -80,7 +81,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
 class SozialdienstBenutzerServiceTest {
-    @Inject
     SozialdienstService sozialdienstService;
 
     @Inject
@@ -100,6 +100,12 @@ class SozialdienstBenutzerServiceTest {
 
     @Inject
     MailService mailService;
+
+    @Inject
+    BenutzerService benutzerService;
+
+    @Inject
+    SozialdienstMapper sozialdienstMapper;
 
     @Inject
     KeycloakAdminClientConfig keycloakAdminClientConfigRuntimeValue;
@@ -150,6 +156,9 @@ class SozialdienstBenutzerServiceTest {
 
         Mockito.when(sozialdienstBenutzerServiceMock.initKeycloak()).thenReturn(mockKecloakAdminClient);
         sozialdienstBenutzerServiceMock.setup();
+        sozialdienstService = new SozialdienstService(
+            benutzerService, sozialdienstRepository, sozialdienstMapper, sozialdienstBenutzerServiceMock
+        );
     }
 
     @Order(2)
@@ -179,6 +188,24 @@ class SozialdienstBenutzerServiceTest {
         sozialdienstDto = sozialdienstService.createSozialdienst(sozialdienstCreateDto);
 
         assertThat(sozialdienstDto.getId(), notNullValue());
+    }
+
+    @Order(3)
+    @Transactional
+    @TestAsAdmin
+    @Test
+    void replaceSozialdienstAdmin() {
+        SozialdienstAdminDto sozialdienstAdminDto = new SozialdienstAdminDto();
+        sozialdienstAdminDto.setKeycloakId(UUID.randomUUID().toString());
+        sozialdienstAdminDto.setVorname("c");
+        sozialdienstAdminDto.setNachname("d");
+        sozialdienstAdminDto.setEmail("c@d.ch");
+        sozialdienstService.replaceSozialdienstAdmin(sozialdienstDto.getId(), sozialdienstAdminDto);
+
+        sozialdienstDto = sozialdienstService.getSozialdienstById(sozialdienstDto.getId());
+        assertThat(sozialdienstDto.getSozialdienstAdmin().getVorname(), equalTo("c"));
+        assertThat(sozialdienstDto.getSozialdienstAdmin().getNachname(), equalTo("d"));
+        assertThat(sozialdienstDto.getSozialdienstAdmin().getEmail(), equalTo("c@d.ch"));
     }
 
     @Order(4)
