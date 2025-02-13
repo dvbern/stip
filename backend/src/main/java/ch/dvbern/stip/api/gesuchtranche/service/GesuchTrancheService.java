@@ -162,9 +162,9 @@ public class GesuchTrancheService {
         var allRequired = new ArrayList<String>();
         final var requiredDokumentTypes = getRequiredDokumentTypes(gesuchTrancheId);
         final var requiredCustomDokumentTypes = getRequiredCustomDokumentTypes(gesuchTrancheId);
-        allRequired.addAll(requiredDokumentTypes.stream().map(dok -> dok.toString()).collect(Collectors.toList()));
+        allRequired.addAll(requiredDokumentTypes.stream().map(Enum::toString).toList());
         allRequired
-            .addAll(requiredCustomDokumentTypes.stream().map(custom -> custom.getType()).collect(Collectors.toList()));
+            .addAll(requiredCustomDokumentTypes.stream().map(CustomDokumentTyp::getType).toList());
         return allRequired;
     }
 
