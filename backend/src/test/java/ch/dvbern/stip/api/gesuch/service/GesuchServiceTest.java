@@ -60,6 +60,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
@@ -169,6 +170,9 @@ class GesuchServiceTest {
 
     @Inject
     ConfigService configService;
+
+    @InjectMock
+    GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
 
     @InjectSpy
     MailService mailService;
@@ -1489,7 +1493,7 @@ class GesuchServiceTest {
             )
         );
 
-        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getId());
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getId(), gesuch.getGesuchTranchen().get(0).getId());
         // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
         assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
     }
@@ -1522,7 +1526,7 @@ class GesuchServiceTest {
             )
         );
 
-        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getId());
+        final var gesuchGS = gesuchService.getGesuchGS(gesuch.getId(), gesuch.getGesuchTranchen().get(0).getId());
         // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
         assertThat(gesuchGS.getGesuchStatus(), is(gesuch.getGesuchStatus()));
     }
@@ -1582,8 +1586,11 @@ class GesuchServiceTest {
                 gesuchInBearbeitungSB
             )
         );
+        when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any()))
+            .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
 
-        final var gesuchGS = gesuchService.getGesuchGS(gesuchInBearbeitungSB.getId());
+        final var gesuchGS = gesuchService
+            .getGesuchGS(gesuchInBearbeitungSB.getId(), gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
         assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
         assertThat(
             gesuchGS.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),

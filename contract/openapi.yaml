@@ -1926,8 +1926,13 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchFehlendeDokumenteUebermitteln
       summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
-  '/gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen':
+  '/gesuch/{gesuchId}/{gesuchTrancheId}/fehlendeDokumenteEinreichen':
     parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
       - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'

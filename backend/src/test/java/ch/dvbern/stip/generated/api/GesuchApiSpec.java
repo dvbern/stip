@@ -1040,13 +1040,14 @@ public class GesuchApiSpec {
      * Dem SB übermitteln das fehlende Dokumente hochgeladen wurden
      * 
      *
+     * @see #gesuchIdPath  (required)
      * @see #gesuchTrancheIdPath  (required)
      * return GesuchDtoSpec
      */
     public static class GesuchTrancheFehlendeDokumenteEinreichenOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen";
+        public static final String REQ_URI = "/gesuch/{gesuchId}/{gesuchTrancheId}/fehlendeDokumenteEinreichen";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1058,7 +1059,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen
+         * PATCH /gesuch/{gesuchId}/{gesuchTrancheId}/fehlendeDokumenteEinreichen
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1069,13 +1070,24 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen
+         * PATCH /gesuch/{gesuchId}/{gesuchTrancheId}/fehlendeDokumenteEinreichen
          * @param handler handler
          * @return GesuchDtoSpec
          */
         public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
             return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GesuchTrancheFehlendeDokumenteEinreichenOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
         }
 
         public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";

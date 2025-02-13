@@ -92,9 +92,9 @@ public interface GesuchResource {
     GesuchDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
+    @Path("/{gesuchId}/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchId") UUID gesuchId,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchTrancheId}/gesuchZurueckweisen")

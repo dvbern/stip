@@ -147,8 +147,9 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto getGesuchGS(UUID gesuchId) {
+    public GesuchDto getGesuchGS(UUID gesuchId, UUID gesuchTrancheId) {
         final var actualGesuch = gesuchRepository.requireById(gesuchId);
+        final var actualTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         if (Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(actualGesuch.getGesuchStatus())) {
             // eingereichtes gesuch (query envers)
             var gesuchInStatusEingereicht = gesuchHistoryRepository.getStatusHistory(gesuchId)
@@ -158,10 +159,12 @@ public class GesuchService {
                 )
                 .findFirst()
                 .orElseThrow();
-            return gesuchMapperUtil.mapWithNewestTranche(gesuchInStatusEingereicht);
+            var trancheInStatusEingereicht =
+                gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(gesuchId).orElseThrow();
+            return gesuchMapperUtil.mapWithTranche(gesuchInStatusEingereicht, trancheInStatusEingereicht);
         } else {
             // atkuelles gesuch
-            return gesuchMapperUtil.mapWithNewestTranche(actualGesuch);
+            return gesuchMapperUtil.mapWithTranche(actualGesuch, actualTranche);
         }
     }
 
