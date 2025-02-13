@@ -147,6 +147,7 @@
   "shared.dokumente.table.upload": "Télécharger",
   "shared.dokumente.table.status": "Status",
   "shared.dokumente.table.noComment": "Aucun commentaire n'a été ajouté",
+  "shared.dokumente.table.noData": "Aucune document disponible",
   "shared.dokumente.dokumentStatus.AKZEPTIERT": "Valide",
   "shared.dokumente.dokumentStatus.ABGELEHNT": "Rejeté",
   "shared.dokumente.dokumentStatus.NO_DOCUMENT": "Aucun document",
@@ -179,6 +180,7 @@
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE_EINREICHEN": "Les documents manquants ont été transmis",
   "shared.nachrichten.type.AENDERUNG_ABGELEHNT": "Changement rejeté",
   "shared.nachrichten.type.GESUCH_STATUS_CHANGE_WITH_COMMENT": "Changement de statut avec commentaire",
+  "shared.nachrichten.type.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT": "Documents manquants non soumis",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",

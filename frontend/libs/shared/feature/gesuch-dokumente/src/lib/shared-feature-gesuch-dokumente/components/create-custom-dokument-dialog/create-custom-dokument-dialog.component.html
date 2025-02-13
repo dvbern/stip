@@ -16,7 +16,13 @@
   <form [formGroup]="form" class="mt-4" novalidate>
     <mat-form-field dvSharedUiFormField class="col-12">
       <mat-label>{{ 'shared.dokumente.createCustomDokumentTyp.dialog.name.label' | translate }}</mat-label>
-      <input type="text" matInput dvMaxLength formControlName="name" data-testid="create-custom-dokument-dialog-name" />
+      <input
+        type="text"
+        matInput
+        dvMaxLength="small"
+        formControlName="name"
+        data-testid="create-custom-dokument-dialog-name"
+      />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | translate }}
       </mat-error>

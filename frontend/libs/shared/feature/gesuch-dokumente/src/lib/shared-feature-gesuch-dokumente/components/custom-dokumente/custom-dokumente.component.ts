@@ -10,7 +10,10 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { SharedModelTableCustomDokument } from '@dv/shared/model/dokument';
+import {
+  SharedModelTableCustomDokument,
+  SharedModelTableDokument,
+} from '@dv/shared/model/dokument';
 import {
   CustomDokumentTyp,
   Dokumentstatus,
@@ -23,12 +26,13 @@ import {
   createCustomDokumentOptions,
 } from '@dv/shared/pattern/document-upload';
 import { detailExpand } from '@dv/shared/ui/animations';
-import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiPrefixAppTypePipe } from '@dv/shared/ui/prefix-app-type';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { RemoteData } from '@dv/shared/util/remote-data';
+
+import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokument-status-actions.component';
 
 @Component({
   selector: 'dv-custom-dokumente',
@@ -40,10 +44,10 @@ import { RemoteData } from '@dv/shared/util/remote-data';
     TypeSafeMatCellDefDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiLoadingComponent,
-    SharedUiIconBadgeComponent,
     SharedUiRdIsPendingPipe,
-    SharedUiPrefixAppTypePipe,
     MatTooltipModule,
+    DokumentStatusActionsComponent,
+    SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './custom-dokumente.component.html',
   styleUrl: './custom-dokumente.component.scss',
@@ -62,11 +66,13 @@ export class CustomDokumenteComponent {
     kommentare: RemoteData<GesuchDokumentKommentar[]>;
     readonly: boolean;
   }>();
+  canCreateCustomDokumentTypSig = input.required<boolean>();
 
   getGesuchDokumentKommentare = output<SharedModelTableCustomDokument>();
   deleteCustomDokumentTyp = output<SharedModelTableCustomDokument>();
-  dokumentAkzeptieren = output<SharedModelTableCustomDokument>();
-  dokumentAblehnen = output<SharedModelTableCustomDokument>();
+  dokumentAkzeptieren = output<SharedModelTableDokument>();
+  dokumentAblehnen = output<SharedModelTableDokument>();
+  createCustomDokumentTyp = output();
 
   detailColumns = ['kommentar'];
   displayedColumns = [
@@ -88,6 +94,8 @@ export class CustomDokumenteComponent {
       permissions,
       dokuments,
       requiredDocumentTypes,
+      isSachbearbeitungApp,
+      readonly,
     } = this.dokumenteViewSig();
 
     if (!gesuchId || !allowTypes || !trancheId) {
@@ -99,9 +107,13 @@ export class CustomDokumenteComponent {
         throw new Error('Custom Dokument Typ missing');
       }
 
+      const hasFiles = gesuchDokument.dokumente.length > 0;
+      const canDelete = isSachbearbeitungApp && !hasFiles && !readonly;
       return {
         dokumentTyp: gesuchDokument.customDokumentTyp,
         gesuchDokument,
+        canDelete,
+        showUpload: hasFiles || !isSachbearbeitungApp,
         dokumentOptions: createCustomDokumentOptions({
           gesuchId,
           trancheId,
@@ -117,6 +129,8 @@ export class CustomDokumenteComponent {
       ...uploadedDokuments,
       ...requiredDocumentTypes.map((dokumentTyp) => ({
         dokumentTyp: dokumentTyp,
+        canDelete: false,
+        showUpload: !isSachbearbeitungApp,
         dokumentOptions: createCustomDokumentOptions({
           gesuchId,
           trancheId,

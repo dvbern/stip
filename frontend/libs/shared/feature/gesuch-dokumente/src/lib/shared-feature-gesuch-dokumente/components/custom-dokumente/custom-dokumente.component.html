@@ -32,10 +32,10 @@
 
     <!-- required document -->
     <ng-container matColumnDef="documentName">
-      <th mat-header-cell *matHeaderCellDef class="tw-min-w-40">
+      <th mat-header-cell *matHeaderCellDef class="tw-min-w-52">
         {{ 'shared.dokumente.table.documentName' | translate }}
       </th>
-      <td mat-cell class="tw-min-w-40" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+      <td mat-cell class="tw-min-w-52" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-py-3">
           {{ dokument.dokumentTyp.type }}
         </div>
@@ -44,10 +44,10 @@
 
     <!-- description -->
     <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef class="tw-min-w-96">
+      <th mat-header-cell *matHeaderCellDef class="tw-w-full tw-min-w-96">
         {{ 'shared.dokumente.table.description' | translate }}
       </th>
-      <td mat-cell class="tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+      <td mat-cell class="tw-w-full tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-py-3">
           {{ dokument.dokumentTyp.description }}
         </div>
@@ -60,103 +60,51 @@
         {{ 'shared.dokumente.table.status' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-        <div class="tw-flex tw-gap-2">
-          @if (dokument?.gesuchDokument?.id) {
-            @if (view.isSachbearbeitungApp && !view.readonly && dokument?.gesuchDokument?.dokumente?.length) {
-              @switch (dokument?.gesuchDokument?.status) {
-                @case ('AUSSTEHEND') {
-                  <button
-                    (click)="dokumentAkzeptieren.emit(dokument); $event.stopPropagation()"
-                    type="button"
-                    class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
-                  >
-                    <i class="material-symbols-rounded tw-text-xl/none">check</i>
-                    <span>
-                      {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
-                    </span>
-                  </button>
-                  <button
-                    (click)="dokumentAblehnen.emit(dokument); $event.stopPropagation()"
-                    type="button"
-                    class="btn table-btn btn-danger d-flex align-items-center gap-1"
-                  >
-                    <i class="material-symbols-rounded tw-text-xl/none">close</i>
-                    <span>
-                      {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
-                    </span>
-                  </button>
-                }
-                @case ('AKZEPTIERT') {
-                  <dv-shared-ui-icon-badge type="success" class="tw-min-w-32">
-                    {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
-                  </dv-shared-ui-icon-badge>
-                }
-                @case ('ABGELEHNT') {
-                  <dv-shared-ui-icon-badge type="danger" class="tw-min-w-32">
-                    {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
-                  </dv-shared-ui-icon-badge>
-                }
-              }
-            } @else {
-              @switch (dokument?.gesuchDokument?.status) {
-                @case ('AKZEPTIERT') {
-                  <dv-shared-ui-icon-badge type="success" class="tw-min-w-32">
-                    {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
-                  </dv-shared-ui-icon-badge>
-                }
-                @case ('AUSSTEHEND') {
-                  @if (dokument?.gesuchDokument?.dokumente?.length) {
-                    <dv-shared-ui-icon-badge
-                      [type]="view.isSachbearbeitungApp ? 'warning' : 'info'"
-                      class="tw-min-w-32"
-                    >
-                      {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
-                    </dv-shared-ui-icon-badge>
-                  } @else {
-                    <dv-shared-ui-icon-badge type="warning" class="tw-min-w-32">
-                      {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
-                    </dv-shared-ui-icon-badge>
-                  }
-                }
-                @case ('ABGELEHNT') {
-                  <dv-shared-ui-icon-badge type="danger" class="tw-min-w-32">
-                    {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
-                  </dv-shared-ui-icon-badge>
-                }
-              }
-            }
-          } @else {
-            <dv-shared-ui-icon-badge type="warning" class="tw-min-w-32">
-              {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
-            </dv-shared-ui-icon-badge>
-          }
-        </div>
+        <dv-dokument-status-actions
+          [dokumentSig]="dokument"
+          [viewSig]="view"
+          (dokumentAkzeptieren)="dokumentAkzeptieren.emit($event)"
+          (dokumentAblehnen)="dokumentAblehnen.emit($event)"
+        ></dv-dokument-status-actions>
       </td>
     </ng-container>
 
     <!-- actions -->
     <ng-container matColumnDef="actions">
-      <th [title]="'shared.dokumente.table.actions' | translate" mat-header-cell *matHeaderCellDef></th>
+      <th [title]="'shared.dokumente.table.actions' | translate" mat-header-cell *matHeaderCellDef>
+        <button
+          *dvIfSachbearbeiter
+          [matTooltip]="'shared.dokumente.createCustomDokumentTyp' | translate"
+          type="button"
+          class="btn btn-outline-primary btn-sm"
+          data-testid="dokumente-button-createCustomDokumentTyp"
+          [disabled]="!canCreateCustomDokumentTypSig()"
+          (click)="createCustomDokumentTyp.emit()"
+        >
+          <i class="material-symbols-rounded fs-4">add</i>
+        </button>
+      </th>
       <td mat-cell class="tw-w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-flex tw-justify-end">
           <!-- delete custom documentType -->
-          @if (view.isSachbearbeitungApp && !view.readonly) {
+          @if (dokument.canDelete) {
             <button
               type="button"
               class="dv-icon-button flex-shrink-0 delete-icon ms-2"
               [attr.aria-label]="'shared.form.delete' | translate"
               [matTooltip]="'shared.dokumente.deleteCustomDokumentTyp.title' | translate"
-              [disabled]="dokument?.gesuchDokument?.dokumente?.length"
               (click)="deleteCustomDokumentTyp.emit(dokument); $event.stopPropagation()"
             >
-              <span class="material-symbols-rounded align-middle text-muted fs-3">delete</span>
+              <span class="material-symbols-rounded align-middle text-muted tw-text-3xl/none">delete</span>
             </button>
           }
-          <dv-shared-pattern-document-upload
-            class="tw-max-h-11"
-            (click)="$event.stopPropagation()"
-            [optionsSig]="dokument.dokumentOptions"
-          ></dv-shared-pattern-document-upload>
+          @if (dokument.showUpload) {
+            <dv-shared-pattern-document-upload
+              class="tw-max-h-11"
+              (click)="$event.stopPropagation()"
+              [optionsSig]="dokument.dokumentOptions"
+            ></dv-shared-pattern-document-upload>
+          }
         </div>
       </td>
     </ng-container>
@@ -207,7 +155,11 @@
       (click)="expandRow(dokument)"
     ></tr>
     <tr mat-row class="detail-row" *matRowDef="let dokument; columns: detailColumns"></tr>
-  </table>
 
-  <pre>{{ dokumenteViewSig().requiredDocumentTypes }}</pre>
+    <tr class="mat-mdc-row" *matNoDataRow>
+      <td class="mat-mdc-cell tw-px-3 tw-text-center" [colSpan]="displayedColumns.length">
+        {{ 'shared.dokumente.table.noData' | translate }}
+      </td>
+    </tr>
+  </table>
 </div>

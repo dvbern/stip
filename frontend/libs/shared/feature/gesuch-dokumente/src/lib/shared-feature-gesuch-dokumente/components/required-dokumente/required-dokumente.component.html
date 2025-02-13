@@ -32,10 +32,10 @@
 
     <!-- required document -->
     <ng-container matColumnDef="documentName">
-      <th mat-header-cell *matHeaderCellDef class="tw-min-w-96">
+      <th mat-header-cell *matHeaderCellDef class="tw-w-full tw-min-w-96">
         {{ 'shared.dokumente.table.documentName' | translate }}
       </th>
-      <td mat-cell class="tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+      <td mat-cell class="tw-w-full tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-py-3">
           {{ dokument.dokumentOptions.titleKey | translate }}
         </div>
@@ -48,9 +48,11 @@
         {{ 'shared.dokumente.table.formStep' | translate }}
       </th>
       <td class="tw-text-nowrap" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-        <a [routerLink]="dokument.formStep.route">
-          {{ dokument.formStep.translationKey | translate }}
-        </a>
+        @if (dokument.formStep.routes; as routes) {
+          <a [routerLink]="routes">
+            {{ dokument.formStep.translationKey | translate }}
+          </a>
+        }
       </td>
     </ng-container>
 
@@ -60,68 +62,12 @@
         {{ 'shared.dokumente.table.status' | translate }}
       </th>
       <td mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-        <div class="tw-flex tw-gap-2">
-          @if (dokument?.gesuchDokument?.id) {
-            @if (view.isSachbearbeitungApp && !view.readonly) {
-              @switch (dokument?.gesuchDokument?.status) {
-                @case ('AUSSTEHEND') {
-                  <button
-                    (click)="dokumentAkzeptieren.emit(dokument); $event.stopPropagation()"
-                    type="button"
-                    class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
-                  >
-                    <i class="material-symbols-rounded tw-text-xl/none">check</i>
-                    <span>
-                      {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
-                    </span>
-                  </button>
-                  <button
-                    (click)="dokumentAblehnen.emit(dokument); $event.stopPropagation()"
-                    type="button"
-                    class="btn table-btn btn-danger d-flex align-items-center gap-1"
-                  >
-                    <i class="material-symbols-rounded tw-text-xl/none">close</i>
-                    <span>
-                      {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
-                    </span>
-                  </button>
-                }
-                @case ('AKZEPTIERT') {
-                  <dv-shared-ui-icon-badge type="success" class="tw-min-w-32">
-                    {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
-                  </dv-shared-ui-icon-badge>
-                }
-                @case ('ABGELEHNT') {
-                  <dv-shared-ui-icon-badge type="danger" class="tw-min-w-32">
-                    {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
-                  </dv-shared-ui-icon-badge>
-                }
-              }
-            } @else {
-              @switch (dokument?.gesuchDokument?.status) {
-                @case ('AKZEPTIERT') {
-                  <dv-shared-ui-icon-badge type="success" class="tw-min-w-32">
-                    {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
-                  </dv-shared-ui-icon-badge>
-                }
-                @case ('AUSSTEHEND') {
-                  <dv-shared-ui-icon-badge [type]="view.isSachbearbeitungApp ? 'warning' : 'info'" class="tw-min-w-32">
-                    {{ '$type.dokumente.dokumentStatus.AUSSTEHEND' | prefixAppType | translate }}
-                  </dv-shared-ui-icon-badge>
-                }
-                @case ('ABGELEHNT') {
-                  <dv-shared-ui-icon-badge type="danger" class="tw-min-w-32">
-                    {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
-                  </dv-shared-ui-icon-badge>
-                }
-              }
-            }
-          } @else {
-            <dv-shared-ui-icon-badge type="warning" class="tw-min-w-32">
-              {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
-            </dv-shared-ui-icon-badge>
-          }
-        </div>
+        <dv-dokument-status-actions
+          [dokumentSig]="dokument"
+          [viewSig]="view"
+          (dokumentAkzeptieren)="dokumentAkzeptieren.emit($event)"
+          (dokumentAblehnen)="dokumentAblehnen.emit($event)"
+        ></dv-dokument-status-actions>
       </td>
     </ng-container>
 

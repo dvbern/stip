@@ -70,11 +70,11 @@ public class RequiredDokumentService {
             .toList();
     }
 
-    private Set<DokumentTyp> getNotAcceptedDokumentTypesForGesuch(final GesuchFormular formular) {
+    private Set<DokumentTyp> getDokumentTypesWithNoFilesAttached(final GesuchFormular formular) {
         return getExistingDokumentsForGesuch(formular).stream()
             .filter(
                 gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT)
-                && Objects.isNull(gesuchDokument.getCustomDokumentTyp())
+                && Objects.isNull(gesuchDokument.getCustomDokumentTyp()) && gesuchDokument.getDokumente().isEmpty()
             )
             .map(GesuchDokument::getDokumentTyp)
             .collect(Collectors.toSet());
@@ -107,7 +107,7 @@ public class RequiredDokumentService {
 
         final var requiredDokumentTypes = getRequiredDokumentTypesForGesuch(formular);
         final var notAcceptedDokumentTypes =
-            getNotAcceptedDokumentTypesForGesuch(formular);
+            getDokumentTypesWithNoFilesAttached(formular);
 
         return requiredDokumentTypes
             .stream()

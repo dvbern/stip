@@ -40,9 +40,14 @@ export type SharedModelGesuchDokument =
   | SharedModelAdditionalGesuchDokument
   | SharedModelCustomGesuchDokument;
 
+export type SharedModelTableDokument =
+  | SharedModelTableRequiredDokument
+  | SharedModelTableCustomDokument;
+
 export interface DokumentOptions {
   permissions: PermissionMap;
   titleKey: string;
+  descriptionKey?: string;
   allowTypes: string;
   dokument: SharedModelGesuchDokument;
   initialDokumente?: Dokument[];
@@ -57,6 +62,8 @@ export interface SharedModelTableRequiredDokument {
 
 export interface SharedModelTableCustomDokument {
   dokumentTyp: CustomDokumentTyp;
+  canDelete: boolean;
+  showUpload: boolean;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: DokumentOptions;
 }
@@ -107,14 +114,12 @@ export const isUploadable = (
   permission: PermissionMap,
 ) => {
   switch (dokumentModel.art) {
-    case 'GESUCH_DOKUMENT': {
+    case 'GESUCH_DOKUMENT':
+    case 'CUSTOM_DOKUMENT': {
       return (
         permission.canUploadDocuments &&
         dokumentModel.gesuchDokument?.status !== 'AKZEPTIERT'
       );
-    }
-    case 'CUSTOM_DOKUMENT': {
-      return permission.canUploadDocuments;
     }
     case 'UNTERSCHRIFTENBLATT': {
       return permission.canUploadUnterschriftenblatt;

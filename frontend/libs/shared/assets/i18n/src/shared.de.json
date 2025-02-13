@@ -147,6 +147,7 @@
   "shared.dokumente.table.upload": "Hochladen",
   "shared.dokumente.table.status": "Status",
   "shared.dokumente.table.noComment": "Kein Kommentar vorhanden",
+  "shared.dokumente.table.noData": "Keine Dokumente vorhanden",
   "shared.dokumente.dokumentStatus.AKZEPTIERT": "Akzeptiert",
   "shared.dokumente.dokumentStatus.ABGELEHNT": "Abgelehnt",
   "shared.dokumente.dokumentStatus.NO_DOCUMENT": "Kein Dokument",
@@ -179,6 +180,7 @@
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE_EINREICHEN": "Fehlende Dokumente wurden übermittelt",
   "shared.nachrichten.type.AENDERUNG_ABGELEHNT": "Änderung abgelehnt",
   "shared.nachrichten.type.GESUCH_STATUS_CHANGE_WITH_COMMENT": "Statusänderung mit Kommentar",
+  "shared.nachrichten.type.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT": "Fehlende Dokumente nicht eingereicht",
   "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
 
   "shared.gesuch.validation.generic": "Bitte überprüfen Sie Ihre Eingaben im Formular und füllen Sie die benötigten Felder aus.",
