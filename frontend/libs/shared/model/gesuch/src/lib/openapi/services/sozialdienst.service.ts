@@ -19,8 +19,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Sozialdienst } from '../model/sozialdienst';
-import { SozialdienstAdminCreate } from '../model/sozialdienstAdminCreate';
-import { SozialdienstAdminUpdate } from '../model/sozialdienstAdminUpdate';
+import { SozialdienstAdmin } from '../model/sozialdienstAdmin';
 import { SozialdienstBenutzer } from '../model/sozialdienstBenutzer';
 import { SozialdienstBenutzerCreate } from '../model/sozialdienstBenutzerCreate';
 import { SozialdienstBenutzerUpdate } from '../model/sozialdienstBenutzerUpdate';
@@ -58,7 +57,7 @@ export interface SozialdienstServiceGetSozialdienstBenutzerRequestParams {
 
 export interface SozialdienstServiceReplaceSozialdienstAdminRequestParams {
     sozialdienstId: string;
-    sozialdienstAdminCreate?: SozialdienstAdminCreate;
+    sozialdienstAdmin?: SozialdienstAdmin;
 }
 
 export interface SozialdienstServiceUpdateSozialdienstRequestParams {
@@ -66,8 +65,7 @@ export interface SozialdienstServiceUpdateSozialdienstRequestParams {
 }
 
 export interface SozialdienstServiceUpdateSozialdienstAdminRequestParams {
-    sozialdienstId: string;
-    sozialdienstAdminUpdate?: SozialdienstAdminUpdate;
+    sozialdienstBenutzerUpdate?: SozialdienstBenutzerUpdate;
 }
 
 export interface SozialdienstServiceUpdateSozialdienstBenutzerRequestParams {
@@ -802,7 +800,7 @@ export class SozialdienstService {
         if (sozialdienstId === null || sozialdienstId === undefined) {
             throw new Error('Required parameter sozialdienstId was null or undefined when calling replaceSozialdienstAdmin$.');
         }
-        const sozialdienstAdminCreate = requestParameters.sozialdienstAdminCreate;
+        const sozialdienstAdmin = requestParameters.sozialdienstAdmin;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -862,7 +860,7 @@ export class SozialdienstService {
         return this.httpClient.request<SozialdienstBenutzer>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: sozialdienstAdminCreate,
+                body: sozialdienstAdmin,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -961,11 +959,7 @@ export class SozialdienstService {
      public updateSozialdienstAdmin$(requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<SozialdienstBenutzer>>;
      public updateSozialdienstAdmin$(requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<SozialdienstBenutzer>>;
      public updateSozialdienstAdmin$(requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const sozialdienstId = requestParameters.sozialdienstId;
-        if (sozialdienstId === null || sozialdienstId === undefined) {
-            throw new Error('Required parameter sozialdienstId was null or undefined when calling updateSozialdienstAdmin$.');
-        }
-        const sozialdienstAdminUpdate = requestParameters.sozialdienstAdminUpdate;
+        const sozialdienstBenutzerUpdate = requestParameters.sozialdienstBenutzerUpdate;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1021,11 +1015,11 @@ export class SozialdienstService {
             }
         }
 
-        const localVarPath = `/sozialdienst/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/updateSozialdienstAdmin`;
+        const localVarPath = `/sozialdienst/admin`;
         return this.httpClient.request<SozialdienstBenutzer>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: sozialdienstAdminUpdate,
+                body: sozialdienstBenutzerUpdate,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

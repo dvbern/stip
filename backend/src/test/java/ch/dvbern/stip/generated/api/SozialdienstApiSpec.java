@@ -14,7 +14,6 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDtoSpec;
@@ -911,14 +910,13 @@ public class SozialdienstApiSpec {
      * 
      * 
      *
-     * @see #sozialdienstIdPath  (required)
      * @see #body  (optional)
      * return SozialdienstBenutzerDtoSpec
      */
     public static class UpdateSozialdienstAdminOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/sozialdienst/{sozialdienstId}/updateSozialdienstAdmin";
+        public static final String REQ_URI = "/sozialdienst/admin";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -931,7 +929,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * PATCH /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin
+         * PATCH /sozialdienst/admin
          * @param handler handler
          * @param <T> type
          * @return type
@@ -942,7 +940,7 @@ public class SozialdienstApiSpec {
         }
 
         /**
-         * PATCH /sozialdienst/{sozialdienstId}/updateSozialdienstAdmin
+         * PATCH /sozialdienst/admin
          * @param handler handler
          * @return SozialdienstBenutzerDtoSpec
          */
@@ -952,22 +950,11 @@ public class SozialdienstApiSpec {
         }
 
          /**
-         * @param sozialdienstAdminUpdateDtoSpec (SozialdienstAdminUpdateDtoSpec)  (optional)
+         * @param sozialdienstBenutzerUpdateDtoSpec (SozialdienstBenutzerUpdateDtoSpec)  (optional)
          * @return operation
          */
-        public UpdateSozialdienstAdminOper body(SozialdienstAdminUpdateDtoSpec sozialdienstAdminUpdateDtoSpec) {
-            reqSpec.setBody(sozialdienstAdminUpdateDtoSpec);
-            return this;
-        }
-
-        public static final String SOZIALDIENST_ID_PATH = "sozialdienstId";
-
-        /**
-         * @param sozialdienstId (UUID)  (required)
-         * @return operation
-         */
-        public UpdateSozialdienstAdminOper sozialdienstIdPath(Object sozialdienstId) {
-            reqSpec.addPathParam(SOZIALDIENST_ID_PATH, sozialdienstId);
+        public UpdateSozialdienstAdminOper body(SozialdienstBenutzerUpdateDtoSpec sozialdienstBenutzerUpdateDtoSpec) {
+            reqSpec.setBody(sozialdienstBenutzerUpdateDtoSpec);
             return this;
         }
 

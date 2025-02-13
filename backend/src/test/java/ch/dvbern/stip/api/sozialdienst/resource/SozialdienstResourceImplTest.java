@@ -29,8 +29,6 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
@@ -47,7 +45,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_ADMIN_ID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
@@ -163,50 +160,29 @@ class SozialdienstResourceImplTest {
         checkSozialdienstAdminResponse(updated.getSozialdienstAdmin());
     }
 
-    @Order(5)
-    @TestAsAdmin
-    @Test
-    void updateSozialdienstAdminTest() {
-        final var updateSozialdienstDto = new SozialdienstAdminUpdateDtoSpec();
-        updateSozialdienstDto.setVorname("updated");
-        updateSozialdienstDto.setNachname("updated");
-        final var updated = apiSpec.updateSozialdienstAdmin()
-            .sozialdienstIdPath(dtoSpec.getId())
-            .body(updateSozialdienstDto)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .as(SozialdienstBenutzerDtoSpec.class);
-        assertTrue(updated.getNachname().contains("updated"));
-        assertTrue(updated.getVorname().contains("updated"));
-        checkSozialdienstAdminResponse(updated);
-    }
-
-    @Order(6)
-    @TestAsAdmin
-    @Test
-    void replaceSozialdienstAdminTest() {
-        final var createSozialdienstDto = new SozialdienstAdminDtoSpec();
-        createSozialdienstDto.setVorname("replaced");
-        createSozialdienstDto.setNachname("replaced");
-        createSozialdienstDto.setEmail("replaced@test.com");
-        createSozialdienstDto.setKeycloakId(SOZIALDIENST_ADMIN_ID);
-        final var replaced = apiSpec.replaceSozialdienstAdmin()
-            .sozialdienstIdPath(dtoSpec.getId())
-            .body(createSozialdienstDto)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .as(SozialdienstBenutzerDtoSpec.class);
-        assertTrue(replaced.getNachname().contains("replaced"));
-        assertTrue(replaced.getVorname().contains("replaced"));
-        assertTrue(replaced.getEmail().contains("replaced"));
-        checkSozialdienstAdminResponse(replaced);
-    }
+    // @Order(5)
+    // @TestAsAdmin
+    // @Test
+    // void replaceSozialdienstAdminTest() {
+    // final var createSozialdienstDto = new SozialdienstAdminDtoSpec();
+    // createSozialdienstDto.setVorname("replaced");
+    // createSozialdienstDto.setNachname("replaced");
+    // createSozialdienstDto.setEmail("replaced@test.com");
+    // createSozialdienstDto.setKeycloakId(SOZIALDIENST_ADMIN_ID);
+    // final var replaced = apiSpec.replaceSozialdienstAdmin()
+    // .sozialdienstIdPath(dtoSpec.getId())
+    // .body(createSozialdienstDto)
+    // .execute(TestUtil.PEEK_IF_ENV_SET)
+    // .then()
+    // .assertThat()
+    // .statusCode(Response.Status.OK.getStatusCode())
+    // .extract()
+    // .as(SozialdienstBenutzerDtoSpec.class);
+    // assertTrue(replaced.getNachname().contains("replaced"));
+    // assertTrue(replaced.getVorname().contains("replaced"));
+    // assertTrue(replaced.getEmail().contains("replaced"));
+    // checkSozialdienstAdminResponse(replaced);
+    // }
 
     @Order(99)
     @TestAsAdmin

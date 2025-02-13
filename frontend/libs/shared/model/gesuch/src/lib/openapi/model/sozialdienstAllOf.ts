@@ -10,11 +10,11 @@
  * Do not edit the class manually.
  */
 import { Adresse } from './adresse';
-import { SozialdienstAdmin } from './sozialdienstAdmin';
+import { SozialdienstBenutzer } from './sozialdienstBenutzer';
 
 export interface SozialdienstAllOf { 
     adresse: Adresse;
     iban: string;
-    sozialdienstAdmin: SozialdienstAdmin;
+    sozialdienstAdmin: SozialdienstBenutzer;
 }
 

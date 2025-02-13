@@ -36,7 +36,6 @@ import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
@@ -120,29 +119,12 @@ public class SozialdienstBenutzerService {
     }
 
     @Transactional
-    public SozialdienstBenutzerDto updateSozialdienstAdminBenutzer(
-        final UUID sozialdienstAdminId,
-        SozialdienstAdminUpdateDto dto
-    ) {
-        var sozialdienstAdmin = sozialdienstBenutzerRepository.requireById(sozialdienstAdminId);
-        sozialdienstAdminMapper.partialUpdate(dto, sozialdienstAdmin);
-        return sozialdienstBenutzerMapper.toDto(sozialdienstAdmin);
-    }
-
-    @Transactional
     public SozialdienstBenutzer createSozialdienstAdminBenutzer(SozialdienstAdminDto dto) {
         final var sozialdienstAdmin = sozialdienstAdminMapper.toEntity(dto);
         sozialdienstAdmin.setBenutzereinstellungen(new Benutzereinstellungen());
         sozialdienstAdmin.setBenutzerStatus(BenutzerStatus.AKTIV);
         sozialdienstBenutzerRepository.persistAndFlush(sozialdienstAdmin);
         return sozialdienstAdmin;
-    }
-
-    @Transactional
-    public void deleteSozialdienstAdminBenutzer(final String benutzerId) {
-        final var sozialdienstAdmin =
-            sozialdienstBenutzerRepository.findByKeycloakId(benutzerId).orElseThrow(NotFoundException::new);
-        sozialdienstBenutzerRepository.delete(sozialdienstAdmin);
     }
 
     public List<SozialdienstBenutzerDto> getSozialdienstBenutzers(Sozialdienst sozialdienst) {
@@ -223,8 +205,8 @@ public class SozialdienstBenutzerService {
         var userRep = new UserRepresentation();
         userRep.setFirstName(sozialdienstBenutzerUpdateDto.getVorname());
         userRep.setLastName(sozialdienstBenutzerUpdateDto.getNachname());
-        userRep.setUsername(userRep.getEmail());
-        userRep.setEmail(userRep.getEmail());
+        userRep.setUsername(sozialdienstBenutzer.getEmail());
+        userRep.setEmail(sozialdienstBenutzer.getEmail());
         userRep.setEmailVerified(true);
         keycloakUsersResource.get(sozialdienstBenutzer.getKeycloakId()).update(userRep);
 

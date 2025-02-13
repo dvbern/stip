@@ -29,7 +29,6 @@ import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
@@ -106,11 +105,10 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     @RolesAllowed({ OidcConstants.ROLE_ADMIN })
     @Override
     public SozialdienstBenutzerDto updateSozialdienstAdmin(
-        UUID sozialdienstId,
-        SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto
+        SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdateDto
     ) {
-        final var sozialdienst = sozialdienstService.getSozialdienstById(sozialdienstId);
-        return sozialdienstService.updateSozialdienstAdmin(sozialdienstAdminUpdateDto, sozialdienst);
+        sozialdienstAuthorizer.canUpdateSozialdienstAdmin();
+        return sozialdienstBenutzerService.updateSozialdienstBenutzer(sozialdienstBenutzerUpdateDto);
     }
 
     @AllowAll

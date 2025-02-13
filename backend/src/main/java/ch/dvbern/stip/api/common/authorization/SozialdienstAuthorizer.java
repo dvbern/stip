@@ -38,6 +38,16 @@ public class SozialdienstAuthorizer extends BaseAuthorizer {
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
 
     @Transactional
+    public void canUpdateSozialdienstAdmin() {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (isAdmin(currentBenutzer)) {
+            return;
+        }
+
+        throw new UnauthorizedException();
+    }
+
+    @Transactional
     public void canUpdateSozialdienstBenutzer(final UUID sozialdienstBenutzerToUpdateID) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         if (isAdmin(currentBenutzer)) {

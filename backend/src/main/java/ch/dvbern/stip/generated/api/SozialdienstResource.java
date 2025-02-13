@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
-import ch.dvbern.stip.generated.dto.SozialdienstAdminUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
@@ -85,10 +84,10 @@ public interface SozialdienstResource {
     SozialdienstDto updateSozialdienst(@Valid SozialdienstUpdateDto sozialdienstUpdateDto);
 
     @PATCH
-    @Path("/{sozialdienstId}/updateSozialdienstAdmin")
+    @Path("/admin")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    SozialdienstBenutzerDto updateSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminUpdateDto sozialdienstAdminUpdateDto);
+    SozialdienstBenutzerDto updateSozialdienstAdmin(@Valid SozialdienstBenutzerUpdateDto sozialdienstBenutzerUpdateDto);
 
     @PATCH
     @Path("/benutzer")

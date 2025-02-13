@@ -181,7 +181,7 @@ class SozialdienstBenutzerServiceTest {
         assertThat(sozialdienstDto.getId(), notNullValue());
     }
 
-    @Order(3)
+    @Order(4)
     @Transactional
     @TestAsSozialdienstAdmin
     @Test
@@ -192,7 +192,7 @@ class SozialdienstBenutzerServiceTest {
         assertThat(sozialdienstbenutzers.size(), equalTo(0));
     }
 
-    @Order(4)
+    @Order(5)
     @Transactional
     @TestAsSozialdienstAdmin
     @Test
@@ -214,7 +214,7 @@ class SozialdienstBenutzerServiceTest {
         assertThat(sozialdienstbenutzer.getEmail(), equalTo(email));
     }
 
-    @Order(5)
+    @Order(6)
     @Transactional
     @TestAsSozialdienstAdmin
     @Test
@@ -225,7 +225,7 @@ class SozialdienstBenutzerServiceTest {
         assertThat(sozialdienstbenutzers.size(), equalTo(1));
     }
 
-    @Order(6)
+    @Order(7)
     @Transactional
     @TestAsSozialdienstAdmin
     @Test
@@ -246,7 +246,7 @@ class SozialdienstBenutzerServiceTest {
         assertThat(sozialdienstbenutzer.getNachname(), equalTo(newname));
     }
 
-    @Order(7)
+    @Order(8)
     @Transactional
     @TestAsSozialdienstAdmin
     @Test
