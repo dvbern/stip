@@ -24,16 +24,16 @@ import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 public class EinnahmenKostenUpdateDtoSpecModel {
     public static EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDtoSpec() {
         return TestUtil.createUpdateDtoSpec(EinnahmenKostenUpdateDtoSpec::new, (model) -> {
-            model.setNettoerwerbseinkommen(TestUtil.getRandomInt(1, 2500));
-            model.setZulagen(TestUtil.getRandomInt(1, 2500));
-            model.setRenten(TestUtil.getRandomInt(1, 2500));
-            model.setEoLeistungen(TestUtil.getRandomInt(1, 2500));
-            model.setErgaenzungsleistungen(TestUtil.getRandomInt(1, 2500));
-            model.setBeitraege(Math.min(TestUtil.getRandomInt(1, 2500), 1));
-            model.setAusbildungskostenSekundarstufeZwei(TestUtil.getRandomInt(1, 2500));
-            model.setAusbildungskostenTertiaerstufe(TestUtil.getRandomInt(1, 2500));
-            model.setFahrkosten(TestUtil.getRandomInt(1, 2500));
-            model.setWohnkosten(TestUtil.getRandomInt(1, 2500));
+            model.setNettoerwerbseinkommen(500);
+            model.setZulagen(500);
+            model.setRenten(500);
+            model.setEoLeistungen(500);
+            model.setErgaenzungsleistungen(500);
+            model.setBeitraege(Math.min(2500, 1));
+            model.setAusbildungskostenSekundarstufeZwei(2500);
+            model.setAusbildungskostenTertiaerstufe(2500);
+            model.setFahrkosten(2500);
+            model.setWohnkosten(2500);
             model.setVerdienstRealisiert(false);
             model.setAuswaertigeMittagessenProWoche(3);
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));

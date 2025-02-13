@@ -7,7 +7,7 @@
     [class.disabled]="step.disabled"
     [class.tw-pointer-events-none]="!step.route"
     [routerLink]="step.route ?? '#'"
-    [attr.data-testid]="'step-nav-' + step.route"
+    [attr.data-testid]="'step-nav-' + step.name"
     (click)="navClicked.emit({})"
   >
     @if (step.hasChanges) {

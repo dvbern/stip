@@ -20,7 +20,10 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -32,6 +35,8 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -43,6 +48,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
@@ -137,6 +143,12 @@ public class GesuchService {
     private final StipDecisionService stipDecisionService;
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final UnterschriftenblattService unterschriftenblattService;
+    private final BuchhaltungService buchhaltungService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
+
+    public Gesuch getGesuchById(final UUID gesuchId) {
+        return gesuchRepository.requireById(gesuchId);
+    }
 
     @Transactional
     public Optional<GesuchDto> findGesuchWithTranche(final UUID gesuchId, final UUID gesuchTrancheId) {
@@ -477,6 +489,7 @@ public class GesuchService {
         preventUpdateVonGesuchIfReadOnly(gesuch);
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForGesuch(gesuchId);
+        buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
         gesuch.getGesuchTranchen()
             .forEach(
                 gesuchTranche -> gesuchDokumentKommentarRepository.deleteAllForGesuchTranche(gesuchTranche.getId())
@@ -798,5 +811,42 @@ public class GesuchService {
         }
 
         return notiz;
+    }
+
+    @Transactional
+    public void checkForFehlendeDokumenteOnAllGesuche() {
+        // TODO: KSTIP-1849 change this to use the nachfrist property of the gesuch. i.e. get all gesuch in that state
+        final var gesuchsToCheck = gesuchRepository.getAllFehlendeDokumente();
+        final var gesuchsperiodenGesucheMap = new HashMap<UUID, ArrayList<Gesuch>>();
+        gesuchsToCheck.forEach(
+            gesuch -> {
+                gesuchsperiodenGesucheMap.computeIfAbsent(gesuch.getGesuchsperiode().getId(), k -> new ArrayList<>());
+                gesuchsperiodenGesucheMap.get(gesuch.getGesuchsperiode().getId()).add(gesuch);
+            }
+        );
+
+        final var changedTooLongAgo = new HashSet<UUID>();
+
+        gesuchsperiodenGesucheMap.forEach(
+            (uuid, gesuchsperiodenGesuchs) -> {
+                final var nachfrist = gesuchsperiodenGesuchs.get(0).getGesuchsperiode().getFristNachreichenDokumente();
+                changedTooLongAgo.addAll(
+                    gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(
+                        gesuchsperiodenGesuchs.stream().map(AbstractEntity::getId).toList(),
+                        Gesuchstatus.FEHLENDE_DOKUMENTE,
+                        LocalDateTime.now().minusDays(nachfrist)
+                    ).map(AbstractEntity::getId).toList()
+                );
+            }
+        );
+
+        final var toUpdate =
+            gesuchsToCheck.stream().filter(gesuch -> changedTooLongAgo.contains(gesuch.getId())).toList();
+        if (!toUpdate.isEmpty()) {
+            gesuchStatusService.bulkTriggerStateMachineEvent(
+                toUpdate,
+                GesuchStatusChangeEvent.IN_BEARBEITUNG_GS
+            );
+        }
     }
 }

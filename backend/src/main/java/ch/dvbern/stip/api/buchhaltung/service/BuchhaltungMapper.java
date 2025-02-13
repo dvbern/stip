@@ -37,7 +37,7 @@ public abstract class BuchhaltungMapper {
 
     @Named("getAuszahlung")
     Integer getAuszahlung(Buchhaltung buchhaltung) {
-        if (buchhaltung.getBuchhaltungType() == BuchhaltungType.AUSZAHLUNG) {
+        if (buchhaltung.getBuchhaltungType() == BuchhaltungType.AUSZAHLUNG && buchhaltung.getBetrag() > 0) {
             return buchhaltung.getBetrag();
         }
         return null;
@@ -45,7 +45,7 @@ public abstract class BuchhaltungMapper {
 
     @Named("getRueckforderung")
     Integer getRueckforderung(Buchhaltung buchhaltung) {
-        if (buchhaltung.getBuchhaltungType() == BuchhaltungType.SALDOAENDERUNG && buchhaltung.getBetrag() < 0) {
+        if (buchhaltung.getBuchhaltungType() == BuchhaltungType.AUSZAHLUNG && buchhaltung.getBetrag() < 0) {
             return buchhaltung.getBetrag();
         }
         return null;

@@ -5047,7 +5047,9 @@ components:
       enum:
         - GESUCH_EINGEREICHT
         - GESUCH_STATUS_CHANGE_WITH_COMMENT
+        - FEHLENDE_DOKUMENTE_EINREICHEN
         - FEHLENDE_DOKUMENTE
+        - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
