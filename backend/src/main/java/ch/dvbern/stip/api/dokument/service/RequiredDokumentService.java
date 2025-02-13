@@ -80,16 +80,6 @@ public class RequiredDokumentService {
             .collect(Collectors.toSet());
     }
 
-    private Set<DokumentTyp> getNotAcceptedDokumentTypesForGesuch(final GesuchFormular formular) {
-        return getExistingDokumentsForGesuch(formular).stream()
-            .filter(
-                gesuchDokument -> !gesuchDokument.getStatus().equals(Dokumentstatus.AKZEPTIERT)
-                && Objects.isNull(gesuchDokument.getCustomDokumentTyp())
-            )
-            .map(GesuchDokument::getDokumentTyp)
-            .collect(Collectors.toSet());
-    }
-
     private Set<DokumentTyp> getRequiredDokumentTypesForGesuch(final GesuchFormular formular) {
         return requiredDocumentProducers
             .stream()
