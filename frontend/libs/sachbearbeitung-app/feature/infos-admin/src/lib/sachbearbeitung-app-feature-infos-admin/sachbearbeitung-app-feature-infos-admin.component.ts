@@ -32,7 +32,6 @@ export interface GesuchTableColumns {
     RouterLink,
   ],
   templateUrl: './sachbearbeitung-app-feature-infos-admin.component.html',
-  styleUrl: './sachbearbeitung-app-feature-infos-admin.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureInfosAdminComponent {
