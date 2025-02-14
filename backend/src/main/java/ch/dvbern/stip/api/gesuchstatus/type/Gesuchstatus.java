@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.gesuchstatus.type;
 
+import lombok.Getter;
+
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
-
-import lombok.Getter;
 
 @Getter
 public enum Gesuchstatus {
@@ -55,7 +55,9 @@ public enum Gesuchstatus {
         Collections.unmodifiableSet(
             EnumSet.of(
                 IN_BEARBEITUNG_SB,
-                ABKLAERUNG_DURCH_RECHSTABTEILUNG
+                ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+                BEREIT_FUER_BEARBEITUNG
+
             )
         );
 
