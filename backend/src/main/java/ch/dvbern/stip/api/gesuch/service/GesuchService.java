@@ -145,7 +145,6 @@ public class GesuchService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
