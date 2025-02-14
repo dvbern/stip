@@ -15,11 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.unterschriftenblatt.scheduledtask;
+package ch.dvbern.stip.api.gesuch.scheduledtask;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
-import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.Scheduled.ConcurrentExecution;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,17 +30,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @RequiredArgsConstructor
-public class UnterschriftenblattUploadCheckTask {
-    private final UnterschriftenblattService unterschriftenblattService;
+public class FehlendeDokumenteScheduledTask {
+    private final GesuchService gesuchService;
 
     @Transactional
-    @Scheduled(cron = "{kstip.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
+    @Scheduled(cron = "{kstip.fehlendedokumente.cron}", concurrentExecution = ConcurrentExecution.SKIP)
     @RunForTenant(MandantIdentifier.BERN)
     public void run() {
         try {
-            LOG.info("Checking Unterschriftenblaetter for Bern");
-            unterschriftenblattService.checkForUnterschriftenblaetterOnAllGesuche();
-            LOG.info("Done checking Unterschriftenblaetter for Bern");
+            LOG.info("Processing gesuchs in FEHLENDE_DOKUMENTE");
+            gesuchService.checkForFehlendeDokumenteOnAllGesuche();
+            LOG.info("Done processing gesuchs in FEHLENDE_DOKUMENTE");
         } catch (Throwable e) {
             LOG.error(e.toString(), e);
         }
